@@ -26,11 +26,13 @@ internal const val LOCATION_REQUEST_CODE = 101
 internal const val CAMERA_STORAGE_REQUEST_CODE = 102
 internal const val UPLOAD_FILE_REQUEST_CODE = 103
 
+private const val VIDEO_PREFIX = "video/"
+
 private val TAG = ChromeClientLocationHandler::class.java.simpleName
 
 var fileUploadCallback: ValueCallback<Array<Uri>>? = null
 var uploadedFileLocation: String? = null
-
+var videoFilePending = false
 
 class ChromeClientLocationHandler(private val activity: Activity) : WebChromeClient() {
     private var mCallback: GeolocationPermissions.Callback? = null
@@ -105,55 +107,55 @@ class ChromeClientLocationHandler(private val activity: Activity) : WebChromeCli
         filePathCallback: ValueCallback<Array<Uri>>,
         fileChooserParams: WebChromeClient.FileChooserParams
     ): Boolean {
-        val requiredPermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA)
+        videoFilePending = isVideoRequest(fileChooserParams)
+
+        val requiredPermissions = getRequiredPermissions(videoFilePending)
+
 
         Log.d(TAG, "Showing File Chooser")
 
+        fileUploadCallback = filePathCallback
+
         if (!checkMissingPermissions(requiredPermissions)) {
-            fileUploadCallback = filePathCallback
-
             uploadFileToWebView()
-
-            return true
         } else {
             Log.d(TAG, "Permissions not set")
 
             askForPermissions(requiredPermissions, CAMERA_STORAGE_REQUEST_CODE)
-
-            return false
         }
+
+        return true
     }
 
     private fun uploadFileToWebView() {
-        val intentArray: Array<Intent?>
+        var intentArray: Array<Intent?>
 
-        var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent?.resolveActivity(activity.packageManager) != null) {
-            var photoFile: File? = null
-            try {
-                photoFile = createImageFile()
-                takePictureIntent.putExtra("PhotoPath", uploadedFileLocation)
-            } catch (ex: IOException) {
-                Log.e(TAG, "Image file creation failed", ex)
-            }
+        var externalMediaIntent: Intent?
 
-            if (photoFile != null) {
-                uploadedFileLocation = "file:" + photoFile.absolutePath
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile))
+        externalMediaIntent =
+            if (videoFilePending) Intent(MediaStore.ACTION_VIDEO_CAPTURE) else Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        if (externalMediaIntent.resolveActivity(activity.packageManager) != null) {
+            var tempUploadFile: File? = createTemporaryFile(videoFilePending)
+
+            if (tempUploadFile != null) {
+                if (!videoFilePending)
+                    externalMediaIntent.putExtra("PhotoPath", uploadedFileLocation)
+                uploadedFileLocation = "file:${tempUploadFile.absolutePath}"
+                externalMediaIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(tempUploadFile))
             } else {
-                takePictureIntent = null
+                externalMediaIntent = null
             }
 
-            intentArray = if (takePictureIntent != null) {
-                arrayOf(takePictureIntent)
-            } else {
-                arrayOfNulls(0)
-            }
         } else
-            intentArray = arrayOfNulls(0)
+            externalMediaIntent = null
 
+        intentArray = if (externalMediaIntent != null) {
+            arrayOf(externalMediaIntent)
+        } else {
+            arrayOfNulls(0)
+        }
 
         val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
         contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -173,6 +175,10 @@ class ChromeClientLocationHandler(private val activity: Activity) : WebChromeCli
 
     fun getFileUploadCallback(): ValueCallback<Array<Uri>>? = fileUploadCallback
 
+    fun resetFileUploadCallback() {
+        fileUploadCallback = null
+    }
+
     fun getUploadedFileLocation(): String? = uploadedFileLocation
 
     private fun checkMissingPermissions(requiredPermissions: Array<String>): Boolean {
@@ -189,13 +195,67 @@ class ChromeClientLocationHandler(private val activity: Activity) : WebChromeCli
         }
     }
 
+    private fun createTemporaryFile(isVideoFile: Boolean): File? {
+        return try {
+            if (isVideoFile)
+                createVideoFile()
+            else
+                createImageFile()
+        } catch (ex: IOException) {
+            Log.e(TAG, "File creation failed", ex)
+            null
+        }
+    }
+
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
         @SuppressLint("SimpleDateFormat") val timeStamp =
             SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = """img_${timeStamp}_"""
+        val imageFileName = """img_$timeStamp"""
+
         val storageDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        Log.d(TAG, "Creating file: $imageFileName in directory: ${storageDir.absolutePath}" )
         return File.createTempFile(imageFileName, ".jpg", storageDir)
+    }
+
+    @Throws(IOException::class)
+    private fun createVideoFile(): File {
+        @SuppressLint("SimpleDateFormat") val timeStamp =
+            SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val videoFileName = """vid_$timeStamp"""
+
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+        Log.d(TAG, "Creating file: $videoFileName in directory: ${storageDir.absolutePath}" )
+        return File.createTempFile(videoFileName, ".mp4", storageDir)
+    }
+
+    private fun isVideoRequest(fileChooserParams: WebChromeClient.FileChooserParams): Boolean {
+        var acceptedTypes = fileChooserParams.acceptTypes?.get(0) ?: return false
+
+        return acceptedTypes
+            .split(",")
+            .all {
+                it.startsWith(VIDEO_PREFIX)
+            }
+    }
+
+    private fun getRequiredPermissions(isVideoFile: Boolean): Array<String> {
+        var requiredBasePermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA)
+
+        var requiredVideoPermissions =
+            requiredBasePermissions +
+                    arrayOf(Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                        Manifest.permission.RECORD_AUDIO)
+
+        return if (isVideoFile) {
+            requiredVideoPermissions
+        } else {
+            requiredBasePermissions
+        }
     }
 }

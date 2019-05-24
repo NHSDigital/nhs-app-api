@@ -1,6 +1,9 @@
 package com.nhs.online.nhsonline.services
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
+import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.support.Optional
@@ -101,14 +104,35 @@ class KnownServices(private val context: Context) {
         services.add(nhs111)
         services.add(dataPref)
 
+        val nhsLoginPrefixList = fetchStringArrayResource(R.array.nhsLoginPrefixList)
+
+        nhsLoginPrefixList.forEach { nhsLoginPrefix ->
+            val nhsBaseLoginUrl = Uri.parse((fetchStringResource(R.string.nhsLoginSuffix)))
+
+            val newHost = "$nhsLoginPrefix.${nhsBaseLoginUrl.host}"
+
+            val nhsLoginUri =
+                nhsBaseLoginUrl
+                    .buildUpon()
+                    .authority(newHost)
+                    .build()
+
+            Log.d(Application.TAG, "Adding known service for $nhsLoginUri")
+
+            services.add(KnownService(nhsLoginUri.toString(),
+                fetchStringResource(R.string.nhs_login_header),
+                fetchStringResource(R.string.nhs_login_accessibility_label),
+                false))
+        }
+
         return services
     }
 
     private fun buildNHSInternalAppService(): KnownService {
         val internalService = KnownService(
-                fetchStringResource(R.string.baseURL),
-                fetchStringResource(R.string.home_header),
-                queryStrings = fetchStringResource(R.string.nhsOnlineRequiredQueries))
+            fetchStringResource(R.string.baseURL),
+            fetchStringResource(R.string.home_header),
+            queryStrings = fetchStringResource(R.string.nhsOnlineRequiredQueries))
         internalService.addPathInfo(fetchStringResource(R.string.symptomsPath),
             true,
             fetchStringResource(R.string.symptoms_header))
@@ -154,9 +178,14 @@ class KnownServices(private val context: Context) {
         return context.resources.getString(resourceId)
     }
 
+    private fun fetchStringArrayResource(resourceId: Int): Array<String> {
+        return context.resources.getStringArray(resourceId)
+    }
+
     fun getPostRequestReloadUrl(url: String): String? {
         return when {
-            url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(R.string.dataSharingPath)
+            url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(
+                R.string.dataSharingPath)
             else -> null
         }
     }

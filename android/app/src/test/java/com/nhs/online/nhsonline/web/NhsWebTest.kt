@@ -75,6 +75,7 @@ class NhsWebTest {
         val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn baseUrl
             on { getString(R.string.loginPath) } doReturn "login"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
         }
         whenever(spyActivity.resources).thenReturn(resourceMock)
         val spyNhsWeb = spy(nhsWeb)
@@ -90,6 +91,7 @@ class NhsWebTest {
         val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn baseUrl
             on { getString(R.string.loginPath) } doReturn loginPath
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
         }
         val loginUrl = baseUrl + "login"
         whenever(spyActivity.resources).thenReturn(resourceMock)
@@ -103,6 +105,32 @@ class NhsWebTest {
 
         // assert
         Assert.assertEquals(loginUrl, nhsWeb.reloadUrl)
+    }
+
+    @Test
+    fun loadUrl_DisplaysBiometricErrorAndLoadsWelcomePage_WhenThereIsAFidoLoginError() {
+        // arrange
+        val baseUrl = "http://unit-test.com/"
+        val loginPath = "login"
+        val resourceMock: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn baseUrl
+            on { getString(R.string.loginPath) } doReturn loginPath
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
+            on { getString(R.string.redirectErrorQueryParam) } doReturn "error"
+        }
+        val redirectUrl = "${baseUrl}auth-return?error=blah"
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+        whenever(interactorMock.canDisplayBiometricLogin()).thenReturn(true)
+        nhsWeb.requiresFullPageLoad = false
+        nhsWeb.isUserLoggedIn = true
+        whenever(urlLoader.produceValidUrl(baseUrl)).thenReturn(baseUrl)
+
+        // act
+        nhsWeb.loadUrl(redirectUrl)
+
+        // assert
+        verify(interactorMock, times(1)).displayBiometricLoginErrorOccurrence()
+        verify(urlLoader).loadUrl(baseUrl, false)
     }
 
     @Test
@@ -121,6 +149,7 @@ class NhsWebTest {
         val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn baseUrl
             on { getString(R.string.loginPath) } doReturn "login"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
         }
         val loginUrl = baseUrl + "login"
         whenever(spyActivity.resources).thenReturn(resourceMock)
@@ -138,6 +167,7 @@ class NhsWebTest {
             on { getString(R.string.baseURL) } doReturn baseUrl
             on { getString(R.string.loginPath) } doReturn loginPath
             on { getString(R.string.fidoAuthQueryKey) } doReturn "fidoAuthResponse"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
         }
         val loginUrl = baseUrl + loginPath
         whenever(webViewMock.url).thenReturn("$loginUrl?fidoAuthResponse=fido")
@@ -170,8 +200,8 @@ class NhsWebTest {
         nhsWeb.onWebLoggedIn()
         nhsWeb.onBiometricOptionChanged()
         val cookies: String? = CookieManager.getInstance()
-                .getCookie(activity.resources.getString(R.string.cookieDomain))
-                ?.takeIf { it.contains("HideBiometricBanner=") }
+            .getCookie(activity.resources.getString(R.string.cookieDomain))
+            ?.takeIf { it.contains("HideBiometricBanner=") }
         assert(!cookies.isNullOrBlank())
     }
 
@@ -190,5 +220,50 @@ class NhsWebTest {
         Assert.assertFalse(nhsWeb.isUserLoggedIn)
         verify(interactorMock).dismissSessionExtensionDialog()
         verify(interactorMock).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun onShouldReloadHomepageOnBackReturn_ReturnsTrue_IfInArray() {
+        val url = "http://auth.ext.signin.nhs.uk"
+        val resourceMock: Resources = mock {
+            on { getStringArray(R.array.nativeReloadOnBackUrls) } doReturn arrayOf(
+                "https://ext.signin.nhs.uk"
+            )
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+
+        val result = nhsWeb.shouldReloadHomepageOnBackReturn(url)
+
+        Assert.assertTrue(result)
+    }
+
+    @Test
+    fun onShouldReloadHomepageOnBackReturn_ReturnsFalse_IfNotInArray() {
+        val url = "http://any.fake.uk"
+        val resourceMock: Resources = mock {
+            on { getStringArray(R.array.nativeReloadOnBackUrls) } doReturn arrayOf(
+                "https://ext.signin.nhs.uk"
+            )
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+
+        val result = nhsWeb.shouldReloadHomepageOnBackReturn(url)
+
+        Assert.assertFalse(result)
+    }
+
+    @Test
+    fun onShouldReloadHomepageOnBackReturn_ReturnsFalse_IfUrlNull() {
+        val url: String? = null
+        val resourceMock: Resources = mock {
+            on { getStringArray(R.array.nativeReloadOnBackUrls) } doReturn arrayOf(
+                "https://ext.signin.nhs.uk"
+            )
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+
+        val result = nhsWeb.shouldReloadHomepageOnBackReturn(url)
+
+        Assert.assertFalse(result)
     }
 }

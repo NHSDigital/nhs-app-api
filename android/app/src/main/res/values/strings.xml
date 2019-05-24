@@ -81,6 +81,8 @@
     <string name="tryLaterText">Please try again later.</string>
     <string name="nhsAppHome">NHS App Home</string>
 
+    <string name="nhs_login_header">Log in to the NHS App</string>
+    <string name="nhs_login_accessibility_label">Log in using Patient ID</string>
 
     <string name="log_in">Log in to NHS App</string>
     <string name="enable_fingerprint">Turn on Fingerprint ID</string>

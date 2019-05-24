@@ -54,4 +54,8 @@ interface IInteractor {
     fun resetFocusToNhsLogoForAccessibility()
 
     fun pageLoadComplete()
+
+    fun displayBiometricLoginErrorOccurrence()
+
+    fun canDisplayBiometricLogin(): Boolean
 }

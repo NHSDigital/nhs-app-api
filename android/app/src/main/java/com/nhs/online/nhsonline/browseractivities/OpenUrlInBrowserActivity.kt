@@ -22,7 +22,8 @@ class OpenUrlInBrowserActivity(private val nativeAppHosts: Array<String>) : Acti
         }
         val currentHost = URL(url).host
         nativeAppHosts.forEach { nativeAppHost ->
-            if (URL(nativeAppHost).host.equals(currentHost, true)) {
+            if (URL(nativeAppHost).host.equals(currentHost, true) || currentHost.contains(
+                    URL(nativeAppHost).host, true)) {
                 return false
             }
         }

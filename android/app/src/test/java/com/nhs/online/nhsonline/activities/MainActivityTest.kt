@@ -6,7 +6,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import android.app.onResume
 import android.support.v7.app.AlertDialog
-import android.webkit.CookieManager
 import android.widget.TextView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
@@ -139,8 +138,8 @@ class MainActivityTest {
             on { isUserLoggedIn }.thenReturn(false)
         }
         FieldSetter.setField(spyActivity,
-                spyActivity::class.java.getDeclaredField("nhsWeb"),
-                nhsWebMock)
+            spyActivity::class.java.getDeclaredField("nhsWeb"),
+            nhsWebMock)
 
         try {
             spyActivity.onBackPressed()
@@ -160,8 +159,8 @@ class MainActivityTest {
             on { isCheckSymptomsUnsecureURL(url) }.thenReturn(true)
         }
         FieldSetter.setField(spyActivity,
-                spyActivity::class.java.getDeclaredField("nhsWeb"),
-                nhsWebMock)
+            spyActivity::class.java.getDeclaredField("nhsWeb"),
+            nhsWebMock)
 
         try {
             spyActivity.onBackPressed()
@@ -169,6 +168,29 @@ class MainActivityTest {
             assert(false)
         }
         verify(nhsWebMock, times(1)).onbackButtonPressedOnCheckSymptomsUnsecurePage()
+    }
+
+    @Test
+    fun onBackButtonPressed_WhenUrlShouldReloadHomepageOnBackReturn_CallsReloadHomepageOnBackReturn() {
+        val url = "http://account.ext.signin.nhs.uk"
+        spyActivity.webview.loadUrl(url)
+
+        val nhsWebMock: NhsWeb = mock {
+            on { isUserLoggedIn }.thenReturn(false)
+            on { reloadUrl }.thenReturn(url)
+            on { shouldReloadHomepageOnBackReturn(url) }.thenReturn(true)
+        }
+        FieldSetter.setField(spyActivity,
+            spyActivity::class.java.getDeclaredField("nhsWeb"),
+            nhsWebMock)
+
+        try {
+            spyActivity.onBackPressed()
+        } catch (e: Exception) {
+            assert(false)
+        }
+
+        verify(nhsWebMock, times(1)).reloadHomepageOnBackReturn()
     }
 
     @Test
@@ -224,5 +246,6 @@ class MainActivityTest {
                 updateUrl)
         }
     }
+
     private fun getStringById(resId: Int): String = mainActivity.resources.getString(resId)
 }

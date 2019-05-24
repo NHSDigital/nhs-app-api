@@ -20,6 +20,7 @@ import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
+import java.net.MalformedURLException
 import java.net.URL
 
 private val TAG = NhsWeb::class.java.simpleName
@@ -40,7 +41,8 @@ class NhsWeb(
     private val errorMessageHandler = ErrorMessageHandler(activity)
     private var originalWebViewZoom = 0
 
-    var applicationState = ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
+    var applicationState =
+        ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
     var isUserLoggedIn = false
     var requiresFullPageLoad = true
     var reloadUrl: String? = null
@@ -68,6 +70,19 @@ class NhsWeb(
     fun loadWelcomePage() = loadUrl(readResourceString(R.string.baseURL))
 
     fun loadUrl(path: String) {
+        Log.d(TAG, "Entering loadUrl")
+
+        val hasFidoLoginError =
+            path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
+                    uiInteractor.canDisplayBiometricLogin() &&
+                    path.contains(activity.resources.getString(R.string.redirectErrorQueryParam))
+        if (hasFidoLoginError) {
+            Log.d(TAG, "Fido login error response url: $path")
+            uiInteractor.displayBiometricLoginErrorOccurrence()
+            loadWelcomePage()
+            return
+        }
+
         var knownService = knownServices.findNHSAppInternalServiceInfoByPath(path)
         if (knownService == null) {
             knownService = knownServices.findMatchingServiceInfo(path)
@@ -93,7 +108,7 @@ class NhsWeb(
     }
 
     fun isCheckSymptomsUnsecureURL(url: String?): Boolean {
-        if(url == null) {
+        if (url == null) {
             return false
         }
         val unsecuredKnownServiceInfo = knownServices.findMatchingServiceInfo(url)
@@ -124,6 +139,9 @@ class NhsWeb(
 
     fun onSlimHeaderBackButtonPressed(): Boolean {
         when {
+            shouldReloadHomepageOnBackReturn(reloadUrl) -> {
+                reloadHomepageOnBackReturn()
+            }
             webView.canGoBack() -> webView.goBack()
             isCheckSymptomsUnsecureURL(reloadUrl) ->
                 loadUrl(readResourceString(R.string.checkYourSymptoms))
@@ -172,11 +190,11 @@ class NhsWeb(
 
     fun onBiometricOptionChanged() {
         val cookies: String? = CookieManager.getInstance()
-                .getCookie(activity.resources.getString(R.string.cookieDomain))
-                ?.takeIf { it.contains("HideBiometricBanner=") }
+            .getCookie(activity.resources.getString(R.string.cookieDomain))
+            ?.takeIf { it.contains("HideBiometricBanner=") }
         if (cookies.isNullOrBlank()) {
             CookieManager.getInstance().setCookie(readResourceString(R.string.cookieDomain),
-                    "HideBiometricBanner=true; max-age=${60 * 60 * 24 * 365 * 5}")
+                "HideBiometricBanner=true; max-age=${60 * 60 * 24 * 365 * 5}")
         }
     }
 
@@ -200,10 +218,14 @@ class NhsWeb(
         return false
     }
 
-    fun reloadCurrentUrl() = urlLoader.reloadRequest(Optional.of(knownServices.getPostRequestReloadUrl(reloadUrl.orEmpty())).orElse(reloadUrl))
+    fun reloadCurrentUrl() =
+        urlLoader.reloadRequest(Optional.of(knownServices.getPostRequestReloadUrl(reloadUrl.orEmpty())).orElse(
+            reloadUrl))
 
 
     fun getFileUploadCallback() = chromeClient.getFileUploadCallback()
+
+    fun resetFileUploadCallback() = chromeClient.resetFileUploadCallback()
 
     fun getUploadedFileLocation() = chromeClient.getUploadedFileLocation()
 
@@ -219,7 +241,8 @@ class NhsWeb(
 
     fun clearSessionCookies() {
         val host = readResourceString(R.string.baseHost)
-        val allHosts = host.split('.').foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
+        val allHosts = host.split('.')
+            .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
         for (String in allHosts) {
             clearCookie("nhso.session", "https://$String")
             clearCookie("NHSO-Session-Id", "https://.$String")
@@ -233,7 +256,29 @@ class NhsWeb(
         return activity.getString(resourceId)
     }
 
-    private fun clearCookie(cookieName: String, domain: String) {
-        CookieManager.getInstance().setCookie(domain, "$cookieName=; Expires=Sat, 1 Jan 2000 00:00:01 UTC;")
+    fun shouldReloadHomepageOnBackReturn(urlString: String?): Boolean {
+        val sitesFromResource: Array<String>? =
+            activity.resources.getStringArray(R.array.nativeReloadOnBackUrls)
+
+        if (urlString == null || sitesFromResource == null) return false
+
+        return try {
+            sitesFromResource.any { urlString.contains(URL(it).host) }
+        } catch (exception: MalformedURLException) {
+            false
+        }
+
     }
+
+    fun reloadHomepageOnBackReturn() {
+        loadWelcomePage()
+        uiInteractor.showBlankScreen()
+    }
+
+    private fun clearCookie(cookieName: String, domain: String) {
+        CookieManager.getInstance()
+            .setCookie(domain, "$cookieName=; Expires=Sat, 1 Jan 2000 00:00:01 UTC;")
+    }
+
+
 }

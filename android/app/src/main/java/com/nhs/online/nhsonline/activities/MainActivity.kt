@@ -151,37 +151,46 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         var results: Array<Uri>? = null
         var fileUploadCallback = nhsWeb.getFileUploadCallback()
 
-        logger.log(Level.WARNING, "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
+        logger.log(Level.WARNING,
+            "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
+        try {
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
 
-                var uploadedFileLocation = nhsWeb.getUploadedFileLocation()
+                    var uploadedFileLocation = nhsWeb.getUploadedFileLocation()
 
-                if (fileUploadCallback == null) {
-                    return
-                }
-
-                if (intent?.data == null) {
-                    if (uploadedFileLocation != null) {
-                        results = arrayOf(Uri.parse(uploadedFileLocation))
+                    if (fileUploadCallback == null) {
+                        return
                     }
-                } else {
-                    val dataString = intent.dataString
-                    if (dataString != null) {
-                        results = arrayOf(Uri.parse(dataString))
+
+                    if (intent?.data == null) {
+                        if (uploadedFileLocation != null) {
+                            results = arrayOf(Uri.parse(uploadedFileLocation))
+                        }
+                    } else {
+                        val dataString = intent.dataString
+                        if (dataString != null) {
+                            results = arrayOf(Uri.parse(dataString))
+                        }
                     }
+
+                    fileUploadCallback.onReceiveValue(results)
+                    nhsWeb.resetFileUploadCallback()
                 }
+            } else {
+                if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
+                    if (fileUploadCallback == null) return
 
-                fileUploadCallback?.onReceiveValue(results)
+                    fileUploadCallback.onReceiveValue(null)
+                    nhsWeb.resetFileUploadCallback()
+                }
             }
-        } else {
-            if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
-                if (fileUploadCallback == null) return
-
-                fileUploadCallback?.onReceiveValue(null)
-            }
+        } catch (exception: Exception) {
+            logger.log(Level.SEVERE, "Unexpected error in onActivityResult" , exception)
         }
+
+
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -310,6 +319,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             path == "/" + resources.getString(R.string.checkYourSymptoms)
                     || nhsWeb.isCheckSymptomsUnsecureURL(webview.url) ->
                 nhsWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
+            nhsWeb.shouldReloadHomepageOnBackReturn(nhsWeb.reloadUrl) -> nhsWeb.reloadHomepageOnBackReturn()
             else -> this.finishAndRemoveTask()
         }
     }
@@ -541,6 +551,14 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun showBiometricLoginIfEnabled() = biometricsInterface.showBiometricLoginIfEnabled()
+
+    override fun displayBiometricLoginErrorOccurrence() {
+        biometricsInterface.notifyLoginErrorOccurrence()
+    }
+
+    override fun canDisplayBiometricLogin(): Boolean {
+        return biometricsInterface.isFingerprintRegistered
+    }
 
     private fun onSuccessButton() {
         activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
