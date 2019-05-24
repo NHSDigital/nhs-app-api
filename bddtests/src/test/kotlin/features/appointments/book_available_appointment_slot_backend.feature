@@ -27,6 +27,7 @@ Feature: Book appointments API
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if empty slot identifier is provided
     Given an appointment booking for <GP System> can be successful
@@ -38,6 +39,7 @@ Feature: Book appointments API
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns a successful response if slot identifier is 1 character
     Given an appointment booking for <GP System> can be successful with slot identifier of 1 character
@@ -49,6 +51,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no booking reason is provided
     Given I have logged into <GP System> and have a valid session cookie
@@ -59,6 +62,7 @@ Feature: Book appointments API
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if an empty booking reason is provided
     Given an appointment booking for <GP System> can be successful
@@ -70,6 +74,7 @@ Feature: Book appointments API
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns successful response if the booking reason is 1 character
     Given an appointment booking for <GP System> can be successful with booking reason of 1 character
@@ -81,6 +86,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns successful response if the booking reason is 150 characters
     Given an appointment booking for <GP System> can be successful with booking reason of 150 characters
@@ -92,6 +98,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if the booking reason exceeds 150 characters
     Given an appointment booking for <GP System> can be successful
@@ -103,6 +110,7 @@ Feature: Book appointments API
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Unauthorized" response if the user session has expired
     Given an appointment booking for <GP System> can be successful, but session has expired
@@ -114,6 +122,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Unauthorized" response if no user session cookie was generated
     Given an appointment booking for <GP System> can be successful
@@ -124,6 +133,7 @@ Feature: Book appointments API
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Forbidden" response if online appointment booking is not available for this patient
     Given online appointment booking is not available to the <GP System> patient, when wanting to book an appointment
@@ -162,6 +172,7 @@ Feature: Book appointments API
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot has been booked by someone else
     Given an appointment booking for <GP System> cannot be successful because the slot has been booked by someone else

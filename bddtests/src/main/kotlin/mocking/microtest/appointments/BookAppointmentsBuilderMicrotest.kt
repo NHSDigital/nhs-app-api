@@ -70,7 +70,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
-        TODO("not implemented")
+        return respondWithConflictError()
     }
 
     override fun respondWithExceptionWhenRequiredFieldMissing(): Mapping {

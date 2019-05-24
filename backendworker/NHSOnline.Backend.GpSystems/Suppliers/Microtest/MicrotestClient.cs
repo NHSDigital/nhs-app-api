@@ -215,6 +215,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
             public bool HasInternalServerError => StatusCode == HttpStatusCode.InternalServerError;
 
+
             public override string ErrorForLogging => $"Error Code: '{StatusCode}'. " +
                                                       $"Error Message:'{ErrorResponseMessage}'. ";
 
