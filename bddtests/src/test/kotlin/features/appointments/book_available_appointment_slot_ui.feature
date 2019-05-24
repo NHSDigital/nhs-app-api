@@ -114,6 +114,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given there are <GP System> appointments available to book, but the GP system is unavailable
@@ -129,6 +130,7 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativesmoketest
     Examples:
@@ -148,6 +150,7 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativesmoketest
     Examples:
@@ -168,6 +171,7 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativesmoketest
     Examples:

@@ -28,7 +28,7 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
     fun respondWithForbiddenError(): Mapping {
         return respondWith(HttpStatus.SC_FORBIDDEN) {  andJsonBody("""
             {
-                "error": "The patient does not have the necessary permissions within the GP system. (appointments)"
+                "Error": "The patient does not have the necessary permissions within the GP system. (appointments)"
             }
         """.trimIndent()) }
     }
@@ -42,9 +42,23 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
         }
     }
 
+    fun respondWithUnknownExceptionError(): Mapping {
+        return respondWith(HttpStatus.SC_BAD_GATEWAY) {
+            andJsonBody("")
+        }
+    }
+
     fun respondWithInternalServerError(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody("")
         }
+    }
+
+    fun respondWithConflictError(): Mapping {
+        return respondWith(HttpStatus.SC_CONFLICT){ andJsonBody(""" +
+            {
+                ""Error"" : ""Conflict. The chosen appointment slot is not available for booking.""
+            }
+            """.trimIndent()) }
     }
 }

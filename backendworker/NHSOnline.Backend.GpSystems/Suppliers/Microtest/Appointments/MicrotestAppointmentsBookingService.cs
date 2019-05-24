@@ -55,7 +55,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
             if (response.HasForbiddenResponse)
             {
+                _logger.LogError(response.ErrorForLogging);
                 return new AppointmentBookResult.Forbidden();
+            }
+
+            if (response.HasConflictResponse)
+            {
+                _logger.LogError(response.ErrorForLogging);
+                return new AppointmentBookResult.SlotNotAvailable();
             }
 
             _logger.LogError(response.ErrorForLogging);

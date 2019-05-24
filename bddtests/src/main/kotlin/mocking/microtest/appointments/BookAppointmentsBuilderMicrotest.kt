@@ -50,7 +50,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     }
 
     override fun respondWithConflictException(): Mapping {
-        TODO("not implemented")
+        return respondWithConflictError()
     }
 
     override fun respondWithBookingLimitException(): Mapping {
@@ -58,7 +58,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     }
 
     override fun respondWithUnknownException(): Mapping {
-        TODO("not implemented")
+        return respondWithUnknownExceptionError()
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
@@ -66,7 +66,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {
-        TODO("not implemented")
+        return respondWithConflictError()
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {

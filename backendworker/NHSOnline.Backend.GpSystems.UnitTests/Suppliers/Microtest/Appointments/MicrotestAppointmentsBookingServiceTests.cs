@@ -22,8 +22,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private const string SlotId = "2862517";
         private const string TelephoneNumber = "07123456789";
         private const string MicrotestSuccessfulBookingResponse = "Appointment successfully created.";
-        private const string MicrotestForbiddenBookingResponse = "The patient does not have the necessary " +
-                                                                 "permissions within the GP system. (appointments)";
+        private const string MicrotestForbiddenBookingResponse = "{\n\t \"Error\" : \"The patient does not have the " +
+                                                                 "necessary permissions within the GP system. " +
+                                                                 "(appointments)\"\n}";
+        private const string MicrotestNotAvailableBookingResponse = "{\n\t \"Error\" : \"Conflict. The chosen appointment " +
+                                                                    "slot is not available for booking.\"\n}";
 
         private IFixture _fixture;
         private Mock<IMicrotestClient> _mockMicrotestClient;
@@ -88,6 +91,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
+        [TestMethod]
+        public async Task Book_ReturnsConflict_ReturnsSlotNotAvailableResponse()
+        {
+            // Arrange
+            var response = new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Conflict)
+            {
+                Body = MicrotestNotAvailableBookingResponse
+            };
+
+            MockMicrotestClientAppointmentPostMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.Book(_microtestUserSession, _request);
+
+            // Assert
+            _mockMicrotestClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
+        }
+        
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]

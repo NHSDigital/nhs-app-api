@@ -149,6 +149,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
 #  Note: VISION ALLOWS To book appointments that are in past
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot is in the past
@@ -173,6 +174,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Gateway" response if an unknown exception occurs
     Given an appointment booking for <GP System> generates an unknown exception
@@ -185,6 +187,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Gateway" response if the GP system is currently unavailable
     Given an appointment booking for <GP System> cannot be successful because the GP system is unavailable
@@ -197,6 +200,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Gateway Timeout" response if the GP system did not respond in a timely fashion
     Given an appointment booking for <GP System> cannot be successful because the GP system will time out
@@ -209,6 +213,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: <GP System> returns corrupted data
     Given <GP System> returns corrupted response for booking request
