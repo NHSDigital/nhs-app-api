@@ -7,6 +7,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
         ValidateUniqueOdsConfiguration,
         MergeOdsJourneys,
         ValidateOdsJourneys,
-        OutputOdsJourneys
+        OutputOdsJourneys,
     }
 }

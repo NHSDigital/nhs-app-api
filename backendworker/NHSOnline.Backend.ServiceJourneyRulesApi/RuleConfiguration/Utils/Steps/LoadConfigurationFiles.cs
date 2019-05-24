@@ -9,7 +9,7 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 {
-    internal class LoadConfigurationFiles : IValidatorStep
+    internal class LoadConfigurationFiles : IValidatorStep, ILoadStep
     {
         public string Description { get; } = "Loading configuration files and validate schema";
         public ProcessOrder Order { get; } = ProcessOrder.LoadConfigurationFiles;
@@ -29,6 +29,26 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             _yamlReaderFactory = yamlReaderFactory;
             _fileHandler = fileHandler;
             _serviceJourneyRulesConfiguration = serviceJourneyRulesConfiguration;
+        }
+
+        public async Task<bool> Execute(LoadContext context)
+        {
+            new ValidateAndLog(_logger)
+                .IsNotNull(context, nameof(context), ThrowError)
+                .IsNotNull(context?.TargetSchema, nameof(context.TargetSchema), ThrowError)
+                .IsValid();
+
+            var configFolderPath = _serviceJourneyRulesConfiguration.InputFolderPath;
+
+            var (empty, didError, readFiles) = await GetConfigurations(context.TargetSchema, configFolderPath);
+            if (empty || didError || !Validate(readFiles))
+            {
+                _logger.LogCritical("Error reading target configuration files. See output above for specific errors.");
+                return false;
+            }
+
+            context.MergedOdsJourneys = readFiles.ToDictionary(k => k.Target.OdsCode, v => v.Journeys);
+            return true;
         }
 
         public async Task<bool> Execute(ConfigurationContext context)
@@ -83,22 +103,35 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             foreach (var folderPath in rules.FolderOrder)
             {
                 var configFolderPath = Path.Join(_serviceJourneyRulesConfiguration.JourneysFolderPath, folderPath);
-                var files = _fileHandler.GetFiles(configFolderPath);
+                var (empty, didError, readFiles) = await GetConfigurations(schema, configFolderPath);
 
-                if (!files.Any())
+                if (empty)
                 {
-                    _logger.LogError(
-                        $"No target configuration files found in directory {configFolderPath}");
                     continue;
                 }
 
-                var (didError, readFiles) = await GetConfigurations(schema, files);
                 hasError = hasError || didError;
-
                 result.Add(configFolderPath, readFiles);
             }
 
             return (hasError || !result.Any(), result);
+        }
+
+        private async Task<(bool empty, bool hadError, List<TargetConfiguration> configurations)> GetConfigurations(
+            FileData schema,
+            string configFolderPath)
+        {
+            var files = _fileHandler.GetFiles(configFolderPath);
+
+            if (files.Any())
+            {
+                var (didError, readFiles) = await GetConfigurations(schema, files);
+                return (false, didError, readFiles);
+            }
+
+            _logger.LogWarning(
+                $"No target configuration files found in directory {configFolderPath}");
+            return (true, false, null);
         }
 
         private async Task<(bool hadError, List<TargetConfiguration> configurations)> GetConfigurations(
@@ -122,6 +155,18 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             }
 
             return (hasError, readFiles);
+        }
+
+        private bool Validate(IEnumerable<TargetConfiguration> readFiles)
+        {
+            if (!readFiles.Any(x => string.IsNullOrWhiteSpace(x.Target?.OdsCode)))
+            {
+                return true;
+            }
+
+            _logger.LogCritical(
+                "Ods code is empty or null in mounted configuration files. See output above for specific errors.");
+            return false;
         }
     }
 }

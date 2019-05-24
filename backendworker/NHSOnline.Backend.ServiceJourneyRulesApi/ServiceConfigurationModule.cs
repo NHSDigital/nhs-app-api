@@ -36,10 +36,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             services.AddSingleton<IValidatorStep, MergeOdsJourneys>();
             services.AddSingleton<IValidatorStep, ValidateOdsJourneys>();
             services.AddSingleton<IValidatorStep, OutputOdsJourneys>();
+            services.AddSingleton<ILoadStep, LoadRequiredFiles>();
+            services.AddSingleton<ILoadStep, LoadConfigurationFiles>();
+            services.AddSingleton<ILoadStep, ValidateOdsJourneys>();
             services.AddSingleton(typeof(EnumDescriptionConverter<>));
             services.AddSingleton<IServiceJourneyRulesConfiguration, ServiceJourneyRulesConfiguration>();
             services.AddSingleton<IYamlSerializer, YamlSerializer>();
             services.AddSingleton<IDirectory, DirectoryWrapper>();
+            services.AddSingleton<IJourneyService, JourneyService>();
             
             base.ConfigureServices(services, configuration);
         }

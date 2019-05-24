@@ -14,17 +14,19 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
 {
     public static class Program
     {
-        private enum RunMode
+        internal enum RunMode
         {
             Validate,
             ServeWebApi
         }
 
+        internal static RunMode Mode { get; private set; }
+
         public static async Task Main(string[] args)
         {
-            var runMode = DetermineRunModeFromCommandLineArgs(args);
+            Mode = DetermineRunModeFromCommandLineArgs(args);
 
-            if (runMode == RunMode.Validate)
+            if (Mode == RunMode.Validate)
             {
                 await BuildConsoleApp(args).RunAsync();
             }

@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         private readonly string _journeysConfigurationFolder = "c:/folder/journeys";
 
         private IValidatorStep _step;
+        private ILoadStep _loadStep;
         private IFixture _fixture;
         private Mock<ILogger<LoadConfigurationFiles>> _mockLogger;
         private Mock<IFileHandler> _mockFileHandler;
@@ -46,6 +47,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockYamlReaderFactory = _fixture.Freeze<Mock<IYamlReaderFactory>>();
 
             _step = _fixture.Create<LoadConfigurationFiles>();
+            _loadStep = _fixture.Create<LoadConfigurationFiles>();
         }
 
         [TestMethod]
@@ -217,8 +219,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _step.Execute(context);
 
             // assert
-            _mockLogger.VerifyLogger(LogLevel.Error, $"found in directory {folder1Path}", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, $"found in directory {folder2Path}", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Warning, $"found in directory {folder1Path}", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Warning, $"found in directory {folder2Path}", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading target configuration files", Times.Once());
             _mockLogger.VerifyNoOtherCalls();
 
@@ -310,7 +312,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _step.Execute(context);
 
             // assert
-            _mockLogger.VerifyLogger(LogLevel.Error, $"found in directory {folder2Path}", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Warning, $"found in directory {folder2Path}", Times.Once());
             _mockLogger.VerifyNoOtherCalls();
 
             result.Should().BeTrue();
@@ -320,6 +322,64 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .WhichValue.Should().NotBeNull()
                 .And.HaveCount(1)
                 .And.Contain(targetConfiguration);
+        }
+        
+        [TestMethod]
+        public void ExecuteWithLoadContext_WhenTargetSchemaIsNotPresent_ThrowsAnException()
+        {
+            // arrange
+            var context = new LoadContext();
+
+            // act
+            Func<Task> act = async () => await _loadStep.Execute(context);
+
+            // assert
+            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("TargetSchema");
+        }
+        
+        [TestMethod]
+        public async Task ExecuteWithLoadContext_WhenItFailsToReadTheMergedConfigurationFile_ReturnsFalse()
+        {
+            // arrange
+            var context = new LoadContext
+            {
+                TargetSchema = _fixture.Create<FileData>()
+            };
+
+            const string fileName = "rule1.yaml";
+            SetupFileHandler(_rulesConfigurationFolder, new[] { fileName });
+            SetupReader(fileName, (Rules) null);
+
+            // act
+            var result = await _loadStep.Execute(context);
+
+            // assert
+            _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading target configuration files.", Times.Once());
+
+            result.Should().BeFalse();
+        }
+        
+        [TestMethod]
+        public async Task ExecuteWithLoadContext_WhenThereAreNoTargetConfigurationFiles_ReturnsFalse()
+        {
+            // arrange
+            var context = new LoadContext
+            {
+                TargetSchema = _fixture.Create<FileData>()
+            };
+
+            const string targetFileName = "target.yaml";
+            SetupFileHandler(_rulesConfigurationFolder, Array.Empty<string>());
+
+            var targetConfiguration = _fixture.Create<TargetConfiguration>();
+            SetupReader(targetFileName, targetConfiguration);
+
+            // act
+            var result = await _loadStep.Execute(context);
+
+            // assert
+
+            result.Should().BeFalse();
         }
 
         private void SetupFileHandler(Dictionary<string, string[]> entries)

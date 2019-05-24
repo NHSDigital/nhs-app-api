@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
+using NHSOnline.Backend.ServiceJourneyRulesApi.StartupFilters;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
@@ -52,10 +53,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
-
+            services.AddSingleton(services);
             services.AddOptions();
             
             _modularStartup.ConfigureServices(services);
+
+            services.AddTransient<IStartupFilter, JourneyRepositoryStartupFilter>();
         }
         
         private static void ConfigureMvcOptions(MvcOptions options)

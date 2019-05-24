@@ -7,7 +7,7 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 {
-    internal class ValidateOdsJourneys : IValidatorStep
+    internal class ValidateOdsJourneys : IValidatorStep, ILoadStep
     {
         public string Description { get; } = "Validating Ods journeys";
         public ProcessOrder Order { get; } = ProcessOrder.ValidateOdsJourneys;
@@ -18,8 +18,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
         {
             _logger = logger;
         }
-
+        
         public Task<bool> Execute(ConfigurationContext context)
+        {
+            return Execute((LoadContext) context);
+        }
+
+        public Task<bool> Execute(LoadContext context)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(context, nameof(context), ThrowError)

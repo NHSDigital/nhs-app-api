@@ -17,6 +17,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
     public class ValidateOdsJourneysTests
     {
         private IValidatorStep _step;
+        private ILoadStep _loadStep;
         private Mock<ILogger<ValidateOdsJourneys>> _mockLogger;
 
         [TestInitialize]
@@ -28,6 +29,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockLogger = fixture.Freeze<Mock<ILogger<ValidateOdsJourneys>>>();
 
             _step = fixture.Create<ValidateOdsJourneys>();
+            
+            _loadStep= fixture.Create<ValidateOdsJourneys>();
         }
 
         [TestMethod]
@@ -70,21 +73,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsJourneyType.Im1Appointments,
-                            PrescriptionsJourneyType.Im1Prescriptions,
-                            MedicalRecordJourneyType.Disabled)
+                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.disabled)
                     },
                     {
                         "A2",
-                        CreateJourneys(AppointmentsJourneyType.Disabled,
+                        CreateJourneys(AppointmentsJourneyType.disabled,
                             PrescriptionsJourneyType.None,
-                            MedicalRecordJourneyType.Im1MedicalRecord)
+                            MedicalRecordJourneyType.im1MedicalRecord)
                     },
                     {
                         "A3",
                         CreateJourneys(null,
-                            PrescriptionsJourneyType.Im1Prescriptions,
-                            MedicalRecordJourneyType.Im1MedicalRecord)
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.im1MedicalRecord)
                     }
                 }
             };
@@ -110,21 +113,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsJourneyType.Im1Appointments,
-                            PrescriptionsJourneyType.Im1Prescriptions,
-                            MedicalRecordJourneyType.Disabled)
+                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.disabled)
                     },
                     {
                         "A2",
-                        CreateJourneys(AppointmentsJourneyType.Disabled,
-                            PrescriptionsJourneyType.Disabled,
-                            MedicalRecordJourneyType.Im1MedicalRecord)
+                        CreateJourneys(AppointmentsJourneyType.disabled,
+                            PrescriptionsJourneyType.disabled,
+                            MedicalRecordJourneyType.im1MedicalRecord)
                     },
                     {
                         "A3",
-                        CreateJourneys(AppointmentsJourneyType.Im1Appointments,
-                            PrescriptionsJourneyType.Im1Prescriptions,
-                            MedicalRecordJourneyType.Im1MedicalRecord)
+                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.im1MedicalRecord)
                     }
                 }
             };
@@ -134,6 +137,57 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
             // assert;
             result.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public async Task Execute_WhenMergedConfigFilesContainsAllJourneys_ReturnsTrue()
+        {
+            // arrange
+            var context = new LoadContext
+            {
+                MergedOdsJourneys = new Dictionary<string, Journeys>
+                {
+                    {
+                        "A1",
+                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.disabled)
+                    }
+                }
+            };
+
+            // act
+            var result = await _loadStep.Execute(context);
+
+            // assert;
+            result.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public async Task Execute_WhenMergedConfigFilesMissingJourneys_ReturnsFalse()
+        {
+            // arrange
+            var context = new LoadContext
+            {
+                MergedOdsJourneys = new Dictionary<string, Journeys>
+                {
+                    {
+                        "A1",
+                        CreateJourneys(null,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.disabled)
+                    }
+                }
+            };
+
+            // act
+            var result = await _loadStep.Execute(context);
+
+            // assert;
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A1'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
+
+            result.Should().BeFalse();
         }
 
         private static Journeys CreateJourneys(

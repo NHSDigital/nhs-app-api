@@ -77,9 +77,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsJourneyType.Im1Appointments,
-                            PrescriptionsJourneyType.Im1Prescriptions,
-                            MedicalRecordJourneyType.Disabled)
+                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.disabled)
                     }
                 }
             };
@@ -110,21 +110,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsJourneyType.Im1Appointments,
-                            PrescriptionsJourneyType.Im1Prescriptions,
-                            MedicalRecordJourneyType.Disabled)
+                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.disabled)
                     },
                     {
                         "A2",
-                        CreateJourneys(AppointmentsJourneyType.Disabled,
-                            PrescriptionsJourneyType.Disabled,
-                            MedicalRecordJourneyType.Im1MedicalRecord)
+                        CreateJourneys(AppointmentsJourneyType.disabled,
+                            PrescriptionsJourneyType.disabled,
+                            MedicalRecordJourneyType.im1MedicalRecord)
                     },
                     {
                         "A3",
-                        CreateJourneys(AppointmentsJourneyType.Im1Appointments,
-                            PrescriptionsJourneyType.Im1Prescriptions,
-                            MedicalRecordJourneyType.Im1MedicalRecord)
+                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
+                            PrescriptionsJourneyType.im1Prescriptions,
+                            MedicalRecordJourneyType.im1MedicalRecord)
                     }
                 }
             };

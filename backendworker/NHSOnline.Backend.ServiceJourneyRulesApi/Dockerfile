@@ -21,11 +21,7 @@ FROM dependencies as built
 WORKDIR /src
 COPY . .
 WORKDIR /src/NHSOnline.Backend.ServiceJourneyRulesApi
-
 RUN dotnet build -c Release -o /app  -r linux-x64
-WORKDIR /src
-COPY configurations/ /app/configurations/
-WORKDIR /src/NHSOnline.Backend.ServiceJourneyRulesApi
 
 FROM built AS publish
 RUN dotnet publish -c Release -o /app -r linux-x64
@@ -35,11 +31,12 @@ ENV PORT=8086
 ENV ASPNETCORE_URLS=
 ENV AUDIT_SINK_TYPE FILE
 ENV SESSION_MONGO_DATABASE_NAME development
-ENV GP_INFO_FILE_PATH ./configurations/gpinfo.csv
-ENV CONFIGURATION_FOLDER_PATH ./configurations
+ENV GP_INFO_FILE_PATH=
+ENV CONFIGURATION_FOLDER_PATH=
 ENV RULES_FOLDER_NAME Rules
 ENV JOURNEYS_FOLDER_NAME Journeys
-ENV OUTPUT_FOLDER_PATH ./configurations/output
+ENV OUTPUT_FOLDER_PATH=
+ENV INPUT_FOLDER_PATH=
 ENV SJR_ARGS=
 
 WORKDIR /app

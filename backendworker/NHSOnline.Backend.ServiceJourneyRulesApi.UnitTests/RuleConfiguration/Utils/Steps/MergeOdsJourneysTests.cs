@@ -62,30 +62,30 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             // arrange
             var defaultFolderJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsJourneyType.Im1Prescriptions,
+                CreateJourneys(null, PrescriptionsJourneyType.im1Prescriptions,
                     MedicalRecordJourneyType.None),
                 CreateJourneys(AppointmentsJourneyType.None, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.Im1MedicalRecord),
-                CreateJourneys(AppointmentsJourneyType.Im1Appointments, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.Disabled)
+                    MedicalRecordJourneyType.im1MedicalRecord),
+                CreateJourneys(AppointmentsJourneyType.im1Appointments, PrescriptionsJourneyType.None,
+                    MedicalRecordJourneyType.disabled)
             );
             
             var anotherFolderJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsJourneyType.Im1Prescriptions,
-                    MedicalRecordJourneyType.Disabled),
-                CreateJourneys(AppointmentsJourneyType.Disabled, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.Im1MedicalRecord),
-                CreateJourneys(AppointmentsJourneyType.Im1Appointments, PrescriptionsJourneyType.Disabled,
+                CreateJourneys(null, PrescriptionsJourneyType.im1Prescriptions,
+                    MedicalRecordJourneyType.disabled),
+                CreateJourneys(AppointmentsJourneyType.disabled, PrescriptionsJourneyType.None,
+                    MedicalRecordJourneyType.im1MedicalRecord),
+                CreateJourneys(AppointmentsJourneyType.im1Appointments, PrescriptionsJourneyType.disabled,
                     MedicalRecordJourneyType.None)
             );
             
             var expectedMergedJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsJourneyType.Im1Prescriptions,
-                    MedicalRecordJourneyType.Disabled),
-                CreateJourneys(AppointmentsJourneyType.Disabled, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.Im1MedicalRecord),
-                CreateJourneys(AppointmentsJourneyType.Im1Appointments, PrescriptionsJourneyType.Disabled,
-                    MedicalRecordJourneyType.Disabled)
+                CreateJourneys(null, PrescriptionsJourneyType.im1Prescriptions,
+                    MedicalRecordJourneyType.disabled),
+                CreateJourneys(AppointmentsJourneyType.disabled, PrescriptionsJourneyType.None,
+                    MedicalRecordJourneyType.im1MedicalRecord),
+                CreateJourneys(AppointmentsJourneyType.im1Appointments, PrescriptionsJourneyType.disabled,
+                    MedicalRecordJourneyType.disabled)
             );
 
             var context = new ConfigurationContext

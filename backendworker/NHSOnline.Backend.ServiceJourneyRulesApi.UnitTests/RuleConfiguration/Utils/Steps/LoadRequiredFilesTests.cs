@@ -19,6 +19,7 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
     {
 
         private IValidatorStep _step;
+        private ILoadStep _loadStep;
         private Mock<IGpInfoReader> _mockGpInfoReader;
         private Mock<IFileHandler> _mockFileHandler;
         private Mock<ILogger<LoadRequiredFiles>> _mockLogger;
@@ -33,6 +34,7 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
             _mockFileHandler = fixture.Freeze<Mock<IFileHandler>>();
             _mockLogger = fixture.Freeze<Mock<ILogger<LoadRequiredFiles>>>();
             _step = fixture.Create<LoadRequiredFiles>();
+            _loadStep= fixture.Create<LoadRequiredFiles>();
         }
 
         [TestMethod]
@@ -127,6 +129,45 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
             context.TargetSchema.Should().BeSameAs(targetSchema);
             context.RulesSchema.Should().BeSameAs(rulesSchema);
             context.GpInfos.Should().NotBeNull();
+        }
+        
+        [TestMethod]
+        public async Task ExecuteWithLoadContext_WhenJourneysSchemaDoesNotExist_ReturnsFalse()
+        {
+            // arrange
+            var context = new LoadContext();
+            FileData fileData;
+            _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.JourneyConfigurationSchema, out fileData))
+                .Returns(false);
+            
+            // act
+            var result = await _loadStep.Execute(context);
+            
+            // assert
+            _mockLogger.VerifyLogger(LogLevel.Critical, Times.Once());
+            
+            result.Should().BeFalse();
+            context.TargetSchema.Should().BeNull();
+        }
+        
+        [TestMethod]
+        public async Task ExecuteWithLoadContext_WhenAllFilesExist_ReturnsTrue()
+        {
+            // arrange
+            var context = new LoadContext();
+            var targetSchema = new FileData(null, null);
+            
+            _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.JourneyConfigurationSchema, out targetSchema))
+                .Returns(true);
+
+            // act
+            var result = await _loadStep.Execute(context);
+            
+            // assert
+            _mockLogger.VerifyNoOtherCalls();
+            
+            result.Should().BeTrue();
+            context.TargetSchema.Should().BeSameAs(targetSchema);
         }
     }
 }

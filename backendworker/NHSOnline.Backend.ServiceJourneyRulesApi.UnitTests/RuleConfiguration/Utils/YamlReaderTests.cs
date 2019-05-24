@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 Target = new Target { All = "*" },
                 Journeys = new Journeys
                 {
-                    Appointments = new Appointments { JourneyType = AppointmentsJourneyType.Im1Appointments }
+                    Appointments = new Appointments { JourneyType = AppointmentsJourneyType.im1Appointments }
                 }
             };
             

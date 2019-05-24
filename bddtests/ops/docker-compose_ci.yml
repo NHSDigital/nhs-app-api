@@ -74,6 +74,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     tty: true
+  servicejourneyrulesapi.config:
+    image: nhsapp.azurecr.io/nhsonline-service-journey-dev-config:${BACKEND_TAG}
+    volumes:
+      - 'servicejourneyrules_data:/output'
   servicejourneyrulesapi.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendservicejourneyrulesapi:${BACKEND_TAG}
     environment:
@@ -86,6 +90,11 @@ services:
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
+      - INPUT_FOLDER_PATH=/app/input
+    depends_on:
+      - servicejourneyrulesapi.config
+    volumes:
+      - 'servicejourneyrules_data:/app/input'
   clinicaldecisionsupportapi.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendclinicaldecisionsupportapi:${BACKEND_TAG}
     environment:
@@ -126,4 +135,6 @@ services:
       - nhsonline.mongodb.session
 volumes:
   redis_data:
+    driver: local
+  servicejourneyrules_data:
     driver: local

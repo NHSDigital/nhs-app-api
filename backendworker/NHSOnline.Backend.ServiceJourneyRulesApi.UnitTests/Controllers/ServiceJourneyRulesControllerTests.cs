@@ -40,12 +40,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
                 {
                     Appointments = new Appointments
                     {
-                        JourneyType = AppointmentsJourneyType.Disabled
+                        JourneyType = AppointmentsJourneyType.disabled
                     }
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.Disabled);
+            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.disabled);
         }
 
         [TestMethod]
@@ -56,12 +56,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
                 {
                     Appointments = new Appointments
                     {
-                        JourneyType = AppointmentsJourneyType.Im1Appointments
+                        JourneyType = AppointmentsJourneyType.im1Appointments
                     }
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.Im1Appointments);
+            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.im1Appointments);
         }
     }
 }

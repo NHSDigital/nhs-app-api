@@ -77,6 +77,10 @@ services:
       - nhsonline.redis.sds
     ports:
       - "8084:8084"
+  servicejourneyrulesapi.config:
+    image: nhsonline-service-journey-dev-config
+    volumes:
+      - 'servicejourneyrules_data:/output'
   servicejourneyrulesapi.local.bitraft.io:
     image: nhsonline.backend.servicejourneyrulesapi
     ports:
@@ -91,6 +95,11 @@ services:
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
+      - INPUT_FOLDER_PATH=/app/input
+    depends_on:
+      - servicejourneyrulesapi.config
+    volumes:
+      - 'servicejourneyrules_data:/app/input'
   clinicaldecisionsupportapi.local.bitraft.io:
     image: nhsonline.backend.clinicaldecisionsupportapi
     ports:
@@ -157,4 +166,6 @@ services:
     - nhsonline.mongodb.session
 volumes:
   redis_data:
+    driver: local
+  servicejourneyrules_data:
     driver: local

@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Service
             {
                 Appointments = new Appointments
                 {
-                    JourneyType = AppointmentsJourneyType.Im1Appointments
+                    JourneyType = AppointmentsJourneyType.im1Appointments
                 }
             };
         }

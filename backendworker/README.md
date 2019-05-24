@@ -37,6 +37,19 @@ and the Redis instances run the following in the backend worker directory:
 docker-compose up --build
 ```
 
+#### Updating service journey rules
+If you are updating service journey rule files, you need to delete the volumes to allow it to be recreated.
+
+```
+docker-compose down -v
+```
+
+Furthermore, if changing the loading logic, build service journey rules image prior `docker-compose up --build`.
+
+```
+docker-compose -f docker-compose.servicejourneyrules build
+```
+
 ### Debugging the backendworker
 If you need to debug the backend worker and want to run it using Visual Studio, Visual Studio Code or Rider you will need to run Wiremock and Redis on their own.  To do this run the following in the backend worker directory:
 

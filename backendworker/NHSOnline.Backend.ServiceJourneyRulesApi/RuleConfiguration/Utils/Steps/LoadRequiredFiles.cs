@@ -6,7 +6,7 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 {
-    internal class LoadRequiredFiles : IValidatorStep
+    internal class LoadRequiredFiles : IValidatorStep, ILoadStep
     {
         public string Description { get; } = "Loading the required files";
         public ProcessOrder Order { get; } = ProcessOrder.LoadRequiredFiles;
@@ -26,6 +26,23 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             _fileHandler = fileHandler;
             _gpInfoReader = gpInfoReader;
             _serviceJourneyRulesConfiguration = serviceJourneyRulesConfiguration;
+        }
+        
+        public Task<bool> Execute(LoadContext context)
+        {
+            new ValidateAndLog(_logger)
+                .IsNotNull(context, nameof(context), ThrowError)
+                .IsValid();
+
+            context.TargetSchema = GetConfigurationSchema();
+
+            if (context.TargetSchema != null)
+            {
+                return Task.FromResult(true);
+            }
+
+            _logger.LogCritical("Error reading necessary files. See output above for specific errors.");
+            return Task.FromResult(false);
         }
 
         public Task<bool> Execute(ConfigurationContext context)
