@@ -2,7 +2,7 @@
 
   <div v-if="showTemplate" :class="[$style['pull-content'],
                                     !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <glossary-header v-if="!showNoRepeatCourses" />
+
     <message-dialog v-if="error" message-type="error">
       <message-text>
         {{ $t('rp12.reasonMissing.summarySubHeader') }}
@@ -107,7 +107,6 @@ import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import GlossaryHeader from '@/components/GlossaryHeader';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
@@ -123,7 +122,6 @@ export default {
     MessageList,
     NoJsForm,
     ErrorMessage,
-    GlossaryHeader,
     GenericTextArea,
     DesktopGenericBackLink,
   },

@@ -130,5 +130,43 @@ describe('prescriptions/index.vue -', () => {
       expect(page.vm.showPrescriptions).toBe(false);
     });
   });
+
+  describe('showPrescriptionsInOrder', () => {
+    it('will show prescriptions ordered by priority.', async () => {
+      const myStore = hasLoaded => ({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: {
+          prescriptions: {
+            hasLoaded,
+            prescriptionCourses: {
+              Approved: [{
+                courseId: 'abc',
+              }],
+              Requested: [{
+                courseId: 'pqr',
+              }],
+              Rejected: [{
+                courseId: 'xyz',
+              }],
+            },
+          },
+          nominatedPharmacy: {
+            pharmacy: {},
+            nominatedPharmacyEnabled: true,
+          },
+        },
+      });
+
+      const $store = myStore(true);
+      jest.spyOn($store, 'dispatch');
+      const page = createPrescriptionsPage($store);
+
+      expect(page.vm.prescriptionCoursesToDisplay).toEqual({
+        Requested: [{ courseId: 'pqr' }],
+        Approved: [{ courseId: 'abc' }],
+        Rejected: [{ courseId: 'xyz' }],
+      });
+    });
+  });
 });
 

@@ -3,7 +3,6 @@
 <template>
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content' ,
                                     !$store.state.device.isNativeApp && $style.desktopWeb]" >
-    <glossary-header v-if="hasLoaded"/>
     <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
       <ul :class="$style['list-menu-white']" role="list">
         <li :class="$style.link" role="link">
@@ -60,7 +59,6 @@
 <script>
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
-import GlossaryHeader from '@/components/GlossaryHeader';
 import { NOMINATED_PHARMACY } from '@/lib/routes';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import keys from 'lodash/fp/keys';
@@ -76,9 +74,17 @@ export default {
   components: {
     FloatingButtonBottom,
     HistoricPrescription,
-    GlossaryHeader,
     NoJsForm,
     AnalyticsTrackedTag,
+  },
+  data() {
+    return {
+      statusDisplayPriority: {
+        [MedicationCourseStatus.Requested]: 1,
+        [MedicationCourseStatus.Approved]: 2,
+        [MedicationCourseStatus.Rejected]: 3,
+      },
+    };
   },
   computed: {
     pharmacyName() {
@@ -126,11 +132,6 @@ export default {
     await store.dispatch('prescriptions/load');
     await store.dispatch('nominatedPharmacy/load');
     return {
-      statusDisplayPriority: {
-        [MedicationCourseStatus.Rejected]: 1,
-        [MedicationCourseStatus.Requested]: 2,
-        [MedicationCourseStatus.Approved]: 3,
-      },
       nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
     };
   },

@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import MyRecord from '@/pages/my-record/';
 import Warning from '@/components/my-record/Warning';
+import GlossaryHeader from '@/components/GlossaryHeader';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, mount } from '../../helpers';
 
@@ -59,6 +60,10 @@ describe('my-record', () => {
 
     it('will not display the warning', () => {
       expect(page.find(Warning).exists()).toBe(false);
+    });
+
+    it('will display the clinical feedback updates', () => {
+      expect(page.find(GlossaryHeader).exists()).toBe(true);
     });
 
     describe('myRecordSectionClick', () => {
