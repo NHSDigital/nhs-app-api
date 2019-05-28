@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
 
@@ -176,10 +177,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new MicrotestApiObjectResponse<string>(responseMessage.StatusCode);
+            await response.Parse(responseMessage, _responseParser, _logger);
 
-            if (!response.HasSuccessResponse)
+            if (response.HasUnauthorisedResponse)
             {
-                response.ErrorResponseMessage = await response.GetStringResponse(responseMessage, _logger);
+                _logger.LogInformation("Unauthorised Microtest response");
+                throw new UnauthorisedGpSystemHttpRequestException();
             }
 
             _logger.LogExit();
@@ -195,17 +198,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return await response.Parse(responseMessage, _responseParser, _logger);
         }
 
-        public class MicrotestApiResponse : ApiResponse
+        public abstract class MicrotestApiResponse : ApiResponse
         {
-            public MicrotestApiResponse(HttpStatusCode statusCode) : base(statusCode)
+            protected MicrotestApiResponse(HttpStatusCode statusCode) : base(statusCode)
             {
             }
+            
             public string ErrorResponseMessage { get; set; }
+            
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
+
+            internal bool HasUnauthorisedResponse => StatusCode == HttpStatusCode.Unauthorized;
+
             public bool HasForbiddenResponse => StatusCode == HttpStatusCode.Forbidden;
             public bool HasConflictResponse => StatusCode == HttpStatusCode.Conflict;
 
-            public override string ErrorForLogging => ErrorResponseMessage;
+            public bool HasInternalServerError => StatusCode == HttpStatusCode.InternalServerError;
+
+            public override string ErrorForLogging => $"Error Code: '{StatusCode}'. " +
+                                                      $"Error Message:'{ErrorResponseMessage}'. ";
 
             protected override bool FormatResponseIfUnsuccessful => false;
         }
@@ -237,13 +248,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
                 ILogger logger)
             {
                 Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
-                
-                if (Body == null)
-                { 
-                    logger.LogError($"Response parsing failed. Raw response: {stringResponse}");
-                    return new MicrotestApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
-                }
-                return this;
+
+                if (Body != null) return this;
+                logger.LogError($"Response parsing failed. Raw response: {stringResponse}");
+                ErrorResponseMessage = stringResponse;
+                return new MicrotestApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
             }
         }
     }

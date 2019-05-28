@@ -96,6 +96,7 @@ Feature: My appointments backend
       | GP System |
       | EMIS      |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Requesting my appointments the <GP System> times out and returns "Gateway Timeout" error
     Given <GP System> will time out when trying to retrieve my appointments
@@ -108,6 +109,7 @@ Feature: My appointments backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: <GP System> user sees an unknown exception on booked appointments request
     Given an unknown exception occurs when I want to view my <GP System> appointments
@@ -120,6 +122,7 @@ Feature: My appointments backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Receive a "Bad Gateway" error when TPP is unavailable for <Appointment Type> appointments
     Given TPP is unavailable for <Appointment Type> appointments

@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             {
                 _logger.LogEnter();
 
-                var microtestUserSession = (MicrotestUserSession)gpUserSession;
+                var microtestUserSession = (MicrotestUserSession) gpUserSession;
 
                 _logger.LogInformation("Appointments GET request starting");
 
@@ -50,8 +50,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 _logger.LogExit();
             }
         }
-        
-        private AppointmentsResult InterpretAppointmentsGetResponse(                  
+
+        private AppointmentsResult InterpretAppointmentsGetResponse(
             MicrotestClient.MicrotestApiObjectResponse<AppointmentsGetResponse> response)
         {
             if (response.HasSuccessResponse)
@@ -71,6 +71,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             {
                 _logger.LogError("Call to Microtest returned a forbidden response");
                 return new AppointmentsResult.Forbidden();
+            }
+
+            if (response.HasInternalServerError)
+            {
+                _logger.LogError("Call to Microtest returned an Internal server error");
+                return new AppointmentsResult.InternalServerError();
             }
 
             _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentsRetrievalService)}) return an unanticipated " +

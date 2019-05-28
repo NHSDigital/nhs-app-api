@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(
-            GpUserSession gpUserSession, 
+            GpUserSession gpUserSession,
             AppointmentSlotsDateRange dateRange)
         {
             try
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 _logger.LogEnter();
 
                 var microtestUserSession = (MicrotestUserSession) gpUserSession;
-                
+
                 _logger.LogInformation("Appointment slots request starting");
 
                 var appointmentSlotsResponse = await _microtestClient.AppointmentSlotsGet(microtestUserSession.OdsCode,
@@ -55,8 +55,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 _logger.LogExit();
             }
         }
-        
-        private AppointmentSlotsResult InterpretAppointmentsGetResponse(                  
+
+        private AppointmentSlotsResult InterpretAppointmentsGetResponse(
             MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse> appointmentSlotsResponse)
         {
             if (appointmentSlotsResponse.HasForbiddenResponse)

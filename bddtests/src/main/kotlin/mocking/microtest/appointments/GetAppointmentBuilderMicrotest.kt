@@ -49,15 +49,15 @@ class GetAppointmentBuilderMicrotest(val patient: Patient)
     }
 
     override fun respondWithCorrupted(): Mapping {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return respondWithCorruptedContent("<<randomtag/>>")
     }
 
     override fun respondWithGPServiceUnavailableException(): Mapping {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return respondWithServiceUnavailable()
     }
 
     override fun respondWithUnknownException(): Mapping {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return respondWithUnknownExceptionError()
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
