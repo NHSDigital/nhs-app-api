@@ -32,6 +32,9 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
             }
         """.trimIndent()) }
     }
+    fun respondWithBadGateway(): Mapping {
+        return respondWith(HttpStatus.SC_BAD_GATEWAY){}
+    }
 
     override fun respondWithServiceUnavailable(): Mapping {
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {

@@ -34,6 +34,7 @@ Feature: View available appointment slots backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots by patient whose session expired returns "Unauthorized" error
@@ -58,6 +59,7 @@ Feature: View available appointment slots backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Requesting available appointment slots when <GP System> is not accessible returns "Forbidden" error
     Given the system will respond with forbidden when trying to retrieve <GP System> appointment slots
@@ -84,6 +86,7 @@ Feature: View available appointment slots backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
     # Only specific to EMIS as we only look to retrieve them for EMIS, at the moment
   Scenario Outline: An EMIS user who has <Telephone Numbers> phone number(s) stored are retrieved with available slots

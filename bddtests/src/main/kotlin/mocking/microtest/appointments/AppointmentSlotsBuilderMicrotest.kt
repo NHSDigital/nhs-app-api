@@ -94,7 +94,7 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
     }
 
     override fun respondWithUnknownException(): Mapping {
-        TODO("not implemented")
+        return respondWithBadGateway()
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = SC_OK): Mapping {

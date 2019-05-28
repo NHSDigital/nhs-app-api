@@ -3,7 +3,7 @@
 Feature: View available appointment slots
   Users can view available appointments from the available appointments Page.
 
-  #HAPPY PATH JOURNIES
+  #HAPPY PATH JOURNEYS
 
   #GP System agnostic scenario, so only need to test with EMIS
 
@@ -14,7 +14,7 @@ Feature: View available appointment slots
     And I am on the Available Appointments page
     Then the appointments menu button is highlighted
 
-  #FEATURE JOURNIES
+  #FEATURE JOURNEYS
 
   Scenario Outline: A <GP System> user enters the available appointments page
     Given there are available appointment slots with different criteria for <GP System>
@@ -277,6 +277,7 @@ Feature: View available appointment slots
     And there should not be an option to try again
     Examples:
       | GP System |
+      | MICROTEST |
       | TPP       |
       | VISION    |
 
@@ -295,6 +296,7 @@ Feature: View available appointment slots
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativesmoketest
     Examples:
