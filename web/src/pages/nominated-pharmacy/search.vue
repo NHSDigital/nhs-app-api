@@ -51,7 +51,6 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import { getDynamicStyle } from '@/lib/desktop-experience';
-import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
 import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS } from '@/lib/routes';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
@@ -63,7 +62,6 @@ export default {
   components: {
     GenericButton,
     GenericTextInput,
-    AbbreviationsArrowRightIcon,
     AnalyticsTrackedTag,
     ErrorMessage,
     MessageDialog,

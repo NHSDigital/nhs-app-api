@@ -1,7 +1,9 @@
 import * as dependency from '@/lib/utils';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
-import { $t, createStore, createRouter, mount } from '../../helpers';
+import { create$T, createStore, createRouter, mount } from '../../helpers';
 import { NOMINATED_PHARMACY_SEARCH } from '../../../../src/lib/routes';
+
+const $t = create$T();
 
 describe('nominated pharmacy not found', () => {
   let $store;

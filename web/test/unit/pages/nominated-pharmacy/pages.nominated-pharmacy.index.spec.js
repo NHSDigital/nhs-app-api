@@ -2,8 +2,10 @@ import * as dependency from '@/lib/utils';
 import NominatedPharmacyIndex from '@/pages/nominated-pharmacy/index';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
-import { $t, createStore, mount } from '../../helpers';
+import { create$T, createStore, mount } from '../../helpers';
 import { PRESCRIPTIONS } from '../../../../src/lib/routes';
+
+const $t = create$T();
 
 describe('nominated pharmacy not found', () => {
   let $store;

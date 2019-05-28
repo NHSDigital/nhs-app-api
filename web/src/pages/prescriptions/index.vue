@@ -61,7 +61,6 @@
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import GlossaryHeader from '@/components/GlossaryHeader';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import { NOMINATED_PHARMACY } from '@/lib/routes';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import keys from 'lodash/fp/keys';
@@ -80,20 +79,6 @@ export default {
     GlossaryHeader,
     NoJsForm,
     AnalyticsTrackedTag,
-  },
-  async asyncData({ store }) {
-    await store.dispatch('prescriptions/clear');
-    await store.dispatch('nominatedPharmacy/clear');
-    await store.dispatch('prescriptions/load');
-    await store.dispatch('nominatedPharmacy/load');
-    return {
-      statusDisplayPriority: {
-        [MedicationCourseStatus.Rejected]: 1,
-        [MedicationCourseStatus.Requested]: 2,
-        [MedicationCourseStatus.Approved]: 3,
-      },
-      nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
-    };
   },
   computed: {
     pharmacyName() {

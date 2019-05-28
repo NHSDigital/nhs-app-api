@@ -1,9 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import Vue from 'vue';
 import NominatedPharmacySearchResults from '@/pages/nominated-pharmacy/results';
+import * as dependency from '@/lib/utils';
 import { createLocalVue } from '@vue/test-utils';
-import { $t, createStore, mount } from '../../helpers';
+import { create$T, createStore, mount } from '../../helpers';
 import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CONFIRM } from '@/lib/routes';
+
+const $tMock = create$T();
 
 describe('nominated pharmacy search results', () => {
   let $store;
@@ -11,7 +13,6 @@ describe('nominated pharmacy search results', () => {
   let wrapper;
   let localVue;
   let pharmacySearchResults;
-  let goToUrl;
 
   const createState = (state = {
     device: {
@@ -28,9 +29,10 @@ describe('nominated pharmacy search results', () => {
   }) => state;
 
   const mountPage = () => mount(NominatedPharmacySearchResults, {
+    localVue,
     $store,
     $style,
-    t: (key) => {
+    $t: (key) => {
       if (key === 'nominatedPharmacySearchResults.resultSummary.showingPharmaciesNear') {
         return 'Pharmacies near "{searchQuery}"';
       }
@@ -40,23 +42,18 @@ describe('nominated pharmacy search results', () => {
       if (key === 'nominatedPharmacySearchResults.distanceAway') {
         return '{distance} miles away';
       }
-      return $t(key);
+      return $tMock(key);
     },
-    localVue,
   });
 
   beforeEach(() => {
-    goToUrl = jest.fn();
     localVue = createLocalVue();
-    localVue.mixin(Vue.mixin({
-      methods: {
-        goToUrl,
-      },
-    }));
+    dependency.redirectTo = jest.fn();
     $store = createStore({
       dispatch: jest.fn(() => Promise.resolve()),
       state: createState(),
     });
+    $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
   });
 
   it('will exist', () => {
@@ -68,15 +65,16 @@ describe('nominated pharmacy search results', () => {
   it('will redirect to search if no search query present', () => {
     $store.state.nominatedPharmacy = {
       searchResults: {
-        searchQuery: '',
         pharmacies: [],
         technicalError: false,
         noResultsFound: true,
       },
+      nominatedPharmacyEnabled: true,
     };
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-    expect(goToUrl).toHaveBeenCalledWith(NOMINATED_PHARMACY_SEARCH.path);
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path, null);
   });
 
   it('will not redirect to search if a search query is present', () => {
@@ -90,7 +88,7 @@ describe('nominated pharmacy search results', () => {
     };
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-    expect(goToUrl).not.toHaveBeenCalled();
+    expect(dependency.redirectTo).not.toHaveBeenCalled();
     expect(wrapper.vm.showPharmacies).toBe(false);
   });
 
@@ -105,7 +103,7 @@ describe('nominated pharmacy search results', () => {
     };
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-    expect(goToUrl).not.toHaveBeenCalled();
+    expect(dependency.redirectTo).not.toHaveBeenCalled();
     expect(wrapper.vm.showPharmacies).toBe(true);
   });
 
@@ -120,17 +118,18 @@ describe('nominated pharmacy search results', () => {
     };
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-    expect(goToUrl).not.toHaveBeenCalled();
+    expect(dependency.redirectTo).not.toHaveBeenCalled();
 
     // act
     wrapper.vm.backButtonClicked();
 
     // assert
-    expect(goToUrl).toHaveBeenCalledWith(NOMINATED_PHARMACY_SEARCH.path);
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path, null);
   });
 
   describe('pharmacyPracticeClicked', () => {
-    it('will put the selected pharmacy in the store and navigate to the confirm page', () => {
+    it('will put the selected pharmacy in the store and navigate to the confirm page', async () => {
       const pharmacy = { pharmacyName: 'drug store' };
 
       $store.state.nominatedPharmacy = {
@@ -145,11 +144,12 @@ describe('nominated pharmacy search results', () => {
       pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
 
       // act
-      wrapper.vm.pharmacyPracticeClicked(pharmacy);
+      await wrapper.vm.pharmacyPracticeClicked(pharmacy);
 
       // assert
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/select', pharmacy);
-      expect(goToUrl).toHaveBeenCalledWith(NOMINATED_PHARMACY_CONFIRM.path);
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CONFIRM.path, null);
     });
   });
 

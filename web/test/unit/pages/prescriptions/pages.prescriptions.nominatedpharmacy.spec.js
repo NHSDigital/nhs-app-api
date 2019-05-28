@@ -1,5 +1,7 @@
-import { $t, createStore as newStore, mount as newMount } from '../../helpers';
+import { create$T, createStore as newStore, mount as newMount } from '../../helpers';
 import PrescriptionsPage from '@/pages/prescriptions/index';
+
+const $t = create$T();
 
 const createState = (isValid, hasLoaded) => ({
   device: {

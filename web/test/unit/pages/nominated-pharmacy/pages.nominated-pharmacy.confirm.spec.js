@@ -2,7 +2,9 @@ import * as dependency from '@/lib/utils';
 import { NOMINATED_PHARMACY } from '@/lib/routes';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
-import { $t, createStore, mount } from '../../helpers';
+import { create$T, createStore, mount } from '../../helpers';
+
+const $t = create$T();
 
 describe('confirm nominated pharmacy', () => {
   let $store;

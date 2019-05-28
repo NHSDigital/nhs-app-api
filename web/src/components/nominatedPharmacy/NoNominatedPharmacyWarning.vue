@@ -27,6 +27,7 @@ import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'NoNominatedPharmacyWarning',
   components: {
     MessageDialog,
     MessageText,

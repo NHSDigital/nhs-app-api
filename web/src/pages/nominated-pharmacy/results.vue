@@ -53,18 +53,14 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
 import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CONFIRM, PRESCRIPTIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     AnalyticsTrackedTag,
-    BackIcon,
     GenericButton,
-    MessageDialog,
   },
   data() {
     const { searchResults, searchQuery } = this.$store.state.nominatedPharmacy;
@@ -106,7 +102,7 @@ export default {
   },
   mounted() {
     if (!this.searchQuery || (!this.pharmacies && !this.technicalError && !this.noResultsFound)) {
-      this.goToUrl(NOMINATED_PHARMACY_SEARCH.path);
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
     }
   },
   created() {
@@ -124,10 +120,10 @@ export default {
     },
     async pharmacyPracticeClicked(pharmacy) {
       this.$store.dispatch('nominatedPharmacy/select', pharmacy);
-      this.goToUrl(NOMINATED_PHARMACY_CONFIRM.path);
+      redirectTo(this, NOMINATED_PHARMACY_CONFIRM.path, null);
     },
     backButtonClicked() {
-      this.goToUrl(NOMINATED_PHARMACY_SEARCH.path);
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
     },
   },
 };

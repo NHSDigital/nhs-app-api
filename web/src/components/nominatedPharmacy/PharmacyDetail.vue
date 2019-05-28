@@ -32,6 +32,7 @@ import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpening
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'PharmacyDetail',
   components: {
     AnalyticsTrackedTag,
     PharmacySummary,

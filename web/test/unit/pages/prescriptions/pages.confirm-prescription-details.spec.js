@@ -1,5 +1,7 @@
 import ConfirmPrescription from '@/pages/prescriptions/confirm-prescription-details';
-import { $t, createStore, mount } from '../../helpers';
+import { create$T, createStore, mount } from '../../helpers';
+
+const $t = create$T();
 
 describe('no nominated pharmacy summary', () => {
   let $store;

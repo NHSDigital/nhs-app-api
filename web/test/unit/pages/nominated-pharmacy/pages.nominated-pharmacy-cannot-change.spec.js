@@ -1,5 +1,7 @@
 import NoNominatedPharmacyChange from '@/pages/nominated-pharmacy/cannot-change';
-import { $t, createStore, mount } from '../../helpers';
+import { create$T, createStore, mount } from '../../helpers';
+
+const $t = create$T();
 
 describe('can not change nominated pharmacy', () => {
   let $store;

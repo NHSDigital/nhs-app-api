@@ -53,14 +53,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 _logger.LogError(
                     $"Unsuccessful request searching for Gp Practice by ods code {odsCode}," +
                     $" Status code: {(int) nhsSearchResponse.StatusCode}");
-                return new GpSearchResult.Unsuccessful();
+                return new GpSearchResult.InternalServerError();
             }
 
             if (nhsSearchResponse.Body == null)
             {
                 _logger.LogError(
                     $"Search for Nhs GP Practice by ods code {odsCode}, no response body found");
-                return new GpSearchResult.Unsuccessful();
+                return new GpSearchResult.InternalServerError();
             }
 
             var searchResponse = new GpSearchResponse
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             };
 
             _logger.LogInformation($"{searchResponse.OrganisationQueryCount} results return for search: {odsCode}");
-            return new GpSearchResult.SuccessfullyRetrieved(searchResponse);
+            return new GpSearchResult.Success(searchResponse);
         }
 
         public PharmacySearchResponse CheckPharmacies(GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> pharmacySearchResponse, string postcode)

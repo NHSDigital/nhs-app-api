@@ -30,6 +30,7 @@
 import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
 
 export default {
+  name: 'PharmacyOpeningTimes',
   components: {
     CollapsibleDialog,
   },

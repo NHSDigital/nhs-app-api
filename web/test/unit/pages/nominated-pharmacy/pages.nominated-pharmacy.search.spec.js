@@ -2,8 +2,9 @@
 import * as dependency from '@/lib/utils';
 import SearchPharmacies from '@/pages/nominated-pharmacy/search';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
-import { createStore, mount, $t } from '../../helpers';
+import { createStore, mount, create$T } from '../../helpers';
 
+const $t = create$T();
 const $style = {};
 
 const createState = () => ({

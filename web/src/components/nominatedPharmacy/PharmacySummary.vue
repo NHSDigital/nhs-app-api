@@ -21,6 +21,7 @@ import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
+  name: 'PharmacySummary',
   components: {
     AnalyticsTrackedTag,
   },

@@ -2,9 +2,10 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
-import { $t, createStore as newStore } from '../../helpers';
+import { create$T, createStore as newStore } from '../../helpers';
 import { PRESCRIPTIONS, NOMINATED_PHARMACY_CHECK, PRESCRIPTION_REPEAT_COURSES } from '../../../../src/lib/routes';
 
+const $t = create$T();
 let component;
 
 const createHeaderCompanionButton = ($store) => {
@@ -34,6 +35,9 @@ const createHeaderCompanionButton = ($store) => {
 const createState = isValid => ({
   device: {
     source: 'web',
+  },
+  errors: {
+    hasConnectionProblem: false,
   },
   nominatedPharmacy: {
     pharmacy: {

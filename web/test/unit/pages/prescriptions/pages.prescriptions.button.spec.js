@@ -20,6 +20,9 @@ describe('prescriptions page', () => {
         source: 'iOS',
         isNativeApp: true,
       },
+      nominatedPharmacy: {
+        nominatedPharmacyEnabled: true,
+      },
     };
     return state;
   };
