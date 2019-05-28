@@ -18,6 +18,7 @@ import termsAndConditions from './modules/termsAndConditions';
 import appVersion from './modules/appVersion';
 import myRecord from './modules/myRecord';
 import organDonation from './modules/organDonation';
+import serviceJourneyRules from './modules/serviceJourneyRules';
 import throttling from './modules/throttling';
 
 export const modules = {
@@ -39,6 +40,7 @@ export const modules = {
   pageTitle,
   prescriptions,
   repeatPrescriptionCourses,
+  serviceJourneyRules,
   session,
   termsAndConditions,
   throttling,

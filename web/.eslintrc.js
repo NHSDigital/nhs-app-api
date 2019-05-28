@@ -14,6 +14,7 @@ module.exports = {
     // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
     "plugin:vue/recommended",
     "airbnb-base",
+    "plugin:custom/default"
   ],
   // required to lint *.vue files
   plugins: [
@@ -25,7 +26,6 @@ module.exports = {
     'import/extensions': ['error', 'never', ],
     'import/no-unresolved': 0,
     'operator-linebreak': 'off',
-    'object-curly-newline': 'off',
     'implicit-arrow-linebreak': 'off',
     'no-multiple-empty-lines': 'off',
     //don't require linebreak before/after opening/closing tags on single or multiline elements

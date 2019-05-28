@@ -1,0 +1,25 @@
+{
+  "name": "eslint-plugin-custom",
+  "version": "0.0.1",
+  "description": "Custom lint rules.",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "npm run test:base -- --watch",
+    "test:base": "mocha \"tests/lib/**/*.js\" --reporter dot"
+  },
+  "files": [
+    "lib"
+  ],
+  "peerDependencies": {
+    "eslint": "^5.0.0"
+  },
+  "dependencies": {
+    "eslint-plugin-vue": "^5.2.2",
+    "lodash": "^4.17.11",
+    "vue-eslint-parser": "^6.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.11.1",
+    "mocha": "^5.2.0"
+  }
+}
