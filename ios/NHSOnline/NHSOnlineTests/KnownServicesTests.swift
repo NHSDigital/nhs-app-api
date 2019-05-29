@@ -98,6 +98,19 @@ class KnownServicesTests: XCTestCase {
         XCTAssertFalse(nhs111UrlSameAsHomeHost)
     }
     
+    func test_theURLIsABiometricRedirectURL_ReturnsTrue() {
+        let url = config().HomeUrl + config().BiometricRedirectURL
+        print(url)
+        let result = knownServices.isFidoAuthResponse(urlString: url)
+        XCTAssertTrue(result, "Biometric URL should return true")
+    }
+    
+    func test_theURLIsNotABiometricRedirectURL_ReturnsFalse() {
+        let url = config().HomeUrl + "login?source=me"
+        let result = knownServices.isFidoAuthResponse(urlString: url)
+        XCTAssertFalse(result, "Biometric URL should return false")
+    }
+    
     private func getNSLocalString(key: String) -> String{
         return NSLocalizedString(key, comment: "")
     }

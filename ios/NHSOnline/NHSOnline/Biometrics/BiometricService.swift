@@ -41,10 +41,12 @@ class BiometricService: BiometricProtocol {
     @available(iOS 10.0, *)
     func authenticate() {
         do {
+            homeViewController.showWebViewContainer()
             let base64Response = try FidoClient().completeAuthorisationRequestAndRetrieveBase64Response()
             let url = config().BiometricRedirectURL + base64Response
             let validLoginUrl = config().HomeUrl + url
             homeViewController.webViewController?.loadPage(url: validLoginUrl)
+            homeViewController.tabBar.selectedItem = nil
         } catch let error as FidoError {
             handleError(error)
         } catch {

@@ -300,6 +300,13 @@ class HomeViewController : UIViewController {
         }
     }
     
+    func showNativeViewContainer() {
+        if (!appVersionCheckError) {
+            self.cycleFromViewController(oldViewController: self.webViewController!,
+                 toViewController: self.currentNativeViewController!)
+        }
+    }
+    
     func showBiometricsRegistrationError() {
         self.errorViewController?.setUnavailabilityError(errorMessage: ErrorMessage(.BiometricRegistrationError))
         self.updateHeaderText(headerText: getBiometricRegistrationErrorStrings().BiometricRegistrationPageHeader)

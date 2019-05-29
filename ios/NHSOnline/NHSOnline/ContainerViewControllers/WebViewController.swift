@@ -115,19 +115,21 @@ class WebViewController: UIViewController, WKUIDelegate {
             urlToNavigateTo = homeUrl + urlToNavigateTo
         }
         
-        if(WebViewController.Properties.usingAbsoluteUri || knownServices.isCIDRedirectUrl(urlString: urlToNavigateTo)) {
+        if(shouldOpenInWebView(urlToNavigateTo)) {
             webView.loadPage(url: urlToNavigateTo)
-        }
-        else if(shouldLoadUrlAsSpaPage(urlToNavigateTo: urlToNavigateTo)) {
+        } else {
             self.loadSpaPage(path: urlToNavigateTo)
             if(webView.url!.absoluteString == urlToNavigateTo) {
                 webViewDelegate?.viewController.applicationState.unBlock()
             }
-            
         }
-        else {
-            webView.loadPage(url: urlToNavigateTo)
-        }
+    }
+    
+    private func shouldOpenInWebView(_ url: String) -> Bool {
+        return WebViewController.Properties.usingAbsoluteUri ||
+            knownServices.isCIDRedirectUrl(urlString: url) ||
+            knownServices.isFidoAuthResponse(urlString: url) ||
+            !shouldLoadUrlAsSpaPage(urlToNavigateTo: url)
     }
     
     func verifyUrl(urlString: String?) -> Bool {

@@ -92,6 +92,14 @@ class KnownServices {
         }
     }
     
+    func isFidoAuthResponse(urlString: String) -> Bool {
+        if let url = URL(string: urlString), let nhsUrl = URL(string: config.HomeUrl) {
+            return url.host == nhsUrl.host &&
+                urlString.contains(config.BiometricRedirectURL)
+        }
+        return false
+    }
+    
     private func buildExternalSites() {
         let helpURL: URL = URL(string: config.HelpURL)!
         let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
