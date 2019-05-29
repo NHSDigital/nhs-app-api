@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Soap
@@ -13,11 +12,11 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
     {
         private const string SoapEnv = "SOAP-ENV";
 
-        private INominatedPharmacyConfig _config;
+        private readonly INominatedPharmacyConfig _config;
 
         public XmlDocument Envelope { get; set; }
 
-        public NominatedPharmacyEnvelope(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config, ILogger logger)
+        public NominatedPharmacyEnvelope(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config)
         {
             XmlDocument xmlDocument = BuildCoreXml(serviceDefinition, config);
             

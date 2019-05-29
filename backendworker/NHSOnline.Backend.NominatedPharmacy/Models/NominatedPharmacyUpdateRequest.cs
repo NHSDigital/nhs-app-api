@@ -14,13 +14,15 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
         private readonly string _updatedOdsCode;
         private readonly string _pertinentSerialChangeNumber;
         private readonly string _nhsNumber;
+        private readonly INominatedPharmacyConfig _config;
 
 
         public NominatedPharmacyUpdateRequest(
             string nhsNumber,
             bool hasExistingNominatedPharmacy,
             string updatedOdsCode,
-            string pertinentSerialChangeNumber)
+            string pertinentSerialChangeNumber,
+            INominatedPharmacyConfig config)
         {
             _messageId = Guid.NewGuid();
             _hl7Time = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
@@ -28,6 +30,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             _updatedOdsCode = updatedOdsCode;
             _pertinentSerialChangeNumber = pertinentSerialChangeNumber;
             _nhsNumber = nhsNumber;
+            _config = config;
         }
 
         public string Body()
@@ -112,12 +115,12 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                    "<acceptAckCode code=\"NE\"/>" +
                    "<communicationFunctionRcv>" +
                    "<device classCode=\"DEV\" determinerCode=\"INSTANCE\">" +
-                   "<id extension=\"200000000355\" root=\"1.2.826.0.1285.0.2.0.107\"/>" +
+                   $"<id extension=\"{_config.SpineAccreditedSystemIdTo}\" root=\"1.2.826.0.1285.0.2.0.107\"/>" +
                    "</device>" +
                    "</communicationFunctionRcv>" +
                    "<communicationFunctionSnd>" +
                    "<device classCode=\"DEV\" determinerCode=\"INSTANCE\">" +
-                   "<id extension=\"200000000355\" root=\"1.2.826.0.1285.0.2.0.107\"/>" +
+                   $"<id extension=\"{_config.SpineAccreditedSystemIdFrom}\" root=\"1.2.826.0.1285.0.2.0.107\"/>" +
                    "</device>" +
                    "</communicationFunctionSnd>" +
                    "<ControlActEvent xmlns=\"urn:hl7-org:v3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
@@ -125,13 +128,13 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                    "<code code=\"1\" codeSystem=\"2.16.840.1.113883.2.1.3.2.4.17.40\" />" +
                    "<author typeCode=\"AUT\">" +
                    "<AgentPersonSDS classCode=\"AGNT\">" +
-                   "<id extension=\"102046062988\" root=\"1.2.826.0.1285.0.2.0.67\"/>" +
+                   $"<id extension=\"{_config.PersonSdsRoleId}\" root=\"1.2.826.0.1285.0.2.0.67\"/>" +
                    "<agentPersonSDS classCode=\"PSN\" determinerCode=\"INSTANCE\">" +
-                   "<id extension=\"102046035980\" root=\"1.2.826.0.1285.0.2.0.65\"/>" +
+                   $"<id extension=\"{_config.SdsUserId}\" root=\"1.2.826.0.1285.0.2.0.65\"/>" +
                    "</agentPersonSDS>" +
                    "<part typeCode=\"PART\">" +
                    "<partSDSRole classCode=\"ROL\">" +
-                   "<id extension=\"R8000\" root=\"1.2.826.0.1285.0.2.1.104\"/>" +
+                   $"<id extension=\"{_config.PartSdsRoleId}\" root=\"1.2.826.0.1285.0.2.1.104\"/>" +
                    "</partSDSRole>" +
                    "</part>" +
                    "</AgentPersonSDS>" +

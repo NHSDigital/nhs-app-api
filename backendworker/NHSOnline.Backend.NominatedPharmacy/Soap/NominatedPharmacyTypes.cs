@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Soap
 {
-    public class NominatedPharmacyTypes
+    public static class NominatedPharmacyTypes
     {
         public class From
         {
@@ -141,18 +141,18 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             public string TypeCode { get; set; }
         }
 
-        public class Code
+        public class CodeElement
         {
             [XmlAttribute(AttributeName = "code")]
-            public string _code { get; set; }
+            public string Code { get; set; }
             [XmlAttribute(AttributeName = "codeSystem")]
             public string CodeSystem { get; set; }
         }
 
-        public class Value
+        public class ValueElement
         {
             [XmlAttribute(AttributeName = "value")]
-            public string _value { get; set; }
+            public string Value { get; set; }
             [XmlAttribute(AttributeName = "codeSystem")]
             public string CodeSystem { get; set; }
             [XmlAttribute(AttributeName = "code")]
@@ -167,9 +167,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
         public class PertinentSerialChangeNumber
         {
             [XmlElement(ElementName = "code", Namespace = "urn:hl7-org:v3")]
-            public Code Code { get; set; }
+            public CodeElement Code { get; set; }
             [XmlElement(ElementName = "value", Namespace = "urn:hl7-org:v3")]
-            public Value Value { get; set; }
+            public ValueElement Value { get; set; }
             [XmlAttribute(AttributeName = "classCode")]
             public string ClassCode { get; set; }
             [XmlAttribute(AttributeName = "moodCode")]
@@ -227,7 +227,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
         public class PatientCareProvisionEvent
         {
             [XmlElement(ElementName = "code", Namespace = "urn:hl7-org:v3")]
-            public Code Code { get; set; }
+            public CodeElement Code { get; set; }
             [XmlElement(ElementName = "effectiveTime", Namespace = "urn:hl7-org:v3")]
             public EffectiveTime EffectiveTime { get; set; }
             [XmlElement(ElementName = "id", Namespace = "urn:hl7-org:v3")]
@@ -278,7 +278,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             public string Use { get; set; }
         }
 
-        public class COCT_MT000201UK02PartOfWhole
+        public class COCTMT000201UK02PartOfWhole
         {
             [XmlElement(ElementName = "addr", Namespace = "urn:hl7-org:v3")]
             public Addr Addr { get; set; }
@@ -319,7 +319,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
         }
 
         [XmlRoot(ElementName = "COCT_MT000203UK02.PartOfWhole", Namespace = "urn:hl7-org:v3")]
-        public class COCT_MT000203UK02PartOfWhole
+        public class COCTMT000203UK02PartOfWhole
         {
             [XmlElement(ElementName = "partPerson", Namespace = "urn:hl7-org:v3")]
             public PartPerson PartPerson { get; set; }
@@ -339,10 +339,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             public List<PlayedOtherProviderPatient> PlayedOtherProviderPatients { get; set; }
 
             [XmlElement(ElementName = "COCT_MT000201UK02.PartOfWhole", Namespace = "urn:hl7-org:v3")]
-            public COCT_MT000201UK02PartOfWhole COCT_MT000201UK02PartOfWhole { get; set; }
+            public COCTMT000201UK02PartOfWhole COCTMT000201UK02PartOfWhole { get; set; }
 
             [XmlElement(ElementName = "COCT_MT000203UK02.PartOfWhole", Namespace = "urn:hl7-org:v3")]
-            public COCT_MT000203UK02PartOfWhole COCT_MT000203UK02PartOfWhole { get; set; }
+            public COCTMT000203UK02PartOfWhole COCTMT000203UK02PartOfWhole { get; set; }
 
             [XmlAttribute(AttributeName = "classCode")]
             public string ClassCode { get; set; }
@@ -354,9 +354,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
         public class PreviousNhsContact
         {
             [XmlElement(ElementName = "code", Namespace = "urn:hl7-org:v3")]
-            public Code Code { get; set; }
+            public CodeElement Code { get; set; }
             [XmlElement(ElementName = "value", Namespace = "urn:hl7-org:v3")]
-            public Value Value { get; set; }
+            public ValueElement Value { get; set; }
             [XmlAttribute(AttributeName = "classCode")]
             public string ClassCode { get; set; }
             [XmlAttribute(AttributeName = "moodCode")]
@@ -432,7 +432,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             [XmlElement(ElementName = "queryAck", Namespace = "urn:hl7-org:v3")]
             public QueryAck QueryAck { get; set; }
             [XmlElement(ElementName = "query", Namespace = "urn:hl7-org:v3")]
-            public Query Query { get; set; }
+            public QueryElement Query { get; set; }
             [XmlAttribute(AttributeName = "classCode")]
             public string ClassCode { get; set; }
             [XmlAttribute(AttributeName = "moodCode")]
@@ -440,13 +440,13 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
 
         }
 
-        public class QUPA_IN000009UK03_Response
+        public class QUPAIN000009UK03Response
         {
             [XmlElement(ElementName = "QUPA_IN000009UK03", Namespace = "urn:hl7-org:v3")]
-            public QUPA_IN000009UK03 QUPA_IN000009UK03 { get; set; }
+            public QUPAIN000009UK03 QUPAIN000009UK03 { get; set; }
         }
 
-        public class QUPA_IN000009UK03
+        public class QUPAIN000009UK03
         {
             [XmlElement(ElementName = "id", Namespace = "urn:hl7-org:v3")]
             public Id Id { get; set; }
@@ -530,7 +530,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             [XmlElement(ElementName = "semanticsText", Namespace = "urn:hl7-org:v3")]
             public string SemanticsText { get; set; }
             [XmlElement(ElementName = "value", Namespace = "urn:hl7-org:v3")]
-            public Value Value { get; set; }
+            public ValueElement Value { get; set; }
         }
 
         public class PersonId
@@ -538,7 +538,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             [XmlElement(ElementName = "semanticsText", Namespace = "urn:hl7-org:v3")]
             public string SemanticsText { get; set; }
             [XmlElement(ElementName = "value", Namespace = "urn:hl7-org:v3")]
-            public Value Value { get; set; }
+            public ValueElement Value { get; set; }
         }
 
         public class RetrievalItem
@@ -547,7 +547,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             public string SemanticsText { get; set; }
         }
 
-        public class Query
+        public class QueryElement
         {
             [XmlElement(ElementName = "historicDataIndicator", Namespace = "urn:hl7-org:v3")]
             public HistoricDataIndicator HistoricDataIndicator { get; set; }
@@ -558,7 +558,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
         }
 
         [XmlRoot(ElementName = "QUPA_IN000008UK02", Namespace = "urn:hl7-org:v3")]
-        public class QUPA_IN000008UK02
+        public class QUPAIN000008UK02
         {
             [XmlElement(ElementName = "id")]
             public Id Id { get; set; }

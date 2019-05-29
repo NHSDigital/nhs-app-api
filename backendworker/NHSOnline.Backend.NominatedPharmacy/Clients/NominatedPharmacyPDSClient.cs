@@ -34,14 +34,14 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             _envelopeService = envelopeService;
         }
 
-        public async Task<NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>> NominatedPharmacyGet(
-            QUPA_IN000008UK02 getNominatedPharmacyRequest)
+        public async Task<NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>> NominatedPharmacyGet(
+            QUPAIN000008UK02 getNominatedPharmacyRequest)
         {
             var serviceDefinition = new GetNominatedPharmacyServiceDefinition();
 
             var path = string.Format(CultureInfo.InvariantCulture, PdsPath);
 
-            var result = await Post<QUPA_IN000009UK03_Response, QUPA_IN000008UK02>(
+            var result = await Post<QUPAIN000009UK03Response, QUPAIN000008UK02>(
                 serviceDefinition,
                 path,
                 getNominatedPharmacyRequest);

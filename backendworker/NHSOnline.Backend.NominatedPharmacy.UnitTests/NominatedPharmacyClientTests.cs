@@ -1,18 +1,15 @@
-﻿using AutoFixture;
+﻿using System.Threading.Tasks;
+using AutoFixture;
 using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
-using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
-using FluentAssertions;
 using NHSOnline.Backend.NominatedPharmacy.Clients;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 {
@@ -39,14 +36,14 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         public async Task NominatedPharmacyGet_ReturnsSuccessfully()
         {
             // Arrange
-            var getNominatedPharmacyRequest = new QUPA_IN000008UK02();
+            var getNominatedPharmacyRequest = new QUPAIN000008UK02();
 
             _nominatedPharmacyPDSClientMock
-                .Setup(x => x.NominatedPharmacyGet(It.IsAny<QUPA_IN000008UK02>()))
+                .Setup(x => x.NominatedPharmacyGet(It.IsAny<QUPAIN000008UK02>()))
                 .Returns(Task.FromResult(
-                    new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(System.Net.HttpStatusCode.OK)
+                    new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(System.Net.HttpStatusCode.OK)
                     {
-                        RawResponse = new NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>(),
+                        RawResponse = new NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>(),
                     }
                 ))
                 .Verifiable();
@@ -57,7 +54,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             // Assert
             _nominatedPharmacyPDSClientMock.Verify();
             result.Should()
-                .BeOfType<NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>>();
+                .BeOfType<NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>>();
         }
 
         [TestMethod]
@@ -69,9 +66,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacySubmitClientMock
                 .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
                 .Returns(Task.FromResult(
-                    new NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>(System.Net.HttpStatusCode.OK)
+                    new UpdateNominatedPharmacyApiObjectResponse(System.Net.HttpStatusCode.OK)
                     {
-                        RawResponse = _fixture.Create<NominatedPharmacyResponseEnvelope<NominatedPharmacyUpdateResponse>>(),
+                        Response = _fixture.Create<UpdateNominatedPharmacyResponseEnvelope>(),
                     }
                 ))
                 .Verifiable();
@@ -82,7 +79,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             // Assert
             _nominatedPharmacySubmitClientMock.Verify();
             result.Should()
-                .BeOfType<NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>>();
+                .BeOfType<UpdateNominatedPharmacyApiObjectResponse>();
         }
     }
 }

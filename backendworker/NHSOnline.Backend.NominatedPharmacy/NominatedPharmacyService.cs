@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             const string Dev = "DEV";
             const string Instance = "INSTANCE";
 
-            var request = new QUPA_IN000008UK02
+            var request = new QUPAIN000008UK02
             {
                 Id = new Id
                 {
@@ -161,12 +161,12 @@ namespace NHSOnline.Backend.NominatedPharmacy
                             },
                         },
                     },
-                    Query = new Query
+                    Query = new QueryElement
                     {
                         HistoricDataIndicator = new HistoricDataIndicator
                         {
                             SemanticsText = "HistoricDataIndicator",
-                            Value = new Value
+                            Value = new ValueElement
                             {
                                 Code = "0",
                                 CodeSystem = "2.16.840.1.113883.2.1.3.2.4.17.36",
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                         PersonId = new PersonId
                         {
                             SemanticsText = "Person.id",
-                            Value = new Value
+                            Value = new ValueElement
                             {
                                 Root = "2.16.840.1.113883.2.1.4.1",
                                 Extension = nhsNumber.RemoveWhiteSpace(),
@@ -203,10 +203,10 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
                 var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
 
-                var patientCareProvisionEvents = result?.Body?.QUPA_IN000009UK03?.ControlActEvent
+                var patientCareProvisionEvents = result?.Body?.QUPAIN000009UK03?.ControlActEvent
                     ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
                     ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
-                    .Where(y => knownPharmacyTypes.Contains(y?.Code?._code));
+                    .Where(y => knownPharmacyTypes.Contains(y?.Code?.Code));
 
                 string odsCode = null;
 
@@ -228,8 +228,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     }
                 }
 
-                var pertinentSerialChangeNumber = result?.Body?.QUPA_IN000009UK03?.ControlActEvent?.Subject?.PDSResponse
-                    ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?._value;
+                var pertinentSerialChangeNumber = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse
+                    ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?.Value;
 
                 var successResult = new GetNominatedPharmacyResult(
                     result.StatusCode,
@@ -263,20 +263,21 @@ namespace NHSOnline.Backend.NominatedPharmacy
                             nominatedPharmacyUpdate.NhsNumber,
                             nominatedPharmacyUpdate.HasExistingNominatedPharmacy,
                             nominatedPharmacyUpdate.UpdatedOdsCode,
-                            nominatedPharmacyUpdate.PertinentSerialChangeNumber));
+                            nominatedPharmacyUpdate.PertinentSerialChangeNumber,
+                            _config));
 
                 if (!result.HasSuccessResponse)
                 {
-                    _logger.LogInformation("The request to update a patients nominated pharmacy was unsuccessful");
+                    _logger.LogInformation($"The request to update a patients nominated pharmacy was unsuccessful. Response from spine: {result.RawResponse}");
                     return new UpdateNominatedPharmacyResult(result.StatusCode);
                 }
 
-                _logger.LogInformation("Successfully completed request to update patient's nominated pharmacy");
+                _logger.LogInformation($"Successfully completed request to update patient's nominated pharmacy. Spine ConversationId: { result.Response?.Header?.MessageHeader?.ConversationId }");
                 return new UpdateNominatedPharmacyResult(result.StatusCode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An error occurred while trying to update the patients nominated pharmacy");
+                _logger.LogError(ex, $"An error occurred while trying to update the patient's nominated pharmacy");
                 return new UpdateNominatedPharmacyResult(HttpStatusCode.InternalServerError);
             }
             finally
@@ -293,11 +294,11 @@ namespace NHSOnline.Backend.NominatedPharmacy
             var patientCareSections = new Dictionary<string, PatientCareProvisionEvent>();
 
             patientCareSections.AddIfValueNotNull(NominatedPharmacyCode,
-                patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCode));
+                patientCareProvisionEvents.FirstOrDefault(x => string.Equals(x.Code?.Code, NominatedPharmacyCode, StringComparison.Ordinal)));
             patientCareSections.AddIfValueNotNull(MedicalApplianceCode,
-                patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == MedicalApplianceCode));
+                patientCareProvisionEvents.FirstOrDefault(x => string.Equals(x.Code?.Code, MedicalApplianceCode, StringComparison.Ordinal)));
             patientCareSections.AddIfValueNotNull(DispensingDoctorCode,
-                patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == DispensingDoctorCode));
+                patientCareProvisionEvents.FirstOrDefault(x => string.Equals(x.Code?.Code, DispensingDoctorCode, StringComparison.Ordinal)));
 
             if (!patientCareSections.Any())
             {

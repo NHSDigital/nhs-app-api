@@ -2,7 +2,7 @@ using NHSOnline.Backend.NominatedPharmacy.Soap;
 
 namespace NHSOnline.Backend.NominatedPharmacy
 {
-    public struct PharmacyCheck
+    public class PharmacyCheck
     {
         public bool IsValid { get; set; }
         

@@ -19,15 +19,15 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             _nominatedPharmacySubmitClient = nominatedPharmacySubmitClient;
         }
 
-        public async Task<NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>> NominatedPharmacyGet(
-            QUPA_IN000008UK02 getNominatedPharmacyRequest)
+        public async Task<NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>> NominatedPharmacyGet(
+            QUPAIN000008UK02 getNominatedPharmacyRequest)
         {
             return await _nominatedPharmacyPDSClient.NominatedPharmacyGet(getNominatedPharmacyRequest);
         }
 
-        public async Task<NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>> UpdateNominatedPharmacy(NominatedPharmacyUpdateRequest addNominatedPharmacyRequest)
+        public async Task<UpdateNominatedPharmacyApiObjectResponse> UpdateNominatedPharmacy(NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest)
         {
-            return await _nominatedPharmacySubmitClient.UpdateNominatedPharmacy(addNominatedPharmacyRequest);
+            return await _nominatedPharmacySubmitClient.UpdateNominatedPharmacy(nominatedPharmacyUpdateRequest);
         }
     }
 }

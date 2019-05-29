@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces
 {
     public interface INominatedPharmacySubmitClient
     {
-        Task<NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>> UpdateNominatedPharmacy(NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest);
+        Task<UpdateNominatedPharmacyApiObjectResponse> UpdateNominatedPharmacy(NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest);
     }
 }

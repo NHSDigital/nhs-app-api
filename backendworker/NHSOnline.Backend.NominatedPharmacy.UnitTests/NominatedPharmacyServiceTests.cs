@@ -1,17 +1,17 @@
-﻿using AutoFixture;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using AutoFixture;
 using AutoFixture.AutoMoq;
+using Castle.Core.Internal;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.NominatedPharmacy.Models;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
-using System.Collections.Generic;
-using Castle.Core.Internal;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 {
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             // Arrange
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
-                    It.Is<QUPA_IN000008UK02>(
+                    It.Is<QUPAIN000008UK02>(
                         req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
@@ -74,15 +74,15 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                    StringComparison.OrdinalIgnoreCase))
                 ))
                 .Returns(Task.FromResult(
-                    new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.OK)
+                    new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.OK)
                     {
-                        RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>
+                        RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>
                         {
-                            Body = new Body<QUPA_IN000009UK03_Response>
+                            Body = new Body<QUPAIN000009UK03Response>
                             {
-                                RetrievalQueryResponse = new QUPA_IN000009UK03_Response
+                                RetrievalQueryResponse = new QUPAIN000009UK03Response
                                 {
-                                    QUPA_IN000009UK03 = new QUPA_IN000009UK03
+                                    QUPAIN000009UK03 = new QUPAIN000009UK03
                                     {
                                         ControlActEvent = new ControlActEvent
                                         {
@@ -106,9 +106,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                                 PatientCareProvisionEvent =
                                                                                     new PatientCareProvisionEvent
                                                                                     {
-                                                                                        Code = new Code
+                                                                                        Code = new CodeElement
                                                                                         {
-                                                                                            _code = code
+                                                                                            Code = code
                                                                                         },
                                                                                         Performer = new Performer
                                                                                         {
@@ -133,9 +133,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                     {
                                                         PertinentSerialChangeNumber = new PertinentSerialChangeNumber
                                                         {
-                                                            Value = new Value
+                                                            Value = new ValueElement
                                                             {
-                                                                _value = "22",
+                                                                Value = "22",
                                                             }
                                                         }
                                                     }
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
                 .Returns(Task.FromResult(
-                    new NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>(HttpStatusCode.BadRequest)
+                    new UpdateNominatedPharmacyApiObjectResponse(HttpStatusCode.BadRequest)
                 ))
                 .Verifiable();
 
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
                 .Returns(Task.FromResult(
-                    new NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>(HttpStatusCode.OK)
+                    new UpdateNominatedPharmacyApiObjectResponse(HttpStatusCode.OK)
                 ))
                 .Verifiable();
 
@@ -259,7 +259,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
-                    It.Is<QUPA_IN000008UK02>(
+                    It.Is<QUPAIN000008UK02>(
                         req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
@@ -289,7 +289,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             //Arrange
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
-                    It.IsAny<QUPA_IN000008UK02>()
+                    It.IsAny<QUPAIN000008UK02>()
                 )).Returns(Task.FromResult(GetUnsuccessfulNominatedPharmacyApiObjectResponse()))               
                 .Verifiable();
 
@@ -310,7 +310,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
-                    It.IsAny<QUPA_IN000008UK02>()
+                    It.IsAny<QUPAIN000008UK02>()
                 )).Throws<Exception>()         
                 .Verifiable();
 
@@ -322,30 +322,30 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             result.HttpStatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
 
-        private static NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>
+        private static NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>
             GetUnsuccessfulNominatedPharmacyApiObjectResponse()
         {
-            return new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.ServiceUnavailable)
+            return new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.ServiceUnavailable)
             {
-                RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>
+                RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>
                 {
                     Body = null
                 }
             };
         }
            
-        private static NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>
+        private static NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>
             GetNominatedPharmacyApiObjectResponse(string[] pharmacyCodes)
         {
-            return new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.OK)
+            return new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.OK)
             {
-                RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>
+                RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>
                 {
-                    Body = new Body<QUPA_IN000009UK03_Response>
+                    Body = new Body<QUPAIN000009UK03Response>
                     {
-                        RetrievalQueryResponse = new QUPA_IN000009UK03_Response
+                        RetrievalQueryResponse = new QUPAIN000009UK03Response
                         {
-                            QUPA_IN000009UK03 = new QUPA_IN000009UK03
+                            QUPAIN000009UK03 = new QUPAIN000009UK03
                             {
                                 ControlActEvent = new ControlActEvent
                                 {
@@ -368,9 +368,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                             {
                                                 PertinentSerialChangeNumber = new PertinentSerialChangeNumber
                                                 {
-                                                    Value = new Value
+                                                    Value = new ValueElement
                                                     {
-                                                        _value = "22",
+                                                        Value = "22",
                                                     }
                                                 }
                                             }
@@ -399,9 +399,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                 PatientCareProvisionEvent =
                                     new PatientCareProvisionEvent
                                     {
-                                        Code = new Code
+                                        Code = new CodeElement
                                         {
-                                            _code = pharmacyCode
+                                            Code = pharmacyCode
                                         },
                                         Performer = new Performer
                                         {

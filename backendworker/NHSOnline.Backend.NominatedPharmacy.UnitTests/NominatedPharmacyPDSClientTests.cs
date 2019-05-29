@@ -56,22 +56,22 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         public async Task GetNominatedPharmacy_ReturnsNominatedPharmacy_WhenValidRequested()
         {
             // Arrange
-            var request = new QUPA_IN000008UK02();
+            var request = new QUPAIN000008UK02();
 
-            var bodyResponse = new NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>
+            var bodyResponse = new NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>
             {
-                Body = new Body<QUPA_IN000009UK03_Response>
+                Body = new Body<QUPAIN000009UK03Response>
                 {
-                    RetrievalQueryResponse = new QUPA_IN000009UK03_Response
+                    RetrievalQueryResponse = new QUPAIN000009UK03Response
                     {
-                        QUPA_IN000009UK03 = new QUPA_IN000009UK03(),
+                        QUPAIN000009UK03 = new QUPAIN000009UK03(),
                     }
                 }
             };
 
             _mockEnvelopeService
                 .Setup(x => x.BuildEnvelope(
-                    It.Is<QUPA_IN000008UK02>(pr => pr == request),
+                    It.Is<QUPAIN000008UK02>(pr => pr == request),
                     It.Is<IServiceDefinition>(sd => sd.SoapActionName.Equals(GetNominatedPharmacySoapActionName, StringComparison.Ordinal))))
                 .Returns("requestXml")
                 .Verifiable();
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             var response = await _sut.NominatedPharmacyGet(request);
 
             // Assert
-            response.Body.QUPA_IN000009UK03.Should().BeEquivalentTo(bodyResponse.Body.RetrievalQueryResponse.QUPA_IN000009UK03);
+            response.Body.QUPAIN000009UK03.Should().BeEquivalentTo(bodyResponse.Body.RetrievalQueryResponse.QUPAIN000009UK03);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             _mockEnvelopeService.Verify();
         }

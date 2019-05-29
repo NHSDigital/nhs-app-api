@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
         {
             try
             {
-                var nominatedPharmacyEnvelope = new NominatedPharmacyEnvelope(serviceDefinition, _config, _logger);
+                var nominatedPharmacyEnvelope = new NominatedPharmacyEnvelope(serviceDefinition, _config);
                 nominatedPharmacyEnvelope.AddBody(request);
 
                 return nominatedPharmacyEnvelope.Envelope.OuterXml;

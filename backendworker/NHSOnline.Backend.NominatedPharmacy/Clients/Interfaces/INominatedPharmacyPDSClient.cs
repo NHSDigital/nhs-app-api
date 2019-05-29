@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces
 {
     public interface INominatedPharmacyPDSClient
     {
-        Task<NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>> NominatedPharmacyGet(QUPA_IN000008UK02 getNominatedPharmacyRequest);
+        Task<NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>> NominatedPharmacyGet(QUPAIN000008UK02 getNominatedPharmacyRequest);
     }
 }

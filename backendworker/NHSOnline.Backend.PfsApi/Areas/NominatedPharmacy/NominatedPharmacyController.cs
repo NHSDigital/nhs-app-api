@@ -61,6 +61,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 _logger.LogInformation("Nominated pharmacy feature is disabled");
                 return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = false });
             }
+
             UserSession userSession = HttpContext.GetUserSession();
 
             var isGpPracticeEpsEnabledResult = await _gpSearchService.IsGpPracticeEPSEnabled(userSession.GpUserSession.OdsCode);
@@ -124,6 +125,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         public async Task<IActionResult> Update([FromBody] UpdateNominatedPharmacyRequest model)
         {
             _logger.LogEnter();
+
+            if (!_config.IsNominatedPharmacyEnabled)
+            {
+                _logger.LogInformation("Nominated pharmacy feature is disabled");
+                return new StatusCodeResult((int)HttpStatusCode.Forbidden);
+            }
+
             UserSession userSession = HttpContext.GetUserSession();
 
             try

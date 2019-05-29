@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.NominatedPharmacy.Models;
-using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.ResponseParsers;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             _responseParser = responseParser;
         }
 
-        public async Task<NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>> UpdateNominatedPharmacy(
+        public async Task<UpdateNominatedPharmacyApiObjectResponse> UpdateNominatedPharmacy(
             NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest)
         {
             try
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
 
                 var httpRequest = BuildHttpRequest(PdsPath, content);
 
-                return await SendRequestAndParseResponse<NominatedPharmacyUpdateResponse>(httpRequest);
+                return await SendRequestAndParseResponse(httpRequest);
             }
             catch (Exception ex)
             {
@@ -81,13 +81,14 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             return content;
         }
 
-        private async Task<NominatedPharmacyApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
+        private async Task<UpdateNominatedPharmacyApiObjectResponse> SendRequestAndParseResponse(
             HttpRequestMessage request)
         {
             var responseMessage = await _httpClient.Client.SendAsync(request);
 
-            var response = new NominatedPharmacyApiObjectResponse<TResponse>(responseMessage.StatusCode);
+            var response = new UpdateNominatedPharmacyApiObjectResponse(responseMessage.StatusCode);
             await response.Parse(responseMessage, _responseParser, _logger);
+
             return response;
         }
     }

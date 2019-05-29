@@ -54,7 +54,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 "111",
                 true,
                 "ODSFFF",
-                "444");
+                "444",
+                _configMock.Object);
 
             _mockHttpHandler
                 .WhenNominatedPharmacy(HttpMethod.Post, new Uri(ApiUrl, PdsPath))

@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         const string odsCode = "AB123";
         const string updatedOdsCode = "BB999";
         const string NominatedPharmacyType = "P1";
-        string pertinentSerialChangeNumber = Guid.NewGuid().ToString();
+        readonly string pertinentSerialChangeNumber = Guid.NewGuid().ToString();
         
         private NominatedPharmacyController _systemUnderTest;
         private IFixture _fixture;
@@ -410,6 +410,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockNominatedPharmacyGatewayUpdateService.Verify();
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             value.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        }
+
+        [TestMethod]
+        public async Task Update_Returns403Forbidden_WhenNominatedPharmacyNotEnabled()
+        {
+            // Arrange
+            _configMock.SetupGet(x => x.IsNominatedPharmacyEnabled).Returns(false);
+            
+            var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
+            {
+                OdsCode = updatedOdsCode
+            };
+
+            // Act
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+
+            // Assert
+            _mockNominatedPharmacyGatewayUpdateService.Verify(x => x.UpdateNominatedPharmacy(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            value.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
         }
 
         [TestMethod]
