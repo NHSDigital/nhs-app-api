@@ -25,7 +25,7 @@ class DeleteAppointmentsBuilderMicrotest(request: CancelAppointmentSlotFacade) :
     }
 
     override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return respondWithServiceUnavailable()
     }
 
     override fun respondWithSuccess(): Mapping {

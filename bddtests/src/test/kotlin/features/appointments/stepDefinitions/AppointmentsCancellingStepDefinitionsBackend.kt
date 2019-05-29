@@ -27,14 +27,9 @@ class AppointmentsCancellingStepDefinitionsBackend {
     fun gpSystemIsAvailableToCancelAnAppointment(gpSystem: String) {
 
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
-        var reason = ""
-        if (gpSystem == "EMIS" || gpSystem == "MICROTEST")
-        {
-            reason = "No longer required"
-        }
 
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
-            cancelRequest.respondWithSuccess()
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
+            cancelRequest -> cancelRequest.respondWithSuccess()
         }
     }
 
@@ -42,20 +37,18 @@ class AppointmentsCancellingStepDefinitionsBackend {
     fun gpSystemIsAvailableToCancelAnAppointmentButWillTimeout(gpSystem: String) {
 
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
-        var reason = ""
-        if (gpSystem == "EMIS") {
-            reason = "No longer required"
-        }
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
-            cancelRequest.respondWithSuccess().delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
+
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
+            cancelRequest -> cancelRequest.respondWithSuccess()
+                .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
         }
     }
 
     @Given("^as a VISION user I want to cancel an appointment booked by someone else$")
     fun appointmentToBeCancelledIsBookedBySomeoneElseForVision() {
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
-        cancelAppointmentSteps.mockCancellationRequestStubForReason("", "VISION") { cancelRequest ->
-            (cancelRequest as CancelAppointmentBuilderVision)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason("VISION"),
+                "VISION") { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
                     .respondWithConflictException()
         }
     }
@@ -63,8 +56,8 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Given("^as a VISION user I want to cancel an appointment that doesn't exist$")
     fun appointmentToBeCancelledDoesNotExistForVision() {
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
-        cancelAppointmentSteps.mockCancellationRequestStubForReason("", "VISION") { cancelRequest ->
-            (cancelRequest as CancelAppointmentBuilderVision)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason("VISION"),
+                "VISION") { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
                     .respondWithExceptionWhenNotAvailable()
         }
     }
@@ -73,12 +66,9 @@ class AppointmentsCancellingStepDefinitionsBackend {
     fun gpSystemIsAvailableToCancelAnAppointmentButWillReturnCorruptedResponse(gpSystem: String) {
 
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
-        var reason = ""
-        if (gpSystem == "EMIS") {
-            reason = "No longer required"
-        }
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
-            cancelRequest.respondWithCorrupted()
+
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
+            cancelRequest -> cancelRequest.respondWithCorrupted()
         }
     }
 
@@ -131,5 +121,12 @@ class AppointmentsCancellingStepDefinitionsBackend {
         val response = SerenityHelpers.getHttpResponse()
         Assert.assertNotNull("Expected Response", response)
         Assert.assertEquals("Expected statusCode", SC_NO_CONTENT, response!!.statusLine.statusCode )
+    }
+
+    private fun getCancellationReason(gpSystem: String) : String {
+        return when (gpSystem) {
+            "EMIS", "MICROTEST" ->  "No longer required"
+            else -> ""
+        }
     }
 }

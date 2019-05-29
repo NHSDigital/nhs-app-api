@@ -96,6 +96,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _mockMicrotestClient.Verify();
             cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
         }
+        
+        [TestMethod]
+        public async Task Cancel_ReturnsConflict_ReturnsAppointmentNotCancellableResponse()
+        {
+            var cancellationReason = new CancellationReason
+            {
+                Id = CancellationReasonId,
+                DisplayName = CancellationDisplayName
+            };
+
+            _cancellationReasonService.Setup(x => x.TryGetCancellationReason(CancellationReasonId,
+                    out cancellationReason))
+                .Returns(true)
+                .Verifiable();
+
+            //Arrange
+            var response = new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Conflict);
+            MockMicrotestClientAppointmentDeleteMethod(response);
+
+            //Act
+            var cancelRequest = await _systemUnderTest.Cancel(_microtestUserSession, _appointmentCancelRequest);
+
+            //Assert
+            _cancellationReasonService.VerifyAll();
+            _mockMicrotestClient.Verify();
+            cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();
+        }
 
         private void MockMicrotestClientAppointmentDeleteMethod(
             MicrotestClient.MicrotestApiObjectResponse<string> response)

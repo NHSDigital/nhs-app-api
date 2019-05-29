@@ -147,6 +147,7 @@ Feature: Ability to cancel an appointment
       | Reason           | GP System |
       | Unable to attend | EMIS      |
       | Reason 1         | VISION    |
+      | Unable to attend | MICROTEST |
 
   @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems

@@ -30,6 +30,7 @@ Feature: Ability to cancel an appointment via api
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: <GP System> returns corrupted data when trying to cancel a previously booked appointment
     Given <GP System> returns corrupted response when trying to cancel a previously booked appointment
