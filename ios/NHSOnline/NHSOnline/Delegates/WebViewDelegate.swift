@@ -100,8 +100,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
-        startActivityIndicator()
         
+        checkPageLoadOriginAndStartActivityIndicator()
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
@@ -375,6 +375,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
     }
 
+    func checkPageLoadOriginAndStartActivityIndicator() {
+        if(self.viewController.goingBack) {
+            self.viewController.goingBack=false
+            if #available(iOS 10.0, *) {
+                os_log("Page looks like it came from a goBack - not starting native spinner", log: OSLog.default, type: .info)
+            } else {
+                NSLog("Page looks like it came from a goBack - not starting native spinner")
+            }
+        } else {
+            startActivityIndicator()
+        }
+    }
+    
     func startActivityIndicator() {
         self.activityIndicator.startAnimating()
         UIApplication.shared.beginIgnoringInteractionEvents()

@@ -23,8 +23,8 @@
 		13730A22220454FF00437FC1 /* BiometricType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A21220454FF00437FC1 /* BiometricType.swift */; };
 		13730A24220460B700437FC1 /* BCryptSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A23220460B700437FC1 /* BCryptSwift.swift */; };
 		1381D46321BFFAE100B54300 /* Scratch12.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1381D46221BFFAE100B54300 /* Scratch12.xcconfig */; };
-			1381D46A21BFFF9000B54300 /* AlgAndEncodingEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */; };
-			1381D46B21BFFF9000B54300 /* TagsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46921BFFF9000B54300 /* TagsEnum.swift */; };
+		1381D46A21BFFF9000B54300 /* AlgAndEncodingEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */; };
+		1381D46B21BFFF9000B54300 /* TagsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46921BFFF9000B54300 /* TagsEnum.swift */; };
 		1381D46E21BFFFA800B54300 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46D21BFFFA800B54300 /* SwiftyJSON.swift */; };
 		1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47521BFFFCF00B54300 /* DisplayPNGCharacteristicsDescriptor.swift */; };
 		1381D48421BFFFD300B54300 /* FinalChallengeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47621BFFFCF00B54300 /* FinalChallengeParams.swift */; };
@@ -65,8 +65,9 @@
 		14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */; };
 		14D4D21521E8BA44008A65E0 /* DeregisterAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */; };
 		14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21821E8D711008A65E0 /* BiometricService.swift */; };
-		14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FD70C22282E02B0072B280 /* ApplicationState.swift */; };
 		14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */; };
+		14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */; };
+		14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FD70C22282E02B0072B280 /* ApplicationState.swift */; };
 		2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */; };
 		2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */; };
 		2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */; };
@@ -195,8 +196,9 @@
 		14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionAssertationBuilder.swift; sourceTree = "<group>"; };
 		14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeregisterAuthenticator.swift; sourceTree = "<group>"; };
 		14D4D21821E8D711008A65E0 /* BiometricService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
-		14FD70C22282E02B0072B280 /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
 		14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewControllerTests.swift; sourceTree = "<group>"; };
+		14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDelegateTests.swift; sourceTree = "<group>"; };
+		14FD70C22282E02B0072B280 /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
 		2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandler.swift; sourceTree = "<group>"; };
@@ -530,6 +532,7 @@
 				4A6A1AA321E6189E00795BE2 /* AssertionTests.swift */,
 				30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */,
 				14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */,
+				14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */,
 			);
 			path = NHSOnlineTests;
 			sourceTree = "<group>";
@@ -856,6 +859,7 @@
 				2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
 				4A6A1AA421E6189E00795BE2 /* AssertionTests.swift in Sources */,
+				14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */,
 				F01745BB207BA39200877E4D /* SafariTests.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
 				135171A921CB1D52001EC74B /* FidoClientTests.swift in Sources */,

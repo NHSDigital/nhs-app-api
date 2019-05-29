@@ -36,6 +36,7 @@ class HomeViewController : UIViewController {
     var extendSessionOverdue: Bool = false
     var currentSessionDuration: Int?
     var isPresented: Bool = false
+    var goingBack: Bool = false
     var biometricService: BiometricService?
     var configurationService: ConfigurationService?
     
@@ -428,6 +429,7 @@ class HomeViewController : UIViewController {
                 self.tabBar.selectedItem = nil
             } else {
                 if(webview.canGoBack) {
+                    goingBack = true
                     webview.goBack()
                 }
             }
