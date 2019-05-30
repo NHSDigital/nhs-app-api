@@ -17,14 +17,12 @@
             {{ $t('biometricBanner.message.settingsButton') }}
           </generic-button>
         </analytics-tracked-tag>
-        <span @click="dismissBiometricsBannerClicked()">
-          <analytics-tracked-tag id="btn_biometricBannerDismiss"
-                                 :text="$t('biometricBanner.message.dismissLink')"
-                                 tag="a"
-                                 aria-hidden="true">
-            {{ $t('biometricBanner.message.dismissLink') }}
-          </analytics-tracked-tag>
-        </span>
+        <analytics-tracked-tag id="btn_biometricBannerDismiss"
+                               :text="$t('biometricBanner.message.dismissLink')"
+                               tag="a"
+                               :click-func="dismissBiometricsBannerClicked">
+          {{ $t('biometricBanner.message.dismissLink') }}
+        </analytics-tracked-tag>
       </div>
     </message-dialog>
   </div>
