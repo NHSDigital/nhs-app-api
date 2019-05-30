@@ -2,39 +2,42 @@
 
   <div v-if="showTemplate" :class="[$style['pull-content'],
                                     !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <h2 id="guidance_sub_header">
-      {{ $t('appointments.guidance.header') }}</h2>
-    <div :class="$style.info"
-         data-purpose="info">
-      <p>
-        {{ $t('appointments.guidance.text') }}</p>
+    <appointment-guidance v-if="isOnlineConsultationsEnabled"/>
+    <div v-else>
+      <h2 id="guidance_sub_header">
+        {{ $t('appointments.guidance.header') }}</h2>
+      <div :class="$style.info"
+           data-purpose="info">
+        <p>
+          {{ $t('appointments.guidance.text') }}</p>
 
-      <strong>
-        1. {{ $t('appointments.guidance.li1.header') }}</strong>
-      <p>
-        {{ $t('appointments.guidance.li1.text') }}</p>
+        <strong>
+          1. {{ $t('appointments.guidance.li1.header') }}</strong>
+        <p>
+          {{ $t('appointments.guidance.li1.text') }}</p>
 
-      <strong>
-        2. {{ $t('appointments.guidance.li2.header') }}</strong>
-      <p>
-        {{ $t('appointments.guidance.li2.text') }}</p>
+        <strong>
+          2. {{ $t('appointments.guidance.li2.header') }}</strong>
+        <p>
+          {{ $t('appointments.guidance.li2.text') }}</p>
 
-      <strong>
-        3. {{ $t('appointments.guidance.li3.header') }}</strong>
-      <p>
-        {{ $t('appointments.guidance.li3.text') }}</p>
+        <strong>
+          3. {{ $t('appointments.guidance.li3.header') }}</strong>
+        <p>
+          {{ $t('appointments.guidance.li3.text') }}</p>
+      </div>
+      <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
+                             :destination="symptomsPath"
+                             data-purpose="generic-button">
+        <generic-button id="btn_check_symptoms"
+                        :class="$style.button"
+                        tabindex="0"
+                        @click="onCheckSymptomClicked">
+          {{ $t('appointments.guidance.symptomButtonText') }}
+        </generic-button>
+      </analytics-tracked-tag>
     </div>
 
-    <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
-                           :destination="symptomsPath"
-                           data-purpose="generic-button">
-      <generic-button id="btn_check_symptoms"
-                      :class="$style.button"
-                      tabindex="0"
-                      @click="onCheckSymptomClicked">
-        {{ $t('appointments.guidance.symptomButtonText') }}
-      </generic-button>
-    </analytics-tracked-tag>
     <no-js-form :action="appointmentBookingPath" :value="formData">
       <generic-button
         id="btn_appointment"
@@ -44,31 +47,48 @@
         {{ $t('appointments.guidance.bookButtonText') }}
       </generic-button>
     </no-js-form>
+
+    <generic-button v-if="$store.state.device.isNativeApp && isOnlineConsultationsEnabled"
+                    :class="[$style.button, $style.grey]"
+                    @click="onBackButtonClicked">
+      {{ $t('appointments.guidance.backButtonText') }}
+    </generic-button>
+
+    <desktopGenericBackLink
+      v-if="isOnlineConsultationsEnabled && !$store.state.device.isNativeApp"
+      :path="indexPath"
+      :button-text="'appointments.guidance.backDesktopLinkText'"
+      @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import { APPOINTMENT_BOOKING, SYMPTOMS } from '@/lib/routes';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import GenericButton from '@/components/widgets/GenericButton';
-import NoJsForm from '@/components/no-js/NoJsForm';
+import { APPOINTMENT_BOOKING, APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import AppointmentGuidance from '@/components/appointments/AppointmentGuidanceMenu';
+import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import NoJsForm from '@/components/no-js/NoJsForm';
 
 export default {
   components: {
-    AnalyticsTrackedTag,
     GenericButton,
     NoJsForm,
+    AppointmentGuidance,
+    DesktopGenericBackLink,
   },
   data() {
     return {
-      symptomsPath: SYMPTOMS.path,
+      indexPath: INDEX.path,
     };
   },
   computed: {
     appointmentBookingPath() {
       return APPOINTMENT_BOOKING.path;
+    },
+    isOnlineConsultationsEnabled() {
+      return (this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true || this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true');
     },
     formData() {
       return {
@@ -79,11 +99,14 @@ export default {
     },
   },
   methods: {
+    onBookButtonClicked() {
+      redirectTo(this, APPOINTMENT_BOOKING.path, null);
+    },
     onCheckSymptomClicked() {
       redirectTo(this, SYMPTOMS.path, null);
     },
-    onBookButtonClicked() {
-      redirectTo(this, APPOINTMENT_BOOKING.path, null);
+    onBackButtonClicked() {
+      redirectTo(this, APPOINTMENTS.path, null);
     },
   },
 };

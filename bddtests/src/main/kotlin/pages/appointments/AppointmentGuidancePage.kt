@@ -5,11 +5,27 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.openqa.selenium.StaleElementReferenceException
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.sharedElements.MenuLinks
+import pages.sharedElements.MenuLinksContent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject() {
 
-    private val mainXPath = "//*[@id='app']/div/main"
+    private val mainXPath = "//*[@id='app']/div/main/div"
+
+    private val checkSymptomsTitle = "Get help with symptoms"
+    private val checkSymptomsDescription = "Find information about specific conditions"
+
+    // online-consultation-journey
+    private var menuContent = MenuLinksContent(
+            title = "More",
+            links = arrayOf(
+                    Pair(checkSymptomsTitle, checkSymptomsDescription)),
+            containerXPath = mainXPath)
+
+    private val menuLinks by lazy { MenuLinks(this, menuContent) }
+
+    val menuCheckSymptomsButton by lazy { menuLinks.link(checkSymptomsTitle) }
 
     val checkSymptomsButton = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_check_symptoms']",

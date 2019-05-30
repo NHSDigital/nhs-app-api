@@ -278,8 +278,14 @@ export default {
         header: 'Get advice from a pharmacist​',
         text: 'They\'re highly skilled healthcare professionals who can offer valuable advice​',
       },
+      menuItem1: {
+        header: 'Get help with symptoms',
+        text: 'Find information about specific conditions',
+      },
       symptomButtonText: 'Check symptoms',
       bookButtonText: 'Book new appointment',
+      backDesktopLinkText: 'Back',
+      backButtonText: 'Back to my appointments',
     },
     noSlotErrorMessage: {
       summary: 'There are no appointments available at the moment',

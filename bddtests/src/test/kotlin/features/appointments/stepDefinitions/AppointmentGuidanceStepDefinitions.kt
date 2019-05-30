@@ -23,4 +23,11 @@ class AppointmentGuidanceStepDefinitions {
     fun whenISelectAppointmentGuidancePageCheckSymptomsButton() {
         appointmentGuidanceSteps.clickCheckSymptomsButton()
     }
+
+    //online-consultation-journey
+    @When("^I select the Appointment Guidance Check symptoms menu item$")
+    @Throws(Exception::class)
+    fun whenISelectAppointmentGuidancePageCheckSymptomsMenuItem() {
+        appointmentGuidanceSteps.clickCheckSymptomsMenuItem()
+    }
 }

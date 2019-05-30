@@ -46,6 +46,15 @@ class AppointmentNavigationStepDefinitions {
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
 
+    @Given("^I am on the online consultations Appointment Guidance page$")
+    fun iAmOnTheOnlineConsultationsGuidancePage() {
+        iAmOnMyAppointmentsPage()
+        myAppointmentsUI.clickOnBookAppointmentButton()
+        appointmentGuidanceSteps.appointmentGuidancePage.
+                locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
+        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+    }
+
     @Given("^I am on the Available Appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
         iTryToProgressToTheAvailableAppointmentsPage()

@@ -51,4 +51,9 @@ open class AppointmentGuidanceSteps {
     fun clickCheckSymptomsButton() {
         appointmentGuidancePage.checkSymptomsButton.click()
     }
+
+    @Step
+    fun clickCheckSymptomsMenuItem() {
+        appointmentGuidancePage.menuCheckSymptomsButton.click()
+    }
 }

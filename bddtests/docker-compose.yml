@@ -22,6 +22,7 @@ services:
       - BIOMETRICS_ENABLED=true
       - THROTTLING_ENABLED=false
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
+      - ONLINE_CONSULTATIONS_ENABLED=false
   api.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:
