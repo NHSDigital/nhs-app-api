@@ -46,9 +46,8 @@ class AppointmentNavigationStepDefinitions {
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
 
-    @Given("^I am on the online consultations Appointment Guidance page$")
+    @Given("^I click through to the online consultations Appointment Guidance page$")
     fun iAmOnTheOnlineConsultationsGuidancePage() {
-        iAmOnMyAppointmentsPage()
         myAppointmentsUI.clickOnBookAppointmentButton()
         appointmentGuidanceSteps.appointmentGuidancePage.
                 locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)

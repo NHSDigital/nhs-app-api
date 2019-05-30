@@ -74,25 +74,25 @@ else
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
           @tech-debt and not @throttling and not @cosmos and not @accessibility and not
-          @online-consultations"
+          @onlineconsultations"
         elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_ios" ]
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
           @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
           @throttling and not @cosmos and not @noJs and not @android and not @accessibility and not
-          @online-consultations"
+          @onlineconsultations"
         elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_android" ]
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
           @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
-          @throttling and not @cosmos and not @noJs and not @ios and not @accessibility"
+          @throttling and not @cosmos and not @noJs and not @ios and not @accessibility and not @onlineconsultations"
         else
           info "Main Tranche - Full BDD Test Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
           @tech-debt and not @long-running and not @throttling and not
-          @cosmos and not @accessibility and not @online-consultations $SPECIFIC_TEST_TAGS"
+          @cosmos and not @accessibility and not @onlineconsultations $SPECIFIC_TEST_TAGS"
         fi
         if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ] &&  [ $MODE == "teamcity" ]
         then
@@ -110,6 +110,7 @@ else
           done
 
           TAGS+=(throttling)
+          TAGS+=(onlineconsultations)
           
         elif [ "$RUN_NATIVE" == 1 ]
         then
@@ -130,7 +131,7 @@ else
         info "MR Tranche - BDD Smoketest Run Configured"
         BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
         not @long-running and not @throttling and not @cosmos and not @accessibility and not
-        @online-consultations $SPECIFIC_TEST_TAGS"
+        @onlineconsultations $SPECIFIC_TEST_TAGS"
         TAGS=(smoketest)
     fi
 fi
@@ -249,7 +250,7 @@ info "Running $TAG tests"
     sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci_run.env
   fi
 
-    if [ $TAG == "online-consultations" ]
+    if [ $TAG == "onlineconsultations" ]
   then
     sed -i '' -e 's/ONLINE\_CONSULTATIONS\_ENABLED\=false/ONLINE\_CONSULTATIONS\_ENABLED\=true/g' vars_ci_run.env
   else
@@ -284,14 +285,7 @@ info "Running $TAG tests"
         done
         BDD_CUCUMBER_OPTIONS+="'"
     else
-      if [ $TAG == "throttling" ]
-      then
-        BDD_CUCUMBER_OPTIONS="--strict --tags '@$TAG and not @native'"
-      else
-        BDD_CUCUMBER_OPTIONS="$BDD_CUCUMBER_OPTIONS_PREFIX and @$TAG'"
-      fi
-
-      if [ $TAG == "online-consultations" ]
+      if [ $TAG == "throttling" ] || [ $TAG == "onlineconsultations" ]
       then
         BDD_CUCUMBER_OPTIONS="--strict --tags '@$TAG and not @native'"
       else
