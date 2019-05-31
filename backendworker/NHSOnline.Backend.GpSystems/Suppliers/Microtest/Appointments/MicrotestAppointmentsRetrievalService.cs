@@ -35,7 +35,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
                 _logger.LogInformation("Appointments GET request starting");
 
-                var response = await _microtestClient.AppointmentsGet(microtestUserSession.OdsCode, microtestUserSession.NhsNumber);
+                var oneYearAgoDate =  DateTimeOffset.Now.AddYears(-1);
+                var response = await _microtestClient.AppointmentsGet(microtestUserSession.OdsCode, microtestUserSession.NhsNumber, oneYearAgoDate);
 
                 _logger.LogInformation("Appointments GET request complete");
                 return InterpretAppointmentsGetResponse(response);

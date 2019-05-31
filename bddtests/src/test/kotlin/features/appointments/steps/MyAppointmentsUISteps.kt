@@ -104,7 +104,7 @@ open class MyAppointmentsUISteps {
             else -> null
         }
         assertNotNull("Invalid session variable key. ", slots)
-        assertEquals("Expected upcoming Appointments size doesn't match with the actual size",
+        assertEquals("Expected Appointments size doesn't match with the actual size",
                 expectedSlots.size, slots!!.size)
         assertEquals("Exact expected Appointments list not found. ", HashSet(expectedSlots), HashSet(slots))
     }

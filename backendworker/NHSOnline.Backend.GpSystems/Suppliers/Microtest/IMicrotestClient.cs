@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
@@ -14,7 +15,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
         Task<MicrotestClient.MicrotestApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
             string odsCode,
-            string nhsNumber);
+            string nhsNumber,
+            DateTimeOffset? pastAppointmentsFromDate);
 
         Task<MicrotestClient.MicrotestApiObjectResponse<string>> AppointmentsPost(
             string odsCode,

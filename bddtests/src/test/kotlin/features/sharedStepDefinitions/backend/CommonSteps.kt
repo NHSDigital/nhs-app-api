@@ -90,7 +90,7 @@ class CommonSteps : AbstractSteps() {
     @Then("the response contains an empty body$")
     fun theResponseBodyIsEmpty(){
         val errorResponse = SerenityHelpers.getHttpException()
-        Assert.assertNotNull("Expected Response", errorResponse)
+        assertNotNull("Expected Response", errorResponse)
         assertEquals("Expected an empty body. ", "", errorResponse!!.body)
     }
 

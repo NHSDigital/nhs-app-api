@@ -36,9 +36,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
-             
+
             _mockHttpHandler = new MockHttpMessageHandler();
-            
+
             _configMock = new Mock<IMicrotestConfig>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(BaseUri);
 
@@ -46,13 +46,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             _fixture.Inject(_configMock);
             _fixture.Inject(_httpClient);
-            
+
             _odsCode = _fixture.Create<string>();
             _nhsNumber = _fixture.CreateNhsNumberFormatted();
 
             _systemUnderTest = _fixture.Create<MicrotestClient>();
         }
-        
+
         [TestMethod]
         public async Task AppointmentSlotsGet_ReturnsAppointmentsResponse_WhenValidlyRequested()
         {
@@ -106,13 +106,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             // Arrange
             var expectedResponse = _fixture.Create<AppointmentsGetResponse>();
 
+            var pastAppointmentsFromDate = _fixture.Create<DateTimeOffset>();
+            var path = "patient/appointments?pastAppointmentsFromDate=" +
+                       pastAppointmentsFromDate.ToString("yyyy-MM-dd",
+                           System.Globalization.CultureInfo.InvariantCulture);
+
             _mockHttpHandler
-                .WhenMicrotest(HttpMethod.Get, "patient/appointments")
+                .WhenMicrotest(HttpMethod.Get, path)
                 .WithMicrotestHeaders(_odsCode, _nhsNumber)
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber);
+            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber, pastAppointmentsFromDate);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -125,18 +130,42 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             // Arrange
             var nonJsonResponse = _fixture.Create<string>();
 
+            var pastAppointmentsFromDate = _fixture.Create<DateTimeOffset>();
+            var path = "patient/appointments?pastAppointmentsFromDate=" + 
+                       pastAppointmentsFromDate.ToString("yyyy-MM-dd",
+                                                                  System.Globalization.CultureInfo.InvariantCulture);
+
             _mockHttpHandler
-                .WhenMicrotest(HttpMethod.Get, "patient/appointments")
+                .WhenMicrotest(HttpMethod.Get, path)
                 .WithMicrotestHeaders(_odsCode, _nhsNumber)
                 .Respond(HttpStatusCode.OK, "application/json", nonJsonResponse);
 
             // Act
-            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber);
+            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber, pastAppointmentsFromDate);
 
             // Assert
             response.StatusCode.Should().Be(500);
         }
 
+        [TestMethod]
+        public async Task
+            AppointmentsGet_ReturnsAppointmentsGetResponse_WhenValidlyRequestedWithoutPastAppointmentsFromDate()
+        {
+            // Arrange
+            var expectedResponse = _fixture.Create<AppointmentsGetResponse>();
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get, "patient/appointments")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber, null);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+        }
 
         [TestMethod]
         public async Task AppointmentsPost_Returns201Created_WhenValidlyRequested()
@@ -150,14 +179,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
                 .WithMicrotestHeaders(_odsCode, _nhsNumber)
                 .WithContent(JsonConvert.SerializeObject(request))
                 .Respond(HttpStatusCode.Created, "text/html", expectedResponse);
-            
+
             // Act
             var response = await _systemUnderTest.AppointmentsPost(_odsCode, _nhsNumber, request);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
-        
+
         [TestMethod]
         public async Task AppointmentsDelete_Returns204NoContent_WhenValidlyRequested()
         {
@@ -169,14 +198,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
                 .WhenMicrotest(HttpMethod.Delete, "patient/appointments")
                 .WithMicrotestHeaders(_odsCode, _nhsNumber)
                 .Respond(HttpStatusCode.NoContent, "text/html", expectedResponse);
-            
+
             // Act
             var response = await _systemUnderTest.AppointmentsDelete(_odsCode, _nhsNumber, request);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
-        
+
         [TestMethod]
         public async Task DemographicsGet_ReturnsDemographicsResponse_WhenValidlyRequested()
         {
@@ -213,7 +242,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             // Assert
             response.StatusCode.Should().Be(500);
         }
-        
+
         public void Dispose()
         {
             _mockHttpHandler.Dispose();

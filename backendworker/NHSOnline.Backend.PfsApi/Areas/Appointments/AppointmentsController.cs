@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
@@ -92,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 else
                 {
                     var appointmentsService = GetAppointmentsService(userSession);
-                    result = await appointmentsService.GetAppointments(userSession.GpUserSession);                    
+                    result = await appointmentsService.GetAppointments(userSession.GpUserSession);
                 }
 
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));

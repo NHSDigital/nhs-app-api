@@ -28,6 +28,7 @@ Feature: My appointments backend
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: API call for my appointments will return appointments from <GP System> when there are historical
   and upcoming
@@ -40,6 +41,7 @@ Feature: My appointments backend
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario: API call for my appointments won't filter out past appointments from VISION
     Given I have upcoming appointments for VISION, with one in the past

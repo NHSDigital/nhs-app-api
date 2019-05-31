@@ -15,6 +15,7 @@ Feature: My appointments UI with Javascript
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativesmoketest
     Examples:
@@ -35,6 +36,7 @@ Feature: My appointments UI with Javascript
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
 
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming appointments
@@ -48,7 +50,6 @@ Feature: My appointments UI with Javascript
     Examples:
       | GP System |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user can see their upcoming appointments and a message if there are no historical
   appointments
@@ -64,6 +65,7 @@ Feature: My appointments UI with Javascript
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees their historical appointments and a message if they have no upcoming
   appointments
@@ -78,6 +80,7 @@ Feature: My appointments UI with Javascript
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   @smoketest
   @nativesmoketest
@@ -94,6 +97,7 @@ Feature: My appointments UI with Javascript
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user can see their upcoming appointments
     Given I have upcoming appointments before cutoff time for <GP System>
@@ -104,13 +108,10 @@ Feature: My appointments UI with Javascript
     And each appointment can be cancelled
     And I am not informed I have no historical appointments
     And I can book an appointment
-    Examples:
-    | GP System |
-    | VISION    |
   @smoketest
     Examples:
     | GP System |
-    | MICROTEST |
+    | VISION    |
 
 
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
