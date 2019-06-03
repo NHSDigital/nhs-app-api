@@ -3,6 +3,7 @@ package features.sharedStepDefinitions.backend
 import com.google.gson.GsonBuilder
 import config.Config
 import cucumber.api.java.Before
+import cucumber.api.java.After
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -15,19 +16,27 @@ import mocking.defaults.VisionMockDefaults
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.getCurrentSession
-import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
+import net.serenitybdd.core.Serenity.getWebdriverManager
+import net.serenitybdd.core.Serenity.sessionVariableCalled
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import utils.contains
 import worker.NhsoHttpException
 import worker.NhsoHttpExceptionErrorBody
 import worker.WorkerClient
 import java.util.concurrent.TimeUnit
+import java.util.logging.Level
 
 private const val ADDITIONAL_TIME_TO_DELAY = 10
+val CONSOLE_LOG_STRINGS_TO_IGNORE =
+        arrayOf("favicon.ico"
+                ,"redirectToCitizenId"
+                ,"Failed to load resource"
+                ,"Request failed with status code 50")
 
 class CommonSteps : AbstractSteps() {
     companion object {
@@ -44,6 +53,21 @@ class CommonSteps : AbstractSteps() {
 
         setSessionVariable(MockingClient::class).to(mockingClient)
         setSessionVariable(WorkerClient::class).to(workerClient)
+    }
+
+    @After
+    fun afterEachScenario() {
+
+        val driver = getWebdriverManager().currentDriver
+
+        if(driver!=null) {
+            val logs = driver.manage().logs().get("browser")
+                    .filter(Level.SEVERE)
+                    .filterNot { it.message.contains(CONSOLE_LOG_STRINGS_TO_IGNORE) }
+
+            Assert.assertTrue("There should not be any console logs but found: \r\n $logs",
+                    logs.isEmpty())
+        }
     }
 
     @Given("^(EMIS|TPP|VISION) is not available$")
