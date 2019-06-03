@@ -17,7 +17,8 @@
             <nuxt/>
           </main>
         </div>
-        <div v-else :class="$style['main-container-desktop']">
+        <div v-else id="mainContent" ref="mainContent" tabindex="-1"
+             :class="$style['main-container-desktop']">
           <div :class="$style['banner-container']">
             <div>
               <beta-banner :banner-class="[$style.banner]" data-sid="beta-flag"/>

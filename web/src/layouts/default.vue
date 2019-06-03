@@ -10,7 +10,9 @@
     <div v-else-if="shouldShowSlimDesktopHeader" :class="$style['header-container-desktop']">
       <web-header :show-menu="false" :show-links="false"/>
     </div>
-    <div :class="[mainClass, $style['main-container-desktop']]">
+    <div id="maincontent" ref="mainContent" tabindex="-1"
+         :class="[mainClass, $style['main-container-desktop']]">
+      <header-companion-button v-if="shouldShowButton"/>
       <main :class="mainClass">
         <spinner />
         <connection-error />
@@ -41,6 +43,7 @@ import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
+import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import SurveyBar from '@/components/SurveyBar';
 import HotJar from '@/components/widgets/HotJar';
 import { INDEX, LOGIN } from '@/lib/routes';
@@ -54,6 +57,7 @@ export default {
     ApiError,
     ConnectionError,
     FlashMessage,
+    HeaderCompanionButton,
     SurveyBar,
     HotJar,
   },
@@ -113,6 +117,12 @@ export default {
         !this.$store.state.device.isNativeApp &&
         this.loggedIn &&
         this.$route.name !== 'Login'
+      );
+    },
+    shouldShowButton() {
+      return (
+        !this.$store.getters['errors/showApiError']
+        && !this.$store.state.device.isNativeApp
       );
     },
     shouldShowFullDesktopHeader() {

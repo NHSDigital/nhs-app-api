@@ -1,5 +1,5 @@
 <template>
-  <div :class="dynamicStyle('loginMain')">
+  <div id="maincontent" :class="dynamicStyle('loginMain')">
     <div v-if="isPracticeParticipating">
       <h2>{{ $t('login.desc') }}</h2>
       <form ref="loginForm"

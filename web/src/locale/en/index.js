@@ -171,7 +171,6 @@ export default {
       settingsButton: 'Open settings',
       dismissLink: 'Dismiss',
     },
-
   },
   termsAndConditions: {
     title: 'Accept conditions of use',
@@ -844,6 +843,9 @@ export default {
       account: 'Account',
       logout: 'Log out',
     },
+  },
+  skipLink: {
+    linkText: 'Skip to main content',
   },
   webFooter: {
     hiddenHeaderText: 'Support links',

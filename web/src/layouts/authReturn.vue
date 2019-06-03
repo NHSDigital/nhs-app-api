@@ -6,7 +6,8 @@
     <div v-else>
       <header-slim :show-in-native="true" :click-url="loginUrl">{{ headerTitle }}</header-slim>
     </div>
-    <div :class="[mainClass, $style['main-container-desktop']]">
+    <div id="mainContent" ref="mainContent" tabindex="-1"
+         :class="[mainClass, $style['main-container-desktop']]">
       <main :class="mainClass">
         <spinner />
         <connection-error />

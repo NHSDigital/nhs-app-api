@@ -1,6 +1,7 @@
 <template>
   <div>
     <cookie-banner v-if="!loggedIn"/>
+    <skip-link />
     <header>
       <span :class="$style['header-content']">
         <div :class="$style.nhsLogo">
@@ -24,7 +25,6 @@
     <div :class="$style.headerLowerSection">
       <page-title v-if="!isLoginPage"
                   :should-show-desktop-version="!$store.state.device.isNativeApp"/>
-      <header-companion-button v-if="shouldShowButton"/>
     </div>
   </div>
 </template>
@@ -43,21 +43,22 @@ import {
 import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
-import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
+import SkipLink from '@/components/widgets/SkipLink';
 import PageTitle from './PageTitle';
 import CookieBanner from '../CookieBanner';
 import NhsHeaderLogo from './NhsHeaderLogo';
 
+
 export default {
   name: 'WebHeader',
   components: {
+    SkipLink,
     BreadCrumbTrail,
     NhsHeaderLogo,
     HeaderLinks,
     HeaderMenu,
     PageTitle,
     CookieBanner,
-    HeaderCompanionButton,
   },
   head() {
     return {
@@ -111,11 +112,6 @@ export default {
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
-    },
-    shouldShowButton() {
-      return (
-        !this.$store.getters['errors/showApiError']
-      );
     },
   },
   mounted() {

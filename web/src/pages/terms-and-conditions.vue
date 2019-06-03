@@ -15,7 +15,8 @@
                     :show-header-buttons="false"/>
       </div>
 
-      <div :class="$style['main-container-desktop']">
+      <div id="mainContent" ref="mainContent" tabindex="-1"
+           :class="$style['main-container-desktop']">
         <section>
           <div>
             <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
