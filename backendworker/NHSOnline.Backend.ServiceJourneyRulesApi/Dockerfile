@@ -40,14 +40,12 @@ ENV CONFIGURATION_FOLDER_PATH ./configurations
 ENV RULES_FOLDER_NAME Rules
 ENV JOURNEYS_FOLDER_NAME Journeys
 ENV OUTPUT_FOLDER_PATH ./configurations/output
+ENV SJR_ARGS=
 
 WORKDIR /app
 EXPOSE $PORT
 COPY --from=publish /app .
 
-ARG SJR_ARGS
-ENV ENV_SJR_ARGS=$SJR_ARGS
-
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD exec dotnet NHSOnline.Backend.ServiceJourneyRulesApi.dll $ENV_SJR_ARGS
+CMD exec dotnet NHSOnline.Backend.ServiceJourneyRulesApi.dll $SJR_ARGS
