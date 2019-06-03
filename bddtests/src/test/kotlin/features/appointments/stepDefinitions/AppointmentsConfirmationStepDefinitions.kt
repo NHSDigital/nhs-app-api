@@ -3,9 +3,9 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
 import features.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
-import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AvailableAppointmentFilterSteps
 import features.appointments.steps.AvailableAppointmentsSteps
@@ -44,14 +44,14 @@ class AppointmentsConfirmationStepDefinitions {
 
     @Given("^I wish to book a telephone appointment using my (\\w+) phone number$")
     fun iWishToBookATelephoneAppointmentUserMyPhoneNumberOfType(phoneNumberToSelect: String) {
-        val patientContactDetails = SerenityHelpers.getPatient().contactDetails
+        val patient = SerenityHelpers.getPatient()
         when (phoneNumberToSelect) {
-            "home" ->
+            "first" ->
                 SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
-                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, patientContactDetails.telephoneNumber!!)
-            "mobile" ->
+                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, patient.telephoneFirst)
+            "second" ->
                 SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
-                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, patientContactDetails.mobileNumber!!)
+                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, patient.telephoneSecond)
             else -> Assert.fail("Invalid phone number type. ")
         }
     }
@@ -86,16 +86,17 @@ class AppointmentsConfirmationStepDefinitions {
 
     @When("^I select the (\\w+) number from available ones$")
     fun iSelectPhoneNumberFromAvailableOnes(phoneNumberToSelect: String) {
-        val patientContactDetails = SerenityHelpers.getPatient().contactDetails
-        when (phoneNumberToSelect) {
-            "home" ->
+        val patient = SerenityHelpers.getPatient()
+        when(phoneNumberToSelect) {
+            "first" ->
                 appointmentsConfirmationSteps.appointmentsConfirmation
-                        .selectPhoneNumberRadioButtonByText(patientContactDetails.telephoneNumber!!)
-            "mobile" ->
+                        .selectPhoneNumberRadioButtonByText(patient.telephoneFirst)
+            "second" ->
                 appointmentsConfirmationSteps.appointmentsConfirmation
-                        .selectPhoneNumberRadioButtonByText(patientContactDetails.mobileNumber!!)
+                        .selectPhoneNumberRadioButtonByText(patient.telephoneSecond)
             else -> Assert.fail("Invalid phone number type. ")
         }
+
         appointmentsConfirmationSteps.checkOnlyOnePhoneNumberRadioButtonIsSelected()
     }
 
@@ -109,7 +110,7 @@ class AppointmentsConfirmationStepDefinitions {
     fun iSelectAlternatePhoneNumberOptions(list: List<String>) {
         for (option in list) {
             when (option) {
-                "home", "mobile" -> iSelectPhoneNumberFromAvailableOnes(option)
+                "first", "second" -> iSelectPhoneNumberFromAvailableOnes(option)
                 "alternative" -> iSelectAlternativePhoneNumberOption()
                 else -> Assert.fail("Invalid phone number option: $option")
             }
@@ -211,11 +212,11 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^I see radio buttons to select the user's telephone numbers$")
     fun iSeeRadioButtonsToSelectUsersTelephoneNumbers() {
         val usersPhoneNumbers = ArrayList<String>()
-        val patientContactDetails = SerenityHelpers.getPatient().contactDetails
-        if (!patientContactDetails.telephoneNumber.isNullOrEmpty())
-            usersPhoneNumbers.add(patientContactDetails.telephoneNumber!!)
-        if (!patientContactDetails.mobileNumber.isNullOrEmpty())
-            usersPhoneNumbers.add(patientContactDetails.mobileNumber!!)
+        val patient = SerenityHelpers.getPatient()
+        if (!patient.telephoneFirst.isNullOrEmpty())
+            usersPhoneNumbers.add(patient.telephoneFirst)
+        if (!patient.telephoneSecond.isNullOrEmpty())
+            usersPhoneNumbers.add(patient.telephoneSecond)
         appointmentsConfirmationSteps.checkRadioButtonsDisplayedForPhoneNumbers(usersPhoneNumbers)
     }
 

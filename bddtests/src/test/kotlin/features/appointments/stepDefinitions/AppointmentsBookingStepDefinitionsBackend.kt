@@ -103,23 +103,22 @@ open class AppointmentsBookingStepDefinitionsBackend {
                 .respondWithSuccess() }
     }
 
-    @Given("^a telephone appointment booking for EMIS can be successful$")
-    fun aTelephoneAppointmentBookingForCanBeSuccessful() {
-        telephoneAppointmentBookingSetupWithResult(defaultTelephoneNumber) {
+    @Given("^a telephone appointment booking for (.*) can be successful$")
+    fun aTelephoneAppointmentBookingForCanBeSuccessful(gpSystem: String) {
+        telephoneAppointmentBookingSetupWithResult(gpSystem, defaultTelephoneNumber) {
             builder -> builder.respondWithSuccess() }
     }
 
-    @Given("^a telephone appointment booking for EMIS cannot be successful without phone number$")
-    fun aTelephoneAppointmentBookingForCannotBeSuccessfulWithoutPhoneNumber() {
-        telephoneAppointmentBookingSetupWithResult {
+    @Given("^a telephone appointment booking for (.*) cannot be successful without phone number$")
+    fun aTelephoneAppointmentBookingForCannotBeSuccessfulWithoutPhoneNumber(gpSystem: String) {
+        telephoneAppointmentBookingSetupWithResult(gpSystem) {
             builder -> builder.respondWithExceptionWhenRequiredFieldMissing() }
     }
 
-    private fun telephoneAppointmentBookingSetupWithResult(
+    private fun telephoneAppointmentBookingSetupWithResult(gpSystem: String,
             telephoneNumber: String? = null,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-        //currently only telephone appointments are applicable to EMIS
-        AppointmentsBookingFactory.getForSupplier("EMIS")
+        AppointmentsBookingFactory.getForSupplier(gpSystem)
                 .telephoneAppointmentBookingSetupWithResult(
                         telephoneNumber,
                         slotId = AppointmentsBookingFactory.defaultApptBookingSlotId,

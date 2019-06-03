@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
 
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _microtestUserSession = new MicrotestUserSession
             {
                 OdsCode = "TestOdsCode",
-                NhsNumber = "TestNhsNumber",
+                NhsNumber = "TestNhsNumber"
             };
             
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
@@ -72,6 +73,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         public async Task GetSlots_MicrotestClientThrowsHttpRequestExceptionFromAppointmentSlots_ReturnsBadGateway()
         {
             // Arrange
+            var demographicsResponse = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new DemographicsGetResponse()
+            };
+            
+            MockMicrotestClientDemographicsGetMethod(demographicsResponse);
+            
             _mockMicrotestClient
                 .Setup(x => x.AppointmentSlotsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AppointmentSlotsDateRange>()))
                 .Throws<HttpRequestException>()
@@ -89,6 +97,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         public async Task GetSlots_MicrotestClientGetAppointmentSlotsUnsuccessful_ReturnsBadGateway()
         {
             // Arrange
+            var demographicsResponse = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new DemographicsGetResponse()
+            };
+            
+            MockMicrotestClientDemographicsGetMethod(demographicsResponse);
+            
             var unsuccessfulSlotResponse = _fixture
                 .Build<MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
@@ -109,6 +124,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         public async Task GetSlots_MicrotestClientGetAppointmentSlotsReturnsForbidden_ReturnsForbiddenResponse()
         {
             // Arrange
+            var demographicsResponse = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new DemographicsGetResponse()
+            };
+            
+            MockMicrotestClientDemographicsGetMethod(demographicsResponse);
+            
             var forbiddenSlotsResponse = _fixture
                 .Build<MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.Forbidden)
@@ -129,6 +151,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         public async Task GetSlots_ReturnsInternalServerError_WhenSomethingGoesWrongDuringMappingResponse()
         {
             // Arrange
+            var demographicsResponse = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new DemographicsGetResponse()
+            };
+            
+            MockMicrotestClientDemographicsGetMethod(demographicsResponse);
+
             var slotResponse = new MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK)
             {
                 Body = new AppointmentSlotsGetResponse(),
@@ -136,7 +165,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             MockMicrotestClientAppointmentSlotGetMethod(slotResponse);
 
-            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body))
+            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, demographicsResponse.Body))
                 .Throws<Exception>();
 
             // Act
@@ -146,21 +175,57 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _mockMicrotestClient.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.InternalServerError>();
         }
-        
+
         [TestMethod]
-        public async Task GetSlots_HappyPath_ReturnsAppointmentSlots()
+        public async Task GetSlots_ExceptionRetrievingDemographicsData_MapperInvokedAnyway()
         {
             // Arrange
+            _mockMicrotestClient
+                .Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws<Exception>()
+                .Verifiable();
+            
             var slotResponse = new MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK)
             {
-                Body = new AppointmentSlotsGetResponse(),
+                Body = new AppointmentSlotsGetResponse()
             };
             
             MockMicrotestClientAppointmentSlotGetMethod(slotResponse);
 
             var expectedResponse = _fixture.Create<AppointmentSlotsResponse>();
 
-            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body))
+            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, null))
+                .Returns(expectedResponse);
+
+            // Act
+            var result = await GetAppointmentSlotsResult();
+
+            // Assert
+            _mockMicrotestClient.Verify();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>(); 
+        }
+        
+        [TestMethod]
+        public async Task GetSlots_HappyPath_ReturnsAppointmentSlots()
+        {
+            // Arrange
+            var demographicsResponse = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new DemographicsGetResponse()
+            };
+            
+            MockMicrotestClientDemographicsGetMethod(demographicsResponse);
+            
+            var slotResponse = new MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new AppointmentSlotsGetResponse()
+            };
+            
+            MockMicrotestClientAppointmentSlotGetMethod(slotResponse);
+
+            var expectedResponse = _fixture.Create<AppointmentSlotsResponse>();
+
+            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, demographicsResponse.Body))
                 .Returns(expectedResponse);
 
             // Act
@@ -178,6 +243,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 _microtestUserSession.OdsCode,
                 _microtestUserSession.NhsNumber,
                 _dateRange)
+            )
+            .ReturnsAsync(response)
+            .Verifiable();     
+        }
+        
+        private void MockMicrotestClientDemographicsGetMethod(
+            MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse> response)
+        {
+            _mockMicrotestClient.Setup(x => x.DemographicsGet(
+                _microtestUserSession.OdsCode,
+                _microtestUserSession.NhsNumber)
             )
             .ReturnsAsync(response)
             .Verifiable();     

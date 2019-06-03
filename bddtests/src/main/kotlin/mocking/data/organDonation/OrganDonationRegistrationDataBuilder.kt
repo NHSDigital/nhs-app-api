@@ -112,7 +112,7 @@ object OrganDonationRegistrationDataBuilder {
                 addressFull = patient.address.full(),
                 telecom = listOf(Identifier(
                         system = "phone",
-                        value = patient.contactDetails.telephoneNumber!!)),
+                        value = patient.telephoneFirst)),
                 organDonationDecision = "opt-out",
                 faithDeclaration = getFaithDeclaration(demographics.faithDeclaration))
     }

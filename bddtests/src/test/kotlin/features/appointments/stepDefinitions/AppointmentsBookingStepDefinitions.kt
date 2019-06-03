@@ -128,9 +128,9 @@ class AppointmentsBookingStepDefinitions {
         factory.generateSuccessfulBookingResponse("")
     }
 
-    @Given("^there are appointments available to book which are of telephone type$")
-    fun thereAreAvailableAppointmentsToBookWhichAreOfTelephoneType() {
-        generateStubsForTelephoneAppointments(NecessityOption.MANDATORY)
+    @Given("^there are appointments available to book which are of telephone type for (.*)$")
+    fun thereAreAvailableAppointmentsToBookWhichAreOfTelephoneType(gpSystem: String) {
+        generateStubsForTelephoneAppointments(gpSystem, NecessityOption.MANDATORY)
     }
 
     @Given("I wish to book an appointment without specifying a reason$")
@@ -139,13 +139,13 @@ class AppointmentsBookingStepDefinitions {
     }
 
     @Given("^there are appointments available to book which are of telephone type with " +
-            "optional booking reason$")
-    fun thereAreAppointmentsAvailableToBookWhichAreOfTelephoneTypeWithOptionalBookingReason() {
-        generateStubsForTelephoneAppointments(NecessityOption.OPTIONAL)
+            "optional booking reason for (.*)$")
+    fun thereAreAppointmentsAvailableToBookWhichAreOfTelephoneTypeWithOptionalBookingReason(gpSystem: String) {
+        generateStubsForTelephoneAppointments(gpSystem, NecessityOption.OPTIONAL)
     }
 
-    private fun generateStubsForTelephoneAppointments(necessityOption: NecessityOption) {
-        val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
+    private fun generateStubsForTelephoneAppointments(gpSystem: String, necessityOption: NecessityOption) {
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         val telephoneNumber = Serenity.sessionVariableCalled<String>(AppointmentsConfirmationSteps
                 .SerenityVariable.TELEPHONE_NUMBER_TO_BOOK_AGAINST) ?: "7777777777"
 

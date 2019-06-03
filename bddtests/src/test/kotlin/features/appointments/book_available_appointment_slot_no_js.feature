@@ -9,15 +9,15 @@ Feature: Book an available appointment slot UI without Javascript
   Background:
     Given I have disabled javascript
 
-    #HAPPY PATH JOURNIES
+    #HAPPY PATH JOURNEYS
 
-    # EMIS Specific Scenarios (For EMIS telephone appointment)
+    # EMIS/Microtest Specific Scenarios (For EMIS/Microtest telephone appointment)
     # The following scenarios covered only telephone appointment options.
     # The telephone number is mandatory if telephone appointment slot selected.
     # Positive submission cases
 
-  Scenario: An EMIS user without Javascript cannot enter or select a phone number for non phone appointments
-    Given there are EMIS appointments available to book
+  Scenario Outline: A <GP System> user without Javascript cannot enter or select a phone number for non phone appointments
+    Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the Available Appointments page
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -26,12 +26,16 @@ Feature: Book an available appointment slot UI without Javascript
     Then the Appointment Slot page is displayed
     And I do not see a text input to enter phone number
     And I do not see any phone numbers to select
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
-  #FEATURE JOURNIES
+  #FEATURE JOURNEYS
 
-  Scenario Outline: An EMIS user with noJs can only enter a phone number for phone appointments, when they have <User's Telephone Numbers> phone number saved
-    Given I have <User's Telephone Numbers> telephone number(s) stored
-    And there are appointments available to book which are of telephone type
+  Scenario Outline: A <GP System> user with noJs can only enter a phone number for phone appointments, when they have <User's Telephone Numbers> phone number saved
+    Given I have <User's Telephone Numbers> telephone number(s) stored for <GP System>
+    And there are appointments available to book which are of telephone type for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -46,18 +50,22 @@ Feature: Book an available appointment slot UI without Javascript
     Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
-      | User's Telephone Numbers |
-      | no                       |
-      | only a home              |
-      | only a mobile            |
-      | both home and mobile     |
+      | GP System | User's Telephone Numbers        |
+      | EMIS      | no                              |
+      | EMIS      | only first                      |
+      | EMIS      | only second                     |
+      | EMIS      | both first and second           |
+      | MICROTEST | no                              |
+      | MICROTEST | only first                      |
+      | MICROTEST | only second                     |
+      | MICROTEST | both first and second           |
 
 
       # Telephone number error scenarios
 
-  Scenario: An EMIS user with noJs receives an error if a phone number is not provided for telephone appointments
-    Given I have no telephone number(s) stored
-    And there are appointments available to book which are of telephone type
+  Scenario Outline: A <GP System> user with noJs receives an error if a phone number is not provided for telephone appointments
+    Given I have no telephone number(s) stored for <GP System>
+    And there are appointments available to book which are of telephone type for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -67,10 +75,14 @@ Feature: Book an available appointment slot UI without Javascript
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then the focus will go back to empty phone number input box
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
-  Scenario: An EMIS user with noJs receives errors if a phone number and booking reason are not provided for telephone appointments
-    Given I have no telephone number(s) stored
-    And there are appointments available to book which are of telephone type
+  Scenario Outline: A <GP System> user with noJs receives errors if a phone number and booking reason are not provided for telephone appointments
+    Given I have no telephone number(s) stored for <GP System>
+    And there are appointments available to book which are of telephone type for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -79,10 +91,14 @@ Feature: Book an available appointment slot UI without Javascript
     And the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
     Then the focus will go back to empty phone number input box
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
-  Scenario: An EMIS user with noJs receives an error if a phone number is not provided for telephone appointments with optional booking reason
-    Given I have no telephone number(s) stored
-    And there are appointments available to book which are of telephone type with optional booking reason
+  Scenario Outline: A <GP System> user with noJs receives an error if a phone number is not provided for telephone appointments with optional booking reason
+    Given I have no telephone number(s) stored for <GP System>
+    And there are appointments available to book which are of telephone type with optional booking reason for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -91,10 +107,14 @@ Feature: Book an available appointment slot UI without Javascript
     And the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
     Then the focus will go back to empty phone number input box
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
-  Scenario: An EMIS user with noJs receives an error if an empty string or whitespace provided for telephone appointments
-    Given I have no telephone number(s) stored
-    And there are appointments available to book which are of telephone type
+  Scenario Outline: A <GP System> user with noJs receives an error if an empty string or whitespace provided for telephone appointments
+    Given I have no telephone number(s) stored for <GP System>
+    And there are appointments available to book which are of telephone type for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -106,14 +126,18 @@ Feature: Book an available appointment slot UI without Javascript
     And I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then the focus will go back to empty phone number input box
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
 
     # Regression Test scenarios to ensure booking reason is still validated for telephone appointments
 
-  Scenario: An EMIS user with noJs receives an error if a phone number is entered for telephone appointments, but no reason
+  Scenario Outline: A <GP System> user with noJs receives an error if a phone number is entered for telephone appointments, but no reason
     Given I wish to book an appointment without specifying a reason
-    And I have no telephone number(s) stored
-    And there are appointments available to book which are of telephone type
+    And I have no telephone number(s) stored for <GP System>
+    And there are appointments available to book which are of telephone type for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -122,11 +146,15 @@ Feature: Book an available appointment slot UI without Javascript
     And I enter a phone number for the appointment
     When I click the 'Confirm and book appointment' button
     Then the focus will go back to empty booking reason input box
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
   @bug  @NHSO-3816
   Scenario: An appointment is booked for an EMIS user with noJS if a phone number is provided for telephone appointments with optional booking reason
-    Given I have no telephone number(s) stored
-    And there are appointments available to book which are of telephone type with optional booking reason
+    Given I have no telephone number(s) stored for EMIS
+    And there are appointments available to book which are of telephone type with optional booking reason for EMIS
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -140,7 +168,7 @@ Feature: Book an available appointment slot UI without Javascript
 
 # Miscellaneous no-JS scenarios
 
-  Scenario Outline: An <GP System> user can book appointments with javascript disabled
+  Scenario Outline: A <GP System> user can book appointments with javascript disabled
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in

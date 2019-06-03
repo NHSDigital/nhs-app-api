@@ -6,7 +6,6 @@ import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.appointments.AppointmentsSlotsExample
-import mocking.emis.demographics.ContactDetails
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
@@ -30,27 +29,30 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
         }
     }
 
-    @Given("^I have (.*) telephone number\\(s\\) stored$")
-    fun iHaveTelephoneNumbersStored(telephoneNumberTypes: String) {
+    @Given("^I have (.*) telephone number\\(s\\) stored for (.*)$")
+    fun iHaveTelephoneNumbersStored(telephoneNumberTypes: String, gpSystem: String) {
         var invalidPhoneNumberTypes = true
-        val contactDetails = ContactDetails()
+
+        val patient = Patient.getDefault(gpSystem)
+        patient.telephoneFirst = ""
+        patient.telephoneSecond = ""
+
         if (telephoneNumberTypes == "no") {
             invalidPhoneNumberTypes = false
         } else {
-            if (telephoneNumberTypes.contains("home")) {
-                contactDetails.telephoneNumber = "01234 456789"
+            if (telephoneNumberTypes.contains("first")) {
+                patient.telephoneFirst = "01234 456789"
                 invalidPhoneNumberTypes = false
             }
-            if (telephoneNumberTypes.contains("mobile")) {
-                contactDetails.mobileNumber = "07912 345678"
+            if (telephoneNumberTypes.contains("second")) {
+                patient.telephoneSecond = "07912 345678"
                 invalidPhoneNumberTypes = false
             }
         }
         Assert.assertFalse("No valid telephone number type passed into the step. ", invalidPhoneNumberTypes)
-        // Currently only applicable for EMIS
-        val patient = Patient.getDefault("EMIS").copy(contactDetails = contactDetails)
+
         SerenityHelpers.setPatient(patient)
-        val factory = DemographicsFactory.getForSupplier("EMIS")
+        val factory = DemographicsFactory.getForSupplier(gpSystem)
         factory.enabled(patient)
     }
 
@@ -101,13 +103,13 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
         }
 
         val patient = SerenityHelpers.getPatient()
-        if  (!patient.contactDetails.telephoneNumber.isNullOrEmpty()) Assert.assertTrue(
+        if  (!patient.telephoneFirst.isNullOrEmpty()) Assert.assertTrue(
                 "Telephone Number not found in response. Only found $actualTelephoneNumbers. ",
-                actualTelephoneNumbers.contains(patient.contactDetails.telephoneNumber)
+                actualTelephoneNumbers.contains(patient.telephoneFirst)
         )
-        if  (!patient.contactDetails.mobileNumber.isNullOrEmpty()) Assert.assertTrue(
+        if  (!patient.telephoneSecond.isNullOrEmpty()) Assert.assertTrue(
                 "Mobile Telephone Number not found in response. Only found $actualTelephoneNumbers. ",
-                actualTelephoneNumbers.contains(patient.contactDetails.mobileNumber)
+                actualTelephoneNumbers.contains(patient.telephoneSecond)
         )
     }
 }

@@ -22,7 +22,10 @@ class DemographicsBuilderMicrotest(private val patient: Patient)
                 locality = patient.address.village!!,
                 post_town = patient.address.town!!,
                 county = patient.address.county!!,
-                postcode = patient.address.postcode!!)
+                postcode = patient.address.postcode!!,
+                telephone1 = patient.telephoneFirst,
+                telephone2 = patient.telephoneSecond
+                )
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(GetDemographicsResponseModel(response), GsonFactory.asIs)
         }

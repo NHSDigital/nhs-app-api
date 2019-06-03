@@ -1,15 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support.Logging;
+using Slot = NHSOnline.Backend.GpSystems.Appointments.Models.Slot;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 {
     public interface IAppointmentSlotsResponseMapper
     {
-        AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse);
+        AppointmentSlotsResponse Map(
+            AppointmentSlotsGetResponse slotsResponse, 
+            DemographicsGetResponse demographicsResponse
+        );
     }
 
     public class AppointmentSlotsResponseMapper : IAppointmentSlotsResponseMapper
@@ -23,12 +29,29 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             _logger = logger;
         }
 
-        public AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse)
+        public AppointmentSlotsResponse Map(
+            AppointmentSlotsGetResponse slotsResponse, 
+            DemographicsGetResponse demographicsResponse)
         {
             _logger.LogEnter();
 
-            var slots = new List<GpSystems.Appointments.Models.Slot>();
+            var slots = MapSlots(slotsResponse);
+            var telephoneNumbers = MapTelephoneNumbers(demographicsResponse);
 
+            var response = new AppointmentSlotsResponse
+            {
+                Slots = slots,
+                BookingReasonNecessity = Necessity.Mandatory,
+                BookingGuidance = string.Empty,
+                TelephoneNumbers = telephoneNumbers
+            };
+
+            _logger.LogExit();
+            return response;
+        }
+
+        private IEnumerable<Slot> MapSlots(AppointmentSlotsGetResponse slotsResponse)
+        {
             foreach (var sourceSlot in slotsResponse.Slots)
             {
                 if (sourceSlot.StartTime == null)
@@ -36,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                     continue;
                 }
 
-                var resultSlot = new GpSystems.Appointments.Models.Slot
+                yield return new Slot
                 {
                     Id = sourceSlot.Id,
                     StartTime = sourceSlot.StartTime.Value,
@@ -47,19 +70,33 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                     SessionName = string.Empty,
                     Channel = _enumMapper.MapChannel(sourceSlot.Channel, Channel.Unknown)
                 };
-
-                slots.Add(resultSlot);
             }
+        }
 
-            var response = new AppointmentSlotsResponse
+        private static IEnumerable<PatientTelephoneNumber> MapTelephoneNumbers(DemographicsGetResponse demographicsResponse)
+        {
+            if (demographicsResponse?.Demographics == null)
             {
-                Slots = slots,
-                BookingReasonNecessity = Necessity.Mandatory,
-                BookingGuidance = string.Empty
-            };
+                return Array.Empty<PatientTelephoneNumber>();
+            }
+            
+             return MapTelephoneNumbers(new[]{
+                demographicsResponse.Demographics.Telephone1,
+                demographicsResponse.Demographics.Telephone2});
+        }
 
-            _logger.LogExit();
-            return response;
+        private static IEnumerable<PatientTelephoneNumber> MapTelephoneNumbers(IEnumerable<string> sourceNumbers)
+        {
+            foreach (var sourceNumber in sourceNumbers)
+            {
+                if (!string.IsNullOrEmpty(sourceNumber))
+                {
+                    yield return new PatientTelephoneNumber()
+                    {
+                        TelephoneNumber = sourceNumber
+                    };
+                }
+            }
         }
     }
 }

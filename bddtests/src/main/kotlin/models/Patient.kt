@@ -9,7 +9,6 @@ import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.defaults.VisionMockDefaults
 import mocking.emis.demographics.Address
-import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
@@ -23,7 +22,9 @@ data class Patient(
         val callingName: String = "",
         val dateOfBirth: String = "",
         val sex: Sex = Sex.NotSpecified,
-        val contactDetails: ContactDetails = ContactDetails(),
+        var telephoneFirst: String = "",
+        var telephoneSecond: String = "",
+        var emailAddress: String = "",
         val address: Address = Address(),
         val accountId: String = "",
         val odsCode: String = "",
@@ -69,6 +70,10 @@ data class Patient(
 
     companion object {
 
+        private const val defaultTelephoneFirst = "02837483567"
+        private const val defaultTelephoneSecond = "07737483567"
+        private const val defaultEmailAddress = "HalleD@fakeemail.com"
+
         private val defaultAddress = Address(
                 houseNameFlatNumber = "99",
                 numberStreet = "Fake Street",
@@ -76,12 +81,6 @@ data class Patient(
                 town = "Fake town",
                 county = "Fake county",
                 postcode = "AA00 0AA"
-        )
-
-        private val defaultContactDetails = ContactDetails(
-                telephoneNumber = "02837483567",
-                mobileNumber = "07737483567",
-                emailAddress = "HalleD@fakeemail.com"
         )
 
         private val idTokenBuilder = IdTokenBuilder(
@@ -169,7 +168,9 @@ data class Patient(
                 dateOfBirth = "1972-04-12",
                 sex = Sex.Male,
                 address = defaultAddress,
-                contactDetails = defaultContactDetails,
+                telephoneFirst = defaultTelephoneFirst,
+                telephoneSecond = defaultTelephoneSecond,
+                emailAddress = defaultEmailAddress,
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "2jM47sZ0ic4FIAcVogI4WI",
                 connectionToken = montelFryeIm1ConnectionToken.accessIdentityGuid!!,
@@ -187,7 +188,9 @@ data class Patient(
                 surname = "Jones",
                 dateOfBirth = "1972-04-12",
                 address = defaultAddress,
-                contactDetails = defaultContactDetails,
+                telephoneFirst = defaultTelephoneFirst,
+                telephoneSecond = defaultTelephoneSecond,
+                emailAddress = defaultEmailAddress,
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "4FIAcVogI4WI2jM47sZ0ic",
                 connectionToken = "7a3a3cf8-4fcc-a797-a4b9-629cdbe104fc",
@@ -241,7 +244,9 @@ data class Patient(
                         county = "West Yorkshire",
                         postcode = "LS18 5TN"
                 ),
-                contactDetails = defaultContactDetails,
+                telephoneFirst = defaultTelephoneFirst,
+                telephoneSecond = defaultTelephoneSecond,
+                emailAddress = defaultEmailAddress,
                 odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                 nhsNumbers = listOf("5785445875"),
                 linkageKey = "passphraseToLink",
@@ -288,7 +293,9 @@ data class Patient(
                         county = "West Yorkshire",
                         postcode = "LS18 5TN"
                 ),
-                contactDetails = defaultContactDetails,
+                telephoneFirst = defaultTelephoneFirst,
+                telephoneSecond = defaultTelephoneSecond,
+                emailAddress = defaultEmailAddress,
                 odsCode = VisionMockDefaults.DEFAULT_ODS_CODE_VISION,
                 nhsNumbers = listOf("5785445875"),
                 connectionToken = "{\"RosuAccountId\":\"104969\",\"" +
@@ -319,7 +326,9 @@ data class Patient(
                         county = "West Yorkshire",
                         postcode = "LS18 5TN"
                 ),
-                contactDetails = defaultContactDetails,
+                telephoneFirst = defaultTelephoneFirst,
+                telephoneSecond = defaultTelephoneSecond,
+                emailAddress = defaultEmailAddress,
                 odsCode = MicrotestMockDefaults.DEFAULT_ODS_CODE_MICROTEST,
                 nhsNumbers = listOf("5785445875"),
                 connectionToken = "{}",

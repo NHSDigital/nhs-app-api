@@ -49,7 +49,7 @@ class IdTokenBuilder(issuer: String, audience: String) {
                 .issueTime(Date(Date().time))
                 .claim("auth_time", Date(Date().time -1 * EXPIRATION_TIME_MULTIPLIER))
                 .claim("ods_code", patient.odsCode)
-                .claim("email", patient.contactDetails.emailAddress)
+                .claim("email", patient.emailAddress)
                 .claim("email_verified",true)
                 .claim("birthdate", patient.dateOfBirth)
                 .claim("nhs_number", patient.nhsNumbers.firstOrNull())

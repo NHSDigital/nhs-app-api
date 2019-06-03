@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using Slot = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
@@ -36,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public void Map_ReturnsEmptyArray_WhenEmptyCollectionIsPassed()
+        public void Map_ReturnsEmptySlotsArray_WhenEmptyCollectionIsPassed()
         {
             // Arrange
             var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
@@ -45,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse);
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
 
             // Assert
             actualResponse.Should().NotBeNull();
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public void Map_ProvidedValidAppointSlots_Maps()
+        public void Map_ProvidedValidAppointmentSlots_Maps()
         {
             // Arrange
             var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
@@ -62,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse);
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
 
             // Assert
             actualResponse.Should().NotBeNull();
@@ -88,12 +89,133 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse);
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
 
             // Assert
             actualResponse.Should().NotBeNull();
             actualResponse.Slots.Should().NotContain(slot => slot.Id.Equals(invalidSlot.Id, StringComparison.Ordinal));
             actualResponse.Slots.Count().Should().Be(_microtestSlots.Count() - 1);
+        }        
+        
+        [TestMethod]
+        public void Map_DemographicsResponseContainsTwoTelephoneNumbers_MapsTwoTelephoneNumbers()
+        {
+            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
+            {
+                Slots = _microtestSlots
+            };
+
+            var demographicsResponse = new DemographicsGetResponse
+            {
+                Demographics = new DemographicsData
+                {
+                    Telephone1 = "1234567890",
+                    Telephone2 = "2345678901"
+                }
+            };
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
+
+            // Assert
+            var expectedTelephones = new[]
+            {
+                new PatientTelephoneNumber { TelephoneNumber = "1234567890" },
+                new PatientTelephoneNumber { TelephoneNumber = "2345678901" }
+            };
+
+            actualResponse.TelephoneNumbers.Should().BeEquivalentTo(expectedTelephones);
+        }
+        
+        [TestMethod]
+        public void Map_DemographicsResponseContainsTelephone1Only_MapsOneTelephoneNumber()
+        {
+            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
+            {
+                Slots = _microtestSlots
+            };
+
+            var demographicsResponse = new DemographicsGetResponse
+            {
+                Demographics = new DemographicsData
+                {
+                    Telephone1 = "1234567890"
+                }
+            };
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
+
+            // Assert
+            var expectedTelephones = new[]
+            {
+                new PatientTelephoneNumber { TelephoneNumber = "1234567890" }
+            };
+
+            actualResponse.TelephoneNumbers.Should().BeEquivalentTo(expectedTelephones);
+        }
+        
+        [TestMethod]
+        public void Map_DemographicsResponseContainsTelephone2Only_MapsOneTelephoneNumber()
+        {
+            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
+            {
+                Slots = _microtestSlots
+            };
+
+            var demographicsResponse = new DemographicsGetResponse
+            {
+                Demographics = new DemographicsData
+                {
+                    Telephone2 = "07901828483"
+                }
+            };
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
+
+            // Assert
+            var expectedTelephones = new[]
+            {
+                new PatientTelephoneNumber { TelephoneNumber = "07901828483" }
+            };
+
+            actualResponse.TelephoneNumbers.Should().BeEquivalentTo(expectedTelephones);
+        }
+        
+        [TestMethod]
+        public void Map_DemographicsResponseIsNull_ResponseHasEmptyTelephoneNumbers()
+        {
+            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
+            {
+                Slots = _microtestSlots
+            };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
+
+            // Assert
+            actualResponse.TelephoneNumbers.Should().BeEmpty();
+        }
+        
+        [TestMethod]
+        public void Map_DemographicsResponseHasNullDemographicsData_ResponseHasEmptyTelephoneNumbers()
+        {
+            var demographicsResponse = new DemographicsGetResponse
+            {
+                Demographics = null
+            };
+            
+            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
+            {
+                Slots = _microtestSlots
+            };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
+
+            // Assert
+            actualResponse.TelephoneNumbers.Should().BeEmpty();
         }
     }
 }

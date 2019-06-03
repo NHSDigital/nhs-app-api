@@ -2,6 +2,7 @@ package mocking.dataPopulation.journies.myRecord
 
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
+import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.EmisDemographicsResponse
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.IdentifierType
@@ -25,7 +26,10 @@ class MyRecordJourney(private val client: MockingClient) {
                                     ),
                                     dateOfBirth = patient.dateOfBirth,
                                     sex = patient.sex,
-                                    contactDetails = patient.contactDetails,
+                                    contactDetails = ContactDetails(
+                                            telephoneNumber = patient.telephoneFirst,
+                                            mobileNumber = patient.telephoneSecond,
+                                            emailAddress = patient.emailAddress),
                                     address = patient.address
                             )
                     )

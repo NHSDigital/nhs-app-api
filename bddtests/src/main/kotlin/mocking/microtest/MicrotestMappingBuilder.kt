@@ -61,4 +61,10 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
             }
             """.trimIndent()) }
     }
+
+    fun respondWithExceptionWhenRequiredFieldMissing(): Mapping {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
+            andJsonBody("")
+        }
+    }
 }

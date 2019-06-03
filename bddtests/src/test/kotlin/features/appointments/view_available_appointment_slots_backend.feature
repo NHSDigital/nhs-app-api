@@ -88,17 +88,21 @@ Feature: View available appointment slots backend
       | VISION    |
       | MICROTEST |
 
-    # Only specific to EMIS as we only look to retrieve them for EMIS, at the moment
-  Scenario Outline: An EMIS user who has <Telephone Numbers> phone number(s) stored are retrieved with available slots
-    Given I have <Telephone Numbers> telephone number(s) stored
-    And there are available appointment slots with different criteria for EMIS
+    # Only specific to EMIS and MICROTEST as we only look to retrieve them for these systems at the moment
+  Scenario Outline: A <GP System> user who has <User's Telephone Numbers> phone number(s) stored are retrieved with available slots
+    Given I have <User's Telephone Numbers> telephone number(s) stored for <GP System>
+    And there are available appointment slots with different criteria for <GP System>
     And I have logged in and have a valid session cookie
     When the available appointment slots are retrieved
     Then <Retrieved Numbers> telephone number(s) are retrieved
     Examples:
-      | Telephone Numbers    | Retrieved Numbers |
-      | no                   | 0                 |
-      | only a home          | 1                 |
-      | only a mobile        | 1                 |
-      | both home and mobile | 2                 |
-    
+      | GP System | User's Telephone Numbers        | Retrieved Numbers |
+      | EMIS      | no                              | 0                 |
+      | EMIS      | only first                      | 1                 |
+      | EMIS      | only second                     | 1                 |
+      | EMIS      | both first and second           | 2                 |
+      | MICROTEST | no                              | 0                 |
+      | MICROTEST | only first                      | 1                 |
+      | MICROTEST | only second                     | 1                 |
+      | MICROTEST | both first and second           | 2                 |
+

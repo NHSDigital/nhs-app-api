@@ -21,7 +21,10 @@ data class EmisDemographicsResponse(
             patientIdentifiers = patientIdentifiers.toMutableList(),
             dateOfBirth = patient.dateOfBirth,
             sex = patient.sex,
-            contactDetails = patient.contactDetails,
+            contactDetails = ContactDetails(
+                    telephoneNumber = patient.telephoneFirst,
+                    mobileNumber = patient.telephoneSecond,
+                    emailAddress = patient.emailAddress),
             address = patient.address
     )
 }

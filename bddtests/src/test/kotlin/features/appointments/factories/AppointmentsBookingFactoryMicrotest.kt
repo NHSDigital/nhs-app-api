@@ -23,7 +23,11 @@ class AppointmentsBookingFactoryMicrotest : AppointmentsBookingFactory("MICROTES
                                              telephoneNumber: String?,
                                              telephoneContactType: String?): BookAppointmentSlotFacade {
 
-        throw NotImplementedError("Telephone appointment not available")
+        return BookAppointmentSlotFacade(
+                patient.userPatientLinkToken,
+                slotId ?: defaultApptBookingSlotId,
+                bookingReason ?: defaultApptBookingReason,
+                telephoneNumber = telephoneNumber)
     }
 
     override fun getExpectedUiRepresentationOfSlot(

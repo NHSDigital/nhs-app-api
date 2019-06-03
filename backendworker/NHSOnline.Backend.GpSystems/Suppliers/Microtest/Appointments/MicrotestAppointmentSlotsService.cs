@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
@@ -35,6 +36,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
                 var microtestUserSession = (MicrotestUserSession) gpUserSession;
 
+                _logger.LogInformation("Demographic data request starting");
+
+                MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse> demographicsResponse = null;
+                try
+                {
+                    demographicsResponse = await _microtestClient.DemographicsGet(microtestUserSession.OdsCode,
+                        microtestUserSession.NhsNumber);
+                    _logger.LogInformation("Demographic data request complete");
+
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e,"Exception has been thrown retrieving Microtest " +
+                                        "demographics data. Continuing...");
+                }
+
                 _logger.LogInformation("Appointment slots request starting");
 
                 var appointmentSlotsResponse = await _microtestClient.AppointmentSlotsGet(microtestUserSession.OdsCode,
@@ -43,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
                 _logger.LogInformation("Appointment slots request complete");
 
-                return InterpretAppointmentsGetResponse(appointmentSlotsResponse);
+                return InterpretAppointmentsGetResponse(appointmentSlotsResponse, demographicsResponse);
             }
             catch (HttpRequestException e)
             {
@@ -56,8 +73,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             }
         }
 
+        
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
-            MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse> appointmentSlotsResponse)
+            MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse> appointmentSlotsResponse,
+            MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse> demographicsResponse)
         {
             if (appointmentSlotsResponse.HasForbiddenResponse)
             {
@@ -74,7 +93,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
             try
             {
-                var result = _appointmentSlotsResponseMapper.Map(appointmentSlotsResponse.Body);
+                var result = _appointmentSlotsResponseMapper.Map(appointmentSlotsResponse.Body, 
+                    demographicsResponse?.Body
+                );
                 return new AppointmentSlotsResult.Success(result);
             }
             catch (Exception e)

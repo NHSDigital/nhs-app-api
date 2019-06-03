@@ -18,7 +18,8 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     init {
         val requestBody = PostAppointmentRequestModel (
                 slotId = request.slotId.toString(),
-                bookingReason = request.bookingReason.toString())
+                bookingReason = request.bookingReason.toString(),
+                telephoneNumber = request.telephoneNumber)
         requestBuilder
                 .andJsonBody(requestBody)
         }
@@ -71,9 +72,5 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
         return respondWithConflictError()
-    }
-
-    override fun respondWithExceptionWhenRequiredFieldMissing(): Mapping {
-        TODO("not implemented")
     }
 }

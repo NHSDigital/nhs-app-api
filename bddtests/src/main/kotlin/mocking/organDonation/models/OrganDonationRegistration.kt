@@ -30,7 +30,7 @@ data class OrganDonationRegistration(
                     dateOfBirth = patient.dateOfBirth,
                     addressFull = patient.address.full(),
                     address = Address.fromPatient(patient),
-                    emailAddresss = patient.contactDetails.emailAddress ?: "",
+                    emailAddresss = patient.emailAddress,
                     decision = OrganDonationRegistrationDecision.OptOut,
                     decisionDetails = null,
                     faithDeclaration = demographics.faithDeclaration.toString()
