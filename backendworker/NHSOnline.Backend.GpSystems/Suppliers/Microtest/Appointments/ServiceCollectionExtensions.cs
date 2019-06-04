@@ -13,7 +13,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             services.AddTransient<MicrotestAppointmentsCancellationService>();
 
             services.AddTransient<IAppointmentSlotsResponseMapper, AppointmentSlotsResponseMapper>();
+            services.AddTransient<IAppointmentSlotsMapper, AppointmentSlotsMapper>();
             services.AddTransient<IAppointmentsResponseMapper, AppointmentsResponseMapper>();
+            services.AddTransient<IAppointmentsMapper, AppointmentsMapper>();
 
             return services;
         }

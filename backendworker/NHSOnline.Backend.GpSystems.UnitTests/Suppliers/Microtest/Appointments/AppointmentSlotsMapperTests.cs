@@ -1,17 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
-using Slot = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot;
+using NHSOnline.Backend.Support.Temporal;
+using UnitTestHelper;
+using Slot = NHSOnline.Backend.GpSystems.Appointments.Models.Slot;
+using SlotSupplier = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 {
@@ -19,203 +20,314 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
     public class AppointmentSlotsMapperTests
     {
         private IFixture _fixture;
-        private IAppointmentSlotsResponseMapper _systemUnderTest;
-        private IEnumerable<Slot> _microtestSlots;
+        private DateTime _testDate;
+        private DateTime _tomorrow;
+        private DateTime _today;
+        private DateTime _nextMonth;
+        private DateTime _twoDaysFromNow;
+        private DateTime _lastMonth;
+        private IAppointmentSlotsMapper _systemUnderTest;
+        private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             var mapper = _fixture.Create<IMicrotestEnumMapper>();
+            var logger = _fixture.Create<ILogger<AppointmentSlotsMapper>>();
+            _dateTimeOffsetProviderMock = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
 
-            var logger = _fixture.Create<ILogger<AppointmentSlotsResponseMapper>>();
+            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProviderMock.Object, mapper, logger);
 
-            _systemUnderTest = new AppointmentSlotsResponseMapper(mapper, logger);
-
-            _microtestSlots = _fixture.CreateMany<Slot>();
+            _testDate = DateTime.Today;
+            _tomorrow = _testDate.AddDays(1);
+            _today = _testDate.AddHours(1);
+            _nextMonth = _testDate.AddMonths(1);
+            _twoDaysFromNow = _testDate.AddDays(2);
+            _lastMonth = _testDate.AddMonths(-1);
         }
 
         [TestMethod]
-        public void Map_ReturnsEmptySlotsArray_WhenEmptyCollectionIsPassed()
+        public void Map_ReturnsEmptyArray_WhenSlotsInResponseIsNull()
+        {
+            // Act
+            var actualResponse = _systemUnderTest.Map(null);
+
+            // Assert
+            actualResponse.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void Map_ReturnsNoLocation_WhenLocationsInResponseIsNull()
         {
             // Arrange
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
-            {
-                Slots = Enumerable.Empty<Slot>()
-            };
+            var slot =
+                CreateSlot("101", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_twoDaysFromNow),
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), null, "Emergency", "Unknown");
+
+            var slots = new[] { slot };
+
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow);
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
+            var actualResponse = _systemUnderTest.Map(slots);
 
             // Assert
-            actualResponse.Should().NotBeNull();
-            actualResponse.Slots.Should().BeEmpty();
+            var expectedSlot = new Slot
+            {
+                Id = "101",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = slotTime,
+                Location = "",
+                StartTime = (DateTimeOffset) slotTime,
+                Type = "Emergency",
+                SessionName = "",
+                Channel = Channel.Unknown
+            };
+            var expectedResponse = new[] { expectedSlot };
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
         [TestMethod]
-        public void Map_ProvidedValidAppointmentSlots_Maps()
+        public void Map_ReturnsEmptyArray_WhenSlotsInResponseIsEmpty()
         {
             // Arrange
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
-            {
-                Slots = _microtestSlots
-            };
+            var slots = Array.Empty<SlotSupplier>();
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
+            var actualResponse = _systemUnderTest.Map(slots);
 
             // Assert
-            actualResponse.Should().NotBeNull();
-            foreach (var slot in actualResponse.Slots)
-            {
-                var microtestSlot = _microtestSlots.First(s => s.Id.Equals(slot.Id, StringComparison.Ordinal));
-                slot.Should().BeEquivalentTo(microtestSlot, options => options.Excluding( s => s.Channel));
-                slot.Channel.Should().Be(Channel.Unknown);
-            }
+            actualResponse.Should().BeEmpty();
         }
 
-        [TestMethod]
-        public void Map_DoesNotMapAppointmentSlot_WhenStartTimeIsNull()
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("2018-05-09T9:59:19")]
+        public void Map_ReturnsResponseWithoutEndTime_WhenEndTimeInSlotIsInInvalidFormat(string invalidEndTime)
         {
             // Arrange
-            var invalidSlot = _microtestSlots.First();
+            var slot =
+                CreateSlot("101", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_tomorrow),
+                    invalidEndTime, "Leeds", "Emergency", "Unknown");
 
-            invalidSlot.StartTime = null;
+            var slots = new[] { slot };
 
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
-            {
-                Slots = _microtestSlots
-            };
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
+            var actualResponse = _systemUnderTest.Map(slots);
 
             // Assert
-            actualResponse.Should().NotBeNull();
-            actualResponse.Slots.Should().NotContain(slot => slot.Id.Equals(invalidSlot.Id, StringComparison.Ordinal));
-            actualResponse.Slots.Count().Should().Be(_microtestSlots.Count() - 1);
-        }        
-        
-        [TestMethod]
-        public void Map_DemographicsResponseContainsTwoTelephoneNumbers_MapsTwoTelephoneNumbers()
-        {
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
+            var expectedSlot = new Slot
             {
-                Slots = _microtestSlots
+                Id = "101",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = null,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTime,
+                Type = "Emergency",
+                SessionName = "",
+                Channel = Channel.Unknown
             };
-
-            var demographicsResponse = new DemographicsGetResponse
-            {
-                Demographics = new DemographicsData
-                {
-                    Telephone1 = "1234567890",
-                    Telephone2 = "2345678901"
-                }
-            };
-            
-            // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
-
-            // Assert
-            var expectedTelephones = new[]
-            {
-                new PatientTelephoneNumber { TelephoneNumber = "1234567890" },
-                new PatientTelephoneNumber { TelephoneNumber = "2345678901" }
-            };
-
-            actualResponse.TelephoneNumbers.Should().BeEquivalentTo(expectedTelephones);
+            var expectedResponse = new[] { expectedSlot };
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
-        
-        [TestMethod]
-        public void Map_DemographicsResponseContainsTelephone1Only_MapsOneTelephoneNumber()
-        {
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
-            {
-                Slots = _microtestSlots
-            };
 
-            var demographicsResponse = new DemographicsGetResponse
-            {
-                Demographics = new DemographicsData
-                {
-                    Telephone1 = "1234567890"
-                }
-            };
-            
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("2018-05-09T9:59:19")]
+        public void Map_ReturnsResponseWithoutSlot_WhenStartTimeInSlotIsInInvalidFormat(string invalidStartTime)
+        {
+            // Arrange
+            var slotWithInvalidStartTime =
+                CreateSlot("101", new[] { "Dr Venkman" }, invalidStartTime,
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency", "Unknown");
+
+            var slot2 =
+                CreateSlot("101", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_twoDaysFromNow),
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency", "Unknown");
+
+            var slots = new[] { slotWithInvalidStartTime, slot2 };
+
+            var slotTimeTwoDays = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow);
+
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
+            var actualResponse = _systemUnderTest.Map(slots);
 
             // Assert
-            var expectedTelephones = new[]
+            var expectedSlot = new Slot
             {
-                new PatientTelephoneNumber { TelephoneNumber = "1234567890" }
+                Id = "101",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = slotTimeTwoDays,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTimeTwoDays,
+                Type = "Emergency",
+                SessionName = ""
             };
 
-            actualResponse.TelephoneNumbers.Should().BeEquivalentTo(expectedTelephones);
+            var expectedResponse = new[] { expectedSlot };
+
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
-        
-        [TestMethod]
-        public void Map_DemographicsResponseContainsTelephone2Only_MapsOneTelephoneNumber()
-        {
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
-            {
-                Slots = _microtestSlots
-            };
 
-            var demographicsResponse = new DemographicsGetResponse
-            {
-                Demographics = new DemographicsData
-                {
-                    Telephone2 = "07901828483"
-                }
-            };
-            
+        [TestMethod]
+        public void Map_HappyPath_ReturnsAnEnumerableOfPastAndSlots()
+        {
+            // Arrange
+            var slot1 =
+                CreateSlot("101", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_tomorrow),
+                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency", "Unknown");
+
+            var slot2 =
+                CreateSlot("102", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_twoDaysFromNow),
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency", "Unknown");
+
+            var slot3 =
+                CreateSlot("103", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_nextMonth),
+                    DateTimeHelper.DateTimeToJson(_nextMonth), "Leeds", null, "Unknown");
+
+            var slot4 =
+                CreateSlot("104", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_today),
+                    DateTimeHelper.DateTimeToJson(_today), "Leeds", "Emergency", "Uknown");
+
+            var slot5 =
+                CreateSlot("105", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_lastMonth),
+                    DateTimeHelper.DateTimeToJson(_lastMonth), "Leeds", null, "Unknown");
+
+            var slots = new[] { slot1, slot2, slot3, slot4, slot5 };
+
+            var slotTimeTwoDays = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow);
+            var slotTimeTomorrow = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
+            var slotTimeNextMonth = _dateTimeOffsetProviderMock.MockDateTimeOffset(_nextMonth);
+            var slotTimeToday = _dateTimeOffsetProviderMock.MockDateTimeOffset(_today);
+            var slotTimeLastMonth = _dateTimeOffsetProviderMock.MockDateTimeOffset(_lastMonth);
+
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
+            var actualResponse = _systemUnderTest.Map(slots);
 
             // Assert
-            var expectedTelephones = new[]
+            var expectedSlot1 = new Slot
             {
-                new PatientTelephoneNumber { TelephoneNumber = "07901828483" }
+                Id = "101",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = slotTimeTomorrow,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTimeTomorrow,
+                Type = "Emergency",
+                SessionName = "",
+                Channel = Channel.Unknown
             };
 
-            actualResponse.TelephoneNumbers.Should().BeEquivalentTo(expectedTelephones);
+            var expectedSlot2 = new Slot
+            {
+                Id = "102",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = slotTimeTwoDays,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTimeTwoDays,
+                Type = "Emergency",
+                SessionName = "",
+                Channel = Channel.Unknown
+            };
+
+            var expectedSlot3 = new Slot
+            {
+                Id = "103",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = slotTimeNextMonth,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTimeNextMonth,
+                Type = string.Empty,
+                SessionName = "",
+                Channel = Channel.Unknown
+            };
+
+            var expectedSlot4 = new Slot
+            {
+                Id = "104",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = slotTimeToday,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTimeToday,
+                Type = "Emergency",
+                SessionName = "",
+                Channel = Channel.Unknown
+            };
+
+            var expectedSlot5 = new Slot
+            {
+                Id = "105",
+                Clinicians = new[] { "Dr Venkman" },
+                EndTime = slotTimeLastMonth,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTimeLastMonth,
+                Type = string.Empty,
+                SessionName = "",
+                Channel = Channel.Unknown
+            };
+
+            var expectedResponse = new[]
+            {
+                expectedSlot1, expectedSlot2, expectedSlot3, expectedSlot4,
+                expectedSlot5
+            };
+
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
-        
+
         [TestMethod]
-        public void Map_DemographicsResponseIsNull_ResponseHasEmptyTelephoneNumbers()
+        public void Map_ReturnsNoClinicians_WhenNoneMatched()
         {
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
-            {
-                Slots = _microtestSlots
-            };
+            // Arrange
+            var slot =
+                CreateSlot("101", null, DateTimeHelper.DateTimeToJson(_tomorrow),
+                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency", "Unknown");
+
+            var slotSessions = new[] { slot };
+
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, null);
+            var actualResponse = _systemUnderTest.Map(slotSessions);
 
             // Assert
-            actualResponse.TelephoneNumbers.Should().BeEmpty();
+            var expectedSlot = new Slot
+            {
+                Id = "101",
+                Clinicians = null,
+                EndTime = slotTime,
+                Location = "Leeds",
+                StartTime = (DateTimeOffset) slotTime,
+                Type = "Emergency",
+                SessionName = "",
+                Channel = Channel.Unknown
+            };
+
+            var expectedResponse = new[] { expectedSlot };
+
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
-        
-        [TestMethod]
-        public void Map_DemographicsResponseHasNullDemographicsData_ResponseHasEmptyTelephoneNumbers()
+
+        private static SlotSupplier CreateSlot(string slotId, IEnumerable<string> clinicians, string startTime,
+            string endTime, string location, string type, string channel)
         {
-            var demographicsResponse = new DemographicsGetResponse
+            var slot = new SlotSupplier
             {
-                Demographics = null
-            };
-            
-            var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
-            {
-                Slots = _microtestSlots
+                Id = slotId,
+                EndTime = endTime,
+                StartTime = startTime,
+                Clinicians = clinicians,
+                Location = location,
+                Type = type,
+                Channel = channel
             };
 
-            // Act
-            var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse, demographicsResponse);
-
-            // Assert
-            actualResponse.TelephoneNumbers.Should().BeEmpty();
+            return slot;
         }
     }
 }

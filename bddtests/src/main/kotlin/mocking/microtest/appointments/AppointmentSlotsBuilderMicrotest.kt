@@ -80,7 +80,7 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
     }
 
     private fun convertDateToMicrotestTimeString(time: ZonedDateTime?): String {
-        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
         return queryDateFormat.format(time)
     }
 

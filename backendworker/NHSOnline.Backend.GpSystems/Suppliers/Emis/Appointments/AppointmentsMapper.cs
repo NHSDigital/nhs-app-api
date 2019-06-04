@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             var success = _dateTimeOffsetProvider.TryCreateDateTimeOffset(time, out var parsedTime);
             if (!success)
             {
-                _logger.LogError($"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
+                _logger.LogError($"Unable to parse EMIS Appointment {usage} Time of '{time}'");
             }
             return parsedTime;
         }

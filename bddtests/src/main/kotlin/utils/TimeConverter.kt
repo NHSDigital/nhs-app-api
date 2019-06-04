@@ -11,7 +11,7 @@ private const val NUMBER_OF_SECONDS_IN_A_MINUTE = 60
 class TimeConverter {
     companion object {
         fun setDuration(startTime: String, endTime: String?): String {
-            val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+            val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
             val startTimeAsLocalDateTime = ZonedDateTime.of(
                 LocalDateTime.parse(startTime, format), ZoneId.of
                     ("Europe/London"))

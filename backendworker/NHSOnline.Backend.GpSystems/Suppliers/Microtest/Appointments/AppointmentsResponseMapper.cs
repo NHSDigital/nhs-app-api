@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Temporal;
-using Appointment = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Appointment;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 {
@@ -13,47 +11,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
     {
         private readonly ILogger<AppointmentsResponseMapper> _logger;
         private readonly ICancellationReasonService _defaultCancellationReasons;
-        private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
-
+        private readonly IAppointmentsMapper _appointmentsMapper;
+        
         public AppointmentsResponseMapper(
             ILogger<AppointmentsResponseMapper> logger,
-            IDateTimeOffsetProvider dateTimeOffsetProvider,
-            ICancellationReasonService defaultCancellationReasons)
+            ICancellationReasonService defaultCancellationReasons,
+            IAppointmentsMapper appointmentsMapper)
         {
             _logger = logger;
             _defaultCancellationReasons = defaultCancellationReasons;
-            _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _appointmentsMapper = appointmentsMapper;
         }
 
         public AppointmentsResponse Map(AppointmentsGetResponse appointmentsGetResponse)
         {
             _logger.LogEnter();
 
-            var upcomingAppointments = new List<UpcomingAppointment>();
-            var pastAppointments = new List<PastAppointment>();
-
-            var now = _dateTimeOffsetProvider.CreateDateTimeOffset();
-
-            foreach (var sourceAppointment in appointmentsGetResponse.Appointments)
-            {
-                if (sourceAppointment.StartTime == null)
-                {
-                    continue;
-                }
-
-                if (sourceAppointment.StartTime < now)
-                {
-                    var resultAppointment = new PastAppointment();
-                    MapAppointment(sourceAppointment, resultAppointment);
-                    pastAppointments.Add(resultAppointment);
-                }
-                else
-                {
-                    var resultAppointment = new UpcomingAppointment();
-                    MapAppointment(sourceAppointment, resultAppointment);
-                    upcomingAppointments.Add(resultAppointment);
-                }
-            }
+            var allAppointments = _appointmentsMapper.Map(appointmentsGetResponse.Appointments);
+            
+            var pastAppointments = allAppointments.Where(x => x is PastAppointment).Cast<PastAppointment>();
+            var upcomingAppointments = allAppointments
+                .Where(x => x is UpcomingAppointment).Cast<UpcomingAppointment>();
 
             var cancellationReasons = _defaultCancellationReasons.GetDefaultCancellationReasons();
 
@@ -66,17 +44,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 PastAppointmentsEnabled = true,
                 CancellationReasons = cancellationReasons
             };
-        }
-
-        private static void MapAppointment(Appointment sourceAppointment, GpSystems.Appointments.Models.Appointment resultAppointment)
-        {
-            resultAppointment.Id = sourceAppointment.Id;
-            resultAppointment.StartTime = sourceAppointment.StartTime.Value;
-            resultAppointment.EndTime = sourceAppointment.EndTime;
-            resultAppointment.Clinicians = sourceAppointment.Clinicians;
-            resultAppointment.Location = sourceAppointment.Location;
-            resultAppointment.Type = sourceAppointment.Type;
-            resultAppointment.SessionName = string.Empty;
         }
     }
 }

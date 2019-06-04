@@ -35,8 +35,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 typeof(MicrotestAppointmentsCancellationService), ServiceLifetime.Transient);
             var microtestAppointmentSlotResponseMapper = new ServiceDescriptor(typeof(IAppointmentSlotsResponseMapper),
                 typeof(AppointmentSlotsResponseMapper), ServiceLifetime.Transient);
+            var microtestAppointmentSlotMapper = new ServiceDescriptor(typeof(IAppointmentSlotsMapper),
+                typeof(AppointmentSlotsMapper), ServiceLifetime.Transient);
             var microtestAppointmentsResponseMapper = new ServiceDescriptor(typeof(IAppointmentsResponseMapper),
                 typeof(AppointmentsResponseMapper), ServiceLifetime.Transient);
+            var microtestAppointmentsMapper = new ServiceDescriptor(typeof(IAppointmentsMapper),
+                typeof(AppointmentsMapper), ServiceLifetime.Transient);
 
             registeredService.Should().ContainEquivalentOf(microtestAppointmentSlotsService);
             registeredService.Should().ContainEquivalentOf(microtestAppointmentsService);
@@ -44,7 +48,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             registeredService.Should().ContainEquivalentOf(microtestAppointmentsCancellationService);
             registeredService.Should().ContainEquivalentOf(microtestAppointmentsRetrievalService);
             registeredService.Should().ContainEquivalentOf(microtestAppointmentSlotResponseMapper);
+            registeredService.Should().ContainEquivalentOf(microtestAppointmentSlotMapper);
             registeredService.Should().ContainEquivalentOf(microtestAppointmentsResponseMapper);
+            registeredService.Should().ContainEquivalentOf(microtestAppointmentsMapper);
         }
     }
 }

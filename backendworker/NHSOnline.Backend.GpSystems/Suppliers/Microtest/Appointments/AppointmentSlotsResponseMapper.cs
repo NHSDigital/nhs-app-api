@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
@@ -6,26 +6,18 @@ using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support.Logging;
-using Slot = NHSOnline.Backend.GpSystems.Appointments.Models.Slot;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 {
-    public interface IAppointmentSlotsResponseMapper
-    {
-        AppointmentSlotsResponse Map(
-            AppointmentSlotsGetResponse slotsResponse, 
-            DemographicsGetResponse demographicsResponse
-        );
-    }
-
     public class AppointmentSlotsResponseMapper : IAppointmentSlotsResponseMapper
     {
-        private readonly IMicrotestEnumMapper _enumMapper;
+        private readonly IAppointmentSlotsMapper _appointmentSlotsMapper;
         private readonly ILogger<AppointmentSlotsResponseMapper> _logger;
 
-        public AppointmentSlotsResponseMapper(IMicrotestEnumMapper enumMapper, ILogger<AppointmentSlotsResponseMapper> logger)
+        public AppointmentSlotsResponseMapper(IAppointmentSlotsMapper appointmentSlotsMapper,
+            ILogger<AppointmentSlotsResponseMapper> logger)
         {
-            _enumMapper = enumMapper;
+            _appointmentSlotsMapper = appointmentSlotsMapper;
             _logger = logger;
         }
 
@@ -35,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
         {
             _logger.LogEnter();
 
-            var slots = MapSlots(slotsResponse);
+            var slots = _appointmentSlotsMapper.Map(slotsResponse.Slots);
             var telephoneNumbers = MapTelephoneNumbers(demographicsResponse);
 
             var response = new AppointmentSlotsResponse
@@ -49,30 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             _logger.LogExit();
             return response;
         }
-
-        private IEnumerable<Slot> MapSlots(AppointmentSlotsGetResponse slotsResponse)
-        {
-            foreach (var sourceSlot in slotsResponse.Slots)
-            {
-                if (sourceSlot.StartTime == null)
-                {
-                    continue;
-                }
-
-                yield return new Slot
-                {
-                    Id = sourceSlot.Id,
-                    StartTime = sourceSlot.StartTime.Value,
-                    EndTime = sourceSlot.EndTime,
-                    Clinicians = sourceSlot.Clinicians,
-                    Location = sourceSlot.Location,
-                    Type = sourceSlot.Type,
-                    SessionName = string.Empty,
-                    Channel = _enumMapper.MapChannel(sourceSlot.Channel, Channel.Unknown)
-                };
-            }
-        }
-
+        
         private static IEnumerable<PatientTelephoneNumber> MapTelephoneNumbers(DemographicsGetResponse demographicsResponse)
         {
             if (demographicsResponse?.Demographics == null)
@@ -80,11 +49,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 return Array.Empty<PatientTelephoneNumber>();
             }
             
-             return MapTelephoneNumbers(new[]{
+            return MapTelephoneNumbers(new[]{
                 demographicsResponse.Demographics.Telephone1,
                 demographicsResponse.Demographics.Telephone2});
         }
-
+        
         private static IEnumerable<PatientTelephoneNumber> MapTelephoneNumbers(IEnumerable<string> sourceNumbers)
         {
             foreach (var sourceNumber in sourceNumbers)
