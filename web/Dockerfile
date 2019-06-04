@@ -10,6 +10,7 @@ USER nodejs
 COPY --chown=nodejs:nodejs package.json .
 COPY --chown=nodejs:nodejs package-lock.json .
 COPY --chown=nodejs:nodejs .npmrc .
+COPY --chown=nodejs:nodejs lint/package.json lint/package.json
 
 # Production Dependencies
 FROM base AS production_dependencies
@@ -40,6 +41,7 @@ FROM production_dependencies AS release
 COPY --chown=nodejs:nodejs --from=build /opt/app/.nuxt ./.nuxt
 COPY --chown=nodejs:nodejs --from=build /opt/app/src ./src
 COPY --chown=nodejs:nodejs --from=build /opt/app/nuxt.config.js ./nuxt.config.js
+RUN rm -r lint
 
 EXPOSE $PORT
 CMD sudo update-ca-certificates && exec node ./node_modules/nuxt/bin/nuxt start
