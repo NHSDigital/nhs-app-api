@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 {
@@ -18,16 +19,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
         private readonly ILogger<EmisIm1ConnectionService> _logger;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly IIm1CacheService _im1CacheService;
+        private readonly EmisIm1RegisterErrorMapper _registerErrorMapper;
 
         public EmisIm1ConnectionService(IEmisClient emisClient, 
             ILogger<EmisIm1ConnectionService> logger,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
-            IIm1CacheService im1CacheService)
+            IIm1CacheService im1CacheService,
+            EmisIm1RegisterErrorMapper registerErrorMapper)
         {
             _emisClient = emisClient;
             _logger = logger;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _im1CacheService = im1CacheService;
+            _registerErrorMapper = registerErrorMapper;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -85,7 +89,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 var response = new PatientIm1ConnectionResponse
                 {
                     ConnectionToken = connectionToken,
-                    NhsNumbers = nhsNumbers
+                    NhsNumbers = nhsNumbers,
+                    OdsCode = odsCode
                 };
 
                 _logger.LogDebug("Verify successfully completed");
@@ -133,59 +138,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     _logger.LogDebug("IM1 connection token found in cache.");
                 }
                 else
-                {                    
-                    var meApplicationsPostRequest = new MeApplicationsPostRequest
-                    {
-                        DateOfBirth = request.DateOfBirth,
-                        Surname = request.Surname,
-                        LinkageDetails = new LinkageDetails
-                        {
-                            AccountId = request.AccountId,
-                            NationalPracticeCode = request.OdsCode,
-                            LinkageKey = request.LinkageKey
-                        }
-                    };
+                {
+                    var meApplicationsPostRequest = CreateMeApplicationsPostRequest(request);
 
                     var meApplicationsResponse =
                         await _emisClient.MeApplicationsPost(endUserSessionId, meApplicationsPostRequest);
 
-                    var notFoundMessages = new[]
-                    {
-                        EmisApiErrorMessages.MeApplicationsPost_AccountIdNotFound,
-                        EmisApiErrorMessages.MeApplicationsPost_LinkageKeyDoesNotMatch,
-                        EmisApiErrorMessages.MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect
-                    };
-
-                    if (meApplicationsResponse.StatusCode == HttpStatusCode.Conflict ||
-                        meApplicationsResponse.HasExceptionWithMessage(
-                            EmisApiErrorMessages.MeApplicationsPost_AlreadyLinked))
-                    {
-                        _logger.LogError(
-                            $"Emis {nameof(_emisClient.MeApplicationsPost)} returned with statuscode {meApplicationsResponse.StatusCode}, account already exists");
-                        _logger.LogEmisErrorResponse(meApplicationsResponse);
-                        return new Im1ConnectionRegisterResult.AccountAlreadyExists();
-                    }
-
-                    if (meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
-                    {
-                        LogExceptionError(nameof(_emisClient.MeApplicationsPost), meApplicationsResponse);
-                        _logger.LogEmisErrorResponse(meApplicationsResponse);
-                        return new Im1ConnectionRegisterResult.NotFound();
-                    }
-
-                    if (meApplicationsResponse.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        LogExceptionError(nameof(_emisClient.MeApplicationsPost), meApplicationsResponse);
-                        _logger.LogEmisErrorResponse(meApplicationsResponse);
-                        return new Im1ConnectionRegisterResult.BadRequest();
-                    }
-
                     if (!meApplicationsResponse.HasSuccessResponse)
                     {
-                        _logger.LogError(
-                            $"Emis {nameof(_emisClient.MeApplicationsPost)} returned with statuscode {meApplicationsResponse.StatusCode}, success");
-                        _logger.LogEmisErrorResponse(meApplicationsResponse);
-                        return new Im1ConnectionRegisterResult.BadGateway();
+                        return _registerErrorMapper.Map(meApplicationsResponse, _logger);
                     }
 
                     connectionToken = new EmisConnectionToken
@@ -194,9 +155,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                         Im1CacheKey = key
                     };
 
+
                     await CacheConnectionToken(connectionToken);
                 }
-                
+
+
                 var sessionPostRequestModel = new SessionsPostRequest
                 {
                     AccessIdentityGuid = connectionToken.AccessIdentityGuid,
@@ -218,7 +181,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     _logger.LogError(
                         $"Emis could not extract {nameof(userPatientLinkToken)}");
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionRegisterResult.NotFound();
+                    return new Im1ConnectionRegisterResult.NotFound(Im1ConnectionErrorCodes.Code.UnknownError);
                 }
 
                 var demographicsResponse =
@@ -236,7 +199,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 var response = new PatientIm1ConnectionResponse
                 {
                     ConnectionToken = connectionToken.SerializeJson(),
-                    NhsNumbers = nhsNumbers
+                    NhsNumbers = nhsNumbers,
+                    OdsCode = request.OdsCode,
+                    LinkageKey = request.LinkageKey,
+                    AccountId = request.AccountId
                 };
 
                 return new Im1ConnectionRegisterResult.Success(response);
@@ -251,6 +217,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             {
                 _logger.LogExit();
             }
+        }
+
+        private MeApplicationsPostRequest CreateMeApplicationsPostRequest(PatientIm1ConnectionRequest request)
+        {
+            return  new MeApplicationsPostRequest
+            {
+                DateOfBirth = request.DateOfBirth,
+                Surname = request.Surname,
+                LinkageDetails = new LinkageDetails
+                {
+                    AccountId = request.AccountId,
+                    NationalPracticeCode = request.OdsCode,
+                    LinkageKey = request.LinkageKey
+                }
+            };
         }
 
         private void LogExceptionError<T>(string methodCall,

@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Support
 
         public async Task<Option<Supplier>> LookupSupplier(string odsCode)
         {
-            _logger.LogInformation("Looking up ODS Code {odsCode}", odsCode);
+            _logger.LogInformation($"Looking up ODS Code {odsCode}");
 
             if (string.IsNullOrWhiteSpace(odsCode))
             {

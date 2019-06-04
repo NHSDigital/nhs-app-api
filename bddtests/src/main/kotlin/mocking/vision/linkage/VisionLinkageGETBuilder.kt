@@ -3,14 +3,15 @@ package mocking.vision.linkage
 import constants.ErrorResponseCodeVision
 import mocking.GsonFactory
 import mocking.MappingBuilder
+import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import mocking.vision.models.error.VisionError
 import mocking.vision.models.error.VisionRestApiErrorResponse
 import mocking.vision.models.linkage.LinkageKeyGetResponse
 import org.apache.http.HttpStatus
 
-class VisionLinkageGETBuilder(orgId: String, nhsNumber: String)
-    : MappingBuilder(method = "GET", url = "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
+class VisionLinkageGETBuilder(orgId: String, nhsNumber: String) : IErrorMappingBuilder,
+        MappingBuilder(method = "GET", url = "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
 
     init {
         requestBuilder
@@ -59,4 +60,17 @@ class VisionLinkageGETBuilder(orgId: String, nhsNumber: String)
     fun respondWithErrorInternalServerError(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR){}
     }
+
+    override fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
+        return respondWith(httpStatusCode) {
+            val error = VisionRestApiErrorResponse(
+                    VisionError(
+                            code = errorCode,
+                            text = message?:""
+                    )
+            )
+            andJsonBody(error, GsonFactory.asPascal)
+        }
+    }
 }
+

@@ -10,11 +10,13 @@ import org.apache.http.entity.StringEntity
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 import worker.models.ndop.NdopResponse
+import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.net.URI
 import javax.servlet.http.Cookie
 
 class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSender, val gson: Gson){
@@ -22,7 +24,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
     var cookieHeaderKey = "Set-Cookie"
 
     fun getIm1Connection(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
-        val httpGet = HttpGet(config.cidBackendUrl + WorkerPaths.patientIm1Connection)
+        val httpGet = HttpGet(config.cidBackendUrl + WorkerPaths.patientIm1ConnectionV1)
         httpGet.setHeader(WorkerHeaders.ConnectionToken, connectionToken)
         httpGet.setHeader(WorkerHeaders.OdsCode, odsCode)
 
@@ -31,6 +33,21 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
 
         return gson.fromJson(result, Im1ConnectionResponse::class.java)
     }
+
+    fun postIm1ConnectionV2(im1ConnectionRequest: Im1ConnectionRequest): Im1ConnectionResponse {
+    val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1ConnectionV2)
+    val httpPost = HttpPost(uri)
+
+    val jsonRequest = gson.toJson(im1ConnectionRequest)
+    val entity = StringEntity(jsonRequest, "UTF-8")
+    entity.setContentType("application/json")
+    httpPost.entity = entity
+
+    val response = sender.sendAsyncAndGetResult(httpPost)
+    httpPost.releaseConnection()
+
+    return gson.fromJson<Im1ConnectionResponse>(response, Im1ConnectionResponse::class.java)
+}
 
     fun postSessionConnection(requestBody: UserSessionRequest): UserSessionResponse {
         val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.sessionConnection)

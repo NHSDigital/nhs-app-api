@@ -43,7 +43,8 @@ class EmisPrescriptionsSubmissionBuilder(
     }
 
     fun respondWithAlreadyAPendingRequestInTheLast30Days(): Mapping {
-        return respondWithStandardError(ErrorResponseCodeEmis.ALREADY_PENDING_REQUEST.toInt(), HttpStatus.SC_CONFLICT)
+        return respondWithStandardError(ErrorResponseCodeEmis.ALREADY_PENDING_REQUEST.toInt(), HttpStatus
+                .SC_CONFLICT)
     }
 
     fun respondWithPrescriptionsNotEnabled(): Mapping {

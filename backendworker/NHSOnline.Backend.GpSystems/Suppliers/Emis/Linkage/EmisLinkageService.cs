@@ -3,40 +3,39 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Support.Logging;
 using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 {
     public class EmisLinkageService : ILinkageService
     {
         private readonly ILogger<EmisLinkageService> _logger;
-        private readonly IEmisClient _emisClient;
         private readonly IEmisLinkageMapper _emisLinkageMapper;
         private readonly IEmisSessionService _emisSessionService;
-        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
-        private readonly IIm1CacheService _im1CacheService;
+        private readonly EmisLinkageServiceHelpers _linkageServiceHelpers;
+        private readonly EmisLinkageGetErrorMapper _getErrorMapper;
+        private readonly EmisLinkagePostErrorMapper _postErrorMapper;
 
         public EmisLinkageService(
             ILoggerFactory loggerFactory,
-            IEmisClient emisClient,
             IEmisLinkageMapper emisLinkageMapper,
             IEmisSessionService emisSessionService,
-            IIm1CacheKeyGenerator im1CacheKeyGenerator,
-            IIm1CacheService im1CacheService)
+            EmisLinkageServiceHelpers linkageServiceHelpers,
+            EmisLinkageGetErrorMapper getErrorMapper,
+            EmisLinkagePostErrorMapper postErrorMapper)
         {
-            _emisClient = emisClient;
             _emisLinkageMapper = emisLinkageMapper;
             _logger = loggerFactory.CreateLogger<EmisLinkageService>();
             _emisSessionService = emisSessionService;
-            _im1CacheKeyGenerator = im1CacheKeyGenerator;
-            _im1CacheService = im1CacheService;
+            _linkageServiceHelpers = linkageServiceHelpers;
+            _getErrorMapper = getErrorMapper;
+            _postErrorMapper = postErrorMapper;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -44,34 +43,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
             try
             {
                 _logger.LogEnter();
-           
+
                 var sessionPost = await _emisSessionService.SendSessionsEndUserSessionPost();
 
-                var response = await GetLinkageKeyResponse(getLinkageRequest.NhsNumber, getLinkageRequest.OdsCode, 
-                    getLinkageRequest.IdentityToken, sessionPost.EndUserSessionId);
+                var response = await _linkageServiceHelpers.GetLinkageKeyResponse(getLinkageRequest.NhsNumber,
+                    getLinkageRequest.OdsCode,
+                    getLinkageRequest.IdentityToken,
+                    sessionPost.EndUserSessionId);
 
-                if (response.HasSuccessResponse || response.StatusCode == HttpStatusCode.Conflict)
-                {
-                    try
-                    {
-                        var linkage = _emisLinkageMapper.Map(response.Body);
-                        linkage.OdsCode = getLinkageRequest.OdsCode;
-
-                        if (response.StatusCode == HttpStatusCode.Conflict)
-                        {
-                            return new LinkageResult.SuccessfullyRetrievedAlreadyExists(linkage);
-                        }
-
-                        return new LinkageResult.SuccessfullyRetrieved(linkage);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
-                        return new LinkageResult.InternalServerError();
-                    }
-                }
-
-                return GetErrorRetrievingNhsUser(response);
+                return IsSuccessfulResponse(response)
+                    ? HandleGetLinkageKeyResponseSuccess(response, getLinkageRequest)
+                    : _getErrorMapper.Map(response, _logger);
             }
             catch (HttpRequestException e)
             {
@@ -83,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                 _logger.LogExit();
             }
         }
-
+        
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
         {
             try
@@ -92,42 +74,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 
                 var sessionPost = await _emisSessionService.SendSessionsEndUserSessionPost();
 
-                var createLinkageKeyResponse = await CreateLinkageKey(createLinkageRequest, sessionPost.EndUserSessionId);
+                var createLinkageKeyResponse =
+                    await _linkageServiceHelpers.CreateLinkageKey(createLinkageRequest, sessionPost.EndUserSessionId);
 
                 if (!createLinkageKeyResponse.HasSuccessResponse)
-                {
-                    return GetErrorCreatingNhsUser(createLinkageKeyResponse);
+                { 
+                    return _postErrorMapper.Map(createLinkageKeyResponse, _logger);
                 }
 
-                var getLinkageKeyResponse = await GetLinkageKeyResponse(
-                    createLinkageRequest.NhsNumber, createLinkageRequest.OdsCode, createLinkageRequest.IdentityToken, sessionPost.EndUserSessionId);
+                var getLinkageKeyResponse = await _linkageServiceHelpers.GetLinkageKeyResponse(
+                    createLinkageRequest.NhsNumber,
+                    createLinkageRequest.OdsCode,
+                    createLinkageRequest.IdentityToken,
+                    sessionPost.EndUserSessionId);
 
-                if (getLinkageKeyResponse.HasSuccessResponse)
+                if (IsSuccessfulResponse(getLinkageKeyResponse))
                 {
-                    try
-                    {
-                        var linkage = _emisLinkageMapper.Map(getLinkageKeyResponse.Body);
-                        linkage.OdsCode = createLinkageRequest.OdsCode;
-                        await StoreAccessGuidInCache(linkage, createLinkageKeyResponse.Body);
-                        return new LinkageResult.SuccessfullyCreated(linkage);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
-                        return new LinkageResult.InternalServerError();
-                    }
+                    return await HandleCreateLinkageKeyResponseSuccess(
+                        getLinkageKeyResponse,
+                        createLinkageRequest,
+                        createLinkageKeyResponse);
                 }
-                else if (getLinkageKeyResponse.StatusCode == HttpStatusCode.Conflict)
-                {
-                    // This is straight after a successful creation, so the chance of
-                    // getting a conflict retrieving the linkage key is incredibly unlikely.
-                    // Returning a 409 from creation indicates that CID should call GET.
-                    _logger.LogError($"Linkage create request unsuccessful - The patient already has an online account.");
-                    _logger.LogEmisErrorResponse(getLinkageKeyResponse);
-                    return new LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount();
-                }
-
-                return GetErrorRetrievingNhsUser(getLinkageKeyResponse);
+                return _getErrorMapper.Map(getLinkageKeyResponse, _logger);
             }
             catch (HttpRequestException e)
             {
@@ -140,186 +108,51 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
             }
         }
 
-        private async Task StoreAccessGuidInCache(LinkageResponse linkage, AddNhsUserResponse addNhsUserResponse)
+        private static bool IsSuccessfulResponse(EmisApiObjectResponse<AddVerificationResponse> response)
         {
-            var key = _im1CacheKeyGenerator.GenerateCacheKey(
-                    linkage.AccountId, linkage.OdsCode, linkage.LinkageKey);
-
-            var connectionToken = new EmisConnectionToken
-            {
-                AccessIdentityGuid = addNhsUserResponse.AccessIdentityGuid.ToString(),
-                Im1CacheKey = key,
-            };
-
-            await _im1CacheService.SaveIm1ConnectionToken(key, connectionToken);
+            return response.HasSuccessResponse || response.StatusCode == HttpStatusCode.Conflict;
         }
 
-        private async Task<EmisApiObjectResponse<AddVerificationResponse>> GetLinkageKeyResponse(string nhsNumber, string odsCode, string identityToken, string endUserSessionId)
+        private LinkageResult HandleGetLinkageKeyResponseSuccess(
+            EmisApiObjectResponse<AddVerificationResponse> response,
+            GetLinkageRequest getLinkageRequest)
         {
-            var addVerificationRequest = new AddVerificationRequest
+            try
             {
-                NhsNumber = nhsNumber,
-                NationalPracticeCode = odsCode,
-                Token = identityToken,
-            };
+                var linkage = _emisLinkageMapper.Map(response.Body);
+                linkage.OdsCode = getLinkageRequest.OdsCode;
 
-            var emisUserSession = new EmisUserSession
+                if (response.StatusCode == HttpStatusCode.Conflict)
+                {
+                    return new LinkageResult.SuccessfullyRetrievedAlreadyExists(linkage);
+                }
+
+                return new LinkageResult.SuccessfullyRetrieved(linkage);
+            }
+            catch (Exception e)
             {
-                EndUserSessionId = endUserSessionId,
-            };
-
-            var headerParams = new EmisHeaderParameters(emisUserSession);
-
-            var linkageResponse = await _emisClient.VerificationPost(headerParams, addVerificationRequest);
-
-            return linkageResponse;
+                _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
+                return new LinkageResult.InternalServerError();
+            }
         }
 
-        private LinkageResult GetErrorRetrievingNhsUser(EmisApiObjectResponse<AddVerificationResponse> response)
+        private async Task<LinkageResult> HandleCreateLinkageKeyResponseSuccess(
+            EmisApiObjectResponse<AddVerificationResponse> getLinkageKeyResponse,
+            CreateLinkageRequest createLinkageRequest,
+            EmisApiObjectResponse<AddNhsUserResponse> createLinkageKeyResponse)
         {
-            if (response.StatusCode == HttpStatusCode.BadRequest)
+            try
             {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PracticeNotLive))
-                {
-                    _logger.LogError($"Linkage get request unsuccessful - practice not live. - Emis error code: {EmisApiErrorCode.PracticeNotLive}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PracticeNotLive();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientMarkedAsArchived))
-                {
-                    _logger.LogError($"Linkage get request unsuccessful - patient marked as archived. - Emis error code: {EmisApiErrorCode.PatientMarkedAsArchived}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PatientMarkedAsArchived();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge))
-                {
-                    _logger.LogWarning($"Linkage get request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
-                    _logger.LogEmisLogWarningResponse(response);
-                    return new LinkageResult.PatientNonCompetentOrUnderMinimumAge();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.AccountStatusInvalid))
-                {
-                    _logger.LogError($"Linkage get request unsuccessful - invalid account status. - Emis error code: {EmisApiErrorCode.AccountStatusInvalid}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.AccountStatusInvalid();
-                }
-
-                _logger.LogError($"Linkage get request unsuccessful - Bad Request - Unknown error.");
-                _logger.LogEmisErrorResponse(response);
-                return new LinkageResult.BadRequestErrorRetrievingNhsUser();
+                var linkage = _emisLinkageMapper.Map(getLinkageKeyResponse.Body);
+                linkage.OdsCode = createLinkageRequest.OdsCode;
+                await _linkageServiceHelpers.StoreAccessGuidInCache(linkage, createLinkageKeyResponse.Body);
+                return new LinkageResult.SuccessfullyCreated(linkage);
             }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
+            catch (Exception e)
             {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.PatientNotRegisteredAtPractice))
-                {
-                    _logger.LogError($"Linkage get request unsuccessful - patient not registered at practice. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PatientNotRegisteredAtPractice();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.NoRegisteredOnlineUserFound))
-                {
-                    _logger.LogError($"Linkage get request unsuccessful - no registered online user found. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.NoRegisteredOnlineUserFound();
-                }
-                
-                _logger.LogError($"Linkage get request unsuccessful - Not Found - Unknown error.");
-
-                _logger.LogEmisErrorResponse(response);
-                return new LinkageResult.NotFoundErrorRetrievingNhsUser();
+                _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
+                return new LinkageResult.InternalServerError();
             }
-
-            _logger.LogError("Linkage get request unsuccessful - Emis system is currently unavailable");
-            _logger.LogEmisErrorResponse(response);
-            return new LinkageResult.SupplierSystemUnavailable();
-        }
-
-        private async Task<EmisApiObjectResponse<AddNhsUserResponse>> CreateLinkageKey(CreateLinkageRequest createLinkageRequest, string endUserSessionId)
-        {
-            var request = new AddNhsUserRequest
-            {
-                NhsNumber = createLinkageRequest.NhsNumber,
-                NationalPracticeCode = createLinkageRequest.OdsCode,
-                EmailAddress = createLinkageRequest.EmailAddress,
-            };
-
-            var emisUserSession = new EmisUserSession
-            {
-                EndUserSessionId = endUserSessionId,
-            };
-
-            var headerParams = new EmisHeaderParameters(emisUserSession);
-
-            var createNhsUserResponse = await _emisClient.NhsUserPost(headerParams, request);
-            
-            return createNhsUserResponse;
-        }
-
-        private LinkageResult GetErrorCreatingNhsUser(EmisApiObjectResponse<AddNhsUserResponse> response)
-        {
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PracticeNotLive))
-                {
-                    _logger.LogError($"Linkage create request unsuccessful - practice not live. - Emis error code: {EmisApiErrorCode.PracticeNotLive}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PracticeNotLive();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientMarkedAsArchived))
-                {
-                    _logger.LogError($"Linkage create request unsuccessful - patient marked as archived. - Emis error code: {EmisApiErrorCode.PatientMarkedAsArchived}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PatientMarkedAsArchived();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge))
-                {
-                    _logger.LogWarning($"Linkage create request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
-                    _logger.LogEmisWarningResponse(response);
-                    return new LinkageResult.PatientNonCompetentOrUnderMinimumAge();
-                }
-                
-                _logger.LogError($"Linkage create request unsuccessful - Bad Request - Unknown error.");
-                _logger.LogEmisErrorResponse(response);
-                return new LinkageResult.BadRequestErrorCreatingNhsUser();
-            }
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.PatientNotRegisteredAtPractice))
-                {
-                    _logger.LogError($"Linkage create request unsuccessful - patient not registered at practice. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PatientNotRegisteredAtPractice();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.NoRegisteredOnlineUserFound))
-                {
-                    _logger.LogError($"Linkage create request unsuccessful - no registered online user found. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
-                    _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.NoRegisteredOnlineUserFound();
-                }
-
-                _logger.LogError($"Linkage create request unsuccessful - no registered online user found. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
-                _logger.LogEmisErrorResponse(response);
-                return new LinkageResult.NotFoundErrorCreatingNhsUser();
-            }
-
-            if (response.StatusCode == HttpStatusCode.Conflict)
-            {
-                _logger.LogError($"Linkage create request unsuccessful - The patient already has an online account.");
-                _logger.LogEmisErrorResponse(response);
-                return new LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount();
-            }
-
-            _logger.LogError("Linkage create request unsuccessful - Emis system is currently unavailable");
-            _logger.LogEmisErrorResponse(response);
-            return new LinkageResult.SupplierSystemUnavailable();
         }
     }
 }

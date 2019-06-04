@@ -4,8 +4,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Linkage;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
@@ -17,18 +17,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
         private readonly ILogger<VisionLinkageService> _logger;
         private readonly IVisionClient _visionClient;
         private readonly IVisionLinkageMapper _visionLinkageMapper;
-        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
+        private readonly VisionLinkageGetErrorMapper _getErrorMapper;
+        private readonly VisionLinkagePostErrorMapper _postErrorMapper;
 
         public VisionLinkageService(
             ILoggerFactory loggerFactory,
             IVisionClient visionClient,
             IVisionLinkageMapper visionLinkageMapper,
-            IIm1CacheKeyGenerator im1CacheKeyGenerator)
+            VisionLinkageGetErrorMapper getErrorMapper,
+            VisionLinkagePostErrorMapper postErrorMapper)
         {
             _logger = loggerFactory.CreateLogger<VisionLinkageService>();
             _visionClient = visionClient;
             _visionLinkageMapper = visionLinkageMapper;
-            _im1CacheKeyGenerator = im1CacheKeyGenerator;
+            _getErrorMapper = getErrorMapper;
+            _postErrorMapper = postErrorMapper;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -37,30 +40,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
             {
                 _logger.LogEnter();
 
-                var request = new GetLinkageKey
-                {
-                    NhsNumber = getLinkageRequest.NhsNumber,
-                    OdsCode = getLinkageRequest.OdsCode,
-                };
+                var request = BuildGetLinkageKey(getLinkageRequest);
 
                 var response = await _visionClient.GetLinkageKey(request);
 
-                if (response.HasSuccessResponse)
-                {
-                    try
-                    {
-                        var mapped = _visionLinkageMapper.Map(response.Body);
-                        
-                        return new LinkageResult.SuccessfullyRetrieved(mapped);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
-                        return new LinkageResult.InternalServerError();
-                    }
-                }
-
-                return GetErrorRetrievingLinkageKey(response);
+                return response.HasSuccessResponse ?
+                    HandleSuccessfulGetLinkageKey(response) :
+                    _getErrorMapper.Map(response, _logger);
             }
             catch (HttpRequestException e)
             {
@@ -79,17 +65,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
             {
                 _logger.LogEnter();
 
-                var request = new CreateLinkageKey
-                {
-                    OdsCode = createLinkageRequest.OdsCode,
-                    LinkageKeyPostRequest = new LinkageKeyPostRequest
-                    {
-                        NhsNumber = createLinkageRequest.NhsNumber,
-                        LastName = createLinkageRequest.Surname,
-                        DateOfBirth = createLinkageRequest.DateOfBirth.FormatToYYYYMMDD(),
-                    },
-                };
-                
+                var request = BuildCreateLinkageKey(createLinkageRequest);
+
                 var linkageResponse = await _visionClient.CreateLinkageKey(request);
                 
                 if (linkageResponse.HasSuccessResponse)
@@ -97,14 +74,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
                     var mapped = _visionLinkageMapper.Map(linkageResponse.Body);
                     return new LinkageResult.SuccessfullyCreated(mapped);
                 }
-                else if (linkageResponse.StatusCode == HttpStatusCode.Conflict)
-                {
-                    _logger.LogError(
-                        $"Linkage create request unsuccessful - The patient already has an online account. {JsonConvert.SerializeObject(linkageResponse)}");
-                    return new LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount();
-                }
 
-                return GetErrorCreatingLinkageKey(linkageResponse);
+                return _postErrorMapper.Map(linkageResponse, _logger);
             }
             catch (HttpRequestException e)
             {
@@ -115,111 +86,45 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
             {
                 _logger.LogExit();
             }
-        }        
-
-        private LinkageResult GetErrorRetrievingLinkageKey(VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse> response)
-        {
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, VisionApiErrorCodes.InvalidNhsNumber))
-                {
-                    LogLinkageGetError(response, "Bad Request - Invalid NHS Number");
-                    return new LinkageResult.BadRequestErrorRetrievingNhsUser();
-                }
-
-                LogLinkageGetError(response, "Bad Request - Unknown error");
-                return new LinkageResult.BadRequestErrorRetrievingNhsUser();
-            }
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, VisionApiErrorCodes.PatientRecordNotFound))
-                {
-                    LogLinkageGetError(response, "Not found - Patient record not found");
-                    return new LinkageResult.NotFoundErrorRetrievingNhsUser();
-                }
-
-                LogLinkageGetError(response, "Not found - Unknown error");
-                return new LinkageResult.NotFoundErrorRetrievingNhsUser();
-            }
-
-            if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.Forbidden, VisionApiErrorCodes.LinkageKeyRevoked))
-                {
-                    LogLinkageGetError(response, "Forbidden - Linkage key revoked");
-                    return new LinkageResult.LinkageKeyRevoked();
-                }
-
-                LogLinkageGetError(response, "Forbidden - Unknown error");
-                return new LinkageResult.ForbiddenErrorRetrievingNhsUser();
-            }
-
-            LogLinkageGetError(response, "Unknown error");
-            return new LinkageResult.SupplierSystemUnavailable();
         }
 
-        private void LogLinkageGetError(VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse> response, string message)
+        private LinkageResult HandleSuccessfulGetLinkageKey(
+            VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse> response)
         {
-            _logger.LogError($"Linkage get request unsuccessful - { message } - Status code: { response.StatusCode } - Vision error: { response.ErrorForLogging }");
+            try
+            {
+                var mapped = _visionLinkageMapper.Map(response.Body);
+
+                return new LinkageResult.SuccessfullyRetrieved(mapped);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
+                return new LinkageResult.InternalServerError();
+            }
         }
 
-        private LinkageResult GetErrorCreatingLinkageKey(
-            VisionLinkageClient.VisionApiObjectResponse<LinkageKeyPostResponse> response)
+        private static GetLinkageKey BuildGetLinkageKey(GetLinkageRequest getLinkageRequest)
         {
-            if (response.StatusCode == HttpStatusCode.BadRequest)
+            return new GetLinkageKey
             {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, VisionApiErrorCodes.InvalidNhsNumber))
-                {
-                    LogLinkageCreateError(response, "Bad Request - Invalid NHS Number");
-                    return new LinkageResult.BadRequestErrorCreatingNhsUser();
-                }
-
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
-                    VisionApiErrorCodes.LinkageKeyRevoked))
-                {
-                    LogLinkageCreateError(response, "Bad Request - Linkage key revoked");
-                    return new LinkageResult.AccountStatusInvalid();
-                }
-
-                LogLinkageCreateError(response, "Bad Request - Unknown error");
-                return new LinkageResult.BadRequestErrorCreatingNhsUser();
-            }
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, VisionApiErrorCodes.InvalidNhsNumber))
-                {
-                    LogLinkageCreateError(response, "Not found - Patient record not found");
-                    return new LinkageResult.NotFoundErrorCreatingNhsUser();
-                }
-
-                LogLinkageCreateError(response, "Not Found - Unknown error");
-                return new LinkageResult.NotFoundErrorCreatingNhsUser();
-            }
-
-            if (response.StatusCode == HttpStatusCode.Conflict)
-            {
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.Conflict,
-                    VisionApiErrorCodes.LinkageKeyAlreadyExists))
-                {
-                    LogLinkageCreateError(response, "Conflict - The patient already has an online account");
-                    return new LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount();
-                }
-                
-                LogLinkageCreateError(response, "Conflict - Unknown error");
-                return new LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount();
-            }
-
-            LogLinkageCreateError(response, "Unknown error");
-            return new LinkageResult.SupplierSystemUnavailable();
+                NhsNumber = getLinkageRequest.NhsNumber,
+                OdsCode = getLinkageRequest.OdsCode,
+            };
         }
 
-        private void LogLinkageCreateError(VisionLinkageClient.VisionApiObjectResponse<LinkageKeyPostResponse> response,
-            string message)
+        private static CreateLinkageKey BuildCreateLinkageKey(CreateLinkageRequest createLinkageRequest)
         {
-            _logger.LogError(
-                $"Linkage create request unsuccessful - {message} - Status code: { response.StatusCode } - Vision error: {response.ErrorForLogging}");
+            return new CreateLinkageKey
+            {
+                OdsCode = createLinkageRequest.OdsCode,
+                LinkageKeyPostRequest = new LinkageKeyPostRequest
+                {
+                    NhsNumber = createLinkageRequest.NhsNumber,
+                    LastName = createLinkageRequest.Surname,
+                    DateOfBirth = createLinkageRequest.DateOfBirth.FormatToYYYYMMDD(),
+                },
+            };
         }
     }
 }

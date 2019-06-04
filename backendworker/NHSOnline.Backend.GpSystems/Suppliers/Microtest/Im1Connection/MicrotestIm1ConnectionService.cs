@@ -15,6 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
             {
                 ConnectionToken = connectionToken,
                 NhsNumbers = new List<PatientNhsNumber>(),
+                OdsCode = odsCode
             });
 
             return new Im1ConnectionVerifyResult.Success(response);
@@ -28,6 +29,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
             {
                 ConnectionToken = connectionToken.SerializeJson(),
                 NhsNumbers = new List<PatientNhsNumber>(),
+                OdsCode = request.OdsCode,
+                AccountId = request.AccountId,
+                LinkageKey = request.LinkageKey
             });
 
             return new Im1ConnectionRegisterResult.Success(response);

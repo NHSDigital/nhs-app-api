@@ -99,16 +99,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
             public ErrorResponse ErrorResponse { get; set; }
 
-            public bool HasInternalErrorCode(string code)
-            {
-                return string.Equals(ErrorResponse?.Code, code, StringComparison.Ordinal);
-            }
-
-            public bool HasStatusCodeAndErrorCode(HttpStatusCode statusCode, string visionApiErrorCode)
-            {
-                return (StatusCode == statusCode) && HasInternalErrorCode(visionApiErrorCode);
-            }
-
             public async Task<VisionApiObjectResponse<TBody>> Parse(
                 HttpResponseMessage responseMessage,
                 IJsonResponseParser responseParser,

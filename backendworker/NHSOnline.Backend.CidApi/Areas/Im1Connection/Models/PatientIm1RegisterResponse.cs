@@ -1,0 +1,11 @@
+using System.Collections.Generic;
+using NHSOnline.Backend.GpSystems.Im1Connection.Models;
+
+namespace NHSOnline.Backend.CidApi.Areas.Im1Connection.Models
+{
+    public class PatientIm1RegisterResponse
+    {
+        public string ConnectionToken { get; set; }
+        public IEnumerable<PatientNhsNumber> NhsNumbers { get; set; }
+    }
+}

@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
 {
@@ -18,17 +19,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
         private readonly IIm1CacheService _im1CacheService;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<VisionIm1ConnectionService> _logger;
+        private readonly VisionIm1RegisterErrorMapper _registerErrorMapper;
 
         public VisionIm1ConnectionService(
             IVisionClient visionClient,
             IIm1CacheService im1CacheService,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
-            ILogger<VisionIm1ConnectionService> logger)
+            ILogger<VisionIm1ConnectionService> logger,
+            VisionIm1RegisterErrorMapper registerErrorMapper)
         {
             _visionClient = visionClient;
             _im1CacheService = im1CacheService;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
+            _registerErrorMapper = registerErrorMapper;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -51,7 +55,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 var response = new PatientIm1ConnectionResponse
                 {
                     ConnectionToken = connectionToken,
-                    NhsNumbers = formattedNhsNumbers
+                    NhsNumbers = formattedNhsNumbers,
+                    OdsCode = odsCode
                 };
 
                 return new Im1ConnectionVerifyResult.Success(response);
@@ -91,23 +96,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 {
                     var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     
-                    VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> linkAccountRes;
+                    VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> linkAccountResponse;
                     
                     try
                     {
-                        linkAccountRes = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
+                        linkAccountResponse = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
                     }
                     catch (SocketException ex)
                     {
                         _logger.LogError(ex, $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked." + ex.ToString() );
-                        return new Im1ConnectionRegisterResult.AccountAlreadyExists();
+                        return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.Code.UserAlreadyLinked);
                     }
 
-                    if (linkAccountRes.HasErrorResponse)
+                    if (linkAccountResponse.HasErrorResponse)
                     {
-                        return GetCorrectRegisterErrorResult(linkAccountRes);
+                        return _registerErrorMapper.Map(linkAccountResponse, _logger);
                     }
-                    var apiToken = linkAccountRes.Body.AuthenticationRef.ApiToken;
+                    var apiToken = linkAccountResponse.Body.AuthenticationRef.ApiToken;
                     connectionToken = new VisionConnectionToken
                     {
                         RosuAccountId = request.AccountId,
@@ -127,13 +132,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                     _logger.LogVisionErrorResponse(configResponse);
                     return new Im1ConnectionRegisterResult.BadGateway();
                 }
-
-                var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();
-                var response = new PatientIm1ConnectionResponse
-                {
-                    ConnectionToken = connectionToken.SerializeJson(),
-                    NhsNumbers = nhsNumbers
-                };
+                
+                var response = CreatePatientIm1ConnectionResponse(request, configResponse, connectionToken);
                 _logger.LogDebug($"{nameof(VisionIm1ConnectionService)} Register successfully completed");
 
                 return new Im1ConnectionRegisterResult.Success(response);
@@ -148,6 +148,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 _logger.LogExit();
             }
+        }
+
+        private PatientIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
+            PatientIm1ConnectionRequest request,
+            VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse,
+            VisionConnectionToken connectionToken)
+        {
+            var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();
+            return new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = connectionToken.SerializeJson(),
+                NhsNumbers = nhsNumbers,
+                OdsCode = request.OdsCode,
+                AccountId = request.AccountId,
+                LinkageKey = request.LinkageKey
+            };
         }
 
         private Im1ConnectionVerifyResult GetCorrectVerifyErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
@@ -183,48 +199,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             _logger.LogVisionErrorResponse(response);
             return new Im1ConnectionVerifyResult.BadGateway();
         }
-        
-        private Im1ConnectionRegisterResult GetCorrectRegisterErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
-        {
-            if (response.IsAccountLockedError)
-            {
-                LogError<T>("User account locked");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionRegisterResult.BadGateway();
-            }
-            
-            if (response.IsAlreadyRegisteredError)
-            {
-                LogError<T>("User already registered");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionRegisterResult.AccountAlreadyExists();
-            }
-            
-            if (response.IsInvalidDetailsError)
-            {
-                LogError<T>("Invalid supplied details");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionRegisterResult.NotFound();
-            }
-            
-            if (response.IsInvalidParameterError)
-            {
-                LogError<T>("Invalid supplied details");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionRegisterResult.BadRequest();
-            }
-
-            if (response.IsUnknownError)
-            {
-                LogError<T>("Unknown error");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionRegisterResult.BadGateway();
-            }
-
-            LogError<T>("Other Error");
-            _logger.LogVisionErrorResponse(response);
-            return new Im1ConnectionRegisterResult.BadGateway();
-       }
         
         private void LogError<T>(string errorType)
         {

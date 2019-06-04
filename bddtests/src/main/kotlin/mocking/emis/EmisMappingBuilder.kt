@@ -1,5 +1,7 @@
 package mocking.emis
 
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
 import constants.ErrorResponseCodeEmis
 import mocking.JSonXmlConverter
 import mocking.MappingBuilder
@@ -7,6 +9,7 @@ import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ErrorResponse
 import mocking.emis.models.ExceptionResponse
 import mocking.emis.practices.PracticeSettingsBuilderEmis
+import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
@@ -18,8 +21,8 @@ const val HEADER_API_VERSION = "X-API-Version"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
 open class EmisMappingBuilder(configuration: EmisConfiguration?,
-                              method: String, relativePath: String = "")
-    : MappingBuilder(method, "/emis$relativePath") {
+                              method: String, relativePath: String = "") : IErrorMappingBuilder,
+        MappingBuilder(method, "/emis$relativePath") {
 
     init {
         if (configuration != null) {
@@ -46,15 +49,8 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
     }
 
     fun responseErrorForbiddenService(): Mapping {
-        return respondWithStandardError(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toInt(), HttpStatus.SC_FORBIDDEN)
-    }
-
-    fun respondWithStandardError(internalResponseCode: Int, httpResponseCode: Int): Mapping {
-        val responseBody = ErrorResponse(internalResponseCode)
-        return respondWith(httpResponseCode) {
-            andJsonBody(responseBody)
-                    .build()
-        }
+        return respondWithStandardError(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toInt(), HttpStatus
+                .SC_FORBIDDEN)
     }
 
     fun respondWithCorruptedContent(content: String): Mapping {
@@ -68,7 +64,7 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
     }
 
     fun respondWithEmisUnknownError(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION.toString(),
                 "Unknown Exception")
         val responseBody = JSonXmlConverter.toJson(exceptionResponse)
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
@@ -84,7 +80,7 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
 
     protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
 
-        val responseBody = ExceptionResponse(internalResponseCode.toLong(), message)
+        val responseBody = ExceptionResponse(internalResponseCode.toString(), message)
 
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(responseBody)
@@ -93,4 +89,28 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
     }
 
     fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
+
+    fun respondWithStandardError(internalResponseCode: Int, httpResponseCode: Int, message: String = ""): Mapping {
+        val responseBody = ErrorResponse(internalResponseCode, message)
+        return respondWith(httpResponseCode) {
+            andJsonBody(responseBody)
+                    .build()
+        }
+    }
+
+    override fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
+        val responseBody = ExceptionResponse(errorCode, message?:"")
+        return respondWith(httpStatusCode) {
+            andJsonBody(responseBody)
+                    .build()
+        }
+    }
+
+    protected fun respondWithBodyAndStatus(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {
+        return respondWith(statusCode) {
+            andJsonBody(body, GsonBuilder()
+                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                    .create())
+        }
+    }
 }

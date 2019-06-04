@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
@@ -70,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 
             var response = await _systemUnderTest.GetLinkageKey(request);
 
-            response.Should().BeAssignableTo<LinkageResult.NotFoundErrorRetrievingNhsUser>();
+            response.Should().BeAssignableTo<LinkageResult.NotFound>();
         }
         
         [TestMethod]
@@ -78,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         {
             var response = await _systemUnderTest.GetLinkageKey(null);
 
-            response.Should().BeAssignableTo<LinkageResult.NotFoundErrorRetrievingNhsUser>();
+            response.Should().BeAssignableTo<LinkageResult.NotFound>();
         }
 
         [TestMethod]
@@ -186,25 +187,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         }
         
         [TestMethod]
-        public async Task CreateLinkageKey_ReturnsSupplierSystemUnavailable_WhenNotAuthenticated()
+        public async Task CreateLinkageKey_ReturnsUnknownError_WhenNotAuthenticated()
         {
-            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.NotAuthenticated,
-                typeof(LinkageResult.SupplierSystemUnavailable));
+            var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.NotAuthenticated,
+                typeof(LinkageResult.UnknownError));
+            var errorCase = (LinkageResult.UnknownError)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
         }
 
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsNotFoundErrorCreatingNhsUser_WhenInvalidLinkageCredentials()
         {
-            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
-                TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials,
-                typeof(LinkageResult.NotFoundErrorCreatingNhsUser));
-        }
-
-        [TestMethod]
-        public async Task CreateLinkageKey_ReturnsInternalServerError_WhenNotAuthenticated()
-        {
-            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.LinkAccount.InvalidProviderId,
-                typeof(LinkageResult.InternalServerError));
+            _settings.MinimumLinkageAge = 16;
+            var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
+                "8",
+                typeof(LinkageResult.ErrorCase));
+            var errorCase = (LinkageResult.ErrorCase)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.ProblemLinkingAccount);
         }
 
         [TestMethod]
@@ -212,13 +211,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         {
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(false);
 
-           await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials,
-                typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge));
-            
+           var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
+               "8",
+                typeof(LinkageResult.ErrorCase));
+            var conflictResult = (LinkageResult.ErrorCase)result;
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
             _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), _settings.MinimumLinkageAge));
         }
 
-        private async Task CreateLinkageKey_ReturnsError_WhenNotAuthenticated(string errorCode, Type expectedError)
+        private async Task<LinkageResult> CreateLinkageKey_ReturnsError_WhenNotAuthenticated(string errorCode, Type expectedError)
         {
             //Arrange
             var request = ValidCreateLinkageRequest();
@@ -236,6 +237,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 
             //Assert
             result.GetType().Should().Be(expectedError);
+            return result;
         }
 
         private CreateLinkageRequest ValidCreateLinkageRequest()

@@ -38,5 +38,34 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 
             return isValid;
         }
+        
+        public bool IsCreateLinkageRequestValid(Im1RegistrationRequest request)
+        {
+            var isValid = new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(request.NhsNumber, nameof(request.NhsNumber))
+                .IsNotNullOrWhitespace(request.Surname, nameof(request.Surname))
+                .IsNotNull(request.DateOfBirth, nameof(request.DateOfBirth))
+                .IsValidOdsCode(request.OdsCode, nameof(request.OdsCode))
+                .IsNotNullOrWhitespace(request.OdsCode, nameof(request.OdsCode))
+                .IsNotNullOrWhitespace(request.IdentityToken, nameof(request.IdentityToken))
+                .IsNotNullOrWhitespace(request.EmailAddress, nameof(request.EmailAddress))
+                .IsValid();
+
+            return isValid;
+        }
+
+        public bool IsPatientIm1ConnectionRequestValid(Im1RegistrationRequest request)
+        {
+            var isValid = new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(request.AccountId, nameof(request.AccountId))
+                .IsNotNull(request.DateOfBirth, nameof(request.DateOfBirth))
+                .IsNotNullOrWhitespace(request.LinkageKey, nameof(request.LinkageKey))
+                .IsValidOdsCode(request.OdsCode, nameof(request.OdsCode))
+                .IsNotNullOrWhitespace(request.OdsCode, nameof(request.OdsCode))
+                .IsNotNullOrWhitespace(request.Surname, nameof(request.Surname))
+                .IsValid();
+
+            return isValid;
+        }
     }
 }

@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,13 +8,13 @@ namespace NHSOnline.Backend.Support
 {
     public static class EnumHelper
     {
-        private static Dictionary<Type, Dictionary<string, string>> DescriptionsCache { get; }
+        private static ConcurrentDictionary<Type, ConcurrentDictionary<string, string>> DescriptionsCache { get; }
 
         private static readonly Type DescriptionAttributeType = typeof(DescriptionAttribute);
 
         static EnumHelper()
         {
-            DescriptionsCache = new Dictionary<Type, Dictionary<string, string>>();
+            DescriptionsCache = new ConcurrentDictionary<Type, ConcurrentDictionary<string, string>>();
         }
 
         public static bool TryParseFromDescription<TEnum>(string description, out TEnum value)
@@ -33,14 +34,6 @@ namespace NHSOnline.Backend.Support
             }
         }
 
-        public static TEnum ParseFromDescription<TEnum>(string description)
-            where TEnum : struct, IConvertible
-        {
-            var type = GetType<TEnum>();
-
-            return (TEnum) ParseFromDescriptionInternal(type, description);
-        }
-
         public static Type GetType<TEnum>()
         {
             var type = typeof(TEnum);
@@ -53,6 +46,22 @@ namespace NHSOnline.Backend.Support
         public static bool HasValue<TEnum>(TEnum? value)
             where TEnum : struct, IConvertible
             => value.HasValue && !value.Equals(default(TEnum));
+        
+        public static string GetDescriptionOrThrowException<TEnum>(TEnum enumerationValue)
+        {
+            var type = GetType<TEnum>();
+
+            var success = GetDescriptions(type)
+                .TryGetValue(enumerationValue.ToString(), out var enumDescription);
+
+
+            if (success && !string.Equals(enumDescription, enumerationValue.ToString(), StringComparison.Ordinal))
+            {
+                return enumDescription;
+            }
+
+            throw new ArgumentException($"No Description attribute on enum {enumerationValue.ToString()}");
+        }
 
         private static object ParseFromDescriptionInternal(Type type, string description)
         {
@@ -73,24 +82,24 @@ namespace NHSOnline.Backend.Support
             return Enum.Parse(type, enumName);
         }
 
-        private static Dictionary<string, string> GetDescriptions(Type type)
+        private static IDictionary<string, string> GetDescriptions(Type type)
         {
             if (DescriptionsCache.TryGetValue(type, out var descriptions))
                 return descriptions;
 
-            descriptions = new Dictionary<string, string>();
+            var newDescriptions = new ConcurrentDictionary<string, string>();
 
             foreach (var fieldInfo in type.GetFields())
             {
                 var attribute = (DescriptionAttribute) fieldInfo.GetCustomAttributes(DescriptionAttributeType, false)
                     .FirstOrDefault();
 
-                descriptions.Add(fieldInfo.Name, attribute != null ? attribute.Description : fieldInfo.Name);
+                newDescriptions.TryAdd(fieldInfo.Name, attribute != null ? attribute.Description : fieldInfo.Name);
             }
 
-            DescriptionsCache.Add(type, descriptions);
+            DescriptionsCache.TryAdd(type, newDescriptions);
 
-            return descriptions;
+            return newDescriptions;
         }
     }
 }

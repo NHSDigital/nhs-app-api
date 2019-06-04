@@ -45,7 +45,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
         private ConfigurationSettings _configurationSettings;
-//        private Mock<ConfigurationSettings> _mockConfigurationSettings;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<ISessionMapper> _mockSessionMapper;
@@ -70,11 +69,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
         private const int MinimumAppAge = 13;
         private const string CookieDomain = "CookieDomain";
-        private int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
+        private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;
         private const int SessionTimeoutMinutes = 10;
-        private int MinimumLinkageAge = 16;
-        
-        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
+        private const int MinimumLinkageAge = 16;
+        private readonly DateTimeOffset? _currentTermsConditionsEffectiveDate = DateTimeOffset.Now;
 
         [TestInitialize]
         public void TestInitialize()
@@ -216,7 +214,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _configurationSettings.DefaultHttpTimeoutSeconds = _sessionTimeoutSeconds;
             _configurationSettings.MinimumAppAge = MinimumAppAge;
             _configurationSettings.MinimumLinkageAge = MinimumLinkageAge;
-            _configurationSettings.CurrentTermsConditionsEffectiveDate = CurrentTermsConditionsEffectiveDate;
+            _configurationSettings.CurrentTermsConditionsEffectiveDate = _currentTermsConditionsEffectiveDate;
             
             _systemUnderTest = _fixture.Create<SessionController>();
             

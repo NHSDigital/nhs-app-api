@@ -15,8 +15,10 @@ using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support;
+using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 {
@@ -72,8 +74,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 patientIdentifiers: patientIdentifiers
             );
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -101,8 +102,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 emisClientMock,
                 userPatientLinkToken: "self", userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -132,8 +132,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 emisClientMock,
                 userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -147,8 +146,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         public async Task Verify_ReturnsEmptyNhsNumbersWhenEmisReturnsEmptyPatientIdentifiers()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
             var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
             var patientIdentifiers = Array.Empty<PatientIdentifier>();
 
@@ -166,8 +164,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         public async Task Verify_ReturnsEmptyNhsNumbers_WhenEmisReturnsNullPatientIdentifiers()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
             var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
             var patientIdentifiers = (PatientIdentifier[]) null;
 
@@ -185,8 +182,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         public async Task Verify_ReturnsNotFound_WhenEmisReturnsEmptyUserLinkModels()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
             var userPatientLinkModels = Array.Empty<UserPatientLink>();
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
@@ -200,8 +196,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         public async Task Verify_ReturnsNotFound_WhenEmisReturnsNullUserLinkModels()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
             var userPatientLinkModels = (UserPatientLink[]) null;
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
@@ -219,8 +214,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 .Setup(x => x.SessionsEndUserSessionPost())
                 .Throws<HttpRequestException>();
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -370,7 +364,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Conflict>();
+            var errorCase = (Im1ConnectionRegisterResult.Conflict)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
         }
 
         [TestMethod]
@@ -393,7 +389,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var errorCase = (Im1ConnectionRegisterResult.ErrorCase) result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UserAlreadyLinked);
         }
         
         [TestMethod]
@@ -416,7 +414,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.NoUserFoundForLinkageDetails);
         }
         
         [TestMethod]
@@ -439,7 +439,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidLinkageDetails);
         }
         
         [TestMethod]
@@ -462,7 +464,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.NoMatchFoundForGivenDemographics);
         }
         
         [TestMethod]
@@ -599,6 +603,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                     {
                         Body = demographicsResponse
                     });
+        }
+
+        private EmisIm1ConnectionService CreateSystemUnderTest(Mock<IEmisClient> emisClientMock)
+        {
+            return new EmisIm1ConnectionService(emisClientMock.Object, _logger,
+                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object, new EmisIm1RegisterErrorMapper());
         }
     }
 }

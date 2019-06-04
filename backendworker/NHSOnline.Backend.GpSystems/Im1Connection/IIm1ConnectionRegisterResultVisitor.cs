@@ -5,7 +5,9 @@
         T Visit(Im1ConnectionRegisterResult.Success result);
         T Visit(Im1ConnectionRegisterResult.BadRequest result);
         T Visit(Im1ConnectionRegisterResult.NotFound result);
-        T Visit(Im1ConnectionRegisterResult.AccountAlreadyExists result);
         T Visit(Im1ConnectionRegisterResult.BadGateway result);
+        T Visit(Im1ConnectionRegisterResult.Conflict result);
+        T Visit(Im1ConnectionRegisterResult.UnknownError result);
+        T Visit(Im1ConnectionRegisterResult.ErrorCase result);
     }
 }

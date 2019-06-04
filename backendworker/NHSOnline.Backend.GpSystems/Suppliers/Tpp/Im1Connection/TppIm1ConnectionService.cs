@@ -17,14 +17,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
         private readonly IIm1CacheService _im1CacheService;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<TppIm1ConnectionService> _logger;
+        private readonly TppIm1RegisterErrorMapper _errorMapper;
 
         public TppIm1ConnectionService(ITppClient tppClient, IIm1CacheService im1CacheService,
-            IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger)
+            IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger,
+            TppIm1RegisterErrorMapper errorMapper)
         {
             _tppClient = tppClient;
             _im1CacheService = im1CacheService;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
+            _errorMapper = errorMapper;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -43,14 +46,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                     _logger.LogError($"Tpp Authentication call failed - {authenticateReply.ErrorForLogging}");
                     return new Im1ConnectionVerifyResult.BadGateway();
                 }
-
-                var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
-
-                var response = new PatientIm1ConnectionResponse
-                {
-                    ConnectionToken = connectionToken,
-                    NhsNumbers = nhsNumbers
-                };
+                
+                var response = CreatePatientIm1ConnectionResponse(authenticateReply, connectionToken, odsCode);
 
                 _logger.LogDebug($"{nameof(TppIm1ConnectionService)} Verify successfully completed");
                 return new Im1ConnectionVerifyResult.Success(response);
@@ -67,22 +64,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             }
         }
 
+        private static PatientIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
+            TppClient.TppApiObjectResponse<AuthenticateReply> authenticateReply, string connectionToken, string odsCode)
+        {
+            var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
+
+            return new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = connectionToken,
+                NhsNumbers = nhsNumbers,
+                OdsCode = odsCode
+            };
+        }
+
         public async Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
         {
             try
             {
                 _logger.LogEnter();
 
-                var linkAccountRequest = new LinkAccount
-                {
-                    AccountId = request.AccountId,
-                    DateofBirth = request.DateOfBirth,
-                    LastName = request.Surname,
-                    OrganisationCode = request.OdsCode,
-                    Passphrase = request.LinkageKey
-                };
+                var linkAccountRequest = CreateLinkAccount(request);
 
-                _logger.LogDebug("Checking cache for IM1 connection token");
+                _logger.LogInformation("Checking cache for IM1 connection token");
                 var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
                 var connectionTokenOption = await _im1CacheService.GetIm1ConnectionToken<TppConnectionToken>(key);
@@ -92,71 +95,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 if (connectionTokenOption.HasValue)
                 {
                     connectionToken = connectionTokenOption.ValueOrFailure();
-                    _logger.LogDebug("IM1 connection token found in cache.");
+                    _logger.LogInformation("IM1 connection token found in cache.");
                 }
                 else
                 {
+                    _logger.LogInformation("IM1 connection token not found in cache.");
                     var linkAccountReply = await _tppClient.LinkAccountPost(linkAccountRequest);
-
-                    var standardErrorMessage = "Failed LinkAccount request returned with";
-                    if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidProviderId))
-                    {
-                        _logger.LogError($"{standardErrorMessage} '{nameof(TppApiErrorCodes.LinkAccount.InvalidProviderId)}' error code.");
-                        return new Im1ConnectionRegisterResult.BadGateway();
-                    }
-
-                    if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials))
-                    {
-                        _logger.LogError(
-                            $"{standardErrorMessage} '{nameof(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials)}' error code.");
-                        return new Im1ConnectionRegisterResult.NotFound();
-                    }
 
                     if (!linkAccountReply.HasSuccessResponse)
                     {
-                        _logger.LogError(
-                            $"{standardErrorMessage}out success response.  Unknown Reason.");
-                        return new Im1ConnectionRegisterResult.BadGateway();
+                        return _errorMapper.Map(linkAccountReply, _logger);
                     }
 
-                    connectionToken = new TppConnectionToken
-                    {
-                        AccountId = linkAccountRequest.AccountId,
-                        Passphrase = linkAccountReply.Body.Passphrase,
-                        ProviderId = linkAccountReply.Body.ProviderId,
-                        Im1CacheKey = key
-                    };
+                    connectionToken = CreateTppConnectionToken(linkAccountRequest, linkAccountReply, key);
 
                     await CacheConnectionToken(connectionToken);
                 }
-
-                var authenticateRequest = new Authenticate
-                {
-                    AccountId = connectionToken.AccountId,
-                    Passphrase = connectionToken.Passphrase,
-                    UnitId = linkAccountRequest.OrganisationCode,
-                    ProviderId = connectionToken.ProviderId
-                };
-
-                var authenticateReply = await _tppClient.AuthenticatePost(authenticateRequest);
-
-                if (!authenticateReply.HasSuccessResponse)
-                {
-                    _logger.LogError(
-                        "Failed Authenticate request returned without success response.  Unknown Reason.");
-                    return new Im1ConnectionRegisterResult.BadGateway();
-                }
-
-                var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
-
-                var response = new PatientIm1ConnectionResponse
-                {
-                    ConnectionToken = connectionToken.SerializeJson(),
-                    NhsNumbers = nhsNumbers
-                };
-
-                _logger.LogDebug($"{nameof(TppIm1ConnectionService)} {nameof(Register)} successfully completed");
-                return new Im1ConnectionRegisterResult.Success(response);
+                
+                return await HandleAuthenticateRequestAndResponse(connectionToken, linkAccountRequest);
             }
             catch (HttpRequestException e)
             {
@@ -168,6 +124,72 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task<Im1ConnectionRegisterResult> HandleAuthenticateRequestAndResponse(TppConnectionToken connectionToken,
+            LinkAccount linkAccountRequest)
+        {
+
+            var authenticateRequest = CreateAuthenticate(connectionToken, linkAccountRequest);
+
+            var authenticateReply = await _tppClient.AuthenticatePost(authenticateRequest);
+
+            if (!authenticateReply.HasSuccessResponse)
+            {
+                _logger.LogError(
+                    "Failed Authenticate request returned without success response.  Unknown Reason.");
+                return new Im1ConnectionRegisterResult.BadGateway();
+            }
+
+            var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
+
+            var response = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = connectionToken.SerializeJson(),
+                NhsNumbers = nhsNumbers,
+                OdsCode = linkAccountRequest.OrganisationCode,
+                AccountId = linkAccountRequest.AccountId,
+                LinkageKey = linkAccountRequest.Passphrase
+            };
+
+            _logger.LogDebug($"{nameof(TppIm1ConnectionService)} {nameof(Register)} successfully completed");
+            return new Im1ConnectionRegisterResult.Success(response);
+
+        }
+
+        private static TppConnectionToken CreateTppConnectionToken(LinkAccount linkAccountRequest,
+            TppClient.TppApiObjectResponse<LinkAccountReply> linkAccountReply, string key) {
+            return new TppConnectionToken
+            {
+                AccountId = linkAccountRequest.AccountId,
+                Passphrase = linkAccountReply.Body.Passphrase,
+                ProviderId = linkAccountReply.Body.ProviderId,
+                Im1CacheKey = key
+            };
+        }
+
+        private static Authenticate CreateAuthenticate(TppConnectionToken connectionToken, LinkAccount linkAccountRequest)
+        {
+            return new Authenticate
+            {
+                AccountId = connectionToken.AccountId,
+                Passphrase = connectionToken.Passphrase,
+                UnitId = linkAccountRequest.OrganisationCode,
+                ProviderId = connectionToken.ProviderId
+            };
+
+        }
+
+        private static LinkAccount CreateLinkAccount(PatientIm1ConnectionRequest request)
+        {
+            return new LinkAccount
+            {
+                AccountId = request.AccountId,
+                DateofBirth = request.DateOfBirth,
+                LastName = request.Surname,
+                OrganisationCode = request.OdsCode,
+                Passphrase = request.LinkageKey
+            };
         }
 
         private async Task CacheConnectionToken(TppConnectionToken im1ConnectionToken) =>

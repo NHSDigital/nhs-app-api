@@ -2,6 +2,7 @@
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Soap;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Envelope
 {
@@ -23,6 +24,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Envelope
         {
             try
             {
+                new ValidateAndLog(_logger)
+                    .IsNotNull(certificate, nameof(certificate))
+                    .IsNotNull(request, nameof(request))
+                    .IsNotNull(requestUsername, nameof(requestUsername))
+                    .IsValid();
+
                 var visionEnvelope = GetVisionEnvelope(certificate, requestUsername);
                 visionEnvelope.AddBody(request);
 

@@ -59,7 +59,7 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
         return respondWithError(invalidLinkageCredentialsError)
     }
 
-    fun respondWithError(errorBody: Error): Mapping {
+    fun respondWithError(errorBody: Error, httpResponse : Int = HttpStatus.SC_OK): Mapping {
         val responseBody = Error(
                 errorBody.errorCode,
                 errorBody.userFriendlyMessage,
@@ -75,7 +75,7 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
             marshaller.marshal(responseBody, stringWriter)
         }
 
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(httpResponse) {
             andXmlBody(stringWriter.toString())
                     .build()
         }

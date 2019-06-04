@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.Im1Connection;
 
 namespace NHSOnline.Backend.CidApi.Areas.Linkage
 {
-    internal class LinkageResultAuditingVisitor : ILinkageResultVisitor<Task<IActionResult>>
+    internal class LinkageResultAuditingVisitor<T> : ILinkageResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
-        private readonly ILogger<LinkageController> _logger;
+        private readonly ILogger<T> _logger;
+        private readonly IIm1ConnectionErrorCodes _errorCodes;
         private readonly Supplier _supplier;
         private readonly string _nhsNumber;
         private readonly string _auditType;
         
-        public LinkageResultAuditingVisitor(IAuditor auditor, ILogger<LinkageController> logger, Supplier supplier, string nhsNumber, string auditType)
+        public LinkageResultAuditingVisitor(IAuditor auditor, ILogger<T> logger, IIm1ConnectionErrorCodes errorCodes, Supplier supplier, string nhsNumber, string auditType)
         {
             _auditor = auditor;
             _logger = logger;
+            _errorCodes = errorCodes;
             _supplier = supplier;
             _nhsNumber = nhsNumber;
             _auditType = auditType;
         }
         
-        public async Task<IActionResult> Visit(LinkageResult.SuccessfullyRetrieved result)
+        public async Task Visit(LinkageResult.SuccessfullyRetrieved result)
         {
             try
             {
@@ -38,11 +39,9 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                 _logger.LogError(e,
                     $"Exception thrown auditing {_auditType} {nameof(LinkageResult.SuccessfullyRetrieved)}");
             }
-            
-            return new OkObjectResult(result.Response);
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.SuccessfullyRetrievedAlreadyExists result)
+        public async Task Visit(LinkageResult.SuccessfullyRetrievedAlreadyExists result)
         {
             try
             {
@@ -52,53 +51,9 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             {
                 _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.SuccessfullyRetrievedAlreadyExists)}");
             }
-            
-            return new OkObjectResult(result.Response);
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.SupplierSystemUnavailable result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to supplier being unavailable.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.SupplierSystemUnavailable)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
-        }
-        
-        public async Task<IActionResult> Visit(LinkageResult.InternalServerError result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to internal server error.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.InternalServerError)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        }
-        
-        public async Task<IActionResult> Visit(LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "The patient already has an online account.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status409Conflict);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.SuccessfullyCreated result)
+        public async Task Visit(LinkageResult.SuccessfullyCreated result)
         {
             try
             {
@@ -108,192 +63,87 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             {
                 _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.SuccessfullyCreated)}");
             }
-            
-            var createdResult = new ObjectResult(result.Response)
-            {
-                StatusCode = StatusCodes.Status201Created
-            };
-
-            return createdResult;
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.PracticeNotLive result)
+        public async Task Visit(LinkageResult.SupplierSystemUnavailable result)
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - practice not live.");
+                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to supplier being unavailable.");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.PracticeNotLive)}");
+                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.SupplierSystemUnavailable)}");
             }
-            
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.PatientMarkedAsArchived result)
+        public async Task Visit(LinkageResult.InternalServerError result)
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - patient marked as archived.");
+                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to internal server error.");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.PatientMarkedAsArchived)}");
+                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.InternalServerError)}");
             }
-            
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.PatientNonCompetentOrUnderMinimumAge result)
+
+        public async Task Visit(LinkageResult.ErrorCase result)
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - patient non competent or under 16.");
+                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Error when linking user");
+                LogErrorCode(result.ErrorCode, nameof(LinkageResult.ErrorCase));
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.PatientNonCompetentOrUnderMinimumAge)}");
+                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.ErrorCase)}");
             }
-            
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.AccountStatusInvalid result)
+        public async Task Visit(LinkageResult.NotFound result)
+        {
+            await AuditUnknownError("Not Found", nameof(LinkageResult.NotFound), result.ErrorCode);
+        }
+
+        public async Task Visit(LinkageResult.BadRequest result)
+        {
+            await AuditUnknownError("Bad Request", nameof(LinkageResult.BadRequest), result.ErrorCode);
+        }
+
+        public async Task Visit(LinkageResult.Conflict result)
+        {
+            await AuditUnknownError("Conflict", nameof(LinkageResult.Conflict), result.ErrorCode);
+        }
+
+        public async Task Visit(LinkageResult.Forbidden result)
+        {
+            await AuditUnknownError("Forbidden", nameof(LinkageResult.Forbidden), result.ErrorCode);
+        }
+        public async Task Visit(LinkageResult.UnknownError result)
+        {
+            await AuditUnknownError("Unknown Error", nameof(LinkageResult.UnknownError), result.ErrorCode);
+        }
+
+        private async Task AuditUnknownError(string errorType, string nameOfResultType, Im1ConnectionErrorCodes.Code errorCode)
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - invalid account status.");
+                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, $"{errorType} returned when linking user - unknown error");
+                LogErrorCode(errorCode, nameOfResultType);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.AccountStatusInvalid)}");
+                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameOfResultType}");
             }
-            
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.PatientNotRegisteredAtPractice result)
+        private void LogErrorCode(Im1ConnectionErrorCodes.Code resultErrorCode, string nameOfResult)
         {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - patient not registered at practice.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.PatientNotRegisteredAtPractice)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status404NotFound);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.NoRegisteredOnlineUserFound result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - no registered online user found.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.NoRegisteredOnlineUserFound)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status404NotFound);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.NotFoundErrorRetrievingNhsUser result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - not found error retrieving nhs user - unknown reason.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.NotFoundErrorRetrievingNhsUser)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status404NotFound);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.NotFoundErrorCreatingNhsUser result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - not found error creating nhs user - unknown reason.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.NotFoundErrorCreatingNhsUser)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status404NotFound);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.BadRequestErrorRetrievingNhsUser result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - bad request error retrieving nhs user - unknown reason.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.BadRequestErrorRetrievingNhsUser)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.BadRequestErrorCreatingNhsUser result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - bad request creating nhs user - unknown reason.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.BadRequestErrorCreatingNhsUser)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.ForbiddenErrorRetrievingNhsUser result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - forbidden retrieving nhs user - unknown reason.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.ForbiddenErrorRetrievingNhsUser)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.LinkageKeyRevoked result)
-        {
-            try
-            {
-                await _auditor.AuditWithExplicitNhsNumber(
-                    _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - linkage key revoked.");                
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {_auditType} {nameof(LinkageResult.LinkageKeyRevoked)}");
-            }
-            
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+            _logger.LogInformation($"Linkage result: '{nameOfResult}'. " +
+                                   $"Error code: {resultErrorCode} : {(int)resultErrorCode} : {_errorCodes.GetErrorResponse(resultErrorCode).ErrorMessage}");
         }
     }
 }

@@ -5,5 +5,8 @@ data class Im1ConnectionRequest (
     var LinkageKey: String? = null,
     var OdsCode: String? = null,
     var Surname: String? = null,
-    var DateOfBirth: String? = null
+    var DateOfBirth: String? = null,
+    var NhsNumber: String? = null,
+    var EmailAddress: String? = null,
+    var IdentityToken: String? =null
 )

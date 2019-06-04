@@ -1,4 +1,6 @@
+using System.Net;
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 
@@ -22,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
         {
-            return await Task.FromResult(new LinkageResult.NotFoundErrorCreatingNhsUser());
+            return await Task.FromResult(new LinkageResult.NotFound(Im1ConnectionErrorCodes.Code.UnknownError));
         }
     }
 }

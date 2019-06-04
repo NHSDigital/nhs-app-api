@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -50,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
             var result = await _systemUnderTest.CreateLinkageKey(request);
 
             // Assert
-            result.Should().BeAssignableTo<LinkageResult.NotFoundErrorCreatingNhsUser>();
+            result.Should().BeAssignableTo<LinkageResult.NotFound>();
         }
     }
 }

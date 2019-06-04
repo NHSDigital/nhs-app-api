@@ -8,6 +8,7 @@ using Castle.Core.Internal;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
@@ -38,7 +39,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
         [TestMethod]
         [DataRow(HttpStatusCode.OK)]
-        public async Task GetLinkageKey_ReturnsSuccessfulResponse_WhenSuccessfulResponseFromVision(HttpStatusCode httpStatusCode)
+        public async Task GetLinkageKey_ReturnsSuccessfulResponse_WhenSuccessfulResponseFromVision(
+            HttpStatusCode httpStatusCode)
         {
             // Arrange
             var accountId = _fixture.Create<string>();
@@ -68,8 +70,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             _visionClient
                 .Setup(x => x.GetLinkageKey(It.Is<GetLinkageKey>(
-                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))))
+                    req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                           req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
                     new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse>(httpStatusCode)
                     {
@@ -85,30 +87,40 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             // Assert
             _visionClient.Verify(x => x.GetLinkageKey(It.Is<GetLinkageKey>(
                 req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))));
+                       req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))));
             _visionLinkageMapper.Verify(x => x.Map(getLinkageKeyResponse));
             result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>();
-            var successResult = (LinkageResult.SuccessfullyRetrieved)result;
+            var successResult = (LinkageResult.SuccessfullyRetrieved) result;
             successResult.Response.Should().NotBeNull();
             successResult.Response.Should().BeEquivalentTo(mappedResult);
         }
 
         [TestMethod]
-        [DataRow(VisionApiErrorCodes.InvalidNhsNumber, HttpStatusCode.BadRequest,
-            typeof(LinkageResult.BadRequestErrorRetrievingNhsUser))]
-        [DataRow(null, HttpStatusCode.BadRequest,
-            typeof(LinkageResult.BadRequestErrorRetrievingNhsUser))]
-        [DataRow(VisionApiErrorCodes.PatientRecordNotFound, HttpStatusCode.NotFound,
-            typeof(LinkageResult.NotFoundErrorRetrievingNhsUser))]
-        [DataRow(null, HttpStatusCode.NotFound,
-            typeof(LinkageResult.NotFoundErrorRetrievingNhsUser))]
-        [DataRow(VisionApiErrorCodes.LinkageKeyRevoked, HttpStatusCode.Forbidden,
-            typeof(LinkageResult.LinkageKeyRevoked))]
-        [DataRow(null, HttpStatusCode.Forbidden,
-            typeof(LinkageResult.ForbiddenErrorRetrievingNhsUser))]
-        [DataRow(null, HttpStatusCode.InternalServerError,
-            typeof(LinkageResult.SupplierSystemUnavailable))]
+        [DataRow("V4205", HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.InvalidNhsNumber)]
+        [DataRow("VY806", HttpStatusCode.NotFound, Im1ConnectionErrorCodes.Code.PatientRecordNotFound)]
         public async Task GetLinkageKey_ReturnsNotFoundResponse_WhenNotFoundResponseFromVision(
+            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse,
+            Im1ConnectionErrorCodes.Code expectedCode)
+        {
+            var result = await GetLinkageKey(visionApiErrorCode, httpStatusCodeResponse,
+                typeof(LinkageResult.ErrorCase));
+
+            var errorCase = (LinkageResult.ErrorCase) result;
+            errorCase.ErrorCode.Should().Be(expectedCode);
+        }
+
+        [TestMethod]
+        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequest))]
+        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFound))]
+        [DataRow(null, HttpStatusCode.Forbidden, typeof(LinkageResult.Forbidden))]
+        [DataRow(null, HttpStatusCode.InternalServerError, typeof(LinkageResult.UnknownError))]
+        public async Task GetLinkageKey_ReturnCorrectError_WhenNoVisionErrorCode(
+            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedType)
+        {
+            await GetLinkageKey(visionApiErrorCode, httpStatusCodeResponse, expectedType);
+        }
+
+        public async Task<LinkageResult> GetLinkageKey(
             string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
         {
             // Arrange
@@ -119,8 +131,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             _visionClient
                 .Setup(x => x.GetLinkageKey(It.Is<GetLinkageKey>(
-                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))))
+                    req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                           req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
                     new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse>(httpStatusCodeResponse)
                     {
@@ -129,7 +141,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                             Code = visionApiErrorCode,
                         },
                     }))
-                    .Verifiable();
+                .Verifiable();
 
             var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode);
 
@@ -139,10 +151,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             // Assert
             _visionClient.Verify(x => x.GetLinkageKey(It.Is<GetLinkageKey>(
                 req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))));
+                       req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))));
             _visionLinkageMapper.VerifyNoOtherCalls();
             result.GetType().Should().Be(expectedResultType);
             result.Should().NotBeNull();
+            return result;
         }
 
         private GetLinkageRequest CreateGetLinkageRequest(
@@ -193,9 +206,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                 LinkageKey = linkageKey,
                 OdsCode = odsCode,
             };
-            
+
             _visionLinkageMapper
-                .Setup(x => 
+                .Setup(x =>
                     x.Map(It.IsAny<LinkageKeyPostResponse>()))
                 .Returns(new LinkageResponse
                 {
@@ -212,7 +225,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                                    && request.OdsCode.Equals(odsCode, StringComparison.Ordinal)
                                    && request.LinkageKeyPostRequest.DateOfBirth
                                        .Equals(DateTimeExtensions.FormatToYYYYMMDD(dateOfBirth),
-                                       StringComparison.Ordinal)
+                                           StringComparison.Ordinal)
                                    && request.LinkageKeyPostRequest.LastName.Equals(surname,
                                        StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
@@ -221,7 +234,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                         Body = linkageKeyPostResponse,
                     }))
                 .Verifiable();
-                     
+
             // Act
             var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
 
@@ -235,30 +248,35 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
         }
 
         [TestMethod]
-        [DataRow(VisionApiErrorCodes.InvalidNhsNumber, HttpStatusCode.BadRequest,
-            typeof(LinkageResult.BadRequestErrorCreatingNhsUser))]
-        [DataRow(VisionApiErrorCodes.LinkageKeyRevoked, HttpStatusCode.BadRequest,
-            typeof(LinkageResult.AccountStatusInvalid))]
-        [DataRow(VisionApiErrorCodes.InvalidNhsNumber, HttpStatusCode.NotFound,
-            typeof(LinkageResult.NotFoundErrorCreatingNhsUser))]
-        [DataRow(VisionApiErrorCodes.LinkageKeyAlreadyExists, HttpStatusCode.Conflict,
-            typeof(LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount))]
-        [DataRow(null, HttpStatusCode.BadRequest,
-            typeof(LinkageResult.BadRequestErrorCreatingNhsUser))]
-        [DataRow(null, HttpStatusCode.NotFound,
-            typeof(LinkageResult.NotFoundErrorCreatingNhsUser))]
-        [DataRow(null, HttpStatusCode.Conflict,
-            typeof(LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount))]
-        [DataRow(null, HttpStatusCode.BadGateway,
-            typeof(LinkageResult.SupplierSystemUnavailable))]
-        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenvisionRespondsWithError(
-            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
+        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenvisionRespondsWithConflict()
+        {
+            var result = await CreateLinkageKey("V2214", HttpStatusCode.Conflict,
+                typeof(LinkageResult.ErrorCase));
+            var errorCaseResult = (LinkageResult.ErrorCase) result;
+            errorCaseResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.LinkageKeyAlreadyExists);
+        }
+
+        [TestMethod]
+        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequest))]
+        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFound))]
+        [DataRow(null, HttpStatusCode.BadGateway, typeof(LinkageResult.UnknownError))]
+        [DataRow(null, HttpStatusCode.Conflict, typeof(LinkageResult.Conflict))]
+        [DataRow("test", HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequest))]
+        public async Task CreateLinkageKey_ReturnsCorrectErrorCaseResponse_WhenVisionRespondsWithUnknownError(
+            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedType)
+        {
+            var result = await CreateLinkageKey(visionApiErrorCode, httpStatusCodeResponse,
+                expectedType);
+        }
+
+        private async Task<LinkageResult> CreateLinkageKey(string visionApiErrorCode,
+            HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
         {
             // Arrange
             var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
-            
+
             _visionLinkageMapper
-                .Setup(x => 
+                .Setup(x =>
                     x.Map(It.IsAny<LinkageKeyPostResponse>()))
                 .Returns(new LinkageResponse
                 {
@@ -298,6 +316,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             // Assert
             _visionClient.Verify();
             result.GetType().Should().Be(expectedResultType);
+
+            return result;
         }
 
         [TestMethod]
@@ -305,9 +325,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
         {
             // Arrange
             var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
-            
+
             _visionLinkageMapper
-                .Setup(x => 
+                .Setup(x =>
                     x.Map(It.IsAny<LinkageKeyPostResponse>()))
                 .Returns(new LinkageResponse
                 {
@@ -335,7 +355,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             // Assert
             _visionClient.Verify();
-            result.Should().BeAssignableTo<LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount>();
+            result.Should().BeAssignableTo<LinkageResult.Conflict>();
+            var errorResult = (LinkageResult.Conflict) result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
         }
 
         [TestMethod]
@@ -343,9 +365,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
         {
             // Arrange
             var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
-            
+
             _visionLinkageMapper
-                .Setup(x => 
+                .Setup(x =>
                     x.Map(It.IsAny<LinkageKeyPostResponse>()))
                 .Returns(new LinkageResponse
                 {
@@ -375,4 +397,4 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             _visionClient.Verify();
         }
     }
-}
+};

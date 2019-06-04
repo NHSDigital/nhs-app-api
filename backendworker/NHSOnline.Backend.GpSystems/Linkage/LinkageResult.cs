@@ -1,4 +1,7 @@
-﻿using NHSOnline.Backend.GpSystems.Linkage.Models;
+﻿using System.Net;
+using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
 
 namespace NHSOnline.Backend.GpSystems.Linkage
 {
@@ -6,15 +9,31 @@ namespace NHSOnline.Backend.GpSystems.Linkage
     {
         public abstract T Accept<T>(ILinkageResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : LinkageResult
+        public class ErrorCase : LinkageResult
         {
-            public LinkageResponse Response { get; }
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
 
-            public SuccessfullyRetrieved(LinkageResponse response)
+            public ErrorCase(Im1ConnectionErrorCodes.Code errorCode)
             {
-                Response = response;
+                ErrorCode = errorCode;
             }
 
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+        
+        public class SupplierSystemUnavailable : LinkageResult
+        {
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class InternalServerError : LinkageResult
+        {
             public override T Accept<T>(ILinkageResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -35,121 +54,16 @@ namespace NHSOnline.Backend.GpSystems.Linkage
                 return visitor.Visit(this);
             }
         }
-
-        public class InternalServerError : LinkageResult
+        
+        public class SuccessfullyRetrieved : LinkageResult
         {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            public LinkageResponse Response { get; }
+
+            public SuccessfullyRetrieved(LinkageResponse response)
             {
-                return visitor.Visit(this);
+                Response = response;
             }
-        }
 
-        public class SupplierSystemUnavailable : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class NotFoundErrorRetrievingNhsUser : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class PracticeNotLive : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class PatientMarkedAsArchived : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class PatientNonCompetentOrUnderMinimumAge : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class AccountStatusInvalid : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class PatientNotRegisteredAtPractice : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class NoRegisteredOnlineUserFound : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class NotFoundErrorCreatingNhsUser : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class BadRequestErrorRetrievingNhsUser : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class BadRequestErrorCreatingNhsUser : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class LinkageKeyRevoked : LinkageResult
-        {
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class ForbiddenErrorRetrievingNhsUser : LinkageResult
-        {
             public override T Accept<T>(ILinkageResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -163,6 +77,81 @@ namespace NHSOnline.Backend.GpSystems.Linkage
             public SuccessfullyRetrievedAlreadyExists(LinkageResponse response)
             {
                 Response = response;
+            }
+
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class NotFound : LinkageResult
+        {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public NotFound(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class Forbidden : LinkageResult
+        {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public Forbidden(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class Conflict : LinkageResult
+        {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public Conflict(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class BadRequest : LinkageResult
+        {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public BadRequest(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class UnknownError : LinkageResult
+        {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public UnknownError(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
             }
 
             public override T Accept<T>(ILinkageResultVisitor<T> visitor)

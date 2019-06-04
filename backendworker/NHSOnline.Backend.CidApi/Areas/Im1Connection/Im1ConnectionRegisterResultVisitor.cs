@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.CidApi.Areas.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 {
@@ -16,7 +18,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 
         public IActionResult Visit(Im1ConnectionRegisterResult.Success result)
         {
-            return new CreatedResult(Request.GetDisplayUrl(), result.Response);
+            
+            return new CreatedResult(Request.GetDisplayUrl(), CreateResponse(result.Response));
         }
         
         public IActionResult Visit(Im1ConnectionRegisterResult.BadRequest result)
@@ -29,14 +32,32 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return new NotFoundResult();
         }
 
-        public IActionResult Visit(Im1ConnectionRegisterResult.AccountAlreadyExists result)
-        {
-            return new StatusCodeResult(StatusCodes.Status409Conflict);
-        }
-
         public IActionResult Visit(Im1ConnectionRegisterResult.BadGateway result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+
+        public IActionResult Visit(Im1ConnectionRegisterResult.Conflict result)
+        {
+            return new StatusCodeResult(StatusCodes.Status409Conflict);
+        }
+
+        public IActionResult Visit(Im1ConnectionRegisterResult.UnknownError result)
+        {
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+        }
+        
+        public IActionResult Visit(Im1ConnectionRegisterResult.ErrorCase result)
+        {
+            var statusCodeResult = Im1ConnectionV1ErrorCodeMapper.Map(result.ErrorCode);
+            return new StatusCodeResult(statusCodeResult);
+        }
+
+        private PatientIm1RegisterResponse CreateResponse(PatientIm1ConnectionResponse response)
+            => new PatientIm1RegisterResponse
+            {
+                ConnectionToken = response.ConnectionToken,
+                NhsNumbers = response.NhsNumbers
+            };
     }
 }

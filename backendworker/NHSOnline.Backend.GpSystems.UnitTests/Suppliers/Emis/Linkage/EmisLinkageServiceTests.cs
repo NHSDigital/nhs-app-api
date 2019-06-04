@@ -7,6 +7,8 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.CidApi.Areas.Linkage;
+using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
@@ -135,16 +137,56 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             successResult.Response.OdsCode.Should().Be(odsCode);
         }
 
+
         [TestMethod]
-        [DataRow(EmisApiErrorCode.PatientNotRegisteredAtPractice, HttpStatusCode.NotFound, typeof(LinkageResult.PatientNotRegisteredAtPractice))]
-        [DataRow(EmisApiErrorCode.NoRegisteredOnlineUserFound, HttpStatusCode.NotFound, typeof(LinkageResult.NoRegisteredOnlineUserFound))]
-        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFoundErrorRetrievingNhsUser))]
-        [DataRow(EmisApiErrorCode.PracticeNotLive, HttpStatusCode.BadRequest, typeof(LinkageResult.PracticeNotLive))]
-        [DataRow(EmisApiErrorCode.PatientMarkedAsArchived, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientMarkedAsArchived))]
-        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge))]
-        [DataRow(EmisApiErrorCode.AccountStatusInvalid, HttpStatusCode.BadRequest, typeof(LinkageResult.AccountStatusInvalid))]
-        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequestErrorRetrievingNhsUser))]
-        public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(EmisApiErrorCode? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
+        [DataRow(-1551, HttpStatusCode.NotFound,
+            Im1ConnectionErrorCodes.Code.PatientNotRegisteredAtThisPractice)]
+        [DataRow(-1104, HttpStatusCode.NotFound,
+            Im1ConnectionErrorCodes.Code.NoSelfAssociatedUserExistWithThisPatient)]
+        [DataRow(1401, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.PracticeNotLive)]
+        [DataRow(1552, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.PatientArchived)]
+        [DataRow(1553, HttpStatusCode.BadRequest,
+            Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent)]
+        [DataRow(1107, HttpStatusCode.BadRequest,
+            Im1ConnectionErrorCodes.Code.UserSelfAssociatedAccountIsArchived)]
+        public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(int? emisApiErrorCode,
+            HttpStatusCode httpStatusCodeResponse, Im1ConnectionErrorCodes.Code code)
+        {
+            // Act
+            var result = await GetLinkageKey(emisApiErrorCode, httpStatusCodeResponse);
+
+            // Assert
+            result.GetType().Should().Be(typeof(LinkageResult.ErrorCase));
+            var errorResult = (LinkageResult.ErrorCase) result;
+            errorResult.ErrorCode.Should().Be(code);
+        }
+
+
+        [TestMethod]
+        public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithBadRequestErrorCode()
+        {
+            // Act
+            var result = await GetLinkageKey(null, HttpStatusCode.BadRequest);
+
+            // Assert
+            result.GetType().Should().Be(typeof(LinkageResult.BadRequest));
+            var errorResult = (LinkageResult.BadRequest)result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+        }
+
+        [TestMethod]
+        public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithNotFoundErrorCode()
+        {
+            // Act
+            var result = await GetLinkageKey(null, HttpStatusCode.NotFound);
+
+            // Assert
+            result.GetType().Should().Be(typeof(LinkageResult.NotFound));
+            var errorResult = (LinkageResult.NotFound)result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+        }
+
+        private async Task<LinkageResult> GetLinkageKey(int? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse)
         {
             // Arrange
             var nhsNumber = _fixture.Create<string>();
@@ -158,30 +200,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             {
                 EndUserSessionId = endUserSessionId,
             };
-            
+
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
-            
+
             var mockResponse = new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCodeResponse);
 
-            // Add emis specific error code if unit test requires it.
-            if (emisApiErrorCode.HasValue)
+            mockResponse.StandardErrorResponse = new StandardErrorResponse
             {
-                mockResponse.StandardErrorResponse = new StandardErrorResponse
-                {
-                    InternalResponseCode = (int)emisApiErrorCode,
-                };
-            }
+                InternalResponseCode = emisApiErrorCode ?? 0,
+            };
+
 
             _emisClient.Setup(x => x.VerificationPost(
-                It.Is<EmisHeaderParameters>(
-                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
-                It.Is<AddVerificationRequest>(
-                    req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                    req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
-                    req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
-                    .ReturnsAsync(mockResponse);
-            
-            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode,identityToken);
+                    It.Is<EmisHeaderParameters>(
+                        header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+                    It.Is<AddVerificationRequest>(
+                        req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                               req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                               req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
+                .ReturnsAsync(mockResponse);
+
+            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode, identityToken);
 
             // Act
             var result = await _systemUnderTest.GetLinkageKey(request);
@@ -192,10 +231,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                     header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
                 It.Is<AddVerificationRequest>(
                     req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                    req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
-                    req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
+                           req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                           req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
 
-            result.GetType().Should().Be(expectedResultType);
+            return result;
         }
 
         [TestMethod]
@@ -300,15 +339,52 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             _mockIm1CacheService.Verify();
         }
 
+
+
+       [TestMethod]
+       [DataRow(1551, HttpStatusCode.NotFound, Im1ConnectionErrorCodes.Code.PatientNotRegisteredAtThisPractice)]
+       [DataRow(1553, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent)]
+       public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(int emisApiErrorCode,
+           HttpStatusCode httpStatusCodeResponse,
+           Im1ConnectionErrorCodes.Code expectedCode)
+       {
+           // Act
+           var result = await CreateLinkageKey(emisApiErrorCode, httpStatusCodeResponse);
+
+           // Assert
+            _emisClient.Verify();
+           result.GetType().Should().Be(typeof(LinkageResult.ErrorCase));
+           var errorCase = (LinkageResult.ErrorCase) result;
+           errorCase.ErrorCode.Should().Be(expectedCode);
+        }
+
         [TestMethod]
-        [DataRow(EmisApiErrorCode.PatientNotRegisteredAtPractice, HttpStatusCode.NotFound, typeof(LinkageResult.PatientNotRegisteredAtPractice))]
-        [DataRow(EmisApiErrorCode.NoRegisteredOnlineUserFound, HttpStatusCode.NotFound, typeof(LinkageResult.NoRegisteredOnlineUserFound))]
-        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFoundErrorCreatingNhsUser))]
-        [DataRow(EmisApiErrorCode.PracticeNotLive, HttpStatusCode.BadRequest, typeof(LinkageResult.PracticeNotLive))]
-        [DataRow(EmisApiErrorCode.PatientMarkedAsArchived, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientMarkedAsArchived))]
-        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge))]
-        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequestErrorCreatingNhsUser))]
-        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(EmisApiErrorCode? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
+        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithNotFoundError()
+        {
+            // Act
+            var result = await CreateLinkageKey(0, HttpStatusCode.NotFound);
+
+            // Assert
+            _emisClient.Verify();
+            result.GetType().Should().Be(typeof(LinkageResult.NotFound));
+            var errorCase = (LinkageResult.NotFound)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+        }
+
+        [TestMethod]
+        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithBadRequestError()
+        {
+            // Act
+            var result = await CreateLinkageKey(0, HttpStatusCode.BadRequest);
+
+            // Assert
+            _emisClient.Verify();
+            result.GetType().Should().Be(typeof(LinkageResult.BadRequest));
+            var errorCase = (LinkageResult.BadRequest)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+        }
+
+        public async Task<LinkageResult> CreateLinkageKey(int emisApiErrorCode,HttpStatusCode httpStatusCodeResponse)
         {
             // Arrange
             var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
@@ -324,13 +400,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var mockResponse = new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(httpStatusCodeResponse);
 
             // Add emis specific error code if unit test requires it.
-            if (emisApiErrorCode.HasValue)
+            mockResponse.StandardErrorResponse = new StandardErrorResponse
             {
-                mockResponse.StandardErrorResponse = new StandardErrorResponse
-                {
-                    InternalResponseCode = (int)emisApiErrorCode,
-                };
-            }
+                InternalResponseCode = (int)emisApiErrorCode,
+            };
+
 
             _emisClient.Setup(x => x.NhsUserPost(
                 It.Is<EmisHeaderParameters>(
@@ -340,45 +414,42 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                     && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
                     .ReturnsAsync(mockResponse)
                     .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
-
-            // Assert
-            _emisClient.Verify();
-            result.GetType().Should().Be(expectedResultType);
+            
+            return await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
         }
 
         [TestMethod]
-        public async Task CreateLinkageKey_ReturnsLinkageKeyAlreadyExists_WhenEmisRespondsWith409()
-        {
-            // Arrange
-            var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
-
-            var endUserSessionId = _fixture.Create<string>();
-            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
-            {
-                EndUserSessionId = endUserSessionId,
-            };
-
-            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
-
-            _emisClient.Setup(x => x.NhsUserPost(
-                It.Is<EmisHeaderParameters>(
-                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
-                It.Is<AddNhsUserRequest>(
-                    request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
-                    && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
-                .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.Conflict))
-                    .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
-
-            // Assert
-            _emisClient.Verify();
-            result.Should().BeAssignableTo<LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount>();
+       public async Task CreateLinkageKey_ReturnsLinkageKeyAlreadyExists_WhenEmisRespondsWith409()
+       {
+           // Arrange
+           var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
+   
+           var endUserSessionId = _fixture.Create<string>();
+           var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+           {
+               EndUserSessionId = endUserSessionId,
+           };
+   
+           _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+   
+           _emisClient.Setup(x => x.NhsUserPost(
+               It.Is<EmisHeaderParameters>(
+                   header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+               It.Is<AddNhsUserRequest>(
+                   request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
+                   && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
+               .ReturnsAsync(
+                   new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.Conflict))
+                   .Verifiable();
+   
+           // Act
+           var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
+   
+           // Assert
+           _emisClient.Verify();
+           result.Should().BeAssignableTo<LinkageResult.Conflict>();
+           var errorCode = (LinkageResult.Conflict) result;
+           errorCode.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
         }
 
         [TestMethod]

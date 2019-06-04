@@ -1,17 +1,19 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NHSOnline.Backend.GpSystems.Linkage.Models;
+using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Temporal;
-using static NHSOnline.Backend.GpSystems.Suppliers.Tpp.TppClient;
-using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 {
@@ -24,6 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         private readonly ILogger<TppLinkageService> _logger;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ConfigurationSettings _settings;
+        private readonly TppLinkagePostErrorMapper _postErrorMapper;
 
         public TppLinkageService(ITppClient client,
             ITppLinkageMapper linkageMapper,
@@ -31,7 +34,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             IIm1CacheService im1CacheService,
             ILogger<TppLinkageService> logger,
             IMinimumAgeValidator minimumAgeValidator,
-            ConfigurationSettings settings)
+            ConfigurationSettings settings,
+            TppLinkagePostErrorMapper postErrorMapper)
         {
             _tppClient = client;
             _linkageMapper = linkageMapper;
@@ -40,11 +44,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             _logger = logger;
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
+            _postErrorMapper = postErrorMapper;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
         {
-            return await Task.FromResult(new LinkageResult.NotFoundErrorRetrievingNhsUser());
+            return await Task.FromResult(new LinkageResult.NotFound(Im1ConnectionErrorCodes.Code.UnknownError));
         }
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
@@ -54,27 +59,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                 _logger.LogEnter();
                 var request = CreateRequest(createLinkageRequest);
 
-                TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse = await _tppClient.NhsUserPost(request);
-                
-                if (!createNhsUserResponse.HasSuccessResponse)
+                var createNhsUserResponse = await _tppClient.NhsUserPost(request);
+
+                if (createNhsUserResponse.HasSuccessResponse)
                 {
-                    var errors = new TppLinkageErrors(_minimumAgeValidator, _logger, _settings);
-                    return errors.GetErrorCreatingNhsUser(createNhsUserResponse, request);
+                    _logger.LogInformation("Linkage Key Successfully created");
+                    return await HandleCreateSuccess(request, createNhsUserResponse);
                 }
 
-                try
-                {
-                    var linkage = _linkageMapper.Map(request, createNhsUserResponse.Body);
-                    var connectionToken = CreateConnectionToken(createNhsUserResponse);
-                    await StoreAccessGuidInCache(linkage, connectionToken);
-                    return new LinkageResult.SuccessfullyCreated(linkage);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(
-                        $"Something went wrong during building the response. Exception message: {e.Message}");
-                    return new LinkageResult.InternalServerError();
-                }
+                return HandleCreateError(createNhsUserResponse, request);
+
             }
             catch (Exception e) when (e is HttpRequestException || e is UnauthorisedGpSystemHttpRequestException)
             {
@@ -85,6 +79,36 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             {
                 _logger.LogExit();
             }
+        }
+
+        private LinkageResult HandleCreateError(
+            TppClient.TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse, AddNhsUserRequest request)
+        {
+            if (createNhsUserResponse.HasErrorWithCode("8") &&
+                !_minimumAgeValidator.IsValid(request.DateofBirth, _settings.MinimumLinkageAge))
+            {
+                return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+            }
+            return _postErrorMapper.Map(createNhsUserResponse, _logger);
+        }
+
+        private async Task<LinkageResult> HandleCreateSuccess(AddNhsUserRequest request,
+            TppClient.TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
+        {
+            try
+            {
+                var linkage = _linkageMapper.Map(request, createNhsUserResponse.Body);
+                var connectionToken = CreateConnectionToken(createNhsUserResponse);
+                await StoreAccessGuidInCache(linkage, connectionToken);
+                return new LinkageResult.SuccessfullyCreated(linkage);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(
+                    $"Something went wrong during building the response. Exception message: {e.Message}");
+                return new LinkageResult.InternalServerError();
+            }
+
         }
 
         private static AddNhsUserRequest CreateRequest(CreateLinkageRequest createLinkageRequest)
@@ -99,7 +123,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             return request;
         }
 
-        private static TppConnectionToken CreateConnectionToken(TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
+        private static TppConnectionToken CreateConnectionToken(TppClient.TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
         {
             return new TppConnectionToken
             {

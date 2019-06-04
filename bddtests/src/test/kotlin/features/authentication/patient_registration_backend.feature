@@ -96,7 +96,7 @@ Feature: Registration
   Scenario: Registering a patient which has been locked by VISION creates a Bad Gateway response
     Given I have data for a Vision patient with a locked account as the account is opened in the Vision application
     When I register the user's IM1 credentials
-    Then I get a "bad gateway" error
+    Then I get a "forbidden" error
 
   Scenario: ODS Code not in the expected format
     Given I have a user's IM1 credentials with an ODS Code not in the expected format

@@ -49,7 +49,6 @@ class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST"
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(JSonXmlConverter.toXML(disabledTppError))
         }
-
     }
 }
 

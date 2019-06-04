@@ -1,7 +1,5 @@
 package mocking.emis.linkage
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisMappingBuilder
@@ -12,8 +10,8 @@ import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
-    : EmisMappingBuilder(null, method = "POST", relativePath = "/users/nhs") {
+class EmisLinkagePOSTBuilder (addNhsUserRequest: AddNhsUserRequest) :
+        EmisMappingBuilder(null, method = "POST", relativePath = "/users/nhs") {
 
     init {
         requestBuilder.andJsonBody(addNhsUserRequest,"equalToJson", GsonFactory.asPascal)
@@ -31,11 +29,16 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     }
 
     private fun respondWithStandardErrorResponse(errorResponse: ErrorResponse, httpStatus: Int): Mapping {
-        return respondWithBody(errorResponse, httpStatus)
+        return respondWithBodyAndStatus(errorResponse, httpStatus)
     }
 
     fun respondWithNoRegisteredOnlineUserFound(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
+        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_NOT_FOUND)
+    }
+
+    fun respondWithNotRegisteredAtPractice(): Mapping {
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NOT_REGISTERED_AT_PRACTICE.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
@@ -62,15 +65,6 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     fun respondWithBadGatewayException(): Mapping {
         val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Bad Gateway")
-        return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
+        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
-
-    private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {
-        return respondWith(statusCode) {
-            andJsonBody(body, GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create())
-        }
-    }
-
 }

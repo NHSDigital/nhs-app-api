@@ -50,7 +50,8 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
                     get
                             .respondWithNoRegisteredOnlineUserFound()
                 },
-                LinkageResult.PatientNotRegisteredAtPractice to null,
+                LinkageResult.PatientNotRegisteredAtPractice to
+                        {get -> get.respondWithNotRegisteredAtPractice()},
                 LinkageResult.PracticeNotLive to { get ->
                     get
                             .respondWithPracticeNotLive()

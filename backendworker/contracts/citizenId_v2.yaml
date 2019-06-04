@@ -1,0 +1,209 @@
+openapi: 3.0.0
+
+info:
+  version: 2.0.0
+  title: NHS App Middleware for NHS Login.
+  description: NHS App Middleware endpoints to allow NHS Login to retrieve and validate linkage details and IM1 Connection Tokens.
+
+paths:
+  /v2/patient/im1connection:
+    post:
+      tags:
+        - im1-connection
+      summary: Given either linkage details or an NHS Number, creates an IM1 Connection Token
+      description: |
+        Retrieve a set of linkage keys from the GP System. If none exist then they will be created.
+
+        This will also cause the user to be linked with the NHS App, creating an IM1 Connection Token. This is only available on the first invocation.
+
+        Once a user has been created their IM1 Connection Token cannot be subsequently retrieved.
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, NHS Login should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+        - in: header
+          name: NHSO-NHS-Login-Client
+          required: false
+          description: An optional identifier for the client of NHS Login that resulted in this request to NHS App.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/CreateIm1ConnectionWithLinkageDetailsRequest'
+                - $ref: '#/components/schemas/CreateIm1ConnectionWithNhsNumberRequest'
+        required: true
+      responses:
+        "201":
+          description: IM1 Connection Token successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateIm1ConnectionResponse'
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |            
+            Bad Request - Possible errorCodes and errorMessages:
+            * 100 - Unknown Error 
+            * 101 - Invalid linkage details 
+            * 103 - Unable to find organisation for NationalPracticeCode 
+            * 105 - Practice not live 
+            * 106 - Invalid Nhs Number 
+            * 107 - Invalid linkage details 
+            * 108 - Patient Facing Services API v2 is not enabled at this practice 
+            * 109 - Patient Facing Services are not enabled by this practice 
+            * 115 - Patient status not valid for online user account process 
+            * 116 - Multiple Records Found With Nhs Number 
+            * 120 - User account already exists with patient demographic details
+            * 124 - Connection to service failed 
+            * 125 - Length of account id is outside valid range 
+            * 126 - Length of linkage key is outside valid range 
+            * 127 - Unidentified value outside valid range 
+            * 123 - User self-associated account is not linked with patient 
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Forbidden - Possible errorCodes and errorMessages:
+            * 104 - User account is inactive or archived, legacy linking not allowed 
+            * 112 - Patient marked as archived
+            * 113 - User account disabled 
+            * 114 - Under minimum age or non competant 
+            * 117 - User self associated account is archived
+            * 118 - Invalid Provider Id 
+            * 121 - User account already exists with patient demographic details and has been archived 
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Not Found - Possible errorCodes and errorMessages:
+            * 102 - No match found for given demographics 
+            * 110 - No user found for linkage details 
+            * 119 - There was a problem linking your account
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Conflict - Possible errorCodes and errorMessages:
+            * 111 - User is already linked   
+            * 122 - Linkage key already exists 
+        "500":
+          description: An unexpected error occurred processing the request.
+        "501":
+          description: No GP System found for supplied ODS Code. This could mean either they don't exist, or they're not yet onboarded.
+        "502":
+          description: Bad response received from GP System. An example would be that a session could not be established
+        "504":
+          description: Timeout when calling GP System
+
+components:
+  schemas:
+    CreateIm1ConnectionRequest:
+      type: object
+      required:
+        - odsCode
+        - surname
+        - dateOfBirth
+      properties:
+        odsCode:
+          type: string
+          description: ODS code for the Patient's GP.
+        surname:
+          type: string
+          description: Patient's Surname.
+        dateOfBirth:
+          type: string
+          format: date
+          description: Patient's Date of Birth.
+
+    CreateIm1ConnectionWithLinkageDetailsRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreateIm1ConnectionRequest'
+        - type: object
+          required:
+            - accountId
+            - linkageKey
+          properties:
+            accountId:
+              type: string
+              description: Patient's GP IM1 Account ID.
+            linkageKey:
+              type: string
+              description: Patient's GP IM1 Linkage Key.
+
+    CreateIm1ConnectionWithNhsNumberRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreateIm1ConnectionRequest'
+        - type: object
+          required:
+            - nhsNumber
+            - emailAddress
+            - identityToken
+          properties:
+            nhsNumber:
+              type: string
+              description: Patient's NHS Number.
+            identityToken:
+              type: string
+              description: Token to uniquely identify the patient at their current practice within the Citizen ID platform.
+            emailAddress:
+              type: string
+              description: Patient's email address, this will be used if a new online user is to be created in the GP System.
+
+    Im1ConnectionResponse:
+      type: object
+      properties:
+        connectionToken:
+          type: string
+          description: IM1 Connection Token.
+        nhsNumbers:
+          type: array
+          description: The NHS Numbers associated with the patient in the GP System.
+          items:
+            type: object
+            properties:
+              nhsNumber:
+                type: string
+                description: An NHS Number associated with the patient in the GP System.
+        odsCode:
+          type: string
+          description: ODS code for the Patient's GP.
+
+    CreateIm1ConnectionResponse:
+      allOf:
+        - $ref: '#/components/schemas/Im1ConnectionResponse'
+        - type: object
+          required:
+            - accountId
+          properties:
+            accountId:
+              type: string
+              description: Patient's GP IM1 Account ID.
+            linkageKey:
+              type: string
+              description: Patient's GP IM1 Linkage Key.
+
+    apiErrorResponse:
+      type: object
+      description: error response from backend api.
+      properties:
+        errorCode:
+          type: integer
+          description: error code.
+        errorMessage:
+          type: string
+          description: error message.

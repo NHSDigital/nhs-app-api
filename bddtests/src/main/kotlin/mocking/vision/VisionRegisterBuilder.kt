@@ -7,6 +7,7 @@ import mocking.vision.VisionErrorResponses.getInvalidDetailsProvidedError
 import mocking.vision.VisionErrorResponses.getInvalidParameterProvidedError
 import mocking.vision.VisionErrorResponses.getPatientAlreadyRegisteredError
 import mocking.vision.VisionErrorResponses.getPatientLockedError
+import mocking.vision.VisionErrorResponses.getMockedError
 import mocking.vision.models.Register
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
@@ -42,10 +43,10 @@ class VisionRegisterBuilder(var userSession: VisionUserSession,
         return resp
     }
 
-    fun respondWithError(typeOfError : String): Mapping {
+    fun respondWithError(typeOfError: String): Mapping {
 
         return respondWith(HttpStatus.SC_OK) {
-            when(typeOfError) {
+            when (typeOfError) {
 
                 "Invalid Details" -> andXmlBody(getInvalidDetailsProvidedError(serviceDefinition)).build()
                 "Invalid Parameter" -> andXmlBody(getInvalidParameterProvidedError(serviceDefinition)).build()
@@ -55,4 +56,12 @@ class VisionRegisterBuilder(var userSession: VisionUserSession,
             }
         }
     }
+
+    fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
+        return respondWith(httpStatusCode) {
+            andXmlBody(
+                    getMockedError(serviceDefinition, errorCode, message ?: "Mocked Error")).build()
+        }
+    }
 }
+

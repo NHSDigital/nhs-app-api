@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 	ProjectSection(SolutionItems) = preProject
 		contracts\bundleContracts.sh = contracts\bundleContracts.sh
 		contracts\citizenid.yaml = contracts\citizenid.yaml
+		contracts\citizenId_v2.yaml = contracts\citizenId_v2.yaml
 		contracts\gpSupplierSpecific\emis-linkage.yaml = contracts\gpSupplierSpecific\emis-linkage.yaml
 		contracts\nhsonline.appointments.yaml = contracts\nhsonline.appointments.yaml
 		contracts\nhsonline.brothermailer.yaml = contracts\nhsonline.brothermailer.yaml

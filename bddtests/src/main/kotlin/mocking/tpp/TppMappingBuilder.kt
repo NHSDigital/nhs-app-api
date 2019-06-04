@@ -3,6 +3,7 @@ package mocking.tpp
 import constants.ErrorResponseCodeTpp
 import mocking.JSonXmlConverter
 import mocking.MappingBuilder
+import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import mocking.tpp.appointments.TppConfig
 import mocking.tpp.models.Error
@@ -10,7 +11,7 @@ import org.apache.http.HttpStatus
 import java.util.*
 
 open class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") :
-        MappingBuilder(method, relativePath) {
+        IErrorMappingBuilder, MappingBuilder(method, relativePath) {
 
     companion object {
         const val apiVersion = "1"
@@ -70,6 +71,13 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
                     .andHeader("type", "")
                     .andDelay(delayMillisecs)
                     .build()
+        }
+    }
+
+    override fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
+        val disabledTppError = Error(errorCode = errorCode, userFriendlyMessage = message?:"")
+        return respondWith(httpStatusCode) {
+            andXmlBody(JSonXmlConverter.toXML(disabledTppError))
         }
     }
 }

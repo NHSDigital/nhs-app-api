@@ -3,6 +3,7 @@ package mocking.vision.linkage
 import constants.ErrorResponseCodeVision
 import mocking.GsonFactory
 import mocking.MappingBuilder
+import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import mocking.vision.models.error.VisionError
 import mocking.vision.models.error.VisionRestApiErrorResponse
@@ -10,8 +11,8 @@ import mocking.vision.models.linkage.LinkageKeyGetResponse
 import mocking.vision.models.linkage.LinkageKeyPostRequest
 import org.apache.http.HttpStatus
 
-class VisionLinkagePOSTBuilder(orgId: String, linkageKeyPostRequest: LinkageKeyPostRequest)
-    : MappingBuilder(method = "POST", url = "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
+class VisionLinkagePOSTBuilder(orgId: String, linkageKeyPostRequest: LinkageKeyPostRequest): IErrorMappingBuilder,
+        MappingBuilder(method = "POST", url = "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
 
     init {
         requestBuilder.andJsonBody(linkageKeyPostRequest,"equalToJson", GsonFactory.asIs)
@@ -58,5 +59,17 @@ class VisionLinkagePOSTBuilder(orgId: String, linkageKeyPostRequest: LinkageKeyP
 
     fun respondWithErrorInternalServerError(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR){}
+    }
+
+    override fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
+        return respondWith(httpStatusCode) {
+            val error = VisionRestApiErrorResponse(
+                    VisionError(
+                            code = errorCode,
+                            text = message?:""
+                    )
+            )
+            andJsonBody(error, GsonFactory.asPascal)
+        }
     }
 }

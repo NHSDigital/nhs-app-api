@@ -10,9 +10,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
+using NHSOnline.Backend.CidApi.Areas.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
+using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 
@@ -22,16 +25,19 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
     public class Im1ConnectionControllerTests
     {
         private const string DefaultOdsCode = "A12345";
-        private const Supplier DefaultSupplier = Supplier.Emis;
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
 
-        private Im1ConnectionController _im1ConnectionController;
+        private Im1ConnectionController _systemUnderTest;
         private Mock<ILogger<Im1ConnectionController>> _logger;
         private Mock<IAuditor> _auditor;
         private Mock<ITokenValidationService> _tokenValidationService;
+        private Mock<IRetrieveLinkageKeysService> _retrieveLinkageKeysService;
         private Mock<IOdsCodeMassager> _odsCodeMassager;
         private IFixture _fixture;
+        private Mock<IGpSystemFactory> _gpSystemFactory;
+        private Mock<Im1ConnectionErrorCodes> _im1ErrorCodes;
+        private Mock<Im1ConnectionErrorCodes> _errorCodes;
 
         [TestInitialize]
         public void TestInitialize()
@@ -40,76 +46,78 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             _logger = new Mock<ILogger<Im1ConnectionController>>();
             _auditor = new Mock<IAuditor>();
+            _gpSystemFactory = new Mock<IGpSystemFactory>();
 
             _tokenValidationService = new Mock<ITokenValidationService>();
             _tokenValidationService.Setup(x => x.IsValidConnectionTokenFormat(It.IsAny<string>())).Returns(true);
+            
+            _retrieveLinkageKeysService = new Mock<IRetrieveLinkageKeysService>();
 
             _odsCodeMassager = new Mock<IOdsCodeMassager>();
+            
 
-            _im1ConnectionController = CreateIm1ConnectionController();
+            _im1ErrorCodes = new Mock<Im1ConnectionErrorCodes>();
+
+            _errorCodes = new Mock<Im1ConnectionErrorCodes>();
+
+            _systemUnderTest = CreateIm1ConnectionController();
         }
 
         [TestMethod]
         public void Constructor_NullOdsCodeLookup_Throws()
         {
-            var gpSystemFactory = MockGpSystemFactory();
-
-            Action act = () => new Im1ConnectionController(null, gpSystemFactory.Object, _logger.Object, _auditor.Object, _odsCodeMassager.Object);
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("odsCodeLookup");
-        }
-
-        [TestMethod]
-        public void Constructor_NullGpSystemFactoryFactory_Throws()
-        {
-            var odsCodeLookup = MockOdsCodeLookup();
-
-            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null, _logger.Object, _auditor.Object, _odsCodeMassager.Object);
+            Action act = () => new Im1ConnectionController(null, 
+                _logger.Object,
+                _auditor.Object,
+                _odsCodeMassager.Object, 
+                _retrieveLinkageKeysService.Object,
+                _im1ErrorCodes.Object, 
+                _errorCodes.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("gpSystemFactory");
         }
 
         [TestMethod]
-        public async Task Get_ReturnsABadRequestResult_WhenTheConnectionTokenIsNull()
+        public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheConnectionTokenIsNull()
         {
-            var result = await _im1ConnectionController.Get(null, DefaultOdsCode);
+            var result = await _systemUnderTest.Get(null, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsABadRequestResult_WhenTheConnectionTokenIsEmpty()
+        public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheConnectionTokenIsEmpty()
         {
-            var result = await _im1ConnectionController.Get(string.Empty, DefaultOdsCode);
+            var result = await _systemUnderTest.Get(string.Empty, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsNull()
+        public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheOdsCodeIsNull()
         {
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, null);
+            var result = await _systemUnderTest.Get(DefaultConnectionToken, null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsEmpty()
+        public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheOdsCodeIsEmpty()
         {
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, string.Empty);
+            var result = await _systemUnderTest.Get(DefaultConnectionToken, string.Empty);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
+        public async Task GetIm1ConnectionV1_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
+            // Arrange
             const string odsCode = DefaultOdsCode;
-            const Supplier supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
 
             _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
@@ -128,15 +136,21 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.Success(expectedResponse));
+            
             var gpSystemMock = MockGpSystem(im1ConnectionService);
-            var gpSystemFactoryMock = MockGpSystemFactory(supplier, gpSystemMock);
-            im1ConnectionService.Setup(x => x.Verify(DefaultConnectionToken, odsCode))
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(odsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+            
+            im1ConnectionService
+                .Setup(x => x.Verify(DefaultConnectionToken, odsCode))
                 .ReturnsAsync(new Im1ConnectionVerifyResult.Success(expectedResponse));
-            _im1ConnectionController =
-                CreateIm1ConnectionController(gpSystemFactoryMock: gpSystemFactoryMock);
+            _systemUnderTest = CreateIm1ConnectionController();
 
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, odsCode);
+            // Act
+            var result = await _systemUnderTest.Get(DefaultConnectionToken, odsCode);
 
+            // Assert
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -146,18 +160,17 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         }
 
         [TestMethod]
-        public async Task Get_UnknownOdsCode_Returns501NotImplemented()
+        public async Task GetIm1ConnectionV1_UnknownOdsCode_Returns501NotImplemented()
         {
             // Arrange
-            var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
-                .Returns(Task.FromResult(Option.None<Supplier>()));
-            _odsCodeMassager.Setup(x => x.CheckOdsCode(DefaultOdsCode)).Returns(DefaultOdsCode);
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(DefaultOdsCode))
+                .Returns(DefaultOdsCode);
 
-            _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
+            _systemUnderTest = CreateIm1ConnectionController();
 
             // Act
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, DefaultOdsCode);
+            var result = await _systemUnderTest.Get(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
             var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
@@ -165,23 +178,21 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _auditor.VerifyNoOtherCalls();
         }
 
-
         [TestMethod]
         public async Task Post_UnknownOdsCode_Returns501NotImplemented()
         {
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
             request.OdsCode = DefaultOdsCode;
+          
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(DefaultOdsCode))
+                .Returns(DefaultOdsCode);
 
-            var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplier(request.OdsCode))
-                .Returns(Task.FromResult(Option.None<Supplier>()));
-            _odsCodeMassager.Setup(x => x.CheckOdsCode(DefaultOdsCode)).Returns(DefaultOdsCode);
-
-            _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
+            _systemUnderTest = CreateIm1ConnectionController();
 
             // Act
-            var result = await _im1ConnectionController.Post(request);
+            var result = await _systemUnderTest.Post(request);
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
@@ -194,7 +205,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         {
             // Arrange
             const string odsCode = DefaultOdsCode;
-            const Supplier supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
 
             var model = _fixture.Create<PatientIm1ConnectionRequest>();
@@ -206,7 +216,16 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new PatientNhsNumber { NhsNumber = "456DEF" }
             };
 
-            var expectedResponse = new PatientIm1ConnectionResponse
+            var registerResponse = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = expectedNhsNumbers,
+                OdsCode = DefaultOdsCode,
+                AccountId = model.AccountId,
+                LinkageKey = model.LinkageKey
+            };
+
+            var expectedResponse = new PatientIm1RegisterResponse
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = expectedNhsNumbers
@@ -215,31 +234,252 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.Success(expectedResponse));
+                new Im1ConnectionVerifyResult.Success(registerResponse));
+            
             var gpSystemMock = MockGpSystem(im1ConnectionService);
-            var gpSystemFactoryMock = MockGpSystemFactory(supplier, gpSystemMock);
-            im1ConnectionService.Setup(x => x.Register(model))
-                .ReturnsAsync(new Im1ConnectionRegisterResult.Success(expectedResponse));
-            _im1ConnectionController = CreateIm1ConnectionController(gpSystemFactoryMock: gpSystemFactoryMock);
+            
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(odsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+            
+            im1ConnectionService
+                .Setup(x => x.Register(model))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.Success(registerResponse));
+            
+            _systemUnderTest = CreateIm1ConnectionController();
 
             // Act
-            var result = await _im1ConnectionController.Post(model);
+            var result = await _systemUnderTest.Post(model);
 
             // Assert
             var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1RegisterResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
 
             _auditor.Verify(x => x.AuditWithExplicitNhsNumber(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
                 Constants.AuditingTitles.Im1ConnectionRegisterResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
-        private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null,
-            Mock<IGpSystemFactory> gpSystemFactoryMock = null)
+        [TestMethod]
+        public async Task PostV2_CreateLinkageRequestInvalid_ReturnsBadRequest()
         {
-            odsCodeLookupMock = odsCodeLookupMock ?? MockOdsCodeLookup();
-            gpSystemFactoryMock = gpSystemFactoryMock ?? MockGpSystemFactory();
+            var model = ValidIm1RegistrationRequest();
+            model.OdsCode = null;
 
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            //Assert
+            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        public async Task PostV2_NoGpSystem_Returns501()
+        {
+            var model = ValidIm1RegistrationRequest();
+            
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(model.OdsCode))
+                .Returns(model.OdsCode);
+            
+            _gpSystemFactory.Setup(x => x.LookupGpSystem(DefaultOdsCode)).ReturnsAsync(Option.None<IGpSystem>());
+
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            //Assert
+            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+        }
+
+        [TestMethod]
+        public async Task PostV2_NoLinkageNeeded_ReturnsSuccess()
+        {
+            var model = ValidIm1RegistrationRequest();
+            
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(model.OdsCode))
+                .Returns(model.OdsCode);
+            
+            var expectedResponse = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = new []{new PatientNhsNumber { NhsNumber = "1112223333" }}
+            };
+            var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
+            mockIm1ConnectionService
+                .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.Success(expectedResponse));
+            
+            var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            //Assert
+            var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
+            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [TestMethod]
+        public async Task PostV2_NoLinkageNeeded_WhereRegisterReturnsError_ReturnsError()
+        {
+            var model = ValidIm1RegistrationRequest();
+            
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(model.OdsCode))
+                .Returns(model.OdsCode);
+            
+            var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
+            mockIm1ConnectionService
+                .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError));
+            
+            var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            //Assert
+            var resultValue = result.Should().BeAssignableTo<ObjectResult>().Subject.Value;
+            var errorResult = resultValue.Should().BeAssignableTo<ApiErrorResponse>().Subject;
+            errorResult.ErrorCode.Should().Be((int)GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError);
+            errorResult.ErrorMessage.Should().Be("Unknown Error");
+        }
+
+        [TestMethod]
+        public async Task PostV2_LinkageNeeded_WhereLinkageReturnsError_ReturnsError()
+        {
+            var model = ValidIm1RegistrationRequest();
+            model.LinkageKey = null;
+            
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(model.OdsCode))
+                .Returns(model.OdsCode);
+
+            var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
+            var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            _retrieveLinkageKeysService.Setup(x =>
+                x.RetrieveLinkageKey(
+                    It.IsAny<RetrieveLinkageKeysRequest>(),
+                    It.IsAny<IGpSystem>())).ReturnsAsync(
+                new LinkageResult.UnknownError(Im1ConnectionErrorCodes.Code.UnknownError));
+
+            mockIm1ConnectionService
+                .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError));
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            //Assert
+            var resultValue = result.Should().BeAssignableTo<ObjectResult>().Subject.Value;
+            var errorResult = resultValue.Should().BeAssignableTo<ApiErrorResponse>().Subject;
+            errorResult.ErrorCode.Should().Be((int)Im1ConnectionErrorCodes.Code.UnknownError);
+            errorResult.ErrorMessage.Should().Be("Unknown Error");
+        }
+
+        [TestMethod]
+        public async Task PostV2_LinkageNeeded_WhereLinkageReturnsSuccessAndIm1ReturnsError_ReturnsError()
+        {
+            var model = ValidIm1RegistrationRequest();
+            model.LinkageKey = null;
+            
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(model.OdsCode))
+                .Returns(model.OdsCode);
+
+            var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
+            var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            var linkageResponse = _fixture.Create<LinkageResponse>();
+            _retrieveLinkageKeysService.Setup(x =>
+                x.RetrieveLinkageKey(
+                    It.IsAny<RetrieveLinkageKeysRequest>(),
+                    It.IsAny<IGpSystem>())).ReturnsAsync(
+                new LinkageResult.SuccessfullyCreated(linkageResponse));
+
+            mockIm1ConnectionService
+                .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError));
+
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            //Assert
+            var resultValue = result.Should().BeAssignableTo<ObjectResult>().Subject.Value;
+            var errorResult = resultValue.Should().BeAssignableTo<ApiErrorResponse>().Subject;
+            errorResult.ErrorCode.Should().Be((int)GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError);
+            errorResult.ErrorMessage.Should().Be("Unknown Error");
+        }
+
+        [TestMethod]
+        public async Task PostV2_LinkageNeeded_WhereLinkageReturnsSuccessAndIm1ReturnsSuccess_ReturnsSuccess()
+        {
+            var model = ValidIm1RegistrationRequest();
+            model.LinkageKey = null;
+            
+            _odsCodeMassager
+                .Setup(x => x.CheckOdsCode(model.OdsCode))
+                .Returns(model.OdsCode);
+
+            var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
+            var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            var linkageResponse = _fixture.Create<LinkageResponse>();
+            _retrieveLinkageKeysService.Setup(x =>
+                x.RetrieveLinkageKey(
+                    It.IsAny<RetrieveLinkageKeysRequest>(),
+                    It.IsAny<IGpSystem>())).ReturnsAsync(
+                new LinkageResult.SuccessfullyCreated(linkageResponse));
+
+            var connectionResponse = _fixture.Create<PatientIm1ConnectionResponse>();
+            mockIm1ConnectionService
+                .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.Success(connectionResponse));
+
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            //Assert
+            var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
+            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(connectionResponse);
+        }
+
+        private Im1RegistrationRequest ValidIm1RegistrationRequest()
+        {
+            return new Im1RegistrationRequest()
+            {
+                AccountId = _fixture.Create<string>(),
+                DateOfBirth = _fixture.Create<DateTime>(),
+                EmailAddress = _fixture.Create<string>(),
+                IdentityToken = _fixture.Create<string>(),
+                LinkageKey = _fixture.Create<string>(),
+                NhsNumber = "1112223333",
+                OdsCode = DefaultOdsCode,
+                Surname = _fixture.Create<string>()
+            };
+        }
+
+        private Im1ConnectionController CreateIm1ConnectionController()
+        {
             // Dummy context...
             var dummyHttpContext = new DefaultHttpContext();
             dummyHttpContext.Request.Host = new HostString("some.host.name");
@@ -250,30 +490,16 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var dummyControllerContext = new ControllerContext(new ActionContext(dummyHttpContext, new RouteData(),
                 new ControllerActionDescriptor()));
 
-            return new Im1ConnectionController(odsCodeLookupMock.Object,
-                gpSystemFactoryMock.Object, _logger.Object, _auditor.Object, _odsCodeMassager.Object)
+            return new Im1ConnectionController(_gpSystemFactory.Object,
+                _logger.Object,
+                _auditor.Object, 
+                _odsCodeMassager.Object,
+                _retrieveLinkageKeysService.Object,
+                _im1ErrorCodes.Object,
+                _errorCodes.Object)
             {
                 ControllerContext = dummyControllerContext
             };
-        }
-
-        private static Mock<IOdsCodeLookup> MockOdsCodeLookup(string odsCode = DefaultOdsCode,
-            Supplier supplier = DefaultSupplier)
-        {
-            var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.Some(supplier)));
-            return mockOdsCodeLookup;
-        }
-
-        private Mock<IGpSystemFactory> MockGpSystemFactory(
-            Supplier supplier = DefaultSupplier,
-            Mock<IGpSystem> gpSystemMock = null)
-        {
-            gpSystemMock = gpSystemMock ?? MockGpSystem();
-            var mockGpSystemFactory = new Mock<IGpSystemFactory>();
-            mockGpSystemFactory.Setup(x => x.CreateGpSystem(supplier)).Returns(gpSystemMock.Object);
-
-            return mockGpSystemFactory;
         }
 
         private Mock<IGpSystem> MockGpSystem(

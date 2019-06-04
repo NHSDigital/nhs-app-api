@@ -123,8 +123,8 @@ class LinkageJournies(private val client: MockingClient) {
         val notFoundPatient = Linkage("A29928", "3434994345", "")
         client.forEmis {
             authentication.linkageKeyGetRequest(AddVerificationRequest(
-                        notFoundPatient.nhsNumber, notFoundPatient.odsCode, notFoundPatient.emailAddress))
-                        .respondWithNoRegisteredOnlineUserFound()
+                    notFoundPatient.nhsNumber, notFoundPatient.odsCode, notFoundPatient.emailAddress))
+                    .respondWithNoRegisteredOnlineUserFound()
         }
 
         val invalidODSCode = Linkage("C94839", "3434234345", "")

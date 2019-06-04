@@ -1,7 +1,8 @@
 package worker
 
 object WorkerPaths {
-    val patientIm1Connection = "/v1/patient/im1connection"
+    val patientIm1ConnectionV2 = "/v2/patient/im1connection"
+    val patientIm1ConnectionV1 = "/v1/patient/im1connection"
     val sessionConnection = "/v1/session"
     val getPrescriptionsConnection = "/v1/patient/prescriptions"
     val postPrescriptionsConnection = "/v1/patient/prescriptions"

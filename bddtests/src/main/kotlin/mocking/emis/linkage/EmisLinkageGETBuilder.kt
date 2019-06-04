@@ -1,7 +1,5 @@
 package mocking.emis.linkage
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisMappingBuilder
@@ -12,8 +10,8 @@ import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
-    : EmisMappingBuilder(null, method = "POST", relativePath = "/me/verifications") {
+class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest) :
+        EmisMappingBuilder(null, method = "POST", relativePath = "/me/verifications") {
 
     init {
         requestBuilder.andJsonBody(addVerificationRequest,"equalToJson", GsonFactory.asPascalSerializeNulls)
@@ -35,61 +33,53 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     fun respondWithForbiddenException(): Mapping {
         val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Forbidden Exception")
-        return respondWithBody(exceptionResponse, HttpStatus.SC_FORBIDDEN)
+        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_FORBIDDEN)
     }
 
     fun respondWithNotImplementedException(): Mapping {
         val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Not Implemented")
-        return respondWithBody(exceptionResponse, HttpStatus.SC_NOT_IMPLEMENTED)
+        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_NOT_IMPLEMENTED)
     }
 
     fun respondWithBadGatewayException(): Mapping {
         val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Bad Gateway")
-        return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
+        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
 
     fun respondWithInternalServerError(): Mapping {
         val errorResponse = ErrorResponse(0)
-        return respondWithBody(errorResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
     }
 
     fun respondWithPatientNotRegisteredAtPractice(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NOT_REGISTERED_AT_PRACTICE.toInt())
-        return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithNoRegisteredOnlineUserFound(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
-        return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithPracticeNotLive(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PRACTICE_NOT_LIVE.toInt())
-        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientMarkedAsArchived(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_MARKED_AS_ARCHIVED.toInt())
-        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientNonCompetentOrUnderMinimumAge(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NON_COMPETENT_OR_UNDER_MINIMUM_AGE.toInt())
-        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithAccountStatusInvalid(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.ACCOUNT_STATUS_INVALID.toInt())
-        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
-    }
-
-    private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {
-        return respondWith(statusCode) {
-            andJsonBody(body, GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create())
-        }
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 }

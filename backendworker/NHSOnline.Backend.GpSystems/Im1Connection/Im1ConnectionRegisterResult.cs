@@ -27,14 +27,43 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
         public class NotFound : Im1ConnectionRegisterResult
         {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public NotFound(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
             public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
 
-        public class AccountAlreadyExists : Im1ConnectionRegisterResult
+        public class BadRequest : Im1ConnectionRegisterResult
         {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public BadRequest(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
+            public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class Conflict : Im1ConnectionRegisterResult
+        {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public Conflict(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
             public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -48,9 +77,31 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
                 return visitor.Visit(this);
             }
         }
-        
-        public class BadRequest : Im1ConnectionRegisterResult
+
+        public class UnknownError : Im1ConnectionRegisterResult
         {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public UnknownError(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
+            public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class ErrorCase : Im1ConnectionRegisterResult
+        {
+            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+
+            public ErrorCase(Im1ConnectionErrorCodes.Code errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
             public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

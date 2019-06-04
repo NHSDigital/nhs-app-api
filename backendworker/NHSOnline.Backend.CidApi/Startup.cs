@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using System.Threading;
 using System.Globalization;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support.Logging;
@@ -31,8 +27,9 @@ using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.CidApi.DependencyInjection;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
-using NHSOnline.Backend.CidApi;
+using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.CidApi.Filters;
+using NHSOnline.Backend.Support.Middleware;
 
 namespace NHSOnline.Backend.CidApi
 {
@@ -95,6 +92,13 @@ namespace NHSOnline.Backend.CidApi
                         new CamelCasePropertyNamesContractResolver()
                 );
 
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = ApiVersion.Parse("1.0");
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ErrorResponses = new NotFoundErrorResponseProvider();
+            });
+
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
@@ -110,8 +114,11 @@ namespace NHSOnline.Backend.CidApi
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IUserSessionManager, UserSessionManager>();
-            services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
+            services.AddSingleton<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();
+            services.AddSingleton<IGetLinkageKeysService, GetLinkageKeysService>();
+            services.AddSingleton<ICreateLinkageKeysService, CreateLinkageKeysService>();
+
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
@@ -159,8 +166,6 @@ namespace NHSOnline.Backend.CidApi
             UseSecurityHeaders(app, _apiAppVersion, loggerFactory.CreateLogger<Startup>());
             app.UseResponseHeadersMiddleware();
 
-            app.UsePathBase(new PathString("/v1"));
-
             var corsAuthority = Configuration["CORS_AUTHORITY"];
             if (corsAuthority != null)
             {
@@ -172,6 +177,17 @@ namespace NHSOnline.Backend.CidApi
                     .AllowCredentials()
                 );
             }
+
+            app.UseLogRequestHeader(new LogRequestHeaderOptions
+            {
+                HeaderName = Constants.HttpHeaders.CorrelationIdentifier,
+                LogTemplate = "CorrelationId={value}",
+            });
+            
+            app.UseLogRequestHeader(new LogRequestHeaderOptions
+            {
+                HeaderName = Constants.HttpHeaders.LoginClient,
+            });
 
             app.UseMvc();
 

@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
@@ -16,33 +18,34 @@ using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.CidApi.Areas.Linkage
 {
-    [Route("patient/linkage")]
+    [ApiVersionRoute("patient/linkage")]
     public class LinkageController : Controller
     {
+
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly ILogger<LinkageController> _logger;
         private readonly IAuditor _auditor;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ConfigurationSettings _settings;
         private readonly IOdsCodeMassager _odsCodeMassager;
+        private readonly IIm1ConnectionErrorCodes _errorCodes;
 
         public LinkageController(
             ILogger<LinkageController> logger,
             IGpSystemFactory gpSystemFactory,
-            IOdsCodeLookup odsCodeLookup,
             IAuditor auditor,
             IMinimumAgeValidator minimumAgeValidator,
             ConfigurationSettings settings,
-            IOdsCodeMassager odsCodeMassager)
+            IOdsCodeMassager odsCodeMassager,
+            IIm1ConnectionErrorCodes errorCodes)
         {
             _logger = logger;
-            _odsCodeLookup = odsCodeLookup;
-            _gpSystemFactory = gpSystemFactory;
+            _gpSystemFactory = gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
             _auditor = auditor;
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
             _odsCodeMassager = odsCodeMassager;
+            _errorCodes = errorCodes;
             
             _settings.Validate();
         }
@@ -63,55 +66,45 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             try
             {
                 _logger.LogEnter();
-                            
-                if (string.IsNullOrWhiteSpace(odsCode))
-                {
-                    return BadRequest();
-                }
                 var cidOdsCode = odsCode;
-                odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
 
-                var getLinkageRequest = new GetLinkageRequest()
+                return await PerformOperationOnGpSystem(string.IsNullOrWhiteSpace(odsCode), odsCode, async gpSystem =>
                 {
-                    NhsNumber = nhsNumber,
-                    Surname = surname,
-                    DateOfBirth = dateOfBirth,
-                    OdsCode = odsCode,
-                    IdentityToken = identityToken
-                };
+                    var getLinkageRequest = new GetLinkageRequest()
+                    {
+                        NhsNumber = nhsNumber,
+                        Surname = surname,
+                        DateOfBirth = dateOfBirth,
+                        OdsCode = odsCode,
+                        IdentityToken = identityToken
+                    };
 
-                var gpSystemOption = await GetGpSystem(odsCode);
-                if (!gpSystemOption.HasValue)
-                {
-                    _logger.LogError(
-                        $"No GP system was found for OdsCode {odsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
-                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
-                }
+                    var validationService = gpSystem.GetLinkageValidationService();
+                    if (!validationService.IsGetValid(getLinkageRequest))
+                    {
+                        _logger.LogError($"Invalid parameters or parameters missing from get linkage request");
+                        return BadRequest();
+                    }
 
-                var gpSystem = gpSystemOption.ValueOrFailure();
+                    var linkageService = gpSystem.GetLinkageService();
 
-                var validationService = gpSystem.GetLinkageValidationService();
-                if (!validationService.IsGetValid(getLinkageRequest))
-                {
-                    _logger.LogError($"Invalid parameters or parameters missing from get linkage request");
-                    return BadRequest();
-                }
+                    await _auditor.AuditWithExplicitNhsNumber(nhsNumber, gpSystem.Supplier,
+                        Constants.AuditingTitles.GetLinkageDetailsAuditTypeRequest,
+                        "Attempting to get linkage details.");
 
-                var linkageService = gpSystem.GetLinkageService();
+                    var result = await linkageService.GetLinkageKey(getLinkageRequest);
 
-                await _auditor.AuditWithExplicitNhsNumber(nhsNumber, gpSystem.Supplier,
-                    Constants.AuditingTitles.GetLinkageDetailsAuditTypeRequest, "Attempting to get linkage details.");
+                    if (_odsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyRetrieved successResult)
+                    {
+                        successResult.Response.OdsCode = cidOdsCode;
+                    }
 
-                var result = await linkageService.GetLinkageKey(getLinkageRequest);
+                    await result.Accept(new LinkageResultAuditingVisitor<LinkageController>(
+                        _auditor, _logger, _errorCodes, gpSystem.Supplier, nhsNumber,
+                        Constants.AuditingTitles.GetLinkageDetailsAuditTypeResponse));
 
-                if (_odsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyRetrieved)
-                {
-                    ((LinkageResult.SuccessfullyRetrieved) result).Response.OdsCode = cidOdsCode;
-                }
-
-                return await result.Accept(new LinkageResultAuditingVisitor(
-                    _auditor, _logger, gpSystem.Supplier, nhsNumber,
-                    Constants.AuditingTitles.GetLinkageDetailsAuditTypeResponse));
+                    return await result.Accept(new LinkageResultVisitor());
+                });
             }
             finally
             {
@@ -125,72 +118,85 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             try
             {
                 _logger.LogEnter();
-
-                if (string.IsNullOrWhiteSpace(createLinkageRequest.OdsCode))
-                {
-                    return BadRequest();
-                }
                 var cidOdsCode = createLinkageRequest.OdsCode;
-                createLinkageRequest.OdsCode = _odsCodeMassager.CheckOdsCode(createLinkageRequest.OdsCode);
 
-                var gpSystemOption = await GetGpSystem(createLinkageRequest.OdsCode);
-                if (!gpSystemOption.HasValue)
-                {
-                    _logger.LogError(
-                        $"No GP system was found for OdsCode {createLinkageRequest.OdsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
-                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
-                }
+                return await PerformOperationOnGpSystem(
+                    string.IsNullOrWhiteSpace(createLinkageRequest.OdsCode), createLinkageRequest.OdsCode,
+                    async (gpSystem) =>
+                    {
+                        var validationService = gpSystem.GetLinkageValidationService();
+                        if (!validationService.IsPostValid(createLinkageRequest))
+                        {
+                            _logger.LogError($"Invalid parameters or parameters missing from create linkage request");
+                            return BadRequest();
+                        }
 
-                var gpSystem = gpSystemOption.ValueOrFailure();
-                
-                var validationService = gpSystem.GetLinkageValidationService();
-                if (!validationService.IsPostValid(createLinkageRequest))
-                {
-                    _logger.LogError($"Invalid parameters or parameters missing from create linkage request");
-                    return BadRequest();
-                }
+                        if (!HasValidDateOfBirthForLinkage(createLinkageRequest.DateOfBirth))
+                        {
+                            return await HandleUnderMinimumAge(createLinkageRequest, gpSystem);
+                        }
 
-                if (!HasValidDateOfBirthForLinkage(createLinkageRequest.DateOfBirth))
-                {
-                    _logger.LogWarning("Linkage details request unsuccessful - patient non competent or under 16.");
+                        var linkageService = gpSystem.GetLinkageService();
 
-                    return await new LinkageResult.PatientNonCompetentOrUnderMinimumAge().Accept(
-                        new LinkageResultAuditingVisitor(
-                            _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
+                        await _auditor.AuditWithExplicitNhsNumber(createLinkageRequest.NhsNumber, gpSystem.Supplier,
+                            Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest,
+                            "Attempting to create linkage key.");
+
+                        var result = await linkageService.CreateLinkageKey(createLinkageRequest);
+
+                        if (_odsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyCreated createdResult)
+                        {
+                            createdResult.Response.OdsCode = cidOdsCode;
+                        }
+
+                        await result.Accept(new LinkageResultAuditingVisitor<LinkageController>(
+                            _auditor, _logger, _errorCodes, gpSystem.Supplier, createLinkageRequest.NhsNumber,
                             Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
-                }
 
-                var linkageService = gpSystem.GetLinkageService();
-
-                await _auditor.AuditWithExplicitNhsNumber(createLinkageRequest.NhsNumber, gpSystem.Supplier,
-                    Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
-
-                var result = await linkageService.CreateLinkageKey(createLinkageRequest);
-
-                if (_odsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyCreated)
-                {
-                    ((LinkageResult.SuccessfullyCreated) result).Response.OdsCode = cidOdsCode;
-                }
-
-                return await result.Accept(new LinkageResultAuditingVisitor(
-                    _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
-                    Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
+                        return await result.Accept(new LinkageResultVisitor());
+                    });
             }
             finally
             {
                 _logger.LogExit();
             }
         }
-
-        private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)
+        
+        private async Task<IActionResult> PerformOperationOnGpSystem(bool isValidCheck, string odsCode,
+            Func<IGpSystem, Task<IActionResult>> operation)
         {
-            var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
-            if (!supplier.HasValue)
+            if (isValidCheck)
             {
-                return Option.None<IGpSystem>();
+                return new BadRequestResult();
             }
 
-            return Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
+            odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
+
+            var gpSystemOption = await _gpSystemFactory.LookupGpSystem(odsCode);
+            if (!gpSystemOption.HasValue)
+            {
+                _logger.LogError(
+                    $"No GP system was found for OdsCode {odsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
+                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+            }
+
+            var gpSystem = gpSystemOption.ValueOrFailure();
+
+            return await operation(gpSystem);
+        }
+
+        private async Task<IActionResult> HandleUnderMinimumAge(CreateLinkageRequest createLinkageRequest,
+            IGpSystem gpSystem)
+        {
+            _logger.LogWarning("Linkage details request unsuccessful - patient non competent or under 16.");
+
+            var linkageResult = new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+
+            await linkageResult.Accept(new LinkageResultAuditingVisitor<LinkageController>(
+                _auditor, _logger, _errorCodes, gpSystem.Supplier, createLinkageRequest.NhsNumber,
+                Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
+
+            return await linkageResult.Accept(new LinkageResultVisitor());
         }
 
         private bool HasValidDateOfBirthForLinkage(DateTime? dateOfBirth)

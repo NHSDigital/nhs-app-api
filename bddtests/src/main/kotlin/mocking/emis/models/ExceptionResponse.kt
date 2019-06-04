@@ -1,10 +1,13 @@
 package mocking.emis.models
 
-class ExceptionResponse(val internalResponseCode: Long,
+class ExceptionResponse(val internalResponseCode: String,
                         exceptionMessage: String) {
-    val internalResponseMessage = "Exception occurred during API processing."
+    val message = exceptionMessage
+    val internalResponseMessage = exceptionMessage
     val exceptions = arrayOf(Exception(exceptionMessage))
 
+    constructor(internalResponseCode: Long,
+                exceptionMessage: String) : this(internalResponseCode.toString(), exceptionMessage)
 
     class Exception(val message: String) {
         val callStack = "Not available"

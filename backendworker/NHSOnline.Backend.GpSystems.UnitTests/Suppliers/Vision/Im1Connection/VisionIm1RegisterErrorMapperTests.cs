@@ -1,0 +1,169 @@
+﻿using System;
+using System.Net;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using Castle.Core.Logging;
+using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
+
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
+{
+    [TestClass]
+    public class VisionIm1RegisterErrorMapperTests
+    {
+        private VisionIm1RegisterErrorMapper _mapperUnderTest;
+        private IFixture _fixture;
+        private Mock<ILogger<VisionIm1ConnectionService>> _logger;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _fixture = new Fixture()
+                .Customize(new AutoMoqCustomization());
+            _mapperUnderTest = _fixture.Create<VisionIm1RegisterErrorMapper>();
+            _logger = _fixture.Create<Mock<ILogger<VisionIm1ConnectionService>>>();
+        }
+
+        [TestMethod]
+        public void Map_WhenPassingNull_ThrowsNullReferenceException()
+        {
+            Action act = () => _mapperUnderTest.Map(null, _logger.Object);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
+        }
+
+        [TestMethod]
+        public void Map_WithOkayWithErrorValues_MapsCorrectly()
+        {
+            // Arrange
+            var response = CreateResponse(HttpStatusCode.OK,
+                "-19");
+
+            // Act
+            var result = _mapperUnderTest.Map(response, _logger.Object);
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UserAccountDisabled);
+        }
+
+        [TestMethod]
+        public void Map_WithOkayWithErrorValuesWithMessage_MapsCorrectly()
+        {
+            // Arrange
+            var response = CreateResponse(HttpStatusCode.OK,
+                "-100",
+                "Connection to external service failed");
+
+            // Act
+            var result = _mapperUnderTest.Map(response, _logger.Object);
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.ConnectionToServiceFailed);
+        }
+
+        [TestMethod]
+        public void Map_WithOkayWithErrorValuesWithUnknownMessage_MapsCorrectly()
+        {
+            // Arrange
+            var response = CreateResponse(HttpStatusCode.OK,
+                "-100",
+                "something else");
+
+            // Act
+            var result = _mapperUnderTest.Map(response, _logger.Object);
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnknownError>();
+            var conflictResult = (Im1ConnectionRegisterResult.UnknownError) result;
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+        }
+
+        [TestMethod]
+        public void Map_WithBadRequestValues_MapsCorrectly()
+        {
+            // Arrange
+            var response = CreateResponse(HttpStatusCode.BadRequest,
+                "V4205");
+
+            // Act
+            var result = _mapperUnderTest.Map(response, _logger.Object);
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidNhsNumber);
+        }
+
+        [TestMethod]
+        public void Map_WithNotFoundValues_MapsCorrectly()
+        {
+            // Arrange
+            var response = CreateResponse(HttpStatusCode.NotFound,
+                "V4205");
+
+            // Act
+            var result = _mapperUnderTest.Map(response, _logger.Object);
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
+            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidNhsNumber);
+        }
+
+        [TestMethod]
+        public void Map_WithOkayWithUnknownErrorValues_MapsCorrectly()
+        {
+            // Arrange
+            var response = CreateResponse(HttpStatusCode.OK, "10");
+
+            // Act
+            var result = _mapperUnderTest.Map(response, _logger.Object);
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnknownError>();
+            var conflictResult = (Im1ConnectionRegisterResult.UnknownError) result;
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+        }
+
+        private VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> CreateResponse(
+            HttpStatusCode statusCode,
+            string errorCode,
+            string errormessage = null)
+        {
+            return new VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse>(statusCode)
+            {
+                RawResponse = new VisionResponseEnvelope<ServiceContentRegisterResponse>
+                {
+                    Body = new VisionResponseBody<ServiceContentRegisterResponse>
+                    {
+                        VisionResponse = new VisionResponse<ServiceContentRegisterResponse>
+                        {
+                            ServiceHeader = new ServiceHeaderResponse()
+                            {
+                                Outcome = new Outcome
+                                {
+                                    Successful = "false",
+                                    Error = new OutcomeError()
+                                    {
+                                        Code = errorCode,
+                                        Description = errormessage
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+    }
+}

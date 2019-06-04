@@ -223,4 +223,30 @@ object VisionErrorResponses {
                 "  </soap:Body>\n" +
                 "</soap:Envelope>"
     }
+
+    fun getMockedError(serviceDefinition: ServiceDefinition, errorCode:String, errorMessage:String = "Mocked Error"):
+            String {
+        return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+                "  <soap:Header>\n" +
+                "  </soap:Header>\n" +
+                "  <soap:Body>\n" +
+                "     <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
+                "        <vision:serviceDefinition>\n" +
+                "           <vision:name>${serviceDefinition.name}</vision:name>\n" +
+                "           <vision:version>${serviceDefinition.version}</vision:version>\n" +
+                "        </vision:serviceDefinition>\n" +
+                "        <vision:serviceHeader>\n" +
+                "           <vision:outcome>\n" +
+                "              <vision:successful>false</vision:successful>\n" +
+                "              <vision:error>\n" +
+                "                 <vision:code>$errorCode</vision:code>\n" +
+                "                 <vision:description>$errorMessage" +
+                "                 </vision:description>\n" +
+                "              </vision:error>\n" +
+                "           </vision:outcome>\n" +
+                "        </vision:serviceHeader>\n" +
+                "     </vision:visionResponse>\n" +
+                "  </soap:Body>\n" +
+                "</soap:Envelope>"
+    }
 }

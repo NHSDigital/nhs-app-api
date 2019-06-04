@@ -5,11 +5,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
@@ -21,7 +19,6 @@ using NHSOnline.Backend.Support.Certificate;
 using NHSOnline.Backend.Support;
 
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
-using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
@@ -350,14 +347,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             public bool IsInvalidUserCredentialsError =>
                 HasVisionApiErrorCode(VisionApiErrorCodes.InvalidUserCredentials);
 
-            public bool IsAccountLockedError => HasVisionApiErrorCode(VisionApiErrorCodes.AccountLocked);
-
-            public bool IsAlreadyRegisteredError => HasVisionApiErrorCode(VisionApiErrorCodes.AccountAlreadyRegistered);
-
-            public bool IsInvalidDetailsError => HasVisionApiErrorCode(VisionApiErrorCodes.InvalidDetails);
-
-            public bool IsInvalidParameterError => HasVisionApiErrorCode(VisionApiErrorCodes.InvalidParameter);
-
             public bool IsUnknownError => HasVisionApiErrorCode(VisionApiErrorCodes.UnknownError);
 
             public bool IsAccessDeniedError => HasVisionApiErrorCode(VisionApiErrorCodes.AccessDenied);
@@ -378,6 +367,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             {
                 return visionErrorCode.Equals(Outcome?.Error?.Code, StringComparison.Ordinal);
             }
+            public string ErrorCode => Outcome?.Error?.Code;
+            public string ErrorMessage => Outcome?.Error?.Description;
 
             private VisionApiObjectResponse<TBody> ParseResponse(
                 IResponseParser responseParser,

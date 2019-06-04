@@ -16,7 +16,6 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.GsonFactory
-import utils.SerenityHelpers
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -41,6 +40,7 @@ import org.junit.Assert
 import pages.MyAccountPage
 import pages.ServiceUnavailablePage
 import pages.navigation.WebHeader
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.WorkerPaths
@@ -480,7 +480,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAUsersIMCredentials() {
-        val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1Connection)
+        val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1ConnectionV1)
         val response = SerenityRest
                 .given()
                 .contentType("application/json")

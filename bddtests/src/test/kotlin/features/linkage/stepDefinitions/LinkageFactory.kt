@@ -25,7 +25,7 @@ abstract class LinkageFactory(protected val gpSystem: String) {
 
     abstract val validOtherLinkageDetails: LinkageInformationFacade
 
-    protected fun <TMapping>responseFromMap(linkageToGetRequestResponse: HashMap<LinkageResult, TMapping?>,
+    protected fun <TMapping>responseFromMap(linkageToGetRequestResponse: HashMap<LinkageResult, TMapping>,
                                           linkageResult: LinkageResult): TMapping?{
 
         Assert.assertTrue("Test Setup Incorrect, Mapping not set up for linkage $linkageResult",
