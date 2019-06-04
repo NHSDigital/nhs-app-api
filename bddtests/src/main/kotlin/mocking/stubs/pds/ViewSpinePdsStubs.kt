@@ -5,7 +5,6 @@ import mocking.MockingClient
 import mocking.spine.pds.PdsNominatedPharmacyBuilder
 import java.lang.StringBuilder
 
-@Suppress("MaxLineLength")
 class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
 
     companion object {
@@ -47,20 +46,21 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         val patientCareProvisionBuilder = StringBuilder();
         if(pharmacyTypes.size > 0) {
             for (pharmacyType in pharmacyTypes) {
-                patientCareProvisionBuilder.append("""<playedOtherProviderPatient classCode="PAT">
-                                  <subjectOf typeCode="SBJ"> <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
-                                        <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="${pharmacyType}"/>
-                                      <effectiveTime>
-                                        <low value="20190402"/>
-                                      </effectiveTime>
-                                      <id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="P000000042"/>
-                                      <performer typeCode="PRF">
-                                        <assignedEntity classCode="ASSIGNED">
-                                          <id root="2.16.840.1.113883.2.1.4.3" extension="${odsCode}"/>
-                                        </assignedEntity>
-                                      </performer>
-                                        </patientCareProvisionEvent> </subjectOf>
-                                </playedOtherProviderPatient>""");
+                patientCareProvisionBuilder.append(
+                        """<playedOtherProviderPatient classCode="PAT">
+                             <subjectOf typeCode="SBJ"> <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
+                               <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="${pharmacyType}"/>
+                                 <effectiveTime>
+                                   <low value="20190402"/>
+                                 </effectiveTime>
+                                 <id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="P000000042"/>
+                                 <performer typeCode="PRF">
+                                   <assignedEntity classCode="ASSIGNED">
+                                     <id root="2.16.840.1.113883.2.1.4.3" extension="${odsCode}"/>
+                                   </assignedEntity>
+                                 </performer>
+                                   </patientCareProvisionEvent> </subjectOf>
+                           </playedOtherProviderPatient>""");
             }
         }
         return patientCareProvisionBuilder;

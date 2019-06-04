@@ -9,6 +9,7 @@ import mocking.data.nhsAzureSearchData.NhsAzureSearchData.DEFAULT_LONGITUDE
 import mocking.nhsAzureSearchService.FILTER_LOCAL_TYPE_POSTCODE
 import mocking.nhsAzureSearchService.FILTER_TYPE_POSTCODE_OUT_CODE
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationRequestBody
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationWithPostcodeRequestBody
 import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesRequestBody
 import mocking.nhsAzureSearchService.SELECT_ORGANISATIONS_GEOCODE_SEARCH
 import mocking.nhsAzureSearchService.getGeoDistanceFilterForLatLon
@@ -59,7 +60,7 @@ open class ThrottlingStepDefinitions {
             )).respondWithSuccess(NhsAzureSearchData.getSuccessfulPostcodeMatch())
         }
         mockingClient.forNhsAzureSearchOrganisation {
-            nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
+            nhsAzureSearch.nhsAzureSearchPostcodeOrganisationRequest(NhsAzureSearchOrganisationWithPostcodeRequestBody(
                     filter = getGeoDistanceFilterForLatLon(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
                     select = SELECT_ORGANISATIONS_GEOCODE_SEARCH,
                     search = null,

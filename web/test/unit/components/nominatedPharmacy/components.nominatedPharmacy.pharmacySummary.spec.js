@@ -52,7 +52,7 @@ describe('pharmacy summary', () => {
 
     it('will format the address', () => {
       expect(pharmacySummaryAddress.text()).toEqual('1 Stuart St, Brooklyn Avenue, ' +
-        'Bangor, Greater London, London, SE254NQ');
+        'Bangor, London, Greater London, SE254NQ');
     });
   });
 

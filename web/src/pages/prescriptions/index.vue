@@ -14,7 +14,7 @@
             :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
             tag="a">
             <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
-            <p :class="!$store.state.device.isNativeApp
+            <p id="pharmacy-name" :class="!$store.state.device.isNativeApp
               && $style.desktopWeb">
               {{ pharmacyName }}
             </p>

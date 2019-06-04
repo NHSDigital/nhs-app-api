@@ -28,7 +28,6 @@ import webdrivers.options.nojs.NoJsOption
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
 private const val WAIT_IN_SECONDS = 190L
 
-@Suppress("MaxLineLength")
 open class SharedStepDefinitions {
 
     @Steps
@@ -76,7 +75,8 @@ open class SharedStepDefinitions {
     @And("Azure organisation search is working")
     fun azureOrganisationSearchIsWorking() {
         mockingClient.forNhsAzureSearchOrganisation {
-            nhsAzureSearch.nhsAzureSearchOrganisationRequest(null).respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(null)
+                    .respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
         }
     }
 

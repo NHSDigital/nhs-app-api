@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 
 namespace NHSOnline.Backend.NominatedPharmacy

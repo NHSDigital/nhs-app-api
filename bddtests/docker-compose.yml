@@ -73,6 +73,7 @@ services:
       - TERMS_CONDITIONS_COSMOS_COLLECTION_NAME=consent
       - TERMS_CONDITIONS_COSMOS_AUTH_KEY=
       - NOMINATED_PHARMACY_URL=http://stubs.local.bitraft.io:8080/spine/
+      - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
       - ConfigurationSettings__CurrentTermsConditionsEffectiveDate=2018-12-12T00:00:00+00:00
       - NHS_SEARCH_BASE_URL=http://stubs.local.bitraft.io:8080/nhs-search-indexes/
       - GP_LOOKUP_API_KEY=testnhssearchservicekey
@@ -166,7 +167,7 @@ services:
       - OnlineConsultationsProvidersSettings__Providers__0__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
       - OnlineConsultationsProvidersSettings__Providers__0__BearerToken=shfjlkasdhflashfl
   stubs.local.bitraft.io:
-    image: nhsapp.azurecr.io/wiremock:2.17.0-alpine
+    image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
     command: --local-response-templating
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

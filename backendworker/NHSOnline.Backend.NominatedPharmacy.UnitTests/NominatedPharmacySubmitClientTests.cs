@@ -69,6 +69,31 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Accepted);
         }
+        
+        [TestMethod]
+        public async Task UpdateNominatedPharmacy_Returns403_WhenUpdatedRequested()
+        {
+            // Arrange         
+            var nominatedPharmacyUpdateRequest = new NominatedPharmacyUpdateRequest(
+                "111",
+                true,
+                "ODSFFF",
+                "444");
+
+            _mockHttpHandler
+                .WhenNominatedPharmacy(HttpMethod.Post, new Uri(ApiUrl, PdsPath))
+                .WithContent(nominatedPharmacyUpdateRequest.Body())
+                .WithHeaders("SoapAction", UpdateNominatedPharmacySoapActionName)
+                .Respond(HttpStatusCode.Forbidden);
+
+            // Act
+            var response = await _sut.UpdateNominatedPharmacy(nominatedPharmacyUpdateRequest);
+
+            // Assert
+            response.Response.Should().BeNull();
+            response.HasSuccessResponse.Should().BeFalse();
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
 
         public void Dispose()
         {

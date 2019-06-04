@@ -12,7 +12,7 @@ import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
 const formatWithOpeningTimes = (pharmacyResponse) => {
   const response = Object.assign({}, pharmacyResponse);
-  if (response) {
+  if (pharmacyResponse) {
     // eslint-disable-next-line max-len
     response.openingTimesFormatted = mapPharmacyDetail(pharmacyResponse.openingTimes);
   }

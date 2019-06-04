@@ -270,7 +270,8 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
             confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
         }
 
-        @Then("I see a message indicating I've previously ordered the medication within the last 30 days")
+        @Then("I see a message indicating I've previously ordered " +
+                "one of the selected medications within the last 30 days")
         fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
             confirmRepeatPrescriptionOrderSteps.assertMedicationOrderedWithinTheLast30DaysErrorShown()
         }

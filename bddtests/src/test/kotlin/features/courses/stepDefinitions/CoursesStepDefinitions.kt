@@ -99,7 +99,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
         iClickOrderARepeatPrescription()
-        nominatedPharmacyCheckPage.clickContinueToRepeatCoursesButton()
+        nominatedPharmacyCheckPage.continueButton.click()
         val courses = getAvailableCoursesFilteredSortedOrdered()
         val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
         courseSteps.selectRepeatPrescriptions(coursesToSelect)

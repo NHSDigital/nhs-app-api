@@ -48,11 +48,86 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _systemUnderTest = _fixture.Create<NominatedPharmacyService>();
         }
 
+        [TestMethod]
+        public async Task
+            NominatedPharmacyGet_ReturnsSuccessfulWhenRequestSucceeds_ReturnsNullCodeAndValidIfThereAreNoFoundPharmacyNominations()
+        {
+            // Arrange
+            _nominatedPharmacyClient
+                .Setup(x => x.NominatedPharmacyGet(
+                    It.Is<QUPAIN000008UK02>(
+                        req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
+                                   StringComparison.OrdinalIgnoreCase))
+                ))
+                .Returns(Task.FromResult(
+                    new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>
+                        {
+                            Body = new Body<QUPAIN000009UK03Response>
+                            {
+                                RetrievalQueryResponse = new QUPAIN000009UK03Response
+                                {
+                                    QUPAIN000009UK03 = new QUPAIN000009UK03
+                                    {
+                                        ControlActEvent = new ControlActEvent
+                                        {
+                                            Subject = new Subject
+                                            {
+                                                PDSResponse = new PDSResponse
+                                                {
+                                                    Subject = new Subject
+                                                    {
+                                                        PatientRole = new PatientRole
+                                                        {
+                                                            PatientPerson = new PatientPerson
+                                                            {
+                                                                PlayedOtherProviderPatients =
+                                                                    new List<PlayedOtherProviderPatient>()
+                                                            }
+                                                        }
+                                                    },
+                                                    PertinentInformation = new PertinentInformation
+                                                    {
+                                                        PertinentSerialChangeNumber = new PertinentSerialChangeNumber
+                                                        {
+                                                            Value = new ValueElement
+                                                            {
+                                                                Value = "22",
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.PharmacyOdsCode.Should().Be(null);
+            result.HasValidPharmacyType.Should().Be(true);
+        }
+
         [DataTestMethod]
         [DataRow("P1", HttpStatusCode.OK, CurrentPharmacyOdsCode, true)]
         [DataRow("P2", HttpStatusCode.OK, null, false)]
         [DataRow("P3", HttpStatusCode.OK, CurrentPharmacyOdsCode, true)]
-        [DataRow("1", HttpStatusCode.OK, null, false)]
+        [DataRow("1", HttpStatusCode.OK, null, true)] // we're only looking at p1, p2, p3
         public async Task
             NominatedPharmacyGet_ReturnsSuccessfulWhenRequestSucceeds_ReturnsOdsCodeIfValidAndIfItIsAValidPharmacyType(
                 string code,

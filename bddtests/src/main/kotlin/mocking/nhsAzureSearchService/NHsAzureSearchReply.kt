@@ -1,8 +1,9 @@
 package mocking.nhsAzureSearchService
 
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
-data class NHSAzureSearchOrganisationReply(
+data class NhsAzureSearchOrganisationReply(
         var value: MutableList<NhsAzureSearchOrganisationItem> = arrayListOf(),
         @SerializedName("@odata.count") var count: Int = 0
 )
@@ -16,8 +17,34 @@ data class NhsAzureSearchOrganisationItem(
         var City: String,
         var County: String,
         var Postcode: String,
-        var NACSCode: String
-)
+        var NACSCode: String,
+        var Metrics: String? = null,
+        var Contacts: String? = null
+) {
+        fun addressFormatted(): String {
+            val addressElements = listOfNotNull(Address1, Address2, Address3, City, County, Postcode)
+            return addressElements.stream().filter{item->item.isNotEmpty()}.toArray().joinToString(", ")
+        }
+
+    fun primaryPhone(): String? {
+        if (Contacts != null) {
+            val contacts = Gson().fromJson(Contacts, Array<Contact>::class.java)
+
+            val telephoneNumbers = contacts.filter { it.OrganisationContactMethodType == "Telephone" }
+            val primaryPhone = telephoneNumbers.firstOrNull()
+
+            return primaryPhone?.OrganisationContactValue
+        }
+        return null
+    }
+}
+
+data class Contact(
+        var OrganisationContactType: String,
+        var OrganisationContactAvailabilityType: String,
+        var OrganisationContactMethodType: String,
+        var OrganisationContactValue: String
+        )
 
 data class NHSAzureSearchPostcodesAndPlacesReply(
         var value: MutableList<NhsAzureSearchPostcodesAndPlacesItem> = arrayListOf(),

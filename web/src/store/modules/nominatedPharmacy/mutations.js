@@ -24,9 +24,11 @@ export default {
     state.pharmacy = {};
     state.hasLoaded = false;
     state.nominatedPharmacyEnabled = null;
+    state.justUpdated = false;
   },
   [NOMINATED_PHARMACY_UPDATED](state) {
     state.hasLoaded = false;
+    state.justUpdated = true;
   },
   [SET_SEARCH_QUERY](state, searchQuery) {
     state.searchQuery = searchQuery;

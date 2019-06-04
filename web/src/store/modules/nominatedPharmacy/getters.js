@@ -10,4 +10,7 @@ export default {
   nominatedPharmacyEnabled(state) {
     return state.nominatedPharmacyEnabled;
   },
+  justUpdated(state) {
+    return state.justUpdated;
+  },
 };

@@ -1,5 +1,6 @@
 package mocking.nhsAzureSearchService
 
+import mocking.GsonFactory
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
@@ -8,11 +9,28 @@ class NhsAzureOrganisationResultsBuilder(requestBody: NhsAzureSearchOrganisation
     init {
         if(requestBody != null) {
             requestBuilder
-                    .andJsonBody(requestBody)
+                    .andJsonBody(requestBody, "equalToJson", GsonFactory.asIsSerializeNulls)
         }
     }
 
-    fun respondWithSuccess(model: NHSAzureSearchOrganisationReply): Mapping {
+    fun respondWithSuccess(model: NhsAzureSearchOrganisationReply): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(model)
+                    .build()
+        }
+    }
+}
+
+class NhsAzurePostcodeOrganisationResultsBuilder(requestBody: NhsAzureSearchOrganisationWithPostcodeRequestBody?) :
+        NhsAzureSearchOrganisationMappingBuilder("POST") {
+    init {
+        if(requestBody != null) {
+            requestBuilder
+                    .andJsonBody(requestBody, "equalToJson", GsonFactory.asIsSerializeNulls)
+        }
+    }
+
+    fun respondWithSuccess(model: NhsAzureSearchOrganisationReply): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(model)
                     .build()

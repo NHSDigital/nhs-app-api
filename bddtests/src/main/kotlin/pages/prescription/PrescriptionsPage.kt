@@ -4,6 +4,7 @@ import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
+import pages.HybridPageElement
 import pages.asciiText
 import pages.navigation.HeaderNative
 
@@ -21,8 +22,17 @@ open class PrescriptionsPage : HybridPageObject() {
     val serverErrorMessage = "Try again later. If the problem continues and you need this information now," +
             " contact your GP surgery directly. For urgent medical advice, call 111."
 
-    private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), " +
-                                                        "'Order new repeat prescription')]"
+    val nominatedPharmacyPanel = HybridPageElement(
+            webDesktopLocator = "//div[@id='nominated-pharmacy-section']",
+            helpfulName = "nominated pharmacy panel",
+            page = this
+    )
+
+    val nominatedPharmacyName = HybridPageElement(
+            webDesktopLocator = "//p[@id='pharmacy-name']",
+            page = this
+    )
+
     private lateinit var headerNative: HeaderNative
 
     fun isLoaded() {
@@ -73,9 +83,7 @@ open class PrescriptionsPage : HybridPageObject() {
         return historicPrescriptions
     }
 
-    fun clickOrderARepeatPrescriptionButton ()
-    {
-        val orderARepeatPrescriptionButton = findByXpath(orderARepeatPrescriptionButtonLocator)
-        orderARepeatPrescriptionButton.click()
+    fun clickOrderARepeatPrescriptionButton() {
+        clickOnButtonContainingText("Order new repeat prescription")
     }
 }

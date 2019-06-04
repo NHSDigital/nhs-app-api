@@ -1,3 +1,5 @@
+import * as dependency from '@/lib/utils';
+import { PRESCRIPTIONS } from '@/lib/routes';
 import NoNominatedPharmacyChange from '@/pages/nominated-pharmacy/cannot-change';
 import { create$T, createStore, mount } from '../../helpers';
 
@@ -53,6 +55,36 @@ describe('can not change nominated pharmacy', () => {
 
     it('will exist', () => {
       expect(pharmacyOpeningTimes.exists()).toBe(true);
+    });
+  });
+
+  describe('back button', () => {
+    let backButton;
+
+    beforeEach(() => {
+      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      wrapper = mountPage();
+      backButton = wrapper.find('#back-button');
+      $style = {
+        button: 'button',
+        green: 'grey',
+      };
+    });
+
+    it('will exist', () => {
+      expect(backButton.exists()).toBe(true);
+    });
+
+    it('will use "nominatedPharmacyCannotChange.backButton.text" for text', () => {
+      expect(backButton.text())
+        .toEqual('translate_nominatedPharmacyCannotChange.backButton');
+    });
+
+    it('will redirect to the prescriptions page on click', async () => {
+      dependency.redirectTo = jest.fn();
+      await backButton.trigger('click');
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path, null);
     });
   });
 });

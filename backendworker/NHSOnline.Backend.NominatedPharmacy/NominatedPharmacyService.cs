@@ -212,20 +212,25 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
                 PharmacyCheck pharmacyCheck = new PharmacyCheck { IsValid = false };
 
-                if (patientCareProvisionEvents != null && patientCareProvisionEvents.Any())
-                {
-                    pharmacyCheck = await CheckPharmacy(patientCareProvisionEvents);
+                pharmacyCheck = await CheckPharmacy(patientCareProvisionEvents);
 
-                    if (pharmacyCheck.IsValid)
+                if (pharmacyCheck.IsValid)
+                {
+                    odsCode = pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
+
+                    if (!string.IsNullOrEmpty(odsCode))
                     {
-                        odsCode = pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
                         _logger.LogInformation($"User retrieved nominated pharmacy with ods code: {odsCode}");
                     }
                     else
                     {
-                        _logger.LogInformation("Invalid patient pharmacy or pharmacy combination");
-                        return new GetNominatedPharmacyResult(result.StatusCode, false);
+                        _logger.LogInformation("Pharmacy ods code check passed because no current pharmacy ods code exists");
                     }
+                }
+                else
+                {
+                    _logger.LogInformation("Invalid patient pharmacy or pharmacy combination");
+                    return new GetNominatedPharmacyResult(result.StatusCode, false);
                 }
 
                 var pertinentSerialChangeNumber = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse
@@ -305,7 +310,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 _logger.LogInformation("Patient does not have a nominated pharmacy set");
                 await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
                     "Patient does not have a nominated pharmacy set");
-                return new PharmacyCheck { IsValid = false, PatientCareProvisionEvent = null };
+                return new PharmacyCheck { IsValid = true, PatientCareProvisionEvent = null };
             }
             else if (patientCareSections.Count > pharmacyThreshold)
             {

@@ -476,7 +476,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             initialize(gpSystem)
         }
 
-
         prescriptionLoader.loadData(
                 numberOfPrescriptions,
                 numOfRepeats,

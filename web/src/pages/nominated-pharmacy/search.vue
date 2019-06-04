@@ -30,7 +30,7 @@
                             a-labelled-by="pharmacy-search-label"
                             name="searchQuery"
                             :maxlength="searchQueryMaxLengthAsString"/>
-        <generic-button :button-classes="['green', 'button']">
+        <generic-button id="search-button" :button-classes="['green', 'button']" >
           {{ $t('nominated_pharmacy.search.searchButton') }}
         </generic-button>
         <analytics-tracked-tag :text="$t('generic.backButton.text')">
@@ -109,7 +109,9 @@ export default {
       return getDynamicStyle(this, args);
     },
     async searchClicked() {
-      if (this.isButtonDisabled) return;
+      if (this.isButtonDisabled) {
+        return;
+      }
       this.isButtonDisabled = true;
 
       const processedQuery = this.processQuery(this.searchQuery);
@@ -129,7 +131,7 @@ export default {
 
       this.$store.dispatch('nominatedPharmacy/setSearchQuery', processedQuery);
       this.$store.dispatch('nominatedPharmacy/setSearchResults', pharmacySearchResponse);
-      this.goToUrl(NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
 
       this.isButtonDisabled = false;
     },

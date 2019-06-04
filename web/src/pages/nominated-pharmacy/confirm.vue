@@ -9,9 +9,9 @@
       {{ $t('nominated_pharmacy.confirm.confirmButton') }}
     </generic-button>
     <analytics-tracked-tag :text="$t('generic.backButton.text')">
-      <generic-button
-        :button-classes="['grey', 'button']" :class="$style['back']"
-        tabindex="0" @click.prevent="cancelButtonClicked">
+      <generic-button id="back-button"
+                      :button-classes="['grey', 'button']" :class="$style['back']"
+                      tabindex="0" @click.prevent="cancelButtonClicked">
         {{ $t('generic.backButton.text') }}
       </generic-button>
     </analytics-tracked-tag>

@@ -6,18 +6,19 @@ import mocking.vision.models.PrescriptionHistory
 import models.prescriptions.HistoricPrescription
 import org.joda.time.DateTime
 
-private const val REJECTED_PRIORITY = 1
-private const val REQUESTED_PRIORITY = 2
-private const val APPROVED_PRIORITY = 3
+private const val REQUESTED_PRIORITY = 1
+private const val APPROVED_PRIORITY = 2
+private const val REJECTED_PRIORITY = 3
 private const val UPPER_LIMIT_FOR_TOTAL_COURSES = 100
 
 object VisionPrescriptionMapper {
     fun map(data: PrescriptionHistory) : List<HistoricPrescription> {
 
         val historicPrescriptionOrderPriority = hashMapOf(
-                "Rejected" to REJECTED_PRIORITY,
                 "Requested" to REQUESTED_PRIORITY,
-                "Approved" to APPROVED_PRIORITY)
+                "Approved" to APPROVED_PRIORITY,
+                "Rejected" to REJECTED_PRIORITY
+                )
 
         val visionPrescriptionStatusToDisplayedStatus = mapOf(
                 VisionPrescriptionStatus.InProgress.value to "Requested",

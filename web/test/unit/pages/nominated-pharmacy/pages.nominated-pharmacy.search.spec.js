@@ -3,6 +3,7 @@ import * as dependency from '@/lib/utils';
 import SearchPharmacies from '@/pages/nominated-pharmacy/search';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
 import { createStore, mount, create$T } from '../../helpers';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
 
 const $t = create$T();
 const $style = {};
@@ -39,6 +40,7 @@ describe('search pharmacies', () => {
       getters: {
         'nominatedPharmacy/previousPage': '/nominated-pharmacy',
       },
+      dispatch: jest.fn(() => Promise.resolve()),
     });
     page = mountPage({ $store, $http });
     searchPharmaciesPage = page.find(SearchPharmacies);
@@ -96,6 +98,79 @@ describe('search pharmacies', () => {
     });
   });
 
+
+  describe('after the search is done', () => {
+    let testPostcode;
+    let testPharmacies;
+    let expectedResult;
+
+    let processQuery;
+    let searchForPharmacies;
+    let validateSearchQuery;
+
+    beforeEach(() => {
+      // arrange
+      dependency.redirectTo = jest.fn();
+
+      searchForPharmacies = jest.fn();
+      processQuery = jest.fn();
+      validateSearchQuery = jest.fn();
+
+      testPostcode = 'rg1';
+      testPharmacies = [{ pharmacyName: 'boots' }];
+
+      expectedResult = {
+        noResultsFound: false,
+        pharmacies: testPharmacies,
+        technicalError: false,
+      };
+
+      $http.getV1PatientPharmacies.mockResolvedValue(testPharmacies);
+
+      processQuery.mockReturnValue('123');
+      validateSearchQuery.mockReturnValue(true);
+      searchForPharmacies.mockReturnValue(expectedResult);
+
+      page.vm.searchQuery = testPostcode;
+    });
+
+    it('disables the button', async () => {
+      // act
+      await page.vm.searchClicked();
+
+      // assert
+      expect(page.vm.isButtonDisabled).toBe(false);
+    });
+
+    it('dispatches results to the store', async () => {
+      // act
+      await page.vm.searchClicked();
+
+      // assert
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setSearchQuery', testPostcode);
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setSearchResults', expectedResult);
+    });
+
+    it('navigates to the results page', async () => {
+      // act
+      dependency.redirectTo = jest.fn();
+      await page.vm.searchClicked();
+
+      // assert
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
+    });
+  });
+
+  describe('after processQuery is run', () => {
+    it('will have trimmed trailing whitespace', () => {
+      const searchQuery = '  abc  ';
+      const processedQuery = page.vm.processQuery(searchQuery);
+
+      expect(processedQuery).toEqual('abc');
+    });
+  });
+
   describe('back button', () => {
     let backButton;
 
@@ -111,7 +186,7 @@ describe('search pharmacies', () => {
       dependency.redirectTo = jest.fn();
       backButton.trigger('click');
 
-      expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, '/nominated-pharmacy', null);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY.path, null);
     });
   });
 });

@@ -46,8 +46,8 @@ export default {
         pharmacy.addressLine1,
         pharmacy.addressLine2,
         pharmacy.addressLine3,
-        pharmacy.county,
         pharmacy.city,
+        pharmacy.county,
         pharmacy.postcode,
       ].filter(Boolean).join(', ');
     },

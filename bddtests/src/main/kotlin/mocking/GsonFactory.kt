@@ -9,6 +9,10 @@ class GsonFactory {
     companion object {
         val asIs = Gson()
 
+        val asIsSerializeNulls = GsonBuilder()
+                .serializeNulls()
+                .create()
+
         val asPascal = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
             .create()

@@ -18,4 +18,5 @@ export const initialState = () => ({
   },
   previousPageToSearch: null,
   nominatedPharmacyEnabled: null,
+  justUpdated: false,
 });

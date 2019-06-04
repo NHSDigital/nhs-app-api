@@ -17,7 +17,7 @@ const val FILTER_TYPE_POSTCODE_OUT_CODE = "Type eq 'PostcodeOutCode'"
 const val SELECT_ORGANISATIONS_GEOCODE_SEARCH = "OrganisationID,OrganisationName,Address1,Address2,Address3,City," +
         "County,Postcode,NACSCode,Geocode"
 
-data class NhsAzureSearchOrganisationRequestBody(
+data class NhsAzureSearchOrganisationWithPostcodeRequestBody(
         val top: Int = NhsAzureSearchData.ORGANISATION_LIMIT,
         val search: String? = "",
         val searchFields: String? = "OrganisationName,Address2,Address3,City",
@@ -26,7 +26,20 @@ data class NhsAzureSearchOrganisationRequestBody(
         val filter: String = "OrganisationTypeID eq 'GPB'",
         val orderby: String? = null,
         val queryType: String? = "simple",
-        val count: Boolean = true
+        val count: Boolean = true,
+        val searchMode: String? = null
+)
+
+data class NhsAzureSearchOrganisationRequestBody(
+        val top: Int = NhsAzureSearchData.ORGANISATION_LIMIT,
+        val search: String? = "",
+        val searchFields: String? = "OrganisationName,Address2,Address3,City",
+        val select: String? = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,County,Postcode," +
+                "NACSCode",
+        val filter: String = "OrganisationTypeID eq 'GPB'",
+        val queryType: String? = "simple",
+        val count: Boolean = true,
+        val searchMode: String? = null
 )
 
 data class NhsAzureSearchPostcodesAndPlacesRequestBody(

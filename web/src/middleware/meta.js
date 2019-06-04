@@ -205,7 +205,8 @@ export default function ({ route, store, app }) {
       break;
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      if (store.getters['nominatedPharmacy/hasNoNominatedPharmacy']) {
+      if (store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] &&
+          !store.getters['nominatedPharmacy/justUpdated']) {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
       } else {

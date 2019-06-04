@@ -1,5 +1,5 @@
 import * as dependency from '@/lib/utils';
-import { NOMINATED_PHARMACY } from '@/lib/routes';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
 import { create$T, createStore, mount } from '../../helpers';
@@ -81,6 +81,36 @@ describe('confirm nominated pharmacy', () => {
       expect($store.dispatch).toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChanged');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
+    });
+  });
+
+  describe('back button', () => {
+    let backButton;
+
+    beforeEach(() => {
+      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      wrapper = mountPage();
+      backButton = wrapper.find('#back-button');
+      $style = {
+        button: 'button',
+        green: 'grey',
+      };
+    });
+
+    it('will exist', () => {
+      expect(backButton.exists()).toBe(true);
+    });
+
+    it('will use "generic.backButton.text" for text', () => {
+      expect(backButton.text())
+        .toEqual('translate_generic.backButton.text');
+    });
+
+    it('will redirect to the search results page on click', async () => {
+      dependency.redirectTo = jest.fn();
+      await backButton.trigger('click');
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
     });
   });
 });
