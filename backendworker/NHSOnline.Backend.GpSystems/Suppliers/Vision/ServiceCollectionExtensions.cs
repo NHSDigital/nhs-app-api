@@ -30,7 +30,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         private static IServiceCollection RegisterVisionBaseServices(this IServiceCollection services)
         {
             services.AddSingleton<IGpSystem, VisionGpSystem>();
-            services.AddSingleton<IVisionPFSConfig, VisionPFSConfig>();
             services.AddSingleton<IVisionLinkageConfig, VisionLinkageConfig>();
             services.AddSingleton<IVisionPFSClient, VisionPFSClient>();
             services.AddSingleton<IVisionLinkageClient, VisionLinkageClient>();

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.DependencyInjection
 {
@@ -13,12 +14,12 @@ namespace NHSOnline.Backend.PfsApi.DependencyInjection
         private readonly IConfiguration _configuration;
         private readonly ILogger<SupplierStartup> _logger;
         private readonly IGpSystemRegistrationService _gpSystemRegistrationService;
-
         public SupplierStartup(IConfiguration configuration, ILoggerFactory loggerFactory, IGpSystemRegistrationService gpSystemRegistrationService)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = loggerFactory.CreateLogger<SupplierStartup>();
             _gpSystemRegistrationService = gpSystemRegistrationService;
+
         }
 
         public void ConfigureServices(IServiceCollection services)

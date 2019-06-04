@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         private readonly IIm1CacheService _im1CacheService;
         private readonly ILogger<TppLinkageService> _logger;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
-        private readonly IOptions<ConfigurationSettings> _settings;
+        private readonly ConfigurationSettings _settings;
 
         public TppLinkageService(ITppClient client,
             ITppLinkageMapper linkageMapper,
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             IIm1CacheService im1CacheService,
             ILogger<TppLinkageService> logger,
             IMinimumAgeValidator minimumAgeValidator,
-            IOptions<ConfigurationSettings> settings)
+            ConfigurationSettings settings)
         {
             _tppClient = client;
             _linkageMapper = linkageMapper;

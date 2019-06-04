@@ -2,7 +2,6 @@
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Certificate;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
@@ -11,6 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
     {
         public TppHttpClientHandler(
             IConfiguration configuration,
+            TppConfigurationSettings configurationSettings,
             ILogger<TppHttpClientHandler> logger,
             ICertificateService certificateService)
         {
@@ -19,8 +19,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
             }
 
-            var path = configuration.GetOrWarn("TPP_CERTIFICATE_PATH", logger);
-            var password = configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", logger);
+            var path = configurationSettings.CertificatePath;
+            var password = configurationSettings.CertificatePassphrase;
             logger.LogInformation($"TPP_CERTIFICATE_PATH: {path}");
 
             var certificate = certificateService.GetCertificate(path, password);

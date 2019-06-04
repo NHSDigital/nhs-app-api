@@ -19,6 +19,10 @@ services:
     environment:
       - ASPNETCORE_URLS=http://*:8082
       - PORT=8082
+      - TPP_CERTIFICATE_PATH=tppPath
+      - TPP_CERTIFICATE_PASSWORD=tpppassword
+      - EMIS_CERTIFICATE_PATH=emisPath
+      - EMIS_CERTIFICATE_PASSWORD=emispassphrase
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
       - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
       - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
@@ -45,6 +49,10 @@ services:
     environment:
       - ASPNETCORE_URLS=http://*:8084
       - PORT=8084
+      - TPP_CERTIFICATE_PATH=tppPath
+      - TPP_CERTIFICATE_PASSWORD=tpppassword
+      - EMIS_CERTIFICATE_PATH=emisPath
+      - EMIS_CERTIFICATE_PASSWORD=emispassphrase
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
       - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
       - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx

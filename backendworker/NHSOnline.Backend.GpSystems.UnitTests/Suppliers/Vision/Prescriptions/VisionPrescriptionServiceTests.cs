@@ -27,10 +27,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private VisionPrescriptionService _systemUnderTest;
         private Mock<IVisionClient> _visionClient;
         private Mock<IVisionPrescriptionMapper> _visionPrescriptionMapper;
-        private IOptions<ConfigurationSettings> _options;
+        private VisionConfigurationSettings _settings;
         private VisionUserSession _visionUserSession;
         private IFixture _fixture;
+        private string ApplicationProviderId = "ApplicationProviderId";
+        private const string RequestUserName = "username";
+        private const string certificatePassphrase = "CertificatePassphrase";
+        private const string certificatePath = "CertificatePath";
+        private const string visionSenderUserName = "visionuser";
+        private const string visionSenderFullName = "visionuser";
+        private const string visionSenderUserIdentity = "username";
+        private const string visionSenderUserRole = "admin";
+        private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
+        private const int CoursesMaxCoursesLimit = 100;
+        private const int VisionAppointmentSlotsRequestCount = 100;
+        private const string environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -44,11 +56,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionPrescriptionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
             
-            _options = Options.Create(new ConfigurationSettings
-            {
-                PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
-            });
-            _fixture.Inject(_options);
+            _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
+                certificatePath, certificatePassphrase, RequestUserName, visionSenderUserName, 
+                visionSenderFullName, visionSenderUserIdentity, visionSenderUserRole, VisionAppointmentSlotsRequestCount, 
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, environment);
+                
+            _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<VisionPrescriptionService>();
         }
 

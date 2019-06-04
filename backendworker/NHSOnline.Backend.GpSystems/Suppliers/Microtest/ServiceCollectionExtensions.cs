@@ -41,7 +41,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
             services.AddSingleton<IGpSystem, MicrotestGpSystem>();
             services.AddSingleton<IMicrotestClient, MicrotestClient>();
-            services.AddSingleton<IMicrotestConfig, MicrotestConfig>();
             services.AddTransient<MicrotestTokenValidationService>();
             services.AddTransient<IMicrotestEnumMapper, MicrotestEnumMapper>();
 

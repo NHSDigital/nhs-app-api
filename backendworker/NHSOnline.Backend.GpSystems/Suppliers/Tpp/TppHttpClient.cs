@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using System;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 {
@@ -7,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
     {
         public const string MediaType = "text/xml";
 
-        public TppHttpClient(HttpClient client, ITppConfig config)
+        public TppHttpClient(HttpClient client, TppConfigurationSettings config)
         {
             client.BaseAddress = config.ApiUrl;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));

@@ -54,7 +54,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 new ServiceDescriptor(typeof(TppHttpRequestIdentifier), typeof(TppHttpRequestIdentifier), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(IGpSystem), typeof(TppGpSystem), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(ITppClient), typeof(TppClient), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(ITppConfig), typeof(TppConfig),ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(TppTokenValidationService), typeof(TppTokenValidationService),ServiceLifetime.Transient)
             };
 

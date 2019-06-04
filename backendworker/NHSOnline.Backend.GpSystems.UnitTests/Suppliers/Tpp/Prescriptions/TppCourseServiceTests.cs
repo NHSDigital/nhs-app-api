@@ -26,11 +26,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         private TppCourseService _systemUnderTest;
         private Mock<ITppClient> _tppClient;
         private Mock<ITppCourseMapper> _tppCourseMapper;
-        private IOptions<ConfigurationSettings> _options;
+        private TppConfigurationSettings _settings;
         private TppUserSession _tppUserSession;
         private IFixture _fixture;
-
+        private const string ApplicationName = "appName";
+        private const string ApplicationVersion = "13";
+        private const string ApplicationProviderId = "providerId";
+        private const string ApplicationDeviceType = "deviceType";
+        private static readonly Uri ApiUrl = new Uri("http://tppapitest:60015/Test/");
+        private const string ApiVersion = "12";
+        private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
+        private const string CertificatePath = "CertificatePath";
+        private const string CertificatePassphrase = "CerticiatePassphrase";
+        private const string environment = "testEnv";
 
         [TestInitialize]
         public void TestInitialize()
@@ -42,11 +51,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
             
             _tppCourseMapper = _fixture.Freeze<Mock<ITppCourseMapper>>();
-            _options = Options.Create(new ConfigurationSettings
-            {
-                CoursesMaxCoursesLimit = CoursesMaxCoursesLimit
-            });
-            _fixture.Inject(_options);
+            
+            _settings = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, ApplicationProviderId, ApplicationDeviceType, 
+                CertificatePath, CertificatePassphrase, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, environment);
+
+            _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<TppCourseService>();
             _fixture.Customize<Medication>(c => c.With(s => s.Requestable, "y"));
         }

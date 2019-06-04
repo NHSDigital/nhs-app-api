@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         private readonly ILogger<LinkageController> _logger;
         private readonly IAuditor _auditor;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
-        private readonly IOptions<ConfigurationSettings> _settings;
+        private readonly ConfigurationSettings _settings;
         private readonly IOdsCodeMassager _odsCodeMassager;
 
         public LinkageController(
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             IOdsCodeLookup odsCodeLookup,
             IAuditor auditor,
             IMinimumAgeValidator minimumAgeValidator,
-            IOptions<ConfigurationSettings> settings,
+            ConfigurationSettings settings,
             IOdsCodeMassager odsCodeMassager)
         {
             _logger = logger;
@@ -43,6 +43,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
             _odsCodeMassager = odsCodeMassager;
+            
+            _settings.Validate();
         }
 
         [HttpGet, AllowAnonymous]
@@ -199,7 +201,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                 return false;
             }
 
-            if (!_minimumAgeValidator.IsValid(dateOfBirth.Value, _settings.Value.MinimumLinkageAge))
+            if (!_minimumAgeValidator.IsValid(dateOfBirth.Value, _settings.MinimumLinkageAge))
             {
                 _logger.LogWarning("Failed to meet the minimum linkage age requirement.");
                 return false;

@@ -26,17 +26,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
     {
         private PrescriptionsController _systemUnderTest;
         private IFixture _fixture;
-        private IOptions<ConfigurationSettings> _options;
+        private ConfigurationSettings _options;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IPrescriptionValidationService> _prescriptionRequestValidationService;
         private UserSession _userSession;
 
         private Mock<IAuditor> _mockAuditor;
-        
-        private int _prescriptionsDefaultLastNumberMonthsToDisplay;
 
         private const string GetRequestAuditType = "RepeatPrescriptions_ViewHistory_Request";
-        private const string GetResponseAuditType = "RepeatPrescriptions_ViewHistory_Response";         
+        private const string GetResponseAuditType = "RepeatPrescriptions_ViewHistory_Response";
+
+        private const string CookieDomain = "CookieDomain";
+        private int PrescriptionsDefaultLastNumberMonthsToDisplay;   
+        private const int DefaultSessionExpiryMinutes  = 10;
+        private const int DefaultHttpTimeoutSeconds = 6;
+        private int MinimumAppAge = 16;
+        private int MinimumLinkageAge = 16;
+        
+        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         
         private const string PostRequestAuditType = "RepeatPrescriptions_OrderRepeatMedications_Request";
         private const string PostResponseAuditType = "RepeatPrescriptions_OrderRepeatMedications_Response";
@@ -53,14 +60,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _userSession = _fixture.Create<UserSession>();
 
-            _prescriptionsDefaultLastNumberMonthsToDisplay = _fixture.Create<int>();
+            PrescriptionsDefaultLastNumberMonthsToDisplay  = _fixture.Create<int>();
 
-            _options = Options.Create(new ConfigurationSettings
-            {
-                PrescriptionsDefaultLastNumberMonthsToDisplay = _prescriptionsDefaultLastNumberMonthsToDisplay
-            });
+            _options = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, DefaultSessionExpiryMinutes, 
+            MinimumAppAge, MinimumLinkageAge, CurrentTermsConditionsEffectiveDate);
 
             _fixture.Inject(_options);
+            
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _prescriptionRequestValidationService = _fixture.Freeze<Mock<IPrescriptionValidationService>>();
 
@@ -204,7 +210,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             Assert.IsNotNull(value);
             Assert.IsTrue(fromDateGenerated.HasValue);
 
-            var xMonthsAgo = DateTimeOffset.Now.AddMonths(-_prescriptionsDefaultLastNumberMonthsToDisplay);
+            var xMonthsAgo = DateTimeOffset.Now.AddMonths(-PrescriptionsDefaultLastNumberMonthsToDisplay);
             Assert.AreEqual(xMonthsAgo.Date, fromDateGenerated.Value.Date);
             
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, "Attempting to view prescriptions", It.IsAny<object[]>()));

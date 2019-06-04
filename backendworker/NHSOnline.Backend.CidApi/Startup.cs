@@ -1,40 +1,56 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Threading;
+using System.Globalization;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Support.Logging;
+using StackExchange.Redis;
+using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
+using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.CidApi.DependencyInjection;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
-using NHSOnline.Backend.CidApi.DependencyInjection;
+using NHSOnline.Backend.CidApi;
 using NHSOnline.Backend.CidApi.Filters;
-using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Settings;
-using StackExchange.Redis;
 
 namespace NHSOnline.Backend.CidApi
 {
     public class Startup
-    {        
+    {
+        private readonly IHostingEnvironment _env;
+        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger<Startup> _logger;
         private IConfiguration Configuration { get; }
-
         private readonly ModularStartup _modularStartup;
         private readonly SupplierStartup _supplierStartup;
-
         private readonly string _apiAppVersion;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
+            _env = env;
+            _loggerFactory = loggerFactory;
 
             if (env.IsDevelopment())
             {
@@ -45,6 +61,9 @@ namespace NHSOnline.Backend.CidApi
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
             _supplierStartup = new SupplierStartup(configuration, loggerFactory, new GpSystemRegistrationService());
+
+            _logger = loggerFactory.CreateLogger<Startup>();
+
         }
 
         private string GetApiAppVersion()
@@ -62,9 +81,9 @@ namespace NHSOnline.Backend.CidApi
         // Note that some service registration has now been moved into Module classes within the namespaces containing the services that they register, to avoid namespace dependency cycles.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ConfigurationSettings>(
-                Configuration.GetSection(ConfigurationSettings.ConfigurationSectionName));
-
+            var environment = Configuration.GetOrWarn("ASPNETCORE_ENVIRONMENT", _logger);
+            SetupConfigurationSettings(services, environment);
+        
             services.AddCors();
 
             services.AddMemoryCache();
@@ -83,10 +102,17 @@ namespace NHSOnline.Backend.CidApi
 
             services.AddSingleton(Configuration);
 
+            services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
+
+            services.AddSingleton<IGuidCreator, GuidCreator>();
+            services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
+            services.AddSingleton<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
+            services.AddSingleton<IUserSessionManager, UserSessionManager>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
+            services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
@@ -152,6 +178,148 @@ namespace NHSOnline.Backend.CidApi
             _modularStartup.Configure(app, env);
         }
 
+        private void SetupConfigurationSettings(IServiceCollection services, string environment)
+        {
+            var configurationSettings = CreateAndValidateEnvironmentVariables();
+            services.AddSingleton(configurationSettings);
+
+            var microtestConfig = CreateAndValidateMicrotestEnvironmentVariables(environment);
+            services.AddSingleton(microtestConfig);
+
+            var emisConfig = CreateAndValidateEmisEnvironmentVariables(environment);
+            services.AddSingleton(emisConfig);
+
+            var tppConfig = CreateAndValidateTppEnvironmentVariables(environment);
+            services.AddSingleton(tppConfig);
+
+            var visionConfig = CreateAndValidateVisionEnvironmentVariables(environment);
+            services.AddSingleton(visionConfig);
+
+        }
+
+        private ConfigurationSettings CreateAndValidateEnvironmentVariables()
+        {
+            var cookieDomain = Configuration["ConfigurationSettings:CookieDomain"];
+            var prescriptionsDefaultLastNumberMonthsToDisplay = Configuration.GetIntOrWarn(
+                "ConfigurationSettings:PrescriptionsDefaultLastNumberMonthsToDisplay", _logger
+            );
+            var defaultSessionExpiryMinutes = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultSessionExpiryMinutes" ,_logger);
+            var defaultHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds" ,_logger);
+            var minimumAppAge = Configuration.GetIntOrWarn("ConfigurationSettings:MinimumAppAge", _logger);
+            var minimumLinkageAge = Configuration.GetIntOrWarn("ConfigurationSettings:MinimumLinkageAge", _logger);
+
+            var currentTermsConditionsEffectiveDate = DateTimeOffset.Parse(
+                Configuration.GetOrWarn("ConfigurationSettings:CurrentTermsConditionsEffectiveDate", _logger),
+                CultureInfo.InvariantCulture
+            );
+            
+            var config =  new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
+            defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds,  minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
+
+            config.Validate();
+            return config;
+        }
+
+        private EmisConfigurationSettings CreateAndValidateEmisEnvironmentVariables(string environment){
+            var emisBaseUrl = Configuration.GetOrWarn("EMIS_BASE_URL", _logger);
+            var applicationId = Configuration.GetOrWarn("EMIS_APPLICATION_ID", _logger);
+            var version = Configuration.GetOrWarn("EMIS_VERSION", _logger);
+            var certificatePath = Configuration.GetOrWarn("EMIS_CERTIFICATE_PATH", _logger);
+            var certificatePassphrase = Configuration.GetOrWarn("EMIS_CERTIFICATE_PASSWORD", _logger);
+
+            var emisExtendedHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:EmisExtendedHttpTimeoutSeconds", _logger);
+            var defaultHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
+            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
+            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
+            
+
+            var config = new EmisConfigurationSettings(new Uri(emisBaseUrl, UriKind.Absolute), applicationId, version, certificatePath, certificatePassphrase,
+             emisExtendedHttpTimeoutSeconds, defaultHttpTimeoutSeconds, coursesMaxCoursesLimit, prescriptionsMaxCoursesSoftLimit, environment);
+            config.Validate();
+
+            return config;
+        }
+
+        private MicrotestConfigurationSettings CreateAndValidateMicrotestEnvironmentVariables(string environment)
+        {
+            var baseUrlstring = Configuration.GetOrWarn("MICROTEST_BASE_URL", _logger);
+            var certificatePath = Configuration.GetOrWarn("MICROTEST_CERT_PATH", _logger);
+            var certificatePassphrase = Configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", _logger);
+
+            var config = new MicrotestConfigurationSettings(new Uri(baseUrlstring), certificatePath, certificatePassphrase, environment);
+            config.Validate();
+
+            return config;
+        }
+
+        private TppConfigurationSettings CreateAndValidateTppEnvironmentVariables(string environment){
+            var tppBaseUrl = Configuration.GetOrWarn("TPP_BASE_URL", _logger);
+            var apiVersion = Configuration.GetOrWarn("TPP_API_VERSION", _logger);
+            var applicationName = Configuration.GetOrWarn("TPP_APPLICATION_NAME", _logger);
+            var applicationVersion = Configuration.GetOrWarn("TPP_APPLICATION_VERSION", _logger);
+            var applicationProviderId = Configuration.GetOrWarn("TPP_APPLICATION_PROVIDER_ID", _logger);
+            var applicationDeviceType = Configuration.GetOrWarn("TPP_APPLICATION_DEVICE_TYPE", _logger);
+            var certificatePath = Configuration.GetOrWarn("TPP_CERTIFICATE_PATH", _logger);
+            var certificatePassphrase = Configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", _logger);
+
+            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
+            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
+
+            var config = new TppConfigurationSettings(
+                new Uri(tppBaseUrl, UriKind.Absolute),
+                apiVersion,
+                applicationName, 
+                applicationVersion,
+                applicationProviderId,
+                applicationDeviceType,
+                certificatePath, 
+                certificatePassphrase,
+                prescriptionsMaxCoursesSoftLimit,
+                coursesMaxCoursesLimit,
+                environment);
+
+                config.Validate();
+                return config;
+        }
+
+        private VisionConfigurationSettings CreateAndValidateVisionEnvironmentVariables(string environment)
+        {
+            var applicationProviderId = Configuration.GetOrWarn("VISION_APPLICATION_PROVIDER_ID", _logger);
+            var apiBaseUriString = Configuration.GetOrWarn("VISION_BASE_URI", _logger);
+            var visionPFSPath = Configuration.GetOrWarn("VISION_PFS_PATH", _logger);
+            var certificatePath = Configuration.GetOrWarn("VISION_CERT_PATH", _logger);
+            var certificatePassphrase = Configuration.GetOrWarn("VISION_CERT_PASSPHRASE", _logger);
+            var requestUsername = Configuration.GetOrWarn("VISION_USERNAME", _logger);
+            var visionSenderUserName = Configuration.GetOrWarn("VISION_SENDER_USERNAME", _logger);
+            var visionSenderUserFullName = Configuration.GetOrWarn("VISION_SENDER_USERFULLNAME", _logger);
+            var visionSenderUserIdentity = Configuration.GetOrWarn("VISION_SENDER_USERIDENTITY", _logger);
+            var visionSenderUserRole = Configuration.GetOrWarn("VISION_SENDER_USERROLE", _logger);
+
+            var prescriptionsMaxCoursesSoftLimit = int.Parse(Configuration["ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit"], CultureInfo.InvariantCulture);
+            var coursesMaxCoursesLimit = int.Parse(Configuration["ConfigurationSettings:CoursesMaxCoursesLimit"], CultureInfo.InvariantCulture);
+            var visionAppointmentSlotsRequestCount = int.Parse(Configuration["ConfigurationSettings:VisionAppointmentSlotsRequestCount"], CultureInfo.InvariantCulture);
+
+            var config = new VisionConfigurationSettings(
+                applicationProviderId,
+                new Uri(apiBaseUriString + visionPFSPath, UriKind.Absolute),
+                certificatePath,
+                certificatePassphrase,
+                requestUsername,
+                visionSenderUserName,
+                visionSenderUserFullName,
+                visionSenderUserIdentity,
+                visionSenderUserRole,
+                visionAppointmentSlotsRequestCount,
+                coursesMaxCoursesLimit,
+                prescriptionsMaxCoursesSoftLimit,
+                environment
+                );
+
+            config.Validate();
+            return config;
+
+        }
+
         private static void UseSecurityHeaders(IApplicationBuilder app, string apiAppVersion, ILogger<Startup> startupLogger)
         {
             app.Use(async (context, next) =>
@@ -174,7 +342,10 @@ namespace NHSOnline.Backend.CidApi
             string webAppVersion = context.Request.Headers[Constants.HttpHeaders.WebAppVersion];
             string nativeAppVersion = context.Request.Headers[Constants.HttpHeaders.NativeAppVersion];
 
-            if (string.IsNullOrEmpty(webAppVersion)) return;
+            if (string.IsNullOrEmpty(webAppVersion))
+            {
+                return;
+            }
             
             var logMessageStringBuilder = new StringBuilder();
                     
@@ -187,6 +358,6 @@ namespace NHSOnline.Backend.CidApi
             }
 
             startupLogger.LogInformation(logMessageStringBuilder.ToString());
-        }
+        } 
     }
 }

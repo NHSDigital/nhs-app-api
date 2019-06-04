@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Support.Settings;
 using UnitTestHelper;
@@ -45,6 +46,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
                 _systemUnderTest.ConfigureServices(_mockIServiceCollection.Object);
             }
             catch (ConfigurationNotFoundException)
+            {
+                isSuccess = true;
+            }
+            catch (ArgumentNullException)
             {
                 isSuccess = true;
             }

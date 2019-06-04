@@ -48,6 +48,17 @@ namespace NHSOnline.Backend.Support
             return value;
         }
 
+        public static int GetIntOrWarn<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        {
+            var strValue = GetOrWarn(configuration, key, logger);
+            if (!int.TryParse(strValue, out var value))
+            {
+                logger.LogWarning(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
+                throw new ConfigurationNotFoundException(key);
+            }
+            return value;
+        }
+
         public static IConfigurationSection ConfigurationSettings(this IConfiguration configuration)
         {
             return configuration.GetSection("ConfigurationSettings");

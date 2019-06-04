@@ -28,16 +28,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         private static readonly Regex ErrorRegex = new Regex("errorCode\\s?=");
 
         private readonly TppHttpClient _httpClient;
-        private readonly ITppConfig _tppConfig;
         private readonly IXmlResponseParser _responseParser;
         private readonly ILogger<TppClient> _logger;
-        public TppClient(TppHttpClient httpClient, ITppConfig tppConfig, IXmlResponseParser responseParser, ILogger<TppClient> logger)
+        private readonly IGuidCreator _guidCreator;
+        private readonly TppConfigurationSettings _config;
+        public TppClient(TppHttpClient httpClient, 
+            IXmlResponseParser responseParser, 
+            ILogger<TppClient> logger,
+            TppConfigurationSettings config,
+            IGuidCreator guidCreator)
         {
             _httpClient = httpClient;
-            _tppConfig = tppConfig;
             _responseParser = responseParser;
-
             _logger = logger;
+            _config = config;
+            _guidCreator = guidCreator;
+
+            config.Validate();
         }
 
         public async Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel)
@@ -54,12 +61,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticate)
         {
+            Console.WriteLine("APPLICATIONNAME: " + _config.ApplicationName);
+            Console.WriteLine("APPLICATIONVERSION: "+ _config.ApplicationVersion);
+            Console.WriteLine("APPLICATION DEVICE TYPE: "+_config.ApplicationDeviceType);
             authenticate.Application = new Application
             {
-                Name = _tppConfig.ApplicationName,
-                Version = _tppConfig.ApplicationVersion,
+                Name = _config.ApplicationName,
+                Version = _config.ApplicationVersion,
                 ProviderId = authenticate.ProviderId,
-                DeviceType = _tppConfig.ApplicationDeviceType
+                DeviceType = _config.ApplicationDeviceType
             };
 
             var response = await Post<Authenticate, AuthenticateReply>(authenticate);
@@ -172,8 +182,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             SetApplicationOnRequest(addNhsUserRequest);
 
-            addNhsUserRequest.ApiVersion = _tppConfig.ApiVersion;
-            addNhsUserRequest.Uuid = _tppConfig.CreateGuid();
+            addNhsUserRequest.ApiVersion = _config.ApiVersion;
+            addNhsUserRequest.Uuid = _guidCreator.CreateGuid();
 
             var response = await Post<AddNhsUserRequest, AddNhsUserResponse>(addNhsUserRequest);
 
@@ -242,8 +252,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 SetApplicationOnRequest(applicationRequest);
             }
 
-            model.ApiVersion = _tppConfig.ApiVersion;
-            model.Uuid = _tppConfig.CreateGuid();
+            Console.WriteLine("API VERSION: "+_config.ApiVersion);
+            model.ApiVersion = _config.ApiVersion;
+            model.Uuid = _guidCreator.CreateGuid();
 
             var xml = model.SerializeXml();
             var content = new StringContent(xml, Encoding.UTF8, TppHttpClient.MediaType);
@@ -297,10 +308,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         private void SetApplicationOnRequest(ITppApplicationRequest request)
         {
             request.Application = request.Application ?? new Application();
-            request.Application.Name = _tppConfig.ApplicationName;
-            request.Application.Version = _tppConfig.ApplicationVersion;
-            request.Application.ProviderId = _tppConfig.ApplicationProviderId;
-            request.Application.DeviceType = _tppConfig.ApplicationDeviceType;
+            request.Application.Name = _config.ApplicationName;
+            request.Application.Version = _config.ApplicationVersion;
+            request.Application.ProviderId = _config.ApplicationProviderId;
+            request.Application.DeviceType = _config.ApplicationDeviceType;
         }
 
         public abstract class TppApiResponse : ApiResponse

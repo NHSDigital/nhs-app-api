@@ -35,13 +35,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
         public static readonly Uri BaseUri = new Uri("http://emis_base_url/");
 
+        private const string CertificatePath = "CertificatePath";
+
+        private const string CertificatePassphrase = "CerticiatePassphrase";
+
+        private const int EmisExtendedHttpTimeoutSeconds = 6;
+        private const int DefaultHttpTimeoutSeconds = 2;
+        private const int PrescriptionsMaxCoursesSoftLimit = 100;
+        private const int CoursesMaxCoursesLimit = 100;
+
+        private const string environment = "testEnv";
+
         private IEmisClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
-        private Mock<IEmisConfig> _configMock;
+        private EmisConfigurationSettings _emisConfig;
         private EmisHttpClient _httpClient;
         private IFixture _fixture;
-        private Mock<IOptions<ConfigurationSettings>> _settings;
-        private ConfigurationSettings _configurationSettings;
+        private EmisConfigurationSettings _configurationSettings;
         private Mock<HttpMessageHandler> _mockedHandler;
 
         [TestInitialize]
@@ -51,25 +61,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
 
             _mockHttpHandler = new MockHttpMessageHandler();
+            _configurationSettings = _fixture.Freeze<EmisConfigurationSettings>();
 
-            _configMock = new Mock<IEmisConfig>();
-            _configMock.SetupGet(x => x.BaseUrl).Returns(BaseUri);
-            _configMock.SetupGet(x => x.Version).Returns(DefaultEmisVersion);
-            _configMock.SetupGet(x => x.ApplicationId).Returns(DefaultEmisApplicationId);
+            _emisConfig = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, 
+                environment);
 
-            _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-
-            _configurationSettings = _fixture.Create<ConfigurationSettings>();
+            _configurationSettings = _fixture.Create<EmisConfigurationSettings>();
             _configurationSettings.DefaultHttpTimeoutSeconds = 2;
             _configurationSettings.EmisExtendedHttpTimeoutSeconds = 6;
 
-            _settings
-                .Setup(x => x.Value)
-                .Returns(_configurationSettings);
+            _httpClient = new EmisHttpClient(new HttpClient(_mockHttpHandler), _emisConfig);
 
-            _httpClient = new EmisHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
-
-            _fixture.Inject(_configMock);
+            _fixture.Inject(_emisConfig);
             _fixture.Inject(_httpClient);
 
             _systemUnderTest = _fixture.Create<EmisClient>();
@@ -573,9 +577,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 })
                 .Verifiable();
 
-            var httpClient = new EmisHttpClient(new HttpClient(_mockedHandler.Object), _configMock.Object);
+            var httpClient = new EmisHttpClient(new HttpClient(_mockedHandler.Object), _emisConfig);
 
-            _fixture.Inject(_configMock);
+            _fixture.Inject(_emisConfig);
             _fixture.Inject(httpClient);
 
             _systemUnderTest = _fixture.Create<EmisClient>();

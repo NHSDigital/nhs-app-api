@@ -34,10 +34,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private Mock<IAvailableAppointmentsResponseMapper> _mockAppointmentsMapper;
         private Mock<ILogger<VisionAppointmentSlotsService>> _mockLogger;
         private IEnumerable<Slot> _mappedSlots;
-        private Mock<IOptions<ConfigurationSettings>> _mockOptions;
+        private VisionConfigurationSettings _mockOptions;
+        private string ApplicationProviderId = "ApplicationProviderId";
+        private const string RequestUserName = "username";
+        private const string certificatePassphrase = "CertificatePassphrase";
+        private const string certificatePath = "CertificatePath";
+        private const string visionSenderUserName = "visionuser";
+        private const string visionSenderFullName = "visionuser";
+        private const string visionSenderUserIdentity = "username";
+        private const string visionSenderUserRole = "admin";
+        private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
+        private const int VisionAppointmentSlotsRequestCount = 50;
+        private const int PrescriptionsMaxCoursesSoftLimit = 100;
+        private const int CoursesMaxCoursesLimit = 100;
 
-        private ConfigurationSettings _settings = new ConfigurationSettings
-            { VisionAppointmentSlotsRequestCount = 50 };
+        private VisionConfigurationSettings _settings;
+        private const string environment = "environment";
+
 
         [TestInitialize]
         public void TestInitialize()
@@ -56,8 +69,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             _mockLogger = _fixture.Freeze<Mock<ILogger<VisionAppointmentSlotsService>>>();
 
-            _mockOptions = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-            _mockOptions.Setup(x => x.Value).Returns(_settings);
+            _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
+                certificatePath, certificatePassphrase, RequestUserName, visionSenderUserName, 
+                visionSenderFullName, visionSenderUserIdentity, visionSenderUserRole, VisionAppointmentSlotsRequestCount, 
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, environment);
+
+            _mockOptions = _fixture.Freeze<VisionConfigurationSettings>();
             
             var slotsResponse = new VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
             {
@@ -111,10 +128,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         public async Task GetSlots_NumberOfSlotsReturnedEqualsMaximumRequested_LogsAWarning()
         {
             // Arrange
-            _mockOptions.ResetCalls();
-            _settings = new ConfigurationSettings
-                { VisionAppointmentSlotsRequestCount = _mappedSlots.Count() };
-            _mockOptions.Setup(x => x.Value).Returns(_settings);
+            _settings.VisionAppointmentSlotsRequestCount = _mappedSlots.Count();
             _mockLogger.SetupLogger(LogLevel.Warning, $"Appointment slots retrieved for Vision patient is equal to the maximum requested ({_mappedSlots.Count()})", null).Verifiable();
             var systemUnderTest = BuildSystemUnderTest();
             
@@ -238,7 +252,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 _mockVisionClient.Object,
                 _mockLogger.Object,
                 _mockAppointmentsMapper.Object,
-                _mockOptions.Object);
+                _settings);
         }
     }
 }

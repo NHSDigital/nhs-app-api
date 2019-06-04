@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public const string HeaderApplicationId = "X-API-ApplicationId";
         public const string HeaderVersion = "X-API-Version";
 
-        public EmisHttpClient(HttpClient client, IEmisConfig config)
+        public EmisHttpClient(HttpClient client, EmisConfigurationSettings config)
         {
             client.DefaultRequestHeaders.Add(HeaderApplicationId, config.ApplicationId);
             client.DefaultRequestHeaders.Add(HeaderVersion, config.Version);

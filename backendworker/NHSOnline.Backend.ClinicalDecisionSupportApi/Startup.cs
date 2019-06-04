@@ -42,9 +42,6 @@ namespace NHSOnline.Backend.ClinicalDecisionSupportApi
                         new CamelCasePropertyNamesContractResolver()
                 );
             
-            services.Configure<ConfigurationSettings>(
-                Configuration.GetSection(ConfigurationSettings.ConfigurationSectionName));
-            
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;

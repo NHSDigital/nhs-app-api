@@ -32,14 +32,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         private static readonly Guid Uuid = new Guid("8a1c6b80-7bcb-49fd-9c6f-4801e12207d6"); 
         private const string UnitId = "unitId";
 
+        private const string CertificatePath = "CertificatePath";
+        private const string CertificatePassphrase = "CerticiatePassphrase";
         private const string MediaType = "application/xml";
         private const string Suid = "session_id";
+
+        private int? PrescriptionsMaxCoursesSoftLimit = 100;
+        private int? CoursesMaxCoursesLimit = 100;
 
         private ITppClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private TppHttpClient _httpClient;
-        private Mock<ITppConfig> _configMock;
+        private TppConfigurationSettings _tppConfig;
+
+        private Mock<IGuidCreator> _guidCreator;
         private IFixture _fixture;
+        private const string environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -47,21 +55,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
 
-            _configMock = new Mock<ITppConfig>();
-            _configMock.SetupGet(x => x.ApplicationName).Returns(ApplicationName);
-            _configMock.SetupGet(x => x.ApplicationVersion).Returns(ApplicationVersion);
-            _configMock.SetupGet(x => x.ApplicationProviderId).Returns(ApplicationProviderId);
-            _configMock.SetupGet(x => x.ApplicationProviderId).Returns(ApplicationProviderId);
-            _configMock.SetupGet(x => x.ApplicationDeviceType).Returns(ApplicationDeviceType);
-            _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
-            _configMock.SetupGet(x => x.ApiVersion).Returns(ApiVersion);
-            _configMock.Setup(x => x.CreateGuid()).Returns(Uuid);
+            _guidCreator = new Mock<IGuidCreator>();
+            _guidCreator.Setup(x => x.CreateGuid()).Returns(Uuid);
 
+            _tppConfig = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, 
+                ApplicationProviderId, ApplicationDeviceType, CertificatePassphrase, CertificatePath, 
+                PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, environment);
             _mockHttpHandler = new MockHttpMessageHandler();
-            _httpClient = new TppHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
+            _httpClient = new TppHttpClient(new HttpClient(_mockHttpHandler), _tppConfig);
 
-            _fixture.Inject(_configMock);
             _fixture.Inject(_httpClient);
+            _fixture.Inject(_tppConfig);
+            _fixture.Inject(_guidCreator);
 
             _systemUnderTest = _fixture.Create<TppClient>();
         }
@@ -75,10 +80,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             authenticateRequestModel.ApiVersion = ApiVersion;
             authenticateRequestModel.Application = new Application
             {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
+                Name = ApplicationName,
+                Version = ApplicationVersion,
                 ProviderId = authenticateRequestModel.ProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
+                DeviceType = ApplicationDeviceType
             };
 
             var expectedAuthenticateResponse = _fixture.Create<AuthenticateReply>();
@@ -100,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithTppHeaders(requestHeaders)
                 .WithContent(authenticateRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
-
+ 
             var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
 
             response.Body.Should().BeEquivalentTo(expectedAuthenticateResponse);
@@ -118,10 +123,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             authenticateRequestModel.ApiVersion = ApiVersion;
             authenticateRequestModel.Application = new Application
             {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
+                Name = ApplicationName,
+                Version = ApplicationVersion,
                 ProviderId = authenticateRequestModel.ProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
+                DeviceType = ApplicationDeviceType
             };
 
             var expectedErrorResponse = _fixture.Create<Error>();
@@ -159,10 +164,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             authenticateRequestModel.ApiVersion = ApiVersion;
             authenticateRequestModel.Application = new Application
             {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
+                Name = ApplicationName,
+                Version = ApplicationVersion,
+                ProviderId = authenticateRequestModel.ProviderId,
+                DeviceType = ApplicationDeviceType
             };
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
@@ -227,16 +232,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkRequestModel.OrganisationCode = UnitId;
             linkRequestModel.Uuid = Uuid;
             linkRequestModel.ApiVersion = ApiVersion;
-            linkRequestModel.Application = new Application
-            {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
-            };
+            linkRequestModel.Application = createApplication();
 
             var expectedLinkAccountResponse = _fixture.Create<LinkAccountReply>();
-            expectedLinkAccountResponse.ProviderId = _configMock.Object.ApplicationProviderId;
+            expectedLinkAccountResponse.ProviderId = _tppConfig.ApplicationProviderId;
 
             var requestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -271,13 +270,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
             linkAccountRequestModel.ApiVersion = ApiVersion;
-            linkAccountRequestModel.Application = new Application
-            {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
-            };
+            linkAccountRequestModel.Application = createApplication();
 
             var expectedErrorResponse = _fixture.Create<Error>();
 
@@ -312,13 +305,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
             linkAccountRequestModel.ApiVersion = ApiVersion;
-            linkAccountRequestModel.Application = new Application
-            {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
-            };
+            linkAccountRequestModel.Application = createApplication();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -343,16 +330,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             addNhsUserRequestModel.OrganisationCode = UnitId;
             addNhsUserRequestModel.Uuid = Uuid;
             addNhsUserRequestModel.ApiVersion = ApiVersion;
-            addNhsUserRequestModel.Application = new Application
-            {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
-            };
+            addNhsUserRequestModel.Application = createApplication();
 
             var expectedLinkAccountResponse = _fixture.Create<AddNhsUserResponse>();
-            expectedLinkAccountResponse.ProviderId = _configMock.Object.ApplicationProviderId;
+            expectedLinkAccountResponse.ProviderId = _tppConfig.ApplicationProviderId;
 
             var requestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -387,13 +368,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             nhsAddUserRequestModel.OrganisationCode = UnitId;
             nhsAddUserRequestModel.Uuid = Uuid;
             nhsAddUserRequestModel.ApiVersion = ApiVersion;
-            nhsAddUserRequestModel.Application = new Application
-            {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
-            };
+            nhsAddUserRequestModel.Application = createApplication();
 
             var expectedErrorResponse = _fixture.Create<Error>();
 
@@ -428,13 +403,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             addNhsUserRequestModel.OrganisationCode = UnitId;
             addNhsUserRequestModel.Uuid = Uuid;
             addNhsUserRequestModel.ApiVersion = ApiVersion;
-            addNhsUserRequestModel.Application = new Application
-            {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
-            };
+            addNhsUserRequestModel.Application = createApplication();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -522,13 +491,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
             linkAccountRequestModel.ApiVersion = ApiVersion;
-            linkAccountRequestModel.Application = new Application
-            {
-                Name = _configMock.Object.ApplicationName,
-                Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
-                DeviceType = _configMock.Object.ApplicationDeviceType
-            };
+            linkAccountRequestModel.Application = createApplication();
 
             var expectedErrorResponse = new Error
             {
@@ -666,6 +629,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public void Dispose()
         {
             _mockHttpHandler.Dispose();
+        }
+
+        private Application createApplication()
+        {
+            return new Application 
+            {
+                Name = _tppConfig.ApplicationName,
+                Version = _tppConfig.ApplicationVersion,
+                ProviderId = _tppConfig.ApplicationProviderId,
+                DeviceType = _tppConfig.ApplicationDeviceType 
+            };
         }
     }
 }

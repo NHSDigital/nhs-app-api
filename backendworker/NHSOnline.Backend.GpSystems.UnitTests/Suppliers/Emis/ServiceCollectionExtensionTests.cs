@@ -41,7 +41,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 new ServiceDescriptor(typeof(EmisHttpRequestIdentifier), typeof(EmisHttpRequestIdentifier), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(IGpSystem), typeof(EmisGpSystem), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IEmisClient), typeof(EmisClient), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IEmisConfig), typeof(EmisConfig), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IEmisEnumMapper), typeof(EmisEnumMapper), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(EmisTokenValidationService), typeof(EmisTokenValidationService), ServiceLifetime.Transient)
             };

@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.Support.UnitTests.Http
@@ -20,9 +21,9 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
     public class HttpTimeoutHandlerTests
     {
         private IFixture _fixture;
-        private Mock<IOptions<ConfigurationSettings>> _settings;
         private Mock<IHttpRequestIdentifier> _requestIdentifier;
         private ConfigurationSettings _configurationSettings;
+        private EmisConfigurationSettings _emisConfigurationSettings;
 
         [TestInitialize]
         public void TestInitialize()
@@ -31,15 +32,14 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
 
             _fixture.Freeze<Mock<ILogger<HttpTimeoutHandler<IHttpRequestIdentifier>>>>();
             _requestIdentifier = _fixture.Freeze<Mock<IHttpRequestIdentifier>>();
-            _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
             
             _configurationSettings = _fixture.Create<ConfigurationSettings>();
+            _emisConfigurationSettings = _fixture.Create<EmisConfigurationSettings>();
             _configurationSettings.DefaultHttpTimeoutSeconds = 2;
-            _configurationSettings.EmisExtendedHttpTimeoutSeconds = 6;
+            _emisConfigurationSettings.EmisExtendedHttpTimeoutSeconds = 6;
 
-            _settings
-                .Setup(x => x.Value)
-                .Returns(_configurationSettings);
+            _fixture.Inject(_configurationSettings);
+
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 .Respond(httpContent);
 
             httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout,
-                _configurationSettings.EmisExtendedHttpTimeoutSeconds);
+                _emisConfigurationSettings.EmisExtendedHttpTimeoutSeconds);
             
             mockHttpHandler.Fallback.Respond(async () =>
             {
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 .Respond(httpContent);
 
             httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout,
-                _configurationSettings.EmisExtendedHttpTimeoutSeconds);
+                _emisConfigurationSettings.EmisExtendedHttpTimeoutSeconds);
             
             mockHttpHandler.Fallback.Respond(async () =>
             {

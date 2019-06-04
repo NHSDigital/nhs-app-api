@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.Areas.Session;
@@ -42,7 +41,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private Mock<ITokenValidationService> _mockTokenValidationService;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
-        private Mock<IOptions<ConfigurationSettings>> _configurationSettings;
+        private ConfigurationSettings _configurationSettings;
+//        private Mock<ConfigurationSettings> _mockConfigurationSettings;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<ISessionMapper> _mockSessionMapper;
@@ -59,11 +59,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private EmisConnectionToken _connectionToken;
         private string _apiSessionId;
         private string _name;
-        private int _sessionTimeoutMinutes;
         private int _sessionTimeoutSeconds;
         private GpSessionCreateResult _sessionCreateResult;
         private const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
         private const int MinimumAppAge = 13;
+        private const string CookieDomain = "CookieDomain";
+        private int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
+        private const int SessionTimeoutMinutes = 10;
+        private int MinimumLinkageAge = 16;
+        
+        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
 
         [TestInitialize]
         public void TestInitialize()
@@ -71,6 +76,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
+            
 
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
@@ -78,17 +84,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _connectionToken = _fixture.Create<EmisConnectionToken>();
             _userProfile.Im1ConnectionToken = _connectionToken.SerializeJson();
             _name = _fixture.Create<string>();
-            _sessionTimeoutMinutes = _fixture.Create<int>();
-            _sessionTimeoutSeconds = _sessionTimeoutMinutes * 60;
-
-            _configurationSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-            _configurationSettings
-                .Setup(x => x.Value)
-                .Returns(new ConfigurationSettings()
-                {
-                    DefaultSessionExpiryMinutes = _sessionTimeoutMinutes,
-                    MinimumAppAge = MinimumAppAge,
-                });
+            _sessionTimeoutSeconds = SessionTimeoutMinutes * 60;
 
             _apiSessionId = _fixture.Create<string>();
 
@@ -190,8 +186,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockOdsCodeMassager = _fixture.Freeze<Mock<IOdsCodeMassager>>();
             _mockOdsCodeMassager.Setup(x => x.CheckOdsCode(_userProfile.OdsCode)).Returns(_userProfile.OdsCode);
 
+            _configurationSettings = _fixture.Freeze<ConfigurationSettings>();
+            _configurationSettings.CookieDomain = CookieDomain;
+            _configurationSettings.PrescriptionsDefaultLastNumberMonthsToDisplay = PrescriptionsDefaultLastNumberMonthsToDisplay;
+            _configurationSettings.DefaultSessionExpiryMinutes = SessionTimeoutMinutes;
+            _configurationSettings.DefaultHttpTimeoutSeconds = _sessionTimeoutSeconds;
+            _configurationSettings.MinimumAppAge = MinimumAppAge;
+            _configurationSettings.MinimumLinkageAge = MinimumLinkageAge;
+            _configurationSettings.CurrentTermsConditionsEffectiveDate = CurrentTermsConditionsEffectiveDate;
+            
             _systemUnderTest = _fixture.Create<SessionController>();
-
+            
             _systemUnderTest.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContextMock.Object

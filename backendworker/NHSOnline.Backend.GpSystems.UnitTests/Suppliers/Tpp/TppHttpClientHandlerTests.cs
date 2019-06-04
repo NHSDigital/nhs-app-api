@@ -85,7 +85,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
         private TppHttpClientHandler CreateTppHttpClientHandler()
         {
-            return new TppHttpClientHandler(_mockConfiguration.Object, _mockLogger.Object, _certificateService.Object);
+            return new TppHttpClientHandler(_mockConfiguration.Object,
+                new TppConfigurationSettings 
+                {
+                    CertificatePath = Path,
+                    CertificatePassphrase = Passphrase
+                }, 
+                _mockLogger.Object,
+                _certificateService.Object);
         }
 
         public void Dispose()

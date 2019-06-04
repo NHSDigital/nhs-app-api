@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
@@ -18,18 +19,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
     public class VisionPrescriptionService : IPrescriptionService
     {
         private readonly ILogger<VisionPrescriptionService> _logger;
-        private readonly ConfigurationSettings _settings;
+        private readonly VisionConfigurationSettings _settings;
         private readonly IVisionClient _visionClient;
         private readonly IVisionPrescriptionMapper _visionPrescriptionMapper;
 
         public VisionPrescriptionService(ILogger<VisionPrescriptionService> logger,
-            IOptions<ConfigurationSettings> settings,
+            VisionConfigurationSettings settings,
             IVisionClient visionClient, IVisionPrescriptionMapper visionPrescriptionMapper)
         {
             _logger = logger;
             _visionClient = visionClient;
-            _settings = settings.Value;
+            _settings = settings;
             _visionPrescriptionMapper = visionPrescriptionMapper;
+
+            _settings.Validate();
         }
 
         public async Task<GetPrescriptionsResult> GetPrescriptions(
@@ -198,7 +201,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             
             foreach (var prescription in prescriptionHistory.Requests)
             {
-                if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit.Value)
+                if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit)
                 {
                     _logger.LogWarning("Total courses exceeded maximum, discarding remainder.");
                     break;

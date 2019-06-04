@@ -51,7 +51,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
                 new ServiceDescriptor(typeof(MicrotestHttpRequestIdentifier), typeof(MicrotestHttpRequestIdentifier),ServiceLifetime.Transient),                
                 new ServiceDescriptor(typeof(IGpSystem), typeof(MicrotestGpSystem),ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IMicrotestClient), typeof(MicrotestClient),ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IMicrotestConfig), typeof(MicrotestConfig), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(MicrotestTokenValidationService), typeof(MicrotestTokenValidationService),ServiceLifetime.Transient)
             };
 

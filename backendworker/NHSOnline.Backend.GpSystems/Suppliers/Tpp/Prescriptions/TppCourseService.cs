@@ -17,17 +17,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
     public class TppCourseService : ICourseService
     {
         private readonly ILogger<TppCourseService> _logger;
-        private readonly ConfigurationSettings _settings;
+        private readonly TppConfigurationSettings _settings;
         private readonly ITppClient _tppClient;
         private readonly ITppCourseMapper _tppCourseMapper;
 
-        public TppCourseService(ILogger<TppCourseService> logger, IOptions<ConfigurationSettings> settings,
+        public TppCourseService(ILogger<TppCourseService> logger, TppConfigurationSettings settings,
             ITppClient tppClient, ITppCourseMapper tppCourseMapper)
         {
             _logger = logger;
-            _settings = settings.Value;
+            _settings = settings;
             _tppClient = tppClient;
             _tppCourseMapper = tppCourseMapper;
+
+            _settings.Validate();
         }
 
         public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
@@ -85,14 +87,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 .Where(x => TppApiConstants.MedicationRequestable.Yes.Equals(x.Requestable,
                                 StringComparison.OrdinalIgnoreCase) &&
                             TppApiConstants.MedicationType.Repeat.Equals(x.Type, StringComparison.OrdinalIgnoreCase));
-
-            if (_settings.CoursesMaxCoursesLimit != null)
+            if (_settings.CoursesMaxCoursesLimit.HasValue)
             {
                 requestableRepeatablePrescriptions = 
                     requestableRepeatablePrescriptions
                         .Take(_settings.CoursesMaxCoursesLimit.Value);
             }
-
+            
             return requestableRepeatablePrescriptions.OrderBy(x => x.Drug).ToList();
         }
 

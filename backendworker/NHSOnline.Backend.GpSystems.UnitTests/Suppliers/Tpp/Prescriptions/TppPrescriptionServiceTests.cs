@@ -27,11 +27,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         private TppPrescriptionService _systemUnderTest;
         private Mock<ITppClient> _tppClient;
         private Mock<ITppPrescriptionMapper> _tppPrescriptionMapper;
-        private IOptions<ConfigurationSettings> _options;
+        private TppConfigurationSettings _settings;
         private TppUserSession _tppUserSession;
         private IFixture _fixture;
-
+        private const string ApplicationName = "appName";
+        private const string ApplicationVersion = "13";
+        private const string ApplicationProviderId = "providerId";
+        private const string ApplicationDeviceType = "deviceType";
+        private static readonly Uri ApiUrl = new Uri("http://tppapitest:60015/Test/");
+        private const string ApiVersion = "12";
+        private const string CertificatePath = "CertificatePath";
+        private const string CertificatePassphrase = "CerticiatePassphrase";
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
+        private const int CoursesMaxCoursesLimit = 100;
+        private const string environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -42,12 +51,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
             _tppPrescriptionMapper = _fixture.Freeze<Mock<ITppPrescriptionMapper>>();
+
+            _settings = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, ApplicationProviderId, ApplicationDeviceType, 
+                CertificatePath, CertificatePassphrase, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, environment);
                         
-            _options = Options.Create(new ConfigurationSettings
-            {
-                PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
-            });
-            _fixture.Inject(_options);
+            _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<TppPrescriptionService>();
         }
 

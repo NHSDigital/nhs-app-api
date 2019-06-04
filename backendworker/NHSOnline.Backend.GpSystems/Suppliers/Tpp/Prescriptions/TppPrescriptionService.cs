@@ -18,19 +18,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
     public class TppPrescriptionService : IPrescriptionService
     {
         private readonly ILogger<TppPrescriptionService> _logger;
-        private readonly ConfigurationSettings _settings;
+        private readonly TppConfigurationSettings _settings;
         private readonly ITppClient _tppClient;
         private readonly ITppPrescriptionMapper _tppPrescriptionMapper;
 
         public TppPrescriptionService(
             ILogger<TppPrescriptionService> logger,
-            IOptions<ConfigurationSettings> settings,
+            TppConfigurationSettings settings,
             ITppClient tppClient, ITppPrescriptionMapper tppPrescriptionMapper)
         {
             _tppClient = tppClient;
-            _settings = settings.Value;
+            _settings = settings;
             _logger = logger;
             _tppPrescriptionMapper = tppPrescriptionMapper;
+
+            _settings.Validate();
         }
 
         public async Task<GetPrescriptionsResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate = null,
@@ -121,10 +123,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 
         private List<Medication> GetMaxPrescriptions(List<Medication> medications)
         {
-            if (_settings.PrescriptionsMaxCoursesSoftLimit != null)
+            if(_settings.PrescriptionsMaxCoursesSoftLimit.HasValue) 
             {
                 medications = medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
             }
+            
 
             return medications;
         }

@@ -16,14 +16,14 @@ namespace NHSOnline.Backend.PfsApi.Devices
         private bool _throttlingEnabled;
         private Uri _fidoServerUrl;
 
-        public SupportedDeviceService(ILogger<SupportedDeviceService> logger, IOptions<ConfigurationSettings> settings)
+        public SupportedDeviceService(ILogger<SupportedDeviceService> logger, DeviceConfigurationSettings settings)
         {
             _logger = logger;
 
             SupportedAppVersions = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
             {
-                { SupportedDeviceNames.Android, settings.Value.MinimumSupportedAndroidVersion },
-                { SupportedDeviceNames.iOS, settings.Value.MinimumSupportediOSVersion }
+                { SupportedDeviceNames.Android, settings.MinimumSupportedAndroidVersion },
+                { SupportedDeviceNames.iOS, settings.MinimumSupportediOSVersion }
             };
 
             CheckIfThrottlingEnabled(settings);
@@ -31,17 +31,17 @@ namespace NHSOnline.Backend.PfsApi.Devices
             GetFidoServerUrl(settings);
         }
 
-        private void CheckIfThrottlingEnabled(IOptions<ConfigurationSettings> settings)
+        private void CheckIfThrottlingEnabled(DeviceConfigurationSettings settings)
         {
-            if (!bool.TryParse(settings.Value.ThrottlingEnabled, out _throttlingEnabled))
+            if (!bool.TryParse(settings.ThrottlingEnabled, out _throttlingEnabled))
             {
                 throw new ConfigurationNotFoundException();
             }
         }
 
-        private void GetFidoServerUrl(IOptions<ConfigurationSettings> settings)
+        private void GetFidoServerUrl(DeviceConfigurationSettings settings)
         {
-            _fidoServerUrl = settings.Value.FidoServerUrl;
+            _fidoServerUrl = settings.FidoServerUrl;
         }
 
         [AllowAnonymous]

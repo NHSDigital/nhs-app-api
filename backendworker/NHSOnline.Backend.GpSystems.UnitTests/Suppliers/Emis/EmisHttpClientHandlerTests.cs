@@ -18,17 +18,37 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private IFixture _fixture;
         private EmisHttpClientHandler _systemUnderTest;
         private Mock<IConfiguration> _mockConfiguration;
+        private EmisConfigurationSettings _config;
         private ILogger<EmisHttpClientHandler> _mockLogger;
         private Mock<ICertificateService> _certificateService;
 
+        public const string DefaultEmisVersion = "2.1.0.0";
+        public static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
+
+        public static readonly Uri BaseUri = new Uri("http://emis_base_url/");
+
+        private const string CertificatePath = "CertificatePath";
+
+        private const string CertificatePassphrase = "CerticiatePassphrase";       
+
+        private const int CoursesMaxCoursesLimit = 100;
+
+        private const int EmisExtendedHttpTimeoutSeconds = 6;
+
+        private const int DefaultHttpTimeoutSeconds = 2;
+        private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const string Path = "Suppliers/Vision/Resources/mycert.pfx";
         private const string Passphrase = "password1";
+        private const string Environment = "testEnv";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockLogger = _fixture.Create<ILogger<EmisHttpClientHandler>>();
+
+            _config = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
 
             _mockConfiguration = new Mock<IConfiguration>();
             _certificateService = _fixture.Freeze<Mock<ICertificateService>>();
@@ -86,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
         private EmisHttpClientHandler CreateEmisHttpClientHandler()
         {
-            return new EmisHttpClientHandler(_mockConfiguration.Object, _mockLogger, _certificateService.Object);
+            return new EmisHttpClientHandler(_mockConfiguration.Object, _config, _mockLogger, _certificateService.Object);
         }
 
         public void Dispose()

@@ -16,11 +16,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         private readonly ConfigurationSettings _settings;
 
         public TppLinkageErrors(IMinimumAgeValidator minimumAgeValidator,
-            ILogger logger, IOptions<ConfigurationSettings> settings)
+            ILogger logger, ConfigurationSettings settings)
         {
             _minimumAgeValidator = minimumAgeValidator;
             _logger = logger;
-            _settings = settings.Value;
+            _settings = settings;
         }
 
 

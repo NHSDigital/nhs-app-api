@@ -2,7 +2,6 @@
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Certificate;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
@@ -12,6 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
         public VisionHttpClientHandler(
             IConfiguration configuration,
+            VisionConfigurationSettings visionConfigurationSettings,
             ILogger<VisionHttpClientHandler> logger,
             ICertificateService certificateService)
         {
@@ -20,8 +20,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
             }
 
-            var path = configuration.GetOrWarn("VISION_CERT_PATH", logger);
-            var password = configuration.GetOrWarn("VISION_CERT_PASSPHRASE", logger);
+            var path = visionConfigurationSettings.CertificatePath;
+            var password = visionConfigurationSettings.CertificatePassphrase;
             logger.LogInformation($"VISION_CERT_PATH: {path}");
 
             var certificate = certificateService.GetCertificate(path, password);

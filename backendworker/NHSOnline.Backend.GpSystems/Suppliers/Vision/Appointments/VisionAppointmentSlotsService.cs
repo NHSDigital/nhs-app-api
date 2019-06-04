@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
@@ -18,18 +19,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         private readonly IVisionClient _visionClient;
         private readonly ILogger<VisionAppointmentSlotsService> _logger;
         private readonly IAvailableAppointmentsResponseMapper _mapper;
-        private readonly ConfigurationSettings _settings;
+        private readonly VisionConfigurationSettings _settings;
         
         public VisionAppointmentSlotsService(
             IVisionClient visionClient, 
             ILogger<VisionAppointmentSlotsService> logger,
             IAvailableAppointmentsResponseMapper mapper,
-            IOptions<ConfigurationSettings> settings)
+            VisionConfigurationSettings settings)
         {
             _visionClient = visionClient;
             _logger = logger;
             _mapper = mapper;
-            _settings = settings.Value;
+            _settings = settings;
+
+            _settings.Validate();
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(GpUserSession gpUserSession, AppointmentSlotsDateRange dateRange)

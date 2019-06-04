@@ -24,12 +24,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly IAuditor _auditor;
         
         public PrescriptionsController(
-            IOptions<ConfigurationSettings> settings,
+            ConfigurationSettings settings,
             ILogger<PrescriptionsController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor)
         {
-            _settings = settings.Value;
+            _settings = settings;
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;

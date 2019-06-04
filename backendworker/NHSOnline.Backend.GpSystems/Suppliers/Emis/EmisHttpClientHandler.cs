@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
     {
         public EmisHttpClientHandler(
             IConfiguration configuration,
+            EmisConfigurationSettings emisConfigurationSettings,
             ILogger<EmisHttpClientHandler> logger,
             ICertificateService certificateService)
         {
@@ -19,8 +20,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
             }
 
-            var path = configuration.GetOrWarn("EMIS_CERTIFICATE_PATH", logger);
-            var password = configuration.GetOrWarn("EMIS_CERTIFICATE_PASSWORD", logger);
+            var path = emisConfigurationSettings.CertificatePath;
+            var password = emisConfigurationSettings.CertificatePassphrase;
             logger.LogInformation($"EMIS_CERTIFICATE_PATH: {path}");
 
             var certificate = certificateService.GetCertificate(path, password);

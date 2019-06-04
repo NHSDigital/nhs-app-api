@@ -14,6 +14,7 @@ using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.CidApi.Areas.Linkage;
@@ -33,10 +34,15 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         private Mock<IAuditor> _mockAuditor;
         private IFixture _fixture;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
-        private Mock<IOptions<ConfigurationSettings>> _settings;
+        private ConfigurationSettings _settings;
         private Mock<IOdsCodeMassager> _odsCodeMassager;
-        private const int MinimumLinkageAge = 16;
-        
+        private const string CookieDomain = "CookieDomain";
+        private int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
+        private const int DefaultSessionExpiryMinutes  = 10;
+        private const int DefaultHttpTimeoutSeconds = 6;
+        private int MinimumAppAge = 16;
+        private int MinimumLinkageAge = 16;
+        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         private const string GetRequestAuditType = "Linkage_GetDetails_Request";
         private const string GetResponseAuditType = "Linkage_GetDetails_Response";
         private const string PostRequestAuditType = "Linkage_CreateKey_Request";
@@ -49,13 +55,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-            _settings
-                .Setup(x => x.Value)
-                .Returns(new ConfigurationSettings()
-                {
-                    MinimumLinkageAge = MinimumLinkageAge,
-                });
+            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultSessionExpiryMinutes, 
+            DefaultHttpTimeoutSeconds, MinimumAppAge, MinimumLinkageAge, CurrentTermsConditionsEffectiveDate);
+
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);
             _odsCodeMassager = _fixture.Freeze<Mock<IOdsCodeMassager>>();
@@ -311,7 +313,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 EmailAddress = emailAddress,
             };
             
-            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), MinimumLinkageAge)).Returns(false);
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), _settings.MinimumLinkageAge)).Returns(false);
             
             LinkageController linkageController = CreateLinkageController(gpSystemFactoryMock: gpSystemFactoryMock);
 
@@ -389,7 +391,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                   MockGpSystemFactory();
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
 
-            return new LinkageController(logger.Object, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object, _mockMinimumAgeValidator.Object, _settings.Object, _odsCodeMassager.Object);
+            return new LinkageController(logger.Object, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object, _mockMinimumAgeValidator.Object, _settings, _odsCodeMassager.Object);
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(

@@ -3,11 +3,9 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.Areas.Configuration;
-using NHSOnline.Backend.Support.Settings;
 using static NHSOnline.Backend.Support.Constants;
 using NHSOnline.Backend.PfsApi.Devices;
 
@@ -20,7 +18,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
 
         private SupportedDeviceService _systemUnderTest;
         private Mock<ILogger<SupportedDeviceService>> _logger;
-        private IOptions<ConfigurationSettings> _options;
+        private DeviceConfigurationSettings _settings;
 
         private const string MinimumSupportedAndroidVersion = "2.1.0";
         private const string MinimumSupportediOSVersion = "3.5.0";
@@ -30,25 +28,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
         [TestInitialize]
         public void TestInitialize()
         {
-            _options = Options.Create(new ConfigurationSettings
+            _settings = new DeviceConfigurationSettings
             {
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
                 MinimumSupportediOSVersion = MinimumSupportediOSVersion,
                 ThrottlingEnabled = "true",
                 FidoServerUrl = _testFidoServerUrl
-            });
+            };
 
-            TestInitializeWithOptions(_options);
+            TestInitializeWithOptions(_settings);
         }
 
-        private void TestInitializeWithOptions(IOptions<ConfigurationSettings> options)
+        private void TestInitializeWithOptions(DeviceConfigurationSettings settings)
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _logger = _fixture.Freeze<Mock<ILogger<SupportedDeviceService>>>();
-            _options = options;
+            _settings = settings;
 
-            _fixture.Inject(_options);
+            _fixture.Inject(_settings);
             _fixture.Inject(_logger);
 
             _systemUnderTest = _fixture.Create<SupportedDeviceService>();
@@ -146,15 +144,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
                 NativeAppVersion = MinimumSupportedAndroidVersion,
             };
             
-            var options = Options.Create(new ConfigurationSettings
+            var settings = new DeviceConfigurationSettings
             {
                 MinimumSupportedAndroidVersion = "1.blah",
                 ThrottlingEnabled = "true",
                 FidoServerUrl = _testFidoServerUrl
-            });
+            };
 
             // Reinitialise with new options
-            TestInitializeWithOptions(options);
+            TestInitializeWithOptions(settings);
 
             // Act
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);

@@ -23,13 +23,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
     {
         public static readonly Uri BaseUri = new Uri("http://microtest_base_url/");
 
+        private string CertificatePath = "CertificatePath";
+        private string CertificatePassphrase = "CertificatePassphrase";
         private IMicrotestClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
-        private Mock<IMicrotestConfig> _configMock;
+        private MicrotestConfigurationSettings _configurationSettings;
         private MicrotestHttpClient _httpClient;
         private IFixture _fixture;
         private string _nhsNumber;
         private string _odsCode;
+        private const string environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -38,13 +41,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
 
             _mockHttpHandler = new MockHttpMessageHandler();
+            
+            _configurationSettings = new MicrotestConfigurationSettings(BaseUri, CertificatePath, CertificatePassphrase, environment);
 
-            _configMock = new Mock<IMicrotestConfig>();
-            _configMock.SetupGet(x => x.BaseUrl).Returns(BaseUri);
+            _httpClient = new MicrotestHttpClient(new HttpClient(_mockHttpHandler), _configurationSettings);
 
-            _httpClient = new MicrotestHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
-
-            _fixture.Inject(_configMock);
+            _fixture.Inject(_configurationSettings);
             _fixture.Inject(_httpClient);
 
             _odsCode = _fixture.Create<string>();

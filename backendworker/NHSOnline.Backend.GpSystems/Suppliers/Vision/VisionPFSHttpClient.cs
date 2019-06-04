@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
     {
         private const string MediaType = "text/xml";
 
-        public VisionPFSHttpClient(HttpClient client, IVisionPFSConfig config)
+        public VisionPFSHttpClient(HttpClient client, VisionConfigurationSettings config)
         {
             client.BaseAddress = config.ApiUrl;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));

@@ -7,9 +7,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
     {
         private const string MediaType = "application/json";
 
-        public MicrotestHttpClient(HttpClient client, IMicrotestConfig config)
+        public MicrotestHttpClient(HttpClient client, MicrotestConfigurationSettings configurationSettings)
         {
-            client.BaseAddress = config.BaseUrl;
+            client.BaseAddress = configurationSettings.BaseUrl;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
             Client = client;
         }

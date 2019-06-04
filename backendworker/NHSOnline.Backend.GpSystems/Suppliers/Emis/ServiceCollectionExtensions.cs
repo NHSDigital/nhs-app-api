@@ -31,8 +31,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
             services.AddSingleton<IGpSystem, EmisGpSystem>();
             services.AddSingleton<IEmisClient, EmisClient>();
-            services.AddSingleton<IEmisConfig, EmisConfig>();
-
+            
             services.AddHttpClient<EmisHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<EmisHttpClientHandler>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<EmisHttpRequestIdentifier>>()

@@ -9,10 +9,10 @@ using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 {
@@ -20,18 +20,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<EmisCourseService> _logger;
-        private readonly ConfigurationSettings _settings;
+        private readonly EmisConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
         private const string AuditType = Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsResponse;
 
-        public EmisCourseService(IAuditor auditor, ILogger<EmisCourseService> logger, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
+        public EmisCourseService(IAuditor auditor, ILogger<EmisCourseService> logger, EmisConfigurationSettings settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _logger = logger;
-            _settings = settings.Value;
+            _settings = settings;
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
             _auditor = auditor;
+
+            _settings.Validate();
         }
 
         public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
@@ -77,13 +79,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
                         _logger
                             .LogInformationKeyValuePairs("Filtering counts", kvp);
-
-                        if (_settings.CoursesMaxCoursesLimit != null)
+                        
+                        if (_settings.CoursesMaxCoursesLimit.HasValue)
                         {
                             coursesResponse.Body.Courses = 
                                 coursesResponse.Body.Courses
                                     .Take(_settings.CoursesMaxCoursesLimit.Value);
                         }
+
 
                         _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
                         

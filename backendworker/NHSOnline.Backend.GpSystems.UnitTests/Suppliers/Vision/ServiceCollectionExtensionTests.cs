@@ -39,7 +39,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var dependencies = new List<ServiceDescriptor>
             {
                 new ServiceDescriptor(typeof(IGpSystem), typeof(VisionGpSystem), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IVisionPFSConfig), typeof(VisionPFSConfig), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IVisionLinkageConfig), typeof(VisionLinkageConfig), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IVisionPFSClient), typeof(VisionPFSClient), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IVisionLinkageClient), typeof(VisionLinkageClient), ServiceLifetime.Singleton),

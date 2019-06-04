@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IOdsCodeLookup _odsCodeLookup;
-        private readonly IOptions<ConfigurationSettings> _settings;
+        private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
         private readonly IIm1CacheService _im1CacheService;
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IGpSystemFactory gpSystemFactory,
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
-            IOptions<ConfigurationSettings> settings,
+            ConfigurationSettings settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
             IIm1CacheService im1CacheService,
@@ -221,7 +221,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             var responseBody = new UserSessionResponse
             {
                 Name = sessionCreatedResultVisited.Name,
-                SessionTimeout = _settings.Value.DefaultSessionExpiryMinutes * 60,
+                SessionTimeout = _settings.DefaultSessionExpiryMinutes * 60,
                 Token = userSession.CsrfToken,
                 OdsCode = userSession.GpUserSession.OdsCode,
                 DateOfBirth = dateOfBirth,

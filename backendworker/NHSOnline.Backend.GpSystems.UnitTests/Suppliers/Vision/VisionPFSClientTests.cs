@@ -33,15 +33,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
     {
         private IVisionPFSClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
-        private IOptions<ConfigurationSettings> _options;
-        private Mock<IVisionPFSConfig> _configMock;
+        private VisionConfigurationSettings _visionConfig;
         private IFixture _fixture;
         private VisionConnectionToken _connectionToken;
         private string _odsCode;
+        private string ApplicationProviderId = "ApplicationProviderId";
         private VisionUserSession _visionUserSession;
         private VisionPFSHttpClient _httpClient;
         private const string RequestUserName = "username";
-        
+        private const string certificatePassphrase = "CertificatePassphrase";
+        private const string certificatePath = "CertificatePath";
+        private const string visionSenderUserName = "visionuser";
+        private const string visionSenderFullName = "visionuser";
+        private const string visionSenderUserIdentity = "username";
+        private const string visionSenderUserRole = "admin";
         private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const string Path = "Suppliers/Vision/Resources/mycert.pfx";
         private const string Passphrase = "password1";
@@ -52,6 +57,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private const string OrderNewPrescriptionServiceDefinitionName = "VONREP.NewPrescription";
         private const string GetAvailableAppointmentsServiceDefinitionName = "VOAPP.GetAvailableAppointments";
         private const int VisionAppointmentSlotsRequestCount = 50;
+        private const string environment = "environment";
         
         private Mock<ICertificateService> _mockCertificateService;
         private Mock<IEnvelopeService> _mockEnvelopeService;
@@ -60,17 +66,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _options = Options.Create(new ConfigurationSettings
-            {
-                VisionAppointmentSlotsRequestCount = VisionAppointmentSlotsRequestCount
-            });
-            _fixture.Inject(_options);
+            
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
-            _configMock = _fixture.Freeze<Mock<IVisionPFSConfig>>();
-            _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
-            _configMock.SetupGet(x => x.RequestUsername).Returns(RequestUserName);
-            _configMock.SetupGet(x => x.CertificatePath).Returns(Path);
-            _configMock.SetupGet(x => x.CertificatePassphrase).Returns(Passphrase);
+
+            _visionConfig = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
+                certificatePath, certificatePassphrase, RequestUserName, visionSenderUserName, 
+                visionSenderFullName, visionSenderUserIdentity, visionSenderUserRole, 50, 100, 100, environment);
             
             _mockCertificateService = _fixture.Freeze<Mock<ICertificateService>>();
             _mockEnvelopeService = _fixture.Freeze<Mock<IEnvelopeService>>();
@@ -87,9 +88,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 new X509Certificate2(Path, Passphrase));
             
             _mockHttpHandler = new MockHttpMessageHandler();
-            _httpClient = new VisionPFSHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
+            _httpClient = new VisionPFSHttpClient(new HttpClient(_mockHttpHandler), _visionConfig);
 
             _fixture.Inject(_httpClient);
+            _fixture.Inject(_visionConfig);
             
             _systemUnderTest = _fixture.Create<VisionPFSClient>();
         }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
@@ -38,28 +39,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         private readonly X509Certificate2 _certificate;
         private readonly ILogger<VisionPFSClient> _logger;
         private readonly IEnvelopeService _envelopeService;
-        private readonly ConfigurationSettings _settings;
+        private readonly VisionConfigurationSettings _settings;
 
         private const string MediaType = "text/xml";
 
-        public VisionPFSClient(IVisionPFSConfig visionConfig,
+        public VisionPFSClient(
             ILoggerFactory loggerFactory,
             ICertificateService certificateService,
             IEnvelopeService envelopeService,
             VisionPFSHttpClient httpClient,
             IXmlResponseParser responseParser,
-            IOptions<ConfigurationSettings> settings)
+            VisionConfigurationSettings settings)
         {
-            _targetUri = visionConfig.ApiUrl;
-            _requestUsername = visionConfig.RequestUsername;
-            _providerId = visionConfig.ApplicationProviderId;
+            _settings = settings;
+            _targetUri = _settings.ApiUrl;
+            _requestUsername = _settings.RequestUsername;
+            _providerId = _settings.ApplicationProviderId;
             _logger = loggerFactory.CreateLogger<VisionPFSClient>();
             _envelopeService = envelopeService;
             _httpClient = httpClient;
             _responseParser = responseParser;
             _certificate =
-                certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
-            _settings = settings.Value;
+                certificateService.GetCertificate(_settings.CertificatePath, _settings.CertificatePassphrase);
+
+            _settings.Validate();
         }
 
         public async Task<VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(

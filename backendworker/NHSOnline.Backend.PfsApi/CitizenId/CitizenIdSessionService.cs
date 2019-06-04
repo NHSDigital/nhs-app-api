@@ -15,12 +15,12 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
     {
         private readonly ICitizenIdService _citizenIdService;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
-        private readonly IOptions<ConfigurationSettings> _settings;
+        private readonly ConfigurationSettings _settings;
         private readonly ILogger<CitizenIdSessionService> _logger;
         private const string DateFormat = "yyyy-MM-dd";
         
         public CitizenIdSessionService(ICitizenIdService citizenIdService, IMinimumAgeValidator minimumAgeValidator, 
-            IOptions<ConfigurationSettings> settings, ILogger<CitizenIdSessionService> logger)
+            ConfigurationSettings settings, ILogger<CitizenIdSessionService> logger)
         {
             _citizenIdService = citizenIdService;
             _minimumAgeValidator = minimumAgeValidator;
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 return null;
             }
 
-            if (!_minimumAgeValidator.IsValid(dateOfBirthParsed, _settings.Value.MinimumAppAge))
+            if (!_minimumAgeValidator.IsValid(dateOfBirthParsed, _settings.MinimumAppAge))
             {
                 _logger.LogError("Failed to meet the minimum age requirement.");
                 return null;

@@ -25,12 +25,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private EmisPrescriptionService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
         private Mock<IEmisPrescriptionMapper> _emisPrescriptionMapper;
-        private IOptions<ConfigurationSettings> _options;
+        private EmisConfigurationSettings _settings;
         private EmisUserSession _emisUserSession;
         private IFixture _fixture;
         private RepeatPrescriptionRequest _repeatPrescriptionRequest;
-
+        public const string DefaultEmisVersion = "2.1.0.0";
+        public static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
+        public static readonly Uri BaseUri = new Uri("http://emis_base_url/");
+        private const string CertificatePath = "CertificatePath";
+        private const string CertificatePassphrase = "CerticiatePassphrase";
+        private const int EmisExtendedHttpTimeoutSeconds = 6;
+        private const int DefaultHttpTimeoutSeconds = 2;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
+        private const int CoursesMaxCoursesLimit = 100;
+        private const string environment = "testEnv";
 
         [TestInitialize]
         public void TestInitialize()
@@ -41,11 +49,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
             
-            _options = Options.Create(new ConfigurationSettings
-            {
-                PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
-            });
-            _fixture.Inject(_options);
+            _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, 
+                environment);
+            _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<EmisPrescriptionService>();
             _repeatPrescriptionRequest = new RepeatPrescriptionRequest
             {

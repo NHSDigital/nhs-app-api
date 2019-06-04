@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
@@ -22,19 +23,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<EmisPrescriptionService> _logger;
-        private readonly ConfigurationSettings _settings;
+        private readonly EmisConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
 
         public EmisPrescriptionService(IAuditor auditor, ILogger<EmisPrescriptionService> logger,
-            IOptions<ConfigurationSettings> settings,
+            EmisConfigurationSettings settings,
             IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _auditor = auditor;
             _logger = logger;
             _emisClient = emisClient;
-            _settings = settings.Value;
+            _settings = settings;
             _emisPrescriptionMapper = emisPrescriptionMapper;
+
+            _settings.Validate();
         }
 
         public async Task<GetPrescriptionsResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate,
@@ -118,7 +121,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x =>
                 x.DateRequested))
             {
-                if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit.Value)
+                if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit)
                 {
                     _logger.LogInformation($"The number of courses has reached {totalCoursesRunningTotal} which has exceeded the maximum, discarding the remainder.");
                     break;

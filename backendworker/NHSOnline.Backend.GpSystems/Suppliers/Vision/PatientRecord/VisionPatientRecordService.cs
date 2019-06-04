@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
     {
         private readonly ILogger<VisionPatientRecordService> _logger;
         private readonly IVisionClient _visionClient;
-        private readonly IVisionPFSConfig _config;
+        private readonly VisionConfigurationSettings _config;
         private readonly IVisionMyRecordMapper _visionMyRecordMapper;
         private readonly VisionAllergyMapper _allergyMapper;
         private readonly VisionMedicationMapper _medicationMapper;
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
         public VisionPatientRecordService(
             ILogger<VisionPatientRecordService> logger,
             IVisionClient visionClient,
-            IVisionPFSConfig visionConfig,
+            VisionConfigurationSettings visionConfig,
             IVisionMyRecordMapper visionMyRecordMapper,
             VisionAllergyMapper allergyMapper,
             VisionMedicationMapper medicationMapper,

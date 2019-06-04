@@ -28,12 +28,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         private Mock<ITppClient> _tppClient;
         private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
         private Mock<IIm1CacheService> _mockIm1CacheService;
-        private Mock<IOptions<ConfigurationSettings>> _settings;
+        private ConfigurationSettings _settings;
         private Mock<ITppLinkageMapper> _mockLinkageMapper;
         private TppLinkageService _systemUnderTest;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         private DateTime _dateOfBirth;
-        private const int MinimumLinkageAge = 16;
+        private const string CookieDomain = "CookieDomain";
+        private int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
+        private const int DefaultSessionExpiryMinutes  = 10;
+        private const int DefaultHttpTimeoutSeconds = 6;
+        private int MinimumAppAge = 16;
+        private int MinimumLinkageAge = 16;
+        
+        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
 
         [TestInitialize]
         public void TestInitialize()
@@ -44,13 +51,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockLinkageMapper = _fixture.Freeze<Mock<ITppLinkageMapper>>();
 
-            _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-            _settings
-                .Setup(x => x.Value)
-                .Returns(new ConfigurationSettings()
-                {
-                    MinimumLinkageAge = MinimumLinkageAge,
-                });
+            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, 
+            DefaultSessionExpiryMinutes, MinimumAppAge, MinimumLinkageAge, CurrentTermsConditionsEffectiveDate);
+
+            _fixture.Inject(_settings);
+
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);
             _dateOfBirth = DateTime.Now.AddYears(-16);  //Doesn't matter what age, as validator is mocked
@@ -210,7 +215,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials,
                 typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge));
             
-            _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), MinimumLinkageAge));
+            _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), _settings.MinimumLinkageAge));
         }
 
         private async Task CreateLinkageKey_ReturnsError_WhenNotAuthenticated(string errorCode, Type expectedError)

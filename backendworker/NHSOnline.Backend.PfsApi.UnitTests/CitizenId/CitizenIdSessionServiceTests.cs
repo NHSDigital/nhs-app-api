@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private IFixture _fixture;
         private Mock<ICitizenIdService> _mockCitizenIdService;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
-        private Mock<IOptions<ConfigurationSettings>> _mockSettings;
+        private ConfigurationSettings _mockSettings;
         private CitizenIdSessionService _systemUnderTest;
 
         private string _authCode;
@@ -35,6 +35,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private string _odsCode;
         
         private const string _dateFormat = "yyyy-MM-dd";
+        private const string CookieDomain = "CookieDomain";
+        private int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
+        private const int DefaultSessionExpiryMinutes  = 10;
+        private const int DefaultHttpTimeoutSeconds = 6;
+        private int MinimumAppAge = 16;
+        private int MinimumLinkageAge = 16;
+        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         
         [TestInitialize]
         public void TestInitialize()
@@ -43,14 +50,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
-            _mockSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-
-            _mockSettings
-                .Setup(x => x.Value)
-                .Returns(new ConfigurationSettings
-                {
-                    MinimumAppAge = 1
-                });
+            _mockSettings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultSessionExpiryMinutes, 
+                DefaultHttpTimeoutSeconds, MinimumAppAge, MinimumLinkageAge, CurrentTermsConditionsEffectiveDate); 
 
             _authCode = _fixture.Create<string>();
             _codeVerifier = _fixture.Create<string>();

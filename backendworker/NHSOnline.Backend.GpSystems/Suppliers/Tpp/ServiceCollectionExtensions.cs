@@ -31,7 +31,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
             services.AddSingleton<IGpSystem, TppGpSystem>();
             services.AddSingleton<ITppClient, TppClient>();
-            services.AddSingleton<ITppConfig, TppConfig>();
 
             services.AddHttpClient<TppHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<TppHttpClientHandler>()

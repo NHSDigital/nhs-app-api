@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
@@ -17,20 +18,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
     public class VisionCourseService : ICourseService
     {
         private readonly ILogger<VisionCourseService> _logger;
-        private readonly ConfigurationSettings _settings;
+        private readonly VisionConfigurationSettings _settings;
         private readonly IVisionClient _visionClient;
         private readonly IVisionPrescriptionMapper _visionPrescriptionMapper;
 
         public VisionCourseService(
             ILogger<VisionCourseService> logger,
-            IOptions<ConfigurationSettings> settings,
+            VisionConfigurationSettings settings,
             IVisionClient visionClient,
             IVisionPrescriptionMapper visionPrescriptionMapper)
         {
             _logger = logger;
-            _settings = settings.Value;
+            _settings = settings;
             _visionClient = visionClient;
             _visionPrescriptionMapper = visionPrescriptionMapper;
+
+            _settings.Validate();
         }
 
         public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
@@ -64,12 +67,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                             coursesResponse.Body.EligibleRepeats.Repeats
                             .OrderBy(x => x.Drug).ToList();
                         
-                        if (_settings.CoursesMaxCoursesLimit != null)
+                        if(_settings.CoursesMaxCoursesLimit.HasValue) 
                         {
                             coursesResponse.Body.EligibleRepeats.Repeats = 
                                 coursesResponse.Body.EligibleRepeats.Repeats
-                                    .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
+                                .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
                         }
+
 
                         _logger.LogDebug($"Mapping response from {nameof(EligibleRepeatsResponse)} to {nameof(CourseListResponse)}");
 

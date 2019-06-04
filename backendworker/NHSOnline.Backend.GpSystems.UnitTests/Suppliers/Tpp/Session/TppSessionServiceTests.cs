@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
     {
         private IFixture _fixture;
         private Mock<ITppClient> _mockTppClient;
-        private Mock<IOptions<ConfigurationSettings>> _mockConfigurationSettings;
+        private Mock<IConfigurationSettings> _mockConfigurationSettings;
         private Mock<ITppSessionMapper> _mockTppSessionMapper;
         private TppSessionService _systemUnderTest;
         private Authenticate _actual;
@@ -60,13 +60,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _nhsNumber = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
             
-            _mockConfigurationSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-            _mockConfigurationSettings
-                .Setup(x => x.Value)
-                .Returns(new ConfigurationSettings()
-                {
-                    DefaultSessionExpiryMinutes = _sessionTimeoutMinutes
-                });
+            _mockConfigurationSettings = new Mock<IConfigurationSettings>();
+            _mockConfigurationSettings.SetupGet(x => x.DefaultHttpTimeoutSeconds).Returns(_sessionTimeoutMinutes);
 
             _mockTppSessionMapper = _fixture.Freeze<Mock<ITppSessionMapper>>();
         }
