@@ -18,7 +18,8 @@ abstract class MyRecordFactory {
                     hashMapOf(
                             "EMIS" to { MyRecordFactoryEmis() },
                             "TPP" to { MyRecordFactoryTpp() },
-                            "VISION" to { MyRecordFactoryVision() })
+                            "VISION" to { MyRecordFactoryVision() },
+                            "MICROTEST" to { MyRecordFactoryMicrotest() })
                 }
 
     }

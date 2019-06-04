@@ -54,6 +54,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         SerenityHelpers.setGpSupplier(getService)
         setPatientToDefaultFor(getService)
         CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
+        SerenityHelpers.setPatient(this.patient)
         SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(this.patient)
         MyRecordFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
     }

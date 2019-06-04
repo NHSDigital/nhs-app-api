@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
@@ -71,10 +72,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         {
             return _serviceProvider.GetService<MicrotestLinkageService>();
         }
-
+        
         public IPatientRecordService GetPatientRecordService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestPatientRecordService>();
         }
 
         public IPrescriptionValidationService GetPrescriptionRequestValidationService()

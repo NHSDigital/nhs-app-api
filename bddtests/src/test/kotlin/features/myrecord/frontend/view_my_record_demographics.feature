@@ -9,10 +9,11 @@ Feature: View My Medical Record Information - Demographics
     Then the my record information screen is loaded
 
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
+      | Service   |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <Service> user navigates to patient information page
     Given the my record wiremocks are initialised for <Service>
@@ -25,10 +26,11 @@ Feature: View My Medical Record Information - Demographics
     And I see my record button on the nav bar is highlighted
 
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
+      | Service   |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <Service> user collapses the patient details section
     Given the my record wiremocks are initialised for <Service>
@@ -38,7 +40,8 @@ Feature: View My Medical Record Information - Demographics
     Then I do not see patient information details
 
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
+      | Service   |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
