@@ -5,6 +5,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     useradd -m aspnetcore
 
+RUN echo "aspnetcore ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers.d/default; \
+    chmod 400 /etc/sudoers.d/default
+
 FROM microsoft/dotnet:2.1-sdk AS build
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -42,4 +45,4 @@ COPY --from=publish /app .
 
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD exec dotnet NHSOnline.Backend.ClinicalDecisionSupportApi.dll
+CMD sudo update-ca-certificates && exec dotnet NHSOnline.Backend.ClinicalDecisionSupportApi.dll
