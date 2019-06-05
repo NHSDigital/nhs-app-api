@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.GpSearch.Models
+﻿namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 {
     public class ContactInformation
     {

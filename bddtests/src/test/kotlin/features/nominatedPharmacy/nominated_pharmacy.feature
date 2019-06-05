@@ -1,7 +1,6 @@
 @nominatedPharmacy
 Feature: nominated pharmacy journey
-
-  @smoketest
+  
   Scenario Outline: Patient can change their nominated pharmacy
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions

@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
         private readonly string _updatedOdsCode;
         private readonly string _pertinentSerialChangeNumber;
         private readonly string _nhsNumber;
-        private readonly INominatedPharmacyConfig _config;
+        private readonly INominatedPharmacyConfigurationSettings _config;
 
 
         public NominatedPharmacyUpdateRequest(
@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             bool hasExistingNominatedPharmacy,
             string updatedOdsCode,
             string pertinentSerialChangeNumber,
-            INominatedPharmacyConfig config)
+            INominatedPharmacyConfigurationSettings config)
         {
             _messageId = Guid.NewGuid();
             _hl7Time = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);

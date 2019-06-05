@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         private NominatedPharmacyService _systemUnderTest;
 
         private Mock<INominatedPharmacyClient> _nominatedPharmacyClient;
-        private Mock<INominatedPharmacyConfig> _configMock;
+        private Mock<INominatedPharmacyConfigurationSettings> _configMock;
         private IFixture _fixture;
 
         private const string SpineAccreditedSystemIdFrom = "0001";
@@ -37,10 +37,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _nominatedPharmacyClient = _fixture.Freeze<Mock<INominatedPharmacyClient>>();
-            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfig>>();
+            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
             _configMock.SetupGet(x => x.SpineAccreditedSystemIdFrom).Returns(SpineAccreditedSystemIdFrom);
             _configMock.SetupGet(x => x.SpineAccreditedSystemIdTo).Returns(SpineAccreditedSystemIdTo);
-            _configMock.SetupGet(x => x.MessageId).Returns(new Guid().ToString());
             _configMock.SetupGet(x => x.PersonSdsRoleId).Returns("roleId");
             _configMock.SetupGet(x => x.SdsUserId).Returns("userId");
             _configMock.SetupGet(x => x.PartSdsRoleId).Returns("sdsRole");

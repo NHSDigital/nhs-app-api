@@ -59,13 +59,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ApiSuppor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ApiSupport.UnitTests", "NHSOnline.Backend.ApiSupport.UnitTests\NHSOnline.Backend.ApiSupport.UnitTests.csproj", "{329BE237-4AB4-4DA1-A49E-75739A0E7861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests", "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests\NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.csproj", "{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests", "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests\NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.csproj", "{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi", "NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj", "{C8D4E4FC-316C-4535-A89F-23DD34ADA155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi", "NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj", "{C8D4E4FC-316C-4535-A89F-23DD34ADA155}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ClinicalDecisionSupportApi", "NHSOnline.Backend.ClinicalDecisionSupportApi\NHSOnline.Backend.ClinicalDecisionSupportApi.csproj", "{97CD6062-3DC2-448A-8865-C1F6747C3BFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ClinicalDecisionSupportApi", "NHSOnline.Backend.ClinicalDecisionSupportApi\NHSOnline.Backend.ClinicalDecisionSupportApi.csproj", "{97CD6062-3DC2-448A-8865-C1F6747C3BFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests", "NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests\NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests.csproj", "{F820D500-2F52-4B8D-8E2D-3434BA668F9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests", "NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests\NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests.csproj", "{F820D500-2F52-4B8D-8E2D-3434BA668F9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

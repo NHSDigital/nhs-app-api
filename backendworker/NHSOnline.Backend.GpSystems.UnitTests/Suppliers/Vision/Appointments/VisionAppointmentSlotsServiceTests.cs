@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private Mock<ILogger<VisionAppointmentSlotsService>> _mockLogger;
         private IEnumerable<Slot> _mappedSlots;
         private VisionConfigurationSettings _mockOptions;
-        private string ApplicationProviderId = "ApplicationProviderId";
+        private readonly string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
         private const string certificatePassphrase = "CertificatePassphrase";
         private const string certificatePath = "CertificatePath";

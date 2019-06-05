@@ -1,6 +1,6 @@
 ﻿namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
 {
-    public interface IEnvelopeService
+    public interface INominatedPharmacyEnvelopeService
     {
         string BuildEnvelope<T>(T request, IServiceDefinition serviceDefinition);
     }

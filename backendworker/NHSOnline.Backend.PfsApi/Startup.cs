@@ -2,9 +2,7 @@ using CorrelationId;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using System.Threading;
 using System.Globalization;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -14,10 +12,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
 using StackExchange.Redis;
 using NHSOnline.Backend.Support.Settings;
@@ -35,9 +31,6 @@ using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.PfsApi.Devices;
 using NHSOnline.Backend.NominatedPharmacy;
-using NHSOnline.Backend.NominatedPharmacy.Clients;
-using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
-using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 using NHSOnline.Backend.PfsApi.Filters;
 
 namespace NHSOnline.Backend.PfsApi
@@ -134,18 +127,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
-
-            // TODO
-            // Configure somewhere better. Need to rebase with API split.
-            services.AddTransient<INominatedPharmacyConfig, NominatedPharmacyConfig>();
-            services.AddHttpClient<NominatedPharmacyHttpClient>();
-            services.AddTransient<INominatedPharmacyService, NominatedPharmacyService>();
-            services.AddSingleton<INominatedPharmacyClient, NominatedPharmacyClient>();
-            services.AddSingleton<INominatedPharmacyPDSClient, NominatedPharmacyPDSClient>();
-            services.AddSingleton<INominatedPharmacySubmitClient, NominatedPharmacySubmitClient>();
-            services.AddTransient<INominatedPharmacyGatewayUpdateService, NominatedPharmacyGatewayUpdateService>();
-            services.AddTransient<IEnvelopeService, EnvelopeService>();
+            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));            
 
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
@@ -155,6 +137,7 @@ namespace NHSOnline.Backend.PfsApi
 
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
+            NominatedPharmacyStartup.RegisterServices(services);
         }
 
         private static void ConfigureMvcOptions(MvcOptions options)
@@ -214,6 +197,8 @@ namespace NHSOnline.Backend.PfsApi
             var visionConfig = CreateAndValidateVisionEnvironmentVariables(environment);
             services.AddSingleton(visionConfig);
 
+            var nominatedPharmacyConfig = CreateAndValidateNominatedPharmacyEnvironmentVariables();
+            services.AddSingleton<INominatedPharmacyConfigurationSettings>(nominatedPharmacyConfig);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -389,6 +374,35 @@ namespace NHSOnline.Backend.PfsApi
 
                 config.Validate();
                 return config;
+        }
+
+        public NominatedPharmacyConfigurationSettings CreateAndValidateNominatedPharmacyEnvironmentVariables()
+        {
+            var isNominatedPharmacyEnabled = bool.TrueString.Equals(Configuration.GetOrWarn("NOMINATED_PHARMACY_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
+            var nominatedPharmacyUriString = Configuration.GetOrWarn("NOMINATED_PHARMACY_URL", _logger);
+            var spineAccreditedSystemIdFrom = Configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_FROM", _logger);
+            var spineAccreditedSystemIdTo = Configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_TO", _logger);
+            var pdsQueryFromAddress = Configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", _logger);
+            var pdsQueryTo = Configuration.GetOrWarn("PDS_QUERY_TO", _logger);
+            var partSdsRoleId = Configuration.GetOrWarn("PART_SDS_ROLE_ID", _logger);
+            var sdsUserId = Configuration.GetOrWarn("SDS_USER_ID", _logger);
+            var personSdsRoleId = Configuration.GetOrWarn("PERSON_SDS_ROLE_ID", _logger);
+            var artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = Configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", _logger);
+
+            var config = new NominatedPharmacyConfigurationSettings(
+                isNominatedPharmacyEnabled,
+                new Uri(nominatedPharmacyUriString, UriKind.Absolute),
+                spineAccreditedSystemIdFrom,
+                spineAccreditedSystemIdTo,
+                pdsQueryFromAddress,
+                pdsQueryTo,
+                partSdsRoleId,
+                sdsUserId,
+                personSdsRoleId,
+                artificialDelayAfterNominatedPharmacyUpdateInMilliseconds);
+
+            config.Validate();
+            return config;
         }
 
         private static void UseSecurityHeaders(IApplicationBuilder app, string apiAppVersion, ILogger<Startup> startupLogger)

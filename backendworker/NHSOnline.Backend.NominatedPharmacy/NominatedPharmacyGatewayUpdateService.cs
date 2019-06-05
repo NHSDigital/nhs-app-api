@@ -16,13 +16,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
         private readonly INominatedPharmacyService _nominatedPharmacyService;
         private readonly IAuditor _auditor;
         private readonly ILogger<NominatedPharmacyGatewayUpdateService> _logger;
-        private readonly INominatedPharmacyConfig _config;
+        private readonly INominatedPharmacyConfigurationSettings _config;
 
         public NominatedPharmacyGatewayUpdateService(
             INominatedPharmacyService nominatedPharmacyService,
             IAuditor auditor,
             ILogger<NominatedPharmacyGatewayUpdateService> logger,
-            INominatedPharmacyConfig config
+            INominatedPharmacyConfigurationSettings config
             )
         {
             _nominatedPharmacyService = nominatedPharmacyService;

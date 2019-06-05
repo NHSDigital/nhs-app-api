@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using GeoCoordinatePortable;
-using static NHSOnline.Backend.Worker.GpSearch.ResponseEnums;
+using static NHSOnline.Backend.PfsApi.GpSearch.ResponseEnums;
 using System.Collections.Generic;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy

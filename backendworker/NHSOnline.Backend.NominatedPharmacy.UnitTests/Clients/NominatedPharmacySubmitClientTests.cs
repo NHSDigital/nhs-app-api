@@ -13,14 +13,14 @@ using NHSOnline.Backend.NominatedPharmacy.Clients;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 
-namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
+namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
 {
     [TestClass]
     public sealed class NominatedPharmacySubmitClientTests : IDisposable
     {
         private INominatedPharmacySubmitClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
-        private Mock<INominatedPharmacyConfig> _configMock;
+        private Mock<INominatedPharmacyConfigurationSettings> _configMock;
         private IFixture _fixture;
         private string _odsCode;
         private NominatedPharmacyHttpClient _httpClient;
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
-            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfig>>();
+            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(ApiUrl);
 
             _odsCode = _fixture.Create<string>();
@@ -78,7 +78,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 "111",
                 true,
                 "ODSFFF",
-                "444");
+                "444",
+                _configMock.Object);
 
             _mockHttpHandler
                 .WhenNominatedPharmacy(HttpMethod.Post, new Uri(ApiUrl, PdsPath))

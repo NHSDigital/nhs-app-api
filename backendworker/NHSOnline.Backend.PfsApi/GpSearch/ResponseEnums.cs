@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.GpSearch
+﻿namespace NHSOnline.Backend.PfsApi.GpSearch
 {
     public static class ResponseEnums
     {

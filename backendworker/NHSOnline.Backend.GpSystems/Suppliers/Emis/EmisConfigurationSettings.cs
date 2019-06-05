@@ -37,17 +37,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         {
             if(BaseUrl == null) 
             {
-                throw new ConfigurationNotFoundException("ApplicationId cannot be null or empty");
+                throw new ConfigurationNotFoundException(nameof(BaseUrl));
             }
             
             if(String.IsNullOrEmpty(ApplicationId))
             {
-                throw new ConfigurationNotFoundException("ApplicationId cannot be null or empty");
+                throw new ConfigurationNotFoundException($"{nameof(ApplicationId)} cannot be null or empty");
             }
 
             if(String.IsNullOrEmpty(Version))
             {
-                throw new ConfigurationNotFoundException("Version cannot be null or empty");
+                throw new ConfigurationNotFoundException($"{nameof(Version)} cannot be null or empty");
             }
 
             if (EmisExtendedHttpTimeoutSeconds == default(int))

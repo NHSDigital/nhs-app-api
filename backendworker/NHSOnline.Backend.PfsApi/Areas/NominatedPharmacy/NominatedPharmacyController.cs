@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         private readonly IPharmacySearchService _pharmacySearchService;
         private readonly INominatedPharmacyGatewayUpdateService _nominatedPharmacyGatewayUpdateService;
         private readonly IAuditor _auditor;
-        private readonly INominatedPharmacyConfig _config;
+        private readonly INominatedPharmacyConfigurationSettings _config;
         private readonly IGpSearchService _gpSearchService;
 
         public NominatedPharmacyController(
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             IPharmacySearchService pharmacySearchService,
             INominatedPharmacyGatewayUpdateService nominatedPharmacyGatewayUpdateService,
             IAuditor auditor,
-            INominatedPharmacyConfig config,
+            INominatedPharmacyConfigurationSettings config,
             IGpSearchService gpSearchService
            )
         {

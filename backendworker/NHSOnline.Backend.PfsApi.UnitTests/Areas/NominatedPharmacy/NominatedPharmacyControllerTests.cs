@@ -14,13 +14,12 @@ using UnitTestHelper;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
-using NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy;
+using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using System.Net;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
-using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.PfsApi.GpSearch;
 
@@ -45,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         private Mock<INominatedPharmacyGatewayUpdateService> _mockNominatedPharmacyGatewayUpdateService;
         private Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper> _mockMapper;
         private Mock<IAuditor> _auditor;
-        private Mock<INominatedPharmacyConfig> _configMock;
+        private Mock<INominatedPharmacyConfigurationSettings> _configMock;
         private Mock<IGpSearchService> _mockGpSearchService;
 
         [TestInitialize]
@@ -67,7 +66,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockNominatedPharmacyGatewayUpdateService = _fixture.Freeze<Mock<INominatedPharmacyGatewayUpdateService>>();
             _mockMapper = _fixture.Freeze<Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>>();
             _auditor = _fixture.Freeze<Mock<IAuditor>>();
-            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfig>>();
+            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
             _configMock.SetupGet(x => x.IsNominatedPharmacyEnabled).Returns(true);
             _mockGpSearchService = _fixture.Freeze<Mock<IGpSearchService>>();
 

@@ -4,12 +4,12 @@ using NHSOnline.Backend.NominatedPharmacy.Soap;
 
 namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
 {
-    public class EnvelopeService : IEnvelopeService
+    public class NominatedPharmacyEnvelopeService : INominatedPharmacyEnvelopeService
     {
-        private readonly ILogger<EnvelopeService> _logger;
-        private readonly INominatedPharmacyConfig _config;
+        private readonly ILogger<NominatedPharmacyEnvelopeService> _logger;
+        private readonly INominatedPharmacyConfigurationSettings _config;
 
-        public EnvelopeService(ILogger<EnvelopeService> logger, INominatedPharmacyConfig config)
+        public NominatedPharmacyEnvelopeService(ILogger<NominatedPharmacyEnvelopeService> logger, INominatedPharmacyConfigurationSettings config)
         {
             _logger = logger;
             _config = config;

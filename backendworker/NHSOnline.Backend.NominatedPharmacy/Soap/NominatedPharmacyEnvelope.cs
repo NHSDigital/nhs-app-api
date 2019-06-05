@@ -12,11 +12,11 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
     {
         private const string SoapEnv = "SOAP-ENV";
 
-        private readonly INominatedPharmacyConfig _config;
+        private readonly INominatedPharmacyConfigurationSettings _config;
 
         public XmlDocument Envelope { get; set; }
 
-        public NominatedPharmacyEnvelope(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config)
+        public NominatedPharmacyEnvelope(IServiceDefinition serviceDefinition, INominatedPharmacyConfigurationSettings config)
         {
             XmlDocument xmlDocument = BuildCoreXml(serviceDefinition, config);
             
@@ -27,11 +27,12 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             Envelope = xmlDocument;
         }
 
-        private static XmlDocument BuildCoreXml(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config)
+        private static XmlDocument BuildCoreXml(IServiceDefinition serviceDefinition, INominatedPharmacyConfigurationSettings config)
         {
             const string Xmlns = "xmlns";
             const string Wsa = "wsa";
             const string hl7 = "hl7";
+            var messageId = Guid.NewGuid();
             XmlDocument xmlDocument;
 
             using (var stream = new MemoryStream())
@@ -48,7 +49,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
                     // Start Header
                     writer.WriteStartElement(SoapEnv, "Header", null);
 
-                    writer.WriteElementString(Wsa, "MessageID", null, String.Format(CultureInfo.InvariantCulture, "uuid:{0}", config.MessageId));
+                    writer.WriteElementString(Wsa, "MessageID", null, String.Format(CultureInfo.InvariantCulture, "uuid:{0}", messageId.ToString()));
                     writer.WriteElementString(Wsa, "Action", null, serviceDefinition.SoapActionName);
                     writer.WriteElementString(Wsa, "To", null, config.PdsQueryTo);
                     writer.WriteStartElement(Wsa, "From", null);

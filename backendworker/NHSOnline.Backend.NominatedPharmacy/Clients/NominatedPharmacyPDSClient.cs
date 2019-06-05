@@ -22,11 +22,11 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
         private readonly NominatedPharmacyHttpClient _httpClient;
         private readonly ILogger<NominatedPharmacyPDSClient> _logger;
         private readonly IXmlResponseParser _responseParser;
-        private readonly IEnvelopeService _envelopeService;
+        private readonly INominatedPharmacyEnvelopeService _envelopeService;
 
         public NominatedPharmacyPDSClient(NominatedPharmacyHttpClient httpClient,
             ILogger<NominatedPharmacyPDSClient> logger, IXmlResponseParser responseParser,
-            IEnvelopeService envelopeService)
+            INominatedPharmacyEnvelopeService envelopeService)
         {
             _logger = logger;
             _httpClient = httpClient;

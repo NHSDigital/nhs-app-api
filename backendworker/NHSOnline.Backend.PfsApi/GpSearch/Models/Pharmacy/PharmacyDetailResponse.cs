@@ -1,7 +1,6 @@
 ﻿using System.Net;
-using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
-namespace NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy
+namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
 {
     public class PharmacyDetailResponse
     {

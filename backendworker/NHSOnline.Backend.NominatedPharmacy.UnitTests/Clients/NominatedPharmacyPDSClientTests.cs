@@ -16,14 +16,14 @@ using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 
-namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
+namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
 {
     [TestClass]
     public sealed class NominatedPharmacyPDSClientTests : IDisposable
     {
         private INominatedPharmacyPDSClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
-        private Mock<INominatedPharmacyConfig> _configMock;
+        private Mock<INominatedPharmacyConfigurationSettings> _configMock;
         private IFixture _fixture;
         private string _odsCode;
         private NominatedPharmacyHttpClient _httpClient;
@@ -31,17 +31,17 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         private const string GetNominatedPharmacySoapActionName = "urn:nhs:names:services:pdsquery/QUPA_IN000008UK02";
         private const string PdsPath = "sync-service";
 
-        private Mock<IEnvelopeService> _mockEnvelopeService;
+        private Mock<INominatedPharmacyEnvelopeService> _mockEnvelopeService;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
-            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfig>>();
+            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(ApiUrl);
 
-            _mockEnvelopeService = _fixture.Freeze<Mock<IEnvelopeService>>();
+            _mockEnvelopeService = _fixture.Freeze<Mock<INominatedPharmacyEnvelopeService>>();
             _odsCode = _fixture.Create<string>();
 
             _mockHttpHandler = new MockHttpMessageHandler();

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy;
+using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
 {

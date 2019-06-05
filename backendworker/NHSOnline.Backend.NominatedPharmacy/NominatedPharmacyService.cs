@@ -25,13 +25,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         private readonly ILogger<NominatedPharmacyService> _logger;
         private readonly INominatedPharmacyClient _prescriptionTrackingClient;
-        private readonly INominatedPharmacyConfig _config;
+        private readonly INominatedPharmacyConfigurationSettings _config;
         private readonly IAuditor _auditor;
 
         public NominatedPharmacyService(
             ILogger<NominatedPharmacyService> logger,
             INominatedPharmacyClient prescriptionTrackingClient,
-            INominatedPharmacyConfig config,
+            INominatedPharmacyConfigurationSettings config,
             IAuditor auditor
         )
         {
@@ -45,12 +45,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
         {
             const string Dev = "DEV";
             const string Instance = "INSTANCE";
+            var messageId = Guid.NewGuid();
 
             var request = new QUPAIN000008UK02
             {
                 Id = new Id
                 {
-                    Root = _config.MessageId,
+                    Root = messageId.ToString(),
                 },
                 CreationTime = new CreationTime
                 {

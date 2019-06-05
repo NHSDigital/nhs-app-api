@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
-using NHSOnline.Backend.Worker.GpSearch;
-using NHSOnline.Backend.Worker.GpSearch.Models;
 
-namespace NHSOnline.Backend.Worker.UnitTests.GpSearch.Models
+namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Models
 {
     [TestClass]
     public class OrganisationModelTests

@@ -10,7 +10,6 @@ using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using GeoCoordinatePortable;
-using NHSOnline.Backend.Worker.GpSearch.Models;
 using OpeningTime = NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models.OpeningTime;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy

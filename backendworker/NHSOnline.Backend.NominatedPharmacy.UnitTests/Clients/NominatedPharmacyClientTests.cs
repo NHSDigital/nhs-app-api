@@ -11,7 +11,7 @@ using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 
-namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
+namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
 {
     [TestClass]
     public class NominatedPharmacyClientTests

@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.NominatedPharmacy
 {
-    public interface INominatedPharmacyConfig
+    public interface INominatedPharmacyConfigurationSettings
     {
         bool IsNominatedPharmacyEnabled { get; }
 
@@ -21,8 +21,6 @@ namespace NHSOnline.Backend.NominatedPharmacy
         string SdsUserId { get; }
 
         string PersonSdsRoleId { get; }
-        
-        string MessageId { get; }
 
         int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
     }
