@@ -2,7 +2,7 @@
   <div v-if="showTemplate" class="pull-content">
     <form :action="bookingPath">
       <input :name="noJsInputName" :value="JSON.stringify(noJsData)" type="hidden">
-      <ul :class="$style['sr-only']" role="presentation"
+      <ul :class="$style['sr-only']" role="list"
           aria-live="polite" aria-relevant="additions" aria-atomic="false">
         <li v-for="(text, index) in availableAppointmentsScreenReaderMessage" :key="index">
           <span :aria-hidden="availableAppointmentsScreenReaderMessage.length !== (index + 1)">

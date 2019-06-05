@@ -4,7 +4,7 @@
                :class="[$style['nhsuk-header__link'], $style['anchor-icon']]"
                :to="indexPath" aria-label="NHS homepage">
       <svg :class="[$style['nhsuk-logo'], $style['nhsuk-logo--white']]" xmlns="http://www.w3.org/2000/svg"
-           role="presentation" focusable="false" viewBox="0 0 40 16">
+           focusable="false" viewBox="0 0 40 16">
         <path fill="#fff" d="M0 0h40v16H0z"/>
         <path fill="#005eb8"
               d="M3.9 1.5h4.4l2.6
