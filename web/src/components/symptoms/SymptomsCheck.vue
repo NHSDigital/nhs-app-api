@@ -2,7 +2,7 @@
   <div v-if="showTemplate" :class="$style['no-padding']" data-purpose="">
     <ul :class="[$style['list-menu'], !$store.state.device.isNativeApp && $style.desktopWeb]"
         role="list">
-      <li role="link">
+      <li>
         <analytics-tracked-tag
           id="btn_choices" :href="conditionsCheckerUrl"
           :class="$style['no-decoration']"
@@ -14,7 +14,7 @@
             {{ $t('sy01.a_z.body') }}</p>
         </analytics-tracked-tag>
       </li>
-      <li role="link">
+      <li>
         <analytics-tracked-tag id="btn_111" :href="symptomsCheckerUrl"
                                :class="$style['no-decoration']"
                                :text="$t('sy01.111.subheader')"
