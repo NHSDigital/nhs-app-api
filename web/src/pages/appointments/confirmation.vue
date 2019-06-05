@@ -7,7 +7,7 @@
         <input :value="slotEndTime" type="hidden" name="endTime">
         <input :value="slotId" type="hidden" name="slotId">
         <input :value="slotStartTime" type="hidden" name="startTime">
-        <message-dialog v-if="showError" message-type="error">
+        <message-dialog v-if="showError" message-type="error" role="alert">
           <message-text data-purpose="error-heading">
             {{ $t('appointments.confirmation.errorDialog') }}
           </message-text>

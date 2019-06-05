@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate" class="pull-content">
-    <message-dialog v-if="showError" message-type="error">
+    <message-dialog v-if="showError" message-type="error" role="alert">
       <message-text data-purpose="error-heading">
         {{ $t('appointments.cancelling.noReasonDialogError') }}
       </message-text>
@@ -141,7 +141,6 @@ export default {
           });
       } else {
         this.submissionError = true;
-        document.getElementById('txt_reason').focus();
         window.scrollTo(0, 0);
         this.labelledBy = 'error-label';
       }
