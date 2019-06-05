@@ -96,6 +96,7 @@ export default {
   },
 
   logoutWhenExpired() {
+    this.dispatch('modal/hide');
     this.dispatch('session/showExpiryMessage');
     this.dispatch('auth/logout', { expired: true });
   },

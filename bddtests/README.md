@@ -159,3 +159,23 @@ docker run --rm -v $(pwd)/bddtests:/repo  nhsapp.azurecr.io/chrome:latest bash -
 This will create a container with a volume mapped to `/bddtests/` and run the task. 
 If you get exit code 1 from the Pa11y task, then an accessibility issue was found.  
 Check the output index.html report in `/bddtests/target/site/pa11y`.
+
+
+## Session Expiry Modal
+The backend worker session duration is set to 3 minutes (`180` seconds) for BDDs.
+
+`docker-compose.yml`
+```
+command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:180})' development"
+
+```
+
+The session expiry tests are reliant on the duration defined in the interface:
+```
+pages.SessionExpiry
+```
+
+Found in ``pages/SessionExpiry.kt``
+
+
+If the session duration is altered these constants will need also adjusting to ensure validity of the tests.

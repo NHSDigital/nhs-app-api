@@ -1,5 +1,6 @@
 import actions from '@/store/modules/session/actions';
 import NativeCallbacks from '@/services/native-app';
+import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 
 import {
   CLEAR,
@@ -234,6 +235,14 @@ describe('actions', () => {
       it('will call native onSessionExpiring callback if expiring and native', () => {
         app.validate(store);
         expect(NativeCallbacks.onSessionExpiring).toHaveBeenCalledTimes(1);
+      });
+
+      it('will call dispatch moal/show  if expiring and desktop', () => {
+        window.nativeApp = undefined;
+        process.client = true;
+
+        app.validate(store);
+        expect(app.dispatch).toHaveBeenCalledWith('modal/show', { content: SessionExpiryModal });
       });
 
       it('will call commit for the SHOW_SESSION_EXPIRING mutation if expiring and native', () => {

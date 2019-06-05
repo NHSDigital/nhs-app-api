@@ -11,13 +11,12 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.sessionexpiry.SessionExpiryNative
+import pages.SessionExpiryNative
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 
 private const val SESSION_EXPIRY_IN_MILLIS_SECONDS = 120L
-private const val SESSION_EXPIRY_HEADER = "You'll be logged out shortly"
 private const val DELAY_SECONDS_FOR_WAITING = 2000L
 private const val DELAY_BEFORE_RESUME = 10_000L
 private const val BACKGROUND_DURATION = 100L
@@ -30,6 +29,7 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
     lateinit var login: LoginSteps
 
     lateinit var sessionExpiry: SessionExpiryNative
+
     lateinit var patient: Patient
 
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
@@ -59,16 +59,24 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
 
     @When("^I am idle long enough for the session to expire$")
     fun iAmIdleLongEnoughForTheSessionToExpire() {
-        sessionExpiry.scrollAndroidNativePage()
-        sessionExpiry.waitForSessionExpandDialogue()
-        sessionExpiry.scrollAndroidNativePage()
-        sessionExpiry.waitForSessionExiryAfterDialogue()
-        sessionExpiry.scrollAndroidNativePage()
+        when(sessionExpiry.onMobile()){
+            false -> {
+                sessionExpiry.waitForSessionExpiryAfterModalDisplay()
+                Thread.sleep(DELAY_BEFORE_RESUME)
+            }
+            true -> {
+                sessionExpiry.scrollAndroidNativePage()
+                sessionExpiry.waitForSessionExpiryModal()
+                sessionExpiry.scrollAndroidNativePage()
+                sessionExpiry.waitForSessionExpiryAfterModalDisplay()
+                sessionExpiry.scrollAndroidNativePage()
+            }
+        }
     }
 
     @When("^I am idle long enough for the session to expire after the dialog$")
     fun iAmIdleLongEnoughForTheSessionToExpireAfterTheDialog() {
-        sessionExpiry.waitForSessionExiryAfterDialogue()
+        sessionExpiry.waitForSessionExpiryAfterModalDisplay()
     }
 
     @When("^I am idle long enough for the backend session to expire")
@@ -94,18 +102,21 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
         sessionExpiry.clickLogOut()
     }
 
+
     @When("^I am idle long enough for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughForSessionExpiryDialog() {
-        sessionExpiry.waitForSessionExpandDialogue()
+        sessionExpiry.waitForSessionExpiryModal()
     }
 
     @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {
-        sessionExpiry.waitForSessionExpandDialogue()
+        sessionExpiry.waitForSessionExpiryModal()
         Thread.sleep(DELAY_BEFORE_RESUME)
-        val presentOnPage =  sessionExpiry.isOnPage(SESSION_EXPIRY_HEADER)
+        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisible()
         Assert.assertEquals(true, presentOnPage)
-        sessionExpiry.scrollAndroidNativePage()
+        if(sessionExpiry.onMobile()) {
+            sessionExpiry.scrollAndroidNativePage()
+        }
     }
 
     @Then("^I see the login page with the session expiry notification$")
@@ -116,13 +127,14 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
 
     @Then("^I see a dialog box prompting to extend the session$")
     fun iSeeTheDialogBoxPromptingToExtendTheSession() {
-        val presentOnPage =  sessionExpiry.isOnPage(SESSION_EXPIRY_HEADER)
+        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisible()
+
         Assert.assertEquals(true, presentOnPage)
     }
 
     @Then("^the dialog box is not visible on the screen$")
     fun theDialogBoxIsNotVisibile() {
-        val presentOnPage = sessionExpiry.isOnPage(SESSION_EXPIRY_HEADER)
+        val presentOnPage = sessionExpiry.isSessionExpiryModalVisible()
         Assert.assertEquals(false, presentOnPage)
     }
 
@@ -139,7 +151,6 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
     @Then("^I lock the device$")
     fun iLockTheDevice() {
         sessionExpiry.lockAndroidDevice()
-
     }
 
     @Then("^I unlock the device$")
@@ -156,9 +167,13 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
 
     @Then("^I am idle for a short time$")
     fun iamIdleBeforeResume() {
-        sessionExpiry.scrollAndroidNativePage()
-        Thread.sleep(DELAY_BEFORE_RESUME)
-        sessionExpiry.scrollAndroidNativePage()
+        when(sessionExpiry.onMobile()) {
+            true -> {
+                sessionExpiry.scrollAndroidNativePage()
+                Thread.sleep(DELAY_BEFORE_RESUME)
+                sessionExpiry.scrollAndroidNativePage()
+            }
+            false -> Thread.sleep(DELAY_BEFORE_RESUME)
+        }
     }
-
 }

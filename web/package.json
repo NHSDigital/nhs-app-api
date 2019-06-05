@@ -68,6 +68,7 @@
     "deepmerge": "3.2.0",
     "express": "4.16.4",
     "find-babel-config": "1.2.0",
+    "focus-trap": "5.0.1",
     "javascript-natural-sort": "0.7.1",
     "js-cookie": "2.2.0",
     "js-yaml": "3.12.2",

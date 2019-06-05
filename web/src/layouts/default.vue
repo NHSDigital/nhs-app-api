@@ -1,36 +1,40 @@
 <template>
-  <div id="app" ref="nhsAppRoot" tabindex="-1"
-       :class="{
-         [$style.desktopWeb]: !$store.state.device.isNativeApp,
-         [$style['nhs-app']]: true
-       }">
-    <div v-if="shouldShowFullDesktopHeader" :class="$style['header-container-desktop']">
-      <web-header ref="headerMenu"/>
-    </div>
-    <div v-else-if="shouldShowSlimDesktopHeader" :class="$style['header-container-desktop']">
-      <web-header :show-menu="false" :show-links="false"/>
-    </div>
-    <div id="maincontent" ref="mainContent" tabindex="-1"
-         :class="[mainClass, $style['main-container-desktop']]">
-      <header-companion-button v-if="shouldShowButton"/>
-      <main :class="mainClass">
-        <spinner />
-        <connection-error />
-        <api-error />
-        <flash-message />
-        <nuxt/>
-      </main>
-    </div>
+  <div>
+    <modal/>
+    <div id="app" ref="nhsAppRoot" tabindex="-1"
+         :class="{
+           [$style.desktopWeb]: !$store.state.device.isNativeApp,
+           [$style['nhs-app']]: true
+         }">
+      <div v-if="shouldShowFullDesktopHeader" :class="$style['header-container-desktop']">
+        <web-header ref="headerMenu"/>
+      </div>
+      <div v-else-if="shouldShowSlimDesktopHeader" :class="$style['header-container-desktop']">
+        <web-header :show-menu="false" :show-links="false"/>
+      </div>
+      <div id="maincontent" ref="mainContent" tabindex="-1"
+           :class="[mainClass, $style['main-container-desktop']]">
+        <header-companion-button v-if="shouldShowButton"/>
+        <main :class="mainClass">
+          <spinner />
+          <connection-error />
+          <api-error />
+          <flash-message />
+          <nuxt/>
+        </main>
+      </div>
 
-    <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
-                @onBarStatusChanged="setSurveyBarStatus"/>
+      <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
+                  @onBarStatusChanged="setSurveyBarStatus"/>
 
-    <hot-jar v-if="isAnalyticsCookieAccepted()"/>
+      <hot-jar v-if="isAnalyticsCookieAccepted()"/>
 
-    <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
-      <web-footer/>
+      <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
+        <web-footer/>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -48,6 +52,7 @@ import SurveyBar from '@/components/SurveyBar';
 import HotJar from '@/components/widgets/HotJar';
 import { INDEX, LOGIN } from '@/lib/routes';
 import NativeVersionSetup from '../services/nativeVersionSetup';
+import Modal from '@/components/modal/Modal';
 
 export default {
   components: {
@@ -60,6 +65,7 @@ export default {
     HeaderCompanionButton,
     SurveyBar,
     HotJar,
+    Modal,
   },
   head() {
     let { platform } = this.$store.state.device.source;

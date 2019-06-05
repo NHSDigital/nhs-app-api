@@ -11,6 +11,7 @@ import {
   SHOW_SESSION_EXPIRING,
   HIDE_SESSION_EXPIRING,
 } from './mutation-types';
+import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 
 
 export default {
@@ -80,10 +81,15 @@ export default {
   validate({ getters, state, commit }) {
     if (getters.isLoggedIn()) {
       if (getters.isValid()) {
-        if (process.client && !state.showSessionExpiring && window.nativeApp
+        if (process.client && !state.showSessionExpiring
             && getters.isExpiring(this.app.$env.SESSION_EXPIRING_WARNING_SECONDS)) {
           commit(SHOW_SESSION_EXPIRING);
-          NativeCallbacks.onSessionExpiring(state.durationSeconds / 60);
+
+          if (window.nativeApp) {
+            NativeCallbacks.onSessionExpiring(state.durationSeconds / 60);
+          } else {
+            this.dispatch('modal/show', { content: SessionExpiryModal });
+          }
         }
         return true;
       }

@@ -5,6 +5,7 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.openqa.selenium.Cookie
+import org.openqa.selenium.Keys
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.loggedOut.LoginPage
 import webdrivers.options.ChromeOptionManager
@@ -128,5 +129,19 @@ open class BrowserSteps {
         url += "?source=$source"
 
         browseTo(url)
+    }
+
+    fun iPressTheTabKey() {
+        loginPage.driver
+                .switchTo()
+                .activeElement()
+                .sendKeys(Keys.TAB)
+    }
+
+    fun iCheckThatElementIsInFocus(name: String) {
+        Assert.assertEquals(name, loginPage.driver
+                .switchTo()
+                .activeElement()
+                .text)
     }
 }

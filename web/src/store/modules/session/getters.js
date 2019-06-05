@@ -11,9 +11,7 @@ export default {
       if (!durationSeconds || !lastCalledAt) return false;
       const now = new Date();
       const expiryTime = moment(lastCalledAt).add(durationSeconds, 'seconds').toDate();
-      const result = now < expiryTime;
-
-      return result;
+      return now < expiryTime;
     };
   },
   isExpiring(state) {
@@ -23,9 +21,7 @@ export default {
       const now = new Date();
       const expiryTime = moment(lastCalledAt).add(durationSeconds, 'seconds').toDate();
       const expiringTime = moment(lastCalledAt).add(durationSeconds - expiringWarningSeconds, 'seconds').toDate();
-      const result = now < expiryTime && now >= expiringTime;
-
-      return result;
+      return now < expiryTime && now >= expiringTime;
     };
   },
 };

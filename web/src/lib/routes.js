@@ -520,7 +520,7 @@ const routes = {
 };
 
 /**
- * Wire up back reference to routes for each route.
+ * Wire up back reference to all routes for each route.
  */
 Object.keys(routes).forEach((key) => { routes[key].crumb.allRoutes = routes; });
 

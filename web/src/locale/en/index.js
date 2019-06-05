@@ -1666,5 +1666,12 @@ export default {
         title: 'How are you feeling right now?',
       },
     },
+    sessionExpiry: {
+      warningDurationInformation:
+        'For security reasons, you\'ll be logged out in 1 minute. ' +
+        '| For security reasons, you\'ll be logged out in {time} minutes.',
+      warningGetMoreTime: 'Stay logged in',
+      warningLogOut: 'Log out',
+    },
   },
 };

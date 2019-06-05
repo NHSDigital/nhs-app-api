@@ -136,5 +136,13 @@ open class SharedStepDefinitions {
         Thread.sleep(((secondsToWaitFor) * WAIT_IN_SECONDS_MODIFIER))
     }
 
+    @Then("^I press the tab key$")
+    fun iPressTheTabKey() {
+        browser.iPressTheTabKey()
+    }
 
+    @Then("^I check that '(.*)' is in focus$")
+    fun iCheckThatElementIsInFocus(name: String) {
+        browser.iCheckThatElementIsInFocus(name)
+    }
 }

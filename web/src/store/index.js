@@ -1,6 +1,7 @@
 import biometricBanner from './modules/biometricBanner';
 import nominatedPharmacy from './modules/nominatedPharmacy';
 import cookieBanner from './modules/cookieBanner';
+import modal from './modules/modal';
 import header from './modules/header';
 import pageTitle from './modules/pageTitle';
 import availableAppointments from './modules/availableAppointments';
@@ -48,6 +49,7 @@ export const modules = {
   session,
   termsAndConditions,
   throttling,
+  modal,
 };
 
 export const actions = {

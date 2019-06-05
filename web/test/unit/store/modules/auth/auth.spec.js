@@ -87,6 +87,7 @@ describe('actions', () => {
       actions
         .logoutWhenExpired();
 
+      expect(actions.dispatch).toHaveBeenCalledWith('modal/hide');
       expect(actions.dispatch).toHaveBeenCalledWith('session/showExpiryMessage');
       expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', { expired: true });
     });

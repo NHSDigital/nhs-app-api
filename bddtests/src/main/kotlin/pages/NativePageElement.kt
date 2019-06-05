@@ -10,7 +10,7 @@ import java.lang.AssertionError
 
 class NativePageElement(
         webDesktopLocator: String,
-        webMobileLocator: String,
+        webMobileLocator: String = webDesktopLocator,
         androidLocator: String? = null,
         iOSLocator: String? = null,
         private var iOSAccessID: String? = null,

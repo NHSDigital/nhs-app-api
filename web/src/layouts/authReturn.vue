@@ -1,23 +1,27 @@
 <template>
-  <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
-      <web-header :show-menu="false" :show-links="false"/>
-    </div>
-    <div v-else>
-      <header-slim :show-in-native="true" :click-url="loginUrl">{{ headerTitle }}</header-slim>
-    </div>
-    <div id="mainContent" ref="mainContent" tabindex="-1"
-         :class="[mainClass, $style['main-container-desktop']]">
-      <main :class="mainClass">
-        <spinner />
-        <connection-error />
-        <api-error />
-        <flash-message />
-        <nuxt />
-      </main>
-    </div>
-    <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
-      <web-footer/>
+  <div>
+    <modal/>
+
+    <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+      <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
+        <web-header :show-menu="false" :show-links="false"/>
+      </div>
+      <div v-else>
+        <header-slim :show-in-native="true" :click-url="loginUrl">{{ headerTitle }}</header-slim>
+      </div>
+      <div id="mainContent" ref="mainContent" tabindex="-1"
+           :class="[mainClass, $style['main-container-desktop']]">
+        <main :class="mainClass">
+          <spinner />
+          <connection-error />
+          <api-error />
+          <flash-message />
+          <nuxt />
+        </main>
+      </div>
+      <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
+        <web-footer/>
+      </div>
     </div>
   </div>
 </template>

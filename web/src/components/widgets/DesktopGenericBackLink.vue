@@ -26,9 +26,6 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
- /*@import "../../style/textstyles";*/
- /*@import "../../style/fonts";*/
- /*@import "../../style/colours";*/
 
  @import '~nhsuk-frontend/packages/core/all.scss';
  @import '~nhsuk-frontend/packages/components/back-link/back-link';
