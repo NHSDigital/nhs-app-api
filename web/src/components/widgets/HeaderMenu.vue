@@ -5,10 +5,10 @@
     <a v-if="miniMenuExpanded" :class="$style['mini-menu-close-button']"
        role="button" tabindex="0"
        @click.prevent="closeMiniMenu"
-       @keyup.13="closeMiniMenu">Menu</a>
+       @keyup.13="closeMiniMenu">{{ $t('navigationMenu.menuLabel') }}</a>
 
     <noscript inline-template>
-      <div :class="$style['menu-nojs-caption']">Menu</div>
+      <div :class="$style['menu-nojs-caption']">{{ $t('navigationMenu.menuLabel') }}</div>
     </noscript>
     <ul>
       <li>

@@ -8,6 +8,7 @@
                              :click-func="myRecordSectionClick"
                              :click-param="PATIENTDETAILS"
                              :text="$t('my_record.patientInfo.sectionHeader')"
+                             :aria-expanded="!isPatientDetailsCollapsed ? 'true' : 'false'"
                              data-purpose="accordion"
                              role="button"
                              tag="a"

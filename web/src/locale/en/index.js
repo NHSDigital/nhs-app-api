@@ -941,6 +941,7 @@ export default {
     copyrightText: 'Crown copyright',
   },
   navigationMenu: {
+    menuLabel: 'Menu',
     appointmentsLabel: 'Appointments',
     moreLabel: 'More',
     myRecordLabel: 'My medical record',

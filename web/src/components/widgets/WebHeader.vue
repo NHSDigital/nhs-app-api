@@ -8,12 +8,14 @@
           <NhsHeaderLogo :index-path="indexPath"/>
         </div>
         <a v-if="showMenuButton"
+           :aria-expanded="miniMenuExpanded ? 'true': 'false'"
            :class="$style['mini-menu-toggler']"
            tabindex="0"
            data-sid="mini-menu"
+           role="button"
            @click.prevent="toggleMiniMenu()"
            @keyup.13="toggleMiniMenu()">
-          Menu
+          {{ $t('navigationMenu.menuLabel') }}
         </a>
         <header-links v-if="showLinks" :anchor-links="links"/>
         <header-menu v-if="showMenu" />
@@ -112,6 +114,14 @@ export default {
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
+    },
+    shouldShowButton() {
+      return (
+        !this.$store.getters['errors/showApiError']
+      );
+    },
+    miniMenuExpanded() {
+      return this.$store.state.header.miniMenuExpanded;
     },
   },
   mounted() {
