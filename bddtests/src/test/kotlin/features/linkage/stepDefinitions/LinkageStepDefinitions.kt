@@ -7,6 +7,7 @@ import cucumber.api.java.en.When
 import features.linkage.LinkageResult
 import mocking.MockingClient
 import mockingFacade.linkage.LinkageInformationFacade
+import models.Patient
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
 import org.junit.Assert
@@ -346,6 +347,7 @@ open class LinkageStepDefinitions {
     }
 
     private fun validLinkage(gpSystem: String): LinkageInformationFacade {
+        SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
         SerenityHelpers.setGpSupplier(gpSystem)
         return LinkageFactory.getForSupplier(gpSystem).validLinkageDetails
     }

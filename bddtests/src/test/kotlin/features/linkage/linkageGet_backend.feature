@@ -29,7 +29,6 @@ Feature: Linkage Get Key
     Examples:
       | GP System |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Linkage request GET for <GP System> returns 400 Bad Request, empty OdsCode
     Given I have valid <GP System> linkage details apart from an empty OdsCode
@@ -122,3 +121,15 @@ Feature: Linkage Get Key
     Given I have valid VISION linkage details but my linkage key has been revoked
     When I call the Linkage GET endpoint
     Then I receive a "Forbidden" error
+
+  Scenario: Linkage request GET for Microtest returns 502 when demographics call fails
+    Given I have valid MICROTEST linkage details
+    And the demographics endpoint responds with internal server error
+    When I call the Linkage GET endpoint
+    Then I receive a "Bad Gateway" error
+
+  Scenario: Linkage request GET for Microtest returns successful linkage response when demographics call is successful
+    Given I have valid MICROTEST linkage details
+    And the GP Practice has enabled demographics functionality
+    When I call the Linkage GET endpoint
+    Then I receive a valid linkage response

@@ -34,6 +34,7 @@ services:
       - ConfigurationSettings__DefaultSessionExpiryMinutes=3
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
+      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
       - MICROTEST_BASE_URL=http://stubs.local.bitraft.io:8080/microtest/
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10
@@ -117,6 +118,7 @@ services:
       - VISION_CERT_PASSPHRASE=GnewUt4z3y
       - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
       - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
+      - MICROTEST_BASE_URL=http://stubs.local.bitraft.io:8080/microtest/
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
