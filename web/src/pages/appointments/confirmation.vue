@@ -90,7 +90,7 @@
         </div>
         <div v-if="showBookingReason()" :class="[$style.form, $style.reasonForm]"
              role="form" data-purpose="booking-reason">
-          <label :class="$style.textReasonLabel"
+          <label id="booking-reason-label" :class="$style.textReasonLabel"
                  for="reasonText">
             {{ $t('appointments.confirmation.headerLabel') }}
             {{ bookingReasonOptional() ? $t('appointments.confirmation.headerLabelSuffix') : '' }}
@@ -200,7 +200,7 @@ export default {
       return APPOINTMENT_BOOK_NOJS.path;
     },
     reasonBoxAriaLabelledBy() {
-      return this.showError ? 'error-label max-reason-desc' : 'max-reason-desc';
+      return this.showError ? 'booking-reason-label error-label max-reason-desc' : 'booking-reason-label max-reason-desc';
     },
     telephoneNumberTextAriaLabelledBy() {
       return this.showTelephoneError ? 'telephone-error-label telephone-number-desc' : 'telephone-number-desc';
