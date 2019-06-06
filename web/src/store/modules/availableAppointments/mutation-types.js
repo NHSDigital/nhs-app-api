@@ -25,6 +25,6 @@ export const initialState = () => ({
     type: '',
     location: '',
     clinician: '',
-    date: 'this_week',
+    date: 'all',
   },
 });

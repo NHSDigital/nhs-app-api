@@ -67,20 +67,6 @@ open class AvailableAppointmentsSteps {
     }
 
     @Step
-    fun assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates: Set<String>,
-                                                                  allDates: ArrayList<String>) {
-        for (date in allDates) {
-            if (!expectedDates.contains(date)) {
-                assertEquals(
-                        "Incorrect text found when expecting there to be no appointments for $date.",
-                        "No appointments available",
-                        availableAppointmentsPage.getNoSlotsAvailableTextAtDate(date)
-                )
-            }
-        }
-    }
-
-    @Step
     fun clickOnBackLink() {
         if (availableAppointmentsPage.onMobile())
             availableAppointmentsPage.clickOnButtonContainingText(backComponentText)

@@ -30,7 +30,7 @@ const clearState = (state) => {
     type: '',
     location: '',
     clinician: '',
-    date: DateFilterValues.THIS_WEEK,
+    date: DateFilterValues.ALL,
   };
 };
 

@@ -35,15 +35,18 @@ const val TELEPHONE_SESSION_TYPE = "Telephone"
 private const val STARTING_LOCATION_ID = 1
 private const val STARTING_CLINICIAN_ID = 1
 private const val STARTING_SLOT_TYPE_ID = 1
+private const val FOUR_WEEKS_IN_DAYS = DAYS_IN_WEEK * 4
 
 open class AppointmentsSlotsExample {
 
-    protected val currentTime = LocalDateTime.now()
+    protected val currentTime = LocalDateTime.now()!!
     private var currentDateToAdd = currentTime
-    val remainingDatesForThisWeek = setWeek()
+    private val remainingDatesForThisWeek = setWeek()
     val datesForNextWeek = setWeek()
 
     private val tomorrowDate = LocalDateTime.now().plusDays(1)
+    private val nextWeekDate = LocalDateTime.now().plusDays( DAYS_IN_WEEK)
+    private val nextFourWeeksDate = LocalDateTime.now().plusDays( FOUR_WEEKS_IN_DAYS)
 
     private var nextLocationId = STARTING_LOCATION_ID
     private var nextStaffId = STARTING_CLINICIAN_ID
@@ -59,7 +62,16 @@ open class AppointmentsSlotsExample {
             ALTERNATE_DEFAULT_TIME_HOUR,
             ALTERNATE_DEFAULT_TIME_MIN
     )
-
+    private val startDateNextWeekAppointment1 = AppointmentDate(
+            nextWeekDate,
+            DEFAULT_TIME_HOUR,
+            DEFAULT_TIME_MIN
+    )
+    private val startDateNextFourWeeksAppointment1 = AppointmentDate(
+            nextFourWeeksDate,
+            DEFAULT_TIME_HOUR,
+            DEFAULT_TIME_MIN
+    )
     private val telephoneStartDateAppointment = AppointmentDate(
             tomorrowDate,
             DEFAULT_TIME_HOUR,
@@ -275,7 +287,10 @@ open class AppointmentsSlotsExample {
                 locationNames = locations,
                 typesNames = types,
                 staffNames = clinicians,
-                dates = arrayListOf(startDateAppointment1, startDateAppointment2)
+                dates = arrayListOf(
+                        startDateAppointment1,
+                        startDateNextWeekAppointment1,
+                        startDateNextFourWeeksAppointment1)
         )
 
         val appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()

@@ -74,7 +74,7 @@ describe('CLEAR', () => {
         type: '',
         location: '',
         clinician: '',
-        date: DateFilterValues.THIS_WEEK,
+        date: DateFilterValues.ALL,
       },
     };
 
@@ -144,7 +144,7 @@ describe('INIT', () => {
         type: '',
         location: '',
         clinician: '',
-        date: DateFilterValues.THIS_WEEK,
+        date: DateFilterValues.ALL,
       },
     };
 

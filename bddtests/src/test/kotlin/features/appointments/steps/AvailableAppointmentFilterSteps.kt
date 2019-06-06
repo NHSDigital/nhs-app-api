@@ -134,7 +134,7 @@ open class AvailableAppointmentFilterSteps {
     fun verifyThatTimePeriodIsSetAsTheDefault() {
         assertEquals(
                 "Incorrect time period option currently selected. ",
-                THIS_WEEK_OPTION,
+                ALL_OPTION,
                 availableAppointmentsPage.timePeriodFilter.getSelectedValue()
         )
     }
@@ -164,6 +164,6 @@ open class AvailableAppointmentFilterSteps {
         const val TOMORROW_OPTION = "Tomorrow"
         const val THIS_WEEK_OPTION = "This week"
         const val NEXT_WEEK_OPTION = "Next week"
-        const val ALL_OPTION = "All available"
+        const val ALL_OPTION = "Next four weeks"
     }
 }

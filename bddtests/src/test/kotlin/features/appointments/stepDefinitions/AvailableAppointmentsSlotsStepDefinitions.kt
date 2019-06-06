@@ -116,6 +116,13 @@ class AvailableAppointmentsSlotsStepDefinitions {
         appointmentsSlotsFactory.generateExample(example)
     }
 
+    @Given("^there are appointment slots on some days in This week but not others, provided by (.*)$")
+    fun thereAreAvailableAppointmentSlotsThisWeekForGPSystem(gpSystem: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val example = appointmentSlotsExample.slotForEndOfToday()
+        appointmentsSlotsFactory.generateExample(example)
+    }
+
     @Given("^there are appointment slots on some days this week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysThisWeekButNotAllForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
@@ -203,7 +210,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         Serenity.setSessionVariable(gpAppointmentsDisabled).to("true")
         AppointmentsSlotsFactory.getForSupplier("VISION").generateDefaultUserData()
     }
-
 
     @Given("^(.*) is unavailable for available appointment slots$")
     fun gpSystemIUnavailableForAvailableAppointmentSlots(gpSystem: String) {
@@ -390,11 +396,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointmentsFilter.verifyThatNoSpecificClinicianIsSelected()
     }
 
-    @Then("^time period remains as that for this week$")
-    fun timePeriodRemainsAsThatForThisWeek() {
-        availableAppointmentsFilter.verifyThatTimePeriodIsSetAsTheDefault()
-    }
-
     @Then("^a message is displayed indicating there are no slots available$")
     fun aMessageIsDisplayedIndicatingThereAreNoSlotAvailable() {
         availableAppointments.availableAppointmentsPage.warning().assertVisible(
@@ -408,8 +409,9 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun aMessageIsDisplayedIndicatingThereAreNoSlotsForSelectedCriteria() {
         availableAppointments.availableAppointmentsPage.warning("No appointments available").assertVisible(
                 arrayListOf(
-                        "Try selecting a different date and time, or without a preferred practice member selected. " +
-                                "If you can't find the appointment you need, call your GP surgery.",
+                        "Try to filter appointments by a different period or" +
+                                "select \"No preference\" for the practice member. " +
+                                "If you cannot find the appointment you need, call your GP surgery.",
                         "If it's urgent and you don't know what to do, call 111 to get help near you."))
     }
 
@@ -425,31 +427,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Then("^I only see results for the selected filter options$")
     fun onlyAvailableSlotsAreDisplayedForFilterOptions() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
-    }
-
-    @Then("^I see results for each of the remaining days for this week, " +
-            "with an appropriate message when there are no slots$")
-    fun iSeeResultsForEachOfTheRemainingDaysForThisWeek() {
-        availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
-        ).filteredSlots.keys
-        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(
-                expectedDates,
-                appointmentSlotsExample.remainingDatesForThisWeek
-        )
-    }
-
-    @Then("^I see results for each of the days for next week, with an appropriate message when there are no slots$")
-    fun iSeeResultsForEachOfTheRemainingDaysForNextWeek() {
-        availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
-        ).filteredSlots.keys
-        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(
-                expectedDates,
-                appointmentSlotsExample.datesForNextWeek
-        )
     }
 
     private fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {

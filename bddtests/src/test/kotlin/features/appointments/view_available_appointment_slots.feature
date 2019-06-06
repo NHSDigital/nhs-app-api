@@ -86,7 +86,7 @@ Feature: View available appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I select a particular slot type and location
-    And I select time period for 'All available'
+    And I select time period for 'Next four weeks'
     Then I only see results for the selected filter options
     Examples:
       | GP System |
@@ -100,7 +100,7 @@ Feature: View available appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I select a particular slot type and location
-    And I select time period for 'All available'
+    And I select time period for 'Next four weeks'
     Then I only see results for the selected filter options
     Examples:
       | GP System |
@@ -116,7 +116,7 @@ Feature: View available appointment slots
     Then appointment type is not selected
     And the only location is selected
     And options for doctors/nurses remains as "no preference"
-    And time period remains as that for this week
+    And I select time period for 'This week'
     And no available slots are displayed
     Examples:
       | GP System |
@@ -197,48 +197,6 @@ Feature: View available appointment slots
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: A <GP System> user still sees the remainder of the current week, if filtering by this week but no appointments are available for some days
-    Given there are appointment slots on some days this week but not others, provided by <GP System>
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I select a type and location that have available slots
-    And I select time period for 'This week'
-    Then I see results for each of the remaining days for this week, with an appropriate message when there are no slots
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-  Scenario Outline: A <GP System> user still sees the whole of week, if filtering by next week but no appointments are available for some days
-    Given there are appointment slots on some days next week but not others, provided by <GP System>
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I select a type and location that have available slots
-    And I select time period for 'Next week'
-    Then I see results for each of the days for next week, with an appropriate message when there are no slots
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-  Scenario Outline: A <GP System> user only sees days with available slots, if filtering by "All available" but no appointments are available for some days
-    Given there are appointment slots on some days in the next few weeks but not others, provided by <GP System>
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I select a type and location that have available slots
-    And I select time period for 'All available'
-    Then I only see results for days that have available slots
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
   Scenario Outline: <GP System> user tries again after a timeout and it times-out again
     Given the <GP System> doesn't respond in a timely fashion for available appointment slots
     And I am logged in
@@ -285,6 +243,33 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+
+  # GP System agnostic scenario, so only need to test with TPP
+  Scenario: A TPP user only sees days with available slots, if filtering by "Next week" but no appointments are available for some days
+    Given there are appointment slots on some days next week but not others, provided by TPP
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I select a type and location that have available slots
+    And I select time period for 'Next week'
+    Then I only see results for days that have available slots
+
+  # GP System agnostic scenario, so only need to test with TPP
+  Scenario: A TPP user only sees days with available slots, if filtering by "This week" but no appointments are available for some days
+    Given there are appointment slots on some days in This week but not others, provided by TPP
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I select a type and location that have available slots
+    And I select time period for 'This week'
+    Then I only see results for days that have available slots
+
+  # GP System agnostic scenario, so only need to test with TPP
+  Scenario: A TPP user only sees days with available slots, if filtering by "Next four weeks" but no appointments are available for some days
+    Given there are appointment slots on some days in the next few weeks but not others, provided by TPP
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I select a type and location that have available slots
+    And I select time period for 'Next four weeks'
+    Then I only see results for days that have available slots
 
   Scenario Outline: <GP System>  user sees appropriate information message when GP system is unavailable
     Given <GP System> is unavailable for available appointment slots

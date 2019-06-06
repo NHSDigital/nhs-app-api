@@ -51,7 +51,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     val timePeriodFilter = DropdownElement(
-            "Filter by date",
+            "Filter available appointments",
             "Appointment time period filter",
             this
     )

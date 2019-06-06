@@ -395,7 +395,6 @@ export default {
     booking: {
       desktopBackButtonText: 'Back',
       backButtonText: 'Back to my appointments',
-      noSlots: 'No appointments available',
       nojs: {
         findButton: 'Find available appointments',
       },
@@ -410,7 +409,7 @@ export default {
       },
       adjustSearch: {
         title: 'No appointments available',
-        line1: 'Try selecting a different date and time, or without a preferred practice member selected. If you can\'t find the appointment you need, call your GP surgery.',
+        line1: 'Try to filter appointments by a different period or select "No preference" for the practice member. If you cannot find the appointment you need, call your GP surgery.',
         line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
       },
       filters: {
@@ -428,13 +427,13 @@ export default {
         },
         date: {
           header: 'Available appointments',
-          label: 'Filter by date',
+          label: 'Filter available appointments',
           options: {
             today: 'Today',
             tomorrow: 'Tomorrow',
             this_week: 'This week',
             next_week: 'Next week',
-            all: 'All available',
+            all: 'Next four weeks',
           },
         },
       },
