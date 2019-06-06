@@ -50,7 +50,7 @@
                               name="choice"
                               @select="radioButtonSelected"/>
 
-        <analytics-tracked-tag :text="this.$t('th05.callToAction')">
+        <analytics-tracked-tag :text="this.$t('th05.callToAction')" :tabindex="-1">
           <generic-button :button-classes="[$store.state.device.isNativeApp
                                               ?'button':'button-desktop',
                                             'green']" @click.prevent="signupFormSubmitted">

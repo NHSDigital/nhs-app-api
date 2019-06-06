@@ -11,8 +11,7 @@
                              :aria-expanded="!isPatientDetailsCollapsed ? 'true' : 'false'"
                              data-purpose="accordion"
                              role="button"
-                             tag="a"
-                             tabindex="0">
+                             tag="a">
         {{ $t('my_record.patientInfo.sectionHeader') }}
       </analytics-tracked-tag>
       <div :class="$style.patientDetailsContainer">

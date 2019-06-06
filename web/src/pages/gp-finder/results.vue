@@ -79,7 +79,7 @@
         </li>
       </ul>
 
-      <analytics-tracked-tag :text="$t('th03.errors.backButton')">
+      <analytics-tracked-tag :text="$t('th03.errors.backButton')" :tabindex="-1">
         <generic-button v-if="tooManyResults || technicalError || noResultsFound"
                         :button-classes="[$store.state.device.isNativeApp
                                             ?'button':'button-desktop',

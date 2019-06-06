@@ -28,6 +28,7 @@
       </div>
       <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
                              :destination="symptomsPath"
+                             :tabindex="-1"
                              data-purpose="generic-button">
         <generic-button id="btn_check_symptoms"
                         :class="$style.button"
@@ -74,11 +75,11 @@ import NoJsForm from '@/components/no-js/NoJsForm';
 
 export default {
   components: {
+    AnalyticsTrackedTag,
     GenericButton,
     NoJsForm,
     AppointmentGuidance,
     DesktopGenericBackLink,
-    AnalyticsTrackedTag,
   },
   data() {
     return {

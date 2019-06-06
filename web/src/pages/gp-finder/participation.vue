@@ -42,7 +42,7 @@
         <input :value="redirectUri" type="hidden" name="redirect_uri">
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
-        <analytics-tracked-tag :text="this.$t('th04.ctaContinue')">
+        <analytics-tracked-tag :text="this.$t('th04.ctaContinue')" :tabindex="-1">
           <generic-button :class="$style.continue" :button-classes="[$store.state.device.isNativeApp
             ?'button':'button-desktop', 'green']">
             {{ this.$t('th04.ctaContinue') }}

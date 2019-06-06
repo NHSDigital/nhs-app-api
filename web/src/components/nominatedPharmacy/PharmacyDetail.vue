@@ -11,8 +11,7 @@
                            :click-func="goToChangeNominatedPharmacySearch"
                            :class="[$style['spacing-top']]"
                            :text="$t('nominated_pharmacy.changePharmacyLink')"
-                           tag="a"
-                           tabindex="0">
+                           tag="a">
       {{ $t('nominated_pharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
     <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"

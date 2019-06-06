@@ -8,7 +8,7 @@
       <h2>{{ this.$t('th06.untilThenHeading') }}</h2>
       <p>{{ this.$t('th06.untilThenSymptomsParagraph') }}</p>
       <p>{{ this.$t('th06.untilThenOrganDonationParagraph') }}</p>
-      <analytics-tracked-tag :text="this.$t('th06.homeButton')">
+      <analytics-tracked-tag :text="this.$t('th06.homeButton')" :tabindex="-1">
         <generic-button :class="$style.goToHomeScreenButton"
                         :button-classes="[$store.state.device.isNativeApp
                           ?'button':'button-desktop', 'grey']"

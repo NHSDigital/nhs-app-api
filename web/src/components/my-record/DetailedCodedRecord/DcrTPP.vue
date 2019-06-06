@@ -8,8 +8,7 @@
                            :aria-expanded="!isEventsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a"
-                           tabindex="0">
+                           tag="a">
       {{ $t('my_record.events.sectionHeader') }}
     </analytics-tracked-tag>
     <events :is-collapsed="isEventsCollapsed" :events="record.tppDcrEvents" />
@@ -23,8 +22,7 @@
                            :aria-expanded="!isTestResultsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a"
-                           tabindex="0">
+                           tag="a">
       {{ $t('my_record.testResults.sectionHeader.tpp') }}
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"

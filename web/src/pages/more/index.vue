@@ -10,6 +10,7 @@
       <li>
         <analytics-tracked-tag :text="$t('sc04.dataSharing.subheader')"
                                :href="dataSharingPath"
+                               :tabindex="-1"
                                data-purpose="text_link">
           <a id="btn_data_sharing"
              :class="$style['no-decoration']"

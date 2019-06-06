@@ -9,8 +9,7 @@
                              'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a"
-                           tabindex="0">
+                           tag="a">
       {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
     </analytics-tracked-tag>
     <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
@@ -24,8 +23,7 @@
                            :aria-expanded="!isAcuteMedicationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a"
-                           tabindex="0">
+                           tag="a">
       {{ $t('my_record.acuteMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isAcuteMedicationsCollapsed"
@@ -40,8 +38,7 @@
                            :aria-expanded="!isCurrentRepeatMedicationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a"
-                           tabindex="0">
+                           tag="a">
       {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
@@ -57,8 +54,7 @@
                              'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a"
-                           tabindex="0">
+                           tag="a">
       {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
