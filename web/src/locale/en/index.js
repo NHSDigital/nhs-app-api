@@ -949,6 +949,7 @@ export default {
     symptomsLabel: 'Symptoms',
     accountLabel: 'Account',
     logoutLabel: 'Log out',
+    close: 'Close the menu',
   },
   navigationMenuList: {
     symptoms: 'Check my symptoms',

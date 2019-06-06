@@ -4,6 +4,7 @@
     <hr aria-hidden="true">
     <a v-if="miniMenuExpanded" :class="$style['mini-menu-close-button']"
        role="button" tabindex="0"
+       :aria-label="$t('navigationMenu.close')"
        @click.prevent="closeMiniMenu"
        @keyup.13="closeMiniMenu">{{ $t('navigationMenu.menuLabel') }}</a>
 
