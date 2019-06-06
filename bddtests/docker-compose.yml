@@ -47,6 +47,7 @@ services:
       - VISION_SENDER_USERROLE=ROSU
       - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
       - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
+      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
