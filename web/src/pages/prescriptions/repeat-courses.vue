@@ -15,10 +15,6 @@
       </message-list>
     </message-dialog>
 
-    <div v-if="showRepeatCourses" :class="$style.info">
-      <p>{{ $t('rp03.subHeader') }}</p>
-    </div>
-
     <div v-if="showRepeatCourses">
       <no-js-form :action="confirmCoursesPath" :value="{}" method="post">
         <div :class="$style.panel">
@@ -30,7 +26,7 @@
               {{ $t('rp03.noMedicinesSelected') }}
             </error-message>
             <fieldset>
-              <legend>{{ $t('rp03.subHeader') }}</legend>
+              <legend role="heading">{{ $t('rp03.subHeader') }}</legend>
               <repeat-prescription
                 v-for="repeatPrescription in repeatPrescriptionCourses"
                 :key="repeatPrescription.id"
@@ -248,7 +244,8 @@ export default {
     fieldset {
       border: none;
       legend {
-        display: none;
+        font-weight: bold;
+        margin-bottom: 16px;
       }
     }
     .validatioin-text {
