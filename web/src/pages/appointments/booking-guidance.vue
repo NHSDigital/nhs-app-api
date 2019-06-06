@@ -66,6 +66,7 @@
 /* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import AppointmentGuidance from '@/components/appointments/AppointmentGuidanceMenu';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
@@ -77,6 +78,7 @@ export default {
     NoJsForm,
     AppointmentGuidance,
     DesktopGenericBackLink,
+    AnalyticsTrackedTag,
   },
   data() {
     return {
