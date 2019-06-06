@@ -30,7 +30,7 @@ services:
       - NDOP_CERTIFICATE_PASSWORD
       - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
-      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
+      - NDOP_CLAIM_ISSUER=https://www-preview.dev.nonlive.nhsapp.service.nhs.uk
       - ORGAN_DONATION_BASE_URL=https://nhsbt-apim-dev01.azure-api.net/uat3/odr/v1/
       - ORGAN_DONATION_CERT_PATH=./certs/OrganDonation.pfx
       - ORGAN_DONATION_CERT_PASSPHRASE=
@@ -74,7 +74,7 @@ services:
       - NDOP_CERTIFICATE_PASSWORD
       - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
-      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
+      - NDOP_CLAIM_ISSUER=https://www-preview.dev.nonlive.nhsapp.service.nhs.uk
       - STUB_TERMS_AND_CONDITIONS=true
       - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
       - SESSION_MONGO_DATABASE_PORT=27017

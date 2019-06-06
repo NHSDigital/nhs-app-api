@@ -25,22 +25,23 @@
                            :class="[$style.button, $style.green]"
                            :text="$t('ds01.startNowButton')"
                            :destination="dataPreferencesUrl"
-                           data-purpose="button"
+                           data-purpose="startNowButton"
                            tag="button"
-                           @click.native="startNowClickedIos">
+                           @click.native="startNow">
       {{ $t('ds01.startNowButton') }}
     </analytics-tracked-tag>
 
     <form v-if="pageId === 'p4' && device !== 'ios'" id="ndop-token-form"
-          :action="dataPreferencesUrl" :target="formTarget" method="POST"
-          name="ndopTokenForm">
+          ref="ndopTokenForm" :action="dataPreferencesUrl" :target="formTarget"
+          method="POST" name="ndopTokenForm">
       <input v-model="ndopToken" type="hidden" name="token">
-      <analytics-tracked-tag id="start-now-button"
+      <analytics-tracked-tag id="startNowButton"
                              :class="[$style.button, $style.green]"
                              :text="$t('ds01.startNowButton')"
                              :destination="dataPreferencesUrl"
-                             data-purpose="button"
-                             tag="button">
+                             data-purpose="startNowButton"
+                             tag="button"
+                             :click-func="startNow">
         {{ $t('ds01.startNowButton') }}
       </analytics-tracked-tag>
     </form>
@@ -95,19 +96,12 @@ export default {
     }
   },
   methods: {
-    async changePage(index) {
+    changePage(index) {
       window.scrollTo(0, 0);
       this.pageIndex = index;
-      const scope = this;
-      if (!scope.ndopToken && scope.pageId === 'p4') {
-        await this.getNdopToken();
-      }
     },
     goToPage(pageId) {
       this.changePage(_.indexOf(this.pageIds, pageId));
-    },
-    startNowClickedIos() {
-      NativeCallbacks.postNdopToken(this.ndopToken);
     },
     isLinkActive(pageId) {
       return pageId === this.pageIds[this.pageIndex] ? this.$style.active : undefined;
@@ -118,13 +112,18 @@ export default {
         this.goToPage(pageId);
       }
     },
-    async getNdopToken() {
+    async startNow() {
       const scope = this;
       await scope.$store.app.$http
         .getV1PatientNdop({})
         .then((p) => {
           scope.ndopToken = p.response.token;
         });
+      if (this.$store.state.device.source === 'ios') {
+        NativeCallbacks.postNdopToken(this.ndopToken);
+      } else {
+        this.$refs.ndopTokenForm.submit();
+      }
     },
   },
 };
