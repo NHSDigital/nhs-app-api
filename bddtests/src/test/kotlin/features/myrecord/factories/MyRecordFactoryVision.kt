@@ -28,4 +28,8 @@ class MyRecordFactoryVision: MyRecordFactory() {
         mocker.generatePatientDataResponse(patient, VisionConstants.testResultsView)
         { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
     }
+
+    override fun enabledWithData(patient: Patient, numAllergies: Int) {
+        throw UnsupportedOperationException()
+    }
 }

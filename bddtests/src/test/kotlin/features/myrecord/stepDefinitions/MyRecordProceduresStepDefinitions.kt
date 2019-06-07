@@ -9,6 +9,7 @@ import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.myrecord.MyRecordInfoPage
+import utils.SerenityHelpers
 
 class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -22,14 +23,14 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
     fun givenIDoNotHaveAccessToProceduresFor(){
         setPatientToDefaultFor("VISION")
         proceduresFactoryVision = ProceduresFactoryVision()
-        proceduresFactoryVision.noAccess(patient)
+        proceduresFactoryVision.noAccess(SerenityHelpers.getPatient())
     }
 
     @And("^the GP Practice has multiple procedures$")
     fun andTheGpPracticeHasMultipleProceduresFor(){
         setPatientToDefaultFor("VISION")
         proceduresFactoryVision = ProceduresFactoryVision()
-        proceduresFactoryVision.enabledWithRecords(patient)
+        proceduresFactoryVision.enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @When("^I click the procedures section$" )
@@ -41,7 +42,7 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
     fun andAnErrorOccurredRetrievingTheProcedures() {
         setPatientToDefaultFor("VISION")
         proceduresFactoryVision = ProceduresFactoryVision()
-        proceduresFactoryVision.errorRetrieving(patient)
+        proceduresFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @Then( "^I see procedures information$" )

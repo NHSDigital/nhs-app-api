@@ -53,35 +53,43 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun givenMyRecordWiremocksAreInitialisedFor(getService: String) {
         SerenityHelpers.setGpSupplier(getService)
         setPatientToDefaultFor(getService)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
-        SerenityHelpers.setPatient(this.patient)
-        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(this.patient)
-        MyRecordFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled summary care record functionality$")
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        MyRecordFactory.getForSupplier(getService).disabled(patient)
+        MyRecordFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^I am on the record warning page$")
     fun givenIAmOnTheRecordWarningPage() {
         browser.goToApp()
-        login.using(this.patient)
+        login.using(SerenityHelpers.getPatient())
         nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
 
     @Given("^I am on my record information page$")
     fun givenIAmOnMyRecordInformationPage() {
         browser.goToApp()
-        login.using(this.patient)
+        login.using(SerenityHelpers.getPatient())
         nav.select(NavBarNative.NavBarType.MY_RECORD)
         myRecordWarningPage.clickAgreeAndContinue()
         myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
+    }
+
+    @Given("^the my record wiremocks are populated for (.*) with (\\d+) allergies$")
+    fun givenMyRecordWiremocksArePopulatedFor(getService: String, numAllergies: Int) {
+        SerenityHelpers.setGpSupplier(getService)
+        setPatientToDefaultFor(getService)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(getService).enabledWithData(SerenityHelpers.getPatient(), numAllergies)
     }
 
     @When("^I enter url address for my record directly into the url$")
@@ -211,7 +219,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see the patient information details$")
     fun iSeePatientInformationDetails() {
-        val sex = this.patient.sex.name;
+        val patient = SerenityHelpers.getPatient()
+        val sex = patient.sex.name
         val address = patient.address.full()
 
         myRecordInfoPage.assertLabelAndValue("Name", patient.formattedFullName())

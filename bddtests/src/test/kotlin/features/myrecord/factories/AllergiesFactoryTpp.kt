@@ -4,8 +4,10 @@ import constants.ErrorResponseCodeTpp
 import mocking.data.myrecord.AllergiesData
 import mocking.tpp.models.Error
 import models.Patient
+import worker.models.myrecord.AllergyItem
 
 class AllergiesFactoryTpp: AllergiesFactory() {
+
     override fun disabled(patient: Patient) {
         mockingClient.forTpp {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
@@ -22,5 +24,9 @@ class AllergiesFactoryTpp: AllergiesFactory() {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(AllergiesData.getTppAllergiesData(count))
         }
+    }
+
+    override fun getExpectedAllergies(): List<AllergyItem> {
+        throw UnsupportedOperationException("Not yet implemented")
     }
 }

@@ -27,6 +27,9 @@
           <scr-tpp v-if="supplier === 'TPP'" :record="$store.state.myRecord.record"/>
 
           <scr-vision v-if="supplier === 'VISION'" :record="$store.state.myRecord.record"/>
+
+          <scr-microtest v-if="supplier === 'MICROTEST'" :record="$store.state.myRecord.record"/>
+
         </template>
 
         <div v-if="hasDetailedRecordAccess">
@@ -51,7 +54,9 @@
         <div v-if="hasLoaded">
           <div id="errorMsg" :class="$style.info">
             <p><strong style="margin-top: 0.5em;">
-              {{ $t('my_record.noRecordAccess.warningHeader') }}
+              {{ $t( supplier === 'MICROTEST' ?
+                'my_record.noRecordsOrNoAccess.warningHeader' :
+                'my_record.noRecordAccess.warningHeader') }}
             </strong></p>
             <p>{{ $t('my_record.noRecordAccess.warningBody') }} </p>
           </div>
@@ -73,6 +78,7 @@ import DcrVision from '@/components/my-record/DetailedCodedRecord/DcrVISION';
 import ScrEmis from '@/components/my-record/SummaryCareRecord/ScrEMIS';
 import ScrTpp from '@/components/my-record/SummaryCareRecord/ScrTPP';
 import ScrVision from '@/components/my-record/SummaryCareRecord/ScrVISION';
+import ScrMicrotest from '@/components/my-record/SummaryCareRecord/ScrMICROTEST';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import Warning from '@/components/my-record/Warning';
@@ -90,6 +96,7 @@ export default {
     ScrEmis,
     ScrTpp,
     ScrVision,
+    ScrMicrotest,
     Warning,
   },
   data() {

@@ -24,6 +24,14 @@ class MyRecordInfoPage : HybridPageObject() {
                     androidLocator = null,
                     page = this)
 
+    val noRecordsOrNoAccessText = "Sorry, this information isn't available through the NHS App. " +
+            "To access it, contact your GP surgery."
+    val noRecordsOrNoAccessParagraph =
+            HybridPageElement(
+                    webDesktopLocator = "//strong[contains(text(), \"${noRecordsOrNoAccessText}\")]",
+                    androidLocator = null,
+                    page = this)
+
     private val noSummaryCareAccessMessage =
             HybridPageElement(
                     webDesktopLocator = "//div[@id='mainDiv']//div[@id='errorMsg']",

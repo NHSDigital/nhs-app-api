@@ -701,6 +701,9 @@ export default {
       warningHeader: 'You do not currently have online access to your medical record',
       warningBody: 'Contact your GP surgery for more information.',
     },
+    noRecordsOrNoAccess: {
+      warningHeader: 'Sorry, this information isn\'t available through the NHS App. To access it, contact your GP surgery.',
+    },
     patientInfo: {
       fieldLabelName: 'Name',
       fieldLabelDOB: 'Date of birth',

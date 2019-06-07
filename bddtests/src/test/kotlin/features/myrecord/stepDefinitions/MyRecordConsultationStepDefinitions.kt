@@ -33,7 +33,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
                 }
             }
@@ -51,7 +51,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
             "TPP" -> {
                 setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                     "You don&apos;t have access to this online service. " +
                                             "You can request access to this service at Kainos GP Demo Unit by " +
@@ -75,7 +75,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
             "TPP" -> {
                 setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
 
                 }
@@ -95,7 +95,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
             "TPP" -> {
                 setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithServiceNotAvailableException()
                 }
 

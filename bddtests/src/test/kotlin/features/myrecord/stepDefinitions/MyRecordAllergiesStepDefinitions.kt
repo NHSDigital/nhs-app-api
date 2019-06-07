@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -10,9 +11,13 @@ import mocking.vision.VisionConstants
 import mocking.vision.VisionConstants.allergiesView
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import pages.assertElementNotPresent
+import pages.assertIsVisible
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val NUMBER_OF_ALLERGIES = 5
 
@@ -24,7 +29,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergies(count: Int) {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        AllergiesFactory.getForSupplier(getService).enabledWithRecords(patient, count)
+        AllergiesFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient(), count)
     }
 
     @Given("^the GP Practice has enabled allergies functionality and has a drug and non drug allergy " +
@@ -32,7 +37,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     fun theGPPracticeHasEnabledAllergiesFunctionalityAndThePatientHasADrugAndNonDrugAllergyRecord() {
         setPatientToDefaultFor("VISION")
         MyRecordVisionMocker(mockingClient).generatePatientDataResponse(
-                patient,
+                SerenityHelpers.getPatient(),
                 allergiesView,
                 VisionConstants.htmlResponseFormat)
         { request -> request.respondWithSuccess(AllergiesData.getVisionAllergiesDrugAndNonDrugData()) }
@@ -43,15 +48,16 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormats() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
+        val patient = SerenityHelpers.getPatient()
         when (getService) {
             "EMIS" ->
                 mockingClient.forEmis {
-                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient)
+                    myRecord.allergiesRequest(patient)
                             .respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
                 }
             "TPP" -> {
                 mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!)
+                    myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithSuccess(AllergiesData.getTppAllergiesData(NUMBER_OF_ALLERGIES))
                 }
             }
@@ -62,17 +68,27 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     fun butTheGPPracticeHasDisabledAllergiesFunctionalityForService() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        AllergiesFactory.getForSupplier(getService).disabled(patient)
+        AllergiesFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an unknown error getting allergies for VISION$")
     fun thereIsAnUnknownErrorGettingAllergiesFor() {
         setPatientToDefaultFor("VISION")
         MyRecordVisionMocker(mockingClient).generatePatientDataResponse(
-                patient,
+                SerenityHelpers.getPatient(),
                 allergiesView,
                 VisionConstants.htmlResponseFormat )
         { request -> request.respondWithUnknownError() }
+    }
+
+    @Then("^I see a message informing me to contact my GP for this information$")
+    fun thenISeeAMessageInformingMeToContactMyGP() {
+        myRecordInfoPage.noRecordsOrNoAccessParagraph.assertIsVisible()
+    }
+
+    @Then("^I do not see a message informing me to contact my GP for this information$")
+    fun thenIDoNotSeeAMessageInformingMeToContactMyGP() {
+        myRecordInfoPage.noRecordsOrNoAccessParagraph.assertElementNotPresent()
     }
 
     @When("^the flag informing that the patient has access to the allergy data is set to \"(.*)\"$")
@@ -103,6 +119,36 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
         Assert.assertArrayEquals(expected.toArray(), myRecordInfoPage.allergies.allRecordItemBodies()
                 .toTypedArray())
+    }
+
+    @Then("^I see the expected allergies displayed$")
+    fun thenISeeTheExpectedAllergiesDisplayed() {
+        val getService = SerenityHelpers.getGpSupplier()
+        val allergyData = AllergiesFactory
+                .getForSupplier(getService)
+                .getExpectedAllergies()
+
+        val onScreenAllergies = myRecordInfoPage.allergies.allRecordItems()
+
+        Assert.assertEquals(
+                allergyData.count(),
+                onScreenAllergies.count())
+
+        for (i in onScreenAllergies.indices) {
+            Assert.assertEquals(
+                    LocalDate.parse(
+                            allergyData[i].date.value
+                    ),
+                    LocalDate.parse(
+                            onScreenAllergies[i].label,
+                            DateTimeFormatter.ofPattern(
+                                    DateTimeFormats.frontendBasicDateFormat)
+                    )
+            )
+
+            // assuming 1 allergy per date for this method until needs expanded
+            Assert.assertEquals(allergyData[i].name, onScreenAllergies[i].bodyElements.joinToString())
+        }
     }
 
     @Then("^I see 5 allergies with different date formats$")

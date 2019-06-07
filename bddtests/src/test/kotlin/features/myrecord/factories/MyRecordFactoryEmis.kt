@@ -45,4 +45,8 @@ class MyRecordFactoryEmis: MyRecordFactory() {
                     .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
         }
     }
+
+    override fun enabledWithData(patient: Patient, numAllergies: Int) {
+        throw UnsupportedOperationException()
+    }
 }

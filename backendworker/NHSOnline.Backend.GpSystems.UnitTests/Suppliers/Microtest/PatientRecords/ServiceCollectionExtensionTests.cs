@@ -28,7 +28,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             var microtestPatientRecordService = new ServiceDescriptor(typeof(MicrotestPatientRecordService),
                 typeof(MicrotestPatientRecordService), ServiceLifetime.Transient);
             
+            var microtestPatientRecordMapper = new ServiceDescriptor(typeof(IMicrotestMyRecordMapper),
+                typeof(MicrotestMyRecordMapper), ServiceLifetime.Transient);
+            
             registeredServices.Should().ContainEquivalentOf(microtestPatientRecordService);
+            registeredServices.Should().ContainEquivalentOf(microtestPatientRecordMapper);
         }
     }
 }

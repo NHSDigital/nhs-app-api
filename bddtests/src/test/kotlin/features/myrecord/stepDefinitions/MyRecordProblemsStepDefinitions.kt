@@ -19,27 +19,27 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityFor() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).enabledWithRecords(patient)
+        ProblemsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled problems functionality$")
     fun butTheGPPracticeHasDisabledProblemsFunctionality() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).disabled(patient)
+        ProblemsFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
     }
     @Given("^no Problems records exist for the patient$")
     fun givenNoProblemsRecordsExistForThePatient() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
+        ProblemsFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an error retrieving Problems data$")
     fun givenThereIsAnErrorRetrievingProblemsData() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).errorRetrieving(patient)
+        ProblemsFactory.getForSupplier(getService).errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @When("^the flag informing that the patient has access to the problem data is set to \"(.*)\"$")

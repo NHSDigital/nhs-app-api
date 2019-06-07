@@ -20,28 +20,28 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
     fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleRecordsExist() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).enabledWithRecords(patient)
+        ImmunisationsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^no immunisation records exist for the patient$")
     fun givenNoImmunisationRecordsExistForThePatient() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
+        ImmunisationsFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the user does not have access to view immunisations$")
     fun givenUserDoesNotHaveAccessToViewImmunisations() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).noAccess(patient)
+        ImmunisationsFactory.getForSupplier(getService).noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an error retrieving immunisations data$")
     fun givenThereIsAnErrorRetrievingImmunisationsData() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).errorRetrieving(patient)
+        ImmunisationsFactory.getForSupplier(getService).errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @When("^I get the users immunisations$")

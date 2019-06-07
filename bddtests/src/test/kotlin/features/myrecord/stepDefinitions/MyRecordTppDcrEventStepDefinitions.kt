@@ -8,6 +8,7 @@ import mocking.data.myrecord.TppDcrData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -18,7 +19,7 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenTheGpPracticeHasMultipleDcrEventsForTpp() {
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
-            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
+            myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
         }
     }
@@ -27,7 +28,7 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenThePatientDoesNotHaveAccessToDcrEventsForTPP() {
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
-            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
+            myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "You don&apos;t have access to this online service. " +
                                     "You can request access to this service at Kainos GP Demo Unit by " +
@@ -40,7 +41,7 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenAnErrorOccurredRetrievingDcrEventsFromTPP() {
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
-            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
+            myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithServiceNotAvailableException()
         }
     }

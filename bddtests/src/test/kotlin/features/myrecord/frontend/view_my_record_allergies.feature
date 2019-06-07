@@ -14,7 +14,6 @@ Feature: View My Medical Record Information - Allergies
       | TPP     |
       | VISION  |
 
-
   Scenario Outline: A <Service> user without Summary Care Record access cannot view allergies section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
@@ -84,3 +83,20 @@ Feature: View My Medical Record Information - Allergies
     And I am on my record information page
     When I click the Allergies and adverse reactions section on My Record
     Then I see an error occurred message with Allergies and adverse reactions on My Record
+
+  Scenario: A MICROTEST user cannot view allergies and adverse reactions section
+    Given the my record wiremocks are initialised for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I do not see the Allergies and adverse reactions heading on My Record
+    And I see a message informing me to contact my GP for this information
+
+  Scenario: A MICROTEST user can view allergies and adverse reactions section
+    Given the my record wiremocks are populated for MICROTEST with 3 allergies
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Allergies and adverse reactions heading on My Record
+    And I do not see a message informing me to contact my GP for this information
+    When I click the Allergies and adverse reactions section on My Record
+    Then I see the expected allergies displayed
+

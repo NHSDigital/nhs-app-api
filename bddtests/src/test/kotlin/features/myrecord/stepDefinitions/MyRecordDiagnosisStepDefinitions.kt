@@ -9,6 +9,7 @@ import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.myrecord.MyRecordInfoPage
+import utils.SerenityHelpers
 
 open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -22,21 +23,21 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
     fun givenIDoNotHaveAccessToDiagnosisFor(){
         setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
-        diagnosisFactoryVision.noAccess(patient)
+        diagnosisFactoryVision.noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple diagnosis$")
     fun andTheGpPracticeHasMultipleDiagnosisFor(){
         setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
-        diagnosisFactoryVision.enabledWithRecords(patient)
+        diagnosisFactoryVision.enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^an error occurred retrieving the diagnosis")
     fun andAnErrorOccurredRetrievingTheDiagnosisFor() {
         setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
-        diagnosisFactoryVision.errorRetrieving(patient)
+        diagnosisFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @When("^I click the diagnosis section$" )

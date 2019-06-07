@@ -23,15 +23,15 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenTheGPPracticeHasEnabledMedicationsFunctionality() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        MedicationsFactory.getForSupplier(getService).enabledWithRecords(patient)
+        MedicationsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has enabled medication functionality and the patient has no medications$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedications() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
-        val factory = MedicationsFactory.getForSupplier(getService);
-        factory.enabledWithBlankRecord(patient)
+        val factory = MedicationsFactory.getForSupplier(getService)
+        factory.enabledWithBlankRecord(SerenityHelpers.getPatient())
         factory.getResult()
     }
 
@@ -42,13 +42,13 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient)
+                    myRecord.medicationsRequest(SerenityHelpers.getPatient())
                             .respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!)
+                    myRecord.viewPatientOverviewPost(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                     "Requested record access is disabled by the practice",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))

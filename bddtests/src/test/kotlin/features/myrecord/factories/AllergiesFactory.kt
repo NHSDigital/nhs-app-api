@@ -3,11 +3,13 @@ package features.myrecord.factories
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
+import worker.models.myrecord.AllergyItem
 
 abstract class AllergiesFactory {
 
     abstract fun disabled(patient: Patient)
     abstract fun enabledWithRecords(patient: Patient, count: Int)
+    abstract fun getExpectedAllergies(): List<AllergyItem>
 
     val mockingClient = MockingClient.instance
 
@@ -18,7 +20,8 @@ abstract class AllergiesFactory {
                     hashMapOf(
                             "EMIS" to { AllergiesFactoryEmis() },
                             "TPP" to { AllergiesFactoryTpp() },
-                            "VISION" to { AllergiesFactoryVision() })
+                            "VISION" to { AllergiesFactoryVision() },
+                            "MICROTEST" to { AllergiesFactoryMicrotest() })
                 }
 
     }

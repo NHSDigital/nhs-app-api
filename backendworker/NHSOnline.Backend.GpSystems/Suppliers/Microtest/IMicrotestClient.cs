@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 {
@@ -29,6 +30,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest);
 
         Task<MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>> DemographicsGet(
+            string odsCode,
+            string nhsNumber);
+        
+        Task<MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>> MedicalRecordGet(
             string odsCode,
             string nhsNumber);
     }

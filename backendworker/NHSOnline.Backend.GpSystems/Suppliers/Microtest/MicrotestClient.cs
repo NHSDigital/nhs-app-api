@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
@@ -24,6 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         private const string AppointmentsWithDatePath = "patient/appointments?pastAppointmentsFromDate={0}";
         private const string AppointmentsPath = "patient/appointments";
         private const string DemographicsPath = "patient/demographics";
+        private const string MedicalRecordPath = "patient/my-record";
 
         private readonly MicrotestHttpClient _httpClient;
         private readonly ILogger<MicrotestClient> _logger;
@@ -117,6 +119,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         {
             _logger.LogEnter();
             var response = await Get<DemographicsGetResponse>(DemographicsPath, odsCode, nhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
+
+        public async Task<MicrotestApiObjectResponse<PatientRecordGetResponse>> MedicalRecordGet(string odsCode, string nhsNumber)
+        {
+            _logger.LogEnter();
+            var response = await Get<PatientRecordGetResponse>(MedicalRecordPath, odsCode, nhsNumber);
 
             _logger.LogExit();
             return response;

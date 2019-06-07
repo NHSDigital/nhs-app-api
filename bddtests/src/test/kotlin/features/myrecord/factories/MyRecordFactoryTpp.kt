@@ -39,4 +39,8 @@ class MyRecordFactoryTpp: MyRecordFactory() {
                     .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
         }
     }
+
+    override fun enabledWithData(patient: Patient, numAllergies: Int) {
+        throw UnsupportedOperationException()
+    }
 }
