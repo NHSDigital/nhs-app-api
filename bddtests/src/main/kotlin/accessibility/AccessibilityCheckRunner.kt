@@ -16,6 +16,10 @@ data class FileReport(val Console: String = "", val Source: String = "", val Err
 open class AccessibilityCheckRunner {
     companion object {
         var errorsEncountered = false
+        var ignoreErrorMap: Map<String, String> = mapOf(
+                // Add comma separated error codes for individual page to ignore
+                "AppointmentBooking.html" to "WCAG2AA.Principle3.Guideline3_2.3_2_2.H32.2"
+        )
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -31,7 +35,8 @@ open class AccessibilityCheckRunner {
                         val report = AccessibilityCheckRunner().pa11y(
                             runCommand,
                             it.canonicalPath,
-                            configFile
+                            configFile,
+                            it.name
                         )
                         fileReports.add(report)
                         it.copyTo(File(outputFolder).resolve(it.name), true)
@@ -48,11 +53,19 @@ open class AccessibilityCheckRunner {
         }
     }
 
-    fun pa11y(runCommand: String, sourceToCheck: String, configFile: String): FileReport {
+    fun pa11y(runCommand: String, sourceToCheck: String, configFile: String, fileName: String): FileReport {
         var consoleOutput = ""
         var failures = ""
         var loopNum = 0
-        val process = Runtime.getRuntime().exec("$runCommand --config $configFile file://$sourceToCheck")
+        var ignoreParameter = ""
+
+        if (ignoreErrorMap.contains(fileName)) {
+            ignoreParameter = "--ignore ${ignoreErrorMap.getValue(fileName)}"
+        }
+
+        val process = Runtime.getRuntime().exec("$runCommand " +
+                "--config $configFile $ignoreParameter file://$sourceToCheck")
+
         val stdInput = BufferedReader(InputStreamReader(process.inputStream, "UTF-8"))
         val stdError = BufferedReader(InputStreamReader(process.errorStream, "UTF-8"))
 
