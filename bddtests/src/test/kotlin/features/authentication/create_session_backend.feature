@@ -11,6 +11,7 @@ Feature: Session Registration
     Then I receive a response
     And the response has a name
     And the response has a session timeout
+    And the response has service journey rules
     And the cookie contains a session guid with http-only
 
   @tech-debt @NHSO-725  # covered in Manual Regression Test pack
@@ -20,38 +21,33 @@ Feature: Session Registration
     Then I receive a response
     And the response has a name
     And the response has a session timeout
+    And the response has service journey rules
     And the cookie contains a session guid with tls-only
-
 
   Scenario: OAuth details are incomplete
     Given I have incomplete OAuth details
     When I create a user session
     Then I get a "Bad Request" error
 
-
   Scenario: OAuth details are invalid
     Given I have invalid OAuth details
     When I create a user session
     Then I get a "Bad Request" error
-
 
   Scenario: CID tokens endpoint fails to process the request
     Given I have valid OAuth details and the CID tokens endpoint fails to process the request
     When I create a user session
     Then I get a "Bad Gateway" error
 
-
   Scenario: EMIS end user session fails to create
     Given I have valid OAuth details and the EMIS end user session endpoint fails to create
     When I create a user session
     Then I get a "Bad Gateway" error
 
-
   Scenario: EMIS session fails to create
     Given I have valid OAuth details and the EMIS session endpoint fails to create
     When I create a user session
     Then I get a "Bad Gateway" error
-
 
   Scenario Outline: <GP System> is unavailable
     Given I have valid OAuth details and <GP System> is not available
@@ -64,7 +60,6 @@ Feature: Session Registration
       | TPP       |
       | VISION    |
 
-
   Scenario Outline: When creating a session with <GP System> an incomplete response returns a Bad Gateway
     Given I have valid OAuth details and <GP System> returns with an incomplete response
     When I create a user session
@@ -73,7 +68,6 @@ Feature: Session Registration
     Examples:
       | GP System |
       | TPP       |
-
 
   Scenario Outline: CID connection token fails to authenticate with <GP System>
     Given I have invalid OAuth details and CID connection token fails to authenticate with <GP System>

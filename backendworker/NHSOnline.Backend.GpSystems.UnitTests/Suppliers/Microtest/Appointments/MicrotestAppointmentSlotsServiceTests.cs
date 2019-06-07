@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             var unsuccessfulSlotResponse = _fixture
                 .Build<MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
             
             MockMicrotestClientAppointmentSlotGetMethod(unsuccessfulSlotResponse);
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             var forbiddenSlotsResponse = _fixture
                 .Build<MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.Forbidden)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
             
             MockMicrotestClientAppointmentSlotGetMethod(forbiddenSlotsResponse);

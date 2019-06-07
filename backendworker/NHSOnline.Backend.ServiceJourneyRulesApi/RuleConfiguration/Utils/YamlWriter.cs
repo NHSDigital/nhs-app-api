@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Logging;
-
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 {
     internal class YamlWriter : IYamlWriter

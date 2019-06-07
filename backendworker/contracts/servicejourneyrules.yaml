@@ -29,18 +29,6 @@ paths:
         200:
           description: Successful operation. Service Journey Rules returned
           schema:
-            $ref: "#/definitions/ServiceJourneyRulesResponse"
+            $ref: "servicejourneyrules.definitions.yaml#/definitions/ServiceJourneyRulesResponse"
         500:
           description: An unexpected error occurred processing the request.
-    
-definitions:
-  ServiceJourneyRulesResponse:
-    type: object
-    properties:
-      appointments:
-        type: object
-        properties:
-          journeyType:
-            type: string
-            description: Type of appointment journey
-            enum: [im1Appointments, disabled]

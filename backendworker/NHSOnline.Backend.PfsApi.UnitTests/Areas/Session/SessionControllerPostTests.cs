@@ -23,6 +23,9 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support.Settings;
 using UnitTestHelper;
 
@@ -48,9 +51,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private Mock<ISessionMapper> _mockSessionMapper;
         private Mock<ILogger<SessionController>> _mockLogger;
         private Mock<IOdsCodeMassager> _mockOdsCodeMassager;
+        private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
         
         private const string DateFormat = "yyyy-MM-dd";
 
+        private ServiceJourneyRulesResponse _serviceJourneyRulesResponse;
+        private ServiceJourneyRulesConfigResult _serviceJourneyRulesConfigResult;
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
         private EmisUserSession _emisUserSession;
@@ -109,6 +115,23 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     OdsCode = _userProfile.OdsCode,
                     Session = _citizenIdUserSession
                 }));
+
+            _serviceJourneyRulesResponse = _fixture.Create<ServiceJourneyRulesResponse>();
+            _serviceJourneyRulesResponse.Appointments = new ServiceJourneyRulesApi.Models.Appointments
+            {
+                JourneyType = AppointmentsJourneyType.None
+            }; 
+
+            _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
+            
+            _serviceJourneyRulesConfigResult =
+                new ServiceJourneyRulesConfigResult.Success(_serviceJourneyRulesResponse);
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode));
+         
+            _mockServiceJourneyRulesService
+                .Setup(x =>
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
+                .Returns(Task.FromResult(_serviceJourneyRulesConfigResult));
 
             _userSession = new UserSession
             {
@@ -360,6 +383,37 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockAuditor.Verify();
             _mockLogger.Verify();
         }
+        
+        [TestMethod]
+        public async Task Post_GetServiceJourneyRulesForOdsFails_Returns404NotFound()
+        {
+            // Arrange
+            _serviceJourneyRulesConfigResult =
+                new ServiceJourneyRulesConfigResult.NotFound();
+         
+            _mockServiceJourneyRulesService
+                .Setup(x =>
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
+                .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
+                .Verifiable();
+            
+            _mockAuditor.Setup(x => x.Audit(Constants.AuditingTitles.SessionCreateResponse, 
+                    "Retrieving Service Journey Rules failed with status code: '404'", 
+                    It.IsAny<object[]>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            
+            // Assert
+            _mockServiceJourneyRulesService.Verify(); 
+            _mockAuditor.Verify();
+            _mockLogger.Verify();
+        }
+
 
         [TestMethod]
         public async Task Post_HappyPath_ReturnsUsersSessionResponse()
@@ -381,7 +435,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat,
                     CultureInfo.InvariantCulture),
                 NhsNumber = _userProfile.NhsNumber,
-                AccessToken = _userProfile.AccessToken
+                AccessToken = _userProfile.AccessToken,
+                ServiceJourneyRules = _serviceJourneyRulesResponse
             };
 
             actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
@@ -391,6 +446,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
             actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
             actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
+            actualUserSessionResponse.ServiceJourneyRules.Should().BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
         }
 
         [TestMethod]
@@ -419,6 +475,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockSessionMapper.VerifyAll();
             _mockAuditor.VerifyAll();
             _mockLogger.VerifyAll();
+            _mockServiceJourneyRulesService.VerifyAll();
         }
         
         [TestMethod]

@@ -609,6 +609,11 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         checkNotNull(this.userSessionResponse?.userSessionResponseBody?.sessionTimeout)
     }
 
+    @Then("^the response has service journey rules$")
+    fun theResponseHasServiceJourneyRules() {
+        checkNotNull(this.userSessionResponse?.userSessionResponseBody?.serviceJourneyRules)
+    }
+
     @Then("^the response has the expected connection token$")
     fun theResponseHasTheExpectedConnectionToken() {
         val result = this.im1ConnectionResponse

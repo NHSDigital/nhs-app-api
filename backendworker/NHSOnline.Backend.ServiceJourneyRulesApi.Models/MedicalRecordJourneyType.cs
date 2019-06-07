@@ -1,17 +1,17 @@
 // ReSharper disable InconsistentNaming
 
-namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
+namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     /// <summary>
-    /// The valid journey types for appointments.
+    /// The valid journey types for medical record.
     ///
     /// The lowercase naming is required for serialization, as it currently
     /// does not support conversion from `PascalCase` to `camelCase`.
     /// </summary>
-    public enum AppointmentsJourneyType
+    public enum MedicalRecordJourneyType
     {
         None = 0,
         disabled,
-        im1Appointments
+        im1MedicalRecord
     }
 }

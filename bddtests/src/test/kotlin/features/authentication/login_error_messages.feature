@@ -29,8 +29,8 @@ Feature: Login error messages
     Given I attempt to log in as a <GP System> user without a date of birth
     Then I see an error message informing me I cannot log in as I am under the minimum age
     Examples:
-    | GP System   |
-    | TPP         |
+      | GP System |
+      | TPP       |
 
   @nativesmoketest
     Examples:
@@ -41,8 +41,8 @@ Feature: Login error messages
     Given I attempt to log in as a <GP System> user with an age under 13
     Then I see an error message informing me I cannot log in as I am under the minimum age
     Examples:
-      | GP System   |
-      | TPP         |
+      | GP System |
+      | TPP       |
 
   @nativesmoketest
     Examples:
@@ -52,9 +52,9 @@ Feature: Login error messages
   Scenario Outline: Cannot log in as a <GP System> user with no NHS Number
     Given I attempt to log in as a <GP System> user without an NHS Number
     Then I see an error message informing me I cannot log in
-  Examples:
-  | GP System   |
-  | TPP         |
+    Examples:
+      | GP System |
+      | TPP       |
 
   @nativesmoketest
     Examples:
@@ -66,5 +66,5 @@ Feature: Login error messages
     Given I attempt to log in as a <GP System> user with invalid ODS Code
     Then I see an error message informing me I cannot log in
     Examples:
-      | GP System   |
-      | EMIS        |
+      | GP System |
+      | EMIS      |

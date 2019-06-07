@@ -1,3 +1,5 @@
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
 {
     internal class Journeys

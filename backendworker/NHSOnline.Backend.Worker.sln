@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
+		contracts\servicejourneyrules.definitions.yaml = contracts\servicejourneyrules.definitions.yaml
+		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"
@@ -66,6 +68,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ClinicalDecisionSupportApi", "NHSOnline.Backend.ClinicalDecisionSupportApi\NHSOnline.Backend.ClinicalDecisionSupportApi.csproj", "{97CD6062-3DC2-448A-8865-C1F6747C3BFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests", "NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests\NHSOnline.Backend.ClinicalDecisionSupportApi.UnitTests.csproj", "{F820D500-2F52-4B8D-8E2D-3434BA668F9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi.Models", "NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj", "{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +145,10 @@ Global
 		{F820D500-2F52-4B8D-8E2D-3434BA668F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F820D500-2F52-4B8D-8E2D-3434BA668F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F820D500-2F52-4B8D-8E2D-3434BA668F9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

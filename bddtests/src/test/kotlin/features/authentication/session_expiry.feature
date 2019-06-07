@@ -3,10 +3,10 @@
 @authentication-session-extend
 @native
 Feature: Session Expiry and Extend
-   Notes on the terminology for the following tests:
-   * A 'secure screen' is a page that is within our native app, e.g. Appointments Booking Page
-   * A 'non secure screen' is a page that is not within our native app, but surfaced as part of the functionality,
-   e.g. Health A-Z (accessed from the symptoms page)
+  Notes on the terminology for the following tests:
+  * A 'secure screen' is a page that is within our native app, e.g. Appointments Booking Page
+  * A 'non secure screen' is a page that is not within our native app, but surfaced as part of the functionality,
+  e.g. Health A-Z (accessed from the symptoms page)
 
   @long-running
   @tech-debt @NHSO-1742
@@ -288,18 +288,6 @@ Feature: Session Expiry and Extend
     When I am idle long enough for the session to expire
     Then I unlock the device
     Then I see the login page with the session expiry notification
-
-  @backend
-  Scenario Outline: <GP System> GP practice session has expired
-    Given I have logged into <GP System> and have a valid session cookie
-    And the GP System session has expired when viewing prescriptions
-    When I request prescriptions for the last 6 months
-    Then I receive a "Unauthorized" error
-
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
 
   Scenario Outline: The <GP System> GP practice session has expired and user selects the prescriptions button
     Given I am patient using the <GP System> GP System

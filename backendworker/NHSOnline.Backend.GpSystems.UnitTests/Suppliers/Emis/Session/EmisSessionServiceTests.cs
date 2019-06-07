@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var unsuccessfulEndUserSession = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
 
             _mockEmisClient
@@ -150,8 +150,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var forbiddenSession = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.Forbidden)
-                .With(x => x.Body, null)
-                .With(x => x.ErrorResponseBadRequest, null)
+                .With(x => x.Body, () => null)
+                .With(x => x.ErrorResponseBadRequest, () => null)
                 .Create();
 
             _mockEmisClient
@@ -177,8 +177,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var badRequestSession = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.BadRequest)
-                .With(x => x.Body, null)
-                .With(x => x.ExceptionErrorResponse, null)
+                .With(x => x.Body, () => null)
+                .With(x => x.ExceptionErrorResponse, () => null)
                 .Create();
 
             _mockEmisClient
@@ -204,7 +204,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var forbiddenSession = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
 
             _mockEmisClient

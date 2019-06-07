@@ -11,6 +11,7 @@ using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 
@@ -55,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
         public async Task GetServiceJourneyRules_ReturnsValidResponse()
         {
             // Arrange
-            var expectedResponse = _fixture.Create<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResult>>();
+            var expectedResponse = _fixture.Create<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>>();
 
             _mockHttpHandler
                 .WhenServiceJourneyRules(HttpMethod.Get, ServiceJourneyRuleApiPath)
@@ -65,7 +66,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
             var response = await _systemUnderTest.GetServiceJourneyRules("Test");
             
             // Assert
-            response.Should().BeOfType(typeof(ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResult>));
+            response.Should().BeOfType(typeof(ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         
@@ -73,7 +74,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
         public async Task GetServiceJourneyRules_ReturnsInValidResponse_ErrorNotFound()
         {
             // Arrange
-            var expectedResponse = _fixture.Create<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResult>>();
+            var expectedResponse = _fixture.Create<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>>();
             
             _mockHttpHandler
                 .WhenServiceJourneyRules(HttpMethod.Post, ServiceJourneyRuleApiPath)

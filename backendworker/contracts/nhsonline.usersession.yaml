@@ -62,7 +62,7 @@ paths:
       description: Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id cookie obtained from post session endpoint.
       responses:
         200:
-          description: Successfully extended.   
+          description: Successfully extended.
         401:
           description: User session has expired.
         500:
@@ -75,9 +75,9 @@ definitions:
   UserSessionRequest:
     type: object
     required:
-     - authCode
-     - codeVerifier
-     - redirectUrl
+      - authCode
+      - codeVerifier
+      - redirectUrl
     properties:
       authCode:
         type: string
@@ -94,7 +94,7 @@ definitions:
       name:
         type: string
         description: User's name
-      sessionTimeout: 
+      sessionTimeout:
         type: integer
         description: User's session timeout period in seconds.
       odsCode:
@@ -109,3 +109,5 @@ definitions:
       accessToken:
         type: string
         description: User's access token which allows NHS Login to identify them
+      serviceJourneyRules:
+        $ref: "servicejourneyrules.definitions.yaml#/definitions/ServiceJourneyRulesResponse"

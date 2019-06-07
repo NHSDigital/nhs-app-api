@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         public async Task Get_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromTpp_NullRequestable()
         {
             // Arrange
-            _fixture.Customize<Medication>(c => c.With(s => s.Requestable, null));
+            _fixture.Customize<Medication>(c => c.With(s => s.Requestable, () => null));
 
             var listRepeatMedicationReply = _fixture.Create<ListRepeatMedicationReply>();
 

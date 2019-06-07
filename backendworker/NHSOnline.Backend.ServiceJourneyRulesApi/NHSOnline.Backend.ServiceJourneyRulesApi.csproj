@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\NHSOnline.Backend.ApiSupport\NHSOnline.Backend.ApiSupport.csproj" />
+      <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj" />
     </ItemGroup>
 
     <ItemGroup>

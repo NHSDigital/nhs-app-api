@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
@@ -33,6 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IIm1CacheService _im1CacheService;
         private readonly ISessionMapper _sessionMapper;
         private readonly IOdsCodeMassager _odsCodeMassager;
+        private readonly IServiceJourneyRulesService _serviceJourneyRules;
 
         public SessionController(
             ICitizenIdSessionService citizenIdSessionService,
@@ -44,7 +47,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IAuditor auditor,
             IIm1CacheService im1CacheService,
             ISessionMapper sessionMapper,
-            IOdsCodeMassager odsCodeMassager
+            IOdsCodeMassager odsCodeMassager,
+            IServiceJourneyRulesService serviceJourneyRules
         )
         {
             _citizenIdSessionService = citizenIdSessionService;
@@ -57,8 +61,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _im1CacheService = im1CacheService;
             _sessionMapper = sessionMapper;
             _odsCodeMassager = odsCodeMassager;
+            _serviceJourneyRules = serviceJourneyRules;
         }
-
+        
         [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] UserSessionRequest model)
         {
@@ -72,81 +77,123 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 {
                     return BadRequest();
                 }
-
-                // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
-                var citizenIdSessionResult = await _citizenIdSessionService.Create(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
-
-                if (!citizenIdSessionResult.StatusCode.IsSuccessStatusCode())
-                {
-                    return new StatusCodeResult(citizenIdSessionResult.StatusCode);
-                }
-                citizenIdSessionResult.OdsCode = _odsCodeMassager.CheckOdsCode(citizenIdSessionResult.OdsCode);
-
-                _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
-
-                // Get a suitable GP system, based on the ODS code.
-                var gpSystemOption = await GetGpSystem(citizenIdSessionResult.OdsCode);
-                if (!gpSystemOption.HasValue)
-                {
-                    _logger.LogError($"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.OdsCode}'");
-                    return new StatusCodeResult(Constants.CustomHttpStatusCodes
-                        .Status464OdsCodeNotSupportedOrNoNhsNumber);
-                }
-
-                var gpSystem = gpSystemOption.ValueOrFailure();
-                _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
-
-                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
-                    Constants.AuditingTitles.SessionCreateRequest,
-                    "Attempting to create Session");
-
-                // Validate the format of the IM1 connection token for this GP system.
-                var tokenValidationService = gpSystem.GetTokenValidationService();
-                if (!tokenValidationService.IsValidConnectionTokenFormat(citizenIdSessionResult.Im1ConnectionToken))
-                {
-                    const string errorMessage = "Failed to validate Im1 connection";
-                    _logger.LogError(errorMessage);
-                    await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
-                        Constants.AuditingTitles.SessionCreateResponse, errorMessage);
-                    return new StatusCodeResult(StatusCodes.Status403Forbidden);
-                }
-
-                // Create a session with the GP system, using the IM1 connection token.
-                var gpSessionCreatedResultVisited = await GetGpSessionCreateResultVisitorOutput(gpSystem, 
-                    citizenIdSessionResult.Im1ConnectionToken, citizenIdSessionResult.OdsCode, citizenIdSessionResult.NhsNumber);
-                if (!gpSessionCreatedResultVisited.SessionWasCreated)
-                {
-                    var errorMessage =
-                        $"Creating the session failed with status code: '{gpSessionCreatedResultVisited.StatusCode}'";                    
-                    _logger.LogError(errorMessage);
-                    await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
-                        Constants.AuditingTitles.SessionCreateResponse, errorMessage);
-                    return new StatusCodeResult(gpSessionCreatedResultVisited.StatusCode);
-                }
                 
-                var userSession = _sessionMapper.Map(HttpContext, gpSessionCreatedResultVisited.UserSession, citizenIdSessionResult.Session);
-
-                // Build and save session token in our session cache
-                var sessionFetchTask = FetchSessionIdAndSaveInCookie(userSession);
-
-                // Delete connection token from cache
-                var tokenDeletionTask = DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
-
-                await Task.WhenAll(sessionFetchTask, tokenDeletionTask);
-
-                // Audit that the user is logged on.
-                HttpContext.SetUserSession(userSession);
-                await _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, "Session successfully created.");
-
-                _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
-                
-                return await Task.FromResult(CreateCreatedResult(gpSessionCreatedResultVisited, userSession,
-                    citizenIdSessionResult.DateOfBirth));
+                return await GetCitizenIdSessionAndCreateSession(model);
             }
             finally
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task<IActionResult> GetCitizenIdSessionAndCreateSession(UserSessionRequest model)
+        {
+            // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
+            var citizenIdSessionResult = await _citizenIdSessionService.Create(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
+
+            if (!citizenIdSessionResult.StatusCode.IsSuccessStatusCode())
+            {
+                return new StatusCodeResult(citizenIdSessionResult.StatusCode);
+            }
+            citizenIdSessionResult.OdsCode = _odsCodeMassager.CheckOdsCode(citizenIdSessionResult.OdsCode);
+            
+            _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
+
+            return await GetGpSystemAndCreateSession(citizenIdSessionResult);
+        }
+
+        private async Task<IActionResult> GetGpSystemAndCreateSession(CitizenIdSessionResult citizenIdSessionResult)
+        {
+            // Get a suitable GP system, based on the ODS code.
+            var gpSystemOption = await GetGpSystem(citizenIdSessionResult.OdsCode);
+            if (!gpSystemOption.HasValue)
+            {
+                _logger.LogError($"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.OdsCode}'");
+                return new StatusCodeResult(Constants.CustomHttpStatusCodes
+                    .Status464OdsCodeNotSupportedOrNoNhsNumber);
+            }
+
+            var gpSystem = gpSystemOption.ValueOrFailure();
+            _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
+
+            await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
+                Constants.AuditingTitles.SessionCreateRequest,
+                "Attempting to create Session");
+
+            // Validate the format of the IM1 connection token for this GP system.
+            var tokenValidationService = gpSystem.GetTokenValidationService();
+            if (!tokenValidationService.IsValidConnectionTokenFormat(citizenIdSessionResult.Im1ConnectionToken))
+            {
+                const string errorMessage = "Failed to validate Im1 connection";
+                _logger.LogError(errorMessage);
+                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
+                    Constants.AuditingTitles.SessionCreateResponse, errorMessage);
+                return new StatusCodeResult(StatusCodes.Status403Forbidden);
+            }
+
+            return await GetUserSessionAndCreateSession(gpSystem, citizenIdSessionResult);
+        }
+
+        private async Task<IActionResult> GetUserSessionAndCreateSession(IGpSystem gpSystem,
+            CitizenIdSessionResult citizenIdSessionResult)
+        {
+            // Create a session with the GP system, using the IM1 connection token.
+            var gpSessionCreatedResultVisited = await GetGpSessionCreateResultVisitorOutput(gpSystem,
+                citizenIdSessionResult.Im1ConnectionToken, citizenIdSessionResult.OdsCode, citizenIdSessionResult.NhsNumber);
+            if (!gpSessionCreatedResultVisited.SessionWasCreated)
+            {
+                var errorMessage =
+                    $"Creating the session failed with status code: '{gpSessionCreatedResultVisited.StatusCode}'";
+                _logger.LogError(errorMessage);
+                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
+                    Constants.AuditingTitles.SessionCreateResponse, errorMessage);
+                return new StatusCodeResult(gpSessionCreatedResultVisited.StatusCode);
+            }
+            var userSession = _sessionMapper.Map(HttpContext, gpSessionCreatedResultVisited.UserSession, citizenIdSessionResult.Session);
+
+            return await GetServiceJourneyRulesAndCreateSession(userSession, citizenIdSessionResult, gpSessionCreatedResultVisited);
+        }
+        
+        private async Task<IActionResult> GetServiceJourneyRulesAndCreateSession(UserSession userSession, CitizenIdSessionResult citizenIdSessionResult,
+            GpSessionCreateResultVisitorOutput gpSessionCreatedResultVisited)
+        {
+            // Get Service Journey Rules
+            _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.OdsCode}");
+
+            var serviceJourneyRulesResultVisited = await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.OdsCode);
+
+            if (!serviceJourneyRulesResultVisited.ServiceJourneyRulesRetrieved)
+            {
+                var errorMessage =
+                    $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
+                _logger.LogError(errorMessage);
+                await _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, errorMessage);
+                return new StatusCodeResult(serviceJourneyRulesResultVisited.StatusCode);
+            }
+            return await CreateSession(userSession, serviceJourneyRulesResultVisited, citizenIdSessionResult, gpSessionCreatedResultVisited);
+        }
+
+        private async Task<IActionResult> CreateSession(UserSession userSession, 
+            ServiceJourneyRulesVisitorOutput serviceJourneyRulesVisitorOutput,
+            CitizenIdSessionResult citizenIdSessionResult,
+            GpSessionCreateResultVisitorOutput gpSessionCreatedResultVisited)
+        {
+            // Build and save session token in our session cache
+            var sessionFetchTask = FetchSessionIdAndSaveInCookie(userSession);
+
+            // Delete connection token from cache
+            var tokenDeletionTask = DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
+
+            await Task.WhenAll(sessionFetchTask, tokenDeletionTask);
+
+            // Audit that the user is logged on.
+            HttpContext.SetUserSession(userSession);
+            await _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, "Session successfully created.");
+
+            _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
+
+            return await Task.FromResult(CreateCreatedResult(gpSessionCreatedResultVisited, userSession, 
+                serviceJourneyRulesVisitorOutput.Response, citizenIdSessionResult.DateOfBirth));
         }
 
         [HttpDelete]
@@ -216,7 +263,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         private CreatedResult CreateCreatedResult(GpSessionCreateResultVisitorOutput sessionCreatedResultVisited,
-            UserSession userSession, DateTime dateOfBirth)
+            UserSession userSession, ServiceJourneyRulesResponse serviceJourneyRules, DateTime dateOfBirth)
         {
             var responseBody = new UserSessionResponse
             {
@@ -226,7 +273,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 OdsCode = userSession.GpUserSession.OdsCode,
                 DateOfBirth = dateOfBirth,
                 NhsNumber = userSession.GpUserSession.NhsNumber,
-                AccessToken = userSession.CitizenIdUserSession.AccessToken
+                AccessToken = userSession.CitizenIdUserSession.AccessToken,
+                ServiceJourneyRules = serviceJourneyRules
             };
 
             return new CreatedResult(string.Empty, responseBody);
@@ -268,6 +316,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             return !supplier.HasValue
                 ? Option.None<IGpSystem>()
                 : Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
+        }
+
+        private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)
+        {
+            var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode);
+            return serviceJourneyRulesConfig.Accept(new ServiceJourneyRulesConfigResultVisitor());
         }
 
         private async Task AppendCookieToResponse(string sessionId)

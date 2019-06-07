@@ -1,4 +1,5 @@
 ﻿using System;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 {
@@ -17,5 +18,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
         public string NhsNumber { get; set; }
 
         public string AccessToken { get; set; }
+        
+        public ServiceJourneyRulesResponse ServiceJourneyRules { get; set; }
     }
 }

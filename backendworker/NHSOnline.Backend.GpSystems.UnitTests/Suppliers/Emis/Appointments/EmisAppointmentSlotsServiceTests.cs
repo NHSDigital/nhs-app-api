@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var unsuccessfulSlotResponse = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
             
             MockEmisClientAppointmentSlotGetMethod(unsuccessfulSlotResponse);
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var unsuccessfulMetadataResponse = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
                 
             MockEmisClientAppointmentSlotsMetadataGetMethod(unsuccessfulMetadataResponse);
@@ -196,7 +196,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var unsuccessfulPracticeSettingsResponse = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
 
             MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK));

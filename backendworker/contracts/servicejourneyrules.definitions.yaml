@@ -1,0 +1,11 @@
+definitions:
+  ServiceJourneyRulesResponse:
+    type: object
+    properties:
+      appointments:
+        type: object
+        properties:
+          journeyType:
+            type: string
+            description: Type of appointment journey
+            enum: [im1Appointments, disabled]

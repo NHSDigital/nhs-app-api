@@ -8,5 +8,6 @@ data class UserSessionResponse(var userSessionResponseCookie: UserSessionRespons
     class UserSessionResponseCookie(var cookie: Cookie)
 
     class UserSessionResponseBody(var name: String,
-                                  var sessionTimeout: Number)
+                                  var sessionTimeout: Number,
+                                  var serviceJourneyRules: Any)
 }

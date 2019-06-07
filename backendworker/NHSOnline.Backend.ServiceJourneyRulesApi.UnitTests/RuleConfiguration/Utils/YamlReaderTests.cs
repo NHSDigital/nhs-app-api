@@ -7,6 +7,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Converters;

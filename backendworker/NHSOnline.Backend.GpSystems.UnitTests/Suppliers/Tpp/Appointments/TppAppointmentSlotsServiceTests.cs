@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var unsuccessfulResponse = _fixture
                 .Build<TppClient.TppApiObjectResponse<ListSlotsReply>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
             
             MockTppClientListSlotsPost(unsuccessfulResponse);
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var unsuccessfulResponse = _fixture
                 .Build<TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .Create();
             
             MockTppClientRequestSystmOnlineMessagesPost(unsuccessfulResponse);
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var forbiddenResponse = _fixture
                 .Build<TppClient.TppApiObjectResponse<ListSlotsReply>>()
                 .With(x => x.StatusCode, HttpStatusCode.OK)
-                .With(x => x.Body, null)
+                .With(x => x.Body, () => null)
                 .With(x => x.ErrorResponse, new Error { ErrorCode = TppApiErrorCodes.NoAccess })
                 .Create();
             

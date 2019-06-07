@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.ResponseParsers;
 
@@ -29,9 +30,9 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
             _correlationContext = correlationContext;
         }
 
-        public async Task<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResult>> GetServiceJourneyRules(string odsCode)
+        public async Task<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>> GetServiceJourneyRules(string odsCode)
         {
-            return await Get<ServiceJourneyRulesResult>(odsCode);            
+            return await Get<ServiceJourneyRulesResponse>(odsCode);            
         }
         
         private async Task<ServiceJourneyRulesApiObjectResponse<TResponse>> Get<TResponse>(string odsCode)

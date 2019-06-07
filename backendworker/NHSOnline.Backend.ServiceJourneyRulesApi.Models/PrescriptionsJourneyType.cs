@@ -1,6 +1,6 @@
 // ReSharper disable InconsistentNaming
 
-namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
+namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     /// <summary>
     /// The valid journey types for prescriptions.
