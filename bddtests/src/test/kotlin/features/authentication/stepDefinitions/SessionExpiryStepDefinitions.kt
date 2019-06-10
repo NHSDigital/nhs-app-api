@@ -22,6 +22,7 @@ private const val DELAY_SECONDS_FOR_WAITING = 2000L
 private const val DELAY_BEFORE_RESUME = 10_000L
 private const val BACKGROUND_DURATION = 100L
 private const val DELAY_FOR_DIALOG = 120_000L
+private const val DESKTOP_EXPIRY_INTERVAL = 180_000L
 
 class SessionExpiryStepDefinitions : AbstractSteps() {
 
@@ -73,6 +74,11 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
     @When("^I am idle long enough for the backend session to expire")
     fun iAmIdleLongEnoughForSessionExpiryDialogBackEnd() {
         Thread.sleep(DELAY_FOR_DIALOG)
+    }
+
+    @When("I am idle long enough for the desktop session to expire")
+    fun iAmIdleLongEnoughForTheDesktopSessionToExpire() {
+        Thread.sleep(DESKTOP_EXPIRY_INTERVAL)
     }
 
     @When("^I click to extend the session$")
@@ -154,4 +160,5 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
         Thread.sleep(DELAY_BEFORE_RESUME)
         sessionExpiry.scrollAndroidNativePage()
     }
+
 }
