@@ -2,11 +2,11 @@
   "priority": 2,
   "request": {
     "method": "POST",
-    "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate"
+    "url": "/fhir/ServiceDefinition/TEST_GEC_ADM/$evaluate"
   },
   "response": {
     "status": 200,
-    "bodyFileName": "resources/serviceDefinition/response/GEC_ADM/common/0_initial.json",
+    "bodyFileName": "resources/serviceDefinition/response/TEST_GEC_ADM/0_initial.json",
     "headers": {
       "Content-Type": "application/json+fhir"
     }

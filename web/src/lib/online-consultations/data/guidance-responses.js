@@ -1,0 +1,97 @@
+export default {
+  resourceType: 'GuidanceResponse',
+  contained: [
+    {
+      resourceType: 'Parameters',
+      id: 'outputParams',
+      parameter: [
+        {
+          name: 'sessionId',
+          valueString: '1',
+        },
+      ],
+    },
+    {
+      resourceType: 'Questionnaire',
+      id: 'TEST_GEC_ADM_AD_ISSUE',
+      status: 'active',
+      item: [
+        {
+          linkId: 'TEST_GEC_ADM_AD_ISSUE',
+          text: 'What administrative issue can we help you with?',
+          type: 'choice',
+          required: true,
+          repeats: false,
+          option: [
+            {
+              valueCoding: {
+                code: 'TEST_GEC_ADM_AD_ISSUE_DISCUSSTESTS',
+                display: 'Discuss recent tests',
+              },
+            },
+            {
+              valueCoding: {
+                code: 'TEST_GEC_ADM_AD_ISSUE_SICKNOTE',
+                display: 'Sick note (fit note)',
+              },
+            },
+            {
+              valueCoding: {
+                code: 'TEST_GEC_ADM_AD_ISSUE_MATCERT',
+                display: 'Request Maternity Exemption Certificate',
+              },
+            },
+            {
+              valueCoding: {
+                code: 'TEST_GEC_ADM_AD_ISSUE_GPLETTER',
+                display: 'GP letter',
+              },
+            },
+            {
+              valueCoding: {
+                code: 'TEST_GEC_ADM_AD_ISSUE_MEDREPORT',
+                display: 'Medical Report',
+              },
+            },
+            {
+              valueCoding: {
+                code: 'TEST_GEC_ADM_AD_ISSUE_MEDEXAM',
+                display: 'Medical Examination',
+              },
+            },
+            {
+              valueCoding: {
+                code: 'TEST_GEC_ADM_AD_ISSUE_OTHER',
+                display: 'Other',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  requestId: '1',
+  module: {
+    reference: 'https://apitest.webgp.com/fhir/ServiceDefinition/TEST_GEC_ADM',
+  },
+  status: 'data-required',
+  occurrenceDateTime: '2019-05-23T11:09:18.924',
+  outputParameters: {
+    reference: '#outputParams',
+  },
+  dataRequirement: [
+    {
+      id: 'TEST_GEC_ADM_AD_ISSUE',
+      extension: [
+        {
+          url: 'https://www.hl7.org/fhir/questionnaire.html',
+          valueReference: {
+            reference: '#TEST_GEC_ADM_AD_ISSUE',
+          },
+        },
+      ],
+      type: 'QuestionnaireResponse',
+      profile: ['https://www.hl7.org/fhir/questionnaireresponse.html'],
+    },
+  ],
+};

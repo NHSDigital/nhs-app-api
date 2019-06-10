@@ -31,6 +31,16 @@ const routes = {
       },
     },
   },
+  APPOINTMENT_ADMIN_HELP: {
+    name: 'appointments-admin-help',
+    path: '/appointments/admin-help',
+    crumb: {
+      i8nKey: 'appointmentsAdminHelp',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+  },
   APPOINTMENT_BOOKING_GUIDANCE: {
     name: 'appointments-booking-guidance',
     path: '/appointments/booking-guidance',
@@ -558,6 +568,7 @@ export const {
   ACCOUNT,
   ACCOUNT_SIGNOUT,
   APPOINTMENTS,
+  APPOINTMENT_ADMIN_HELP,
   APPOINTMENT_BOOK_NOJS,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,

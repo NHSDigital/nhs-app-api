@@ -21,6 +21,7 @@ import myRecord from './modules/myRecord';
 import organDonation from './modules/organDonation';
 import serviceJourneyRules from './modules/serviceJourneyRules';
 import throttling from './modules/throttling';
+import onlineConsultations from './modules/onlineConsultations';
 
 export const modules = {
   analytics,
@@ -38,6 +39,7 @@ export const modules = {
   myRecord,
   navigation,
   nominatedPharmacy,
+  onlineConsultations,
   organDonation,
   pageTitle,
   prescriptions,

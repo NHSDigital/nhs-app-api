@@ -3,6 +3,7 @@
 import {
   ACCOUNT,
   APPOINTMENTS,
+  APPOINTMENT_ADMIN_HELP,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,
@@ -90,6 +91,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.account';
       route.meta.pageTitleKey = 'pageTitles.account';
+      break;
+    case APPOINTMENT_ADMIN_HELP.name:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaders.appointmentAdminHelp';
+      route.meta.pageTitleKey = 'pageTitles.appointmentAdminHelp';
       break;
     case GP_FINDER.name:
     case GP_FINDER_RESULTS.name:

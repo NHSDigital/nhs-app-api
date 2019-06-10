@@ -1,66 +1,11 @@
 {
+  "priority": 1,
   "request": {
     "method": "POST",
     "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
-    "bodyPatterns": [
-      {
-        "equalToJson": {
-          "resourceType": "Parameters",
-          "meta": {
-            "profile": [
-              "http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate"
-            ]
-          },
-          "parameter": [
-            {
-              "name": "requestId"
-            },
-            {
-              "name": "sessionId"
-            },
-            {
-              "name": "patient",
-              "resource": {
-                "resourceType": "Patient",
-                "name": [
-                  {
-                    "family": "Bloggs",
-                    "given": ["Jenny"]
-                  }
-                ],
-                "gender": "female",
-                "birthDate": "1942-09-07"
-              }
-            },
-            {
-              "name": "inputData",
-              "resource": {
-                "item": [
-                  {
-                    "answer": [
-                      {
-                        "valueCoding": {
-                          "code": "GEC_ADM_AD_SMOKE_NEVER"
-                        }
-                      }
-                    ],
-                    "linkId": "GEC_ADM_AD_SMOKE",
-                    "text": "Do you smoke?"
-                  }
-                ],
-                "questionnaire": {
-                  "reference": "Questionnaire/GEC_ADM_AD_SMOKE"
-                },
-                "resourceType": "QuestionnaireResponse",
-                "status": "completed"
-              }
-            }
-          ]
-        },
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ]
+    "bodyPatterns" : [ {
+      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/GEC_ADM_AD_SMOKE')]"
+    } ]
   },
   "response": {
     "status": 200,

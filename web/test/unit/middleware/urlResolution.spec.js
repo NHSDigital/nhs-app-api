@@ -7,6 +7,7 @@ describe('middleware/urlResolution', () => {
     input = {
       env: {
         URI_FORMAT_API_CLIENT: 'http://api{host}',
+        URI_FORMAT_CDS_CLIENT: 'http://clinicaldecisionsupportapi{host}',
         URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}/auth-return',
         URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}/auth-return',
       },
@@ -33,6 +34,10 @@ describe('middleware/urlResolution', () => {
           expect(input.env.API_HOST).toBe('http://api.some.web.host');
         });
 
+        it('will correctly set the CDS_HOST from the `x-origin` header', () => {
+          expect(input.env.CDS_HOST).toBe('http://clinicaldecisionsupportapi.some.web.host');
+        });
+
         it('will correctly set the CID_REDIRECT_URI from the `x-origin` header', () => {
           expect(input.env.CID_REDIRECT_URI).toBe('http://web.some.web.host/auth-return');
         });
@@ -42,7 +47,7 @@ describe('middleware/urlResolution', () => {
         });
       });
 
-      describe('x-origin is prefixed wiht www- ', () => {
+      describe('x-origin is prefixed with www- ', () => {
         beforeEach(() => {
           input.req.headers['x-origin'] = 'www-purple.some.web.host';
           urlResolution(input);
@@ -50,6 +55,10 @@ describe('middleware/urlResolution', () => {
 
         it('will correctly set the API_HOST from the `x-origin` header', () => {
           expect(input.env.API_HOST).toBe('http://api-purple.some.web.host');
+        });
+
+        it('will correctly set the CDS_HOST from the `x-origin` header', () => {
+          expect(input.env.CDS_HOST).toBe('http://clinicaldecisionsupportapi-purple.some.web.host');
         });
 
         it('will correctly set the CID_REDIRECT_URI from the `x-origin` header', () => {
@@ -71,6 +80,10 @@ describe('middleware/urlResolution', () => {
           expect(input.env.API_HOST).toBe('http://api.first.web.host');
         });
 
+        it('will correctly set the CDS_HOST from the first `x-origin` header value', () => {
+          expect(input.env.CDS_HOST).toBe('http://clinicaldecisionsupportapi.first.web.host');
+        });
+
         it('will correctly set the CID_REDIRECT_URI from the first `x-origin` header value', () => {
           expect(input.env.CID_REDIRECT_URI).toBe('http://web.first.web.host/auth-return');
         });
@@ -90,6 +103,10 @@ describe('middleware/urlResolution', () => {
 
       it('will correctly set the API_HOST from the `Host` header', () => {
         expect(input.env.API_HOST).toBe('http://api.foo.bar');
+      });
+
+      it('will correctly set the CDS_HOST from the `Host` header', () => {
+        expect(input.env.CDS_HOST).toBe('http://clinicaldecisionsupportapi.foo.bar');
       });
 
       it('will correctly set the CID_REDIRECT_URI from the `Host` header', () => {

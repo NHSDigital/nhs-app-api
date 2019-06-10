@@ -1,71 +1,11 @@
 {
+  "priority": 1,
   "request": {
     "method": "POST",
     "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
-    "bodyPatterns": [
-      {
-        "equalToJson": {
-          "resourceType": "Parameters",
-          "meta": {
-            "profile": [
-              "http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate"
-            ]
-          },
-          "parameter": [
-            {
-              "name": "requestId"
-            },
-            {
-              "name": "sessionId"
-            },
-            {
-              "name": "patient",
-              "resource": {
-                "resourceType": "Patient",
-                "name": [
-                  {
-                    "family": "Bloggs",
-                    "given": ["Jenny"]
-                  }
-                ],
-                "gender": "female",
-                "birthDate": "1942-09-07"
-              }
-            },
-            {
-              "name": "inputData",
-              "resource": {
-                "item": [
-                  {
-                    "answer": [
-                      {
-                        "valueCoding": {
-                          "code": "PRE_STD_AD_DISCLAIMERS_1"
-                        }
-                      },
-                      {
-                        "valueCoding": {
-                          "code": "PRE_STD_AD_DISCLAIMERS_2"
-                        }
-                      }
-                    ],
-                    "linkId": "PRE_STD_AD_DISCLAIMERS",
-                    "text": "You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice."
-                  }
-                ],
-                "questionnaire": {
-                  "reference": "Questionnaire/PRE_STD_AD_DISCLAIMERS"
-                },
-                "resourceType": "QuestionnaireResponse",
-                "status": "completed"
-              }
-            }
-          ]
-        },
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ]
+    "bodyPatterns" : [ {
+      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/PRE_STD_AD_DISCLAIMERS')]"
+    } ]
   },
   "response": {
     "status": 200,

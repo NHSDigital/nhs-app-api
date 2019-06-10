@@ -830,6 +830,7 @@ export default {
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
     appointments: 'My appointments',
+    appointmentAdminHelp: 'GP help without an appointment',
     appointmentGuidance: 'Check before you book',
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
@@ -860,6 +861,7 @@ export default {
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
     account: 'My account',
     appointments: 'My appointments',
+    appointmentAdminHelp: 'GP help without an appointment',
     appointmentGuidance: 'Check before you book - My appointments',
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
@@ -1633,6 +1635,10 @@ export default {
     },
   },
   onlineConsultations: {
+    orchestrator: {
+      continueButton: 'Continue',
+      backButton: 'Back',
+    },
     questions: {
       quantity: {
         initialUnitDropdownValue: 'Select unit',

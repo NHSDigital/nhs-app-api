@@ -1,66 +1,11 @@
 {
+  "priority": 1,
   "request": {
     "method": "POST",
     "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
-    "bodyPatterns": [
-      {
-        "equalToJson": {
-          "resourceType": "Parameters",
-          "meta": {
-            "profile": [
-              "http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate"
-            ]
-          },
-          "parameter": [
-            {
-              "name": "requestId"
-            },
-            {
-              "name": "sessionId"
-            },
-            {
-              "name": "patient",
-              "resource": {
-                "resourceType": "Patient",
-                "name": [
-                  {
-                    "family": "Bloggs",
-                    "given": ["Jenny"]
-                  }
-                ],
-                "gender": "female",
-                "birthDate": "1942-09-07"
-              }
-            },
-            {
-              "name": "inputData",
-              "resource": {
-                "item": [
-                  {
-                    "answer": [
-                      {
-                        "valueCoding": {
-                          "code": "PRE_STD_EMERGENCY_YES"
-                        }
-                      }
-                    ],
-                    "linkId": "PRE_STD_AD_EMERGENCY",
-                    "text": "Next, let's make sure this isn't an emergency. Are you currently experiencing any of the following? <ul><li><em>Signs of a heart attack</em> - pain like a very tight band, heavy weight or squeezing in the centre of your chest</li><li><em>Signs of a stroke</em> - face drooping on one side, can't hold both arms up, difficulty speaking</li><li><em>Severe difficulty breathing</em> - gasping, not being able to get words out, choking or lips turning blue</li><li><em>Severe injuries</em> - heavy bleeding that won't stop or deep cuts after a serious accident</li></ul>"
-                  }
-                ],
-                "questionnaire": {
-                  "reference": "Questionnaire/PRE_STD_AD_SELFORCHILD"
-                },
-                "resourceType": "QuestionnaireResponse",
-                "status": "completed"
-              }
-            }
-          ]
-        },
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ]
+    "bodyPatterns" : [ {
+      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/PRE_STD_AD_EMERGENCY')]"
+    } ]
   },
   "response": {
     "status": 200,

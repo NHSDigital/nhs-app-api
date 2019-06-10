@@ -1,0 +1,17 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/TEST_GEC_ADM/$evaluate",
+    "bodyPatterns" : [ {
+      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/TEST_GEC_ADM_AD_SICKNOTEDURATION')]"
+    } ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/TEST_GEC_ADM/TEST_GEC_ADM_AD_ISSUE_SICKNOTE/9_duration.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}
