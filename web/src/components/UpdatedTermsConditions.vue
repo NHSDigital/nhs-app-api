@@ -1,7 +1,10 @@
 <template>
   <div v-if="showTemplate">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
-      <message-dialog :class="$style.customErrorBox" message-type="error" icon-text="Error">
+      <message-dialog :class="$style.customErrorBox"
+                      message-type="error"
+                      icon-text="Error"
+                      role="alert">
         <p :class="$style.customErrorText">
           {{ $t('updatedTermsAndConditions.errorMsgHeader') }}
         </p>
@@ -34,6 +37,7 @@
     <div :class="getErrorState()">
       <error-message v-if="hasTriedToContinue && !areTermsAccepted"
                      id="error_txt"
+                     role="alert"
                      :class="$style.validationText">
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
@@ -109,6 +113,8 @@ export default {
           const sourceValue = this.$store.state.device.source;
           window.location = `${window.location.origin}${INDEX.path}?source=${sourceValue}`;
         }
+      } else {
+        window.scrollTo(0, 0);
       }
     },
     getErrorState() {
