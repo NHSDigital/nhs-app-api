@@ -179,4 +179,8 @@
         <item>@string/frutiger76BlackItalic</item>
         <item>@string/frutiger95UltraBlack</item>
     </string-array>
+
+    <string-array name="nonBlockingMenuItems">
+        <item>@string/symptoms</item>
+    </string-array>
 </resources>

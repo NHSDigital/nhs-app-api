@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.LinearLayout
+import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.support.Optional
 import com.nhs.online.nhsonline.web.NhsWeb
@@ -68,17 +69,13 @@ class MenuBar @JvmOverloads constructor(
 
     private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
         if(nhsWeb?.applicationState?.isReady() !=  false) {
-            nhsWeb?.applicationState?.block()
+            if(getMenuBarItemAt(position).isBlockingMenuItem()) {
+                nhsWeb?.applicationState?.block()
+            }
             selectedPosition.ifPresent { selectedPosition ->
-
                 getMenuBarItemAt(selectedPosition).deselectItem()
-                selectMenuItem(position, shouldInvokeListener)
-
             }
-
-            selectedPosition.ifEmpty {
-                selectMenuItem(position, shouldInvokeListener)
-            }
+            selectMenuItem(position, shouldInvokeListener)
         }
     }
 
@@ -155,4 +152,8 @@ class MenuBar @JvmOverloads constructor(
             }
         }
     }
+}
+
+fun MenuBarItem.isBlockingMenuItem(): Boolean {
+    return this.itemText !in context.resources.getStringArray(R.array.nonBlockingMenuItems)
 }

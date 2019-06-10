@@ -38,6 +38,9 @@ class MenuBarItem @JvmOverloads constructor(
     private val iconHeight: Int
         get() = resources.getDimension(R.dimen.menuBarItemIconHeight).toInt()
 
+    val itemText: String
+      get() = title
+
     var menuItemClickedListener: ((position: Int) -> Unit)? = null
     private var itemPosition: Int = 0
 

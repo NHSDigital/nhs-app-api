@@ -406,6 +406,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun showWebviewScreen() {
         logger.info("Entering showWebViewScreen")
 
+        nhsWeb.applicationState.unBlock()
+
         if (isSuccessfulConfigCheck) {
             activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
             hideBlankScreen()

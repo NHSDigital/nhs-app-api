@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.web.NhsWeb
+import com.nhs.online.nhsonline.navigation.MenuBar
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,7 +41,7 @@ class MenuBarTests  {
     }
 
     @Test
-    fun SwitchingTheMenuItemShouldSetApplicationStateBusy() {
+    fun SwitchingTheMenuItemShouldSetApplicationStateBusyIfTheMenuIsBlocking() {
 
         var appStateMock: ApplicationState = mock {
             on { isReady() } doReturn true
@@ -51,11 +52,43 @@ class MenuBarTests  {
         }
 
         menuBar.nhsWeb = nhsWeb
-        val menuBarItem = menuBar.getChildAt(0) as MenuBarItem
 
-        menuBar.switchActiveMenuItemTo(menuBarItem.id)
+        for(childIndex: Int in 0..menuBar.childCount - 1) {
+            val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
+            if(menuBarItem.isBlockingMenuItem()) {
+                menuBar.switchActiveMenuItemTo(menuBarItem.id)
+                break
+            }
+        }
+
         verify(appStateMock).block()
     }
+
+    @Test
+    fun SwitchingTheMenuItemShouldNotSetApplicationStateBusyIfTheMenuIsNonBlocking() {
+
+        var appStateMock: ApplicationState = mock {
+            on { isReady() } doReturn true
+        }
+
+        nhsWeb = mock {
+            on { applicationState } doReturn appStateMock
+        }
+
+        menuBar.nhsWeb = nhsWeb
+
+        for(childIndex: Int in 0..menuBar.childCount - 1) {
+            val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
+            if(!menuBarItem.isBlockingMenuItem()) {
+                menuBar.switchActiveMenuItemTo(menuBarItem.id)
+                break
+            }
+        }
+
+        verify(appStateMock).isReady()
+        verifyNoMoreInteractions(appStateMock)
+    }
+
 
     @Test
     fun SwitchingTheMenuItemWhenTheApplicationStateIsBusyShouldNotCallTheListener() {
