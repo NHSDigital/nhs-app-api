@@ -90,12 +90,14 @@ export default {
   align-content: flex-start;
 
   .icon {
-    flex: 0 0 2.5em;
+    flex: 0 0 3em;
     margin-right: $two;
+    padding-left: 0.5em;
   }
   .label {
     flex: 1 1 auto;
     font-weight: bold;
+    font-size: 1.1875em;
     padding-top: $one;
   }
 }
