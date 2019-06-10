@@ -1,5 +1,10 @@
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
+using NHSOnline.Backend.NominatedPharmacy.Soap;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Models
@@ -36,9 +41,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
         public string Body()
         {
             return GetEbXmlBoundary() +
-                   GetEbXmlBody() +
-                   GetHl7Boundary() +
-                   GetHl7Body() +
+                   GetEbXmlBody() + "\n" +
+                   GetHl7Boundary() + "\n" +
+                   GetHl7Body() + "\n" +
                    BoundaryEnd;
         }
 
@@ -49,7 +54,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 
             return _hasExistingNominatedPharmacy ? UpdateModeAltered : UpdateModeAdded;
         }
-        
+
         private static string GetEbXmlBoundary()
         {
             return "----=_MIME-Boundary\n" +
@@ -59,40 +64,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
         }
 
         private string GetEbXmlBody()
-        {
-            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                   "<SOAP:Envelope xmlns:xsi=\"http://www.w3c.org/2001/XML-Schema-Instance\" xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:eb=\"http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd\" xmlns:hl7ebxml=\"urn:hl7-org:transport/ebxml/DSTUv1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" +
-                   "<SOAP:Header>" +
-                   "<eb:MessageHeader SOAP:mustUnderstand=\"1\" eb:version=\"2.0\">" +
-                   "<eb:From>" +
-                   "<eb:PartyId eb:type=\"urn:nhs:names:partyType:ocs+serviceInstance\">E87021-820463</eb:PartyId>" +
-                   "</eb:From>" +
-                   "<eb:To>" +
-                   "<eb:PartyId eb:type=\"urn:nhs:names:partyType:ocs+serviceInstance\">YEA-801248</eb:PartyId>" +
-                   "</eb:To>" +
-                   "<eb:CPAId>S2011405A2055612</eb:CPAId>" +
-                   $"<eb:ConversationId>{_messageId}</eb:ConversationId>" +
-                   "<eb:Service>urn:nhs:names:services:pds</eb:Service>" +
-                   "<eb:Action>PRPA_IN000203UK06</eb:Action>" +
-                   "<eb:MessageData>" +
-                   $"<eb:MessageId>{_messageId}</eb:MessageId>" +
-                   $"<eb:Timestamp>{_hl7Time}</eb:Timestamp>" +
-                   "</eb:MessageData>" +
-                   "<eb:DuplicateElimination/>" +
-                   "</eb:MessageHeader>" +
-                   "<eb:AckRequested SOAP:mustUnderstand=\"1\" eb:version=\"2.0\" eb:signed=\"false\" SOAP:actor=\"urn:oasis:names:tc:ebxml-msg:actor:toPartyMSH\"/>" +
-                   "<eb:SyncReply SOAP:mustUnderstand=\"1\" eb:version=\"2.0\" SOAP:actor=\"http://schemas.xmlsoap.org/soap/actor/next\"/>" +
-                   "</SOAP:Header>" +
-                   "<SOAP:Body>" +
-                   "<eb:Manifest SOAP:mustUnderstand=\"1\" eb:version=\"2.0\">" +
-                   $"<eb:Reference xlink:href=\"cid:{_messageId}@spine.nhs.uk\">" +
-                   "<eb:Schema eb:location=\"http://www.nhsia.nhs.uk/schemas/HL7-Message.xsd\" eb:version=\"1.0\"/>" +
-                   "<eb:Description xml:lang=\"en\">HL7 payload</eb:Description>" +
-                   "<hl7ebxml:Payload style=\"HL7\" encoding=\"XML\" version=\"3.0\"/>" +
-                   "</eb:Reference>" +
-                   "</eb:Manifest>" +
-                   "</SOAP:Body>" +
-                   "</SOAP:Envelope>\n\n";
+        {   
+            var envelope = UpdatePharmacySOAPEnvelope.BuildSOAPEnvelope(_messageId.ToString(), _hl7Time, _config.PartyIdFrom, _config.PartyIdTo);  
+            return envelope.OuterXml;
         }
 
         private string GetHl7Boundary()
@@ -105,80 +79,222 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 
         private string GetHl7Body()
         {
-            return "<PRPA_IN000203UK06 xmlns=\"urn:hl7-org:v3\">" +
-                   $"<id root=\"{_messageId}\"/>" +
-                   $"<creationTime value=\"{_hl7Time}\"/>" +
-                   "<versionCode code=\"V3NPfIT3.0\"/>" +
-                   "<interactionId root=\"2.16.840.1.113883.2.1.3.2.4.12\" extension=\"PRPA_IN000203UK06\"/>" +
-                   "<processingCode code=\"P\"/>" +
-                   "<processingModeCode code=\"T\"/>" +
-                   "<acceptAckCode code=\"NE\"/>" +
-                   "<communicationFunctionRcv>" +
-                   "<device classCode=\"DEV\" determinerCode=\"INSTANCE\">" +
-                   $"<id extension=\"{_config.SpineAccreditedSystemIdTo}\" root=\"1.2.826.0.1285.0.2.0.107\"/>" +
-                   "</device>" +
-                   "</communicationFunctionRcv>" +
-                   "<communicationFunctionSnd>" +
-                   "<device classCode=\"DEV\" determinerCode=\"INSTANCE\">" +
-                   $"<id extension=\"{_config.SpineAccreditedSystemIdFrom}\" root=\"1.2.826.0.1285.0.2.0.107\"/>" +
-                   "</device>" +
-                   "</communicationFunctionSnd>" +
-                   "<ControlActEvent xmlns=\"urn:hl7-org:v3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-                   "xsi:schemaLocation=\"urn:hl7-org:v3 SpineXSD\\MCAI_MT040101UK03.xsd\" classCode=\"CACT\" moodCode=\"EVN\">" +
-                   "<code code=\"1\" codeSystem=\"2.16.840.1.113883.2.1.3.2.4.17.40\" />" +
-                   "<author typeCode=\"AUT\">" +
-                   "<AgentPersonSDS classCode=\"AGNT\">" +
-                   $"<id extension=\"{_config.PersonSdsRoleId}\" root=\"1.2.826.0.1285.0.2.0.67\"/>" +
-                   "<agentPersonSDS classCode=\"PSN\" determinerCode=\"INSTANCE\">" +
-                   $"<id extension=\"{_config.SdsUserId}\" root=\"1.2.826.0.1285.0.2.0.65\"/>" +
-                   "</agentPersonSDS>" +
-                   "<part typeCode=\"PART\">" +
-                   "<partSDSRole classCode=\"ROL\">" +
-                   $"<id extension=\"{_config.PartSdsRoleId}\" root=\"1.2.826.0.1285.0.2.1.104\"/>" +
-                   "</partSDSRole>" +
-                   "</part>" +
-                   "</AgentPersonSDS>" +
-                   "</author>" +
-                   "<author1 typeCode=\"AUT\">" +
-                   "<AgentSystemSDS classCode=\"AGNT\">" +
-                   "<agentSystemSDS classCode=\"DEV\" determinerCode=\"INSTANCE\">" +
-                   "<id extension=\"200000000355\" root=\"1.2.826.0.1285.0.2.0.107\"/>" +
-                   "</agentSystemSDS>" +
-                   "</AgentSystemSDS>" +
-                   "</author1>" +
-                   "<subject>" +
-                   "<PdsUpdateRequest classCode=\"REG\" moodCode=\"RQO\">" +
-                   "<code code=\"1\" codeSystem=\"2.16.840.1.113883.2.1.3.2.4.17.40\" />" +
-                   "<pertinentInformation typeCode=\"PERT\">" +
-                   "<pertinentSerialChangeNumber classCode=\"OBS\" moodCode=\"EVN\">" +
-                   "<code code=\"2\" codeSystem=\"2.16.840.1.113883.2.1.3.2.4.17.35\"/>" +
-                   $"<value value=\"{_pertinentSerialChangeNumber}\"/>" +
-                   "</pertinentSerialChangeNumber>" +
-                   "</pertinentInformation>" +
-                   "<subject typeCode=\"SBJ\">" +
-                   "<patientRole classCode=\"PAT\">" +
-                   $"<id root=\"2.16.840.1.113883.2.1.4.1\" extension=\"{ _nhsNumber.RemoveWhiteSpace() }\"/>" +
-                   "<patientPerson classCode=\"PSN\" determinerCode=\"INSTANCE\" >" +
-                   "<playedOtherProviderPatient classCode=\"PAT\">" +
-                   "<subjectOf typeCode=\"SBJ\">" +
-                   $"<patientCareProvision classCode=\"PCPR\" moodCode=\"EVN\" updateMode=\"{ GetUpdateMode() }\">" +
-                   "<code code=\"P1\" codeSystem=\"2.16.840.1.113883.2.1.3.2.4.17.37\"/>" +
-                   "<id root=\"2.16.840.1.113883.2.1.3.2.4.18.1\" extension=\"P000000042\" />" +
-                   "<performer typeCode=\"PRF\">" +
-                   "<assignedOrganization classCode=\"ASSIGNED\">" +
-                   $"<id root=\"2.16.840.1.113883.2.1.4.3\" extension=\"{_updatedOdsCode}\"/>" +
-                   "</assignedOrganization>" +
-                   "</performer>" +
-                   "</patientCareProvision>" +
-                   "</subjectOf>" +
-                   "</playedOtherProviderPatient>" +
-                   "</patientPerson>" +
-                   "</patientRole>" +
-                   "</subject>" +
-                   "</PdsUpdateRequest>" +
-                   "</subject>" +
-                   "</ControlActEvent>" +
-                   "</PRPA_IN000203UK06>\n";
+            var controlActEventBody = new UpdateNominatedPharmacyTypes.ControlActEvent
+            {
+                ClassCode = "CACT",
+                MoodCode = "EVN",
+                Xsi = "http://www.w3.org/2001/XMLSchema-instance",
+                SchemaLocation = "urn:hl7-org:v3 SpineXSD\\MCAI_MT040101UK03.xsd",
+                Code = new NominatedPharmacyTypes.CodeElement
+                {
+                    Code = "1",
+                    CodeSystem = "2.16.840.1.113883.2.1.3.2.4.17.40"
+                },
+                Author1 = new NominatedPharmacyTypes.Author1
+                {
+                    TypeCode = "AUT",
+                    AgentSystemSDS = new NominatedPharmacyTypes.AgentSystemSDS()
+                    {
+                        ClassCode = "AGNT",
+                        AgentSystemSDSInner = new NominatedPharmacyTypes.AgentSystemSDSInner
+                        {
+                            ClassCode = "DEV",
+                            DeterminerCode = "INSTANCE",
+                            Id = new NominatedPharmacyTypes.Id
+                            {
+                                Root = "1.2.826.0.1285.0.2.0.107",
+                                Extension = _config.SpineAccreditedSystemIdFrom
+                            }
+                        }
+                    }
+                },
+                SubjectOuter = new UpdateNominatedPharmacyTypes.SubjectOuter
+                {
+                    PdsUpdateRequest = new UpdateNominatedPharmacyTypes.PdsUpdateRequest
+                    {
+                        ClassCode = "REG",
+                        MoodCode = "RQO",
+                        Code = new NominatedPharmacyTypes.CodeElement
+                        {
+                            Code = "1",
+                            CodeSystem = "2.16.840.1.113883.2.1.3.2.4.17.40"
+                        },
+                        PertinentInformation = new UpdateNominatedPharmacyTypes.PertinentInformation
+                        {
+                            TypeCode = "PERT",
+                            PertinentSerialChangeNumber =
+                                new UpdateNominatedPharmacyTypes.PertinentSerialChangeNumber
+                                {
+                                    ClassCode = "OBS",
+                                    MoodCode = "EVN",
+                                    Code = new NominatedPharmacyTypes.CodeElement
+                                    {
+                                        Code = "2",
+                                        CodeSystem = "2.16.840.1.113883.2.1.3.2.4.17.35"
+                                    },
+                                    Value = new UpdateNominatedPharmacyTypes.ValueElement
+                                    {
+                                        value = _pertinentSerialChangeNumber
+                                    }
+                                }
+                        },
+                        Subject = new UpdateNominatedPharmacyTypes.Subject
+                        {
+                            TypeCode = "SBJ",
+                            PatientRole = new UpdateNominatedPharmacyTypes.PatientRole
+                            {
+                                ClassCode = "PAT",
+                                Id = new NominatedPharmacyTypes.Id
+                                {
+                                    Root = "2.16.840.1.113883.2.1.4.1",
+                                    Extension = _nhsNumber.RemoveWhiteSpace()
+                                },
+                                PatientPerson = new UpdateNominatedPharmacyTypes.PatientPerson
+                                {
+                                    ClassCode = "PSN",
+                                    DeterminerCode = "INSTANCE",
+                                    PlayedOtherProviderPatient =
+                                        new UpdateNominatedPharmacyTypes.PlayedOtherProviderPatient
+                                        {
+                                            ClassCode = "PAT",
+                                            SubjectOf = new UpdateNominatedPharmacyTypes.SubjectOf
+                                            {
+                                                TypeCode = "SBJ",
+                                                PatientCareProvision =
+                                                    new UpdateNominatedPharmacyTypes.PatientCareProvision
+                                                    {
+                                                        ClassCode = "PCPR",
+                                                        MoodCode = "EVN",
+                                                        UpdateMode = GetUpdateMode(),
+                                                        Code = new NominatedPharmacyTypes.CodeElement
+                                                        {
+                                                            Code = "P1",
+                                                            CodeSystem = "2.16.840.1.113883.2.1.3.2.4.17.37"
+                                                        },
+                                                        Id = new NominatedPharmacyTypes.Id
+                                                        {
+                                                            Root = "2.16.840.1.113883.2.1.3.2.4.18.1",
+                                                            Extension = "P000000042"
+                                                        },
+                                                        Performer = new UpdateNominatedPharmacyTypes.Performer
+                                                        {
+                                                            TypeCode = "PRF",
+                                                            AssignedOrganization =
+                                                                new UpdateNominatedPharmacyTypes.
+                                                                    AssignedOrganization
+                                                                    {
+                                                                        ClassCode = "ASSIGNED",
+                                                                        Id = new NominatedPharmacyTypes.Id
+                                                                        {
+                                                                            Root = "2.16.840.1.113883.2.1.4.3",
+                                                                            Extension = _updatedOdsCode
+                                                                        }
+                                                                    }
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            XmlDocument controlActDoc = new XmlDocument();
+            controlActDoc.LoadXml(controlActEventBody.SerializeXml());
+            controlActDoc.DocumentElement.SetAttribute("xmlns", "urn:hl7-org:v3");
+
+            var requestBody = new UpdateNominatedPharmacyTypes.PRPAIN000203UK06
+            {
+                Id = new NominatedPharmacyTypes.Id
+                {
+                    Root = _messageId.ToString()
+                },
+                CreationTime = new NominatedPharmacyTypes.CreationTime
+                {
+                    Value = _hl7Time
+                },
+                VersionCode = new NominatedPharmacyTypes.VersionCode
+                {
+                    Code = "V3NPfIT3.0"
+                },
+                InteractionId = new NominatedPharmacyTypes.InteractionId
+                {
+                    Root = "2.16.840.1.113883.2.1.3.2.4.12",
+                    Extension = "PRPA_IN000203UK06"
+                },
+                ProcessingCode = new NominatedPharmacyTypes.ProcessingCode
+                {
+                    Code = "P"
+                },
+                ProcessingModeCode = new NominatedPharmacyTypes.ProcessingModeCode
+                {
+                    Code = "T"
+                },
+                AcceptAckCode = new NominatedPharmacyTypes.AcceptAckCode
+                {
+                    Code = "NE"
+                },
+                CommunicationFunctionRcv = createCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
+                CommunicationFunctionSnd = createCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
+                ControlActEvent = controlActEventBody
+            };
+
+            var xdoc = RemoveXmlns(requestBody.SerializeXml()).DocumentElement;
+            xdoc.SetAttribute("xmlns", "urn:hl7-org:v3");
+            return xdoc.OuterXml;
+        }
+
+        public static XmlDocument RemoveXmlns(String xml)
+        {
+            XDocument d = XDocument.Parse(xml);
+            d.Root.Descendants().Attributes().Where(x => x.IsNamespaceDeclaration).Remove();
+
+            foreach (var elem in d.Descendants())
+                elem.Name = elem.Name.LocalName;
+
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(d.CreateReader());
+
+            return xmlDocument;
+        }
+
+        public static NominatedPharmacyTypes.CommunicationFunctionSnd createCommunicationFunctionSnd(string extension)
+        {
+            var communicationFuncSndObject = new NominatedPharmacyTypes.CommunicationFunctionSnd
+            {
+                Device = new NominatedPharmacyTypes.Device
+                {
+                    ClassCode = "DEV",
+                    DeterminerCode = "INSTANCE",
+                    Id = new NominatedPharmacyTypes.Id
+                    {
+                        Extension = extension,
+                        Root = "1.2.826.0.1285.0.2.0.107"
+                    }
+                }
+            };
+            return communicationFuncSndObject;
+        }
+        
+        public static NominatedPharmacyTypes.CommunicationFunctionRcv createCommunicationFunctionRcv(string extension)
+        {
+            NominatedPharmacyTypes.CommunicationFunctionRcv communicationFuncSndObject =
+                new NominatedPharmacyTypes.CommunicationFunctionRcv
+                {
+                    Device = new NominatedPharmacyTypes.Device
+                    {
+                        ClassCode = "DEV",
+                        DeterminerCode = "INSTANCE",
+                        Id = new NominatedPharmacyTypes.Id
+                        {
+                            Extension = extension,
+                            Root = "1.2.826.0.1285.0.2.0.107"
+                        }
+                    }
+                };
+            return communicationFuncSndObject;
         }
     }
 }

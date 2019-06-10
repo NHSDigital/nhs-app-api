@@ -28,10 +28,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             string spineAccreditedSystemIdTo = _fixture.Create<string>();
             string pdsQueryFromAddress = _fixture.Create<string>();
             string pdsQueryToAddress = _fixture.Create<string>();
-            string partSdsRoleId = _fixture.Create<string>();
-            string sdsUserId = _fixture.Create<string>();
-            string personSdsRoleId = _fixture.Create<string>();
             int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = _fixture.Create<int>();
+            string partyIdFrom = _fixture.Create<string>();
+            string partyIdTo = _fixture.Create<string>();
 
             // Act
             var config = new NominatedPharmacyConfigurationSettings(
@@ -40,10 +39,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 spineAccreditedSystemIdFrom,
                 spineAccreditedSystemIdTo,
                 pdsQueryFromAddress,
-                pdsQueryToAddress, partSdsRoleId,
-                sdsUserId,
-                personSdsRoleId,
-                artificialDelayAfterNominatedPharmacyUpdateInMilliseconds);
+                pdsQueryToAddress,
+                artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
+                partyIdFrom,
+                partyIdTo);
 
             // Assert
             config.IsNominatedPharmacyEnabled.Should().Be(isNominatedPharmacyEnabled);
@@ -52,8 +51,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             config.SpineAccreditedSystemIdTo.Should().Be(spineAccreditedSystemIdTo);
             config.PdsQueryFromAddress.Should().Be(pdsQueryFromAddress);
             config.PdsQueryTo.Should().Be(pdsQueryToAddress);
-            config.PartSdsRoleId.Should().Be(partSdsRoleId);
-            config.PersonSdsRoleId.Should().Be(personSdsRoleId);
+            config.PartyIdFrom.Should().Be((partyIdFrom));
+            config.PartyIdTo.Should().Be((partyIdTo));
         }
     }
 }

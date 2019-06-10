@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             }
 
             UserSession userSession = HttpContext.GetUserSession();
-
+            
             var isGpPracticeEpsEnabledResult = await _gpSearchService.IsGpPracticeEPSEnabled(userSession.GpUserSession.OdsCode);
 
             if (!HttpStatusCodeExtensions.IsSuccessStatusCode(isGpPracticeEpsEnabledResult.HttpStatusCode))

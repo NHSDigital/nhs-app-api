@@ -43,6 +43,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
 
             _logger.LogInformation($"Nominated pharmacy retrieved. Updating nominated pharmacy from { result.PharmacyOdsCode } to: { updatedOdsCode }");
+            await _auditor.Audit(Constants.AuditingTitles.UpdatedNominatedPharmacy, $"Attempting to update nominated pharmacy from" +
+                                                                                            $" { result.PharmacyOdsCode } to: { updatedOdsCode }");
 
             var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
             {

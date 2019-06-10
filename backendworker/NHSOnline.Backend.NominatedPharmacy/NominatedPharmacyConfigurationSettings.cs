@@ -12,10 +12,9 @@ namespace NHSOnline.Backend.NominatedPharmacy
             string spineAccreditedSystemIdTo,
             string pdsQueryFromAddress,
             string pdsQueryToAddress,
-            string partSdsRoleId,
-            string sdsUserId,
-            string personSdsRoleId,
-            int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds)
+            int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
+            string partyIdFrom,
+            string partyIdTo)
         {
             IsNominatedPharmacyEnabled = isNominatedPharmacyEnabled;
             BaseUrl = baseUrl;
@@ -23,10 +22,9 @@ namespace NHSOnline.Backend.NominatedPharmacy
             SpineAccreditedSystemIdTo = spineAccreditedSystemIdTo;
             PdsQueryFromAddress = pdsQueryFromAddress;
             PdsQueryTo = pdsQueryToAddress;
-            PartSdsRoleId = partSdsRoleId;
-            SdsUserId = sdsUserId;
-            PersonSdsRoleId = personSdsRoleId;
             ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds = artificialDelayAfterNominatedPharmacyUpdateInMilliseconds;
+            PartyIdFrom = partyIdFrom;
+            PartyIdTo = partyIdTo;
         }
 
         public bool IsNominatedPharmacyEnabled { get; }
@@ -40,14 +38,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public string PdsQueryFromAddress { get; }
 
         public string PdsQueryTo { get; }
-
-        public string PartSdsRoleId { get; }
-
-        public string SdsUserId { get; }
-
-        public string PersonSdsRoleId { get; }
-
+        
         public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
+        
+        public string PartyIdFrom { get; }
+        
+        public string PartyIdTo { get; }
+
 
         public void Validate()
         {
@@ -75,20 +72,15 @@ namespace NHSOnline.Backend.NominatedPharmacy
             {
                 throw new ConfigurationNotFoundException(nameof(PdsQueryTo));
             }
-
-            if (string.IsNullOrEmpty(PartSdsRoleId))
+            
+            if (string.IsNullOrEmpty(PartyIdFrom))
             {
-                throw new ConfigurationNotFoundException(nameof(PartSdsRoleId));
+                throw new ConfigurationNotFoundException(nameof(PartyIdFrom));
             }
-
-            if (string.IsNullOrEmpty(SdsUserId))
+            
+            if (string.IsNullOrEmpty(PartyIdTo))
             {
-                throw new ConfigurationNotFoundException(nameof(SdsUserId));
-            }
-
-            if (string.IsNullOrEmpty(PersonSdsRoleId))
-            {
-                throw new ConfigurationNotFoundException(nameof(PersonSdsRoleId));
+                throw new ConfigurationNotFoundException(nameof(PartyIdTo));
             }
         }
     }

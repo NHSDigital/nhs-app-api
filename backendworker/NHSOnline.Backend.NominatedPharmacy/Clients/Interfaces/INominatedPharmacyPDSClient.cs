@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
-using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces
 {

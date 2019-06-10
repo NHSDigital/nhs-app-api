@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using System.Xml.Serialization;
-using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Soap
 {

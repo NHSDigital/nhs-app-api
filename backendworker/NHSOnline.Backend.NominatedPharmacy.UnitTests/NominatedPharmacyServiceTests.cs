@@ -12,6 +12,7 @@ using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 {
@@ -40,9 +41,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
             _configMock.SetupGet(x => x.SpineAccreditedSystemIdFrom).Returns(SpineAccreditedSystemIdFrom);
             _configMock.SetupGet(x => x.SpineAccreditedSystemIdTo).Returns(SpineAccreditedSystemIdTo);
-            _configMock.SetupGet(x => x.PersonSdsRoleId).Returns("roleId");
-            _configMock.SetupGet(x => x.SdsUserId).Returns("userId");
-            _configMock.SetupGet(x => x.PartSdsRoleId).Returns("sdsRole");
 
             _systemUnderTest = _fixture.Create<NominatedPharmacyService>();
         }
@@ -55,9 +53,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
-                                   StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
@@ -138,9 +134,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
-                                   StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
@@ -334,9 +328,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
-                                   StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&

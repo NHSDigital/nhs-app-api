@@ -14,6 +14,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy
 {
@@ -78,72 +79,12 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 {
                     Code = "NE",
                 },
-                CommunicationFunctionRcv = new CommunicationFunctionRcv
-                {
-                    Device = new Device
-                    {
-                        ClassCode = Dev,
-                        DeterminerCode = Instance,
-                        Id = new Id
-                        {
-                            Extension = _config.SpineAccreditedSystemIdTo,
-                            Root = "1.2.826.0.1285.0.2.0.107",
-                        },
-                    },
-                },
-                CommunicationFunctionSnd = new CommunicationFunctionSnd
-                {
-                    Device = new Device
-                    {
-                        ClassCode = Dev,
-                        DeterminerCode = Instance,
-                        Id = new Id
-                        {
-                            Extension = _config.SpineAccreditedSystemIdFrom,
-                            Root = "1.2.826.0.1285.0.2.0.107",
-                        },
-                    },
-                },
+                CommunicationFunctionRcv = NominatedPharmacyUpdateRequest.createCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
+                CommunicationFunctionSnd = NominatedPharmacyUpdateRequest.createCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
                 ControlActEvent = new ControlActEvent
                 {
                     ClassCode = "CACT",
                     MoodCode = "EVN",
-                    Author = new Author
-                    {
-                        TypeCode = "AUT",
-                        AgentPersonSDS = new AgentPersonSDS
-                        {
-                            ClassCode = "AGNT",
-                            Id = new Id
-                            {
-                                Extension = _config.PersonSdsRoleId,
-                                Root = "1.2.826.0.1285.0.2.0.67",
-                            },
-                            AgentPersonSDSInner = new AgentPersonSDSInner
-                            {
-                                ClassCode = "PSN",
-                                DeterminerCode = Instance,
-                                Id = new Id
-                                {
-                                    Extension = _config.SdsUserId,
-                                    Root = "1.2.826.0.1285.0.2.0.65",
-                                }
-                            },
-                            Part = new Part
-                            {
-                                TypeCode = "PART",
-                                PartSDSRole = new PartSDSRole
-                                {
-                                    ClassCode = "ROL",
-                                    Id = new Id
-                                    {
-                                        Extension = _config.PartSdsRoleId,
-                                        Root = "1.2.826.0.1285.0.2.1.104",
-                                    },
-                                },
-                            },
-                        },
-                    },
                     Author1 = new Author1
                     {
                         TypeCode = "AUT",
@@ -167,7 +108,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                         HistoricDataIndicator = new HistoricDataIndicator
                         {
                             SemanticsText = "HistoricDataIndicator",
-                            Value = new ValueElement
+                            Value = new GetNominatedPharmacyTypes.ValueElement
                             {
                                 Code = "0",
                                 CodeSystem = "2.16.840.1.113883.2.1.3.2.4.17.36",
@@ -176,7 +117,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                         PersonId = new PersonId
                         {
                             SemanticsText = "Person.id",
-                            Value = new ValueElement
+                            Value = new GetNominatedPharmacyTypes.ValueElement
                             {
                                 Root = "2.16.840.1.113883.2.1.4.1",
                                 Extension = nhsNumber.RemoveWhiteSpace(),
@@ -234,6 +175,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     return new GetNominatedPharmacyResult(result.StatusCode, false);
                 }
 
+
                 var pertinentSerialChangeNumber = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse
                     ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?.Value;
 
@@ -255,7 +197,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 _logger.LogExit();
             }
         }
-
+ 
         public async Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(
             NominatedPharmacyUpdate nominatedPharmacyUpdate)
         {
@@ -290,7 +232,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             {
                 _logger.LogExit();
             }
-        }
+        }       
 
         private async Task<PharmacyCheck> CheckPharmacy(
             IEnumerable<PatientCareProvisionEvent> patientCareProvisionEvents)

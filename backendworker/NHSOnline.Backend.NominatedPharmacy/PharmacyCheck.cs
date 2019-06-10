@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
     {
         public bool IsValid { get; set; }
         
-        public NominatedPharmacyTypes.PatientCareProvisionEvent PatientCareProvisionEvent { get; set; }
+        public GetNominatedPharmacyTypes.PatientCareProvisionEvent PatientCareProvisionEvent { get; set; }
 
         public string PharmacyType { get; set; }
     }

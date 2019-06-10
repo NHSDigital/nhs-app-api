@@ -16,12 +16,11 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         string PdsQueryFromAddress { get; }
 
-        string PartSdsRoleId { get; }
-
-        string SdsUserId { get; }
-
-        string PersonSdsRoleId { get; }
-
         int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
+        
+        string PartyIdFrom { get; }
+        
+        string PartyIdTo { get; }
+
     }
 }

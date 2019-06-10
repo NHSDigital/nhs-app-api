@@ -384,10 +384,9 @@ namespace NHSOnline.Backend.PfsApi
             var spineAccreditedSystemIdTo = Configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_TO", _logger);
             var pdsQueryFromAddress = Configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", _logger);
             var pdsQueryTo = Configuration.GetOrWarn("PDS_QUERY_TO", _logger);
-            var partSdsRoleId = Configuration.GetOrWarn("PART_SDS_ROLE_ID", _logger);
-            var sdsUserId = Configuration.GetOrWarn("SDS_USER_ID", _logger);
-            var personSdsRoleId = Configuration.GetOrWarn("PERSON_SDS_ROLE_ID", _logger);
             var artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = Configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", _logger);
+            var partyIdFrom = Configuration.GetOrWarn("PARTY_ID_FROM", _logger);
+            var partyIdTo = Configuration.GetOrWarn("PARTY_ID_TO", _logger);
 
             var config = new NominatedPharmacyConfigurationSettings(
                 isNominatedPharmacyEnabled,
@@ -396,10 +395,9 @@ namespace NHSOnline.Backend.PfsApi
                 spineAccreditedSystemIdTo,
                 pdsQueryFromAddress,
                 pdsQueryTo,
-                partSdsRoleId,
-                sdsUserId,
-                personSdsRoleId,
-                artificialDelayAfterNominatedPharmacyUpdateInMilliseconds);
+                artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
+                partyIdFrom,
+                partyIdTo);
 
             config.Validate();
             return config;

@@ -2,7 +2,10 @@
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
-using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using NHSOnline.Backend.NominatedPharmacy.Soap;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.UpdateNominatedPharmacyTypes;
+
 
 namespace NHSOnline.Backend.NominatedPharmacy.Clients
 {
