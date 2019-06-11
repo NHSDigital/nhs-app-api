@@ -2,7 +2,8 @@
   <p :class="[$style.msgText,
               extendedStyle,
               !$store.state.device.isNativeApp && $style.desktopWeb]"
-     :aria-label="ariaLabel">
+     :aria-label="ariaLabel"
+     role="text">
     <slot/>
   </p>
 </template>
