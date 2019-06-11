@@ -50,6 +50,7 @@
     </no-js-form>
 
     <generic-button v-if="$store.state.device.isNativeApp && isOnlineConsultationsEnabled"
+                    id="back_btn"
                     :class="[$style.button, $style.grey]"
                     @click="onBackButtonClicked">
       {{ $t('appointments.guidance.backButtonText') }}
@@ -64,6 +65,9 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
+import flow from 'lodash/fp/flow';
+
 /* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
@@ -72,6 +76,11 @@ import AppointmentGuidance from '@/components/appointments/AppointmentGuidanceMe
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import NoJsForm from '@/components/no-js/NoJsForm';
+
+const isOnlineConsultationsEnabled = flow(
+  get('$store.app.$env.ONLINE_CONSULTATIONS_ENABLED'),
+  isTruthy,
+);
 
 export default {
   components: {
@@ -84,6 +93,7 @@ export default {
   data() {
     return {
       indexPath: INDEX.path,
+      symptomsPath: SYMPTOMS.path,
     };
   },
   computed: {
@@ -91,7 +101,7 @@ export default {
       return APPOINTMENT_BOOKING.path;
     },
     isOnlineConsultationsEnabled() {
-      return (this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true || this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true');
+      return isOnlineConsultationsEnabled(this);
     },
     formData() {
       return {

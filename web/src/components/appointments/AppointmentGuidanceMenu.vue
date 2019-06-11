@@ -8,12 +8,28 @@
           :destination="symptomsPath"
           :class="$style['no-decoration']"
           :text="$t('appointments.guidance.menuItem1.header')"
-          :aria-label="`${$t('appointments.guidance.menuItem1.subheaderAriaLabel')}.
+          :aria-label="`${$t('appointments.guidance.menuItem1.header')}.
             ${$t('appointments.guidance.menuItem1.text')}`">
           <a id="checkSymptomsLink" @click="onCheckSymptomClicked">
             <h2>{{ $t('appointments.guidance.menuItem1.header') }}</h2>
             <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
               {{ $t('appointments.guidance.menuItem1.text') }}</p>
+          </a>
+        </analytics-tracked-tag>
+      </li>
+
+      <li role="link" >
+        <analytics-tracked-tag
+          id="btn_gpHelpNoAppointment"
+          :destination="symptomsPath"
+          :class="$style['no-decoration']"
+          :text="$t('appointments.guidance.menuItem3.header')"
+          :aria-label="`${$t('appointments.guidance.menuItem3.header')}.
+            ${$t('appointments.guidance.menuItem3.text')}`">
+          <a id="checkSymptomsLink" @click="onGpAdminHelpClick">
+            <h2>{{ $t('appointments.guidance.menuItem3.header') }}</h2>
+            <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+              {{ $t('appointments.guidance.menuItem3.text') }}</p>
           </a>
         </analytics-tracked-tag>
       </li>
@@ -24,7 +40,7 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { SYMPTOMS } from '@/lib/routes';
+import { SYMPTOMS, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -41,6 +57,9 @@ export default {
     onCheckSymptomClicked() {
       redirectTo(this, SYMPTOMS.path, null);
     },
+    onGpAdminHelpClick() {
+      redirectTo(this, APPOINTMENT_ADMIN_HELP.path, null)
+    }
   },
 };
 </script>

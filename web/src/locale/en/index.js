@@ -320,6 +320,10 @@ export default {
         header: 'Get help with symptoms',
         text: 'Find information about specific conditions',
       },
+      menuItem3: {
+        header: 'Request GP help without an appointment',
+        text: 'Get fit notes and GP letters or ask about recent tests',
+      },
       symptomButtonText: 'Check symptoms',
       bookButtonText: 'Book new appointment',
       backDesktopLinkText: 'Back',
