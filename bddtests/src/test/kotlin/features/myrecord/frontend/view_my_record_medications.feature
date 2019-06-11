@@ -21,29 +21,6 @@ Feature: View My Medical Record Information - Medications
       | TPP     |
       | VISION  |
 
-
-  Scenario Outline: A <Service> user views medications
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has enabled medications functionality
-    And I am on my record information page
-    Then I see the Acute (short-term) medications heading on My Record
-    When I click the Acute (short-term) medications section on My Record
-    Then I see acute medication information
-
-    When I click the Repeat medications: current section on My Record
-    Then I see current repeat medication information
-
-    When I click the Repeat medications: discontinued section on My Record
-    Then I see discontinued repeat medication information
-
-    Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
-
-
   Scenario Outline: A <Service> user cannot view medications when they cannot access their Summary Care Record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality

@@ -17,8 +17,8 @@ Feature: Get Test Results Data
       | EMIS    |
       | TPP     |
 
-  Scenario Outline: Requesting single test result with child values with no ranges for EMIS
-    Given the my record wiremocks are initialised for <Service>
+  Scenario: Requesting single test result with child values with no ranges for EMIS
+    Given the my record wiremocks are initialised for EMIS
     And I have logged in and have a valid session cookie
     And the GP Practice has a single test result with multiple child values with no ranges for EMIS
     When I get the users test results
@@ -27,12 +27,8 @@ Feature: Get Test Results Data
     And the line item value is set correctly
     And the field indicating supplier is set
 
-    Examples:
-      | Service |
-      | EMIS    |
-
-  Scenario Outline: Requesting single test result with child values with ranges for EMIS
-    Given the my record wiremocks are initialised for <Service>
+  Scenario: Requesting single test result with child values with ranges for EMIS
+    Given the my record wiremocks are initialised for EMIS
     And I have logged in and have a valid session cookie
     And the GP Practice has a single test result with multiple child values with ranges for EMIS
     When I get the users test results
@@ -41,33 +37,21 @@ Feature: Get Test Results Data
     And the line item displays text value and range
     And the field indicating supplier is set
 
-    Examples:
-      | Service |
-      | EMIS    |
-
-  Scenario Outline: Requesting single test result with no child items or range for EMIS
-    Given the my record wiremocks are initialised for <Service>
+  Scenario: Requesting single test result with no child items or range for EMIS
+    Given the my record wiremocks are initialised for EMIS
     And I have logged in and have a valid session cookie
     And the GP Practice has test results enabled and a single test result exists with no child values or range for EMIS
     When I get the users test results
     Then I receive a single test result with the term set correctly to Term TextValue NumericUnits
     And the field indicating supplier is set
 
-    Examples:
-      | Service |
-      | EMIS    |
-
-  Scenario Outline: Requesting single test result with no child items and a range for EMIS
-    Given the my record wiremocks are initialised for <Service>
+  Scenario: Requesting single test result with no child items and a range for EMIS
+    Given the my record wiremocks are initialised for EMIS
     And I have logged in and have a valid session cookie
     And the GP Practice has a single test result with no child values and range for EMIS
     When I get the users test results
     Then I receive the term set correctly to Term TextValue NumericUnits Range
     And the field indicating supplier is set
-
-    Examples:
-      | Service |
-      | EMIS    |
 
   Scenario Outline: GP Practice has disabled test results functionality
     Given the my record wiremocks are initialised for <Service>

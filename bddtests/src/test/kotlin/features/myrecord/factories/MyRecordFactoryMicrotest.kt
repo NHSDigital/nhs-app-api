@@ -30,4 +30,17 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
                     )
         }
     }
+
+    override fun enabledWithAllRecords(patient: Patient){
+        mockingClient.forMicrotest {
+            demographics.demographicsRequest(patient).respondWithSuccess()
+        }
+
+        mockingClient.forMicrotest {
+            myRecord.myRecordRequest(patient)
+                    .respondWithSuccess(
+                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord()
+                    )
+        }
+    }
 }

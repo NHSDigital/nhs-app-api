@@ -1,20 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Consultations
 
-  Scenario Outline: An <Service> user has Consultations on their record
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has multiple consultations
-    And I am on my record information page
-    Then I see the Consultations heading on My Record
-    When I click the Consultations section on My Record
-    Then I see Consultations records displayed
-
-    Examples:
-      |Service|
-      |EMIS|
-      |TPP|
-
   Scenario Outline: An <Service> user has no Consultations on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality

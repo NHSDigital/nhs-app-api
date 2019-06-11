@@ -2,23 +2,6 @@
 @vision-procedures
 Feature: View My Medical Record Information - Procedures
 
-  Scenario: A VISION user can view procedures information
-    Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has multiple procedures
-    And I am on my record information page
-    When I click the procedures section
-    Then I see procedures information
-
-  Scenario: A VISION user can view procedures information without Javascript
-    Given I have disabled javascript
-    And the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has multiple procedures
-    And I am on my record information page
-    When I click the procedures section
-    Then I see procedures information
-
   Scenario: A VISION user has no access to procedures section
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality

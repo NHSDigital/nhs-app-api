@@ -18,7 +18,6 @@ import org.junit.Assert.assertTrue
 import org.openqa.selenium.JavascriptExecutor
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
-import pages.isCurrentlyVisible
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
@@ -43,7 +42,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var headerNative: HeaderNative
 
-    lateinit var myRecordWarningPage: MyRecordWarningPage
+    private lateinit var myRecordWarningPage: MyRecordWarningPage
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
@@ -190,8 +189,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see the (.*) section collapsed on My Record$")
     fun iSeeTheSectionCollapsed(heading: String) {
-        val section = myRecordInfoPage.getSection(heading)
-        assertFalse("Expected section paragraph to not be visible", section.firstParagraph.isCurrentlyVisible)
+        myRecordInfoPage.assertSectionCollapsed(heading)
     }
 
     @Then("^I see a message indicating that I have no access to view my summary care record$")
@@ -237,6 +235,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun andISeeTheTopOfMyMedicalRecordPage(){
         assertEquals(0L, getScrollPositionX())
         assertEquals(0L, getScrollPositionY())
+    }
+
+    @Then("^I click on the Back link on my records page$")
+    fun iClickOnBackButtonOnMyRecordsPage(){
+        myRecordInfoPage.clickOnBackLink()
     }
 
     private fun getScrollPositionX(): Any {

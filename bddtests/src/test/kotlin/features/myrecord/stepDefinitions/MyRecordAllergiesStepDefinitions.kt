@@ -7,6 +7,7 @@ import cucumber.api.java.en.When
 import features.myrecord.factories.AllergiesFactory
 import features.myrecord.factories.MyRecordVisionMocker
 import mocking.data.myrecord.AllergiesData
+import mocking.data.myrecord.MyRecordSerenityHelpers
 import mocking.vision.VisionConstants
 import mocking.vision.VisionConstants.allergiesView
 import net.serenitybdd.core.Serenity
@@ -14,7 +15,9 @@ import org.junit.Assert
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.myrecord.MyRecordInfoPage
+import mocking.data.myrecord.NUMBER_OF_ALLERGY_RECORDS
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.models.myrecord.MyRecordResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -111,14 +114,25 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
     @Then("^I see one or more drug type allergies record displayed$")
     fun thenISeeOneOrMoreDrugTypeAllergiesRecordDisplayed() {
-        Assert.assertEquals(2, myRecordInfoPage.allergies.allRecordItems().count())
-        val expected = ArrayList<String>()
-        for (i in 1..2) {
-            expected.add(AllergiesData.TERM)
-        }
+        val retrievedAllergyRecords = myRecordInfoPage.allergies.allRecordItems().count()
+        Assert.assertEquals("Expected allergy record items",
+                NUMBER_OF_ALLERGY_RECORDS, retrievedAllergyRecords)
+        val expected = MyRecordSerenityHelpers.EXPECTED_ALLERGY_DATA.getOrFail<ArrayList<String>>()
+        val retrievedItemBodies = myRecordInfoPage.allergies.allRecordItemBodies().toTypedArray()
 
-        Assert.assertArrayEquals(expected.toArray(), myRecordInfoPage.allergies.allRecordItemBodies()
-                .toTypedArray())
+        Assert.assertArrayEquals("Expected allergy record item bodies",
+                expected.toArray(), retrievedItemBodies)
+    }
+
+    @Then("^I see allergies record displayed$")
+    fun thenISeeAllergiesRecordDisplayed() {
+        val retrievedAllergyRecords = myRecordInfoPage.allergies.allRecordItems().count()
+        Assert.assertEquals("Expected allergy record items",
+                NUMBER_OF_ALLERGY_RECORDS, retrievedAllergyRecords)
+        val expected = MyRecordSerenityHelpers.EXPECTED_ALLERGY_DATA.getOrFail<ArrayList<String>>()
+        val retrievedItemBodies = myRecordInfoPage.allergies.allRecordItemBodies().toTypedArray()
+        Assert.assertArrayEquals("Expected allergy record item bodies",
+                expected.toArray(), retrievedItemBodies)
     }
 
     @Then("^I see the expected allergies displayed$")

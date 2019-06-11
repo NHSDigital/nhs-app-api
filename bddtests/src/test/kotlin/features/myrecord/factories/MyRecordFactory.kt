@@ -11,6 +11,7 @@ abstract class MyRecordFactory {
     abstract fun disabled(patient:Patient)
     abstract fun enabledWithBlankRecord(patient: Patient)
     abstract fun enabledWithData(patient: Patient)
+    abstract fun enabledWithAllRecords(patient: Patient)
 
     companion object : SupplierSpecificFactory<MyRecordFactory>() {
 

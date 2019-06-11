@@ -1,21 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Immunisations
 
- Scenario Outline: A <Service> user has immunisations on their record
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has enabled immunisations functionality and multiple immunisation records exist
-    And I am on my record information page
-    Then I see the Immunisations heading on My Record
-    When I click the Immunisations section on My Record
-    Then I see immunisation records displayed
-
-  Examples:
-  |Service|
-  |EMIS|
-  |VISION|
-
-
   Scenario Outline: A <Service> user has no immunisations on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
@@ -27,10 +12,10 @@ Feature: View My Medical Record Information - Immunisations
 
   Examples:
   |Service|
-  |EMIS|
-  |VISION|
+  |EMIS   |
+  |VISION |
 
-  Scenario Outline: An EMIS user does not have access to immunisations
+  Scenario: An EMIS user does not have access to immunisations
     Given the my record wiremocks are initialised for EMIS
     And the GP Practice has enabled demographics functionality
     And the user does not have access to view immunisations

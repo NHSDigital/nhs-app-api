@@ -5,6 +5,8 @@ import mocking.emis.immunisations.ImmunisationMedicalRecord
 import mocking.emis.immunisations.ImmunisationResponse
 import mocking.emis.immunisations.ImmunisationResponseModel
 
+const val NUMBER_OF_IMMUNISATION_RECORDS = 2
+
 object ImmunisationsData {
 
     fun getImmunisationsData(): ImmunisationResponseModel {

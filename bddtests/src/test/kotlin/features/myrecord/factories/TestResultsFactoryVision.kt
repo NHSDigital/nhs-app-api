@@ -9,6 +9,7 @@ class TestResultsFactoryVision : TestResultsFactory() {
 
     private var mocker: MyRecordVisionMocker = MyRecordVisionMocker(mockingClient)
 
+    private val testResultsData by lazy { TestResultsData() }
     override fun disabled(patient: Patient) {
         mocker.generatePatientDataResponse(
                 patient,

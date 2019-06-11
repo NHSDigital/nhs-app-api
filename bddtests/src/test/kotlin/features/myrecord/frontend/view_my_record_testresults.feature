@@ -2,33 +2,6 @@
 @test-results
 Feature: View My Medical Record Information - Test Results
 
-  Scenario Outline: A <Service> user can view test result section
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality
-    And I am on my record information page
-    Then I see the test result heading
-    And I see the test result section collapsed
-
-    Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
-
-  Scenario Outline: A <Service> user can view test result information
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has six test results
-    And I am on my record information page
-    When I click the test result section
-    Then I see test result information
-
-    Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
-
   Scenario Outline: A <Service> user has no access to test result section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
@@ -103,17 +76,13 @@ Feature: View My Medical Record Information - Test Results
     When I click the test result section
     Then I see test results with multiple child values some of which have ranges
 
-  Scenario Outline: A TPP user has multiple test results
+  Scenario: A TPP user has multiple test results
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
     And the GP Practice has six test results
     And I am on my record information page
     When I click the test result section
-    Then I see <Count> test results
-
-    Examples:
-      | Count |
-      | 6     |
+    Then I see 6 test results
 
   Scenario: An exception occurs retrieving test result detail
     Given the my record wiremocks are initialised for TPP
@@ -124,7 +93,7 @@ Feature: View My Medical Record Information - Test Results
     When I click the test result section
     And I click a test result
     Then I see the appropriate error message for retrieving test result detail
-
+    
   Scenario: A TPP user can navigate to an individual test result
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
@@ -135,8 +104,8 @@ Feature: View My Medical Record Information - Test Results
     Then I see header text is My medical record
     And I see the test result content
 
-  @bug @NHSO-6233
-  Scenario: A user can navigate back to my record page from test result detail
+  @tech-debt @bug @NHSO-6233
+  Scenario: An user navigates back to my record page from test result detail
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
     And the GP Practice has six test results
@@ -147,6 +116,7 @@ Feature: View My Medical Record Information - Test Results
     And I click the test result detail back
     Then I see the my record page scrolled to the test result section
 
+  @tech-debt @NHSO-6382
   Scenario: A TPP user has multiple test results navigation
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality

@@ -32,16 +32,9 @@ Feature: View My Medical Record Information - Demographics
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: A <Service> user collapses the patient details section
-    Given the my record wiremocks are initialised for <Service>
+  Scenario: A EMIS user collapses the patient details section
+    Given the my record wiremocks are initialised for EMIS
     And the GP Practice has enabled demographics functionality
     And I am on my record information page
     When I click My details heading
     Then I do not see patient information details
-
-    Examples:
-      | Service   |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |

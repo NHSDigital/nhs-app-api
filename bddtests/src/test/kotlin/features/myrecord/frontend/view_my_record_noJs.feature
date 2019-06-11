@@ -68,3 +68,30 @@ Feature: View My Medical Record Information - No Javascript
     When I click continue
     Then I see the my medical record page
     And I see a drug and non drug allergy record from VISION
+
+  Scenario: A VISION user can view diagnosis information without Javascript
+    Given I have disabled javascript
+    And the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has multiple diagnosis
+    And I am on my record information page
+    When I click the diagnosis section
+    Then I see diagnosis information
+
+  Scenario: A VISION user can view examinations information without Javascript
+    Given I have disabled javascript
+    Given the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has multiple examinations
+    And I am on my record information page
+    When I click the examinations section
+    Then I see examinations information
+
+  Scenario: A VISION user can view procedures information without Javascript
+    Given I have disabled javascript
+    And the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has multiple procedures
+    And I am on my record information page
+    When I click the procedures section
+    Then I see procedures information

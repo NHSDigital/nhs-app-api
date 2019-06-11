@@ -10,6 +10,8 @@ import java.time.OffsetDateTime
 
 private const val END_DATE = 60L
 class MyRecordFactoryTpp: MyRecordFactory() {
+    private val testResultsFactory by lazy {TestResultsFactoryTpp()}
+    private val patientOverviewFactory by lazy {PatientOverviewFactoryTpp()}
 
     override fun disabled(patient: Patient) {
         mockingClient.forTpp {
@@ -21,6 +23,7 @@ class MyRecordFactoryTpp: MyRecordFactory() {
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
+
         mockingClient.forTpp {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
@@ -42,5 +45,19 @@ class MyRecordFactoryTpp: MyRecordFactory() {
 
     override fun enabledWithData(patient: Patient) {
         throw UnsupportedOperationException()
+    }
+
+    override fun enabledWithAllRecords(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                    .respondWithSuccess(patientOverviewFactory.getTppPatientOverviewData())
+        }
+
+        mockingClient.forTpp {
+            myRecord.patientRecordRequest(patient.tppUserSession!!)
+                    .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
+        }
+
+        testResultsFactory.enabledWithRecords(patient)
     }
 }

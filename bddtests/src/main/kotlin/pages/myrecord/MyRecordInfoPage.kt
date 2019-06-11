@@ -13,8 +13,8 @@ import pages.assertElementNotPresent
 import pages.isCurrentlyVisible
 import pages.isVisible
 
-
 const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
+
 
 class MyRecordInfoPage : HybridPageObject() {
 
@@ -24,7 +24,7 @@ class MyRecordInfoPage : HybridPageObject() {
                     androidLocator = null,
                     page = this)
 
-    val noRecordsOrNoAccessText = "Sorry, this information isn't available through the NHS App. " +
+    private val noRecordsOrNoAccessText = "Sorry, this information isn't available through the NHS App. " +
             "To access it, contact your GP surgery."
     val noRecordsOrNoAccessParagraph =
             HybridPageElement(
@@ -97,6 +97,10 @@ class MyRecordInfoPage : HybridPageObject() {
 
     fun getSection(header: String): MyRecordWrapper {
         return MyRecordWrapper(header, this)
+    }
+
+    fun assertSectionCollapsed(heading: String){
+        getSection(heading).firstParagraph.assertElementNotPresent()
     }
 
     fun isNameVisible(): Boolean {

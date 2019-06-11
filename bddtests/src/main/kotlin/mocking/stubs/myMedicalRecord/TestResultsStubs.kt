@@ -1,7 +1,7 @@
 package mocking.stubs.myMedicalRecord
 
 import mocking.MockingClient
-import mocking.data.myrecord.TestResultsData
+import mocking.data.myrecord.TestResultsData.Companion.getTestResultsForEmis
 import mocking.emis.testResults.EmisTestResultsBuilder
 import mocking.stubs.InputResponse
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
@@ -19,7 +19,8 @@ class TestResultsStubs(private val mockingClient: MockingClient) {
 
     fun generateEMISStubs() {
 
-        val testResultsLoader = TestResultsData.getTestResultsForEmis(EMIS_RESULT_COUNT)
+        val testResultsLoader =
+                getTestResultsForEmis(EMIS_RESULT_COUNT)
         val mapEMISTestResultsStubs =
                 InputResponse<Patient, EmisTestResultsBuilder>()
                         .addResponse(goodPatientEMIS) { builder

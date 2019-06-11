@@ -16,6 +16,7 @@ private const val START_DATE_FOR_RANGE_TWO = 119L
 private const val END_DATE_FOR_RANGE_TWO = 60L
 private const val START_DATE_FOR_RANGE_THREE = 59L
 class TestResultsFactoryTpp : TestResultsFactory(){
+
     override fun disabled(patient: Patient) {
         val today = OffsetDateTime.now()
 
@@ -62,7 +63,8 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         }
     }
 
-    override fun enabledWithRecords(patient: Patient) {  val today = OffsetDateTime.now()
+    override fun enabledWithRecords(patient: Patient) {
+        val today = OffsetDateTime.now()
         var startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
         var endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
 

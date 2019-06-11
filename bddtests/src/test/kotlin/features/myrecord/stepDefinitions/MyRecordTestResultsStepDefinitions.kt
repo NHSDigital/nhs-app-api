@@ -6,7 +6,9 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactory
 import features.sharedSteps.BrowserSteps
+import mocking.data.myrecord.MyRecordSerenityHelpers
 import mocking.data.myrecord.TestResultsData
+import mocking.emis.testResults.TestResultValue
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -15,6 +17,7 @@ import pages.ErrorPage
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -24,7 +27,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Steps
     lateinit var browser: BrowserSteps
-
     lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     lateinit var errorPage: ErrorPage
     lateinit var myRecordInfoPage: MyRecordInfoPage
@@ -202,22 +204,32 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("^I receive the test result with term set correctly to Term$")
     fun thenIReceiveATestResultWithTermSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Neutrophil count", result.response.testResults.data.first().description)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+        assertEquals(testResultValue.term, result.response.testResults.data.first().description)
     }
 
     @Then("^the line item displays text value and range$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+        val lowerRange = testResultValue.range!!.minimumText
+        val upperRange = testResultValue.range!!.maximumText
         assertEquals("Child LineItem Description does not match",
-                "Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)",
+                "${testResultValue.term}: ${testResultValue.textValue} " +
+                        "${testResultValue.numericUnits} (normal range: $lowerRange - $upperRange)",
                 result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^the line item value is set correctly$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
         assertEquals("Child LineItem Description does not match",
-                "Platelet count: 5.9 x10^9/L",
+                "${testResultValue.term}: ${testResultValue.textValue} " +
+                        "${testResultValue.numericUnits}",
                 result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
@@ -232,13 +244,21 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnits() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Neutrophil count: 5.58 x10^9/L", result.response.testResults.data.first().description)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+        assertEquals("${testResultValue.term}: ${testResultValue.textValue} " +
+                "${testResultValue.numericUnits}", result.response.testResults.data.first().description)
     }
 
     @Then("^I receive the term set correctly to Term TextValue NumericUnits Range$")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnitsWithRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)",
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+        val lowerRange = testResultValue.range!!.minimumText
+        val upperRange = testResultValue.range!!.maximumText
+        assertEquals("${testResultValue.term}: ${testResultValue.textValue} " +
+                "${testResultValue.numericUnits} (normal range: $lowerRange - $upperRange)",
                 result.response.testResults.data.first().description)
     }
 
@@ -314,11 +334,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
             }
         }
         myRecordInfoPage.assertSectionHeaderIsVisible(header)
-    }
-
-    @Then("^I see the test result section collapsed$")
-    fun thenISeeTheTestResultSectionCollapsed() {
-        Assert.assertFalse(myRecordInfoPage.isTestResultsTextMsgVisible())
     }
 
     @Then("^I see test result information$")
