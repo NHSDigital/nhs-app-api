@@ -18,7 +18,9 @@ open class AccessibilityCheckRunner {
         var errorsEncountered = false
         var ignoreErrorMap: Map<String, String> = mapOf(
                 // Add comma separated error codes for individual page to ignore
-                "AppointmentBooking.html" to "WCAG2AA.Principle3.Guideline3_2.3_2_2.H32.2"
+                "AppointmentBooking.html" to "WCAG2AA.Principle3.Guideline3_2.3_2_2.H32.2",
+                "OrganDonationCheckDetails_ReaffirmNoAdditionalDetails.html"
+                        to "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Fail"
         )
 
         @JvmStatic
