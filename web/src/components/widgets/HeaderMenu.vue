@@ -254,10 +254,9 @@ export default {
         }
 
         &:hover {
-          background: $white url('~assets/close-menu-hover.svg') no-repeat center right;
-          background-position: right 1em center;
+          background: $nhs_blue url('~assets/close-menu-hover.svg') no-repeat center right;
           box-shadow: none;
-          color: $black;
+          color: $white;
           text-decoration: underline;
         }
       }

@@ -22,7 +22,7 @@
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
                    :class="$style.additionalInformation" />
       </message-dialog>
-      <form :action="retryUrl" method="get">
+      <form ref="retryFormRef" :action="retryUrl" method="get" tabindex="-1">
         <generic-button v-if="retryButtonText && ($store.state.device.isNativeApp || retryAction)"
                         :class="[
                           ...dynamicStyle('button'),
@@ -164,12 +164,16 @@ export default {
   },
   updated() {
     if (this.showError()) {
+      this.setFocus();
       this.updatePageTitle();
       this.updatePageHeader();
       window.scrollTo(0, 0);
     }
   },
   methods: {
+    setFocus() {
+      this.$refs.retryFormRef.focus();
+    },
     dynamicStyle(...args) {
       return getDynamicStyle(this, args);
     },

@@ -337,6 +337,23 @@ describe('api errors', () => {
               expect(wrapper.find('[data-purpose="retry-or-back-button"').text())
                 .toEqual('translate_auth_return.errors.retryButtonText');
             });
+
+            it('will call setFocus method on update', () => {
+              wrapper.vm.setFocus = jest.fn();
+              getters['errors/showApiError'] = false;
+              getters['errors/showApiError'] = true;
+
+              expect(wrapper.vm.setFocus).toHaveBeenCalled();
+            });
+
+            it('will focus on the form when setFocus method is called', () => {
+              wrapper.vm.$refs.retryFormRef = {
+                focus: jest.fn(),
+              };
+              wrapper.vm.setFocus();
+
+              expect(wrapper.vm.$refs.retryFormRef.focus).toHaveBeenCalled();
+            });
           });
         });
       });
