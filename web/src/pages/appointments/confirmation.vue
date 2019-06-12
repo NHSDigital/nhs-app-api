@@ -30,7 +30,7 @@
         </div>
 
         <appointment-slot v-if="slot" :appointment="slot" :show-cancellation-link="false"
-                          aria-label="selected appointment"
+                          data-purpose="appointment-info"
                           date-time-header="h2" />
         <div v-if="showPhoneNumber()" :class="[$style.form, $style.phoneNumberForm]"
              role="form" data-purpose="phone-number">
@@ -115,7 +115,6 @@
           </p>
           <p>
             {{ $t('appointments.confirmation.reasonDesc.line2') }}
-            <br >
             {{ $t('appointments.confirmation.reasonDesc.line3') }}
           </p>
         </div>

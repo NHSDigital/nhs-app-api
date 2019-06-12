@@ -468,12 +468,12 @@ export default {
       },
     },
     confirmation: {
-      telephoneNumberLabel: 'Phone number for appointment',
+      telephoneNumberLabel: 'Choose a phone number for this appointment',
       telephoneNumberDescription: 'This number will only be used for this appointment. It will not be saved.',
-      headerLabel: 'Reason for this appointment',
+      headerLabel: 'Give a reason for this appointment',
       headerLabelSuffix: ' (Optional)',
       reasonDesc: {
-        line1: 'Text must be shorter than 150 characters (about 25 words)',
+        line1: 'Text must be shorter than 150 characters (about 25 words).',
         line2: 'This text may not be read by your GP or practice member until the day of your appointment.',
         line3: 'If it\'s urgent, contact your GP surgery before booking.',
       },

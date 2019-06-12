@@ -22,7 +22,7 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     private val appointmentLocationXpath = String.format(dataLabelXpath, "location")
     private val appointmentCliniciansXPath = "[starts-with(@data-label, 'clinician')]"
 
-    private val selectedAppointmentParentXpath = "//div[@aria-label='selected appointment']"
+    private val selectedAppointmentParentXpath = "//div[@data-purpose='appointment-info']"
     lateinit var headerNative: HeaderNative
 
     val reasonError = HybridPageElement(
