@@ -16,6 +16,7 @@ import com.nhs.online.nhsonline.fido.uaf.msg.RegistrationRequest
 import com.nhs.online.nhsonline.fido.uaf.util.FidoEndpointConfig
 import org.json.JSONArray
 import org.json.JSONException
+import java.lang.Exception
 import java.security.Signature
 
 private val TAG = RegistrationService::class.java.simpleName
@@ -64,28 +65,34 @@ class RegistrationService(
     }
 
     private fun handleRegistrationResponse(response: BiometricCallResult) {
-        biometricsInteractor.dismissProgressDialog()
-        if (response.statusCode != BiometricAsyncHandler.OK) {
-            biometricsInteractor.showBiometricRegistrationError()
-            return
-        }
-        val result = response.result
-        val username = extractUserFromUafRegMessage(result)
-        preferencesService.saveFidoUsername(username)
-        fidoKeystore.generateKeyPair(username)
-
-        val registerCallback = object : FingerprintAuthCallback(result) {
-            override fun processAuthentication(cryptObj: FingerprintManagerCompat.CryptoObject): Int =
-                completeFidoRegistration(cryptObj, this.uafMessage)
-
-            override fun cancel() {
-                biometricState.registrationStateChangeInProgress = false
+        try {
+            biometricsInteractor.dismissProgressDialog()
+            if (response.statusCode != BiometricAsyncHandler.OK) {
+                biometricsInteractor.showBiometricRegistrationError()
+                return
             }
-        }
+            val result = response.result
+            val username = extractUserFromUafRegMessage(result)
+            preferencesService.saveFidoUsername(username)
+            fidoKeystore.generateKeyPair(username)
 
-        biometricState.registrationStateChangeInProgress = true
-        val fingerprintContent = fingerprintDialog.generateFingerprintContent(true)
-        fingerprintDialog.showFingerprintAuthDialog(registerCallback, fingerprintContent)
+            val registerCallback = object : FingerprintAuthCallback(result) {
+                override fun processAuthentication(cryptObj: FingerprintManagerCompat.CryptoObject): Int =
+                        completeFidoRegistration(cryptObj, this.uafMessage)
+
+                override fun cancel() {
+                    biometricState.registrationStateChangeInProgress = false
+                }
+            }
+
+            biometricState.registrationStateChangeInProgress = true
+            val fingerprintContent = fingerprintDialog.generateFingerprintContent(true)
+            fingerprintDialog.showFingerprintAuthDialog(registerCallback, fingerprintContent)
+        }
+        catch(e: Exception) {
+            biometricState.registrationStateChangeInProgress = false
+            removeAndShowDeviceError()
+        }
     }
 
     private fun completeFidoRegistration(
@@ -123,6 +130,11 @@ class RegistrationService(
 
     private fun removeAndShowRegistrationError() {
         biometricsInteractor.showBiometricRegistrationError()
+        biometricCleanupHelper.removeFidoData()
+    }
+
+    private fun removeAndShowDeviceError() {
+        biometricsInteractor.showBiometricDeviceError()
         biometricCleanupHelper.removeFidoData()
     }
 

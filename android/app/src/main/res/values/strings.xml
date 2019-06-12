@@ -67,6 +67,9 @@
     <string name="biometric_registration_failure_message">
         Something went wrong when registering for Fingerprint ID.
     </string>
+    <string name="biometric_device_failure_message">
+        Something went wrong when registering your fingerprint. \n\nYour device may not be compatible with the fingerprint authentication service. \n\n You may need to log in using your username and password instead.
+    </string>
     <string name="service_unavailable">Service unavailable</string>
     <string name="apiUnavailableErrorMessage">You currently cannot use this service. \n\nIf the problem continues and you need to book an
         appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.

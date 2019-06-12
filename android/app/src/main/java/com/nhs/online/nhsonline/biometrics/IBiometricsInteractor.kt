@@ -15,6 +15,8 @@ interface IBiometricsInteractor {
 
     fun showBiometricRegistrationError()
 
+    fun showBiometricDeviceError()
+
     fun getActivity(): FragmentActivity
 
     fun loadBiometricLoginPage(url: String)

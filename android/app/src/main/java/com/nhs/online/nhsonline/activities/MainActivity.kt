@@ -377,9 +377,25 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun showBiometricRegistrationError() {
-        errorTextView.setServiceError(getString(R.string.errorIconText),
-            getString(R.string.biometric_registration_failure_message))
-        activityViewSwitcher.switchTo(ActivityView.ERROR)
+        try {
+            errorTextView.setServiceError(getString(R.string.errorIconText),
+                getString(R.string.biometric_registration_failure_message))
+            activityViewSwitcher.switchTo(ActivityView.ERROR)
+        } catch (e: Exception) {
+            logger.log(Level.WARNING,
+                    "${this::class.java.simpleName}: Unable to show error page $e")
+        }
+    }
+
+    override fun showBiometricDeviceError() {
+        try {
+            errorTextView.setServiceError("Error",
+                    getString(R.string.biometric_device_failure_message))
+            activityViewSwitcher.switchTo(ActivityView.ERROR)
+        } catch (e: Exception) {
+            logger.log(Level.WARNING,
+                    "${this::class.java.simpleName}: Unable to show error page $e")
+        }
     }
 
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
