@@ -5,7 +5,7 @@ set -e
 echo "Commit hash: $(git rev-parse HEAD)"
 echo "Commit hash: $(git rev-parse HEAD)" > version.txt
 
-APIS=(PfsApi CidApi ServiceJourneyRulesApi ClinicalDecisionSupportApi)
+APIS=(PfsApi CidApi ServiceJourneyRulesApi)
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 
 for api in "${APIS[@]}"
@@ -14,5 +14,5 @@ do
 done
 
 # build CDSS Wiremock image
-cd NHSOnline.Backend.ClinicalDecisionSupportApi/cdss-wiremock
+cd NHSOnline.Backend.PfsApi/ClinicalDecisionSupport/cdss-wiremock
 docker build --pull --build-arg COMMIT_ID=$(git rev-parse HEAD) -t ${DOCKER_REGISTRY}/nhsonline-backendcdsswiremock:$(git rev-parse HEAD) .

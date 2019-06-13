@@ -20,6 +20,7 @@ using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
@@ -31,7 +32,12 @@ using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.PfsApi.Devices;
 using NHSOnline.Backend.NominatedPharmacy;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.RequestFormatters;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.PfsApi.Filters;
+using SettingValidationStartupFilter = NHSOnline.Backend.Support.SettingValidationStartupFilter;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -127,7 +133,18 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));            
+            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));    
+            
+            
+            services.Configure<OnlineConsultationsProvidersSettings>(Configuration.GetSection("OnlineConsultationsProvidersSettings"));
+            services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
+            services.AddSingleton(resolver =>
+                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);
+            services.AddSingleton<IValidatable>(resolver => 
+                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);        
+
+            services.AddSingleton<IFhirSanitizationHelper, FhirSanitizationHelper>();
+            services.AddSingleton<IOnlineConsultationsProviderHttpClientPool, OnlineConsultationsProviderHttpClientPool>();
 
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
@@ -150,6 +167,7 @@ namespace NHSOnline.Backend.PfsApi
             );
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
             options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
+            options.InputFormatters.Insert(0, new FhirParametersInputFormatter());
         }
 
         private void ConfigureServiceCookies(CookieAuthenticationOptions options)

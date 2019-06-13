@@ -38,15 +38,6 @@ export const resolveApiClient = ({ req, env }) => {
   return env.API_HOST;
 };
 
-export const resolveCdsClient = ({ req, env }) => {
-  env.CDS_HOST = env.CDS_HOST || applyUriFormat(
-    resolveBaseHost(req),
-    resolveUrlFormat('URI_FORMAT_CDS_CLIENT', env),
-  );
-
-  return env.CDS_HOST;
-};
-
 export const resolveCidWeb = ({ req, env }) => {
   env.CID_REDIRECT_URI = env.CID_REDIRECT_URI || applyUriFormat(
     resolveBaseHost(req),
@@ -69,5 +60,4 @@ export default ({ env, req }) => {
   resolveApiClient({ env, req });
   resolveCidWeb({ env, req });
   resolveCidNative({ env, req });
-  resolveCdsClient({ env, req });
 };

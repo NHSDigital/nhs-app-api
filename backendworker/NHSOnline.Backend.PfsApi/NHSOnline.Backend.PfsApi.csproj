@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="CorrelationId" Version="2.1.0" />
     <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
+    <PackageReference Include="Hl7.Fhir.STU3" Version="1.2.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.8.11" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
@@ -43,5 +44,59 @@
     <None Update="certs\vps_nhson001.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Remove="ClinicalDecisionSupport\cdss-wiremock\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ClinicalDecisionSupport\cdss-wiremock\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="ClinicalDecisionSupport\cdss-wiremock\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="ClinicalDecisionSupport\cdss-wiremock\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\postman\NHS App FHIR Examples (Wiremock).postman_collection.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\postman\NHS App Fhir Examples (Wiremock).postman_environment.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\common\0_initial.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\common\1_disclaimers.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\common\2_self_or_child.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\common\3_is_emergency.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\common\4_verify_practice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\common\5_sex_choice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\common\6_dob.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\10_alcohol_consumption.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\11_smoking_habits_final.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\7_admin_issue_choice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\8_new_or_extend.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\9_duration.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\search\all.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\search\byId\GEC_ADM.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\TEST_GEC_ADM\common\0_initial.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\TEST_GEC_ADM\TEST_GEC_ADM_ISSUE_SICKNOTE\1_admin_issue_choice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\TEST_GEC_ADM\TEST_GEC_ADM_ISSUE_SICKNOTE\2_new_or_extend.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\TEST_GEC_ADM\TEST_GEC_ADM_ISSUE_SICKNOTE\3_duration.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\TEST_GEC_ADM\TEST_GEC_ADM_ISSUE_SICKNOTE\4_alcohol_consumption.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\mappings\serviceDefinition\TEST_GEC_ADM\TEST_GEC_ADM_ISSUE_SICKNOTE\5_smoking_habits_final.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\common\0_initial.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\common\1_disclaimers.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\common\2_self_or_child.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\common\3_is_emergency.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\common\4_verify_practice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\common\5_sex_choice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\common\6_dob.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\10_alcohol_consumption.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\11_smoking_habits_final.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\7_admin_issue_choice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\8_new_or_extend.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\GEC_ADM\GEC_ADM_AD_ISSUE_SICKNOTE\9_duration.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\search\all.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\search\byId\GEC_ADM.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\common\0_initial.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\10_alcohol_consumption.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\11_smoking_habits_final.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\7_admin_issue_choice.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\8_new_or_extend.json" />
+    <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\9_duration.json" />
   </ItemGroup>
 </Project>

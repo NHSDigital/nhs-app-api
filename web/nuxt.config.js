@@ -63,8 +63,6 @@ const config = {
     // URL Formats
     URI_FORMAT_API_CLIENT: 'http://api{host}:8082',
     API_HOST_SERVER: 'http://api.local.bitraft.io:8082',
-    URI_FORMAT_CDS_CLIENT: 'http://clinicaldecisionsupportapi{host}:8087',
-    CDS_HOST_SERVER: 'http://clinicaldecisionsupportapi.local.bitraft.io:8087',
     URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}:3000/auth-return',
     URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}:3000/auth-return',
     // Cookie settings

@@ -47,7 +47,7 @@ docker-compose down -v
 Furthermore, if changing the loading logic, build service journey rules image prior `docker-compose up --build`.
 
 ```
-docker-compose -f docker-compose.servicejourneyrules build
+docker-compose -f docker-compose.servicejourneyrules.yml build
 ```
 
 ### Debugging the backendworker
@@ -78,3 +78,24 @@ curl -v \
   --header "NHSO-Connection-Token: token" \
   --header "NHSO-ODS-Code: E87649" \
   stubs.local.bitraft.io:8080/patient/im1connection
+
+# Clinical Decision Support Setup
+
+<br>
+<br>
+
+## Setup
+--------
+
+### Update hosts
+
+Add the following to `/etc/hosts`
+
+```
+127.0.0.1       ems.cdss.stubs.local.bitraft.io
+```
+
+### CDSS Supplier Stub
+
+Currently the CDS Api depends on the CDSS Wiremock Stubs under `nhsonline-app/backendworker/NHSOnline.Backend.PfsApi/ClinicalDecisionSupport/cdss-wiremock`.
+This is being used as a temporary CDSS supplier. Follow the instructions in the README within that project to get it running.
