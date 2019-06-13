@@ -1,5 +1,14 @@
-// eslint-disable-next-line import/prefer-default-export
+export const IM1_PROVIDER = 'im1';
+export const INIT = 'INIT';
 export const ONLINE_CONSULTATIONS = 'online-consultations';
+export const SET_RULES = 'SET_RULES';
+
 export const initialState = () => ({
-  onlineConsultations: true,
+  isLoaded: false,
+  rules: {
+    appointments: {
+      provider: IM1_PROVIDER,
+    },
+    onlineConsultations: true,
+  },
 });

@@ -49,6 +49,7 @@ const config = {
       'meta',
       'termsAndConditions',
       'myRecordAcceptance',
+      'serviceJourneyRules',
       'urlResolution',
     ],
   },

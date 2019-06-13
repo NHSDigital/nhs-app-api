@@ -28,6 +28,7 @@ const final = ({ self, commit }) => {
   self.dispatch('appVersion/init');
   self.dispatch('organDonation/init');
   self.dispatch('myRecord/init');
+  self.dispatch('serviceJourneyRules/init');
 
   if (sourceValue === Sources.Web) {
     self.app.context.redirect(LOGIN.path);

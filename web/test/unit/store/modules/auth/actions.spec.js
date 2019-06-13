@@ -1,4 +1,3 @@
-import { find } from 'lodash/fp';
 import actions from '@/store/modules/auth/actions';
 import { AUTH_RESPONSE, UPDATE_CONFIG } from '@/store/modules/auth/mutation-types';
 import NativeCallbacks from '@/services/native-app';
@@ -51,74 +50,64 @@ describe('actions', () => {
   });
 
   describe('handle auth response', () => {
-    it('will set the session info from the received session timeout and the response', () => actions
-      .handleAuthResponse({ commit, state }, '123')
-      .then(() => {
-        const info = find(x => x[0] === 'session/setInfo')(actions.dispatch.mock.calls)[1];
-        expect(info.name).toEqual(name);
-        expect(info.durationSeconds).toEqual(sessionTimeout);
-        expect(info.token).toEqual(token);
-        expect(info.gpOdsCode).toEqual(odsCode);
-      }));
+    beforeEach(async () => {
+      await actions.handleAuthResponse({ commit, state }, '123');
+    });
 
-    it('will hide start validation checking', () => actions
-      .handleAuthResponse({ commit, state }, '123')
-      .then(() => {
-        expect(actions.dispatch).toHaveBeenCalledWith('session/hideExpiryMessage');
-      }));
+    it('will set the session info from the received session timeout and the response', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo', {
+        name,
+        durationSeconds: sessionTimeout,
+        token,
+        gpOdsCode: odsCode,
+      });
+    });
 
-    it('will hide the expiry message', () => actions
-      .handleAuthResponse({ commit, state }, '123')
-      .then(() => {
-        expect(actions.dispatch).toHaveBeenCalledWith('session/startValidationChecking');
-      }));
+    it('will hide start validation checking', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/hideExpiryMessage');
+    });
 
-    it('will remove the "nhso.auth" cookie', () => actions
-      .handleAuthResponse({ commit, state }, '123')
-      .then(() => {
-        expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.auth');
-      }));
+    it('will hide the expiry message', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/startValidationChecking');
+    });
 
-    it('will commit the AUTH_RESPONSE', () => actions
-      .handleAuthResponse({ commit, state }, '123')
-      .then(() => {
-        expect(commit).toHaveBeenCalledWith(AUTH_RESPONSE, postSessionResponse);
-      }));
+    it('will remove the "nhso.auth" cookie', () => {
+      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.auth');
+    });
+
+    it('will commit the AUTH_RESPONSE', () => {
+      expect(commit).toHaveBeenCalledWith(AUTH_RESPONSE, postSessionResponse);
+    });
   });
 
   describe('logout', () => {
-    it('will dispatch the session/clear event', () => actions
-      .logout({ commit })
-      .then(() => {
-        expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
-      }));
+    beforeEach(async () => {
+      await actions.logout({ commit });
+    });
 
-    it('will dispatch the session/endValidationChecking event', () => actions
-      .logout({ commit })
-      .then(() => {
-        expect(actions.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
-      }));
+    it('will dispatch the session/clear event', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
+    });
 
-    it(
-      'will clear the info token by dispatching the session/setInfo event with no parameters',
-      () => actions
-        .logout({ commit })
-        .then(() => {
-          expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo');
-        }),
-    );
+    it('will dispatch the session/endValidationChecking event', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
+    });
 
-    it('will remove the nhso.session cookie', () => actions
-      .logout({ commit })
-      .then(() => {
-        expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.session');
-      }));
+    it('will clear the info token by dispatching the session/setInfo event with no parameters', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo');
+    });
 
-    it('will remove the nhso.terms cookie', () => actions
-      .logout({ commit })
-      .then(() => {
-        expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
-      }));
+    it('will remove the nhso.session cookie', () => {
+      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.session');
+    });
+
+    it('will remove the nhso.terms cookie', () => {
+      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
+    });
+
+    it('will dispatch serviceJourneyRules/init', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
+    });
   });
 
   describe('logoutWhenExpired', () => {
@@ -181,6 +170,16 @@ describe('actions', () => {
       jest.runTimersToTime(10000);
 
       expect(NativeCallbacks.onLogin).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('unauthorised', () => {
+    beforeEach(() => {
+      actions.unauthorised({ commit });
+    });
+
+    it('will dispatch serviceJourneyRules/init', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
     });
   });
 });
