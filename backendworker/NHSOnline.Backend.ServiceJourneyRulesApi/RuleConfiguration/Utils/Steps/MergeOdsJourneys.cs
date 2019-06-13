@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 
             foreach (var (folderPath, odsJourneys) in folderOdsJourneys)
             {
-                _logger.LogInformation($"Merging in {folderPath} journeys");
+                _logger.LogDebug($"Merging in {folderPath} journeys");
                 MergeFolderJourneys(odsJourneys, mergedOdsJourneys);
             }
 

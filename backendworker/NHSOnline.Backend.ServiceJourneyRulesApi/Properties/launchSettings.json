@@ -22,11 +22,6 @@
         "SESSION_MONGO_DATABASE_NAME": "development",
         "SESSION_MONGO_DATABASE_COLLECTION": "session",
         "AUDIT_SINK_TYPE": "FILE",
-        "GP_INFO_FILE_PATH": "../configurations/gpinfo.csv",
-        "CONFIGURATION_FOLDER_PATH": "../configurations",
-        "RULES_FOLDER_NAME": "Rules",
-        "JOURNEYS_FOLDER_NAME": "Journeys",
-        "OUTPUT_FOLDER_PATH": "../configurations/output",
         "INPUT_FOLDER_PATH": "../configurations/output"
       }
     },
@@ -38,8 +33,7 @@
         "CONFIGURATION_FOLDER_PATH": "../configurations",
         "RULES_FOLDER_NAME": "Rules",
         "JOURNEYS_FOLDER_NAME": "Journeys",
-        "OUTPUT_FOLDER_PATH": "../configurations/output",
-        "INPUT_FOLDER_PATH": "../configurations/output"
+        "OUTPUT_FOLDER_PATH": "../configurations/output"
       }
     }
   }

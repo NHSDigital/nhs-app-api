@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 
         private void WriteContent(IDictionary<string, Journeys> mergedOdsJourneys)
         {
-            _logger.LogInformation($"Outputting merged ODS config files to {_outputFolder}");
+            _logger.LogDebug($"Outputting merged ODS config files to {_outputFolder}");
             foreach (var (odsCode, journeys) in mergedOdsJourneys)
             {
                 var targetConfiguration = new TargetConfiguration
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 
                 var filePath = Path.Join(_outputFolder, $"{odsCode}.yaml");
 
-                _logger.LogInformation($"Creating '{filePath}'");
+                _logger.LogDebug($"Creating '{filePath}'");
                 _yamlWriter.Write(filePath, targetConfiguration);
             }
         }

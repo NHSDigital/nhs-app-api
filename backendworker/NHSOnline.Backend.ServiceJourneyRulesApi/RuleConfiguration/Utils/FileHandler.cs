@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 
         private string GetEmbeddedText(string resourceName)
         {
-            _logger.LogInformation($"Reading resource: {resourceName}");
+            _logger.LogDebug($"Reading resource: {resourceName}");
             using (var resourceStream = _assembly.GetManifestResourceStream(resourceName))
             using (var stream = new StreamReader(resourceStream, Encoding.UTF8))
             {

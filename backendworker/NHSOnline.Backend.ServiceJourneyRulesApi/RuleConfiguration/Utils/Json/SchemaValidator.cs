@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json
             {
                 if (Schemas.TryGetValue(schemaFile.Name, out var schema))
                 {
-                    _logger.LogInformation($"Getting JSON schema from cache for {schemaFile.Name}");
+                    _logger.LogDebug($"Getting JSON schema from cache for {schemaFile.Name}");
                     return schema;
                 }
 
@@ -52,12 +52,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json
 
             try
             {
-                _logger.LogInformation($"Validating JSON from file {jsonFile.Name}");
+                _logger.LogDebug($"Validating JSON from file {jsonFile.Name}");
                 var errors = schema.Validate(jsonFile.Data);
 
                 if (!errors.Any())
                 {
-                    _logger.LogInformation($"Validation successful for {jsonFile.Name}");
+                    _logger.LogDebug($"Validation successful for {jsonFile.Name}");
                     return true;
                 }
                 

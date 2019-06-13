@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Conve
             {
                 try
                 {
-                    _logger.LogInformation($"Deserializing {yamlFile.Name}");
+                    _logger.LogDebug($"Deserializing {yamlFile.Name}");
 
                     using (var sr = new StringReader(yamlFile.Data))
                     {
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Conve
 
                         using (var json = new StringWriter())
                         {
-                            _logger.LogInformation($"Successfully deserialized {yamlFile.Name}");
+                            _logger.LogDebug($"Successfully deserialized {yamlFile.Name}");
                             _serializer.Serialize(json, yaml);
 
                             jsonFile = new FileData(yamlFile.Name, json.ToString());
