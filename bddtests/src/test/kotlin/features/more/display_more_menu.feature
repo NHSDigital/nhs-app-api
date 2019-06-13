@@ -20,3 +20,13 @@ Feature: Display More Menu
     Given I am on the More Page
     When I choose to set my data sharing preferences
     Then I am on the Data Sharing page
+
+
+  @onlineconsultations
+  Scenario: A logged in user can navigate to the more screen and request GP help if online consultations available
+    Given I am a EMIS patient
+    And I am logged in
+    And I navigate to More
+    And I see the more page header
+    Then I see more button on the nav bar is highlighted
+    And I see and can follow links including online consultation links within the more page body

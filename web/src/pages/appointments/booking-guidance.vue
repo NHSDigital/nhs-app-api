@@ -70,7 +70,7 @@ import flow from 'lodash/fp/flow';
 
 /* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, isTruthy } from '@/lib/utils';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import AppointmentGuidance from '@/components/appointments/AppointmentGuidanceMenu';
 import GenericButton from '@/components/widgets/GenericButton';

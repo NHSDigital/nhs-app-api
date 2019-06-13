@@ -931,6 +931,10 @@ export default {
       subheader: 'Find out why your data matters',
       body: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning.',
     },
+    requestGpHelp: {
+      subheader: 'Request GP help without an appointment',
+      body: 'Get fit notes and GP letters or ask about recent tests.',
+    },
   },
   webHeader: {
     title: '{pageTitle} - NHS App',

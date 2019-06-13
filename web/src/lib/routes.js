@@ -37,7 +37,7 @@ const routes = {
     crumb: {
       i8nKey: 'appointmentsAdminHelp',
       get parentRoute() {
-        return this.allRoutes.INDEX;
+        return this.allRoutes.APPOINTMENTS;
       },
     },
   },

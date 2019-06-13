@@ -5,12 +5,15 @@
       <li role="link">
         <analytics-tracked-tag
           id="btn_symptoms"
-          :destination="symptomsPath"
           :class="$style['no-decoration']"
           :text="$t('appointments.guidance.menuItem1.header')"
           :aria-label="`${$t('appointments.guidance.menuItem1.header')}.
-            ${$t('appointments.guidance.menuItem1.text')}`">
-          <a id="checkSymptomsLink" @click="onCheckSymptomClicked">
+            ${$t('appointments.guidance.menuItem1.text')}`"
+          data-purpose="text_link">
+          <a id="btn_gp_help"
+             :href="symptomsPath"
+             :class="$style['no-decoration']"
+             @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem1.header') }}</h2>
             <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
               {{ $t('appointments.guidance.menuItem1.text') }}</p>
@@ -18,15 +21,18 @@
         </analytics-tracked-tag>
       </li>
 
-      <li role="link" >
+      <li role="link">
         <analytics-tracked-tag
           id="btn_gpHelpNoAppointment"
-          :destination="symptomsPath"
           :class="$style['no-decoration']"
           :text="$t('appointments.guidance.menuItem3.header')"
           :aria-label="`${$t('appointments.guidance.menuItem3.header')}.
-            ${$t('appointments.guidance.menuItem3.text')}`">
-          <a id="checkSymptomsLink" @click="onGpAdminHelpClick">
+            ${$t('appointments.guidance.menuItem3.text')}`"
+          data-purpose="text_link">
+          <a id="btn_gp_help"
+             :href="adminHelpPath"
+             :class="$style['no-decoration']"
+             @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem3.header') }}</h2>
             <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
               {{ $t('appointments.guidance.menuItem3.text') }}</p>
@@ -52,14 +58,21 @@ export default {
     symptomsPath() {
       return SYMPTOMS.path;
     },
+    adminHelpPath() {
+      return APPOINTMENT_ADMIN_HELP.path;
+    },
   },
   methods: {
-    onCheckSymptomClicked() {
-      redirectTo(this, SYMPTOMS.path, null);
+    navigate(event) {
+      redirectTo(this, event.currentTarget.pathname, null);
+      event.preventDefault();
+
+      if (event.currentTarget.pathname === this.adminHelpPath) {
+        this.$store.dispatch('navigation/setNewMenuItem', 1);
+        this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.appointmentAdminHelp'));
+        this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.appointmentAdminHelp'));
+      }
     },
-    onGpAdminHelpClick() {
-      redirectTo(this, APPOINTMENT_ADMIN_HELP.path, null)
-    }
   },
 };
 </script>

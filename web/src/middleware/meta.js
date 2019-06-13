@@ -93,7 +93,6 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.account';
       break;
     case APPOINTMENT_ADMIN_HELP.name:
-      store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointmentAdminHelp';
       route.meta.pageTitleKey = 'pageTitles.appointmentAdminHelp';
       break;

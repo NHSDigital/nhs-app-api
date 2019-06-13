@@ -1,5 +1,5 @@
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
-import { createStore, mount, createRouter } from '../../helpers';
+import { createStore, mount, createRouter, createEvent } from '../../helpers';
 import { SYMPTOMS, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
@@ -40,13 +40,16 @@ describe('Appointment guidance menu', () => {
 
   it('will link to the check symptoms page when check symptoms menu item clicked', () => {
     const wrapper = createWrapper();
-    wrapper.find('#btn_symptoms a').trigger('click');
+    const event = createEvent({ currentTarget: { pathname: SYMPTOMS.path } });
+    wrapper.vm.navigate(event);
     expect($router.push).toHaveBeenCalledWith(SYMPTOMS.path);
   });
 
   it('will link to the online consultation orchastrator page when request admin help menu item clicked', () => {
     const wrapper = createWrapper();
-    wrapper.find('#btn_gpHelpNoAppointment a').trigger('click');
+    const event = createEvent({ currentTarget: { pathname: APPOINTMENT_ADMIN_HELP.path } });
+    wrapper.vm.navigate(event);
+    expect($store.dispatch).toHaveBeenCalledWith('navigation/setNewMenuItem', 1);
     expect($router.push).toHaveBeenCalledWith(APPOINTMENT_ADMIN_HELP.path);
   });
 });

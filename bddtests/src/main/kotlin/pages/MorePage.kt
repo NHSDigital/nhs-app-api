@@ -15,6 +15,10 @@ open class MorePage : HybridPageObject() {
             "Find out how the NHS uses your confidential patient " +
                     "information and choose whether or not it can be used for research and planning."
 
+    // online consultations menu item
+    private val requestGpHelpTitle = "Request GP help without an appointment"
+    private val requestGpHelpDescription = "Get fit notes and GP letters or ask about recent tests"
+
     private val pageTitle = HybridPageElement(
             webDesktopLocator = "//h1[contains(text(),\"More\")]",
             androidLocator = null,
@@ -26,13 +30,15 @@ open class MorePage : HybridPageObject() {
             title = "More",
             links = arrayOf(
                     Pair(organDonationTitle, organDonationDescription),
-                    Pair(dataSharingTitle, dataSharingDescription)),
+                    Pair(dataSharingTitle, dataSharingDescription),
+                    Pair(requestGpHelpTitle, requestGpHelpDescription)),
             containerXPath = "//div[@id='mainDiv']")
 
     val links by lazy { MenuLinks(this, content) }
 
     val btnOrganDonation by lazy { links.link(organDonationTitle) }
     val btnDataSharing by lazy { links.link(dataSharingTitle) }
+    val btnRequestGpHelp by lazy { links.link(requestGpHelpTitle) }
 
     fun assertLinksPresent() {
         links.assertLinksPresent()

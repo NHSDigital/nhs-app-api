@@ -94,6 +94,27 @@ class MoreStepDefinitions {
         }
     }
 
+    @Then("And I see and can follow links including online consultation links within the more page body")
+    fun iSeeAndCanFollowLinksIncludingOnlineConsultationsWithinTheMorePageBody() {
+        morePage.assertLinksPresent()
+        val linksToFollow = arrayListOf(
+                { followDataSharingLink() },
+                { followOrganDonationLink() },
+                { followRequestGPHelpLink() }
+        )
+
+        Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. " +
+                "This test must be updated if a link is added or removed.",
+                morePage.links.count(),
+                linksToFollow.count())
+
+        linksToFollow.forEachIndexed { index, link ->
+            link.invoke()
+            if (index != linksToFollow.size - 1)
+                navigateBackToMorePage()
+        }
+    }
+
     private fun followDataSharingLink() {
         morePage.btnDataSharing.click()
         morePage.locatorMethods.waitForNativeStepToComplete()
@@ -104,6 +125,10 @@ class MoreStepDefinitions {
     private fun followOrganDonationLink() {
         morePage.btnOrganDonation.click()
         organDonationSteps.iAmOnTheOrganDonationPage()
+    }
+
+    private fun followRequestGPHelpLink() {
+        morePage.btnRequestGpHelp.click()
     }
 
     private fun navigateBackToMorePage() {
