@@ -2,6 +2,7 @@ import {
   CLEAR,
   SET_SERVICE_DEFINITION_ID,
   SET_QUESTION_FROM_GUIDANCE_RESPONSE,
+  SET_PREVIOUS_ROUTE,
 } from './mutation-types';
 import InitialAdminHelpGuidanceResponse from '@/lib/online-consultations/data/guidance-responses';
 
@@ -20,5 +21,8 @@ export default {
     const guidanceResponse = InitialAdminHelpGuidanceResponse;
 
     commit(SET_QUESTION_FROM_GUIDANCE_RESPONSE, guidanceResponse);
+  },
+  setPreviousRoute({ commit }, previousRoute) {
+    commit(SET_PREVIOUS_ROUTE, previousRoute);
   },
 };

@@ -20,7 +20,6 @@
           </a>
         </analytics-tracked-tag>
       </li>
-
       <li role="link">
         <analytics-tracked-tag
           id="btn_gpHelpNoAppointment"
@@ -31,7 +30,6 @@
           data-purpose="text_link">
           <a id="btn_gp_help"
              :href="adminHelpPath"
-             :class="$style['no-decoration']"
              @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem3.header') }}</h2>
             <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
@@ -46,8 +44,9 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { SYMPTOMS, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
+import { SYMPTOMS, APPOINTMENT_ADMIN_HELP, APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import { createUri } from '@/lib/noJs';
 
 export default {
   name: 'AppointmentGuidanceMenu',
@@ -59,7 +58,12 @@ export default {
       return SYMPTOMS.path;
     },
     adminHelpPath() {
-      return APPOINTMENT_ADMIN_HELP.path;
+      const noJsData = {
+        onlineConsultations: {
+          previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path,
+        },
+      };
+      return createUri({ path: APPOINTMENT_ADMIN_HELP.path, noJs: noJsData });
     },
   },
   methods: {
@@ -67,8 +71,9 @@ export default {
       redirectTo(this, event.currentTarget.pathname, null);
       event.preventDefault();
 
-      if (event.currentTarget.pathname === this.adminHelpPath) {
+      if (event.currentTarget.pathname === APPOINTMENT_ADMIN_HELP.path) {
         this.$store.dispatch('navigation/setNewMenuItem', 1);
+        this.$store.dispatch('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE.path);
         this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.appointmentAdminHelp'));
         this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.appointmentAdminHelp'));
       }

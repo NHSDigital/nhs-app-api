@@ -13,9 +13,13 @@
         {{ $t('onlineConsultations.orchestrator.continueButton') }}
       </generic-button>
     </div>
-    <generic-button :button-classes="['button', 'grey']">
-      {{ $t('onlineConsultations.orchestrator.backButton') }}
-    </generic-button>
+    <form :action="backRoute">
+      <generic-button :button-classes="['button', 'grey']"
+                      click-delay="medium"
+                      @click.stop.prevent="onBackButtonClicked()">
+        {{ $t('onlineConsultations.orchestrator.backButton') }}
+      </generic-button>
+    </form>
   </div>
 </template>
 
@@ -46,6 +50,14 @@ export default {
     },
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
+    },
+    backRoute() {
+      return this.$store.state.onlineConsultations.previousRoute;
+    },
+  },
+  methods: {
+    onBackButtonClicked() {
+      this.$router.goBack();
     },
   },
 };

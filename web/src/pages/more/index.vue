@@ -43,7 +43,8 @@ import get from 'lodash/fp/get';
 import flow from 'lodash/fp/flow';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { DATA_SHARING_PREFERENCES, INDEX, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
+import { DATA_SHARING_PREFERENCES, INDEX, APPOINTMENT_ADMIN_HELP, MORE } from '@/lib/routes';
+import { createUri } from '@/lib/noJs';
 import { isTruthy, redirectTo } from '@/lib/utils';
 
 const getOnlineConsultationEnabled = flow(
@@ -60,11 +61,16 @@ export default {
     dataSharingPath() {
       return DATA_SHARING_PREFERENCES.path;
     },
-    requestAdminHelpPath() {
-      return APPOINTMENT_ADMIN_HELP.path;
-    },
     isOnlineConsultationsEnabled() {
       return getOnlineConsultationEnabled(this);
+    },
+    requestAdminHelpPath() {
+      const noJsData = {
+        onlineConsultations: {
+          previousRoute: MORE.path,
+        },
+      };
+      return createUri({ path: APPOINTMENT_ADMIN_HELP.path, noJs: noJsData });
     },
   },
   created() {
@@ -77,6 +83,7 @@ export default {
 
       if (event.currentTarget.pathname === this.requestAdminHelpPath) {
         this.$store.dispatch('navigation/setNewMenuItem', 4);
+        this.$store.dispatch('onlineConsultations/setPreviousRoute', MORE.path);
       }
     },
     redirectIfDesktop() {
