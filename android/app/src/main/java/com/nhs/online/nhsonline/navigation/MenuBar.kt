@@ -68,7 +68,7 @@ class MenuBar @JvmOverloads constructor(
     }
 
     private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
-        if(nhsWeb?.applicationState?.isReady() !=  false) {
+        if(nhsWeb?.applicationState?.isReady() !=  false && menuItemNotCurrentlySelected(position)) {
             if(getMenuBarItemAt(position).isBlockingMenuItem()) {
                 nhsWeb?.applicationState?.block()
             }
@@ -78,6 +78,15 @@ class MenuBar @JvmOverloads constructor(
             selectMenuItem(position, shouldInvokeListener)
         }
     }
+
+    private fun menuItemNotCurrentlySelected(position: Int): Boolean {
+        var notCurrentlySelected = true
+        selectedPosition.ifPresent {
+            notCurrentlySelected = it != position
+        }
+        return notCurrentlySelected
+    }
+
 
     private fun selectMenuItem(position: Int, shouldInvokeListener: Boolean = true) {
         val menuBarItem = getMenuBarItemAt(position)

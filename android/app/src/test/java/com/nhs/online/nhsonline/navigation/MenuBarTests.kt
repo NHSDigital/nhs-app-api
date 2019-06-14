@@ -7,7 +7,6 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.web.NhsWeb
-import com.nhs.online.nhsonline.navigation.MenuBar
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -25,11 +24,11 @@ class MenuBarTests  {
 
     @Before
     fun setUp() {
-        var controller: ActivityController<Activity> = Robolectric.buildActivity(Activity::class.java)
+        val controller: ActivityController<Activity> = Robolectric.buildActivity(Activity::class.java)
 
-        var activityMain = LayoutInflater.from(controller.get()).inflate(R.layout.activity_main, null) as ViewGroup
+        val activityMain = LayoutInflater.from(controller.get()).inflate(R.layout.activity_main, null) as ViewGroup
 
-        for(i in 0..activityMain.childCount-1) {
+        for(i in 0.until(activityMain.childCount)) {
             if(activityMain.getChildAt(i) is MenuBar) {
                 menuBar = activityMain.getChildAt(i) as MenuBar
                 break
@@ -41,9 +40,9 @@ class MenuBarTests  {
     }
 
     @Test
-    fun SwitchingTheMenuItemShouldSetApplicationStateBusyIfTheMenuIsBlocking() {
+    fun switchingTheMenuItemShouldSetApplicationStateBusyIfTheMenuIsBlocking() {
 
-        var appStateMock: ApplicationState = mock {
+        val appStateMock: ApplicationState = mock {
             on { isReady() } doReturn true
         }
 
@@ -53,7 +52,7 @@ class MenuBarTests  {
 
         menuBar.nhsWeb = nhsWeb
 
-        for(childIndex: Int in 0..menuBar.childCount - 1) {
+        for(childIndex: Int in 0.until(menuBar.childCount)) {
             val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
             if(menuBarItem.isBlockingMenuItem()) {
                 menuBar.switchActiveMenuItemTo(menuBarItem.id)
@@ -65,9 +64,9 @@ class MenuBarTests  {
     }
 
     @Test
-    fun SwitchingTheMenuItemShouldNotSetApplicationStateBusyIfTheMenuIsNonBlocking() {
+    fun switchingTheMenuItemShouldNotSetApplicationStateBusyIfTheMenuIsNonBlocking() {
 
-        var appStateMock: ApplicationState = mock {
+        val appStateMock: ApplicationState = mock {
             on { isReady() } doReturn true
         }
 
@@ -77,7 +76,7 @@ class MenuBarTests  {
 
         menuBar.nhsWeb = nhsWeb
 
-        for(childIndex: Int in 0..menuBar.childCount - 1) {
+        for(childIndex: Int in 0.until(menuBar.childCount)) {
             val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
             if(!menuBarItem.isBlockingMenuItem()) {
                 menuBar.switchActiveMenuItemTo(menuBarItem.id)
@@ -89,11 +88,48 @@ class MenuBarTests  {
         verifyNoMoreInteractions(appStateMock)
     }
 
+    @Test
+    fun switchingTheMenuItemShouldNotSetApplicationStateBusyIfCurrentTabIsReselected() {
+
+        val appStateMock: ApplicationState = mock {
+            on { isReady() } doReturn true
+        }
+
+        nhsWeb = mock {
+            on { applicationState } doReturn appStateMock
+        }
+
+        menuBar.nhsWeb = nhsWeb
+
+        for(childIndex: Int in 0.until(menuBar.childCount)) {
+            val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
+            if(menuBarItem.isBlockingMenuItem()) {
+                menuBar.switchActiveMenuItemTo(menuBarItem.id)
+                break
+            }
+        }
+
+        verify(appStateMock, times(1)).isReady()
+        verify(appStateMock, times(1)).block()
+
+        for(childIndex: Int in 0.until(menuBar.childCount)) {
+            val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
+            if(menuBarItem.isBlockingMenuItem()) {
+                menuBar.switchActiveMenuItemTo(menuBarItem.id)
+                break
+            }
+        }
+
+        verify(appStateMock, times(2)).isReady()
+        verify(appStateMock, times(1)).block()
+        verifyNoMoreInteractions(appStateMock)
+    }
+
 
     @Test
-    fun SwitchingTheMenuItemWhenTheApplicationStateIsBusyShouldNotCallTheListener() {
+    fun switchingTheMenuItemWhenTheApplicationStateIsBusyShouldNotCallTheListener() {
 
-        var appStateMock: ApplicationState = mock {
+        val appStateMock: ApplicationState = mock {
             on { isReady() } doReturn false
         }
 
