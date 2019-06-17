@@ -1,6 +1,7 @@
 <template>
   <span :class="$style.pageTitle">
-    <h1 v-if="shouldShowDesktopVersion" :class="$style.homePageTitle" aria-live="polite">
+    <h1 v-if="shouldShowDesktopVersion" :key="$store.state.header.headerText"
+        :class="$style.homePageTitle" aria-live="polite">
       {{ $store.state.header.headerText }}
     </h1>
   </span>
