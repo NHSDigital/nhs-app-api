@@ -1,37 +1,41 @@
-swagger: "2.0"
-
+openapi: 3.0.2
 info:
   version: 0.0.6
   title: NHS App Sub-API - User Sessions.
   description: NHS App Sub-API - endpoints pertaining to User Sessions.
-
 paths:
   /session:
     post:
       tags:
         - session
       summary: Creates a user session for an authenticated user.
-      description: Given an OAuth authorisation code and PKCE code verifier, creates and returns a user session.
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          name: userSession
-          required: true
-          description: OAuth details for the session to be created.
-          schema:
-            $ref: '#/definitions/UserSessionRequest'
+      description: Given an OAuth authorisation code and PKCE code verifier, creates and
+        returns a user session.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSessionRequest"
+        description: OAuth details for the session to be created.
+        required: true
+        x-name: UserSession
       responses:
         201:
-          description: Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests.
-          schema:
-            $ref: "#/definitions/UserSessionResponse"
+          description: Successfully authenticated. The session ID is returned in a cookie
+            name `NHSO-Session-Id`. This cookie should be included in subsequent
+            requests.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSessionResponse"
         400:
           description: Bad request. Supplied OAuth details are incomplete or invalid
         403:
-          description: Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully authenticate with the GP system.
+          description: Forbidden. Can occur if the IM1 connection token received from
+            Citizen ID does not successfully authenticate with the GP system.
         464:
-          description: ODS code associated with a user is not supported or no nhs number found.
+          description: ODS code associated with a user is not supported or no nhs number
+            found.
         465:
           description: User did not meet the minimum age requirement.
         500:
@@ -44,7 +48,9 @@ paths:
       tags:
         - session
       summary: Deletes a user session for an authenticated user.
-      description: Given a valid session cookie deletes the users session and signs the user out. Requires NHSO-Session-Id cookie obtained from post session endpoint.
+      description: Given a valid session cookie deletes the users session and signs the
+        user out. Requires NHSO-Session-Id cookie obtained from post session
+        endpoint.
       responses:
         204:
           description: Successfully deleted session and user signed out
@@ -59,7 +65,9 @@ paths:
       tags:
         - session
       summary: Extends a user session for an authenticated user.
-      description: Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id cookie obtained from post session endpoint.
+      description: Extends a user session for an authenticated user, by calling an upstream
+        endpoint. Requires NHSO-Session-Id cookie obtained from post session
+        endpoint.
       responses:
         200:
           description: Successfully extended.
@@ -68,46 +76,48 @@ paths:
         500:
           description: An unexpected error occurred during the processing of the request.
         502:
-          description: Could not extend service. Can occur if already timed out, or there is a problem with the request.
+          description: Could not extend service. Can occur if already timed out, or there
+            is a problem with the request.
         504:
           description: Timeout when calling upstream system.
-definitions:
-  UserSessionRequest:
-    type: object
-    required:
-      - authCode
-      - codeVerifier
-      - redirectUrl
-    properties:
-      authCode:
-        type: string
-        description: OAuth authorization code.
-      codeVerifier:
-        type: string
-        description: PKCE code verifier.
-      redirectUrl:
-        type: string
-        description: Redirect url provided when signing in to Citizen ID
-  UserSessionResponse:
-    type: object
-    properties:
-      name:
-        type: string
-        description: User's name
-      sessionTimeout:
-        type: integer
-        description: User's session timeout period in seconds.
-      odsCode:
-        type: string
-        description: Unique code that identifies a user's GP practice
-      token:
-        type: string
-        description: User's session CsrfToken
-      nhsNumber:
-        type: string
-        description: User's NHS number
-      accessToken:
-        type: string
-        description: User's access token which allows NHS Login to identify them
-      serviceJourneyRules:
-        $ref: "servicejourneyrules.definitions.yaml#/definitions/ServiceJourneyRulesResponse"
+components:
+  schemas:
+    UserSessionRequest:
+      type: object
+      required:
+        - authCode
+        - codeVerifier
+        - redirectUrl
+      properties:
+        authCode:
+          type: string
+          description: OAuth authorization code.
+        codeVerifier:
+          type: string
+          description: PKCE code verifier.
+        redirectUrl:
+          type: string
+          description: Redirect url provided when signing in to Citizen ID
+    UserSessionResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's name
+        sessionTimeout:
+          type: integer
+          description: User's session timeout period in seconds.
+        odsCode:
+          type: string
+          description: Unique code that identifies a user's GP practice
+        token:
+          type: string
+          description: User's session CsrfToken
+        nhsNumber:
+          type: string
+          description: User's NHS number
+        accessToken:
+          type: string
+          description: User's access token which allows NHS Login to identify them
+        serviceJourneyRules:
+          $ref: servicejourneyrules.yaml#/components/schemas/ServiceJourneyRulesResponse

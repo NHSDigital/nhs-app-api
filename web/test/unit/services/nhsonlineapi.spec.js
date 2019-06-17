@@ -1,5 +1,5 @@
 import axios from 'axios';
-import NHSOnlineApi from '@/services/nhsonlineapi';
+import NHSOnlineApi from '@/services/v1nhsonlineapi';
 
 describe('services/nhsonlineapi', () => {
   const deferred = {

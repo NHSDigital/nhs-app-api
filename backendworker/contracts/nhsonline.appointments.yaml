@@ -1,28 +1,32 @@
-swagger: "2.0"
-
+openapi: 3.0.2
 info:
   version: 0.0.7
   title: NHS App Sub-API - Appointments
-  description: NHS App Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
-
+  description: NHS App Sub-API - endpoints pertaining to appointments. All require an
+    NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
   /appointment-slots:
     get:
       tags:
         - appointment-slots
       summary: Gets a list of available appointments for the logged on user.
-      description: Returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      produces:
-        - application/json
+      description: Returns lists of clinicians, appointment sessions, locations and
+        available appointment slots for the logged in user. Requires
+        NHSO-Session-Id cookie (obtained from session endpoint).
       responses:
         200:
-          description: Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots.
-          schema:
-            $ref: "#/definitions/AppointmentSlotsResponse"
+          description: Returns list of available slots and associated meta data. Returns
+            empty collection of slots if GP system does not return a list of
+            available slots.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentSlotsResponse"
         401:
           description: User session has expired.
         403:
-          description: The patient does not have the necessary permissions within the GP system.
+          description: The patient does not have the necessary permissions within the GP
+            system.
         500:
           description: An unexpected error occurred processing the request.
         502:
@@ -34,16 +38,17 @@ paths:
       tags:
         - appointments
       summary: Cancels an upcoming appointment for the logged on user.
-      description: Cancels a specified appointment for the logged on user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          name: AppointmentCancelRequest
-          required: true
-          description: Details of the appointment to be cancelled, along with reason for the booking being cancelled.
-          schema:
-            $ref: "#/definitions/AppointmentCancelRequest"
+      description: Cancels a specified appointment for the logged on user. Requires
+        NHSO-Session-Id cookie (obtained from session endpoint).
+      requestBody:
+        x-name: AppointmentCancelRequest
+        description: Details of the appointment to be cancelled, along with reason for the booking being cancelled.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentCancelRequest"
+        
       responses:
         204:
           description: Successfully cancelled the specified appointment.
@@ -52,9 +57,11 @@ paths:
         401:
           description: User session has expired.
         403:
-          description: The patient does not have the necessary permissions within the GP system.
+          description: The patient does not have the necessary permissions within the GP
+            system.
         409:
-          description: The specified appointment does not exist or is not in a suitable state to be cancelled.
+          description: The specified appointment does not exist or is not in a suitable
+            state to be cancelled.
         461:
           description: It is too late to cancel this appointment.
         500:
@@ -67,20 +74,26 @@ paths:
       tags:
         - appointments
       summary: Gets a list of existing appointments for the logged on user.
-      description: Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      produces:
-        - application/json
+      description: Returns list of booked appointments for the logged on user, and
+        associated metadata including list of cancellation reasons that can be
+        used to cancel upcoming appointments. Requires NHSO-Session-Id cookie
+        (obtained from session endpoint).
       responses:
-        200:
-          description: Returns list of booked appointments and associated meta data. Returns empty collection of appointments if GP system does not return a list of appointmetns.
-          schema:
-            $ref: "#/definitions/AppointmentsResponse"
+        "200":
+          description: Returns list of booked appointments and associated meta data.
+            Returns empty collection of appointments if GP system does not
+            return a list of appointmetns.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentsResponse"
         400:
           description: Bad request. A querystring parameter is not in the expected format.
         401:
           description: User session has expired.
         403:
-          description: The patient does not have the necessary permissions within the GP system.
+          description: The patient does not have the necessary permissions within the GP
+            system.
         500:
           description: An unexpected error occurred processing the request.
         502:
@@ -91,16 +104,19 @@ paths:
       tags:
         - appointments
       summary: Creates a GP Appointment for the logged on user.
-      description: Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          name: AppointmentBookRequest
-          required: true
-          description: Details of the appointment slot to be booked, along with reasons for the booking being made.
-          schema:
-            $ref: "#/definitions/AppointmentBookRequest"
+      description: Books an appointment slot for the logged on user, given a slot
+        identifier. Identifiers of available slots can be obtained using the
+        appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained
+        from session endpoint).
+      requestBody:
+        x-name: AppointmentBookRequest
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentBookRequest"
+        description: Details of the appointment slot to be booked, along with reasons for
+          the booking being made.
+        required: true
       responses:
         201:
           description: Appointment successfully created.
@@ -109,203 +125,216 @@ paths:
         401:
           description: User session has expired.
         403:
-          description: The patient does not have the necessary permissions within the GP system.
+          description: The patient does not have the necessary permissions within the GP
+            system.
         409:
           description: Conflict. The chosen appointment slot is not available for booking.
         460:
-          description: The patient has reached the limit of pending appointments that may be booked.
+          description: The patient has reached the limit of pending appointments that may
+            be booked.
         500:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
         504:
           description: Timeout when calling upstream system.
-definitions:
-  AppointmentBookRequest:
-    type: object
-    required:
-      - slotId
-      - bookingReason
-    properties:
-      slotId:
-        type: string
-        description: Identifier of appointment slot to be booked.
-        minLength: 1
-      bookingReason:
-        type: string
-        description: Reason for booking appointment. e.g. symptoms being experienced by the patient.
-        minLength: 1
-        maxLength: 150
-      startTime:
-        type: string
-        format: date-time
-        description: Appointment Start Date Time.
-      endTime:
-        type: string
-        format: date-time
-        description: Appointment End Date Time.
-      telephoneNumber:
-        type: string
-        description: Patient's phone number for telephone appointment.
-  AppointmentCancelRequest:
-    type: object
-    required:
-      - appointmentId
-    properties:
-      appointmentId:
-        type: string
-        description: Identifier of the appointment to be cancelled.
-        minLength: 1
-      cancellationReasonId:
-        type: string
-        description: Identifier of the reason for the appointment being cancelled. Array of valid cancellation reasons is returned when requesting a user's current appointments.
-  AppointmentsResponse:
-    type: object
-    properties:
-      upcomingAppointments:
-        type: array
-        description: Array of booked upcoming Appointments.
-        items:
-          $ref: '#/definitions/UpcomingAppointment'
-      pastAppointments:
-        type: array
-        description: Array of past Appointments.
-        items:
-          $ref: '#/definitions/PastAppointment'
-      cancellationReasons:
-        type: array
-        description: Array of Cancellation Reasons.
-        items:
-          $ref: '#/definitions/CancellationReason'
-      disableCancellation:
-        type: boolean
-        description: Indicates whether appointment cancellation is disabled.
-      pastAppointmentsEnabled:
-        type: boolean
-        description: Indicates whether past appointments are enabled.
-  AppointmentSlotsResponse:
-    type: object
-    properties:
-      telephoneNumbers:
-        type: array
-        description: Patient's telephone numbers.
-        items:
-          $ref: '#/definitions/PatientTelephoneNumber'
-      guidanceMessage:
-        type: string
-        description: Guidance message from GP practice explaining which appointment slot to book.
-      bookingReasonNecessity:
-        type: string
-        enum: [NotAllowed, Optional, Mandatory]
-        description: Indicates whether the patient can supply a booking reason when making an appointment.
-      slots:
-        type: array
-        description: Available Appointment Slots.
-        items:
-          $ref: '#/definitions/Slot'
-  UpcomingAppointment:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Appointment Identifier.
-      type:
-        type: string
-        description: Type of appointment slot, e.g. "Baby Clinics".
-      sessionName:
-        type: string
-        description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
-      startTime:
-        type: string
-        format: date-time
-        description: Appointment Start Date Time.
-      endTime:
-        type: string
-        format: date-time
-        description: Appointment End Date Time.
-      location:
-        type: string
-        description: Physical location of the appointment.
-      clinicians:
-        type: array
-        description: Array of Clinicians, accounts for joint sessions.
-        items:
+components:
+  schemas:
+    AppointmentBookRequest:
+      type: object
+      required:
+        - slotId
+        - bookingReason
+      properties:
+        slotId:
           type: string
-      disableCancellation:
-        type: boolean
-        description: Indicates the appointment cannot be cancelled.
-  PastAppointment:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Appointment Identifier.
-      type:
-        type: string
-        description: Type of appointment slot, e.g. "Baby Clinics".
-      sessionName:
-        type: string
-        description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
-      startTime:
-        type: string
-        format: date-time
-        description: Appointment Start Date Time.
-      endTime:
-        type: string
-        format: date-time
-        description: Appointment End Date Time.
-      location:
-        type: string
-        description: Physical location of the appointment.
-      clinicians:
-        type: array
-        description: Array of Clinicians, accounts for joint sessions.
-        items:
+          description: Identifier of appointment slot to be booked.
+          minLength: 1
+        bookingReason:
           type: string
-  CancellationReason:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Cancellation Reason Identifier.
-      displayName:
-        type: string
-        description: Cancellation Reason Description.
-  PatientTelephoneNumber:
-    type: object
-    properties:
-      telephoneNumber:
-        type: string
-        description: Patient's telephone number.
-  Slot:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Slot Identifier.
-      type: 
-        type: string
-        description: Type of appointment slot, e.g. "Baby Clinics".
-      sessionName:
-        type: string
-        description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
-      startTime:
-        type: string
-        format: date-time
-        description: Appointment Slot Start Date Time.
-      endTime:
-        type: string
-        format: date-time
-        description: Appointment Slot End Date Time.
-      location:
-        type: string
-        description: Location of the appointment slot
-      clinicians:
-        type: array
-        description: Array of Clinicians, accounts for joint sessions.
-        items:
+          description: Reason for booking appointment. e.g. symptoms being experienced by
+            the patient.
+          minLength: 1
+          maxLength: 150
+        startTime:
           type: string
-      channel:
-        type: string
-        enum: [Unknown, Telephone]
-        description: Indicates slot channel type supplied by GP practice
+          format: date-time
+          description: Appointment Start Date Time.
+        endTime:
+          type: string
+          format: date-time
+          description: Appointment End Date Time.
+        telephoneNumber:
+          type: string
+          description: Patient's phone number for telephone appointment.
+    AppointmentCancelRequest:
+      type: object
+      required:
+        - appointmentId
+      properties:
+        appointmentId:
+          type: string
+          description: Identifier of the appointment to be cancelled.
+          minLength: 1
+        cancellationReasonId:
+          type: string
+          description: Identifier of the reason for the appointment being cancelled. Array
+            of valid cancellation reasons is returned when requesting a user's
+            current appointments.
+    AppointmentsResponse:
+      type: object
+      properties:
+        upcomingAppointments:
+          type: array
+          description: Array of booked upcoming Appointments.
+          items:
+            $ref: "#/components/schemas/UpcomingAppointment"
+        pastAppointments:
+          type: array
+          description: Array of past Appointments.
+          items:
+            $ref: "#/components/schemas/PastAppointment"
+        cancellationReasons:
+          type: array
+          description: Array of Cancellation Reasons.
+          items:
+            $ref: "#/components/schemas/CancellationReason"
+        disableCancellation:
+          type: boolean
+          description: Indicates whether appointment cancellation is disabled.
+        pastAppointmentsEnabled:
+          type: boolean
+          description: Indicates whether past appointments are enabled.
+    AppointmentSlotsResponse:
+      type: object
+      properties:
+        telephoneNumbers:
+          type: array
+          description: Patient's telephone numbers.
+          items:
+            $ref: "#/components/schemas/PatientTelephoneNumber"
+        guidanceMessage:
+          type: string
+          description: Guidance message from GP practice explaining which appointment slot
+            to book.
+        bookingReasonNecessity:
+          type: string
+          enum:
+            - NotAllowed
+            - Optional
+            - Mandatory
+          description: Indicates whether the patient can supply a booking reason when
+            making an appointment.
+        slots:
+          type: array
+          description: Available Appointment Slots.
+          items:
+            $ref: "#/components/schemas/Slot"
+    UpcomingAppointment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Appointment Identifier.
+        type:
+          type: string
+          description: Type of appointment slot, e.g. "Baby Clinics".
+        sessionName:
+          type: string
+          description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
+        startTime:
+          type: string
+          format: date-time
+          description: Appointment Start Date Time.
+        endTime:
+          type: string
+          format: date-time
+          description: Appointment End Date Time.
+        location:
+          type: string
+          description: Physical location of the appointment.
+        clinicians:
+          type: array
+          description: Array of Clinicians, accounts for joint sessions.
+          items:
+            type: string
+        disableCancellation:
+          type: boolean
+          description: Indicates the appointment cannot be cancelled.
+    PastAppointment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Appointment Identifier.
+        type:
+          type: string
+          description: Type of appointment slot, e.g. "Baby Clinics".
+        sessionName:
+          type: string
+          description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
+        startTime:
+          type: string
+          format: date-time
+          description: Appointment Start Date Time.
+        endTime:
+          type: string
+          format: date-time
+          description: Appointment End Date Time.
+        location:
+          type: string
+          description: Physical location of the appointment.
+        clinicians:
+          type: array
+          description: Array of Clinicians, accounts for joint sessions.
+          items:
+            type: string
+    CancellationReason:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Cancellation Reason Identifier.
+        displayName:
+          type: string
+          description: Cancellation Reason Description.
+    PatientTelephoneNumber:
+      type: object
+      properties:
+        telephoneNumber:
+          type: string
+          description: Patient's telephone number.
+    Slot:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Slot Identifier.
+        type:
+          type: string
+          description: Type of appointment slot, e.g. "Baby Clinics".
+        sessionName:
+          type: string
+          description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
+        startTime:
+          type: string
+          format: date-time
+          description: Appointment Slot Start Date Time.
+        endTime:
+          type: string
+          format: date-time
+          description: Appointment Slot End Date Time.
+        location:
+          type: string
+          description: Location of the appointment slot
+        clinicians:
+          type: array
+          description: Array of Clinicians, accounts for joint sessions.
+          items:
+            type: string
+        channel:
+          type: string
+          enum:
+            - Unknown
+            - Telephone
+          description: Indicates slot channel type supplied by GP practice

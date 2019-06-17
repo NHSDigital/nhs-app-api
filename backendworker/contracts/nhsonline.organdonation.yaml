@@ -1,9 +1,9 @@
-swagger: "2.0"
-
+openapi: 3.0.2
 info:
   version: 0.0.7
   title: NHS App Sub-API - Organ Donation
-  description: NHS App Sub-API - endpoints pertaining to Organ Donation -  All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+  description: NHS App Sub-API - endpoints pertaining to Organ Donation -  All require an
+    NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
   /organdonation:
     get:
@@ -11,54 +11,57 @@ paths:
         - organDonation
       summary: Get the existing organ donation and user demographic information.
       description: Returns the user's organ donation record.
-      consumes:
-        - application/json
+      x-header: Content-Type
       responses:
-        200:
+        "200":
           description: Successfully retrieved the user's organ donation record.
-          schema:
-            $ref: '#/definitions/organDonationRegistration'
-        401:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/organDonationRegistration"
+        "401":
           description: User session missing or expired.
-        403:
+        "403":
           description: User forbidden access to GP System demographics.
-        409:
+        "409":
           description: Conflicts on organ donation record.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-          schema:
-            $ref: '#/definitions/apiErrorResponse'
-        504:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/apiErrorResponse"
+        "504":
           description: Timeout when calling upstream system.
     post:
       tags:
         - organDonation
       summary: Creates a user's organ donation record
-      description: Creates the user's organ donation record and returns the record identifier.
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          required: true
-          name: 'organDonationRegistrationRequest'
-          description: Details of the organ donation registration request.
-          schema:
-            $ref: '#/definitions/organDonationRegistrationRequest'
+      description: Creates the user's organ donation record and returns the record
+        identifier.
+      requestBody:
+        $ref: "#/components/requestBodies/organDonationRegistrationRequest"
       responses:
         201:
-          description: "Successfully created the organ donation record and returned the record identifier."
-          schema:
-            type: "object"
-            properties:
-              identifier:
-                type: "string"
-                description: "User's organ donation identifier."
-              state:
-                type: string
-                enum: [NotFound, Ok, Conflicted]
-                description: User's organ donation record state
+          description: Successfully created the organ donation record and returned the
+            record identifier.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    description: User's organ donation identifier.
+                  state:
+                    type: string
+                    enum:
+                      - NotFound
+                      - Ok
+                      - Conflicted
+                    description: User's organ donation record state
         400:
           description: Bad request. Supplied request is incomplete or invalid.
         401:
@@ -69,37 +72,39 @@ paths:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
-          schema:
-            $ref: '#/definitions/apiErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/apiErrorResponse"
         504:
           description: Timeout when calling upstream system.
     put:
       tags:
         - organDonation
       summary: Amends a user's organ donation record
-      description: Amends the user's organ donation record and returns the record identifier.
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          required: true
-          name: 'organDonationRegistrationRequest'
-          description: Details of the organ donation registration request.
-          schema:
-            $ref: '#/definitions/organDonationRegistrationRequest'
+      description: Amends the user's organ donation record and returns the record
+        identifier.
+      requestBody:
+        $ref: "#/components/requestBodies/organDonationRegistrationRequest"
       responses:
         200:
-          description: "Successfully amended the organ donation record and returned the record identifier."
-          schema:
-            type: "object"
-            properties:
-              identifier:
-                type: "string"
-                description: "User's organ donation identifier."
-              state:
-                type: string
-                enum: [NotFound, Ok, Conflicted]
-                description: User's organ donation record state
+          description: Successfully amended the organ donation record and returned the
+            record identifier.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    description: User's organ donation identifier.
+                  state:
+                    type: string
+                    enum:
+                      - NotFound
+                      - Ok
+                      - Conflicted
+                    description: User's organ donation record state
         400:
           description: Bad request. Supplied request is incomplete or invalid.
         401:
@@ -108,8 +113,10 @@ paths:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
-          schema:
-            $ref: '#/definitions/apiErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/apiErrorResponse"
         504:
           description: Timeout when calling upstream system.
     delete:
@@ -117,18 +124,17 @@ paths:
         - organDonation
       summary: Delete a user's organ donation record
       description: Delete the user's organ donation record.
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          required: true
-          name: 'organDonationWithdrawRequest'
-          description: Details of the organ donation registration withdraw request.
-          schema:
-            $ref: '#/definitions/organDonationWithdrawRequest'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/organDonationWithdrawRequest"
+        description: Details of the organ donation registration withdraw request.
+        required: true
+        x-name: organDonationWithdrawRequest
       responses:
         200:
-          description: "Successfully deleted the organ donation record."
+          description: Successfully deleted the organ donation record.
         400:
           description: Bad request. Supplied request is incomplete or invalid.
         401:
@@ -137,214 +143,85 @@ paths:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
-          schema:
-            $ref: '#/definitions/apiErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/apiErrorResponse"
         504:
           description: Timeout when calling upstream system.
   /organdonation/referencedata:
     get:
       tags:
         - organDonation
-      summary: Get the reference data required for registering an organ donation decision.
-      description: Returns the reference data for titles, genders, religions, ethnicities and withdraw reasons.
-      produces:
-        - application/json
+      summary: Get the reference data required for registering an organ donation
+        decision.
+      description: Returns the reference data for titles, genders, religions, ethnicities
+        and withdraw reasons.
       responses:
-        200:
+        "200":
           description: Successfully retrieved the organ donation reference data.
-          schema:
-            $ref: '#/definitions/organDonationReferenceData'
-        401:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/organDonationReferenceData"
+        "401":
           description: User session missing or expired.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-          schema:
-            $ref: '#/definitions/apiErrorResponse'
-        504:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/apiErrorResponse"
+        "504":
           description: Timeout when calling upstream system.
-definitions:
-  organDonationReferenceData:
-    type: object
-    properties:
-      ethnicities:
-        type: array
-        items:
-          $ref: '#/definitions/selectOption'
-      genders:
-        type: array
-        items:
-          $ref: '#/definitions/selectOption'
-      titles:
-        type: array
-        items:
-          $ref: '#/definitions/selectOption'
-      religions:
-        type: array
-        items:
-          $ref: '#/definitions/selectOption'
-      withdrawReasons:
-        type: array
-        items:
-          $ref: '#/definitions/selectOption'
-  additionalDetails:
-    type: object
-    properties:
-      religionId:
-        type: string
-        description: The identifier for the select religion.
-      ethnicityId:
-        type: string
-        description: The identifier for the select ethnicity.
-  organDonationRegistration:
-    type: object
-    description: Details of the organ donation registration request.
-    properties:
-      identifier:
-        type: string
-        description: User's organ donation identifier.
-      nhsNumber:
-        type: string
-        description: User's nhs number from the GP System.
-      nameFull:
-        type: string
-        description: User's full name.
-      name:
-        $ref: '#/definitions/usersName'
-      gender:
-        type: string
-        description: User's gender from the GP System.
-      dateOfBirth:
-        type: string
-        format: date
-        description: User's date of birth from the GP System.
-      addressFull:
-        type: string
-        description: User's full address.
-      address:
-        $ref: '#/definitions/usersAddress'
-      decision:
-        type: string
-        enum: [Unknown, OptIn, OptOut]
-        description: User's organ donation decision.
-      decisionDetails:
-        $ref: '#/definitions/decisionDetails'
-      faithDeclaration:
-        type: string
-        enum: [NotStated, Yes, No]
-        description: User's faith decision.
-      state:
-        type: string
-        enum: [NotFound, Ok, Conflicted]
-        description: User's organ donation record state
-  organDonationStoreRegistration:
-    type: object
-    description: Details of the organ donation store registration.
-    properties:
-      identifier:
-        type: string
-        description: User's organ donation identifier.
-      nhsNumber:
-        type: string
-        description: User's nhs number from the GP System.
-      name:
-        $ref: '#/definitions/usersName'
-      gender:
-        type: string
-        description: User's gender from the GP System.
-      dateOfBirth:
-        type: string
-        format: date
-        description: User's date of birth from the GP System.
-      addressFull:
-        type: string
-        description: User's full address.
-      address:
-        $ref: '#/definitions/usersAddress'
-      decision:
-        type: string
-        enum: [OptIn, OptOut]
-        description: User's organ donation decision.
-      decisionDetails:
-        $ref: '#/definitions/decisionDetails'
-      faithDeclaration:
-        type: string
-        enum: [NotStated, Yes, No]
-        description: User's faith decision.
-  selectOption:
-    type: object
-    description: Contains data for a select box option
-    properties:
-      id:
-        type: string
-        description: The identifier for the select option.
-      displayName:
-        type: string
-        description: The value to be displayed to the user.
-  usersName:
-    type: object
-    description: User's name object.
-    properties:
-      title:
-        type: string
-        description: User's title from the GP System.
-      givenName:
-        type: string
-        description: User's given name from the GP System.
-      surname:
-        type: string
-        description: User's surname from the GP System.
-  usersAddress:
-    type: object
-    description: User's address from the GP System.
-    properties:
-      houseName:
-        type: string
-        description: User's house name from the GP System.
-      numberStreet:
-        type: string
-        description: User's house number and street from the GP System.
-      village:
-        type: string
-        description: User's village from the GP System.
-      town:
-        type: string
-        description: User's town from the GP System.
-      county:
-        type: string
-        description: User's county from the GP System.
-      postcode:
-        type: string
-        description: User's postcode from the GP System.
-  decisionDetails:
-    type: object
-    description: User's organ donation decision.
-    properties:
-      all:
-        type: boolean
-        description: User's agreed to donate all organs.
-      choices:
-        description: User's individual organ donation choices.
-        additionalProperties:
-          type: string
-          enum: [NotStated, Yes, No]
-          description: Value of the choice.
-        example:
-          heart: Yes
-          lungs: NotStated
-          kidney: No
-  organDonationRegistrationRequest:
-    type: object
-    description: Details of the organ donation registration request.
-    properties:
-      registration:
-        $ref: '#/definitions/organDonationStoreRegistration'
-      additionalDetails:
-        $ref: '#/definitions/additionalDetails'
-  organDonationWithdrawRequest:
+components:
+  requestBodies:
+    organDonationRegistrationRequest:
+      x-name: organDonationRegistrationRequest
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/organDonationRegistrationRequest"
+      description: Details of the organ donation registration request.
+      required: true
+  schemas:
+    organDonationReferenceData:
       type: object
-      description: Details of the organ donation registration withdraw request.
+      properties:
+        ethnicities:
+          type: array
+          items:
+            $ref: "#/components/schemas/selectOption"
+        genders:
+          type: array
+          items:
+            $ref: "#/components/schemas/selectOption"
+        titles:
+          type: array
+          items:
+            $ref: "#/components/schemas/selectOption"
+        religions:
+          type: array
+          items:
+            $ref: "#/components/schemas/selectOption"
+        withdrawReasons:
+          type: array
+          items:
+            $ref: "#/components/schemas/selectOption"
+    additionalDetails:
+      type: object
+      properties:
+        religionId:
+          type: string
+          description: The identifier for the select religion.
+        ethnicityId:
+          type: string
+          description: The identifier for the select ethnicity.
+    organDonationRegistration:
+      type: object
+      description: Details of the organ donation registration request.
       properties:
         identifier:
           type: string
@@ -352,8 +229,11 @@ definitions:
         nhsNumber:
           type: string
           description: User's nhs number from the GP System.
+        nameFull:
+          type: string
+          description: User's full name.
         name:
-          $ref: '#/definitions/usersName'
+          $ref: "#/components/schemas/usersName"
         gender:
           type: string
           description: User's gender from the GP System.
@@ -365,18 +245,185 @@ definitions:
           type: string
           description: User's full address.
         address:
-          $ref: '#/definitions/usersAddress'
+          $ref: "#/components/schemas/usersAddress"
+        decision:
+          type: string
+          enum:
+            - Unknown
+            - OptIn
+            - OptOut
+          description: User's organ donation decision.
+        decisionDetails:
+          $ref: "#/components/schemas/decisionDetails"
+        faithDeclaration:
+          type: string
+          enum:
+            - NotStated
+            - Yes
+            - No
+          description: User's faith decision.
+        state:
+          type: string
+          enum:
+            - NotFound
+            - Ok
+            - Conflicted
+          description: User's organ donation record state
+    organDonationStoreRegistration:
+      type: object
+      description: Details of the organ donation store registration.
+      properties:
+        identifier:
+          type: string
+          description: User's organ donation identifier.
+        nhsNumber:
+          type: string
+          description: User's nhs number from the GP System.
+        name:
+          $ref: "#/components/schemas/usersName"
+        gender:
+          type: string
+          description: User's gender from the GP System.
+        dateOfBirth:
+          type: string
+          format: date
+          description: User's date of birth from the GP System.
+        addressFull:
+          type: string
+          description: User's full address.
+        address:
+          $ref: "#/components/schemas/usersAddress"
+        decision:
+          type: string
+          enum:
+            - OptIn
+            - OptOut
+          description: User's organ donation decision.
+        decisionDetails:
+          $ref: "#/components/schemas/decisionDetails"
+        faithDeclaration:
+          type: string
+          enum:
+            - NotStated
+            - Yes
+            - No
+          description: User's faith decision.
+    selectOption:
+      type: object
+      description: Contains data for a select box option
+      properties:
+        id:
+          type: string
+          description: The identifier for the select option.
+        displayName:
+          type: string
+          description: The value to be displayed to the user.
+    usersName:
+      type: object
+      description: User's name object.
+      properties:
+        title:
+          type: string
+          description: User's title from the GP System.
+        givenName:
+          type: string
+          description: User's given name from the GP System.
+        surname:
+          type: string
+          description: User's surname from the GP System.
+    usersAddress:
+      type: object
+      description: User's address from the GP System.
+      properties:
+        houseName:
+          type: string
+          description: User's house name from the GP System.
+        numberStreet:
+          type: string
+          description: User's house number and street from the GP System.
+        village:
+          type: string
+          description: User's village from the GP System.
+        town:
+          type: string
+          description: User's town from the GP System.
+        county:
+          type: string
+          description: User's county from the GP System.
+        postcode:
+          type: string
+          description: User's postcode from the GP System.
+    decisionDetails:
+      type: object
+      description: User's organ donation decision.
+      properties:
+        all:
+          type: boolean
+          description: User's agreed to donate all organs.
+        choices:
+          description: User's individual organ donation choices.
+          additionalProperties:
+            type: string
+            enum:
+              - NotStated
+              - Yes
+              - No
+            description: Value of the choice.
+          example:
+            heart: Yes
+            lungs: NotStated
+            kidney: No
+    organDonationRegistrationRequest:
+      type: object
+      description: Details of the organ donation registration request.
+      properties:
+        registration:
+          $ref: "#/components/schemas/organDonationStoreRegistration"
+        additionalDetails:
+          $ref: "#/components/schemas/additionalDetails"
+    organDonationWithdrawRequest:
+      type: object
+      description: Details of the organ donation registration withdraw request.
+      properties:
+        identifier:
+          type: string
+          description: User's organ donation identifier.
+        nhsNumber:
+          type: string
+          description: User's nhs number from the GP System.
+        name:
+          $ref: "#/components/schemas/usersName"
+        gender:
+          type: string
+          description: User's gender from the GP System.
+        dateOfBirth:
+          type: string
+          format: date
+          description: User's date of birth from the GP System.
+        addressFull:
+          type: string
+          description: User's full address.
+        address:
+          $ref: "#/components/schemas/usersAddress"
         withdrawReasonId:
           type: string
           description: withdraw reason code.
-      required: [identifier, nhsNumber, name, gender, dateOfBirth, addressFull, address, withdrawReasonId]
-  apiErrorResponse:
-    type: object
-    description: error response from backend api.
-    properties:
-      errorCode:
-        type: integer
-        description: error code.
-      errorMessage:
-        type: string
-        description: error message.
+      required:
+        - identifier
+        - nhsNumber
+        - name
+        - gender
+        - dateOfBirth
+        - addressFull
+        - address
+        - withdrawReasonId
+    apiErrorResponse:
+      type: object
+      description: error response from backend api.
+      properties:
+        errorCode:
+          type: integer
+          description: error code.
+        errorMessage:
+          type: string
+          description: error message.

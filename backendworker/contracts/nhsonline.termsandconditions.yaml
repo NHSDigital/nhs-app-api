@@ -1,10 +1,8 @@
-﻿swagger: "2.0"
-
+﻿openapi: 3.0.2
 info:
   version: 0.0.7
   title: NHS App Sub-API - Terms and Conditions
   description: NHS App Sub-API - endpoints pertaining to terms and conditions. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
-
 paths:
   /consent:
     get:
@@ -12,13 +10,14 @@ paths:
         - termsAndConditions
       summary: Gets the patient consent for the logged on user.
       description: Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      produces:
-        - application/json
+     
       responses:
         200:
           description: Returns patient consent data for the logged in user.
-          schema:
-            $ref: '#/definitions/ConsentResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentResponse'
         463:
           description: Unable to fetch consent at this time.
     post:
@@ -26,47 +25,47 @@ paths:
         - termsAndConditions
       summary: Records patient consent and date of consent
       description: Records whether the logged in user has given their consent to use the app and date and time of consent
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          name: ConsentRequest
-          required: true
-          description: Object indicating whether consent has been granted, and the date the request was made.
-          schema:
-            $ref: "#/definitions/ConsentRequest"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsentRequest"
+        description: Object indicating whether consent has been granted, and the date the request was made.
+        required: true
+        x-name: ConsentRequest
       responses:
         201:
           description: Appointment successfully created.
         462:
           description: Unable to record consent at this time.
-definitions:
-  ConsentResponse:
-    type: object
-    required:
-      - consentGiven
-    properties:
-      updatedConsentRequired:
-        type: boolean
-        description: Flag indicating whether the terms and conditions have changed since last consent
-      consentGiven:
-        type: boolean
-        description: Flag indicating whether the user has consented to the terms and conditions
-      analyticsCookieAccepted:
-        type: boolean
-        description: Flag indicating whether the user has consented to the use of analytics
-  ConsentRequest:
-    type: object
-    required:
-      - consentGiven
-      - analyticsCookieAccepted
-    properties:
-      consentGiven:
-        type: boolean
-        description: Flag indicating whether the user has consented to the terms and conditions
-      analyticsCookieAccepted:
-        type: boolean
-        description: Flag indicating whether the user has consented to the use of analytics
-      updatingConsent:
-        type: boolean
-        description: Flag indicating whether the user is consenting to updated terms and conditions
+components:
+  schemas:
+    ConsentResponse:
+      type: object
+      required:
+        - consentGiven
+      properties:
+        updatedConsentRequired:
+          type: boolean
+          description: Flag indicating whether the terms and conditions have changed since last consent
+        consentGiven:
+          type: boolean
+          description: Flag indicating whether the user has consented to the terms and conditions
+        analyticsCookieAccepted:
+          type: boolean
+          description: Flag indicating whether the user has consented to the use of analytics
+    ConsentRequest:
+      type: object
+      required:
+        - consentGiven
+        - analyticsCookieAccepted
+      properties:
+        consentGiven:
+          type: boolean
+          description: Flag indicating whether the user has consented to the terms and conditions
+        analyticsCookieAccepted:
+          type: boolean
+          description: Flag indicating whether the user has consented to the use of analytics
+        updatingConsent:
+          type: boolean
+          description: Flag indicating whether the user is consenting to updated terms and conditions

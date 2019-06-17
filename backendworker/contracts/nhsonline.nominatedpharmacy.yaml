@@ -1,52 +1,52 @@
-swagger: "2.0"
-
+openapi: 3.0.2
 info:
   version: 0.0.1
   title: NHS App Sub-API - Nominated Pharmacy
-  description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require NHSO-Session-Id cookie in header from session endpoint.
-
+  description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require
+    NHSO-Session-Id cookie in header from session endpoint.
 paths:
   /nominated-pharmacy:
     get:
       tags:
         - pharmacy
       summary: Gets the nominated pharmacy detail for a given patient.
-      description: Returns the nominated pharmacy detail for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint.
-      produces:
-        - application/json
+      description: Returns the nominated pharmacy detail for the logged in user. Requires
+        NHSO-Session-Id cookie in header from session endpoint.
       responses:
-        200:
-          description: Returns a pharmacy object with its associated meta data. Returns an empty pharmacy if no nominated pharmacy was found.
-          schema:
-            $ref: "#/definitions/PharmacyDetailsResponse"
-        401:
+        "200":
+          description: Returns a pharmacy object with its associated meta data. Returns an
+            empty pharmacy if no nominated pharmacy was found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PharmacyDetailsResponse"
+        "401":
           description: User session missing or expired.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
     post:
       tags:
         - pharmacy
       summary: Update nominated pharmacy for a patient.
       description: Returns http response.
-      consumes:
-        - "application/json"
-      parameters:
-        - in: body
-          name: UpdateNominatedPharmacyRequest
-          required: true
-          description: Updates a patients nominated pharmacy to the submitted OdsCode
-          schema:
-            type: "object"
-            required:
-              - "odsCode"
-            properties:
-              odsCode:
-                type: "string"
-                description: New ods code a patient has selected
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - odsCode
+              properties:
+                odsCode:
+                  type: string
+                  description: New ods code a patient has selected
+        description: Updates a patients nominated pharmacy to the submitted OdsCode
+        required: true
+        x-name: UpdateNominatedPharmacyRequest
       responses:
         200:
           description: Nominated pharmacy successfully updated.
@@ -55,70 +55,71 @@ paths:
         401:
           description: User session missing or expired.
         403:
-          description: Patient's nominated pharmacy cannot be updated because the feature is disabled.
+          description: Patient's nominated pharmacy cannot be updated because the feature
+            is disabled.
         500:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
         504:
           description: Timeout when calling upstream system.
-definitions:
-  PharmacyDetailsResponse:
-    type: object
-    properties:
-      nominatedPharmacyEnabled:
-        type: boolean
-        description: Returns true if a patients pharmacy is a valid type to show
-      pharmacyDetails:
-        $ref: "#/definitions/PharmacyDetails"
-  OpeningTime:
-    type: object
-    properties:
-      day:
-        type: string
-        description: Day of the week.
-      time:
-        type: string
-        description: Opening and closing time.
-  PharmacyDetails:
-    type: object
-    properties:
-      pharmacyName:
-        type: string
-        description: Name of the nominated pharmacy.
-      pharmacyType:
-        type: string
-        description: Type of the nominated pharmacy.
-      pharmacySubType:
-        type: string
-        description: Subtype of the nominated pharmacy.
-      url:
-        type: string
-        description: The main organisation's website URL.
-      addressLine1:
-        type: string
-        description: First line of address.
-      addressLine2:
-        type: string
-        description: Second line of address.
-      addressLine3:
-        type: string
-        description: Third line of address.
-      city:
-        type: string
-        description: Name of the city.
-      county:
-        type: string
-        description: Name of the county.
-      postcode:
-        type: string
-        description: Postcode.
-      telephoneNumber:
-        type: string
-        description: Telephone number of the nominated pharmacy.
-      openingTimes:
-        type: array
-        description: An array of opening times.
-        items:
-          $ref: '#/definitions/OpeningTime'
-
+components:
+  schemas:
+    PharmacyDetailsResponse:
+      type: object
+      properties:
+        nominatedPharmacyEnabled:
+          type: boolean
+          description: Returns true if a patients pharmacy is a valid type to show
+        pharmacyDetails:
+          $ref: "#/components/schemas/PharmacyDetails"
+    OpeningTime:
+      type: object
+      properties:
+        day:
+          type: string
+          description: Day of the week.
+        time:
+          type: string
+          description: Opening and closing time.
+    PharmacyDetails:
+      type: object
+      properties:
+        pharmacyName:
+          type: string
+          description: Name of the nominated pharmacy.
+        pharmacyType:
+          type: string
+          description: Type of the nominated pharmacy.
+        pharmacySubType:
+          type: string
+          description: Subtype of the nominated pharmacy.
+        url:
+          type: string
+          description: The main organisation's website URL.
+        addressLine1:
+          type: string
+          description: First line of address.
+        addressLine2:
+          type: string
+          description: Second line of address.
+        addressLine3:
+          type: string
+          description: Third line of address.
+        city:
+          type: string
+          description: Name of the city.
+        county:
+          type: string
+          description: Name of the county.
+        postcode:
+          type: string
+          description: Postcode.
+        telephoneNumber:
+          type: string
+          description: Telephone number of the nominated pharmacy.
+        openingTimes:
+          type: array
+          description: An array of opening times.
+          items:
+            $ref: "#/components/schemas/OpeningTime"

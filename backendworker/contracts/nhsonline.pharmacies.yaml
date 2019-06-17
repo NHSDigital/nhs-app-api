@@ -1,10 +1,9 @@
-swagger: "2.0"
-
+openapi: 3.0.2
 info:
   version: 0.0.1
   title: NHS App Sub-API - Pharmacies
-  description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require NHSO-Session-Id cookie in header from session endpoint.
-
+  description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require
+    NHSO-Session-Id cookie in header from session endpoint.
 paths:
   /pharmacies:
     get:
@@ -16,70 +15,74 @@ paths:
         - in: query
           name: searchTerm
           required: true
-          description: Search term to search for pharmacies by postcode, town or pharmacy name.
-          type: string
+          description: Search term to search for pharmacies by postcode, town or pharmacy
+            name.
+          schema:
+            type: string
       responses:
         200:
           description: Search Executed Successfully
-          schema:
-            $ref: "#/definitions/PharmacySearchResponse"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PharmacySearchResponse"
         400:
           description: Bad request. Supplied request is invalid.
         500:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
-
-definitions:
-  Pharmacy:
-    type: object
-    properties:
-      pharmacyName:
-        type: string
-        description: Name of the pharmacy.
-      addressLine1:
-        type: string
-        description: First line of address.
-      addressLine2:
-        type: string
-        description: Second line of address.
-      addressLine3:
-        type: string
-        description: Third line of address.
-      city:
-        type: string
-        description: Name of the city.
-      county:
-        type: string
-        description: Name of the county.
-      postcode:
-        type: string
-        description: Postcode.
-      telephoneNumber:
-        type: string
-        description: Telephone number of the pharmacy.
-      odsCode:
-        type: string
-        description: Code to identify the pharmacy
-      openingTimes:
-        type: array
-        description: An array of opening times.
-        items:
-          $ref: '#/definitions/OpeningTime'
-  OpeningTime:
-    type: object
-    properties:
-      day:
-        type: string
-        description: Day of the week.
-      time:
-        type: string
-        description: Opening and closing time.
-  PharmacySearchResponse:
-    type: object
-    properties:
-      pharmacies:
-        type: array
-        description: Array of pharmacies matched in search
-        items:
-          $ref: "#/definitions/Pharmacy"
+components:
+  schemas:
+    Pharmacy:
+      type: object
+      properties:
+        pharmacyName:
+          type: string
+          description: Name of the pharmacy.
+        addressLine1:
+          type: string
+          description: First line of address.
+        addressLine2:
+          type: string
+          description: Second line of address.
+        addressLine3:
+          type: string
+          description: Third line of address.
+        city:
+          type: string
+          description: Name of the city.
+        county:
+          type: string
+          description: Name of the county.
+        postcode:
+          type: string
+          description: Postcode.
+        telephoneNumber:
+          type: string
+          description: Telephone number of the pharmacy.
+        odsCode:
+          type: string
+          description: Code to identify the pharmacy
+        openingTimes:
+          type: array
+          description: An array of opening times.
+          items:
+            $ref: "#/components/schemas/OpeningTime"
+    OpeningTime:
+      type: object
+      properties:
+        day:
+          type: string
+          description: Day of the week.
+        time:
+          type: string
+          description: Opening and closing time.
+    PharmacySearchResponse:
+      type: object
+      properties:
+        pharmacies:
+          type: array
+          description: Array of pharmacies matched in search
+          items:
+            $ref: "#/components/schemas/Pharmacy"

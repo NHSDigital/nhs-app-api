@@ -1,41 +1,41 @@
-swagger: "2.0"
-
+openapi: 3.0.2
 info:
   version: 0.0.5
   title: NHS App Sub-API - Ods Code Lookup
   description: NHS App Sub-API - endpoints pertaining to looking up and ods code.
-
 paths:
   /odscodelookup:
     get:
       tags:
         - odscodelookup
-      summary: Gets a boolean value to indicate if gp practice is participating in public beta
-      description: Gets a boolean value to indicate if gp practice is participating in public beta
-      produces:
-        - application/json
+      summary: Gets a boolean value to indicate if gp practice is participating in
+        public beta
+      description: Gets a boolean value to indicate if gp practice is participating in
+        public beta
       parameters:
         - in: query
           name: odsCode
-          type: string
-          format: string
           required: true
           description: ods code of gp practice
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: Returns ods code lookup result for the practice
-          schema:
-            $ref: "#/definitions/GetOdsCodeLookupResult"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetOdsCodeLookupResult"
         400:
           description: the ods code was not provided
         500:
           description: An unexpected error occurred processing the request.
-
-definitions:
-  GetOdsCodeLookupResult:
-    type: object
-    properties:
-      isGPPracticeSupported:
-        type: boolean
-        description: Returns true if the GP Practice is participating
-
+components:
+  schemas:
+    GetOdsCodeLookupResult:
+      type: object
+      properties:
+        isGPPracticeSupported:
+          type: boolean
+          description: Returns true if the GP Practice is participating

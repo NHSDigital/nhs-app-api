@@ -1,52 +1,48 @@
-swagger: '2.0'
-
+openapi: 3.0.2
 info:
   version: 0.0.7
   title: NHS App API
   description: This is the API for the NHS App.
-
-schemes:
-  - https
-
 paths:
   /v1/configuration:
-    $ref: './nhsonline.configuration.yaml#/paths/~1configuration'
+    $ref: ./nhsonline.configuration.yaml#/paths/~1configuration
   /v1/odscodelookup:
-    $ref: './nhsonline.odscode.yaml#/paths/~1odscodelookup'
+    $ref: ./nhsonline.odscode.yaml#/paths/~1odscodelookup
   /v1/patient/appointments:
-    $ref: './nhsonline.appointments.yaml#/paths/~1appointments'
+    $ref: ./nhsonline.appointments.yaml#/paths/~1appointments
   /v1/patient/appointment-slots:
-    $ref: './nhsonline.appointments.yaml#/paths/~1appointment-slots'
+    $ref: ./nhsonline.appointments.yaml#/paths/~1appointment-slots
   /v1/patient/courses:
     # Course endpoints are in the prescriptions file as they share the course definitions
-    $ref: './nhsonline.prescriptions.yaml#/paths/~1courses'
+    $ref: ./nhsonline.prescriptions.yaml#/paths/~1courses
   /v1/patient/demographics:
-    $ref: './nhsonline.demographics.yaml#/paths/~1demographics'
+    $ref: ./nhsonline.demographics.yaml#/paths/~1demographics
   /v1/patient/my-record:
-    $ref: './nhsonline.myrecord.yaml#/paths/~1my-record'
+    $ref: ./nhsonline.myrecord.yaml#/paths/~1my-record
   /v1/patient/my-record/section:
-    $ref: './nhsonline.myrecord.yaml#/paths/~1my-record~1section'
+    $ref: ./nhsonline.myrecord.yaml#/paths/~1my-record~1section
   /v1/patient/ndop:
-    $ref: './nhsonline.ndop.yaml#/paths/~1ndop'
+    $ref: ./nhsonline.ndop.yaml#/paths/~1ndop
   /v1/patient/organdonation:
-    $ref: './nhsonline.organdonation.yaml#/paths/~1organdonation'
+    $ref: ./nhsonline.organdonation.yaml#/paths/~1organdonation
   /v1/patient/organdonation/referencedata:
-    $ref: './nhsonline.organdonation.yaml#/paths/~1organdonation~1referencedata'
+    $ref: ./nhsonline.organdonation.yaml#/paths/~1organdonation~1referencedata
   /v1/patient/prescriptions:
-    $ref: './nhsonline.prescriptions.yaml#/paths/~1prescriptions'
+    $ref: ./nhsonline.prescriptions.yaml#/paths/~1prescriptions
   /v1/patient/terms-and-conditions/consent:
-    $ref: './nhsonline.termsandconditions.yaml#/paths/~1consent'
+    $ref: ./nhsonline.termsandconditions.yaml#/paths/~1consent
   /v1/patient/test-result:
-    $ref: './nhsonline.myrecord.yaml#/paths/~1test-result'
+    $ref: ./nhsonline.myrecord.yaml#/paths/~1test-result
   /v1/gpsearch:
-    $ref: './nhsonline.gpsearch.yaml#/paths/~1gpsearch'
+    $ref: ./nhsonline.gpsearch.yaml#/paths/~1gpsearch
   /v1/brothermailer:
-    $ref: './nhsonline.brothermailer.yaml#/paths/~1brothermailer'
+    $ref: ./nhsonline.brothermailer.yaml#/paths/~1brothermailer
   /v1/session:
-    $ref: './nhsonline.usersession.yaml#/paths/~1session'
+    $ref: ./nhsonline.usersession.yaml#/paths/~1session
   /v1/session/extend:
-    $ref: './nhsonline.usersession.yaml#/paths/~1session~1extend'
+    $ref: ./nhsonline.usersession.yaml#/paths/~1session~1extend
   /v1/patient/pharmacies:
-    $ref: './nhsonline.pharmacies.yaml#/paths/~1pharmacies'
+    $ref: ./nhsonline.pharmacies.yaml#/paths/~1pharmacies
   /v1/patient/nominated-pharmacy:
-    $ref: './nhsonline.nominatedpharmacy.yaml#/paths/~1nominated-pharmacy'
+    $ref: ./nhsonline.nominatedpharmacy.yaml#/paths/~1nominated-pharmacy
+    

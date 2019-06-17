@@ -1,7 +1,7 @@
 import get from 'lodash/fp/get';
 import { Router } from 'express';
 import { APPOINTMENTS } from '../../../lib/routes';
-import NHSOnlineApi from '../../../services/nhsonlineapi';
+import NHSOnlineApi from '../../../services/v1nhsonlineapi';
 import { createUri } from '../../../lib/noJs';
 
 const initialiseApi = ({ apiFn, req, res }) => {

@@ -1,24 +1,24 @@
-﻿swagger: "2.0"
-
+﻿openapi: 3.0.2
 info:
   version: 0.0.5
   title: NHS App Sub-API - My Record
-  description: NHS App Sub-API - endpoints pertaining to patient record. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
-
+  description: NHS App Sub-API - endpoints pertaining to patient record. All require an
+    NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
   /my-record:
     get:
       tags:
         - myrecord
       summary: Gets the record for the logged on user.
-      description: Returns the users medical record for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      produces:
-        - application/json
+      description: Returns the users medical record for the logged in user. Requires
+        NHSO-Session-Id cookie (obtained from session endpoint).
       responses:
         200:
           description: Returns myrecord data for the logged in user.
-          schema:
-            $ref: '#/definitions/MyRecordResponse'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyRecordResponse"
         401:
           description: User session has expired.
         500:
@@ -32,21 +32,26 @@ paths:
       tags:
         - myrecord section
       summary: Gets a specific section from the record for the logged on user.
-      description: Returns only the specified section from the users medical record for the logged in user (Vision only). Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      produces:
-        - application/json
+      description: Returns only the specified section from the users medical record for the
+        logged in user (Vision only). Requires NHSO-Session-Id cookie (obtained
+        from session endpoint).
       parameters:
         - in: query
           name: section
-          type: string
-          enum: [TestResults, Diagnosis]
           required: true
           description: specific section to return
+          schema:
+            type: string
+            enum:
+              - TestResults
+              - Diagnosis
       responses:
         200:
           description: Returns specified myrecord section for the logged in user.
-          schema:
-            $ref: '#/definitions/MyRecordSectionResponse'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyRecordSectionResponse"
         401:
           description: User session has expired.
         500:
@@ -59,20 +64,22 @@ paths:
     get:
       tags:
         - test result
-      summary: Returns a string which contains html from TPP for the selected test result.
-      produces:
-        - application/json
+      summary: Returns a string which contains html from TPP for the selected test
+        result.
       parameters:
         - in: query
           name: testResultId
-          type: string
           required: true
           description: id of selected test result
+          schema:
+            type: string
       responses:
         200:
           description: Returns html for selected test result from TPP
-          schema:
-            $ref: "#/definitions/TestResultResponse"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestResultResponse"
         400:
           description: Bad request. A querystring parameter is not in the expected format.
         401:
@@ -83,394 +90,355 @@ paths:
           description: Bad response received from upstream system.
         504:
           description: Timeout when calling upstream system.
-
-definitions:
-  TestResultResponse:
-    type: object
-    properties:
-      hasErrored:
-        type: boolean
-        description: Shows if error occurred getting test result from TPP
-      testResult:
-        type: string
-        description: html represenation of test result data
-
-  MyRecordResponse:
-    type: object
-    properties:
-      hasSummaryRecordAccess:
-        type: boolean
-        description: Shows if the patient has access to their summary record.
-      hasDetailedRecordAccess:
-        type: boolean
-        description: Shows if the patient has access to their detailed record.
-      supplier:
-        type: string
-        description: supplier.
-        enum:
-          - UNKNOWN
-          - EMIS
-          - TPP
-          - VISION
-      allergies:
-        type: object
-        description: An object containing all allergy details.
-        $ref: '#/definitions/Allergies'
-      medications:
-        type: object
-        description:  An object containing all medication details.
-        $ref: '#/definitions/Medications'
-      immunisations:
-        type: object
-        description: An object containing all immunisation details.
-        $ref: '#/definitions/Immunisations'
-      testResults:
-        type: object
-        description: An object containing all test result details.
-        $ref: '#/definitions/TestResults'
-      diagnosis:
-        type: object
-        description: Vision Only - An object containing Diagnosis markup to be rendered
-        $ref: '#/definitions/Diagnosis'
-      problems:
-        type: object
-        description: An object containing all problems details.
-        $ref: '#/definitions/Problems'
-      tppDcrEvents:
-        type: object
-        description: An object containing all tpp dcr event details.
-        $ref: '#/definitions/TppDcrEvents'
-      consultations:
-        type: object
-        description: An object containing all consultation details.
-        $ref: '#/definitions/Consultations'
-
-  MyRecordSectionResponse:
-    type: object
-    properties:
-      markup:
-        type: string
-        description: Markup for specified section (will be either HTML or XML)
-      sectionName:
-        type: string
-        description: Name of section requested
-
-  Allergies:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      data:
-        type: array
-        description: An array of allergy information objects.
-        items:
-          $ref: '#/definitions/AllergyItem'
-
-  AllergyItem:
-    type: object
-    properties:
-      name:
-        type: string
-        description: The name of the allergy.
-      date:
-        $ref: '#/definitions/Date'
-      drug:
-        type: string
-        description: The name of the drug responsible for the allergy.
-      reaction:
-        type: string
-        description: The allergic reaction.
-
-  Medications:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      data:
-        type: object
-        properties:
-          acuteMedications:
-            type: array
-            description: Array of acuteMedications
-            items:
-              $ref: '#/definitions/MedicationItem'
-          currentRepeatMedications:
-            type: array
-            description: Array of acuteMedications
-            items:
-              $ref: '#/definitions/MedicationItem'
-          discontinuedRepeatMedications:
-            type: array
-            description: Array of acuteMedications
-            items:
-              $ref: '#/definitions/MedicationItem'
-
-  MedicationItem:
-    type: object
-    properties:
-      date:
-        type: string
-        format: date-time
-        description: The date/time of the item.
-      lineItems:
-        type: array
-        description: An array of line items.
-        items:
-          $ref: '#/definitions/LineItem'
-
-  LineItem:
-    type: object
-    properties:
-      text:
-        type: string
-        description: When the record was entered.
-      lineItems:
-        type: array
-        description: An array of line items
-        items:
+components:
+  schemas:
+    TestResultResponse:
+      type: object
+      properties:
+        hasErrored:
+          type: boolean
+          description: Shows if error occurred getting test result from TPP
+        testResult:
           type: string
-
-  Immunisations:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      data:
-        type: object
-        properties:
-          immunisations:
-            type: array
-            description: Array of immunisations.
-            items:
-              $ref: '#/definitions/ImmunisationItem'
-
-  ImmunisationItem:
-    type: object
-    properties:
-      effectiveDate:
-        $ref: '#/definitions/Date'
-      term:
-        type: string
-        description: The name of the immunisation.
-
-  TestResults:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      rawHtml:
-        type: string
-        description: When working with Vision, raw HTML is returned instead of XML data
-      data:
-        type: object
-        properties:
-          testResults:
-            type: array
-            description: Array of test results
-            items:
-              $ref: '#/definitions/TestResultItem'
-
-  Diagnosis:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      rawHtml:
-        type: string
-        description: This is for Vision Only, contains Raw HTML to be rendered on the web
-
-  TestResultItem:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Id of the test result
-      date:
-        $ref: '#/definitions/Date'
-      description:
-        type: string
-        description: The name of the test result.
-      associatedTexts:
-        type: array
-        description: Array of associated texts.
-        items:
+          description: html represenation of test result data
+    MyRecordResponse:
+      type: object
+      properties:
+        hasSummaryRecordAccess:
+          type: boolean
+          description: Shows if the patient has access to their summary record.
+        hasDetailedRecordAccess:
+          type: boolean
+          description: Shows if the patient has access to their detailed record.
+        supplier:
           type: string
-      testResultChildItems:
-        type: array
-        description: Array of test result child line items.
-        items:
-          $ref: '#/definitions/TestResultChildLineItem'
-
-  TestResultChildLineItem:
-    type: object
-    properties:
-      description:
-        type: string
-        description: The name of the test result.
-      associatedTexts:
-        type: array
-        description: Array of associated texts.
-        items:
+          description: supplier.
+          enum:
+            - UNKNOWN
+            - EMIS
+            - TPP
+            - VISION
+        allergies:
+          $ref: "#/components/schemas/Allergies"
+        medications:
+          $ref: "#/components/schemas/Medications"
+        immunisations:
+          $ref: "#/components/schemas/Immunisations"
+        testResults:
+          $ref: "#/components/schemas/TestResults"
+        diagnosis:
+          $ref: "#/components/schemas/Diagnosis"
+        problems:
+          $ref: "#/components/schemas/Problems"
+        tppDcrEvents:
+          $ref: "#/components/schemas/TppDcrEvents"
+        consultations:
+          $ref: "#/components/schemas/Consultations"
+    MyRecordSectionResponse:
+      type: object
+      properties:
+        markup:
           type: string
-
-  Problems:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      data:
-        type: object
-        properties:
-          problems:
-            type: array
-            description: Array of problems
-            items:
-              $ref: '#/definitions/ProblemItem'
-
-  ProblemItem:
-    type: object
-    properties:
-      effectiveDate:
-        $ref: '#/definitions/Date'
-      lineItems:
-        type: array
-        description: An array of line items.
-        items:
-          $ref: '#/definitions/LineItem'
-
-  TppDcrEvents:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      data:
-        type: object
-        properties:
-          problems:
-            type: array
-            description: Array of problems
-            items:
-              $ref: '#/definitions/TppDcrEvent'
-
-  TppDcrEvent:
-    type: object
-    properties:
-      effectiveDate:
-        type: string
-        format: date-time
-        description: date/time value.
-      eventLocationAndDoneBy:
-        type: string
-        description: Event location and done by
-      eventItems:
-        type: array
-        description: Array of event items
-        items:
+          description: Markup for specified section (will be either HTML or XML)
+        sectionName:
           type: string
-
-  Consultations:
-    type: object
-    properties:
-      hasAccess:
-        type: boolean
-        description: Does the patient have access to this data.
-      hasErrored:
-        type: boolean
-        description: Some error occurred when attempting to retrieve this error.
-      data:
-        type: object
-        properties:
-          problems:
-            type: array
-            description: Array of problems
-            items:
-              $ref: '#/definitions/ConsultationItem'
-
-  ConsultationItem:
-    type: object
-    properties:
-      effectiveDate:
-        $ref: '#/definitions/Date'
-      consultantLocation:
-        type: string
-        description: Consultant Location and Name
-      consultationHeaders:
-        type: array
-        description: An array of consultationHeader.
-        items:
-          $ref: '#/definitions/ConsultationHeaderItem'
-
-  ConsultationHeaderItem:
-    type: object
-    properties:
-      header:
-        type: string
-        description: Consultation Header
-      observationsWithTerm:
-        type: array
-        description: An array of observations.
-        items:
-          $ref: '#/definitions/ObservationItem'
-      associatedTexts:
-        type: array
-        description: An array of associated texts.
-        items:
+          description: Name of section requested
+    Allergies:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: array
+          description: An array of allergy information objects.
+          items:
+            $ref: "#/components/schemas/AllergyItem"
+    AllergyItem:
+      type: object
+      properties:
+        name:
           type: string
-
-  ObservationItem:
-    type: object
-    properties:
-      term:
-        type: string
-        description: Observation Term
-      associatedTexts:
-        type: array
-        description: An array of associated texts.
-        items:
+          description: The name of the allergy.
+        date:
+          $ref: "#/components/schemas/Date"
+        drug:
           type: string
-
-  Date:
-    type: object
-    properties:
-      value:
-        type: string
-        format: date-time
-        description: date/time value.
-      datePart:
-        type: string
-        description: date part to display.
-        enum:
-          - Unknown
-          - Year
-          - YearMonth
-          - YearMonthDay
-          - YearMonthDayTime
-            
+          description: The name of the drug responsible for the allergy.
+        reaction:
+          type: string
+          description: The allergic reaction.
+    Medications:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: object
+          properties:
+            acuteMedications:
+              type: array
+              description: Array of acuteMedications
+              items:
+                $ref: "#/components/schemas/MedicationItem"
+            currentRepeatMedications:
+              type: array
+              description: Array of acuteMedications
+              items:
+                $ref: "#/components/schemas/MedicationItem"
+            discontinuedRepeatMedications:
+              type: array
+              description: Array of acuteMedications
+              items:
+                $ref: "#/components/schemas/MedicationItem"
+    MedicationItem:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+          description: The date/time of the item.
+        lineItems:
+          type: array
+          description: An array of line items.
+          items:
+            $ref: "#/components/schemas/LineItem"
+    LineItem:
+      type: object
+      properties:
+        text:
+          type: string
+          description: When the record was entered.
+        lineItems:
+          type: array
+          description: An array of line items
+          items:
+            type: string
+    Immunisations:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: object
+          properties:
+            immunisations:
+              type: array
+              description: Array of immunisations.
+              items:
+                $ref: "#/components/schemas/ImmunisationItem"
+    ImmunisationItem:
+      type: object
+      properties:
+        effectiveDate:
+          $ref: "#/components/schemas/Date"
+        term:
+          type: string
+          description: The name of the immunisation.
+    TestResults:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        rawHtml:
+          type: string
+          description: When working with Vision, raw HTML is returned instead of XML data
+        data:
+          type: object
+          properties:
+            testResults:
+              type: array
+              description: Array of test results
+              items:
+                $ref: "#/components/schemas/TestResultItem"
+    Diagnosis:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        rawHtml:
+          type: string
+          description: This is for Vision Only, contains Raw HTML to be rendered on the web
+    TestResultItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the test result
+        date:
+          $ref: "#/components/schemas/Date"
+        description:
+          type: string
+          description: The name of the test result.
+        associatedTexts:
+          type: array
+          description: Array of associated texts.
+          items:
+            type: string
+        testResultChildItems:
+          type: array
+          description: Array of test result child line items.
+          items:
+            $ref: "#/components/schemas/TestResultChildLineItem"
+    TestResultChildLineItem:
+      type: object
+      properties:
+        description:
+          type: string
+          description: The name of the test result.
+        associatedTexts:
+          type: array
+          description: Array of associated texts.
+          items:
+            type: string
+    Problems:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: object
+          properties:
+            problems:
+              type: array
+              description: Array of problems
+              items:
+                $ref: "#/components/schemas/ProblemItem"
+    ProblemItem:
+      type: object
+      properties:
+        effectiveDate:
+          $ref: "#/components/schemas/Date"
+        lineItems:
+          type: array
+          description: An array of line items.
+          items:
+            $ref: "#/components/schemas/LineItem"
+    TppDcrEvents:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: object
+          properties:
+            problems:
+              type: array
+              description: Array of problems
+              items:
+                $ref: "#/components/schemas/TppDcrEvent"
+    TppDcrEvent:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          format: date-time
+          description: date/time value.
+        eventLocationAndDoneBy:
+          type: string
+          description: Event location and done by
+        eventItems:
+          type: array
+          description: Array of event items
+          items:
+            type: string
+    Consultations:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: object
+          properties:
+            problems:
+              type: array
+              description: Array of problems
+              items:
+                $ref: "#/components/schemas/ConsultationItem"
+    ConsultationItem:
+      type: object
+      properties:
+        effectiveDate:
+          $ref: "#/components/schemas/Date"
+        consultantLocation:
+          type: string
+          description: Consultant Location and Name
+        consultationHeaders:
+          type: array
+          description: An array of consultationHeader.
+          items:
+            $ref: "#/components/schemas/ConsultationHeaderItem"
+    ConsultationHeaderItem:
+      type: object
+      properties:
+        header:
+          type: string
+          description: Consultation Header
+        observationsWithTerm:
+          type: array
+          description: An array of observations.
+          items:
+            $ref: "#/components/schemas/ObservationItem"
+        associatedTexts:
+          type: array
+          description: An array of associated texts.
+          items:
+            type: string
+    ObservationItem:
+      type: object
+      properties:
+        term:
+          type: string
+          description: Observation Term
+        associatedTexts:
+          type: array
+          description: An array of associated texts.
+          items:
+            type: string
+    Date:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+          description: date/time value.
+        datePart:
+          type: string
+          description: date part to display.
+          enum:
+            - Unknown
+            - Year
+            - YearMonth
+            - YearMonthDay
+            - YearMonthDayTime

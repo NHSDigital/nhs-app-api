@@ -30,7 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
-		contracts\servicejourneyrules.definitions.yaml = contracts\servicejourneyrules.definitions.yaml
 		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
 	EndProjectSection
 EndProject

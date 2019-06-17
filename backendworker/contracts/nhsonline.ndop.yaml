@@ -1,10 +1,9 @@
-﻿swagger: "2.0"
-
+﻿openapi: 3.0.2
 info:
   version: 0.0.7
   title: NHS App Sub-API - Ndop Token
-  description: NHS App Sub-API - endpoints pertaining to ndop token. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
-
+  description: NHS App Sub-API - endpoints pertaining to ndop token. All require an
+    NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
   /ndop:
     get:
@@ -12,19 +11,21 @@ paths:
         - ndop
       summary: Request Ndop Token
       description: Returns a signed Jwt token to be passed to Ndop Web Page
-      consumes:
-        - application/json
       responses:
         200:
           description: Token successfully created.
-          schema:
-            $ref: '#/definitions/NdopResponse'
+          x-header: Content-Type
+          content:
+             application/json:
+              schema:
+                $ref: "#/components/schemas/NdopResponse"
         500:
           description: An unexpected error occurred processing the request.
-definitions:
-  NdopResponse:
-    type: object
-    properties:
-      token:
-        type: string
-        description: signed Jwt Token
+components:
+  schemas:
+    NdopResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: signed Jwt Token

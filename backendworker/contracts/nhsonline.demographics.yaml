@@ -1,52 +1,53 @@
-swagger: "2.0"
-
+openapi: 3.0.2
 info:
   version: 0.0.5
   title: NHS App Sub-API - Demographics
-  description: NHS App Sub-API - endpoints pertaining to demographics. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
-
+  description: NHS App Sub-API - endpoints pertaining to demographics. All require an
+    NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
   /demographics:
     get:
       tags:
         - demographics
       summary: Gets demographic information for the logged on user.
-      description: Returns personal details and address details for the logged-in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-      produces:
-        - application/json
+      description: Returns personal details and address details for the logged-in user.
+        Requires NHSO-Session-Id cookie (obtained from session endpoint).
       responses:
         200:
           description: Returns demographic data for the logged in user.
-          schema:
-            $ref: "#/definitions/DemographicResponse"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemographicResponse"
         401:
           description: User session has expired.
         403:
-          description: The patient does not have the necessary permissions within the GP system.
+          description: The patient does not have the necessary permissions within the GP
+            system.
         500:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
         504:
           description: Timeout when calling upstream system.
- 
-definitions:
-  DemographicResponse:
-    type: object
-    properties:
-      nhsNumber:
-        type: string
-        description: The patient's NHS number.
-      patientName:
-        type: string
-        description: The patient's name.
-      dateOfBirth:
-        type: string
-        format: date-time
-        description: The patient's date of birth.
-      sex:
-        type: string
-        description: The patient's sex.
-      address:
-        type: string
-        description: The patient's address.
+components:
+  schemas:
+    DemographicResponse:
+      type: object
+      properties:
+        nhsNumber:
+          type: string
+          description: The patient's NHS number.
+        patientName:
+          type: string
+          description: The patient's name.
+        dateOfBirth:
+          type: string
+          format: date-time
+          description: The patient's date of birth.
+        sex:
+          type: string
+          description: The patient's sex.
+        address:
+          type: string
+          description: The patient's address.

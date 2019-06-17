@@ -1,5 +1,5 @@
 /* eslint-disable */
-import NHSOnlineApi from '../services/nhsonlineapi';
+import NHSOnlineApi from '../services/v1nhsonlineapi';
 
 export default ({ app, store, res, req }) => {
 
