@@ -405,12 +405,12 @@ export default {
       noAppointmentsAvailable: {
         title: 'No appointments available',
         line1: 'There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.',
-        line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
+        line2: 'If it\'s urgent and you do not know what to do, call 111 to get help near you.',
       },
       adjustSearch: {
         title: 'No appointments available',
         line1: 'Try to filter appointments by a different period or select "No preference" for the practice member. If you cannot find the appointment you need, call your GP surgery.',
-        line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
+        line2: 'If it\'s urgent and you do not know what to do, call 111 to get help near you.',
       },
       filters: {
         type: {
@@ -499,7 +499,7 @@ export default {
           header: 'You can\'t book any more appointments right now',
           subheader: 'Contact your GP surgery if you still need to book one.',
           message: 'You can go back to see what you\'ve already booked and cancel any appointments that you may no longer need.',
-          additionalInfo: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
+          additionalInfo: 'If it\'s urgent and you do not know what to do, call 111 to get help near you.',
           retryButtonText: 'Back to my appointments',
         },
         409: {
