@@ -101,6 +101,7 @@ namespace NHSOnline.Backend.Support
             public const string GetNominatedPharmacy = "NominatedPharmacy_Get_Response";
             public const string UpdatedNominatedPharmacy = "NominatedPharmacy_Update_Response";
             public const string SearchNominatedPharmacyAuditTypeResponse = "SearchNominatedPharmacy_Get_Response";
+            public const string GetServiceJourneyRulesAuditTypeRequest = "ServiceJourneyRules_Get_Request";
         }
 
         public static class HttpContextItems

@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -41,7 +42,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Appointments = new ServiceJourneyRulesApi.Models.Appointments
                        {
-                           
                            JourneyType = AppointmentsJourneyType.im1Appointments
                        }
                    }
@@ -68,7 +68,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Appointments = new ServiceJourneyRulesApi.Models.Appointments
                        {
-                           
                            JourneyType = AppointmentsJourneyType.disabled
                        }
                    }
@@ -95,7 +94,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Appointments = new ServiceJourneyRulesApi.Models.Appointments
                        {
-                           
                            JourneyType = AppointmentsJourneyType.im1Appointments
                        }
                    }
@@ -169,19 +167,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
            // Assert
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.NotFound>();
        }
-       
-       [TestMethod]
-       public async Task GetServiceJourneyRulesForOdsCode_InvalidRequest_ReturnsBadGateway()
+
+       [TestMethod] public async Task GetServiceJourneyRulesForOdsCode_InvalidRequest_ReturnsInternalServerError()
        {
            // Arrange
            _serviceJourneyRulesClient.Setup(x => x.GetServiceJourneyRules(DefaultOdsCode))
-               .ReturnsAsync(new ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>(HttpStatusCode.Created));
+               .Throws<HttpRequestException>()
+               .Verifiable();
 
            // Act
-           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode("odsCode");
+           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode);
 
            // Assert
-           result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.BadGateway>();
+           result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.InternalServerError>();
        }
    }
 }

@@ -39,5 +39,10 @@ $ npm install -g json2yaml
 
 Outputs contract to index.yaml
 ```bash
-$ swagger-cli bundle nhsonline.yaml | json2yaml > ../../web/contracts/index.yaml
+$ swagger-cli bundle --dereference nhsonline.yaml | json2yaml > ../../web/contracts/index.yaml
+```
+or just run 
+
+```bash
+$ ./bundleContracts.sh
 ```

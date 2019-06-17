@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
     {
         T Visit(ServiceJourneyRulesConfigResult.Success result);
         T Visit(ServiceJourneyRulesConfigResult.NotFound result);
-        T Visit(ServiceJourneyRulesConfigResult.BadGateway result);
+        T Visit(ServiceJourneyRulesConfigResult.InternalServerError result);
     }
 }

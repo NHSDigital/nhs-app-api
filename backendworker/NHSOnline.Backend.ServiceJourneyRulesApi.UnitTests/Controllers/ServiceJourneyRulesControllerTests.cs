@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Controllers;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
-using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 

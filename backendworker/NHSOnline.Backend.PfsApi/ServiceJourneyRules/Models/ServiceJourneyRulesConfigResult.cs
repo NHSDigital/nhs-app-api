@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models
             } 
         }
         
-        public class BadGateway : ServiceJourneyRulesConfigResult
+        public class InternalServerError : ServiceJourneyRulesConfigResult
         {  
             public override T Accept<T>(
                 IServiceJourneyRulesConfigResultVisitor<T> visitor)

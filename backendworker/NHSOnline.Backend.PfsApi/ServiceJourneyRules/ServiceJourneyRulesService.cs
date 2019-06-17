@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
@@ -56,10 +57,10 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
                 _logger.LogError($"Failed to retrieve Service Journey Rules for ods code: {odsCode}");
                 return new ServiceJourneyRulesConfigResult.NotFound();
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
                 _logger.LogError($"Exception calling Service Journey Rules API, {ex}");
-                return new ServiceJourneyRulesConfigResult.BadGateway();
+                return new ServiceJourneyRulesConfigResult.InternalServerError();
             }  
         }
     }

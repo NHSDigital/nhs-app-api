@@ -15,4 +15,5 @@ object WorkerPaths {
     val LinkageKey = "/v1/patient/linkage"
     val ndopConnection = "/v1/patient/ndop"
     val organDonationConnection = "/v1/patient/organdonation"
+    val serviceJourneyRules = "/v1/patient/journey-configuration"
 }

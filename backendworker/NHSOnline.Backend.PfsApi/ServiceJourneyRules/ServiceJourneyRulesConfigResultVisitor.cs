@@ -24,12 +24,12 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
             };
         }
 
-        public ServiceJourneyRulesVisitorOutput Visit(ServiceJourneyRulesConfigResult.BadGateway result)
+        public ServiceJourneyRulesVisitorOutput Visit(ServiceJourneyRulesConfigResult.InternalServerError result)
         {
             return new ServiceJourneyRulesVisitorOutput
             {
                 ServiceJourneyRulesRetrieved = false,
-                StatusCode = StatusCodes.Status502BadGateway
+                StatusCode = StatusCodes.Status500InternalServerError
             };
         }
     }
