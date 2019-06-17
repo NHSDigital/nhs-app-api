@@ -535,6 +535,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             // Assert
             VerifyCustomTimeoutPresentInRequest();
         }
+
+        [TestMethod]
+        public async Task MeApplicationsPost_VerifyCustomTimeoutHeaderPresent()
+        {
+            // Arrange
+            var endUserSessionId = _fixture.Create<string>();
+            var requestBody = _fixture.Create<MeApplicationsPostRequest>();
+
+            SetupMockedHandlerEmisForEmisCustomTimeout();
+            
+            // Act
+            await _systemUnderTest.MeApplicationsPost(endUserSessionId, requestBody);
+            
+            // Assert
+            VerifyCustomTimeoutPresentInRequest();
+        }
         
         [TestMethod]
         public async Task CoursesGet_VerifyDefaultTimeIsUsed()

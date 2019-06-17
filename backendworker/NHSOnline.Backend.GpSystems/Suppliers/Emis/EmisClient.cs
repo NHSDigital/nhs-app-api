@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             MeApplicationsPostRequest model)
         {
             return await Post<MeApplicationsPostRequest, MeApplicationsPostResponse>(model, MeApplicationsPath,
-                endUserSessionId);
+                endUserSessionId, customTimeout: _settings.EmisExtendedHttpTimeoutSeconds);
         }
 
         public async Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
