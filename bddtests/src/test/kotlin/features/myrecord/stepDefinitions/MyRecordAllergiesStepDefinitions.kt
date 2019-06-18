@@ -161,7 +161,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         assertContains(dates, "15 May 2018")
         assertContains(dates, "May 2018")
         assertContains(dates, "2018")
-        assertContains(dates, "15 May 2018 09:52")
+        assertContains(dates, "15 May 2018 9:52 am")
     }
 
     private fun assertContains(actualDates: List<String>, expected: String) {

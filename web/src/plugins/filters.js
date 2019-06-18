@@ -19,7 +19,7 @@ Vue.filter('datePart',
           return value ? moment.utc(value).format('MMMM YYYY') : ''
           break;
         case "YearMonthDayTime":
-          return value ? moment.utc(value).format("D MMMM YYYY hh:mm") : ''
+          return value ? moment.utc(value).format("D MMMM YYYY h:mm a") : ''
           break;
         default:
           return value ? moment.utc(value).format('D MMMM YYYY'): ''
