@@ -56,7 +56,7 @@ ENV SESSION_MONGO_DATABASE_PASSWORD=
 ENV SESSION_MONGO_DATABASE_NAME development
 ENV SESSION_MONGO_DATABASE_COLLECTION session
 ENV ConfigurationSettings__DefaultSessionExpiryMinutes 10
-ENV ConfigurationSettings__EmisExtendedHttpTimeoutSeconds 120
+ENV ConfigurationSettings__EmisExtendedHttpTimeoutSeconds 100
 ENV TPP_BASE_URL https://systmonline2.tpp-uk.com:60015/Patient/
 ENV TPP_API_VERSION 1
 ENV TPP_APPLICATION_NAME NhsApp
