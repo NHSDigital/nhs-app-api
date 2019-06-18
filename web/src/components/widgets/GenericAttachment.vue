@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     onSelectedFileChange(event) {
-      this.$emit('input', event);
+      this.$emit('change', event);
     },
   },
 };

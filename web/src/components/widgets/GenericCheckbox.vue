@@ -1,41 +1,55 @@
 <template>
-  <div :class="getStyleClasses">
-    <div :class="$style.clickme"
-         aria-hidden="true"
-         @click="onClick"
-         @keypress="onKeyDown">
-      <checked-icon :id="`${checkboxId}-icon`" :selected="selected"/>
-    </div>
+  <div class="nhsuk-checkboxes__item" style="padding: 0 0 0 40px">
     <input :id="checkboxId"
            ref="checkbox"
-           v-tabbing="[this.$style.form, this.$style['checkbox-panel']]"
+           v-model="isSelected"
            :checked="selected"
-           :class="[this.$style.form, this.$style.checkbox, this.$style['sr-only']]"
+           class="nhsuk-checkboxes__input"
            type="checkbox"
-           @change="onChange">
-    <label :id="`${checkboxId}-label`" :for="checkboxId">
+           :required="required"
+           @change="onChange"
+           @keypress="onKeyDown">
+    <label :id="`${checkboxId}-label`"
+           class="nhsuk-label nhsuk-checkboxes__label"
+           :for="checkboxId">
       <slot/>
     </label>
   </div>
 </template>
 
 <script>
-
-import CheckedIcon from '@/components/icons/CheckedIcon';
 import TabFocusMixin from './TabFocusMixin';
 
 export default {
   name: 'GenericCheckbox',
-  components: {
-    CheckedIcon,
-  },
   mixins: [TabFocusMixin.tabMixin],
   props: {
+    name: {
+      type: String,
+      default: '',
+    },
     checkboxId: {
       type: String,
-      default: 'checkbox',
+      default: '',
     },
-    value: Boolean,
+    label: {
+      type: String,
+      default: '',
+    },
+    value: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data() {
+    return {
+      isSelected: this.value,
+      labelId: `${this.checkboxId}-label`,
+    };
   },
   computed: {
     selected: {
@@ -61,14 +75,11 @@ export default {
     },
   },
 };
-
 </script>
-<style module lang="scss" scoped>
-@import '../../style/forms';
-@import "../../style/accessibility";
 
-.clickme {
-  outline-style: none;
-  cursor: pointer;
-}
+<style module lang="scss" scoped>
+  .nhsuk-checkboxes__input {
+    height: 40px;
+    width: 40px;
+  }
 </style>

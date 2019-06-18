@@ -27,7 +27,7 @@ describe('GenericAttachment.vue', () => {
       });
       const input = wrapper.find("[id='id']");
       input.trigger('change');
-      expect(wrapper.emitted('input')).toBeDefined();
+      expect(wrapper.emitted('change')).toBeDefined();
     });
 
     it('should emit when selected file changed is called', () => {
