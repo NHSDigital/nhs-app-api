@@ -21,13 +21,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             
             var medicalRecord = immunisationsGetResponse.MedicalRecord;
 
-            immunisations.Data = (medicalRecord.Immunisations ?? Enumerable.Empty<Immunisation>()).Select(x =>
-                new ImmunisationItem
-                {
-                    Term = x.Term,
-                    EffectiveDate = new MyRecordDate { Value = x.EffectiveDate.Value, DatePart = x.EffectiveDate.DatePart }
-                });
-
+            immunisations.Data = (medicalRecord.Immunisations ?? Enumerable.Empty<Immunisation>())
+                .Where(i => !string.IsNullOrEmpty(i.Term))
+                .Select(x =>
+                    new ImmunisationItem
+                    {
+                        Term = x.Term,
+                        EffectiveDate = new MyRecordDate
+                        {
+                            Value = x.EffectiveDate?.Value,
+                            DatePart = x.EffectiveDate?.DatePart
+                        }
+                    });
             return immunisations;
         }   
     }
