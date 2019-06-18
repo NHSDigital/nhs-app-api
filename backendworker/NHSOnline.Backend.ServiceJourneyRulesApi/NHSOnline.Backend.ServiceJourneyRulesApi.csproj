@@ -11,7 +11,7 @@
         <PackageReference Include="CsvHelper" Version="12.1.2" />
         <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
         <PackageReference Include="NJsonSchema" Version="9.13.36" />
-        <PackageReference Include="YamlDotNet" Version="6.0.0" />
+        <PackageReference Include="YamlDotNet" Version="6.1.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     </ItemGroup>
 

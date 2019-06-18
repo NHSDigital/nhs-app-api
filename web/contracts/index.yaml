@@ -546,64 +546,17 @@
                                     type: "array"
                                     description: "An array of line items."
                                     items: 
-                                      type: "object"
-                                      properties: 
-                                        text: 
-                                          type: "string"
-                                          description: "When the record was entered."
-                                        lineItems: 
-                                          type: "array"
-                                          description: "An array of line items"
-                                          items: 
-                                            type: "string"
+                                      $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/content/application~1json/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
                             currentRepeatMedications: 
                               type: "array"
                               description: "Array of acuteMedications"
                               items: 
-                                type: "object"
-                                properties: 
-                                  date: 
-                                    type: "string"
-                                    format: "date-time"
-                                    description: "The date/time of the item."
-                                  lineItems: 
-                                    type: "array"
-                                    description: "An array of line items."
-                                    items: 
-                                      type: "object"
-                                      properties: 
-                                        text: 
-                                          type: "string"
-                                          description: "When the record was entered."
-                                        lineItems: 
-                                          type: "array"
-                                          description: "An array of line items"
-                                          items: 
-                                            type: "string"
+                                $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/content/application~1json/schema/properties/medications/properties/data/properties/acuteMedications/items"
                             discontinuedRepeatMedications: 
                               type: "array"
                               description: "Array of acuteMedications"
                               items: 
-                                type: "object"
-                                properties: 
-                                  date: 
-                                    type: "string"
-                                    format: "date-time"
-                                    description: "The date/time of the item."
-                                  lineItems: 
-                                    type: "array"
-                                    description: "An array of line items."
-                                    items: 
-                                      type: "object"
-                                      properties: 
-                                        text: 
-                                          type: "string"
-                                          description: "When the record was entered."
-                                        lineItems: 
-                                          type: "array"
-                                          description: "An array of line items"
-                                          items: 
-                                            type: "string"
+                                $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/content/application~1json/schema/properties/medications/properties/data/properties/acuteMedications/items"
                     immunisations: 
                       type: "object"
                       properties: 
@@ -623,21 +576,7 @@
                                 type: "object"
                                 properties: 
                                   effectiveDate: 
-                                    type: "object"
-                                    properties: 
-                                      value: 
-                                        type: "string"
-                                        format: "date-time"
-                                        description: "date/time value."
-                                      datePart: 
-                                        type: "string"
-                                        description: "date part to display."
-                                        enum: 
-                                          - "Unknown"
-                                          - "Year"
-                                          - "YearMonth"
-                                          - "YearMonthDay"
-                                          - "YearMonthDayTime"
+                                    $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/content/application~1json/schema/properties/allergies/properties/data/items/properties/date"
                                   term: 
                                     type: "string"
                                     description: "The name of the immunisation."
@@ -666,21 +605,7 @@
                                     type: "string"
                                     description: "Id of the test result"
                                   date: 
-                                    type: "object"
-                                    properties: 
-                                      value: 
-                                        type: "string"
-                                        format: "date-time"
-                                        description: "date/time value."
-                                      datePart: 
-                                        type: "string"
-                                        description: "date part to display."
-                                        enum: 
-                                          - "Unknown"
-                                          - "Year"
-                                          - "YearMonth"
-                                          - "YearMonthDay"
-                                          - "YearMonthDayTime"
+                                    $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/content/application~1json/schema/properties/allergies/properties/data/items/properties/date"
                                   description: 
                                     type: "string"
                                     description: "The name of the test result."
@@ -734,21 +659,7 @@
                                 type: "object"
                                 properties: 
                                   effectiveDate: 
-                                    type: "object"
-                                    properties: 
-                                      value: 
-                                        type: "string"
-                                        format: "date-time"
-                                        description: "date/time value."
-                                      datePart: 
-                                        type: "string"
-                                        description: "date part to display."
-                                        enum: 
-                                          - "Unknown"
-                                          - "Year"
-                                          - "YearMonth"
-                                          - "YearMonthDay"
-                                          - "YearMonthDayTime"
+                                    $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/content/application~1json/schema/properties/allergies/properties/data/items/properties/date"
                                   lineItems: 
                                     type: "array"
                                     description: "An array of line items."
@@ -812,21 +723,7 @@
                                 type: "object"
                                 properties: 
                                   effectiveDate: 
-                                    type: "object"
-                                    properties: 
-                                      value: 
-                                        type: "string"
-                                        format: "date-time"
-                                        description: "date/time value."
-                                      datePart: 
-                                        type: "string"
-                                        description: "date part to display."
-                                        enum: 
-                                          - "Unknown"
-                                          - "Year"
-                                          - "YearMonth"
-                                          - "YearMonthDay"
-                                          - "YearMonthDayTime"
+                                    $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/content/application~1json/schema/properties/allergies/properties/data/items/properties/date"
                                   consultantLocation: 
                                     type: "string"
                                     description: "Consultant Location and Name"
@@ -951,18 +848,7 @@
                       type: "string"
                       description: "User's full name."
                     name: 
-                      type: "object"
-                      description: "User's name object."
-                      properties: 
-                        title: 
-                          type: "string"
-                          description: "User's title from the GP System."
-                        givenName: 
-                          type: "string"
-                          description: "User's given name from the GP System."
-                        surname: 
-                          type: "string"
-                          description: "User's surname from the GP System."
+                      $ref: "#/paths/~1v1~1patient~1organdonation/delete/requestBody/content/application~1json/schema/properties/name"
                     gender: 
                       type: "string"
                       description: "User's gender from the GP System."
@@ -974,27 +860,7 @@
                       type: "string"
                       description: "User's full address."
                     address: 
-                      type: "object"
-                      description: "User's address from the GP System."
-                      properties: 
-                        houseName: 
-                          type: "string"
-                          description: "User's house name from the GP System."
-                        numberStreet: 
-                          type: "string"
-                          description: "User's house number and street from the GP System."
-                        village: 
-                          type: "string"
-                          description: "User's village from the GP System."
-                        town: 
-                          type: "string"
-                          description: "User's town from the GP System."
-                        county: 
-                          type: "string"
-                          description: "User's county from the GP System."
-                        postcode: 
-                          type: "string"
-                          description: "User's postcode from the GP System."
+                      $ref: "#/paths/~1v1~1patient~1organdonation/delete/requestBody/content/application~1json/schema/properties/address"
                     decision: 
                       type: "string"
                       enum: 
@@ -1049,15 +915,7 @@
             content: 
               application/json: 
                 schema: 
-                  type: "object"
-                  description: "error response from backend api."
-                  properties: 
-                    errorCode: 
-                      type: "integer"
-                      description: "error code."
-                    errorMessage: 
-                      type: "string"
-                      description: "error message."
+                  $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/content/application~1json/schema"
           504: 
             description: "Timeout when calling upstream system."
       post: 
@@ -1066,112 +924,7 @@
         summary: "Creates a user's organ donation record"
         description: "Creates the user's organ donation record and returns the record identifier."
         requestBody: 
-          x-name: "organDonationRegistrationRequest"
-          content: 
-            application/json: 
-              schema: 
-                type: "object"
-                description: "Details of the organ donation registration request."
-                properties: 
-                  registration: 
-                    type: "object"
-                    description: "Details of the organ donation store registration."
-                    properties: 
-                      identifier: 
-                        type: "string"
-                        description: "User's organ donation identifier."
-                      nhsNumber: 
-                        type: "string"
-                        description: "User's nhs number from the GP System."
-                      name: 
-                        type: "object"
-                        description: "User's name object."
-                        properties: 
-                          title: 
-                            type: "string"
-                            description: "User's title from the GP System."
-                          givenName: 
-                            type: "string"
-                            description: "User's given name from the GP System."
-                          surname: 
-                            type: "string"
-                            description: "User's surname from the GP System."
-                      gender: 
-                        type: "string"
-                        description: "User's gender from the GP System."
-                      dateOfBirth: 
-                        type: "string"
-                        format: "date"
-                        description: "User's date of birth from the GP System."
-                      addressFull: 
-                        type: "string"
-                        description: "User's full address."
-                      address: 
-                        type: "object"
-                        description: "User's address from the GP System."
-                        properties: 
-                          houseName: 
-                            type: "string"
-                            description: "User's house name from the GP System."
-                          numberStreet: 
-                            type: "string"
-                            description: "User's house number and street from the GP System."
-                          village: 
-                            type: "string"
-                            description: "User's village from the GP System."
-                          town: 
-                            type: "string"
-                            description: "User's town from the GP System."
-                          county: 
-                            type: "string"
-                            description: "User's county from the GP System."
-                          postcode: 
-                            type: "string"
-                            description: "User's postcode from the GP System."
-                      decision: 
-                        type: "string"
-                        enum: 
-                          - "OptIn"
-                          - "OptOut"
-                        description: "User's organ donation decision."
-                      decisionDetails: 
-                        type: "object"
-                        description: "User's organ donation decision."
-                        properties: 
-                          all: 
-                            type: "boolean"
-                            description: "User's agreed to donate all organs."
-                          choices: 
-                            description: "User's individual organ donation choices."
-                            additionalProperties: 
-                              type: "string"
-                              enum: 
-                                - "NotStated"
-                                - "Yes"
-                                - "No"
-                              description: "Value of the choice."
-                            example: 
-                              heart: "Yes"
-                              lungs: "NotStated"
-                              kidney: "No"
-                      faithDeclaration: 
-                        type: "string"
-                        enum: 
-                          - "NotStated"
-                          - "Yes"
-                          - "No"
-                        description: "User's faith decision."
-                  additionalDetails: 
-                    type: "object"
-                    properties: 
-                      religionId: 
-                        type: "string"
-                        description: "The identifier for the select religion."
-                      ethnicityId: 
-                        type: "string"
-                        description: "The identifier for the select ethnicity."
-          description: "Details of the organ donation registration request."
-          required: true
+          $ref: "#/paths/~1v1~1patient~1organdonation/put/requestBody"
         responses: 
           201: 
             description: "Successfully created the organ donation record and returned the record identifier."
@@ -1203,15 +956,7 @@
             content: 
               application/json: 
                 schema: 
-                  type: "object"
-                  description: "error response from backend api."
-                  properties: 
-                    errorCode: 
-                      type: "integer"
-                      description: "error code."
-                    errorMessage: 
-                      type: "string"
-                      description: "error message."
+                  $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/content/application~1json/schema"
           504: 
             description: "Timeout when calling upstream system."
       put: 
@@ -1238,18 +983,7 @@
                         type: "string"
                         description: "User's nhs number from the GP System."
                       name: 
-                        type: "object"
-                        description: "User's name object."
-                        properties: 
-                          title: 
-                            type: "string"
-                            description: "User's title from the GP System."
-                          givenName: 
-                            type: "string"
-                            description: "User's given name from the GP System."
-                          surname: 
-                            type: "string"
-                            description: "User's surname from the GP System."
+                        $ref: "#/paths/~1v1~1patient~1organdonation/delete/requestBody/content/application~1json/schema/properties/name"
                       gender: 
                         type: "string"
                         description: "User's gender from the GP System."
@@ -1261,27 +995,7 @@
                         type: "string"
                         description: "User's full address."
                       address: 
-                        type: "object"
-                        description: "User's address from the GP System."
-                        properties: 
-                          houseName: 
-                            type: "string"
-                            description: "User's house name from the GP System."
-                          numberStreet: 
-                            type: "string"
-                            description: "User's house number and street from the GP System."
-                          village: 
-                            type: "string"
-                            description: "User's village from the GP System."
-                          town: 
-                            type: "string"
-                            description: "User's town from the GP System."
-                          county: 
-                            type: "string"
-                            description: "User's county from the GP System."
-                          postcode: 
-                            type: "string"
-                            description: "User's postcode from the GP System."
+                        $ref: "#/paths/~1v1~1patient~1organdonation/delete/requestBody/content/application~1json/schema/properties/address"
                       decision: 
                         type: "string"
                         enum: 
@@ -1289,25 +1003,7 @@
                           - "OptOut"
                         description: "User's organ donation decision."
                       decisionDetails: 
-                        type: "object"
-                        description: "User's organ donation decision."
-                        properties: 
-                          all: 
-                            type: "boolean"
-                            description: "User's agreed to donate all organs."
-                          choices: 
-                            description: "User's individual organ donation choices."
-                            additionalProperties: 
-                              type: "string"
-                              enum: 
-                                - "NotStated"
-                                - "Yes"
-                                - "No"
-                              description: "Value of the choice."
-                            example: 
-                              heart: "Yes"
-                              lungs: "NotStated"
-                              kidney: "No"
+                        $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/content/application~1json/schema/properties/decisionDetails"
                       faithDeclaration: 
                         type: "string"
                         enum: 
@@ -1458,15 +1154,7 @@
             content: 
               application/json: 
                 schema: 
-                  type: "object"
-                  description: "error response from backend api."
-                  properties: 
-                    errorCode: 
-                      type: "integer"
-                      description: "error code."
-                    errorMessage: 
-                      type: "string"
-                      description: "error message."
+                  $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/content/application~1json/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/organdonation/referencedata: 
@@ -1486,27 +1174,11 @@
                     ethnicities: 
                       type: "array"
                       items: 
-                        type: "object"
-                        description: "Contains data for a select box option"
-                        properties: 
-                          id: 
-                            type: "string"
-                            description: "The identifier for the select option."
-                          displayName: 
-                            type: "string"
-                            description: "The value to be displayed to the user."
+                        $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/content/application~1json/schema/properties/titles/items"
                     genders: 
                       type: "array"
                       items: 
-                        type: "object"
-                        description: "Contains data for a select box option"
-                        properties: 
-                          id: 
-                            type: "string"
-                            description: "The identifier for the select option."
-                          displayName: 
-                            type: "string"
-                            description: "The value to be displayed to the user."
+                        $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/content/application~1json/schema/properties/titles/items"
                     titles: 
                       type: "array"
                       items: 
@@ -1522,27 +1194,11 @@
                     religions: 
                       type: "array"
                       items: 
-                        type: "object"
-                        description: "Contains data for a select box option"
-                        properties: 
-                          id: 
-                            type: "string"
-                            description: "The identifier for the select option."
-                          displayName: 
-                            type: "string"
-                            description: "The value to be displayed to the user."
+                        $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/content/application~1json/schema/properties/titles/items"
                     withdrawReasons: 
                       type: "array"
                       items: 
-                        type: "object"
-                        description: "Contains data for a select box option"
-                        properties: 
-                          id: 
-                            type: "string"
-                            description: "The identifier for the select option."
-                          displayName: 
-                            type: "string"
-                            description: "The value to be displayed to the user."
+                        $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/content/application~1json/schema/properties/titles/items"
           401: 
             description: "User session missing or expired."
           500: 
@@ -1552,15 +1208,7 @@
             content: 
               application/json: 
                 schema: 
-                  type: "object"
-                  description: "error response from backend api."
-                  properties: 
-                    errorCode: 
-                      type: "integer"
-                      description: "error code."
-                    errorMessage: 
-                      type: "string"
-                      description: "error message."
+                  $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/content/application~1json/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/prescriptions: 
@@ -1659,17 +1307,7 @@
                       type: "array"
                       description: "Array of prescription courses."
                       items: 
-                        type: "object"
-                        properties: 
-                          id: 
-                            type: "string"
-                            description: "Course identifier."
-                          name: 
-                            type: "string"
-                            description: "Course name."
-                          details: 
-                            type: "string"
-                            description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
+                        $ref: "#/paths/~1v1~1patient~1courses/get/responses/200/content/application~1json/schema/properties/courses/items"
           400: 
             description: "Bad request. All headers must be provided."
           401: 
@@ -1936,12 +1574,12 @@
                         appointments: 
                           type: "object"
                           properties: 
-                            journeyType: 
+                            provider: 
                               type: "string"
-                              description: "Type of appointment journey"
+                              description: "The appointment provider"
                               enum: 
-                                - "im1Appointments"
-                                - "disabled"
+                                - "im1"
+                                - "none"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
           403: 

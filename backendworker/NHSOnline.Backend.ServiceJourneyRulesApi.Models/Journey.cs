@@ -7,9 +7,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public abstract class Journey<TEnum>
         where TEnum: struct, IConvertible
     {
-        
         [JsonConverter(typeof(StringEnumConverter), false)]
-        public TEnum JourneyType { get; set; }
-        
+        public TEnum Provider { get; set; }
     }
 }

@@ -63,30 +63,30 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             // arrange
             var defaultFolderJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsJourneyType.im1Prescriptions,
-                    MedicalRecordJourneyType.None),
-                CreateJourneys(AppointmentsJourneyType.None, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.im1MedicalRecord),
-                CreateJourneys(AppointmentsJourneyType.im1Appointments, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.disabled)
+                CreateJourneys(null, PrescriptionsProvider.im1,
+                    MedicalRecordProvider.Unknown),
+                CreateJourneys(AppointmentsProvider.Unknown, PrescriptionsProvider.Unknown,
+                    MedicalRecordProvider.im1),
+                CreateJourneys(AppointmentsProvider.im1, PrescriptionsProvider.Unknown,
+                    MedicalRecordProvider.none)
             );
             
             var anotherFolderJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsJourneyType.im1Prescriptions,
-                    MedicalRecordJourneyType.disabled),
-                CreateJourneys(AppointmentsJourneyType.disabled, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.im1MedicalRecord),
-                CreateJourneys(AppointmentsJourneyType.im1Appointments, PrescriptionsJourneyType.disabled,
-                    MedicalRecordJourneyType.None)
+                CreateJourneys(null, PrescriptionsProvider.im1,
+                    MedicalRecordProvider.none),
+                CreateJourneys(AppointmentsProvider.none, PrescriptionsProvider.Unknown,
+                    MedicalRecordProvider.im1),
+                CreateJourneys(AppointmentsProvider.im1, PrescriptionsProvider.none,
+                    MedicalRecordProvider.Unknown)
             );
             
             var expectedMergedJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsJourneyType.im1Prescriptions,
-                    MedicalRecordJourneyType.disabled),
-                CreateJourneys(AppointmentsJourneyType.disabled, PrescriptionsJourneyType.None,
-                    MedicalRecordJourneyType.im1MedicalRecord),
-                CreateJourneys(AppointmentsJourneyType.im1Appointments, PrescriptionsJourneyType.disabled,
-                    MedicalRecordJourneyType.disabled)
+                CreateJourneys(null, PrescriptionsProvider.im1,
+                    MedicalRecordProvider.none),
+                CreateJourneys(AppointmentsProvider.none, PrescriptionsProvider.Unknown,
+                    MedicalRecordProvider.im1),
+                CreateJourneys(AppointmentsProvider.im1, PrescriptionsProvider.none,
+                    MedicalRecordProvider.none)
             );
 
             var context = new ConfigurationContext
@@ -120,20 +120,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         private static Journeys CreateJourneys(
-            AppointmentsJourneyType? appointmentsJourneyType,
-            PrescriptionsJourneyType? prescriptionsJourneyType,
-            MedicalRecordJourneyType? medicalRecordJourneyType)
+            AppointmentsProvider? appointmentsProvider,
+            PrescriptionsProvider? prescriptionsProvider,
+            MedicalRecordProvider? medicalRecordProvider)
         {
             return new Journeys
             {
-                Appointments = appointmentsJourneyType.HasValue
-                    ? new Appointments { JourneyType = appointmentsJourneyType.Value }
+                Appointments = appointmentsProvider.HasValue
+                    ? new Appointments { Provider = appointmentsProvider.Value }
                     : null,
-                Prescriptions = prescriptionsJourneyType.HasValue
-                    ? new Prescriptions { JourneyType = prescriptionsJourneyType.Value }
+                Prescriptions = prescriptionsProvider.HasValue
+                    ? new Prescriptions { Provider = prescriptionsProvider.Value }
                     : null,
-                MedicalRecord = medicalRecordJourneyType.HasValue
-                    ? new MedicalRecord { JourneyType = medicalRecordJourneyType.Value }
+                MedicalRecord = medicalRecordProvider.HasValue
+                    ? new MedicalRecord { Provider = medicalRecordProvider.Value }
                     : null
             };
         }

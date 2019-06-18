@@ -15,9 +15,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Service
         private readonly ILogger _logger;
         private readonly IServiceProvider _services;
 
-        public JourneyService(
-            IServiceProvider services,
-            ILogger<JourneyService> logger)
+        public JourneyService(IServiceProvider services, ILogger<JourneyService> logger)
         {
             _services = services;
             _logger = logger;

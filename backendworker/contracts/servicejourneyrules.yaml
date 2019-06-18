@@ -34,9 +34,9 @@ components:
         appointments:
           type: object
           properties:
-            journeyType:
+            provider:
               type: string
-              description: Type of appointment journey
+              description: The appointment provider
               enum:
-                - im1Appointments
-                - disabled
+                - im1
+                - none

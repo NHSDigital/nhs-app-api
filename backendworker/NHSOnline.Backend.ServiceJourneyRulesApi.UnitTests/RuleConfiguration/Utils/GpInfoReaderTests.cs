@@ -20,7 +20,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         private Mock<ILogger<GpInfoReader>> _mockLogger;
         private Mock<IFileHandler> _mockFileHandler;
         
-        
         [TestInitialize]
         public void TestInitialize()
         {

@@ -1,6 +1,6 @@
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
-    public class MedicalRecord : Journey<MedicalRecordJourneyType>
+    public class MedicalRecord : Journey<MedicalRecordProvider>
     {
     }
 }

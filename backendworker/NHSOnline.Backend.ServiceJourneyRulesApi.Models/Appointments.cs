@@ -1,6 +1,6 @@
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
-    public class Appointments : Journey<AppointmentsJourneyType>
+    public class Appointments : Journey<AppointmentsProvider>
     {
     }
 }

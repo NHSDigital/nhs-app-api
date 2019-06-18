@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
         private readonly IServiceJourneyRulesClient _serviceJourneyRulesClient;
         private readonly ILogger<ServiceJourneyRulesService> _logger;
         
-        private const string AppointmentsJourney = "im1Appointments";
+        private const string AppointmentsProvider = "im1";
         
         public ServiceJourneyRulesService(IServiceJourneyRulesClient serviceJourneyRulesClient,  ILogger<ServiceJourneyRulesService> logger)
         {
@@ -30,8 +30,8 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 
                     if (result.HasSuccessResponse && result.Body != null)
                     {
-                        return result.Body.Appointments.JourneyType.ToString()
-                            .Equals(AppointmentsJourney, StringComparison.OrdinalIgnoreCase);
+                        return result.Body.Appointments.Provider.ToString()
+                            .Equals(AppointmentsProvider, StringComparison.OrdinalIgnoreCase);
                     }
 
                     return false;

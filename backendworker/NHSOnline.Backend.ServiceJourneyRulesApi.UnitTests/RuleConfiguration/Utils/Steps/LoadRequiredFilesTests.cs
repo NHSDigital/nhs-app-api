@@ -17,7 +17,6 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
     [TestClass]
     public class LoadRequiredFilesTests
     {
-
         private IValidatorStep _step;
         private ILoadStep _loadStep;
         private Mock<IGpInfoReader> _mockGpInfoReader;

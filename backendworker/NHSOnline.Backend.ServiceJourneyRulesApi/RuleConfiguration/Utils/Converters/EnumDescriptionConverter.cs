@@ -10,7 +10,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Conve
     internal class EnumDescriptionConverter<TEnum> : ITypeConverter
         where TEnum: struct, IConvertible
     {
-        
         private readonly Type _enumType;
         private readonly IProcessState _processState;
         private readonly ILogger _logger;

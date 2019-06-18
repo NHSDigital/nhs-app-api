@@ -3,15 +3,15 @@
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     /// <summary>
-    /// The valid journey types for prescriptions.
+    /// The valid providers for prescriptions.
     ///
     /// The lowercase naming is required for serialization, as it currently
     /// does not support conversion from `PascalCase` to `camelCase`.
     /// </summary>
-    public enum PrescriptionsJourneyType
+    public enum PrescriptionsProvider
     {
-        None = 0,
-        disabled,
-        im1Prescriptions
+        Unknown = 0,
+        none,
+        im1
     }
 }

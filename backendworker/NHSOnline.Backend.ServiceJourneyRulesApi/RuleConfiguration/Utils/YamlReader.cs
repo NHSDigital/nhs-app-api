@@ -11,7 +11,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
     internal class YamlReader<TModel> : IYamlReader<TModel>
         where TModel: class, new()
     {
-
         private readonly IDeserializer _deserializer;
         private readonly ILogger _logger;
         private readonly string _filePath;

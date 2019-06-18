@@ -78,9 +78,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
-                            PrescriptionsJourneyType.im1Prescriptions,
-                            MedicalRecordJourneyType.disabled)
+                        CreateJourneys(AppointmentsProvider.im1,
+                            PrescriptionsProvider.im1,
+                            MedicalRecordProvider.none)
                     }
                 }
             };
@@ -111,21 +111,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
-                            PrescriptionsJourneyType.im1Prescriptions,
-                            MedicalRecordJourneyType.disabled)
+                        CreateJourneys(AppointmentsProvider.im1,
+                            PrescriptionsProvider.im1,
+                            MedicalRecordProvider.none)
                     },
                     {
                         "A2",
-                        CreateJourneys(AppointmentsJourneyType.disabled,
-                            PrescriptionsJourneyType.disabled,
-                            MedicalRecordJourneyType.im1MedicalRecord)
+                        CreateJourneys(AppointmentsProvider.none,
+                            PrescriptionsProvider.none,
+                            MedicalRecordProvider.im1)
                     },
                     {
                         "A3",
-                        CreateJourneys(AppointmentsJourneyType.im1Appointments,
-                            PrescriptionsJourneyType.im1Prescriptions,
-                            MedicalRecordJourneyType.im1MedicalRecord)
+                        CreateJourneys(AppointmentsProvider.im1,
+                            PrescriptionsProvider.im1,
+                            MedicalRecordProvider.im1)
                     }
                 }
             };
@@ -162,15 +162,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         private static Journeys CreateJourneys(
-            AppointmentsJourneyType appointmentsJourneyType,
-            PrescriptionsJourneyType prescriptionsJourneyType,
-            MedicalRecordJourneyType medicalRecordJourneyType)
+            AppointmentsProvider appointmentsProvider,
+            PrescriptionsProvider prescriptionsProvider,
+            MedicalRecordProvider medicalRecordProvider)
         {
             return new Journeys
             {
-                Appointments = new Appointments { JourneyType = appointmentsJourneyType },
-                Prescriptions = new Prescriptions { JourneyType = prescriptionsJourneyType },
-                MedicalRecord = new MedicalRecord { JourneyType = medicalRecordJourneyType }
+                Appointments = new Appointments { Provider = appointmentsProvider },
+                Prescriptions = new Prescriptions { Provider = prescriptionsProvider },
+                MedicalRecord = new MedicalRecord { Provider = medicalRecordProvider }
             };
         }
     }

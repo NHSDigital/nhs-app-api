@@ -46,18 +46,18 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 
             foreach (var (odsCode, journeys) in odsJourneys)
             {
-                if (EnumHelper.HasValue(journeys.Appointments?.JourneyType) &&
-                    EnumHelper.HasValue(journeys.Prescriptions?.JourneyType) &&
-                    EnumHelper.HasValue(journeys.MedicalRecord?.JourneyType))
+                if (EnumHelper.HasValue(journeys.Appointments?.Provider) &&
+                    EnumHelper.HasValue(journeys.Prescriptions?.Provider) &&
+                    EnumHelper.HasValue(journeys.MedicalRecord?.Provider))
                 {
                     _logger.LogDebug($"Validation successful for '{odsCode}'");
                     continue;
                 }
 
                 _logger.LogError($"Not all journey types have been defined for '{odsCode}'.\n" +
-                                 $"\tPrescription: {journeys.Prescriptions?.JourneyType}\n" +
-                                 $"\tMedicalRecord: {journeys.MedicalRecord?.JourneyType}\n" +
-                                 $"\tAppointments: {journeys.Appointments?.JourneyType}");
+                                 $"\tPrescription: {journeys.Prescriptions?.Provider}\n" +
+                                 $"\tMedicalRecord: {journeys.MedicalRecord?.Provider}\n" +
+                                 $"\tAppointments: {journeys.Appointments?.Provider}");
                 isValid = false;
             }
 

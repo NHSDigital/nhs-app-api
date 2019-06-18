@@ -3,8 +3,8 @@ target:
   supplier: "emis"
 journeys:
   appointments:
-    journeyType: im1Appointments
+    provider: im1
   prescriptions:
-    journeyType: im1Prescriptions
+    provider: im1
   medicalRecord:
-    journeyType: im1MedicalRecord
+    provider: im1

@@ -9,15 +9,15 @@
       "oneOf": [{
         "additionalProperties": false,
         "properties": {
-          "journeyType": {
-            "enum": [ "im1Appointments" ]
+          "provider": {
+            "enum": [ "im1" ]
           }
         }
       },{
         "additionalProperties": false,
         "properties": {
-          "journeyType": {
-            "enum": [ "disabled" ]
+          "provider": {
+            "enum": [ "none" ]
           }
         }
       }]
@@ -26,15 +26,15 @@
       "oneOf": [{
         "additionalProperties": false,
         "properties": {
-          "journeyType": {
-            "enum": [ "im1Prescriptions" ]
+          "provider": {
+            "enum": [ "im1" ]
           }
         }
       },{
         "additionalProperties": false,
         "properties": {
-          "journeyType": {
-            "enum": [ "disabled" ]
+          "provider": {
+            "enum": [ "none" ]
           }
         }
       }]
@@ -43,15 +43,15 @@
       "oneOf": [{
         "additionalProperties": false,
         "properties": {
-          "journeyType": {
-            "enum": [ "im1MedicalRecord" ]
+          "provider": {
+            "enum": [ "im1" ]
           }
         }
       },{
         "additionalProperties": false,
         "properties": {
-          "journeyType": {
-            "enum": [ "disabled" ]
+          "provider": {
+            "enum": [ "none" ]
           }
         }
       }]

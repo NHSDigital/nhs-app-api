@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                            "  \"*\": \"*\"\n"+
                                            "journeys:\n"+
                                            "  appointments:\n"+
-                                           "    journeyType: im1Appointments";
+                                           "    provider: im1";
 
         private Mock<IYamlToJsonConverter> _mockYamlToJsonConverter;
         private Mock<ISchemaValidator> _mockSchemaValidator;
@@ -172,7 +172,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 Target = new Target { All = "*" },
                 Journeys = new Journeys
                 {
-                    Appointments = new Appointments { JourneyType = AppointmentsJourneyType.im1Appointments }
+                    Appointments = new Appointments { Provider = AppointmentsProvider.im1 }
                 }
             };
             

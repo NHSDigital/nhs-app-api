@@ -56,17 +56,17 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 }
 
                 // Update existing ODS journeys
-                if (EnumHelper.HasValue(journeys.Appointments?.JourneyType))
+                if (EnumHelper.HasValue(journeys.Appointments?.Provider))
                 {
                     currentJourneys.Appointments = journeys.Appointments;
                 }
 
-                if (EnumHelper.HasValue(journeys.Prescriptions?.JourneyType))
+                if (EnumHelper.HasValue(journeys.Prescriptions?.Provider))
                 {
                     currentJourneys.Prescriptions = journeys.Prescriptions;
                 }
 
-                if (EnumHelper.HasValue(journeys.MedicalRecord?.JourneyType))
+                if (EnumHelper.HasValue(journeys.MedicalRecord?.Provider))
                 {
                     currentJourneys.MedicalRecord = journeys.MedicalRecord;
                 }

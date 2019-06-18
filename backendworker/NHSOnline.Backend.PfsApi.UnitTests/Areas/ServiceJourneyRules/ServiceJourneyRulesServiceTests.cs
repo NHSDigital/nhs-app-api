@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
        }
        
        [TestMethod]
-       public async Task IsJourneyEnabled_JourneyIsIm1Appointments_ReturnsTrue()
+       public async Task IsJourneyEnabled_WhenProviderIsIm1_ReturnsTrue()
        {
            // Arrange
            var mockResponse =
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Appointments = new ServiceJourneyRulesApi.Models.Appointments
                        {
-                           JourneyType = AppointmentsJourneyType.im1Appointments
+                           Provider = AppointmentsProvider.im1
                        }
                    }
                };
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
        }
 
        [TestMethod]
-       public async Task IsJourneyEnabled_JourneyIsDisabled_ReturnsFalse()
+       public async Task IsJourneyEnabled_WhenThereIsNoProvider_ReturnsFalse()
        {
            // Arrange
            var mockResponse =
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Appointments = new ServiceJourneyRulesApi.Models.Appointments
                        {
-                           JourneyType = AppointmentsJourneyType.disabled
+                           Provider = AppointmentsProvider.none
                        }
                    }
                };
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Appointments = new ServiceJourneyRulesApi.Models.Appointments
                        {
-                           JourneyType = AppointmentsJourneyType.im1Appointments
+                           Provider = AppointmentsProvider.im1
                        }
                    }
                    

@@ -32,35 +32,35 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
         }
 
         [TestMethod]
-        public void CorrectResponseIsReturnedWhenAppointmentsJourneyIsDisabled()
+        public void CorrectResponseIsReturnedWhenThereIsNoProvider()
         {
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))
                 .Returns(new ServiceJourneyRulesResponse()
                 {
                     Appointments = new Appointments
                     {
-                        JourneyType = AppointmentsJourneyType.disabled
+                        Provider = AppointmentsProvider.none
                     }
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.disabled);
+            Assert.AreEqual(getResponse.Value.Appointments.Provider, AppointmentsProvider.none);
         }
 
         [TestMethod]
-        public void CorrectResponseIsReturnedWhenJourneyIsIm1Appointments()
+        public void CorrectResponseIsReturnedWhenProviderIsIm1()
         {
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))
                 .Returns(new ServiceJourneyRulesResponse()
                 {
                     Appointments = new Appointments
                     {
-                        JourneyType = AppointmentsJourneyType.im1Appointments
+                        Provider = AppointmentsProvider.im1
                     }
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.im1Appointments);
+            Assert.AreEqual(getResponse.Value.Appointments.Provider, AppointmentsProvider.im1);
         }
     }
 }
