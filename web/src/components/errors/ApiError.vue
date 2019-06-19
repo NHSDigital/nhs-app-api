@@ -172,7 +172,9 @@ export default {
   },
   methods: {
     setFocus() {
-      this.$refs.retryFormRef.focus();
+      if (this.$refs.retryFormRef) {
+        this.$refs.retryFormRef.focus();
+      }
     },
     dynamicStyle(...args) {
       return getDynamicStyle(this, args);
