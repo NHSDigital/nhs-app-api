@@ -58,7 +58,6 @@ export default {
   @import "../../style/spacings";
 
   .decision-button {
-    @extend .focusBorder;
     @include space(padding, top, $three);
     @include space(padding, left, $four);
     @include space(padding, right, $four);
