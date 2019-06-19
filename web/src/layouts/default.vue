@@ -1,7 +1,7 @@
 <template>
   <div>
     <modal/>
-    <div id="app" ref="nhsAppRoot" tabindex="-1"
+    <div id="app" ref="nhsAppRoot" :tabindex="!$store.state.device.isNativeApp ? -1 : false"
          :class="{
            [$style.desktopWeb]: !$store.state.device.isNativeApp,
            [$style['nhs-app']]: true
@@ -12,7 +12,9 @@
       <div v-else-if="shouldShowSlimDesktopHeader" :class="$style['header-container-desktop']">
         <web-header :show-menu="false" :show-links="false"/>
       </div>
-      <div id="maincontent" ref="mainContent" tabindex="-1"
+      <div id="maincontent"
+           ref="mainContent"
+           :tabindex="!$store.state.device.isNativeApp ? -1 : false"
            :class="[mainClass, $style['main-container-desktop']]">
         <main :class="mainClass">
           <header-companion-button v-if="shouldShowButton"/>
@@ -217,9 +219,6 @@ export default {
 
         if (this.$store.state.device.isNativeApp) {
           this.$store.dispatch('auth/nativeLogin');
-        }
-        if (this.$store.state.device.isNativeApp) {
-          NativeCallbacks.resetPageFocus();
         }
       }
     }

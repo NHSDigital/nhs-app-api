@@ -4,7 +4,9 @@ import MedicationCourseStatus from '@/lib/medication-course-status';
 import { LOGIN, ACCOUNT_SIGNOUT, MYRECORD } from '@/lib/routes';
 import Sources from '@/lib/sources';
 import { redirectTo } from '@/lib/utils'
+import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus'
 
+Vue.mixin(ResetPageFocusMixin);
 
 Vue.mixin({
   computed: {
