@@ -22,11 +22,11 @@ class CheckBoxElement(page : HybridPageObject, text:String) {
     }
 
     fun assertChecked() {
-       Assert.assertEquals("Expected checked",1, getCheckedElementsCount())
+        assertChecked(true)
     }
 
     fun assertUnchecked() {
-        Assert.assertEquals("Expected unchecked",0, getCheckedElementsCount())
+        assertChecked(false)
     }
 
     fun assertInlineError(errorMessage: String) {
@@ -52,11 +52,10 @@ class CheckBoxElement(page : HybridPageObject, text:String) {
         return inlineErrors
     }
 
-    private fun getCheckedElementsCount(): Int {
-        var elementCount = 0
+    private fun assertChecked(isChecked: Boolean) {
+        val errorMessage = if (isChecked) "Expected checkbox to be checked" else "Expected checkbox to be unchecked"
         checkBoxElement.actOnTheElement {
-            elementCount = it.findElements(By.xpath("./div//*[local-name() = 'svg']")).count()
+            Assert.assertEquals(errorMessage, isChecked, it.isSelected)
         }
-        return elementCount
     }
 }
