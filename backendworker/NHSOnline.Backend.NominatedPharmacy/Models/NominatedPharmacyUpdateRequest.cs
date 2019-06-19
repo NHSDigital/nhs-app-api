@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 
         private string GetEbXmlBody()
         {   
-            var envelope = UpdatePharmacySOAPEnvelope.BuildSOAPEnvelope(_messageId.ToString(), _hl7Time, _config.PartyIdFrom, _config.PartyIdTo);  
+            var envelope = UpdatePharmacySOAPEnvelope.BuildSOAPEnvelope(_messageId.ToString(), _hl7Time, _config.PartyIdFrom, _config.PartyIdTo, _config.SpineCpaId);  
             return envelope.OuterXml;
         }
 
@@ -205,7 +205,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             controlActDoc.LoadXml(controlActEventBody.SerializeXml());
             controlActDoc.DocumentElement.SetAttribute("xmlns", "urn:hl7-org:v3");
 
-            var requestBody = new UpdateNominatedPharmacyTypes.PRPAIN000203UK06
+            var requestBody = new UpdateNominatedPharmacyTypes.PRPAIN000203UK03
             {
                 Id = new NominatedPharmacyTypes.Id
                 {
@@ -222,7 +222,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                 InteractionId = new NominatedPharmacyTypes.InteractionId
                 {
                     Root = "2.16.840.1.113883.2.1.3.2.4.12",
-                    Extension = "PRPA_IN000203UK06"
+                    Extension = "PRPA_IN000203UK03"
                 },
                 ProcessingCode = new NominatedPharmacyTypes.ProcessingCode
                 {

@@ -135,8 +135,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
 			public string MoodCode { get; set; }
 		}
 
-		[XmlRoot(ElementName="PRPA_IN000203UK06", IsNullable = false)]
-		public class PRPAIN000203UK06 {
+		[XmlRoot(ElementName="PRPA_IN000203UK03", IsNullable = false)]
+		public class PRPAIN000203UK03 {
 			[XmlElement(ElementName="id")]
 			public NominatedPharmacyTypes.Id Id { get; set; }
 			[XmlElement(ElementName="creationTime")]

@@ -37,7 +37,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
 
         // Update nominated pharmacy ods code
         mockingClient.forSpine {
-            PdsNominatedPharmacyBuilder("urn:nhs:names:services:pds/PRPA_IN000203UK06")
+            PdsNominatedPharmacyBuilder("urn:nhs:names:services:pds/PRPA_IN000203UK03")
                     .respondWithAccepted() }
 
     }

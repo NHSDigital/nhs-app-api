@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
         private NominatedPharmacyHttpClient _httpClient;
         private static readonly Uri ApiUrl = new Uri("http://spine_nominated_pharmacy_base_url/", UriKind.Absolute);
         private const string PdsPath = "sync-service";
-        private const string UpdateNominatedPharmacySoapActionName = "urn:nhs:names:services:pds/PRPA_IN000203UK06";
+        private const string UpdateNominatedPharmacySoapActionName = "urn:nhs:names:services:pds/PRPA_IN000203UK03";
 
         [TestInitialize]
         public void TestInitialize()

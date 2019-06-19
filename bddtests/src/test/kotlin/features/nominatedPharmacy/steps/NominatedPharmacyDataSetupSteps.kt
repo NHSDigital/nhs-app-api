@@ -86,7 +86,7 @@ open class NominatedPharmacyDataSetupSteps {
                         arrayOf(pharmacyType))
 
         mockingClient.forSpine {
-            PdsNominatedPharmacyBuilder("urn:nhs:names:services:pds/PRPA_IN000203UK06")
+            PdsNominatedPharmacyBuilder("urn:nhs:names:services:pds/PRPA_IN000203UK03")
                     .respondWithAccepted()
                     .inScenario("changeNominatedPharmacy")
                     .whenScenarioStateIs(Scenario.STARTED)

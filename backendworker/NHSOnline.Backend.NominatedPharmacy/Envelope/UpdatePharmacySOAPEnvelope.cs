@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
 {
     public static class UpdatePharmacySOAPEnvelope
     {
-         public static XmlDocument BuildSOAPEnvelope(string messageID, string hl7Time, string partyIdFrom, string partyIdTo )
+         public static XmlDocument BuildSOAPEnvelope(string messageID, string hl7Time, string partyIdFrom, string partyIdTo, string cpaId)
         {
             const string SOAP = "SOAP";
             const string Xmlns = "xmlns";
@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
                     
                     // Start CPAId
                     writer.WriteStartElement(Eb, "CPAId", null);
-                    writer.WriteRaw("S2011405A2055612");                    
+                    writer.WriteRaw(cpaId);                    
                     writer.WriteEndElement();
                     // End CPAId
                     
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
                     
                     // Start Action
                     writer.WriteStartElement(Eb, "Action", null);
-                    writer.WriteRaw("PRPA_IN000203UK06");                    
+                    writer.WriteRaw("PRPA_IN000203UK03");                    
                     writer.WriteEndElement();
                     // End Action
                     

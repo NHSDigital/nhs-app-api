@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
                 HeaderSoapAction,
                 new[]
                 {
-                    "urn:nhs:names:services:pds/PRPA_IN000203UK06"
+                    "urn:nhs:names:services:pds/PRPA_IN000203UK03"
                 });
 
             return httpRequest;

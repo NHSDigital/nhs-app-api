@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             Uri baseUrl = new Uri("http://test-url/nom");
             string spineAccreditedSystemIdFrom = _fixture.Create<string>();
             string spineAccreditedSystemIdTo = _fixture.Create<string>();
+            string spineCpaId = _fixture.Create<string>();
             string pdsQueryFromAddress = _fixture.Create<string>();
             string pdsQueryToAddress = _fixture.Create<string>();
             int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = _fixture.Create<int>();
@@ -38,6 +39,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 baseUrl,
                 spineAccreditedSystemIdFrom,
                 spineAccreditedSystemIdTo,
+                spineCpaId,
                 pdsQueryFromAddress,
                 pdsQueryToAddress,
                 artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
@@ -49,6 +51,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             config.BaseUrl.Should().BeEquivalentTo(baseUrl);
             config.SpineAccreditedSystemIdFrom.Should().Be(spineAccreditedSystemIdFrom);
             config.SpineAccreditedSystemIdTo.Should().Be(spineAccreditedSystemIdTo);
+            config.SpineCpaId.Should().Be(spineCpaId);
             config.PdsQueryFromAddress.Should().Be(pdsQueryFromAddress);
             config.PdsQueryTo.Should().Be(pdsQueryToAddress);
             config.PartyIdFrom.Should().Be((partyIdFrom));

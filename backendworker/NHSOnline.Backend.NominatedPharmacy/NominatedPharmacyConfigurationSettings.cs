@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             Uri baseUrl,
             string spineAccreditedSystemIdFrom,
             string spineAccreditedSystemIdTo,
+            string spineCpaId,
             string pdsQueryFromAddress,
             string pdsQueryToAddress,
             int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
@@ -20,6 +21,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             BaseUrl = baseUrl;
             SpineAccreditedSystemIdFrom = spineAccreditedSystemIdFrom;
             SpineAccreditedSystemIdTo = spineAccreditedSystemIdTo;
+            SpineCpaId = spineCpaId;
             PdsQueryFromAddress = pdsQueryFromAddress;
             PdsQueryTo = pdsQueryToAddress;
             ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds = artificialDelayAfterNominatedPharmacyUpdateInMilliseconds;
@@ -34,6 +36,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public string SpineAccreditedSystemIdFrom { get; }
 
         public string SpineAccreditedSystemIdTo { get; }
+
+        public string SpineCpaId { get; }
 
         public string PdsQueryFromAddress { get; }
 
@@ -61,6 +65,11 @@ namespace NHSOnline.Backend.NominatedPharmacy
             if (string.IsNullOrEmpty(SpineAccreditedSystemIdTo))
             {
                 throw new ConfigurationNotFoundException(nameof(SpineAccreditedSystemIdTo));
+            }
+
+            if (string.IsNullOrEmpty(SpineCpaId))
+            {
+                throw new ConfigurationNotFoundException(nameof(SpineCpaId));
             }
 
             if (string.IsNullOrEmpty(PdsQueryFromAddress))

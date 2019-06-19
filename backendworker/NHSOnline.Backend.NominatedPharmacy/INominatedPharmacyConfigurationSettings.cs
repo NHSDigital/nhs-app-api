@@ -12,6 +12,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         string SpineAccreditedSystemIdTo { get; }
 
+        string SpineCpaId { get; }
+
         string PdsQueryTo { get; }
 
         string PdsQueryFromAddress { get; }

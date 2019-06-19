@@ -400,6 +400,7 @@ namespace NHSOnline.Backend.PfsApi
             var nominatedPharmacyUriString = Configuration.GetOrWarn("NOMINATED_PHARMACY_URL", _logger);
             var spineAccreditedSystemIdFrom = Configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_FROM", _logger);
             var spineAccreditedSystemIdTo = Configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_TO", _logger);
+            var spineCpaId = Configuration.GetOrWarn("SPINE_CPA_ID", _logger);
             var pdsQueryFromAddress = Configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", _logger);
             var pdsQueryTo = Configuration.GetOrWarn("PDS_QUERY_TO", _logger);
             var artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = Configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", _logger);
@@ -411,6 +412,7 @@ namespace NHSOnline.Backend.PfsApi
                 new Uri(nominatedPharmacyUriString, UriKind.Absolute),
                 spineAccreditedSystemIdFrom,
                 spineAccreditedSystemIdTo,
+                spineCpaId,
                 pdsQueryFromAddress,
                 pdsQueryTo,
                 artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
