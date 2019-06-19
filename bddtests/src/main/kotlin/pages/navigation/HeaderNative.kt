@@ -7,7 +7,8 @@ import pages.NativePageObject
 import webdrivers.options.OptionManager
 import webdrivers.options.device.DeviceWebDesktop
 
-const val WAIT_FOR_PAGE_MS = 3000L
+private const val WAIT_FOR_PAGE_MS = 3000L
+private const val HEADER_RETRIES = 20
 
 class HeaderNative : NativePageObject() {
 
@@ -15,21 +16,21 @@ class HeaderNative : NativePageObject() {
         return "//android.widget.ImageView[contains(@resource-id,'${id}')]"
     }
 
-    val homeIcon = NativePageElement(
+    private val homeIcon = NativePageElement(
             androidLocator = getAndroidIconLocator("nhsOnlineLogoIcon"),
             webDesktopLocator = "//*[@id='nhs_logo']",
             webMobileLocator = "//*[@id='nhs_logo']",
             iOSAccessID = "NHS App Home",
             page = this
     )
-    val helpIcon = NativePageElement(
+    private val helpIcon = NativePageElement(
             androidLocator = getAndroidIconLocator("helpIcon"),
             webDesktopLocator = "//a[@id='help_icon']",
             webMobileLocator = "//a[@id='help_icon']",
             iOSAccessID = "Help and support",
             page = this
     )
-    val accountIcon = NativePageElement(
+    private val accountIcon = NativePageElement(
             androidLocator = getAndroidIconLocator("myAccountIcon"),
             webDesktopLocator = "//a[@href='/account']",
             webMobileLocator = "//a[@href='/account']",
@@ -75,18 +76,21 @@ class HeaderNative : NativePageObject() {
     fun waitForPageHeaderText(expectedHeaderText: String) {
 
         Thread.sleep(WAIT_FOR_PAGE_MS)
-
-        var text = ""
-        var staleElement = true
-        while(staleElement) {
+        var retryAssertionsRemaining = HEADER_RETRIES
+        while (retryAssertionsRemaining > 0) {
             try {
-                text = getPageTitle(expectedHeaderText).text
-                staleElement = false
-            }
-            catch(e: StaleElementReferenceException) {
-                staleElement = true
+                val title = getPageTitle(expectedHeaderText)
+                Assert.assertEquals("Header Expected", expectedHeaderText, title.text)
+                break
+            } catch (e: StaleElementReferenceException) {
+                Thread.sleep(WAIT_FOR_PAGE_MS)
+            } catch (e: AssertionError) {
+                retryAssertionsRemaining--
+                if (retryAssertionsRemaining == 0) {
+                    throw(e)
+                }
+                Thread.sleep(WAIT_FOR_PAGE_MS)
             }
         }
-        Assert.assertEquals("Header is correct", expectedHeaderText, text)
     }
 }

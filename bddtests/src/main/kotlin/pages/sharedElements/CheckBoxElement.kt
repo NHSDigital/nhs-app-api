@@ -7,7 +7,7 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
 
-class CheckBoxElement(page : HybridPageObject, text:String) {
+class CheckBoxElement(val page : HybridPageObject, text:String) {
 
     private val checkBoxElement = HybridPageElement(
             webDesktopLocator = "//div[input[@type='checkbox']][label[contains(normalize-space(),'$text')]]",
@@ -44,18 +44,22 @@ class CheckBoxElement(page : HybridPageObject, text:String) {
 
         checkBoxElement.actOnTheElement {
             inlineErrors.addAll(
-                it.findElements(By.xpath("./preceding-sibling::p[contains(@class, error-message)]/span"))
-                        .map { webElement -> webElement.text }
+                    it.findElements(By.xpath("./preceding-sibling::p[contains(@class, error-message)]/span"))
+                            .map { webElement -> webElement.text }
             )
         }
 
         return inlineErrors
     }
 
-    private fun assertChecked(isChecked: Boolean) {
-        val errorMessage = if (isChecked) "Expected checkbox to be checked" else "Expected checkbox to be unchecked"
+    private fun assertChecked(expectedChecked: Boolean) {
+        val errorMessage = if (expectedChecked)
+            "Expected checkbox to be checked"
+        else "Expected checkbox to be unchecked"
         checkBoxElement.actOnTheElement {
-            Assert.assertEquals(errorMessage, isChecked, it.isSelected)
+            val input = it.findElement(By.xpath("./input"))
+            val isSelected = input.isSelected
+            Assert.assertEquals(errorMessage, expectedChecked, isSelected)
         }
     }
 }

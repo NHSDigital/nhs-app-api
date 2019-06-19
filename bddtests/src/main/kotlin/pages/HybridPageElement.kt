@@ -144,6 +144,8 @@ open class HybridPageElement(
             }
             catch(e: AssertionError) {
                 retryAssertionsOnce--
+                if(retryAssertionsOnce==0)
+                    throw(e)
                 Thread.sleep(MILLISECONDS_IN_A_SECOND)
             }
         }

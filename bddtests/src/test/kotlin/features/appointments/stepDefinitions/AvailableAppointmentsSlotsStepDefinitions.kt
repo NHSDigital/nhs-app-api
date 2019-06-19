@@ -409,7 +409,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun aMessageIsDisplayedIndicatingThereAreNoSlotsForSelectedCriteria() {
         availableAppointments.availableAppointmentsPage.warning("No appointments available").assertVisible(
                 arrayListOf(
-                        "Try to filter appointments by a different period or" +
+                        "Try to filter appointments by a different period or " +
                                 "select \"No preference\" for the practice member. " +
                                 "If you cannot find the appointment you need, call your GP surgery.",
                         "If it's urgent and you do not know what to do, call 111 to get help near you."))
