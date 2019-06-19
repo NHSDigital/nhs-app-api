@@ -1,19 +1,28 @@
 <template>
-  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+  <div v-if="showTemplate"
+       :class="[$style['pull-content'], $style.content,
+                !$store.state.device.isNativeApp && $style.desktopWeb]">
     <pharmacy-detail id="pharmacy-detail"
                      :pharmacy="nominatedPharmacy"
                      :is-my-nominated-pharmacy="false" />
     <generic-button id="confirm-button"
-                    :class="[$style.button, $style.green]"
+                    :button-classes="[$store.state.device.isNativeApp
+                      ?'button' : 'button-desktop', 'green']"
                     @click.stop.prevent="submitNominatedPharmacy">
       {{ $t('nominated_pharmacy.confirm.confirmButton') }}
     </generic-button>
-    <analytics-tracked-tag :text="$t('generic.backButton.text')">
-      <generic-button id="back-button"
+    <analytics-tracked-tag :text="$t('generic.backButton.text')"
+                           :tabindex="-1">
+      <generic-button v-if="$store.state.device.isNativeApp" id="back-button"
                       :button-classes="['grey', 'button']" :class="$style['back']"
                       tabindex="0" @click.prevent="cancelButtonClicked">
         {{ $t('generic.backButton.text') }}
       </generic-button>
+      <desktopGenericBackLink v-else
+                              id="back-link"
+                              :path="nominatedPharmacySearchResultsPath"
+                              :button-text="'generic.backButton.text'"
+                              @clickAndPrevent="cancelButtonClicked"/>
     </analytics-tracked-tag>
   </div>
 </template>
@@ -23,6 +32,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY } from '@/lib/routes';
 
@@ -31,10 +41,12 @@ export default {
     GenericButton,
     AnalyticsTrackedTag,
     PharmacyDetail,
+    DesktopGenericBackLink,
   },
   data() {
     return {
       nominatedPharmacy: this.$store.state.nominatedPharmacy.selectedNominatedPharmacy,
+      nominatedPharmacySearchResultsPath: NOMINATED_PHARMACY_SEARCH_RESULTS.path,
     };
   },
   created() {
@@ -50,7 +62,7 @@ export default {
       redirectTo(this, NOMINATED_PHARMACY.path, null);
     },
     cancelButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
+      redirectTo(this, this.nominatedPharmacySearchResultsPath, null);
     },
   },
 };
@@ -60,4 +72,25 @@ export default {
   @import "../../style/spacings";
   @import "../../style/buttons";
   @import "../../style/info";
+
+  div {
+  &.desktopWeb {
+    max-width: 540px;
+
+    .warningText {
+      font-family: $default_web;
+      font-weight: normal;
+    }
+
+    li {
+      font-family: $default_web;
+      font-weight: normal;
+    }
+
+    p {
+      font-family: $default_web;
+      font-weight: normal;
+    }
+  }
+}
 </style>

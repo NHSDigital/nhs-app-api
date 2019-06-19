@@ -76,35 +76,81 @@ describe('nominated pharmacy not found', () => {
     });
   });
 
-  describe('back to prescriptions', () => {
-    let backButton;
+  describe('back to prescriptions link present on desktop', () => {
+    let backLink;
 
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $style = {
-        button: 'button',
-        grey: 'grey',
-      };
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
-      backButton = wrapper.find('#back-button');
+      backLink = wrapper.find('#back-link');
     });
 
     it('will exist', () => {
-      expect(backButton.exists()).toBe(true);
+      expect(backLink.exists()).toBe(true);
     });
 
     it('will use "nominatedPharmacyNotFound.backButton" for text', () => {
-      expect(backButton.text())
+      expect(backLink.text())
         .toEqual('translate_nominatedPharmacyNotFound.backButton');
     });
 
     it('will navigate back to prescriptions page', async () => {
       dependency.redirectTo = jest.fn();
-      await backButton.trigger('click');
+      await backLink.trigger('click');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path, null);
     });
+  });
+});
+
+describe('back button present on mobile app', () => {
+  let backButton;
+  let $store;
+  let $style;
+  let wrapper;
+
+  const createStateForApp = (state = {
+    device: {
+      source: 'ios',
+    },
+    nominatedPharmacy: {
+      pharmacy: {
+        pharmacyName: 'boots',
+      },
+    },
+  }) => state;
+
+  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t });
+
+  beforeEach(() => {
+    $store = createStore({
+      dispatch: jest.fn(() => Promise.resolve()),
+      state: createStateForApp(),
+    });
+    $style = {
+      button: 'button',
+      grey: 'grey',
+    };
+    $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
+    wrapper = mountPage();
+    backButton = wrapper.find('#back-link');
+  });
+
+  it('will exist', () => {
+    expect(backButton.exists()).toBe(true);
+  });
+
+  it('will use "nominatedPharmacyNotFound.backButton" for text', () => {
+    expect(backButton.text())
+      .toEqual('translate_nominatedPharmacyNotFound.backButton');
+  });
+
+  it('will navigate back to prescriptions page', async () => {
+    dependency.redirectTo = jest.fn();
+    await backButton.trigger('click');
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path, null);
   });
 });
 

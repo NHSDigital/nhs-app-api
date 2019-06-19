@@ -1,7 +1,8 @@
 <template>
   <div v-if="showTemplate"
        id="mainDiv"
-       :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]">
+       :class="[$style['pull-content'], $style.content,
+                !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div v-if="hasNoNominatedPharmacy">
       <no-nominated-pharmacy-warning/>
     </div>
@@ -16,16 +17,23 @@
     </div>
 
     <generic-button id="continue-button-found"
-                    :button-classes="['green', 'button']"
+                    :button-classes="[$store.state.device.isNativeApp
+                      ?'button' : 'button-desktop', 'green']"
                     @click.prevent="onContinueButtonClicked">
       {{ getContinueButtonText }}
     </generic-button>
 
-    <generic-button id="back-button"
+    <generic-button v-if="$store.state.device.isNativeApp"
+                    id="back-button"
                     :button-classes="['grey', 'button']" :class="$style.back"
                     tabindex="0" @click.prevent="onBackButtonClicked">
       {{ $t('nominatedPharmacyNotFound.backButton') }}
     </generic-button>
+    <desktopGenericBackLink v-else
+                            id="back-link"
+                            :path="prescriptionsPath"
+                            :button-text="'nominatedPharmacyNotFound.backButton'"
+                            @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>
 
@@ -34,6 +42,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
@@ -42,6 +51,7 @@ export default {
   components: {
     GenericButton,
     PharmacyDetail,
+    DesktopGenericBackLink,
     NoNominatedPharmacyWarning,
   },
   data() {
@@ -63,10 +73,13 @@ export default {
     isInternetPharmacy() {
       return (this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy);
     },
+    prescriptionsPath() {
+      return PRESCRIPTIONS.path;
+    },
   },
   created() {
     if (this.$store.state.nominatedPharmacy.hasLoaded === false || !this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, PRESCRIPTIONS.path, null);
+      redirectTo(this, this.prescriptionsPath, null);
     }
   },
   methods: {
@@ -74,7 +87,7 @@ export default {
       redirectTo(this, PRESCRIPTION_REPEAT_COURSES.path, null);
     },
     onBackButtonClicked() {
-      redirectTo(this, PRESCRIPTIONS.path, null);
+      redirectTo(this, this.prescriptionsPath, null);
     },
   },
 };

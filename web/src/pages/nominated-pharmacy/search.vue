@@ -1,5 +1,6 @@
 <template>
-  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+  <div v-if="showTemplate" :class="[$style['pull-content'], $style.content,
+                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div :class="$style.info">
       <message-dialog v-if="isInternetPharmacy"
                       id="warning-dialog"
@@ -25,21 +26,29 @@
       <form @submit.prevent="searchFormSubmitted">
         <generic-text-input id="searchTextInput"
                             v-model="searchQuery"
-                            :class="$style['input-spacing']"
+                            :class="[$store.state.device.isNativeApp
+                              ? $style['input-spacing']: $style['input-spacing-desktop']]"
                             type="text"
                             a-labelled-by="pharmacy-search-label"
                             name="searchQuery"
                             :maxlength="searchQueryMaxLengthAsString"/>
-        <generic-button id="search-button" :button-classes="['green', 'button']" >
+        <generic-button id="search-button"
+                        :button-classes="[$store.state.device.isNativeApp
+                          ?'button':'button-desktop', 'green']">
           {{ $t('nominated_pharmacy.search.searchButton') }}
         </generic-button>
-        <analytics-tracked-tag :text="$t('generic.backButton.text')">
-          <generic-button
-            id="back-button"
-            :button-classes="['grey', 'button']" :class="$style['back']"
-            tabindex="0" @click.prevent="cancelButtonClicked">
+        <analytics-tracked-tag :text="$t('generic.backButton.text')" :tabindex="-1">
+          <generic-button v-if="$store.state.device.isNativeApp"
+                          id="back-button"
+                          :button-classes="['grey', 'button']" :class="$style['back']"
+                          tabindex="0" @click.prevent="cancelButtonClicked">
             {{ $t('generic.backButton.text') }}
           </generic-button>
+          <desktopGenericBackLink v-else
+                                  id="back-link"
+                                  :path="backButtonPath"
+                                  :button-text="'generic.backButton.text'"
+                                  @clickAndPrevent="cancelButtonClicked"/>
         </analytics-tracked-tag>
       </form>
     </div>
@@ -56,6 +65,7 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -66,6 +76,7 @@ export default {
     ErrorMessage,
     MessageDialog,
     MessageText,
+    DesktopGenericBackLink,
   },
   data() {
     return {
@@ -192,7 +203,14 @@ export default {
 }
 
 .input-spacing {
+  margin-top: 1em;
   margin-bottom: 1em;
+}
+
+.input-spacing-desktop {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  max-width: 350px;
 }
 
 .search-label-spacing {

@@ -7,6 +7,8 @@
     <p v-if="!isInternetPharmacy" id="pharmacyAddress"> {{ formatAddress(pharmacy) }} </p>
     <analytics-tracked-tag v-if="isInternetPharmacy"
                            id="url"
+                           :class="[$style.checkFeaturesLink, $style['link-spacing'],
+                                    !$store.state.device.isNativeApp && $style.desktopWeb]"
                            :href="pharmacy.url"
                            :text="$t(pharmacy.url)"
                            tag="a" target="_blank">
@@ -69,5 +71,10 @@ export default {
 
 .additional-padding {
   margin-top: 1em;
+}
+
+.checkFeaturesLink.link-spacing {
+  display: inline-block;
+  margin: 1.2em 0;
 }
 </style>

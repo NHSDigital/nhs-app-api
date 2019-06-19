@@ -171,20 +171,20 @@ describe('search pharmacies', () => {
     });
   });
 
-  describe('back button', () => {
-    let backButton;
+  describe('back link for desktop', () => {
+    let backLink;
 
     beforeEach(() => {
-      backButton = page.find('#back-button');
+      backLink = page.find('#back-link');
     });
 
     it('will exist', () => {
-      expect(backButton.exists()).toBe(true);
+      expect(backLink.exists()).toBe(true);
     });
 
     it('it will go back to the previous page set in the store', () => {
       dependency.redirectTo = jest.fn();
-      backButton.trigger('click');
+      backLink.trigger('click');
 
       expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY.path, null);
     });

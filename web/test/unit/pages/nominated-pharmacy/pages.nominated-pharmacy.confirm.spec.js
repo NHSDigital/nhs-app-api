@@ -32,7 +32,9 @@ describe('confirm nominated pharmacy', () => {
     let pharmacyDetails;
 
     beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()), state: createState(),
+      });
       wrapper = mountPage();
       pharmacyDetails = wrapper.find(PharmacyDetail);
     });
@@ -47,15 +49,18 @@ describe('confirm nominated pharmacy', () => {
     });
   });
 
-  describe('confirm button', () => {
+  describe('confirm button for desktop', () => {
     let confirmButton;
 
     beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createState(),
+      });
       wrapper = mountPage();
       confirmButton = wrapper.find('#confirm-button');
       $style = {
-        button: 'button',
+        button: 'button-desktop',
         green: 'green',
       };
     });
@@ -66,7 +71,6 @@ describe('confirm nominated pharmacy', () => {
 
     it('will be a green button', () => {
       expect(confirmButton.classes()).toContain($style.green);
-      expect(confirmButton.classes()).toContain($style.button);
     });
 
     it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {
@@ -84,31 +88,83 @@ describe('confirm nominated pharmacy', () => {
     });
   });
 
-  describe('back button', () => {
-    let backButton;
+  describe('confirm button for app', () => {
+    let confirmButton;
+
+    const createStateForApp = (state = {
+      device: {
+        source: 'ios',
+      },
+      nominatedPharmacy: {
+        selectedNominatedPharmacy: {
+          odsCode: 'RR123',
+          openingTimesFormatted: [{
+            day: 'Sunday',
+            times: [],
+          }],
+        },
+      },
+    }) => state;
+
+    const mountPageForApp = () => mount(ConfirmNominatedPharmacy, { $store, $style, $t });
 
     beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      wrapper = mountPage();
-      backButton = wrapper.find('#back-button');
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createStateForApp(),
+      });
+      wrapper = mountPageForApp();
+      confirmButton = wrapper.find('#confirm-button');
       $style = {
         button: 'button',
-        green: 'grey',
+        green: 'green',
       };
     });
 
     it('will exist', () => {
-      expect(backButton.exists()).toBe(true);
+      expect(confirmButton.exists()).toBe(true);
+    });
+
+    it('will be a green button', () => {
+      expect(confirmButton.classes()).toContain($style.green);
+    });
+
+    it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {
+      expect(confirmButton.text())
+        .toEqual('translate_nominated_pharmacy.confirm.confirmButton');
+    });
+
+    it('will submit nominated pharmacy on click and call to redirect', async () => {
+      dependency.redirectTo = jest.fn();
+      await confirmButton.trigger('click');
+      expect($store.dispatch).toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', 'RR123');
+      expect($store.dispatch).toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChanged');
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
+    });
+  });
+
+  describe('back link for desktop', () => {
+    let backLink;
+
+    beforeEach(() => {
+      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      wrapper = mountPage();
+      backLink = wrapper.find('#back-link');
+    });
+
+    it('will exist', () => {
+      expect(backLink.exists()).toBe(true);
     });
 
     it('will use "generic.backButton.text" for text', () => {
-      expect(backButton.text())
+      expect(backLink.text())
         .toEqual('translate_generic.backButton.text');
     });
 
     it('will redirect to the search results page on click', async () => {
       dependency.redirectTo = jest.fn();
-      await backButton.trigger('click');
+      await backLink.trigger('click');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
     });

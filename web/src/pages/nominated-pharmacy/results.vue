@@ -1,5 +1,6 @@
 <template>
-  <div :class="[$style.content, 'pull-content']">
+  <div :class="[$style['pull-content'], $style.content,
+                !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div v-if="noResultsFound" :class="$style.resultPanel">
       <h2>
         {{ $t('nominatedPharmacySearchResults.errors.noResultsFound.header') }}
@@ -19,6 +20,8 @@
             :key="`pharmacy-${pharmacy.odsCode}`"
             :class="$style.link">
           <analytics-tracked-tag :id="`btnPharmacy-${pharmacy.odsCode}`"
+                                 :class="!$store.state.device.isNativeApp ?
+                                   $style['no-decoration'] : ''"
                                  text="Pharmacy"
                                  tag="a"
                                  href="#"
@@ -41,11 +44,17 @@
         </li>
       </ul>
     </div>
-    <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')">
-      <generic-button :button-classes="['grey', 'button']" :class="$style.back"
+    <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')"
+                           :tabindex="-1">
+      <generic-button v-if="$store.state.device.isNativeApp"
+                      :button-classes="['grey', 'button']" :class="$style.back"
                       tabindex="0" @click="backButtonClicked">
         {{ $t('nominatedPharmacySearchResults.backButton') }}
       </generic-button>
+      <desktopGenericBackLink v-else
+                              :path="searchNominatedPharmacyPath"
+                              :button-text="'nominatedPharmacyNotFound.backButton'"
+                              @clickAndPrevent="backButtonClicked"/>
     </analytics-tracked-tag>
   </div>
 </template>
@@ -54,6 +63,7 @@
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CONFIRM, PRESCRIPTIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -61,6 +71,7 @@ export default {
   components: {
     AnalyticsTrackedTag,
     GenericButton,
+    DesktopGenericBackLink,
   },
   data() {
     const { searchResults, searchQuery } = this.$store.state.nominatedPharmacy;
@@ -99,10 +110,13 @@ export default {
     foundNoResults() {
       return this.$t('nominatedPharmacySearchResults.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
     },
+    searchNominatedPharmacyPath() {
+      return NOMINATED_PHARMACY_SEARCH.path;
+    },
   },
   mounted() {
     if (!this.searchQuery || (!this.pharmacies && !this.technicalError && !this.noResultsFound)) {
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
+      redirectTo(this, this.searchNominatedPharmacyPath, null);
     }
   },
   created() {
@@ -123,7 +137,7 @@ export default {
       redirectTo(this, NOMINATED_PHARMACY_CONFIRM.path, null);
     },
     backButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
+      redirectTo(this, this.searchNominatedPharmacyPath, null);
     },
   },
 };
@@ -133,6 +147,21 @@ export default {
 @import '../../style/listmenu';
 @import "../../style/colours";
 
+div {
+  &.desktopWeb {
+  max-width: 540px;
+
+  li {
+    font-family: $default_web;
+    font-weight: normal;
+  }
+
+  p {
+    font-family: $default_web;
+    font-weight: normal;
+    }
+  }
+}
 .resultPanel {
   margin-top: 1em;
   margin-bottom: 1em;

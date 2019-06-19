@@ -12,7 +12,7 @@ describe('can not change nominated pharmacy', () => {
 
   const createState = (state = {
     device: {
-      source: 'web',
+      source: 'ios',
     },
     nominatedPharmacy: {
       pharmacy: {

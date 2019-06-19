@@ -157,6 +157,15 @@ export default {
 @import '../../style/listmenu';
 @import "../../style/fonts";
 
+div {
+  &.desktopWeb {
+  max-width: 540px;
+  p {
+    font-family: $default_web;
+    font-weight: normal;
+    }
+  }
+}
 .desktopWeb {
    font-family: $default-web;
    max-width: 540px + 64px; // 64px (2em) to compasensate padding apply to the div by main.scss

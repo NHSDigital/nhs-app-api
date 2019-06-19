@@ -96,7 +96,7 @@ Feature: nominated pharmacy journey
     When I click on change my nominated pharmacy link
     Then I see cannot change pharmacy page
     And I see header with how to change pharmacy instruction
-    When I click the 'Back' button
+    When I click the Back link
     Then I see prescriptions page loaded
 
     Examples:

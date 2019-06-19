@@ -9,14 +9,14 @@
     <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink"
                            id="link-to-change-pharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
-                           :class="[$style['spacing-top']]"
+                           :class="[$style.checkFeaturesLink, $style['link-spacing'],
+                                    !$store.state.device.isNativeApp && $style.desktopWeb]"
                            :text="$t('nominated_pharmacy.changePharmacyLink')"
                            tag="a">
       {{ $t('nominated_pharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
     <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
-                            :pharmacy-opening-time="pharmacy.openingTimesFormatted"
-                            :class="[$style['spacing-top']]" />
+                            :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
   </div>
 </template>
 
@@ -91,11 +91,6 @@ export default {
 @import "../../style/textstyles";
 @import "../../style/home";
 
-.column {
-  float: left;
-  width: 50%;
-}
-
 .row:after {
   content: "";
   display: table;
@@ -103,8 +98,9 @@ export default {
   padding-bottom: 0.5em;
 }
 
-.spacing-top {
-  margin: 1.5em 0;
+.checkFeaturesLink.link-spacing {
+  display: inline-block;
+  margin: 1.2em 0;
 }
 
 </style>

@@ -10,6 +10,7 @@ describe('pharmacy summary', () => {
   beforeEach(() => {
     $store = createStore({
       state: {
+        device: 'web',
         nominatedPharmacy: initialState(),
       },
     });

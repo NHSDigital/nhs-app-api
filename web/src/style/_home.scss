@@ -127,30 +127,30 @@ header.logged {
     .organDonationLink:hover {
         @include linkHoverStyle;
     }
+}
 
-    .checkFeaturesLink {
-        cursor: pointer;
-        text-decoration: underline;
-      &.desktopWeb {
-        display: inline;
-        font-family: $default-web;
-      }
-    }
-
-  .checkFeaturesLink:focus{
-    background: $focus_highlight; 
-    box-shadow: 0 0 0 4px $focus_highlight; 
-    color: $black; 
-    outline: 0; 
-    width: auto;
-  }
-  .checkFeaturesLink:hover{
-    background: $hover_highlight; 
-    box-shadow: 0 0 0 4px $hover_highlight; 
-    color: $black; 
-    width: auto;
+.checkFeaturesLink {
+    cursor: pointer;
     text-decoration: underline;
+  &.desktopWeb {
+    display: inline;
+    font-family: $default-web;
   }
+}
+
+.checkFeaturesLink:focus{
+  background: $focus_highlight; 
+  box-shadow: 0 0 0 4px $focus_highlight; 
+  color: $black; 
+  outline: 0; 
+  width: auto;
+}
+.checkFeaturesLink:hover{
+  background: $hover_highlight; 
+  box-shadow: 0 0 0 4px $hover_highlight; 
+  color: $black; 
+  width: auto;
+  text-decoration: underline;
 }
 
 .loginMain {
