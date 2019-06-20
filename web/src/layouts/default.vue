@@ -225,8 +225,8 @@ export default {
     if (this.pathChanged) {
       this.$refs.nhsAppRoot.focus();
       this.pathChanged = false;
+      NativeCallbacks.pageLoadComplete();
     }
-    NativeCallbacks.pageLoadComplete();
   },
   methods: {
     isLoginPage() {

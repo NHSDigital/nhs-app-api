@@ -39,6 +39,7 @@ class HomeViewController : UIViewController {
     var goingBack: Bool = false
     var biometricService: BiometricService?
     var configurationService: ConfigurationService?
+    public var selectedTab: Int?
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true

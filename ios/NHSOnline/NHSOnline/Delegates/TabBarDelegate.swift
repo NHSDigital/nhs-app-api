@@ -22,11 +22,21 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     }
     
     func tabBar(_ tabBar: UITabBar, didSelect: UITabBarItem) {
-        if(viewController.applicationState.isReady()) {
-            viewController.applicationState.block()
-            let selectedItem = Menu(rawValue: didSelect.tag)!
-            var selectedURL: String
-            switch selectedItem {
+        if(viewController.selectedTab == didSelect.tag) {
+            return
+        }
+        
+        if(!viewController.applicationState.isReady()) {
+            selectMenu(menu: Menu(rawValue: viewController.selectedTab!)!)
+            return
+        }
+        viewController.selectedTab = didSelect.tag
+        
+        let selectedItem = Menu(rawValue: didSelect.tag)!
+        var selectedURL: String
+
+        viewController.applicationState.block()
+        switch selectedItem {
             case .Symptoms:
                 selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
                 break
@@ -42,9 +52,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
             case .More:
                 selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
                 break
-            }
-            selectPage(pageUrl: selectedURL)
         }
+        selectPage(pageUrl: selectedURL)
     }
     
     private func selectPage(pageUrl: String) {
