@@ -63,6 +63,10 @@ export default {
         dropdownClass.push(this.$style['validation-select-border']);
       }
 
+      if (!this.$store.state.device.isNativeApp) {
+        dropdownClass.push(this.$style.desktopWeb);
+      }
+
       return dropdownClass;
     },
   },
@@ -74,6 +78,13 @@ export default {
 @import "../../style/select";
 @import "../../style/errorvalidation";
 
+div {
+ &.desktopWeb {
+  .custom-dropdown__select--white {
+   padding-right: 70px;
+  }
+ }
+ }
 select::-ms-expand {
   display: none;
 }

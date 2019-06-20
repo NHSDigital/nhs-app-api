@@ -29,6 +29,9 @@ describe('additional-details', () => {
     };
     state = {
       organDonation: initialState(),
+      device: {
+        isNativeApp: false,
+      },
     };
   });
 
