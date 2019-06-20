@@ -283,4 +283,8 @@ div {
   }
  }
 }
+
+div:focus {
+  outline: none !important;
+}
 </style>
