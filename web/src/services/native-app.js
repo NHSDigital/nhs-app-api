@@ -89,15 +89,6 @@ export default {
     return false;
   },
 
-  checkSymptoms() {
-    const app = window.nativeApp;
-    if (app && app.checkSymptoms) {
-      app.checkSymptoms();
-      return true;
-    }
-    return false;
-  },
-
   hideWhiteScreen() {
     const app = window.nativeApp;
     if (app && app.hideWhiteScreen) {

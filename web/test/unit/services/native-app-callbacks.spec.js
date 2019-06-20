@@ -8,7 +8,6 @@ describe('NATIVE CALLBACKS', () => {
     { fn: 'clearMenuBarItem' },
     { fn: 'hideHeader' },
     { fn: 'showHeader' },
-    { fn: 'checkSymptoms' },
     { fn: 'hideHeaderSlim' },
     { fn: 'showHeaderSlim' },
     { fn: 'hideWhiteScreen' },

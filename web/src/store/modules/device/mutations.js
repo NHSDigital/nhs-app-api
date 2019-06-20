@@ -10,12 +10,10 @@ export default {
   [UPDATE_IS_NATIVE_APP](state, isNativeApp) {
     state.isNativeApp = isNativeApp;
   },
-  [GO_TO_CHECK_SYMPTOMS](state) {
+  [GO_TO_CHECK_SYMPTOMS]() {
     if (window.nativeApp) {
-      if (!NativeCallbacks.checkSymptoms()) {
-        const sourceValue = this.app.store.state.device.source;
-        redirectTo(this, '/check-your-symptoms', { source: sourceValue });
-      }
+      const sourceValue = this.app.store.state.device.source;
+      redirectTo(this, '/check-your-symptoms', { source: sourceValue });
     } else {
       redirectTo(this, CHECKYOURSYMPTOMS.path, null);
     }
