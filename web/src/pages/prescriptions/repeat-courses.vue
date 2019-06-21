@@ -16,7 +16,7 @@
     </message-dialog>
 
     <div v-if="showRepeatCourses">
-      <no-js-form :action="confirmCoursesPath" :value="{}" method="post">
+      <no-js-form :action="confirmCoursesPath" :value="{formData}" method="post">
         <div :class="$style.panel">
           <div :class="{
             [$style['validation-inline']]: (error && !courseSelectionValid),
@@ -27,11 +27,7 @@
             </error-message>
             <fieldset>
               <legend role="heading">{{ $t('rp03.subHeader') }}</legend>
-              <repeat-prescription
-                v-for="repeatPrescription in repeatPrescriptionCourses"
-                :key="repeatPrescription.id"
-                :selected="repeatPrescription.selected"
-                :prescription-details="repeatPrescription" />
+              <repeat-prescription v-model="selected"/>
             </fieldset>
           </div>
         </div>
@@ -124,9 +120,17 @@ export default {
   data() {
     return {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest ? this.$store.state.repeatPrescriptionCourses.specialRequest : '',
+      prescriptionChoices: this.$store.state.repeatPrescriptionCourses,
+      selected: this.$store.state.repeatPrescriptionCourses.selected,
     };
   },
   computed: {
+    formData() {
+      return {
+        repeatCourses: this.$store.state.repeatPrescriptionCourses,
+        selectedCourses: this.$store.state.repeatPrescriptionCourses.selected,
+      };
+    },
     error() {
       const { validated } = this.$store.state.repeatPrescriptionCourses;
 

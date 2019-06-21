@@ -1,58 +1,71 @@
 <template>
-  <div data-purpose="repeat-prescription">
-    <input :value="JSON.stringify(nojsData)" :name="prescriptionDetails.id" type="hidden">
-    <generic-checkbox-no-js v-model="selected"
-                            :checkbox-id="prescriptionDetails.id"
-                            :selected="selected"
-                            name="prescription"
-                            @click="check">
-      <span data-label="prescription-name">
-        {{ prescriptionDetails.name }}
-      </span>
-      <p :class="$style.prescriptionDescription" data-label="prescription-description">
-        {{ prescriptionDetails.details }}
-      </p>
-    </generic-checkbox-no-js>
+  <div>
+    <div v-for="repeatPrescription in repeatPrescriptionCourses" :key="repeatPrescription.id">
+      <div data-purpose="repeat-prescription">
+        <input :value="JSON.stringify({
+                 name: repeatPrescription.name,
+                 details: repeatPrescription.details,
+               })"
+               :name="repeatPrescription.id" type="hidden">
+        <generic-checkbox
+          :checkbox-id="repeatPrescription.id"
+          :value="repeatPrescription.id"
+          :is-selected="value"
+          :required="false"
+          name="prescription"
+          @input="selectedValueChanged(repeatPrescription)">
+          <span data-label="prescription-name"
+                :aria-label="`${repeatPrescription.name}. ${repeatPrescription.details}`"
+                role="text">
+            {{ repeatPrescription.name }}
+          </span>
+          <p :class="$style.prescriptionDescription"
+             data-label="prescription-description"
+             aria-hidden="true">
+            {{ repeatPrescription.details }}
+          </p>
+        </generic-checkbox>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import GenericCheckboxNoJs from '@/components/widgets/GenericCheckboxNoJs';
+import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 
 export default {
   name: 'RepeatPrescription',
   components: {
-    GenericCheckboxNoJs,
+    GenericCheckbox,
   },
   props: {
-    prescriptionDetails: {
-      type: Object,
-      required: true,
+    value: {
+      type: Array,
+      default: () => [],
     },
+
   },
   computed: {
     ...mapGetters({
       isValid: 'repeatPrescriptionCourses/isValid',
     }),
-    selected: {
-      get() {
-        return this.prescriptionDetails.selected;
-      },
-      set() {
-        // not needed, computed value is for hidden input
-      },
-    },
-    nojsData() {
-      return {
-        name: this.prescriptionDetails.name,
-        details: this.prescriptionDetails.details,
-      };
+    repeatPrescriptionCourses() {
+      const { repeatPrescriptionCourses } = this.$store.state.repeatPrescriptionCourses;
+      if (typeof repeatPrescriptionCourses === 'undefined' || !repeatPrescriptionCourses || repeatPrescriptionCourses.length === 0) {
+        return null;
+      }
+      return repeatPrescriptionCourses;
     },
   },
   methods: {
-    check() {
-      this.$store.dispatch('repeatPrescriptionCourses/select', this.prescriptionDetails.id);
+    selectedValueChanged(checkbox) {
+      this.$store.dispatch('repeatPrescriptionCourses/select', checkbox.id);
       this.$store.dispatch('repeatPrescriptionCourses/validate', { isValid: this.isValid });
+      const storeSelected = this.$store.state.repeatPrescriptionCourses.repeatPrescriptionCourses
+        .filter(c => c.selected === true)
+        .map(item => item.id);
+      this.$store.dispatch('repeatPrescriptionCourses/updateSelected', storeSelected);
+      this.$emit('input', storeSelected);
     },
   },
 };

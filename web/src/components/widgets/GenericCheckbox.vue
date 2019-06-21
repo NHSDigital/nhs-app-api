@@ -2,11 +2,12 @@
   <div class="nhsuk-checkboxes__item" style="padding: 0 0 0 40px">
     <input :id="checkboxId"
            ref="checkbox"
-           v-model="isSelected"
-           :checked="selected"
+           v-model="selectedCheckbox"
            class="nhsuk-checkboxes__input"
            type="checkbox"
+           :name="name"
            :required="required"
+           :value="value"
            @change="onChange"
            @keypress="onKeyDown">
     <label :id="`${checkboxId}-label`"
@@ -36,9 +37,13 @@ export default {
       type: String,
       default: '',
     },
+    // eslint-disable-next-line vue/require-prop-types
     value: {
-      type: Boolean,
-      default: false,
+      default: '',
+    },
+    // eslint-disable-next-line vue/require-prop-types
+    isSelected: {
+      default: '',
     },
     required: {
       type: Boolean,
@@ -47,23 +52,13 @@ export default {
   },
   data() {
     return {
-      isSelected: this.value,
       labelId: `${this.checkboxId}-label`,
+      selectedCheckbox: this.isSelected,
     };
   },
-  computed: {
-    selected: {
-      get() {
-        return this.value;
-      },
-      set(val) {
-        this.$emit('input', val);
-      },
-    },
-  },
   methods: {
-    onChange($event) {
-      this.selected = $event.target.checked;
+    onChange() {
+      this.$emit('input', this.value);
     },
     onClick() {
       this.$refs.checkbox.click();

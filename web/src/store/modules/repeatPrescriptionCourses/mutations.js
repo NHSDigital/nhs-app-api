@@ -5,6 +5,7 @@ import {
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
+  UPDATE_SELECTED_REPEAT_PRESCRIPTION,
   initialState,
 } from './mutation-types';
 
@@ -31,6 +32,7 @@ export default {
     })(initialState);
     state.hasLoaded = false;
     state.specialRequest = null;
+    state.selected = [];
   },
   [REPEAT_PRESCRIPTION_VALIDATED](state, validationObject) {
     state.validated = !!validationObject.submitted;
@@ -46,6 +48,9 @@ export default {
   },
   [REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO](state, repeatPrescriptionAdditionalInfo) {
     state.specialRequest = repeatPrescriptionAdditionalInfo.specialRequest;
+  },
+  [UPDATE_SELECTED_REPEAT_PRESCRIPTION](state, ids) {
+    state.selected = ids;
   },
 };
 

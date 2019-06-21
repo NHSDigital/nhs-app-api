@@ -3,7 +3,7 @@
     <div class="nhsuk-checkboxes">
       <generic-checkbox v-for="checkbox in checkboxes"
                         :key="checkbox.code"
-                        :value="checkbox.selected"
+                        :value="checkbox.code"
                         :name="name"
                         :required="required"
                         :checkbox-id="`checkbox-${checkbox.code}`"
