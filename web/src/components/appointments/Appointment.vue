@@ -1,39 +1,39 @@
 <template>
   <div :class="[$style.panel, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <component :is="dateTimeHeader" :class="$style['date-time-header']">
-      <span role="text">
-        <span :class="$style.date"
-              data-label="date">{{ formatDate(appointment.startTime) }}&nbsp;</span>
-        <span :class="$style.time"
-              data-label="start time">{{ formatTime(appointment.startTime) }}</span>
-      </span>
-    </component>
-    <hr aria-hidden="true">
-    <p :class="[$style.session, appointment.sessionName && $style.reducedPadding]"
-       data-label="slot type">
-      {{ appointment.type }}
-    </p>
-    <p v-if="appointment.sessionName"
-       :class="$style.sessionName"
-       data-label="session name">
-      {{ appointment.sessionName }}
-    </p>
-    <hr aria-hidden="true">
+    <div :class="$style.panelGroup">
+      <component :is="dateTimeHeader" :class="$style['date-time-header']">
+        <div :class="$style.date"
+             data-label="date">{{ formatDate(appointment.startTime) }}</div>
+        <div :class="$style.time"
+             data-label="start time">{{ formatTime(appointment.startTime) }}</div>
+      </component>
+    </div>
 
-    <p :class="$style.location">
-      <location-icon/>&nbsp;
-      <span data-label="location">{{ appointment.location }}</span>
-    </p>
+    <div :class="$style.panelGroup">
+      <h3>{{ this.$t('appointments.index.appointmentTypeLabel') }}</h3>
+      <p :class="$style.session" data-label="slot type">
+        {{ appointment.type }}
+      </p>
+      <p v-if="appointment.sessionName" :class="$style.sessionName" data-label="session name">
+        {{ appointment.sessionName }}
+      </p>
+      <p v-for="(clinician, index) in appointment.clinicians"
+         :key="clinician" :class="$style.person">
+        <span :data-label="'clinician ' + (index + 1)">
+          {{ clinician }}
+        </span>
+      </p>
+    </div>
 
-    <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
-       :class="$style.person">
-      <clinician-icon/>&nbsp;
-      <span :data-label="'clinician ' + (index +1)">
-        {{ clinician }}
-      </span>
-    </p>
+    <div :class="$style.panelGroup">
+      <h3>{{ this.$t('appointments.index.locationLabel') }}</h3>
+      <p :class="$style.location">
+        <span data-label="location">{{ appointment.location }}</span>
+      </p>
+    </div>
 
-    <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation">
+    <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation"
+          :class="$style.panelGroup">
       <hr :class="$style.cancel"
           aria-hidden="true">
       <p>
@@ -44,7 +44,9 @@
         </a>
       </p>
     </span>
-    <span v-if="showCancellationLink && (cancellationDisabled || appointment.disableCancellation)">
+
+    <span v-if="showCancellationLink && (cancellationDisabled || appointment.disableCancellation)"
+          :class="$style.panelGroup">
       <hr :class="$style.cancel"
           aria-hidden="true">
       <p :class="$style['cancel-disabled']">
@@ -56,18 +58,12 @@
 
 <script>
 import moment from 'moment-timezone';
-import LocationIcon from '@/components/icons/LocationIcon';
-import ClinicianIcon from '@/components/icons/ClinicianIcon';
 import { APPOINTMENT_CANCELLING } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'Appointment',
-  components: {
-    ClinicianIcon,
-    LocationIcon,
-  },
   props: {
     appointment: {
       type: Object,
@@ -112,83 +108,83 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/panels";
+  @import "../../style/panels";
+  @import '~nhsuk-frontend/packages/core/settings/_all.scss';
+  @import '~nhsuk-frontend/packages/core/tools/_all.scss';
+  @import '~nhsuk-frontend/packages/core/elements/_links.scss';
 
-@import '~nhsuk-frontend/packages/core/settings/_all.scss';
-@import '~nhsuk-frontend/packages/core/tools/_all.scss';
-@import '~nhsuk-frontend/packages/core/elements/_links.scss';
+  .panel {
+    .panelGroup {
+      padding-top: 0.25em;
+      padding-bottom: 0.75em;
+    }
 
-.panel {
-  &.desktopWeb {
-    hr {
-      opacity: unset;
+    .date {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .time {
+      font-weight: normal;
+      font-size: 25px;
+      line-height: 1.5em;
+    }
+
+    h3 {
+      font-weight: bold;
+      font-size: 16px;
     }
 
     .date-time-header {
       font-family: $default-web;
-      font-weight: lighter;
       display: block;
-      font-size: 1em;
       line-height: 1.5em;
+
       span.time {
         font-family: $default-web;
-        font-weight: lighter;
       }
     }
 
     p {
       font-family: $default-web;
-      font-weight: lighter;
-      max-width: 540px;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
     }
 
     p.person,
     p.location,
     p.cancel-disabled {
       font-family: $default-web;
-      font-weight: lighter;
     }
 
     a.cancel-link {
       font-family: $default-web;
       font-weight: normal;
     }
-  }
 
-  p.sessionName {
-    font-weight: lighter;
-    font-size: 0.875em;
-    padding-top: 0.25em;
-    padding-bottom: 0.75em;
-  }
-
-  p.reducedPadding {
-    padding-bottom: 0 !important;
-  }
-
-  h3 {
-    padding-bottom: 0em;
-    padding-top: 0em;
-
-    span.date {
-      display: block;
-      padding-bottom: 0.5em;
-      padding-top: 0.5em;
+    p.sessionName {
+      font-size: 1em;
     }
 
-    span.time {
-      @include default_label;
-      letter-spacing: $kernel;
-      color: $light_grey;
-      font-size: 1.250em;
-      padding-bottom: 0.5em;
-      padding-top: 0em;
+    h3 {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+
+    hr {
+      margin-bottom: 0.5em;
+    }
+
+    a.cancel-link,
+    a.cancel-disabled {
+      margin: 0.5em 0;
+    }
+
+    &.desktopWeb {
+      p {
+        max-width: 540px;
+      }
     }
   }
-
-  .cancel {
-    margin-top: 0.5em;
-  }
-}
 
 </style>

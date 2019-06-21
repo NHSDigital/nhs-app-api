@@ -9,7 +9,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     And I am on the My Appointments page
-    When I select a "Cancel appointment" link
+    When I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
@@ -23,7 +23,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    When I select a "Cancel appointment" link
+    When I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
@@ -37,7 +37,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    When I select a "Cancel appointment" link
+    When I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
@@ -46,7 +46,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for TPP
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    When I select a "Cancel appointment" link
+    When I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And cancellation reasons drop-down is hidden
@@ -55,7 +55,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    When I select a "Cancel appointment" link
+    When I select a "Cancel this appointment" link
     And I select "Cancel appointment" button
     Then I will receive a cancellation validation error
     Examples:
@@ -68,7 +68,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    When I select a "Cancel appointment" link
+    When I select a "Cancel this appointment" link
     And I select "Cancel appointment" button
     Then I will receive a cancellation validation error
 
@@ -77,7 +77,7 @@ Feature: Ability to cancel an appointment
     Given <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    And I select a "Cancel appointment" link
+    And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
     Then the My Appointments page is displayed
@@ -99,7 +99,7 @@ Feature: Ability to cancel an appointment
     Given VISION is available to cancel a previously booked appointment before cutoff time, with only one available reason
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    And I select a "Cancel appointment" link
+    And I select a "Cancel this appointment" link
     And I select the cancellation reason
     When I select "Cancel appointment" button
     Then the My Appointments page is displayed
@@ -110,7 +110,7 @@ Feature: Ability to cancel an appointment
     Given TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    And I select a "Cancel appointment" link
+    And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     When I select "Cancel appointment" button
     Then the My Appointments page is displayed
@@ -121,7 +121,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    And I select a "Cancel appointment" link
+    And I select a "Cancel this appointment" link
     When I select a "Back" button
     Then the My Appointments page is displayed
     Examples:
@@ -138,7 +138,7 @@ Feature: Ability to cancel an appointment
     Given <GP System> is unavailable to cancel a previously booked appointment because <Reason>
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    When I select a "Cancel appointment" link
+    When I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
     Then I see appropriate information message when there is an error sending data on appointment confirmation page
@@ -154,7 +154,7 @@ Feature: Ability to cancel an appointment
     Given I have upcoming appointments before cutoff time for VISION
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    And I select a "Cancel appointment" link
+    And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I lose my internet connection
     When I select "Cancel appointment" button

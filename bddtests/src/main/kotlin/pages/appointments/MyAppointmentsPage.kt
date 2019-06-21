@@ -44,7 +44,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     private val cancelAppointmentLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'Cancel appointment')]",
+            webDesktopLocator = "//a[contains(text(),'Cancel this appointment')]",
             page = this
     )
 

@@ -72,7 +72,7 @@ Feature: Appointment Service with no Javascript
     Given <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    And I select a "Cancel appointment" link
+    And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
     Then the My Appointments page is displayed
@@ -86,7 +86,7 @@ Feature: Appointment Service with no Javascript
     Given TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in
     When I retrieve the 'My Appointments' page directly
-    And I select a "Cancel appointment" link
+    And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     When I select "Cancel appointment" button
     Then the My Appointments page is displayed

@@ -18,7 +18,7 @@
       And I am logged in
       When I retrieve the 'My Appointments' page directly
       Then the MyAppointments_WithAppointments page is saved to disk
-      And I select a "Cancel appointment" link
+      And I select a "Cancel this appointment" link
       Then I will be on the "Cancellation reason" screen
       Then the CancelAppointments page is saved to disk
       And I select a cancellation reason of No longer required

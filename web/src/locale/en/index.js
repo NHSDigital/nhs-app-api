@@ -259,8 +259,10 @@ export default {
       successText: 'Your appointment has been booked. You can view details or cancel it here.',
       succcessAndCancellationDisabledText: 'Your appointment has been booked. You can view details here.',
       bookButtonText: 'Book new appointment',
-      cancelButtonText: 'Cancel appointment',
+      cancelButtonText: 'Cancel this appointment',
       cancellationDisabledText: 'To cancel this appointment, contact your GP surgery.',
+      locationLabel: 'Location',
+      appointmentTypeLabel: 'Appointment type',
       empty: {
         header: 'Upcoming appointments',
         text1: 'You don\'t currently have any appointments booked.',
@@ -1362,10 +1364,6 @@ export default {
     appointmentsIcon: {
       title: 'Appointments',
     },
-    clinicianIcon: {
-      title: 'Clinician',
-      description: 'Clinician Graphic',
-    },
     helpIcon: {
       title: 'Help and support',
       desc: 'Access help and support',
@@ -1373,10 +1371,6 @@ export default {
     homeIcon: {
       title: 'NHS Online',
       desc: 'Go back to the home screen.',
-    },
-    locationIcon: {
-      title: 'Location',
-      description: 'Location Graphic',
     },
     moreIcon: {
       title: 'More',

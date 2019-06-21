@@ -3,113 +3,119 @@
 @import './formspanelshared';
 
 .panel {
-	display: table;
-	width: 100%;
-	box-sizing: border-box;
-	padding: 1em;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;
-	margin-top: 0.5em;
-	background-color: $white;
-	-webkit-box-shadow: 0.063em 0.063em 0.125em 0em rgba(0,0,0,0.2);
-	-moz-box-shadow: 0.063em 0.063em 0.125em 0em rgba(0,0,0,0.2);
-	box-shadow: 0.063em 0.063em 0.125em 0em rgba(0,0,0,0.2);
-	transition: all ease 0.5s;
-	box-shadow: 0.063em 0.063em 0.125em 0em rgba(0,0,0,0.2);
-    &.desktopWeb {
-      box-shadow: 0 0.25em 0 0 #D8DDE0;
+  display: table;
+  width: 100%;
+  border: 1px solid $panel_grey;
+  box-sizing: border-box;
+  padding: 0.5em 1em;
+  margin-top: 0.5em;
+  background-color: $white;
+
+  &.desktopWeb {
+    font-family: $default-web;
+    font-weight: normal;
+    max-width: 540px;
+    margin-right: 1em;
+
+    h3 {
       font-family: $default-web;
-      font-weight: normal;
-			max-width: 540px;
-			margin-right: 1em;
-			h3 {
-				font-family: $default-web;
-        display: block;
-        font-size: 1em;
-        line-height: 1.5em;
-			}
-			b, label {
-				font-family: $default-web;
-			}
-			a.cancel-link {
-				font-family: $default-web;
-        font-weight: normal;
-			}
+      display: block;
+      font-size: 1em;
+      line-height: 1.5em;
     }
 
-	h2 {
-		@include default_label;
-		font-weight: 700;
-		padding-bottom: 0.5em;
-		padding-top: 0.5em;
-	}
+    b, label {
+      font-family: $default-web;
+    }
 
-	h3 {
-      @include default_label;
-      padding-bottom: 0.5em;
-      padding-top: 0.5em;
-	}
-
-	b,
-	label {
-		padding-bottom: 0.250em;
-		padding-top: 0.5em;
-	}
-
-	.requested,
-	.issued,
-	.rejected {
-		p {
-			padding-top: 0em;
-		}
-		svg {
-			vertical-align: middle;
-		}
-	}
-	.requested {
-		b {
-			color: $awaiting !important;
-		}
-	}
-	.issued {
-		b {
-			color: $approved !important;
-		}
-	}
-	.rejected {
-		b {
-			color: $error !important;
-		}
-	}
-  a.cancel-link:hover{
-     background: #ffcd60;
-     box-shadow: 0 0 0 4px #ffcd60;
-     box-sizing: border-box;
-     color: #D40003;
-     text-decoration: none;
-   }
-
-  a.cancel-link:focus{
-    outline-color: $focus_highlight;
-  box-shadow: 0 0 0 4px $focus_highlight;
+    a.cancel-link {
+      font-family: $default-web;
+      font-weight: bold;
+    }
   }
-	a.cancel-link{
+
+  h2 {
+    @include default_label;
+    font-weight: 700;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
+
+  h3 {
+    @include default_label;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
+
+  b,
+  label {
+    padding-bottom: 0.250em;
+    padding-top: 0.5em;
+  }
+
+  .requested,
+  .issued,
+  .rejected {
+    p {
+      padding-top: 0em;
+    }
+
+    svg {
+      vertical-align: middle;
+    }
+  }
+
+  .requested {
+    b {
+      color: $awaiting !important;
+    }
+  }
+
+  .issued {
+    b {
+      color: $approved !important;
+    }
+  }
+
+  .rejected {
+    b {
+      color: $error !important;
+    }
+  }
+
+  a.cancel-link:hover {
+    background: #ffcd60;
+    box-shadow: 0 0 0 4px #ffcd60;
+    box-sizing: border-box;
+    color: #D40003;
+    text-decoration: none;
+  }
+
+  a.cancel-link:focus {
+    outline-color: $focus_highlight;
+    box-shadow: 0 0 0 4px $focus_highlight;
+  }
+
+  a.cancel-link {
+    color: #D40003;
+    display: inline-block;
+    margin-top: 0.5em;
+
+    :visited {
       color: #D40003;
-      display: inline-block;
-      margin-top: 0.5em;
-      :visited {
-        color: #D40003;
-        outline-color: $focus_highlight;
-      }
-	}
-	p.session {
-		padding-top: 0.750em;
-		padding-bottom: 0.750em;
-	}
-	p.person,
-	p.location,
-	p.cancel-disabled {
-		padding-top: 0.5em;
-		padding-bottom: 0em;
-	}
+      outline-color: $focus_highlight;
+    }
+  }
+
+  p.session {
+    padding-top: 0.750em;
+    padding-bottom: 0.750em;
+  }
+
+  p.person,
+  p.location,
+  p.cancel-disabled {
+    padding-top: 0.5em;
+    padding-bottom: 0em;
+  }
 }

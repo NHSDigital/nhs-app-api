@@ -28,8 +28,8 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsUISteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 
-    @When("^I select a \"Cancel appointment\" link$")
-    fun iSelectACancelLink() {
+    @When("^I select a \"Cancel this appointment\" link$")
+    fun iSelectACancelThisAppointmentLink() {
         myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
