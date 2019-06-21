@@ -1,6 +1,7 @@
 <template>
   <div id="maincontent" :class="dynamicStyle('loginMain')">
-    <div v-if="isPracticeParticipating">
+    <div v-if="!isThrottlingEnabled || (isPracticeParticipating
+      && isThrottlingEnabled)">
       <h2>{{ $t('login.desc') }}</h2>
       <form ref="loginForm"
             :action="authoriseUrl"
@@ -13,14 +14,14 @@
     <no-ssr placeholder="">
       <div :class="$style.throttlingContent">
         <analytics-tracked-tag
-          v-if="!hasCookie && isPracticeParticipating"
+          v-if="!hasCookie && isPracticeParticipating && isThrottlingEnabled"
           :class="[$style.checkFeaturesLink, !$store.state.device.isNativeApp && $style.desktopWeb]"
           :text="$t('login.checkWhatFeaturesYouCanUse')"
           :click-func="resetAndGoToGPFinder"
           tag="a">
           {{ $t('login.checkWhatFeaturesYouCanUse') }}
         </analytics-tracked-tag>
-        <div v-if="!isPracticeParticipating">
+        <div v-if="!isPracticeParticipating && isThrottlingEnabled">
           <br>
           <ul :class="$style['list-menu']">
             <li role="link">
@@ -34,7 +35,7 @@
               </analytics-tracked-tag>
             </li>
           </ul>
-          <div v-if="!isPracticeParticipating">
+          <div v-if="!isPracticeParticipating && isThrottlingEnabled">
             <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
             <h5>{{ notParticipatingSurgeryName }}</h5>
             <p>{{ notParticipatingSurgeryAddress }}</p>
@@ -97,10 +98,8 @@ export default {
     notParticipatingSurgeryAddress() {
       return this.practiceAddress;
     },
-    showCheckFeaturesLink() {
-      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-      return betaCookie !== undefined && !betaCookie.NeverShowCheckFeatureLink &&
-          (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
+    isThrottlingEnabled() {
+      return (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
             this.$store.app.$env.THROTTLING_ENABLED === true);
     },
   },
