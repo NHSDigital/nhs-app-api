@@ -1,7 +1,5 @@
 <template>
   <div>
-    <modal/>
-
     <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
       <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
         <web-header :show-menu="false" :show-links="false"/>
