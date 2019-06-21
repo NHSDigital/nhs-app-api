@@ -3,4 +3,4 @@ target:
   odsCode: "A29928"
 journeys:
   appointments:
-    provider: none
+    provider: im1
