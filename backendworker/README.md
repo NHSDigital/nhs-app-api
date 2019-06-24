@@ -37,14 +37,20 @@ and the Redis instances run the following in the backend worker directory:
 docker-compose up --build
 ```
 
+NOTE: if buiding for the first time, build SJR service first:
+
+```
+docker-compose -f docker-compose.servicejourneyrules.yml build
+```
+
 #### Updating service journey rules
 If you are updating service journey rule files, you need to delete the volumes to allow it to be recreated.
 
 ```
-docker-compose down -v
+docker volume ls | grep servicejourneyrules | awk '{print $2}' | xargs docker volume rm
 ```
 
-Furthermore, if changing the loading logic, build service journey rules image prior `docker-compose up --build`.
+Furthermore, if changing the validation/loading logic, build service journey rules image prior to `docker-compose`.
 
 ```
 docker-compose -f docker-compose.servicejourneyrules.yml build

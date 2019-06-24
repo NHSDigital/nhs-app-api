@@ -30,11 +30,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Write_WhenGivenAFilePathAndContent_WriteFile()
         {
-            // arrange
+            // Arrange
             var filePath = "c:/test.yaml";
             var model = new object();
 
-            // act
+            // Act
             _yamlWriter.Write(filePath, model);
 
             // Act and Assert

@@ -10,10 +10,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void GetType_WhenTypeNotEnum_ThrownsAnException()
         {
-            // act
+            //  Arrange
             Action act = () => EnumHelper.GetType<int>();
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().Which.Message
                 .Should().Be("Type provided must be an Enum.");
         }
@@ -21,10 +21,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void GetType_WhenTypeIsEnum_ReturnsType()
         {
-            // act
+            // Act
             var result = EnumHelper.GetType<Test>();
 
-            // assert
+            // Assert
             result.Should().Be(typeof(Test));
         }
 
@@ -44,10 +44,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void GetDescriptionOrThrowException_WhenNoDescrption_ThrownsAnException()
         {
-            // act
+            // Act
             Action act = () => EnumHelper.GetDescriptionOrThrowException(Test.Fourth);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().Which.Message
                 .Should().Be("No Description attribute on enum Fourth");
         }
@@ -55,10 +55,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void GetDescriptionOrThrowException_WhenDescrption_ReturnsDescription()
         {
-            // act
+            // Act
             var result = EnumHelper.GetDescriptionOrThrowException(Test.Third);
 
-            // assert
+            // Assert
             result.Should().Be("Description 2");
         }
     }

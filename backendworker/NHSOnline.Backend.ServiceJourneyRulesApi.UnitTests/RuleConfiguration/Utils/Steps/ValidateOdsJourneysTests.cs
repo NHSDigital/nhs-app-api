@@ -37,10 +37,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextIsNotPresent_ThrowsAnException()
         {
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(null);
 
-            // assert
+            // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(2)
                 .And.AllBeOfType<ArgumentNullException>()
@@ -53,13 +53,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenMergedOdsJourneysIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext();
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("MergedOdsJourneys");
         }
 
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenMissingJourneys_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 MergedOdsJourneys = new Dictionary<string, Journeys>
@@ -93,10 +93,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert;
+            // Assert;
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A2'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A3'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenAllJourneysAreProvided_ReturnsTrue()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 MergedOdsJourneys = new Dictionary<string, Journeys>
@@ -133,17 +133,17 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert;
+            // Assert;
             result.Should().BeTrue();
         }
         
         [TestMethod]
         public async Task Execute_WhenMergedConfigFilesContainsAllJourneys_ReturnsTrue()
         {
-            // arrange
+            // Arrange
             var context = new LoadContext
             {
                 MergedOdsJourneys = new Dictionary<string, Journeys>
@@ -157,17 +157,17 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _loadStep.Execute(context);
 
-            // assert;
+            // Assert;
             result.Should().BeTrue();
         }
         
         [TestMethod]
         public async Task Execute_WhenMergedConfigFilesMissingJourneys_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new LoadContext
             {
                 MergedOdsJourneys = new Dictionary<string, Journeys>
@@ -181,10 +181,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _loadStep.Execute(context);
 
-            // assert;
+            // Assert;
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A1'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 

@@ -53,10 +53,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextIsNotPresent_ThrowsAnException()
         {
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(null);
 
-            // assert
+            // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(3)
                 .And.AllBeOfType<ArgumentNullException>()
@@ -69,13 +69,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextHasNoValues_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext();
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(2)
                 .And.AllBeOfType<ArgumentNullException>()
@@ -87,39 +87,39 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextRulesSchemaIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 TargetSchema = _fixture.Create<FileData>()
             };
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("RulesSchema");
         }
 
         [TestMethod]
         public void Execute_WhenContextTargetSchemaIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 RulesSchema = _fixture.Create<FileData>()
             };
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("TargetSchema");
         }
 
         [TestMethod]
         public async Task Execute_WhenThereIsNoRulesConfigurationFile_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 TargetSchema = _fixture.Create<FileData>(),
@@ -128,10 +128,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
             SetupFileHandler(_rulesConfigurationFolder, Array.Empty<string>());
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Error, "There must be exactly 1 rules configuration file in",
                 Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading rules config file", Times.Once());
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenThereAreMultipleRulesConfigurationFiles_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 TargetSchema = _fixture.Create<FileData>(),
@@ -152,10 +152,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
             SetupFileHandler(_rulesConfigurationFolder, new[] { "rule1.yaml", "rule2.yaml" });
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Error, "There must be exactly 1 rules configuration file in",
                 Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading rules config file", Times.Once());
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenItFailsToReadTheRulesConfigurationFile_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 TargetSchema = _fixture.Create<FileData>(),
@@ -178,10 +178,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             SetupFileHandler(_rulesConfigurationFolder, new[] { fileName });
             SetupReader(fileName, (Rules) null);
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading rules config file", Times.Once());
             _mockLogger.VerifyNoOtherCalls();
 
@@ -191,7 +191,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenThereAreNoTargetConfigurationFilesOnAllFolders_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 TargetSchema = _fixture.Create<FileData>(),
@@ -215,10 +215,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 { folder2Path, Array.Empty<string>() },
             });
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Warning, $"found in directory {folder1Path}", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Warning, $"found in directory {folder2Path}", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading target configuration files", Times.Once());
@@ -230,7 +230,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenSomeTargetConfigurationFailToRead_ReturnsTrue()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 TargetSchema = _fixture.Create<FileData>(),
@@ -267,10 +267,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             SetupReader(target3FileName, target3Configuration);
             SetupReader(target4FileName, target4Configuration);
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading target configuration files", Times.Once());
             _mockLogger.VerifyNoOtherCalls();
 
@@ -280,7 +280,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenThereAreNoTargetConfigurationFilesOnSomeFolders_ReturnsTrue()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 TargetSchema = _fixture.Create<FileData>(),
@@ -308,10 +308,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var targetConfiguration = _fixture.Create<TargetConfiguration>();
             SetupReader(targetFileName, targetConfiguration);
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Warning, $"found in directory {folder2Path}", Times.Once());
             _mockLogger.VerifyNoOtherCalls();
 
@@ -327,20 +327,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void ExecuteWithLoadContext_WhenTargetSchemaIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new LoadContext();
 
-            // act
+            // Act
             Func<Task> act = async () => await _loadStep.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("TargetSchema");
         }
         
         [TestMethod]
         public async Task ExecuteWithLoadContext_WhenItFailsToReadTheMergedConfigurationFile_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new LoadContext
             {
                 TargetSchema = _fixture.Create<FileData>()
@@ -350,10 +350,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             SetupFileHandler(_rulesConfigurationFolder, new[] { fileName });
             SetupReader(fileName, (Rules) null);
 
-            // act
+            // Act
             var result = await _loadStep.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error reading target configuration files.", Times.Once());
 
             result.Should().BeFalse();
@@ -362,7 +362,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task ExecuteWithLoadContext_WhenThereAreNoTargetConfigurationFiles_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new LoadContext
             {
                 TargetSchema = _fixture.Create<FileData>()
@@ -374,10 +374,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var targetConfiguration = _fixture.Create<TargetConfiguration>();
             SetupReader(targetFileName, targetConfiguration);
 
-            // act
+            // Act
             var result = await _loadStep.Execute(context);
 
-            // assert
+            // Assert
 
             result.Should().BeFalse();
         }

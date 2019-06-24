@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
     public class FileHandlerTests
     {
         private const string DuplicateFileName = "duplicate_file.json";
-        private const string UniqueFileName = "invalid_schema.json";
+        private const string UniqueFileName = "unique_file.json";
         private IFileHandler _fileHandler;
         private Mock<IDirectory> _directory;
 
@@ -32,10 +32,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void ReadEmbeddedResourceFromFileName_WhenCalledWithValidFileName_ReturnsFileDataWithNoError()
         {
-            // act
+            // Act
             var result = _fileHandler.ReadEmbeddedResourceFromFileName(UniqueFileName, out var fileData);
 
-            // assert
+            // Assert
             result.Should().BeTrue();
             fileData.Should().NotBeNull();
             fileData.Name.Should().EndWith(UniqueFileName);
@@ -48,10 +48,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void ReadEmbeddedResourceFromFileName_WhenCalledWithInvalidFileName_ReturnsFileDataWithError(
             string fileName)
         {
-            // act
+            // Act
             var result = _fileHandler.ReadEmbeddedResourceFromFileName(fileName, out var fileData);
 
-            // assert
+            // Assert
             result.Should().BeFalse();
             fileData.Should().BeNull();
         }
@@ -59,10 +59,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void GetTextReader_WhenCalledWithAValidFilePath_ReturnsTextReader()
         {
-            // act
+            // Act
             var result = _fileHandler.GetTextReader("TestData/GpInfo/gpinfo.csv");
 
-            //assert
+            // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<TextReader>();
         }
@@ -70,10 +70,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void GetTextWriter_WhenCalledWithAValidFilePath_ReturnsTextWriter()
         {
-            // act
+            // Act
             var result = _fileHandler.GetTextWriter("TestData/GpInfo/text.csv");
 
-            //assert
+            // Assert
             _directory.Verify(s => s.CreateDirectory("TestData/GpInfo"));
 
             result.Should().NotBeNull();

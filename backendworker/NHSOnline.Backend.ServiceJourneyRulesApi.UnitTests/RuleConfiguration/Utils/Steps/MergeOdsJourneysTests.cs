@@ -33,10 +33,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextIsNotPresent_ThrowsAnException()
         {
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(null);
 
-            // assert
+            // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(2)
                 .And.AllBeOfType<ArgumentNullException>()
@@ -48,20 +48,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenFolderOdsJourneysIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext();
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("FolderOdsJourneys");
         }
 
         [TestMethod]
         public async Task Execute_WhenGivenAListOfFolderOdsJourneys_MergesJourneys()
         {
-            // arrange
+            // Arrange
             var defaultFolderJourneys = CreateOdsJourneys(
                 CreateJourneys(null, PrescriptionsProvider.im1,
                     MedicalRecordProvider.Unknown),
@@ -98,10 +98,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             result.Should().BeTrue();
             context.MergedOdsJourneys.Should().BeEquivalentTo(expectedMergedJourneys);
         }

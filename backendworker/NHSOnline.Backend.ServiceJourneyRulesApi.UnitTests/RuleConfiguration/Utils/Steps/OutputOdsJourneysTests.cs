@@ -42,10 +42,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextIsNotPresent_ThrowsAnException()
         {
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(null);
 
-            // assert
+            // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(2)
                 .And.AllBeOfType<ArgumentNullException>()
@@ -58,20 +58,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenMergedOdsJourneysIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext();
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("MergedOdsJourneys");
         }
 
         [TestMethod]
         public async Task Execute_WhenWritingFileFails_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 MergedOdsJourneys = new Dictionary<string, Journeys>
@@ -90,10 +90,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockYamlWriter.Setup(s => s.Write(It.IsAny<string>(), It.IsAny<TargetConfiguration>()))
                 .Throws(exception);
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockYamlWriter.Verify(s => s.Write(It.IsAny<string>(), It.IsAny<TargetConfiguration>()));
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error outputting the merged files", exception, Times.Once());
 
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenGivenAListOfOdsJourneys_WritesToFileAndReturnsTrue()
         {
-            // arrange
+            // Arrange
             var writeCalls = new Dictionary<string, TargetConfiguration>();
             var context = new ConfigurationContext
             {
@@ -133,10 +133,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockYamlWriter.Setup(s => s.Write(It.IsAny<string>(), It.IsAny<TargetConfiguration>()))
                 .Callback((string path, TargetConfiguration configuration) => writeCalls.Add(path, configuration));
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             result.Should().BeTrue();
             writeCalls.Should().HaveCount(3);
             writeCalls.Should().ContainKey("c:/output/A1.yaml")

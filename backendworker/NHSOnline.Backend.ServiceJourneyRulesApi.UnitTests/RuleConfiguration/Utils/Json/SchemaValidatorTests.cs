@@ -20,73 +20,352 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
     [TestClass]
     public class SchemaValidatorTests
     {
-        private const string ValidSchemaFileName = ".valid_schema.json";
-        private const string ValidJson = @"{ ""target"": true }";
-        private const string InvalidSchemaFileName = ".invalid_schema.json";
-        private const string InvalidJson = @"{ ""target"": 1 }";
         private Mock<ILogger<SchemaValidator>> _mockLogger;
         private ISchemaValidator _validator;
+        private FileData _rulesSchema;
+        private FileData _journeyConfigurationSchema;
 
         [TestInitialize]
         public void TestInitialize()
         {
             var fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            
+
+            _rulesSchema = GetEmbeddedResource(Constants.FileNames.RulesSchema);
+            _journeyConfigurationSchema = GetEmbeddedResource(Constants.FileNames.JourneyConfigurationSchema);
             _mockLogger = fixture.Freeze<Mock<ILogger<SchemaValidator>>>();
-            
+
             _validator = fixture.Create<SchemaValidator>();
         }
 
         [TestMethod]
-        public async Task ValidateJsonAgainstSchema_WhenCalledWithInvalidSchema_ReturnsFalse()
+        public async Task ValidateJsonAgainstSchema_WhenCalledWithNullSchemaFile_ReturnsFalse()
         {
-            // act
-            var result = await _validator.ValidateJsonAgainstSchema(
-                GetEmbeddedResource(InvalidSchemaFileName),
-                new FileData(null, null));
-            
-            // assert
-            _mockLogger.VerifyLogger(LogLevel.Error, typeof(JsonReaderException), Times.Once());
+            // Arrange
+            const string fileContent = "{" +
+                                       "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                                       "  \"target\": {" +
+                                       "    \"*\":\"*\"" +
+                                       "  }," +
+                                       "  \"journeys\": {" +
+                                       "    \"appointments\": {" +
+                                       "      \"provider\": \"im1\"" +
+                                       "    }" +
+                                       "  }" +
+                                       "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+            var schemaFile = new FileData("Schema file", null);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(schemaFile, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, $"Unable to create schema from {schemaFile.Name}", Times.Once());
 
             result.Should().BeFalse();
         }
 
         [TestMethod]
-        public async Task ValidateJsonAgainstSchema_WhenCalledWithValidSchemaInvalidJson_ReturnsFalse()
+        public async Task ValidateJsonAgainstSchema_RulesSchema_WhenCalledWithAdditionalProperty_ReturnsFalse()
         {
-            // arrange
-            var validJsonSchema = GetEmbeddedResource(ValidSchemaFileName);
-            var jsonFile = new FileData(string.Empty, InvalidJson);
+            // Arrange
+            const string fileContent = "{" +
+                                       "  \"$schema\": \"Rules/Journeys/rules_schema.json\"," +
+                                       "  \"folderOrder\": [" +
+                                       "    \"defaults\"," +
+                                       "    \"suppliers\"," +
+                                       "    \"informatica\"," +
+                                       "    \"incident_overrides\"" +
+                                       "  ]," +
+                                       "  \"additionalProperty\": [" +
+                                       "    \"defaults\"," +
+                                       "    \"suppliers\"," +
+                                       "    \"informatica\"," +
+                                       "    \"incident_overrides\"" +
+                                       "  ]" +
+                                       "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
 
-            // act
-            var result = await _validator.ValidateJsonAgainstSchema(validJsonSchema, jsonFile);
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_rulesSchema, jsonFile);
 
-            // assert
-            _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "NoAdditionalPropertiesAllowed: #/additionalProperty", Times.Once());
 
             result.Should().BeFalse();
         }
 
         [TestMethod]
-        public async Task ValidateJsonAgainstSchema_WhenCalledWithValidSchemaValidJson_ReturnsTrue()
+        public async Task ValidateJsonAgainstSchema_RulesSchema_WhenCalledWithoutFolderOrder_ReturnsFalse()
         {
-            // arrange
-            var validJsonSchema = GetEmbeddedResource(ValidSchemaFileName);
-            var jsonFile = new FileData(string.Empty, ValidJson);
+            // Arrange
+            const string fileContent = "{" +
+                                       "  \"$schema\": \"Schemas/Rules/rules_schema.json\"" +
+                                       "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
 
-            // act
-            var result = await _validator.ValidateJsonAgainstSchema(validJsonSchema, jsonFile);
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_rulesSchema, jsonFile);
 
-            // assert
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "PropertyRequired: #/folderOrder", Times.Once());
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("\"folderOrder\": \"notAList\"")]
+        [DataRow("\"folderOrder\": { \"prop\": \"foo\" }")]
+        public async Task ValidateJsonAgainstSchema_RulesSchema_WhenCalledWithInvalidFolderOrderType_ReturnsFalse(
+            string folderOrder)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Rules/rules_schema.json\"," +
+                              folderOrder +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_rulesSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "ArrayExpected: #/folderOrder", Times.Once());
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public async Task ValidateJsonAgainstSchema_RulesSchema_WhenCalledWithValidJsonFile_ReturnsTrue()
+        {
+            // Arrange
+            const string fileContent = "{" +
+                                       "  \"$schema\": \"Schemas/Rules/rules_schema.json\"," +
+                                       "  \"folderOrder\": [" +
+                                       "    \"defaults\"," +
+                                       "    \"suppliers\"," +
+                                       "    \"informatica\"," +
+                                       "    \"incident_overrides\"" +
+                                       "  ]" +
+                                       "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_rulesSchema, jsonFile);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithoutTarget_ReturnsFalse()
+        {
+            // Arrange
+            const string fileContent = "{" +
+                                       "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                                       "  \"journeys\": {" +
+                                       "    \"appointments\": {" +
+                                       "      \"provider\": \"im1\"" +
+                                       "    }" +
+                                       "  }" +
+                                       "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "PropertyRequired: #/target", Times.Once());
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("", null)]
+        [DataRow("\"*\":\"error\"", "NotInEnumeration: #/target.*")]
+        [DataRow("\"supplier\":\"foo\"", "NotInEnumeration: #/target.supplier")]
+        public async Task
+            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidTarget_ReturnsFalse(string target,
+                string expectedError)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              target +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              "    \"appointments\": {" +
+                              "      \"provider\": \"im1\"" +
+                              "    }" +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+
+            _mockLogger.VerifyLogger(LogLevel.Error, "NotOneOf: #/target", Times.Once());
+            if (!string.IsNullOrWhiteSpace(expectedError))
+            {
+                _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
+            }
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("\"supplier\":\"emis\"")]
+        [DataRow("\"supplier\":\"tpp\"")]
+        [DataRow("\"supplier\":\"microtest\"")]
+        [DataRow("\"supplier\":\"vision\"")]
+        [DataRow("\"ccgCode\":\"foo\"")]
+        [DataRow("\"odsCode\":\"foo\"")]
+        [DataRow("\"*\":\"*\"")]
+        public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidTarget_ReturnsTrue(
+            string target)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              target +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              "    \"appointments\": {" +
+                              "      \"provider\": \"im1\"" +
+                              "    }" +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithoutJourneys_ReturnsFalse()
+        {
+            // Arrange
+            const string fileContent = "{" +
+                                       "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                                       "  \"target\": {" +
+                                       "    \"supplier\":\"emis\"" +
+                                       "  }" +
+                                       "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "PropertyRequired: #/journeys", Times.Once());
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow("\"test\": \"foo\"")]
+        public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourneys_ReturnsFalse(
+            string journeys)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              "    \"supplier\":\"emis\"" +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              journeys +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "NotAnyOf: #/journeys", Times.Once());
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("", null)]
+        [DataRow("\"provider\": \"foo\"", null)]
+        [DataRow("\"provider\": \"informatica\"", "PropertyRequired: #/journeys.appointments.informaticaUrl")]
+        public async Task
+            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidAppointmentsProviders_ReturnsFalse(
+                string provider, string expectedError)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              "    \"odsCode\":\"FOO\"" +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              "    \"appointments\": {" +
+                              provider +
+                              "    }" +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "NotOneOf: #/journeys.appointments", Times.Once());
+            if (!string.IsNullOrWhiteSpace(expectedError))
+            {
+                _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
+            }
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("\"provider\": \"im1\"")]
+        [DataRow("\"provider\": \"none\"")]
+        [DataRow("\"provider\": \"informatica\", \"informaticaUrl\": \"http://example.com\"")]
+        public async Task
+            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidAppointmentsProviders_ReturnsTrue(
+                string provider)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              "    \"odsCode\":\"FOO\"" +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              "    \"appointments\": {" +
+                              provider +
+                              "    }" +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
             result.Should().BeTrue();
         }
 
         private static FileData GetEmbeddedResource(string fileName)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith(fileName, StringComparison.Ordinal));
-            
+            var assembly = Assembly.GetAssembly(typeof(SchemaValidator));
+            var resourceName = assembly.GetManifestResourceNames()
+                .Single(str => str.EndsWith(fileName, StringComparison.Ordinal));
+
             using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
             using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
             {

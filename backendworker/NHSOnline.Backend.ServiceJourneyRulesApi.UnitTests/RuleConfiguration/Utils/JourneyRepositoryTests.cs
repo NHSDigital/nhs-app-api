@@ -22,10 +22,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void GetJourneys_WhenCalledWithValidOdsCode_ReturnMatchingJourney()
         {
-            // act
+            // Act
             var result = _journeyRepository.GetJourneys("foo");
             
-            //assert
+            // Assert
             result.Should().NotBeNull();
         }
     }

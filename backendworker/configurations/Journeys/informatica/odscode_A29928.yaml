@@ -3,4 +3,5 @@ target:
   odsCode: "A29928"
 journeys:
   appointments:
-    provider: im1
+    provider: informatica
+    informaticaUrl: http://informatica.example.com

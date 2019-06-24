@@ -19,22 +19,22 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         private IGpInfoReader _gpInfoReader;
         private Mock<ILogger<GpInfoReader>> _mockLogger;
         private Mock<IFileHandler> _mockFileHandler;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             var fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            
+
             _mockLogger = fixture.Freeze<Mock<ILogger<GpInfoReader>>>();
             _mockFileHandler = fixture.Freeze<Mock<IFileHandler>>();
             _gpInfoReader = fixture.Create<GpInfoReader>();
         }
-        
+
         [TestMethod]
         public void GetGpInfo_WhenCalledWithValidFileName_MapAllFieldsForGivenOdsCode()
         {
-            //arrange
+            // Arrange
             var expected = new GpInfo()
             {
                 Ods = "A81001",
@@ -42,34 +42,35 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 Supplier = GpInfoSupplier.Tpp,
                 EndpointCreated = "20160125"
             };
-            
+
             SetupFileHandlerForMultipleOdsCode();
-            
-            // act
+
+            // Act
             var result = _gpInfoReader.GetGpInfo(GpInfoFilePath);
-            
-            //assert
+
+            // Assert
             result.Should().NotBeNull().And.ContainKey(expected.Ods);
             result[expected.Ods].Should().BeEquivalentTo(expected);
         }
-        
+
         [TestMethod]
         [DataRow("A81001", "20160125")]
         [DataRow("M81001", "20180121")]
         [DataRow("X1001", "20180921")]
-        public void GetGpInfo_WhenCalledWithValidFileName_ReturnsLatestRecordForGivenOdsCode(string odsCode, string EndpointCreated)
+        public void GetGpInfo_WhenCalledWithValidFileName_ReturnsLatestRecordForGivenOdsCode(string odsCode,
+            string EndpointCreated)
         {
-            //arrange            
+            // Arrange            
             SetupFileHandlerForMultipleOdsCode();
-            
-            // act
+
+            // Act
             var result = _gpInfoReader.GetGpInfo(GpInfoFilePath);
-            
-            // assert
+
+            // Assert
             result.Should().ContainKey(odsCode);
             result[odsCode].EndpointCreated.Should().Be(EndpointCreated);
         }
-        
+
         [TestMethod]
         [DataRow("EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)", GpInfoSupplier.Emis)]
         [DataRow("THE PHOENIX PARTNERSHIP", GpInfoSupplier.Tpp)]
@@ -79,37 +80,37 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void GetGpInfo_WhenCalledWithValidFileName_MatchesGpSupplierEnumValue
             (string gpSupplier, GpInfoSupplier expectedSupplierEnumValue)
         {
-            //arrange         
+            // Arrange         
             SetupFileHandlerForVariousSuppliers(gpSupplier);
-            
-            // act
+
+            // Act
             var result = _gpInfoReader.GetGpInfo(GpInfoFilePath);
-            
-            //assert
+
+            // Assert
             result.Should().NotBeNull().And.HaveCount(1);
             result.First().Value.Supplier.Should().Be(expectedSupplierEnumValue);
         }
-        
+
         [TestMethod]
         public void GetGpInfo_WhenCalledWithUnkownFile_LogsErrorAndReturnNull()
-        {   
-            // arrange
+        {
+            // Arrange
             _mockFileHandler.Setup(f => f.GetTextReader(It.IsAny<string>()))
                 .Throws<FileNotFoundException>();
-            
-            // act
+
+            // Act
             var result = _gpInfoReader.GetGpInfo("UnkownFile.csv");
-            
-            // assert
+
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());
-            
+
             result.Should().BeNull();
         }
-        
+
         [TestMethod]
         public void GetGpInfo_WhenCalledWithInvalidCsv_LogsErrorAndReturnNull()
-        {   
-            // arrange
+        {
+            // Arrange
             const string filePath = "InvalidGpInfo.csv";
             var fileDataStream = new StringReader
             (
@@ -118,25 +119,27 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
             _mockFileHandler.Setup(erh => erh.GetTextReader(filePath))
                 .Returns(fileDataStream);
-            
-            // act
+
+            // Act
             var result = _gpInfoReader.GetGpInfo("InvalidGpInfo.csv");
-            
-            // assert
+
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());
-            
+
             result.Should().BeNull();
         }
-        
+
         private void SetupFileHandlerForVariousSuppliers(string gpSupplier)
         {
-            var fileDataStream = new StringReader("ODS,Organisation,ClosedDate,PartyKey,ASID,Supplier,Product,Version,EndpointCreated,CCGCode,CCG\n" +
-                                                  "A81001,THE DENSHAM SURGERY,,YGA-0021074,2.86E+11,"+ gpSupplier +",SystmOne,601 Core GP2GPLM EPS2(AS),20140121,00K,NHS HARTLEPOOL AND STOCKTON-ON-TEES CCG");
+            var fileDataStream = new StringReader(
+                "ODS,Organisation,ClosedDate,PartyKey,ASID,Supplier,Product,Version,EndpointCreated,CCGCode,CCG\n" +
+                "A81001,THE DENSHAM SURGERY,,YGA-0021074,2.86E+11," + gpSupplier +
+                ",SystmOne,601 Core GP2GPLM EPS2(AS),20140121,00K,NHS HARTLEPOOL AND STOCKTON-ON-TEES CCG");
 
             _mockFileHandler.Setup(erh => erh.GetTextReader(GpInfoFilePath))
                 .Returns(fileDataStream);
         }
-        
+
         private void SetupFileHandlerForMultipleOdsCode()
         {
             var fileDataStream = new StringReader

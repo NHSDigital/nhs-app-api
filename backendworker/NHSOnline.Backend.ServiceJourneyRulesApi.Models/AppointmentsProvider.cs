@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     {
         Unknown = 0,
         none,
-        im1
+        im1,
+        informatica
     }
 }

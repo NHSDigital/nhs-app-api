@@ -34,10 +34,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextIsNotPresent_ThrowsAnException()
         {
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(null);
 
-            // assert
+            // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(3)
                 .And.AllBeOfType<ArgumentNullException>()
@@ -51,13 +51,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextHasNoValues_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext();
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(2)
                 .And.AllBeOfType<ArgumentNullException>()
@@ -69,49 +69,49 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Execute_WhenContextGpInfosIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 FolderConfigurations = _fixture.Create<Dictionary<string, IEnumerable<TargetConfiguration>>>()
             };
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("GpInfos");
         }
 
         [TestMethod]
         public void Execute_WhenContextFolderConfigurationsIsNotPresent_ThrowsAnException()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 GpInfos = _fixture.Create<Dictionary<string, GpInfo>>()
             };
 
-            // act
+            // Act
             Func<Task> act = async () => await _step.Execute(context);
 
-            // assert
+            // Assert
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("FolderConfigurations");
         }
 
         [TestMethod]
         public async Task Execute_WhenEmptyFolderConfigurations_ReturnsTrueWithEmptyList()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 GpInfos = _fixture.Create<Dictionary<string, GpInfo>>(),
                 FolderConfigurations = new Dictionary<string, IEnumerable<TargetConfiguration>>()
             };
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             result.Should().BeTrue();
             context.FolderConfigurations.Should().NotBeNull().And.BeEmpty();
         }
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenGpInfoIsEmptyAndTargetIsNotAnOdsCode_ReturnsTrueWithEmptyList()
         {
-            // arrange
+            // Arrange
             const string folderName = "folder1";
             var context = new ConfigurationContext
             {
@@ -138,10 +138,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             result.Should().BeTrue();
             context.FolderOdsJourneys.Should().NotBeNull().And.HaveCount(1);
             context.FolderOdsJourneys.Should().ContainKey(folderName)
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenThereIsAFolderConflict_ReturnsFalse()
         {
-            // arrange
+            // Arrange
             var context = new ConfigurationContext
             {
                 GpInfos = new Dictionary<string, GpInfo>
@@ -173,10 +173,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             _mockLogger.VerifyLogger(LogLevel.Error, "Error applying '3' ODS configuration to 'folder1' list",
                 typeof(ArgumentException), Times.Once());
 
@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public async Task Execute_WhenGpInfoHasMatchingTargets_SetsTheMatchingTargets()
         {
-            // arrange
+            // Arrange
             const string folderName = "folder1";
             const string folderName2 = "folder2";
             const string folderName3 = "folder3";
@@ -233,10 +233,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 }
             };
 
-            // act
+            // Act
             var result = await _step.Execute(context);
 
-            // assert
+            // Assert
             result.Should().BeTrue();
             context.FolderOdsJourneys.Should().NotBeNull().And.HaveCount(3);
             context.FolderOdsJourneys.Should().ContainKey(folderName)

@@ -17,6 +17,15 @@
         "additionalProperties": false,
         "properties": {
           "provider": {
+            "enum": [ "informatica" ]
+          },
+          "informaticaUrl": { "type": "string" }
+        },
+        "required": ["provider", "informaticaUrl"]
+      },{
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
             "enum": [ "none" ]
           }
         }
@@ -98,15 +107,9 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "signin": {
-          "additionalProperties": false,
-          "properties": {
-            "enabled": { "type": "boolean" }
-          }
-        },
         "appointments": { "$ref": "#/definitions/appointmentsJourney" },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
-        "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
+        "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" }
       },
       "anyOf": [{
         "required": ["appointments"]
