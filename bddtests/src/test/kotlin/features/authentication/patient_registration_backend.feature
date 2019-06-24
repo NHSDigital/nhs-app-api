@@ -7,7 +7,7 @@ Feature: Registration
     Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
     And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
-    Then I receive a response
+    Then I receive a "Created" success code
     And the response has the expected connection token
     And the response has the expected NHS numbers
     And the IM1 Connection Token is in the cache
@@ -22,14 +22,14 @@ Feature: Registration
   Scenario: Patient registers for a Vision account with NHS Number of "one"
     Given I have a new VISION patient with Nhs Numbers of "one"
     When I register the user's IM1 credentials
-    Then I receive a response
+    Then I receive a "Created" success code
     And the response has the expected connection token
     And the response has the expected NHS numbers
 
   Scenario Outline: Patient registers for a Microtest account with NHS Number of "one"
     Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
     When I register the user's IM1 credentials
-    Then I receive a response
+    Then I receive a "Created" success code
     And the response has the expected connection token
     And the response has the expected NHS numbers
     Examples:

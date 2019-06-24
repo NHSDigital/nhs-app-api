@@ -23,6 +23,18 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
 
     var cookieHeaderKey = "Set-Cookie"
 
+    fun postIm1Connection(im1ConnectionRequest: Im1ConnectionRequest): Im1ConnectionResponse {
+        val httpPost = HttpPost(config.cidBackendUrl + WorkerPaths.patientIm1ConnectionV1)
+        val entity = StringEntity(gson.toJson(im1ConnectionRequest), "UTF-8")
+        entity.setContentType("application/json")
+        httpPost.entity = entity
+
+        val result = sender.sendAsyncAndGetResult(httpPost)
+        httpPost.releaseConnection()
+
+        return gson.fromJson(result, Im1ConnectionResponse::class.java)
+    }
+
     fun getIm1Connection(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
         val httpGet = HttpGet(config.cidBackendUrl + WorkerPaths.patientIm1ConnectionV1)
         httpGet.setHeader(WorkerHeaders.ConnectionToken, connectionToken)

@@ -7,12 +7,14 @@ Feature: Linkage Get Key
   Scenario: Linkage request GET for EMIS returns success with LinkageResponse, first time retrieving
     Given I have valid EMIS linkage details and it's the first time a linkage key has been retrieved for an identity token
     When I call the Linkage GET endpoint
-    Then I receive a valid linkage response
+    Then I receive a "OK" success code
+    And I receive a valid linkage response
 
   Scenario: Linkage request GET for EMIS returns success with LinkageResponse, not the first time retrieving
     Given I have valid EMIS linkage details and it's not the first time a linkage key has been retrieved for an identity token
     When I call the Linkage GET endpoint
-    Then I receive a valid linkage response
+    Then I receive a "OK" success code
+    And I receive a valid linkage response
 
   Scenario: Linkage request GET with correct values for TPP returns 404 Not Found
     Given I have valid TPP linkage details
@@ -22,7 +24,8 @@ Feature: Linkage Get Key
   Scenario Outline: Linkage request GET with patients who have linkage keys <GP System>
     Given I have valid <GP System> linkage details
     When I call the Linkage GET endpoint
-    Then I receive a valid linkage response
+    Then I receive a "OK" success code
+    And I receive a valid linkage response
     Examples:
       | GP System |
       | VISION    |

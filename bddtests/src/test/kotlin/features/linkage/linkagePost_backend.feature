@@ -8,14 +8,16 @@ Feature: Linkage Post Key
     Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
     And no IM1 Connection Token is currently cached
     When I call the Linkage POST endpoint
-    Then I receive a valid linkage response
+    Then I receive a "Created" success code
+    And I receive a valid linkage response
     And the IM1 Connection Token is in the cache
 
   Scenario: Linkage request POST after delayed response from EMIS and an Im1 Connection Token is cached
     Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
     And no IM1 Connection Token is currently cached
     When I call the Linkage POST endpoint which responds after 11 seconds
-    Then I receive a valid linkage response
+    Then I receive a "Created" success code
+    And I receive a valid linkage response
     And the IM1 Connection Token is in the cache
 
   Scenario: Linkage request EMIS POST connection closes and an Im1 Connection Token is cached
@@ -29,13 +31,15 @@ Feature: Linkage Post Key
     Given I have valid TPP linkage details for posting
     And no IM1 Connection Token is currently cached
     When I call the Linkage POST endpoint
-    Then I receive a valid linkage response
+    Then I receive a "Created" success code
+    And I receive a valid linkage response
     And the IM1 Connection Token is in the cache
 
-  Scenario Outline: Linkage request POST for <GP System> returns success with LinkageResponse test
+  Scenario Outline: Linkage request POST for <GP System> returns success with LinkageResponse text
     Given I have valid <GP System> linkage details for posting
     When I call the Linkage POST endpoint
-    Then I receive a valid linkage response
+    Then I receive a "Created" success code
+    And I receive a valid linkage response
     Examples:
       | GP System |
       | TPP       |
@@ -117,10 +121,11 @@ Feature: Linkage Post Key
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: Linkage request POST for <GP System> returns 200 OK when patient is at least 16
+  Scenario Outline: Linkage request POST for <GP System> returns 201 Created when patient is at least 16
     Given I have valid <GP System> linkage details and try to create a linkage key as 16 years old
     When I call the Linkage POST endpoint
-    Then I receive a valid linkage response
+    Then I receive a "Created" success code
+    And I receive a valid linkage response
     Examples:
       | GP System |
       | EMIS      |

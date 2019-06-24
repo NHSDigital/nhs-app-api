@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
         public async Task<IActionResult> Visit(LinkageResult.SuccessfullyCreated result)
         {
-            return await Task.FromResult(new OkObjectResult(result.Response));
+            return await Task.FromResult(new CreatedResult(string.Empty, result.Response));
         }
 
         public async Task<IActionResult> Visit(LinkageResult.SuccessfullyRetrievedAlreadyExists result)

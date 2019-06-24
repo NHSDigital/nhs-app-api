@@ -1,6 +1,5 @@
 package features.authentication.stepDefinitions
 
-import com.google.gson.Gson
 import config.Config
 import constants.DateTimeFormats
 import cucumber.api.DataTable
@@ -29,12 +28,9 @@ import models.Patient
 import mongodb.MongoDBConnection
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
-import net.serenitybdd.rest.SerenityRest
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
-import org.apache.http.HttpStatus.SC_CREATED
-import org.apache.http.HttpStatus.SC_OK
 import org.joda.time.DateTime
 import org.junit.Assert
 import pages.MyAccountPage
@@ -43,13 +39,11 @@ import pages.navigation.WebHeader
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.WorkerPaths
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
-import java.net.URI
 import java.util.*
 
 const val INVALID_VALUE = "xxx-wrong-format-xxx"
@@ -480,20 +474,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAUsersIMCredentials() {
-        val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1ConnectionV1)
-        val response = SerenityRest
-                .given()
-                .contentType("application/json")
-                .body(Gson().toJson(this.im1ConnectionRequest!!))
-                .post(uri)
-
-        if (arrayOf(SC_OK, SC_CREATED).contains(response.statusCode)) {
-            this.im1ConnectionResponse = Gson().fromJson(response.body.asString(), Im1ConnectionResponse::class.java)
-        } else {
-            setErrorResponse(NhsoHttpException(uri = uri.toString(),
-                    statusCode = response.statusCode,
-                    body = response.body?.toString(),
-                    method = "POST"))
+        try {
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .authentication.postIm1Connection(this.im1ConnectionRequest!!)
+            setSessionVariable(Im1ConnectionResponse::class).to(result)
+            this.im1ConnectionResponse = result
+        } catch (httpException: NhsoHttpException) {
+            setErrorResponse(httpException)
         }
     }
 

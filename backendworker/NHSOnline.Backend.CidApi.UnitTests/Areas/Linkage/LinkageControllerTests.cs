@@ -286,7 +286,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         public async Task Post_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
             var expectedResponse = _fixture.Create<LinkageResponse>();
-            var mockResult = new LinkageResult.SuccessfullyRetrieved(expectedResponse);
+            var mockResult = new LinkageResult.SuccessfullyCreated(expectedResponse);
             var mockLinkageService = new Mock<ILinkageService>();
             
             mockLinkageService.Setup(x => x.CreateLinkageKey(
@@ -332,7 +332,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                    req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal) &&
                                                    req.EmailAddress.Equals(DefaultEmailAddress, StringComparison.Ordinal))), Times.Once);
             
-            var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), PostRequestAuditType, It.IsAny<string>()));
