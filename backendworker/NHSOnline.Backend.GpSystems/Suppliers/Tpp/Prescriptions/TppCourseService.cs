@@ -4,13 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
-using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 {
@@ -105,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 _logger.LogError("The tpp prescriptions service is not enabled");
 
                 return new GetCoursesResult.Forbidden();
-    }
+            }
 
             _logger.LogError("Tpp system is currently unavailable");
 

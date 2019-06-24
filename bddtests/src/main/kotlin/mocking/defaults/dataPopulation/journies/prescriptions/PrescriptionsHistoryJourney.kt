@@ -1,6 +1,7 @@
 package mocking.defaults.dataPopulation.journies.prescriptions
 
 import mocking.MockingClient
+import mocking.data.prescriptions.MicrotestPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.VisionMockDefaults
 import models.Patient
@@ -35,5 +36,13 @@ class PrescriptionsHistoryJourney(private val client: MockingClient) {
                     prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionPrescriptionLoader.data)
                 }
+
+        MicrotestPrescriptionLoader.loadData(1,1,1)
+        client
+                .forMicrotest {
+                    prescriptions.getPrescriptionHistoryRequest(patient)
+                            .respondWithSuccess(MicrotestPrescriptionLoader.data)
+                }
+
     }
 }

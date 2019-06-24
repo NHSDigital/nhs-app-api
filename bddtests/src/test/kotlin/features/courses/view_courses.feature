@@ -20,6 +20,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> User has 0 repeatable prescriptions
     Given I am a <GP System> patient
@@ -37,6 +38,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> user has 1 repeatable prescription
     Given I am a <GP System> patient
@@ -69,6 +71,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> user has the max number of repeatable prescriptions
     Given I am a <GP System> patient
@@ -85,6 +88,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> user has over 5 repeat dispense prescriptions
     Given I am a <GP System> patient
@@ -116,14 +120,15 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
     Given I am a <GP System> patient
     And I have historic prescriptions
-    And there are 1 repeatable prescriptions available
+    And there are 4 repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
-    And I select 1 repeatable prescriptions out of 1 available
+    And I select 2 repeatable prescriptions out of 4 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
     Examples:
@@ -131,6 +136,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
     Given I am a <GP System> patient
@@ -150,6 +156,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
     Given I am a <GP System> patient
@@ -166,6 +173,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @smoketest
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
@@ -190,6 +198,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | VISION    |
+      | MICROTEST |
   @smoketest
     Examples:
       | GP System |
@@ -210,6 +219,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The user can't see prescription special request when the gp system <GP System> has disabled it
     Given I am a <GP System> patient

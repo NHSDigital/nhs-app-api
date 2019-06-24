@@ -1,6 +1,5 @@
 using System;
 using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {

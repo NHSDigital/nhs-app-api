@@ -4,6 +4,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session;
 using NHSOnline.Backend.Support.Http;
 
@@ -17,7 +18,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             services.RegisterMicrotestAppointmentsServices();
             services.RegisterMicrotestSessionServices();
             services.RegisterMicrotestDemographicsServices();
-            services.RegisterMicrotestPatientRecordServices(); 
+            services.RegisterMicrotestPatientRecordServices();
+            services.RegisterMicrotestPrescriptionsServices();
             return services;
         }
 

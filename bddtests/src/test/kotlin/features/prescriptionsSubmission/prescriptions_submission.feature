@@ -40,6 +40,7 @@ Feature: Prescriptions submission
       | GP System |
       | EMIS      |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 1 entries
     And I am using <GP System> GP System to submit my prescription
@@ -54,6 +55,7 @@ Feature: Prescriptions submission
     | GP System |
     | EMIS      |
     | TPP       |
+    | MICROTEST |
   @nativesmoketest
     Examples:
     | GP System |

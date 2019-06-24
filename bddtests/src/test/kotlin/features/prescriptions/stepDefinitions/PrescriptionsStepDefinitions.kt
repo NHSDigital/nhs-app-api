@@ -9,6 +9,7 @@ import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
+import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
@@ -21,6 +22,7 @@ import utils.SerenityHelpers
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
+import mocking.data.prescriptions.MicrotestPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.EmisMockDefaults
@@ -31,6 +33,7 @@ import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import models.prescriptions.HistoricPrescription
@@ -267,6 +270,14 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
+            ProviderTypes.MICROTEST -> {
+
+                mockingClient
+                        .forMicrotest {
+                            prescriptions.getPrescriptionHistoryRequest(currentPatient, expectedDefaultFromDate)
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
+                        }
+            }
         }
 
 
@@ -353,7 +364,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     @Then("I receive a list of (\\d+) prescriptions")
-    fun thenIReceiveAListOfTenPrescriptions(count: Int) {
+    fun thenIReceiveAListOfXPrescriptions(count: Int) {
 
         assertNotNull(prescriptionsListResponse)
 
@@ -369,10 +380,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                             ZonedDateTime.parse(prescriptions[int + 1].orderDate))
                 }
             }
-            ProviderTypes.TPP -> {
-                assertEquals(count, prescriptionsListResponse.courses.count())
-            }
-            ProviderTypes.VISION -> {
+            ProviderTypes.TPP,
+            ProviderTypes.VISION,
+            ProviderTypes.MICROTEST -> {
                 assertEquals(count, prescriptionsListResponse.courses.count())
             }
             else -> {
@@ -392,7 +402,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     private fun providerHasAllPrescriptionFields(): Boolean {
-        return currentProvider == ProviderTypes.EMIS || currentProvider == ProviderTypes.VISION
+        return currentProvider == ProviderTypes.EMIS ||
+                currentProvider == ProviderTypes.VISION ||
+                currentProvider == ProviderTypes.MICROTEST
     }
 
     @Then("^I get a response with a list of prescriptions for the last 6 months$")
@@ -456,16 +468,28 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
+            ProviderTypes.MICROTEST -> {
+                mockingClient
+                        .forMicrotest {
+                            prescriptions.getPrescriptionHistoryRequest(currentPatient, fromdate)
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
+                        }
+            }
         }
     }
 
     private fun getResponseToExpectedPrescriptionFormat(): List<HistoricPrescription> {
 
         return when (currentProvider) {
-            ProviderTypes.EMIS -> EmisPrescriptionMapper.map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
-            ProviderTypes.TPP -> TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply)
-            ProviderTypes.VISION -> VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
-            else -> ArrayList()
+            ProviderTypes.EMIS ->
+                EmisPrescriptionMapper.map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
+            ProviderTypes.TPP ->
+                TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply)
+            ProviderTypes.VISION ->
+                VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
+            ProviderTypes.MICROTEST ->
+                MicrotestPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistoryGetResponse)
+            else -> throw NotImplementedError()
         }
     }
 
@@ -510,6 +534,14 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                                     .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
                         }
             }
+            ProviderTypes.MICROTEST -> {
+                mockingClient
+                        .forMicrotest {
+                            prescriptions.getPrescriptionHistoryRequest(currentPatient, fromdate)
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
+                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
+                        }
+            }
         }
     }
 
@@ -531,6 +563,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             }
             ProviderTypes.VISION -> {
                 prescriptionLoader = VisionPrescriptionLoader
+            }
+            ProviderTypes.MICROTEST -> {
+                prescriptionLoader = MicrotestPrescriptionLoader
             }
         }
     }

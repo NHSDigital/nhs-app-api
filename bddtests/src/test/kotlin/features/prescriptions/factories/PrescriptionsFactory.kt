@@ -52,7 +52,8 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
                     hashMapOf(
                             "EMIS" to { PrescriptionsFactoryEmis() },
                             "TPP" to { PrescriptionsFactoryTpp() },
-                            "VISION" to { PrescriptionsFactoryVision() })
+                            "VISION" to { PrescriptionsFactoryVision() },
+                            "MICROTEST" to { PrescriptionsFactoryMicrotest() })
                 }
     }
 }

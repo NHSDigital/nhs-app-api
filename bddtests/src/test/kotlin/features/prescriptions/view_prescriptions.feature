@@ -66,6 +66,7 @@ Feature: View prescriptions
     Examples:
       | GP System |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
     Given I am patient using the <GP System> GP System

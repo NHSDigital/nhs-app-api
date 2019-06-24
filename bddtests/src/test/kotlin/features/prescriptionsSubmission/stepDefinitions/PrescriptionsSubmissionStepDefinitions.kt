@@ -8,6 +8,7 @@ import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
+import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
@@ -21,6 +22,7 @@ import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.stubs.pds.ViewSpinePdsStubs
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
@@ -173,6 +175,8 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
             prescriptionLoader = PrescriptionsFactory.getForSupplier(gpSystem).getPrescriptionsLoader
             val emisPrescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
             Serenity.setSessionVariable("EmisPrescriptionsMap").to(emisPrescriptionMap)
+            val microtestPrescriptionMap = mutableMapOf<String, PrescriptionHistoryGetResponse>()
+            Serenity.setSessionVariable("MicrotestPrescriptionsMap").to(microtestPrescriptionMap)
         }
 
         @Given("^I have (\\d+) historic prescriptions in this scenario$")
@@ -208,6 +212,21 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                                 .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                     }
                 }
+                ProviderTypes.MICROTEST -> {
+                    val data = prescriptionLoader.data as PrescriptionHistoryGetResponse
+                    mockingClient.forMicrotest {
+                        prescriptions.getPrescriptionHistoryRequest(currentPatient)
+                                .respondWithSuccess(data)
+                                .inScenario(scenarioTitle)
+                                .whenScenarioStateIs(currentScenarioState)
+                    }
+
+                    val map =
+                            Serenity.sessionVariableCalled<MutableMap<String,
+                                    PrescriptionHistoryGetResponse>>("MicrotestPrescriptionsMap")
+                    map[Scenario.STARTED] = data
+                }
+
             }
         }
 
@@ -261,6 +280,14 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                 ProviderTypes.VISION -> {
                     prescriptionSteps.assertPrescriptionsMatch(VisionPrescriptionMapper
                             .map(prescriptionLoader.data as PrescriptionHistory), amount)
+                }
+                ProviderTypes.MICROTEST -> {
+                    val map =
+                            Serenity.sessionVariableCalled<MutableMap<String,
+                                    PrescriptionHistoryGetResponse>>("MicrotestPrescriptionsMap")
+
+                    prescriptionSteps.assertPrescriptionsMatch(MicrotestPrescriptionMapper.map(
+                            map[currentScenarioState]!!), amount)
                 }
             }
         }

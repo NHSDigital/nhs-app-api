@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 {
@@ -50,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
         public ICourseService GetCourseService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestCourseService>();
         }
 
         public IDemographicsService GetDemographicsService()
@@ -80,17 +81,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
         public IPrescriptionValidationService GetPrescriptionRequestValidationService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestPrescriptionValidationService>();
         }
 
         public IPrescriptionService GetPrescriptionService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestPrescriptionService>();
         }
 
         public ISessionExtendService GetSessionExtendService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestSessionExtendService>();
         }
 
         public ISessionService GetSessionService()

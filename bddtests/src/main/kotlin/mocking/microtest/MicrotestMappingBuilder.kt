@@ -21,6 +21,7 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
     var appointments = MicrotestMappingBuilderAppointments()
     var demographics = MicrotestMappingBuilderDemographics()
     var myRecord = MicrotestMappingBuilderMyRecord()
+    var prescriptions = MicrotestMappingBuilderPrescriptions()
 
     fun respondWithCorruptedContent(content: String): Mapping {
         return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }

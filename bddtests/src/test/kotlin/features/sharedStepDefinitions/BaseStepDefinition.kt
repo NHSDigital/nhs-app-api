@@ -6,7 +6,7 @@ open class BaseStepDefinition {
 
     companion object {
         enum class ProviderTypes {
-            EMIS, TPP, VISION
+            EMIS, TPP, VISION, MICROTEST
         }
     }
 

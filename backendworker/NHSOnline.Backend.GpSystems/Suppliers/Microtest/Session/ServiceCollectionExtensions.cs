@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session
         public static IServiceCollection RegisterMicrotestSessionServices(this IServiceCollection services)
         {
             services.AddTransient<MicrotestSessionService>();
+            services.AddTransient<MicrotestSessionExtendService>();
 
             return services;
         }

@@ -4,6 +4,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 {
@@ -36,5 +37,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         Task<MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>> MedicalRecordGet(
             string odsCode,
             string nhsNumber);
+
+        Task<MicrotestClient.MicrotestApiObjectResponse<PrescriptionHistoryGetResponse>> PrescriptionHistoryGet(
+            string odsCode,
+            string nhsNumber,
+            DateTimeOffset? fromDate);
+
+        Task<MicrotestClient.MicrotestApiObjectResponse<CoursesGetResponse>> CoursesGet(
+            string odsCode,
+            string nhsNumber);
+
+        Task<MicrotestClient.MicrotestApiObjectResponse<string>> PrescriptionsPost(
+            string odsCode,
+            string nhsNumber,
+            PrescriptionRequestsPost model);
     }
 }

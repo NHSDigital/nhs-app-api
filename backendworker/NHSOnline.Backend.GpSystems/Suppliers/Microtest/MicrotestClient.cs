@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
@@ -26,6 +27,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         private const string AppointmentsPath = "patient/appointments";
         private const string DemographicsPath = "patient/demographics";
         private const string MedicalRecordPath = "patient/my-record";
+        private const string PrescriptionsHistoryPath = "patient/prescriptions";
+        private const string CoursesPath = "patient/courses";
 
         private readonly MicrotestHttpClient _httpClient;
         private readonly ILogger<MicrotestClient> _logger;
@@ -128,6 +131,54 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         {
             _logger.LogEnter();
             var response = await Get<PatientRecordGetResponse>(MedicalRecordPath, odsCode, nhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
+
+        public async Task<MicrotestApiObjectResponse<PrescriptionHistoryGetResponse>> PrescriptionHistoryGet(
+            string odsCode,
+            string nhsNumber,
+            DateTimeOffset? fromDate)
+        {
+            _logger.LogEnter();
+
+            var path = PrescriptionsHistoryPath;
+            
+            if (fromDate.HasValue)
+            {
+                var fromDateString = fromDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                _logger.LogDebug($"{ nameof(fromDate) }: { fromDateString }");
+
+                path += $"?from_date={ fromDateString }";
+            }
+
+            var response = await Get<PrescriptionHistoryGetResponse>(path, odsCode, nhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
+
+        public async Task<MicrotestApiObjectResponse<CoursesGetResponse>> CoursesGet(
+            string odsCode,
+            string nhsNumber)
+        {
+            _logger.LogEnter();
+
+            var response = await Get<CoursesGetResponse>(CoursesPath, odsCode, nhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
+
+        public async Task<MicrotestApiObjectResponse<string>> PrescriptionsPost(
+            string odsCode,
+            string nhsNumber,
+            PrescriptionRequestsPost model)
+        {
+            _logger.LogEnter();
+
+            var response = await Post(model, PrescriptionsHistoryPath, odsCode: odsCode, nhsNumber: nhsNumber);
 
             _logger.LogExit();
             return response;

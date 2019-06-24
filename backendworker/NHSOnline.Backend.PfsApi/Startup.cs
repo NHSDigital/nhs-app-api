@@ -305,8 +305,10 @@ namespace NHSOnline.Backend.PfsApi
             var baseUrlstring = Configuration.GetOrWarn("MICROTEST_BASE_URL", _logger);
             var certificatePath = Configuration.GetOrWarn("MICROTEST_CERT_PATH", _logger);
             var certificatePassphrase = Configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", _logger);
+            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
+            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
 
-            var config = new MicrotestConfigurationSettings(new Uri(baseUrlstring), certificatePath, certificatePassphrase, environment);
+            var config = new MicrotestConfigurationSettings(new Uri(baseUrlstring), certificatePath, certificatePassphrase, environment, prescriptionsMaxCoursesSoftLimit, coursesMaxCoursesLimit);
             config.Validate();
 
             return config;

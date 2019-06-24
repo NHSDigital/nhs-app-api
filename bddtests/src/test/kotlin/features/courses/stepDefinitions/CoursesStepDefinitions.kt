@@ -71,10 +71,14 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         if (currentProvider == null) {
             initialize()
         }
+
         if (currentProvider == ProviderTypes.EMIS) {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
         }
-        if (currentProvider == ProviderTypes.VISION) {
+        else if (currentProvider == ProviderTypes.VISION) {
+            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
+        }
+        else if (currentProvider == ProviderTypes.MICROTEST) {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
         }
     }

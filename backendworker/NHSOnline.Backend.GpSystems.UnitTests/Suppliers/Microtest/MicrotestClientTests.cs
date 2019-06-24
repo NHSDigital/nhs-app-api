@@ -6,14 +6,14 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Support.ResponseParsers;
-using RichardSzalay.MockHttp;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
+using NHSOnline.Backend.Support.ResponseParsers;
+using RichardSzalay.MockHttp;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
@@ -23,8 +23,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
     {
         public static readonly Uri BaseUri = new Uri("http://microtest_base_url/");
 
-        private string CertificatePath = "CertificatePath";
-        private string CertificatePassphrase = "CertificatePassphrase";
+        private const string CertificatePath = "CertificatePath";
+        private const string CertificatePassphrase = "CertificatePassphrase";
+        private const int PrescriptionsLimit = 100;
+        private const int CoursesLimit = 100;
         private IMicrotestClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private MicrotestConfigurationSettings _configurationSettings;
@@ -42,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             _mockHttpHandler = new MockHttpMessageHandler();
             
-            _configurationSettings = new MicrotestConfigurationSettings(BaseUri, CertificatePath, CertificatePassphrase, environment);
+            _configurationSettings = new MicrotestConfigurationSettings(BaseUri, CertificatePath, CertificatePassphrase, environment, PrescriptionsLimit, CoursesLimit);
 
             _httpClient = new MicrotestHttpClient(new HttpClient(_mockHttpHandler), _configurationSettings);
 
@@ -243,6 +245,65 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             // Assert
             response.StatusCode.Should().Be(500);
+        }
+
+        [TestMethod]
+        public async Task PrescriptionHistoryGet_ReturnsPrescriptionHistoryResponse_WhenValidlyRequested()
+        {
+            var expectedResponse = _fixture.Create<PrescriptionHistoryGetResponse>();
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get,
+                    "patient/prescriptions")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var fromDate = new DateTime(2000, 1, 1);
+
+            var response = await _systemUnderTest.PrescriptionHistoryGet(_odsCode, _nhsNumber, fromDate);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+        }
+
+        [TestMethod]
+        public async Task CoursesGet_ReturnsACoursesResponse_WhenValidlyRequested()
+        {
+            var expectedResponse = _fixture.Create<CoursesGetResponse>();
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get, "patient/courses")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _systemUnderTest.CoursesGet(_odsCode, _nhsNumber);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+        }
+
+        [TestMethod]
+        public async Task PrescriptionsPost_ReturnsTrue_WhenValidlyRequested()
+        {
+            var expectedResponse = new PrescriptionRequestPostResponse();
+
+            var prescriptionRequestsPost = new PrescriptionRequestsPost
+            {
+                CourseIds = new []
+                {
+                    "766ecd82-3008-4454-95a5-98c423ce0527",
+                }
+            };
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Post, "patient/prescriptions")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .WithContent(JsonConvert.SerializeObject(prescriptionRequestsPost))
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _systemUnderTest.PrescriptionsPost(_odsCode, _nhsNumber, prescriptionRequestsPost);
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         public void Dispose()
