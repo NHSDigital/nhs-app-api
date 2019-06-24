@@ -5,8 +5,10 @@
     @keypress="onKeyDown">
     <a :class="!$store.state.device.isNativeApp && $style.desktopWeb"
        :href="createLink()" @click.prevent="select">
-      <span role="text">
-        <span :class="$style.strong" data-label="start time">
+      <span >
+        <span :class="$style.strong"
+              data-label="start time"
+              :aria-label="formatTime(timeSlot.startTime)">
           {{ formatTime(timeSlot.startTime) }}
         </span>
         <p v-if="timeSlot.sessionName" data-label="session name">
