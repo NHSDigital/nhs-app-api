@@ -33,6 +33,7 @@ class WorkerClient(config:Config = Config.instance) {
     val authentication = WorkerClientAuthentication(config, workerClientSender, gson)
     val session = WorkerClientSession(config, workerClientSender, gson)
     val organDonation = WorkerClientOrganDonation(config, workerClientSender, gson)
+    val serviceJourneyRules = WorkerClientServiceJourneyRules(config, workerClientSender, gson)
 
     companion object {
 
