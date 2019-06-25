@@ -338,7 +338,7 @@ Feature: Organ Donation
       | Error Code |
       | 429        |
 
-  Scenario Outline: An user opting out, where OD returns a <Error Code> non-recoverable error, is shown an error
+  Scenario Outline: A user opting out, where OD returns a <Error Code> non-recoverable error, is shown an error
   message and can't retry
     Given I am a EMIS user who wishes to register as opt out, but OD returns non-recoverable <Error Code> error
     And I am logged in
@@ -350,3 +350,13 @@ Feature: Organ Donation
     Examples:
       | Error Code |
       | 400        |
+
+    Scenario: A user registering, where OD takes too long to respond, is shown decision pending page
+      Given I am a EMIS user who wishes to register as opt out, but OD takes too long to respond
+      And I am logged in
+      When I retrieve the 'Organ Donation' page directly
+      And I follow the opt-out journey to the 'Check Details' page
+      When I confirm that my details are accurate, and accept the privacy statement for organ donation
+      And I click the 'Submit my decision' button on an Organ Donation page
+      And I wait for 15 seconds
+      And I see an appropriate Organ Donation decision processing message without a retry option

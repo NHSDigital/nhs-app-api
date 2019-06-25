@@ -26,6 +26,12 @@ export default {
       message: 'Try again in a few moments.',
     },
   },
+  messageIconText: {
+    success: 'Success',
+    warning: 'Warning',
+    error: 'Error',
+    message: 'Message',
+  },
   generic: {
     backButton: {
       text: 'Back',
@@ -988,6 +994,12 @@ export default {
           message: 'If the problem persists you can contact NHS Blood and Transplant to get help with this.',
         },
       },
+      504: {
+        pageTitle: 'Decision being processed',
+        pageHeader: 'Decision being processed',
+        header: 'Decision being processed',
+        message: 'Check back later to confirm that your decision has been registered.',
+      },
     },
     review_your_decision: {
       errors: {
@@ -1003,6 +1015,12 @@ export default {
             retryButtonText: 'Try again',
             message: 'If the problem persists you can contact NHS Blood and Transplant to get help with this.',
           },
+        },
+        504: {
+          pageTitle: 'Decision being processed',
+          pageHeader: 'Decision being processed',
+          header: 'Decision being processed',
+          message: 'Check back later to confirm that your decision has been registered.',
         },
       },
     },

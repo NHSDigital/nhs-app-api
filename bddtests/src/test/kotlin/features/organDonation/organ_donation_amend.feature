@@ -166,7 +166,7 @@ Feature: Organ Donation - Amend
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
-    
+
   Scenario: A user opted to not donate their organs can amend it to donate all
     Given I am a EMIS user registered as opt-out who then amends their decision to opt-in
     And I am logged in
@@ -283,3 +283,16 @@ Feature: Organ Donation - Amend
     Examples:
       | Error Code |
       | 401        |
+
+  Scenario: A user, amending a decision where OD takes too long to respond, is shown decision pending page
+    Given I am a EMIS user registered as opt-in amends to opt-out, but OD takes too long to respond
+    And I am logged in
+    When I retrieve the 'Organ Donation' page directly
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
+    When I choose to amend my Organ Donation decision
+    Then the internal Organ Donation Choice Page is displayed
+    When I follow the opt-out journey to the 'Check Details' page
+    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Submit my decision' button on an Organ Donation page
+    And I wait for 15 seconds
+    Then I see an appropriate Organ Donation decision processing message without a retry option

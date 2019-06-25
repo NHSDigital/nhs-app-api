@@ -10,6 +10,8 @@ class OrganDonationErrorPage: ErrorPage() {
     val errorMessageWithRetry = "If the problem persists you can contact NHS Blood and Transplant " +
             "to get help with this."
     val errorMessageNoRetry = "You can contact NHS Blood and Transplant to get help with this."
+    val processingHeader = "Decision being processed"
+    val processingMessage = "Check back later to confirm that your decision has been registered."
 
     private val contactDetailsFinderFormat = "//div[@data-purpose='error']//div[@data-purpose='msg-contactdetails']"
     private val contactDetailsLocation = findElementByLocator(contactDetailsFinderFormat)

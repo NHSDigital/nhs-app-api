@@ -10,10 +10,12 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import org.apache.http.HttpStatus
 import pages.organDonation.OrganDonationErrorPage
 import utils.set
+import java.time.Duration
 
 private const val ERROR_SCENARIO = "error scenario"
 private const val ERROR_SCENARIO_WILL_SUCCEED = "to succeed"
 private const val OD_ERROR_RETRY_BUTTON = "Try again"
+private const val OD_TIME_TO_RESPOND = 12L
 
 class OrganDonationErrorStepDefinitions {
 
@@ -127,6 +129,40 @@ class OrganDonationErrorStepDefinitions {
             request.respondWithError("test", errorCode)} }
     }
 
+    @Given("^I am a (\\w+) user who wishes to register as opt out, but OD takes too long to respond")
+    fun iAmAUserWhoWishesToRegisterAsOptOutButOrganDonationTakesTooLong(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.lookUpRegistrationWithSuccessfulDemographics { a ->
+            a.respondWithError(HttpStatus.SC_NOT_FOUND) }
+
+        factory.create { registration -> registration.optOut {
+            request ->
+            request.respondWithSuccess("test").delayedBy(Duration.ofSeconds(OD_TIME_TO_RESPOND)) } }
+    }
+
+    @Given("^I am a (\\w+) user registered with organ donation with a decision to (.*) " +
+            "who wishes to opt-out but OD takes too long to respond")
+    fun iAmAUserWhoHasRegisteredAndWishToWithdrawButOrganDonationTakesTooLong(gpSystem: String, decision: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existing.setUpExistingDecisionForPatient(decision)
+        factory.withdrawRegistration{
+            request ->request.respondWithSuccess("test").delayedBy(Duration.ofSeconds(OD_TIME_TO_RESPOND)) }
+    }
+
+    @Given("^I am a (\\w+) user registered as opt-in amends to opt-out, but OD takes too long to respond")
+    fun iAmRegisteredAsOptInAmendingToOptOutButOrganDonationTakesTooLong(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existingRegistration = factory.existing.optIn()
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
+
+        factory.amend { registration ->
+            registration.optOut { request ->
+                request.respondWithSuccess("test").delayedBy(Duration.ofSeconds(OD_TIME_TO_RESPOND))} }
+    }
+
     @Given("^I am a (\\w+) user who wishes to register as opt out, but OD returns recoverable (.*) error$")
     fun iAmAUserWhoWishesToRegisterAsOptOutButOrganDonationThrowsErrorAndIRetry(gpSystem: String, errorCode: Int) {
         val factory = OrganDonationFactory(gpSystem)
@@ -195,6 +231,14 @@ class OrganDonationErrorStepDefinitions {
     fun iSeeAnAppropriateOrganDonationErrorMessageWithNoOptionToRetry() {
         organDonationErrorPage.assertHeaderText(organDonationErrorPage.errorHeader)
                 .assertMessageText(organDonationErrorPage.errorMessageNoRetry)
+                .assertNoButton(OD_ERROR_RETRY_BUTTON)
+        organDonationErrorPage.assertContactDetails()
+    }
+
+    @Then("^I see an appropriate Organ Donation decision processing message without a retry option$")
+    fun iSeeAnAppropriateOrganDonationProcessingMessageWithNoOptionToRetry() {
+        organDonationErrorPage.assertHeaderText(organDonationErrorPage.processingHeader)
+                .assertMessageText(organDonationErrorPage.processingMessage)
                 .assertNoButton(OD_ERROR_RETRY_BUTTON)
         organDonationErrorPage.assertContactDetails()
     }

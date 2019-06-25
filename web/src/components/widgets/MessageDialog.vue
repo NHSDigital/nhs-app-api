@@ -45,10 +45,10 @@ export default {
   data() {
     return {
       defaultIconTexts: {
-        success: 'Success',
-        warning: 'Warning',
-        error: 'Error',
-        message: 'Message',
+        success: this.$t('messageIconText.success'),
+        warning: this.$t('messageIconText.warning'),
+        error: this.$t('messageIconText.error'),
+        message: this.$t('messageIconText.message'),
       },
     };
   },
