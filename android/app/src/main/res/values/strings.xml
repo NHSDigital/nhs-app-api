@@ -152,7 +152,6 @@
     <string name="header_icon_help">Help icon</string>
 
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
-    <string name="haveShownThrottlingCarouselBefore">haveShownThrottlingCarouselBefore</string>
 
     <string name="sessionExpiryWarningHeader">You\'ll be logged out shortly</string>
     <string name="sessionExpiryWarningDurationInformation">Every %d minutes, we log you out for security purposes.</string>

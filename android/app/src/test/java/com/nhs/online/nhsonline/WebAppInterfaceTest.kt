@@ -172,15 +172,6 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun appIntro() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterface.completeAppIntro()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(nhsWebMock).onThrottlingCarouselComplete()
-    }
-
-    @Test
     fun storeBetaCookie() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.storeBetaCookie()

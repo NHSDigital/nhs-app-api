@@ -139,19 +139,6 @@ class NhsWeb(
         }
     }
 
-    fun loadThrottlingCarousel() {
-        originalWebViewZoom = webView.settings.textZoom
-        webView.settings.textZoom = 100
-        webView.loadUrl(readResourceString(R.string.throttleCarouselPath))
-    }
-
-    fun onThrottlingCarouselComplete() {
-        webView.settings.textZoom = originalWebViewZoom
-        appPersistData.storeBoolean(activity.getString(R.string.haveShownThrottlingCarouselBefore),
-            true)
-        loadWelcomePage()
-    }
-
     fun onWebLoggedIn() {
         Log.d(TAG, "Entering loggedIn")
         if (isUserLoggedIn) return

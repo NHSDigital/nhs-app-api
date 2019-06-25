@@ -154,9 +154,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func shouldOpenInSafari(url: URL) -> Bool {
         
-        let nativeWebViewUrlParts = [ config().IntroCarouselFileName,
-                          config().ThrottlingCarouselFileName,
-                          "login",
+        let nativeWebViewUrlParts = ["login",
                           config().CidUrlSuffix]
 
         if(url.absoluteString.containsAnyOf(nativeWebViewUrlParts)) {
@@ -185,9 +183,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         var shouldAllowNativeInteraction = false;
         
         let url = self.viewController.webViewController?.webView.url;
-        if(url?.absoluteString.contains("appintro"))!{
-            shouldAllowNativeInteraction = true
-        }
         if(url?.absoluteString.contains("throttling"))!{
             shouldAllowNativeInteraction = true
         }
@@ -243,13 +238,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break
             case "attemptBiometricLogin":
                 viewController.delayedBiometricsStart(0.3)
-                break
-            case "completeAppIntro":
-                let defaults = UserDefaults.standard
-                defaults.set(false, forKey: config().IsFirstTimeOpened)
-                defaults.set(true, forKey: config().HaveShownThrottlingCarouselBefore)
-                
-                self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
                 break
             case "focusElement":
                 let elementToFocus = message.body;

@@ -102,14 +102,7 @@ class LifeCycleObserver(
 
                 context.configBiometricSetup(configurationResponse.fidoServerUrl)
 
-                val throttlingPageLoaded = PersistData(context)
-                    .readBoolean(context.getString(R.string.haveShownThrottlingCarouselBefore))
-
-                if (configurationResponse.isThrottlingEnabled && !throttlingPageLoaded) {
-                    nhsWeb.loadThrottlingCarousel()
-                } else {
-                    nhsWeb.loadWelcomePage()
-                }
+                nhsWeb.loadWelcomePage()
             }
 
             override fun onError(errorMessage: ErrorMessage) {

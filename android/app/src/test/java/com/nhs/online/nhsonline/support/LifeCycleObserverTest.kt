@@ -305,8 +305,6 @@ class LifeCycleObserverTest {
         verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(1)).hideBlankScreen()
-        verify(nhsWebMock, times(1)).loadThrottlingCarousel()
-        verify(nhsWebMock, times(0)).loadWelcomePage()
         verify(contextSpy, times(1)).configBiometricSetup(fidoServerUrl)
         verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
         assertEquals(true, contextSpy.isSuccessfulConfigCheck)

@@ -102,12 +102,6 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun completeAppIntro() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering completeAppIntro")
-        activity.runOnUiThread { nhsWeb.onThrottlingCarouselComplete() }
-    }
-
-    @JavascriptInterface
     fun storeBetaCookie() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering storeBetaCookie")
         activity.runOnUiThread { nhsWeb.onBetaCookieStoreRequest() }

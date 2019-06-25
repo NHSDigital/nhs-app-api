@@ -52,10 +52,6 @@ window.nativeApp.clearMenuBarItem = function(header) {
     window.webkit.messageHandlers.clearMenuBarItem.postMessage(null);
 };
 
-window.nativeApp.completeAppIntro = function(header) {
-    window.webkit.messageHandlers.completeAppIntro.postMessage(null);
-};
-
 window.nativeApp.goToLoginOptions = function() {
     window.webkit.messageHandlers.goToLoginOptions.postMessage(null);
 };

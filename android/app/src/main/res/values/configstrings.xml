@@ -29,8 +29,6 @@
     <string name="conditions">https://www.nhs.uk/conditions/</string>
     <string name="nhs111Location">https://111.service.nhs.uk/</string>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
-    <string name="appIntroPath">file:///android_asset/appintro.html</string>
-    <string name="throttleCarouselPath">file:///android_asset/throttling.html</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
 
     <string name="accessToken">accessToken</string>

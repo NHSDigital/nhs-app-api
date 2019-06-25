@@ -6,7 +6,6 @@ struct Config: Decodable {
         case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
-        case IsFirstTimeOpened, HaveShownThrottlingCarouselBefore, CarouselDirectory, CarouselContentType, IntroCarouselFileName, ThrottlingCarouselFileName
         case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
         case BiometricHelpURL, FidoLoginErrorPath, BiometricRedirectURL, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
@@ -36,13 +35,6 @@ struct Config: Decodable {
     let NhsOnlineRequiredQueryString:String
     let ResponseWaitingTime: Double
     let SessionTimeout: Int
-
-    let IsFirstTimeOpened: String
-    let HaveShownThrottlingCarouselBefore: String
-    let CarouselDirectory: String
-    let CarouselContentType: String
-    let IntroCarouselFileName: String
-    let ThrottlingCarouselFileName: String
 
     let HelpURL: String
     let TermsAndConditionsURL: String

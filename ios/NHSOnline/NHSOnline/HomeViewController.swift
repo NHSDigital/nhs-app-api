@@ -134,12 +134,6 @@ class HomeViewController : UIViewController {
         self.webViewController?.loadPage(url: pageUrl)
     }
     
-    func openThrottlingCarousel() {
-        if(!UserDefaults.standard.bool(forKey: config().HaveShownThrottlingCarouselBefore)) {
-            openCarousel(fileName: config().ThrottlingCarouselFileName)
-        }
-    }
-    
     func setUpControllers() {
         webViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
         webViewController?.loadViewIfNeeded()
@@ -162,31 +156,6 @@ class HomeViewController : UIViewController {
         biometricResultController?.loadViewIfNeeded()
         
         currentNativeViewController = errorViewController
-    }
-    
-    func openCarousel(fileName: String) {
-        
-        let type = config().CarouselContentType
-        let directory = config().CarouselDirectory
-        
-        if let path = Bundle.main.url(forResource: fileName, withExtension: type, subdirectory: directory) {
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                self.webViewController?.webView.loadFileURL(path, allowingReadAccessTo: path)
-                self.webViewController?.webView.becomeFirstResponder()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                    self.executeJavascript(scriptToExecute: "var isIos = true; removeAttrs(); var result = jQuery('#nhso_logo_one').focus();")
-                })
-            })
-            
-        } else {
-            if #available(iOS 10.0, *) {
-                os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
-            } else {
-                NSLog("Critical - Files for carousel missing")
-            }
-        }
     }
     
     func addSubview(subView:UIView, toView parentView:UIView) {

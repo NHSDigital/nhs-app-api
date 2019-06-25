@@ -37,7 +37,6 @@ open class ResourceMockingClass {
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=android"
             on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
-            on { getString(R.string.appIntroPath) } doReturn "file:///android_asset/appintro.html"
             on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
             on { getStringArray(R.array.externalSiteUrls) } doReturn arrayOf(

@@ -166,41 +166,6 @@ class NhsWebTest {
     }
 
     @Test
-    fun loadThrottlingCarousel_Sets_ZoomSizeTo100AndLoadsThrottlingUrl() {
-        val throttlingUrl = "file://throttling-url.html"
-        val resourceMock: Resources = mock {
-            on { getString(R.string.throttleCarouselPath) } doReturn throttlingUrl
-        }
-        val webviewSettings: WebSettings = mock()
-        whenever(webViewMock.settings).thenReturn(webviewSettings)
-        whenever(spyActivity.resources).thenReturn(resourceMock)
-        nhsWeb.loadThrottlingCarousel()
-        verify(webviewSettings).textZoom = 100
-        verify(webViewMock).loadUrl(throttlingUrl)
-    }
-
-    @Test
-    fun onThrottlingCarouselComplete_Resets_WebviewTextZoomToOriginalSizeAndSaveThrottlingStateAndLoadsWelcomePage() {
-        val hasThrottlingShown = "haveShownThrottlingCarouselBefore"
-        val originalTextSize = 50
-
-        ReflectionHelpers.setField(nhsWeb, "originalWebViewZoom", originalTextSize)
-        val appPersistData: PersistData = mock()
-        ReflectionHelpers.setField(nhsWeb, "appPersistData", appPersistData)
-        val webviewSettings: WebSettings = mock()
-
-        whenever(webViewMock.settings).thenReturn(webviewSettings)
-        val spyNhsWeb = spy(nhsWeb)
-        whenever(spyActivity.getString(R.string.haveShownThrottlingCarouselBefore)).thenReturn(
-            hasThrottlingShown)
-        spyNhsWeb.onThrottlingCarouselComplete()
-
-        verify(webviewSettings).textZoom = originalTextSize
-        verify(appPersistData).storeBoolean(hasThrottlingShown, true)
-        verify(spyNhsWeb).loadWelcomePage()
-    }
-
-    @Test
     fun onBiometricOptionChanged() {
         nhsWeb.onWebLoggedIn()
         nhsWeb.onBiometricOptionChanged()

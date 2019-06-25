@@ -18,7 +18,6 @@ class   ConfigurationService : ConfigurationServiceProtocol {
             getConfigurationResponse() { (configResponse) in
                 if let config = configResponse {
                     self.configurationResponse = ConfigurationResponse(config.isDeviceSupported,
-                                                                       config.isThrottlingEnabled ?? false,
                                                                        config.fidoServerUrl,
                                                                        false)
                 }
@@ -77,9 +76,6 @@ class   ConfigurationService : ConfigurationServiceProtocol {
     
     func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
         if isValidConfigResponse() {
-            if(configurationResponse.isThrottlingEnabled) {
-                homeViewController.openThrottlingCarousel()
-            }
             
             completionHandler(configurationResponse)
         } else {
