@@ -28,8 +28,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.google.gson.Gson
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.biometrics.utils.SigningHelper
 import kotlinx.android.synthetic.main.fingerprint_dialog_container.*
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
+                                                  fingerprintContent: FingerprintContent,
+                                                  fingerprintAuthProcessor: FingerprintAuthProcessor) : FingerprintAuthenticationDialogFragment {
+    val fragment = FingerprintAuthenticationDialogFragment()
+    val args = Bundle()
+    fragment.arguments = args
+    fragment.cryptoObject = FingerprintManagerCompat.CryptoObject(signingHelper.initSignature())
+    fragment.fingerprintContent = fingerprintContent
+    fragment.fingerprintAuthProcessor = fingerprintAuthProcessor
+    return fragment;
+}
 
 /**
  * A dialog which uses fingerprint APIs to authenticate the user, and falls back to password
@@ -39,9 +54,9 @@ import kotlinx.android.synthetic.main.fingerprint_dialog_container.*
 class FingerprintAuthenticationDialogFragment : DialogFragment(),
     TextView.OnEditorActionListener,
     FingerprintUiHelper.Callback {
-    private lateinit var cryptoObject: FingerprintManagerCompat.CryptoObject
-    private lateinit var fingerprintUiHelper: FingerprintUiHelper
-    private lateinit var fingerprintContent: FingerprintContent
+    var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
+    var fingerprintUiHelper: FingerprintUiHelper? = null
+    var fingerprintContent: FingerprintContent? = null
     var fingerprintAuthProcessor: FingerprintAuthProcessor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +64,8 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
         // Do not create a new Fragment when the Activity is re-created such as orientation changes.
         retainInstance = true
-        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog)
+        setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog)
+
     }
 
     override fun onCreateView(
@@ -57,15 +73,15 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dialog.setTitle(fingerprintContent.title)
+        dialog.setTitle(fingerprintContent?.title)
         dialog.setCanceledOnTouchOutside(false)
         return inflater.inflate(R.layout.fingerprint_dialog_container, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fingerprintDescription.text = fingerprintContent.description
-        cancelButton.text = fingerprintContent.cancelText
+        fingerprintDescription.text = fingerprintContent?.description
+        cancelButton.text = fingerprintContent?.cancelText
 
         cancelButton.setOnClickListener {
             fingerprintAuthProcessor?.cancel()
@@ -77,12 +93,12 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
     override fun onResume() {
         super.onResume()
-        fingerprintUiHelper.startListening(cryptoObject)
+        fingerprintUiHelper?.startListening(cryptoObject!!)
     }
 
     override fun onPause() {
         super.onPause()
-        fingerprintUiHelper.stopListening()
+        fingerprintUiHelper?.stopListening()
     }
 
     private fun initiateFingerprintUiHelper() {
@@ -97,14 +113,6 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         dismissAllowingStateLoss()
     }
 
-    fun setFingerprintContent(fingerprintContent: FingerprintContent) {
-        this.fingerprintContent = fingerprintContent
-    }
-
-    fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject) {
-        this.cryptoObject = cryptoObject
-    }
-
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
         return false
     }
@@ -116,6 +124,6 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
     override fun onError() {
         dismissAllowingStateLoss()
-        fingerprintUiHelper.stopListening()
+        fingerprintUiHelper?.stopListening()
     }
 }

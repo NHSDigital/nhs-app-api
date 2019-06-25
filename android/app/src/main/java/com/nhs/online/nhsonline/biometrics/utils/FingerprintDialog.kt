@@ -3,13 +3,12 @@ package com.nhs.online.nhsonline.biometrics.utils
 import android.annotation.TargetApi
 import android.os.Build
 import android.support.v4.app.FragmentActivity
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Log
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricConstants
 import com.nhs.online.nhsonline.biometrics.BiometricState
+import com.nhs.online.nhsonline.fido.uaf.fp.createFingerprintAuthenticationDialogFragment
 import com.nhs.online.nhsonline.fido.uaf.fp.FingerprintAuthProcessor
-import com.nhs.online.nhsonline.fido.uaf.fp.FingerprintAuthenticationDialogFragment
 import com.nhs.online.nhsonline.fido.uaf.fp.FingerprintContent
 
 private val TAG = FingerprintDialog::class.java.simpleName
@@ -23,11 +22,7 @@ class FingerprintDialog(
             fingerprintAuthProcessor: FingerprintAuthProcessor,
             fingerprintContent: FingerprintContent
     ) {
-        val fingerprintAuthFragment = FingerprintAuthenticationDialogFragment()
-        fingerprintAuthFragment.fingerprintAuthProcessor = fingerprintAuthProcessor
-        fingerprintAuthFragment.setFingerprintContent(fingerprintContent)
-        val cryptoObj = FingerprintManagerCompat.CryptoObject(signingHelper.initSignature())
-        fingerprintAuthFragment.setCryptoObject(cryptoObj)
+        val fingerprintAuthFragment = createFingerprintAuthenticationDialogFragment(signingHelper, fingerprintContent, fingerprintAuthProcessor)
 
         Log.d(TAG, "Showing fingerprint fragment: $fingerprintAuthFragment")
         fingerprintAuthFragment.show(activity.supportFragmentManager, BiometricConstants.DIALOG_FRAGMENT_TAG)
