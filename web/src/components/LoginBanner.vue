@@ -82,14 +82,17 @@ export default {
     }
 
     &:hover {
-      background: #ffcd60;
-      box-shadow: 0 0 0 4px #ffcd60;
-      color: #212B32;
+      background: $hover_highlight;
+      box-shadow: 0 0 0 4px $hover_highlight;
+      color: $black;
       text-decoration: none;
     }
 
     &:focus {
+      background: $focus_highlight;
       box-shadow: 0 0 0 4px $focus_highlight;
+      color: $black;
+      outline: 0;
     }
 
     &:visited {
