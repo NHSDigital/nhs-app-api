@@ -31,10 +31,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/accessibility";
 
 .reaffirmDecision {
-  @extend .focusBorder;
   padding: 0.5em;
   margin-left: -0.5em;
 }
