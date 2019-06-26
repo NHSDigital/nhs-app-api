@@ -61,14 +61,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     currentJourneys.Appointments = journeys.Appointments;
                 }
 
-                if (EnumHelper.HasValue(journeys.Prescriptions?.Provider))
+                if (EnumHelper.HasValue(journeys.CdssAdvice?.Provider))
                 {
-                    currentJourneys.Prescriptions = journeys.Prescriptions;
+                    currentJourneys.CdssAdvice = journeys.CdssAdvice;
                 }
 
-                if (EnumHelper.HasValue(journeys.MedicalRecord?.Provider))
+                if (EnumHelper.HasValue(journeys.CdssAdmin?.Provider))
                 {
-                    currentJourneys.MedicalRecord = journeys.MedicalRecord;
+                    currentJourneys.CdssAdmin = journeys.CdssAdmin;
                 }
             }
         }

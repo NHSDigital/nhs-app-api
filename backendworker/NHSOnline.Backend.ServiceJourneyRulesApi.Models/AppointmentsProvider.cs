@@ -11,7 +11,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum AppointmentsProvider
     {
         Unknown = 0,
-        none,
         im1,
         informatica
     }

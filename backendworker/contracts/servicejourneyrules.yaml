@@ -39,4 +39,3 @@ components:
               description: The appointment provider
               enum:
                 - im1
-                - none

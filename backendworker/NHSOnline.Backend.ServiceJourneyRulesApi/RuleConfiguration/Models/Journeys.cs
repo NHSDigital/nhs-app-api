@@ -6,8 +6,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
     {
         public Appointments Appointments { get; set; }
         
-        public Prescriptions Prescriptions { get; set; }
+        public Cdss CdssAdvice  { get; set; }
         
-        public MedicalRecord MedicalRecord  { get; set; }
+        public Cdss CdssAdmin  { get; set; }
     }
 }

@@ -78,9 +78,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsProvider.im1,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.none)
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
                     }
                 }
             };
@@ -111,21 +110,18 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsProvider.im1,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.none)
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
                     },
                     {
                         "A2",
-                        CreateJourneys(AppointmentsProvider.none,
-                            PrescriptionsProvider.none,
-                            MedicalRecordProvider.im1)
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.none,
+                            cdssAdviceServiceDefinition: "adviceDefinition")
                     },
                     {
                         "A3",
-                        CreateJourneys(AppointmentsProvider.im1,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.im1)
+                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
+                            cdssAdminProvider: CdssProvider.none)
                     }
                 }
             };
@@ -159,19 +155,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     Target = new Target { OdsCode = "A3" },
                     Journeys = context.MergedOdsJourneys["A3"]
                 });
-        }
-
-        private static Journeys CreateJourneys(
-            AppointmentsProvider appointmentsProvider,
-            PrescriptionsProvider prescriptionsProvider,
-            MedicalRecordProvider medicalRecordProvider)
-        {
-            return new Journeys
-            {
-                Appointments = new Appointments { Provider = appointmentsProvider },
-                Prescriptions = new Prescriptions { Provider = prescriptionsProvider },
-                MedicalRecord = new MedicalRecord { Provider = medicalRecordProvider }
-            };
         }
     }
 }

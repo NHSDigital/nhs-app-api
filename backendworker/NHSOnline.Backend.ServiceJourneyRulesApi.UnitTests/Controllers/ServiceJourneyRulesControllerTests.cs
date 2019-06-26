@@ -32,22 +32,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
         }
 
         [TestMethod]
-        public void CorrectResponseIsReturnedWhenThereIsNoProvider()
-        {
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))
-                .Returns(new ServiceJourneyRulesResponse()
-                {
-                    Appointments = new Appointments
-                    {
-                        Provider = AppointmentsProvider.none
-                    }
-                });
-
-            var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.AreEqual(getResponse.Value.Appointments.Provider, AppointmentsProvider.none);
-        }
-
-        [TestMethod]
         public void CorrectResponseIsReturnedWhenProviderIsIm1()
         {
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))

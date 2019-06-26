@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void GetType_WhenTypeNotEnum_ThrownsAnException()
         {
-            //  Arrange
+            // Arrange
             Action act = () => EnumHelper.GetType<int>();
 
             // Assert

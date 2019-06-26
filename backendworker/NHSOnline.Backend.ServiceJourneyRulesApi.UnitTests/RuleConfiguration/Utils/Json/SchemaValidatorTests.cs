@@ -10,7 +10,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json;
 using UnitTestHelper;
@@ -297,11 +296,110 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
+        [DataRow("\"appointments\": { \"provider\": \"im1\" }")]
+        [DataRow("\"appointments\": { \"provider\": \"informatica\", \"informaticaUrl\": \"http://example.com\" }")]
+        [DataRow("\"cdssAdvice\": { \"provider\": \"none\" }")]
+        [DataRow("\"cdssAdvice\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\" }")]
+        [DataRow("\"cdssAdmin\": { \"provider\": \"none\" }")]
+        [DataRow("\"cdssAdmin\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\" }")]
+        public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
+            string journeys)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              "    \"supplier\":\"emis\"" +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              journeys +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
         [DataRow("", null)]
-        [DataRow("\"provider\": \"foo\"", null)]
+        [DataRow("\"provider\": \"foo\"", "NotInEnumeration: #/journeys.cdssAdvice.provider")]
+        [DataRow("\"provider\": \"eConsult\"", "PropertyRequired: #/journeys.cdssAdvice.serviceDefinition")]
+        public async Task
+            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidCdssAdviceProvider_ReturnsFalse(
+                string provider, string expectedError)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              "    \"odsCode\":\"FOO\"" +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              "    \"cdssAdvice\": {" +
+                              provider +
+                              "    }" +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "NotOneOf: #/journeys.cdssAdvice", Times.Once());
+            if (!string.IsNullOrWhiteSpace(expectedError))
+            {
+                _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
+            }
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("", null)]
+        [DataRow("\"provider\": \"foo\"", "NotInEnumeration: #/journeys.cdssAdmin.provider")]
+        [DataRow("\"provider\": \"eConsult\"", "PropertyRequired: #/journeys.cdssAdmin.serviceDefinition")]
+        public async Task
+            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidCdssAdminProvider_ReturnsFalse(
+                string provider, string expectedError)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              "    \"odsCode\":\"FOO\"" +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              "    \"cdssAdmin\": {" +
+                              provider +
+                              "    }" +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, "NotOneOf: #/journeys.cdssAdmin", Times.Once());
+            if (!string.IsNullOrWhiteSpace(expectedError))
+            {
+                _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
+            }
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow("", null)]
+        [DataRow("\"provider\": \"foo\"", "NotInEnumeration: #/journeys.appointments.provider")]
         [DataRow("\"provider\": \"informatica\"", "PropertyRequired: #/journeys.appointments.informaticaUrl")]
         public async Task
-            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidAppointmentsProviders_ReturnsFalse(
+            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidAppointmentsProvider_ReturnsFalse(
                 string provider, string expectedError)
         {
             // Arrange
@@ -329,35 +427,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             }
 
             result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        [DataRow("\"provider\": \"im1\"")]
-        [DataRow("\"provider\": \"none\"")]
-        [DataRow("\"provider\": \"informatica\", \"informaticaUrl\": \"http://example.com\"")]
-        public async Task
-            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidAppointmentsProviders_ReturnsTrue(
-                string provider)
-        {
-            // Arrange
-            var fileContent = "{" +
-                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
-                              "  \"target\": {" +
-                              "    \"odsCode\":\"FOO\"" +
-                              "  }," +
-                              "  \"journeys\": {" +
-                              "    \"appointments\": {" +
-                              provider +
-                              "    }" +
-                              "  }" +
-                              "}";
-            var jsonFile = new FileData(string.Empty, fileContent);
-
-            // Act
-            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
-
-            // Assert
-            result.Should().BeTrue();
         }
 
         private static FileData GetEmbeddedResource(string fileName)

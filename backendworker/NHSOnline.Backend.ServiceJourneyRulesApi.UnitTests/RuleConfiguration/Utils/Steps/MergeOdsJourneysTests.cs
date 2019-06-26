@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             var fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            
+
             _mockLogger = fixture.Freeze<Mock<ILogger<MergeOdsJourneys>>>();
 
             _step = fixture.Create<MergeOdsJourneys>();
@@ -63,30 +63,27 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             // Arrange
             var defaultFolderJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsProvider.im1,
-                    MedicalRecordProvider.Unknown),
-                CreateJourneys(AppointmentsProvider.Unknown, PrescriptionsProvider.Unknown,
-                    MedicalRecordProvider.im1),
-                CreateJourneys(AppointmentsProvider.im1, PrescriptionsProvider.Unknown,
-                    MedicalRecordProvider.none)
+                JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.eConsult,
+                    cdssAdminProvider: CdssProvider.Unknown, cdssAdviceServiceDefinition: "adviceDefinition"),
+                JourneyBuilder.Build(AppointmentsProvider.Unknown, CdssProvider.Unknown, CdssProvider.none),
+                JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
+                    cdssAdminProvider: CdssProvider.Unknown)
             );
-            
+
             var anotherFolderJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsProvider.im1,
-                    MedicalRecordProvider.none),
-                CreateJourneys(AppointmentsProvider.none, PrescriptionsProvider.Unknown,
-                    MedicalRecordProvider.im1),
-                CreateJourneys(AppointmentsProvider.im1, PrescriptionsProvider.none,
-                    MedicalRecordProvider.Unknown)
+                JourneyBuilder.Build(null, CdssProvider.none, CdssProvider.eConsult,
+                    cdssAdminServiceDefinition: "adminDefinition"),
+                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.Unknown, CdssProvider.Unknown),
+                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.Unknown,
+                    cdssAdviceServiceDefinition: "adviceDefinition")
             );
-            
+
             var expectedMergedJourneys = CreateOdsJourneys(
-                CreateJourneys(null, PrescriptionsProvider.im1,
-                    MedicalRecordProvider.none),
-                CreateJourneys(AppointmentsProvider.none, PrescriptionsProvider.Unknown,
-                    MedicalRecordProvider.im1),
-                CreateJourneys(AppointmentsProvider.im1, PrescriptionsProvider.none,
-                    MedicalRecordProvider.none)
+                JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
+                    cdssAdminProvider: CdssProvider.eConsult, cdssAdminServiceDefinition: "adminDefinition"),
+                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.Unknown, CdssProvider.none),
+                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.Unknown,
+                    cdssAdviceServiceDefinition: "adviceDefinition")
             );
 
             var context = new ConfigurationContext
@@ -116,25 +113,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 { "A1", firstJourney },
                 { "A2", secondJourney },
                 { "A3", thirdJourney }
-            };
-        }
-
-        private static Journeys CreateJourneys(
-            AppointmentsProvider? appointmentsProvider,
-            PrescriptionsProvider? prescriptionsProvider,
-            MedicalRecordProvider? medicalRecordProvider)
-        {
-            return new Journeys
-            {
-                Appointments = appointmentsProvider.HasValue
-                    ? new Appointments { Provider = appointmentsProvider.Value }
-                    : null,
-                Prescriptions = prescriptionsProvider.HasValue
-                    ? new Prescriptions { Provider = prescriptionsProvider.Value }
-                    : null,
-                MedicalRecord = medicalRecordProvider.HasValue
-                    ? new MedicalRecord { Provider = medicalRecordProvider.Value }
-                    : null
             };
         }
     }

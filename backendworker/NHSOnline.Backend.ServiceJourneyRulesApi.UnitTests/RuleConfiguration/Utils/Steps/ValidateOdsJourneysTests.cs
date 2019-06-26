@@ -30,8 +30,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockLogger = fixture.Freeze<Mock<ILogger<ValidateOdsJourneys>>>();
 
             _step = fixture.Create<ValidateOdsJourneys>();
-            
-            _loadStep= fixture.Create<ValidateOdsJourneys>();
+
+            _loadStep = fixture.Create<ValidateOdsJourneys>();
         }
 
         [TestMethod]
@@ -74,21 +74,28 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsProvider.im1,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.none)
+                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
+                            cdssAdminProvider: CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
                     },
                     {
                         "A2",
-                        CreateJourneys(AppointmentsProvider.none,
-                            PrescriptionsProvider.Unknown,
-                            MedicalRecordProvider.im1)
+                        JourneyBuilder.Build(AppointmentsProvider.Unknown, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
                     },
                     {
                         "A3",
-                        CreateJourneys(null,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.im1)
+                        JourneyBuilder.Build(null, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A4",
+                        JourneyBuilder.Build(AppointmentsProvider.im1, null, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A5",
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.Unknown)
                     }
                 }
             };
@@ -99,11 +106,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             // Assert;
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A2'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A3'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A4'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A5'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
         }
-        
+
         [TestMethod]
         public async Task Execute_WhenAllJourneysAreProvided_ReturnsTrue()
         {
@@ -114,21 +123,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsProvider.im1,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.none)
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
                     },
                     {
                         "A2",
-                        CreateJourneys(AppointmentsProvider.none,
-                            PrescriptionsProvider.none,
-                            MedicalRecordProvider.im1)
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.eConsult,
+                            cdssAdviceServiceDefinition: "adviceDefinition",
+                            cdssAdminServiceDefinition: "adminDefinition")
                     },
                     {
                         "A3",
-                        CreateJourneys(AppointmentsProvider.im1,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.im1)
+                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
+                            cdssAdminProvider: CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
                     }
                 }
             };
@@ -139,7 +147,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             // Assert;
             result.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public async Task Execute_WhenMergedConfigFilesContainsAllJourneys_ReturnsTrue()
         {
@@ -150,9 +158,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(AppointmentsProvider.im1,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.none)
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A2",
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.eConsult,
+                            cdssAdviceServiceDefinition: "adviceDefinition",
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A3",
+                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
+                            cdssAdminProvider: CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
                     }
                 }
             };
@@ -163,7 +182,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             // Assert;
             result.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public async Task Execute_WhenMergedConfigFilesMissingJourneys_ReturnsFalse()
         {
@@ -174,9 +193,28 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        CreateJourneys(null,
-                            PrescriptionsProvider.im1,
-                            MedicalRecordProvider.none)
+                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
+                            cdssAdminProvider: CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A2",
+                        JourneyBuilder.Build(AppointmentsProvider.Unknown, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A3",
+                        JourneyBuilder.Build(null, CdssProvider.none, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A4",
+                        JourneyBuilder.Build(AppointmentsProvider.im1, null, CdssProvider.eConsult,
+                            cdssAdminServiceDefinition: "adminDefinition")
+                    },
+                    {
+                        "A5",
+                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.Unknown)
                     }
                 }
             };
@@ -185,29 +223,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _loadStep.Execute(context);
 
             // Assert;
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A1'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A2'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A3'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A4'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A5'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
-        }
-
-        private static Journeys CreateJourneys(
-            AppointmentsProvider? appointmentsProvider,
-            PrescriptionsProvider? prescriptionsProvider,
-            MedicalRecordProvider? medicalRecordProvider)
-        {
-            return new Journeys
-            {
-                Appointments = appointmentsProvider.HasValue
-                    ? new Appointments { Provider = appointmentsProvider.Value }
-                    : null,
-                Prescriptions = prescriptionsProvider.HasValue
-                    ? new Prescriptions { Provider = prescriptionsProvider.Value }
-                    : null,
-                MedicalRecord = medicalRecordProvider.HasValue
-                    ? new MedicalRecord { Provider = medicalRecordProvider.Value }
-                    : null
-            };
         }
     }
 }

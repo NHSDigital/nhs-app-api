@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
        }
 
        [TestMethod]
-       public async Task IsJourneyEnabled_WhenThereIsNoProvider_ReturnsFalse()
+       public async Task IsJourneyEnabled_WhenProviderIsNotIm1_ReturnsFalse()
        {
            // Arrange
            var mockResponse =
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Appointments = new ServiceJourneyRulesApi.Models.Appointments
                        {
-                           Provider = AppointmentsProvider.none
+                           Provider = AppointmentsProvider.informatica
                        }
                    }
                };

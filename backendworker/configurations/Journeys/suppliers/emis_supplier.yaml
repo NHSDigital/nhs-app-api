@@ -4,7 +4,3 @@ target:
 journeys:
   appointments:
     provider: im1
-  prescriptions:
-    provider: im1
-  medicalRecord:
-    provider: im1

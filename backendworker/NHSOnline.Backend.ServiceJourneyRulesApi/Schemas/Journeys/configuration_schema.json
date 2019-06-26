@@ -12,7 +12,8 @@
           "provider": {
             "enum": [ "im1" ]
           }
-        }
+        },
+        "required": ["provider"]
       },{
         "additionalProperties": false,
         "properties": {
@@ -22,47 +23,46 @@
           "informaticaUrl": { "type": "string" }
         },
         "required": ["provider", "informaticaUrl"]
-      },{
-        "additionalProperties": false,
-        "properties": {
-          "provider": {
-            "enum": [ "none" ]
-          }
-        }
       }]
     },
-    "prescriptionsJourney": {
+    "cdssAdviceJourney": {
       "oneOf": [{
         "additionalProperties": false,
         "properties": {
           "provider": {
-            "enum": [ "im1" ]
+            "enum": [ "none" ]
           }
-        }
+        },
+        "required": ["provider"]
       },{
         "additionalProperties": false,
         "properties": {
           "provider": {
-            "enum": [ "none" ]
-          }
-        }
+            "enum": [ "eConsult" ]
+          },
+          "serviceDefinition": { "type": "string" }
+        },
+        "required": ["provider", "serviceDefinition"]
       }]
     },
-    "medicalRecordJourney": {
+    "cdssAdminJourney": {
       "oneOf": [{
         "additionalProperties": false,
         "properties": {
           "provider": {
-            "enum": [ "im1" ]
+            "enum": [ "none" ]
           }
-        }
+        },
+        "required": ["provider"]
       },{
         "additionalProperties": false,
         "properties": {
           "provider": {
-            "enum": [ "none" ]
-          }
-        }
+            "enum": [ "eConsult" ]
+          },
+          "serviceDefinition": { "type": "string" }
+        },
+        "required": ["provider", "serviceDefinition"]
       }]
     }
   },
@@ -108,15 +108,15 @@
       "additionalProperties": false,
       "properties": {
         "appointments": { "$ref": "#/definitions/appointmentsJourney" },
-        "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
-        "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" }
+        "cdssAdvice": { "$ref": "#/definitions/cdssAdviceJourney"},
+        "cdssAdmin": { "$ref": "#/definitions/cdssAdminJourney"}
       },
       "anyOf": [{
         "required": ["appointments"]
       },{
-        "required": ["prescriptions"]
+        "required": ["cdssAdvice"]
       },{
-        "required": ["medicalRecord"]
+        "required": ["cdssAdmin"]
       }]
     }
   },
