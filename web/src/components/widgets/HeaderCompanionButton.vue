@@ -1,6 +1,6 @@
 <template>
-  <span v-if="activeButton && !(showApiError || hasConnectionProblem)"
-        :class="$style.headerCompanion">
+  <div v-if="activeButton && !(showApiError || hasConnectionProblem)"
+       :class="$style.headerCompanion">
     <no-js-form :action="path" :value="activeButton.formData">
       <button id="header-companion-button"
               :class="$style.companionButton"
@@ -8,7 +8,7 @@
         {{ activeButton.text }}
       </button>
     </no-js-form>
-  </span>
+  </div>
 </template>
 <script>
 /* eslint-disable no-unused-vars */
@@ -81,8 +81,7 @@ export default {
   .headerCompanion {
     @include main-container-width;
     display: block;
-    margin: 0 auto;
-    padding: 1em 16px 16px;
+    margin: 1em auto;
 
     .companionButton {
       @include button;
@@ -94,9 +93,7 @@ export default {
       transition: all ease 0.5s;
       cursor: pointer;
       width: auto;
-      min-width: 16.875em;
-      padding: 0.625em 2em;
-      max-width: 960px;
+      padding: 1em 16px 16px;
       display: block;
     }
 

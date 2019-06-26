@@ -14,8 +14,8 @@
       </div>
       <div id="maincontent" ref="mainContent" tabindex="-1"
            :class="[mainClass, $style['main-container-desktop']]">
-        <header-companion-button v-if="shouldShowButton"/>
         <main :class="mainClass">
+          <header-companion-button v-if="shouldShowButton"/>
           <spinner />
           <connection-error />
           <api-error />
