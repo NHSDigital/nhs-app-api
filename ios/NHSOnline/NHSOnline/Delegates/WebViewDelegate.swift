@@ -280,6 +280,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         let tabBar = self.viewController.tabBar!
         if(index >= 0 && index < tabBar.items!.count){
             tabBar.selectedItem = tabBar.items![index]
+            viewController.selectedTab = index
         }
     }
     
@@ -293,6 +294,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
+        self.viewController.selectedTab = nil
     }
     
     @objc func pageIsNotResponding() {

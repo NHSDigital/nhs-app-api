@@ -39,6 +39,7 @@ class MenuBar @JvmOverloads constructor(
             val menuBarItem = getMenuBarItemAt(i)
             if (menuBarItem.id == menuBarItemId) {
                 onMenuItemClicked(i, false)
+                selectedPosition = Optional.of(i)
                 break
             }
         }
@@ -68,7 +69,10 @@ class MenuBar @JvmOverloads constructor(
     }
 
     private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
-        if(nhsWeb?.applicationState?.isReady() !=  false && menuItemNotCurrentlySelected(position)) {
+        if(nhsWeb?.applicationState?.isReady() ==  false)
+                return
+
+        if(menuItemNotCurrentlySelected(position)) {
             if(getMenuBarItemAt(position).isBlockingMenuItem()) {
                 nhsWeb?.applicationState?.block()
             }
@@ -80,6 +84,8 @@ class MenuBar @JvmOverloads constructor(
     }
 
     private fun menuItemNotCurrentlySelected(position: Int): Boolean {
+        if(getMenuBarItemAt(position).isReselectableMenuItem())
+            return true
         var notCurrentlySelected = true
         selectedPosition.ifPresent {
             notCurrentlySelected = it != position
@@ -165,4 +171,8 @@ class MenuBar @JvmOverloads constructor(
 
 fun MenuBarItem.isBlockingMenuItem(): Boolean {
     return this.itemText !in context.resources.getStringArray(R.array.nonBlockingMenuItems)
+}
+
+fun MenuBarItem.isReselectableMenuItem(): Boolean {
+    return this.itemText in context.resources.getStringArray(R.array.reSelectableMenuItems)
 }

@@ -378,6 +378,7 @@ class HomeViewController : UIViewController {
         self.pageUrl = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
         webViewController?.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
+        self.selectedTab = nil
     }
     
     @objc func selectHelp(sender : UITapGestureRecognizer) {
@@ -389,6 +390,7 @@ class HomeViewController : UIViewController {
         self.pageUrl = config().HomeUrl
         self.webViewController?.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
+        self.selectedTab = nil
     }
     func showWhiteScreen() {
         let v = UIView(frame: UIScreen.main.bounds)
@@ -404,6 +406,7 @@ class HomeViewController : UIViewController {
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
                 self.tabBar.selectedItem = nil
+                self.selectedTab = nil
             } else {
                 if(webview.canGoBack) {
                     goingBack = true

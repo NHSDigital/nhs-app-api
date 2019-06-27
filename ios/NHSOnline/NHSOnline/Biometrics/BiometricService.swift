@@ -47,6 +47,7 @@ class BiometricService: BiometricProtocol {
             let validLoginUrl = config().HomeUrl + url
             homeViewController.webViewController?.loadPage(url: validLoginUrl)
             homeViewController.tabBar.selectedItem = nil
+            homeViewController.selectedTab = nil
         } catch let error as FidoError {
             handleError(error)
         } catch {
