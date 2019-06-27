@@ -401,7 +401,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             [XmlElement(ElementName = "person.id", Namespace = "urn:hl7-org:v3")]
             public PersonId PersonId { get; set; }
             [XmlElement(ElementName = "retrievalItem", Namespace = "urn:hl7-org:v3")]
-            public RetrievalItem RetrievalItem { get; set; }
+            public List<RetrievalItem> RetrievalItems { get; set; }
         }
 
         [XmlRoot(ElementName = "QUPA_IN000008UK02", Namespace = "urn:hl7-org:v3")]

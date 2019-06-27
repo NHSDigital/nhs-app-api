@@ -58,7 +58,11 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
-                                   StringComparison.OrdinalIgnoreCase))
+                                   StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
+                                   req.ControlActEvent.Query.RetrievalItems[0].SemanticsText.Equals("person.nameUsual", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[1].SemanticsText.Equals("person.otherDemographics", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[2].SemanticsText.Equals("pharmacy", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[3].SemanticsText.Equals("supercededId", StringComparison.Ordinal))
                 ))
                 .Returns(Task.FromResult(
                     new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.OK)

@@ -123,9 +123,24 @@ namespace NHSOnline.Backend.NominatedPharmacy
                                 Extension = nhsNumber.RemoveWhiteSpace(),
                             },
                         },
-                        RetrievalItem = new RetrievalItem
+                        RetrievalItems = new List<RetrievalItem>
                         {
-                            SemanticsText = "person.allData",
+                            new RetrievalItem
+                            {
+                                SemanticsText = "person.nameUsual",
+                            },
+                            new RetrievalItem
+                            {
+                                SemanticsText = "person.otherDemographics",
+                            },
+                            new RetrievalItem
+                            {
+                                SemanticsText = "pharmacy",
+                            },
+                            new RetrievalItem
+                            {
+                                SemanticsText = "supercededId",
+                            },
                         },
                     },
                 },
