@@ -36,11 +36,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         private ConsultationItem FilterConsultationItem(Consultation response)
         {
             var consultationHeaders = FilterConsultationHeaders(response);
-            
-            var effectiveDate = new MyRecordDate
+            MyRecordDate effectiveDate = null;
+
+            if (response.EffectiveDate?.Value != null)
             {
-                Value = response.EffectiveDate.Value, DatePart = response.EffectiveDate.DatePart
-            };
+                effectiveDate = new MyRecordDate
+                {
+                    Value = response.EffectiveDate.Value,
+                    DatePart = response.EffectiveDate.DatePart
+                };
+            }
 
             var consultantLocation = !string.IsNullOrEmpty(response.Location)
                 ? $"{response.Location} - {response.ConsultantName}"

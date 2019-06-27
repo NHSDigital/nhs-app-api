@@ -499,5 +499,71 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             result.Should().NotBeNull();
             result.Data.ToList()[0].ConsultantLocation.Should().Be(item.MedicalRecord.Consultations[0].ConsultantName);
         }
+        
+        [TestMethod]
+        public void MapConsultationRequestsGetResponseToConsultationListResponse_WithNullEffectiveDateValue_ReturnsDataEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject {
+                MedicalRecord = new MedicalRecord
+                {
+                    Consultations = new List<Consultation>
+                    {
+                        new Consultation
+                        {
+                            EffectiveDate = new EffectiveDate
+                            {
+                                DatePart = "DD-MM-YYYY",
+                                Value = null,
+                            },
+                            ConsultantName = "Jean (Dr)",
+                            Location = "Test SURGERY",
+                        },                     
+                    },  
+                },
+            };
+
+            // Act
+            var result = new EmisConsultationMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Count().Should().Be(1);
+
+            var consultation = result.Data.First();
+            consultation.ConsultantLocation.Should().Be("Test SURGERY - Jean (Dr)");
+            consultation.EffectiveDate.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void MapConsultationRequestsGetResponseToConsultationListResponse_WithNullEffectiveDate_ReturnsDataWithEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Consultations = new List<Consultation>
+                    {
+                        new Consultation
+                        {
+                            ConsultantName = "Jean (Dr)",
+                            Location = "Test SURGERY",
+                        },
+                    },
+                },
+            };
+
+            // Act
+            var result = new EmisConsultationMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Count().Should().Be(1);
+
+            var consultation = result.Data.First();
+            consultation.ConsultantLocation.Should().Be("Test SURGERY - Jean (Dr)");
+            consultation.EffectiveDate.Should().BeNull();
+        }
     }
 }

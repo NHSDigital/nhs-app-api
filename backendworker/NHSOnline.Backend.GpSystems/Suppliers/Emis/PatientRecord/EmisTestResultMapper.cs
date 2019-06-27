@@ -41,13 +41,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 return testResultItem;                
             }
 
-            testResultItem.Date =
-                new MyRecordDate
-                {
-                    Value = response.Value.EffectiveDate.Value,
-                    DatePart = response.Value.EffectiveDate.DatePart
-                };
-
+            if (response.Value.EffectiveDate?.Value != null)
+            {
+                testResultItem.Date =
+                    new MyRecordDate
+                    {
+                        Value = response.Value.EffectiveDate.Value,
+                        DatePart = response.Value.EffectiveDate.DatePart
+                    };
+            }
+            
             if (response.ChildValues == null || !response.ChildValues.Any())
             {
                 var itemDescription = BuildItemDescriptionWithNoChildValues(response);
