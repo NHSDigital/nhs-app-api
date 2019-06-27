@@ -519,6 +519,14 @@ export default {
         },
       },
     },
+    informatica: {
+      header: 'Appointment booking is not currently available directly through the NHS App',
+      description: 'Your GP surgery uses Appointments Online to book appointments, and you’ll need a username and password from your GP surgery.',
+      link: {
+        prefix: 'If you have a username and password, ',
+        text: 'log in to Appointments Online',
+      },
+    },
   },
   prescriptions: {
     errors: {
@@ -849,6 +857,7 @@ export default {
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
+    appointmentInformatica: 'Service unavailable',
     myRecord: 'My medical record',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
@@ -880,6 +889,7 @@ export default {
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
+    appointmentInformatica: 'Service Unavailable',
     myRecord: 'Sensitive information - My record',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',

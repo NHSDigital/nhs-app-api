@@ -109,9 +109,7 @@ export default {
 
 <style module lang="scss" scoped>
   @import "../../style/panels";
-  @import '~nhsuk-frontend/packages/core/settings/_all.scss';
-  @import '~nhsuk-frontend/packages/core/tools/_all.scss';
-  @import '~nhsuk-frontend/packages/core/elements/_links.scss';
+  @import "../../style/nhsuklinks";
 
   .panel {
     .panelGroup {

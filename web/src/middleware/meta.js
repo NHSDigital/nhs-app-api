@@ -8,6 +8,7 @@ import {
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CONFIRMATIONS,
+  APPOINTMENT_INFORMATICA,
   CHECKYOURSYMPTOMS,
   GP_FINDER,
   GP_FINDER_RESULTS,
@@ -128,6 +129,11 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.appointments';
       route.meta.pageTitleKey = 'pageTitles.appointments';
       break;
+    case APPOINTMENT_BOOKING.name:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaders.appointmentBooking';
+      route.meta.pageTitleKey = 'pageTitles.appointmentBooking';
+      break;
     case APPOINTMENT_BOOKING_GUIDANCE.name:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointmentGuidance';
@@ -138,15 +144,15 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.appointmentCancelling';
       route.meta.pageTitleKey = 'pageTitles.appointmentCancelling';
       break;
-    case APPOINTMENT_BOOKING.name:
-      store.dispatch('navigation/setNewMenuItem', 1);
-      route.meta.headerKey = 'pageHeaders.appointmentBooking';
-      route.meta.pageTitleKey = 'pageTitles.appointmentBooking';
-      break;
     case APPOINTMENT_CONFIRMATIONS.name:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointmentConfirmation';
       route.meta.pageTitleKey = 'pageTitles.appointmentConfirmation';
+      break;
+    case APPOINTMENT_INFORMATICA.name:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaders.appointmentInformatica';
+      route.meta.pageTitleKey = 'pageTitles.appointmentInformatica';
       break;
     case ORGAN_DONATION.name:
     case ORGAN_DONATION_ADDITIONAL_DETAILS.name:

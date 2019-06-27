@@ -1,4 +1,5 @@
 export const IM1_PROVIDER = 'im1';
+export const INFORMATICA = 'informatica';
 export const INIT = 'INIT';
 export const ONLINE_CONSULTATIONS = 'online-consultations';
 export const SET_RULES = 'SET_RULES';

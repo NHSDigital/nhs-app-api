@@ -1,5 +1,15 @@
 import find from 'lodash/fp/find';
 
+const informaticaAppointmentRedirect = {
+  condition: 'serviceJourneyRules/informaticaEnabled',
+  url: '/appointments/informatica',
+};
+
+const im1AppointmentRedirect = {
+  condition: 'serviceJourneyRules/im1Enabled',
+  url: '/appointments',
+};
+
 const routes = {
   ACCOUNT: {
     name: 'account',
@@ -30,53 +40,15 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    redirectRules: [
+      informaticaAppointmentRedirect,
+    ],
   },
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
     path: '/appointments/admin-help',
     crumb: {
       i8nKey: 'appointmentsAdminHelp',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-  },
-  APPOINTMENT_BOOKING_GUIDANCE: {
-    name: 'appointments-booking-guidance',
-    path: '/appointments/booking-guidance',
-    crumb: {
-      enabled: true,
-      i8nKey: 'appointmentsGuidanceBooking',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-  },
-  APPOINTMENT_CANCELLING: {
-    name: 'appointments-cancelling',
-    path: '/appointments/cancelling',
-    crumb: {
-      i8nKey: 'appointmentsCancelling',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-  },
-  APPOINTMENT_CANCEL_NOJS: {
-    name: 'appointments-cancel-noJs',
-    path: '/nojs/appointments/cancel',
-    crumb: {
-      i8nKey: 'appointmentsCancelling',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-  },
-  APPOINTMENT_BOOKING: {
-    name: 'appointments-booking',
-    path: '/appointments/booking',
-    crumb: {
-      i8nKey: 'appointmentsBooking',
       get parentRoute() {
         return this.allRoutes.APPOINTMENTS;
       },
@@ -92,6 +64,50 @@ const routes = {
       },
     },
   },
+  APPOINTMENT_BOOKING: {
+    name: 'appointments-booking',
+    path: '/appointments/booking',
+    crumb: {
+      i8nKey: 'appointmentsBooking',
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
+  },
+  APPOINTMENT_BOOKING_GUIDANCE: {
+    name: 'appointments-booking-guidance',
+    path: '/appointments/booking-guidance',
+    crumb: {
+      enabled: true,
+      i8nKey: 'appointmentsGuidanceBooking',
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
+    redirectRules: [
+      informaticaAppointmentRedirect,
+    ],
+  },
+  APPOINTMENT_CANCEL_NOJS: {
+    name: 'appointments-cancel-noJs',
+    path: '/nojs/appointments/cancel',
+    crumb: {
+      i8nKey: 'appointmentsCancelling',
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
+  },
+  APPOINTMENT_CANCELLING: {
+    name: 'appointments-cancelling',
+    path: '/appointments/cancelling',
+    crumb: {
+      i8nKey: 'appointmentsCancelling',
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
+  },
   APPOINTMENT_CONFIRMATIONS: {
     name: 'appointments-confirmation',
     path: '/appointments/confirmation',
@@ -101,6 +117,20 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+  },
+  APPOINTMENT_INFORMATICA: {
+    name: 'appointments-informatica',
+    path: '/appointments/informatica',
+    crumb: {
+      enabled: true,
+      i8nKey: 'appointmentsInformatica',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    redirectRules: [
+      im1AppointmentRedirect,
+    ],
   },
   AUTH_RETURN: {
     name: 'auth-return',
@@ -302,6 +332,61 @@ const routes = {
       },
     },
   },
+  NOMINATED_PHARMACY: {
+    name: 'nominated-pharmacy',
+    path: '/nominated-pharmacy',
+    crumb: {
+      i8nKey: 'nominatedPharmacy',
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
+  NOMINATED_PHARMACY_SEARCH: {
+    name: 'nominated-pharmacy-search',
+    path: '/nominated-pharmacy/search',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
+  NOMINATED_PHARMACY_CONFIRM: {
+    name: 'nominated-pharmacy-confirm',
+    path: '/nominated-pharmacy/confirm',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
+  NOMINATED_PHARMACY_SEARCH_RESULTS: {
+    name: 'nominated-pharmacy-results',
+    path: '/nominated-pharmacy/results',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
+  NOMINATED_PHARMACY_CHECK: {
+    name: 'nominated-pharmacy-check',
+    path: '/nominated-pharmacy/check',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
+  NOMINATED_PHARMACY_CANNOT_CHANGE: {
+    name: 'nominated-pharmacy-cannot-change',
+    path: '/nominated-pharmacy/cannot-change',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
   ORGAN_DONATION: {
     name: 'organ-donation',
     path: '/organ-donation',
@@ -451,61 +536,6 @@ const routes = {
       },
     },
   },
-  NOMINATED_PHARMACY: {
-    name: 'nominated-pharmacy',
-    path: '/nominated-pharmacy',
-    crumb: {
-      i8nKey: 'nominatedPharmacy',
-      get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
-  },
-  NOMINATED_PHARMACY_SEARCH: {
-    name: 'nominated-pharmacy-search',
-    path: '/nominated-pharmacy/search',
-    crumb: {
-      get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
-  },
-  NOMINATED_PHARMACY_CONFIRM: {
-    name: 'nominated-pharmacy-confirm',
-    path: '/nominated-pharmacy/confirm',
-    crumb: {
-      get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
-  },
-  NOMINATED_PHARMACY_SEARCH_RESULTS: {
-    name: 'nominated-pharmacy-results',
-    path: '/nominated-pharmacy/results',
-    crumb: {
-      get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
-  },
-  NOMINATED_PHARMACY_CHECK: {
-    name: 'nominated-pharmacy-check',
-    path: '/nominated-pharmacy/check',
-    crumb: {
-      get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
-  },
-  NOMINATED_PHARMACY_CANNOT_CHANGE: {
-    name: 'nominated-pharmacy-cannot-change',
-    path: '/nominated-pharmacy/cannot-change',
-    crumb: {
-      get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
-  },
   // Legacy
   LEGACY_MYRECORDWARNING: {
     name: 'my-record-warning',
@@ -570,11 +600,12 @@ export const {
   APPOINTMENTS,
   APPOINTMENT_ADMIN_HELP,
   APPOINTMENT_BOOK_NOJS,
+  APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CANCEL_NOJS,
-  APPOINTMENT_BOOKING,
   APPOINTMENT_CONFIRMATIONS,
+  APPOINTMENT_INFORMATICA,
   AUTH_RETURN,
   BEGINLOGIN,
   CHECKYOURSYMPTOMS,
@@ -619,4 +650,3 @@ export const {
   SYMPTOMS,
   TERMSANDCONDITIONS,
 } = routes;
-
