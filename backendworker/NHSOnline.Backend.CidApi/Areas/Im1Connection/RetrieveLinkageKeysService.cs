@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
@@ -71,7 +72,17 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 
         private static bool ShouldCreateLinkageKey(LinkageResult result)
         {
-            return result is LinkageResult.NotFound || GetLinkageResultAllowsCreateLinkage(result);
+            return LinkageKeyIsNotFound(result) || GetLinkageResultAllowsCreateLinkage(result);
+        }
+
+        private static bool LinkageKeyIsNotFound(LinkageResult result)
+        {
+            if (result is LinkageResult.UnmappedErrorWithStatusCode resultWithStatusCode)
+            {
+                return resultWithStatusCode.IsNotFound;
+            }
+
+            return result is LinkageResult.NotFound;
         }
 
         private static bool GetLinkageResultAllowsCreateLinkage(LinkageResult result)
@@ -84,14 +95,14 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return false;
         }
 
-        private static readonly Im1ConnectionErrorCodes.Code[] ContinueToCreateLinkageKeyErrorCodes =
+        private static readonly Im1ConnectionErrorCodes.InternalCode[] ContinueToCreateLinkageKeyErrorCodes =
         {
-            Im1ConnectionErrorCodes.Code.UnknownError,
-            Im1ConnectionErrorCodes.Code.NoSelfAssociatedUserExistWithThisPatient,
-            Im1ConnectionErrorCodes.Code.PatientNotRegisteredAtThisPractice,
-            Im1ConnectionErrorCodes.Code.NoApiKeyAssociatedWithNhsNumber,
-            Im1ConnectionErrorCodes.Code.NoUserAssociatedWithNhsNumber,
-            Im1ConnectionErrorCodes.Code.PatientRecordNotFound
+            Im1ConnectionErrorCodes.InternalCode.UnknownError,
+            Im1ConnectionErrorCodes.InternalCode.NoSelfAssociatedUserExistWithThisPatient,
+            Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice,
+            Im1ConnectionErrorCodes.InternalCode.NoApiKeyAssociatedWithNhsNumber,
+            Im1ConnectionErrorCodes.InternalCode.NoUserAssociatedWithNhsNumber,
+            Im1ConnectionErrorCodes.InternalCode.PatientRecordNotFound
         };
 
         private static CreateLinkageRequest BuildCreateLinkageRequest(RetrieveLinkageKeysRequest model)

@@ -43,13 +43,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         }
 
         [TestMethod]
-        [DataRow(Code.PatientNotRegisteredAtThisPractice, StatusCodes.Status404NotFound)]
-        [DataRow(Code.NoSelfAssociatedUserExistWithThisPatient, StatusCodes.Status404NotFound)]
-        [DataRow(Code.PracticeNotLive, StatusCodes.Status400BadRequest)]
-        [DataRow(Code.PatientArchived, StatusCodes.Status403Forbidden)]
-        [DataRow(Code.UnderMinimumAgeOrNonCompetent, StatusCodes.Status403Forbidden)]
-        [DataRow(Code.UserSelfAssociatedAccountIsArchived, StatusCodes.Status403Forbidden)]
-        public async Task SuccessfulMappings(Code code, int expectedStatusCode)
+        [DataRow(InternalCode.PatientNotRegisteredAtThisPractice, StatusCodes.Status404NotFound)]
+        [DataRow(InternalCode.NoSelfAssociatedUserExistWithThisPatient, StatusCodes.Status404NotFound)]
+        [DataRow(InternalCode.PracticeNotLive, StatusCodes.Status400BadRequest)]
+        [DataRow(InternalCode.PatientArchived, StatusCodes.Status403Forbidden)]
+        [DataRow(InternalCode.UnderMinimumAgeOrNonCompetent, StatusCodes.Status403Forbidden)]
+        [DataRow(InternalCode.UserSelfAssociatedAccountIsArchived, StatusCodes.Status403Forbidden)]
+        public async Task SuccessfulMappings(InternalCode code, int expectedStatusCode)
         {
             // Arrange
             var errorCase = new LinkageResult.ErrorCase(code);
@@ -64,9 +64,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         }
 
         [TestMethod]
-        [DataRow(Code.PatientNotRegisteredAtThisPractice, StatusCodes.Status404NotFound)]
-        [DataRow(Code.UnderMinimumAgeOrNonCompetent, StatusCodes.Status403Forbidden)]
-        public async Task SuccessfulMappingsPost(Code code, int expectedStatusCode)
+        [DataRow(InternalCode.PatientNotRegisteredAtThisPractice, StatusCodes.Status404NotFound)]
+        [DataRow(InternalCode.UnderMinimumAgeOrNonCompetent, StatusCodes.Status403Forbidden)]
+        public async Task SuccessfulMappingsPost(InternalCode code, int expectedStatusCode)
         {
             // Arrange
             var errorCase = new LinkageResult.ErrorCase(code);

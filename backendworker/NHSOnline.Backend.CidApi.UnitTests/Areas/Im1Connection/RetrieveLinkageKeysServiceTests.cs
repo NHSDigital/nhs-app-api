@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var getLinkageKeysService = MockGetLinkageKeysService(mockResult, gpSystemMock.Object);
             getLinkageKeysService.Setup(x => x.GetLinkageKey(It.IsAny<GetLinkageRequest>(), It.IsAny<IGpSystem>()))
-                .ReturnsAsync(new LinkageResult.NotFound(Im1ConnectionErrorCodes.Code.UnknownError));
+                .ReturnsAsync(new LinkageResult.NotFound(Im1ConnectionErrorCodes.InternalCode.UnknownError));
             _systemUnderTest = new RetrieveLinkageKeysService(_logger.Object, getLinkageKeysService.Object,
                 _createLinkageKeysService.Object);
 

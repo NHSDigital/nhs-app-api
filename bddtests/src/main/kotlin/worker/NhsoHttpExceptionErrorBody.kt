@@ -1,6 +1,6 @@
 package worker
 
-class NhsoHttpExceptionErrorBody {
+open class NhsoHttpExceptionErrorBody {
     val errorCode:String=""
     val errorMessage:String=""
 }

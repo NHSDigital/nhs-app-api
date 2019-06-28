@@ -1,5 +1,6 @@
 @authentication
 @backend
+  @target
 Feature: Im1 Connection V2
   A user can create a new NHS account from the login page, allowing them to access the app
 
@@ -48,7 +49,7 @@ Feature: Im1 Connection V2
   Scenario Outline: A <GP System> user missing <Field> receives a 400 response on registering with Im1
     Given I am a <GP System> user wishing to register but missing <Field>
     When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "400" error status code
+    Then I receive a '400' IM1 error status code with code '106' and GP System 'Unknown'
     Examples:
       | GP System | Field   |
       | EMIS      | Surname |
@@ -61,24 +62,26 @@ Feature: Im1 Connection V2
       | VISION    | Odscode |
       | VISION    | Dob     |
 
-  Scenario Outline: A <GP System> user registering can get a <ExpectedErrorCode> error when retrieving linkage details
+  Scenario Outline: A <GP System> user registering can get a a <ExpectedCode> error from a <GPCode> error when retrieving linkage details
     Given I am a <GP System> user registering but getting linkage details returns '<GPHttpCode>' '<GPCode>' '<Message>'
     When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "<ExpectedStatus>" error status code with code "<ExpectedErrorCode>"
+    Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedErrorCode | Message |
-      | EMIS     | 400        |	1001    | 400            | 103 ||
-      | EMIS     | 400        |	1401    | 400            | 105 ||
-      | VISION   | 400        |	V4205   | 400            | 106 ||
-      | VISION   | 404        |	V4205   | 400            | 106 ||
-      | EMIS     | 403	      | 1030    | 400            | 108 | Patient Facing Services API v2 is not enabled at this practice |
-      | EMIS     | 403	      | 1030    | 400            | 109 | Patient Facing Services are not enabled by this practice |
-      | EMIS     | 400	      | 1552    | 403            | 112 ||
-      | EMIS     | 400	      | 1553    | 403            | 114 ||
-      | EMIS     | 400        |	1554    | 400            | 115 ||
-      | EMIS     | 400        |	1555    | 400            | 116 ||
-      | EMIS     | 400        |	1107    | 403            | 117 ||
-      | EMIS     | 400        |	1109    | 400            | 123 ||
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
+      | EMIS     | 400        |	1001    | 403            | 101 ||
+      | EMIS     | 400        |	1401    | 403            | 101 ||
+      | EMIS     | 403	      | 1030    | 403            | 101 | Patient Facing Services API v2 is not enabled at this practice |
+      | EMIS     | 403	      | 1030    | 403            | 101 | Patient Facing Services are not enabled by this practice |
+      | EMIS     | 400	      | 1552    | 403            | 102 ||
+      | EMIS     | 400        |	1554    | 403            | 102 ||
+      | EMIS     | 400        |	1107    | 403            | 102 ||
+      | EMIS     | 400        |	1109    | 403            | 102 ||
+      | EMIS     | 400	      | 1553    | 403            | 104 ||
+      | EMIS     | 400        |	1555    | 409            | 105 ||
+      | VISION   | 400        |	V4205   | 400            | 108 ||
+      | VISION   | 404        |	V4205   | 400            | 108 ||
+      | EMIS     | 400        | 1       | 502            | 100 | Unmapped Error |
+      | VISION   | 400        | 1       | 502            | 100 | Unmapped Error |
 
   Scenario Outline: A <GP System> user can successfully register with created linkage details after '<GPCode>' error
     Given I am a <GP System> user registering with created linkage after a get linkage returns '<GPHttpCode>' '<GPCode>' '<Message>'
@@ -101,119 +104,142 @@ Feature: Im1 Connection V2
       #198
       | VISION   | 404	      | VY806   |  |
 
-  Scenario Outline: A <GP System> user registering with no linkage key can get a <ExpectedErrorCode> error when creating
-  linkage details
+  Scenario Outline: A <GP System> user registering with no linkage key can get a <ExpectedCode> error when creating
+  linkage details after '<GPCode>' error
     Given I am a <GP System> user registering but creating my linkage key will return a '<GPHttpCode>' '<GPCode>' error
     When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "<ExpectedStatus>" error status code with code "<ExpectedErrorCode>"
+    Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedErrorCode |
-      | EMIS      | 400        | 1553   | 403            | 114               |
-      | TPP       | 200        | 5      | 403            | 118               |
-      | TPP       | 200        | 8      | 404            | 119               |
-      | TPP       | 200        | 6      | 404            | 119               |
-      | EMIS      | 409        | 1110   | 400            | 120               |
-      | EMIS      | 400        | 1107   | 403            | 121               |
-      | VISION    | 409        | V2214  | 409            | 122               |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode |
+      | TPP       | 200        | 8      | 500            | 100          |
+      | TPP       | 200        | 6      | 500            | 100          |
+      | EMIS      | 400        | 1107   | 403            | 102          |
+      | EMIS      | 400        | 1553   | 403            | 104          |
+      | EMIS      | 409        | 1110   | 409            | 105          |
+      | VISION    | 409        | V2214  | 409            | 105          |
+      | TPP       | 200        | 5      | 400            | 109          |
+  #Unmapped Errors
+      | EMIS      | 400        | 1      | 502            | 100          |
+      | TPP       | 400        | 1      | 502            | 100          |
+      | VISION    | 400        | 1      | 502            | 100          |
 
   Scenario Outline: A <GP System> user under minimum age attempting to register with no linkage key will receive an error when
   creating linkage details
     Given I am a <GP System> user registering but creating my linkage key fail because I am under minimum age
     When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "<ExpectedStatusCode>" error status code with code "<ExpectedErrorCode>"
+    Then I receive a '<ExpectedStatusCode>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | ExpectedStatusCode | ExpectedErrorCode |
-      | EMIS      | 403                | 114            |
+      | GP System | ExpectedStatusCode | ExpectedCode |
+      | EMIS      | 403                | 104          |
 
-
-  Scenario Outline: A <GP System> user registering with retrieved linkage details can get a <ExpectedErrorCode> error
+  Scenario Outline: A <GP System> user registering with retrieved linkage can get a <ExpectedCode> error from a <GPCode> error
     Given I am a <GP System> user with retrieved linkage but registering returns '<GPHttpCode>' '<GPCode>' '<Message>'
     And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "<ExpectedStatus>" error status code with code "<ExpectedErrorCode>"
+    Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedErrorCode | Message |
-      | EMIS      | 400        | 1105   | 400            | 101            |         |
-      | VISION    | 200        | -31    | 400            | 101            |         |
-      | EMIS      | 400        | 1106   | 404            | 102            |         |
-      | EMIS      | 400        | 1001   | 400            | 103            |         |
-      | EMIS      | 400        | 1107   | 403            | 104            |         |
-      | VISION    | 200        | -34    | 403            | 104            |         |
-      | EMIS      | 400        | 1401   | 400            | 105            |         |
-      | VISION    | 400        | V4205  | 400            | 106            |         |
-      | VISION    | 404        | V4205  | 400            | 106            |         |
-      | EMIS      | 403        | 1030   | 400            | 108            | Patient Facing Services API v2 is not enabled at this practice|
-      | EMIS      | 403        | 1030   | 400            | 109            | Patient Facing Services are not enabled by this practice      |
-      | EMIS      | 404        | 1104   | 404            | 110            |         |
-      | VISION    | 200        | -33    | 404            | 110            |         |
-      | EMIS      | 400        | 1108   | 409            | 111            |         |
-      | VISION    | 200        | -2     | 409            | 111            |         |
-      | EMIS      | 400        | 1552   | 403            | 112            |         |
-      | VISION    | 200        | -19    | 403            | 113            |         |
-      | VISION    | 200        | -100   | 400            | 124            | Connection to external service failed |
-      | EMIS      | 400        |        | 400            | 125            | AccountId length outside of valid range.|
-      | EMIS      | 400        |        | 400            | 126            | LinkageKey length outside of valid range. |
-      | EMIS      | 400        |        | 400            | 127            | Other length outside of valid range.|
-      | VISION    | 200        | -100   | 502            |                | Unknown Error |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
+      | TPP       | 200        | 8      | 500            | 100  ||
+      | EMIS      | 400        | 1001   | 403            | 101  ||
+      | EMIS      | 400        | 1401   | 403            | 101  ||
+      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services API v2 is not enabled at this practice|
+      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services are not enabled by this practice      |
+      | EMIS      | 400        | 1107   | 403            | 102  ||
+      | VISION    | 200        | -34    | 403            | 102  ||
+      | EMIS      | 400        | 1552   | 403            | 102  ||
+      | VISION    | 200        | -19    | 403            | 102  ||
+      | EMIS      | 400        | 1106   | 404            | 103  ||
+      | EMIS      | 404        | 1104   | 404            | 103  ||
+      | VISION    | 200        | -33    | 404            | 103  ||
+      | EMIS      | 400        | 1108   | 409            | 105  ||
+      | VISION    | 200        | -2     | 409            | 105  ||
+      | EMIS      | 400        | 1105   | 400            | 106  ||
+      | VISION    | 200        | -31    | 400            | 106  ||
+      | EMIS      | 400        |        | 400            | 106  | Other length outside of valid range.|
+      | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
+      | VISION    | 400        | V4205  | 400            | 108  ||
+      | VISION    | 404        | V4205  | 400            | 108  ||
+      | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
+      | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
+      | VISION    | 200        | -100   | 502            | 100  | Unknown Error |
+      | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
+      | TPP       | 400        | 1      | 502            | 100  | Unmapped Error |
+      | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
 
-
-  Scenario Outline: A <GP System> user registering with created linkage details can get a <ExpectedErrorCode> error
+  Scenario Outline: A <GP System> user registering with created linkage details can get <ExpectedCode> error from a <GPCode> error
     Given I am a <GP System> user with created linkage key but registering returns '<GPHttpCode>' '<GPCode>' '<Message>'
     And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "<ExpectedStatus>" error status code with code "<ExpectedErrorCode>"
+    Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedErrorCode | Message |
-      | EMIS      | 400        | 1105   | 400            | 101  ||
-      | VISION    | 200        | -31    | 400            | 101  ||
-      | EMIS      | 400        | 1106   | 404            | 102  ||
-      | EMIS      | 400        | 1001   | 400            | 103  ||
-      | EMIS      | 400        | 1107   | 403            | 104  ||
-      | VISION    | 200        | -34    | 403            | 104  ||
-      | EMIS      | 400        | 1401   | 400            | 105  ||
-      | VISION    | 400        | V4205  | 400            | 106  ||
-      | VISION    | 404        | V4205  | 400            | 106  ||
-      | EMIS      | 403        | 1030   | 400            | 108  | Patient Facing Services API v2 is not enabled at this practice|
-      | EMIS      | 403        | 1030   | 400            | 109  | Patient Facing Services are not enabled by this practice      |
-      | EMIS      | 404        | 1104   | 404            | 110  ||
-      | VISION    | 200        | -33    | 404            | 110  ||
-      | EMIS      | 400        | 1108   | 409            | 111  ||
-      | VISION    | 200        | -2     | 409            | 111  ||
-      | EMIS      | 400        | 1552   | 403            | 112  ||
-      | VISION    | 200        | -19    | 403            | 113  ||
-      | VISION    | 200        | -100   | 400            | 124  | Connection to external service failed |
-      | EMIS      | 400        |        | 400            | 125  | AccountId length outside of valid range.|
-      | EMIS      | 400        |        | 400            | 126  | LinkageKey length outside of valid range. |
-      | EMIS      | 400        |        | 400            | 127  | Other length outside of valid range.|
-      | VISION    | 200        | -100   | 502            |      | Unknown Error |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
+      | EMIS      | 400        | 1001   | 403            | 101  ||
+      | EMIS      | 400        | 1401   | 403            | 101  ||
+      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services API v2 is not enabled at this practice|
+      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services are not enabled by this practice      |
+      | EMIS      | 400        | 1107   | 403            | 102  ||
+      | VISION    | 200        | -34    | 403            | 102  ||
+      | EMIS      | 400        | 1552   | 403            | 102  ||
+      | VISION    | 200        | -19    | 403            | 102  ||
+      | EMIS      | 400        | 1106   | 404            | 103  ||
+      | EMIS      | 404        | 1104   | 404            | 103  ||
+      | VISION    | 200        | -33    | 404            | 103  ||
+      | EMIS      | 400        | 1108   | 409            | 105  ||
+      | VISION    | 200        | -2     | 409            | 105  ||
+      | EMIS      | 400        | 1105   | 400            | 106  ||
+      | VISION    | 200        | -31    | 400            | 106  ||
+      | EMIS      | 400        |        | 400            | 106  | Other length outside of valid range.|
+      | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
+      | VISION    | 400        | V4205  | 400            | 108  ||
+      | VISION    | 404        | V4205  | 400            | 108  ||
+      | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
+      | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
+      | VISION    | 200        | -100   | 502            | 100  | Unknown Error |
+      | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
+      | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
     #If TPP has a successful linkage creation, the register endpoint is not called
 
-  Scenario Outline: A <GP System> user registering with provided linkage details can get a <ExpectedErrorCode> error
+  Scenario Outline: A <GP System> user registering with provided linkage details can get a <ExpectedCode> error from a <GPCode> error
     Given I am a <GP System> user with provided linkage key but registering returns '<GPHttpCode>' '<GPCode>' '<Message>'
     When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "<ExpectedStatus>" error status code with code "<ExpectedErrorCode>"
+    Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedErrorCode | Message |
-      | EMIS      | 400        | 1105   | 400            | 101  ||
-      | VISION    | 200        | -31    | 400            | 101  ||
-      | EMIS      | 400        | 1106   | 404            | 102  ||
-      | EMIS      | 400        | 1001   | 400            | 103  ||
-      | EMIS      | 400        | 1107   | 403            | 104  ||
-      | VISION    | 200        | -34    | 403            | 104  ||
-      | EMIS      | 400        | 1401   | 400            | 105  ||
-      | VISION    | 400        | V4205  | 400            | 106  ||
-      | VISION    | 404        | V4205  | 400            | 106  ||
-      | TPP       | 200        | 8      | 400            | 107  ||
-      | EMIS      | 403        | 1030   | 400            | 108  | Patient Facing Services API v2 is not enabled at this practice|
-      | EMIS      | 403        | 1030   | 400            | 109  | Patient Facing Services are not enabled by this practice      |
-      | EMIS      | 404        | 1104   | 404            | 110  ||
-      | VISION    | 200        | -33    | 404            | 110  ||
-      | EMIS      | 400        | 1108   | 409            | 111  ||
-      | VISION    | 200        | -2     | 409            | 111  ||
-      | EMIS      | 400        | 1552   | 403            | 112  ||
-      | VISION    | 200        | -19    | 403            | 113  ||
-      | VISION    | 200        | -100   | 400            | 124  | Connection to external service failed |
-      | EMIS      | 400        |        | 400            | 125  | AccountId length outside of valid range.|
-      | EMIS      | 400        |        | 400            | 126  | LinkageKey length outside of valid range. |
-      | EMIS      | 400        |        | 400            | 127  | Other length outside of valid range.|
-      | VISION    | 200        | -100   | 502            |      | Unknown Error |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
+      | EMIS      | 400        | 1001   | 403            | 101  ||
+      | EMIS      | 400        | 1401   | 403            | 101  ||
+      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services API v2 is not enabled at this practice|
+      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services are not enabled by this practice      |
+      | EMIS      | 400        | 1107   | 403            | 102  ||
+      | VISION    | 200        | -34    | 403            | 102  ||
+      | EMIS      | 400        | 1552   | 403            | 102  ||
+      | VISION    | 200        | -19    | 403            | 102  ||
+      | EMIS      | 400        | 1106   | 404            | 103  ||
+      | EMIS      | 404        | 1104   | 404            | 103  ||
+      | VISION    | 200        | -33    | 404            | 103  ||
+      | EMIS      | 400        | 1108   | 409            | 105  ||
+      | VISION    | 200        | -2     | 409            | 105  ||
+      | EMIS      | 400        | 1105   | 400            | 106  ||
+      | VISION    | 200        | -31    | 400            | 106  ||
+      | TPP       | 200        | 8      | 400            | 106  ||
+      | EMIS      | 400        |        | 400            | 106  | Other length outside of valid range.|
+      | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
+      | VISION    | 400        | V4205  | 400            | 108  ||
+      | VISION    | 404        | V4205  | 400            | 108  ||
+      | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
+      | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
+      | VISION    | 200        | -100   | 502            | 100  | Unknown Error |
+      | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
+      | TPP       | 400        | 1      | 502            | 100  | Unmapped Error |
+      | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
+
+  @long-running
+  Scenario Outline: A <GP System> user registering with Im1, when the request times out, receives a 504 timeout error
+    Given I am a <GP System> user wishing to register but the request will timeout
+    And no IM1 Connection Token is currently cached
+    When I register the user's IM1 credentials using the v2 endpoint
+    Then I receive a '504' IM1 error status code with code '100' and GP System 'Unknown'
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |

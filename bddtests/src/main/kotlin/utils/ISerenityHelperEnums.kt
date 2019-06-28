@@ -22,3 +22,15 @@ fun <T>ISerenityHelperEnums.set(value : T) {
 fun ISerenityHelperEnums.isTrueOrFalse() : Boolean {
     return this.getOrNull<Boolean>() == true
 }
+
+fun <T>ISerenityHelperEnums.setIfNotAlreadySet(valueToSet : T) {
+    val currentStoredValue = this.getOrNull<Any>()
+    if (currentStoredValue == null) {
+        this.set(valueToSet)
+    }
+    else if(currentStoredValue != valueToSet)
+        Assert.assertEquals("Test setup incorrect, $this changing values",
+                currentStoredValue,
+                valueToSet)
+}
+

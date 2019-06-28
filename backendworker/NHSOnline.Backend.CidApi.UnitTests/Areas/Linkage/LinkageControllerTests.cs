@@ -34,7 +34,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         private ConfigurationSettings _settings;
         private Mock<IOdsCodeMassager> _odsCodeMassager;
-        private Mock<IIm1ConnectionErrorCodes> _errorCodes;
         private const int MinimumLinkageAge = 16;
         
         private const string CookieDomain = "CookieDomain";
@@ -62,7 +61,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);
             _odsCodeMassager = _fixture.Freeze<Mock<IOdsCodeMassager>>();
             _odsCodeMassager.Setup(x => x.CheckOdsCode(DefaultOdsCode)).Returns(DefaultOdsCode);
-            _errorCodes = _fixture.Freeze<Mock<IIm1ConnectionErrorCodes>>();
         }
         
         [TestMethod]
@@ -95,8 +93,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object, 
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
 
             // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value, DefaultOdsCode, DefaultIdentityToken);
@@ -135,8 +132,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object,
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
 
             // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value, DefaultOdsCode, DefaultIdentityToken);
@@ -183,8 +179,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object,
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
 
             // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value,
@@ -244,8 +239,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object,
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
 
             // Act
             var result = await linkageController.Post(request);
@@ -271,8 +265,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object,
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
 
             // Act
             var result = await linkageController.Post(request);
@@ -317,8 +310,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object,
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
 
             // Act
             var result = await linkageController.Post(request);
@@ -372,10 +364,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         }
 
        [DataTestMethod]
-       [DataRow(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent)]
-       [DataRow(Im1ConnectionErrorCodes.Code.InvalidProviderId)]
-       [DataRow(Im1ConnectionErrorCodes.Code.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived)]
-       public async Task Post_Returns403Forbidden_ForVariousResults(Im1ConnectionErrorCodes.Code errorCode)
+       [DataRow(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent)]
+       [DataRow(Im1ConnectionErrorCodes.InternalCode.InvalidProviderId)]
+       [DataRow(Im1ConnectionErrorCodes.InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived)]
+       public async Task Post_Returns403Forbidden_ForVariousResults(Im1ConnectionErrorCodes.InternalCode errorCode)
        {
             var mockResult = new LinkageResult.ErrorCase(errorCode);
             var mockLinkageService = new Mock<ILinkageService>();
@@ -408,8 +400,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object,
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
        
            // Act
            var actionResult = await linkageController.Post(request);
@@ -439,8 +430,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _mockAuditor.Object, 
                 _mockMinimumAgeValidator.Object, 
                 _settings,
-                _odsCodeMassager.Object,
-                _errorCodes.Object);
+                _odsCodeMassager.Object);
         }
         
         private static Mock<ILinkageValidationService> MockLinkageValidationService(bool validationResult = false)

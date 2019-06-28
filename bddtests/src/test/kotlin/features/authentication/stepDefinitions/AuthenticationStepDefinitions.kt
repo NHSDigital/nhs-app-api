@@ -13,7 +13,6 @@ import features.navigation.steps.NavHeaderSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import features.sharedSteps.SupplierSpecificFactory
 import mocking.GsonFactory
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
@@ -36,7 +35,9 @@ import org.junit.Assert
 import pages.MyAccountPage
 import pages.ServiceUnavailablePage
 import pages.navigation.WebHeader
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionRequest
@@ -559,7 +560,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 linkingInformationExample.surname,
                 linkingInformationExample.dateOfBirth
         )
-        val gpSystem = Serenity.sessionVariableCalled<String>(SupplierSpecificFactory.SerenityKey.GP_SYSTEM)
+        val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
         this.patient = Patient.getDefault(gpSystem).copy(
                 accountId = linkingInformationExample.accountId,
                 linkageKey = linkingInformationExample.linkageKey,

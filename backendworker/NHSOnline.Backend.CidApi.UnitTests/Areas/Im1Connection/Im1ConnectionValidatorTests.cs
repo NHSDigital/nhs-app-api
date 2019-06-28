@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -61,13 +63,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         }
 
         [DataTestMethod]
-        [DataRow("", "", "", "")]
-        [DataRow(null, "1234567890", "A1B2C3", "Smith")]
-        [DataRow("1234567890", null, "A1B2C3", "Smith")]
-        [DataRow("1234567890", "1234567890", null, "Smith")]
-        [DataRow("1234567890", "1234567890", "A1B2C3", null)]
-        [DataRow("1234567890", "1234567890", "Fake Ods Code", "Smith")]
-        public void IsPostValid_InvalidData_ReturnsFalse(string accountId, string linkageKey, string odsCode, string surname)
+        [DataRow("", "", "", "", new []{"AccountId", "LinkageKey", "OdsCode", "Surname"})]
+        [DataRow(null, "1234567890", "A1B2C3", "Smith", new[] { "AccountId" })]
+        [DataRow("1234567890", null, "A1B2C3", "Smith", new[] {  "LinkageKey" })]
+        [DataRow("1234567890", "1234567890", null, "Smith", new[] { "OdsCode" })]
+        [DataRow("1234567890", "1234567890", "A1B2C3", null, new[] { "Surname" })]
+        [DataRow("1234567890", "1234567890", "Fake Ods Code", "Smith", new[] { "OdsCode" })]
+        public void IsPostValid_InvalidData_ReturnsFalse(string accountId, string linkageKey, string odsCode, string surname, IEnumerable<string> expectedInvalidParams)
         {
             //Arrange
             PatientIm1ConnectionRequest request = new PatientIm1ConnectionRequest
@@ -80,10 +82,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             //Act
-            var result = _systemUnderTest.IsPostValid(request);
+            var result = _systemUnderTest.IsPostValid(request, out var invalidParams);
 
             //Assert
             result.Should().BeFalse();
+            invalidParams.Should().BeEquivalentTo(expectedInvalidParams);
         }
 
         [TestMethod]
@@ -100,22 +103,23 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             //Act
-            var result = _systemUnderTest.IsPostValid(request);
+            var result = _systemUnderTest.IsPostValid(request, out var invalidParams);
 
             //Assert
             result.Should().BeTrue();
+            invalidParams.Should().BeEquivalentTo(Enumerable.Empty<string>());
         }
 
         [DataTestMethod]
-        [DataRow("", "", "", "", "")]
-        [DataRow(null, "Smith", "123ABC", "test@test.com", "IDToken")]
-        [DataRow("A1B2C3", null, "123ABC", "test@test.com", "IDToken")]
-        [DataRow("A1B2C3", "Smith", null, "test@test.com", "IDToken")]
-        [DataRow("A1B2C3", "Smith", "123ABC", null, "IDToken")]
-        [DataRow("A1B2C3", "Smith", "123ABC", "test@test.com", null)]
-        [DataRow("Fake Ods Code", "Smith", "123ABC", "test@test.com", "IDToken")]
+        [DataRow("", "", "", "", "", new[] { "OdsCode", "Surname", "NhsNumber", "EmailAddress", "IdentityToken" })]
+        [DataRow(null, "Smith", "123ABC", "test@test.com", "IDToken", new[] { "OdsCode"})]
+        [DataRow("A1B2C3", null, "123ABC", "test@test.com", "IDToken", new[] { "Surname" })]
+        [DataRow("A1B2C3", "Smith", null, "test@test.com", "IDToken", new[] { "NhsNumber" })]
+        [DataRow("A1B2C3", "Smith", "123ABC", null, "IDToken", new[] { "EmailAddress" })]
+        [DataRow("A1B2C3", "Smith", "123ABC", "test@test.com", null, new[] { "IdentityToken" })]
+        [DataRow("Fake Ods Code", "Smith", "123ABC", "test@test.com", "IDToken", new[] { "OdsCode" })]
         public void IsCreateLinkageRequestValid_InvalidData_ReturnsFalse(
-            string odsCode, string surname, string nhsNumber, string emailAddress, string identityToken)
+            string odsCode, string surname, string nhsNumber, string emailAddress, string identityToken, IEnumerable<string> expectedInvalidParams)
         {
             //Arrange
             Im1RegistrationRequest request = new Im1RegistrationRequest
@@ -129,10 +133,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             //Act
-            var result = _systemUnderTest.IsCreateLinkageRequestValid(request);
+            var result = _systemUnderTest.IsCreateLinkageRequestValid(request, out var invalidParams);
 
             //Assert
             result.Should().BeFalse();
+            invalidParams.Should().BeEquivalentTo(expectedInvalidParams);
         }
 
         [TestMethod]
@@ -150,21 +155,22 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             //Act
-            var result = _systemUnderTest.IsCreateLinkageRequestValid(request);
+            var result = _systemUnderTest.IsCreateLinkageRequestValid(request, out var invalidParams);
 
             //Assert
             result.Should().BeTrue();
+            invalidParams.Should().BeEquivalentTo(Enumerable.Empty<string>());
         }
 
         [DataTestMethod]
-        [DataRow("", "", "", "")]
-        [DataRow(null, "1234", "A1B2C3", "Smith")]
-        [DataRow("AccountID", null, "A1B2C3", "Smith")]
-        [DataRow("AccountID", "1234", null, "Smith")]
-        [DataRow("AccountID", "1234", "A1B2C3", null)]
-        [DataRow("AccountID", "1234", "Fake Ods Code", "Smith")]
+        [DataRow("", "", "", "", new[] { "AccountId", "LinkageKey", "OdsCode", "Surname" })]
+        [DataRow(null, "1234", "A1B2C3", "Smith", new[] { "AccountId"})]
+        [DataRow("AccountID", null, "A1B2C3", "Smith", new[] {  "LinkageKey"})]
+        [DataRow("AccountID", "1234", null, "Smith", new[] { "OdsCode" })]
+        [DataRow("AccountID", "1234", "A1B2C3", null, new[] {"Surname" })]
+        [DataRow("AccountID", "1234", "Fake Ods Code", "Smith", new[] { "OdsCode"})]
         public void IsPatientIm1ConnectionRequestValid_InvalidData_ReturnsFalse(
-            string accountId, string linkageKey, string odsCode, string surname)
+            string accountId, string linkageKey, string odsCode, string surname, IEnumerable<string> expectedInvalidParams)
         {
             //Arrange
             Im1RegistrationRequest request = new Im1RegistrationRequest
@@ -177,10 +183,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             //Act
-            var result = _systemUnderTest.IsPatientIm1ConnectionRequestValid(request);
+            var result = _systemUnderTest.IsPatientIm1ConnectionRequestValid(request, out var invalidParams);
 
             //Assert
             result.Should().BeFalse();
+            invalidParams.Should().BeEquivalentTo(expectedInvalidParams);
         }
         
         [TestMethod]
@@ -197,10 +204,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             //Act
-            var result = _systemUnderTest.IsPatientIm1ConnectionRequestValid(request);
+            var result = _systemUnderTest.IsPatientIm1ConnectionRequestValid(request, out var invalidParams);
 
             //Assert
             result.Should().BeTrue();
+            invalidParams.Should().BeEquivalentTo(Enumerable.Empty<string>());
         }
     }
 }

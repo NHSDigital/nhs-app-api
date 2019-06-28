@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
             var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
-            var successResult = result.Should().BeOfType<LinkageResult.UnknownError>();
+            var errorResult = result.Should().BeOfType<LinkageResult.UnmappedErrorWithStatusCode>();
         }
 
         [TestMethod]

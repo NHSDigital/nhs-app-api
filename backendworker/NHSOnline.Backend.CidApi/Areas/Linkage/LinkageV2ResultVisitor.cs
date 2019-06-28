@@ -1,25 +1,33 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.CidApi.Areas.Linkage
 {
     public class LinkageV2ResultVisitor : ILinkageResultVisitor<Task<IActionResult>>
     {
-        public LinkageV2ResultVisitor(IIm1ConnectionErrorCodes errorCodes)
+        public LinkageV2ResultVisitor(IIm1ConnectionErrorCodes errorCodes, Supplier gpSystem, ILogger logger)
         {
             ErrorCodes = errorCodes;
+            GpSystem = gpSystem;
+            Logger = logger;
         }
 
         private IIm1ConnectionErrorCodes ErrorCodes { get; }
+        private Supplier GpSystem { get; }
+        private ILogger Logger { get; }
 
         public async Task<IActionResult> Visit(LinkageResult.ErrorCase result)
         {
-            var response = ErrorCodes.GetErrorResponse(result.ErrorCode);
-            var statusCodeResult = Im1ConnectionV2ErrorCodeMapper.Map(result.ErrorCode);
+            Logger.LogInformation("Linkage resulted in an error which was mapped");
+            var response = (ApiErrorResponse) ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
+            var externalErrorCode = ErrorCodes.GetExternalCode(result.ErrorCode);
+            var statusCodeResult = Im1ConnectionV2ErrorCodeToStatusCodeMapper.Map(externalErrorCode);
 
             return await Task.FromResult(new ObjectResult(response)
             {
@@ -29,69 +37,49 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
         public async Task<IActionResult> Visit(LinkageResult.SupplierSystemUnavailable result)
         {
+            Logger.LogInformation("Linkage resulted in a supplier system unavailable error");
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status503ServiceUnavailable));
         }
 
         public async Task<IActionResult> Visit(LinkageResult.InternalServerError result)
         {
+            Logger.LogError("Linkage resulted in an internal server error");
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status500InternalServerError));
         }
 
         public async Task<IActionResult> Visit(LinkageResult.SuccessfullyRetrieved result)
         {
+            Logger.LogInformation("Linkage resulted in a success");
             return await Task.FromResult(new OkObjectResult(result.Response));
         }
 
         public async Task<IActionResult> Visit(LinkageResult.SuccessfullyCreated result)
         {
+            Logger.LogInformation("Linkage resulted in a success");
             return await Task.FromResult(new OkObjectResult(result.Response));
         }
 
         public async Task<IActionResult> Visit(LinkageResult.SuccessfullyRetrievedAlreadyExists result)
         {
+            Logger.LogInformation("Linkage resulted in a success");
             return await Task.FromResult(new OkObjectResult(result.Response));
         }
 
         public async Task<IActionResult> Visit(LinkageResult.NotFound result)
         {
-            var response = ErrorCodes.GetErrorResponse(result.ErrorCode);
+            Logger.LogInformation("Linkage resulted in a not found error");
+            var response = (ApiErrorResponse) ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
             return await Task.FromResult(new ObjectResult(response)
             {
                 StatusCode = StatusCodes.Status404NotFound
+
             });
         }
 
-        public async Task<IActionResult> Visit(LinkageResult.BadRequest result)
+        public async Task<IActionResult> Visit(LinkageResult.UnmappedErrorWithStatusCode result)
         {
-            var response = ErrorCodes.GetErrorResponse(result.ErrorCode);
-            return await Task.FromResult(new ObjectResult(response)
-            {
-                StatusCode = StatusCodes.Status400BadRequest
-            });
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.Conflict result)
-        {
-            var response = ErrorCodes.GetErrorResponse(result.ErrorCode);
-
-            return await Task.FromResult(new ObjectResult(response)
-            {
-                StatusCode = StatusCodes.Status409Conflict
-            });
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.Forbidden result)
-        {
-            var response = ErrorCodes.GetErrorResponse(result.ErrorCode);
-            return await Task.FromResult(new ObjectResult(response)
-            {
-                StatusCode = StatusCodes.Status403Forbidden
-            });
-        }
-
-        public async Task<IActionResult> Visit(LinkageResult.UnknownError result)
-        {
-            var response = ErrorCodes.GetErrorResponse(result.ErrorCode);
+            Logger.LogError("Linkage resulted in an error which was unmappable");
+            var response = (ApiErrorResponse) ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
             return await Task.FromResult(new ObjectResult(response)
             {
                 StatusCode = StatusCodes.Status502BadGateway

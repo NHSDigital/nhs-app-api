@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void Success()
         {
-            var errorResponses = new ErrorCodes<SuccessTest>().GetAllErrorResponses();
+            var errorResponses = new ErrorCodes<SuccessTest, ApiErrorResponse>().GetAllErrorResponses();
 
             errorResponses.Should().HaveCount(2);
 
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void DuplicateValueFailure()
         {
-            var errorCodes = new ErrorCodes<DuplicateValueTest>();
+            var errorCodes = new ErrorCodes<DuplicateValueTest, ApiErrorResponse>();
 
             Action act = () => errorCodes.GetAllErrorResponses();
 
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void NotAnEnumFailure()
         {
-            var errorCodes = new ErrorCodes<int>();
+            var errorCodes = new ErrorCodes<int, ApiErrorResponse>();
 
             Action act = () => errorCodes.GetAllErrorResponses();
 
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void NoDescriptionFailure()
         {
-            var errorCodes = new ErrorCodes<NoDescriptionTest>();
+            var errorCodes = new ErrorCodes<NoDescriptionTest, ApiErrorResponse>();
 
             Action act = () => errorCodes.GetAllErrorResponses();
 

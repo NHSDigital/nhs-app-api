@@ -10,7 +10,6 @@ import features.im1Appointments.steps.AvailableAppointmentFilterSteps.Companion.
 import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
-import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExample
@@ -25,12 +24,13 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.SC_OK
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.assertIsVisible
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
@@ -182,8 +182,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^will respond in a timely fashion on the second attempt$")
     fun theGpSystemWillSucceedForAvailableAppointmentSlotsOnTheSecondAttempt() {
-        val gpSystem: String = SerenityHelpers.getValueOrNull(SupplierSpecificFactory.SerenityKey.GP_SYSTEM) ?: ""
-        Assert.assertNotEquals("Cannot determine GP system being used. ", "", gpSystem)
+        val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val genericExample = appointmentSlotsExample.getGenericExample()
         // stub to generate success on 2nd attempt

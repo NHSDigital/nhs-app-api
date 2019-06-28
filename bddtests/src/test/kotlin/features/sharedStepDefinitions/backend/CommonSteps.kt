@@ -1,8 +1,8 @@
 package features.sharedStepDefinitions.backend
 
 import config.Config
-import cucumber.api.java.Before
 import cucumber.api.java.After
+import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import mocking.MockingClient
@@ -11,14 +11,15 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.tpp.models.Authenticate
 import models.Patient
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.getCurrentSession
-import net.serenitybdd.core.Serenity.setSessionVariable
 import net.serenitybdd.core.Serenity.getWebdriverManager
 import net.serenitybdd.core.Serenity.sessionVariableCalled
+import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.contains
+import utils.set
 import worker.WorkerClient
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
@@ -31,9 +32,6 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
                 ,"Request failed with status code 50")
 
 class CommonSteps : AbstractSteps() {
-    companion object {
-        val GP_SYSTEM: String = "GpSupplier"
-    }
 
     @Before
     fun beforeEachScenario() {
@@ -96,7 +94,7 @@ class CommonSteps : AbstractSteps() {
     fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
         val patient = Patient.getDefault(gpSystem)
 
-        Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
+        GlobalSerenityHelpers.GP_SYSTEM.set(gpSystem)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)
 

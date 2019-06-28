@@ -17,17 +17,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
         private readonly IIm1CacheService _im1CacheService;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<TppIm1ConnectionService> _logger;
-        private readonly TppIm1RegisterErrorMapper _errorMapper;
 
         public TppIm1ConnectionService(ITppClient tppClient, IIm1CacheService im1CacheService,
-            IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger,
-            TppIm1RegisterErrorMapper errorMapper)
+            IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger)
         {
             _tppClient = tppClient;
             _im1CacheService = im1CacheService;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
-            _errorMapper = errorMapper;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -104,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 
                     if (!linkAccountReply.HasSuccessResponse)
                     {
-                        return _errorMapper.Map(linkAccountReply, _logger);
+                        return TppIm1RegisterErrorMapper.Map(linkAccountReply, _logger);
                     }
 
                     connectionToken = CreateTppConnectionToken(linkAccountRequest, linkAccountReply, key);

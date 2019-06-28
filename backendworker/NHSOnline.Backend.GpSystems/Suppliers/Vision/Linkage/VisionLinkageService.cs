@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Linkage;
@@ -17,21 +15,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
         private readonly ILogger<VisionLinkageService> _logger;
         private readonly IVisionClient _visionClient;
         private readonly IVisionLinkageMapper _visionLinkageMapper;
-        private readonly VisionLinkageGetErrorMapper _getErrorMapper;
-        private readonly VisionLinkagePostErrorMapper _postErrorMapper;
 
         public VisionLinkageService(
             ILoggerFactory loggerFactory,
             IVisionClient visionClient,
-            IVisionLinkageMapper visionLinkageMapper,
-            VisionLinkageGetErrorMapper getErrorMapper,
-            VisionLinkagePostErrorMapper postErrorMapper)
+            IVisionLinkageMapper visionLinkageMapper)
         {
             _logger = loggerFactory.CreateLogger<VisionLinkageService>();
             _visionClient = visionClient;
             _visionLinkageMapper = visionLinkageMapper;
-            _getErrorMapper = getErrorMapper;
-            _postErrorMapper = postErrorMapper;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -46,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
 
                 return response.HasSuccessResponse ?
                     HandleSuccessfulGetLinkageKey(response) :
-                    _getErrorMapper.Map(response, _logger);
+                    VisionLinkageGetErrorMapper.Map(response, _logger);
             }
             catch (HttpRequestException e)
             {
@@ -75,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
                     return new LinkageResult.SuccessfullyCreated(mapped);
                 }
 
-                return _postErrorMapper.Map(linkageResponse, _logger);
+                return VisionLinkagePostErrorMapper.Map(linkageResponse, _logger);
             }
             catch (HttpRequestException e)
             {

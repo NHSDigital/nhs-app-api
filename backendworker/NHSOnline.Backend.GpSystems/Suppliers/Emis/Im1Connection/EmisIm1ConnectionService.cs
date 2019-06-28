@@ -19,19 +19,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
         private readonly ILogger<EmisIm1ConnectionService> _logger;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly IIm1CacheService _im1CacheService;
-        private readonly EmisIm1RegisterErrorMapper _registerErrorMapper;
 
         public EmisIm1ConnectionService(IEmisClient emisClient, 
             ILogger<EmisIm1ConnectionService> logger,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
-            IIm1CacheService im1CacheService,
-            EmisIm1RegisterErrorMapper registerErrorMapper)
+            IIm1CacheService im1CacheService)
         {
             _emisClient = emisClient;
             _logger = logger;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _im1CacheService = im1CacheService;
-            _registerErrorMapper = registerErrorMapper;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -146,7 +143,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
                     if (!meApplicationsResponse.HasSuccessResponse)
                     {
-                        return _registerErrorMapper.Map(meApplicationsResponse, _logger);
+                        return EmisIm1RegisterErrorMapper.Map(meApplicationsResponse, _logger);
                     }
 
                     connectionToken = new EmisConnectionToken
@@ -158,16 +155,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
                     await CacheConnectionToken(connectionToken);
                 }
-
-
+                
                 var sessionPostRequestModel = new SessionsPostRequest
                 {
                     AccessIdentityGuid = connectionToken.AccessIdentityGuid,
                     NationalPracticeCode = request.OdsCode
                 };
 
-                var sessionsResponse =
-                    await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
+                var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
                 if (!sessionsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
@@ -181,7 +176,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     _logger.LogError(
                         $"Emis could not extract {nameof(userPatientLinkToken)}");
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionRegisterResult.NotFound(Im1ConnectionErrorCodes.Code.UnknownError);
+                    return new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
                 }
 
                 var demographicsResponse =

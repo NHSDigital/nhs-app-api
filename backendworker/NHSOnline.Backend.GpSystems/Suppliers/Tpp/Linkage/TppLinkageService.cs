@@ -26,7 +26,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         private readonly ILogger<TppLinkageService> _logger;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ConfigurationSettings _settings;
-        private readonly TppLinkagePostErrorMapper _postErrorMapper;
 
         public TppLinkageService(ITppClient client,
             ITppLinkageMapper linkageMapper,
@@ -34,8 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             IIm1CacheService im1CacheService,
             ILogger<TppLinkageService> logger,
             IMinimumAgeValidator minimumAgeValidator,
-            ConfigurationSettings settings,
-            TppLinkagePostErrorMapper postErrorMapper)
+            ConfigurationSettings settings)
         {
             _tppClient = client;
             _linkageMapper = linkageMapper;
@@ -44,12 +42,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             _logger = logger;
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
-            _postErrorMapper = postErrorMapper;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
         {
-            return await Task.FromResult(new LinkageResult.NotFound(Im1ConnectionErrorCodes.Code.UnknownError));
+            return await Task.FromResult(new LinkageResult.NotFound(Im1ConnectionErrorCodes.InternalCode.UnknownError));
         }
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
@@ -87,9 +84,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             if (createNhsUserResponse.HasErrorWithCode("8") &&
                 !_minimumAgeValidator.IsValid(request.DateofBirth, _settings.MinimumLinkageAge))
             {
-                return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+                return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
             }
-            return _postErrorMapper.Map(createNhsUserResponse, _logger);
+            return TppLinkagePostErrorMapper.Map(createNhsUserResponse, _logger);
         }
 
         private async Task<LinkageResult> HandleCreateSuccess(AddNhsUserRequest request,

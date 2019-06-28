@@ -1,28 +1,36 @@
-﻿using NHSOnline.Backend.GpSystems.Im1Connection;
+﻿using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Linkage;
 using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
 {
-    public class VisionLinkageGetErrorMapper : VisionLinkageErrorMapper<LinkageKeyGetResponse>
+    public static class VisionLinkageGetErrorMapper
     {
-        protected override Code UnknownError =>
-            Im1ConnectionErrorCodes.Code.UnknownError;
-
-        protected override KeyAndMessageToEnumMapper<Code>
+        private static KeyAndMessageToEnumMapper<InternalCode>
             KeyAndMessageToError =>
-            new KeyAndMessageToEnumMapper<Code>()
+            new KeyAndMessageToEnumMapper<InternalCode>()
                 .Add("404V2210", "No API key associated with the nhs number",
-                    Code.NoApiKeyAssociatedWithNhsNumber)
+                    InternalCode.NoApiKeyAssociatedWithNhsNumber)
                 .Add("404V2210", "No user associated with the nhs number",
-                    Code.NoUserAssociatedWithNhsNumber)
+                    InternalCode.NoUserAssociatedWithNhsNumber)
                 .AddKeyToEnum("400V4205",
-                    Code.InvalidNhsNumber)
+                    InternalCode.InvalidNhsNumber)
                 .AddKeyToEnum(
                     "404V4205",
-                    Code.InvalidNhsNumber)
+                    InternalCode.InvalidNhsNumber)
                 .AddKeyToEnum(
                     "404VY806",
-                    Code.PatientRecordNotFound);
+                    InternalCode.PatientRecordNotFound);
+
+        public static LinkageResult Map(VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse> response,
+            ILogger<VisionLinkageService> logger)
+        {
+            var mappedValue = VisionErrorMapper.Map(logger, response, KeyAndMessageToError);
+            return mappedValue != null
+                ? new LinkageResult.ErrorCase(mappedValue.Value)
+                : (LinkageResult)new LinkageResult.UnmappedErrorWithStatusCode(response.StatusCode);
+        }
     }
 }

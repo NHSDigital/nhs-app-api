@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
     [TestClass]
     public class VisionIm1RegisterErrorMapperTests
     {
-        private VisionIm1RegisterErrorMapper _mapperUnderTest;
         private IFixture _fixture;
         private Mock<ILogger<VisionIm1ConnectionService>> _logger;
 
@@ -26,14 +25,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            _mapperUnderTest = _fixture.Create<VisionIm1RegisterErrorMapper>();
             _logger = _fixture.Create<Mock<ILogger<VisionIm1ConnectionService>>>();
         }
 
         [TestMethod]
         public void Map_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapperUnderTest.Map(null, _logger.Object);
+            Action act = () => VisionIm1RegisterErrorMapper.Map(null, _logger.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
         }
@@ -46,12 +44,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 "-19");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UserAccountDisabled);
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAccountDisabled);
         }
 
         [TestMethod]
@@ -63,12 +61,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 "Connection to external service failed");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.ConnectionToServiceFailed);
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed);
         }
 
         [TestMethod]
@@ -80,12 +78,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 "something else");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnknownError>();
-            var conflictResult = (Im1ConnectionRegisterResult.UnknownError) result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
+            result.GetType().Should().Be(typeof(Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode));
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -96,12 +95,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 "V4205");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidNhsNumber);
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidNhsNumber);
         }
 
         [TestMethod]
@@ -112,12 +111,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 "V4205");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidNhsNumber);
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidNhsNumber);
         }
 
         [TestMethod]
@@ -127,12 +126,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var response = CreateResponse(HttpStatusCode.OK, "10");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnknownError>();
-            var conflictResult = (Im1ConnectionRegisterResult.UnknownError) result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
+            result.GetType().Should().Be(typeof(Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode));
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         private VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> CreateResponse(

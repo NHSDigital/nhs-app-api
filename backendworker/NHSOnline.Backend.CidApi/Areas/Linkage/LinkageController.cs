@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ConfigurationSettings _settings;
         private readonly IOdsCodeMassager _odsCodeMassager;
-        private readonly IIm1ConnectionErrorCodes _errorCodes;
 
         public LinkageController(
             ILogger<LinkageController> logger,
@@ -35,8 +34,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             IAuditor auditor,
             IMinimumAgeValidator minimumAgeValidator,
             ConfigurationSettings settings,
-            IOdsCodeMassager odsCodeMassager,
-            IIm1ConnectionErrorCodes errorCodes)
+            IOdsCodeMassager odsCodeMassager)
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
@@ -44,7 +42,6 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
             _odsCodeMassager = odsCodeMassager;
-            _errorCodes = errorCodes;
             
             _settings.Validate();
         }
@@ -99,10 +96,10 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                     }
 
                     await result.Accept(new LinkageResultAuditingVisitor<LinkageController>(
-                        _auditor, _logger, _errorCodes, gpSystem.Supplier, nhsNumber,
+                        _auditor, _logger, gpSystem.Supplier, nhsNumber,
                         Constants.AuditingTitles.GetLinkageDetailsAuditTypeResponse));
 
-                    return await result.Accept(new LinkageResultVisitor());
+                    return await result.Accept(new LinkageResultVisitor(_logger));
                 });
             }
             finally
@@ -149,10 +146,10 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                         }
 
                         await result.Accept(new LinkageResultAuditingVisitor<LinkageController>(
-                            _auditor, _logger, _errorCodes, gpSystem.Supplier, createLinkageRequest.NhsNumber,
+                            _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
                             Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
 
-                        return await result.Accept(new LinkageResultVisitor());
+                        return await result.Accept(new LinkageResultVisitor(_logger));
                     });
             }
             finally
@@ -189,13 +186,13 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             _logger.LogWarning("Linkage details request unsuccessful - patient non competent or under 16.");
 
-            var linkageResult = new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+            var linkageResult = new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
 
             await linkageResult.Accept(new LinkageResultAuditingVisitor<LinkageController>(
-                _auditor, _logger, _errorCodes, gpSystem.Supplier, createLinkageRequest.NhsNumber,
+                _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
                 Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
 
-            return await linkageResult.Accept(new LinkageResultVisitor());
+            return await linkageResult.Accept(new LinkageResultVisitor(_logger));
         }
 
         private bool HasValidDateOfBirthForLinkage(DateTime? dateOfBirth)

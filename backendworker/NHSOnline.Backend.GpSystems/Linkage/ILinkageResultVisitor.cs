@@ -9,9 +9,6 @@
         T Visit(LinkageResult.SuccessfullyCreated result);
         T Visit(LinkageResult.SuccessfullyRetrievedAlreadyExists result);
         T Visit(LinkageResult.NotFound result);
-        T Visit(LinkageResult.BadRequest result);
-        T Visit(LinkageResult.Conflict result);
-        T Visit(LinkageResult.Forbidden result);
-        T Visit(LinkageResult.UnknownError result);
+        T Visit(LinkageResult.UnmappedErrorWithStatusCode result);
     }
 }

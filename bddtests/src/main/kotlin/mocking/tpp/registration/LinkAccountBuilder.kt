@@ -22,8 +22,6 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
                 .andHeader(typeHeader, typeValue)
                 .andBodyMatchingXpath("//LinkAccount[" +
                         "@apiVersion='${linkAccount.apiVersion}' and " +
-                        "@accountId='${linkAccount.accountId}' and " +
-                        "@passphrase='${linkAccount.passphrase}' and " +
                         "@lastName='${linkAccount.lastName}' and " +
                         "@organisationCode='${linkAccount.organisationCode}']")
     }

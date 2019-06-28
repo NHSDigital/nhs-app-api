@@ -10,17 +10,26 @@ namespace NHSOnline.Backend.GpSystems
         private ILogger _logger;
 
         private readonly List<Mapping> _keyAndMessageMappings = new List<Mapping>();
-        private readonly Dictionary<string, TEnum> _keyToEnumMappers = new Dictionary<string, TEnum> ();
-        
-        public KeyAndMessageToEnumMapper<TEnum> AddKeyToEnum(string message, TEnum mapping)
-        {
-            _keyToEnumMappers.Add(message, mapping);
-            return this;
-        }
+
+        private readonly Dictionary<string, TEnum> _keyMappings = new Dictionary<string, TEnum>();
+
+        private readonly Dictionary<string, TEnum> _messageMappings = new Dictionary<string, TEnum>();
 
         public KeyAndMessageToEnumMapper<TEnum> Add(string key, string message, TEnum mapping)
         {
             _keyAndMessageMappings.Add(new Mapping(key, message, mapping));
+            return this;
+        }
+
+        public KeyAndMessageToEnumMapper<TEnum> AddKeyToEnum(string key, TEnum mapping)
+        {
+            _keyMappings. Add(key,  mapping);
+            return this;
+        }
+
+        public KeyAndMessageToEnumMapper<TEnum> AddMessageToEnum(string message, TEnum mapping)
+        {
+            _messageMappings.Add(message, mapping);
             return this;
         }
 
@@ -32,59 +41,81 @@ namespace NHSOnline.Backend.GpSystems
             }
 
             _logger = logger;
-            var mappings = messages.Select(message => Map(key, message?.Trim()))
-                .Where(mapping => mapping != null).ToList();
 
-            return mappings.Any() ? mappings.First() : Map(key, null);
+            if (messages.Any() && messages.Any(message => !string.IsNullOrWhiteSpace(message)))
+            {
+                return messages
+                    .Select(message => MapKeyAndMessage(key, message.Trim()))
+                    .FirstOrDefault(mapping => mapping != null);
+            }
+
+            return MapKeyAndMessage(key, null);
         }
 
-        private TEnum? Map(string key, string message)
+        private TEnum? MapKeyAndMessage(string key, string message)
         {
             var keyAndMessageMapping = MapKeyAndMessageToEnum(key, message);
-
             if (keyAndMessageMapping != null)
             {
                 return keyAndMessageMapping.Value;
             }
 
-            var successfulKeyMapping = _keyToEnumMappers.TryGetValue(key, out var keyMapping);
-
-            _logger.LogInformation(successfulKeyMapping
-                ? $"Mapping found with Key '{key}'"
-                : $"No mapping found with Key '{key}'");
-            if (successfulKeyMapping)
+            var keyMapping = MapKeyToEnum(key);
+            if (keyMapping != null)
             {
-                return keyMapping;
+                return keyMapping.Value;
             }
 
-            if (message != null)
-            {
-                var successfulMessageMapping =
-                    _keyToEnumMappers.TryGetValue(message, out var messageMapping);
-                _logger.LogInformation(successfulMessageMapping
-                    ? $"Mapping found with Message '{message}'"
-                    : $"No mapping found with Message '{message}'");
-                if (successfulMessageMapping)
-                {
-                    return messageMapping;
-                }
-            }
-
-            return null;
+            return MapMessageToEnum(message);
         }
 
         private TEnum? MapKeyAndMessageToEnum(string key, string message)
         {
-            var foundMapping = _keyAndMessageMappings
-                .FirstOrDefault(mapping =>
+            var foundMappings = _keyAndMessageMappings
+                .Where(mapping =>
                     KeyMatches(mapping, key) &&
-                    MessageMatches(mapping, message));
+                    MessageMatches(mapping, message)).Select(mapping => mapping.MappedValue);
 
-            _logger.LogInformation(foundMapping != null
-                ? $"Mapping found with Key '{key}' and Message '{message}'"
-                : $"No mapping found with Key '{key}' and Message '{message}'");
+            if (foundMappings.Any())
+            {
+                _logger.LogInformation($"Mapping found with Key '{key}' and Message '{message}'");
+                return foundMappings.First();
+            }
 
-            return foundMapping?.MappedValue;
+            _logger.LogInformation($"No mapping found with Key '{key}' and Message '{message}'");
+            return null;
+        }
+
+        private TEnum? MapKeyToEnum(string key)
+        {
+            var keyMappings = _keyMappings.Where(mapping => string.Equals(mapping.Key, key, StringComparison.OrdinalIgnoreCase))
+                .Select(mapping => mapping.Value);
+
+            if (keyMappings.Any())
+            {
+                _logger.LogInformation($"Mapping found with Key '{key}'");
+                return keyMappings.First();
+            }
+
+            _logger.LogInformation($"No mapping found with Key '{key}'");
+            return null;
+        }
+
+        private TEnum? MapMessageToEnum(string message)
+        {
+            if (message != null)
+            {
+                var messageMappings = _messageMappings
+                    .Where(mapping => MessageMatches(mapping, message)).Select(mapping => mapping.Value);
+                if (messageMappings.Any())
+                {
+                    _logger.LogInformation($"Mapping found with Message '{message}'");
+                    return messageMappings.First();
+                }
+                _logger.LogInformation($"No mapping found with Message '{message}'");
+            }
+
+            return null;
         }
 
         private static bool KeyMatches(Mapping mapping, string key)
@@ -100,6 +131,16 @@ namespace NHSOnline.Backend.GpSystems
             }
 
             return string.IsNullOrWhiteSpace(message) && string.IsNullOrWhiteSpace(mapping?.Message);
+        }
+
+        private static bool MessageMatches(KeyValuePair<string, TEnum> mapping, string message)
+        {
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                return message.Contains(mapping.Key, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
         }
 
         private class Mapping

@@ -21,39 +21,39 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             _logger = fixture.Create<ILoggerFactory>().CreateLogger<EmisLinkageService>();
         }
 
-        private readonly KeyAndMessageToEnumMapper<Code> _mapperUnderTest =
-            new KeyAndMessageToEnumMapper<Code>()
+        private readonly KeyAndMessageToEnumMapper<InternalCode> _mapperUnderTest =
+            new KeyAndMessageToEnumMapper<InternalCode>()
                 .Add("4031030", "Patient Facing Services API v2 is not enabled at this practice",
-                    Code.PatientFacingServicesApiv2IsNotEnabledAtThisPractice)
+                    InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice)
                 
                 .Add("400", "LinkageKey length outside of valid range",
-                    Code.LinkageKeyLengthOutsideOfValidRange)
+                    InternalCode.LinkageKeyLengthOutsideOfValidRange)
                 
                 .Add("400", "length outside of valid range",
-                    Code.InputValueLengthOutsideOfValidRange)
+                    InternalCode.InputValueLengthOutsideOfValidRange)
                 
-                .AddKeyToEnum("Registered online user is already linked",
-                    Code.UserAlreadyLinked)
+                .AddMessageToEnum("Registered online user is already linked",
+                    InternalCode.UserAlreadyLinked)
                 
-                .AddKeyToEnum("No registered online user found for given linkage details",
-                    Code.NoUserFoundForLinkageDetails)
+                .AddMessageToEnum("No registered online user found for given linkage details",
+                    InternalCode.NoUserFoundForLinkageDetails)
                 
-                .AddKeyToEnum("4001552", Code.PatientArchived)
-                .AddKeyToEnum("4001108", Code.UserAlreadyLinked);
+                .AddKeyToEnum("4001552", InternalCode.PatientArchived)
+                .AddKeyToEnum("4001108", InternalCode.UserAlreadyLinked);
 
 
 
         [TestMethod]
         [DataRow("4031030", "Patient Facing Services API v2 is not enabled at this practice",
-            Code.PatientFacingServicesApiv2IsNotEnabledAtThisPractice)]
+            InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice)]
         [DataRow("400", "One of the parameter length outside of valid range",
-            Code.InputValueLengthOutsideOfValidRange)]
+            InternalCode.InputValueLengthOutsideOfValidRange)]
         [DataRow("300", "Registered online user is already linked",
-            Code.UserAlreadyLinked)]
-        [DataRow("4001552", "Something or other", Code.PatientArchived)]
-        [DataRow("4001552", null, Code.PatientArchived)]
-        [DataRow("4001552", "", Code.PatientArchived)]
-        public void Map_Successful(string key, string message, Code expectedOutcome)
+            InternalCode.UserAlreadyLinked)]
+        [DataRow("4001552", "Something or other", InternalCode.PatientArchived)]
+        [DataRow("4001552", null, InternalCode.PatientArchived)]
+        [DataRow("4001552", "", InternalCode.PatientArchived)]
+        public void Map_Successful(string key, string message, InternalCode expectedOutcome)
         {
             var result = _mapperUnderTest.Map(_logger, key, message);
 
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var key = "4031030";
             var message1 = "Patient Facing Services API v2 is not enabled at this practice";
             var message2 = "Non matching";
-            var expectedOutcome = Code.PatientFacingServicesApiv2IsNotEnabledAtThisPractice;
+            var expectedOutcome = InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice;
 
             var result1 = _mapperUnderTest.Map(_logger, key, message1, message2);
             var result2 = _mapperUnderTest.Map(_logger, key, message2, message1);

@@ -116,7 +116,7 @@ Feature: Linkage Get Key
     Given I have valid VISION linkage details but my patient record was not found
     When I call the Linkage GET endpoint
     Then I receive a "Not Found" error
-
+@tech-debt @NHSO-6181
   Scenario: Linkage request GET for Vision returns 403 Forbidden, linkage key revoked
     Given I have valid VISION linkage details but my linkage key has been revoked
     When I call the Linkage GET endpoint

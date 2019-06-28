@@ -12,10 +12,11 @@ import mocking.vision.models.linkage.LinkageKeyGetResponse
 import mocking.vision.models.linkage.LinkageKeyPostRequest
 import mockingFacade.linkage.LinkageInformationFacade
 import mocking.models.Mapping
+import java.time.Duration
 
 class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory("VISION") {
 
-    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade) {
+    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         configuration()
         mockingClient.forVision {
                 authentication.getRegisterRequest(
@@ -25,7 +26,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory("VISION") {
                                 Register(
                                         rosuAccountId = patient.rosuAccountId,
                                         apiToken = patient.apiKey)
-                        )
+                        ).delayedBy(delay)
             }
     }
 

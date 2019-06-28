@@ -68,15 +68,15 @@ class ResponseStatusCodeSteps {
         Assert.assertEquals("Expected statusCode", HttpStatus.SC_INTERNAL_SERVER_ERROR, errorResponse!!.statusCode)
     }
 
-    private fun assertNhsoException(expectedHttpStatusCode : Int, expectedErrorCode : String){
+    private fun assertNhsoException(expectedHttpStatusCode : Int, expectedErrorCode : String) {
         val errorResponse = SerenityHelpers.getHttpException()
-        val errorResponseBody = GsonBuilder().create()
+        val exception = GsonBuilder().create()
                 .fromJson<NhsoHttpExceptionErrorBody>(errorResponse?.body.toString(),
                         NhsoHttpExceptionErrorBody::class.java)
 
         Assert.assertNotNull("Expected Response", errorResponse)
         Assert.assertEquals("Expected statusCode", expectedHttpStatusCode, errorResponse!!.statusCode)
-        Assert.assertEquals("Expected errorCode", expectedErrorCode, errorResponseBody?.errorCode?:"")
+        Assert.assertEquals("Expected errorCode", expectedErrorCode, exception?.errorCode ?: "")
     }
 
     private val _statusCodeMapping: HashMap<String, Int> = hashMapOf(

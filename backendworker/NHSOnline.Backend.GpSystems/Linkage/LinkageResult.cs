@@ -11,9 +11,9 @@ namespace NHSOnline.Backend.GpSystems.Linkage
 
         public class ErrorCase : LinkageResult
         {
-            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+            public Im1ConnectionErrorCodes.InternalCode ErrorCode { get; }
 
-            public ErrorCase(Im1ConnectionErrorCodes.Code errorCode)
+            public ErrorCase(Im1ConnectionErrorCodes.InternalCode errorCode)
             {
                 ErrorCode = errorCode;
             }
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Linkage
                 return visitor.Visit(this);
             }
         }
-        
+
         public class SupplierSystemUnavailable : LinkageResult
         {
             public override T Accept<T>(ILinkageResultVisitor<T> visitor)
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Linkage
                 return visitor.Visit(this);
             }
         }
-        
+
         public class SuccessfullyRetrieved : LinkageResult
         {
             public LinkageResponse Response { get; }
@@ -87,9 +87,9 @@ namespace NHSOnline.Backend.GpSystems.Linkage
 
         public class NotFound : LinkageResult
         {
-            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+            public Im1ConnectionErrorCodes.InternalCode ErrorCode { get; }
 
-            public NotFound(Im1ConnectionErrorCodes.Code errorCode)
+            public NotFound(Im1ConnectionErrorCodes.InternalCode errorCode)
             {
                 ErrorCode = errorCode;
             }
@@ -100,58 +100,15 @@ namespace NHSOnline.Backend.GpSystems.Linkage
             }
         }
 
-        public class Forbidden : LinkageResult
+        public class UnmappedErrorWithStatusCode : LinkageResult
         {
-            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
+            public Im1ConnectionErrorCodes.InternalCode ErrorCode { get;}
+            public bool IsNotFound { get; }
 
-            public Forbidden(Im1ConnectionErrorCodes.Code errorCode)
+            public UnmappedErrorWithStatusCode(HttpStatusCode statusCode)
             {
-                ErrorCode = errorCode;
-            }
-
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class Conflict : LinkageResult
-        {
-            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
-
-            public Conflict(Im1ConnectionErrorCodes.Code errorCode)
-            {
-                ErrorCode = errorCode;
-            }
-
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class BadRequest : LinkageResult
-        {
-            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
-
-            public BadRequest(Im1ConnectionErrorCodes.Code errorCode)
-            {
-                ErrorCode = errorCode;
-            }
-
-            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class UnknownError : LinkageResult
-        {
-            public Im1ConnectionErrorCodes.Code ErrorCode { get; }
-
-            public UnknownError(Im1ConnectionErrorCodes.Code errorCode)
-            {
-                ErrorCode = errorCode;
+                IsNotFound = statusCode == HttpStatusCode.NotFound;
+                ErrorCode = Im1ConnectionErrorCodes.InternalCode.UnknownError; 
             }
 
             public override T Accept<T>(ILinkageResultVisitor<T> visitor)

@@ -364,9 +364,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Conflict>();
-            var errorCase = (Im1ConnectionRegisterResult.Conflict)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -391,7 +391,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var errorCase = (Im1ConnectionRegisterResult.ErrorCase) result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UserAlreadyLinked);
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
         }
         
         [TestMethod]
@@ -416,7 +416,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.NoUserFoundForLinkageDetails);
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserFoundForLinkageDetails);
         }
         
         [TestMethod]
@@ -441,7 +441,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidLinkageDetails);
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
         }
         
         [TestMethod]
@@ -466,7 +466,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.NoMatchFoundForGivenDemographics);
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoMatchFoundForGivenDemographics);
         }
         
         [TestMethod]
@@ -484,7 +484,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
         
         [TestMethod]
@@ -505,7 +507,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
         
         [TestMethod]
@@ -526,7 +530,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         private static PatientIdentifier CreatePatientIdentifier(
@@ -608,7 +614,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         private EmisIm1ConnectionService CreateSystemUnderTest(Mock<IEmisClient> emisClientMock)
         {
             return new EmisIm1ConnectionService(emisClientMock.Object, _logger,
-                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object, new EmisIm1RegisterErrorMapper());
+                _mockIm1CacheKeyGenerator.Object, _mockIm1CacheService.Object);
         }
     }
 }

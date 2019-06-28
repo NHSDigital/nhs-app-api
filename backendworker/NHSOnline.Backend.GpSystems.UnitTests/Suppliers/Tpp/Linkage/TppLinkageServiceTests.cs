@@ -190,9 +190,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         public async Task CreateLinkageKey_ReturnsUnknownError_WhenNotAuthenticated()
         {
             var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.NotAuthenticated,
-                typeof(LinkageResult.UnknownError));
-            var errorCase = (LinkageResult.UnknownError)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+                typeof(LinkageResult.UnmappedErrorWithStatusCode));
+            var errorCase = (LinkageResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -203,7 +203,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 "8",
                 typeof(LinkageResult.ErrorCase));
             var errorCase = (LinkageResult.ErrorCase)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.ProblemLinkingAccount);
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
         }
 
         [TestMethod]
@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                "8",
                 typeof(LinkageResult.ErrorCase));
             var conflictResult = (LinkageResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
             _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), _settings.MinimumLinkageAge));
         }
 

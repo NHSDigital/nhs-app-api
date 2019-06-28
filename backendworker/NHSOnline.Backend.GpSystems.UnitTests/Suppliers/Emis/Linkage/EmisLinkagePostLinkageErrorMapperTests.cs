@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
     public class EmisLinkagePostLinkageErrorMapperTests
     {
         private EmisTestHelpers _helper;
-        private EmisLinkagePostErrorMapper _mapperUnderTest;
         private Mock<ILogger<EmisLinkageService>> _logger;
 
         [TestInitialize]
@@ -26,14 +25,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
             _helper = new EmisTestHelpers(fixture);
-            _mapperUnderTest = fixture.Create<EmisLinkagePostErrorMapper>();
             _logger = fixture.Freeze<Mock<ILogger<EmisLinkageService>>>();
         }
 
         [TestMethod]
         public void Map_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapperUnderTest.Map(null, _logger.Object);
+            Action act = () => EmisLinkagePostErrorMapper.Map(null, _logger.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
         }
@@ -42,16 +40,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         public void Map_WithBadRequestValues_MapsCorrectly()
         {
             // Arrange
-            var response = _helper.CreateResponse<AddNhsUserResponse>(HttpStatusCode.BadRequest,
-                1553);
+            var response = _helper.CreateResponse<AddNhsUserResponse>(HttpStatusCode.BadRequest, 1553);
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = EmisLinkagePostErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
             var conflictResult = (LinkageResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
         }
         
         [TestMethod]
@@ -61,12 +58,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var response = _helper.CreateResponse<AddNhsUserResponse>(HttpStatusCode.BadRequest, 999);
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = EmisLinkagePostErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.BadRequest>();
-            var conflictResult = (LinkageResult.BadRequest) result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>();
+            var linkageResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
+            linkageResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
     }
 }

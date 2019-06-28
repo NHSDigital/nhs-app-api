@@ -6,51 +6,52 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 {
     internal static class Im1ConnectionV1ErrorCodeMapper
     {
-        private static readonly Dictionary<Code, int> ErrorCodeToStatusCode =
-            new Dictionary<Code, int>
+        private static readonly Dictionary<InternalCode, int> ErrorCodeToStatusCode =
+            new Dictionary<InternalCode, int>
             {
-                { Code.InvalidLinkageDetails, StatusCodes.Status400BadRequest },
-                { Code.NoMatchFoundForGivenDemographics, StatusCodes.Status404NotFound },
-                { Code.UnableToFindOrganisation, StatusCodes.Status400BadRequest },
-                { Code.UserAccountIsInactiveOrArchived, StatusCodes.Status403Forbidden },
-                { Code.PracticeNotLive, StatusCodes.Status400BadRequest },
-                { Code.InvalidNhsNumber, StatusCodes.Status400BadRequest },
-                { Code.AccountIdLengthOutsideOfValidRange, StatusCodes.Status400BadRequest },
-                { Code.LinkageKeyLengthOutsideOfValidRange, StatusCodes.Status400BadRequest },
-                { Code.InputValueLengthOutsideOfValidRange, StatusCodes.Status400BadRequest },
-                { Code.PatientFacingServicesApiv2IsNotEnabledAtThisPractice, StatusCodes.Status400BadRequest },
-                { Code.PatientFacingServicesAreNotEnabledAtThisPractice, StatusCodes.Status400BadRequest },
-                { Code.PatientArchived, StatusCodes.Status403Forbidden },
-                { Code.NoUserFoundForLinkageDetails, StatusCodes.Status404NotFound },
-                { Code.UserAlreadyLinked, StatusCodes.Status409Conflict },
-                { Code.ConnectionToServiceFailed, StatusCodes.Status400BadRequest },
-                { Code.UserAccountDisabled, StatusCodes.Status403Forbidden },
-                { Code.UnknownError, StatusCodes.Status400BadRequest },
-                { Code.InvalidLinkageDetailsTpp, StatusCodes.Status404NotFound },
-                { Code.UnderMinimumAgeOrNonCompetent, StatusCodes.Status403Forbidden },
-                { Code.MultipleRecordsFoundWithNhsNumber, StatusCodes.Status400BadRequest },
-                { Code.NotValidForOnlineUser, StatusCodes.Status400BadRequest },
-                { Code.UserSelfAssociatedAccountIsArchived, StatusCodes.Status403Forbidden },
-                { Code.UserSelfAssociatedAccountNotLinkedWithPatient, StatusCodes.Status400BadRequest },
-                { Code.PatientNotRegisteredAtThisPractice, StatusCodes.Status404NotFound },
-                { Code.NoSelfAssociatedUserExistWithThisPatient, StatusCodes.Status404NotFound },
-                { Code.NoApiKeyAssociatedWithNhsNumber, StatusCodes.Status400BadRequest },
-                { Code.NoUserAssociatedWithNhsNumber, StatusCodes.Status400BadRequest },
-                { Code.PatientRecordNotFound, StatusCodes.Status404NotFound },
-                { Code.InvalidProviderId, StatusCodes.Status403Forbidden },
-                { Code.ProblemLinkingAccount, StatusCodes.Status404NotFound },
+                { InternalCode.InvalidOption, StatusCodes.Status500InternalServerError },
+                { InternalCode.InvalidLinkageDetails, StatusCodes.Status400BadRequest },
+                { InternalCode.NoMatchFoundForGivenDemographics, StatusCodes.Status404NotFound },
+                { InternalCode.UnableToFindOrganisation, StatusCodes.Status400BadRequest },
+                { InternalCode.UserAccountIsInactiveOrArchived, StatusCodes.Status403Forbidden },
+                { InternalCode.PracticeNotLive, StatusCodes.Status400BadRequest },
+                { InternalCode.InvalidNhsNumber, StatusCodes.Status400BadRequest },
+                { InternalCode.AccountIdLengthOutsideOfValidRange, StatusCodes.Status400BadRequest },
+                { InternalCode.LinkageKeyLengthOutsideOfValidRange, StatusCodes.Status400BadRequest },
+                { InternalCode.InputValueLengthOutsideOfValidRange, StatusCodes.Status400BadRequest },
+                { InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice, StatusCodes.Status400BadRequest },
+                { InternalCode.PatientFacingServicesAreNotEnabledAtThisPractice, StatusCodes.Status400BadRequest },
+                { InternalCode.PatientArchived, StatusCodes.Status403Forbidden },
+                { InternalCode.NoUserFoundForLinkageDetails, StatusCodes.Status404NotFound },
+                { InternalCode.UserAlreadyLinked, StatusCodes.Status409Conflict },
+                { InternalCode.ConnectionToServiceFailed, StatusCodes.Status400BadRequest },
+                { InternalCode.UserAccountDisabled, StatusCodes.Status403Forbidden },
+                { InternalCode.UnknownError, StatusCodes.Status400BadRequest },
+                { InternalCode.InvalidLinkageDetailsTpp, StatusCodes.Status404NotFound },
+                { InternalCode.UnderMinimumAgeOrNonCompetent, StatusCodes.Status403Forbidden },
+                { InternalCode.MultipleRecordsFoundWithNhsNumber, StatusCodes.Status400BadRequest },
+                { InternalCode.NotValidForOnlineUser, StatusCodes.Status400BadRequest },
+                { InternalCode.UserSelfAssociatedAccountIsArchived, StatusCodes.Status403Forbidden },
+                { InternalCode.UserSelfAssociatedAccountNotLinkedWithPatient, StatusCodes.Status400BadRequest },
+                { InternalCode.PatientNotRegisteredAtThisPractice, StatusCodes.Status404NotFound },
+                { InternalCode.NoSelfAssociatedUserExistWithThisPatient, StatusCodes.Status404NotFound },
+                { InternalCode.NoApiKeyAssociatedWithNhsNumber, StatusCodes.Status400BadRequest },
+                { InternalCode.NoUserAssociatedWithNhsNumber, StatusCodes.Status400BadRequest },
+                { InternalCode.PatientRecordNotFound, StatusCodes.Status404NotFound },
+                { InternalCode.InvalidProviderId, StatusCodes.Status403Forbidden },
+                { InternalCode.ProblemLinkingAccount, StatusCodes.Status404NotFound },
                 {
-                    Code.UserAccountAlreadyExistsWithPatientDemographicDetails,
+                    InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetails,
                     StatusCodes.Status400BadRequest
                 },
                 {
-                    Code.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived,
+                    InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived,
                     StatusCodes.Status403Forbidden
                 },
-                { Code.LinkageKeyAlreadyExists, StatusCodes.Status409Conflict },
+                { InternalCode.LinkageKeyAlreadyExists, StatusCodes.Status409Conflict },
             };
 
-        public static int Map(Code errorCode)
+        public static int Map(InternalCode errorCode)
         {
             return ErrorCodeToStatusCode.GetValueOrDefault(errorCode);
         }

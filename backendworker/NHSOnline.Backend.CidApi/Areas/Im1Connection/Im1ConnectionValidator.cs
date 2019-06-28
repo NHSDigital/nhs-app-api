@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Support;
 
@@ -24,7 +25,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return isValid;
         }
 
-        public bool IsPostValid(PatientIm1ConnectionRequest request)
+        public bool IsPostValid(PatientIm1ConnectionRequest request, out IEnumerable<string> invalidParameters)
         {
             var isValid = new ValidateAndLog(_logger)
                 .IsValidOdsCode(request.OdsCode, nameof(request.OdsCode))
@@ -34,12 +35,12 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 .IsNotNullOrWhitespace(request.OdsCode, nameof(request.OdsCode))
                 .IsNotNullOrWhitespace(request.Surname, nameof(request.Surname))
                 .IsNotNull(request.DateOfBirth, nameof(request.DateOfBirth))
-                .IsValid();
+                .IsValid(out invalidParameters);
 
             return isValid;
         }
         
-        public bool IsCreateLinkageRequestValid(Im1RegistrationRequest request)
+        public bool IsCreateLinkageRequestValid(Im1RegistrationRequest request, out IEnumerable<string> invalidParameters)
         {
             var isValid = new ValidateAndLog(_logger)
                 .IsNotNullOrWhitespace(request.NhsNumber, nameof(request.NhsNumber))
@@ -49,12 +50,12 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 .IsNotNullOrWhitespace(request.OdsCode, nameof(request.OdsCode))
                 .IsNotNullOrWhitespace(request.IdentityToken, nameof(request.IdentityToken))
                 .IsNotNullOrWhitespace(request.EmailAddress, nameof(request.EmailAddress))
-                .IsValid();
+                .IsValid(out invalidParameters);
 
             return isValid;
         }
 
-        public bool IsPatientIm1ConnectionRequestValid(Im1RegistrationRequest request)
+        public bool IsPatientIm1ConnectionRequestValid(Im1RegistrationRequest request, out IEnumerable<string> invalidParameters)
         {
             var isValid = new ValidateAndLog(_logger)
                 .IsNotNullOrWhitespace(request.AccountId, nameof(request.AccountId))
@@ -63,7 +64,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 .IsValidOdsCode(request.OdsCode, nameof(request.OdsCode))
                 .IsNotNullOrWhitespace(request.OdsCode, nameof(request.OdsCode))
                 .IsNotNullOrWhitespace(request.Surname, nameof(request.Surname))
-                .IsValid();
+                .IsValid(out invalidParameters);
 
             return isValid;
         }

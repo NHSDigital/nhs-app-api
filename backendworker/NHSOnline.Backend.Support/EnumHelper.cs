@@ -42,7 +42,10 @@ namespace NHSOnline.Backend.Support
 
             return type;
         }
-        
+        public static IEnumerable<TEnum> GetValues<TEnum>()
+        {
+            return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
+        }        
         public static string GetDescriptionOrThrowException<TEnum>(TEnum enumerationValue)
         {
             var type = GetType<TEnum>();

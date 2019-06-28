@@ -96,11 +96,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
         }
 
         [TestMethod]
-        [DataRow("V4205", HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.InvalidNhsNumber)]
-        [DataRow("VY806", HttpStatusCode.NotFound, Im1ConnectionErrorCodes.Code.PatientRecordNotFound)]
+        [DataRow("V4205", HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.InternalCode.InvalidNhsNumber)]
+        [DataRow("VY806", HttpStatusCode.NotFound, Im1ConnectionErrorCodes.InternalCode.PatientRecordNotFound)]
         public async Task GetLinkageKey_ReturnsNotFoundResponse_WhenNotFoundResponseFromVision(
             string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse,
-            Im1ConnectionErrorCodes.Code expectedCode)
+            Im1ConnectionErrorCodes.InternalCode expectedCode)
         {
             var result = await GetLinkageKey(visionApiErrorCode, httpStatusCodeResponse,
                 typeof(LinkageResult.ErrorCase));
@@ -110,14 +110,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
         }
 
         [TestMethod]
-        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequest))]
-        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFound))]
-        [DataRow(null, HttpStatusCode.Forbidden, typeof(LinkageResult.Forbidden))]
-        [DataRow(null, HttpStatusCode.InternalServerError, typeof(LinkageResult.UnknownError))]
+        [DataRow(null, HttpStatusCode.BadRequest)]
+        [DataRow(null, HttpStatusCode.NotFound)]
+        [DataRow(null, HttpStatusCode.Forbidden)]
+        [DataRow(null, HttpStatusCode.InternalServerError)]
         public async Task GetLinkageKey_ReturnCorrectError_WhenNoVisionErrorCode(
-            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedType)
+            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse)
         {
-            await GetLinkageKey(visionApiErrorCode, httpStatusCodeResponse, expectedType);
+            await GetLinkageKey(visionApiErrorCode, httpStatusCodeResponse, typeof(LinkageResult.UnmappedErrorWithStatusCode));
         }
 
         public async Task<LinkageResult> GetLinkageKey(
@@ -253,20 +253,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             var result = await CreateLinkageKey("V2214", HttpStatusCode.Conflict,
                 typeof(LinkageResult.ErrorCase));
             var errorCaseResult = (LinkageResult.ErrorCase) result;
-            errorCaseResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.LinkageKeyAlreadyExists);
+            errorCaseResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.LinkageKeyAlreadyExists);
         }
 
         [TestMethod]
-        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequest))]
-        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFound))]
-        [DataRow(null, HttpStatusCode.BadGateway, typeof(LinkageResult.UnknownError))]
-        [DataRow(null, HttpStatusCode.Conflict, typeof(LinkageResult.Conflict))]
-        [DataRow("test", HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequest))]
+        [DataRow(null, HttpStatusCode.BadRequest)]
+        [DataRow(null, HttpStatusCode.NotFound)]
+        [DataRow(null, HttpStatusCode.BadGateway)]
+        [DataRow(null, HttpStatusCode.Conflict)]
+        [DataRow("test", HttpStatusCode.BadRequest)]
         public async Task CreateLinkageKey_ReturnsCorrectErrorCaseResponse_WhenVisionRespondsWithUnknownError(
-            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedType)
+            string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse)
         {
             var result = await CreateLinkageKey(visionApiErrorCode, httpStatusCodeResponse,
-                expectedType);
+                typeof(LinkageResult.UnmappedErrorWithStatusCode));
         }
 
         private async Task<LinkageResult> CreateLinkageKey(string visionApiErrorCode,
@@ -316,7 +316,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             // Assert
             _visionClient.Verify();
             result.GetType().Should().Be(expectedResultType);
-
+            
             return result;
         }
 
@@ -355,9 +355,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             // Assert
             _visionClient.Verify();
-            result.Should().BeAssignableTo<LinkageResult.Conflict>();
-            var errorResult = (LinkageResult.Conflict) result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>();
+            var errorResult = (LinkageResult.UnmappedErrorWithStatusCode) result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]

@@ -9,12 +9,12 @@ using NHSOnline.Backend.GpSystems.Im1Connection;
 namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 {
     [TestClass]
-    public class Im1ConnectionV2ErrorCodeMapperTests
+    public class Im1ConnectionV2ErrorCodeToStatusCodeMapperTests
     {
         [TestMethod]
         public void Mapping_Successful()
         {
-            var result = Im1ConnectionV2ErrorCodeMapper.Map(Im1ConnectionErrorCodes.Code.InvalidLinkageDetails);
+            var result = Im1ConnectionV2ErrorCodeToStatusCodeMapper.Map(Im1ConnectionErrorCodes.ExternalCode.InvalidDetails);
             result.Should().Be(StatusCodes.Status400BadRequest);
         }
 
@@ -22,9 +22,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public void AllErrorCodesHaveMappings()
         {
             var unmappedCodes = Enum
-                .GetValues(typeof(Im1ConnectionErrorCodes.Code))
-                .Cast<Im1ConnectionErrorCodes.Code>()
-                .Where(errorCode => Im1ConnectionV2ErrorCodeMapper.Map(errorCode) == 0)
+                .GetValues(typeof(Im1ConnectionErrorCodes.ExternalCode))
+                .Cast<Im1ConnectionErrorCodes.ExternalCode>()
+                .Where(errorCode => Im1ConnectionV2ErrorCodeToStatusCodeMapper.Map(errorCode) == 0)
                 .ToList();
 
             if (unmappedCodes.Any())

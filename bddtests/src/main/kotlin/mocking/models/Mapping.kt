@@ -16,8 +16,10 @@ class Mapping() {
         this.response = response
     }
 
-    fun delayedBy(seconds: Duration): Mapping {
-        this.response!!.fixedDelayMilliseconds = seconds.toMillis().toInt()
+    fun delayedBy(seconds: Duration?): Mapping {
+        if (seconds != null) {
+            this.response!!.fixedDelayMilliseconds = seconds.toMillis().toInt()
+        }
         return this
     }
 

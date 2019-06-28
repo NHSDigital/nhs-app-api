@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
     public class EmisLinkageGetErrorMapperTests
     {
         private EmisTestHelpers _helper;
-        private EmisLinkageGetErrorMapper _mapperUnderTest;
         private Mock<ILogger<EmisLinkageService>> _logger;
 
         [TestInitialize]
@@ -27,13 +26,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 .Customize(new AutoMoqCustomization());
             _helper = new EmisTestHelpers(fixture);
             _logger = fixture.Freeze<Mock<ILogger<EmisLinkageService>>>();
-            _mapperUnderTest = new EmisLinkageGetErrorMapper();
         }
 
         [TestMethod]
         public void Map_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapperUnderTest.Map(null, _logger.Object);
+            Action act = () => EmisLinkageGetErrorMapper.Map(null, _logger.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
         }
@@ -47,12 +45,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 "Patient Facing Services API v2 is not enabled at this practice");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = EmisLinkageGetErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
             var conflictResult = (LinkageResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.Code.PatientFacingServicesApiv2IsNotEnabledAtThisPractice);
+            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice);
         }
 
         [TestMethod]
@@ -63,12 +61,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 1551);
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = EmisLinkageGetErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
             var conflictResult = (LinkageResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.Code.PatientNotRegisteredAtThisPractice);
+            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice);
         }
 
         [TestMethod]
@@ -79,12 +77,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 1553);
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = EmisLinkageGetErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
             var conflictResult = (LinkageResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
         }
 
         [TestMethod]
@@ -94,12 +92,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var response = _helper.CreateResponse<AddVerificationResponse>(HttpStatusCode.BadRequest, 999);
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = EmisLinkageGetErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.BadRequest>();
-            var conflictResult = (LinkageResult.BadRequest)result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>();
+            var linkageResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
+            linkageResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
     }
 }

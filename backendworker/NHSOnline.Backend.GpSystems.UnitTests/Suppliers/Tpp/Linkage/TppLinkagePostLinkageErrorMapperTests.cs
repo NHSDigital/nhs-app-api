@@ -18,7 +18,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
     [TestClass]
     public class TppLinkagePostLinkageErrorMapperTests
     {
-        private TppLinkagePostErrorMapper _mapperUnderTest;
         private IFixture _fixture;
         private Mock<ILogger<TppLinkageService>> _logger;
 
@@ -27,14 +26,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            _mapperUnderTest = new TppLinkagePostErrorMapper();
             _logger = _fixture.Create<Mock<ILogger<TppLinkageService>>>();
         }
 
         [TestMethod]
         public void Map_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapperUnderTest.Map(null, _logger.Object);
+            Action act = () => TppLinkagePostErrorMapper.Map(null, _logger.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
         }
@@ -48,12 +46,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 "6");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = TppLinkagePostErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
             var conflictResult = (LinkageResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.Code.ProblemLinkingAccount);
+            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
         }
         
         [TestMethod]
@@ -63,12 +61,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             var response = CreateResponse(HttpStatusCode.OK, "10");
 
             // Act
-            var result = _mapperUnderTest.Map(response, _logger.Object);
+            var result = TppLinkagePostErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.UnknownError>();
-            var conflictResult = (LinkageResult.UnknownError) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.Code.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>();
+            var conflictResult = (LinkageResult.UnmappedErrorWithStatusCode) result;
+            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
 

@@ -15,6 +15,7 @@ object ErrorResponseCodeVision {
 
     // rest api error codes
     const val INVALID_NHS_NUMBER = "V4205"
+    //NHSO-6181 - Find what this error code should be
     const val LINKAGE_KEY_REVOKED = "TO_BE_CONFIRMED" // to be confirmed - Vision question tracker #28
     const val PATIENT_RECORD_NOT_FOUND = "VY806"
     const val LINKAGE_KEY_ALREADY_EXISTS = "V2214"

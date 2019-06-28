@@ -13,10 +13,8 @@ import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
-import features.sharedStepDefinitions.backend.CommonSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import utils.SerenityHelpers
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
@@ -24,14 +22,14 @@ import mocking.data.prescriptions.MicrotestPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.EmisMockDefaults
-import mocking.emis.models.PrescriptionRequestsGetResponse
-import mocking.emis.models.RequestedMedicationCourseStatus
-import mocking.tpp.models.Error
-import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.emis.models.PrescriptionRequestsGetResponse
+import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
+import mocking.tpp.models.Error
+import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import models.prescriptions.HistoricPrescription
@@ -45,6 +43,9 @@ import pages.navigation.HeaderNative
 import pages.text
 import utils.getOrNull
 import utils.set
+import utils.GlobalSerenityHelpers
+import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionsListResponse
@@ -177,7 +178,7 @@ open class PrescriptionsStepDefinitions {
     fun theGPSystemHasDisabledPrescriptions() {
         var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
-            initialize(Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM))
+            initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
             currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         }
         PrescriptionsFactory.getForSupplier(currentProvider.toString()).disableAtGPLevel()
@@ -187,7 +188,7 @@ open class PrescriptionsStepDefinitions {
     fun theGPSystemSessionHasExpired() {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
-            initialize(Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM))
+            initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
         }
         PrescriptionsFactory.getForSupplier(currentProvider.toString()).gpSessionHasExpired()
     }
@@ -445,7 +446,7 @@ open class PrescriptionsStepDefinitions {
 
         val currentPatient = SerenityHelpers.getPatient()
         if (!::prescriptionLoader.isInitialized) {
-            val gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
+            val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
             initialize(gpSystem)
         }
 
@@ -508,7 +509,7 @@ open class PrescriptionsStepDefinitions {
     private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime) {
 
         if (!::prescriptionLoader.isInitialized) {
-            val gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
+            val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
             initialize(gpSystem)
         }
 

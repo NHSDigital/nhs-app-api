@@ -1,4 +1,3 @@
-@file:Suppress("WildcardImport")
 package mocking.stubs.prescriptions
 
 import mocking.MockingClient
@@ -7,7 +6,13 @@ import mocking.spine.ePS.prescriptions.EPS111ItemDetailBuilder
 import mocking.spine.ePS.prescriptions.EPS111ItemSummaryBuilder
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
-import mocking.spine.ePS.models.*
+import mocking.spine.ePS.models.LineItemDetail
+import mocking.spine.ePS.models.Organisation
+import mocking.spine.ePS.models.RepeatInstance
+import mocking.spine.ePS.models.SpineItemDetailGetResponse
+import mocking.spine.ePS.models.SpineItemDetailPrescription
+import mocking.spine.ePS.models.SpineItemSummaryGetResponse
+import mocking.spine.ePS.models.SpineItemSummaryPrescription
 import mocking.stubs.InputResponse
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.StubsPatientFactory.Companion.goodPatientEMIS

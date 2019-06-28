@@ -1,35 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Im1Connection
 {
     public interface IIm1ConnectionErrorCodes
     {
-        ApiErrorResponse GetErrorResponse(Im1ConnectionErrorCodes.Code code);
+        Im1ErrorResponse GetAndLogErrorResponse(Im1ConnectionErrorCodes.InternalCode internalCode, Supplier supplier, ILogger logger);
+        Im1ConnectionErrorCodes.ExternalCode GetExternalCode(Im1ConnectionErrorCodes.InternalCode internalCode);
     }
 
-#pragma warning disable CA1008 // Enums should have zero value
     public class Im1ConnectionErrorCodes : IIm1ConnectionErrorCodes
     {
-        public ApiErrorResponse GetErrorResponse(Code code)
+        public Im1ErrorResponse GetAndLogErrorResponse(InternalCode internalCode, Supplier supplier, ILogger logger)
         {
-            return ErrorResponses[(int)code];
+            var internalErrorMessage = InternalErrorResponses[(int)internalCode].ErrorMessage;
+            var externalCode = GetExternalCode(internalCode);
+            var externalError = ExternalErrorResponses[(int) externalCode];
+            var externalErrorMessage = externalError.ErrorMessage;
+            logger.LogInformation($"Linkage Error. Internal Error code: {internalCode} : {(int)internalCode} : {internalErrorMessage}" +
+                                  $"\nMapped to External Error code: {externalCode} : {(int)externalCode} : {externalErrorMessage}");
+            externalError.GpSystem = supplier.ToString();
+            return externalError;
         }
 
-        public Dictionary<int, ApiErrorResponse> ErrorResponses { get; } = CreateErrors();
-
-        private static Dictionary<int, ApiErrorResponse> CreateErrors()
+        public ExternalCode GetExternalCode(InternalCode internalCode)
         {
-            return new ErrorCodes<Code>().GetAllErrorResponses();
+            if (internalCode == InternalCode.InvalidOption)
+            {
+                throw new ArgumentException($"{InternalCode.InvalidOption} is not a valid option");
+            }
+
+            return ErrorCodeToGenericErrorCode.GetValueOrDefault(internalCode);
         }
 
-        //Any changes to this enum must also be made in the swagger contract
-        public enum Code
+        public Dictionary<int, Im1ErrorResponse> ExternalErrorResponses { get; } = new ErrorCodes<ExternalCode, Im1ErrorResponse>().GetAllErrorResponses();
+        public Dictionary<int, Im1ErrorResponse> InternalErrorResponses { get; } = new ErrorCodes<InternalCode, Im1ErrorResponse>().GetAllErrorResponses();
+        
+        public enum InternalCode
         {
             [Description("Unknown Error")]
-            UnknownError = 100,
+            InvalidOption = 0,
 
+            [Description("Unknown Error")]
+            UnknownError = 100,
             [Description("Invalid linkage details")]
             InvalidLinkageDetails = 101,
             [Description("No match found for given demographics")]
@@ -96,5 +113,96 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             [Description("No self-associated user exist with this patient")]
             NoSelfAssociatedUserExistWithThisPatient = 199
         }
+
+        //Any changes to this enum must also be made in the swagger contract
+        public enum ExternalCode
+        {
+            [Description("Unknown Error")]
+            InvalidOption = 0,
+
+            [Description("Unknown Error")]
+            UnknownError = 100,
+            [Description("Practice not enabled")]
+            PracticeNotEnabled = 101,
+            [Description("Patient archived or disabled")]
+            PatientArchivedOrDisabled = 102,
+            [Description("Patient not found")]
+            PatientNotFound = 103,
+            [Description("Under minimum age or non competant")]
+            UnderMinimumAgeOrNonCompetent = 104,
+            [Description("User account conflict")]
+            UserAccountConflict = 105,
+            [Description("Invalid Details")]
+            InvalidDetails = 106,
+            [Description("Upstream Error")]
+            UpstreamError = 107,
+            [Description("Invalid Nhs Number")]
+            InvalidNhsNumber = 108,
+            [Description("Invalid Provider Id")]
+            InvalidProviderId = 109,
+            [Description("Invalid Account Id")]
+            InvalidAccountId = 110,
+            [Description("Invalid Linkage Key")]
+            InvalidLinkageKey = 111,
+
+            [Description("Linkage not found, prompt to create new linkage key")]
+            LinkageNotFound = 199
+        }
+
+        private static readonly Dictionary<InternalCode, ExternalCode> ErrorCodeToGenericErrorCode =
+            new Dictionary<InternalCode, ExternalCode>
+            {
+                { InternalCode.InvalidOption, ExternalCode.InvalidOption },
+                { InternalCode.UserAccountIsInactiveOrArchived, ExternalCode.PatientArchivedOrDisabled },
+                { InternalCode.PatientArchived,ExternalCode.PatientArchivedOrDisabled },
+                { InternalCode.UserAccountDisabled,ExternalCode.PatientArchivedOrDisabled },
+                { InternalCode.UserSelfAssociatedAccountIsArchived, ExternalCode.PatientArchivedOrDisabled },
+                { InternalCode.UserSelfAssociatedAccountNotLinkedWithPatient, ExternalCode.PatientArchivedOrDisabled },
+                {
+                    InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived,
+                    ExternalCode.PatientArchivedOrDisabled
+                },
+                { InternalCode.NotValidForOnlineUser, ExternalCode.PatientArchivedOrDisabled },
+
+                { InternalCode.PracticeNotLive, ExternalCode.PracticeNotEnabled },
+                { InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice,ExternalCode.PracticeNotEnabled  },
+                { InternalCode.PatientFacingServicesAreNotEnabledAtThisPractice, ExternalCode.PracticeNotEnabled },
+                { InternalCode.UnableToFindOrganisation, ExternalCode.PracticeNotEnabled },
+
+                { InternalCode.UnderMinimumAgeOrNonCompetent, ExternalCode.UnderMinimumAgeOrNonCompetent },
+
+                { InternalCode.NoMatchFoundForGivenDemographics,ExternalCode.PatientNotFound  },
+                { InternalCode.NoUserFoundForLinkageDetails, ExternalCode.PatientNotFound },
+
+                { InternalCode.InvalidLinkageDetails,ExternalCode.InvalidDetails },
+                { InternalCode.InvalidLinkageDetailsTpp, ExternalCode.InvalidDetails },
+                { InternalCode.InvalidNhsNumber, ExternalCode.InvalidNhsNumber },
+                { InternalCode.AccountIdLengthOutsideOfValidRange, ExternalCode.InvalidAccountId },
+                { InternalCode.LinkageKeyLengthOutsideOfValidRange, ExternalCode.InvalidLinkageKey},
+                { InternalCode.InputValueLengthOutsideOfValidRange, ExternalCode.InvalidDetails},
+                { InternalCode.InvalidProviderId,  ExternalCode.InvalidProviderId},
+
+                { InternalCode.UserAlreadyLinked, ExternalCode.UserAccountConflict },
+                { InternalCode.MultipleRecordsFoundWithNhsNumber, ExternalCode.UserAccountConflict  },
+                {
+                  InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetails,
+                  ExternalCode.UserAccountConflict
+                },
+                { InternalCode.LinkageKeyAlreadyExists,  ExternalCode.UserAccountConflict },
+
+                { InternalCode.ConnectionToServiceFailed, ExternalCode.UpstreamError },
+
+                { InternalCode.UnknownError, ExternalCode.UnknownError },
+                { InternalCode.ProblemLinkingAccount, ExternalCode.UnknownError },
+
+                // The following error codes are caught earlier in the process.
+                // They are included here for completeness, but should never reach this stage.
+                // (Failure to get linkage key prompts a create).
+                { InternalCode.PatientNotRegisteredAtThisPractice, ExternalCode.LinkageNotFound },
+                { InternalCode.NoApiKeyAssociatedWithNhsNumber,  ExternalCode.LinkageNotFound },
+                { InternalCode.NoUserAssociatedWithNhsNumber,  ExternalCode.LinkageNotFound },
+                { InternalCode.PatientRecordNotFound, ExternalCode.LinkageNotFound },
+                { InternalCode.NoSelfAssociatedUserExistWithThisPatient, ExternalCode.LinkageNotFound }
+            };
     }
 }

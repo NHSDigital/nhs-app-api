@@ -19,20 +19,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
         private readonly IIm1CacheService _im1CacheService;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<VisionIm1ConnectionService> _logger;
-        private readonly VisionIm1RegisterErrorMapper _registerErrorMapper;
 
         public VisionIm1ConnectionService(
             IVisionClient visionClient,
             IIm1CacheService im1CacheService,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
-            ILogger<VisionIm1ConnectionService> logger,
-            VisionIm1RegisterErrorMapper registerErrorMapper)
+            ILogger<VisionIm1ConnectionService> logger)
         {
             _visionClient = visionClient;
             _im1CacheService = im1CacheService;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
-            _registerErrorMapper = registerErrorMapper;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -105,12 +102,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                     catch (SocketException ex)
                     {
                         _logger.LogError(ex, $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked." + ex.ToString() );
-                        return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.Code.UserAlreadyLinked);
+                        return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
                     }
 
                     if (linkAccountResponse.HasErrorResponse)
                     {
-                        return _registerErrorMapper.Map(linkAccountResponse, _logger);
+                        return VisionIm1RegisterErrorMapper.Map(linkAccountResponse, _logger);
                     }
                     var apiToken = linkAccountResponse.Body.AuthenticationRef.ApiToken;
                     connectionToken = new VisionConnectionToken

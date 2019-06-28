@@ -7,6 +7,7 @@ import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
 import utils.SerenityHelpers
 import worker.models.patient.Im1ConnectionRequest
+import java.time.Duration
 
 abstract class Im1ConnectionV2Factory(protected val gpSystem: String) {
 
@@ -28,7 +29,7 @@ abstract class Im1ConnectionV2Factory(protected val gpSystem: String) {
 
     abstract fun successfulLinkagePost(linkageInformationFacade: LinkageInformationFacade)
 
-    abstract fun successfulIm1Register(linkageFacade: LinkageInformationFacade)
+    abstract fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration? = null)
 
     abstract fun errorIm1Register(httpStatusCode: Int,
                                   errorCode: String,

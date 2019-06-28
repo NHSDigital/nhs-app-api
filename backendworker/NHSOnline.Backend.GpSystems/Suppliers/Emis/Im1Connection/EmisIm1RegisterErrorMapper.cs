@@ -5,55 +5,48 @@ using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 {
-    public class EmisIm1RegisterErrorMapper : Im1ConnectionErrorMapper
+    public static class EmisIm1RegisterErrorMapper
     {
-        protected override Code UnknownError =>
-            Code.UnknownError;
-
-        protected static KeyAndMessageToEnumMapper<Code>
+        private static KeyAndMessageToEnumMapper<InternalCode>
             KeyAndMessageToError =>
-            new KeyAndMessageToEnumMapper<Code>()
+            new KeyAndMessageToEnumMapper<InternalCode>()
                 .Add("4031030", 
                     "Patient Facing Services API v2 is not enabled at this practice",
-                    Code.PatientFacingServicesApiv2IsNotEnabledAtThisPractice)
-                
+                    InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice)
                 .Add("4031030", 
                     "Patient Facing Services are not enabled by this practice",
-                    Code.PatientFacingServicesAreNotEnabledAtThisPractice)
-                
+                    InternalCode.PatientFacingServicesAreNotEnabledAtThisPractice)
                 .Add("400", 
                     "AccountId length outside of valid range",
-                    Code.AccountIdLengthOutsideOfValidRange)
-                
+                    InternalCode.AccountIdLengthOutsideOfValidRange)
                 .Add("400", 
                     "LinkageKey length outside of valid range",
-                    Code.LinkageKeyLengthOutsideOfValidRange)
-                
+                    InternalCode.LinkageKeyLengthOutsideOfValidRange)
                 .Add("400", 
                     "length outside of valid range",
-                    Code.InputValueLengthOutsideOfValidRange)
-                
-                .AddKeyToEnum("Registered online user is already linked",Code.UserAlreadyLinked)
-                .AddKeyToEnum("No registered online user found for given linkage details",Code.NoUserFoundForLinkageDetails)
-                .AddKeyToEnum("Invalid linkage details", Code.InvalidLinkageDetails)
-                .AddKeyToEnum("No match found for given demographics",Code.NoMatchFoundForGivenDemographics)
-                .AddKeyToEnum("4041104", Code.NoUserFoundForLinkageDetails)
-                .AddKeyToEnum("4001105", Code.InvalidLinkageDetails)
-                .AddKeyToEnum("4001106", Code.NoMatchFoundForGivenDemographics)
-                .AddKeyToEnum("4001001", Code.UnableToFindOrganisation)
-                .AddKeyToEnum("4001107", Code.UserAccountIsInactiveOrArchived)
-                .AddKeyToEnum("4001401", Code.PracticeNotLive)
-                .AddKeyToEnum("4001552", Code.PatientArchived)
-                .AddKeyToEnum("4001108", Code.UserAlreadyLinked);
+                    InternalCode.InputValueLengthOutsideOfValidRange)
+                .AddMessageToEnum("Registered online user is already linked",InternalCode.UserAlreadyLinked)
+                .AddMessageToEnum("No registered online user found for given linkage details",InternalCode.NoUserFoundForLinkageDetails)
+                .AddMessageToEnum("Invalid linkage details", InternalCode.InvalidLinkageDetails)
+                .AddMessageToEnum("The request is invalid", InternalCode.InvalidLinkageDetails)
+                .AddMessageToEnum("No match found for given demographics",InternalCode.NoMatchFoundForGivenDemographics)
+                .AddKeyToEnum("4041104", InternalCode.NoUserFoundForLinkageDetails)
+                .AddKeyToEnum("4001105", InternalCode.InvalidLinkageDetails)
+                .AddKeyToEnum("4001106", InternalCode.NoMatchFoundForGivenDemographics)
+                .AddKeyToEnum("4001001", InternalCode.UnableToFindOrganisation)
+                .AddKeyToEnum("4001107", InternalCode.UserAccountIsInactiveOrArchived)
+                .AddKeyToEnum("4001401", InternalCode.PracticeNotLive)
+                .AddKeyToEnum("4001552", InternalCode.PatientArchived)
+                .AddKeyToEnum("4001108", InternalCode.UserAlreadyLinked);
 
-        public Im1ConnectionRegisterResult Map(EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse> response,
+        public static Im1ConnectionRegisterResult Map(EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse> response,
             ILogger<EmisIm1ConnectionService> logger)
         {
             var mappedValue = EmisErrorMapper.Map(logger, response, KeyAndMessageToError);
 
             return mappedValue != null
                 ? new Im1ConnectionRegisterResult.ErrorCase(mappedValue.Value)
-                : MapUnknownError(response.StatusCode);
+                : (Im1ConnectionRegisterResult) new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
         }
     }
 }

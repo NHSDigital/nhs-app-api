@@ -22,7 +22,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
     [TestClass]
     public class TppIm1ConnectionServiceTests
     {
-        private const string DefaultConnectionToken = "{\"accountid\":\"account_id\",\"passphrase\":\"passphrase\",\"providerid\":\"providerid\"}";
+        private const string DefaultConnectionToken =
+            "{\"accountid\":\"account_id\",\"passphrase\":\"passphrase\",\"providerid\":\"providerid\"}";
+
         private const string DefaultOdsCode = "token";
 
         private IFixture _fixture;
@@ -126,7 +128,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
         }
-        
+
         [TestMethod]
         public async Task Register_Success_WhenIm1TokenIsCached()
         {
@@ -137,7 +139,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     {
                         Body = linkAccountReply,
                     }));
-            
+
             var authenticateReply = _fixture.Create<AuthenticateReply>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
@@ -145,20 +147,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     {
                         Body = authenticateReply,
                     }));
-            
+
             const string key = "Key";
             _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
                     It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(key);
 
             var im1Token = _fixture.Create<TppConnectionToken>();
-            
+
             _mockIm1CacheService.Setup(x => x.GetIm1ConnectionToken<TppConnectionToken>(key))
                 .Returns(Task.FromResult(
                     Option.Some(im1Token)
                 ));
-            
-            var systemUnderTest = CreateSystemUnderTest();         
+
+            var systemUnderTest = CreateSystemUnderTest();
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
@@ -178,7 +180,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     {
                         Body = linkAccountReply,
                     }));
-            
+
             var authenticateReply = _fixture.Create<AuthenticateReply>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
@@ -211,14 +213,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             _mockIm1CacheService.Verify();
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsBadGateway_WhenTppClientLinkAccountReturnsInvalidProviderId()
         {
             var invalidProviderErrorResponse = _fixture.Build<Error>()
                 .With(x => x.ErrorCode, "6")
                 .Create();
-                
+
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
                     new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
@@ -229,19 +231,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
-            
+
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidLinkageDetailsTpp);
+            var errorResult = (Im1ConnectionRegisterResult.ErrorCase) result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetailsTpp);
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsNotFound_WhenTppClientLinkAccountReturnsInvalidLinkageCredentials()
         {
             var invalidLinkageCredentialsErrorResponse = _fixture.Build<Error>()
                 .With(x => x.ErrorCode, "8")
                 .Create();
-                
+
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
                     new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
@@ -254,14 +256,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var result = await systemUnderTest.Register(request);
 
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.InvalidLinkageDetailsTpp);
+            var errorResult = (Im1ConnectionRegisterResult.ErrorCase) result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetailsTpp);
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsUnknownError_WhenTppClientLinkAccountReturnsErrorResponse()
         {
-            var errorResponse = _fixture.Create<Error>();          
+            var errorResponse = _fixture.Create<Error>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
                     new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
@@ -273,12 +275,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
 
             var result = await systemUnderTest.Register(request);
-            
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnknownError>();
-            var errorResult = (Im1ConnectionRegisterResult.UnknownError)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
+            result.GetType().Should().Be(typeof(Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode));
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsBadGateway_WhenTppClientAuthenticateReturnsErrorResponse()
         {
@@ -289,8 +292,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     {
                         Body = linkAccountReply,
                     }));
-            
-            var errorResponse = _fixture.Create<Error>();                
+
+            var errorResponse = _fixture.Create<Error>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
@@ -304,7 +307,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
-        
+
         [TestMethod]
         public async Task Verify_ReturnsBadGateway_WhenTppClientLinkAccountThrowsHttpRequestException()
         {
@@ -318,7 +321,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
-        
+
         [TestMethod]
         public async Task Verify_ReturnsBadGateway_WhenTppClientAuthenticateThrowsHttpRequestException()
         {
@@ -329,7 +332,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     {
                         Body = linkAccountReply,
                     }));
-            
+
             _mockTppClient
                 .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
                 .Throws<HttpRequestException>();
@@ -343,8 +346,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
         private TppIm1ConnectionService CreateSystemUnderTest()
         {
-            return new TppIm1ConnectionService(_mockTppClient.Object, _mockIm1CacheService.Object
-                , _mockIm1CacheKeyGenerator.Object, _logger, new TppIm1RegisterErrorMapper());
+            return new TppIm1ConnectionService(_mockTppClient.Object, _mockIm1CacheService.Object,
+                _mockIm1CacheKeyGenerator.Object, _logger);
         }
     }
 }

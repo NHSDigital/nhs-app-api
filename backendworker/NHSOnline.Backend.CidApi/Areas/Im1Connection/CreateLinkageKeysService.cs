@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
@@ -41,7 +40,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 {
                     _logger.LogWarning("Linkage details request unsuccessful - patient non competent or under 16.");
                     
-                    return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent);
+                    return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
                 }
 
                 var linkageService = gpSystem.GetLinkageService();

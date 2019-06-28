@@ -17,10 +17,11 @@ import mocking.tpp.models.PersonName
 import mocking.tpp.models.User
 import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
+import java.time.Duration
 
 class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory("TPP") {
 
-    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade) {
+    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         authenticate()
         mockingClient.forTpp {
             authentication.linkAccountRequest(patient).respondWithSuccess(
@@ -28,7 +29,7 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory("TPP") {
                             passphrase = patient.passphrase,
                             uuid = TppMockDefaults.DEFAULT_TPP_UUID,
                             passphraseToLink = "passphraseToLink"
-                    ))
+                    )).delayedBy(delay)
         }
     }
 
@@ -41,8 +42,7 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory("TPP") {
         )
 
         mockingClient.forTpp {
-            authentication.linkAccountRequest(patient).respondWithError(error, httpStatusCode
-            )
+            authentication.linkAccountRequest(patient).respondWithError(error, httpStatusCode)
         }
     }
 

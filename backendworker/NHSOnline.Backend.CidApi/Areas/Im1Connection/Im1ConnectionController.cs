@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -47,70 +49,97 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             _errorCodes = linkageErrorCodes;
             _gpSystemFactory = gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
         }
-        
+
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Get(
-            [FromHeader(Name = Constants.HttpHeaders.ConnectionToken)] string connectionToken,
-            [FromHeader(Name = Constants.HttpHeaders.OdsCode)] string odsCode)
+            [FromHeader(Name = Constants.HttpHeaders.ConnectionToken)]
+            string connectionToken,
+            [FromHeader(Name = Constants.HttpHeaders.OdsCode)]
+            string odsCode)
         {
             try
             {
                 _logger.LogEnter();
-                
+
                 if (odsCode != null)
                 {
                     odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
                 }
 
                 var validator = new Im1ConnectionValidator(_logger);
-                return await PerformOperationOnGpSystem(!validator.IsGetValid(connectionToken, odsCode), odsCode, async (gpSystem) =>
+                if (!validator.IsGetValid(connectionToken, odsCode))
                 {
-                    var tokenValidationService = gpSystem.GetTokenValidationService();
-                    if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
-                    {
-                        _logger.LogError(
-                            $"ConnectionToken provided in header {Constants.HttpHeaders.ConnectionToken} is invalid.");
-                        return new BadRequestResult();
-                    }
+                    return new BadRequestResult();
+                }
 
-                    var im1ConnectionService = gpSystem.GetIm1ConnectionService();
-                    var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
+                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(odsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {odsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
+                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                }
 
-                    await verifyResult.Accept(
-                        new Im1ConnectionVerifyAuditingVisitor(_auditor, _logger, gpSystem.Supplier));
-                    return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
-                });
+                var gpSystem = gpSystemOption.ValueOrFailure();
+
+                var tokenValidationService = gpSystem.GetTokenValidationService();
+                if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
+                {
+                    _logger.LogError(
+                        $"ConnectionToken provided in header {Constants.HttpHeaders.ConnectionToken} is invalid.");
+                    return new BadRequestResult();
+                }
+
+                var im1ConnectionService = gpSystem.GetIm1ConnectionService();
+                var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
+
+                await verifyResult.Accept(
+                    new Im1ConnectionVerifyAuditingVisitor(_auditor, _logger, gpSystem.Supplier));
+                return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
             }
             finally
             {
                 _logger.LogExit();
             }
         }
-        
+
         [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
             try
             {
                 _logger.LogEnter();
-                
+
                 if (model.OdsCode != null)
                 {
                     model.OdsCode = _odsCodeMassager.CheckOdsCode(model.OdsCode);
                 }
 
-                var validator = new Im1ConnectionValidator(_logger);
+                var isValid = new Im1ConnectionValidator(_logger).IsPostValid(model, out var invalidParams);
 
-                return await PerformOperationOnGpSystem(!validator.IsPostValid(model), model.OdsCode, async (gpSystem) =>
+                if (!isValid)
                 {
-                    var im1ConnectionService = gpSystem.GetIm1ConnectionService();
-                    var registerResult = await im1ConnectionService.Register(model);
+                    return new BadRequestResult();
+                }
 
-                    await registerResult.Accept(
-                        new Im1ConnectionRegisterAuditingVisitor(_auditor, _logger, _im1ErrorCodes,
-                            gpSystem.Supplier));
-                    return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
-                });
+                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(model.OdsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
+                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+
+                }
+
+                var gpSystem = gpSystemOption.ValueOrFailure();
+                var im1ConnectionService = gpSystem.GetIm1ConnectionService();
+                var registerResult = await im1ConnectionService.Register(model);
+
+                await registerResult.Accept(
+                    new Im1ConnectionRegisterAuditingVisitor(_auditor, _logger,
+                        gpSystem.Supplier));
+                return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request, _logger));
+
             }
             finally
             {
@@ -131,16 +160,39 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     im1RegistrationRequest.OdsCode = _odsCodeMassager.CheckOdsCode(im1RegistrationRequest.OdsCode);
                 }
 
-                var isCreateLinkageRequestValid = validator.IsCreateLinkageRequestValid(im1RegistrationRequest);
+                var isCreateLinkageRequestValid = validator.IsCreateLinkageRequestValid(
+                    im1RegistrationRequest, 
+                    out var invalidLinkageParameters);
 
                 var isPatientIm1ConnectionRequestValid =
-                    validator.IsPatientIm1ConnectionRequestValid(im1RegistrationRequest);
-                var isValid = !isCreateLinkageRequestValid && !isPatientIm1ConnectionRequestValid;
+                    validator.IsPatientIm1ConnectionRequestValid(im1RegistrationRequest,
+                        out var invalidIm1ConnectionParameters);
 
-                return await PerformOperationOnGpSystem(isValid, im1RegistrationRequest.OdsCode,
-                    async (gpSystem) => await HandleRegistrationRequest(im1RegistrationRequest,
-                        gpSystem,
-                        isPatientIm1ConnectionRequestValid));
+                if (!isCreateLinkageRequestValid && !isPatientIm1ConnectionRequestValid)
+                {
+                    _logger.LogInformation("Patient Im1 Connection Request invalid, cannot continue with registration");
+                    return IsInvalidResponse(
+                        Im1ConnectionErrorCodes.ExternalCode.InvalidDetails, 
+                        StatusCodes.Status400BadRequest, 
+                        invalidLinkageParameters.Concat(invalidIm1ConnectionParameters).Distinct());
+                }
+
+                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(im1RegistrationRequest.OdsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {im1RegistrationRequest.OdsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
+                    return IsInvalidResponse(
+                        Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                        StatusCodes.Status501NotImplemented,
+                        new[] { nameof(im1RegistrationRequest.OdsCode) });
+                }
+
+                var gpSystem = gpSystemOption.ValueOrFailure();
+
+                return await HandleRegistrationRequest(im1RegistrationRequest,
+                    gpSystem,
+                    isPatientIm1ConnectionRequestValid);
             }
             finally
             {
@@ -164,7 +216,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 
                 if (ValidLinkageDetails(retrieveLinkageResult, out var linkageDetails))
                 {
-                    _logger.LogInformation("Valid linkage details found for Im1 Registration");
+                    _logger.LogInformation("Valid linkage details found or created for Im1 Registration");
                     registrationRequest.AccountId = linkageDetails.AccountId;
                     registrationRequest.OdsCode = linkageDetails.OdsCode;
                     registrationRequest.LinkageKey = linkageDetails.LinkageKey;
@@ -174,11 +226,10 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     await retrieveLinkageResult.Accept(
                         new LinkageResultAuditingVisitor<Im1ConnectionController>(_auditor,
                             _logger,
-                            _errorCodes,
                             gpSystem.Supplier,
                             im1RegistrationRequest.NhsNumber,
                             Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
-                    return await retrieveLinkageResult.Accept(new LinkageV2ResultVisitor(_errorCodes));
+                    return await retrieveLinkageResult.Accept(new LinkageV2ResultVisitor(_errorCodes, gpSystem.Supplier, _logger));
                 }
             }
             else
@@ -190,9 +241,9 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             var registerResult = await im1ConnectionService.Register(registrationRequest);
 
             await registerResult.Accept(
-                new Im1ConnectionRegisterAuditingVisitor(_auditor, _logger, _im1ErrorCodes,
+                new Im1ConnectionRegisterAuditingVisitor(_auditor, _logger,
                     gpSystem.Supplier));
-            return registerResult.Accept(new Im1ConnectionV2RegisterResultVisitor(Request, _im1ErrorCodes));
+            return registerResult.Accept(new Im1ConnectionV2RegisterResultVisitor(Request, _im1ErrorCodes, gpSystem.Supplier, _logger));
         }
 
         private static bool ValidLinkageDetails(LinkageResult linkageResult, out LinkageResponse linkageResponse)
@@ -213,25 +264,23 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return false;
         }
 
-        private async Task<IActionResult> PerformOperationOnGpSystem(bool isValidCheck, string odsCode,
-            Func<IGpSystem, Task<IActionResult>> operation)
+        private IActionResult IsInvalidResponse(
+            Im1ConnectionErrorCodes.ExternalCode errorCode, 
+            int statusCode,
+            IEnumerable<string> invalidParameters)
         {
-            if (isValidCheck)
+            return new ObjectResult(
+                new Im1ErrorResponse
+                {
+                    ErrorCode = (int) errorCode,
+                    ErrorMessage = $"{EnumHelper.GetDescriptionOrThrowException(errorCode)}. " +
+                                   $"Invalid parameters: {string.Join(", ", invalidParameters)}",
+                    GpSystem = Supplier.Unknown.ToString()
+
+                })
             {
-                return new BadRequestResult();
-            }
-
-            var gpSystemOption = await _gpSystemFactory.LookupGpSystem(odsCode);
-            if (!gpSystemOption.HasValue)
-            {
-                _logger.LogError(
-                    $"No GP system was found for OdsCode {odsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
-                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
-            }
-
-            var gpSystem = gpSystemOption.ValueOrFailure();
-
-            return await operation(gpSystem);
+                StatusCode = statusCode
+            };
         }
 
         private static PatientIm1ConnectionRequest CreatePatientIm1RegisterRequest(

@@ -48,22 +48,22 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 
         public Task Visit(Im1ConnectionVerifyResult.NotFound result)
         {
-            return Task.FromResult<object>(null);
+            return Task.CompletedTask;
         }
 
         public Task Visit(Im1ConnectionVerifyResult.BadGateway result)
         {
-            return Task.FromResult<object>(null);
+            return Task.CompletedTask;
         }
 
         public Task Visit(Im1ConnectionVerifyResult.InternalServerError result)
         {
-            return Task.FromResult<object>(null);
+            return Task.CompletedTask;
         }
 
         public Task Visit(Im1ConnectionVerifyResult.BadRequest result)
         {
-            return Task.FromResult<object>(null);
+            return Task.CompletedTask;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.Support
     {
         private readonly ILogger _logger;
         private bool _argumentsAreValid;
+        private readonly List<string> _errorNames = new List<string>();
         private readonly List<ArgumentException> _exceptions = new List<ArgumentException>();
 
         private const string NotSuppliedErrorLogMessage = "The value for '{0}' has not been supplied";
@@ -117,6 +118,7 @@ namespace NHSOnline.Backend.Support
         
         private void HandleError(string name, ValidationOptions options, string message, Func<string, ArgumentException> createException)
         {
+            _errorNames.Add(name);
             _logger.LogError(string.Format(CultureInfo.InvariantCulture, message, name));
             _argumentsAreValid = false;
 
@@ -133,6 +135,12 @@ namespace NHSOnline.Backend.Support
                 throw new AggregateException(_exceptions);
             }
             return _argumentsAreValid;
+        }
+
+        public bool IsValid(out IEnumerable<string> parameterNames)
+        {
+            parameterNames = _errorNames.Distinct();
+            return IsValid();
         }
     }
 }

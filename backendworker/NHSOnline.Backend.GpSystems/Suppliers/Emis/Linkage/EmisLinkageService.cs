@@ -19,23 +19,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
         private readonly IEmisLinkageMapper _emisLinkageMapper;
         private readonly IEmisSessionService _emisSessionService;
         private readonly EmisLinkageServiceHelpers _linkageServiceHelpers;
-        private readonly EmisLinkageGetErrorMapper _getErrorMapper;
-        private readonly EmisLinkagePostErrorMapper _postErrorMapper;
-
         public EmisLinkageService(
             ILoggerFactory loggerFactory,
             IEmisLinkageMapper emisLinkageMapper,
             IEmisSessionService emisSessionService,
-            EmisLinkageServiceHelpers linkageServiceHelpers,
-            EmisLinkageGetErrorMapper getErrorMapper,
-            EmisLinkagePostErrorMapper postErrorMapper)
+            EmisLinkageServiceHelpers linkageServiceHelpers)
         {
             _emisLinkageMapper = emisLinkageMapper;
             _logger = loggerFactory.CreateLogger<EmisLinkageService>();
             _emisSessionService = emisSessionService;
             _linkageServiceHelpers = linkageServiceHelpers;
-            _getErrorMapper = getErrorMapper;
-            _postErrorMapper = postErrorMapper;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -53,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 
                 return IsSuccessfulResponse(response)
                     ? HandleGetLinkageKeyResponseSuccess(response, getLinkageRequest)
-                    : _getErrorMapper.Map(response, _logger);
+                    : EmisLinkageGetErrorMapper.Map(response, _logger);
             }
             catch (HttpRequestException e)
             {
@@ -79,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 
                 if (!createLinkageKeyResponse.HasSuccessResponse)
                 { 
-                    return _postErrorMapper.Map(createLinkageKeyResponse, _logger);
+                    return EmisLinkagePostErrorMapper.Map(createLinkageKeyResponse, _logger);
                 }
 
                 var getLinkageKeyResponse = await _linkageServiceHelpers.GetLinkageKeyResponse(
@@ -95,7 +88,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                         createLinkageRequest,
                         createLinkageKeyResponse);
                 }
-                return _getErrorMapper.Map(getLinkageKeyResponse, _logger);
+                return EmisLinkageGetErrorMapper.Map(getLinkageKeyResponse, _logger);
             }
             catch (HttpRequestException e)
             {

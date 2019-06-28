@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         [TestMethod]
         public void Mapping_Successful()
         {
-            var result = Im1ConnectionV1ErrorCodeMapper.Map(Im1ConnectionErrorCodes.Code.InvalidLinkageDetails);
+            var result = Im1ConnectionV1ErrorCodeMapper.Map(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
             result.Should().Be(StatusCodes.Status400BadRequest);
         }
 
@@ -22,8 +22,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public void AllErrorCodesHaveMappings()
         {
             var unmappedCodes = Enum
-                .GetValues(typeof(Im1ConnectionErrorCodes.Code))
-                .Cast<Im1ConnectionErrorCodes.Code>()
+                .GetValues(typeof(Im1ConnectionErrorCodes.InternalCode))
+                .Cast<Im1ConnectionErrorCodes.InternalCode>()
                 .Where(errorCode => Im1ConnectionV1ErrorCodeMapper.Map(errorCode) == 0)
                 .ToList();
 

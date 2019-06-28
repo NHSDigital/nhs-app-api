@@ -4,9 +4,10 @@ import constants.DateTimeFormats
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
+import java.time.Duration
 
 class Im1ConnectionV2FactoryMicrotest : Im1ConnectionV2Factory("MICROTEST") {
-    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade) {
+    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         TODO("not implemented")
     }
 

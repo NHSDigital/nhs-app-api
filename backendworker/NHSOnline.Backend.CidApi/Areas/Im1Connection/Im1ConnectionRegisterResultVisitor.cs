@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.CidApi.Areas.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using PatientIm1ConnectionResponse = NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.PatientIm1ConnectionResponse;
 
@@ -9,45 +11,35 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
     internal class Im1ConnectionRegisterResultVisitor : IIm1ConnectionRegisterResultVisitor<IActionResult>
     {
         private HttpRequest Request { get; }
+        public ILogger Logger { get; }
 
-        public Im1ConnectionRegisterResultVisitor(HttpRequest request)
+        public Im1ConnectionRegisterResultVisitor(HttpRequest request, ILogger logger)
         {
             Request = request;
+            Logger = logger;
         }
 
         public IActionResult Visit(Im1ConnectionRegisterResult.Success result)
         {
-            
+            Logger.LogInformation("Im1 Connection Registration resulted in a success");
             return new CreatedResult(Request.GetDisplayUrl(), CreateResponse(result.Response));
-        }
-        
-        public IActionResult Visit(Im1ConnectionRegisterResult.BadRequest result)
-        {
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
-        }
-
-        public IActionResult Visit(Im1ConnectionRegisterResult.NotFound result)
-        {
-            return new NotFoundResult();
         }
 
         public IActionResult Visit(Im1ConnectionRegisterResult.BadGateway result)
         {
+            Logger.LogInformation("Im1 Connection Registration resulted in a bad gateway");
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(Im1ConnectionRegisterResult.Conflict result)
+        public IActionResult Visit(Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode result)
         {
-            return new StatusCodeResult(StatusCodes.Status409Conflict);
-        }
-
-        public IActionResult Visit(Im1ConnectionRegisterResult.UnknownError result)
-        {
+            Logger.LogError("Im1 Connection Registration resulted in an error which was unmappable");
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
-        
+
         public IActionResult Visit(Im1ConnectionRegisterResult.ErrorCase result)
         {
+            Logger.LogInformation("Im1 Connection Registration resulted in an error which was mapped");
             var statusCodeResult = Im1ConnectionV1ErrorCodeMapper.Map(result.ErrorCode);
             return new StatusCodeResult(statusCodeResult);
         }

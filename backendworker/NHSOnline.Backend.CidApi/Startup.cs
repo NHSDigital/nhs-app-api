@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.CidApi
             options.Filters.Add(new AuthorizeFilter(
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );
-            options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
+            options.Filters.Add(typeof(Im1TimeoutExceptionFilterAttribute));
             options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
         }
 

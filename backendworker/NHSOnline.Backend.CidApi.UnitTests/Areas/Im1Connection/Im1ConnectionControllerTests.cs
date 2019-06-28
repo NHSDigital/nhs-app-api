@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -82,7 +83,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheConnectionTokenIsNull()
         {
             var result = await _systemUnderTest.Get(null, DefaultOdsCode);
-
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
@@ -91,7 +91,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheConnectionTokenIsEmpty()
         {
             var result = await _systemUnderTest.Get(string.Empty, DefaultOdsCode);
-
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
@@ -100,7 +99,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheOdsCodeIsNull()
         {
             var result = await _systemUnderTest.Get(DefaultConnectionToken, null);
-
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
@@ -109,7 +107,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public async Task GetIm1ConnectionV1_ReturnsABadRequestResult_WhenTheOdsCodeIsEmpty()
         {
             var result = await _systemUnderTest.Get(DefaultConnectionToken, string.Empty);
-
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
             _auditor.VerifyNoOtherCalls();
         }
@@ -177,8 +174,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.Get(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            Assert.IsInstanceOfType(result, typeof(StatusCodeResult));
+            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
             _auditor.VerifyNoOtherCalls();
         }
 
@@ -199,8 +197,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            Assert.IsInstanceOfType(result, typeof(StatusCodeResult));
+            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
             _auditor.VerifyNoOtherCalls();
         }
 
@@ -274,7 +273,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.Post(model);
 
             //Assert
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            AssertErrorWithStatusCode(
+                result, 
+                StatusCodes.Status400BadRequest,
+                Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                "Invalid Details. Invalid parameters: OdsCode");
         }
 
         [TestMethod]
@@ -292,8 +295,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.Post(model);
 
             //Assert
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            AssertErrorWithStatusCode(
+                result,
+                StatusCodes.Status501NotImplemented,
+                Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                "Invalid Details. Invalid parameters: OdsCode");
         }
 
         [TestMethod]
@@ -341,7 +347,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
-                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError));
+                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError));
             
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
             _gpSystemFactory
@@ -352,10 +358,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.Post(model);
 
             //Assert
-            var resultValue = result.Should().BeAssignableTo<ObjectResult>().Subject.Value;
-            var errorResult = resultValue.Should().BeAssignableTo<ApiErrorResponse>().Subject;
-            errorResult.ErrorCode.Should().Be((int)GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError);
-            errorResult.ErrorMessage.Should().Be("Unknown Error");
+            AssertErrorWithStatusCode(
+                result,
+                StatusCodes.Status500InternalServerError,
+                Im1ConnectionErrorCodes.ExternalCode.UnknownError,
+                "Unknown Error");
         }
 
         [TestMethod]
@@ -378,19 +385,20 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 x.RetrieveLinkageKey(
                     It.IsAny<RetrieveLinkageKeysRequest>(),
                     It.IsAny<IGpSystem>())).ReturnsAsync(
-                new LinkageResult.UnknownError(Im1ConnectionErrorCodes.Code.UnknownError));
+                new LinkageResult.UnmappedErrorWithStatusCode(HttpStatusCode.BadRequest));
 
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
-                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError));
+                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError));
             // Act
             var result = await _systemUnderTest.Post(model);
 
             //Assert
-            var resultValue = result.Should().BeAssignableTo<ObjectResult>().Subject.Value;
-            var errorResult = resultValue.Should().BeAssignableTo<ApiErrorResponse>().Subject;
-            errorResult.ErrorCode.Should().Be((int)Im1ConnectionErrorCodes.Code.UnknownError);
-            errorResult.ErrorMessage.Should().Be("Unknown Error");
+            AssertErrorWithStatusCode(
+                result,
+                StatusCodes.Status502BadGateway,
+                Im1ConnectionErrorCodes.ExternalCode.UnknownError,
+                "Unknown Error");
         }
 
         [TestMethod]
@@ -418,16 +426,17 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
-                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError));
+                .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError));
 
             // Act
             var result = await _systemUnderTest.Post(model);
 
             //Assert
-            var resultValue = result.Should().BeAssignableTo<ObjectResult>().Subject.Value;
-            var errorResult = resultValue.Should().BeAssignableTo<ApiErrorResponse>().Subject;
-            errorResult.ErrorCode.Should().Be((int)GpSystems.Im1Connection.Im1ConnectionErrorCodes.Code.UnknownError);
-            errorResult.ErrorMessage.Should().Be("Unknown Error");
+            AssertErrorWithStatusCode(
+                result,
+                StatusCodes.Status500InternalServerError,
+                Im1ConnectionErrorCodes.ExternalCode.UnknownError,
+                "Unknown Error");
         }
 
         [TestMethod]
@@ -530,6 +539,17 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 .ReturnsAsync(expectedResponse);
 
             return mockIm1ConnectionService;
+        }
+
+        private void AssertErrorWithStatusCode(IActionResult result, int statusCode, Im1ConnectionErrorCodes.ExternalCode errorCode, string message)
+        {
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>();
+            objectResult.Subject.StatusCode.Should().Be(statusCode);
+            var resultValue = objectResult.Subject.Value;
+
+            var errorResult = resultValue.Should().BeAssignableTo<Im1ErrorResponse>().Subject;
+            errorResult.ErrorCode.Should().Be((int)errorCode);
+            errorResult.ErrorMessage.Should().Be(message);
         }
     }
 }

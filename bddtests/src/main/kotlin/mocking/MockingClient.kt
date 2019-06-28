@@ -16,7 +16,6 @@ import mocking.throttling.BrotherMailerMappingBuilder
 import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
 
-@Suppress("TooManyFunctions")
 class MockingClient(configuration: MockingConfiguration): WiremockHelper(configuration) {
 
     fun forCitizenId(method: String = "GET", resolver: CitizenIdMappingBuilder.() -> Mapping) {

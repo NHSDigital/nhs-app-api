@@ -15,6 +15,7 @@ import mocking.emis.models.IdentifierType
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
+import java.time.Duration
 
 class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory("EMIS") {
     override fun errorIm1Register(httpStatusCode: Int, errorCode: String, message: String?) {
@@ -63,7 +64,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory("EMIS") {
         }
     }
 
-    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade) {
+    override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         endUserSessionRequest()
         sessionRequest()
         demographicsRequest()
@@ -79,7 +80,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory("EMIS") {
                                             nationalPracticeCode = linkageFacade.odsCode
                                     )
                             )
-                    ).respondWithSuccess(identityToken)
+                    ).respondWithSuccess(identityToken).delayedBy(delay)
                 }
     }
 

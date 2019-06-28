@@ -140,17 +140,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
         [TestMethod]
         [DataRow(-1551, HttpStatusCode.NotFound,
-            Im1ConnectionErrorCodes.Code.PatientNotRegisteredAtThisPractice)]
+            Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice)]
         [DataRow(-1104, HttpStatusCode.NotFound,
-            Im1ConnectionErrorCodes.Code.NoSelfAssociatedUserExistWithThisPatient)]
-        [DataRow(1401, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.PracticeNotLive)]
-        [DataRow(1552, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.PatientArchived)]
+            Im1ConnectionErrorCodes.InternalCode.NoSelfAssociatedUserExistWithThisPatient)]
+        [DataRow(1401, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.InternalCode.PracticeNotLive)]
+        [DataRow(1552, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.InternalCode.PatientArchived)]
         [DataRow(1553, HttpStatusCode.BadRequest,
-            Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent)]
+            Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent)]
         [DataRow(1107, HttpStatusCode.BadRequest,
-            Im1ConnectionErrorCodes.Code.UserSelfAssociatedAccountIsArchived)]
+            Im1ConnectionErrorCodes.InternalCode.UserSelfAssociatedAccountIsArchived)]
         public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(int? emisApiErrorCode,
-            HttpStatusCode httpStatusCodeResponse, Im1ConnectionErrorCodes.Code code)
+            HttpStatusCode httpStatusCodeResponse, Im1ConnectionErrorCodes.InternalCode code)
         {
             // Act
             var result = await GetLinkageKey(emisApiErrorCode, httpStatusCodeResponse);
@@ -169,9 +169,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var result = await GetLinkageKey(null, HttpStatusCode.BadRequest);
 
             // Assert
-            result.GetType().Should().Be(typeof(LinkageResult.BadRequest));
-            var errorResult = (LinkageResult.BadRequest)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
+            var errorResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -181,9 +181,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var result = await GetLinkageKey(null, HttpStatusCode.NotFound);
 
             // Assert
-            result.GetType().Should().Be(typeof(LinkageResult.NotFound));
-            var errorResult = (LinkageResult.NotFound)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
+            var errorCase = (LinkageResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         private async Task<LinkageResult> GetLinkageKey(int? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse)
@@ -342,11 +342,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
 
        [TestMethod]
-       [DataRow(1551, HttpStatusCode.NotFound, Im1ConnectionErrorCodes.Code.PatientNotRegisteredAtThisPractice)]
-       [DataRow(1553, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.Code.UnderMinimumAgeOrNonCompetent)]
+       [DataRow(1551, HttpStatusCode.NotFound, Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice)]
+       [DataRow(1553, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent)]
        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(int emisApiErrorCode,
            HttpStatusCode httpStatusCodeResponse,
-           Im1ConnectionErrorCodes.Code expectedCode)
+           Im1ConnectionErrorCodes.InternalCode expectedCode)
        {
            // Act
            var result = await CreateLinkageKey(emisApiErrorCode, httpStatusCodeResponse);
@@ -366,9 +366,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify();
-            result.GetType().Should().Be(typeof(LinkageResult.NotFound));
-            var errorCase = (LinkageResult.NotFound)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
+            var errorCase = (LinkageResult.UnmappedErrorWithStatusCode)result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -379,9 +379,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify();
-            result.GetType().Should().Be(typeof(LinkageResult.BadRequest));
-            var errorCase = (LinkageResult.BadRequest)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
+            var errorResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
+            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         public async Task<LinkageResult> CreateLinkageKey(int emisApiErrorCode,HttpStatusCode httpStatusCodeResponse)
@@ -447,9 +447,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
    
            // Assert
            _emisClient.Verify();
-           result.Should().BeAssignableTo<LinkageResult.Conflict>();
-           var errorCode = (LinkageResult.Conflict) result;
-           errorCode.ErrorCode.Should().Be(Im1ConnectionErrorCodes.Code.UnknownError);
+           result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
+           var errorResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
+           errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]

@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
             if (!demographicsResponse.HasSuccessResponse)
             {
                 _logger.LogError($"Unsuccessful request retrieving demographics as part of linkage. Status code: {(int)demographicsResponse.StatusCode}");
-                return new LinkageResult.UnknownError(Im1ConnectionErrorCodes.Code.UnknownError);
+                return new LinkageResult.UnmappedErrorWithStatusCode(HttpStatusCode.BadGateway);
             }
 
             var linkage = await Task.FromResult(new LinkageResponse
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
         {
-            return await Task.FromResult(new LinkageResult.NotFound(Im1ConnectionErrorCodes.Code.UnknownError));
+            return await Task.FromResult(new LinkageResult.NotFound(Im1ConnectionErrorCodes.InternalCode.UnknownError));
         }
     }
 }

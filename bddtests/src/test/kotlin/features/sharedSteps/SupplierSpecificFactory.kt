@@ -1,7 +1,8 @@
 package features.sharedSteps
 
 import org.junit.Assert
-import utils.SerenityHelpers.Companion.setSerenityVariableIfNotAlreadySet
+import utils.GlobalSerenityHelpers
+import utils.set
 
 abstract class SupplierSpecificFactory<T>{
 
@@ -11,11 +12,9 @@ abstract class SupplierSpecificFactory<T>{
         if (!map.containsKey(gpSystem)) {
             Assert.fail("GP system '$gpSystem' is not set up.")
         }
-        setSerenityVariableIfNotAlreadySet(SerenityKey.GP_SYSTEM, gpSystem)
+        GlobalSerenityHelpers.GP_SYSTEM.set(gpSystem)
         return map.getValue(gpSystem).invoke()
     }
-
-    enum class SerenityKey {
-        GP_SYSTEM
-    }
 }
+
+

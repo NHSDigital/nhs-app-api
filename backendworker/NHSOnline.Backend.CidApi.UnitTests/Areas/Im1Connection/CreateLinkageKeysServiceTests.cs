@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var resultAsStatusCodeResult = result.Should().BeAssignableTo<LinkageResult>().Subject;
             resultAsStatusCodeResult.Should().BeOfType(typeof(LinkageResult.ErrorCase));
             ((LinkageResult.ErrorCase)resultAsStatusCodeResult).ErrorCode.Should()
-                .Be(Code.UnderMinimumAgeOrNonCompetent);
+                .Be(InternalCode.UnderMinimumAgeOrNonCompetent);
         }
 
         [TestMethod]
@@ -114,13 +114,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var resultAsStatusCodeResult = result.Should().BeAssignableTo<LinkageResult>().Subject;
             resultAsStatusCodeResult.Should().BeOfType(typeof(LinkageResult.ErrorCase));
             ((LinkageResult.ErrorCase)resultAsStatusCodeResult).ErrorCode.Should()
-                .Be(Code.UnderMinimumAgeOrNonCompetent);
+                .Be(InternalCode.UnderMinimumAgeOrNonCompetent);
         }
 
         [DataTestMethod]
-        [DataRow(Code.InvalidProviderId)]
-        [DataRow(Code.PatientNotRegisteredAtThisPractice)]
-        public async Task Post_ReturnsErrorCodesWhenGivenErrorCodes(Code errorCode)
+        [DataRow(InternalCode.InvalidProviderId)]
+        [DataRow(InternalCode.PatientNotRegisteredAtThisPractice)]
+        public async Task Post_ReturnsErrorCodesWhenGivenErrorCodes(InternalCode errorCode)
         {
             // Arrange
             var mockResult = new LinkageResult.ErrorCase(errorCode);
@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public async Task Post_ReturnsNotFoundWhenNotFound()
         {
             // Arrange
-            var mockResult = new LinkageResult.NotFound(Code.UnknownError);
+            var mockResult = new LinkageResult.NotFound(InternalCode.UnknownError);
             var mockLinkageService = MockLinkageService(mockResult);
             var gpSystemMock = MockGpSystem(mockLinkageService);
             var request = CreateLinkageRequest();
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var resultAsStatusCodeResult = result.Should().BeAssignableTo<LinkageResult>().Subject;
             resultAsStatusCodeResult.Should().BeOfType(typeof(LinkageResult.NotFound));
-            ((LinkageResult.NotFound)resultAsStatusCodeResult).ErrorCode.Should().Be(Code.UnknownError);
+            ((LinkageResult.NotFound)resultAsStatusCodeResult).ErrorCode.Should().Be(InternalCode.UnknownError);
         }
 
         private static CreateLinkageRequest CreateLinkageRequest()

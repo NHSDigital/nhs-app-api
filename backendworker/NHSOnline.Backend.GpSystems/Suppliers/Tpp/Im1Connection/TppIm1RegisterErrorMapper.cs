@@ -7,30 +7,21 @@ using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 {
-    public class TppIm1RegisterErrorMapper : Im1ConnectionErrorMapper
+    public static class TppIm1RegisterErrorMapper
     {
-        private static Dictionary<string, Code> KeyToEnumMapper =>
-            new Dictionary<string, Code>
+        private static Dictionary<string, InternalCode> KeyToEnumMapper =>
+            new Dictionary<string, InternalCode>
             {
-                { "2008", Code.InvalidLinkageDetailsTpp },
-                { "2006", Code.InvalidLinkageDetailsTpp },
+                { "2008", InternalCode.InvalidLinkageDetailsTpp },
+                { "2006", InternalCode.InvalidLinkageDetailsTpp },
             };
 
-        protected override Code UnknownError => Code.UnknownError;
-
-        public Im1ConnectionRegisterResult Map(TppClient.TppApiObjectResponse<LinkAccountReply> response, ILogger<TppIm1ConnectionService> logger)
+        public static Im1ConnectionRegisterResult Map(TppClient.TppApiObjectResponse<LinkAccountReply> response, ILogger<TppIm1ConnectionService> logger)
         {
-            logger.LogTppErrorResponse(response);
-            if (response == null)
-            {
-                throw new ArgumentNullException(nameof(response));
-            }
-
             var keyMapping = TppErrorMapper.Map(logger, response, KeyToEnumMapper);
-            
             return keyMapping !=null
                 ? new Im1ConnectionRegisterResult.ErrorCase(keyMapping.Value) 
-                : MapUnknownError(response.StatusCode);
+                : (Im1ConnectionRegisterResult) new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
         }
     }
 }

@@ -7,41 +7,32 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 {
-    public class TppLinkagePostErrorMapper : LinkageErrorMapper
+    public static class TppLinkagePostErrorMapper
     {
-        protected override Im1ConnectionErrorCodes.Code UnknownError => Im1ConnectionErrorCodes.Code.UnknownError;
-
-        private static Dictionary<string, Im1ConnectionErrorCodes.Code> KeyToEnumMapper=>
-            new Dictionary<string, Im1ConnectionErrorCodes.Code>
+        private static Dictionary<string, Im1ConnectionErrorCodes.InternalCode> KeyToEnumMapper=>
+            new Dictionary<string, Im1ConnectionErrorCodes.InternalCode>
             {
                 {
                     "2008",
-                    Im1ConnectionErrorCodes.Code.ProblemLinkingAccount
+                    Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount
                 },
                 {
                     "2006",
-                    Im1ConnectionErrorCodes.Code.ProblemLinkingAccount
+                    Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount
                 },
                 {
                     "2005",
-                    Im1ConnectionErrorCodes.Code.InvalidProviderId
+                    Im1ConnectionErrorCodes.InternalCode.InvalidProviderId
                 }
             };
         
 
-        public LinkageResult Map(TppClient.TppApiObjectResponse<AddNhsUserResponse> response, ILogger<TppLinkageService> logger)
+        public static LinkageResult Map(TppClient.TppApiObjectResponse<AddNhsUserResponse> response, ILogger<TppLinkageService> logger)
         {
-            logger.LogTppErrorResponse(response);
-            if (response == null)
-            {
-                throw new ArgumentNullException(nameof(response));
-            }
-
             var keyMapping = TppErrorMapper.Map(logger, response, KeyToEnumMapper);
-
             return keyMapping != null
                 ? new LinkageResult.ErrorCase(keyMapping.Value)
-                : MapUnknownError(response.StatusCode);
+                : (LinkageResult) new LinkageResult.UnmappedErrorWithStatusCode(response.StatusCode);
         }
     }
 }
