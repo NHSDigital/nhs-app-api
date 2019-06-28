@@ -153,7 +153,7 @@ div {
   right: 0;
   z-index: 4;
   box-sizing: border-box;
-  min-width: 300px;
+  min-width: 230px;
 
   .header-content {
    @include main-container-width;

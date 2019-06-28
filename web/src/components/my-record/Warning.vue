@@ -146,7 +146,7 @@ export default {
         transition: all ease 0.5s;
         cursor: pointer;
         width: auto;
-        min-width: 16.875em;
+        min-width: 12.5em;
         padding-left: 2em;
         padding-right: 2em;
         max-width: 960px;

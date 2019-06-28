@@ -73,7 +73,7 @@ export default {
   .desktopWeb {
     button.button {
       width: auto;
-      min-width: 16.875em;
+      min-width: 12.5em;
     }
   }
 </style>
