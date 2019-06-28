@@ -42,6 +42,8 @@ import worker.WorkerClient
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.Im1ConnectionToken
+import worker.models.session.AppointmentsProvider
+import worker.models.session.CdssProvider
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import java.util.*
@@ -598,7 +600,17 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^the response has service journey rules$")
     fun theResponseHasServiceJourneyRules() {
-        checkNotNull(this.userSessionResponse?.userSessionResponseBody?.serviceJourneyRules)
+        val serviceJourneyRules = this.userSessionResponse?.userSessionResponseBody?.serviceJourneyRules
+        checkNotNull(serviceJourneyRules)
+        Assert.assertEquals("Service Journey Rules Appointments provider",
+                AppointmentsProvider.im1,
+                serviceJourneyRules!!.journeys.appointments.provider)
+        Assert.assertEquals("Service Journey Rules CdssAdmin provider",
+                CdssProvider.eConsult,
+                serviceJourneyRules.journeys.cdssAdmin.provider)
+        Assert.assertEquals("Service Journey Rules CdssAdvice provider",
+                CdssProvider.eConsult,
+                serviceJourneyRules.journeys.cdssAdvice.provider)
     }
 
     @Then("^the response has the expected connection token$")

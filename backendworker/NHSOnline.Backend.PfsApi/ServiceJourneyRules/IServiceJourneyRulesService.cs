@@ -5,8 +5,6 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 {
     public interface IServiceJourneyRulesService
     {
-        Task<bool> IsJourneyEnabled(string odsCode);
-        
         Task<ServiceJourneyRulesConfigResult> GetServiceJourneyRulesForOdsCode(string odsCode);
     }
 }

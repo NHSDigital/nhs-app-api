@@ -1933,15 +1933,75 @@
                     serviceJourneyRules: 
                       type: "object"
                       properties: 
-                        appointments: 
+                        journeys: 
                           type: "object"
                           properties: 
-                            provider: 
-                              type: "string"
-                              description: "The appointment provider"
-                              enum: 
-                                - "im1"
-                                - "none"
+                            appointments: 
+                              type: "object"
+                              oneOf: 
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "im1"
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "informatica"
+                                    informaticaUrl: 
+                                      type: "string"
+                                      description: "The informaticaUrl"
+                            cdssAdvice: 
+                              type: "object"
+                              oneOf: 
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "none"
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The cdss provider"
+                                      enum: 
+                                        - "eConsult"
+                                    serviceDefinition: 
+                                      type: "string"
+                                      description: "The service definition"
+                            cdssAdmin: 
+                              type: "object"
+                              oneOf: 
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "none"
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The cdss provider"
+                                      enum: 
+                                        - "eConsult"
+                                    serviceDefinition: 
+                                      type: "string"
+                                      description: "The service definition"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
           403: 
@@ -2181,15 +2241,75 @@
                 schema: 
                   type: "object"
                   properties: 
-                    appointments: 
+                    journeys: 
                       type: "object"
                       properties: 
-                        provider: 
-                          type: "string"
-                          description: "The appointment provider"
-                          enum: 
-                            - "im1"
-                            - "none"
+                        appointments: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "im1"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "informatica"
+                                informaticaUrl: 
+                                  type: "string"
+                                  description: "The informaticaUrl"
+                        cdssAdvice: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "none"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The cdss provider"
+                                  enum: 
+                                    - "eConsult"
+                                serviceDefinition: 
+                                  type: "string"
+                                  description: "The service definition"
+                        cdssAdmin: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "none"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The cdss provider"
+                                  enum: 
+                                    - "eConsult"
+                                serviceDefinition: 
+                                  type: "string"
+                                  description: "The service definition"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 

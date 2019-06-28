@@ -1,9 +1,8 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 {
@@ -12,40 +11,15 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
         private readonly IServiceJourneyRulesClient _serviceJourneyRulesClient;
         private readonly ILogger<ServiceJourneyRulesService> _logger;
         
-        private const string AppointmentsProvider = "im1";
-        
         public ServiceJourneyRulesService(IServiceJourneyRulesClient serviceJourneyRulesClient,  ILogger<ServiceJourneyRulesService> logger)
         {
             _serviceJourneyRulesClient = serviceJourneyRulesClient;
             _logger = logger;
         }
-
-        public async Task<bool> IsJourneyEnabled(string odsCode)
-        {
-            using (_logger.WithTimer($"Checking SJR Api to see if Journey is enabled for {odsCode}"))
-            {
-                try
-                {
-                    var result = await _serviceJourneyRulesClient.GetServiceJourneyRules(odsCode);
-
-                    if (result.HasSuccessResponse && result.Body != null)
-                    {
-                        return result.Body.Appointments.Provider.ToString()
-                            .Equals(AppointmentsProvider, StringComparison.OrdinalIgnoreCase);
-                    }
-
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Exception calling Service Journey Rules API, {ex}");
-                    throw;
-                }                
-            }
-        }
         
         public async Task<ServiceJourneyRulesConfigResult> GetServiceJourneyRulesForOdsCode(string odsCode)
         {
+            _logger.LogEnter();
             try
             {
                 var result = await _serviceJourneyRulesClient.GetServiceJourneyRules(odsCode);
@@ -54,6 +28,7 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
                 {
                     return new ServiceJourneyRulesConfigResult.Success(result.Body);
                 }
+
                 _logger.LogError($"Failed to retrieve Service Journey Rules for ods code: {odsCode}");
                 return new ServiceJourneyRulesConfigResult.NotFound();
             }
@@ -61,7 +36,11 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
             {
                 _logger.LogError($"Exception calling Service Journey Rules API, {ex}");
                 return new ServiceJourneyRulesConfigResult.InternalServerError();
-            }  
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
     }
 }

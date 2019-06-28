@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
 using NHSOnline.Backend.Support.Logging;
 
@@ -24,16 +23,28 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult<ServiceJourneyRulesResponse> Get([FromQuery]string odsCode)
+        public IActionResult Get([FromQuery]string odsCode)
         {   
             try
             {
                 _logger.LogEnter();
 
+                if (string.IsNullOrWhiteSpace(odsCode))
+                {
+                    _logger.LogError("Ods code not provided");
+                    return BadRequest();
+                }
+
                 _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {odsCode}");
                 
                 var result = _serviceJourneyRulesService.GetServiceJourneyRulesForOdsCode(odsCode);
-                return result;
+
+                if (result?.Journeys == null)
+                {
+                    return NotFound();
+                }
+
+                return new OkObjectResult(result);
             }
             finally
             {

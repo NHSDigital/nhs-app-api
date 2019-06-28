@@ -1,5 +1,6 @@
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
 {

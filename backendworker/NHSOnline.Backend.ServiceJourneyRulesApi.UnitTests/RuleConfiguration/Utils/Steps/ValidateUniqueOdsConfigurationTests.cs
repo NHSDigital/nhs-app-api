@@ -7,6 +7,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
 using NHSOnline.Backend.Support;
@@ -166,8 +167,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         "folder1",
                         new[]
                         {
-                            new TargetConfiguration { Target = new Target { All = "*" } },
-                            new TargetConfiguration { Target = new Target { OdsCode = "3" } },
+                            new TargetConfiguration
+                                { Target = new Target { All = "*" }, Journeys = _fixture.Create<Journeys>() },
+                            new TargetConfiguration
+                                { Target = new Target { OdsCode = "3" }, Journeys = _fixture.Create<Journeys>() },
                         }
                     }
                 }
@@ -211,23 +214,30 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         folderName,
                         new[]
                         {
-                            new TargetConfiguration { Target = new Target { All = "*" } }
+                            new TargetConfiguration
+                                { Target = new Target { All = "*" }, Journeys = _fixture.Create<Journeys>() }
                         }
                     },
                     {
                         folderName2,
                         new[]
                         {
-                            new TargetConfiguration { Target = new Target { CcgCode = ccgCode } },
-                            new TargetConfiguration { Target = new Target { OdsCode = "9" } },
+                            new TargetConfiguration
+                                { Target = new Target { CcgCode = ccgCode }, Journeys = _fixture.Create<Journeys>() },
+                            new TargetConfiguration
+                                { Target = new Target { OdsCode = "9" }, Journeys = _fixture.Create<Journeys>() },
                         }
                     },
                     {
                         folderName3,
                         new[]
                         {
-                            new TargetConfiguration { Target = new Target { Supplier = Supplier.Tpp } },
-                            new TargetConfiguration { Target = new Target { CcgCode = ccgCode2 } },
+                            new TargetConfiguration
+                            {
+                                Target = new Target { Supplier = Supplier.Tpp }, Journeys = _fixture.Create<Journeys>()
+                            },
+                            new TargetConfiguration
+                                { Target = new Target { CcgCode = ccgCode2 }, Journeys = _fixture.Create<Journeys>() },
                         }
                     }
                 }

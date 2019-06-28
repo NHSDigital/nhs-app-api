@@ -80,21 +80,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                               
                 var userSession = HttpContext.GetUserSession();
                 
-                _logger.LogInformation("Checking Service Journey Rules for Appointments");
-                
-                AppointmentsResult result;
-
-                var isActive = await _serviceJourneyRulesService.IsJourneyEnabled(userSession.GpUserSession.OdsCode);
-
-                if (!isActive)
-                {
-                    result = new AppointmentsResult.Forbidden();
-                }
-                else
-                {
-                    var appointmentsService = GetAppointmentsService(userSession);
-                    result = await appointmentsService.GetAppointments(userSession.GpUserSession);
-                }
+                var result = await GetAppointmentsService(userSession).GetAppointments(userSession.GpUserSession);
 
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
                 return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, userSession));

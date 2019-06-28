@@ -31,7 +31,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
-        private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
 
         private const string RequestAuditType = "Appointments_ViewBooked_Request";
         private const string ResponseAuditType = "Appointments_ViewBooked_Response";
@@ -73,9 +72,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
-            _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
-            _mockServiceJourneyRulesService.Setup(x => x.IsJourneyEnabled(_userSession.GpUserSession.OdsCode)).Returns(Task.FromResult(true));
             
             _systemUnderTest = _fixture.Create<AppointmentsController>();
 

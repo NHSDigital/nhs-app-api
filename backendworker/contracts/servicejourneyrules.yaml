@@ -31,11 +31,59 @@ components:
     ServiceJourneyRulesResponse:
       type: object
       properties:
-        appointments:
+        journeys:
           type: object
           properties:
-            provider:
-              type: string
-              description: The appointment provider
-              enum:
-                - im1
+            appointments:
+              type: object
+              oneOf:
+                - $ref: "#/components/schemas/im1"
+                - $ref: "#/components/schemas/informatica"
+            cdssAdvice:
+              type: object
+              oneOf:
+                - $ref: "#/components/schemas/cdssDisabled"
+                - $ref: "#/components/schemas/cdssEnabled"
+            cdssAdmin:
+              type: object
+              oneOf:
+                - $ref: "#/components/schemas/cdssDisabled"
+                - $ref: "#/components/schemas/cdssEnabled"
+    im1:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: The provider
+          enum:
+            - im1
+    informatica:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: The provider
+          enum:
+            - informatica
+        informaticaUrl:
+          type: string
+          description: The informaticaUrl
+    cdssDisabled:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: The provider
+          enum:
+            - none
+    cdssEnabled:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: The cdss provider
+          enum:
+            - eConsult
+        serviceDefinition:
+          type: string
+          description: The service definition

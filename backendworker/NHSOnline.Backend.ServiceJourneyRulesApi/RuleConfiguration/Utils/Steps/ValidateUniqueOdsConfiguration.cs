@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
@@ -107,7 +108,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
         {
             var targets = GetTargets(gpInfos, configuration.Target);
 
-            return targets.ToDictionary(t => t, t => configuration.Journeys);
+            return targets.ToDictionary(t => t, t => configuration.Journeys.Clone());
         }
 
         private static IEnumerable<string> GetTargets(IDictionary<string, GpInfo> gpInfos, Target target)

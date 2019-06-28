@@ -10,7 +10,7 @@ export default {
     })(state);
   },
   [SET_RULES](state, rules) {
-    state.rules = rules;
+    state.rules = rules.journeys;
     state.isLoaded = true;
   },
 };

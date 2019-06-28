@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 {
@@ -12,6 +12,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
             _odsJourneys = odsJourneys;
         }
 
-        public Journeys GetJourneys(string odsCode) => _odsJourneys[odsCode];
+        public Journeys GetJourneys(string odsCode) => _odsJourneys?.ContainsKey(odsCode) ?? false ? _odsJourneys[odsCode] : null;
     }
 }

@@ -1,4 +1,4 @@
-using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 {

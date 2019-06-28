@@ -1,18 +1,39 @@
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Service
 {
-    public class ServiceJourneyRulesService: IServiceJourneyRulesService
+    internal class ServiceJourneyRulesService : IServiceJourneyRulesService
     {
+        private readonly ILogger<ServiceJourneyRulesService> _logger;
+        private readonly IJourneyRepository _journeyRepository;
+
+        public ServiceJourneyRulesService(ILoggerFactory loggerFactory,
+            IJourneyRepository journeyRepository)
+        {
+            _logger = loggerFactory.CreateLogger<ServiceJourneyRulesService>();
+            _journeyRepository = journeyRepository;
+        }
+
         public ServiceJourneyRulesResponse GetServiceJourneyRulesForOdsCode(string odsCode)
         {
-            return new ServiceJourneyRulesResponse
+            _logger.LogEnter();
+            try
             {
-                Appointments = new Appointments
+                var journeys = _journeyRepository.GetJourneys(odsCode);
+
+                if (journeys == null)
                 {
-                    Provider = AppointmentsProvider.im1
+                    _logger.LogInformation($"No Journeys returned from Journey Repository for ods code: {odsCode}");
                 }
-            };
+                return new ServiceJourneyRulesResponse { Journeys = journeys };
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
     }
 }

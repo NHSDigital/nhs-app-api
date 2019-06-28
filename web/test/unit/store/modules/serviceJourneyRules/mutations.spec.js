@@ -24,14 +24,18 @@ describe('service journey rules mutations', () => {
   });
 
   describe('SET_RULES', () => {
-    const rules = { foo: 'test' };
+    const rules = {
+      journeys: {
+        foo: 'test',
+      },
+    };
 
     beforeEach(() => {
       mutations[SET_RULES](state, rules);
     });
 
     it('will set the `rules` value to the received value', () => {
-      expect(state.rules).toBe(rules);
+      expect(state.rules).toBe(rules.journeys);
     });
 
     it('will set the `isloaded` value to true', () => {

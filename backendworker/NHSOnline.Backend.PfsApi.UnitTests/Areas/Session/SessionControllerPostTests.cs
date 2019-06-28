@@ -115,10 +115,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 }));
 
             _serviceJourneyRulesResponse = _fixture.Create<ServiceJourneyRulesResponse>();
-            _serviceJourneyRulesResponse.Appointments = new ServiceJourneyRulesApi.Models.Appointments
-            {
-                Provider = AppointmentsProvider.Unknown
-            }; 
 
             _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
             
