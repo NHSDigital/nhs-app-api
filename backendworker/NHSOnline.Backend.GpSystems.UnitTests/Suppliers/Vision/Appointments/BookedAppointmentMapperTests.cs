@@ -19,7 +19,7 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 {
     [TestClass]
-    public class AppointmentMapperTests
+    public class BookedAppointmentMapperTests
     {
         private IFixture _fixture;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
@@ -318,7 +318,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
 
         [TestMethod]
-        public void Map_MultipleLocationsWithSameId_LogsDuplicates()
+        public void Map_MultipleLocationsWithSameIdAndName_MapsOkWithoutLoggingDuplicates()
         {   
             // Arrange
             var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
@@ -348,7 +348,55 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             var slots = new[] { slot1, slot2 }.ToList();
 
-            var location3 = new Location { Id = _location1.Id, Name = "Duplicate Location" };
+            var location3 = new Location { Id = _location1.Id, Name = _location1.Name };
+            _locations.Add(location3);
+
+            var bookedAppointmentsResponse =
+                CreateBookedAppointmentsResponse(slots, _locations, _sessions, _slotTypes, _owners);
+            
+            // Act
+            Action act = () => _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
+            
+            // Assert
+            act.Should().NotThrow();
+            _mockLogger.VerifyLogger(
+                LogLevel.Information, 
+                DuplicatesLogMessagePrefix,
+                Times.Never());
+        }
+        
+        [TestMethod]
+        public void Map_MultipleLocationsWithSameIdButDifferentName_LogsDuplicates()
+        {   
+            // Arrange
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
+
+            var slot1 = new BookedSlot
+            {
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
+                Id = "SLOTX01",
+                Location = _location1.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithDescription.Id, 
+                Owner = _owner1.Id,
+                Duration = slotTime1.Duration
+            };
+
+            var slot2 = new BookedSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX02",
+                Location = _location2.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithoutDescription.Id,
+                Owner = _owner2.Id,
+                Duration = slotTime2.Duration
+            };
+
+            var slots = new[] { slot1, slot2 }.ToList();
+
+            var location3 = new Location { Id = _location1.Id, Name = _fixture.Create<string>() };
             _locations.Add(location3);
 
             var bookedAppointmentsResponse =
@@ -366,7 +414,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public void Map_MultipleSlotTypesWithSameId_LogsDuplicates()
+        public void Map_MultipleSlotTypesWithSameIdAndDescription_MapsOkWithoutLoggingDuplicates()
         {   
             // Arrange
             var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
@@ -396,7 +444,56 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             var slots = new[] { slot1, slot2 }.ToList();
 
-            var slotType3 = new SlotType { Id = _slotTypeWithDescription.Id, Description = "Duplicate Slot Type" };
+            var slotType3 = new SlotType { Id = _slotTypeWithDescription.Id, 
+                Description = _slotTypeWithDescription.Description};
+            _slotTypes.Add(slotType3);
+
+            var bookedAppointmentsResponse =
+                CreateBookedAppointmentsResponse(slots, _locations, _sessions, _slotTypes, _owners);
+            
+            // Act
+            Action act = () => _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
+            
+            // Assert
+            act.Should().NotThrow();
+            _mockLogger.VerifyLogger(
+                LogLevel.Information, 
+                DuplicatesLogMessagePrefix,
+                Times.Never());
+        }
+        
+        [TestMethod]
+        public void Map_MultipleSlotTypesWithSameIdButDifferentDescription_LogsDuplicates()
+        {   
+            // Arrange
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
+
+            var slot1 = new BookedSlot
+            {
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
+                Id = "SLOTX01",
+                Location = _location1.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithDescription.Id, 
+                Owner = _owner1.Id,
+                Duration = slotTime1.Duration
+            };
+
+            var slot2 = new BookedSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX02",
+                Location = _location2.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithoutDescription.Id,
+                Owner = _owner2.Id,
+                Duration = slotTime2.Duration
+            };
+
+            var slots = new[] { slot1, slot2 }.ToList();
+
+            var slotType3 = new SlotType { Id = _slotTypeWithDescription.Id, Description = _fixture.Create<string>()};
             _slotTypes.Add(slotType3);
 
             var bookedAppointmentsResponse =
@@ -414,7 +511,59 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public void Map_MultipleSessionsWithSameId_LogsDuplicates()
+        public void Map_MultipleSessionsWithSameIdAndDescription_MapsOkWithoutLoggingDuplicates()
+        {   
+            // Arrange
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
+
+            var slot1 = new BookedSlot
+            {
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
+                Id = "SLOTX01",
+                Location = _location1.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithDescription.Id, 
+                Owner = _owner1.Id,
+                Duration = slotTime1.Duration
+            };
+
+            var slot2 = new BookedSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX02",
+                Location = _location2.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithoutDescription.Id,
+                Owner = _owner2.Id,
+                Duration = slotTime2.Duration
+            };
+
+            var slots = new[] { slot1, slot2 }.ToList();
+
+            var session2 = _fixture.Build<SlotSession>()
+                .With(x => x.Location, _location1.Id)
+                .With(x => x.Id, _generalSession.Id)
+                .With(x => x.Description, _generalSession.Description)
+                .Create();
+            _sessions.Add(session2);
+
+            var bookedAppointmentsResponse =
+                CreateBookedAppointmentsResponse(slots, _locations, _sessions, _slotTypes, _owners);
+            
+            // Act
+            Action act = () => _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
+            
+            // Assert
+            act.Should().NotThrow();
+            _mockLogger.VerifyLogger(
+                LogLevel.Information, 
+                DuplicatesLogMessagePrefix,
+                Times.Never());
+        }
+        
+        [TestMethod]
+        public void Map_MultipleSessionsWithSameIdButDifferentDescription_LogsDuplicates()
         {   
             // Arrange
             var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));

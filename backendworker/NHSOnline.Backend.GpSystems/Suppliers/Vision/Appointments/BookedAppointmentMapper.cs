@@ -71,25 +71,33 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         
         private Dictionary<string, string> SetUpLocations(IEnumerable<Location> locations)
         {
-            return locations == null
-                ? new Dictionary<string, string>()
-                : locations.ToDictionaryLogOnFailure(location => location.Id, location => location.Name,
-                    _logger);
+            return SetupDeduplicatedDictionary(locations, l => l.Id, l => l.Name);
         }
         
         private Dictionary<string, string> SetUpSlotType(IEnumerable<SlotType> slotTypes)
         {
-            return slotTypes == null
-                ? new Dictionary<string, string>()
-                : slotTypes.ToDictionaryLogOnFailure(slotType => slotType.Id, slotType => slotType.Description, 
-                    _logger);
+            return SetupDeduplicatedDictionary(slotTypes, st => st.Id, st => st.Description);
         }
         
         private Dictionary<string, string> SetUpSessions(IEnumerable<SlotSession> sessions)
         {
-            return sessions == null
-                ? new Dictionary<string, string>()
-                : sessions.ToDictionaryLogOnFailure(session => session.Id, session => session.Description, _logger);
+            return SetupDeduplicatedDictionary(sessions, s => s.Id, s => s.Description);
+        }
+
+        private Dictionary<string, string> SetupDeduplicatedDictionary<TSource>(
+            IEnumerable<TSource> source,
+            Func<TSource, string> keySelector,
+            Func<TSource, string> valueSelector)
+        {
+            if (source == null)
+            {
+                return new Dictionary<string, string>();
+            }
+
+            return source
+                .Select(s => new { Key = keySelector(s), Value = valueSelector(s) })
+                .Distinct()
+                .ToDictionaryLogOnFailure(x => x.Key, x => x.Value, _logger);
         }
 
         private static IEnumerable<string> GetClinician(string ownerId, IEnumerable<Owner> owners)
