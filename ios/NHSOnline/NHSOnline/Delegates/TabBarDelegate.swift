@@ -42,22 +42,30 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         if(selectedItem != .Symptoms) {
             viewController.applicationState.block()
         }
+        processTabBarSelection(selectedTag: didSelect.tag)
+    }
+    
+    
+    func processTabBarSelection(selectedTag: Int) {
+        let selectedItem = Menu(rawValue: selectedTag)!
+        var selectedURL: String
+        
         switch selectedItem {
-            case .Symptoms:
-                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
-                break
-            case .Appointments:
-                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
-                break
-            case .Prescriptions:
-                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
-                break
-            case .MyRecord:
-                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
-                break
-            case .More:
-                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
-                break
+        case .Symptoms:
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
+            break
+        case .Appointments:
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
+            break
+        case .Prescriptions:
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
+            break
+        case .MyRecord:
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
+            break
+        case .More:
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
+            break
         }
         selectPage(pageUrl: selectedURL)
     }

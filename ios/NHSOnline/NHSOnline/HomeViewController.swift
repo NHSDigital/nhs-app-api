@@ -99,7 +99,13 @@ class HomeViewController : UIViewController {
     }
     
     func delayedBiometricsStart(_ timer: Double) {
-        if isOnLogin() {
+        let webView = self.webViewController?.webView
+        checkForLoginPageAndTriggerBiometricTimer(webView!, timer)
+    }
+    
+    func checkForLoginPageAndTriggerBiometricTimer(_ webView: WKWebView, _ timer: Double) {
+        if isOnLogin(webView: webView) {
+            clearSelectedTab()
             self.showWebViewContainer()
             if #available(iOS 10.0, *) {
                 Timer.scheduledTimer(timeInterval: timer, target: self, selector: #selector(self.attemptBiometricLogin), userInfo: nil, repeats: false)
@@ -107,10 +113,15 @@ class HomeViewController : UIViewController {
         }
     }
     
-    func isOnLogin() -> Bool {
+    func clearSelectedTab() {
+        tabBar.selectedItem = nil
+        selectedTab = nil
+    }
+    
+    func isOnLogin(webView: WKWebView) -> Bool {
         let loginURLString = config().HomeUrl + "login" + config().NhsOnlineRequiredQueryString
         
-        return self.webViewController?.webView.url?.absoluteString == loginURLString
+        return webView.url?.absoluteString == loginURLString
     }
     
     @objc @available(iOS 10.0, *)

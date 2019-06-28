@@ -147,6 +147,7 @@ class NhsWeb(
 
         uiInteractor.showMenuBar()
         uiInteractor.showHeader()
+        uiInteractor.clearMenuBarItem()
     }
 
     fun onWebLoggedOut() {

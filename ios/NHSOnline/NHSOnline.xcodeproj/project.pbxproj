@@ -59,6 +59,7 @@
 		1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702521F5D334003E3EAB /* String_Extensions.swift */; };
 		1417702821F5D34D003E3EAB /* Data_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702721F5D34D003E3EAB /* Data_Extensions.swift */; };
 		14865E7E220AE7B300E72948 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14865E7D220AE7B300E72948 /* RegistrationRequest.swift */; };
+		14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */; };
 		14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */; };
 		14D4D20521E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */; };
 		14D4D20B21E8AD25008A65E0 /* EncodingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */; };
@@ -190,6 +191,7 @@
 		1417702521F5D334003E3EAB /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
 		1417702721F5D34D003E3EAB /* Data_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_Extensions.swift; sourceTree = "<group>"; };
 		14865E7D220AE7B300E72948 /* RegistrationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
+		14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarDelegateTests.swift; sourceTree = "<group>"; };
 		14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackTC.xcconfig; sourceTree = "<group>"; };
 		14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationAssertionBuilder.swift; sourceTree = "<group>"; };
 		14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodingHelper.swift; sourceTree = "<group>"; };
@@ -519,6 +521,7 @@
 		C20578162028B94800CDBDC5 /* NHSOnlineTests */ = {
 			isa = PBXGroup;
 			children = (
+				14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */,
 				2EC6C6C82243128900EE49B9 /* Utils */,
 				3067F25321E39BF7009734AF /* Lifecycle */,
 				F01745A6207B700700877E4D /* Info.plist */,
@@ -864,6 +867,7 @@
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
 				135171A921CB1D52001EC74B /* FidoClientTests.swift in Sources */,
 				30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */,
+				14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */,
 				4A8A3EA421E4E4AA00E49E01 /* ModelTests.swift in Sources */,
 				C2357EBA216574F20033B98F /* KnownServiceTests.swift in Sources */,
 				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,

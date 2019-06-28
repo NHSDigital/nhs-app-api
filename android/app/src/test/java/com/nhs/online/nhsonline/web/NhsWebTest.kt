@@ -176,11 +176,12 @@ class NhsWebTest {
     }
 
     @Test
-    fun onWebLoggedIn_Sets_IsLoginToTrue_And_ShowsHeaders_And_Menu() {
+    fun onWebLoggedIn_Sets_IsLoginToTrue_And_ShowsHeaders_And_Menu_And_Clears_MenuBarItem() {
         nhsWeb.onWebLoggedIn()
         Assert.assertTrue(nhsWeb.isUserLoggedIn)
         verify(interactorMock).showHeader()
         verify(interactorMock).showMenuBar()
+        verify(interactorMock).clearMenuBarItem()
     }
 
     @Test

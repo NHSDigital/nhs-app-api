@@ -52,7 +52,7 @@ class LifecycleHandlersTests: XCTestCase {
         
         func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
             
-            let response = ConfigurationResponse(isValidConfiguration, false, "", false)
+            let response = ConfigurationResponse(isValidConfiguration, "", false)
             
             completionHandler(response)
         }

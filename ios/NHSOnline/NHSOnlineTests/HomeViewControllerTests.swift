@@ -69,4 +69,15 @@ class HomeViewControllerTests: XCTestCase {
         
         XCTAssertTrue(testResult)
     }
+    
+    func test_delayedBiometricsStart_shouldClearMenuBar() {
+        
+        testWebview.load(URLRequest(url: ((URL(string:
+            config().HomeUrl + "login" + config().NhsOnlineRequiredQueryString)!))))
+        vcHome.selectedTab = 1
+        
+        vcHome.checkForLoginPageAndTriggerBiometricTimer(testWebview, 10)
+        
+        XCTAssert(vcHome?.selectedTab == nil)
+    }
 }
