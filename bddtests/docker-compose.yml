@@ -34,7 +34,6 @@ services:
       - ConfigurationSettings__DefaultSessionExpiryMinutes=3
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
-      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
       - MICROTEST_BASE_URL=http://stubs.local.bitraft.io:8080/microtest/
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10

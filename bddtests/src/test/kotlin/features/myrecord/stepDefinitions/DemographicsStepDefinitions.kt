@@ -27,6 +27,13 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
         DemographicsFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
     }
 
+    @Given("^the demographics endpoint responds with internal server error$")
+    fun theDemographicsEndpointRespondsWithInternalServerError() {
+        val getService = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(getService)
+        DemographicsFactory.getForSupplier(getService).throwInternalError(SerenityHelpers.getPatient())
+    }
+
     @When("^I get the users demographic data$")
     fun whenIGetTheUsersDemographicsDataFor() {
         try {
