@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Exceptions;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Extensions;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
@@ -14,12 +13,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         internal static void ConfigureJourneyRepository(this IServiceCollection services)
         {
             var serviceProvider = services.BuildServiceProvider();
-           
             var journeyService = serviceProvider.GetService<IJourneyService>();
             var applicationLifetime = serviceProvider.GetService<IApplicationLifetime>();
-            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            
-            loggerFactory.AddConsole();
 
             try
             {
@@ -37,6 +32,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 {
                     throw;
                 }
+
                 applicationLifetime.StopApplication(1);
             }
         }

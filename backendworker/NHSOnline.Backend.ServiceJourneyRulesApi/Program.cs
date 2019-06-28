@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi
 {
@@ -41,7 +43,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
 
         private static IConfigurationBuilder SetupConfiguration(IConfigurationBuilder builder, string[] args)
             => builder.AddEnvironmentVariables().AddCommandLine(args);
-        
+
         private static IHost BuildConsoleApp(string[] args) =>
             new HostBuilder()
                 .UseConsoleLifetime()
@@ -62,13 +64,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseConfiguration(BuildConfiguration(args))
-                // Clear default logging providers these will be added later in startup.
-                .ConfigureLogging((context, logBuilder) => logBuilder.ClearProviders())
+                .ConfigureLogging((context, logBuilder) =>
+                {
+                    logBuilder.ClearProviders();
+
+                    var logSettings = LoggingSettings.GetSettings(context.Configuration);
+                    logBuilder.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel,
+                        logSettings.ErrorLevel, logSettings.CensorFilters));
+                    logBuilder.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel,
+                        LogLevel.None, logSettings.CensorFilters));
+                })
                 .Build();
 
-        private static RunMode DetermineRunModeFromCommandLineArgs(IEnumerable<string> args) => 
-            args.Any(s => s.Contains(Constants.Args.ValidateMode, StringComparison.Ordinal)) 
-                ? RunMode.Validate 
+        private static RunMode DetermineRunModeFromCommandLineArgs(IEnumerable<string> args) =>
+            args.Any(s => s.Contains(Constants.Args.ValidateMode, StringComparison.Ordinal))
+                ? RunMode.Validate
                 : RunMode.ServeWebApi;
     }
 }

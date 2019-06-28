@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Support
 {

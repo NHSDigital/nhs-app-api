@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,9 +9,7 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi
 {
@@ -70,11 +67,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            // Read in optional log configuration...
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
-
             if (env.IsDevelopment())
             {
                 loggerFactory.AddDebug();
