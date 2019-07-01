@@ -2,9 +2,13 @@ package features.myrecord.factories
 
 import mocking.vision.VisionConstants
 import models.Patient
+import worker.models.myrecord.MedicationsData
 import java.time.LocalDateTime
 
 class MedicationsFactoryVision: MedicationsFactory() {
+    override fun getExpectedMedications(): MedicationsData {
+        throw UnsupportedOperationException()
+    }
 
     private var mocker: MyRecordVisionMocker = MyRecordVisionMocker(mockingClient)
 

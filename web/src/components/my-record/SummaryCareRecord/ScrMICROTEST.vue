@@ -3,7 +3,7 @@
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isAllergiesAndAdverseReactionsCollapsed)]"
                            :click-func="myRecordSectionClick"
-                           :click-param="ALLERGIESANDADVERSEREACTIONS"
+                           :click-param="ALLERGIES_AND_ADVERSE_REACTIONS"
                            :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
                            :aria-expanded="!isAllergiesAndAdverseReactionsCollapsed ?
                              'true' : 'false'"
@@ -14,19 +14,70 @@
     </analytics-tracked-tag>
     <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
                                      :allergies="record.allergies" />
+
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isAcuteMedicationsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="ACUTE_MEDICATIONS"
+                           :text="$t('my_record.acuteMedications.sectionHeader')"
+                           :aria-expanded="!isAcuteMedicationsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.acuteMedications.sectionHeader') }}
+    </analytics-tracked-tag>
+    <medications :is-collapsed="isAcuteMedicationsCollapsed"
+                 :medications="record.medications.data.acuteMedications"
+                 :has-error="record.medications.hasErrored"/>
+
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isCurrentRepeatMedicationsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="CURRENT_REPEAT_MEDICATIONS"
+                           :text="$t('my_record.currentRepeatMedications.sectionHeader')"
+                           :aria-expanded="!isCurrentRepeatMedicationsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
+    </analytics-tracked-tag>
+    <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
+                 :medications="record.medications.data.currentRepeatMedications"
+                 :has-error="record.medications.data.hasErrored" />
+
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isDiscontinuedRepeatMedicationsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="DISCONTINUED_REPEAT_MEDICATIONS"
+                           :text="$t('my_record.discontinuedRepeatMedications.sectionHeader')"
+                           :aria-expanded="!isDiscontinuedRepeatMedicationsCollapsed ?
+                             'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
+    </analytics-tracked-tag>
+    <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
+                 :medications="record.medications.data.discontinuedRepeatMedications"
+                 :has-error="record.medications.data.hasErrored" />
   </div>
 </template>
 
 <script>
+import Medications from '@/components/my-record/SharedComponents/Medications';
 import AllergiesAndAdverseReactions from '@/components/my-record/SharedComponents/AllergiesAndAdverseReactions';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
-const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
+const ALLERGIES_AND_ADVERSE_REACTIONS = 'allergiesandadversereactions';
+const ACUTE_MEDICATIONS = 'acutemedications';
+const CURRENT_REPEAT_MEDICATIONS = 'currentrepeatmedications';
+const DISCONTINUED_REPEAT_MEDICATIONS = 'discontinuedrepeatmedications';
 
 export default {
   name: 'ScrMICROTEST',
   components: {
     AllergiesAndAdverseReactions,
+    Medications,
     AnalyticsTrackedTag,
   },
   props: {
@@ -37,8 +88,14 @@ export default {
   },
   data() {
     return {
-      ALLERGIESANDADVERSEREACTIONS,
+      ALLERGIES_AND_ADVERSE_REACTIONS,
+      ACUTE_MEDICATIONS,
+      CURRENT_REPEAT_MEDICATIONS,
+      DISCONTINUED_REPEAT_MEDICATIONS,
       isAllergiesAndAdverseReactionsCollapsed: process.client,
+      isAcuteMedicationsCollapsed: process.client,
+      isCurrentRepeatMedicationsCollapsed: process.client,
+      isDiscontinuedRepeatMedicationsCollapsed: process.client,
     };
   },
   methods: {
@@ -47,9 +104,21 @@ export default {
     },
     myRecordSectionClick(section) {
       switch (section) {
-        case ALLERGIESANDADVERSEREACTIONS:
+        case ALLERGIES_AND_ADVERSE_REACTIONS:
           this.isAllergiesAndAdverseReactionsCollapsed =
             !this.isAllergiesAndAdverseReactionsCollapsed;
+          break;
+        case ACUTE_MEDICATIONS:
+          this.isAcuteMedicationsCollapsed =
+            !this.isAcuteMedicationsCollapsed;
+          break;
+        case CURRENT_REPEAT_MEDICATIONS:
+          this.isCurrentRepeatMedicationsCollapsed =
+            !this.isCurrentRepeatMedicationsCollapsed;
+          break;
+        case DISCONTINUED_REPEAT_MEDICATIONS:
+          this.isDiscontinuedRepeatMedicationsCollapsed =
+            !this.isDiscontinuedRepeatMedicationsCollapsed;
           break;
         default:
           break;

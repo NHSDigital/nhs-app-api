@@ -4,6 +4,9 @@ import mocking.data.myrecord.MedicationsData
 import models.Patient
 
 class MedicationsFactoryEmis: MedicationsFactory(){
+    override fun getExpectedMedications(): worker.models.myrecord.MedicationsData {
+        throw UnsupportedOperationException()
+    }
 
     override fun enabledWithBlankRecord(patient: Patient) {
         mockingClient.forEmis {

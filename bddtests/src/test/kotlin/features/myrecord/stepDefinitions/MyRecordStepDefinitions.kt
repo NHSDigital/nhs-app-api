@@ -83,13 +83,13 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
     }
 
-    @Given("^the my record wiremocks are populated for (.*) with (\\d+) allergies$")
-    fun givenMyRecordWiremocksArePopulatedFor(getService: String, numAllergies: Int) {
+    @Given("^the my record wiremocks are populated for (.*)$")
+    fun givenMyRecordWiremocksArePopulatedFor(getService: String) {
         SerenityHelpers.setGpSupplier(getService)
         setPatientToDefaultFor(getService)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
         SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(getService).enabledWithData(SerenityHelpers.getPatient(), numAllergies)
+        MyRecordFactory.getForSupplier(getService).enabledWithData(SerenityHelpers.getPatient())
     }
 
     @When("^I enter url address for my record directly into the url$")

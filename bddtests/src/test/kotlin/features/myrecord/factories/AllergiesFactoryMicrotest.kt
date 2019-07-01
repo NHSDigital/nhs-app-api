@@ -1,7 +1,7 @@
 package features.myrecord.factories
 
 import mocking.data.myrecord.MyRecordSerenityHelpers
-import mocking.microtest.myRecord.Allergy
+import mocking.microtest.myRecord.MyRecordResponseModel
 import models.Patient
 import utils.getOrFail
 import worker.models.myrecord.AllergyItem
@@ -17,7 +17,9 @@ class AllergiesFactoryMicrotest: AllergiesFactory() {
     }
 
     override fun getExpectedAllergies(): List<AllergyItem> {
-        val allergies = MyRecordSerenityHelpers.ALLERGY_DATA.getOrFail<List<Allergy>>()
+
+        val myRecord = MyRecordSerenityHelpers.MY_RECORD_DATA.getOrFail<MyRecordResponseModel>()
+        val allergies = myRecord.allergies.data
 
         return allergies.map {
             item -> AllergyItem(

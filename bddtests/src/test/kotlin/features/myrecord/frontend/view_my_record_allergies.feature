@@ -92,7 +92,7 @@ Feature: View My Medical Record Information - Allergies
     And I see a message informing me to contact my GP for this information
 
   Scenario: A MICROTEST user can view allergies and adverse reactions section
-    Given the my record wiremocks are populated for MICROTEST with 3 allergies
+    Given the my record wiremocks are populated for MICROTEST
     And the GP Practice has enabled demographics functionality
     And I am on my record information page
     Then I see the Allergies and adverse reactions heading on My Record

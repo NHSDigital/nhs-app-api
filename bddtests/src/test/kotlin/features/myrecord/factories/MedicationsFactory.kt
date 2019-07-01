@@ -7,6 +7,7 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 import worker.WorkerClient
+import worker.models.myrecord.MedicationsData
 import worker.models.myrecord.MyRecordResponse
 import java.util.*
 
@@ -20,6 +21,7 @@ abstract class MedicationsFactory {
 
     abstract fun enabledWithBlankRecord(patient:Patient)
     abstract fun enabledWithRecords(patient:Patient)
+    abstract fun getExpectedMedications(): MedicationsData
 
     fun getResult() {
 
@@ -40,7 +42,8 @@ abstract class MedicationsFactory {
                     hashMapOf(
                             "EMIS" to { MedicationsFactoryEmis() },
                             "TPP" to { MedicationsFactoryTpp() },
-                            "VISION" to { MedicationsFactoryVision() })
+                            "VISION" to { MedicationsFactoryVision() },
+                            "MICROTEST" to { MedicationsFactoryMicrotest() })
                 }
 
     }

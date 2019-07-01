@@ -6,5 +6,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord
     {
         [JsonProperty("allergies")]
         public AllergyData AllergyData { get; set; }
+
+        [JsonProperty("drugs")]
+        public MedicationData MedicationData { get; set; }
     }
 }

@@ -40,7 +40,7 @@ class MyRecordFactoryTpp: MyRecordFactory() {
         }
     }
 
-    override fun enabledWithData(patient: Patient, numAllergies: Int) {
+    override fun enabledWithData(patient: Patient) {
         throw UnsupportedOperationException()
     }
 }

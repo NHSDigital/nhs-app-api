@@ -3,9 +3,13 @@ package features.myrecord.factories
 import mocking.tpp.models.ViewPatientOverviewItem
 import mocking.tpp.models.ViewPatientOverviewReply
 import models.Patient
+import worker.models.myrecord.MedicationsData
 import java.time.LocalDateTime
 
 class MedicationsFactoryTpp: MedicationsFactory() {
+    override fun getExpectedMedications(): MedicationsData {
+        throw UnsupportedOperationException()
+    }
 
     override fun enabledWithBlankRecord(patient: Patient) {
         mockingClient.forTpp {

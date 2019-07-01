@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         private readonly ILogger<MicrotestPatientRecordService> _logger;
         private readonly IMicrotestClient _microtestClient;
         private readonly IMicrotestMyRecordMapper _microtestMyRecordMapper;
-        
+
         public MicrotestPatientRecordService(
             ILogger<MicrotestPatientRecordService> logger,
             IMicrotestClient microtestClient,
@@ -38,13 +38,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     await _microtestClient.MedicalRecordGet(microtestUserSession.OdsCode,
                         microtestUserSession.NhsNumber);
                 _logger.LogInformation("Patient record tasks completed");
-                
+
                 var myRecordResponse = _microtestMyRecordMapper.Map(medicalRecord.Body);
                 _logger.LogInformation(
                     "Mapped MICROTEST PatientRecordGetResponse to universal MyRecordResponse class instance");
 
                 myRecordResponse.Supplier = microtestUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
-                
+
                 return new GetMyRecordResult.Success(myRecordResponse);
             }
             catch (HttpRequestException e)

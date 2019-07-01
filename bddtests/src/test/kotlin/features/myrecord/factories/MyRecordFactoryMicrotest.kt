@@ -18,7 +18,7 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
         }
     }
 
-    override fun enabledWithData(patient: Patient, numAllergies: Int) {
+    override fun enabledWithData(patient: Patient) {
         mockingClient.forMicrotest {
             demographics.demographicsRequest(patient).respondWithSuccess()
         }
@@ -26,7 +26,7 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
         mockingClient.forMicrotest {
             myRecord.myRecordRequest(patient)
                     .respondWithSuccess(
-                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord(numAllergies)
+                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord()
                     )
         }
     }
