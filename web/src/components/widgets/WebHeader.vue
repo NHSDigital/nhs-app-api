@@ -2,31 +2,40 @@
   <div>
     <cookie-banner v-if="!loggedIn"/>
     <skip-link />
-    <header>
-      <span :class="$style['header-content']">
-        <div :class="$style.nhsLogo">
-          <NhsHeaderLogo :index-path="indexPath"/>
+    <header class="nhsuk-header" role="banner">
+      <div class="nhsuk-width-container nhsuk-header__container">
+        <NhsHeaderLogo :index-path="indexPath"/>
+        <div id="content-header" class="nhsuk-header__content">
+          <div v-if="showMenuButton" class="nhsuk-header__menu">
+            <button id="toggle-menu"
+                    class="nhsuk-header__menu-toggle"
+                    :class="$style.menuButton"
+                    aria-controls="header-navigation"
+                    aria-label="Open menu"
+                    @click.prevent="toggleMiniMenu()"
+                    @keyup.13="toggleMiniMenu()">Menu</button>
+          </div>
+          <header-links v-if="showLinks" :anchor-links="links"/>
         </div>
-        <a v-if="showMenuButton"
-           :aria-expanded="miniMenuExpanded ? 'true': 'false'"
-           :class="$style['mini-menu-toggler']"
-           tabindex="0"
-           data-sid="mini-menu"
-           role="button"
-           @click.prevent="toggleMiniMenu()"
-           @keyup.13="toggleMiniMenu()">
-          {{ $t('navigationMenu.menuLabel') }}
-        </a>
-        <header-links v-if="showLinks" :anchor-links="links"/>
-        <header-menu v-if="showMenu" />
-      </span>
+      </div>
+      <div class="nhsuk-width-container">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <header-menu v-if="showMenu" />
+          </div>
+        </div>
+      </div>
     </header>
 
     <bread-crumb-trail :routes="currentBreadCrumbs"/>
 
-    <div :class="$style.headerLowerSection">
-      <page-title v-if="!isLoginPage"
-                  :should-show-desktop-version="!$store.state.device.isNativeApp"/>
+    <div class="nhsuk-width-container">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <page-title v-if="!isLoginPage"
+                      :should-show-desktop-version="!$store.state.device.isNativeApp"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -140,111 +149,84 @@ export default {
   @import '../../style/screensizes';
   @import '../../style/textstyles';
   @import "../../style/fonts";
-  @import "../../style/desktopcomponentsizes";
-div {
- header {
-  background: $nhs_blue;
-  color: $white;
-  position: relative;
-  height: auto;
-  display: block;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 4;
-  box-sizing: border-box;
-  min-width: 230px;
 
-  .header-content {
-   @include main-container-width;
-   display: block;
-   margin: 0 auto;
-   padding: 0 16px;
-
-   .nhsLogo {
+  header {
+    background: $nhs_blue;
     color: $white;
-    display: inline-block;
+    position: relative;
+    height: auto;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    box-sizing: border-box;
+    min-width: 300px;
 
-    a.anchor-icon {
-     color: $white;
-     display: inline-block;
+    .header-content {
+     display: block;
 
-    }
-   }
+     .nhsLogo {
+      color: $white;
+      display: inline-block;
 
-   a.mini-menu-toggler {
-    display: none;
+      a.anchor-icon {
+       color: $white;
+       display: inline-block;
 
-    :focus {
-     background-color: transparent;
-     border-color: $focus_highlight;
-     box-shadow: 0 0 0 3px $focus_highlight;
-    }
-   }
-  }
-
-   @include tablet-and-above {
-   .header-content {
-    margin-left: 32px;
-   }
-  }
-
-  @include desktop {
-   .header-content {
-    margin: 0 auto;
-   }
-  }
-
-
-  @include phone-and-below() {
-   .header-content {
-    a.mini-menu-toggler {
-     float: right;
-     margin-top: 0.8em;
-     display: inline-block;
-     font-family: $frutiger-roman;
-     font-weight: 700;
-     line-height: 2em;
-     color: $white;
-     @include kerneliOS;
-     font-size: 1.125em;
-     border: 1px $white solid;
-     border-radius: 0.5em;
-     padding: 0.125em 0.8em;
-     margin-left: 1em;
-     cursor: pointer;
-
-     &:focus {
-      box-shadow: 0 0 0 4px $focus_highlight;
+      }
      }
 
-     &:hover {
-      background: #003d78;
-      box-shadow: 0 0 0 4px $focus_highlight;
-      text-decoration: none;
+     a.mini-menu-toggler {
+      display: none;
+
+      :focus {
+       background-color: transparent;
+       border-color: $focus_highlight;
+       box-shadow: 0 0 0 3px $focus_highlight;
+      }
+     }
+    }
+
+   .menuButton {
+    margin-right: 0;
+   }
+
+   @include fromTablet() {
+    .menuButton {
+     margin-right: 0;
+    }
+   }
+
+    @include tabletAndBelow() {
+     .header-content {
+      a.mini-menu-toggler {
+       float: right;
+       margin-top: 0.8em;
+       display: inline-block;
+       font-family: $frutiger-roman;
+       font-weight: 700;
+       line-height: 2em;
+       color: $white;
+       @include kerneliOS;
+       font-size: 1.125em;
+       border: 1px $white solid;
+       border-radius: 0.5em;
+       padding: 0.125em 0.8em;
+       margin-left: 1em;
+       cursor: pointer;
+
+       &:focus {
+        box-shadow: 0 0 0 4px $focus_highlight;
+       }
+
+       &:hover {
+        background: #003d78;
+        box-shadow: 0 0 0 4px $focus_highlight;
+        text-decoration: none;
+       }
+      }
      }
     }
    }
-  }
- }
-
- .headerLowerSection{
-  display: block;
-  @include main-container-width;
-  width: auto;
-  position: relative;
- }
-
-  @include tablet-and-above {
-  .headerLowerSection{
-   margin-left: 2em;
-  }
- }
-
- @include desktop {
-  .headerLowerSection{
-   margin: 0 auto;
-  }
- }
-}
 </style>

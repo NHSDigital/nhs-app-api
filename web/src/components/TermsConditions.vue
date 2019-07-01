@@ -152,7 +152,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../style/termsConditions";
+@import "../style/termsConditions";
 
   .acceptButton {
     &.desktopWeb {

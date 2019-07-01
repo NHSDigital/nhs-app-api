@@ -107,7 +107,7 @@ export default {
   }
 
 
-  @include tablet-and-above {
+  @include fromTablet {
    .rule {
     margin-right: 0;
     padding-left: 1em;
@@ -115,7 +115,7 @@ export default {
    }
   }
 
-  @include desktop {
+  @include fromDesktop {
     .header, .navigationList, .mainContentContainer {
       margin: 0 auto;
     }

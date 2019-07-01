@@ -1,18 +1,18 @@
 <template>
   <footer role="contentinfo">
-    <div :class="$style['nhsuk-footer']">
-      <div :class="$style['nhsuk-width-container']">
-        <h2 :class="$style['nhsuk-u-visually-hidden']">
+    <div id="nhsuk-footer" class="nhsuk-footer">
+      <div class="nhsuk-width-container">
+        <h2 class="nhsuk-u-visually-hidden">
           {{ $t('webFooter.hiddenHeaderText') }}
         </h2>
-        <ul v-for="(link, index) in links" :key="index" :class="$style['nhsuk-footer__list']">
-          <li :class="$style['nhsuk-footer__list-item']">
-            <a :class="$style['nhsuk-footer__list-item-link']" :href="link.url" target="_blank">
+        <ul class="nhsuk-footer__list">
+          <li v-for="(link, index) in links" :key="index" class="nhsuk-footer__list-item">
+            <a class="nhsuk-footer__list-item-link" :href="link.url" target="_blank">
               {{ $t(link.localeLabel) }}
             </a>
           </li>
         </ul>
-        <p :class="$style['nhsuk-footer__copyright']">
+        <p class="nhsuk-footer__copyright">
           {{ '&copy; '+ $t('webFooter.copyrightText') }}
         </p>
       </div>
@@ -34,18 +34,27 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
+<style lang="scss" scoped>
   @import '~nhsuk-frontend/packages/core/all.scss';
   @import '~nhsuk-frontend/packages/components/footer/_footer.scss';
+  @import "../../style/desktopWeb/accessibility";
+
+  .nhsuk-footer li {
+    width: fit-content;
+  }
   .nhsuk-footer ul {
-    width : fit-content;
-    a {
-      -moz-text-decoration-line: underline;
-      text-decoration-line: underline;
+    width: fit-content;
+  }
+
+  a {
+    display: table;
+
+    &:focus {
+      @include linkFocusStyle;
     }
-    a:hover {
-      -moz-text-decoration-line: none;
-      text-decoration-line: none;
+
+    &:hover {
+      @include linkHoverStyle;
     }
   }
 </style>

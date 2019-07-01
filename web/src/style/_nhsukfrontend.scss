@@ -1,23 +1,62 @@
-@import "../../node_modules/nhsuk-frontend/packages/core/tools/all.scss";
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/typography";
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/colours";
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/globals";
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/spacing";
-@import "../../node_modules/nhsuk-frontend/packages/core/elements/table";
-@import "../../node_modules/nhsuk-frontend/packages/core/utilities/visually-hidden";
-@import "../../node_modules/nhsuk-frontend/packages/core/objects/grid";
-@import "../../node_modules/nhsuk-frontend/packages/core/objects/form-group";
-@import "../../node_modules/nhsuk-frontend/packages/components/back-link/back-link";
-@import "../../node_modules/nhsuk-frontend/packages/components/input/input";
-@import "../../node_modules/nhsuk-frontend/packages/components/error-message/error-message";
-@import "../../node_modules/nhsuk-frontend/packages/components/radios/radios";
-@import "../../node_modules/nhsuk-frontend/packages/components/fieldset/fieldset";
-@import "../../node_modules/nhsuk-frontend/packages/components/textarea/textarea";
-@import "../../node_modules/nhsuk-frontend/packages/components/date-input/date-input";
-@import "../../node_modules/nhsuk-frontend/packages/components/select/select";
-@import "../../node_modules/nhsuk-frontend/packages/components/tables/tables";
-@import "../../node_modules/nhsuk-frontend/packages/components/label/label";
-@import "../../node_modules/nhsuk-frontend/packages/components/hint/hint";
-@import "../../node_modules/nhsuk-frontend/packages/components/promo/promo";
-@import "../../node_modules/nhsuk-frontend/packages/components/inset-text/inset-text";
-@import "../../node_modules/nhsuk-frontend/packages/components/checkboxes/checkboxes";
+// Settings
+@import '~nhsuk-frontend/packages/core/settings/all';
+
+// Tools
+@import '~nhsuk-frontend/packages/core/tools/all';
+
+// Generic
+@import '~nhsuk-frontend/packages/core/generic/box-sizing';
+@import '~nhsuk-frontend/packages/core/generic/font-face';
+@import '~nhsuk-frontend/packages/core/generic/ie';
+
+// Elements
+@import '~nhsuk-frontend/packages/core/elements/forms';
+@import '~nhsuk-frontend/packages/core/elements/page';
+@import '~nhsuk-frontend/packages/core/elements/table';
+
+// Objects
+@import '~nhsuk-frontend/packages/core/objects/form-group';
+@import '~nhsuk-frontend/packages/core/objects/grid';
+@import '~nhsuk-frontend/packages/core/objects/main-wrapper';
+@import '~nhsuk-frontend/packages/core/objects/width-container';
+
+// Styles
+@import '~nhsuk-frontend/packages/core/styles/icons';
+
+// Utilities
+@import '~nhsuk-frontend/packages/core/utilities/clearfix';
+@import '~nhsuk-frontend/packages/core/utilities/grid-widths';
+@import '~nhsuk-frontend/packages/core/utilities/link-nowrap';
+@import '~nhsuk-frontend/packages/core/utilities/reading-width';
+@import '~nhsuk-frontend/packages/core/utilities/spacing';
+@import '~nhsuk-frontend/packages/core/utilities/typography';
+@import '~nhsuk-frontend/packages/core/utilities/visually-hidden';
+@import '~nhsuk-frontend/packages/core/utilities/widths';
+
+
+@import "~nhsuk-frontend/packages/components/back-link/back-link";
+@import "~nhsuk-frontend/packages/components/input/input";
+@import "~nhsuk-frontend/packages/components/error-message/error-message";
+@import "~nhsuk-frontend/packages/components/radios/radios";
+@import "~nhsuk-frontend/packages/components/fieldset/fieldset";
+@import "~nhsuk-frontend/packages/components/textarea/textarea";
+@import "~nhsuk-frontend/packages/components/date-input/date-input";
+@import "~nhsuk-frontend/packages/components/select/select";
+@import "~nhsuk-frontend/packages/components/tables/tables";
+@import "~nhsuk-frontend/packages/components/label/label";
+@import "~nhsuk-frontend/packages/components/hint/hint";
+@import "~nhsuk-frontend/packages/components/promo/promo";
+@import "~nhsuk-frontend/packages/components/inset-text/inset-text";
+@import "~nhsuk-frontend/packages/components/checkboxes/checkboxes";
+@import "~nhsuk-frontend/packages/components/breadcrumb/breadcrumb";
+@import "~nhsuk-frontend/packages/components/footer/footer";
+@import "~nhsuk-frontend/packages/components/header/header";
+@import "~nhsuk-frontend/packages/core/styles/icons";
+
+
+/**
+  Removal of NHS UK grey background
+ */
+html {
+  background-color: unset;
+}

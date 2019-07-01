@@ -1,43 +1,47 @@
 <template>
-  <nav :class="[$style.menu, miniMenuExpanded ? $style.expanded : $style.collapsed,
-                'nojs-mini-menu-expanded']">
-    <hr aria-hidden="true">
-    <a v-if="miniMenuExpanded" :class="$style['mini-menu-close-button']"
-       role="button" tabindex="0"
-       :aria-label="$t('navigationMenu.close')"
-       @click.prevent="closeMiniMenu"
-       @keyup.13="closeMiniMenu">{{ $t('navigationMenu.menuLabel') }}</a>
-
-    <noscript inline-template>
-      <div :class="$style['menu-nojs-caption']">{{ $t('navigationMenu.menuLabel') }}</div>
-    </noscript>
-    <ul>
-      <li>
-        <a :class="$style['navMenuItem']" :href="symptomsPath"
+  <nav class="nhsuk-header__navigation" :class="[miniMenuExpanded && 'js-show',
+                                                 'nojs-mini-menu-expanded']">
+    <p class="nhsuk-header__navigation-title">
+      <span id="label-navigation">Menu</span>
+      <button id="close-menu" class="nhsuk-header__navigation-close"
+              @click.prevent="closeMiniMenu"
+              @keyup.13="closeMiniMenu">
+        <svg class="nhsuk-icon nhsuk-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42
+                  1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1
+                  0 0 0 1.42 0 1 1 0 0 0 0-1.42z"/>
+        </svg>
+        <span class="nhsuk-u-visually-hidden">Close menu</span>
+      </button>
+    </p>
+    <ul class="nhsuk-header__navigation-list">
+      <li class="nhsuk-header__navigation-item nhsuk-header__navigation-item--for-mobile">
+        <a class="nhsuk-header__navigation-link" :href="symptomsPath"
            data-sid="symptoms-menu-item"
            data-purpose="symptomsPageLink"
            @click.prevent="setMenuitemState($event)">
           {{ $t('navigationMenu.symptomsLabel') }}
         </a>
       </li>
-      <li>
-        <a :class="$style['navMenuItem']" :href="appointmentsPath"
+      <li class="nhsuk-header__navigation-item">
+        <a class="nhsuk-header__navigation-link" :href="appointmentsPath"
            data-sid="appointments-menu-item"
            data-purpose="appointmentsPageLink"
            @click.prevent="setMenuitemState($event)">
           {{ $t('navigationMenu.appointmentsLabel') }}
         </a>
       </li>
-      <li>
-        <a :class="$style['navMenuItem']" :href="prescriptionsPath"
+      <li class="nhsuk-header__navigation-item">
+        <a class="nhsuk-header__navigation-link" :href="prescriptionsPath"
            data-sid="prescriptions-menu-item"
            data-purpose="prescriptionsPageLink"
            @click.prevent="setMenuitemState($event)">
           {{ $t('navigationMenu.prescriptionsLabel') }}
         </a>
       </li>
-      <li>
-        <a :class="$style['navMenuItem']" :href="recordPath"
+      <li class="nhsuk-header__navigation-item">
+        <a class="nhsuk-header__navigation-link" :href="recordPath"
            data-sid="myrecord-menu-item"
            data-purpose="myRecordPageLink"
            @click.prevent="setMenuitemState($event)">
@@ -45,23 +49,23 @@
         </a>
       </li>
       <!-- Hidden as not in scope for mvp, will be needed in future -->
-      <li v-if="false">
-        <a :class="$style['navMenuItem']" :href="morePath"
+      <li v-if="false" class="nhsuk-header__navigation-item">
+        <a class="nhsuk-header__navigation-link" :href="morePath"
            data-sid="more-menu-item"
            data-purpose="morePageLink"
            @click.prevent="setMenuitemState($event)">
           {{ $t('navigationMenu.moreLabel') }}
         </a>
       </li>
-      <li :class="$style.additionalMenuItem">
-        <a :class="$style['navMenuItem']" :href="accountPath"
+      <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
+        <a class="nhsuk-header__navigation-link" :href="accountPath"
            data-sid="account-menu-item"
            @click.prevent="setMenuitemState($event)">
           {{ $t('navigationMenu.accountLabel') }}
         </a>
       </li>
-      <li :class="$style.additionalMenuItem">
-        <a :class="$style['navMenuItem']" :href="logoutPath"
+      <li :class="[$style.additionalMenuItem, 'nhsuk-header__navigation-item']">
+        <a class="nhsuk-header__navigation-link" :href="logoutPath"
            data-sid="logout-menu-item"
            @click.prevent="setMenuitemState($event)">
           {{ $t('navigationMenu.logoutLabel') }}
@@ -157,7 +161,7 @@ export default {
     cursor: pointer;
   }
 
-  nav.menu {
+  nav{
     overflow: hidden;
     height: auto;
     display: none;
@@ -170,6 +174,57 @@ export default {
       display: none;
     }
 
+   @include fromLargeDesktop() {
+    & {
+     display: block;
+    }
+
+    .additionalMenuItem{
+     display: none;
+    }
+
+    & > ul {
+     display: flex;
+     flex-wrap: wrap;
+     list-style: none;
+
+     li {
+      display: inline-block;
+      margin: 0;
+      color: $white;
+      flex-grow: 1;
+      text-align: center;
+      :focus {
+       outline-color: $focus_highlight;
+       box-shadow: inset 0 0 0 4px $focus_highlight;
+       outline-offset: -5px;
+      }
+
+      a {
+       @include default_text_web;
+       font-weight: normal;
+       font-size: 1em;
+       line-height: 1.5em;
+       font-family: $default-web;
+       color: $white;
+       padding: 1em;
+
+       &:visited,
+       &:active {
+        color: $white;
+       }
+
+       &:hover {
+        background: #003d78;
+        box-shadow: none;
+        color: #FFFFFF;
+        text-decoration: underline;
+       }
+      }
+     }
+    }
+   }
+
     a.mini-menu-close-button {
       display: none;
       :focus {
@@ -179,140 +234,19 @@ export default {
       }
     }
 
-    & > ul {
-      display: flex;
-      flex-wrap: wrap;
-      list-style: none;
-
-      li {
-        display: inline-block;
-        margin: 0;
-        color: $white;
-        flex-grow: 1;
-        text-align: center;
-        :focus {
-          outline-color: $focus_highlight;
-          box-shadow: inset 0 0 0 4px $focus_highlight;
-          outline-offset: -5px;
-        }
-
-        a {
-          @include default_text_web;
-          font-weight: normal;
-          font-size: 1em;
-          line-height: 1.5em;
-          font-family: $default-web;
-          color: $white;
-          padding: 1em;
-
-          &:visited,
-          &:active {
-            color: $white;
-          }
-
-          &:hover {
-            background: #003d78;
-            box-shadow: none;
-            color: #FFFFFF;
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-
-    @include phone-and-below {
-      &.expanded {
-        display: block;
-      }
-
-      &.collapsed {
-        display: none;
-      }
+    @include tabletAndBelow {
 
       hr {
         display: none;
       }
 
-      $parent-left-right-padding: 16px;
-
       background: $white;
-      margin: 0 (-1 * $parent-left-right-padding);
 
       .menu-nojs-caption {
         @include mini-menu-option;
         cursor: default;
       }
 
-      a.mini-menu-close-button {
-        @include mini-menu-option;
-        background: $white url('~assets/close-menu.svg') no-repeat center right;
-        background-position: right 1em center;
-
-        &:visited,
-        &:active {
-          color: $black;
-        }
-
-        &:hover {
-          background: $nhs_blue url('~assets/close-menu-hover.svg') no-repeat center right;
-          box-shadow: none;
-          color: $white;
-          text-decoration: underline;
-        }
-      }
-
-      & > ul {
-        display: block;
-        border-bottom: 3px $background solid;
-
-        li {
-          display: block;
-          margin: 0;
-          color: $black;
-          border-bottom: 1px $background solid;
-          text-align: center;
-
-          :focus {
-            outline-color: $focus_highlight;
-            box-shadow: inset 0 0 0 4px $focus_highlight;
-          }
-
-          a {
-            @include default_text;
-            text-align: left;
-            font-family: $default-web;
-            color: $nhs_blue;
-            padding: 1em;
-            background: $white url('~assets/icon_arrow_left.svg') no-repeat center right;
-            background-position: right 1em center;
-
-            &:visited,
-            &:active {
-              color: $nhs_blue;
-            }
-
-            &:hover {
-              box-shadow: none;
-              background: $nhs_blue;
-              color: $white;
-              text-decoration: underline;
-              background-repeat: no-repeat;
-              background-image: url('~assets/icon_arrow_white_left.svg');
-              background-position: right 1em center;
-            }
-          }
-        }
-      }
-    }
-
-    @include tablet-and-above() {
-      & {
-        display: block;
-      }
-
-      .additionalMenuItem{
-        display: none;
-      }
     }
   }
 </style>

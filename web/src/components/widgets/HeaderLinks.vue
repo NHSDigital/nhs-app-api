@@ -77,7 +77,7 @@ export default {
       }
     }
 
-   @include tablet-and-above {
+   @include fromLargeDesktop {
      display: inline-block;
    }
   }

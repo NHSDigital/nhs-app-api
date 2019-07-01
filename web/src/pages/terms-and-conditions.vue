@@ -9,20 +9,23 @@
       <terms-conditions v-else/>
     </div>
     <div v-else>
-      <div :class="$style['header-container-desktop']">
+      <div :class="$style['header-container-desktop']" class="nhsuk-width-container--full">
         <web-header :show-menu="false"
                     :show-links="false"
                     :show-header-buttons="false"/>
       </div>
 
       <div id="mainContent" ref="mainContent" tabindex="-1"
-           :class="$style['main-container-desktop']">
-        <section>
-          <div>
-            <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
-            <terms-conditions v-else/>
-          </div>
-        </section>
+           class="nhsuk-width-container nhsuk-width-container--full"
+           :class="$style.mainContent">
+        <div class="nhsuk-grid-row">
+          <main class="nhsuk-main-wrapper nhsuk-main-wrapper--no-padding nhsuk-homepage">
+            <div class="nhsuk-grid-column-three-quarters">
+              <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
+              <terms-conditions v-else/>
+            </div>
+          </main>
+        </div>
       </div>
       <div v-if="!this.$store.state.device.isNativeApp"
            :class="$style['footer-container-desktop']">
@@ -85,9 +88,7 @@ export default {
 </style>
 
 <style module lang="scss" scoped>
-  @import "../style/home";
   @import "../style/spacings";
-  @import "../style/webshared";
   .webHeader {
     padding: 3.625em 0 3.125em 2.0px;
   }
@@ -99,25 +100,13 @@ export default {
   }
 
   section {
-    @include main-container-width;
     display: block;
-    margin: 0 auto;
     padding: 0 1em 2.5em;
-
-    > div {
-      @include inner-container-width;
-    }
   }
 
-  @include tablet-and-above {
-    section {
-      margin: 0 2em;
-    }
+  .mainContent {
+    outline: none;
   }
 
-  @include desktop {
-    section  {
-      margin: 0 auto;
-    }
-  }
+
 </style>

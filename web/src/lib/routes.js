@@ -558,7 +558,7 @@ const routes = {
     crumb: {
       i8nKey: 'termsAndConditions',
       get parentRoute() {
-        return this.allRoutes.INDEX;
+        return undefined;
       },
     },
   },

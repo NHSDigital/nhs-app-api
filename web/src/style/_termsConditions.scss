@@ -2,6 +2,7 @@
 @import "./forms";
 @import "./home";
 @import "./colours";
+@import "../style/desktopWeb/accessibility";
 
 p {
   padding-bottom: 0.5em;
@@ -9,7 +10,6 @@ p {
   display: block;
   font-weight: normal;
   line-height: 1.5em;
-  outline-color: $focus_highlight;
 }
 a {
   color: #005EB8;
@@ -18,7 +18,6 @@ a {
   font-weight: bold;
   text-decoration: none;
   vertical-align: baseline;
-    outline-color: $focus_highlight;
 }
 a:hover {
   text-decoration: underline;
@@ -42,10 +41,6 @@ strong {
   p a {
     display: inherit;
     text-decoration: underline;
-  }
-  a {
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
   }
 }
 
@@ -110,4 +105,14 @@ button {
   color: $error !important;
   font-weight: 700 !important;
   padding-bottom: 0em !important;
+}
+
+a {
+  &:focus {
+    @include linkFocusStyle;
+  }
+
+  &:hover {
+    @include linkHoverStyle;
+  }
 }

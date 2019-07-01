@@ -134,13 +134,13 @@ export default {
     }
 
 
-    @include tablet-and-above {
+    @include fromTablet {
       .cookie-banner-panel {
         margin: 0 2em;
       }
     }
 
-    @include desktop {
+    @include fromDesktop {
       .cookie-banner-panel  {
         margin: 0 auto;
       }

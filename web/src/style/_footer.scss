@@ -101,7 +101,7 @@
   }
 }
 
-@include tablet-and-above {
+@include fromTablet {
   .footer {
     padding-bottom: 2em;
 
@@ -129,7 +129,7 @@
   }
 }
 
-@include desktop {
+@include fromDesktop {
   .footer {
     .footer-content {
       margin: 0 auto;

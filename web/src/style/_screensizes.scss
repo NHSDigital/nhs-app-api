@@ -1,66 +1,64 @@
 /*Media Query Breakpoints*/
+$mobile: 320px;
+$tablet: 641px;
+$desktop: 769px;
+$large-desktop: 990px;
 
-$phone-width: 375px;
-$tablet-width: 768px;
-$desktop-width: 1024px;
-$medium-screen: 40.0625em;
-$desktop-tablet-width: 48.0625em;
-$desktop-wide-width: 1366px;
-
-@mixin phoneOld {
-  @media (max-device-width: #{$phone-width - 1px}) {
+@mixin mobileAndBelow {
+  @media (max-width: #{$mobile}) {
     @content;
   }
 }
 
-@mixin phone {
-  @media (min-device-width: #{$phone-width}) and (max-device-width: #{$tablet-width - 1px}) {
-    @media (min-width: #{$phone-width}) and (max-width: #{$tablet-width - 1px}) {
+@mixin tabletOnly {
+  @media (min-device-width: #{$tablet}) and (max-device-width: #{$desktop}) {
       @content;
-    }
   }
 }
 
-@mixin phone-and-below {
-  @media (max-width: #{$desktop-tablet-width - 0.063em}) {
+@mixin tabletAndBelow {
+  @media (max-width: #{$tablet}) {
     @content;
   }
 }
 
-@mixin medium-screen {
-  @media (min-width: $medium-screen) {
+@mixin fromMobile {
+  @media (min-width: #{$mobile}) {
     @content;
   }
 }
 
-@mixin tablet {
-  @media (min-device-width: #{$tablet-width}) and (max-device-width: #{$desktop-width - 1px}) {
-    @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
-      @content;
-    }
-  }
-}
-
-@mixin tablet-and-below {
-  @media (max-width: #{$desktop-width - 1px}) {
+@mixin fromTablet {
+  @media (min-width: #{$tablet}) {
     @content;
   }
 }
 
-@mixin tablet-and-above {
-  @media (min-width: #{$desktop-tablet-width}) {
+@mixin desktopAndBelow {
+  @media (max-width: #{$desktop}) {
     @content;
   }
 }
 
-@mixin iPadPro {
-  @media only screen and (min-device-width: #{$desktop-width}) and (max-device-width: #{$desktop-wide-width}) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1.5) {
+@mixin fromDesktop {
+  @media (min-width: #{$desktop}) {
+    @content;
+  }
+}
+@mixin desktopOnly {
+  @media (min-device-width: #{$desktop}) and (max-device-width: #{$large-desktop}) {
     @content;
   }
 }
 
-@mixin desktop {
-  @media (min-width: #{$desktop-width }) {
+@mixin fromLargeDesktop {
+  @media (min-width: #{$large-desktop}) {
+    @content;
+  }
+}
+
+@mixin largeDesktopAndBelow {
+  @media (min-width: #{$large-desktop}) {
     @content;
   }
 }

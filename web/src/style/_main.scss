@@ -20,19 +20,13 @@ body {
 	background: $background;
 	@include default_text;
 	font-family: $default;
-	@include phoneOld {
-		font-size: 0.875em;
-	}
-	@include phone {
+	@include mobileAndBelow {
 		font-size: 1em;
 	}
-	@include tablet {
+	@include tabletOnly {
 		font-size: 1.225em;
 	}
-	@include iPadPro {
-		font-size: 1.6em;
-	}
-	@include desktop {
+	@include fromDesktop {
 		font-size: 1em;
 	}
 }
@@ -95,7 +89,7 @@ main.content {
 }
 
 
-@include tablet-and-above {
+@include fromTablet {
 	main.content {
 		margin-left: 1em;
 	}
@@ -105,7 +99,7 @@ main.content {
 	}
 }
 
-@include desktop {
+@include fromDesktop {
 	main.content > div {
 	        padding: 0 1em;
 	}

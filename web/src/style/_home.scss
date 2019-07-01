@@ -20,21 +20,15 @@ body {
     background: $white;
     @include default_text;
     font-family: $default;
-    @include phoneOld {
-        font-size: 0.875em;
-    }
-    @include phone {
-        font-size: 1em;
-    }
-    @include tablet {
-        font-size: 1.225em;
-    }
-    @include iPadPro {
-        font-size: 1.6em;
-    }
-    @include desktop {
-        font-size: 1em;
-    }
+  @include mobileAndBelow {
+    font-size: 1em;
+  }
+  @include tabletOnly {
+    font-size: 1.225em;
+  }
+  @include fromDesktop {
+    font-size: 1em;
+  }
 }
 * {
     padding: 0;
@@ -128,7 +122,6 @@ header.logged {
         @include linkHoverStyle;
     }
 }
-
 .checkFeaturesLink {
     cursor: pointer;
     text-decoration: underline;
@@ -139,16 +132,16 @@ header.logged {
 }
 
 .checkFeaturesLink:focus{
-  background: $focus_highlight; 
-  box-shadow: 0 0 0 4px $focus_highlight; 
-  color: $black; 
-  outline: 0; 
+  background: $focus_highlight;
+  box-shadow: 0 0 0 4px $focus_highlight;
+  color: $black;
+  outline: 0;
   width: auto;
 }
 .checkFeaturesLink:hover{
-  background: $hover_highlight; 
-  box-shadow: 0 0 0 4px $hover_highlight; 
-  color: $black; 
+  background: $hover_highlight;
+  box-shadow: 0 0 0 4px $hover_highlight;
+  color: $black;
   width: auto;
   text-decoration: underline;
 }

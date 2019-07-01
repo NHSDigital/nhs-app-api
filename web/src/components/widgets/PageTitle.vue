@@ -20,21 +20,18 @@ export default {
 <style module lang="scss" scoped>
  @import "../../style/fonts";
  @import "../../style/textstyles";
- @import '../../style/screensizes';
 
-.pageTitle {
- display: block;
- @include main-container-width;
+ .pageTitle {
+   display: block;
 
- .homePageTitle {
-  color: #212B32;
-  text-align: left;
-  font-family: $frutiger-roman;
-  font-size: 2.250em;
-  font-weight: 600;
-  line-height: 1.250em;
-  padding: 1em 16px 16px;
-
+   .homePageTitle {
+     color: #212B32;
+     text-align: left;
+     font-family: $frutiger-roman;
+     font-size: 2.250em;
+     font-weight: 600;
+     line-height: 1.250em;
+     padding-top: 1em;
+   }
  }
-}
 </style>

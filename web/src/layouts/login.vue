@@ -154,14 +154,14 @@ export default {
   @include main-container-width;
 }
 
-@include tablet-and-above {
+@include fromTablet {
   .banner-container > div {
     margin: 0 2em;
     padding: 0 1em;
   }
 }
 
-@include desktop {
+@include fromDesktop {
   .banner-container > div {
     margin: 0 auto;
     padding: 0 1em;
@@ -230,13 +230,13 @@ section {
 }
 
 
-@include tablet-and-above {
+@include fromTablet {
   section {
     margin: 0 32px;
   }
 }
 
-@include desktop {
+@include fromDesktop {
   section  {
     margin: 0 auto;
   }
