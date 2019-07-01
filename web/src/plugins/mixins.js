@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Vue from 'vue';
 import MedicationCourseStatus from '@/lib/medication-course-status';
-import { LOGIN, ACCOUNT_SIGNOUT } from '@/lib/routes';
+import { LOGIN, ACCOUNT_SIGNOUT, MYRECORD } from '@/lib/routes';
 import Sources from '@/lib/sources';
 import { redirectTo } from '@/lib/utils'
 
@@ -22,10 +22,14 @@ Vue.mixin({
       }
       return null;
     },
-    goToUrl(url) {
+    goToUrl(url, statusCode = undefined) {
       if (url === '') {
         this.$router.go();
         return;
+      }
+      
+      if (url === MYRECORD.path && statusCode == 504) {
+        this.$store.dispatch('myRecord/resetTerms');
       }
 
       if ((url === LOGIN.path && this.$store.getters['session/isLoggedIn']())

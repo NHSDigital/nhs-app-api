@@ -184,7 +184,7 @@ export default {
         this.$store.dispatch(this.retryAction);
         return;
       }
-      this.goToUrl(this.retryUrl);
+      this.goToUrl(this.retryUrl, this.statusCode);
     },
     showError() {
       return this.hasApiError;
