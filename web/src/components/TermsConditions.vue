@@ -46,8 +46,9 @@
                      :class="$style.validationText">
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
-      <generic-checkbox v-model="areTermsAccepted"
-                        checkbox-id="termsAndConditions-agree_checkbox">
+      <generic-checkbox :value="termsAcceptedValue"
+                        checkbox-id="termsAndConditions-agree_checkbox"
+                        @input="termsSelectionChanged">
         <span :class="$style.termsAndConditionsCaption">
           {{ $t('termsAndConditions.checkBoxText1') }}
 
@@ -72,8 +73,9 @@
         </span>
       </generic-checkbox>
     </div>
-    <generic-checkbox v-model="isAnalyticsCookieAccepted"
-                      checkbox-id="analyticsCookie-agree_analyticsCookieCheckbox">
+    <generic-checkbox :value="analyticsAcceptedValue"
+                      checkbox-id="analyticsCookie-agree_analyticsCookieCheckbox"
+                      @input="analyticsSelectionChanged">
       {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
     </generic-checkbox>
     <generic-button id="btn_accept" :class="[$style.button, $style.green, $style.acceptButton]"
@@ -106,6 +108,8 @@ export default {
       cookiesPolicyURL: this.$store.app.$env.COOKIES_POLICY_URL,
       areTermsAccepted: false,
       isAnalyticsCookieAccepted: false,
+      termsAcceptedValue: 'terms',
+      analyticsAcceptedValue: 'analytics',
       hasTriedToContinue: false,
     };
   },
@@ -136,6 +140,12 @@ export default {
         return this.$style.validationBorderLeft;
       }
       return null;
+    },
+    termsSelectionChanged() {
+      this.areTermsAccepted = !this.areTermsAccepted;
+    },
+    analyticsSelectionChanged() {
+      this.isAnalyticsCookieAccepted = !this.isAnalyticsCookieAccepted;
     },
   },
 };

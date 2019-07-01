@@ -41,8 +41,9 @@
                      :class="$style.validationText">
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
-      <generic-checkbox v-model="areTermsAccepted"
-                        checkbox-id="termsAndConditions-agree_checkbox">
+      <generic-checkbox :value="termsAcceptedValue"
+                        checkbox-id="termsAndConditions-agree_checkbox"
+                        @input="termsSelectionChanged">
         <span :class="$style.termsAndConditionsCaption">
           {{ $t('updatedTermsAndConditions.checkBoxText1') }}
           <span>
@@ -92,6 +93,7 @@ export default {
       privacyPolicyURL: this.$store.app.$env.PRIVACY_POLICY_URL,
       cookiesPolicyURL: this.$store.app.$env.COOKIES_POLICY_URL,
       areTermsAccepted: false,
+      termsAcceptedValue: 'terms',
       hasTriedToContinue: false,
     };
   },
@@ -122,6 +124,9 @@ export default {
         return this.$style.validationBorderLeft;
       }
       return null;
+    },
+    termsSelectionChanged() {
+      this.areTermsAccepted = !this.areTermsAccepted;
     },
   },
 };
