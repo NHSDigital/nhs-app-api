@@ -10,11 +10,9 @@ Feature: Service Journey Rules
     Then I receive an "Ok" success code
     And I receive the service journey rules response
 
-  @tech-debt  @NHSO-5509
   Scenario: A user fetching the service journey rules for an ODS code not configured will receive a 404
     Given I am a user whose ODS Code does not have specific journey configuration set up
-    And I have logged in and have a valid session cookie
-    When I request the service journey rules for my ODS Code
+    When I login but service journey rules has no configuration for my GP practice
     Then I receive a "Not Found" error
 
   @long-running

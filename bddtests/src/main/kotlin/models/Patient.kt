@@ -27,7 +27,7 @@ data class Patient(
         var emailAddress: String = "",
         val address: Address = Address(),
         val accountId: String = "",
-        val odsCode: String = "",
+        var odsCode: String = "",
         val connectionToken: String = "",
         val sessionId: String = "",
         val endUserSessionId: String = "",

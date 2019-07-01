@@ -3,6 +3,9 @@ package features.serviceJourneyRules.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.sharedStepDefinitions.backend.CommonSteps
+import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
+import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -22,6 +25,10 @@ open class ServiceJourneyRulesStepDefinitions {
     fun iAmAUserWhoseODSCodeDoesNotHaveASpecificJourneyConfigurationSetUp() {
         // TPP is used as the default odsCode does not currently exist within gpinfo.csv
         SerenityHelpers.setGpSupplier("TPP")
+        val patient = Patient.getDefault("TPP")
+        patient.odsCode = TPP_ODS_CODE_NO_SJR_CONFIGURATION
+        patient.tppUserSession!!.unitId = TPP_ODS_CODE_NO_SJR_CONFIGURATION
+        SerenityHelpers.setPatient(patient)
     }
 
     @When("^I request the service journey rules for my ODS Code$")
@@ -44,5 +51,14 @@ open class ServiceJourneyRulesStepDefinitions {
                 .sessionVariableCalled<ServiceJourneyRulesResponse>(ServiceJourneyRulesResponse::class)
 
         Assert.assertNotNull("Expected serviceJourneyRulesResponse not null", serviceJourneyRulesResponse)
+    }
+
+    @When("^I login but service journey rules has no configuration for my GP practice")
+    fun whenILoginButServiceJourneyRulesConfigurationHasNoConfiguration() {
+        try {
+            CommonSteps().givenIHaveLoggedInAndHaveAValidSessionCookie()
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
     }
 }

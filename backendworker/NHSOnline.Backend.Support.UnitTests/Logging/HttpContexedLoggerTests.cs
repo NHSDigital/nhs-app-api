@@ -55,7 +55,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             }
         }
 
-
         private class DummyController : Controller
         {
             private readonly ILogger _logger;
@@ -117,6 +116,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
                     _logger.LogCritical(exception, "Logging an exception.");
                 }
             }
+
             public void ControllerLogSensorFilterMethod()
             {
                 _logger.LogCritical("Filter?personalData=sensitive&otherStuff=ok");
@@ -124,6 +124,21 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
                 {
                     _logger.LogCritical("Filter?hidden=Asterix&otherStuff=ok");
                 }
+            }
+        }
+
+        private class DummyConsoleService
+        {
+            private readonly ILogger _logger;
+
+            public DummyConsoleService(ILoggerFactory logProvider)
+            {
+                _logger = logProvider.CreateLogger<DummyConsoleService>();
+            }
+
+            public void ConsoleMethod()
+            {
+                _logger.LogCritical(MethodLogPrefix + "ConsoleMethod");
             }
         }
 
@@ -153,7 +168,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(),
                 new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", new UserSession() { Key = SessionId });
+            actionContext.HttpContext.Items.Add("UserSession", new UserSession { Key = SessionId });
             _systemUnderTest.ControllerContext = new ControllerContext(actionContext);
             _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(),
                 new Dictionary<string, object>(), _systemUnderTest);
@@ -165,13 +180,17 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         {
             var filters = new List<LogCensorFilter>
             {
-                new LogCensorFilter { Match = RegExt1, Replacement = RegExt1.Replace("[^&]*", "*****", StringComparison.Ordinal) },
-                new LogCensorFilter { Match = RegExt2, Replacement = RegExt2.Replace("[^&]*", "*****", StringComparison.Ordinal) },
-                new LogCensorFilter { Match = RegExt3, Replacement = RegExt3.Replace("[^&]*", "*****", StringComparison.Ordinal) },
+                new LogCensorFilter
+                    { Match = RegExt1, Replacement = RegExt1.Replace("[^&]*", "*****", StringComparison.Ordinal) },
+                new LogCensorFilter
+                    { Match = RegExt2, Replacement = RegExt2.Replace("[^&]*", "*****", StringComparison.Ordinal) },
+                new LogCensorFilter
+                    { Match = RegExt3, Replacement = RegExt3.Replace("[^&]*", "*****", StringComparison.Ordinal) },
             };
 
             _stream = new MemoryStream();
-            logBuilder.AddProvider(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Critical, LogLevel.None, filters));
+            logBuilder.AddProvider(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Critical,
+                LogLevel.None, filters));
         }
 
         [TestCleanup]
@@ -268,7 +287,8 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().Contain(SessionId);
-            testString.Should().EndWith("| Logging an exception. [Exception: System.ArgumentException: Something has gone wrong!");
+            testString.Should()
+                .EndWith("| Logging an exception. [Exception: System.ArgumentException: Something has gone wrong!");
         }
 
         [TestMethod]
@@ -287,6 +307,20 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             testString.Should().NotBeEmpty();
             testString.Should().NotContain("Asterix");
             testString.Should().NotContain("prohibited");
+        }
+
+        [TestMethod]
+        public void LogFromNonScopedMethod()
+        {
+            var systemUnderTest = _fixture.Create<DummyConsoleService>();
+            systemUnderTest.ConsoleMethod();
+
+            _stream.Position = 0;
+            var testString = new StreamReader(_stream).ReadLine();
+            testString.Should().NotBeEmpty();
+            testString.Should()
+                .MatchRegex(
+                    $"^\\|[^|]+\\|[^|]+DummyConsoleService \\| Critical \\| {MethodLogPrefix}ConsoleMethod \\|$");
         }
 
         public void Dispose()

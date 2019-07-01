@@ -167,7 +167,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var errorMessage =
                     $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
                 _logger.LogError(errorMessage);
-                await _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, errorMessage);
+                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, userSession.GpUserSession.Supplier,
+                    Constants.AuditingTitles.SessionCreateResponse, errorMessage);
                 return new StatusCodeResult(serviceJourneyRulesResultVisited.StatusCode);
             }
             return await CreateSession(userSession, serviceJourneyRulesResultVisited, citizenIdSessionResult, gpSessionCreatedResultVisited);

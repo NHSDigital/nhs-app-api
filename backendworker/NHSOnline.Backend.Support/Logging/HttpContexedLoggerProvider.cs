@@ -97,7 +97,13 @@ namespace NHSOnline.Backend.Support.Logging
                         exceptionMessage = $"[Exception: {exception}] ";
                     }
 
-                    _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {CensorLogMessage(formatter(state, exception))} {exceptionMessage}|");
+                    var scope = GetScope(state);
+
+                    _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} |" +
+                                          (string.IsNullOrWhiteSpace(scope) ? string.Empty : $" {scope} |") +
+                                          $" {_categoryName} |" +
+                                          $" { logLevel } |" +
+                                          $" {CensorLogMessage(formatter(state, exception))} {exceptionMessage}|");
                     _textWriter.Flush();
                 }
             }

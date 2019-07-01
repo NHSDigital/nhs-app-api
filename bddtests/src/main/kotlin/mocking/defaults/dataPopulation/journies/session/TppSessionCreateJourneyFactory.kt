@@ -19,7 +19,7 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
                 apiVersion = TppMockDefaults.TPP_API_VERSION,
                 accountId = patient.accountId,
                 passphrase = patient.passphrase,
-                unitId = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
+                unitId = patient.odsCode,
                 uuid = TppMockDefaults.DEFAULT_TPP_UUID,
                 application = Application(
                         name = "NhsApp",

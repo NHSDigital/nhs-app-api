@@ -391,7 +391,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
             
-            _mockAuditor.Setup(x => x.Audit(Constants.AuditingTitles.SessionCreateResponse, 
+            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, 
+                    Supplier.Emis,
+                    Constants.AuditingTitles.SessionCreateResponse, 
                     "Retrieving Service Journey Rules failed with status code: '404'", 
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
