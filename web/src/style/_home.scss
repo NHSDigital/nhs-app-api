@@ -6,6 +6,7 @@ $logged_height: 12em; //16.5em
 @import './textstyles';
 @import './screensizes';
 @import './fonts';
+@import '/desktopWeb/accessibility';
 
 html {
   font: $apple-system-body;
@@ -90,7 +91,6 @@ header.logged {
 
 @mixin loginMain-core {
     margin-bottom: 3em;
-    padding-left: 0.3em;
     padding-right: 0.3em;
 
     h2 {
@@ -113,18 +113,26 @@ header.logged {
         width: 100%;
     }
 
-    .notMySurgeryLink {
-        margin-top: 1em;
+    .organDonationLink {
         text-align: left;
         cursor: pointer;
         font-weight: bold;
+        display: inline;
+    }
+
+    .organDonationLink:focus {
+        @include linkFocusStyle;
+    }
+
+    .organDonationLink:hover {
+        @include linkHoverStyle;
     }
 
     .checkFeaturesLink {
         cursor: pointer;
         text-decoration: underline;
       &.desktopWeb {
-        display: inline-block;
+        display: inline;
         font-family: $default-web;
       }
     }

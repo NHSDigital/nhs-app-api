@@ -35,7 +35,7 @@
              :aria-label="$t('th05.privacyStatement') + $t('th05.privacyPolicyLinkText')">
             {{ $t('th05.privacyStatement') }}
             <analytics-tracked-tag :href="privacyPolicyURL"
-                                   :class="$style['paragraph-link']"
+                                   :class="$style.throtlingLink"
                                    :text="$t('th05.privacyPolicyLinkText')"
                                    tag="a" target="_blank">
               {{ $t('th05.privacyPolicyLinkText') }}

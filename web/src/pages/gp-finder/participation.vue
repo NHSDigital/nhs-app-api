@@ -4,7 +4,7 @@
       <h2>{{ `${$t('th04.featuresHeader')} ${practiceName}` }}</h2>
       <analytics-tracked-tag :text="$t('th04.ctaNotMySurgery')"
                              :click-func="backButtonClicked"
-                             :class="$style.linkBack"
+                             :class="$style.throtlingLink"
                              tag="a">
         {{ $t('th04.ctaNotMySurgery') }}
       </analytics-tracked-tag>

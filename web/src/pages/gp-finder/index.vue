@@ -54,6 +54,7 @@
       <login-banner v-if="!$store.state.device.isNativeApp"/>
       <analytics-tracked-tag v-if="$store.state.device.isNativeApp"
                              :click-func="hasAnAccountLinkClicked"
+                             :class="$style.throtlingLink"
                              :text="$t('th02.hasAnAccountLink')"
                              tag="a"
                              tabindex="0">

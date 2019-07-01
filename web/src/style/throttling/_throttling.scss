@@ -24,3 +24,24 @@ a {
   font-weight: normal;
   text-decoration: underline;
 }
+
+.throtlingLink {
+  text-decoration: underline;
+  display: inline;
+}
+
+.throtlingLink:focus{
+  background: $focus_highlight;
+  box-shadow: 0 0 0 4px $focus_highlight;
+  color: $black;
+  outline: 0;
+  width: auto;
+}
+
+.throtlingLink:hover{
+  background: $hover_highlight;
+  box-shadow: 0 0 0 4px $hover_highlight;
+  color: $black;
+  width: auto;
+  text-decoration: underline;
+}

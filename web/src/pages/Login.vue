@@ -23,24 +23,22 @@
         </analytics-tracked-tag>
         <div v-if="!isPracticeParticipating && isThrottlingEnabled">
           <br>
-          <ul :class="$style['list-menu']">
-            <li role="link">
-              <analytics-tracked-tag id="btn_organDonation"
-                                     :href="organDonationUrl"
-                                     :class="[$style['no-decoration'], $style.focusBorder]"
-                                     :text="$t('shared.organDonation.recordDecision')"
-                                     tag="a"
-                                     target="_blank">
-                <h3>{{ $t('shared.organDonation.recordDecision') }}</h3>
-              </analytics-tracked-tag>
-            </li>
-          </ul>
+          <analytics-tracked-tag id="btn_organDonation"
+                                 :href="organDonationUrl"
+                                 :class="$style.organDonationLink"
+                                 :text="$t('shared.organDonation.recordDecision')"
+                                 tag="a"
+                                 target="_blank">
+            <NHS-Arrow-Circle />
+            {{ $t('shared.organDonation.recordDecision') }}
+          </analytics-tracked-tag>
           <div v-if="!isPracticeParticipating && isThrottlingEnabled">
             <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
             <h5>{{ notParticipatingSurgeryName }}</h5>
             <p>{{ notParticipatingSurgeryAddress }}</p>
             <analytics-tracked-tag :text="$t('login.notMyGpSurgery')"
-                                   :class="$style.notMySurgeryLink"
+                                   :class="[$style.checkFeaturesLink,
+                                            !$store.state.device.isNativeApp && $style.desktopWeb]"
                                    :click-func="resetAndGoToGPFinder"
                                    href="#"
                                    tag="a">
@@ -59,6 +57,7 @@
 </template>
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import NHSArrowCircle from '@/components/icons/NHSArrowCircle';
 import LoginButton from '@/components/LoginButton';
 import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN } from '@/lib/routes';
@@ -72,6 +71,7 @@ export default {
   components: {
     AnalyticsTrackedTag,
     LoginButton,
+    NHSArrowCircle,
   },
   data() {
     return {

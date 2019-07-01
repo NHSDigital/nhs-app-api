@@ -5,7 +5,7 @@
         <div :class="$style.searchResult">
           <p> {{ gpPractices.length + $t('th03.resultsFound') + '\'' + searchQuery + '\'' }}</p>
           <p v-if="!$store.state.device.isNativeApp">
-            <a tabindex="0" :class="$style['paragraph-link']" role="link"
+            <a tabindex="0" :class="$style.throtlingLink" role="link"
                @click="backButtonClicked">
               {{ $t('th03.searchAgain') }}
             </a>
@@ -57,7 +57,7 @@
         <div :class="$style.searchResult">
           <p> {{ gpPractices.length + $t('th03.resultsFound') + '\'' + searchQuery + '\'' }}</p>
           <p v-if="!$store.state.device.isNativeApp">
-            <a tabindex="0" :class="$style['paragraph-link']" role="link"
+            <a tabindex="0" :class="$style.throtlingLink" role="link"
                @click="backButtonClicked">
               {{ $t('th03.searchAgain') }}
             </a>
