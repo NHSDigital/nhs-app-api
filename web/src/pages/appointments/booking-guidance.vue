@@ -30,12 +30,14 @@
                              :destination="symptomsPath"
                              :tabindex="-1"
                              data-purpose="generic-button">
-        <generic-button id="btn_check_symptoms"
-                        :class="$style.button"
-                        tabindex="0"
-                        @click="onCheckSymptomClicked">
-          {{ $t('appointments.guidance.symptomButtonText') }}
-        </generic-button>
+        <no-js-form :action="symptomsPath" :value="formData">
+          <generic-button id="btn_check_symptoms"
+                          :class="$style.button"
+                          tabindex="0"
+                          @click="onCheckSymptomClicked">
+            {{ $t('appointments.guidance.symptomButtonText') }}
+          </generic-button>
+        </no-js-form>
       </analytics-tracked-tag>
     </div>
 
