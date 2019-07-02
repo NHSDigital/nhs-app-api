@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Extensions;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Middleware;
 

@@ -1,12 +1,10 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Exceptions;
-using NHSOnline.Backend.ServiceJourneyRulesApi.Extensions;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
-using IApplicationLifetime = Microsoft.Extensions.Hosting.IApplicationLifetime;
 
-namespace NHSOnline.Backend.ServiceJourneyRulesApi
+namespace NHSOnline.Backend.ServiceJourneyRulesApi.Extensions
 {
     internal static class ServiceCollectionExtensions
     {
@@ -14,7 +12,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         {
             var serviceProvider = services.BuildServiceProvider();
             var journeyService = serviceProvider.GetService<IJourneyService>();
-            var applicationLifetime = serviceProvider.GetService<IApplicationLifetime>();
 
             try
             {
@@ -33,7 +30,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                     throw;
                 }
 
-                applicationLifetime.StopApplication(1);
+                Environment.Exit(1);
             }
         }
     }
