@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Types;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -150,7 +151,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
-        public async Task Execute_WhenThereIsAFolderConflict_ReturnsFalse()
+        public async Task Execute_WhenThereIsAFolderOdsConflict_ReturnsFalse()
         {
             // Arrange
             var context = new ConfigurationContext
@@ -191,14 +192,19 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
-        public async Task Execute_WhenGpInfoHasMatchingTargets_SetsTheMatchingTargets()
+        public async Task Execute_WhenGpInfoHasMatchingTargets_SetsFolderOdsJourneys()
         {
             // Arrange
             const string folderName = "folder1";
             const string folderName2 = "folder2";
-            const string folderName3 = "folder3";
             const string ccgCode = "ccgCode1";
             const string ccgCode2 = "ccgCode2";
+
+            var allConfiguration = CreateTargetConfiguration(all: "*");
+            var ccgConfiguration = CreateTargetConfiguration(ccgCode: ccgCode2);
+            var odsCodeConfiguration = CreateTargetConfiguration(odsCode: "9");
+            var odsCodesConfiguration = CreateTargetConfiguration(odsCodes: new List<string> { "8", "10" });
+            var supplierConfiguration = CreateTargetConfiguration(Supplier.Tpp);
 
             var context = new ConfigurationContext
             {
@@ -210,36 +216,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 },
                 FolderConfigurations = new Dictionary<string, IEnumerable<TargetConfiguration>>
                 {
-                    {
-                        folderName,
-                        new[]
-                        {
-                            new TargetConfiguration
-                                { Target = new Target { All = "*" }, Journeys = _fixture.Create<Journeys>() }
-                        }
-                    },
-                    {
-                        folderName2,
-                        new[]
-                        {
-                            new TargetConfiguration
-                                { Target = new Target { CcgCode = ccgCode }, Journeys = _fixture.Create<Journeys>() },
-                            new TargetConfiguration
-                                { Target = new Target { OdsCode = "9" }, Journeys = _fixture.Create<Journeys>() },
-                        }
-                    },
-                    {
-                        folderName3,
-                        new[]
-                        {
-                            new TargetConfiguration
-                            {
-                                Target = new Target { Supplier = Supplier.Tpp }, Journeys = _fixture.Create<Journeys>()
-                            },
-                            new TargetConfiguration
-                                { Target = new Target { CcgCode = ccgCode2 }, Journeys = _fixture.Create<Journeys>() },
-                        }
-                    }
+                    { folderName, new[] { allConfiguration, odsCodeConfiguration } },
+                    { folderName2, new[] { ccgConfiguration, supplierConfiguration, odsCodesConfiguration } },
                 }
             };
 
@@ -248,13 +226,54 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
             // Assert
             result.Should().BeTrue();
-            context.FolderOdsJourneys.Should().NotBeNull().And.HaveCount(3);
-            context.FolderOdsJourneys.Should().ContainKey(folderName)
-                .WhichValue.Should().NotBeNull().And.HaveCount(3);
-            context.FolderOdsJourneys.Should().ContainKey(folderName2)
-                .WhichValue.Should().NotBeNull().And.HaveCount(2);
-            context.FolderOdsJourneys.Should().ContainKey(folderName3)
-                .WhichValue.Should().NotBeNull().And.HaveCount(3);
+            context.FolderOdsJourneys.Should().NotBeNull().And.HaveCount(2);
+            context.FolderOdsJourneys.Should().ContainKeys(folderName, folderName2);
+
+            var firstFolderConfigurations = context.FolderOdsJourneys[folderName];
+            firstFolderConfigurations.Should().NotBeNull().And.HaveCount(4);
+
+            firstFolderConfigurations.Should().ContainKey("1").WhichValue.Should()
+                .NotBe(allConfiguration.Journeys).And
+                .BeEquivalentTo(allConfiguration.Journeys);
+            firstFolderConfigurations.Should().ContainKey("2").WhichValue.Should()
+                .NotBe(allConfiguration.Journeys).And
+                .BeEquivalentTo(allConfiguration.Journeys);
+            firstFolderConfigurations.Should().ContainKey("3").WhichValue.Should()
+                .NotBe(allConfiguration.Journeys).And
+                .BeEquivalentTo(allConfiguration.Journeys);
+            firstFolderConfigurations.Should().ContainKey("9").WhichValue.Should()
+                .NotBe(odsCodeConfiguration.Journeys).And
+                .BeEquivalentTo(odsCodeConfiguration.Journeys);
+
+            var secondFolderConfigurations = context.FolderOdsJourneys[folderName2];
+            secondFolderConfigurations.Should().NotBeNull().And.HaveCount(5);
+
+            secondFolderConfigurations.Should().ContainKey("1").WhichValue.Should()
+                .NotBe(supplierConfiguration.Journeys).And
+                .BeEquivalentTo(supplierConfiguration.Journeys);
+            secondFolderConfigurations.Should().ContainKey("2").WhichValue.Should()
+                .NotBe(ccgConfiguration.Journeys).And
+                .BeEquivalentTo(ccgConfiguration.Journeys);
+            secondFolderConfigurations.Should().ContainKey("3").WhichValue.Should()
+                .NotBe(ccgConfiguration.Journeys).And
+                .BeEquivalentTo(ccgConfiguration.Journeys);
+            secondFolderConfigurations.Should().ContainKey("8").WhichValue.Should()
+                .NotBe(odsCodesConfiguration.Journeys).And
+                .BeEquivalentTo(odsCodesConfiguration.Journeys);
+            secondFolderConfigurations.Should().ContainKey("10").WhichValue.Should()
+                .NotBe(odsCodesConfiguration.Journeys).And
+                .BeEquivalentTo(odsCodesConfiguration.Journeys);
+        }
+
+        private TargetConfiguration CreateTargetConfiguration(Supplier supplier = Supplier.Unknown,
+            string odsCode = null, List<string> odsCodes = null, string ccgCode = null, string all = null)
+        {
+            return new TargetConfiguration
+            {
+                Target = new Target
+                    { Supplier = supplier, OdsCode = odsCode, OdsCodes = odsCodes, CcgCode = ccgCode, All = all },
+                Journeys = _fixture.Create<Journeys>()
+            };
         }
     }
 }

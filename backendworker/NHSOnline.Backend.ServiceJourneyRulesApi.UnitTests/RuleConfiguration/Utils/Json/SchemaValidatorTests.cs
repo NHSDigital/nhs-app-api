@@ -113,10 +113,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
-        [DataRow("\"folderOrder\": \"notAList\"")]
-        [DataRow("\"folderOrder\": { \"prop\": \"foo\" }")]
+        [DataRow("\"folderOrder\": \"notAList\"", "ArrayExpected: #/folderOrder")]
+        [DataRow("\"folderOrder\": { \"prop\": \"foo\" }", "ArrayExpected: #/folderOrder")]
+        [DataRow("\"folderOrder\": []", "TooFewItems: #/folderOrder")]
         public async Task ValidateJsonAgainstSchema_RulesSchema_WhenCalledWithInvalidFolderOrderType_ReturnsFalse(
-            string folderOrder)
+            string folderOrder, string expectedError)
         {
             // Arrange
             var fileContent = "{" +
@@ -129,7 +130,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _validator.ValidateJsonAgainstSchema(_rulesSchema, jsonFile);
 
             // Assert
-            _mockLogger.VerifyLogger(LogLevel.Error, "ArrayExpected: #/folderOrder", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
 
             result.Should().BeFalse();
         }
@@ -182,6 +183,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         [DataRow("", null)]
         [DataRow("\"*\":\"error\"", "NotInEnumeration: #/target.*")]
+        [DataRow("\"odsCodes\":\"NotAList\"", "ArrayExpected: #/target.odsCodes")]
+        [DataRow("\"odsCodes\": []", "TooFewItems: #/target.odsCodes")]
         [DataRow("\"supplier\":\"foo\"", "NotInEnumeration: #/target.supplier")]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidTarget_ReturnsFalse(string target,
@@ -222,6 +225,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("\"supplier\":\"vision\"")]
         [DataRow("\"ccgCode\":\"foo\"")]
         [DataRow("\"odsCode\":\"foo\"")]
+        [DataRow("\"odsCodes\":[\"foo\", \"bop\"]")]
         [DataRow("\"*\":\"*\"")]
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidTarget_ReturnsTrue(
             string target)

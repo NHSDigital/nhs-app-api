@@ -118,6 +118,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 return new List<string> { target.OdsCode };
             }
 
+            if (target.OdsCodes != null)
+            {
+                return target.OdsCodes;
+            }
+
             var gpInfoTargets = gpInfos.AsEnumerable();
 
             switch (target)

@@ -1,0 +1,12 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes: 
+   - X00100
+   - XXXXXX
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: foo
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: foo
