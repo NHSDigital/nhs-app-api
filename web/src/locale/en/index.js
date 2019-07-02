@@ -996,12 +996,6 @@ export default {
           message: 'If the problem persists you can contact NHS Blood and Transplant to get help with this.',
         },
       },
-      504: {
-        pageTitle: 'Decision being processed',
-        pageHeader: 'Decision being processed',
-        header: 'Decision being processed',
-        message: 'Check back later to confirm that your decision has been registered.',
-      },
     },
     review_your_decision: {
       errors: {
