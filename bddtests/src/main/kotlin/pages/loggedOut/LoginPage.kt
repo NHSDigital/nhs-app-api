@@ -41,8 +41,8 @@ class LoginPage : HybridPageObject() {
     )
 
     val recordMyOrganDonationDecisionLink = HybridPageElement(
-            webDesktopLocator = "//h3[contains(text(), 'Record my organ donation decision')]",
-            webMobileLocator = "//h3[contains(text(), 'Record my organ donation decision')]",
+            webDesktopLocator = "//*[@id='btn_organDonation']",
+            webMobileLocator = "//*[@id='btn_organDonation']",
             androidLocator = null,
             page = this
     )
