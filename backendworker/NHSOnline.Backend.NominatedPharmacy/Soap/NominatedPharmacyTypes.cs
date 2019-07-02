@@ -64,8 +64,18 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             public string Code { get; set; }
             [XmlAttribute(AttributeName = "codeSystem")]
             public string CodeSystem { get; set; }
+            [XmlAttribute(AttributeName = "displayName")]
+            public string DisplayName { get; set; }
+            [XmlElement(ElementName = "qualifier")]
+            public Qualifier Qualifier { get; set; }
         }
-        
+
+        public class Qualifier
+        {
+            [XmlAttribute(AttributeName = "code")]
+            public string Code { get; set; }
+        }
+
         public class AgentPersonSDSInner
         {
             [XmlElement(ElementName = "id", Namespace = "urn:hl7-org:v3")]

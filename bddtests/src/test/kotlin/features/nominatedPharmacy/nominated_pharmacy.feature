@@ -79,6 +79,35 @@ Feature: nominated pharmacy journey
       | GP System |
       | EMIS      |
 
+  Scenario Outline: Patient does not see nominated pharmacy when gp practice is enabled but account is sensitive
+    Given I am patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a P1 typed nominated pharmacy with SW11XR OdsCode and S ConfidentialityCode
+    And I am logged in
+    When I navigate to prescriptions
+    Then I see prescriptions page loaded
+    And I do not see the nominated pharmacy panel
+
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  Scenario Outline: Patient does not see nominated pharmacy when gp practice is enabled but nhs number is superseded
+    Given I am patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a P1 typed nominated pharmacy with SW11XR OdsCode and nhsNumber 1234567890 is returned
+    And I am logged in
+    When I navigate to prescriptions
+    Then I see prescriptions page loaded
+    And I do not see the nominated pharmacy panel
+
+    Examples:
+      | GP System | 
+      | EMIS      |
 
   Scenario Outline: If patient has a P3 typed nominated pharmacy it can not be changed
     Given I am patient using the <GP System> GP System

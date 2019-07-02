@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         private const string SpineAccreditedSystemIdTo = "0002";
         private const string NhsNumber = "239 372 9384";
         private const string NhsNumberTrimmed = "2393729384";
+        private const string RandomNhsNumber = "1234567890";
         private const string CurrentPharmacyOdsCode = "PHA12";
         private const string UpdatedPharmacyOdsCode = "AB837";
 
@@ -62,7 +63,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                    req.ControlActEvent.Query.RetrievalItems[0].SemanticsText.Equals("person.nameUsual", StringComparison.Ordinal) &&
                                    req.ControlActEvent.Query.RetrievalItems[1].SemanticsText.Equals("person.otherDemographics", StringComparison.Ordinal) &&
                                    req.ControlActEvent.Query.RetrievalItems[2].SemanticsText.Equals("pharmacy", StringComparison.Ordinal) &&
-                                   req.ControlActEvent.Query.RetrievalItems[3].SemanticsText.Equals("supercededId", StringComparison.Ordinal))
+                                   req.ControlActEvent.Query.RetrievalItems[3].SemanticsText.Equals("person.confidentiality", StringComparison.Ordinal))
                 ))
                 .Returns(Task.FromResult(
                     new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.OK)
@@ -89,6 +90,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                             {
                                                                 PlayedOtherProviderPatients =
                                                                     new List<PlayedOtherProviderPatient>()
+                                                            }, 
+                                                            Id = new Id
+                                                            {
+                                                                Extension = NhsNumberTrimmed
                                                             }
                                                         }
                                                     },
@@ -198,6 +203,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                             }
                                                                         }
                                                                     }
+                                                            },
+                                                            Id = new Id
+                                                            {
+                                                                Extension = NhsNumberTrimmed
                                                             }
                                                         }
                                                     },
@@ -231,6 +240,176 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             result.HasValidPharmacyType.Should().Be(hasValidPharmacyType);
         }
 
+        
+        
+        [TestMethod]
+        public async Task NominatedPharmacyGet_ReturnsFalseWhenNhsNumberReturnedDoesNotMatch()
+        {
+            // Arrange
+            _nominatedPharmacyClient
+                .Setup(x => x.NominatedPharmacyGet(
+                    It.Is<QUPAIN000008UK02>(
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
+                                   StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
+                                   req.ControlActEvent.Query.RetrievalItems[0].SemanticsText.Equals("person.nameUsual", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[1].SemanticsText.Equals("person.otherDemographics", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[2].SemanticsText.Equals("pharmacy", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[3].SemanticsText.Equals("person.confidentiality", StringComparison.Ordinal))
+                ))
+                .Returns(Task.FromResult(
+                    new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>
+                        {
+                            Body = new Body<QUPAIN000009UK03Response>
+                            {
+                                RetrievalQueryResponse = new QUPAIN000009UK03Response
+                                {
+                                    QUPAIN000009UK03 = new QUPAIN000009UK03
+                                    {
+                                        ControlActEvent = new ControlActEvent
+                                        {
+                                            Subject = new Subject
+                                            {
+                                                PDSResponse = new PDSResponse
+                                                {
+                                                    Subject = new Subject
+                                                    {
+                                                        PatientRole = new PatientRole
+                                                        {
+                                                            PatientPerson = new PatientPerson
+                                                            {
+                                                                PlayedOtherProviderPatients =
+                                                                    new List<PlayedOtherProviderPatient>()
+                                                            }, 
+                                                            Id = new Id
+                                                            {
+                                                                Extension = RandomNhsNumber
+                                                            }
+                                                        }
+                                                    },
+                                                    PertinentInformation = new PertinentInformation
+                                                    {
+                                                        PertinentSerialChangeNumber = new PertinentSerialChangeNumber
+                                                        {
+                                                            Value = new ValueElement
+                                                            {
+                                                                Value = "22",
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.PharmacyOdsCode.Should().Be(null);
+            result.HasValidPharmacyType.Should().Be(false);
+        }
+        
+        [DataRow("SS")]
+        [DataRow("T")]
+        [DataRow("")]
+        [DataRow(null)]
+        [DataTestMethod]
+        public async Task NominatedPharmacyGet_ReturnsFalseWhenConfidentalityCodeIsPresent(string code)
+        {
+            // Arrange
+            _nominatedPharmacyClient
+                .Setup(x => x.NominatedPharmacyGet(
+                    It.Is<QUPAIN000008UK02>(
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
+                                   StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
+                                   req.ControlActEvent.Query.RetrievalItems[0].SemanticsText.Equals("person.nameUsual", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[1].SemanticsText.Equals("person.otherDemographics", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[2].SemanticsText.Equals("pharmacy", StringComparison.Ordinal) &&
+                                   req.ControlActEvent.Query.RetrievalItems[3].SemanticsText.Equals("person.confidentiality", StringComparison.Ordinal))
+                ))
+                .Returns(Task.FromResult(
+                    new NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPAIN000009UK03Response>
+                        {
+                            Body = new Body<QUPAIN000009UK03Response>
+                            {
+                                RetrievalQueryResponse = new QUPAIN000009UK03Response
+                                {
+                                    QUPAIN000009UK03 = new QUPAIN000009UK03
+                                    {
+                                        ControlActEvent = new ControlActEvent
+                                        {
+                                            Subject = new Subject
+                                            {
+                                                PDSResponse = new PDSResponse
+                                                {
+                                                    Subject = new Subject
+                                                    {
+                                                        PatientRole = new PatientRole
+                                                        {
+                                                            PatientPerson = new PatientPerson
+                                                            {
+                                                                PlayedOtherProviderPatients =
+                                                                    new List<PlayedOtherProviderPatient>()
+                                                            }, 
+                                                            Id = new Id
+                                                            {
+                                                                Extension = NhsNumberTrimmed
+                                                            },
+                                                            ConfidentialityCode = new ConfidentialityCode
+                                                            {
+                                                                Code = code
+                                                            }
+                                                        }   
+                                                    },
+                                                    PertinentInformation = new PertinentInformation
+                                                    {
+                                                        PertinentSerialChangeNumber = new PertinentSerialChangeNumber
+                                                        {
+                                                            Value = new ValueElement
+                                                            {
+                                                                Value = "22",
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.PharmacyOdsCode.Should().Be(null);
+            result.HasValidPharmacyType.Should().Be(false);
+        }
+         
         [TestMethod]
         public async Task NominatedPharmacyUpdate_Returns400_WhenUpdateClientFails()
         {

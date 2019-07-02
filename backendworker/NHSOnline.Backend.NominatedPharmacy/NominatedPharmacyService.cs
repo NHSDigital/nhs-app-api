@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                             },
                             new RetrievalItem
                             {
-                                SemanticsText = "supercededId",
+                                SemanticsText = "person.confidentiality",
                             },
                         },
                     },
@@ -158,6 +158,37 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     return new GetNominatedPharmacyResult(result.StatusCode, false);
                 }
 
+                var issueEvents = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Reasons?.Select(x => x.JustifyingDetectedIssueEvent);
+
+                if (issueEvents != null)
+                {
+                    var issueEventsWithCode = issueEvents.Where(x => x.Code != null);
+                    foreach (var issue in issueEventsWithCode)
+                    {
+                        _logger.LogInformation($"JustifyingDetectedIssueEvent returned from PDS Trace " +
+                                    $"with a code of [{issue.Code.Code}] and a displayName of [{issue.Code.DisplayName}]");
+                    }
+                }
+
+                var nhsNumberReturned = result?.Body?.QUPAIN000009UK03?.ControlActEvent
+                    ?.Subject?.PDSResponse?.Subject?.PatientRole?.Id?.Extension;
+                
+                if (!nhsNumber.RemoveWhiteSpace().Equals(nhsNumberReturned, StringComparison.Ordinal))
+                {
+                    _logger.LogInformation($"The sent nhsNumber has been superseded " +
+                                           $"- old number [{nhsNumber}], new number [{nhsNumberReturned}]");
+                    return new GetNominatedPharmacyResult(result.StatusCode, false);
+                } 
+              
+                var confidentialityCode = result?.Body?.QUPAIN000009UK03?.ControlActEvent
+                    ?.Subject?.PDSResponse?.Subject?.PatientRole?.ConfidentialityCode;
+                
+                if (confidentialityCode != null)
+                {
+                    _logger.LogInformation("Account is marked as confidential");
+                    return new GetNominatedPharmacyResult(result.StatusCode, false);
+                }  
+  
                 var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
 
                 var patientCareProvisionEvents = result?.Body?.QUPAIN000009UK03?.ControlActEvent
@@ -170,6 +201,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 PharmacyCheck pharmacyCheck = new PharmacyCheck { IsValid = false };
 
                 pharmacyCheck = await CheckPharmacy(patientCareProvisionEvents);
+
 
                 if (pharmacyCheck.IsValid)
                 {

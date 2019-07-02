@@ -9,7 +9,7 @@ class GetNominatedPharmacyRequestBuilder
         private const val fromAsid = "200000000355"
         private const val toAsid = "200000000355"
 
-        fun getResponse(): String {
+        fun getResponse(nhsNumber: String): String {
             return """
             <?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
@@ -81,7 +81,7 @@ class GetNominatedPharmacyRequestBuilder
                           </pertinentInformation>
                           <subject typeCode="SBJ">
                             <patientRole classCode="PAT">
-                              <id root="2.16.840.1.113883.2.1.4.1" extension="9674998489"/>
+                              <id root="2.16.840.1.113883.2.1.4.1" extension="${nhsNumber}"/>
                               <patientPerson classCode="PSN" determinerCode="INSTANCE">
                                 <administrativeGenderCode code="1"/>
                                 <birthTime value="19230326"/>
@@ -151,7 +151,8 @@ class GetNominatedPharmacyRequestBuilder
         """.trimIndent()
         }
 
-        fun getResponse(odsCode: String, pharmacyTypes: kotlin.Array<String>): String {
+        fun getResponse(nhsNumber: String, odsCode: String,
+                        pharmacyTypes: kotlin.Array<String>, code : String? = null): String {
             return """
             <?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
@@ -212,6 +213,13 @@ class GetNominatedPharmacyRequestBuilder
                           </agentSystemSDS>
                         </AgentSystemSDS>
                       </author1>
+                      <reason typeCode="RSON">
+                        <justifyingDetectedIssueEvent classCode="ALRT" moodCode="EVN">
+                          <code code="9" codeSystem="2.16.840.1.113883.2.1.3.2.4.17.42" displayName="Success retrieval">
+                            <qualifier code="WG"/>
+                          </code>
+                        </justifyingDetectedIssueEvent>
+                      </reason>
                       <subject typeCode="SUBJ">
                         <PDSResponse
                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" classCode="OBS" moodCode="EVN">
@@ -223,7 +231,8 @@ class GetNominatedPharmacyRequestBuilder
                           </pertinentInformation>
                           <subject typeCode="SBJ">
                             <patientRole classCode="PAT">
-                              <id root="2.16.840.1.113883.2.1.4.1" extension="9674998489"/>
+                              ${ getConfidentialityCode(code) }
+                              <id root="2.16.840.1.113883.2.1.4.1" extension="${nhsNumber}"/>
                               <patientPerson classCode="PSN" determinerCode="INSTANCE">
                                 <administrativeGenderCode code="1"/>
                                 <birthTime value="19230326"/>
@@ -294,8 +303,17 @@ class GetNominatedPharmacyRequestBuilder
         """.trimIndent()
         }
 
+        fun getConfidentialityCode(code: String?) : StringBuilder {
+            val ccBuilder = StringBuilder()
+            if (code != null) {
+                ccBuilder.append(
+                        """<confidentialityCode codeSystem="2.16.840.1.113883.2.1.3.2.4.16.1" code="${code}"/>""")
+            }
+            return ccBuilder
+        }
+
         fun getPlayedOtherProviderPatient(odsCode: String, pharmacyTypes: kotlin.Array<String>) : StringBuilder {
-            val patientCareProvisionBuilder = StringBuilder();
+            val patientCareProvisionBuilder = StringBuilder()
             if(pharmacyTypes.size > 0) {
                 for (pharmacyType in pharmacyTypes) {
                     patientCareProvisionBuilder.append("""<playedOtherProviderPatient classCode="PAT">
@@ -311,10 +329,10 @@ class GetNominatedPharmacyRequestBuilder
                                         </assignedEntity>
                                       </performer>
                                         </patientCareProvisionEvent> </subjectOf>
-                                </playedOtherProviderPatient>""");
+                                </playedOtherProviderPatient>""")
                 }
             }
-            return patientCareProvisionBuilder;
+            return patientCareProvisionBuilder
         }
     }
 }

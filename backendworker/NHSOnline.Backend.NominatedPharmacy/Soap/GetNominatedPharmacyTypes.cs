@@ -265,14 +265,24 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             public string TypeCode { get; set; }
         }
 
+        public class ConfidentialityCode
+        {
+            [XmlAttribute(AttributeName = "codeSystem")]
+            public string CodeSystem { get; set; }
+            [XmlAttribute(AttributeName = "code")]
+            public string Code { get; set; }
+        }
+
         public class PatientRole
         {
             [XmlElement(ElementName = "id")]
-            public NominatedPharmacyTypes.Id Id { get; set; }
+            public NominatedPharmacyTypes.Id Id { get; set; }       
             [XmlElement(ElementName = "patientPerson")]
-            public PatientPerson PatientPerson { get; set; }
+            public PatientPerson PatientPerson { get; set; }   
             [XmlElement(ElementName = "subjectOf8")]
-            public SubjectOf8 SubjectOf8 { get; set; }
+            public SubjectOf8 SubjectOf8 { get; set; } 
+            [XmlElement(ElementName = "confidentialityCode")]
+            public ConfidentialityCode ConfidentialityCode { get; set; }
             [XmlAttribute(AttributeName = "classCode")]
             public string ClassCode { get; set; }
         }
@@ -329,7 +339,26 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             public string ClassCode { get; set; }
             [XmlAttribute(AttributeName = "moodCode")]
             public string MoodCode { get; set; }
+            [XmlElement(ElementName = "reason")]
+            public List<Reason> Reasons { get; set; }
+        }
 
+        public class JustifyingDetectedIssueEvent
+        {
+            [XmlElement(ElementName = "code")]
+            public NominatedPharmacyTypes.CodeElement Code { get; set; }
+            [XmlAttribute(AttributeName = "classCode")]
+            public string ClassCode { get; set; }
+            [XmlAttribute(AttributeName = "moodCode")]
+            public string MoodCode { get; set; }
+        }
+
+        public class Reason
+        {
+            [XmlElement(ElementName = "justifyingDetectedIssueEvent")]
+            public JustifyingDetectedIssueEvent JustifyingDetectedIssueEvent { get; set; }
+            [XmlAttribute(AttributeName = "typeCode")]
+            public string TypeCode { get; set; }
         }
 
         public class QUPAIN000009UK03Response

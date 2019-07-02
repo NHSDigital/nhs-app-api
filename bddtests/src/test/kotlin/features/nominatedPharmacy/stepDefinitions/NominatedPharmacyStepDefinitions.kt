@@ -67,6 +67,16 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacyWithInternetPharmacy(odsCode)
     }
 
+    @Given("^I have a (.*) typed nominated pharmacy with (.*) OdsCode and nhsNumber (.*) is returned$")
+    fun iHaveANomPharmButDifferentNhsNumberIsReturned(pharmacyType : String, odsCode: String, nhsNumber: String) {
+        nominatedPharmacyDataSetupSteps.setupNominatedPharmacyWithDifferentNhsNumber(pharmacyType, odsCode, nhsNumber)
+    }
+
+    @Given("^I have a (.*) typed nominated pharmacy with (.*) OdsCode and (.*) ConfidentialityCode$")
+    fun iHaveANomPharmAndConfidentialityCode(pharmacyType : String, odsCode: String, confidentialityCode: String) {
+        nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, odsCode, confidentialityCode)
+    }
+
     @Given("^I don't have a nominated pharmacy of any type$")
     fun iDontHaveANominatedPharmacyOfAnyType() {
         nominatedPharmacyDataSetupSteps.setupNoNominatedPharmacy()

@@ -17,7 +17,8 @@ open class NominatedPharmacyDataSetupSteps {
     private val mockingClient = MockingClient.instance
 
     fun setupNoNominatedPharmacy() {
-        val responseStringForUpdatedPharmacy = GetNominatedPharmacyRequestBuilder.getResponse()
+        val nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
+        val responseStringForUpdatedPharmacy = GetNominatedPharmacyRequestBuilder.getResponse(nhsNumber)
 
         mockingClient.forSpine {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
@@ -34,8 +35,10 @@ open class NominatedPharmacyDataSetupSteps {
     }
 
     fun setupNominatedPharmacyWithInternetPharmacy(odsCode: String) {
+        val nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
+
         val responseStringForUpdatedPharmacy =
-                GetNominatedPharmacyRequestBuilder.getResponse(odsCode, arrayOf("P1"))
+                GetNominatedPharmacyRequestBuilder.getResponse(nhsNumber, odsCode, arrayOf("P1"))
 
         mockingClient.forSpine {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
@@ -53,10 +56,22 @@ open class NominatedPharmacyDataSetupSteps {
         NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.set(generatedPharmacy)
     }
 
-    fun setupNominatedPharmacy(pharmacyType: String, odsCode: String) {
+    fun setupNominatedPharmacyWithDifferentNhsNumber(pharmacyType: String, odsCode: String, nhsNumber : String) {
         val responseStringForUpdatedPharmacy =
-                GetNominatedPharmacyRequestBuilder.getResponse(odsCode, arrayOf(pharmacyType))
+                GetNominatedPharmacyRequestBuilder.getResponse(nhsNumber, odsCode, arrayOf(pharmacyType))
 
+        setupNominatedPharmacy(responseStringForUpdatedPharmacy, odsCode)
+    }
+
+    fun setupNominatedPharmacy(pharmacyType: String, odsCode: String, code: String? = null) {
+        val  nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
+        val responseStringForUpdatedPharmacy =
+                GetNominatedPharmacyRequestBuilder.getResponse(nhsNumber, odsCode, arrayOf(pharmacyType), code)
+
+        setupNominatedPharmacy(responseStringForUpdatedPharmacy, odsCode)
+    }
+
+    private fun setupNominatedPharmacy(responseStringForUpdatedPharmacy: String, odsCode: String) {
         mockingClient.forSpine {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
                     .respondWithSuccess(responseStringForUpdatedPharmacy)
@@ -102,6 +117,7 @@ open class NominatedPharmacyDataSetupSteps {
             organisation: NhsAzureSearchOrganisationItem) {
         val responseStringForUpdatedPharmacy =
                 GetNominatedPharmacyRequestBuilder.getResponse(
+                        SerenityHelpers.getPatient().nhsNumbers[0],
                         organisation.NACSCode,
                         arrayOf(pharmacyType))
 
