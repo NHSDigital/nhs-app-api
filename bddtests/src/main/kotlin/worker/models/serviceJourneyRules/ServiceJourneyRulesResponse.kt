@@ -1,16 +1,21 @@
 package worker.models.serviceJourneyRules
 
+data class ServiceJourneyRulesResponse( var journeys : Journey)
 
-data class ServiceJourneyRulesResponse(
-        var Appointments: Appointments
-)
+data class Journey(var appointments: AppointmentsJourneyRules,
+                   var cdssAdvice: CdssJourneyRules,
+                   var cdssAdmin: CdssJourneyRules)
 
-data class Appointments(
-        var Provider: AppointmentsProvider
-)
+data class AppointmentsJourneyRules(var informaticaUrl:String, var provider:AppointmentsProvider)
 
-enum class AppointmentsProvider {
-    Unknown,
-    None,
-    Im1
+data class CdssJourneyRules(var serviceDefinition:String, var provider:CdssProvider)
+
+@Suppress("EnumNaming", "Must be lower case")
+enum class AppointmentsProvider{
+    im1,
+    informatica
+}
+@Suppress("EnumNaming", "Must be lower case")
+enum class CdssProvider{
+    eConsult
 }

@@ -22,3 +22,19 @@ Feature: Service Journey Rules
     And My session has expired
     When I request the service journey rules for my ODS Code
     Then I receive a "Unauthorized" error
+
+  @backend
+  Scenario: API call for SJR will successfully return a response with appointments configured to IM1
+    Given I am a user where the journey configuration for appointments is set to Im1
+    And I have logged in and have a valid session cookie
+    When I request the service journey rules for my ODS Code
+    Then I receive an "Ok" success code
+    And the service journey rules response will have appointments set to im1
+
+  @backend
+  Scenario: API call for SJR will successfully return a response with appointments configured to Informatica Frontdesk
+    Given I am a user where the journey configuration for appointments is set to Informatica
+    And I have logged in and have a valid session cookie
+    When I request the service journey rules for my ODS Code
+    Then I receive an "Ok" success code
+    And the service journey rules response will have appointments set to informatica

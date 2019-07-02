@@ -1,5 +1,6 @@
 package worker.models.session
 
+import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
 import javax.servlet.http.Cookie
 
 data class UserSessionResponse(var userSessionResponseCookie: UserSessionResponseCookie,
@@ -9,5 +10,5 @@ data class UserSessionResponse(var userSessionResponseCookie: UserSessionRespons
 
     class UserSessionResponseBody(var name: String,
                                   var sessionTimeout: Number,
-                                  var serviceJourneyRules: ServiceJourneyRules)
+                                  var serviceJourneyRules: ServiceJourneyRulesResponse)
 }

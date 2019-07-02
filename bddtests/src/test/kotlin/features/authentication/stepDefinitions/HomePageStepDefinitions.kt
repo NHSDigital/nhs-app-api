@@ -3,7 +3,7 @@ package features.authentication.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.steps.MyAppointmentsUISteps
+import features.im1Appointments.steps.MyAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.stepDefinitions.MyRecordStepDefinitions

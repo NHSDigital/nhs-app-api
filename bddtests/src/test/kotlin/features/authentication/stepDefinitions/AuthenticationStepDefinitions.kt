@@ -42,8 +42,8 @@ import worker.WorkerClient
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.Im1ConnectionToken
-import worker.models.session.AppointmentsProvider
-import worker.models.session.CdssProvider
+import worker.models.serviceJourneyRules.AppointmentsProvider
+import worker.models.serviceJourneyRules.CdssProvider
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import java.util.*

@@ -1,7 +1,7 @@
 package features.authentication.stepDefinitions
 
 import cucumber.api.java.en.Given
-import features.appointments.factories.AppointmentsBookingFactory
+import features.im1Appointments.factories.AppointmentsBookingFactory
 import features.sharedStepDefinitions.backend.AbstractSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
