@@ -18,6 +18,7 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
+using PatientIm1ConnectionResponse = NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.PatientIm1ConnectionResponse;
 
 namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 {
@@ -127,6 +128,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new PatientNhsNumber { NhsNumber = "123ABC" },
                 new PatientNhsNumber { NhsNumber = "456DEF" }
             };
+            
+            var verifyResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = expectedNhsNumbers
+            };
 
             var expectedResponse = new PatientIm1ConnectionResponse
             {
@@ -135,16 +142,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.Success(expectedResponse));
+                new Im1ConnectionVerifyResult.Success(verifyResponse));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             _gpSystemFactory
                 .Setup(x => x.LookupGpSystem(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
             
-            im1ConnectionService
-                .Setup(x => x.Verify(DefaultConnectionToken, odsCode))
-                .ReturnsAsync(new Im1ConnectionVerifyResult.Success(expectedResponse));
             _systemUnderTest = CreateIm1ConnectionController();
 
             // Act
@@ -216,7 +220,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new PatientNhsNumber { NhsNumber = "456DEF" }
             };
 
-            var registerResponse = new PatientIm1ConnectionResponse
+            var registerResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = expectedNhsNumbers,
@@ -225,7 +229,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 LinkageKey = model.LinkageKey
             };
 
-            var expectedResponse = new PatientIm1RegisterResponse
+            var expectedResponse = new PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = expectedNhsNumbers
@@ -253,7 +257,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             // Assert
             var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1RegisterResponse>().Subject;
+            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
 
             _auditor.Verify(x => x.AuditWithExplicitNhsNumber(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
@@ -301,7 +305,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
             
-            var expectedResponse = new PatientIm1ConnectionResponse
+            var expectedResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = new []{new PatientNhsNumber { NhsNumber = "1112223333" }}
@@ -321,7 +325,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             //Assert
             var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            var actualResponse = resultValue.Should().BeAssignableTo<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
@@ -449,7 +453,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                     It.IsAny<IGpSystem>())).ReturnsAsync(
                 new LinkageResult.SuccessfullyCreated(linkageResponse));
 
-            var connectionResponse = _fixture.Create<PatientIm1ConnectionResponse>();
+            var connectionResponse = _fixture.Create<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>();
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
                 .ReturnsAsync(new Im1ConnectionRegisterResult.Success(connectionResponse));
@@ -459,7 +463,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             //Assert
             var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            var actualResponse = resultValue.Should().BeAssignableTo<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(connectionResponse);
         }
 

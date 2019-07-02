@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.CidApi.Areas.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Im1Connection;
-using NHSOnline.Backend.GpSystems.Im1Connection.Models;
+using PatientIm1ConnectionResponse = NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.PatientIm1ConnectionResponse;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 {
@@ -53,8 +52,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return new StatusCodeResult(statusCodeResult);
         }
 
-        private PatientIm1RegisterResponse CreateResponse(PatientIm1ConnectionResponse response)
-            => new PatientIm1RegisterResponse
+        private static PatientIm1ConnectionResponse CreateResponse(GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse response)
+            => new PatientIm1ConnectionResponse
             {
                 ConnectionToken = response.ConnectionToken,
                 NhsNumbers = response.NhsNumbers

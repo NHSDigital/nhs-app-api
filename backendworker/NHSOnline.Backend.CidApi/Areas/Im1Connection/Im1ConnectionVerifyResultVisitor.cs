@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Im1Connection;
+using PatientIm1ConnectionResponse = NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.PatientIm1ConnectionResponse;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 {
@@ -8,7 +9,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
     {
         public IActionResult Visit(Im1ConnectionVerifyResult.Success result)
         {
-            return new OkObjectResult(result.Response);
+            return new OkObjectResult(CreateResponse(result.Response));
         }
 
         public IActionResult Visit(Im1ConnectionVerifyResult.NotFound result)
@@ -30,5 +31,12 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         {
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
+        
+        private static PatientIm1ConnectionResponse CreateResponse(GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse response)
+            => new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = response.ConnectionToken,
+                NhsNumbers = response.NhsNumbers
+            };
     }
 }
