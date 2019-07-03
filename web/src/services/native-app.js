@@ -98,15 +98,6 @@ export default {
     return false;
   },
 
-  completeAppIntro() {
-    const app = window.nativeApp;
-    if (app && app.completeAppIntro) {
-      app.completeAppIntro();
-      return true;
-    }
-    return false;
-  },
-
   resetPageFocus() {
     const app = window.nativeApp;
     if (app && app.resetPageFocus) {

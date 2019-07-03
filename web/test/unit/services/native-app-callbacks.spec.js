@@ -11,7 +11,6 @@ describe('NATIVE CALLBACKS', () => {
     { fn: 'hideHeaderSlim' },
     { fn: 'showHeaderSlim' },
     { fn: 'hideWhiteScreen' },
-    { fn: 'completeAppIntro' },
     { fn: 'resetPageFocus' },
     { fn: 'goToLoginOptions' },
     { fn: 'fetchNativeAppVersion' },
