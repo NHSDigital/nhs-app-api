@@ -112,6 +112,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Setup(x => x.GetPharmacyDetail(odsCode))
                 .Returns(Task.FromResult(pharmacyDetailResponse))
                 .Verifiable();
+            
+            _mockPharmacyService
+                .Setup(x => x.IsValidPharmacySubType(pharmacyDetailResponse))
+                .Returns(true)
+                .Verifiable();
 
             var mappedResult = _fixture.Create<PharmacyDetails>();
 
@@ -248,6 +253,50 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             value.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsSuccessWithEnabledFalse_WhenIsValidPharmacySubTypeReturnsFalse()
+        {
+            // Arrange
+            string nhsNumber = _userSession.GpUserSession.NhsNumber;
+
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType);
+            
+            var pharmacyOrgansation = _fixture.Create<Organisation>();
+            var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrgansation);
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
+            _mockNominatedPharmacyService
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Returns(Task.FromResult(nominatedPharmacyResult))
+                .Verifiable();
+
+            _mockPharmacyService
+                .Setup(x => x.GetPharmacyDetail(odsCode))
+                .Returns(Task.FromResult(pharmacyDetailResponse))
+                .Verifiable(); 
+            
+            _mockPharmacyService
+                .Setup(x => x.IsValidPharmacySubType(pharmacyDetailResponse))
+                .Returns(false)
+                .Verifiable(); 
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _mockNominatedPharmacyService.Verify();
+            _mockGpSearchService.Verify();
+            _mockPharmacyService.Verify();
+
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            value.Should().BeEquivalentTo(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = false, PharmacyDetails = null });
         }
 
         [DataTestMethod]

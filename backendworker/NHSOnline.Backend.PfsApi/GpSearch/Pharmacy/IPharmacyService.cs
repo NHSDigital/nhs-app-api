@@ -6,5 +6,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
     public interface IPharmacyService
     {
         Task<PharmacyDetailResponse> GetPharmacyDetail(string odsCode);
+        bool IsValidPharmacySubType(PharmacyDetailResponse pharmacyDetailResponse);
     }
 }

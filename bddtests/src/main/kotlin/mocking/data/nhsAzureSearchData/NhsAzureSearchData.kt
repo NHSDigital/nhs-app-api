@@ -64,6 +64,8 @@ object NhsAzureSearchData {
         return NhsAzureSearchOrganisationItem(
                 "$organisationId",
                 "$organisationName",
+                "P1",
+                "Community Pharmacy",
                 "$i Bridge Street",
                 "Clay Cross",
                 "",
@@ -83,6 +85,8 @@ object NhsAzureSearchData {
         return NhsAzureSearchOrganisationItem(
                 "$organisationId",
                 "$organisationName",
+                "P1",
+                "Community Pharmacy",
                 "$i Bridge Street",
                 "Clay Cross",
                 "",

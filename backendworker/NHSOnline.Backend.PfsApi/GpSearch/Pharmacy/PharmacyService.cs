@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
     {
         private readonly ILogger<PharmacyService> _logger;
         private readonly IGpLookupClient _gpLookupClient;
-
+        
         public PharmacyService(
             ILogger<PharmacyService> logger,
             IGpLookupClient gpLookupClient
@@ -77,6 +77,13 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 _logger.LogExit();
             }
         }
+        
+        public bool IsValidPharmacySubType(PharmacyDetailResponse pharmacyDetailResponse)
+        {
+            return (pharmacyDetailResponse.Pharmacy?.OrganisationSubType != null && 
+                    !pharmacyDetailResponse.Pharmacy.OrganisationSubType.Equals(
+                Constants.OrganisationSubTypeForInternetPharmacy, StringComparison.Ordinal));
+        } 
 
         private static OrganisationSearchData GetPharmacySearchData(string odsCode)
         {

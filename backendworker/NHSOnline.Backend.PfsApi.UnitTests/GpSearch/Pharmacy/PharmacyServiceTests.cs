@@ -157,5 +157,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             result.StatusCode.Should().Be(503);
             result.Pharmacy.Should().BeNull();
         }
+        
+        [TestMethod]
+        [DataRow(Constants.OrganisationSubTypeForInternetPharmacy, false)]
+        [DataRow(Constants.OrganisationSubTypeForCommunityPharmacy, true)]
+        [DataRow(null, false)]
+        public void IsValidPharmacySubType_ReturnsCorrectResult_ForDifferentOrganisationSubTypes(string organisationSubType, bool expectedResult)
+        {
+            // Arrange
+            var pharmacyDetailResponse = _fixture.Create<PharmacyDetailResponse>();
+            pharmacyDetailResponse.Pharmacy.OrganisationSubType = organisationSubType;
+
+            // Act
+            var result = _pharmacyService.IsValidPharmacySubType(pharmacyDetailResponse);
+
+            // Assert
+            result.Should().Be(expectedResult);
+        }
     }
 }

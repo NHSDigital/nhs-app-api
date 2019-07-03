@@ -33,6 +33,26 @@ open class NominatedPharmacyDataSetupSteps {
         NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.set(generatedPharmacy)
     }
 
+    fun setupNominatedPharmacyWithInternetPharmacy(odsCode: String) {
+        val responseStringForUpdatedPharmacy =
+                GetNominatedPharmacyRequestBuilder.getResponse(odsCode, arrayOf("P1"))
+
+        mockingClient.forSpine {
+            PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
+                    .respondWithSuccess(responseStringForUpdatedPharmacy)
+                    .inScenario("changeNominatedPharmacy")
+                    .whenScenarioStateIs(Scenario.STARTED)
+        }
+
+        val data = NhsAzureSearchData.generatePharmacyData(1)
+        val generatedPharmacy = data.value[0]
+        generatedPharmacy.NACSCode = odsCode
+        generatedPharmacy.OrganisationSubType = "Internet Pharmacy"
+        setupWiremockToReturnPharmacyWhenSearchedFor(generatedPharmacy)
+
+        NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.set(generatedPharmacy)
+    }
+
     fun setupNominatedPharmacy(pharmacyType: String, odsCode: String) {
         val responseStringForUpdatedPharmacy =
                 GetNominatedPharmacyRequestBuilder.getResponse(odsCode, arrayOf(pharmacyType))

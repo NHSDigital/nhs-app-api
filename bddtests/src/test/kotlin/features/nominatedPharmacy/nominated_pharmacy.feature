@@ -103,3 +103,19 @@ Feature: nominated pharmacy journey
       | GP System | Pharmacy Type | OdsCode |
       | EMIS      | P3            | SW11XR  |
 
+
+  Scenario Outline: If patient has an Internet Pharmacy they can't see any nominated pharmacy functionality
+    Given I am patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a P1 typed Internet pharmacy with <OdsCode> OdsCode
+    And I am logged in
+    When I navigate to prescriptions
+    Then I see prescriptions page loaded
+    And I do not see the nominated pharmacy panel
+
+    Examples:
+      | GP System | OdsCode |
+      | EMIS      | SW11XR  |
+

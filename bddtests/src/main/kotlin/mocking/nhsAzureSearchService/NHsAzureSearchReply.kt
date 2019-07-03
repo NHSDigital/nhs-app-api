@@ -11,6 +11,8 @@ data class NhsAzureSearchOrganisationReply(
 data class NhsAzureSearchOrganisationItem(
         var OrganisationID: String,
         var OrganisationName: String,
+        var OrganisationType: String,
+        var OrganisationSubType: String,
         var Address1: String,
         var Address2: String,
         var Address3: String,

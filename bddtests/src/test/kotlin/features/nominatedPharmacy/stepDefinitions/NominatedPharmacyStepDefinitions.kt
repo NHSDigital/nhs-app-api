@@ -62,6 +62,11 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, odsCode)
     }
 
+    @Given("^I have a P1 typed Internet pharmacy with (.*) OdsCode$")
+    fun iHaveAnInternetPharmacy(odsCode: String) {
+        nominatedPharmacyDataSetupSteps.setupNominatedPharmacyWithInternetPharmacy(odsCode)
+    }
+
     @Given("^I don't have a nominated pharmacy of any type$")
     fun iDontHaveANominatedPharmacyOfAnyType() {
         nominatedPharmacyDataSetupSteps.setupNoNominatedPharmacy()
@@ -112,8 +117,7 @@ class NominatedPharmacyStepDefinitions {
     @Then("^I see the nominated pharmacy panel on the prescriptions page$")
     fun iSeeTheNominatedPharmacyBanner() {
         assertTrue(
-                "Nominated pharmacy panel is not visible",
-                prescriptionsPage.nominatedPharmacyPanel.isVisible)
+                "Nominated pharmacy panel is visible", prescriptionsPage.nominatedPharmacyPanel.isVisible)
     }
 
     @Then("^I see my nominated pharmacy on the prescriptions page$")

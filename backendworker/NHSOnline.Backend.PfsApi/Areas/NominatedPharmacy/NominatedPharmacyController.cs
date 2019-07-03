@@ -108,7 +108,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 return new StatusCodeResult(GetErrorStatusCode("Error retrieving pharmacy using pharmacy ods code with status code",
                     result.HttpStatusCode));
             }
-
+            
+            if (!_pharmacyService.IsValidPharmacySubType(pharmacyDetailResponse))
+            {
+                _logger.LogInformation("Nominated pharmacy is disabled as user has invalid pharmacy subtype");
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = false });
+            }
+            
             var pharmacyDetails = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
             pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
             await _auditor.Audit(Support.Constants.AuditingTitles.GetNominatedPharmacy, "Successfully retrieved nominated pharmacy");
