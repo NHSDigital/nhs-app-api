@@ -19,10 +19,6 @@ describe('NATIVE CALLBACKS', () => {
       fn: 'updateHeaderText',
       param: 'headerText',
     },
-    {
-      fn: 'postNdopToken',
-      param: 'token',
-    },
     { fn: 'onSessionExpiring' },
     { fn: 'pageLoadComplete' },
   ]).it('will trigger native callback via window.nativeApp', ({ fn, param }) => {

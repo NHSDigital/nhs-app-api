@@ -224,9 +224,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
                 break
-            case "postNdopToken":
-                callPostNdopToken(token: String(describing: message.body))
-                break
             case "clearMenuBarItem":
                 clearMenuBarItem()
                 break
@@ -270,10 +267,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func goToLoginOptions() {
         CookieHandler().readAccessTokenFromCookie()
         viewController.showBiometricViewContainer()
-    }
-    
-    func callPostNdopToken(token: String?) {
-        self.viewController.webViewController?.postNdopToken(token: token!)
     }
     
     func setMenuBarItem(index: Int){

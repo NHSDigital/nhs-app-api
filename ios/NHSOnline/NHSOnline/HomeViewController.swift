@@ -179,12 +179,6 @@ class HomeViewController : UIViewController {
                                                                  options: [], metrics: nil, views: viewBindingsDict))
     }
     
-    func postNdopToken(token: String?) {
-        if (token != nil) {
-            self.webViewController?.postNdopToken(token: token!)
-        }
-    }
-    
     func updateHeaderText(headerText: String?, accessibilityLabel: String? = nil) {
         if (headerText != nil) {
             self.headerBar.headerTitle.text = headerText

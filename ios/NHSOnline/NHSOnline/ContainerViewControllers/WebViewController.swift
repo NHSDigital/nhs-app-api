@@ -40,7 +40,6 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
-        webView.configuration.userContentController.add(delegate, name: "postNdopToken")
         webView.configuration.userContentController.add(delegate, name: "updateHeaderText")
         webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
         webView.configuration.userContentController.add(delegate, name: "setMenuBarItem")
@@ -149,14 +148,6 @@ class WebViewController: UIViewController, WKUIDelegate {
             let viewController = webViewDelegate?.viewController
             viewController!.tabBar.selectedItem = nil
         }
-    }
-    
-    func postNdopToken(token: String) {
-        var urlRequest = URLRequest(url: URL(string: config().DataPreferencesURL)!)
-        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = ("&token=" + token).data(using: String.Encoding.utf8)
-        webView.load(urlRequest)
     }
     
     func dismissSafariViewController() {

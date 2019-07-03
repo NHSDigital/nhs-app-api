@@ -40,7 +40,7 @@ Feature: Data Sharing
     When I click the link called 'Visit the NHS.UK website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
     Then a new tab has been opened by the link
 
-  @smoketest
+    
   @nativesmoketest
   Scenario: A user chooses to manage their Data Sharing preferences
     Given I am on the Data Sharing Overview page

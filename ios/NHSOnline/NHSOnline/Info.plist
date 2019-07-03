@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>DataPreferencesURL</key>
+	<string>https://$(DATA_PREFERENCES_URL)</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>So you can record your video</string>
 	<key>CidUrlSuffix</key>
@@ -149,8 +151,6 @@
 	<string>https://$(COOKIES_POLICY_URL)</string>
 	<key>OpenSourceLicencesURL</key>
 	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
-	<key>DataPreferencesURL</key>
-	<string>https://$(DATA_PREFERENCES_URL)</string>
 	<key>DataSharingUrlPath</key>
 	<string>$(DATA_SHARING_URL)</string>
 	<key>AccessibilityStatementURL</key>

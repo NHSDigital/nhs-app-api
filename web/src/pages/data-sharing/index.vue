@@ -20,31 +20,20 @@
       <MakeYourChoice v-if="pageId === 'p4'"/>
     </div>
 
-    <analytics-tracked-tag v-if="pageId === 'p4' && device === 'ios'"
-                           id="start-now-button"
-                           :class="[$style.button, $style.green]"
-                           :text="$t('ds01.startNowButton')"
-                           :destination="dataPreferencesUrl"
-                           data-purpose="startNowButton"
-                           tag="button"
-                           @click.native="startNow">
-      {{ $t('ds01.startNowButton') }}
-    </analytics-tracked-tag>
-
-    <form v-if="pageId === 'p4' && device !== 'ios'" id="ndop-token-form"
-          ref="ndopTokenForm" :action="dataPreferencesUrl" :target="formTarget"
+    <form v-if="pageId === 'p4'" id="ndop-token-form"
+          ref="ndopTokenForm" :action="dataPreferencesUrl" target="_self"
           method="POST" name="ndopTokenForm">
       <input v-model="ndopToken" type="hidden" name="token">
       <analytics-tracked-tag id="startNowButton"
                              :class="[$style.button, $style.green]"
                              :text="$t('ds01.startNowButton')"
-                             :destination="dataPreferencesUrl"
                              data-purpose="startNowButton"
                              tag="button"
                              :click-func="startNow">
         {{ $t('ds01.startNowButton') }}
       </analytics-tracked-tag>
     </form>
+
     <BottomNav :class="$style['bottom-nav']" :current-page="pageId"
                @next-page="changePage(++pageIndex)" @previous-page="changePage(--pageIndex)"/>
   </div>
@@ -52,7 +41,6 @@
 
 <script>
 /* eslint-disable import/extensions */
-import NativeCallbacks from '@/services/native-app';
 import BottomNav from '@/components/data-sharing/BottomNav';
 import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
@@ -60,7 +48,7 @@ import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoi
 import MakeYourChoice from '@/components/data-sharing/MakeYourChoice';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
-import _ from 'lodash';
+import keys from 'lodash/fp/keys';
 
 export default {
   components: {
@@ -73,7 +61,7 @@ export default {
   },
   data() {
     return {
-      pageIds: _.keys(this.$t('ds01.titles')),
+      pageIds: keys(this.$t('ds01.titles')),
       pageIndex: 0,
       dataPreferencesUrl: this.$store.app.$env.DATA_PREFERENCES_URL,
       ndopToken: undefined,
@@ -85,9 +73,6 @@ export default {
     },
     device() {
       return this.$store.state.device.source;
-    },
-    formTarget() {
-      return !this.$store.state.device.isNativeApp ? '_self' : '_blank';
     },
   },
   mounted() {
@@ -101,7 +86,7 @@ export default {
       this.pageIndex = index;
     },
     goToPage(pageId) {
-      this.changePage(_.indexOf(this.pageIds, pageId));
+      this.changePage(this.pageIds.indexOf(pageId));
     },
     isLinkActive(pageId) {
       return pageId === this.pageIds[this.pageIndex] ? this.$style.active : undefined;
@@ -114,16 +99,13 @@ export default {
     },
     async startNow() {
       const scope = this;
-      await scope.$store.app.$http
+      await this.$store.app.$http
         .getV1PatientNdop({})
         .then((p) => {
           scope.ndopToken = p.response.token;
         });
-      if (this.$store.state.device.source === 'ios') {
-        NativeCallbacks.postNdopToken(this.ndopToken);
-      } else {
-        this.$refs.ndopTokenForm.submit();
-      }
+
+      this.$refs.ndopTokenForm.submit();
     },
   },
 };

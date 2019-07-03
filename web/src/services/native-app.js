@@ -107,16 +107,6 @@ export default {
     return false;
   },
 
-  // iOS specific
-  postNdopToken(token) {
-    const app = window.nativeApp;
-    if (app && app.postNdopToken) {
-      app.postNdopToken(token);
-      return true;
-    }
-    return false;
-  },
-
   goToLoginOptions() {
     const app = window.nativeApp;
     if (app && app.goToLoginOptions) {
