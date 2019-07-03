@@ -10,11 +10,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public Cdss CdssAdmin { get; set; }
 
+        public MedicalRecord MedicalRecord { get; set; }
+
+        public Prescriptions Prescriptions { get; set; }
+
+        public bool? NominatedPharmacy { get; set; }
+
         public Journeys Clone() => new Journeys
         {
             Appointments = Appointments?.Clone(),
             CdssAdvice = CdssAdvice?.Clone(),
-            CdssAdmin = CdssAdmin?.Clone()
+            CdssAdmin = CdssAdmin?.Clone(),
+            MedicalRecord = MedicalRecord?.Clone(),
+            Prescriptions = Prescriptions?.Clone(),
+            NominatedPharmacy = NominatedPharmacy
         };
     }
 }

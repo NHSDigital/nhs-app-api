@@ -57,19 +57,34 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 }
 
                 // Update existing ODS journeys
-                if (EnumHelper.HasValue(journeys.Appointments?.Provider))
+                if (journeys.Appointments?.Provider != null)
                 {
                     currentJourneys.Appointments = journeys.Appointments;
                 }
 
-                if (EnumHelper.HasValue(journeys.CdssAdvice?.Provider))
+                if (journeys.CdssAdvice?.Provider != null)
                 {
                     currentJourneys.CdssAdvice = journeys.CdssAdvice;
                 }
 
-                if (EnumHelper.HasValue(journeys.CdssAdmin?.Provider))
+                if (journeys.CdssAdmin?.Provider != null)
                 {
                     currentJourneys.CdssAdmin = journeys.CdssAdmin;
+                }
+
+                if (journeys.MedicalRecord?.Provider != null)
+                {
+                    currentJourneys.MedicalRecord = journeys.MedicalRecord;
+                }
+
+                if (journeys.Prescriptions?.Provider != null)
+                {
+                    currentJourneys.Prescriptions = journeys.Prescriptions;
+                }
+
+                if (journeys.NominatedPharmacy.HasValue)
+                {
+                    currentJourneys.NominatedPharmacy = journeys.NominatedPharmacy;
                 }
             }
         }

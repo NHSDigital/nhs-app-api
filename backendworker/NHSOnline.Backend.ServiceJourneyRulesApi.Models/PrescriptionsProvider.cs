@@ -3,15 +3,14 @@
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     /// <summary>
-    /// The valid providers for appointments.
+    /// The valid providers for prescriptions.
     ///
     /// The lowercase naming is required for serialization, as it currently
     /// does not support conversion from `PascalCase` to `camelCase`.
     /// </summary>
-    public enum AppointmentsProvider
+    public enum PrescriptionsProvider
     {
         im1,
-        informatica,
         gpAtHand
     }
 }

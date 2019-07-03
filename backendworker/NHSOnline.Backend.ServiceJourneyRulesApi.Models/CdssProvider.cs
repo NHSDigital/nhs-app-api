@@ -10,7 +10,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     /// </summary>
     public enum CdssProvider
     {
-        Unknown = 0,
         none,
         eConsult
     }

@@ -63,28 +63,69 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             // Arrange
             var defaultFolderJourneys = CreateOdsJourneys(
-                JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.eConsult,
-                    cdssAdminProvider: CdssProvider.Unknown, cdssAdviceServiceDefinition: "adviceDefinition"),
-                JourneyBuilder.Build(AppointmentsProvider.Unknown, CdssProvider.Unknown, CdssProvider.none),
-                JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
-                    cdssAdminProvider: CdssProvider.Unknown)
+                new JourneysBuilder()
+                    .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
+                    .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                    .MedicalRecord(MedicalRecordProvider.im1)
+                    .Prescriptions(PrescriptionsProvider.gpAtHand)
+                    .NominatedPharmacyEnabled(true)
+                    .Build(),
+                new JourneysBuilder()
+                    .CdssAdminProvider(CdssProvider.none)
+                    .MedicalRecord(MedicalRecordProvider.im1)
+                    .Build(),
+                new JourneysBuilder()
+                    .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
+                    .CdssAdviceProvider(CdssProvider.none)
+                    .MedicalRecord(MedicalRecordProvider.im1)
+                    .Prescriptions(PrescriptionsProvider.gpAtHand)
+                    .NominatedPharmacyEnabled(false)
+                    .Build()
             );
 
             var anotherFolderJourneys = CreateOdsJourneys(
-                JourneyBuilder.Build(null, CdssProvider.none, CdssProvider.eConsult,
-                    cdssAdminServiceDefinition: "adminDefinition"),
-                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.Unknown, CdssProvider.Unknown),
-                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.Unknown,
-                    cdssAdviceServiceDefinition: "adviceDefinition")
+                new JourneysBuilder()
+                    .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                    .MedicalRecord(MedicalRecordProvider.im1)
+                    .Prescriptions(PrescriptionsProvider.gpAtHand)
+                    .Build(),
+                new JourneysBuilder()
+                    .AppointmentProvider(AppointmentsProvider.gpAtHand)
+                    .MedicalRecord(MedicalRecordProvider.im1)
+                    .Prescriptions(PrescriptionsProvider.gpAtHand)
+                    .NominatedPharmacyEnabled(true)
+                    .Build(),
+                new JourneysBuilder()
+                    .AppointmentProvider(AppointmentsProvider.im1)
+                    .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                    .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                    .Prescriptions(PrescriptionsProvider.im1)
+                    .Build()
             );
 
             var expectedMergedJourneys = CreateOdsJourneys(
-                JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
-                    cdssAdminProvider: CdssProvider.eConsult, cdssAdminServiceDefinition: "adminDefinition"),
-                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.Unknown, CdssProvider.none),
-                JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.Unknown,
-                    cdssAdviceServiceDefinition: "adviceDefinition")
-            );
+                new JourneysBuilder()
+                    .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
+                    .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                    .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                    .MedicalRecord(MedicalRecordProvider.im1)
+                    .Prescriptions(PrescriptionsProvider.gpAtHand)
+                    .NominatedPharmacyEnabled(true)
+                    .Build(),
+                new JourneysBuilder()
+                    .AppointmentProvider(AppointmentsProvider.gpAtHand)
+                    .CdssAdminProvider(CdssProvider.none)
+                    .MedicalRecord(MedicalRecordProvider.im1)
+                    .Prescriptions(PrescriptionsProvider.gpAtHand)
+                    .NominatedPharmacyEnabled(true)
+                    .Build(),
+                new JourneysBuilder()
+                    .AppointmentProvider(AppointmentsProvider.im1)
+                    .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                    .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                    .Prescriptions(PrescriptionsProvider.im1)
+                    .NominatedPharmacyEnabled(false)
+                    .Build());
 
             var context = new ConfigurationContext
             {

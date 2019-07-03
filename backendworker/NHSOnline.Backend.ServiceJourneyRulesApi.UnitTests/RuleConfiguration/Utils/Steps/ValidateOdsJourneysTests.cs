@@ -47,7 +47,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("context", StringComparison.Ordinal))
                 .And.Contain(x =>
                     ((ArgumentNullException) x).ParamName.Equals("MergedOdsJourneys", StringComparison.Ordinal));
-            ;
         }
 
         [TestMethod]
@@ -63,7 +62,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("MergedOdsJourneys");
         }
 
-
         [TestMethod]
         public async Task Execute_WhenMissingJourneys_ReturnsFalse()
         {
@@ -73,29 +71,44 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 MergedOdsJourneys = new Dictionary<string, Journeys>
                 {
                     {
-                        "A1",
-                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
-                            cdssAdminProvider: CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        "A1", 
+                        ValidJourneys().Build()
                     },
                     {
                         "A2",
-                        JourneyBuilder.Build(AppointmentsProvider.Unknown, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        ValidJourneys()
+                            .AppointmentProvider(null)
+                            .Build()
                     },
                     {
                         "A3",
-                        JourneyBuilder.Build(null, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        ValidJourneys()
+                            .CdssAdviceProvider(null)
+                            .Build()
                     },
                     {
                         "A4",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, null, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        ValidJourneys()
+                            .CdssAdminProvider(null)
+                            .Build()
                     },
                     {
                         "A5",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.Unknown)
+                        ValidJourneys()
+                            .MedicalRecord(null)
+                            .Build()
+                    },
+                    {
+                        "A6",
+                        ValidJourneys()
+                            .Prescriptions(null)
+                            .Build()
+                    },
+                    {
+                        "A7",
+                        ValidJourneys()
+                            .NominatedPharmacyEnabled(null)
+                            .Build()
                     }
                 }
             };
@@ -108,6 +121,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A3'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A4'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A5'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A6'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A7'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -123,20 +138,36 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .CdssAdviceProvider(CdssProvider.none)
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(true)
+                            .Build()
                     },
                     {
                         "A2",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.eConsult,
-                            cdssAdviceServiceDefinition: "adviceDefinition",
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(true)
+                            .Build()
                     },
                     {
                         "A3",
-                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
-                            cdssAdminProvider: CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
+                            .CdssAdviceProvider(CdssProvider.none)
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(true)
+                            .Build()
                     }
                 }
             };
@@ -158,20 +189,36 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .CdssAdviceProvider(CdssProvider.none)
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(true)
+                            .Build()
                     },
                     {
                         "A2",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.eConsult,
-                            cdssAdviceServiceDefinition: "adviceDefinition",
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(false)
+                            .Build()
                     },
                     {
                         "A3",
-                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
-                            cdssAdminProvider: CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
+                            .CdssAdviceProvider(CdssProvider.none)
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(true)
+                            .Build()
                     }
                 }
             };
@@ -193,28 +240,43 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
-                            cdssAdminProvider: CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        ValidJourneys().Build()
                     },
                     {
                         "A2",
-                        JourneyBuilder.Build(AppointmentsProvider.Unknown, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        ValidJourneys()
+                            .AppointmentProvider(null)
+                            .Build()
                     },
                     {
                         "A3",
-                        JourneyBuilder.Build(null, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        ValidJourneys()
+                            .CdssAdviceProvider(null)
+                            .Build()
                     },
                     {
                         "A4",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, null, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        ValidJourneys()
+                            .CdssAdminProvider(null)
+                            .Build()
                     },
                     {
                         "A5",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.Unknown)
+                        ValidJourneys()
+                            .MedicalRecord(null)
+                            .Build()
+                    },
+                    {
+                        "A6",
+                        ValidJourneys()
+                            .Prescriptions(null)
+                            .Build()
+                    },
+                    {
+                        "A7",
+                        ValidJourneys()
+                            .NominatedPharmacyEnabled(null)
+                            .Build()
                     }
                 }
             };
@@ -227,9 +289,22 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A3'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A4'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A5'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A6'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A7'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
+        }
+
+        private JourneysBuilder ValidJourneys()
+        {
+            return new JourneysBuilder()
+                .AppointmentProvider(AppointmentsProvider.im1)
+                .CdssAdviceProvider(CdssProvider.none)
+                .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                .Prescriptions(PrescriptionsProvider.gpAtHand)
+                .NominatedPharmacyEnabled(true);
         }
     }
 }

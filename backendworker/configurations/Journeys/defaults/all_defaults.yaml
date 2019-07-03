@@ -8,3 +8,8 @@ journeys:
     provider: none
   cdssAdmin:
     provider: none
+  medicalRecord:
+    provider: im1
+  prescriptions:
+    provider: im1
+  nominatedPharmacy: true

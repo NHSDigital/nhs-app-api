@@ -78,8 +78,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .CdssAdviceProvider(CdssProvider.none)
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .Build()
                     }
                 }
             };
@@ -110,18 +113,36 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     {
                         "A1",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.none, CdssProvider.eConsult,
-                            cdssAdminServiceDefinition: "adminDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .CdssAdviceProvider(CdssProvider.none)
+                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(true)
+                            .Build()
                     },
                     {
                         "A2",
-                        JourneyBuilder.Build(AppointmentsProvider.im1, CdssProvider.eConsult, CdssProvider.none,
-                            cdssAdviceServiceDefinition: "adviceDefinition")
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(false)
+                            .CdssAdminProvider(CdssProvider.none)
+                            .Build()
                     },
                     {
                         "A3",
-                        JourneyBuilder.Build(informaticaUrl: "www.example.com", cdssAdviceProvider: CdssProvider.none,
-                            cdssAdminProvider: CdssProvider.none)
+                        new JourneysBuilder()
+                            .AppointmentProvider(AppointmentsProvider.informatica,"www.example.com" )
+                            .CdssAdviceProvider(CdssProvider.none)
+                            .CdssAdminProvider(CdssProvider.none)
+                            .MedicalRecord(MedicalRecordProvider.im1)
+                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .NominatedPharmacyEnabled(true)
+                            .Build()
                     }
                 }
             };

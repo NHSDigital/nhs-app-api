@@ -302,10 +302,17 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         [DataRow("\"appointments\": { \"provider\": \"im1\" }")]
         [DataRow("\"appointments\": { \"provider\": \"informatica\", \"informaticaUrl\": \"http://example.com\" }")]
+        [DataRow("\"appointments\": { \"provider\": \"gpAtHand\" }")]
         [DataRow("\"cdssAdvice\": { \"provider\": \"none\" }")]
         [DataRow("\"cdssAdvice\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\" }")]
         [DataRow("\"cdssAdmin\": { \"provider\": \"none\" }")]
         [DataRow("\"cdssAdmin\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\" }")]
+        [DataRow("\"medicalRecord\": { \"provider\": \"im1\"}")]
+        [DataRow("\"medicalRecord\": { \"provider\": \"gpAtHand\"}")]
+        [DataRow("\"prescriptions\": { \"provider\": \"im1\"}")]
+        [DataRow("\"prescriptions\": { \"provider\": \"gpAtHand\"}")]
+        [DataRow("\"nominatedPharmacy\": \"true\"")]
+        [DataRow("\"nominatedPharmacy\": \"false\"")]
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
             string journeys)
         {
@@ -328,13 +335,25 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             result.Should().BeTrue();
         }
 
-        [TestMethod]
-        [DataRow("", null)]
-        [DataRow("\"provider\": \"foo\"", "NotInEnumeration: #/journeys.cdssAdvice.provider")]
-        [DataRow("\"provider\": \"eConsult\"", "PropertyRequired: #/journeys.cdssAdvice.serviceDefinition")]
+       [TestMethod]
+        [DataRow("cdssAdvice", "{}", "PropertyRequired: #/journeys.cdssAdvice.provider", true)]
+        [DataRow("cdssAdvice", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.cdssAdvice.provider", true)]
+        [DataRow("cdssAdvice", "{\"provider\": \"eConsult\"}", "PropertyRequired: #/journeys.cdssAdvice.serviceDefinition", true)]
+        [DataRow("cdssAdmin","{}", "PropertyRequired: #/journeys.cdssAdmin.provider", true)]
+        [DataRow("cdssAdmin", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.cdssAdmin.provider", true)]
+        [DataRow("cdssAdmin", "{\"provider\": \"eConsult\"}", "PropertyRequired: #/journeys.cdssAdmin.serviceDefinition", true)]
+        [DataRow("appointments", "{}", "PropertyRequired: #/journeys.appointments.provider", true)]
+        [DataRow("appointments", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.appointments.provider", true)]
+        [DataRow("appointments", "{\"provider\": \"informatica\"}", "PropertyRequired: #/journeys.appointments.informaticaUrl", true)]
+        [DataRow("medicalRecord","{}", "PropertyRequired: #/journeys.medicalRecord.provider", false)]
+        [DataRow("medicalRecord", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.medicalRecord.provider", false)]
+        [DataRow("prescriptions", "{}", "PropertyRequired: #/journeys.prescriptions.provider", false)]
+        [DataRow("prescriptions", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.prescriptions.provider", false)]
+        [DataRow("nominatedPharmacy", "\"\"", "NotInEnumeration: #/journeys.nominatedPharmacy", false)]
+        [DataRow("nominatedPharmacy", "\"test\"", "NotInEnumeration: #/journeys.nominatedPharmacy", false)]
         public async Task
-            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidCdssAdviceProvider_ReturnsFalse(
-                string provider, string expectedError)
+            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
+                string journeyType, string value, string expectedError, bool oneOfMultipleOptions)
         {
             // Arrange
             var fileContent = "{" +
@@ -343,9 +362,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                               "    \"odsCode\":\"FOO\"" +
                               "  }," +
                               "  \"journeys\": {" +
-                              "    \"cdssAdvice\": {" +
-                              provider +
-                              "    }" +
+                              "    \""+ journeyType+ "\": " + value +
                               "  }" +
                               "}";
             var jsonFile = new FileData(string.Empty, fileContent);
@@ -354,77 +371,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
 
             // Assert
-            _mockLogger.VerifyLogger(LogLevel.Error, "NotOneOf: #/journeys.cdssAdvice", Times.Once());
-            if (!string.IsNullOrWhiteSpace(expectedError))
+            if (oneOfMultipleOptions)
             {
-                _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
+                _mockLogger.VerifyLogger(LogLevel.Error, $"NotOneOf: #/journeys.{journeyType}", Times.Once());
             }
-
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        [DataRow("", null)]
-        [DataRow("\"provider\": \"foo\"", "NotInEnumeration: #/journeys.cdssAdmin.provider")]
-        [DataRow("\"provider\": \"eConsult\"", "PropertyRequired: #/journeys.cdssAdmin.serviceDefinition")]
-        public async Task
-            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidCdssAdminProvider_ReturnsFalse(
-                string provider, string expectedError)
-        {
-            // Arrange
-            var fileContent = "{" +
-                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
-                              "  \"target\": {" +
-                              "    \"odsCode\":\"FOO\"" +
-                              "  }," +
-                              "  \"journeys\": {" +
-                              "    \"cdssAdmin\": {" +
-                              provider +
-                              "    }" +
-                              "  }" +
-                              "}";
-            var jsonFile = new FileData(string.Empty, fileContent);
-
-            // Act
-            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
-
-            // Assert
-            _mockLogger.VerifyLogger(LogLevel.Error, "NotOneOf: #/journeys.cdssAdmin", Times.Once());
-            if (!string.IsNullOrWhiteSpace(expectedError))
-            {
-                _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
-            }
-
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        [DataRow("", null)]
-        [DataRow("\"provider\": \"foo\"", "NotInEnumeration: #/journeys.appointments.provider")]
-        [DataRow("\"provider\": \"informatica\"", "PropertyRequired: #/journeys.appointments.informaticaUrl")]
-        public async Task
-            ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidAppointmentsProvider_ReturnsFalse(
-                string provider, string expectedError)
-        {
-            // Arrange
-            var fileContent = "{" +
-                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
-                              "  \"target\": {" +
-                              "    \"odsCode\":\"FOO\"" +
-                              "  }," +
-                              "  \"journeys\": {" +
-                              "    \"appointments\": {" +
-                              provider +
-                              "    }" +
-                              "  }" +
-                              "}";
-            var jsonFile = new FileData(string.Empty, fileContent);
-
-            // Act
-            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
-
-            // Assert
-            _mockLogger.VerifyLogger(LogLevel.Error, "NotOneOf: #/journeys.appointments", Times.Once());
             if (!string.IsNullOrWhiteSpace(expectedError))
             {
                 _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());

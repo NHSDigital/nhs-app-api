@@ -1947,6 +1947,7 @@
                                       description: "The provider"
                                       enum: 
                                         - "im1"
+                                        - "gpAtHand"
                                 - 
                                   type: "object"
                                   properties: 
@@ -2002,6 +2003,32 @@
                                     serviceDefinition: 
                                       type: "string"
                                       description: "The service definition"
+                            medicalRecord: 
+                              type: "object"
+                              oneOf: 
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "im1"
+                                        - "gpAtHand"
+                            prescriptions: 
+                              type: "object"
+                              oneOf: 
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "im1"
+                                        - "gpAtHand"
+                            nominatedPharmacy: 
+                              type: "bool"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
           403: 
@@ -2255,6 +2282,7 @@
                                   description: "The provider"
                                   enum: 
                                     - "im1"
+                                    - "gpAtHand"
                             - 
                               type: "object"
                               properties: 
@@ -2310,6 +2338,32 @@
                                 serviceDefinition: 
                                   type: "string"
                                   description: "The service definition"
+                        medicalRecord: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "im1"
+                                    - "gpAtHand"
+                        prescriptions: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "im1"
+                                    - "gpAtHand"
+                        nominatedPharmacy: 
+                          type: "bool"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 

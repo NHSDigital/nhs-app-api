@@ -6,64 +6,89 @@
   "type": "object",
   "definitions": {
     "appointmentsJourney": {
-      "oneOf": [{
-        "additionalProperties": false,
-        "properties": {
-          "provider": {
-            "enum": [ "im1" ]
-          }
-        },
-        "required": ["provider"]
-      },{
-        "additionalProperties": false,
-        "properties": {
-          "provider": {
-            "enum": [ "informatica" ]
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "enum": [ "im1", "gpAtHand" ]
+            }
           },
-          "informaticaUrl": { "type": "string" }
+          "required": [ "provider" ]
         },
-        "required": ["provider", "informaticaUrl"]
-      }]
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "enum": [ "informatica" ]
+            },
+            "informaticaUrl": { "type": "string" }
+          },
+          "required": [ "provider", "informaticaUrl" ]
+        }
+      ]
     },
     "cdssAdviceJourney": {
-      "oneOf": [{
-        "additionalProperties": false,
-        "properties": {
-          "provider": {
-            "enum": [ "none" ]
-          }
-        },
-        "required": ["provider"]
-      },{
-        "additionalProperties": false,
-        "properties": {
-          "provider": {
-            "enum": [ "eConsult" ]
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "enum": [ "none" ]
+            }
           },
-          "serviceDefinition": { "type": "string" }
+          "required": [ "provider" ]
         },
-        "required": ["provider", "serviceDefinition"]
-      }]
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "enum": [ "eConsult" ]
+            },
+            "serviceDefinition": { "type": "string" }
+          },
+          "required": [ "provider", "serviceDefinition" ]
+        }
+      ]
     },
     "cdssAdminJourney": {
-      "oneOf": [{
-        "additionalProperties": false,
-        "properties": {
-          "provider": {
-            "enum": [ "none" ]
-          }
-        },
-        "required": ["provider"]
-      },{
-        "additionalProperties": false,
-        "properties": {
-          "provider": {
-            "enum": [ "eConsult" ]
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "enum": [ "none" ]
+            }
           },
-          "serviceDefinition": { "type": "string" }
+          "required": [ "provider" ]
         },
-        "required": ["provider", "serviceDefinition"]
-      }]
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "enum": [ "eConsult" ]
+            },
+            "serviceDefinition": { "type": "string" }
+          },
+          "required": [ "provider", "serviceDefinition" ]
+        }
+      ]
+    },
+    "medicalRecordJourney": {
+      "properties": {
+        "provider": {
+          "enum": [ "im1", "gpAtHand" ]
+        }
+      },
+      "required": [ "provider" ]
+    },
+    "prescriptionsJourney": {
+      "properties": {
+        "provider": {
+          "enum": [ "im1", "gpAtHand" ]
+        }
+      },
+      "required": [ "provider" ]
     }
   },
   "properties": {
@@ -76,7 +101,7 @@
           "properties": {
             "*": {
               "type": "string",
-              "enum": ["*"]
+              "enum": [ "*" ]
             }
           }
         },
@@ -119,16 +144,32 @@
       "additionalProperties": false,
       "properties": {
         "appointments": { "$ref": "#/definitions/appointmentsJourney" },
-        "cdssAdvice": { "$ref": "#/definitions/cdssAdviceJourney"},
-        "cdssAdmin": { "$ref": "#/definitions/cdssAdminJourney"}
+        "cdssAdvice": { "$ref": "#/definitions/cdssAdviceJourney" },
+        "cdssAdmin": { "$ref": "#/definitions/cdssAdminJourney" },
+        "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
+        "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
+        "nominatedPharmacy": { "enum": ["true", "false"]  }
       },
-      "anyOf": [{
-        "required": ["appointments"]
-      },{
-        "required": ["cdssAdvice"]
-      },{
-        "required": ["cdssAdmin"]
-      }]
+      "anyOf": [
+        {
+          "required": [ "appointments" ]
+        },
+        {
+          "required": [ "cdssAdvice" ]
+        },
+        {
+          "required": [ "cdssAdmin" ]
+        },
+        {
+          "required": [ "medicalRecord" ]
+        },
+        {
+          "required": [ "prescriptions" ]
+        },
+        {
+          "required": [ "nominatedPharmacy" ]
+        }
+      ]
     }
   },
   "required": ["target", "journeys"]

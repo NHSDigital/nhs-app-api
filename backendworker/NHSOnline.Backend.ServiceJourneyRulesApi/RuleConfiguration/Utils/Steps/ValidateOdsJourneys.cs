@@ -47,9 +47,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 
             foreach (var (odsCode, journeys) in odsJourneys)
             {
-                if (EnumHelper.HasValue(journeys.Appointments?.Provider) &&
-                    EnumHelper.HasValue(journeys.CdssAdvice?.Provider)&&
-                    EnumHelper.HasValue(journeys.CdssAdmin?.Provider))
+                if (journeys.Appointments?.Provider != null &&
+                    journeys.CdssAdvice?.Provider != null &&
+                    journeys.CdssAdmin?.Provider != null &&
+                    journeys.MedicalRecord?.Provider != null &&
+                    journeys.Prescriptions?.Provider != null &&
+                    journeys.NominatedPharmacy.HasValue)
                 {
                     _logger.LogDebug($"Validation successful for '{odsCode}'");
                     continue;
@@ -58,7 +61,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 _logger.LogError($"Not all journey types have been defined for '{odsCode}'.\n" +
                                  $"\tAppointments: {journeys.Appointments?.Provider}\n" +
                                  $"\tCdssAdvice: {journeys.CdssAdvice?.Provider}\n" +
-                                 $"\tCdssAdmin: {journeys.CdssAdmin?.Provider}");
+                                 $"\tCdssAdmin: {journeys.CdssAdmin?.Provider}\n" +
+                                 $"\tMedicalRecord: {journeys.MedicalRecord?.Provider}\n" +
+                                 $"\tPrescriptions: {journeys.Prescriptions?.Provider}\n" +
+                                 $"\tNominatedPharmacy: {journeys.NominatedPharmacy}");
                 isValid = false;
             }
 
