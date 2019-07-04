@@ -1,10 +1,13 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
-    <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
-      {{ errorText }}
-    </span>
+    <div v-if="error && errorText">
+      <span v-for="singleError in errorText"
+            :id="`${id}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
     <div :class="$style.dateTimeContainer">
       <generic-date-input :id="id"
                           v-model="dateTimeValue"
@@ -56,7 +59,7 @@ export default {
       default: false,
     },
     errorText: {
-      type: String,
+      type: Array,
       default: undefined,
     },
     required: {

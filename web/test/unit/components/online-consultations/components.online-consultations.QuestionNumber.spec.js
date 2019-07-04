@@ -10,7 +10,6 @@ const defaultPropsData = {
   max: 100,
   value: 20,
   error: true,
-  errorText: 'this is an error',
   id: 'number-answer',
   name: 'number-answer',
   required: true,
@@ -132,7 +131,6 @@ describe('QuestionNumber.vue', () => {
         expect(textInputVm.id).toEqual(defaultAnswerIdName);
         expect(textInputVm.step).toEqual('any');
         expect(textInputVm.error).toEqual(defaultPropsData.error);
-        expect(textInputVm.errorText).toEqual(defaultPropsData.errorText);
       });
 
       each([{

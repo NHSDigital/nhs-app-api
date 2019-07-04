@@ -10,7 +10,7 @@ const getInputWrapper = (useComponent = true) => wrapper.find(useComponent ? Gen
 
 const defaultPropsData = {
   value: 'answer',
-  maxlength: '20',
+  maxLength: '20',
 };
 
 const mountQuestion = ({

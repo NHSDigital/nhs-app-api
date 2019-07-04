@@ -18,14 +18,13 @@ describe('online consultations mappers parameters', () => {
     resource: {
       resourceType: QUESTIONNAIRE_RESPONSE,
       status: COMPLETED,
-      item: [],
+      item: [{
+        linkId: 'TEST_QUESTION',
+      }],
       questionnaire: {
         reference: `Questionnaire/${defaultQuestionId}`,
       },
     },
-  };
-  const defaultItem = {
-    linkId: defaultQuestionId,
   };
 
   beforeEach(() => {
@@ -129,22 +128,6 @@ describe('online consultations mappers parameters', () => {
         });
 
         describe('valid and non empty as of last validate', () => {
-          describe('unknown question type', () => {
-            it('will add an item to the questionnaire response containing only a link id matching the question id', () => {
-              // Arrange
-              state.question.type = 'unknown-question-type';
-              const expectedInputData = defaultInputData;
-              expectedInputData.resource.item.push(defaultItem);
-
-              // Act
-              const parameters = getParameters(state, rootState);
-
-              // Assert
-              const inputDataParameter = parameters.parameter.filter(p => p && p.name === INPUT_DATA)[0];
-              expect(inputDataParameter).toEqual(expectedInputData);
-            });
-          });
-
           describe('known question types', () => {
             describe('attachment question', () => {
               it('will add a valueAttachment to item.answer with a size, title, data and contentType', () => {

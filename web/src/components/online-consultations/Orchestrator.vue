@@ -11,6 +11,7 @@
         </message-text>
         <message-list>
           <li>{{ validationErrorMessage }}</li>
+          <li v-for="error in validationErrorMessageFromResponse" :key="error">{{ error }}</li>
         </message-list>
       </message-dialog>
 
@@ -36,9 +37,11 @@
                      :accept="question.accept"
                      :max-size="question.maxSize"
                      :max-value="question.maxValue"
-                     :maxlength="question.maxlength"
+                     :max-length="question.maxLength"
                      :error="isValidationError"
-                     :error-text="validationErrorMessage"
+                     :error-text="
+                       validationErrorMessages(
+                         validationErrorMessage, validationErrorMessageFromResponse)"
                      @validate="onAnswerValidate"/>
         </question>
         <generic-button :button-classes="['button', 'green']"
@@ -139,7 +142,11 @@ export default {
       return this.$store.state.onlineConsultations.validationError;
     },
     validationErrorMessage() {
-      return this.$t(this.$store.state.onlineConsultations.validationErrorMessage);
+      return this.$t(this.$store.state.onlineConsultations.validationErrorMessage,
+        { value: this.$store.state.onlineConsultations.latestAdditionalValue });
+    },
+    validationErrorMessageFromResponse() {
+      return this.$store.state.onlineConsultations.validationErrorMessageFromResponse;
     },
     isDataRequired() {
       return this.$store.state.onlineConsultations.status === DATA_REQUIRED;
@@ -258,6 +265,14 @@ export default {
     },
     backToHomeClicked() {
       redirectTo(this, INDEX.path, null);
+    },
+    validationErrorMessages(localError, responseErrors) {
+      const errorMessages = [];
+      errorMessages.push(localError);
+      if (responseErrors !== undefined) {
+        responseErrors.forEach(c => errorMessages.push(c));
+      }
+      return errorMessages;
     },
   },
 };

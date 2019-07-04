@@ -1,5 +1,13 @@
 import { get, isEmpty } from 'lodash/fp';
-import { CARE_PLAN, PARAMETERS, QUESTIONNAIRE, QUESTIONNAIRE_RESPONSE, REFERRAL_REQUEST, REQUEST_GROUP } from '@/lib/online-consultations/constants/resource-types';
+import {
+  CARE_PLAN,
+  PARAMETERS,
+  QUESTIONNAIRE,
+  QUESTIONNAIRE_RESPONSE,
+  REFERRAL_REQUEST,
+  REQUEST_GROUP,
+  OPERATION_OUTCOME,
+} from '@/lib/online-consultations/constants/resource-types';
 import { SESSION_ID } from '@/lib/online-consultations/constants/parameter-names';
 import { ACTIVE } from '@/lib/online-consultations/constants/status-types';
 
@@ -17,6 +25,13 @@ function getQuestionnaire(guidanceResponse, questionnaireId) {
                  c.status === ACTIVE);
 
   return activeQuestionnaires[0];
+}
+
+function getOperationOutcome(guidanceResponse) {
+  const operationOutcomes = guidanceResponse.contained
+    .filter(c => c.resourceType === OPERATION_OUTCOME);
+
+  return operationOutcomes;
 }
 
 function getRequestGroupId(guidanceResponse) {
@@ -81,6 +96,29 @@ export function getQuestionnaireItem(guidanceResponse) {
     const questionnaire = getQuestionnaire(guidanceResponse, questionnaireId);
 
     return questionnaire.item[0];
+  } catch (e) {
+    return undefined;
+  }
+}
+
+/**
+ * @param {{issue:string}} object
+ * @param guidanceResponse
+ */
+export function getAllIssues(guidanceResponse) {
+  try {
+    const operationOutcomeIssues = [];
+    const operationOutcome = getOperationOutcome(guidanceResponse);
+    if (isEmpty(operationOutcome)) {
+      return undefined;
+    }
+
+    operationOutcome.forEach((c) => {
+      c.issue.forEach((issue) => {
+        operationOutcomeIssues.push(issue.details.text);
+      });
+    });
+    return operationOutcomeIssues;
   } catch (e) {
     return undefined;
   }

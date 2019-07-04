@@ -1,11 +1,19 @@
 <template>
-  <generic-text-area :id="id"
-                     v-model="textValue"
-                     :required="required"
-                     :name="name"
-                     :error="error"
-                     :error-text="errorText"
-                     :maxlength="maxlength"/>
+  <div>
+    <div v-if="error && errorText">
+      <span v-for="singleError in errorText"
+            :id="`${id}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
+    <generic-text-area :id="id"
+                       v-model="textValue"
+                       :required="required"
+                       :name="name"
+                       :error="error"
+                       :maxlength="maxLength"/>
+  </div>
 </template>
 
 <script>
@@ -30,7 +38,7 @@ export default {
       type: String,
       default: 'text-answer',
     },
-    maxlength: {
+    maxLength: {
       type: String,
       default: undefined,
     },
@@ -43,7 +51,7 @@ export default {
       default: false,
     },
     errorText: {
-      type: String,
+      type: Array,
       default: undefined,
     },
   },

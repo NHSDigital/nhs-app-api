@@ -45,7 +45,10 @@ export function questionChoiceAnswerValid(answer, required, validCodes = []) {
   };
 }
 
-export function questionDateAnswerValid(answer = {}, required) {
+export function questionDateAnswerValid(
+  answer = {},
+  required,
+) {
   const { day, month, year } = answer;
 
   const dayEmpty = day === undefined || day === '';
@@ -58,7 +61,15 @@ export function questionDateAnswerValid(answer = {}, required) {
     return { isValid: true, isEmpty };
   }
 
-  if (dayEmpty || monthEmpty || yearEmpty || year < 1000 || year > 9999) {
+  if (dayEmpty && monthEmpty && yearEmpty && required) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}dateEmpty`,
+      isEmpty,
+    };
+  }
+
+  if (year < 1000 || year > 9999 || dayEmpty || monthEmpty || yearEmpty) {
     return {
       isValid: false,
       message: `${baseMessagePath}date`,
@@ -88,8 +99,15 @@ export function questionDateTimeAnswerValid(answer = {}, required) {
     return { isValid: true, isEmpty };
   }
 
-  if (dayEmpty || monthEmpty || yearEmpty || hourEmpty || minuteEmpty ||
-      year < 1000 || year > 9999 || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+  if (dayEmpty || monthEmpty || yearEmpty || hourEmpty || minuteEmpty) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}dateTimeEmpty`,
+      isEmpty,
+    };
+  }
+
+  if (year < 1000 || year > 9999 || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
     return {
       isValid: false,
       message: `${baseMessagePath}dateTime`,
@@ -122,8 +140,8 @@ export function questionNumberAnswerValid(
   answer,
   required,
   type,
-  min = undefined,
-  max = undefined,
+  min,
+  max,
 ) {
   const isEmpty = answer === '' || answer === undefined;
   if (!required && isEmpty) {
@@ -132,14 +150,29 @@ export function questionNumberAnswerValid(
 
   const isInteger = type === QuestionTypes.INTEGER;
   const regExp = isInteger ? integerRegExp : decimalRegExp;
-
   if (Number.isNaN(answer) ||
-      (max !== undefined && answer > max) ||
-      (min !== undefined && answer < min) ||
-      regExp.exec(answer) === null) {
+      regExp.exec(answer) === null || answer === '-') {
     return {
       isValid: false,
       message: isInteger ? `${baseMessagePath}integer` : `${baseMessagePath}decimal`,
+      isEmpty,
+    };
+  }
+
+  if (max !== undefined && answer > max) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}overMaxValueNumber`,
+      additionalValue: max,
+      isEmpty,
+    };
+  }
+
+  if (min !== undefined && answer < min) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}underMinValueNumber`,
+      additionalValue: min,
       isEmpty,
     };
   }
@@ -163,6 +196,7 @@ export function questionMultipleChoiceAnswerValid(answer = [], required, validCo
 export function questionQuantityAnswerValid(
   answer = {},
   required,
+  min = undefined,
   max = undefined,
   validCodes = [],
 ) {
@@ -177,21 +211,66 @@ export function questionQuantityAnswerValid(
   }
 
   const isValidUnit = validCodes.includes(unit);
-  const lessThanOrEqualToMax = max === undefined || quantity <= max;
-  const greaterThanOrEqualToMinValue = quantity >= 0;
 
+  if (quantityEmpty) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}quantity`,
+      isEmpty,
+    };
+  }
+
+  if (max !== undefined && quantity > max) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}overMaxValueNumber`,
+      additionalValue: max,
+      isEmpty,
+    };
+  }
+
+  if (min !== undefined && quantity < min) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}underMinValueNumber`,
+      additionalValue: min,
+      isEmpty,
+    };
+  }
+
+  if (!quantityEmpty && !isValidUnit) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}quantityUnit`,
+      isEmpty,
+    };
+  }
   return {
-    isValid: !quantityEmpty &&
-             isValidUnit &&
-             lessThanOrEqualToMax &&
-             greaterThanOrEqualToMinValue,
-    message: `${baseMessagePath}quantity`,
+    isValid: true,
     isEmpty,
   };
 }
 
-export function questionStringAnswerValid(answer, required) {
+export function questionStringAnswerValid(answer, required, maxLength) {
   const isEmpty = answer === undefined || answer === '' || answer.trim() === '';
+  const lessThanMaxLength = !isEmpty && (maxLength === undefined || answer.length <= maxLength);
+
+  if (isEmpty) {
+    return {
+      isValid: (!required && isEmpty) || !isEmpty,
+      message: `${baseMessagePath}string`,
+      isEmpty,
+    };
+  }
+
+  if (!lessThanMaxLength) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}stringTooLong`,
+      additionalValue: maxLength,
+      isEmpty,
+    };
+  }
 
   return {
     isValid: (!required && isEmpty) || !isEmpty,
@@ -202,11 +281,35 @@ export function questionStringAnswerValid(answer, required) {
 
 export function questionTextAnswerValid(answer, required, maxLength) {
   const isEmpty = answer === undefined || answer === '' || answer.trim() === '';
-  const lessThanMaxLength = !isEmpty && (maxLength === undefined || answer.length <= maxLength);
+  const lessThanMaxLength =
+    !isEmpty && (maxLength === undefined || (answer.length <= maxLength && !answer.isEmpty));
+
+  if (required && isEmpty) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}text`,
+      isEmpty,
+    };
+  }
+
+  if (!required && isEmpty) {
+    return {
+      isValid: true,
+      isEmpty,
+    };
+  }
+
+  if (!lessThanMaxLength) {
+    return {
+      isValid: false,
+      message: `${baseMessagePath}textTooLong`,
+      additionalValue: maxLength,
+      isEmpty,
+    };
+  }
 
   return {
-    isValid: (!required && isEmpty) || lessThanMaxLength,
-    message: `${baseMessagePath}text`,
+    isValid: true,
     isEmpty,
   };
 }
@@ -238,9 +341,15 @@ export function isAnswerValid(answer, question = {}) {
     case QuestionTypes.CHOICE:
       return questionChoiceAnswerValid(answer, question.required, question.validCodes);
     case QuestionTypes.DATE:
-      return questionDateAnswerValid(answer, question.required);
+      return questionDateAnswerValid(
+        answer,
+        question.required,
+      );
     case QuestionTypes.DATETIME:
-      return questionDateTimeAnswerValid(answer, question.required);
+      return questionDateTimeAnswerValid(
+        answer,
+        question.required,
+      );
     case QuestionTypes.DECIMAL:
     case QuestionTypes.INTEGER:
       return questionNumberAnswerValid(
@@ -262,7 +371,11 @@ export function isAnswerValid(answer, question = {}) {
         question.validCodes,
       );
     case QuestionTypes.STRING:
-      return questionStringAnswerValid(answer, question.required);
+      return questionStringAnswerValid(
+        answer,
+        question.required,
+        question.maxLength,
+      );
     case QuestionTypes.TEXT:
       return questionTextAnswerValid(answer, question.required, question.maxLength);
     case QuestionTypes.TIME:

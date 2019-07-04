@@ -343,6 +343,12 @@ describe('online consultations mappers item', () => {
             code: 's',
             display: 'sec',
           },
+        }, {
+          url: 'minValue',
+          valueInteger: 0,
+        }, {
+          url: 'minValue',
+          valueInteger: 0,
         }];
         expectedQuestion.options = [{
           code: 'm',
@@ -354,6 +360,7 @@ describe('online consultations mappers item', () => {
         expectedQuestion.validCodes = ['m', 's'];
         expectedQuestion.type = QuestionTypes.QUANTITY;
         expectedQuestion.name = `${item.linkId}-${QuestionTypes.QUANTITY}`;
+        expectedQuestion.min = 0;
 
         // Act
         const question = getQuestion(item);

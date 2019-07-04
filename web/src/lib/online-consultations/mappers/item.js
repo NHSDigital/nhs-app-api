@@ -65,15 +65,36 @@ function getQuestion(item) {
     }
 
     if (type === QuestionTypes.QUANTITY) {
-      question.options = item.extension.map(o => ({
+      const unitCodes = item.extension
+        .filter(c => c.valueCoding !== undefined);
+      question.options = unitCodes.map(o => ({
         code: o.valueCoding.code,
         label: o.valueCoding.display,
       }));
       question.validCodes = question.options.map(o => (o.code));
+      if (Array.isArray(item.extension)) {
+        const extensionValues = item.extension
+          .filter(c => c.valueCoding === undefined);
+        extensionValues.forEach((extensionItem) => {
+          if (extensionItem.url.includes('minValue')) {
+            question.min = extensionItem.valueInteger;
+          }
+          if (extensionItem.url.includes('maxValue')) {
+            question.max = extensionItem.valueInteger;
+          }
+        });
+      }
     }
 
     if (type === QuestionTypes.STRING || type === QuestionTypes.TEXT) {
       question.tag = 'label';
+      if (Array.isArray(item.extension)) {
+        item.extension.forEach((extensionItem) => {
+          if (extensionItem.url.includes('maxLength')) {
+            question.maxLength = extensionItem.valueInteger.toString();
+          }
+        });
+      }
     }
 
     return question;

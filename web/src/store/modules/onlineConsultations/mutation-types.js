@@ -13,6 +13,8 @@ export const SET_ANSWER_IS_EMPTY = 'SET_ANSWER_IS_EMPTY';
 export const UPDATE_REQUEST_ID = 'UPDATE_REQUEST_ID';
 export const FILE_LOADING = 'FILE_LOADING';
 export const FILE_LOAD_COMPLETE = 'FILE_LOAD_COMPLETE';
+export const SET_VALIDATION_ERROR_FROM_RESPONSE = 'SET_VALIDATION_ERROR_FROM_RESPONSE';
+export const CLEAR_VALIDATION = 'CLEAR_VALIDATION';
 
 export const initialState = () => ({
   sessionId: undefined,
@@ -30,4 +32,8 @@ export const initialState = () => ({
   error: false,
   requestId: 0,
   isLoadingFile: false,
+  issues: undefined,
+  validationErrorMessageFromResponse: undefined,
+  additionalValue: undefined,
+  latestAdditionalValue: undefined,
 });

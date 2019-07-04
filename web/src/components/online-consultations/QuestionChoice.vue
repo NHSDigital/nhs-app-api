@@ -1,9 +1,12 @@
 <template>
   <fieldset class="nhsuk-fieldset">
-    <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
-      {{ errorText }}
-    </span>
+    <div v-if="error && errorText">
+      <span v-for="singleError in errorText"
+            :id="`${name}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
     <radio-group :key="name"
                  v-model="selectedValue"
                  :name="name"
@@ -37,7 +40,7 @@ export default {
       default: undefined,
     },
     errorText: {
-      type: String,
+      type: Array,
       default: undefined,
     },
     value: {

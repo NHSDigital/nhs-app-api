@@ -1,15 +1,23 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <generic-text-input :id="id"
-                      v-model="numberValue"
-                      :name="name"
-                      :min="min"
-                      :max="max"
-                      :required="required"
-                      :error="error"
-                      :error-text="errorText"
-                      step="any"
-                      type="tel"/>
+  <div>
+    <div v-if="error && errorText" :id="errorId" >
+      <span v-for="singleError in errorText"
+            :id="`${id}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
+    <generic-text-input :id="id"
+                        v-model="numberValue"
+                        :name="name"
+                        :min="min"
+                        :max="max"
+                        :required="required"
+                        :error="error"
+                        step="any"
+                        type="tel"/>
+  </div>
 </template>
 
 <script>
@@ -53,7 +61,7 @@ export default {
       default: false,
     },
     errorText: {
-      type: String,
+      type: Array,
       default: undefined,
     },
     required: {
@@ -66,10 +74,15 @@ export default {
       numberValue: this.value,
     };
   },
+  computed: {
+    errorId() {
+      return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+  },
   watch: {
-    numberValue(to) {
+    async numberValue(to) {
       this.checkAndEmitIsValueValid(to);
-      this.$emit('input', to);
+      await this.$emit('input', to);
     },
   },
   created() {

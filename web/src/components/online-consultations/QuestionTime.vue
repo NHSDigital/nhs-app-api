@@ -1,11 +1,19 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <generic-time-input :id="id"
-                      v-model="timeValue"
-                      :required="required"
-                      :name="name"
-                      :error="error"
-                      :error-text="errorText"/>
+  <div>
+    <div v-if="error && errorText">
+      <span v-for="singleError in errorText"
+            :id="`${id}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
+    <generic-time-input :id="id"
+                        v-model="timeValue"
+                        :required="required"
+                        :name="name"
+                        :error="error"/>
+  </div>
 </template>
 
 <script>
@@ -40,7 +48,7 @@ export default {
       default: false,
     },
     errorText: {
-      type: String,
+      type: Array,
       default: undefined,
     },
     required: {

@@ -1,11 +1,19 @@
 <template>
-  <generic-image-input :id="id"
-                       :name="name"
-                       :source="source"
-                       :required="required"
-                       :error="error"
-                       :error-text="errorText"
-                       @input="onImageClicked($event)"/>
+  <div>
+    <div v-if="error && errorText">
+      <span v-for="singleError in errorText"
+            :id="`${id}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
+    <generic-image-input :id="id"
+                         :name="name"
+                         :source="source"
+                         :required="required"
+                         :error="error"
+                         @input="onImageClicked($event)"/>
+  </div>
 </template>
 
 <script>
@@ -39,7 +47,7 @@ export default {
       default: false,
     },
     errorText: {
-      type: String,
+      type: Array,
       default: undefined,
     },
   },

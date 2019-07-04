@@ -7,6 +7,7 @@ const resourceTypes = {
   QUESTIONNAIRE_RESPONSE: 'QuestionnaireResponse',
   REFERRAL_REQUEST: 'ReferralRequest',
   REQUEST_GROUP: 'RequestGroup',
+  OPERATION_OUTCOME: 'OperationOutcome',
 };
 
 export const {
@@ -18,4 +19,5 @@ export const {
   QUESTIONNAIRE_RESPONSE,
   REFERRAL_REQUEST,
   REQUEST_GROUP,
+  OPERATION_OUTCOME,
 } = resourceTypes;

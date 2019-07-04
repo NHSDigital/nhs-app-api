@@ -126,9 +126,12 @@ function getInputDataParameter({ question, answer, answerIsValid, answerIsEmpty 
         },
       },
     };
-
     if (!answerIsEmpty) {
       inputData.resource.item.push(getAnswerItem(question, answer));
+    } else {
+      inputData.resource.item.push({
+        linkId: question.id,
+      });
     }
   }
 

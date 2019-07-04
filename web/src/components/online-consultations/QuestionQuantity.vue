@@ -1,9 +1,12 @@
 <template>
   <div>
-    <span v-if="error && errorText" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
-      {{ errorText }}
-    </span>
+    <div v-if="error && errorText">
+      <span v-for="singleError in errorText"
+            :id="`${name}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
     <div class="nhsuk-input__item">
       <label :id="`${name}-quantity-label`"
              :for="`${name}-quantity`"
@@ -16,7 +19,7 @@
              type="number"
              :name="`${name}-quantity`"
              pattern="[0-9]+"
-             :min="0"
+             :min="min"
              :max="maxValue"
              :required="required">
     </div>
@@ -64,6 +67,10 @@ export default {
       type: Array,
       required: true,
     },
+    min: {
+      type: Number,
+      default: undefined,
+    },
     maxValue: {
       type: Number,
       default: undefined,
@@ -82,7 +89,7 @@ export default {
       default: false,
     },
     errorText: {
-      type: String,
+      type: Array,
       default: undefined,
     },
     required: {
@@ -127,7 +134,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.$emit('validate', questionQuantityAnswerValid(value, this.required, this.maxValue, this.validValues));
+      this.$emit('validate', questionQuantityAnswerValid(value, this.required, this.min, this.maxValue, this.validValues));
     },
   },
 };

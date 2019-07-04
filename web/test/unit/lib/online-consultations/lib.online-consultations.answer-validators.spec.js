@@ -20,6 +20,7 @@ describe('online consultations answer validators', () => {
   const baseMessage = 'appointments.admin_help.errors.validation.message.';
   let validator;
   let message;
+  let additionalValue;
 
   describe('attachment validator', () => {
     beforeAll(() => {
@@ -298,7 +299,6 @@ describe('online consultations answer validators', () => {
   describe('date validator', () => {
     beforeAll(() => {
       validator = questionDateAnswerValid;
-      message = `${baseMessage}${QuestionTypes.DATE}`;
     });
 
     describe('answer is empty', () => {
@@ -331,7 +331,7 @@ describe('online consultations answer validators', () => {
           // Arrange
           const expectedValidation = {
             isValid: false,
-            message,
+            message: `${baseMessage}dateEmpty`,
             isEmpty: true,
           };
 
@@ -369,7 +369,7 @@ describe('online consultations answer validators', () => {
         // Arrange
         const expectedValidation = {
           isValid: false,
-          message,
+          message: `${baseMessage}date`,
           isEmpty: false,
         };
 
@@ -399,7 +399,7 @@ describe('online consultations answer validators', () => {
           // Arrange
           const expectedValidation = {
             isValid: false,
-            message,
+            message: `${baseMessage}date`,
             isEmpty: false,
           };
 
@@ -422,7 +422,7 @@ describe('online consultations answer validators', () => {
         };
         const expectedValidation = {
           isValid: true,
-          message,
+          message: `${baseMessage}date`,
           isEmpty: false,
         };
 
@@ -438,10 +438,10 @@ describe('online consultations answer validators', () => {
   describe('datetime validator', () => {
     beforeAll(() => {
       validator = questionDateTimeAnswerValid;
-      message = `${baseMessage}${QuestionTypes.DATETIME}`;
     });
 
     describe('answer is empty', () => {
+      message = `${baseMessage}dateTimeEmpty`;
       describe('answer is not required', () => {
         each([{
           day: '',
@@ -475,7 +475,7 @@ describe('online consultations answer validators', () => {
           // Arrange
           const expectedValidation = {
             isValid: false,
-            message,
+            message: `${baseMessage}dateTimeEmpty`,
             isEmpty: true,
           };
 
@@ -488,26 +488,8 @@ describe('online consultations answer validators', () => {
       });
     });
 
-    describe('answer is partially empty, year is not 4 characters long, hour/minute are not between 0-23/0-59 respectively', () => {
+    describe('answer year is not 4 characters long, hour/minute are not between 0-23/0-59 respectively', () => {
       each([{
-        day: '',
-        month: '1',
-        year: '2000',
-        hour: '1',
-        minute: '2',
-      }, {
-        day: '1',
-        month: '',
-        year: '',
-        hour: '1',
-        minute: '2',
-      }, {
-        day: '1',
-        month: '11',
-        year: '',
-        hour: '1',
-        minute: '2',
-      }, {
         day: '31',
         month: '12',
         year: '20000',
@@ -519,19 +501,25 @@ describe('online consultations answer validators', () => {
         year: '99',
         hour: '1',
         minute: '2',
-      }, {
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '',
-        minute: '2',
-      }, {
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '1',
-        minute: '',
-      }, {
+      }]).it('will return is valid false', (answer) => {
+        // Arrange
+        const expectedValidation = {
+          isValid: false,
+          message: `${baseMessage}dateTime`,
+          isEmpty: false,
+        };
+        message = `${baseMessage}dateTime`;
+        // Act
+        const validation = validator(answer, true);
+
+        // Assert
+        expect(validation).toEqual(expectedValidation);
+      });
+    });
+
+    describe('hour/minute are not between 0-23/0-59 respectively', () => {
+      message = `${baseMessage}dateTime`;
+      each([{
         day: '31',
         month: '12',
         year: '1992',
@@ -562,6 +550,52 @@ describe('online consultations answer validators', () => {
           message,
           isEmpty: false,
         };
+        // Act
+        const validation = validator(answer, true);
+
+        // Assert
+        expect(validation).toEqual(expectedValidation);
+      });
+    });
+
+    describe('answer is partially empty', () => {
+      each([{
+        day: '',
+        month: '1',
+        year: '2000',
+        hour: '1',
+        minute: '2',
+      }, {
+        day: '1',
+        month: '',
+        year: '',
+        hour: '1',
+        minute: '2',
+      }, {
+        day: '1',
+        month: '11',
+        year: '',
+        hour: '1',
+        minute: '2',
+      }, {
+        day: '31',
+        month: '12',
+        year: '1992',
+        hour: '',
+        minute: '2',
+      }, {
+        day: '31',
+        month: '12',
+        year: '1992',
+        hour: '1',
+        minute: '',
+      }]).it('will return is valid false', (answer) => {
+        // Arrange
+        const expectedValidation = {
+          isValid: false,
+          message: `${baseMessage}dateTimeEmpty`,
+          isEmpty: false,
+        };
 
         // Act
         const validation = validator(answer, true);
@@ -573,6 +607,7 @@ describe('online consultations answer validators', () => {
 
     describe('answer used to create a date in the format yyyy-MM-dd', () => {
       describe('Date.getTime() is NaN', () => {
+        message = `${baseMessage}dateTime`;
         each([{
           day: 'something',
           month: 'not a',
@@ -736,8 +771,8 @@ describe('online consultations answer validators', () => {
 
     describe('integer validation', () => {
       beforeAll(() => {
-        message = `${baseMessage}${QuestionTypes.INTEGER}`;
         numberQuestionType = QuestionTypes.INTEGER;
+        additionalValue = 100;
       });
 
       describe('answer is empty and not required', () => {
@@ -768,7 +803,7 @@ describe('online consultations answer validators', () => {
           // Arrange
           const expectedValidation = {
             isValid: false,
-            message,
+            message: `${baseMessage}integer`,
             isEmpty: false,
           };
 
@@ -788,8 +823,9 @@ describe('online consultations answer validators', () => {
             const max = 100;
             const expectedValidation = {
               isValid: false,
-              message,
               isEmpty: false,
+              additionalValue,
+              message: `${baseMessage}overMaxValueNumber`,
             };
 
             // Act
@@ -831,8 +867,9 @@ describe('online consultations answer validators', () => {
             const min = 100;
             const expectedValidation = {
               isValid: false,
-              message,
               isEmpty: false,
+              message: `${baseMessage}underMinValueNumber`,
+              additionalValue,
             };
 
             // Act
@@ -872,7 +909,7 @@ describe('online consultations answer validators', () => {
           const answer = 12.3;
           const expectedValidation = {
             isValid: false,
-            message,
+            message: `${baseMessage}integer`,
             isEmpty: false,
           };
 
@@ -887,7 +924,6 @@ describe('online consultations answer validators', () => {
 
     describe('decimal validation', () => {
       beforeAll(() => {
-        message = `${baseMessage}${QuestionTypes.DECIMAL}`;
         numberQuestionType = QuestionTypes.DECIMAL;
       });
 
@@ -919,7 +955,7 @@ describe('online consultations answer validators', () => {
           // Arrange
           const expectedValidation = {
             isValid: false,
-            message,
+            message: `${baseMessage}decimal`,
             isEmpty: false,
           };
 
@@ -939,7 +975,8 @@ describe('online consultations answer validators', () => {
             const max = 100.2;
             const expectedValidation = {
               isValid: false,
-              message,
+              message: `${baseMessage}overMaxValueNumber`,
+              additionalValue: 100.2,
               isEmpty: false,
             };
 
@@ -983,7 +1020,8 @@ describe('online consultations answer validators', () => {
             const min = 100.1;
             const expectedValidation = {
               isValid: false,
-              message,
+              message: `${baseMessage}underMinValueNumber`,
+              additionalValue: 100.1,
               isEmpty: false,
             };
 
@@ -1114,7 +1152,6 @@ describe('online consultations answer validators', () => {
   describe('quantity validator', () => {
     beforeAll(() => {
       validator = questionQuantityAnswerValid;
-      message = `${baseMessage}${QuestionTypes.QUANTITY}`;
     });
 
     describe('answer is empty and not required', () => {
@@ -1146,12 +1183,12 @@ describe('online consultations answer validators', () => {
         const validCodes = ['m'];
         const expectedValidation = {
           isValid: false,
-          message,
+          message: `${baseMessage}quantityUnit`,
           isEmpty: false,
         };
 
         // Act
-        const validation = validator(answer, true, undefined, validCodes);
+        const validation = validator(answer, true, undefined, undefined, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -1168,13 +1205,14 @@ describe('online consultations answer validators', () => {
         const validCodes = ['m'];
         const max = 15;
         const expectedValidation = {
+          additionalValue: 15,
           isValid: false,
-          message,
+          message: `${baseMessage}overMaxValueNumber`,
           isEmpty: false,
         };
 
         // Act
-        const validation = validator(answer, true, max, validCodes);
+        const validation = validator(answer, true, undefined, max, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -1190,14 +1228,16 @@ describe('online consultations answer validators', () => {
         };
         const validCodes = ['m'];
         const max = 15;
+        const min = 0;
         const expectedValidation = {
+          additionalValue: 0,
           isValid: false,
-          message,
+          message: `${baseMessage}underMinValueNumber`,
           isEmpty: false,
         };
 
         // Act
-        const validation = validator(answer, true, max, validCodes);
+        const validation = validator(answer, true, min, max, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -1215,12 +1255,11 @@ describe('online consultations answer validators', () => {
         const max = 20;
         const expectedValidation = {
           isValid: true,
-          message,
           isEmpty: false,
         };
 
         // Act
-        const validation = validator(answer, true, max, validCodes);
+        const validation = validator(answer, true, undefined, max, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -1313,7 +1352,7 @@ describe('online consultations answer validators', () => {
         // Arrange
         const expectedValidation = {
           isValid: true,
-          message,
+          additionalValue: undefined,
           isEmpty: true,
         };
 
@@ -1335,7 +1374,8 @@ describe('online consultations answer validators', () => {
         // Arrange
         const expectedValidation = {
           isValid: false,
-          message,
+          message: `${baseMessage}text`,
+          additionalValue: undefined,
           isEmpty: true,
         };
 
@@ -1353,7 +1393,6 @@ describe('online consultations answer validators', () => {
         const answer = 'This is a test answer';
         const expectedValidation = {
           isValid: true,
-          message,
           isEmpty: false,
         };
 
@@ -1373,7 +1412,8 @@ describe('online consultations answer validators', () => {
           const maxLength = 5;
           const expectedValidation = {
             isValid: false,
-            message,
+            message: `${baseMessage}textTooLong`,
+            additionalValue: 5,
             isEmpty: false,
           };
 
@@ -1395,7 +1435,6 @@ describe('online consultations answer validators', () => {
           // Arrange
           const expectedValidation = {
             isValid: true,
-            message,
             isEmpty: false,
           };
 
@@ -1545,7 +1584,7 @@ describe('online consultations answer validators', () => {
 
         // Assert
         expect(validation).toBeDefined();
-        expect(validation.message.endsWith(questionType)).toBe(true);
+        expect(validation.message.includes(questionType)).toBe(true);
       });
 
       describe('unknown question type', () => {

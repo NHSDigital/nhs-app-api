@@ -14,8 +14,15 @@ import {
   UPDATE_REQUEST_ID,
   FILE_LOADING,
   FILE_LOAD_COMPLETE,
+  SET_VALIDATION_ERROR_FROM_RESPONSE,
+  CLEAR_VALIDATION,
 } from './mutation-types';
-import { getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/guidance-response';
+import {
+  getSessionId,
+  getQuestionnaireItem,
+  getCarePlansAndReferralRequests,
+  getAllIssues,
+} from '@/lib/online-consultations/mappers/guidance-response';
 import getQuestion from '@/lib/online-consultations/mappers/item';
 import getParameters from '@/lib/online-consultations/mappers/parameters';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
@@ -53,6 +60,7 @@ export default {
       if (status === DATA_REQUIRED) {
         const sessionId = getSessionId(response);
         const question = getQuestion(getQuestionnaireItem(response));
+        const issues = getAllIssues(response);
 
         if (sessionId === undefined || question === undefined) {
           showError(store);
@@ -61,6 +69,9 @@ export default {
 
         commit(SET_SESSION_ID, sessionId);
         commit(SET_QUESTION, question);
+        if (issues !== undefined) {
+          commit(SET_VALIDATION_ERROR_FROM_RESPONSE, issues);
+        }
         return;
       }
 
@@ -108,5 +119,8 @@ export default {
   },
   fileLoadComplete({ commit }) {
     commit(FILE_LOAD_COMPLETE);
+  },
+  clearValidation({ commit }) {
+    commit(CLEAR_VALIDATION);
   },
 };

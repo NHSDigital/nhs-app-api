@@ -102,7 +102,7 @@ describe('orchestrator', () => {
         let max;
         let source;
         let maxValue;
-        let maxlength;
+        let maxLength;
 
         let questionVm;
         let questionInputVm;
@@ -126,7 +126,7 @@ describe('orchestrator', () => {
           expect(isLegend).toEqual(question.isLegend);
           expect(name).toEqual(question.name);
           expect(required).toEqual(question.required);
-          expect(errorText).toEqual('translate_test.validation.error.message');
+          expect(errorText).toEqual(['translate_test.validation.error.message']);
         });
 
         describe('attachment', () => {
@@ -310,7 +310,7 @@ describe('orchestrator', () => {
           it('will render the question input assigning appropriate values to props', () => {
             // Arrange
             question = baseQuestion('text');
-            question.maxlength = '240';
+            question.maxLength = '240';
 
             const questionInputSelector = 'questiontext-stub';
             store.state.onlineConsultations.question = question;
@@ -321,10 +321,10 @@ describe('orchestrator', () => {
             questionVm = orchestrator.find(questionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
-            ({ maxlength } = questionInputVm);
+            ({ maxLength } = questionInputVm);
 
             // Assert
-            expect(maxlength).toEqual(question.maxlength);
+            expect(maxLength).toEqual(question.maxLength);
           });
         });
       });

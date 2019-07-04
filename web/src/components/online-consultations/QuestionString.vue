@@ -1,11 +1,20 @@
 <template>
-  <generic-text-input :id="id"
-                      v-model="stringValue"
-                      :name="name"
-                      :error="error"
-                      :error-text="errorText"
-                      type="text"
-                      :required="required"/>
+  <div>
+    <div v-if="error && errorText">
+      <span v-for="singleError in errorText"
+            :id="`${id}error`" :key="singleError" class="nhsuk-error-message">
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        {{ singleError }}
+      </span>
+    </div>
+    <generic-text-input :id="id"
+                        v-model="stringValue"
+                        :name="name"
+                        :error="error"
+                        type="text"
+                        :required="required"
+                        :max-length="maxLength"/>
+  </div>
 </template>
 
 <script>
@@ -39,6 +48,10 @@ export default {
       default: false,
     },
     errorText: {
+      type: Array,
+      default: undefined,
+    },
+    maxLength: {
       type: String,
       default: undefined,
     },
