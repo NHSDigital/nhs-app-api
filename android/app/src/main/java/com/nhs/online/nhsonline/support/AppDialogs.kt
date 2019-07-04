@@ -13,7 +13,6 @@ import com.nhs.online.nhsonline.utils.Html
 
 class AppDialogs(private val activity: Activity) {
     private var upgradeDialog: AlertDialog? = null
-    private var rootedDeviceDialog: AlertDialog? = null
     private var extendSessionDialogue: AlertDialog? = null
     private var exitDialog: AlertDialog? = null
 
@@ -28,17 +27,6 @@ class AppDialogs(private val activity: Activity) {
                 getResourceString(R.string.UpdateDesc)
         val title = getResourceString(R.string.UpdateRequiredHeader)
         upgradeDialog = showNonCancellableDialog(title, content)
-    }
-
-    fun showRootedDeviceDialog() {
-        val showing = showDialogIfAvailable(rootedDeviceDialog)
-        if (showing) return
-
-        val content = getResourceString(R.string.rootedDeviceDialogDescriptionLine1) +
-                " <br/><br/>" +
-                getResourceString(R.string.rootedDeviceDialogDescriptionLine2)
-        val title = getResourceString(R.string.rootedDeviceDialogHeader)
-        rootedDeviceDialog = showNonCancellableDialog(title, content)
     }
 
     private fun showNonCancellableDialog(

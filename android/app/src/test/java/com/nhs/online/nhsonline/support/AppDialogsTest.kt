@@ -50,30 +50,6 @@ class AppDialogsTest {
     }
 
     @Test
-    fun showRootedDeviceDialog() {
-        val expectedTitle = "You cannot use the NHS App with a rooted Android device"
-        val expectedPartMessageText = "If you did not realise your phone was rooted"
-        appDialogs.showRootedDeviceDialog()
-        val rootedDialog = getCurrentActiveAlertDialog()
-        val title = extractAlertDialogTitle(rootedDialog)
-        Assert.assertEquals(title, expectedTitle)
-        val message = extractAlertDialogMessage(rootedDialog)
-        Assert.assertNotNull(message)
-        message?.apply { Assert.assertTrue(message.contains(expectedPartMessageText)) }
-    }
-
-    @Test
-    fun showRootedDeviceDialog_ClickingNegativeButton_FinishesActivity() {
-        val spyActivity = spy(activity)
-        appDialogs = AppDialogs(spyActivity)
-        appDialogs.showRootedDeviceDialog()
-        val upgradeDialog = getCurrentActiveAlertDialog()
-        val negativeButton: Button = upgradeDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-        negativeButton.callOnClick()
-        verify(spyActivity).finishAndRemoveTask()
-    }
-
-    @Test
     fun showExitDialog() {
         val expectedMessageText = "Are you sure you want to log out?"
         appDialogs.showExitDialog {}

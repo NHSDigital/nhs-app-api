@@ -12,29 +12,19 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.services.ConfigurationResponse
 import com.nhs.online.nhsonline.web.NhsWeb
-import com.scottyab.rootbeer.RootBeer
 
 
 class LifeCycleObserver(
     private val context: MainActivity,
     private val appWebInterface: AppWebInterface,
     private val nhsWeb: NhsWeb,
-    private val rootBeerService: RootBeer,
     private val appDialogs: AppDialogs
 ) {
     private val knownServices = KnownServices(context)
     private val configurationService = ConfigurationService(context)
-    private val isRootCheckEnabled =
-        context.resources.getString(R.string.isRootCheckEnabled).toBoolean()
 
     fun onMoveToForeground() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToForeground")
-
-        val isDeviceRooted = checkForRooting()
-        if (isDeviceRooted) {
-            appDialogs.showRootedDeviceDialog()
-            return
-        }
 
         val validating = validateUserSession()
         if (!validating && !isCurrentWebViewUrlFromCID())
@@ -47,19 +37,6 @@ class LifeCycleObserver(
     fun onMoveToBackground() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToBackground")
         context.showBlankScreen()
-    }
-
-    private fun checkForRooting(): Boolean {
-        rootBeerService.setLogging(true)
-
-        if (!isRootCheckEnabled) {
-            Log.d(Application.TAG, "${this::class.java.simpleName}: Root check is disabled")
-        } else if (rootBeerService.isRootedWithoutBusyBoxCheck) {
-            Log.e(Application.TAG, "${this::class.java.simpleName}: Detected that device is rooted")
-            return true
-        }
-
-        return false
     }
 
     private fun validateUserSession(): Boolean {

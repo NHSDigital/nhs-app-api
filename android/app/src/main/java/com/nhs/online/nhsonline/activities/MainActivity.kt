@@ -33,7 +33,6 @@ import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
-import com.scottyab.rootbeer.RootBeer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
 import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
@@ -127,7 +126,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
-                appWebInterface, nhsWeb, RootBeer(this), appDialogs)
+                appWebInterface, nhsWeb, appDialogs)
         }
 
         lifeCycleObserver?.onMoveToForeground()

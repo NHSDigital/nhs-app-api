@@ -5,5 +5,4 @@
     <string name="baseURL">https://www.nhsapp.service.nhs.uk/</string>
     <string name="baseApiURL">https://api.nhsapp.service.nhs.uk/v1/</string>
     <string name="dataPreferencesBaseUrl">https://app.your-data-matters.service.nhs.uk/</string>
-    <string name="isRootCheckEnabled">true</string>
 </resources>

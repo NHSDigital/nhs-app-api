@@ -5,5 +5,4 @@
     <string name="baseURL">https://www-demo.nhsapp.service.nhs.uk/</string>
     <string name="baseApiURL">https://api-demo.nhsapp.service.nhs.uk/v1/</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
-    <string name="isRootCheckEnabled">true</string>
 </resources>

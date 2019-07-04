@@ -16,7 +16,6 @@ import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
-import com.scottyab.rootbeer.RootBeer
 import kotlinx.android.synthetic.main.activity_main.*
 import org.junit.Test
 
@@ -37,7 +36,6 @@ class LifeCycleObserverTest {
     private lateinit var contextSpy: MainActivity
     private lateinit var appWebInterfaceMock: AppWebInterface
     private lateinit var configurationServiceMock: ConfigurationService
-    private lateinit var rootBeerServiceMock: RootBeer
     private lateinit var appDialogsMock: AppDialogs
     private lateinit var nhsWebMock: NhsWeb
     private lateinit var errorMessageHandler: ErrorMessageHandler
@@ -47,13 +45,10 @@ class LifeCycleObserverTest {
         contextSpy = spy(mainActivity)
 
         val r = spy(mainActivity.resources)
-        whenever(r.getString(R.string.isRootCheckEnabled)).thenReturn("true")
         whenever(contextSpy.resources).thenReturn(r)
         errorMessageHandler = ErrorMessageHandler(contextSpy)
         appWebInterfaceMock = mock(AppWebInterface::class.java)
         configurationServiceMock = mock(ConfigurationService::class.java)
-        rootBeerServiceMock = mock(RootBeer::class.java)
-        rootBeerServiceMock.setLogging(true)
         appDialogsMock = mock()
         val webViewMock: WebView = mock {
             on { settings }.thenReturn(mock())
@@ -62,7 +57,7 @@ class LifeCycleObserverTest {
         nhsWebMock = spy(nhsWeb)
 
         lifeCycleObserver = LifeCycleObserver(contextSpy, appWebInterfaceMock,
-            nhsWebMock, rootBeerServiceMock, appDialogsMock)
+            nhsWebMock, appDialogsMock)
         ReflectionHelpers.setField(lifeCycleObserver,
             "configurationService",
             configurationServiceMock)
@@ -70,9 +65,7 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_notRooted_nullUrl_configurationError() {
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
+    fun onMoveToForeground_nullUrl_configurationError() {
         val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
         doAnswer {
             val callback = it.arguments[0] as IVolleyCallback
@@ -81,23 +74,8 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(contextSpy, times(1)).showUnavailabilityError(em)
         assertEquals(false, contextSpy.isSuccessfulConfigCheck)
-    }
-
-    @Test
-    fun onMoveToForeground_RootedDevice() {
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(true)
-        doNothing().whenever(appDialogsMock).showRootedDeviceDialog()
-
-        lifeCycleObserver.onMoveToForeground()
-
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
-        verify(appDialogsMock, times(1)).showRootedDeviceDialog()
     }
 
     @Test
@@ -108,10 +86,7 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_notRooted_withNullUrl_configurationError() {
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
-
+    fun onMoveToForeground_withNullUrl_configurationError() {
         contextSpy.webview.loadUrl(null)
 
         val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
@@ -122,19 +97,14 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock).isRootedWithoutBusyBoxCheck
         verify(contextSpy).showUnavailabilityError(em)
         assertEquals(false, contextSpy.isSuccessfulConfigCheck)
     }
 
     @Test
-    fun onMoveToForeground_notRooted_withAUrl_shouldValidateSession_configurationError() {
+    fun onMoveToForeground_withAUrl_shouldValidateSession_configurationError() {
         val url = "Bazz"
         val knownServicesMock: KnownServices = overrideKnownServicesField(url)
-
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
 
         contextSpy.webview.loadUrl(url)
 
@@ -148,8 +118,6 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(appWebInterfaceMock, times(1)).validateSession(any())
         verify(contextSpy, times(1)).showUnavailabilityError(em)
@@ -157,12 +125,9 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_notRooted_withAUrl_shouldNotValidateSession_configurationError() {
+    fun onMoveToForeground_withAUrl_shouldNotValidateSession_configurationError() {
         val url = "Bazz"
         val knownServicesMock: KnownServices = overrideKnownServicesField(url)
-
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
 
         contextSpy.webview.loadUrl(url)
         doNothing().whenever(contextSpy).hideBlankScreen()
@@ -179,8 +144,6 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(2)).hideBlankScreen()
         verify(contextSpy, times(1)).showUnavailabilityError(em)
@@ -188,12 +151,9 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_notRooted_withAUrl_shouldNotValidateSession_configurationSuccessAlreadyChecked() {
+    fun onMoveToForeground_withAUrl_shouldNotValidateSession_configurationSuccessAlreadyChecked() {
         val url = "Bazz"
         val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
 
         contextSpy.webview.loadUrl(url)
         doNothing().whenever(contextSpy).hideBlankScreen()
@@ -211,8 +171,6 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(1)).hideBlankScreen()
         verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
@@ -220,12 +178,9 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_notRooted_withAUrl_shouldNotValidateSession_configurationSuccessAlreadyChecked_withValidConfiguration() {
+    fun onMoveToForeground_withAUrl_shouldNotValidateSession_configurationSuccessAlreadyChecked_withValidConfiguration() {
         val url = "Bazz"
         val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
 
         contextSpy.webview.loadUrl(url)
         doNothing().whenever(contextSpy).hideBlankScreen()
@@ -241,8 +196,6 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(1)).hideBlankScreen()
         verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
@@ -250,12 +203,9 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_notRooted_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withValidConfiguration() {
+    fun onMoveToForeground_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withValidConfiguration() {
         val url = "Bazz"
         val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
 
         contextSpy.webview.loadUrl(url)
         doNothing().whenever(contextSpy).hideBlankScreen()
@@ -269,8 +219,6 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(1)).hideBlankScreen()
         verify(nhsWebMock, times(1)).loadWelcomePage()
@@ -279,12 +227,9 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_notRooted_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withValidConfiguration_throttlingEnable() {
+    fun onMoveToForeground_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withValidConfiguration_throttlingEnable() {
         val url = "Bazz"
         val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        doNothing().whenever(rootBeerServiceMock).setLogging(true)
-        whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
 
         contextSpy.webview.loadUrl(url)
         doNothing().whenever(contextSpy).hideBlankScreen()
@@ -301,8 +246,6 @@ class LifeCycleObserverTest {
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(rootBeerServiceMock, times(2)).setLogging(true)
-        verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(1)).hideBlankScreen()
         verify(contextSpy, times(1)).configBiometricSetup(fidoServerUrl)
