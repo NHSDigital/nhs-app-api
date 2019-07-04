@@ -1,0 +1,10 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A44444"
+journeys:
+  appointments:
+    provider: gpAtHand
+  medicalRecord:
+    provider: gpAtHand
+  prescriptions:
+    provider: gpAtHand

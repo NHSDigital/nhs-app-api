@@ -150,5 +150,5 @@ Feature: View My Medical Record Information - Test Results
     And the GP Practice has enabled demographics functionality
     And I am on my record information page
     When I enter url address for test results detail directly into the url
-    Then I am redirected to the my record page
+    Then I am redirected to the 'My Record' page
     And I see the my record warning page

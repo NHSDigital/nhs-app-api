@@ -3,7 +3,7 @@ import Foundation
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
         case HomeUrl, Nhs111Url, Nhs111LocationUrl, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost
-        case AppointmentsUrlPath, AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
+        case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
         case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld
@@ -22,13 +22,17 @@ struct Config: Decodable {
     let DataPreferencesURL: String
 
     let MyRecordUrlPath: String
+    let MyRecordGpAtHandUrlPath: String
     let MoreUrlPath: String
     let ConditionsUrlPath: String
     let AppointmentsUrlPath: String
+    let AppontmentsGpAtHandUrlPath: String
+    let InformaticaUrlPath: String
     let AdminHelpUrlPath: String
     let SymptomsUrlPath: String
     let OrganDonationUrlPath: String
     let PrescriptionsUrlPath: String
+    let PrescriptionsGpAtHandUrlPath: String
     let MyAccountUrlPath: String
     let DataSharingUrlPath: String
     let SessionUrlPath: String

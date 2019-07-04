@@ -35,10 +35,14 @@ class KnownServicesTests: XCTestCase {
         if let lastChar = nhsoBaseUrl.last, lastChar == "/" {nhsoBaseUrl.removeLast() }
         let nhsoInternalServices = [nhsoBaseUrl, nhsoBaseUrl+config().SymptomsUrlPath,
                                     nhsoBaseUrl+config().AppointmentsUrlPath, nhsoBaseUrl+config().MyRecordUrlPath,
-                                    nhsoBaseUrl+config().PrescriptionsUrlPath, nhsoBaseUrl+config().MoreUrlPath]
+                                    nhsoBaseUrl+config().PrescriptionsUrlPath, nhsoBaseUrl+config().MoreUrlPath,
+                                    nhsoBaseUrl+config().AppontmentsGpAtHandUrlPath, nhsoBaseUrl+config().MyRecordGpAtHandUrlPath,
+                                    nhsoBaseUrl+config().PrescriptionsGpAtHandUrlPath, nhsoBaseUrl+config().InformaticaUrlPath]
         let equivalentHeaders = [getNSLocalString(key: "HomeTitle"), getNSLocalString(key: "SymptomsTitle"),
                                  getNSLocalString(key: "AppointmentsTitle"), getNSLocalString(key: "MyRecordTitle"),
-                                 getNSLocalString(key: "PrescriptionsTitle"), getNSLocalString(key: "MoreTitle")]
+                                 getNSLocalString(key: "PrescriptionsTitle"), getNSLocalString(key: "MoreTitle"),
+                                 getNSLocalString(key: "ServiceUnavailableTitle"), getNSLocalString(key: "ServiceUnavailableTitle"),
+                                 getNSLocalString(key: "ServiceUnavailableTitle"), getNSLocalString(key: "ServiceUnavailableTitle")]
         for index in 0..<nhsoInternalServices.count {
             guard let serviceInfo = self.knownServices.findMatchingKnownServiceInfo(url: URL(string: nhsoInternalServices[index])) else {
                 assertionFailure("No service info found for \(nhsoInternalServices[index])")

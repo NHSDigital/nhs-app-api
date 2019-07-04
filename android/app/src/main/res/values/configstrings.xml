@@ -16,9 +16,13 @@
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="myRecordPath">my-record</string>
+    <string name="myRecordGpAtHandPath">my-record/gp-at-hand</string>
     <string name="symptomsPath">symptoms</string>
     <string name="appointmentsPath">appointments</string>
+    <string name="appointmentsGpAtHandPath">appointments/gp-at-hand</string>
+    <string name="informaticaPath">appointments/informatica</string>
     <string name="prescriptionsPath">prescriptions</string>
+    <string name="prescriptionsGpAtHandPath">prescriptions/gp-at-hand</string>
     <string name="myAccountPath">account</string>
     <string name="organDonationPath">organ-donation</string>
     <string name="dataSharingPath">data-sharing</string>

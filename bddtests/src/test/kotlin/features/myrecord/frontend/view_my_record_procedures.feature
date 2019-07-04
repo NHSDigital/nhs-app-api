@@ -41,5 +41,5 @@ Feature: View My Medical Record Information - Procedures
     And the GP Practice has multiple procedures
     And I am on my record information page
     When I enter url address for procedures detail directly into the url
-    Then I am redirected to the my record page
+    Then I am redirected to the 'My Record' page
     And I see the my record warning page

@@ -1,15 +1,5 @@
 import find from 'lodash/fp/find';
 
-const informaticaAppointmentRedirect = {
-  condition: 'serviceJourneyRules/informaticaEnabled',
-  url: '/appointments/informatica',
-};
-
-const im1AppointmentRedirect = {
-  condition: 'serviceJourneyRules/im1Enabled',
-  url: '/appointments',
-};
-
 const adminHelpRedirect = {
   condition: 'serviceJourneyRules/cdssAdminDisabled',
   url: '/appointments',
@@ -18,6 +8,26 @@ const adminHelpRedirect = {
 const gpAdviceRedirect = {
   condition: 'serviceJourneyRules/cdssAdviceDisabled',
   url: '/appointments',
+};
+
+const gpAtHandPrescriptionsRedirect = {
+  condition: 'serviceJourneyRules/gpAtHandPrescriptionsEnabled',
+  url: '/prescriptions/gp-at-hand',
+};
+
+const im1AppointmentRedirect = {
+  condition: 'serviceJourneyRules/im1AppointmentsEnabled',
+  url: '/appointments',
+};
+
+const im1PrescriptionsRedirect = {
+  condition: 'serviceJourneyRules/im1PrescriptionsEnabled',
+  url: '/prescriptions',
+};
+
+const informaticaAppointmentRedirect = {
+  condition: 'serviceJourneyRules/informaticaAppointmentsEnabled',
+  url: '/appointments/informatica',
 };
 
 const routes = {
@@ -521,22 +531,38 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-  },
-  PRESCRIPTION_REPEAT_COURSES: {
-    name: 'prescriptions-repeat-courses',
-    path: '/prescriptions/repeat-courses',
-    crumb: {
-      i8nKey: 'prescriptionRepeatCourses',
-      get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
+    redirectRules: [
+      gpAtHandPrescriptionsRedirect,
+    ],
   },
   PRESCRIPTION_CONFIRM_COURSES: {
     name: 'prescriptions-confirm-prescription-details',
     path: '/prescriptions/confirm-prescription-details',
     crumb: {
       i8nKey: 'prescriptionConfirmCourses',
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
+  PRESCRIPTION_GP_AT_HAND: {
+    name: 'prescriptions-gp-at-hand',
+    path: '/prescriptions/gp-at-hand',
+    crumb: {
+      i8nKey: 'prescriptionGpAtHand',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    redirectRules: [
+      im1PrescriptionsRedirect,
+    ],
+  },
+  PRESCRIPTION_REPEAT_COURSES: {
+    name: 'prescriptions-repeat-courses',
+    path: '/prescriptions/repeat-courses',
+    crumb: {
+      i8nKey: 'prescriptionRepeatCourses',
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
       },
@@ -674,6 +700,7 @@ export const {
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
+  PRESCRIPTION_GP_AT_HAND,
   SYMPTOMS,
   TERMSANDCONDITIONS,
 } = routes;

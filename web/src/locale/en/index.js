@@ -669,6 +669,23 @@ export default {
         },
       },
     },
+    gp_at_hand: {
+      header: 'Sorry, you cannot order prescriptions through the NHS App',
+      paragraphs: [
+        {
+          prefix: 'To order prescriptions with Babylon GP at Hand, please ',
+          linkText: 'use the Babylon app',
+          linkUrl: 'https://www.gpathand.nhs.uk/download-app',
+          suffix: '.',
+        },
+        {
+          prefix: 'Please contact Babylon GP at Hand on 0330 808 2217 or ',
+          linkText: 'gpathand@nhs.net',
+          linkUrl: 'mailto:gpathand@nhs.net',
+          suffix: ' if you have any problems.',
+        },
+      ],
+    },
   },
   nominated_pharmacy: {
     line1: 'If you order repeat medication using the NHS App, this pharmacy is where it will be sent.',
@@ -910,7 +927,6 @@ export default {
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
-    appointmentInformatica: 'Service unavailable',
     myRecord: 'My medical record',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
@@ -925,6 +941,7 @@ export default {
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
+    serviceUnavailable: 'Service unavailable',
   },
   pageTitles: {
     home: 'Home',
@@ -943,7 +960,6 @@ export default {
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
-    appointmentInformatica: 'Service Unavailable',
     myRecord: 'Sensitive information - My record',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
@@ -957,6 +973,7 @@ export default {
     confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
+    serviceUnavailable: 'Service unavailable',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',

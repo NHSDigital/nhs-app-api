@@ -228,12 +228,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         assertEquals(SerenityHelpers.getGpSupplier(), result.response.supplier)
     }
 
-    @Then("^I am redirected to the my record page$")
-    fun thenIAmRedirectedToTheMyRecordPage() {
-        val redirectUrl = Config.instance.url + "/my-record"
-        browser.shouldHaveUrl(redirectUrl)
-    }
-
     @Then("^I return to my medical record page$")
     fun thenIReturnToMyMedicalRecordPage() {
         nav.select(NavBarNative.NavBarType.MY_RECORD)

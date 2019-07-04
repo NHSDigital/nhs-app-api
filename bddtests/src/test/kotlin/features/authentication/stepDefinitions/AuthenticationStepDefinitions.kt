@@ -795,13 +795,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         browser.checkLoginDetailsAreReset()
     }
 
-    @Then("^I am redirected to the CID create an account page$")
+    @Then("^I am on the CID create an account page$")
     @Throws(Exception::class)
     fun thenIAmRedirectedToTheCIDCreateAnAccountPage() {
         accountCreation.assertPageIsVisible()
     }
 
-    @Then("^I am redirected to the signed in home page$")
+    @Then("^I am on the signed in home page$")
     @Throws(Exception::class)
     fun thenIAmRedirectedToTheSignedInHomePage() {
         navHeader.assertHomePageHeaderVisible()

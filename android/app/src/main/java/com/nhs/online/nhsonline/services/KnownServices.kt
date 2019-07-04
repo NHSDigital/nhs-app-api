@@ -148,6 +148,18 @@ class KnownServices(private val context: Context) {
         internalService.addPathInfo(fetchStringResource(R.string.myRecordPath),
             true,
             fetchStringResource(R.string.my_record_header))
+        internalService.addPathInfo(fetchStringResource(R.string.informaticaPath),
+                true,
+                fetchStringResource(R.string.service_unavailable))
+        internalService.addPathInfo(fetchStringResource(R.string.appointmentsGpAtHandPath),
+                true,
+                fetchStringResource(R.string.service_unavailable))
+        internalService.addPathInfo(fetchStringResource(R.string.prescriptionsGpAtHandPath),
+                true,
+                fetchStringResource(R.string.service_unavailable))
+        internalService.addPathInfo(fetchStringResource(R.string.myRecordGpAtHandPath),
+                true,
+                fetchStringResource(R.string.service_unavailable))
         internalService.addPathInfo(fetchStringResource(R.string.morePath),
             true,
             fetchStringResource(R.string.more_header))

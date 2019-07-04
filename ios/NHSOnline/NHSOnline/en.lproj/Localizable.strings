@@ -13,6 +13,7 @@
 "MyRecordTitle" = "My medical record";
 "MoreTitle" = "More";
 "HomeTitle" = "Home";
+"ServiceUnavailableTitle" = "Service unavailable";
 "CheckSymptomsTitle" = "Check my symptoms";
 "BackArrowTitle" = "Back button";
 "LoginAndPasswordOptions" = "Login & password options";

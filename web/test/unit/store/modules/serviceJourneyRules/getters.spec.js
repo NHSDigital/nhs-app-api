@@ -1,5 +1,5 @@
 import getters from '@/store/modules/serviceJourneyRules/getters';
-import { initialState, IM1_PROVIDER, INFORMATICA } from '@/store/modules/serviceJourneyRules/mutation-types';
+import { initialState, GP_AT_HAND, IM1_PROVIDER, INFORMATICA } from '@/store/modules/serviceJourneyRules/mutation-types';
 
 describe('getters', () => {
   let currentState;
@@ -8,31 +8,79 @@ describe('getters', () => {
     currentState = initialState();
   });
 
-  describe('im1Enabled', () => {
-    const { im1Enabled } = getters;
+  describe('im1AppointmentsEnabled', () => {
+    const { im1AppointmentsEnabled } = getters;
 
     it('will be true if the appointments provider is im1', () => {
       currentState.rules.appointments.provider = IM1_PROVIDER;
-      expect(im1Enabled(currentState)).toBe(true);
+      expect(im1AppointmentsEnabled(currentState)).toBe(true);
     });
 
-    it('will be false if the appointments provider is Informatica', () => {
+    it('will be false if the appointments provider is informatica', () => {
       currentState.rules.appointments.provider = INFORMATICA;
-      expect(im1Enabled(currentState)).toBe(false);
+      expect(im1AppointmentsEnabled(currentState)).toBe(false);
     });
   });
 
-  describe('informaticaEnabled', () => {
-    const { informaticaEnabled } = getters;
+  describe('informaticaAppointmentsEnabled', () => {
+    const { informaticaAppointmentsEnabled } = getters;
 
-    it('will be true if the appointments provider is Informatica', () => {
+    it('will be true if the appointments provider is informatica', () => {
       currentState.rules.appointments.provider = INFORMATICA;
-      expect(informaticaEnabled(currentState)).toBe(true);
+      expect(informaticaAppointmentsEnabled(currentState)).toBe(true);
     });
 
     it('will be false if the appointments provider is im1', () => {
       currentState.rules.appointments.provider = IM1_PROVIDER;
-      expect(informaticaEnabled(currentState)).toBe(false);
+      expect(informaticaAppointmentsEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('im1PrescriptionsEnabled', () => {
+    const { im1PrescriptionsEnabled } = getters;
+
+    beforeEach(() => {
+      currentState = {
+        rules: {
+          prescriptions: {
+            provider: 'im1',
+          },
+        },
+      };
+    });
+
+    it('will be true if the prescriptions provider is im1', () => {
+      currentState.rules.prescriptions.provider = IM1_PROVIDER;
+      expect(im1PrescriptionsEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if the prescriptions provider is gp at hand', () => {
+      currentState.rules.prescriptions.provider = GP_AT_HAND;
+      expect(im1PrescriptionsEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('gpAtHandPrescriptionsEnabled', () => {
+    const { gpAtHandPrescriptionsEnabled } = getters;
+
+    beforeEach(() => {
+      currentState = {
+        rules: {
+          prescriptions: {
+            provider: 'gpAtHand',
+          },
+        },
+      };
+    });
+
+    it('will be true if the prescriptions provider is gp at hand', () => {
+      currentState.rules.prescriptions.provider = GP_AT_HAND;
+      expect(gpAtHandPrescriptionsEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if the prescriptions provider is im1', () => {
+      currentState.rules.prescriptions.provider = IM1_PROVIDER;
+      expect(gpAtHandPrescriptionsEnabled(currentState)).toBe(false);
     });
   });
 

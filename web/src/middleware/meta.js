@@ -42,6 +42,7 @@ import {
   ORGAN_DONATION_YOUR_CHOICE,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
+  PRESCRIPTION_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,
   SYMPTOMS,
   TERMSANDCONDITIONS,
@@ -156,8 +157,8 @@ export default function ({ route, store, app }) {
       break;
     case APPOINTMENT_INFORMATICA.name:
       store.dispatch('navigation/setNewMenuItem', 1);
-      route.meta.headerKey = 'pageHeaders.appointmentInformatica';
-      route.meta.pageTitleKey = 'pageTitles.appointmentInformatica';
+      route.meta.headerKey = 'pageHeaders.serviceUnavailable';
+      route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
       break;
     case ORGAN_DONATION.name:
     case ORGAN_DONATION_ADDITIONAL_DETAILS.name:
@@ -179,15 +180,20 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.prescriptions';
       route.meta.pageTitleKey = 'pageTitles.prescriptions';
       break;
-    case PRESCRIPTION_REPEAT_COURSES.name:
-      store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'pageHeaders.repeatPrescriptionCourses';
-      route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionCourses';
-      break;
     case PRESCRIPTION_CONFIRM_COURSES.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.confirmPrescription';
       route.meta.pageTitleKey = 'pageTitles.confirmPrescription';
+      break;
+    case PRESCRIPTION_GP_AT_HAND.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.serviceUnavailable';
+      route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
+      break;
+    case PRESCRIPTION_REPEAT_COURSES.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.repeatPrescriptionCourses';
+      route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionCourses';
       break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:

@@ -17,20 +17,33 @@ import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.serviceJourneyRules.AppointmentsProvider
+import worker.models.serviceJourneyRules.MedicalRecordProvider
+import worker.models.serviceJourneyRules.PrescriptionsProvider
 import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
 import java.util.*
 
-const val EMIS_GP_SUPPLIER = "EMIS"
-const val ODSCODE_IM1_ECONSULT_NOMINATED_PHARMACY_ENABLED = "A11111"
-const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
+private const val EMIS_GP_SUPPLIER = "EMIS"
+private const val ODSCODE_IM1_ECONSULT_NOMINATED_PHARMACY_ENABLED = "A11111"
+private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
+private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
 
 class ServiceJourneyRulesStepDefinitions {
 
     private val journeysOdsMap = mapOf(
-            EnumSet.of(JourneyType.APPOINTMENTS_IM1, JourneyType.NOMINATED_PHARMACY_ENABLED)
+            EnumSet.of(JourneyType.APPOINTMENTS_IM1,
+                    JourneyType.MEDICAL_RECORD_IM1,
+                    JourneyType.PRESCRIPTIONS_IM1,
+                    JourneyType.NOMINATED_PHARMACY_ENABLED)
                     to ODSCODE_IM1_ECONSULT_NOMINATED_PHARMACY_ENABLED,
-            EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA, JourneyType.NOMINATED_PHARMACY_DISABLED)
-                    to ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED
+            EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
+                    JourneyType.MEDICAL_RECORD_IM1,
+                    JourneyType.PRESCRIPTIONS_IM1,
+                    JourneyType.NOMINATED_PHARMACY_DISABLED)
+                    to ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED,
+            EnumSet.of(JourneyType.APPOINTMENTS_GPATHAND,
+                    JourneyType.MEDICAL_RECORD_GPATHAND,
+                    JourneyType.PRESCRIPTIONS_GPATHAND)
+                    to ODSCODE_GP_AT_HAND_CONFIGURATIONS
     )
 
     @Given("^I am a user whose ODS Code has a specific journey configuration set up$")
@@ -54,7 +67,6 @@ class ServiceJourneyRulesStepDefinitions {
     fun iAmAUserWhereTheJourneyConfigurationsAre(configurations: List<Configuration>) {
         val journeyTypes = mapToJourneyTypes(configurations)
         val odsCode = findOdsCode(journeyTypes)
-
         Assert.assertNotNull("Cannot find a matching ODS code with the given configuration in SJR", odsCode)
 
         // copying at moment until a new instance is returned per request
@@ -90,7 +102,7 @@ class ServiceJourneyRulesStepDefinitions {
     }
 
     @Then("^the service journey rules response will have appointments set to (\\w+)$")
-    fun theServiceJourneyRulesResponseWillHaveAppointmentsSetToIm1(provider: String) {
+    fun theServiceJourneyRulesResponseWillHaveAppointmentsSetTo(provider: String) {
         val serviceJourneyRulesResponse =
                 ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
                         .getOrFail<ServiceJourneyRulesResponse>()
@@ -101,27 +113,39 @@ class ServiceJourneyRulesStepDefinitions {
                 serviceJourneyRulesResponse.journeys.appointments.provider)
     }
 
-    @Then("^the service journey rules response will have nominated pharmacy enabled$")
-    fun theServiceJourneyRulesResponseWillHaveNominatedPharmacyEnabled() {
+    @Then("^the service journey rules response will have medical record set to (\\w+)$")
+    fun theServiceJourneyRulesResponseWillHaveMedicalRecordSetTo(provider: String){
         val serviceJourneyRulesResponse =
                 ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
                         .getOrFail<ServiceJourneyRulesResponse>()
 
         Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
-        Assert.assertEquals("Service Journey Rules Appointments provider",
-                true,
-                serviceJourneyRulesResponse.journeys.nominatedPharmacy)
+        Assert.assertEquals("Service Journey Rules Medical Record provider",
+                MedicalRecordProvider.valueOf(provider),
+                serviceJourneyRulesResponse.journeys.medicalRecord.provider)
     }
 
-    @Then("^the service journey rules response will have nominated pharmacy disabled$")
-    fun theServiceJourneyRulesResponseWillHaveNominatedPharmacyDisabled() {
+    @Then("^the service journey rules response will have prescriptions set to (\\w+)$")
+    fun theServiceJourneyRulesResponseWillHavePrescriptionsSetTo(provider: String){
+        val serviceJourneyRulesResponse =
+                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
+                        .getOrFail<ServiceJourneyRulesResponse>()
+
+        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+        Assert.assertEquals("Service Journey Rules Prescriptions provider",
+                PrescriptionsProvider.valueOf(provider),
+                serviceJourneyRulesResponse.journeys.prescriptions.provider)
+    }
+
+    @Then("^the service journey rules response will have nominated pharmacy (enabled|disabled)$")
+    fun theServiceJourneyRulesResponseWillHaveNominatedPharmacyEnabledOrDisabled(enabled: String) {
         val serviceJourneyRulesResponse =
                 ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
                         .getOrFail<ServiceJourneyRulesResponse>()
 
         Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
         Assert.assertEquals("Service Journey Rules Appointments provider",
-                false,
+                enabled == "enabled",
                 serviceJourneyRulesResponse.journeys.nominatedPharmacy)
     }
 
@@ -156,7 +180,12 @@ class ServiceJourneyRulesStepDefinitions {
 
     enum class JourneyType {
         APPOINTMENTS_IM1,
+        APPOINTMENTS_GPATHAND,
         APPOINTMENTS_INFORMATICA,
+        MEDICAL_RECORD_IM1,
+        MEDICAL_RECORD_GPATHAND,
+        PRESCRIPTIONS_IM1,
+        PRESCRIPTIONS_GPATHAND,
         NOMINATED_PHARMACY_DISABLED,
         NOMINATED_PHARMACY_ENABLED
     }

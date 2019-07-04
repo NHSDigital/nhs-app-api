@@ -129,6 +129,14 @@
 	<string>$(SYMPTOMS_URL_PATH)</string>
 	<key>PrescriptionsUrlPath</key>
 	<string>$(PRESCRIPTIONS_URL_PATH)</string>
+	<key>PrescriptionsGpAtHandUrlPath</key>
+	<string>$(PRESCRIPTIONS_GP_AT_HAND_URL_PATH)</string>
+	<key>AppontmentsGpAtHandUrlPath</key>
+	<string>$(APPOINTMENTS_GP_AT_HAND_URL_PATH)</string>
+	<key>MyRecordGpAtHandUrlPath</key>
+	<string>$(MY_RECORD_GP_AT_HAND_URL_PATH)</string>
+	<key>InformaticaUrlPath</key>
+	<string>$(INFORMATICA_URL_PATH)</string>
 	<key>MyAccountUrlPath</key>
 	<string>$(MY_ACCOUNT_URL_PATH)</string>
 	<key>SessionUrlPath</key>

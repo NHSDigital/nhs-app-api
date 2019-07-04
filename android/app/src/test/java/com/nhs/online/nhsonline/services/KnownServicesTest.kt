@@ -129,19 +129,27 @@ class KnownServicesTest : ResourceMockingClass() {
         val nhsAppServices =
             arrayListOf(getResourceString(R.string.symptomsPath),
                 getResourceString(R.string.appointmentsPath),
+                getResourceString(R.string.appointmentsGpAtHandPath),
+                getResourceString(R.string.informaticaPath),
                 getResourceString(R.string.prescriptionsPath),
+                getResourceString(R.string.prescriptionsGpAtHandPath),
                 getResourceString(R.string.myRecordPath),
+                getResourceString(R.string.myRecordGpAtHandPath),
                 getResourceString(R.string.myAccountPath),
                 getResourceString(R.string.morePath) + "random/path",
                 "${getResourceString(R.string.checkYourSymptoms)}/random-path")
 
         val equivalentNhsAppHeaders = arrayListOf(getResourceString(R.string.symptoms_header),
-            getResourceString(R.string.appointments_header),
-            getResourceString(R.string.prescriptions_header),
-            getResourceString(R.string.my_record_header),
-            getResourceString(R.string.my_account_header),
-            getResourceString(R.string.more_header),
-            getResourceString(R.string.symptoms_header))
+                getResourceString(R.string.appointments_header),
+                getResourceString(R.string.service_unavailable),
+                getResourceString(R.string.service_unavailable),
+                getResourceString(R.string.prescriptions_header),
+                getResourceString(R.string.service_unavailable),
+                getResourceString(R.string.my_record_header),
+                getResourceString(R.string.service_unavailable),
+                getResourceString(R.string.my_account_header),
+                getResourceString(R.string.more_header),
+                getResourceString(R.string.symptoms_header))
         for (i in 0 until nhsAppServices.size) {
             val serviceInfo =
                 testKnownServices.findNHSAppInternalServiceInfoByPath(nhsAppServices[i])

@@ -52,4 +52,10 @@ class GenericPageStepDefinitions {
     fun aNewTabOpens() {
         browser.assertNewTab()
     }
+
+    @Then("^I am redirected to the '(.*)' page$")
+    fun thenIAmRedirectedToThePage(pageName: String) {
+        val redirectUrl = pageUrl.getPage(pageName, genericPage.onMobile())
+        browser.shouldHaveUrl(redirectUrl)
+    }
 }
