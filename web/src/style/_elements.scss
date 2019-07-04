@@ -51,9 +51,13 @@ a, button {
   &:focus {
     @include outlineStyle
   }
+}
 
-  &:hover {
-    @include outlineStyleLight;
+.desktopWeb {
+  a, button {
+    &:hover {
+      @include outlineStyleLight;
+    }
   }
 }
 
