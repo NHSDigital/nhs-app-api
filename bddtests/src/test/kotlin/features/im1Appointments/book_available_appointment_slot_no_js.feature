@@ -31,7 +31,6 @@ Feature: Book an available appointment slot UI without Javascript
       | EMIS      |
       | MICROTEST |
 
-
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: A <GP System> user with noJs can only enter a phone number for phone appointments, when they have <User's Telephone Numbers> phone number saved
@@ -152,10 +151,11 @@ Feature: Book an available appointment slot UI without Javascript
       | EMIS      |
       | MICROTEST |
 
-  @bug  @NHSO-3816
-  Scenario: An appointment is booked for an EMIS user with noJS if a phone number is provided for telephone appointments with optional booking reason
-    Given I have no telephone number(s) stored for EMIS
+  Scenario: An EMIS user with noJS can book a telephone appointment if a phone number is provided without describing symptoms when booking reason is optional
+    Given I wish to book an appointment without specifying a reason
+    And I have no telephone number(s) stored for EMIS
     And there are appointments available to book which are of telephone type with optional booking reason for EMIS
+    And a booked appointment can be cancelled
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -167,9 +167,9 @@ Feature: Book an available appointment slot UI without Javascript
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
 
-# Miscellaneous no-JS scenarios
+    # Miscellaneous no-JS scenarios
 
-  Scenario Outline: A <GP System> user can book appointments with javascript disabled
+  Scenario Outline: A <GP System> user with noJS can book appointments
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in
@@ -189,17 +189,33 @@ Feature: Book an available appointment slot UI without Javascript
       | VISION    |
       | MICROTEST |
 
-
-  @bug  @NHSO-3816
-  Scenario: An appointment is booked for an EMIS user with noJS with no optional booking reason
-    Given I wish to book an appointment without specifying a reason
-    And there are EMIS appointments available to book where booking reason is set optional
+  # Not applicable for VISION
+  Scenario Outline: A <GP System> user with noJS cannot book appointments without describing symptoms when booking reason is mandatory
+    Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
-    And the Appointment Slot page is displayed
+    Then the Appointment Slot page is displayed
+    And  I click the 'Confirm and book appointment' button
+    Then the focus will go back to empty booking reason input box
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | MICROTEST |
+
+  Scenario: An EMIS user with noJS can book an appointment without describing symptoms when booking reason is optional
+    Given there are EMIS appointments available to book where booking reason is set optional
+    And a booked appointment can be cancelled
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have filtered such that there is one time displayed that represents multiple slots
+    And I click the 'Find available appointments' button
+    When I have selected a time when multiple slots are available
+    Then the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
+

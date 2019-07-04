@@ -104,7 +104,7 @@
                              v-model="symptoms"
                              :a-labelled-by="reasonBoxAriaLabelledBy"
                              :text-area-classes="defaultClasses"
-                             :required="true"
+                             :required="reasonRequired"
                              :error.sync="showReasonError"
                              name="bookingReason"
                              maxlength="150"/>
@@ -209,6 +209,9 @@ export default {
     },
     showReasonError() {
       return this.reasonError && !this.symptoms;
+    },
+    reasonRequired() {
+      return !this.bookingReasonOptional();
     },
     showTelephoneError() {
       return this.telephoneNumberError && !this.telephoneNumber;
@@ -362,18 +365,18 @@ export default {
 @import "../../style/desktopWeb/inputcontrol";
 
 .reasonForm {
- &.web {
-  margin-bottom: 24px;
- }
+  &.web {
+    margin-bottom: 24px;
+  }
 }
 
 .phoneNumberForm {
- &.web {
-  margin-bottom: 6px;
- }
- &.desktopWeb{
-  margin-top: 1em;
-}
+  &.web {
+    margin-bottom: 6px;
+  }
+  &.desktopWeb{
+    margin-top: 1em;
+  }
 }
 
 .textReasonLabel {
@@ -422,51 +425,51 @@ export default {
 }
 
 .customRadio {
-    cursor: pointer;
-    height: 32px;
-    left: 0;
-    margin: 0;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    width: 32px;
-    z-index: 1;
+  cursor: pointer;
+  height: 32px;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 32px;
+  z-index: 1;
 }
 
 .customRadioLabel {
-    -ms-touch-action: manipulation;
-    cursor: pointer;
-    display: inline-block;
-    margin-bottom: 0;
-    padding: 8px 12px 4px;
-    touch-action: manipulation;
+  -ms-touch-action: manipulation;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 0;
+  padding: 8px 12px 4px;
+  touch-action: manipulation;
 }
 .customRadio + .customRadioLabel::before {
-    background: $white;
-    border: 2px #425563 solid;
-    border-radius: 50%;
-    box-sizing: border-box;
-    content: '';
-    height: 32px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 32px;
+  background: $white;
+  border: 2px #425563 solid;
+  border-radius: 50%;
+  box-sizing: border-box;
+  content: '';
+  height: 32px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 32px;
 }
 .customRadio + .customRadioLabel::after {
-    background: black;
-    border: 8px solid #212b32;
-    border-radius: 50%;
-    content: '';
-    height: 0;
-    left: 8px;
-    opacity: 0;
-    position: absolute;
-    top: 8px;
-    width: 0;
+  background: black;
+  border: 8px solid #212b32;
+  border-radius: 50%;
+  content: '';
+  height: 0;
+  left: 8px;
+  opacity: 0;
+  position: absolute;
+  top: 8px;
+  width: 0;
 }
 .customRadio:checked + .customRadioLabel::after {
-    opacity: 1;
+  opacity: 1;
 }
 
 .customRadio:focus + .customRadioLabel::before {
@@ -476,47 +479,47 @@ export default {
 }
 
 .customRadioItem {
-    display: block;
-    position: relative;
-    min-height: 32px;
-    margin-bottom: 8px;
-    padding: 0 0 0 32px;
-    clear: left;
+  display: block;
+  position: relative;
+  min-height: 32px;
+  margin-bottom: 8px;
+  padding: 0 0 0 32px;
+  clear: left;
 }
 
 .confirmButton {
   margin-top: 1em;
- }
+}
 
 .errorBorder {
   max-width: 540px;
 }
 
 div {
- &.desktopWeb {
-  p {
-   font-family: $default-web;
-   font-weight: lighter;
-   max-width: 540px;
+  &.desktopWeb {
+    p {
+      font-family: $default-web;
+      font-weight: lighter;
+      max-width: 540px;
+    }
+    .info {
+      font-size: 1em;
+      margin-bottom: 1em;
+    }
+    .telephoneNumberContainer {
+      margin-bottom: 0px;
+    }
+    .patientTelephoneNumberLabel {
+      font-family: $default-web;
+      font-weight: lighter;
+    }
+    .textReasonLabel {
+      padding-top: 1em;
+      font-family: $default-web;
+      font-weight: lighter;
+      margin-top: 1em;
+    }
   }
-  .info {
-   font-size: 1em;
-   margin-bottom: 1em;
-  }
-  .telephoneNumberContainer {
-   margin-bottom: 0px;
-  }
-  .patientTelephoneNumberLabel {
-    font-family: $default-web;
-    font-weight: lighter;
-  }
-  .textReasonLabel {
-   padding-top: 1em;
-    font-family: $default-web;
-    font-weight: lighter;
-    margin-top: 1em;
-  }
- }
 }
 
 </style>
