@@ -1,5 +1,10 @@
 import axios from 'axios';
 import NHSOnlineApi from '@/services/v1nhsonlineapi';
+import uuid from 'uuid';
+
+jest.mock('uuid');
+
+const mockNhsoRequestID = '123-456-789';
 
 describe('services/nhsonlineapi', () => {
   const deferred = {
@@ -9,11 +14,13 @@ describe('services/nhsonlineapi', () => {
 
   beforeEach(() => {
     axios.mockClear();
+    uuid.v4 = jest.fn().mockReturnValue(mockNhsoRequestID);
   });
 
   describe('request', () => {
     let store;
-    const createRequestApi = () => new NHSOnlineApi({ store });
+    let res;
+    const createRequestApi = () => new NHSOnlineApi({ store, res });
     const request = ({
       api,
       headers,
@@ -34,12 +41,62 @@ describe('services/nhsonlineapi', () => {
         dispatch: jest.fn(),
         state: {},
       };
+      res = {
+        setHeader: jest.fn(),
+      };
+    });
+
+    describe('will send a header NHSO-Request-ID for an http request', () => {
+      let headers;
+      beforeEach(() => {
+        headers = {};
+      });
+
+      describe('when process is server', () => {
+        beforeEach(() => {
+          process.server = true;
+        });
+
+        it('will read value from current request variable', () => {
+          // act
+          res.locals = {
+            nhsoRequestId: mockNhsoRequestID,
+          };
+          const api = createRequestApi();
+          request({ api, headers });
+
+          // assert
+          const headersSentInRequest = axios.mock.calls[0][0].headers;
+          expect(headersSentInRequest).not.toBeNull();
+          const nhsoRequestIdHeader = headersSentInRequest['NHSO-Request-ID'];
+          expect(nhsoRequestIdHeader).toBe(mockNhsoRequestID);
+          expect(uuid.v4).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('when process is client', () => {
+        beforeEach(() => {
+          process.server = false;
+        });
+
+        it('will generate a unique id for the http request', () => {
+          // act
+          request({ headers });
+
+          // assert
+          const headersSentInRequest = axios.mock.calls[0][0].headers;
+          expect(headersSentInRequest).not.toBeNull();
+          const nhsoRequestIdHeader = headersSentInRequest['NHSO-Request-ID'];
+          expect(nhsoRequestIdHeader).toBe(mockNhsoRequestID);
+          expect(uuid.v4).toHaveBeenCalled();
+        });
+      });
     });
 
     describe('cookie', () => {
       let headers;
       beforeEach(() => {
-        headers = [];
+        headers = {};
       });
 
       describe('cookie exists', () => {
@@ -68,7 +125,7 @@ describe('services/nhsonlineapi', () => {
     describe('csrf token', () => {
       let headers;
       beforeEach(() => {
-        headers = [];
+        headers = {};
       });
 
       describe('token exists', () => {
@@ -95,23 +152,28 @@ describe('services/nhsonlineapi', () => {
       describe('token does not exist', () => {
         it('will not set the "X-CSRF-TOKEN header in the request', () => {
           request({ headers });
-          expect(headers).toEqual([]);
+          expect(headers['X-CSRF-TOKEN']).toBeUndefined();
         });
       });
+    });
+
+    let headers;
+    beforeEach(() => {
+      headers = {};
     });
 
     describe('query parameters', () => {
       it('will not include a query string when query parameters are empty', () => {
         const queryParameters = {};
         const url = 'http://foo/';
-        request({ queryParameters, url });
+        request({ headers, queryParameters, url });
         expect(axios.mock.calls[0][0].url).toEqual(url);
       });
 
       it('will not include a query string when query parameters are undefined', () => {
         const queryParameters = undefined;
         const url = 'http://foo/';
-        request({ queryParameters, url });
+        request({ headers, queryParameters, url });
         expect(axios.mock.calls[0][0].url).toEqual(url);
       });
 
@@ -121,7 +183,7 @@ describe('services/nhsonlineapi', () => {
           boo: 'hoo',
           foo: 'bar',
         };
-        request({ queryParameters, url });
+        request({ headers, queryParameters, url });
         expect(axios.mock.calls[0][0].url).toEqual(`${url}?boo=hoo&foo=bar`);
       });
 
@@ -130,13 +192,13 @@ describe('services/nhsonlineapi', () => {
         const queryParameters = {
           'works?': '&',
         };
-        request({ queryParameters, url });
+        request({ headers, queryParameters, url });
         expect(axios.mock.calls[0][0].url).toEqual(`${url}?works%3F=%26`);
       });
     });
 
     it('will dispatch "http/isLoading"', () => {
-      request();
+      request({ headers });
       expect(store.dispatch).toHaveBeenCalledWith('http/isLoading');
     });
   });

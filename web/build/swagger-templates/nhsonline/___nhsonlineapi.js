@@ -10,6 +10,7 @@ import $q from 'q';
 import axios from 'axios'
 import isEmpty from 'lodash/fp/isEmpty'
 import get from 'lodash/fp/get'
+import { v4 as uuid } from 'uuid'
 import {
     resolveApiClient
 } from '../middleware/urlResolution'
@@ -121,6 +122,15 @@ class NHSOnlineApi {
           headers['Cookie'] = cookie;
         }
 
+        let nhsoRequestId;
+
+        if (process.server) {
+          nhsoRequestId = this.res.locals.nhsoRequestId;
+        } else {
+          nhsoRequestId = uuid();
+        }
+        headers['NHSO-Request-ID'] = nhsoRequestId;
+
         const webVersion = getWebVersion(this);
         const nativeVersion = getNativeVersion(this);
         const platform = getPlatform(this);
@@ -166,7 +176,7 @@ class NHSOnlineApi {
 
         if (process.server) {
           consola = require('consola');
-          consola.info(`Begin request: ${method} ${urlWithParams}`);
+          consola.info(`Begin request: ${method} ${urlWithParams}, CorrelationId=${nhsoRequestId}`);
         }
 
         axios({
@@ -182,15 +192,18 @@ class NHSOnlineApi {
           data: JSON.stringify(body)
         }).then((response) => {
           if (process.server) {
-            this.res.setHeader('Cache-Control', `${response.headers['cache-control']}`);
-            this.res.setHeader('Pragma', `${response.headers['pragma']}`);
-    
             if (response) {
               const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();
-              consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}, duration: ${requestDurationMilliseconds}ms`);
-            }
-            if (response.headers['set-cookie']) {
-              this.res.setHeader('Set-Cookie', `${response.headers['set-cookie']}; SameSite=Lax`);
+              consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}, duration: ${requestDurationMilliseconds}ms, CorrelationId=${nhsoRequestId}`);
+
+              if (response.headers) {
+                this.res.setHeader('Cache-Control', `${response.headers['cache-control']}`);
+                this.res.setHeader('Pragma', `${response.headers['pragma']}`);
+
+                if (response.headers['set-cookie']) {
+                  this.res.setHeader('Set-Cookie', `${response.headers['set-cookie']}; SameSite=Lax`);
+                }
+              }
             }
           }
 
@@ -207,11 +220,11 @@ class NHSOnlineApi {
             const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();
 
             if (error.response) {
-              consola.error(new Error(`Error response for request: ${method} ${urlWithParams}, response: ${error.response.status}, duration: ${requestDurationMilliseconds}ms}`));
+              consola.error(new Error(`Error response for request: ${method} ${urlWithParams}, response: ${error.response.status}, duration: ${requestDurationMilliseconds}ms}, CorrelationId=${nhsoRequestId}`));
             } else if (error.request) {
-              consola.error(new Error(`Error sending request: ${method} ${urlWithParams}, duration: ${requestDurationMilliseconds}ms`));
+              consola.error(new Error(`Error sending request: ${method} ${urlWithParams}, duration: ${requestDurationMilliseconds}ms, CorrelationId=${nhsoRequestId}`));
             } else {
-              consola.error(new Error(`Error setting up the request: ${method} ${urlWithParams}, error: ${error.message}, duration: ${requestDurationMilliseconds}ms`));
+              consola.error(new Error(`Error setting up the request: ${method} ${urlWithParams}, error: ${error.message}, duration: ${requestDurationMilliseconds}ms, CorrelationId=${nhsoRequestId}`));
             }
           }
           this.store.dispatch('http/loadingCompleted');

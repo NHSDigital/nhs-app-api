@@ -41,6 +41,7 @@ const config = {
   ],
   serverMiddleware: [
     './.transpiled/middleware-server/noJsApi.js',
+    './.transpiled/middleware-server/setRequestId.js',
     './.transpiled/middleware-server/handler.js',
     './.transpiled/middleware-server/responseHeaders.js',
   ],

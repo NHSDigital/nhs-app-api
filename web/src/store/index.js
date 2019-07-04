@@ -53,7 +53,7 @@ export const modules = {
 };
 
 export const actions = {
-  async nuxtServerInit({ dispatch }, { req }) {
+  async nuxtServerInit({ dispatch }, { req, res }) {
     const authCookie = this.$cookies.get('nhso.auth');
     if (process.server) {
       /*
@@ -62,7 +62,9 @@ export const actions = {
       */
       const consola = require('consola'); // eslint-disable-line global-require
       const { redirectUri, codeVerifier } = authCookie || {};
-      consola.info(`Auth Cookie values for request: ${req.url}: redirectUri: ${redirectUri}, codeVerifier: ${codeVerifier}`);
+      const { nhsoRequestId } = res.locals;
+
+      consola.info(`Auth Cookie values for request: ${req.url}, redirectUri=${redirectUri}, codeVerifier=${codeVerifier}, CorrelationId=${nhsoRequestId}`);
     }
     await dispatch('auth/updateConfig', authCookie);
     await dispatch('session/setInfo', this.$cookies.get('nhso.session'));

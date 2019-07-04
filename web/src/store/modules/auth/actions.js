@@ -59,8 +59,9 @@ export default {
 
     const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
     if (process.server) {
+      const { nhsoRequestId } = this.app.context.res.locals;
       const consola = require('consola');
-      consola.info(`handleAuthResponse. codeVerifier: ${codeVerifier}, redirectUrl: ${redirectUrl}`);
+      consola.info(`handleAuthResponse - codeVerifier=${codeVerifier}, redirectUrl=${redirectUrl}, CorrelationId=${nhsoRequestId}`);
     }
 
     return this.app.$http

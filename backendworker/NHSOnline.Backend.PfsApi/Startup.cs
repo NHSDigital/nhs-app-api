@@ -38,6 +38,7 @@ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.PfsApi.Filters;
 using SettingValidationStartupFilter = NHSOnline.Backend.Support.SettingValidationStartupFilter;
+using NHSOnline.Backend.Support.Middleware;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -252,8 +253,19 @@ namespace NHSOnline.Backend.PfsApi
                 );
             }
 
-            app.UseCorrelationId();
-            
+            app.UseCorrelationId(new CorrelationIdOptions
+            {
+                Header = Constants.HttpHeaders.CorrelationIdentifier,
+                UseGuidForCorrelationId = true,
+                UpdateTraceIdentifier = false
+            });
+
+            app.UseLogRequestHeader(new LogRequestHeaderOptions
+            {
+                HeaderName = Constants.HttpHeaders.CorrelationIdentifier,
+                LogTemplate = "CorrelationId={value}",
+            });
+
             app.UseMvc();
 
             _modularStartup.Configure(app, env);
