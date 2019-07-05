@@ -21,7 +21,7 @@
             :class="$style.link">
           <analytics-tracked-tag :id="`btnPharmacy-${pharmacy.odsCode}`"
                                  :class="!$store.state.device.isNativeApp ?
-                                   $style['no-decoration'] : ''"
+                                   [$style['no-decoration','pharmacy-link']] : ''"
                                  text="Pharmacy"
                                  tag="a"
                                  href="#"
@@ -179,5 +179,11 @@ div {
 .bullet {
   list-style-type: disc;
   padding-left: 1rem;
+}
+
+.pharmacy-link {
+  // added to show the border on focus and hover
+  position: relative;
+  z-index: 1;
 }
 </style>
