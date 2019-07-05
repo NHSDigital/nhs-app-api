@@ -32,7 +32,7 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
 
 class CommonSteps : AbstractSteps() {
     companion object {
-        val GP_SYSTEM: String = "GP_SYSTEM"
+        val GP_SYSTEM: String = "GpSupplier"
     }
 
     @Before

@@ -11,11 +11,10 @@
   </div>
 </template>
 <script>
-/* eslint-disable no-unused-vars */
-import { APPOINTMENTS, APPOINTMENT_BOOKING_GUIDANCE, NOMINATED_PHARMACY_CHECK, PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
+import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
+import { APPOINTMENTS, APPOINTMENT_BOOKING_GUIDANCE, PRESCRIPTIONS } from '@/lib/routes';
 
 export default {
   name: 'HeaderCompanionButton',
@@ -57,8 +56,7 @@ export default {
         return APPOINTMENT_BOOKING_GUIDANCE.path;
       }
       if (this.$route.name === PRESCRIPTIONS.name) {
-        return this.$store.state.nominatedPharmacy.nominatedPharmacyEnabled ?
-          NOMINATED_PHARMACY_CHECK.path : PRESCRIPTION_REPEAT_COURSES.path;
+        return GetNavigationPathFromPrescriptions(this.$store);
       }
       return '';
     },

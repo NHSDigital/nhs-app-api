@@ -1,100 +1,139 @@
-import { create$T, createStore, mount } from '../../helpers';
 import PrescriptionsPage from '@/pages/prescriptions/index';
-import { PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_CHECK, NOMINATED_PHARMACY } from '../../../../src/lib/routes';
+import { createRouter, createStore, mount } from '../../helpers';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_CHECK, PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 
-const $t = create$T();
+describe('prescriptions/index.vue', () => {
+  let wrapper;
+  let $store;
+  let $router;
 
-const createState = (isValid, hasLoaded) => ({
-  device: {
-    source: 'web',
-  },
-  prescriptions: {
-    hasLoaded,
-    prescriptionCourses: {},
-  },
-  nominatedPharmacy: {
-    pharmacy: {
-      pharmacyName: undefined,
-    },
-    nominatedPharmacyEnabled: isValid,
-  },
-});
+  const mountPage = (isEnabled) => {
+    $router = createRouter();
+    $store = createStore({
+      state: {
+        device: {
+          isNativeApp: true,
+        },
+        prescriptions: {
+          hasLoaded: true,
+          prescriptionCourses: {},
+        },
+        nominatedPharmacy: {
+          pharmacy: {
+            pharmacyName: undefined,
+          },
+        },
+      },
+      getters: {
+        'nominatedPharmacy/nominatedPharmacyEnabled': isEnabled,
+        'serviceJourneyRules/nominatedPharmacyEnabled': isEnabled,
+      },
+    });
 
-describe('prescriptions/index.vue -', () => {
-  describe('nominated pharmacy will be shown', () => {
-    let nominatedPharmacy;
-    let nominatedPharmacyLink;
-    let $store;
-    let wrapper;
+    $store.app.$analytics = {
+      trackButtonClick: jest.fn(),
+    };
 
+    return mount(PrescriptionsPage, {
+      $route: {
+        name: PRESCRIPTIONS.name,
+      },
+      $router,
+      $store,
+    });
+  };
+
+  describe('nominated pharmacy is enabled', () => {
     beforeEach(() => {
-      $store = createStore(
-        { dispatch: jest.fn(() => Promise.resolve()), state: createState(true, true) },
-      );
-
-      const mountPage = () => mount(PrescriptionsPage, { $store, $t });
-      wrapper = mountPage();
+      wrapper = mountPage(true);
     });
 
-    it('it will show pharmacy when it is a valid type', () => {
-      nominatedPharmacy = wrapper.find('#nominated-pharmacy-section');
-      expect(nominatedPharmacy.exists()).toBe(true);
+    it('will show pharmacy section', () => {
+      expect(wrapper.find('#nominated-pharmacy-section').exists()).toBe(true);
     });
 
-    it('it will redirect to nominated-pharmacy when clicked', () => {
-      nominatedPharmacyLink = wrapper.find('#nominated-pharmacy');
-      $store.app.$analytics = {
-        trackButtonClick: jest.fn(),
-      };
+    describe('pharmacy link', () => {
+      let nominatedPharmacyLink;
 
-      wrapper.vm.onNominatedPharmacyDetailClicked();
+      beforeEach(() => {
+        global.digitalData = {};
+        nominatedPharmacyLink = wrapper.find('#nominated-pharmacy');
+      });
 
-      expect(nominatedPharmacyLink.exists()).toEqual(true);
-      expect($store.app.$analytics.trackButtonClick)
-        .toHaveBeenCalledWith(NOMINATED_PHARMACY.path, true);
+      it('will exist', () => {
+        expect(nominatedPharmacyLink.exists()).toEqual(true);
+      });
+
+      describe('clicked', () => {
+        beforeEach(() => {
+          nominatedPharmacyLink.trigger('click');
+        });
+
+        it('will track nominated pharmacy check path', () => {
+          expect($store.app.$analytics.trackButtonClick)
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY.path, true);
+        });
+
+        it('will redirect to nominated pharmacy check page', () => {
+          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY.path);
+        });
+      });
+    });
+
+    describe('order new repeat prescription button', () => {
+      let button;
+
+      beforeEach(() => {
+        button = wrapper.find('#order-prescription-button');
+      });
+
+      describe('clicked', () => {
+        beforeEach(() => {
+          button.trigger('click');
+        });
+
+        it('will track nominated pharmacy check path', () => {
+          expect($store.app.$analytics.trackButtonClick)
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY_CHECK.path, true);
+        });
+
+        it('will redirect to nominated pharmacy check page', () => {
+          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY_CHECK.path);
+        });
+      });
     });
   });
 
-  describe('nominated pharmacy will not be displayed', () => {
-    let nominatedPharmacy;
-    let $store;
-
-    it('it will not show pharmacy when it is not a valid type', () => {
-      $store = createStore(
-        { dispatch: jest.fn(() => Promise.resolve()), state: createState(false, true) },
-      );
-
-      const mountPage = () => mount(PrescriptionsPage, { $store, $t });
-      const wrapper = mountPage();
-      nominatedPharmacy = wrapper.find('#nominated-pharmacy-section');
-      expect(nominatedPharmacy.exists()).toBe(false);
-    });
-  });
-
-  describe('continue button', () => {
-    let $store;
-
-    it('it will navigate to the courses page when it shouldnt show the nominated pharmacy', () => {
-      $store = createStore(
-        { dispatch: jest.fn(() => Promise.resolve()), state: createState(false, true) },
-      );
-
-      const mountPage = () => mount(PrescriptionsPage, { $store, $t });
-      const wrapper = mountPage();
-      const path = wrapper.vm.getContinueButtonPath();
-      expect(path).toBe(PRESCRIPTION_REPEAT_COURSES.path);
+  describe('nominated pharmacy is not enabled', () => {
+    beforeEach(() => {
+      wrapper = mountPage(false);
     });
 
-    it('it will have navigate to the nominated pharmacy check page when it should show the nominated pharmacy', () => {
-      $store = createStore(
-        { dispatch: jest.fn(() => Promise.resolve()), state: createState(true, true) },
-      );
+    it('will not show pharmacy section', () => {
+      expect(wrapper.find('#nominated-pharmacy-section').exists()).toBe(false);
+    });
 
-      const mountPage = () => mount(PrescriptionsPage, { $store, $t });
-      const wrapper = mountPage();
-      const path = wrapper.vm.getContinueButtonPath();
-      expect(path).toBe(NOMINATED_PHARMACY_CHECK.path);
+    describe('order new repeat prescription button', () => {
+      let button;
+
+      beforeEach(() => {
+        button = wrapper.find('#order-prescription-button');
+      });
+
+      describe('clicked', () => {
+        beforeEach(() => {
+          button.trigger('click');
+        });
+
+        it('will track prescriptions repeat courses path', () => {
+          expect($store.app.$analytics.trackButtonClick)
+            .toHaveBeenCalledWith(PRESCRIPTION_REPEAT_COURSES.path, true);
+        });
+
+        it('will redirect to prescriptions repeat courses', () => {
+          expect($router.push).toHaveBeenCalledWith(PRESCRIPTION_REPEAT_COURSES.path);
+        });
+      });
     });
   });
 });
-

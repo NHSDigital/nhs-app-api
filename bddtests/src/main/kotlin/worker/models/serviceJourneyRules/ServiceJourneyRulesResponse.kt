@@ -6,7 +6,8 @@ data class ServiceJourneyRulesResponse( var journeys : Journey)
 
 data class Journey(var appointments: AppointmentsJourneyRules,
                    var cdssAdvice: CdssJourneyRules,
-                   var cdssAdmin: CdssJourneyRules)
+                   var cdssAdmin: CdssJourneyRules,
+                   var nominatedPharmacy: Boolean)
 
 data class AppointmentsJourneyRules(var informaticaUrl:String, var provider:AppointmentsProvider)
 

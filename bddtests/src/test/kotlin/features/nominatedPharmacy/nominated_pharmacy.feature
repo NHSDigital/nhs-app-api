@@ -1,6 +1,6 @@
 @nominatedPharmacy
 Feature: nominated pharmacy journey
-  
+
   Scenario Outline: Patient can change their nominated pharmacy
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
@@ -31,7 +31,6 @@ Feature: nominated pharmacy journey
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
       | EMIS      | P1            | Boots       | SW11XR  |
-
 
   @smoketest
   Scenario Outline: Patient with no nominated pharmacy can nominate a pharmacy
@@ -106,8 +105,21 @@ Feature: nominated pharmacy journey
     And I do not see the nominated pharmacy panel
 
     Examples:
-      | GP System | 
+      | GP System |
       | EMIS      |
+
+  Scenario: Patient does not see nominated pharmacy when SJR has disabled it for their gp practice
+    Given I am a user where the journey configurations are:
+      | Journey            | Value    |
+      | nominated pharmacy | disabled |
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a P1 typed nominated pharmacy with SW11XR OdsCode
+    And I am logged in
+    When I navigate to prescriptions
+    Then I see prescriptions page loaded
+    And I do not see the nominated pharmacy panel
 
   Scenario Outline: If patient has a P3 typed nominated pharmacy it can not be changed
     Given I am patient using the <GP System> GP System
@@ -132,7 +144,6 @@ Feature: nominated pharmacy journey
       | GP System | Pharmacy Type | OdsCode |
       | EMIS      | P3            | SW11XR  |
 
-
   Scenario Outline: If patient has an Internet Pharmacy they can't see any nominated pharmacy functionality
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
@@ -147,4 +158,3 @@ Feature: nominated pharmacy journey
     Examples:
       | GP System | OdsCode |
       | EMIS      | SW11XR  |
-

@@ -1,8 +1,9 @@
+export const CDSS_ADMIN = 'cdssAdmin';
+export const CDSS_ADVICE = 'cdssAdvice';
 export const IM1_PROVIDER = 'im1';
 export const INFORMATICA = 'informatica';
 export const INIT = 'INIT';
-export const CDSS_ADVICE = 'cdssAdvice';
-export const CDSS_ADMIN = 'cdssAdmin';
+export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const SET_RULES = 'SET_RULES';
 
 export const initialState = () => ({
@@ -17,5 +18,6 @@ export const initialState = () => ({
     cdssAdmin: {
       provider: 'none',
     },
+    nominatedPharmacy: false,
   },
 });

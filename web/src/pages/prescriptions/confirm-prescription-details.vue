@@ -26,13 +26,15 @@
           {{ $t('rp03.noSpecialRequestDefaultText') }}
         </p>
       </div>
-      <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
-        <hr>
-        <b :class="$style.pharmacyHeader">{{ $t('rp04.nominatedPharmacyHeader') }}</b>
-        <pharmacy-summary id="pharmacy-summary"
-                          :pharmacy="nominatedPharmacy"
-                          :pharmacy-name-as-header="false" />
-      </div>
+      <sjr-if journey="nominatedPharmacy">
+        <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
+          <hr>
+          <b :class="$style.pharmacyHeader">{{ $t('rp04.nominatedPharmacyHeader') }}</b>
+          <pharmacy-summary id="pharmacy-summary"
+                            :pharmacy="nominatedPharmacy"
+                            :pharmacy-name-as-header="false" />
+        </div>
+      </sjr-if>
     </div>
 
     <generic-button id="btn_confirm_and_order_prescription"
@@ -57,18 +59,19 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
-import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
-import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import GenericButton from '@/components/widgets/GenericButton';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
+import SjrIf from '@/components/SjrIf';
 import { redirectTo } from '@/lib/utils';
+import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 
 export default {
   components: {
-    GenericButton,
     DesktopGenericBackLink,
+    GenericButton,
     PharmacySummary,
+    SjrIf,
   },
   data() {
     return {

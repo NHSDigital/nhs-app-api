@@ -1,27 +1,27 @@
-<!-- eslint-disable vue/no-v-html -->
-<!-- eslint-disable vue/no-template-shadow -->
 <template>
-  <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content' ,
+  <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content',
                                     !$store.state.device.isNativeApp && $style.desktopWeb]" >
-    <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
-      <ul :class="$style['list-menu-white']" role="list">
-        <li :class="$style.link" role="link">
-          <analytics-tracked-tag
-            id="nominated-pharmacy"
-            :click-func="onNominatedPharmacyDetailClicked"
-            :class="$style['no-decoration']"
-            :text="$t('rp01.nominatedPharmacy')"
-            :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
-            tag="a">
-            <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
-            <p id="pharmacy-name" :class="!$store.state.device.isNativeApp
-              && $style.desktopWeb">
-              {{ pharmacyName }}
-            </p>
-          </analytics-tracked-tag>
-        </li>
-      </ul>
-    </div>
+    <sjr-if journey="nominatedPharmacy">
+      <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
+        <ul :class="$style['list-menu-white']" role="list">
+          <li :class="$style.link" role="link">
+            <analytics-tracked-tag
+              id="nominated-pharmacy"
+              :click-func="onNominatedPharmacyDetailClicked"
+              :class="$style['no-decoration']"
+              :text="$t('rp01.nominatedPharmacy')"
+              :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
+              tag="a">
+              <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
+              <p id="pharmacy-name" :class="!$store.state.device.isNativeApp
+                && $style.desktopWeb">
+                {{ pharmacyName }}
+              </p>
+            </analytics-tracked-tag>
+          </li>
+        </ul>
+      </div>
+    </sjr-if>
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
       <p>
@@ -37,8 +37,8 @@
         <div v-if="getMedicationCourseStatus(key) != null">
           <h2>{{ getMedicationCourseStatus(key) }}</h2>
         </div>
-        <div v-for="(prescriptionCourse, key) in statusGroup"
-             :key="key"
+        <div v-for="(prescriptionCourse, index) in statusGroup"
+             :key="index"
              data-label="historic-prescription">
           <historic-prescription :prescription-course="prescriptionCourse" />
         </div>
@@ -57,25 +57,24 @@
 </template>
 
 <script>
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
-import HistoricPrescription from '@/components/HistoricPrescription';
-import { NOMINATED_PHARMACY } from '@/lib/routes';
-import MedicationCourseStatus from '@/lib/medication-course-status';
-import keys from 'lodash/fp/keys';
-import each from 'lodash/fp/each';
-import sortBy from 'lodash/fp/sortBy';
-import isEmpty from 'lodash/fp/isEmpty';
-import { redirectTo } from '@/lib/utils';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
+import HistoricPrescription from '@/components/HistoricPrescription';
+import MedicationCourseStatus from '@/lib/medication-course-status';
+import NoJsForm from '@/components/no-js/NoJsForm';
+import SjrIf from '@/components/SjrIf';
+import { each, isEmpty, keys, sortBy } from 'lodash/fp';
+import { redirectTo } from '@/lib/utils';
+import { NOMINATED_PHARMACY } from '@/lib/routes';
 
 export default {
   components: {
+    AnalyticsTrackedTag,
     FloatingButtonBottom,
     HistoricPrescription,
     NoJsForm,
-    AnalyticsTrackedTag,
+    SjrIf,
   },
   data() {
     return {
@@ -123,7 +122,7 @@ export default {
       return this.$store.state.prescriptions.hasLoaded;
     },
     showNominatedPharmacy() {
-      return this.$store.state.nominatedPharmacy.nominatedPharmacyEnabled;
+      return this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
     },
   },
   async asyncData({ store }) {

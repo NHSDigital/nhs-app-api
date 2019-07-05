@@ -1,5 +1,5 @@
 import get from 'lodash/fp/get';
-import { INFORMATICA, IM1_PROVIDER, CDSS_ADMIN, CDSS_ADVICE } from './mutation-types';
+import { CDSS_ADMIN, CDSS_ADVICE, IM1_PROVIDER, INFORMATICA, NOMINATED_PHARMACY } from './mutation-types';
 
 export default {
   [`${CDSS_ADMIN}Enabled`](state) {
@@ -19,5 +19,8 @@ export default {
   },
   [`${INFORMATICA}Enabled`](state) {
     return get('rules.appointments.provider')(state) === INFORMATICA;
+  },
+  [`${NOMINATED_PHARMACY}Enabled`](state) {
+    return get('rules.nominatedPharmacy')(state);
   },
 };

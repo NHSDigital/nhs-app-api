@@ -1,92 +1,67 @@
 import ConfirmPrescription from '@/pages/prescriptions/confirm-prescription-details';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
-const $t = create$T();
-
-describe('no nominated pharmacy summary', () => {
-  let $store;
-  let wrapper;
-
-  const createState = (state = {
-    device: {
-      source: 'web',
-    },
-    nominatedPharmacy: {
-      pharmacy: {
-        pharmacyName: undefined,
+describe('confirm prescriptions', () => {
+  const mountPage = ({ hasNoNominatedPharmacy, pharmacyName = undefined, sjrEnabled = true }) => {
+    const $store = createStore({
+      state: {
+        device: {
+          source: 'web',
+        },
+        nominatedPharmacy: {
+          pharmacy: {
+            pharmacyName,
+          },
+        },
+        repeatPrescriptionCourses: {
+          specialRequest: '',
+          specialRequestNecessity: 'NotAllowed',
+        },
       },
-    },
-    repeatPrescriptionCourses: {
-      specialRequest: '',
-      specialRequestNecessity: 'NotAllowed',
-    },
-  }) => state;
+    });
+    $store.getters['repeatPrescriptionCourses/selectedPrescriptions'] = [{ courseId: 1 }];
+    $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = hasNoNominatedPharmacy;
+    $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = sjrEnabled;
 
-  const mountPage = () => mount(ConfirmPrescription, { $store, $t });
+    return mount(ConfirmPrescription, { $store });
+  };
 
   describe('nominated pharmacy summary', () => {
-    let pharmacyBlock;
-    let pharmacySummary;
+    const pharmacyBlockId = '#my-nominated-pharmacy';
+    let wrapper;
 
-    beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $store.getters['repeatPrescriptionCourses/selectedPrescriptions'] = [{ courseId: 1 }];
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
-      wrapper = mountPage();
-      pharmacyBlock = wrapper.find('#my-nominated-pharmacy');
-      pharmacySummary = wrapper.find('#pharmacy-summary');
+    describe('SJR disabled', () => {
+      beforeEach(() => {
+        wrapper = mountPage({ hasNoNominatedPharmacy: true, pharmacyName: 'boots', sjrEnabled: false });
+      });
+
+      it('will not exist', () => {
+        expect(wrapper.find(pharmacyBlockId).exists()).toBe(false);
+      });
     });
 
-    it('will not exist', () => {
-      expect(pharmacyBlock.exists()).toBe(false);
-    });
+    describe('SJR enabled', () => {
+      const sjrEnabled = true;
 
-    it('will not have pharmacy summary', () => {
-      expect(pharmacySummary.exists()).toBe(false);
-    });
-  });
-});
+      describe('has no nominated pharmacy', () => {
+        beforeEach(() => {
+          wrapper = mountPage({ hasNoNominatedPharmacy: true, sjrEnabled });
+        });
 
-describe('nominated pharmacy summary present', () => {
-  let $store;
-  let wrapper;
+        it('will not exist', () => {
+          expect(wrapper.find(pharmacyBlockId).exists()).toBe(false);
+        });
+      });
 
-  const createState = (state = {
-    device: {
-      source: 'web',
-    },
-    nominatedPharmacy: {
-      pharmacy: {
-        pharmacyName: 'boots',
-      },
-    },
-    repeatPrescriptionCourses: {
-      specialRequest: '',
-      specialRequestNecessity: 'NotAllowed',
-    },
-  }) => state;
+      describe('has nominated pharmacy', () => {
+        beforeEach(() => {
+          wrapper = mountPage({ hasNoNominatedPharmacy: false, pharmacyName: 'Boots', sjrEnabled });
+        });
 
-  const mountPage = () => mount(ConfirmPrescription, { $store, $t });
-
-  describe('nominated pharmacy summary', () => {
-    let pharmacyBlock;
-    let pharmacySummary;
-
-    beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $store.getters['repeatPrescriptionCourses/selectedPrescriptions'] = [{ courseId: 1 }];
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
-      wrapper = mountPage();
-      pharmacyBlock = wrapper.find('#my-nominated-pharmacy');
-      pharmacySummary = wrapper.find('#pharmacy-summary');
-    });
-
-    it('will exist', () => {
-      expect(pharmacyBlock.exists()).toBe(true);
-    });
-
-    it('will have pharmacy summary', () => {
-      expect(pharmacySummary.exists()).toBe(true);
+        it('will exist', () => {
+          expect(wrapper.find(pharmacyBlockId).exists()).toBe(true);
+        });
+      });
     });
   });
 });

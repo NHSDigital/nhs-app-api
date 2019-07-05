@@ -4,7 +4,9 @@ Feature: Informatica Frontdesk Appointments
 
   Scenario: A user sees an appropriate message when the appointments journey configuration is set to
   Informatica Frontdesk
-    Given I am a user where the journey configuration for appointments is set to Informatica
+    Given I am a user where the journey configurations are:
+      | Journey      | Value       |
+      | appointments | informatica |
     And I am logged in
     When I retrieve the 'My Appointments' page directly
     Then I see an appropriate message informing me that my GP surgery uses Appointments Online
