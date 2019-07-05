@@ -13,7 +13,7 @@
       <hr aria-hidden="true">
       <div :class="getStatusStyle()">
         <b>
-          <component :is="getIcon()" />
+          <component :is="getIcon()" focusable="false"/>
           <span data-label="status">
             {{ getStatusText() }}
           </span>
