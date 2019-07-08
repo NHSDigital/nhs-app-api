@@ -218,11 +218,7 @@ components:
           description: Guidance message from GP practice explaining which appointment slot
             to book.
         bookingReasonNecessity:
-          type: string
-          enum:
-            - NotAllowed
-            - Optional
-            - Mandatory
+          $ref: "./nhsonline.shared.yaml#/components/schemas/Necessity"
           description: Indicates whether the patient can supply a booking reason when
             making an appointment.
         slots:

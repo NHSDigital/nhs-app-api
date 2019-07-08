@@ -313,12 +313,12 @@
                       type: "string"
                       description: "Guidance message from GP practice explaining which appointment slot to book."
                     bookingReasonNecessity: 
+                      description: "Indicates whether the patient can supply a booking reason when making an appointment."
                       type: "string"
                       enum: 
                         - "NotAllowed"
                         - "Optional"
                         - "Mandatory"
-                      description: "Indicates whether the patient can supply a booking reason when making an appointment."
                     slots: 
                       type: "array"
                       description: "Available Appointment Slots."
@@ -396,12 +396,12 @@
                             type: "string"
                             description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
                     specialRequestNecessity: 
+                      description: "Indicates whether the patient can supply a special request when ordering a prescription."
                       type: "string"
                       enum: 
-                        - "notAllowed"
-                        - "optional"
-                        - "mandatory"
-                      description: "Indicates whether the patient can supply a special request when ordering a prescription."
+                        - "NotAllowed"
+                        - "Optional"
+                        - "Mandatory"
           401: 
             description: "User session missing or expired."
           403: 

@@ -1,0 +1,14 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Sub-API - Shared Components
+  description: NHS App Sub-API - components shared between multiple functional areas
+paths: {}
+components:
+  schemas:
+    Necessity:
+      type: string
+      enum:
+        - NotAllowed
+        - Optional
+        - Mandatory
