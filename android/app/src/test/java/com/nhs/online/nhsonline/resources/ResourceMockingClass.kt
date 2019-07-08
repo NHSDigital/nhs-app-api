@@ -41,12 +41,6 @@ open class ResourceMockingClass {
             on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
             on { getStringArray(R.array.externalSiteUrls) } doReturn arrayOf(
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/",

@@ -6,10 +6,10 @@ describe('WebFooter.vue', () => {
   let wrapper;
 
   const $env = {
-    TERMS_AND_CONDITIONS_URL: 'https://terms-and-conditions',
-    PRIVACY_POLICY_URL: 'https://privacy-policy',
-    HELP_AND_SUPPORT_URL: 'https://help-and-support',
-    ACCESSIBILITY_STATEMENT: 'https://accessibility-statement',
+    TERMS_AND_CONDITIONS_URL: 'https://terms',
+    PRIVACY_POLICY_URL: 'https://privacy',
+    HELP_AND_SUPPORT_URL: 'https://help',
+    ACCESSIBILITY_STATEMENT: 'https://accessibility',
   };
   const urlAndTexts = {
     'myAccount.termsAndConditions': { url: $env.TERMS_AND_CONDITIONS_URL, text: 'Terms of use' },

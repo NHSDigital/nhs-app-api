@@ -23,30 +23,30 @@ Feature: View My Account Page
 
   Scenario: A patient can navigate to the Terms of use page
     Given I am on the My Account page
-    When I click the link called 'Terms of use' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/'
+    When I click the link called 'Terms of use' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Privacy policy page
     Given I am on the My Account page
-    When I click the link called 'Privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/'
+    When I click the link called 'Privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Cookies policy page
     Given I am on the My Account page
-    When I click the link called 'Cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/'
+    When I click the link called 'Cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Open source licences page
     Given I am on the My Account page
-    When I click the link called 'Open source licences' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/'
+    When I click the link called 'Open source licences' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Help and support page
     Given I am on the My Account page
-    When I click the link called 'Help and support' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/'
+    When I click the link called 'Help and support' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Accessibility statement page
     Given I am on the My Account page
-    When I click the link called 'Accessibility statement' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/'
+    When I click the link called 'Accessibility statement' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/'
     Then a new tab has been opened by the link

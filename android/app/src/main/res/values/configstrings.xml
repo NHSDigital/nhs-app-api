@@ -40,21 +40,14 @@
     <string name="loginPath">login</string>
     <string name="secureFlag">enabled</string>
     <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
-    <string name="helpURLOld">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/</string>
     <string name="helpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/</string>
     <string name="biometricsHelpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/android-fingerprint-ID-help/</string>
-    <string name="termsAndConditionsURLOld">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/</string>
     <string name="termsAndConditionsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/</string>
-    <string name="privacyPolicyURLOld">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/</string>
     <string name="privacyPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/</string>
-    <string name="cookiesPolicyURLOld">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/</string>
     <string name="cookiesPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/</string>
-    <string name="openSourceLicensesURLOld">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/</string>
     <string name="openSourceLicensesURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/</string>
-    <string name="medicalRecordAbbreviationsURLOld">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/</string>
     <string name="medicalRecordAbbreviationsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/</string>
     <string name="sessionDetailsCookieName">nhso.session</string>
-    <string name="accessibilityStatementURLOld">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/</string>
     <string name="accessibilityStatementURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/</string>
     <string name="configurationApiPath">configuration?nativeAppVersion=%1$s&amp;deviceName=Android</string>
     <string name="isSupportedVersion">isDeviceSupported</string>
@@ -74,15 +67,6 @@
         <item>@string/openSourceLicensesURL</item>
         <item>@string/medicalRecordAbbreviationsURL</item>
         <item>@string/accessibilityStatementURL</item>
-
-        <item>@string/helpURLOld</item>
-        <item>@string/termsAndConditionsURLOld</item>
-        <item>@string/privacyPolicyURLOld</item>
-        <item>@string/cookiesPolicyURLOld</item>
-        <item>@string/openSourceLicensesURLOld</item>
-        <item>@string/medicalRecordAbbreviationsURLOld</item>
-        <item>@string/accessibilityStatementURLOld</item>
-
     </string-array>
 
     <string-array name="nativeAppHosts">

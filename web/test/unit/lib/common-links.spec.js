@@ -3,12 +3,12 @@ import { accountLinks, footerLinks } from '@/lib/common-links';
 describe('common-links', () => {
   let $env;
   const createEnv = () => ({
-    TERMS_AND_CONDITIONS_URL: 'https://terms-and-conditions',
-    COOKIES_POLICY_URL: 'https://cookies-policy',
-    OPEN_SOURCE_LICENCES_URL: 'https://open-source_lincences',
-    PRIVACY_POLICY_URL: 'https://privacy-policy',
-    HELP_AND_SUPPORT_URL: 'https://help-and-support',
-    ACCESSIBILITY_STATEMENT: 'https://accessibility-statement',
+    TERMS_AND_CONDITIONS_URL: 'https://terms',
+    COOKIES_POLICY_URL: 'https://cookies',
+    OPEN_SOURCE_LICENCES_URL: 'https://open-source',
+    PRIVACY_POLICY_URL: 'https://privacy',
+    HELP_AND_SUPPORT_URL: 'https://help',
+    ACCESSIBILITY_STATEMENT: 'https://accessibility',
   });
   beforeEach(() => {
     $env = createEnv();
