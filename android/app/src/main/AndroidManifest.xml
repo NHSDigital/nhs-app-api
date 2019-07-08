@@ -28,7 +28,7 @@
         actual functionality of older version (the feature is not supported below android 6 and it won't work and we don't need it anyway in production) -->
         <activity
             android:name=".activities.MainActivity"
-            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|screenLayout|smallestScreenSize"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:launchMode="singleTask"
