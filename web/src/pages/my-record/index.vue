@@ -137,6 +137,11 @@ export default {
   updated() {
     window.scrollTo(0, 0);
   },
+  beforeDestroy() {
+    if (this.$store.state.myRecord.hasAcceptedTerms) {
+      this.$store.dispatch('myRecord/resetTerms');
+    }
+  },
   methods: {
     getCollapsedState(collapsed) {
       return collapsed ? this.$style.closed : this.$style.opened;

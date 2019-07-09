@@ -19,14 +19,5 @@ export default ({ redirect, route, store }) => {
     route.path.indexOf(MY_RECORD_VISION_DIAGNOSIS_DETAIL.path) === 0)
     && !store.state.myRecord.hasAcceptedTerms) {
     redirect(MYRECORD.path);
-    return;
-  }
-
-  if (route.path.indexOf(MYRECORD.path) > -1) {
-    return;
-  }
-
-  if (store.state.myRecord.hasAcceptedTerms) {
-    store.dispatch('myRecord/resetTerms');
   }
 };

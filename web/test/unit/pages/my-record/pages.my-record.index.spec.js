@@ -62,6 +62,11 @@ describe('my-record', () => {
       expect(page.find(Warning).exists()).toBe(false);
     });
 
+    it('will reset the terms before the component is destroyed', () => {
+      page.destroy();
+      expect($store.dispatch).toHaveBeenCalledWith('myRecord/resetTerms');
+    });
+
     it('will display the clinical feedback updates', () => {
       expect(page.find(GlossaryHeader).exists()).toBe(true);
     });
