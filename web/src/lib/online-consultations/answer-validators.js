@@ -1,4 +1,5 @@
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
+import moment from 'moment';
 
 const integerRegExp = /^-?\d+$/;
 const decimalRegExp = /^-?\d+(\.\d+)?$/;
@@ -78,7 +79,7 @@ export function questionDateAnswerValid(
   }
 
   return {
-    isValid: !Number.isNaN(new Date(`${year}-${month}-${day}`).getTime()),
+    isValid: moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').isValid(),
     message: `${baseMessagePath}date`,
     isEmpty,
   };
@@ -116,7 +117,7 @@ export function questionDateTimeAnswerValid(answer = {}, required) {
   }
 
   return {
-    isValid: !Number.isNaN(new Date(`${year}-${month}-${day}`).getTime()),
+    isValid: moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').isValid(),
     message: `${baseMessagePath}dateTime`,
     isEmpty,
   };
@@ -183,12 +184,29 @@ export function questionNumberAnswerValid(
   };
 }
 
-export function questionMultipleChoiceAnswerValid(answer = [], required, validCodes = []) {
+export function questionMultipleChoiceAnswerValid(
+  answer = [],
+  required,
+  allOptionsRequired,
+  validCodes = [],
+) {
   const isEmpty = answer.length === 0;
 
+  if (!required && isEmpty) {
+    return { isValid: true, isEmpty };
+  }
+
+  const isValid = allOptionsRequired
+    ? !isEmpty && validCodes.every(o => answer.includes(o))
+    : !isEmpty && answer.every(o => validCodes.includes(o));
+
+  const message = allOptionsRequired
+    ? `${baseMessagePath}multiple_choiceAllRequired`
+    : `${baseMessagePath}multiple_choiceAtLeastOneRequired`;
+
   return {
-    isValid: (!required && isEmpty) || (!isEmpty && answer.every(o => validCodes.includes(o))),
-    message: `${baseMessagePath}multiple_choice`,
+    isValid,
+    message,
     isEmpty,
   };
 }
@@ -362,7 +380,12 @@ export function isAnswerValid(answer, question = {}) {
     case QuestionTypes.IMAGE:
       return questionImageAnswerValid(answer, question.required);
     case QuestionTypes.MULTIPLE_CHOICE:
-      return questionMultipleChoiceAnswerValid(answer, question.required, question.validCodes);
+      return questionMultipleChoiceAnswerValid(
+        answer,
+        question.required,
+        question.allOptionsRequired,
+        question.validCodes,
+      );
     case QuestionTypes.QUANTITY:
       return questionQuantityAnswerValid(
         answer,

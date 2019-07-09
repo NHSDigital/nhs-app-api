@@ -2,57 +2,76 @@
   "resourceType": "ServiceDefinition",
   "id": "GEC_ADM",
   "contained": [
-      {
-          "resourceType": "Questionnaire",
-          "id": "PRE_STD_AD_DISCLAIMERS",
-          "status": "active",
+    {
+      "resourceType": "Questionnaire",
+      "id": "GLO_PRE_DISCLAIMERS",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "GLO_PRE_DISCLAIMERS",
+          "text": "You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.",
+          "type": "group",
+          "required": true,
           "item": [
-              {
-                  "linkId": "PRE_STD_AD_DISCLAIMERS",
-                  "text": "You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.",
-                  "type": "choice",
-                  "required": true,
-                  "repeats": true,
-                  "option": [
-                      {
-                          "valueCoding": {
-                              "code": "PRE_STD_AD_DISCLAIMERS_1",
-                              "display": "I have read the privacy notice, and I consent to you using the personal and health data I give you to provide an online consultation. I can withdraw my consent at any time by abandoning the form."
-                          }
-                      },
-                      {
-                          "valueCoding": {
-                              "code": "PRE_STD_AD_DISCLAIMERS_2",
-                              "display": "I consent to you sharing my personal and health data with {0}."
-                          }
-                      }
-                  ]
-              }
+            {
+              "linkId": "GLO_PRE_DISCLAIMERS_1",
+              "text": "I have read the privacy notice, and I consent to you using the personal and health data I give you to provide an online consultation. I can withdraw my consent at any time by abandoning the form.",
+              "type": "boolean",
+              "required": true
+            },
+            {
+              "linkId": "GLO_PRE_DISCLAIMERS_2",
+              "text": "I consent to you sharing my personal and health data with {{practice.name}}.",
+              "type": "boolean",
+              "required": true
+            }
           ]
-      }
+        }
+      ]
+    }
   ],
   "url": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM",
-  "version": "0.1.1",
-  "title": "Administrative Help",
+  "version": "0.1.10",
+  "title": "Administrative help",
   "status": "draft",
   "experimental": true,
-  "date": "2019-05-16",
+  "date": "2019-07-15",
   "publisher": "eConsultHealthLtd",
   "dataRequirement": [
-      {
-          "id": "1",
-          "extension": [
-              {
-                  "url": "https://www.hl7.org/fhir/questionnaire.html",
-                  "valueReference": {
-                      "reference": "#PRE_STD_AD_DISCLAIMERS"
-                  }
-              }
-          ],
-          "type": "QuestionnaireResponse",
-          "profile": [
-              "https://www.hl7.org/fhir/questionnaireresponse.html"
-          ]
-      }
+    {
+      "id": "1",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GLO_PRE_DISCLAIMERS"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": [
+        "https://www.hl7.org/fhir/questionnaireresponse.html"
+      ]
+    },
+    {
+      "id": "2",
+      "type": "Patient",
+      "profile": [
+        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
+      ]
+    },
+    {
+      "id": "3",
+      "type": "Organization",
+      "profile": [
+        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+      ],
+      "codeFilter": [
+        {
+          "path": "identifier",
+          "valueSetString": "odsOrganizationCode"
+        }
+      ]
+    }
   ]
 }

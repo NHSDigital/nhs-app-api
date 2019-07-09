@@ -7,6 +7,7 @@
                         :name="name"
                         :required="required"
                         :checkbox-id="`checkbox-${checkbox.code}`"
+                        :is-selected="selectedValues.includes(checkbox.code)"
                         @input="selectedValueChanged(checkbox)">
         <span>{{ checkbox.label }}</span>
       </generic-checkbox>
@@ -37,12 +38,12 @@ export default {
     },
     value: {
       type: Array,
-      default: undefined,
+      default: () => [],
     },
   },
   data() {
     return {
-      selectedValues: [],
+      selectedValues: this.value,
     };
   },
   methods: {

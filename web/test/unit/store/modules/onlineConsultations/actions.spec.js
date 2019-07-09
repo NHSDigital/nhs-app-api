@@ -3,27 +3,29 @@ import {
   CLEAR,
   UPDATE_REQUEST_ID,
   SET_STATUS,
+  SET_DATA_REQUIREMENTS,
   SET_SESSION_ID,
   SET_QUESTION,
   SET_CARE_PLANS,
   SET_REFERRAL_REQUESTS,
 } from '@/store/modules/onlineConsultations/mutation-types';
 import getParameters from '@/lib/online-consultations/mappers/parameters';
-import { getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/guidance-response';
+import { getDataRequirements, getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/response';
 import getQuestion from '@/lib/online-consultations/mappers/item';
 import each from 'jest-each';
 
 jest.mock('@/lib/online-consultations/mappers/parameters');
-jest.mock('@/lib/online-consultations/mappers/guidance-response');
+jest.mock('@/lib/online-consultations/mappers/response');
 jest.mock('@/lib/online-consultations/mappers/item');
 
-const { evaluateServiceDefinition } = actions;
+const { getServiceDefinition, evaluateServiceDefinition } = actions;
 
 const commit = jest.fn();
 const store = {
   app: {
     $cdsApi: {
       postFhirServiceDefinitionEvaluate: jest.fn(),
+      getFhirServiceDefinition: jest.fn(),
     },
   },
   dispatch: jest.fn(),
@@ -41,7 +43,163 @@ describe('online consultations store actions', () => {
   beforeEach(() => {
     commit.mockClear();
     store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockClear();
+    store.app.$cdsApi.getFhirServiceDefinition.mockClear();
     store.dispatch.mockClear();
+  });
+
+  describe('getServiceDefinition', () => {
+    let request;
+
+    beforeEach(() => {
+      request = { serviceDefinitionId: 'GEC_ADM' };
+    });
+
+    afterEach(() => {
+      expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_ID);
+    });
+
+    describe('attempted get service definition is rejected', () => {
+      it('will dispatch clearAndSetError', () => {
+        // Arrange
+        store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
+          () => Promise.reject(),
+        );
+
+        // Act
+        return getServiceDefinition
+          .call(store, { commit })
+          .then(() => {
+            // Assert
+            const { getFhirServiceDefinition } = store.app.$cdsApi;
+            expect(getFhirServiceDefinition).toHaveBeenCalledWith(request);
+            expect(getFhirServiceDefinition).toHaveBeenCalledTimes(1);
+            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+            expect(store.dispatch).toHaveBeenCalledTimes(1);
+          });
+      });
+    });
+
+    describe('attempted get service definition is resolved', () => {
+      afterEach(() => {
+        expect(commit).toHaveBeenNthCalledWith(1, CLEAR);
+      });
+
+      describe('response is undefined', () => {
+        it('will dispatch clearAndSetError', () => {
+          // Arrange
+          store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
+            () => Promise.resolve(undefined),
+          );
+
+          // Act
+          return getServiceDefinition
+            .call(store, { commit })
+            .then(() => {
+              // Assert
+              expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+              expect(store.dispatch).toHaveBeenCalledTimes(1);
+            });
+        });
+      });
+
+      describe('getDataRequirements returns undefined', () => {
+        it('will dispatch clearAndSetError', () => {
+          // Arrange
+          store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
+            () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
+          );
+          getDataRequirements.mockReturnValue(undefined);
+
+          // Act
+          return getServiceDefinition
+            .call(store, { commit })
+            .then(() => {
+              // Assert
+              expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+              expect(store.dispatch).toHaveBeenCalledTimes(1);
+            });
+        });
+      });
+
+      describe('getDataRequirements returns value', () => {
+        it('will commit data requirements to store', () => {
+          // Arrange
+          const expectedDataRequirements = {
+            questionnaireResponse: false,
+            patient: false,
+            organization: false,
+          };
+          getDataRequirements.mockReturnValue(expectedDataRequirements);
+
+          store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
+            () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
+          );
+
+          // Act
+          return getServiceDefinition
+            .call(store, { commit })
+            .then(() => {
+              // Assert
+              expect(commit).toHaveBeenCalledWith(SET_DATA_REQUIREMENTS, expectedDataRequirements);
+              expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+              expect(store.dispatch).toHaveBeenCalledTimes(1);
+            });
+        });
+
+        describe('getDataRequirements.questionnaireResponse is true', () => {
+          describe('question cannot be retrieved from response', () => {
+            it('will dispatch clearAndSetError', () => {
+              // Arrange
+              const expectedDataRequirements = {
+                questionnaireResponse: true,
+                patient: false,
+                organization: false,
+              };
+              getDataRequirements.mockReturnValue(expectedDataRequirements);
+              getQuestion.mockReturnValue(undefined);
+
+              // Act
+              return getServiceDefinition
+                .call(store, { commit })
+                .then(() => {
+                  // Assert
+                  expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+                  expect(store.dispatch).toHaveBeenCalledTimes(1);
+                });
+            });
+          });
+
+          describe('question successfully retrieved from response', () => {
+            it('will commit question to store and set status to data-required', () => {
+              // Arrange
+              const expectedDataRequirements = {
+                questionnaireResponse: true,
+                patient: false,
+                organization: false,
+              };
+              getDataRequirements.mockReturnValue(expectedDataRequirements);
+
+              store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
+                () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
+              );
+
+              const expectedQuestion = { type: 'text' };
+              getQuestion.mockReturnValue(expectedQuestion);
+
+              // Act
+              return getServiceDefinition
+                .call(store, { commit })
+                .then(() => {
+                  // Assert
+                  expect(commit).toHaveBeenCalledWith(SET_STATUS, 'data-required');
+                  expect(commit).toHaveBeenCalledWith(SET_QUESTION, expectedQuestion);
+                  expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+                });
+            });
+          });
+        });
+      });
+    });
   });
 
   describe('evaluateServiceDefinition', () => {

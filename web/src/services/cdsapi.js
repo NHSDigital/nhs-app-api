@@ -244,7 +244,7 @@ class CDSApi {
 		});
   }
 
-/**
+  /**
 	 * Evaluates the given Fhir Parameters resource and returns a Fhir GuidanceResponse 
 	 * @method
 	 * @name CDSApi#postFhirServiceDefinitionEvaluate
@@ -286,6 +286,52 @@ class CDSApi {
 
 		this.request({
 			method: 'POST',
+			url: domain + path,
+			parameters,
+			body,
+			headers,
+			queryParameters,
+			form,
+			deferred,
+			ignoreError
+		});
+
+		return deferred.promise;
+	}
+
+	/**
+	 * Gets the Service Definition resource for the given ID
+	 * @method
+	 * @name CDSApi#getFhirServiceDefinition
+   * @param {string} parameters.serviceDefinitionId - the id of the service definition to get
+	 */
+	getFhirServiceDefinition(parameters) {
+		if (parameters === undefined) {
+			parameters = {};
+		}
+		let ignoreError = parameters.ignoreError || false;
+		let deferred = $q.defer();
+		let domain = this.domain;
+		let path = '/fhir/ServiceDefinition?_id={serviceDefinitionId}';
+		let body = {};
+		let headers = {};
+		let form = {};
+
+		let queryParameters = {};
+
+		headers['Accept'] = ['application/json+fhir'];
+
+    if (parameters['serviceDefinitionId'] === undefined) {
+      deferred.reject(new Error('Missing required parameter: serviceDefinitionId'));
+      return deferred.promise;
+    }
+
+    path = path.replace('{serviceDefinitionId}', parameters.serviceDefinitionId);
+
+		queryParameters = this.mergeQueryParams(parameters, queryParameters);
+
+		this.request({
+			method: 'GET',
 			url: domain + path,
 			parameters,
 			body,

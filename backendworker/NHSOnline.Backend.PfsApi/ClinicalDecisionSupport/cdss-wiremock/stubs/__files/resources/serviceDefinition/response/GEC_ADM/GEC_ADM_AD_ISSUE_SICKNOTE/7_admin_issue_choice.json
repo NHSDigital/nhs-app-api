@@ -17,6 +17,31 @@
       "status": "active",
       "item": [
         {
+          "linkId": "GEC_ADM_AD_SICKNOTEDETAIL_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_SICKNOTEDETAIL_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
           "linkId": "GEC_ADM_AD_SICKNOTEDETAIL",
           "text": "Is this a new request or extension of an existing sick note?",
           "type": "choice",
@@ -38,6 +63,8 @@
           ]
         }
       ]
+    }
+  ]
     }
   ],
   "requestId": "1",

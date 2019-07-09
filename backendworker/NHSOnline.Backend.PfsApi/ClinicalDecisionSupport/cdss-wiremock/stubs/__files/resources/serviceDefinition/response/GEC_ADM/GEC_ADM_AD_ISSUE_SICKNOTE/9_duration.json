@@ -17,6 +17,31 @@
       "status": "active",
       "item": [
         {
+          "linkId": "GEC_ADM_AD_ALCOHOL_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_ALCOHOL_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
           "linkId": "GEC_ADM_AD_ALCOHOL",
           "text": "Do you know how many units of alcohol you drink each week? (1 pint of beer is approximately two units and one small glass of wine is 1 unit)?",
           "type": "choice",
@@ -80,6 +105,8 @@
           ]
         }
       ]
+    }
+  ]
     }
   ],
   "requestId": "1",

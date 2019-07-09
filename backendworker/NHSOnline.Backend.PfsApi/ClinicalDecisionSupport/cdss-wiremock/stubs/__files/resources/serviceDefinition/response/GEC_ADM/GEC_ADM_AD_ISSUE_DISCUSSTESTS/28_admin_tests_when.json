@@ -16,7 +16,31 @@
       "id": "GEC_ADM_AD_TESTADDITIONAL",
       "status": "active",
       "item": [
-        {
+        {"linkId": "GEC_ADM_AD_TESTADDITIONAL_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_TESTADDITIONAL_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
           "linkId": "GEC_ADM_AD_TESTADDITIONAL",
           "text": "Please tell us what you would like to discuss regarding your test",
           "type": "text",
@@ -24,6 +48,8 @@
           "repeats": false
         }
       ]
+    }
+  ]
     }
   ],
   "requestId": "1",

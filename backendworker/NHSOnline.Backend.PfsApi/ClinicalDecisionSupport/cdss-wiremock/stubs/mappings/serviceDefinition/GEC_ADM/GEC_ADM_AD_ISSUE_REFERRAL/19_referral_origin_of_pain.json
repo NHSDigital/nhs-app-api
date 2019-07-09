@@ -1,11 +1,12 @@
 {
-  "priority": 1,
+  "priority": 2,
   "request": {
     "method": "POST",
     "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
-    "bodyPatterns" : [ {
-      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference === 'Questionnaire/GEC_ADM_AD_REFERRALPAINORIGIN')]"
-    } ]
+    "bodyPatterns" : [
+      {
+        "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference === 'Questionnaire/GEC_ADM_AD_REFERRALPAINORIGIN')]"
+      }]
   },
   "response": {
     "status": 200,

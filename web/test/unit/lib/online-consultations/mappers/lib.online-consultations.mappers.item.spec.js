@@ -45,6 +45,72 @@ describe('online consultations mappers item', () => {
       };
     });
 
+    describe('item type group', () => {
+      beforeEach(() => {
+        item.type = QuestionTypes.GROUP;
+      });
+
+      it('will return a question with appropriate properties set', () => {
+        // Arrange
+        item.item = [{
+          linkId: 'code-1',
+          text: 'Option 1',
+        }, {
+          linkId: 'code-2',
+          text: 'Option 2',
+        }];
+        expectedQuestion.type = QuestionTypes.MULTIPLE_CHOICE;
+        expectedQuestion.name = `${item.linkId}-${QuestionTypes.MULTIPLE_CHOICE}`;
+        expectedQuestion.repeats = true;
+        expectedQuestion.isLegend = true;
+        expectedQuestion.options = [{
+          code: 'code-1',
+          label: 'Option 1',
+          selected: false,
+        }, {
+          code: 'code-2',
+          label: 'Option 2',
+          selected: false,
+        }];
+        expectedQuestion.validCodes = ['code-1', 'code-2'];
+        expectedQuestion.allOptionsRequired = true;
+
+        // Act
+        const question = getQuestion(item);
+
+        // Assert
+        expect(question).toEqual(expectedQuestion);
+        expect(mapHtmlTags).toBeCalledTimes(1);
+        expect(mapHtmlTags).toBeCalledWith(item.text);
+      });
+
+      describe('item has no options', () => {
+        it('will return undefined', () => {
+          // Arrange
+          item.item = [];
+
+          // Act
+          const question = getQuestion(item);
+
+          // Assert
+          expect(question).toBeUndefined();
+        });
+      });
+
+      describe('item has no text property', () => {
+        it('will return undefined', () => {
+          // Arrange
+          item.text = undefined;
+
+          // Act
+          const question = getQuestion(item);
+
+          // Assert
+          expect(question).toBeUndefined();
+        });
+      });
+    });
+
     describe('item type attachment', () => {
       it('will return a question with appropriate properties set', () => {
         // Arrange

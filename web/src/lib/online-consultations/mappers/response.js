@@ -1,6 +1,8 @@
 import { get, isEmpty } from 'lodash/fp';
 import {
   CARE_PLAN,
+  ORGANIZATION,
+  PATIENT,
   PARAMETERS,
   QUESTIONNAIRE,
   QUESTIONNAIRE_RESPONSE,
@@ -11,15 +13,21 @@ import {
 import { SESSION_ID } from '@/lib/online-consultations/constants/parameter-names';
 import { ACTIVE } from '@/lib/online-consultations/constants/status-types';
 
-function getQuestionnaireId(guidanceResponse) {
-  const questionnaireIds = guidanceResponse.dataRequirement
+function getQuestionnaireId(response) {
+  const questionnaireIds = response.dataRequirement
     .filter(d => d.type === QUESTIONNAIRE_RESPONSE);
 
-  return questionnaireIds[0].id;
+  return questionnaireIds[0].extension[0].valueReference.reference.substring(1);
 }
 
-function getQuestionnaire(guidanceResponse, questionnaireId) {
-  const activeQuestionnaires = guidanceResponse.contained
+function getQuestionnaireResponse(guidanceResponse) {
+  const questionnaireResponse = guidanceResponse.contained
+    .filter(c => c.resourceType === QUESTIONNAIRE_RESPONSE);
+
+  return questionnaireResponse[0];
+}
+function getQuestionnaire(response, questionnaireId) {
+  const activeQuestionnaires = response.contained
     .filter(c => c.resourceType === QUESTIONNAIRE &&
                  c.id === questionnaireId &&
                  c.status === ACTIVE);
@@ -90,12 +98,57 @@ export function getSessionId(guidanceResponse) {
   }
 }
 
-export function getQuestionnaireItem(guidanceResponse) {
+export function getQuestionnaireItem(response) {
+  try {
+    const questionnaireId = getQuestionnaireId(response);
+    const questionnaire = getQuestionnaire(response, questionnaireId);
+    let questionReturn;
+
+    if (questionnaire.item[0].item !== undefined && !questionnaire.item[0].text) {
+      questionReturn = questionnaire.item[0].item.filter(c => c.linkId === questionnaireId);
+      return questionReturn[0];
+    }
+    return questionnaire.item[0];
+  } catch (e) {
+    return undefined;
+  }
+}
+
+export function getQuestionnaireResponseAnswers(response) {
+  try {
+    const questionnaireResponse = getQuestionnaireResponse(response);
+    const questionnaireId = getQuestionnaireId(response);
+    let questionAnswerReturn;
+
+    if (questionnaireResponse.item !== undefined) {
+      questionAnswerReturn = questionnaireResponse.item.filter(c => c.linkId === questionnaireId);
+      return questionAnswerReturn[0];
+    }
+    return undefined;
+  } catch (e) {
+    return undefined;
+  }
+}
+
+/**
+ * @param {{valueCodeableConcept:string}} object
+ * @param guidanceResponse
+ */
+
+export function getPreviousQuestion(guidanceResponse) {
   try {
     const questionnaireId = getQuestionnaireId(guidanceResponse);
     const questionnaire = getQuestionnaire(guidanceResponse, questionnaireId);
+    let questionReturn;
 
-    return questionnaire.item[0];
+    if (questionnaire.item[0].item !== undefined) {
+      const questionReturnWithExtension =
+        questionnaire.item[0].item.filter(c => c.extension !== undefined);
+      questionReturn = questionReturnWithExtension.filter(c => c.linkId.includes('_PREV') &&
+        c.type === 'boolean' && c.extension[0].valueCodeableConcept.text === 'back');
+      return questionReturn[0];
+    }
+    return undefined;
   } catch (e) {
     return undefined;
   }
@@ -135,6 +188,30 @@ export function getCarePlansAndReferralRequests(guidanceResponse) {
     }
 
     return actions;
+  } catch (e) {
+    return undefined;
+  }
+}
+
+export function getDataRequirements(response) {
+  try {
+    const result = {
+      questionnaireResponse: false,
+      patient: false,
+      organization: false,
+    };
+
+    response.dataRequirement.forEach((dr) => {
+      if (dr.type === ORGANIZATION) {
+        result.organization = true;
+      } else if (dr.type === PATIENT) {
+        result.patient = true;
+      } else if (dr.type === QUESTIONNAIRE_RESPONSE) {
+        result.questionnaireResponse = true;
+      }
+    });
+
+    return result;
   } catch (e) {
     return undefined;
   }

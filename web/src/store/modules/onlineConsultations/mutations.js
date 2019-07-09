@@ -2,7 +2,9 @@ import {
   CLEAR,
   SET_SESSION_ID,
   SET_STATUS,
+  SET_DATA_REQUIREMENTS,
   SET_QUESTION,
+  SET_PREVIOUS_QUESTION,
   SET_ANSWER,
   SET_ANSWER_IS_VALID,
   SET_VALIDATION_ERROR,
@@ -16,13 +18,19 @@ import {
   FILE_LOAD_COMPLETE,
   SET_VALIDATION_ERROR_FROM_RESPONSE,
   CLEAR_VALIDATION,
+  PREVIOUS_SELECTED,
+  CLEAR_CLIENT_ERRORS,
 } from './mutation-types';
 
 export default {
   [CLEAR](state, resetRequestId) {
     state.sessionId = undefined;
     state.status = undefined;
+    state.dataRequirements = undefined;
     state.question = undefined;
+    state.previousQuestion = undefined;
+    state.previousSelected = false;
+    state.previousAnswers = undefined;
     state.answer = undefined;
     state.answerIsValid = false;
     state.answerIsEmpty = true;
@@ -50,8 +58,17 @@ export default {
   [SET_STATUS](state, status) {
     state.status = status;
   },
+  [SET_DATA_REQUIREMENTS](state, dataRequirements) {
+    state.dataRequirements = dataRequirements;
+  },
   [SET_QUESTION](state, question) {
     state.question = question;
+  },
+  [SET_PREVIOUS_QUESTION](state, previousQuestion) {
+    state.previousQuestion = previousQuestion;
+  },
+  [PREVIOUS_SELECTED](state) {
+    state.previousSelected = true;
   },
   [SET_ANSWER](state, answer) {
     state.answer = answer;
@@ -98,5 +115,9 @@ export default {
   [CLEAR_VALIDATION](state) {
     state.validationError = undefined;
     state.validationErrorMessage = undefined;
+  },
+  [CLEAR_CLIENT_ERRORS](state) {
+    state.validationError = false;
+    state.validationErrorMessageFromResponse = undefined;
   },
 };

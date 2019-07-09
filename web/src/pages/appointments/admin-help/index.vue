@@ -49,7 +49,16 @@ export default {
       await store.dispatch('onlineConsultations/setValidationError');
     }
 
-    if (question === undefined || store.state.onlineConsultations.answerIsValid) {
+    if (question === undefined) {
+      await store.dispatch('onlineConsultations/getServiceDefinition');
+    } else if (store.state.onlineConsultations.answerIsValid) {
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition');
+    }
+
+    const previousClicked = get('direction', body) === 'back';
+
+    if (previousClicked === true) {
+      await store.dispatch('onlineConsultations/setPrevious');
       await store.dispatch('onlineConsultations/evaluateServiceDefinition');
     }
   },

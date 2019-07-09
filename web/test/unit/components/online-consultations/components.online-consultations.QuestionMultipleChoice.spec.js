@@ -3,7 +3,7 @@ import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import CheckboxGroup from '@/components/CheckboxGroup';
 import { mount } from '../../helpers';
 
-const multiChoiceValidationMessage = 'appointments.admin_help.errors.validation.message.multiple_choice';
+const multiChoiceValidationMessage = 'appointments.admin_help.errors.validation.message.multiple_choiceAtLeastOneRequired';
 let wrapper;
 
 const getCheckboxGroup = (useComponent = true) => wrapper.find(useComponent ? CheckboxGroup : 'checkbox-group');

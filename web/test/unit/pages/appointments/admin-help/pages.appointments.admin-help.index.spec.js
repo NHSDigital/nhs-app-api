@@ -13,11 +13,6 @@ describe('Admin Help page', () => {
   const dispatch = jest.fn(() => Promise.resolve());
 
   const $store = {
-    app: {
-      $env: {
-        ONLINE_CONSULTATIONS_ENABLED: true,
-      },
-    },
     state: {
       device: {
         isNativeApp: true,
@@ -162,7 +157,7 @@ describe('Admin Help page', () => {
     });
     describe('service definition evaluation', () => {
       describe('with question missing from the store', () => {
-        it('should dispatch evaluate action', async () => {
+        it('should not dispatch evaluate action', async () => {
           // Arrange
           $store.state.onlineConsultations.question = undefined;
           mountPage();
@@ -171,7 +166,18 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition');
+          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition');
+        });
+        it('should dispatch get action', async () => {
+          // Arrange
+          $store.state.onlineConsultations.question = undefined;
+          mountPage();
+
+          // Act
+          await page.vm.$options.asyncData({ store: $store, req });
+
+          // Assert
+          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition');
         });
       });
       describe('with valid answer in store', () => {

@@ -18,7 +18,7 @@
       "item": [
         {
           "linkId": "PRE_STD_AD_DISCLAIMERS",
-          "text": "You can use this <a href=\"www.google.com\">form</a> to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.<script>console.log('I am trying to do something dodgy');alert('boo');</script>",
+          "text": "You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.",
           "type": "choice",
           "required": true,
           "repeats": true,
@@ -32,7 +32,31 @@
             {
               "valueCoding": {
                 "code": "PRE_STD_AD_DISCLAIMERS_2",
-                "display": "I consent to you sharing my personal and health data with {0}."
+                "display": "I consent to you sharing my personal and health data with Test Practice."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resourceType": "QuestionnaireResponse",
+      "questionnaire": {
+        "reference": "Questionnaire/PRE_STD_AD_DISCLAIMERS"
+      },
+      "status": "completed",
+      "item": [
+        {
+          "linkId": "PRE_STD_AD_DISCLAIMERS",
+          "answer": [
+            {
+              "valueCoding": {
+                "code": "PRE_STD_AD_DISCLAIMERS_1"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "PRE_STD_AD_DISCLAIMERS_2"
               }
             }
           ]
@@ -42,10 +66,10 @@
   ],
   "requestId": "1",
   "module": {
-    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
+    "reference": "http://localhost:8085/fhir/ServiceDefinition/GEC_ADM"
   },
   "status": "data-required",
-  "occurrenceDateTime": "2019-05-23T09:27:27.911",
+  "occurrenceDateTime": "2019-07-08T11:14:06.934",
   "outputParameters": {
     "reference": "#outputParams"
   },
@@ -61,7 +85,9 @@
         }
       ],
       "type": "QuestionnaireResponse",
-      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+      "profile": [
+        "https://www.hl7.org/fhir/questionnaireresponse.html"
+      ]
     }
   ]
 }

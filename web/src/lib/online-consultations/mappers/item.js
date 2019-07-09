@@ -5,7 +5,8 @@ function getQuestion(item) {
   try {
     let { type } = item;
 
-    if (type === QuestionTypes.CHOICE && item.repeats) {
+    if ((type === QuestionTypes.GROUP && item.text) ||
+        (type === QuestionTypes.CHOICE && item.repeats)) {
       type = QuestionTypes.MULTIPLE_CHOICE;
     }
 
@@ -22,6 +23,28 @@ function getQuestion(item) {
       text: mapHtmlTags(item.text),
       type,
     };
+
+    // Assumed MultipleChoice with all options required, if type === group and text is present
+    // No text present indicates questions with a back navigation.
+
+    // todo: remove return undefined when previous navigation added in
+    if (item.type === QuestionTypes.GROUP) {
+      if (!item.text) {
+        return undefined;
+      }
+      question.repeats = true;
+      question.isLegend = true;
+      question.allOptionsRequired = true;
+      question.options = item.item.map(i => ({
+        code: i.linkId,
+        label: i.text,
+        selected: false,
+      }));
+      if (!question.options.length) {
+        return undefined;
+      }
+      question.validCodes = question.options.map(o => (o.code));
+    }
 
     if (type === QuestionTypes.ATTACHMENT) {
       question.accept = ['image/png', 'image/jpeg'];

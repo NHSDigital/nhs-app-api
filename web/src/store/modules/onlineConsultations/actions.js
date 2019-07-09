@@ -2,7 +2,9 @@ import {
   CLEAR,
   SET_SESSION_ID,
   SET_STATUS,
+  SET_DATA_REQUIREMENTS,
   SET_QUESTION,
+  SET_PREVIOUS_QUESTION,
   SET_ANSWER,
   SET_ANSWER_IS_VALID,
   SET_VALIDATION_ERROR,
@@ -16,15 +18,20 @@ import {
   FILE_LOAD_COMPLETE,
   SET_VALIDATION_ERROR_FROM_RESPONSE,
   CLEAR_VALIDATION,
+  PREVIOUS_SELECTED,
+  CLEAR_CLIENT_ERRORS,
 } from './mutation-types';
 import {
+  getDataRequirements,
   getSessionId,
   getQuestionnaireItem,
   getCarePlansAndReferralRequests,
+  getPreviousQuestion,
+  getQuestionnaireResponseAnswers,
   getAllIssues,
-} from '@/lib/online-consultations/mappers/guidance-response';
+} from '@/lib/online-consultations/mappers/response';
 import getQuestion from '@/lib/online-consultations/mappers/item';
-import getParameters from '@/lib/online-consultations/mappers/parameters';
+import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
 
 const showError = (store) => {
@@ -34,6 +41,46 @@ const showError = (store) => {
 export default {
   clear({ commit }, resetRequestId) {
     commit(CLEAR, resetRequestId);
+  },
+  getServiceDefinition({ commit }) {
+    const store = this;
+    return store.app.$cdsApi.getFhirServiceDefinition({
+      serviceDefinitionId: 'GEC_ADM',
+    }).then((response) => {
+      commit(CLEAR);
+      if (response === undefined) {
+        showError(store);
+        return;
+      }
+
+      const dataRequirements = getDataRequirements(response);
+
+      if (dataRequirements === undefined) {
+        showError(store);
+        return;
+      }
+
+      commit(SET_DATA_REQUIREMENTS, dataRequirements);
+
+      if (dataRequirements.questionnaireResponse) {
+        const question = getQuestion(getQuestionnaireItem(response));
+
+        if (question === undefined) {
+          showError(store);
+          return;
+        }
+
+        commit(SET_STATUS, DATA_REQUIRED);
+        commit(SET_QUESTION, question);
+        return;
+      }
+
+      showError(store);
+    }).catch(() => {
+      showError(store);
+    }).finally(() => {
+      commit(UPDATE_REQUEST_ID);
+    });
   },
   evaluateServiceDefinition({ commit, state, rootState }) {
     const store = this;
@@ -61,6 +108,8 @@ export default {
         const sessionId = getSessionId(response);
         const question = getQuestion(getQuestionnaireItem(response));
         const issues = getAllIssues(response);
+        const previousQuestion = getQuestion(getPreviousQuestion(response));
+        const previousAnswers = getQuestionnaireResponseAnswers(response);
 
         if (sessionId === undefined || question === undefined) {
           showError(store);
@@ -69,8 +118,13 @@ export default {
 
         commit(SET_SESSION_ID, sessionId);
         commit(SET_QUESTION, question);
+        commit(SET_PREVIOUS_QUESTION, previousQuestion);
         if (issues !== undefined) {
           commit(SET_VALIDATION_ERROR_FROM_RESPONSE, issues);
+        }
+        if (previousAnswers !== undefined) {
+          const answersFormatted = getAnswerFromItem(question, previousAnswers);
+          commit(SET_ANSWER, answersFormatted, question.type);
         }
         return;
       }
@@ -122,5 +176,11 @@ export default {
   },
   clearValidation({ commit }) {
     commit(CLEAR_VALIDATION);
+  },
+  setPrevious({ commit }) {
+    commit(PREVIOUS_SELECTED);
+  },
+  clearClientErrors({ commit }) {
+    commit(CLEAR_CLIENT_ERRORS);
   },
 };

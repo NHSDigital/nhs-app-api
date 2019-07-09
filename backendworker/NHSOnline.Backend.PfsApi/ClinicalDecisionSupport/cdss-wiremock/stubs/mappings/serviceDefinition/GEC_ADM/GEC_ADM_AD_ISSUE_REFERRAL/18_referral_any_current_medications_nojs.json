@@ -5,7 +5,7 @@
     "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
     "bodyPatterns" : [ 
       { "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference === 'Questionnaire/GEC_ADM_AD_REFERRALCURRENTMEDICATION')]"},
-      {"matchesJsonPath" : "$.parameter[?(@.name === 'inputData')].resource.item[?(@.linkId == 'GEC_ADM_AD_REFERRALCURRENTMEDICATION')].[?(@.answer[0].valueString === 'medicine')]"} 
+      {"matchesJsonPath" : "$.parameter[?(@.name === 'inputData')].resource.item[?(@.linkId == 'GEC_ADM_AD_REFERRALCURRENTMEDICATION')].[?(@.answer[0].valueString === 'medicine')]"}
     ]
   },
   "response": {

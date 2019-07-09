@@ -17,6 +17,31 @@
         "status": "active",
         "item": [
           {
+            "linkId": "GEC_ADM_AD_TESTWHEN_GROUP",
+            "type": "group",
+            "item": [
+              {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                    "valueCodeableConcept": {
+                      "id": "codeableConcept",
+                      "coding": [
+                        {
+                          "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                          "code": "button",
+                          "display": "back"
+                        }
+                      ],
+                      "text": "back"
+                    }
+                  }
+                ],
+                "linkId": "GEC_ADM_AD_TESTWHEN_PREV",
+                "type": "boolean",
+                "required": false
+              },
+              {
             "linkId": "GEC_ADM_AD_TESTWHEN",
             "text": "When did you have this test done?",
             "type": "choice",
@@ -50,6 +75,8 @@
             ]
           }
         ]
+      }
+    ]
       }
     ],
     "requestId": "1",

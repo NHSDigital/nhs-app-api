@@ -1,17 +1,17 @@
-import { getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/guidance-response';
-import { CARE_PLAN, PARAMETERS, QUESTIONNAIRE, QUESTIONNAIRE_RESPONSE, REFERRAL_REQUEST, REQUEST_GROUP } from '@/lib/online-consultations/constants/resource-types';
+import { getDataRequirements, getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests, getQuestionnaireResponseAnswers, getPreviousQuestion } from '@/lib/online-consultations/mappers/response';
+import { CARE_PLAN, PARAMETERS, QUESTIONNAIRE, QUESTIONNAIRE_RESPONSE, REFERRAL_REQUEST, REQUEST_GROUP, ORGANIZATION, PATIENT } from '@/lib/online-consultations/constants/resource-types';
 import { SESSION_ID } from '@/lib/online-consultations/constants/parameter-names';
 import { ACTIVE } from '@/lib/online-consultations/constants/status-types';
 import each from 'jest-each';
 
-describe('online consultations mappers guidance response', () => {
-  let guidanceResponse;
+describe('online consultations mappers response', () => {
+  let response;
 
   describe('getSessionId', () => {
     describe('exception is thrown', () => {
       it('will return undefined', () => {
         // Act
-        const sessionId = getSessionId(guidanceResponse);
+        const sessionId = getSessionId(response);
 
         // Assert
         expect(sessionId).toBeUndefined();
@@ -26,7 +26,7 @@ describe('online consultations mappers guidance response', () => {
         const outputParamsId = 'output-params-id';
         const invalidOutputParamsId = 'invalid-output-params-id';
 
-        guidanceResponse = {
+        response = {
           contained: [{
             resourceType: PARAMETERS,
             id: outputParamsId,
@@ -48,10 +48,66 @@ describe('online consultations mappers guidance response', () => {
         };
 
         // Act
-        const sessionId = getSessionId(guidanceResponse);
+        const sessionId = getSessionId(response);
 
         // Assert
         expect(sessionId).toEqual(validSessionId);
+      });
+    });
+  });
+
+  describe('getDataRequirements', () => {
+    describe('exception is thrown', () => {
+      it('will return undefined', () => {
+        // Act
+        const dataRequirements = getDataRequirements(response);
+
+        // Assert
+        expect(dataRequirements).toBeUndefined();
+      });
+    });
+
+    describe('response dataRequirement is populated', () => {
+      each([{
+        expectedDataRequirements: {
+          questionnaireResponse: true,
+          patient: false,
+          organization: false,
+        },
+        types: [QUESTIONNAIRE_RESPONSE],
+      }, {
+        expectedDataRequirements: {
+          questionnaireResponse: true,
+          patient: true,
+          organization: false,
+        },
+        types: [QUESTIONNAIRE_RESPONSE, PATIENT],
+      }, {
+        expectedDataRequirements: {
+          questionnaireResponse: true,
+          patient: true,
+          organization: true,
+        },
+        types: [QUESTIONNAIRE_RESPONSE, PATIENT, ORGANIZATION],
+      }, {
+        expectedDataRequirements: {
+          questionnaireResponse: false,
+          patient: false,
+          organization: false,
+        },
+        types: [],
+      }]).it('will return an object indicating which data is required', ({ expectedDataRequirements, types }) => {
+        // Arrange
+        const dataRequirement = types.map(t => ({ type: t }));
+        response = {
+          dataRequirement,
+        };
+
+        // Act
+        const dataRequirements = getDataRequirements(response);
+
+        // Assert
+        expect(dataRequirements).toEqual(expectedDataRequirements);
       });
     });
   });
@@ -60,7 +116,7 @@ describe('online consultations mappers guidance response', () => {
     describe('exception is thrown', () => {
       it('will return undefined', () => {
         // Act
-        const item = getQuestionnaireItem(guidanceResponse);
+        const item = getQuestionnaireItem(response);
 
         // Assert
         expect(item).toBeUndefined();
@@ -75,7 +131,7 @@ describe('online consultations mappers guidance response', () => {
         const expectedItem = { expected: true };
         const unexpectedItem = { expected: false };
 
-        guidanceResponse = {
+        response = {
           contained: [{
             resourceType: QUESTIONNAIRE,
             id: validQuestionnaireId,
@@ -89,15 +145,109 @@ describe('online consultations mappers guidance response', () => {
           }],
           dataRequirement: [{
             type: QUESTIONNAIRE_RESPONSE,
-            id: validQuestionnaireId,
+            extension: [{
+              valueReference: {
+                reference: `#${validQuestionnaireId}`,
+              },
+            }],
           }],
         };
 
         // Act
-        const item = getQuestionnaireItem(guidanceResponse);
+        const item = getQuestionnaireItem(response);
 
         // Assert
         expect(item).toEqual(expectedItem);
+      });
+    });
+  });
+
+  describe('getQuestionnaireResponse', () => {
+    describe('get questionnaire response', () => {
+      it('will return questionnaire response', () => {
+        const contained = {
+          contained: [{
+            resourceType: QUESTIONNAIRE_RESPONSE,
+            item: [{
+              linkId: 'test',
+            }],
+          }],
+          dataRequirement: [{
+            type: QUESTIONNAIRE_RESPONSE,
+            extension: [{
+              valueReference: {
+                reference: '_test',
+              },
+            }],
+          }],
+        };
+
+        // Act
+        const previousAnswer = getQuestionnaireResponseAnswers(contained);
+
+        // Assert
+        expect(previousAnswer).toEqual({
+          linkId: 'test',
+        });
+        // Act
+        const result = getCarePlansAndReferralRequests(response);
+
+        // Assert
+        expect(result)
+          .toBeUndefined();
+      });
+    });
+  });
+
+  describe('getPreviousQuestion', () => {
+    describe('get previous questionnaire', () => {
+      it('will return previous questionnaire', () => {
+        const contained = {
+          contained: [{
+            resourceType: QUESTIONNAIRE,
+            id: 'test',
+            status: ACTIVE,
+            item: [{
+              item: [{
+                linkId: 'test_PREV',
+                type: 'boolean',
+                extension: [{
+                  valueCodeableConcept: {
+                    text: 'back',
+                  },
+                }],
+              }],
+            }],
+          }],
+          dataRequirement: [{
+            type: QUESTIONNAIRE_RESPONSE,
+            extension: [{
+              valueReference: {
+                reference: '_test',
+              },
+            }],
+          }],
+        };
+
+        // Act
+        const previousAnswer = getPreviousQuestion(contained);
+
+        // Assert
+        expect(previousAnswer).toEqual({
+          linkId: 'test_PREV',
+          type: 'boolean',
+          extension: [{
+            valueCodeableConcept: {
+              text: 'back',
+            },
+          }],
+        });
+        // Act
+        const result = getCarePlansAndReferralRequests(response);
+
+        // Assert
+        expect(result)
+          .toBeUndefined();
       });
     });
   });
@@ -106,7 +256,7 @@ describe('online consultations mappers guidance response', () => {
     describe('exception is thrown', () => {
       it('will return undefined', () => {
         // Act
-        const result = getCarePlansAndReferralRequests(guidanceResponse);
+        const result = getCarePlansAndReferralRequests(response);
 
         // Assert
         expect(result).toBeUndefined();
@@ -239,7 +389,7 @@ describe('online consultations mappers guidance response', () => {
           }],
         };
 
-        guidanceResponse = {
+        response = {
           contained: [
             validRequestGroup,
             validReferralRequest1,
@@ -259,10 +409,10 @@ describe('online consultations mappers guidance response', () => {
       describe('no care plans or referral requests can be mapped', () => {
         it('will return undefined', () => {
           // Arrange
-          guidanceResponse.contained[0].action = [];
+          response.contained[0].action = [];
 
           // Act
-          const actions = getCarePlansAndReferralRequests(guidanceResponse);
+          const actions = getCarePlansAndReferralRequests(response);
 
           // Assert
           expect(actions).toBeUndefined();
@@ -272,7 +422,7 @@ describe('online consultations mappers guidance response', () => {
       describe('care plans and referral requests can be mapped and are fully populated', () => {
         it('will map contained care plans and referral requests mentioned in the request group', () => {
           // Act
-          const actions = getCarePlansAndReferralRequests(guidanceResponse);
+          const actions = getCarePlansAndReferralRequests(response);
 
           // Assert
           expect(actions).toEqual(expectedActions);
@@ -290,7 +440,7 @@ describe('online consultations mappers guidance response', () => {
           expectedActions.carePlans[0].activities = [];
 
           // Act
-          const actions = getCarePlansAndReferralRequests(guidanceResponse);
+          const actions = getCarePlansAndReferralRequests(response);
 
           // Assert
           expect(actions).toEqual(expectedActions);
@@ -304,7 +454,7 @@ describe('online consultations mappers guidance response', () => {
           expectedActions.referralRequests.shift();
 
           // Act
-          const actions = getCarePlansAndReferralRequests(guidanceResponse);
+          const actions = getCarePlansAndReferralRequests(response);
 
           // Assert
           expect(actions).toEqual(expectedActions);

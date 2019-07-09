@@ -103,6 +103,7 @@ describe('orchestrator', () => {
         let source;
         let maxValue;
         let maxLength;
+        let allOptionsRequired;
 
         let questionVm;
         let questionInputVm;
@@ -168,19 +169,13 @@ describe('orchestrator', () => {
           });
         });
 
-        describe('choice and multiple_choice', () => {
-          each([{
-            type: 'choice',
-            selector: 'questionchoice-stub',
-          }, {
-            type: 'multiple_choice',
-            selector: 'questionmultiplechoice-stub',
-          }]).it('will render the question input assigning appropriate values to props', ({ type, selector }) => {
-            question = baseQuestion(type);
+        describe('choice', () => {
+          it('will render the question input assigning appropriate values to props', () => {
+            question = baseQuestion('choice');
             question.isLegend = true;
             question.options = ['choice-1'];
 
-            const questionInputSelector = selector;
+            const questionInputSelector = 'questionchoice-stub';
             store.state.onlineConsultations.question = question;
 
             // Act
@@ -263,6 +258,33 @@ describe('orchestrator', () => {
 
             // Assert
             expect(source).toEqual(question.source);
+          });
+        });
+
+        describe('multiple_choice', () => {
+          each([
+            true,
+            false,
+          ]).it('will render the question input assigning appropriate values to props', (allRequired) => {
+            question = baseQuestion('multiple_choice');
+            question.isLegend = true;
+            question.options = ['choice-1'];
+            question.allOptionsRequired = allRequired;
+
+            const questionInputSelector = 'questionmultiplechoice-stub';
+            store.state.onlineConsultations.question = question;
+
+            // Act
+            mountOrchestrator();
+
+            questionVm = orchestrator.find(questionSelector).vm;
+            questionInputVm = orchestrator.find(questionInputSelector).vm;
+
+            ({ options, allOptionsRequired } = questionInputVm);
+
+            // Assert
+            expect(options).toEqual(question.options);
+            expect(allOptionsRequired).toEqual(question.allOptionsRequired);
           });
         });
 

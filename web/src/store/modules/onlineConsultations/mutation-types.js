@@ -1,7 +1,9 @@
 export const CLEAR = 'CLEAR';
 export const SET_SESSION_ID = 'SET_SESSION_ID';
 export const SET_STATUS = 'SET_STATUS';
+export const SET_DATA_REQUIREMENTS = 'SET_DATA_REQUIREMENTS';
 export const SET_QUESTION = 'SET_QUESTION';
+export const SET_PREVIOUS_QUESTION = 'SET_PREVIOUS_QUESTION';
 export const SET_ANSWER = 'SET_ANSWER';
 export const SET_ANSWER_IS_VALID = 'SET_ANSWER_IS_VALID';
 export const SET_VALIDATION_ERROR = 'SET_VALIDATION_ERROR';
@@ -15,11 +17,17 @@ export const FILE_LOADING = 'FILE_LOADING';
 export const FILE_LOAD_COMPLETE = 'FILE_LOAD_COMPLETE';
 export const SET_VALIDATION_ERROR_FROM_RESPONSE = 'SET_VALIDATION_ERROR_FROM_RESPONSE';
 export const CLEAR_VALIDATION = 'CLEAR_VALIDATION';
+export const PREVIOUS_SELECTED = 'PREVIOUS_SELECTED';
+export const CLEAR_CLIENT_ERRORS = 'CLEAR_CLIENT_ERRORS';
 
 export const initialState = () => ({
   sessionId: undefined,
   status: undefined,
+  dataRequirements: undefined,
   question: undefined,
+  previousQuestion: undefined,
+  previousSelected: false,
+  previousAnswers: undefined,
   answer: undefined,
   answerIsValid: false,
   answerIsEmpty: true,

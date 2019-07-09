@@ -17,6 +17,31 @@
       "status": "active",
       "item": [
         {
+          "linkId": "GEC_ADM_AD_TESTTYPELIST_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_TESTTYPELIST_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
           "linkId": "GEC_ADM_AD_TESTTYPELIST",
           "text": "Which test result(s) would you like to discuss?",
           "type": "choice",
@@ -89,6 +114,8 @@
           ]
         }
       ]
+    }
+  ]
     }
   ],
   "requestId": "1",

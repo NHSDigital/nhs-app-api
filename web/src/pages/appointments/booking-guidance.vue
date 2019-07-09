@@ -30,21 +30,12 @@
 </template>
 
 <script>
-import get from 'lodash/fp/get';
-import flow from 'lodash/fp/flow';
-
-/* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
-import { redirectTo, isTruthy } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import NoJsForm from '@/components/no-js/NoJsForm';
-
-const isOnlineConsultationsEnabled = flow(
-  get('$store.app.$env.ONLINE_CONSULTATIONS_ENABLED'),
-  isTruthy,
-);
 
 export default {
   components: {
@@ -62,9 +53,6 @@ export default {
   computed: {
     appointmentBookingPath() {
       return APPOINTMENT_BOOKING.path;
-    },
-    isOnlineConsultationsEnabled() {
-      return isOnlineConsultationsEnabled(this);
     },
     formData() {
       return {

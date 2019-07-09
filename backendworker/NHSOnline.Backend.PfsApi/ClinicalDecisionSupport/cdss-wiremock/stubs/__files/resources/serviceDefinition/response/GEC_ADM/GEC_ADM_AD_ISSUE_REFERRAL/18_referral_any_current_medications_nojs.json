@@ -17,6 +17,31 @@
       "status": "active",
       "item": [
         {
+          "linkId": "GEC_ADM_AD_REFERRALPROGRESSIVEPAIN_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_REFERRALPROGRESSIVEPAIN_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
           "linkId": "GEC_ADM_AD_REFERRALPROGRESSIVEPAIN",
           "text": "Is the pain progressively getting worse?",
           "type": "boolean",
@@ -24,6 +49,8 @@
           "repeats": false
         }
       ]
+    }
+  ]
     }
   ],
   "requestId": "1",

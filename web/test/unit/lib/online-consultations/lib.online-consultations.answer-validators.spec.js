@@ -1062,7 +1062,7 @@ describe('online consultations answer validators', () => {
   describe('multiple choice validator', () => {
     beforeAll(() => {
       validator = questionMultipleChoiceAnswerValid;
-      message = `${baseMessage}${QuestionTypes.MULTIPLE_CHOICE}`;
+      message = `${baseMessage}multiple_choiceAtLeastOneRequired`;
     });
 
     describe('answer is empty and not required', () => {
@@ -1073,7 +1073,6 @@ describe('online consultations answer validators', () => {
         // Arrange
         const expectedValidation = {
           isValid: true,
-          message,
           isEmpty: true,
         };
 
@@ -1103,7 +1102,7 @@ describe('online consultations answer validators', () => {
         };
 
         // Act
-        const validation = validator(answer, true, validCodes);
+        const validation = validator(answer, true, false, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -1122,7 +1121,7 @@ describe('online consultations answer validators', () => {
         };
 
         // Act
-        const validation = validator(answer, true, validCodes);
+        const validation = validator(answer, true, false, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -1141,10 +1140,53 @@ describe('online consultations answer validators', () => {
         };
 
         // Act
-        const validation = validator(answer, true, validCodes);
+        const validation = validator(answer, true, false, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
+      });
+    });
+
+    describe('all options are required', () => {
+      beforeEach(() => {
+        message = `${baseMessage}multiple_choiceAllRequired`;
+      });
+
+      describe('all options are selected', () => {
+        it('will return is valid true', () => {
+          // Arrange
+          const answer = ['choice-1', 'choice-2', 'choice-3'];
+          const validCodes = ['choice-2', 'choice-1', 'choice-3'];
+          const expectedValidation = {
+            isValid: true,
+            message,
+            isEmpty: false,
+          };
+
+          // Act
+          const validation = validator(answer, true, true, validCodes);
+
+          // Assert
+          expect(validation).toEqual(expectedValidation);
+        });
+      });
+      describe('all options are not selected', () => {
+        it('will return is valid false', () => {
+          // Arrange
+          const answer = ['choice-1', 'choice-3'];
+          const validCodes = ['choice-2', 'choice-1', 'choice-3'];
+          const expectedValidation = {
+            isValid: false,
+            message,
+            isEmpty: false,
+          };
+
+          // Act
+          const validation = validator(answer, true, true, validCodes);
+
+          // Assert
+          expect(validation).toEqual(expectedValidation);
+        });
       });
     });
   });

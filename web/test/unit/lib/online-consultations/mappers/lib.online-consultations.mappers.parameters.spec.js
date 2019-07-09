@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
-import getParameters from '@/lib/online-consultations/mappers/parameters';
+import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
 import { SESSION_ID, INPUT_DATA, ORGANIZATION as ORGANIZATION_PARAMETER } from '@/lib/online-consultations/constants/parameter-names';
 import { QUESTIONNAIRE_RESPONSE, ORGANIZATION as ORGANIZATION_RESOURCE } from '@/lib/online-consultations/constants/resource-types';
@@ -36,22 +36,44 @@ describe('online consultations mappers parameters', () => {
     };
   });
 
-  describe('status is undefined - initial request', () => {
-    it('will add a care connect organization parameter', () => {
-      // Act
-      const parameters = getParameters(state, rootState);
+  describe('answer is valid', () => {
+    describe('organization is a data requirement', () => {
+      it('will add organization parameter', () => {
+        // Arrange
+        state.answerIsValid = true;
+        state.dataRequirements = { organization: true };
 
-      // Assert
-      const organizationParameter = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER)[0];
-      expect(organizationParameter.resource.resourceType).toEqual(ORGANIZATION_RESOURCE);
-      expect(organizationParameter.resource.identifier.value).toEqual(rootState.session.gpOdsCode);
+        // Act
+        const parameters = getParameters(state, rootState);
+
+        // Assert
+        const organizationParameter = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER)[0];
+        expect(organizationParameter.resource.resourceType).toEqual(ORGANIZATION_RESOURCE);
+        expect(organizationParameter.resource.identifier.value).toEqual(rootState.session.gpOdsCode);
+      });
+    });
+
+    describe('organization is not a data requirement', () => {
+      it('will not add organization parameter', () => {
+        // Arrange
+        state.answerIsValid = true;
+        state.dataRequirements = { organization: false };
+
+        // Act
+        const parameters = getParameters(state, rootState);
+
+        // Assert
+        const organizationParameters = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER);
+        expect(organizationParameters).toHaveLength(0);
+      });
     });
   });
 
-  describe('status is not undefined', () => {
-    it('will not add a care connect organization parameter', () => {
+  describe('answer is invalid', () => {
+    each([true, false]).it('will not add organization parameter', (organizationRequired) => {
       // Arrange
-      state.status = 'an-unknown-status';
+      state.answerIsValid = false;
+      state.dataRequirements = { organization: organizationRequired };
 
       // Act
       const parameters = getParameters(state, rootState);
@@ -129,6 +151,35 @@ describe('online consultations mappers parameters', () => {
 
         describe('valid and non empty as of last validate', () => {
           describe('known question types', () => {
+            describe('attachment question response item', () => {
+              it('attachment attachment response item', () => {
+                // Arrange
+                const question = {
+                  type: 'attachment',
+                };
+                const answer = {
+                  answer: [{
+                    valueAttachment: {
+                      title: 'title',
+                      contentType: 'image/png',
+                      size: 9999,
+                      data: 'data',
+                    },
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual({
+                  base64: 'data',
+                  name: 'title',
+                  size: 9999,
+                  type: 'image/png',
+                });
+              });
+            });
             describe('attachment question', () => {
               it('will add a valueAttachment to item.answer with a size, title, data and contentType', () => {
                 // Arrange
@@ -157,6 +208,25 @@ describe('online consultations mappers parameters', () => {
                 expect(actualAnswer).toEqual(expectedAnswer);
               });
             });
+            describe('boolean question response item', () => {
+              it('boolean question response item', () => {
+                // Arrange
+                const question = {
+                  type: 'boolean',
+                };
+                const answer = {
+                  answer: [{
+                    valueBoolean: true,
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual('true');
+              });
+            });
             describe('boolean question', () => {
               each([true, false]).it('will add a valueBoolean to item.answer with a value of true or false', (answer) => {
                 // Arrange
@@ -172,6 +242,27 @@ describe('online consultations mappers parameters', () => {
 
                 // Assert
                 expect(actualAnswer).toEqual(expectedAnswer);
+              });
+            });
+            describe('choice question response item', () => {
+              it('choice attachment response item', () => {
+                // Arrange
+                const question = {
+                  type: 'choice',
+                };
+                const answer = {
+                  answer: [{
+                    valueCoding: {
+                      code: 'Test',
+                    },
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual('Test');
               });
             });
             describe('choice question', () => {
@@ -191,6 +282,29 @@ describe('online consultations mappers parameters', () => {
 
                 // Assert
                 expect(actualAnswer).toEqual(expectedAnswer);
+              });
+            });
+            describe('date question response item', () => {
+              it('date attachment response item', () => {
+                // Arrange
+                const question = {
+                  type: 'date',
+                };
+                const answer = {
+                  answer: [{
+                    valueDate: '1990-10-12',
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual({
+                  year: '1990',
+                  month: '10',
+                  day: '12',
+                });
               });
             });
             describe('date question', () => {
@@ -236,6 +350,31 @@ describe('online consultations mappers parameters', () => {
 
                 // Assert
                 expect(actualAnswer).toEqual(expectedAnswer);
+              });
+            });
+            describe('dateTime question response item', () => {
+              it('dateTime response item', () => {
+                // Arrange
+                const question = {
+                  type: 'dateTime',
+                };
+                const answer = {
+                  answer: [{
+                    valueDateTime: '2015-03-25T12:00:00Z',
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual({
+                  year: '2015',
+                  month: '03',
+                  day: '25',
+                  hour: '12',
+                  minute: '00',
+                });
               });
             });
             describe('dateTime question', () => {
@@ -309,6 +448,25 @@ describe('online consultations mappers parameters', () => {
                 expect(actualAnswer).toEqual(expectedAnswer);
               });
             });
+            describe('decimal response item', () => {
+              it('decimal response item', () => {
+                // Arrange
+                const question = {
+                  type: 'decimal',
+                };
+                const answer = {
+                  answer: [{
+                    valueDecimal: 5.5,
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual(5.5);
+              });
+            });
             describe('image question', () => {
               it('will add a valueString to item.answer containing selected point', () => {
                 // Arrange
@@ -329,6 +487,28 @@ describe('online consultations mappers parameters', () => {
                 expect(actualAnswer).toEqual(expectedAnswer);
               });
             });
+            describe('image response item', () => {
+              it('image response item', () => {
+                // Arrange
+                const question = {
+                  type: 'image',
+                };
+                const answer = {
+                  answer: [{
+                    valueString: '10,6',
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual({
+                  x: '10',
+                  y: '6',
+                });
+              });
+            });
             describe('integer question', () => {
               it('will add a valueInteger to item.answer with a value equal to answer', () => {
                 // Arrange
@@ -345,6 +525,25 @@ describe('online consultations mappers parameters', () => {
 
                 // Assert
                 expect(actualAnswer).toEqual(expectedAnswer);
+              });
+            });
+            describe('integer response item', () => {
+              it('integer response item', () => {
+                // Arrange
+                const question = {
+                  type: 'integer',
+                };
+                const answer = {
+                  answer: [{
+                    valueInteger: '10',
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual('10');
               });
             });
             describe('multiple choice question', () => {
@@ -366,6 +565,27 @@ describe('online consultations mappers parameters', () => {
 
                 // Assert
                 expect(actualAnswer).toEqual(expectedAnswer);
+              });
+            });
+            describe('multiple choice response item', () => {
+              it('multiple choice response item', () => {
+                // Arrange
+                const question = {
+                  type: QuestionTypes.MULTIPLE_CHOICE,
+                };
+                const answer = {
+                  answer: [{
+                    valueCoding: {
+                      code: 'TEST',
+                    },
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual(['TEST']);
               });
             });
             describe('quantity question', () => {
@@ -392,6 +612,31 @@ describe('online consultations mappers parameters', () => {
                 expect(actualAnswer).toEqual(expectedAnswer);
               });
             });
+            describe('quantity response item', () => {
+              it('quantity response item', () => {
+                // Arrange
+                const question = {
+                  type: QuestionTypes.QUANTITY,
+                };
+                const answer = {
+                  answer: [{
+                    valueQuantity: {
+                      value: '5',
+                      unit: 'm',
+                    },
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual({
+                  quantity: '5',
+                  unit: 'm',
+                });
+              });
+            });
             describe('string question', () => {
               it('will add a valueString to item.answer equal to answer', () => {
                 // Arrange
@@ -410,6 +655,25 @@ describe('online consultations mappers parameters', () => {
                 expect(actualAnswer).toEqual(expectedAnswer);
               });
             });
+            describe('string response item', () => {
+              it('string response item', () => {
+                // Arrange
+                const question = {
+                  type: QuestionTypes.STRING,
+                };
+                const answer = {
+                  answer: [{
+                    valueString: 'TEST',
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual('TEST');
+              });
+            });
             describe('text question', () => {
               it('will add a valueString to item.answer equal to answer', () => {
                 // Arrange
@@ -426,6 +690,25 @@ describe('online consultations mappers parameters', () => {
 
                 // Assert
                 expect(actualAnswer).toEqual(expectedAnswer);
+              });
+            });
+            describe('text response item', () => {
+              it('text response item', () => {
+                // Arrange
+                const question = {
+                  type: QuestionTypes.TEXT,
+                };
+                const answer = {
+                  answer: [{
+                    valueString: 'TEST',
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual('TEST');
               });
             });
             describe('time question', () => {
@@ -467,6 +750,28 @@ describe('online consultations mappers parameters', () => {
 
                 // Assert
                 expect(actualAnswer).toEqual(expectedAnswer);
+              });
+            });
+            describe('time response item', () => {
+              it('time response item', () => {
+                // Arrange
+                const question = {
+                  type: QuestionTypes.TIME,
+                };
+                const answer = {
+                  answer: [{
+                    valueTime: '11:11',
+                  }],
+                };
+
+                // Act
+                const previousAnswer = getAnswerFromItem(question, answer);
+
+                // Assert
+                expect(previousAnswer).toEqual({
+                  hour: '11',
+                  minute: '11',
+                });
               });
             });
           });

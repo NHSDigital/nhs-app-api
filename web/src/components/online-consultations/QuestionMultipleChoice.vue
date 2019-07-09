@@ -16,7 +16,7 @@
                     v-model="selectedValues"
                     :name="name"
                     :checkboxes="options"
-                    :required="false"
+                    :required="allOptionsRequired"
                     @select="selectedValuesChanged" />
   </fieldset>
 </template>
@@ -59,6 +59,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    allOptionsRequired: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -81,7 +85,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.$emit('validate', questionMultipleChoiceAnswerValid(value, this.required, this.validValues));
+      this.$emit('validate', questionMultipleChoiceAnswerValid(value, this.required, this.allOptionsRequired, this.validValues));
     },
     selectedValuesChanged(value) {
       this.selectedValues = value;

@@ -1,10 +1,10 @@
 {
-  "priority": 1,
+  "priority": 2,
   "request": {
     "method": "POST",
     "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
     "bodyPatterns" : [ {
-      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/PRE_STD_AD_SELFORCHILD')]"
+      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference === 'Questionnaire/PRE_STD_AD_SELFORCHILD')]"
     } ]
   },
   "response": {

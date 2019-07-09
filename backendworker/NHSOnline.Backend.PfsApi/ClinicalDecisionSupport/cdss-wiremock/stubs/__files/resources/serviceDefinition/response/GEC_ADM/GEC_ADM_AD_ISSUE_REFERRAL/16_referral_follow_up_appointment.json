@@ -17,6 +17,31 @@
       "status": "active",
       "item": [
         {
+          "linkId": "GEC_ADM_AD_REFERRALPRIORITY_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_REFERRALPRIORTIY_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
           "linkId": "GEC_ADM_AD_REFERRALPRIORITY",
           "text": "Between 0 and 10, 0 being low and 10 being high, what would you say the priority of the referral is?",
           "type": "integer",
@@ -34,6 +59,8 @@
           ]
         }
       ]
+    }
+  ]
     }
   ],
   "requestId": "1",

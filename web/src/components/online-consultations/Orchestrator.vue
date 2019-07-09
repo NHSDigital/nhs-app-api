@@ -30,6 +30,7 @@
                      :type="question.type"
                      :name="question.name"
                      :required="question.required"
+                     :all-options-required="question.allOptionsRequired"
                      :options="question.options"
                      :min="question.min"
                      :max="question.max"
@@ -73,6 +74,15 @@
                             :button-text="backButtonText"
                             data-purpose="back-to-home-button"
                             @clickAndPrevent="backToHomeClicked"/>
+    <no-js-form v-else-if="showBackButton" :value="noJsState" method="post">
+      <input type="hidden" name="direction" value="back">
+      <generic-button :button-classes="['button', 'grey']"
+                      :class="$style.button"
+                      click-delay="short"
+                      @click.prevent="backClicked">
+        {{ $t('appointments.admin_help.orchestrator.backButton') }}
+      </generic-button>
+    </no-js-form>
     <form v-else :action="indexPath">
       <back-button :goto-path="indexPath"
                    :class="$style.button"
@@ -235,6 +245,9 @@ export default {
       }
       return true;
     },
+    showBackButton() {
+      return this.$store.state.onlineConsultations.previousQuestion !== undefined;
+    },
   },
   watch: {
     nothingToDisplay(to) {
@@ -251,6 +264,7 @@ export default {
       if (this.$store.state.onlineConsultations.isLoadingFile) {
         return;
       }
+      await this.$store.dispatch('onlineConsultations/clearClientErrors');
       await this.$store.dispatch('onlineConsultations/setValidationError');
       if (!this.isValidationError) {
         document.activeElement.blur();
@@ -260,6 +274,17 @@ export default {
         } else {
           EventBus.$emit(FOCUS_NHSAPP_ROOT);
         }
+      }
+      window.scrollTo(0, 0);
+    },
+    async backClicked() {
+      document.activeElement.blur();
+      await this.$store.dispatch('onlineConsultations/setPrevious');
+      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition');
+      if (this.isNativeApp) {
+        NativeApp.resetPageFocus();
+      } else {
+        EventBus.$emit(FOCUS_NHSAPP_ROOT);
       }
       window.scrollTo(0, 0);
     },

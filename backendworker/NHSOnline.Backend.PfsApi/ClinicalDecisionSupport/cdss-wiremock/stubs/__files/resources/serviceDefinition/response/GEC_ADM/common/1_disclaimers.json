@@ -17,23 +17,50 @@
       "status": "active",
       "item": [
         {
-          "linkId": "PRE_STD_AD_SELFORCHILD",
-          "text": "Are you asking for help for yourself or for your child?",
-          "type": "choice",
-          "required": true,
-          "repeats": false,
-          "option": [
+          "linkId": "PRE_STD_AD_SELFORCHILD_GROUP",
+          "type": "group",
+          "item": [
             {
-              "valueCoding": {
-                "code": "PRE_STD_AD_SELFORCHILD_SELF",
-                "display": "For myself"
-              }
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "PRE_STD_AD_SELFORCHILD_PREV",
+              "type": "boolean",
+              "required": false
             },
             {
-              "valueCoding": {
-                "code": "PRE_STD_AD_SELFORCHILD_CHILD",
-                "display": "For my child"
-              }
+              "linkId": "PRE_STD_AD_SELFORCHILD",
+              "text": "Are you asking for help for yourself or for your child?",
+              "type": "choice",
+              "required": true,
+              "repeats": false,
+              "option": [
+                {
+                  "valueCoding": {
+                    "code": "PRE_STD_AD_SELFORCHILD_SELF",
+                    "display": "For myself"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "PRE_STD_AD_SELFORCHILD_CHILD",
+                    "display": "For my child"
+                  }
+                }
+              ]
             }
           ]
         }

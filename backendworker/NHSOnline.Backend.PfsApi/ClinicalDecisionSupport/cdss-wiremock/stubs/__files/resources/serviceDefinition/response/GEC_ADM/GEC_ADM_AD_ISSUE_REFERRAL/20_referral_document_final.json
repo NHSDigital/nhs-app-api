@@ -1,5 +1,3 @@
-
-
 {
   "resourceType": "GuidanceResponse",
   "contained": [
@@ -14,75 +12,42 @@
       ]
     },
     {
-      "resourceType": "CarePlan",
-      "id": "careplan1",
+      "resourceType": "Questionnaire",
+      "id": "GEC_ADM_AD_REFERRALSTRINGFINAL",
       "status": "active",
-      "intent": "option",
-      "title": "What happens next?",
-      "activity": [
-        {
-          "detail": {
-            "description": "<ul><li>One of your GPs will now review your request.</li><li>Your practice will respond to you by phone or email before {date will appear here}</li></ul>"
-          }
-        }
-      ]
-    },
-    {
-      "resourceType": "CarePlan",
-      "id": "careplan2",
-      "status": "active",
-      "intent": "option",
-      "title": "Here are two important tips for ensuring you receive a response:",
-      "activity": [
-        {
-          "detail": {
-            "description": "<ul><li>A call from your practice may sometimes appear on your phone as \"Blocked\", \"No caller ID\" or \"Private number\"</li><li>Check your junk email folder</li></ul>"
-          }
-        }
-      ]
-    },
-    {
-      "resourceType": "CarePlan",
-      "id": "careplan3",
-      "status": "active",
-      "intent": "option",
-      "title": "What if I don’t get a call or email?<script>console.log('this is a script');</script>",
-      "activity": [
-        {
-          "detail": {
-            "description": "There is generally no need for you to contact the practice before {date will appear here}. But if they're unable to reach you by then, please let them know by using the link in your confirmation email or by calling the practice on {tel no will appear here}.<script>console.log('this is a script');</script>"
-          }
-        }
-      ]
-    },
-    {
-      "resourceType": "ReferralRequest",
-      "id": "rr1",
-      "description": "Thank you, {name}. Your request for {consultation name} has been securely sent to your GPs at {practice name}.<script>console.log('this is a script');</script>"
-    },
-    {
-      "resourceType": "RequestGroup",
-      "id": "rg1",
-      "action": [
-        {
-          "resource": {
-            "reference": "#rr1"
-          }
-        },
-        {
-          "resource": {
-            "reference": "#careplan1"
-          }
-        },
-        {
-          "resource": {
-            "reference": "#careplan2"
-          }
-        },
-        {
-          "resource": {
-            "reference": "#careplan3"
-          }
+      "item": [
+        {"linkId": "GEC_ADM_AD_REFERRALSTRINGFINAL_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_REFERRALSTRINGFINAL_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "linkId": "GEC_ADM_AD_REFERRALSTRINGFINAL",
+              "text": "Please enter your additional comments",
+              "type": "string",
+              "required": false,
+              "repeats": false
+            }
+          ]
         }
       ]
     }
@@ -91,12 +56,24 @@
   "module": {
     "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
   },
-  "status": "success",
-  "occurrenceDateTime": "2019-05-23T09:36:03.132",
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:18:04.864",
   "outputParameters": {
     "reference": "#outputParams"
   },
-  "result": {
-    "reference": "#rg1"
-  }
+  "dataRequirement": [
+    {
+      "id": "GEC_ADM_AD_REFERRALSTRINGFINAL",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GEC_ADM_AD_REFERRALSTRINGFINAL"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
 }
