@@ -4,7 +4,7 @@ import config.Config
 import models.Patient
 import worker.models.session.UserSessionRequest
 
-class StubsPatientFactory {
+class EmisStubsPatientFactory {
     companion object {
         private val CONNECTION_TOKEN_SUFFIX_LENGTH = 12
         private val CONNECTION_TOKEN_SUFFIX_INVALIDLENGTH = 2
@@ -104,15 +104,15 @@ class StubsPatientFactory {
                 "dSubNrxkAZucsE23Ld0jAmrPJALxatKvbyJEs6tGsBWBs_4bmJ5yLy36QSpdDElN0Zp4HWjfP0Wy34kovEIn_wBqKgfrsQ0wH5Rz" +
                 "VODReB5zVOyEd_uVBrlz1pP_T1OS9b6XZi8j9F1GIr49jY"
 
-        val goodPatientEMIS = generateEMISPatientData(
+        val goodPatientEMIS = generatePatientData(
                 "1", "goodpatient", CONNECTION_TOKEN_SUFFIX_LENGTH, goodToken)
-        val timeoutPatientEMIS = generateEMISPatientData(
+        val timeoutPatientEMIS = generatePatientData(
                 "2", "timeoutpatient", CONNECTION_TOKEN_SUFFIX_LENGTH, timeoutToken)
-        val serviceNotEnabledPatientEMIS = generateEMISPatientData(
+        val serviceNotEnabledPatientEMIS = generatePatientData(
                 "3", "servicennotenabledpatient", CONNECTION_TOKEN_SUFFIX_LENGTH, serviceNotEnabledToken)
-        val sessionErrorPatientEMIS = generateEMISPatientData(
+        val sessionErrorPatientEMIS = generatePatientData(
                 "4", "sessionerrorpatient", CONNECTION_TOKEN_SUFFIX_INVALIDLENGTH, sessionErrorToken)
-        val serverErrorPatientEMIS = generateEMISPatientData(
+        val serverErrorPatientEMIS = generatePatientData(
                 "5", "servererrorpatient", CONNECTION_TOKEN_SUFFIX_LENGTH, serverErrorToken)
 
         val EMISPatientList = listOf(
@@ -123,12 +123,12 @@ class StubsPatientFactory {
                 serverErrorPatientEMIS
         )
 
-        private fun generateEMISPatientData(uniqueId: String, loginID: String, length: Int, accessToken: String):
+        private fun generatePatientData(uniqueId: String, loginID: String, length: Int, accessToken: String):
                 Patient {
             val pad = uniqueId.padStart(length, '0')
             //do not add end user session id here
 
-            val patient = Patient.picaJones.copy(
+            return Patient.picaJones.copy(
                     firstName = "You are logged in as",
                     surname = loginID,
                     cidUserSession = UserSessionRequest(
@@ -140,7 +140,6 @@ class StubsPatientFactory {
                     connectionToken = "00000000-0000-0000-0000-$pad",
                     userPatientLinkToken = "userPatientLinkToken$pad"
             )
-            return patient
         }
     }
 }

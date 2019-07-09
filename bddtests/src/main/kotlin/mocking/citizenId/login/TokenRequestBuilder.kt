@@ -4,7 +4,6 @@ import cucumber.deps.com.thoughtworks.xstream.InitializationException
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.models.login.token.SucceededResponse
-import mocking.defaults.EmisMockDefaults
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import java.io.UnsupportedEncodingException
@@ -57,20 +56,13 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
     }
 
     fun respondWithSuccess(
-            accessToken: String = EmisMockDefaults.patientEmis.accessToken,
+            accessToken: String,
             expiresIn: String = "90",
             scope: String = "openid profile nhs_app_credentials gp_integration_credentials",
             tokenType: String = "Bearer",
             idToken: String = ""): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andJsonBody(
-                    SucceededResponse(
-                            accessToken,
-                            tokenType,
-                            expiresIn,
-                            scope,
-                            idToken)
-            )
+            andJsonBody(SucceededResponse(accessToken, tokenType, expiresIn, scope, idToken))
         }
     }
 

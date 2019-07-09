@@ -54,7 +54,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                                         csvFileLocation = arguments.getOrElse(1) { NFT_EMIS_USER_CSV })
                     }
                     "mockenvironment" -> {
-                        StubbedEnvironment(client).generateEMISStubs()
+                        StubbedEnvironment().generateStubs()
                     }
                     else -> {
                         throw IllegalArgumentException("Type $type not recognised as a mock data set.")

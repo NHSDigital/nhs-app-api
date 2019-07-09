@@ -9,7 +9,6 @@ import mocking.citizenId.login.UserInfoRequestBuilder
 import mocking.citizenId.login.SigningKeysRequestBuilder
 import mocking.citizenId.login.TokenRequestBuilder
 import mocking.citizenId.models.TokenRequest
-import mocking.defaults.EmisMockDefaults
 import models.Patient
 
 open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
@@ -25,7 +24,7 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
                              clientId: String = Config.instance.cidClientId) =
             AccountRegistrationRequestBuilder(redirectUri, clientId)
 
-    fun completeLoginRequest(patient: Patient = EmisMockDefaults.patientEmis,
+    fun completeLoginRequest(patient: Patient,
                              customIdForPatient: String? = null) = CompleteLoginRequestBuilder(
             patient, customIdForPatient)
 

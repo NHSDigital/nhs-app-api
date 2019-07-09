@@ -19,6 +19,7 @@ class SessionJournies(private val client: MockingClient) {
         cidFactory.createFor(Patient.montelFrye)
         emisFactory.createFor(Patient.montelFrye)
 
+        cidFactory.createFor(Patient.kevinBarry)
         tppFactory.createFor(Patient.kevinBarry)
 
         visionFactory.createFor(Patient.aderynCanon)

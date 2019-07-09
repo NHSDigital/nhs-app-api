@@ -15,9 +15,9 @@ import mocking.spine.ePS.models.SpineItemSummaryGetResponse
 import mocking.spine.ePS.models.SpineItemSummaryPrescription
 import mocking.stubs.InputResponse
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
-import mocking.stubs.StubsPatientFactory.Companion.goodPatientEMIS
-import mocking.stubs.StubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
-import mocking.stubs.StubsPatientFactory.Companion.timeoutPatientEMIS
+import mocking.stubs.EmisStubsPatientFactory.Companion.goodPatientEMIS
+import mocking.stubs.EmisStubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
+import mocking.stubs.EmisStubsPatientFactory.Companion.timeoutPatientEMIS
 import models.Patient
 import java.time.Duration
 
