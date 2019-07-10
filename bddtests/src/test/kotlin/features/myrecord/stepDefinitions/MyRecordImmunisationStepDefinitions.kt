@@ -1,16 +1,20 @@
 package features.myrecord.stepDefinitions
 
+import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ImmunisationsFactory
 import net.serenitybdd.core.Serenity
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -64,5 +68,30 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
     @Then("^I see immunisation records displayed$")
     fun thenISeeImmunisationRecordsDisplayed() {
         assertEquals(2, myRecordInfoPage.immunisations.allRecordItems().count())
+    }
+
+    @Then("^I see the expected immunisations displayed$")
+    fun thenISeeTheExpectedImmunisationsDisplayed() {
+        val expectedImmunisations = ImmunisationsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .getExpectedImmunisations()
+
+        val onScreenImmunisations = myRecordInfoPage.immunisations.allRecordItems()
+
+        Assert.assertEquals(expectedImmunisations.count(), onScreenImmunisations.count())
+
+        for (i in onScreenImmunisations.indices) {
+            Assert.assertEquals(
+                    LocalDate.parse(
+                            expectedImmunisations[i].effectiveDate.value),
+                    LocalDate.parse(
+                            onScreenImmunisations[i].label,
+                            DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)
+                    ))
+
+            Assert.assertEquals(expectedImmunisations[i].term, onScreenImmunisations[i].bodyElements[0])
+            Assert.assertEquals(expectedImmunisations[i].nextDate, onScreenImmunisations[i].bodyElements[1])
+            Assert.assertEquals(expectedImmunisations[i].status, onScreenImmunisations[i].bodyElements[2])
+        }
     }
 }

@@ -2,7 +2,8 @@ package mocking.microtest.myRecord
 
 data class MyRecordResponseModel(
         var allergies: Allergies,
-        var drugs: Medications
+        var drugs: Medications,
+        var vaccinations: Immunisations
 )
 
 data class Allergies(
@@ -37,4 +38,18 @@ data class Medication(
         var prescribed_date: String,
         var first_prescribed_date: String,
         var reason: String
+)
+
+data class Immunisations(
+        var hasAccess: String,
+        var hasErrored: String,
+        var count: Int,
+        var data: MutableList<Immunisation> = arrayListOf()
+)
+
+data class Immunisation(
+        var date: String,
+        var description: String,
+        var nextDate: String,
+        var status: String
 )

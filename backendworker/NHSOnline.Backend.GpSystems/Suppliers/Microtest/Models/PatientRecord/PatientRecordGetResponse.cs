@@ -9,5 +9,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord
 
         [JsonProperty("drugs")]
         public MedicationData MedicationData { get; set; }
+        
+        [JsonProperty("vaccinations")]
+        public ImmunisationData ImmunisationData { get; set; }
     }
 }

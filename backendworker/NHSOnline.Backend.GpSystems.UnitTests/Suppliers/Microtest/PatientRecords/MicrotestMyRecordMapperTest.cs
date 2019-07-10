@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void MapNullObjectThrowsArgumentNullException()
+        public void MapPatientRecordGetResponse_ThrowsArgumentNullExceptionWhenObjectIsNull()
         {
             Action act = () => _mapper.Map(null);
 
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
          * Map Allergy Tests
          */
         [TestMethod]
-        public void TestMapAllergiesWhenReturnsSuccess()
+        public void MapPatientRecordGetResponse_MapAllergySuccessfully()
         {
             var item = new PatientRecordGetResponse
             {
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void TestAllergyWithNullOrEmptySeverityNotMapped(string severity)
+        public void MapPatientRecordGetResponse_ShouldNotMapAllergiesWhenSeverityIsNullOrEmpty(string severity)
         {
             var allergy1 = BuildMicrotestAllergy(0, severity, "Nut Allergy", "2019-03-27");
             var allergy2 = BuildMicrotestAllergy(1, "high", "Medication Allergy", "2019-04-27");
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("invalidDate")]
-        public void TestAllergyWithNullOrInvalidDate(string date)
+        public void MapPatientRecordGetResponse_ShouldPutAllergiesWithValidDateBeforeAllergiesWithoutDate(string date)
         {
             var allergy1 = BuildMicrotestAllergy(0, "low", "Nut Allergy", date);
             var allergy2 = BuildMicrotestAllergy(1, "high", "Medication Allergy", "2019-03-27");
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void TestSummaryRecordAccessShouldBeFalseWhenNoAllergiesReturned()
+        public void MapPatientRecordGetResponse_SummaryRecordAccessShouldBeFalseWhenNoAllergiesReturned()
         {
             var item = new PatientRecordGetResponse
             {
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void TestSummaryRecordAccessShouldBeFalseWhenAllAllergiesAreFilteredOut()
+        public void MapPatientRecordGetResponse_SummaryRecordAccessShouldBeFalseWhenAllAllergiesAreFilteredOut()
         {
             var item = new PatientRecordGetResponse
             {
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void TestAllergiesOrderedInDescendingOrder()
+        public void MapPatientRecordGetResponse_ShouldOrderAllergiesInDecendingOrder()
         {
             var allergy1 = BuildMicrotestAllergy(0, "Medium", "Allergy A", "2019-03-27");
             var allergy2 = BuildMicrotestAllergy(1, "Severe", "Allergy B", "2019-04-27");
@@ -214,7 +214,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
          * Medication Tests
          */
         [TestMethod]
-        public void MapMedicationSuccessSingleMedicationPerSection()
+        public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleMedicationPerSection()
         {
             //Arrange
             var currentMedication = BuildCurrentMicrotestMedication(
@@ -288,7 +288,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void MapMedicationSuccessForCurrentMedicationsOnly()
+        public void MapPatientRecordGetResponse_CanSuccessfullyMapCurrentMedicationsOnly()
         {
             //Arrange
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -340,7 +340,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void MapMedicationSuccessForHistoricMedicationsOnly()
+        public void MapPatientRecordGetResponse_CanSuccessfullyMapHistoricMedicationsOnly()
         {
             //Arrange
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -391,7 +391,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void MapMedicationSuccessForAcuteMedicationsOnly()
+        public void MapPatientRecordGetResponse_CanSuccessfullyMapAcuteMedicationsOnly()
         {
             //Arrange
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -443,7 +443,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
 
         [TestMethod]
-        public void MapMedicationSuccessMultipleMedicationsForEachSection()
+        public void MapPatientRecordGetResponse_CanSuccessfullyMultipleMedicationsForEachSection()
         {
             //Arrange
             var currentMedication = BuildCurrentMicrotestMedication(
@@ -525,13 +525,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
-        
+
         
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("no last prescribed date")]
         [DataRow("")]
-        public void MapMedicationInvalidDatesNotMapped(String prescribedDate)
+        public void MapPatientRecordGetResponse_ShouldNotMapMedicationItemsWithInvalidDates(String prescribedDate)
         {
             //Arrange
             var currentMedication = BuildCurrentMicrotestMedication(
@@ -598,7 +598,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         
 
         [TestMethod]
-        public void TestSummaryRecordAccessShouldBeFalseWhenNoMedicationsReturned()
+        public void MapPatientRecordGetResponse_ShouldSetSummaryAccessToFalseWhenNoMedicationsReturned()
         {
             //Input data
             var item = new PatientRecordGetResponse
@@ -618,7 +618,186 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             //Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeFalse();
+        }        
+
+        /*
+         Map Immunisation Tests
+         */
+        [TestMethod]
+        public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleImmunisationItem()
+        {
+            //Arrange
+            var item = new PatientRecordGetResponse
+            {
+                ImmunisationData = new ImmunisationData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Immunisations = new List<Immunisation>
+                    {
+                        BuildMicrotestImmunisation("2019-03-27", "Flu vaccination", "2022-03-27", "ok")
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Immunisations.Data.Should().HaveCount(1);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+
+            var expectedResult = new MyRecordResponse
+            {
+                Immunisations = new Immunisations
+                {
+                    Data = new List<ImmunisationItem>
+                    {
+                        BuildImmunisationItem(item.ImmunisationData.Immunisations.ElementAt(0))
+                    }
+                }
+            };
+
+            result.Immunisations.Should().BeEquivalentTo(expectedResult.Immunisations);
         }
+
+        
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("invalidDate")]
+        public void MapPatientRecordGetResponse_ShouldPutImmunisationsWithNoEffectiveDateAfterThoseWithEffectiveDate(string date)
+        {
+            //Arrange
+            var imm1 = BuildMicrotestImmunisation(date, "Mumps", "2022-03-27", "ok");
+            var imm2 = BuildMicrotestImmunisation("2000-01-01", "Flu", "2022-03-27", "ok");
+        
+            var item = new PatientRecordGetResponse
+            {
+                ImmunisationData = new ImmunisationData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Immunisations = new List<Immunisation>
+                    {
+                        imm1, imm2        
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Immunisations.Data.Should().HaveCount(2);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Immunisations.Data.ElementAt(0).Should().BeEquivalentTo(BuildImmunisationItem(imm2));
+        }
+        
+        
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("no next date available")]
+        public void MapPatientRecordGetResponse_CanSuccessfullyMapImmunisationsWithUnparsableNextDate(string date)
+        {
+            //Arrange
+            var imm1 = BuildMicrotestImmunisation("2019-01-01", "Mumps", date, "ok");
+        
+            var item = new PatientRecordGetResponse
+            {
+                ImmunisationData = new ImmunisationData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Immunisations = new List<Immunisation>
+                    {
+                        imm1        
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Immunisations.Data.Should().HaveCount(1);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Immunisations.Data.ElementAt(0).Should().BeEquivalentTo(BuildImmunisationItem(imm1));
+        }
+        
+        
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldOrderImmunisationsByDateDescending()
+        {
+            //Arrange
+            var imm1 = BuildMicrotestImmunisation("2000-01-03", "Mumps", "2022-03-27", "ok");
+            var imm2 = BuildMicrotestImmunisation("2000-01-01", "Flu", "2022-03-27", "ok");
+            var imm3 = BuildMicrotestImmunisation("2000-01-02", "Measles", "2022-03-27", "ok");
+
+            var item = new PatientRecordGetResponse
+            {
+                ImmunisationData = new ImmunisationData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Immunisations = new List<Immunisation>
+                    {
+                        imm1, imm2, imm3        
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+            
+            //Assert
+            result.Should().NotBeNull();
+            result.Immunisations.Data.Should().HaveCount(3);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            
+            var expectedResult = new MyRecordResponse
+            {
+                Immunisations = new Immunisations
+                {
+                    Data = new List<ImmunisationItem>
+                    {
+                        BuildImmunisationItem(imm2),
+                        BuildImmunisationItem(imm3),
+                        BuildImmunisationItem(imm1),
+                    }
+                }
+            };
+
+            result.Immunisations.Should().BeEquivalentTo(expectedResult.Immunisations);
+        }
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldSetDetailedRecordAccessToFalseWhenNoImmunisationsReturned()
+        {
+            var item = new PatientRecordGetResponse
+            {
+                ImmunisationData = new ImmunisationData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Immunisations = new List<Immunisation>()
+                },
+            };
+
+            var result = _mapper.Map(item);
+
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+        }
+
 
         private static AllergyItem BuildAllergyItem(Allergy allergy)
         {
@@ -627,10 +806,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Name = allergy.Description,
                 Date = new MyRecordDate
                 {
-                    Value = DateTime.TryParse(allergy.StartDate, out var eventDate)
-                        ? eventDate
+                    Value = DateTime.TryParse(allergy.StartDate, out var allergyDate)
+                        ? allergyDate
                         : (DateTimeOffset?) null,
-                    DatePart = allergy.StartDate
+                    DatePart = "Unknown"
                 }
             };
         }
@@ -648,9 +827,44 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             return new MedicationItem
             {
-                Date = DateTime.Parse(item.PrescribedDate, new CultureInfo("en-GB")),
+                Date = DateTime.Parse(item.PrescribedDate, CultureInfo.InvariantCulture),
                 LineItems = medicationLineItems
             };
+        }
+        
+        
+        private static ImmunisationItem BuildImmunisationItem(Immunisation immunisation)
+        {
+            var item = new ImmunisationItem
+            {
+                Term = immunisation.Description,
+                EffectiveDate = new MyRecordDate
+                {
+                    Value = DateTime.TryParse(immunisation.Date, out var effectiveDate)
+                        ? effectiveDate
+                        : (DateTimeOffset?) null,
+                    DatePart = "Unknown",
+                },
+                Status = immunisation.Status
+            };
+
+            if (immunisation.NextDate != null)
+            {
+                item.NextDate = new MyRecordDateRawString();
+                if (DateTime.TryParse(immunisation.NextDate, out var nextDate))
+                {
+                    item.NextDate.Value = nextDate;
+                    item.NextDate.DatePart = "Unknown";
+                }
+                else
+                {
+                    item.NextDate.RawValue = immunisation.NextDate;
+                }
+            }   
+                
+            return item;
+                    
+            
         }
 
         private static Allergy BuildMicrotestAllergy(int id, string severity, string desc, string startDate)
@@ -692,6 +906,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Type = type,
                 PrescribedDate = date,
                 Reason = reason
+            };
+        }
+        
+        
+        private static Immunisation BuildMicrotestImmunisation(string date, string desc, string nextDate, string status)
+        {
+            return new Immunisation
+            {
+                Date = date,
+                Description = desc,
+                NextDate = nextDate,
+                Status = status
             };
         }
     }

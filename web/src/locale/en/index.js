@@ -743,6 +743,8 @@ export default {
     },
     immunisations: {
       sectionHeader: 'Immunisations',
+      nextDate: 'Next Date: ',
+      status: 'Status: ',
     },
     testResults: {
       sectionHeader: {

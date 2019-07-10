@@ -14,6 +14,12 @@
         {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
       </span>
       <p>{{ item.term }}</p>
+      <p v-if="item.nextDate != null">
+        {{ $t('my_record.immunisations.nextDate') }}{{ getNextDateFormatted(item.nextDate) }}
+      </p>
+      <p v-if="item.status != null">
+        {{ $t('my_record.immunisations.status') }}{{ item.status }}
+      </p>
       <hr aria-hidden="true">
     </div>
   </div>
@@ -50,6 +56,12 @@ export default {
       return this.immunisations.hasErrored ||
              this.immunisations.data.length === 0 ||
              !this.immunisations.hasAccess;
+    },
+  },
+  methods: {
+    getNextDateFormatted(nextDate) {
+      return nextDate.rawValue != null ?
+        nextDate.rawValue : this.$options.filters.datePart(nextDate.value, nextDate.datePart);
     },
   },
 };

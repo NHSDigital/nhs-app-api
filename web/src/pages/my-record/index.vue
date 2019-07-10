@@ -42,6 +42,7 @@
 
           <dcr-vision v-if="supplier === 'VISION'" :record="$store.state.myRecord.record"/>
 
+          <dcr-microtest v-if="supplier === 'MICROTEST'" :record="$store.state.myRecord.record"/>
         </div>
 
         <div v-else>
@@ -75,6 +76,7 @@ import PatientDetails from '@/components/my-record/SharedComponents/PatientDetai
 import DcrEmis from '@/components/my-record/DetailedCodedRecord/DcrEMIS';
 import DcrTpp from '@/components/my-record/DetailedCodedRecord/DcrTPP';
 import DcrVision from '@/components/my-record/DetailedCodedRecord/DcrVISION';
+import DcrMicrotest from '@/components/my-record/DetailedCodedRecord/DcrMICROTEST';
 import ScrEmis from '@/components/my-record/SummaryCareRecord/ScrEMIS';
 import ScrTpp from '@/components/my-record/SummaryCareRecord/ScrTPP';
 import ScrVision from '@/components/my-record/SummaryCareRecord/ScrVISION';
@@ -93,6 +95,7 @@ export default {
     DcrEmis,
     DcrTpp,
     DcrVision,
+    DcrMicrotest,
     ScrEmis,
     ScrTpp,
     ScrVision,

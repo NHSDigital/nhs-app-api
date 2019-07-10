@@ -5,19 +5,22 @@ import mocking.microtest.myRecord.Medications
 import mocking.microtest.myRecord.MyRecordResponseModel
 import mocking.microtest.myRecord.Allergy
 import mocking.microtest.myRecord.Allergies
-
+import mocking.microtest.myRecord.Immunisation
+import mocking.microtest.myRecord.Immunisations
 import utils.set
 
 object MicrotestMyRecordData {
 
     const val MAX_ALLERGIES = 3
     const val MAX_MEDICATIONS = 3
+    const val MAX_IMMUNISATIONS = 3
 
     fun getEmptyMicrotestMyRecord(): MyRecordResponseModel {
 
         val allergies = Allergies("true", "false", 0, mutableListOf<Allergy>())
         val medications = Medications("true", "false", 0, mutableListOf<Medication>())
-        return MyRecordResponseModel(allergies, medications)
+        val immunisations = Immunisations("true", "false", 0, mutableListOf<Immunisation>())
+        return MyRecordResponseModel(allergies, medications, immunisations)
     }
 
     fun getPopulatedMicrotestMyRecord(): MyRecordResponseModel {
@@ -58,9 +61,22 @@ object MicrotestMyRecordData {
             )
         }
 
+        val immunisationList = mutableListOf<Immunisation>()
+        for (i in 1..MAX_IMMUNISATIONS) {
+            immunisationList.add(
+                    Immunisation(
+                            date = "2019-07-03",
+                            description = "Immunisation $i",
+                            nextDate = "no next date",
+                            status = "Main $i"
+                    )
+            )
+        }
+
         val allergies = Allergies("true", "false", allergyList.size, allergyList)
         val medications = Medications("true", "false", medicationList.size, medicationList)
-        val  myRecordResponseModel =  MyRecordResponseModel(allergies, medications)
+        val immunisations = Immunisations("true", "false", immunisationList.size, immunisationList)
+        val  myRecordResponseModel =  MyRecordResponseModel(allergies, medications, immunisations)
 
         MyRecordSerenityHelpers.MY_RECORD_DATA.set(myRecordResponseModel)
 

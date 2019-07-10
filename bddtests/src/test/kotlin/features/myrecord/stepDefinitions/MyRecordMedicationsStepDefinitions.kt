@@ -135,7 +135,6 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
         checkOnScreenMedicationsAreCorrect(expectedCurrentMedications, onScreenCurrentMedications)
     }
 
-
     @Then("^I see acute medication information$")
     fun thenISeeAcuteMedicationInformation() {
         myRecordInfoPage.acuteMedications.firstElement.assertIsVisible()

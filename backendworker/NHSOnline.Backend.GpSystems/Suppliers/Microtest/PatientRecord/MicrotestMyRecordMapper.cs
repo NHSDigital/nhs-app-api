@@ -27,8 +27,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 
             MapAllergies(myRecordResponse, patientRecordGetResponse.AllergyData);
             MapMedications(myRecordResponse, patientRecordGetResponse.MedicationData);
+            MapImmunisations(myRecordResponse, patientRecordGetResponse.ImmunisationData);
 
             SetHasSummaryRecordAccess(myRecordResponse);
+            SetHasDetailedRecordAccess(myRecordResponse);
 
             return myRecordResponse;
         }
@@ -46,10 +48,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                         Date = x.StartDate != null
                             ? new MyRecordDate
                             {
-                                Value = DateTime.TryParse(x.StartDate, out var eventDate)
-                                    ? eventDate
+                                Value = DateTime.TryParse(x.StartDate, out var allergyDate)
+                                    ? allergyDate
                                     : (DateTimeOffset?) null,
-                                DatePart = x.StartDate
+                                DatePart = "Unknown"
                             }
                             : null
                     })
@@ -98,11 +100,59 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                 }
             }
 
-            myRecordResponse.Medications.Data.AcuteMedications = acuteMeds;
-            myRecordResponse.Medications.Data.CurrentRepeatMedications = currentMeds;
-            myRecordResponse.Medications.Data.DiscontinuedRepeatMedications = historicMeds;
+            myRecordResponse.Medications.Data.AcuteMedications =
+                acuteMeds.OrderByDescending(med => med.Date.GetValueOrDefault());
+            
+            myRecordResponse.Medications.Data.CurrentRepeatMedications = 
+                currentMeds.OrderByDescending(med => med.Date.GetValueOrDefault());
+            
+            myRecordResponse.Medications.Data.DiscontinuedRepeatMedications = 
+                historicMeds.OrderByDescending(med => med.Date.GetValueOrDefault());
         }
 
+        
+        private static void MapImmunisations(MyRecordResponse myRecordResponse, ImmunisationData immunisationData)
+        {
+            if (immunisationData != null)
+            {
+                myRecordResponse.Immunisations.Data = immunisationData.Immunisations
+                    .Select(x =>
+                    {
+                        var item = new ImmunisationItem
+                        {
+                            Term = x.Description,
+                            EffectiveDate = x.Date != null
+                                ? new MyRecordDate
+                                {
+                                    Value = DateTime.TryParse(x.Date, out var effectiveDate)
+                                        ? effectiveDate
+                                        : (DateTimeOffset?) null,
+                                    DatePart = "Unknown"
+                                }
+                                : null,
+                            Status = x.Status
+                        };
+
+                        if (x.NextDate != null)
+                        {
+                            item.NextDate = new MyRecordDateRawString();
+                            if (DateTime.TryParse(x.NextDate, out var nextDate))
+                            {
+                                item.NextDate.Value = nextDate;
+                                item.NextDate.DatePart = "Unknown";
+                            }
+                            else
+                            {
+                                item.NextDate.RawValue = x.NextDate;
+                            }
+                        }
+                        return item;
+                    })
+                    .OrderByDescending(o => o.EffectiveDate?.Value.GetValueOrDefault())
+                    .ToList();
+            }
+        }        
+        
         /**
          * Adds a medication item if a valid date is present.
          */
@@ -138,6 +188,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                 IsAny(myRecordResponse.Medications.Data.AcuteMedications) ||
                 IsAny(myRecordResponse.Medications.Data.CurrentRepeatMedications) ||
                 IsAny(myRecordResponse.Medications.Data.DiscontinuedRepeatMedications);
+        }
+
+        private static void SetHasDetailedRecordAccess(MyRecordResponse myRecordResponse)
+        {
+            myRecordResponse.HasDetailedRecordAccess = IsAny(myRecordResponse.Immunisations.Data);
         }
 
         private static bool IsAny<T>(IEnumerable<T> data)

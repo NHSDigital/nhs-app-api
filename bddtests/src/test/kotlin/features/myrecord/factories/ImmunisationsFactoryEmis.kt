@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import mocking.data.myrecord.ImmunisationsData
 import models.Patient
+import worker.models.myrecord.ImmunisationItem
 
 class ImmunisationsFactoryEmis: ImmunisationsFactory(){
     override fun enabledWithBlankRecord(patient: Patient) {
@@ -27,5 +28,9 @@ class ImmunisationsFactoryEmis: ImmunisationsFactory(){
         mockingClient.forEmis {
             myRecord.immunisationsRequest(patient).respondWithExceptionWhenNotEnabled()
         }
+    }
+
+    override fun getExpectedImmunisations(): List<ImmunisationItem> {
+        throw UnsupportedOperationException()
     }
 }
