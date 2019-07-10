@@ -43,8 +43,8 @@ export default {
   [LOADED_PROCEDURES](state, { record }) {
     state.procedures = record;
   },
-  [LOADED_DETAILED_TEST_RESULT](state, { hasErrored, data }) {
-    state.detailedTestResult = { data, hasErrored, hasLoaded: true };
+  [LOADED_DETAILED_TEST_RESULT](state, { data }) {
+    state.detailedTestResult = { data, hasLoaded: true };
   },
   [RESET_TERMS](state) {
     state.hasAcceptedTerms = false;

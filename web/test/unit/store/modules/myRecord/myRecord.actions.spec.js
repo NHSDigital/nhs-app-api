@@ -7,11 +7,11 @@ import {
   TOGGLE_PATIENT_DETAIL,
 } from '@/store/modules/myRecord/mutation-types';
 
-const createApp = ({ record, patientDetails, testResults }) => ({
+const createApp = ({ record, patientDetails, data }) => ({
   $http: {
     getV1PatientDemographics: jest.fn().mockResolvedValue({ response: patientDetails }),
     getV1PatientMyRecord: jest.fn().mockResolvedValue({ response: record }),
-    getV1PatientTestResult: jest.fn().mockResolvedValue({ response: testResults }),
+    getV1PatientTestResult: jest.fn().mockResolvedValue({ response: data }),
   },
 });
 
@@ -64,10 +64,10 @@ describe('my record actions', () => {
 
     describe('loadDetailedTestResult', () => {
       const testResultId = 3456;
-      const testResults = {};
+      const data = {};
 
       beforeEach(async () => {
-        app.$http.getV1PatientTestResult.mockResolvedValue({ response: testResults });
+        app.$http.getV1PatientTestResult.mockResolvedValue({ response: data });
         await actions.loadDetailedTestResult(context, testResultId);
       });
 
@@ -76,7 +76,7 @@ describe('my record actions', () => {
       });
 
       it('will commit LOADED_DETAILED_TEST_RESULT with the received results', () => {
-        expect(context.commit).toHaveBeenCalledWith(LOADED_DETAILED_TEST_RESULT, testResults);
+        expect(context.commit).toHaveBeenCalledWith(LOADED_DETAILED_TEST_RESULT, { data });
       });
     });
 

@@ -61,9 +61,9 @@ export default {
     commit(LOADED_PROCEDURES, { record });
   },
   async loadDetailedTestResult({ commit }, testResultId) {
-    const { response } = await this.app.$http.getV1PatientTestResult({ testResultId }) || {};
-    const { hasErrored, testResult: data } = response;
-    commit(LOADED_DETAILED_TEST_RESULT, { hasErrored, data });
+    const { response: data }
+      = await this.app.$http.getV1PatientTestResult({ testResultId }) || {};
+    commit(LOADED_DETAILED_TEST_RESULT, { data });
   },
   resetTerms({ commit }) {
     commit(RESET_TERMS);
