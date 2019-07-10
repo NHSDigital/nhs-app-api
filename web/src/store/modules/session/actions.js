@@ -22,18 +22,24 @@ export default {
   showExpiryMessage:
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
   updateLastCalledAt({ commit }, lastCalledAt = new Date()) {
-    const session = this.app.$cookies.get('nhso.session');
+    if (process.client || !this.app.context.res.locals.LastCalledAtUpdated) {
+      if (process.server) {
+        this.app.context.res.locals.LastCalledAtUpdated = true;
+      }
 
-    if (session) {
-      session.lastCalledAt = lastCalledAt;
-      setCookie({
-        key: 'nhso.session',
-        value: session,
-        cookies: this.app.$cookies,
-        options: {
-          secure: this.app.$env.SECURE_COOKIES,
-        },
-      });
+      const session = this.app.$cookies.get('nhso.session');
+
+      if (session) {
+        session.lastCalledAt = lastCalledAt;
+        setCookie({
+          key: 'nhso.session',
+          value: session,
+          cookies: this.app.$cookies,
+          options: {
+            secure: this.app.$env.SECURE_COOKIES,
+          },
+        });
+      }
     }
 
     commit(SET_LAST_CALLED_AT, lastCalledAt);
