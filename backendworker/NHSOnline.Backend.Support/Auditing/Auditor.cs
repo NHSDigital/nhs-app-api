@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -23,53 +24,17 @@ namespace NHSOnline.Backend.Support.Auditing
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        private string NhsNumber()
-        {
-            var nhsNumber = _scopeProvider.Value?.UserContext()?.NhsNumber;
-
-            if (string.IsNullOrEmpty(nhsNumber))
-            {
-                throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
-            }
-
-            return nhsNumber;
-        }
-
-        private Supplier Supplier()
-        {
-            var supplier = _scopeProvider.Value?.UserContext()?.Supplier ?? Support.Supplier.Unknown;
-            return supplier;
-        }
-
         public async Task Audit(string operation, string details, params object[] parameters)
         {
-            try
-            {
-                var nhsNumber = NhsNumber();
-                var supplier = Supplier();
-
-                await AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, $"Failed to write audit '{operation}'");
-                throw;
-            }
+            var nhsNumber = _scopeProvider.Value?.UserContext()?.NhsNumber;
+            var supplier = _scopeProvider.Value?.UserContext()?.Supplier ?? Supplier.Unknown;
+            var accessToken = _scopeProvider.Value?.UserContext()?.AccessToken;
+            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            
+            await AuditInternal(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
         }
 
-        public async Task PostAudit(string operation, string details, params object[] parameters)
-        {
-            try
-            {
-                await Audit(operation, details, parameters);
-            }
-            catch (Exception)
-            {
-                _logger.LogInformation($"PostAudit suppress exception thrown by '{operation}'");
-            }
-        }
-
-        public async Task AuditWithExplicitNhsNumber(
+        public async Task AuditRegistrationEvent(
             string nhsNumber, 
             Supplier supplier, 
             string operation,
@@ -77,37 +42,100 @@ namespace NHSOnline.Backend.Support.Auditing
             params object[] parameters
         )
         {
-            if (string.IsNullOrEmpty(nhsNumber))
-            {
-                throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
-            }
-            if (supplier == Support.Supplier.Unknown)
-            {
-                throw new NoAuditKeyException(ExceptionMessages.SupplierNotSpecified);
-            }
-
-            try
-            {
-                await AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, $"Failed to write audit '{operation}'");
-                throw;
-            }
+            const string nhsLoginSubject = "";
+            await AuditInternal(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
         }
 
-        private async Task AuditWithNoTryCatch(string nhsNumber, Supplier supplier, string operation, string details,
-            params object[] parameters)
+        public async Task AuditSessionEvent(
+            string accessToken,
+            string nhsNumber,
+            Supplier supplier,
+            string operation,
+            string details,
+            params object[] parameters
+        )
         {
-            await _auditSink.WriteAudit(DateTime.UtcNow, nhsNumber, supplier, operation,
-                string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters), _scopeProvider.Value.VersionTag());
+            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            await AuditInternal(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
         }
-
+        
         public IDisposable BeginScope(HttpContext httpContext)
         {
             _scopeProvider.Value = new HttpContextAuditorScope(httpContext, _configuration);
             return null;
+        }
+
+        private async Task AuditInternal(
+            string nhsLoginSubject, 
+            string nhsNumber,
+            Supplier supplier,
+            string operation,
+            string details,
+            params object[] parameters
+            )
+        {
+            if (string.IsNullOrEmpty(nhsNumber))
+            {
+                throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
+            }
+            if (supplier == Supplier.Unknown)
+            {
+                throw new NoAuditKeyException(ExceptionMessages.SupplierNotSpecified);
+            }
+
+            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
+
+            await AuditInternal(auditRecord);
+        }
+
+        private async Task AuditInternal(AuditRecord auditRecord)
+        {
+            try
+            {
+                await _auditSink.WriteAudit(auditRecord);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Failed to write audit '{auditRecord.Operation}'");
+                throw;
+            }
+        }
+
+        private AuditRecord BuildAuditRecord(string nhsLoginSubject, string nhsNumber, Supplier supplier, string operation,
+            string details, params object[] parameters)
+        {
+            var formattedDetails = string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters);           
+            var versionTag = _scopeProvider.Value?.VersionTag();
+
+            var auditRecord = new AuditRecord(
+                DateTime.UtcNow,
+                nhsLoginSubject,
+                nhsNumber,
+                supplier,
+                operation,
+                formattedDetails,
+                versionTag
+            );
+
+            return auditRecord;
+        }
+
+        private static string DeriveNhsLoginSubject(string accessToken)
+        {
+            string nhsLoginSubject;
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.ReadJwtToken(accessToken);
+                nhsLoginSubject = token.Subject;
+            }
+            catch (Exception e)
+            {
+                throw new NoAuditKeyException(ExceptionMessages.AccessTokenInvalid, e);
+            }
+
+            return nhsLoginSubject;
         }
     }
 }

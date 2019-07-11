@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.PostAudit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses?.Count()).Sum() } courses");
+                await _auditor.Audit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses?.Count()).Sum() } courses");
             }
             catch (Exception e)
             {
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Supplier Unavailable");
+                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Supplier Unavailable");
             }
             catch (Exception e)
             {
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Insufficient permissions");
+                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Insufficient permissions");
             }
             catch (Exception e)
             {
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Internal Server Error");
+                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Internal Server Error");
             }
             catch (Exception e)
             {
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Bad Request");
+                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Bad Request");
             }
             catch (Exception e)
             {
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Cannot Reorder Prescription");
+                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Cannot Reorder Prescription");
             }
             catch (Exception e)
             {
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Medication already ordered within last 30 days");
+                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Medication already ordered within last 30 days");
             }
             catch (Exception e)
             {

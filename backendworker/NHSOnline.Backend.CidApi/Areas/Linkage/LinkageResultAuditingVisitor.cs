@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType,
+                await _auditor.AuditRegistrationEvent(_nhsNumber, _supplier, _auditType,
                     "Linkage details successfully retrieved.");
             }
             catch (Exception e)
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details successfully retrieved - already existed.");
+                await _auditor.AuditRegistrationEvent(_nhsNumber, _supplier, _auditType, "Linkage details successfully retrieved - already existed.");
             }
             catch (Exception e)
             {
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage key successfully created.");
+                await _auditor.AuditRegistrationEvent(_nhsNumber, _supplier, _auditType, "Linkage key successfully created.");
             }
             catch (Exception e)
             {
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to supplier being unavailable.");
+                await _auditor.AuditRegistrationEvent(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to supplier being unavailable.");
             }
             catch (Exception e)
             {
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to internal server error.");
+                await _auditor.AuditRegistrationEvent(_nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful due to internal server error.");
             }
             catch (Exception e)
             {
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, "Error when linking user");
+                await _auditor.AuditRegistrationEvent(_nhsNumber, _supplier, _auditType, "Error when linking user");
                 LogErrorCode(result.ErrorCode, nameof(LinkageResult.ErrorCase));
             }
             catch (Exception e)
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             try
             {
-                await _auditor.AuditWithExplicitNhsNumber(_nhsNumber, _supplier, _auditType, $"{errorType} returned when linking user - unknown error");
+                await _auditor.AuditRegistrationEvent(_nhsNumber, _supplier, _auditType, $"{errorType} returned when linking user - unknown error");
                 LogErrorCode(errorCode, nameOfResultType);
             }
             catch (Exception e)

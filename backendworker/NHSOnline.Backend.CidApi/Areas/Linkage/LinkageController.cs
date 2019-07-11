@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                     var linkageService = gpSystem.GetLinkageService();
 
-                    await _auditor.AuditWithExplicitNhsNumber(nhsNumber, gpSystem.Supplier,
+                    await _auditor.AuditRegistrationEvent(nhsNumber, gpSystem.Supplier,
                         Constants.AuditingTitles.GetLinkageDetailsAuditTypeRequest,
                         "Attempting to get linkage details.");
 
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                         var linkageService = gpSystem.GetLinkageService();
 
-                        await _auditor.AuditWithExplicitNhsNumber(createLinkageRequest.NhsNumber, gpSystem.Supplier,
+                        await _auditor.AuditRegistrationEvent(createLinkageRequest.NhsNumber, gpSystem.Supplier,
                             Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest,
                             "Attempting to create linkage key.");
 

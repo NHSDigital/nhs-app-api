@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 
                 var linkageService = gpSystem.GetLinkageService();
 
-                await _auditor.AuditWithExplicitNhsNumber(request.NhsNumber, gpSystem.Supplier,
+                await _auditor.AuditRegistrationEvent(request.NhsNumber, gpSystem.Supplier,
                     Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
 
                 return await linkageService.CreateLinkageKey(request);

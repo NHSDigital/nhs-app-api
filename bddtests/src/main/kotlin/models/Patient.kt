@@ -46,7 +46,21 @@ data class Patient(
                         "-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
                 redirectUrl = Config.instance.cidRedirectUri),
-        val accessToken: String = "access_token",
+        val accessToken: String = "eyJzdWIiOiI0NTVmODBiYy02NTkyLTRmZTQtODVlMC0wZTdiOTdlYzFmYWQiLCJhdWQiOiJuaHMtb25s" +
+                "aW5lIiwia2lkIjoiYjcxNDk4NmFjNTI2ZWExMjY1NTVhMzdmMTY4NjU5ZmNlOGI5ZGIyNCIsImlzcyI6Imh0dHBzOi8vYXV0aC" +
+                "5leHQuc2lnbmluLm5ocy51ayIsInR5cCI6IkpXVCIsImV4cCI6MTU2MjMxNTg4MSwiaWF0IjoxNTYyMzEyMjgxLCJhbGciOiJS" +
+                "UzUxMiIsImp0aSI6IjRlZTA0Mjc1LThhY2QtNGE2NS04MTY2LTRjM2FkOWJjM2FlNSJ9.eyJzdWIiOiI0NTVmODBiYy02NTkyL" +
+                "TRmZTQtODVlMC0wZTdiOTdlYzFmYWQiLCJuaHNfbnVtYmVyIjoiOTc0NDM2Njc1MyIsImlzcyI6Imh0dHBzOi8vYXV0aC5leHQ" +
+                "uc2lnbmluLm5ocy51ayIsInZlcnNpb24iOjAsInZ0bSI6Imh0dHBzOi8vYXV0aC5leHQuc2lnbmluLm5ocy51ay90cnVzdG1hc" +
+                "msvYXV0aC5leHQuc2lnbmluLm5ocy51ayIsImNsaWVudF9pZCI6Im5ocy1vbmxpbmUiLCJyZXF1ZXN0aW5nX3BhdGllbnQiOiI" +
+                "5NzQ0MzY2NzUzIiwiYXVkIjoibmhzLW9ubGluZSIsInRva2VuX3VzZSI6ImFjY2VzcyIsImF1dGhfdGltZSI6MTU2MjMxMjI3O" +
+                "Swic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBuaHNfYXBwX2NyZWRlbnRpYWxzIGdwX2ludGVncmF0aW9uX2NyZWRlbnRpYWxzIiw" +
+                "idm90IjoiUDkuQ3AuQ2QiLCJleHAiOjE1NjIzMTU4ODEsImlhdCI6MTU2MjMxMjI4MSwicmVhc29uX2Zvcl9yZXF1ZXN0Ijoic" +
+                "GF0aWVudGFjY2VzcyIsImp0aSI6IjRlZTA0Mjc1LThhY2QtNGE2NS04MTY2LTRjM2FkOWJjM2FlNSJ9.AqVT_loj8Tzx46CYmo" +
+                "LgdFhPflA2NSBxhdAeImYq93Rzx4Q6B0jh3Kd9XMRLi7rtoKFLqjPvWBcZeL-A58qibvN_CtTESXFRzQbTcXnPY0qyV48oxIvd" +
+                "ghaw7eMuF2tJnFy-X2ozuqUn_4h-zsHrG80KG9bdu3htAT_hac4cXtY9GC519RQ0835ool-IV9Us7rVMKMCt_f_rNRWu_QhnJE" +
+                "Hyc8YLcSZ2b3VRsMjTPIadVOdJeLq2vIbhhiDZ2a9GX5FnwcgE0pW241-5FbOQy9nvtW-gA-7dtQWXObg4QcAqxpRmr1rIbFlB" +
+                "4FeK26UZs6IT9dZ-foYfIBl_4Eyggg",
         val tppUserSession: TppUserSession? = null,
         val im1ConnectionTokenAsJson: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157"

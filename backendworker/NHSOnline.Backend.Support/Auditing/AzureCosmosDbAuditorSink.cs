@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Support.Auditing
                 UriFactory.CreateDocumentCollectionUri(config.CosmosDbSinkDatabaseId, config.CosmosDbSinkCollectionId);
         }
 
-        public async Task WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details, VersionTag versionTag)
+        public async Task WriteAudit(AuditRecord auditRecord)
         {
             if (_disposed)
             {
@@ -33,8 +33,6 @@ namespace NHSOnline.Backend.Support.Auditing
             }
 
             _logger.LogEnter();
-
-            var auditRecord = new AuditRecord(timestamp, nhsNumber, supplier, operation, details, versionTag);
 
             using (_logger.WithTimer("Add audit entry to CosmosDB"))
             {

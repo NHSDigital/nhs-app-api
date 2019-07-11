@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.Support
             var success = true;
             var userSession = httpContext.GetUserSession();
             var gpUserSession = userSession.GpUserSession;
+            var citizenIdUserSession = userSession.CitizenIdUserSession;
             
             try
             {
@@ -40,16 +41,21 @@ namespace NHSOnline.Backend.Support
             {
                 success = false;
                 _logger.LogError(e, $"Delete session failed with error: {e.Message}");
-                await _auditor.AuditWithExplicitNhsNumber(gpUserSession.NhsNumber, gpUserSession.Supplier,
-                    Constants.AuditingTitles.SessionDeleteResponse, "Delete session failed");
+                await _auditor.AuditSessionEvent(
+                    citizenIdUserSession.AccessToken,
+                    gpUserSession.NhsNumber, 
+                    gpUserSession.Supplier,
+                    Constants.AuditingTitles.SessionDeleteResponse, 
+                    "Delete session failed");
             }
 
             await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             if (!success) return false;
             
-            _logger.LogDebug($"Session successfully deleted.");
-            await _auditor.AuditWithExplicitNhsNumber(
+            _logger.LogDebug("Session successfully deleted.");
+            await _auditor.AuditSessionEvent(
+                citizenIdUserSession.AccessToken,
                 gpUserSession.NhsNumber,
                 gpUserSession.Supplier,
                 Constants.AuditingTitles.SessionDeleteResponse,

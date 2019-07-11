@@ -130,7 +130,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockSessionService.Verify(x => x.Logoff(_userSession.GpUserSession));
             _mockSessionCacheService.Verify(x => x.DeleteUserSession(_userSession.Key));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.AuditSessionEvent(
+                _userSession.CitizenIdUserSession.AccessToken, 
+                _userSession.GpUserSession.NhsNumber,
+                _userSession.GpUserSession.Supplier,             
+                DeleteResponseAuditType, 
+                It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -153,7 +158,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
             _mockSessionService.Verify(x => x.Logoff(_userSession.GpUserSession));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.AuditSessionEvent(
+                _userSession.CitizenIdUserSession.AccessToken, 
+                _userSession.GpUserSession.NhsNumber,
+                _userSession.GpUserSession.Supplier, 
+                DeleteResponseAuditType, 
+                It.IsAny<string>()));
         }
 
         public void Dispose()

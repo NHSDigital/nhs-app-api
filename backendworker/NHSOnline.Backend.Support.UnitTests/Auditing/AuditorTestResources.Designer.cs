@@ -8,28 +8,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NHSOnline.Backend.Support {
+namespace NHSOnline.Backend.Support.UnitTests.Auditing {
     using System;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ExceptionMessages {
+    public class AuditorTestResources {
         
         private static System.Resources.ResourceManager resourceMan;
         
         private static System.Globalization.CultureInfo resourceCulture;
         
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ExceptionMessages() {
+        internal AuditorTestResources() {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("NHSOnline.Backend.Support.ExceptionMessages", typeof(ExceptionMessages).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("NHSOnline.Backend.Support.UnitTests.Auditing.AuditorTestResources", typeof(AuditorTestResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -46,39 +46,9 @@ namespace NHSOnline.Backend.Support {
             }
         }
         
-        public static string ConfigurationValueNotFound {
+        public static string AccessTokenValid {
             get {
-                return ResourceManager.GetString("ConfigurationValueNotFound", resourceCulture);
-            }
-        }
-        
-        public static string ConnectionMultiplexerFactoryUnknownMultiplexerName {
-            get {
-                return ResourceManager.GetString("ConnectionMultiplexerFactoryUnknownMultiplexerName", resourceCulture);
-            }
-        }
-        
-        public static string HttpClientFactoryUnknownClientName {
-            get {
-                return ResourceManager.GetString("HttpClientFactoryUnknownClientName", resourceCulture);
-            }
-        }
-        
-        public static string InvalidLogLevel {
-            get {
-                return ResourceManager.GetString("InvalidLogLevel", resourceCulture);
-            }
-        }
-        
-        public static string NoNhsNumberAvailable {
-            get {
-                return ResourceManager.GetString("NoNhsNumberAvailable", resourceCulture);
-            }
-        }
-        
-        public static string SupplierNotSpecified {
-            get {
-                return ResourceManager.GetString("SupplierNotSpecified", resourceCulture);
+                return ResourceManager.GetString("AccessTokenValid", resourceCulture);
             }
         }
         
@@ -88,15 +58,9 @@ namespace NHSOnline.Backend.Support {
             }
         }
         
-        public static string OdsCodeLookupUnknownOdsCode {
+        public static string AccessTokenSubject {
             get {
-                return ResourceManager.GetString("OdsCodeLookupUnknownOdsCode", resourceCulture);
-            }
-        }
-        
-        public static string OdsCodeLookupUnknownSupplierCode {
-            get {
-                return ResourceManager.GetString("OdsCodeLookupUnknownSupplierCode", resourceCulture);
+                return ResourceManager.GetString("AccessTokenSubject", resourceCulture);
             }
         }
     }

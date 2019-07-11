@@ -8,7 +8,9 @@ namespace NHSOnline.Backend.Support.Auditing
         private readonly HttpContext _httpContext;
         private readonly string _appApiVersion;
 
-        public HttpContextAuditorScope(HttpContext httpContext, IConfiguration configuration)
+        public HttpContextAuditorScope(
+            HttpContext httpContext, 
+            IConfiguration configuration)
         {
             _httpContext = httpContext;
             _appApiVersion = configuration[Constants.EnvironmentalVariables.VersionTag];
@@ -31,14 +33,17 @@ namespace NHSOnline.Backend.Support.Auditing
         {
             if (_httpContext.Items.Keys.Contains(Constants.HttpContextItems.UserSession) == false)
             {
-                return new AuditUserContext(null, Supplier.Unknown);
+                return new AuditUserContext(null,null, Supplier.Unknown);
             }
 
             var userSession = _httpContext.GetUserSession();
 
-            var auditUserContext = new AuditUserContext(userSession.GpUserSession.NhsNumber, userSession.GpUserSession.Supplier);
+            var auditContext = new AuditUserContext(
+                userSession.CitizenIdUserSession.AccessToken,
+                userSession.GpUserSession.NhsNumber,
+                userSession.GpUserSession.Supplier);
 
-            return auditUserContext;
+            return auditContext;
         }
     }
 }

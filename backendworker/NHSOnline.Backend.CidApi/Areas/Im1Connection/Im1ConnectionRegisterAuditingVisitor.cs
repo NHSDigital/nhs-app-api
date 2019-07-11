@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             {
                 if (!string.IsNullOrEmpty(result.Response.NhsNumbers?.FirstOrDefault()?.NhsNumber))
                 {
-                    await _auditor.AuditWithExplicitNhsNumber(
+                    await _auditor.AuditRegistrationEvent(
                         result.Response.NhsNumbers.First().NhsNumber, _supplier,
                         Constants.AuditingTitles.Im1ConnectionRegisterResponse, "IM1 connection successfully registered with GP system.");
                 }

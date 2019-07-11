@@ -116,7 +116,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             var gpSystem = gpSystemOption.ValueOrFailure();
             _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
 
-            await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
+            await _auditor.AuditSessionEvent(
+                citizenIdSessionResult.Session.AccessToken,
+                citizenIdSessionResult.NhsNumber, 
+                gpSystem.Supplier,
                 Constants.AuditingTitles.SessionCreateRequest,
                 "Attempting to create Session");
 
@@ -126,8 +129,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 const string errorMessage = "Failed to validate Im1 connection";
                 _logger.LogError(errorMessage);
-                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
-                    Constants.AuditingTitles.SessionCreateResponse, errorMessage);
+                await _auditor.AuditSessionEvent(
+                    citizenIdSessionResult.Session.AccessToken,
+                    citizenIdSessionResult.NhsNumber, 
+                    gpSystem.Supplier,
+                    Constants.AuditingTitles.SessionCreateResponse, 
+                    errorMessage);
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
 
@@ -145,8 +152,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var errorMessage =
                     $"Creating the session failed with status code: '{gpSessionCreatedResultVisited.StatusCode}'";
                 _logger.LogError(errorMessage);
-                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
-                    Constants.AuditingTitles.SessionCreateResponse, errorMessage);
+                await _auditor.AuditSessionEvent(
+                    citizenIdSessionResult.Session.AccessToken,
+                    citizenIdSessionResult.NhsNumber, 
+                    gpSystem.Supplier,
+                    Constants.AuditingTitles.SessionCreateResponse, 
+                    errorMessage);
                 return new StatusCodeResult(gpSessionCreatedResultVisited.StatusCode);
             }
             var userSession = _sessionMapper.Map(HttpContext, gpSessionCreatedResultVisited.UserSession, citizenIdSessionResult.Session);
@@ -167,8 +178,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var errorMessage =
                     $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
                 _logger.LogError(errorMessage);
-                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, userSession.GpUserSession.Supplier,
-                    Constants.AuditingTitles.SessionCreateResponse, errorMessage);
+                await _auditor.AuditSessionEvent(
+                    citizenIdSessionResult.Session.AccessToken,
+                    citizenIdSessionResult.NhsNumber, 
+                    userSession.GpUserSession.Supplier,
+                    Constants.AuditingTitles.SessionCreateResponse, 
+                    errorMessage);
                 return new StatusCodeResult(serviceJourneyRulesResultVisited.StatusCode);
             }
             return await CreateSession(userSession, serviceJourneyRulesResultVisited, citizenIdSessionResult, gpSessionCreatedResultVisited);
@@ -208,6 +223,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 // Delete GP supplier session                
                 var userSession = HttpContext.GetUserSession();
                 var gpUserSession = userSession.GpUserSession;
+                var citizenIdUserSession = userSession.CitizenIdUserSession;
 
                 try
                 {
@@ -221,8 +237,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 catch (Exception e)
                 {
                     _logger.LogError($"Deleting the GP supplier failed with error: {e.Message}");
-                    await _auditor.AuditWithExplicitNhsNumber(gpUserSession.NhsNumber, gpUserSession.Supplier,
-                        Constants.AuditingTitles.SessionDeleteResponse, "Delete session failed");
+                    await _auditor.AuditSessionEvent(
+                        citizenIdUserSession.AccessToken,
+                        gpUserSession.NhsNumber, 
+                        gpUserSession.Supplier,
+                        Constants.AuditingTitles.SessionDeleteResponse, 
+                        "Delete session failed");
 
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
@@ -236,8 +256,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Delete session failed with error: {e.Message}");
-                    await _auditor.AuditWithExplicitNhsNumber(gpUserSession.NhsNumber, gpUserSession.Supplier,
-                        Constants.AuditingTitles.SessionDeleteResponse, "Delete session failed");
+                    await _auditor.AuditSessionEvent(
+                        citizenIdUserSession.AccessToken,
+                        gpUserSession.NhsNumber, 
+                        gpUserSession.Supplier,
+                        Constants.AuditingTitles.SessionDeleteResponse, 
+                        "Delete session failed");
 
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
@@ -252,8 +276,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _logger.LogDebug(
                     $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
 
-                await _auditor.AuditWithExplicitNhsNumber(gpUserSession.NhsNumber, gpUserSession.Supplier,
-                    Constants.AuditingTitles.SessionDeleteResponse, "Session successfully deleted");
+                await _auditor.AuditSessionEvent(
+                    citizenIdUserSession.AccessToken,
+                    gpUserSession.NhsNumber, 
+                    gpUserSession.Supplier,
+                    Constants.AuditingTitles.SessionDeleteResponse, 
+                    "Session successfully deleted");
 
                 return new StatusCodeResult(StatusCodes.Status204NoContent);
             }

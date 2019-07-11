@@ -290,13 +290,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_OdsCodeIsInvalidFormat_ReturnsForbidden()
         {
             // Arrange
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, "Attempting to create Session",
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken,
+                    _userProfile.NhsNumber, 
+                    Supplier.Emis,
+                    Constants.AuditingTitles.SessionCreateRequest, 
+                    "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, Supplier.Emis, 
-                    Constants.AuditingTitles.SessionCreateResponse, "Failed to validate Im1 connection", It.IsAny<object[]>()))
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken,
+                    _userProfile.NhsNumber, 
+                    Supplier.Emis, 
+                    Constants.AuditingTitles.SessionCreateResponse, 
+                    "Failed to validate Im1 connection", 
+                    It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
             
@@ -320,13 +329,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_Im1ConnectionTokenFailsAuthenticationWithGpSupplier_ReturnsForbidden()
         {
             // Arrange
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, "Attempting to create Session",
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken,
+                    _userProfile.NhsNumber, 
+                    Supplier.Emis,
+                    Constants.AuditingTitles.SessionCreateRequest, 
+                    "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, Supplier.Emis, 
-                    Constants.AuditingTitles.SessionCreateResponse, "Creating the session failed with status code: '403'", It.IsAny<object[]>()))
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken,
+                    _userProfile.NhsNumber, 
+                    Supplier.Emis, 
+                    Constants.AuditingTitles.SessionCreateResponse, 
+                    "Creating the session failed with status code: '403'", It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
             var sessionCreateResult = new GpSessionCreateResult.Forbidden();
@@ -350,13 +367,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_GpSupplierSessionCreateFails_Returns502BadGateway()
         {
             // Arrange
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, "Attempting to create Session",
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken,
+                    _userProfile.NhsNumber, 
+                    Supplier.Emis,
+                    Constants.AuditingTitles.SessionCreateRequest, 
+                    "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, Supplier.Emis, 
-                    Constants.AuditingTitles.SessionCreateResponse, "Creating the session failed with status code: '502'", 
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken, 
+                    _userProfile.NhsNumber, 
+                    Supplier.Emis, 
+                    Constants.AuditingTitles.SessionCreateResponse, 
+                    "Creating the session failed with status code: '502'", 
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
@@ -391,7 +416,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
             
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, 
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken,
+                    _userProfile.NhsNumber, 
                     Supplier.Emis,
                     Constants.AuditingTitles.SessionCreateResponse, 
                     "Retrieving Service Journey Rules failed with status code: '404'", 
@@ -409,7 +436,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockAuditor.Verify();
             _mockLogger.Verify();
         }
-
 
         [TestMethod]
         public async Task Post_HappyPath_ReturnsUsersSessionResponse()
@@ -449,8 +475,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Arrange
-            _mockAuditor.Setup(x => x.AuditWithExplicitNhsNumber(_userProfile.NhsNumber, Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, "Attempting to create Session",
+            _mockAuditor.Setup(x => x.AuditSessionEvent(
+                    _citizenIdUserSession.AccessToken,
+                    _userProfile.NhsNumber, 
+                    Supplier.Emis,
+                    Constants.AuditingTitles.SessionCreateRequest, 
+                    "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask);
             _mockAuditor.Setup(x => x.Audit(Constants.AuditingTitles.SessionCreateResponse,

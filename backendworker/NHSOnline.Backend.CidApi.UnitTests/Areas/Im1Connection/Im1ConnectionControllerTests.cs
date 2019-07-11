@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
 
-            _auditor.Verify(x => x.AuditWithExplicitNhsNumber(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
+            _auditor.Verify(x => x.AuditRegistrationEvent(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
                 Constants.AuditingTitles.Im1ConnectionVerifyResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
@@ -260,7 +260,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
 
-            _auditor.Verify(x => x.AuditWithExplicitNhsNumber(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
+            _auditor.Verify(x => x.AuditRegistrationEvent(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
                 Constants.AuditingTitles.Im1ConnectionRegisterResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,31 +16,35 @@ namespace NHSOnline.Backend.Support.Auditing
             _streamWriter = new StreamWriter(stream);
         }
 
-        public Task WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details, VersionTag versionTag)
+        public Task WriteAudit(AuditRecord auditRecord)
         {
             if (_disposed)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            var auditStringBuilder = new StringBuilder();
-            auditStringBuilder.Append($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {supplier} | {operation} | {details} |");
+            var auditStringBuilder = new StringBuilder(" | ")
+                .AppendJoin(" | ",
+                    auditRecord.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture),
+                    auditRecord.NhsLoginSubject,
+                    auditRecord.NhsNumber,
+                    auditRecord.Supplier,
+                    auditRecord.Operation,
+                    auditRecord.Details)
+                .Append(" |");
 
-            if (versionTag != null)
+            if (!string.IsNullOrEmpty(auditRecord.ApiVersion))
             {
-                if (!string.IsNullOrEmpty(versionTag.Api))
-                {
-                    auditStringBuilder.Append($" API Version: {versionTag.Api} |");
-                }
-                if (!string.IsNullOrEmpty(versionTag.Web))
-                {
-                    auditStringBuilder.Append($" Web Version: {versionTag.Web} |");
-                }
-                if (!string.IsNullOrEmpty(versionTag.Native))
-                {
-                    auditStringBuilder.Append($" Native Version: {versionTag.Native} |");
-                }                
+                auditStringBuilder.Append($" API Version: {auditRecord.ApiVersion} |");
             }
+            if (!string.IsNullOrEmpty(auditRecord.WebVersion))
+            {
+                auditStringBuilder.Append($" Web Version: {auditRecord.WebVersion} |");
+            }
+            if (!string.IsNullOrEmpty(auditRecord.NativeVersion))
+            {
+                auditStringBuilder.Append($" Native Version: {auditRecord.NativeVersion} |");
+            }                
 
             _streamWriter.WriteLine(auditStringBuilder.ToString());
             _streamWriter.Flush();

@@ -24,16 +24,22 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
     [TestClass]
     public sealed class AuditorTests : IDisposable
     {
-        private const string NhsNumber = "424 933 2837";
+        private const string NhsNumber1 = "424 933 2837";
+        private const string NhsNumber2 = "585 613 2189";
         private const Supplier SupplierEmis = Supplier.Emis;
-        private const string RubbishScope = "THIS IS A RUBBISH AUDIT";
+        private static readonly string AccessToken = AuditorTestResources.AccessTokenValid;
 
         private IFixture _fixture;
         private Stream _stream;
         private DummyClassThatAudits _systemUnderTest;
-        ActionExecutingContext _actionExecutingContext;
-        ResultExecutedContext _resultContext;
+        private ActionExecutingContext _actionExecutingContext;
+        private ResultExecutedContext _resultContext;
 
+        private class UnknownSupplierSession : GpUserSession
+        {
+            public override Supplier Supplier => Supplier.Unknown;
+        }
+        
         private class NestedCallClass
         {
             private readonly IAuditor _auditor;
@@ -78,8 +84,8 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
 
             public async Task ClearTextAudit()
             {
-                var param0 = "eggs";
-                var param1 = 5;
+                const string param0 = "eggs";
+                const int param1 = 5;
                 await _auditor.Audit("Testing", "Had breakfast of {0} and {1} sausages.", param0, param1);
             }
 
@@ -89,10 +95,9 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
                 var awaiter = Task.Run(_nestedClass.TaskAsyncMethod);
 
                 var dummyContext = new DefaultHttpContext();
-                dummyContext.Items.Add("UserSession", CreateUserSession(RubbishScope) );
+                dummyContext.Items.Add("UserSession", CreateUserSession(NhsNumber2, AuditorTestResources.AccessTokenValid) );
                 using (_auditor.BeginScope(dummyContext))
                 {
-
                     await _auditor.Audit("Testing", "Message with rubbish scope 1");
                     _nestedClass.PauseNestedExecution = false;
                     await awaiter;
@@ -101,12 +106,52 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
                 }
             }
 
-            public async Task AuditWithScope(string nhsNumber, Supplier supplier)
+            public async Task Audit(
+                UserSession userSessionInContext,
+                string operation, 
+                string details,
+                params object[] parameters
+            )
             {
                 var dummyContext = new DefaultHttpContext();
+                dummyContext.Items.Add("UserSession", userSessionInContext);
+                
                 using (_auditor.BeginScope(dummyContext))
                 {
-                    await _auditor.AuditWithExplicitNhsNumber(nhsNumber, supplier, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");                    
+                    await _auditor.Audit(operation, details, parameters);                    
+                }
+            }
+            
+            public async Task AuditRegistrationEvent(
+                string nhsNumber, 
+                Supplier supplier,
+                string operation, 
+                string details,
+                params object[] parameters
+            )
+            {
+                var dummyContext = new DefaultHttpContext();
+                
+                using (_auditor.BeginScope(dummyContext))
+                {
+                    await _auditor.AuditRegistrationEvent(nhsNumber, supplier, operation, details, parameters);                    
+                }
+            }
+            
+            public async Task AuditSessionEvent(
+                string accessToken, 
+                string nhsNumber, 
+                Supplier supplier,
+                string operation, 
+                string details,
+                params object[] parameters
+                )
+            {
+                var dummyContext = new DefaultHttpContext();
+                
+                using (_auditor.BeginScope(dummyContext))
+                {
+                    await _auditor.AuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, parameters);                    
                 }
             }
         }
@@ -133,18 +178,22 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
 
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", CreateUserSession(NhsNumber));
-            _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<String, object>(), _systemUnderTest);
+            actionContext.HttpContext.Items.Add("UserSession", CreateUserSession(NhsNumber1, AuditorTestResources.AccessTokenValid));
+            _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<string, object>(), _systemUnderTest);
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
         }
 
-        private static UserSession CreateUserSession(string nhsNumber)
+        private static UserSession CreateUserSession(string nhsNumber, string accessToken)
         {
             return new UserSession
             {
                 GpUserSession = new EmisUserSession
                 {
                     NhsNumber = nhsNumber
+                },
+                CitizenIdUserSession = new CitizenIdUserSession
+                {
+                    AccessToken = accessToken
                 }
             };
         }
@@ -175,7 +224,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().Contain("woke up.");
-            testString.Should().Contain(NhsNumber);
+            testString.Should().Contain(NhsNumber1);
             testString.Should().Contain(SupplierEmis.ToString());
         }
 
@@ -188,7 +237,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().Contain("Had breakfast of eggs and 5 sausages.");
-            testString.Should().Contain(NhsNumber);
+            testString.Should().Contain(NhsNumber1);
             testString.Should().Contain(SupplierEmis.ToString());
         }
 
@@ -198,30 +247,176 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
             await _systemUnderTest.BasicAudit();
         }
 
-        [TestMethod]
-        public async Task TestAuditWithScopeProvidedInAuditMethod()
+                [TestMethod]
+        public async Task Audit_HappyPath()
         {
-            await _systemUnderTest.AuditWithScope(NhsNumber, Supplier.Tpp);
+            await _systemUnderTest.Audit(
+                CreateUserSession(NhsNumber1, AuditorTestResources.AccessTokenValid),
+                "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
 
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(NhsNumber + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  NhsNumber1 + " | Emis | Test Audit | SomeDetails 'with parameters' |");
+        }
+
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task Audit_NhsNumberNullOrEmpty_Throws(string nhsNumber)
+        {
+            var userSession = CreateUserSession(nhsNumber, AuditorTestResources.AccessTokenValid);
+            await _systemUnderTest.Audit(
+                userSession,
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public async Task TestThrowsExceptionIfNhsNumberIsNull()
+        public async Task Audit_SupplierIsDefault_Throws()
         {
-            await _systemUnderTest.AuditWithScope("", Supplier.Vision);
+            var userSession = CreateUserSession(NhsNumber1, AuditorTestResources.AccessTokenValid);
+            userSession.GpUserSession = new UnknownSupplierSession() { NhsNumber = NhsNumber1 };
+            
+            await _systemUnderTest.Audit(
+                userSession,
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
+        }
+
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task Audit_AccessTokenNullOrEmpty_Throws(string accessToken)
+        {
+            var userSession = CreateUserSession(NhsNumber1, accessToken);
+            
+            await _systemUnderTest.Audit(
+                userSession,
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
+        }
+        
+        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        public async Task Audit_AccessTokenInvalid_Throws()
+        {
+            var userSession = CreateUserSession(NhsNumber1, AuditorTestResources.AccessTokenInvalid);
+            
+            await _systemUnderTest.Audit(
+                userSession,
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
+        }
+        
+        [TestMethod]
+        public async Task AuditSessionEvent_HappyPath()
+        {
+            var userSession = CreateUserSession(NhsNumber1, AuditorTestResources.AccessTokenValid);
+            await _systemUnderTest.AuditSessionEvent(
+                AccessToken, 
+                NhsNumber1, 
+                Supplier.Tpp, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  NhsNumber1 + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
+        }
+
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditSessionEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
+        {
+            await _systemUnderTest.AuditSessionEvent(
+                AccessToken, 
+                nhsNumber, 
+                Supplier.Vision, 
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public async Task TestThrowsExceptionIfSupplierIsDefault()
+        public async Task AuditSessionEvent_SupplierIsDefault_Throws()
         {
-            await _systemUnderTest.AuditWithScope("1684156", Supplier.Unknown);
+            await _systemUnderTest.AuditSessionEvent(
+                AccessToken,
+                "1684156", 
+                Supplier.Unknown,                 
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
         }
 
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditSessionEvent_AccessTokenNullOrEmpty_Throws(string accessToken)
+        {
+            await _systemUnderTest.AuditSessionEvent(
+                accessToken, 
+                NhsNumber1, 
+                SupplierEmis, 
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
+        }
+        
+        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        public async Task AuditSessionEvent_AccessTokenInvalid_Throws()
+        {
+            await _systemUnderTest.AuditSessionEvent(
+                AuditorTestResources.AccessTokenInvalid, 
+                NhsNumber1, SupplierEmis, 
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
+        }
+        
+        [TestMethod]
+        public async Task AuditRegistrationEvent_HappyPath()
+        {
+            await _systemUnderTest.AuditRegistrationEvent(
+                NhsNumber1, 
+                Supplier.Tpp, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith("|  | " +  NhsNumber1 + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
+        }
+        
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditRegistrationEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
+        {
+            await _systemUnderTest.AuditRegistrationEvent(
+                nhsNumber, 
+                Supplier.Vision, 
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
+        }
+
+        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        public async Task AuditRegistrationEvent_SupplierIsDefault_Throws()
+        {
+            await _systemUnderTest.AuditRegistrationEvent(
+                "1684156", 
+                Supplier.Unknown,                 
+                "Test Audit", 
+                "SomeDetails '{0} {1}'", 
+                "with", "parameters");
+        }
 
         [TestMethod]
         public void TestCrossThreadAudits()
@@ -233,15 +428,15 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
 
             var auditLine1 = streamReader.ReadLine();
             auditLine1.Should().NotBeEmpty();
-            auditLine1.Should().EndWith(RubbishScope + " | Emis | Testing | Message with rubbish scope 1 |");
+            auditLine1.Should().EndWith(NhsNumber2 + " | Emis | Testing | Message with rubbish scope 1 |");
 
             var auditLine2 = streamReader.ReadLine();
             auditLine2.Should().NotBeEmpty();
-            auditLine2.Should().EndWith(NhsNumber + " | Emis | Testing | TaskedMethod |");
+            auditLine2.Should().EndWith(NhsNumber1 + " | Emis | Testing | TaskedMethod |");
 
             var auditLine3  = streamReader.ReadLine();
             auditLine3.Should().NotBeEmpty();
-            auditLine3.Should().EndWith(RubbishScope + " | Emis | Testing | Message with rubbish scope 2 |");
+            auditLine3.Should().EndWith(NhsNumber2 + " | Emis | Testing | Message with rubbish scope 2 |");
         }
 
         public void Dispose()
