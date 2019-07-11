@@ -10,6 +10,16 @@ const im1AppointmentRedirect = {
   url: '/appointments',
 };
 
+const adminHelpRedirect = {
+  condition: 'serviceJourneyRules/cdssAdminDisabled',
+  url: '/appointments',
+};
+
+const gpAdviceRedirect = {
+  condition: 'serviceJourneyRules/cdssAdviceDisabled',
+  url: '/appointments',
+};
+
 const routes = {
   ACCOUNT: {
     name: 'account',
@@ -53,6 +63,22 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    redirectRules: [
+      adminHelpRedirect,
+    ],
+  },
+  APPOINTMENT_GP_ADVICE: {
+    name: 'appointments-gp-advice',
+    path: '/appointments/gp-advice',
+    crumb: {
+      i8nKey: 'appointmentsGpAdvice',
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
+    redirectRules: [
+      gpAdviceRedirect,
+    ],
   },
   APPOINTMENT_BOOK_NOJS: {
     name: 'appointments-book-noJs',
@@ -605,6 +631,7 @@ export const {
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CANCEL_NOJS,
   APPOINTMENT_CONFIRMATIONS,
+  APPOINTMENT_GP_ADVICE,
   APPOINTMENT_INFORMATICA,
   AUTH_RETURN,
   BEGINLOGIN,

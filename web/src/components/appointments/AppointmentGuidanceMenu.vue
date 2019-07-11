@@ -10,7 +10,7 @@
           :aria-label="`${$t('appointments.guidance.menuItem1.header')}.
             ${$t('appointments.guidance.menuItem1.text')}`"
           data-purpose="text_link">
-          <a id="btn_gp_help"
+          <a id="btn_symptoms_link"
              :href="symptomsPath"
              :class="$style['no-decoration']"
              @click="navigate($event)">
@@ -20,23 +20,40 @@
           </a>
         </analytics-tracked-tag>
       </li>
-      <li role="link">
+      <sjr-if journey="cdssAdmin" tag="li" role="link">
         <analytics-tracked-tag
           id="btn_gpHelpNoAppointment"
           :class="$style['no-decoration']"
+          :text="$t('appointments.guidance.menuItem2.header')"
+          :aria-label="`${$t('appointments.guidance.menuItem2.header')}.
+            ${$t('appointments.guidance.menuItem2.text')}`"
+          data-purpose="text_link">
+          <a id="btn_gp_advice"
+             :href="adminHelpPath"
+             @click="navigate($event)">
+            <h2>{{ $t('appointments.guidance.menuItem2.header') }}</h2>
+            <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+              {{ $t('appointments.guidance.menuItem2.text') }}</p>
+          </a>
+        </analytics-tracked-tag>
+      </sjr-if>
+      <sjr-if journey="cdssAdvice" tag="li" role="link">
+        <analytics-tracked-tag
+          id="btn_gpAdvice"
+          :class="$style['no-decoration']"
           :text="$t('appointments.guidance.menuItem3.header')"
           :aria-label="`${$t('appointments.guidance.menuItem3.header')}.
-            ${$t('appointments.guidance.menuItem3.text')}`"
-          data-purpose="text_link">
+            ${$t('appointments.guidance.menuItem3.text')}`">
           <a id="btn_gp_help"
-             :href="adminHelpPath"
+             :href="gpAdvicePath"
+             :class="$style['no-decoration']"
              @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem3.header') }}</h2>
             <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
               {{ $t('appointments.guidance.menuItem3.text') }}</p>
           </a>
         </analytics-tracked-tag>
-      </li>
+      </sjr-if>
     </ul>
   </div>
 </template>
@@ -44,14 +61,16 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { SYMPTOMS, APPOINTMENT_ADMIN_HELP, APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
+import { SYMPTOMS, APPOINTMENT_ADMIN_HELP, APPOINTMENT_BOOKING_GUIDANCE, APPOINTMENT_GP_ADVICE } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import { createUri } from '@/lib/noJs';
+import SjrIf from '@/components/SjrIf';
 
 export default {
   name: 'AppointmentGuidanceMenu',
   components: {
     AnalyticsTrackedTag,
+    SjrIf,
   },
   computed: {
     symptomsPath() {
@@ -65,17 +84,29 @@ export default {
       };
       return createUri({ path: APPOINTMENT_ADMIN_HELP.path, noJs: noJsData });
     },
+    gpAdvicePath() {
+      return APPOINTMENT_GP_ADVICE.path;
+    },
   },
   methods: {
     navigate(event) {
+      let header;
+      let title;
       redirectTo(this, event.currentTarget.pathname, null);
       event.preventDefault();
 
       if (event.currentTarget.pathname === APPOINTMENT_ADMIN_HELP.path) {
+        if (event.currentTarget.id === 'btn_gp_help') {
+          header = this.$t('pageHeaders.appointmentAdminHelp');
+          title = this.$t('pageTitles.appointmentAdminHelp');
+          this.$store.dispatch('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE.path);
+        } else {
+          header = this.$t('pageHeaders.appointmentGpAdvice');
+          title = this.$t('pageTitles.appointmentGpAdvice');
+        }
+        this.$store.dispatch('header/updateHeaderText', header);
+        this.$store.dispatch('pageTitle/updatePageTitle', title);
         this.$store.dispatch('navigation/setNewMenuItem', 1);
-        this.$store.dispatch('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE.path);
-        this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.appointmentAdminHelp'));
-        this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.appointmentAdminHelp'));
       }
     },
   },

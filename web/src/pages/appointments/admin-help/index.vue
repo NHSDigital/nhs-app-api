@@ -22,7 +22,6 @@ import MessageText from '@/components/widgets/MessageText';
 import { noJsParameterName } from '@/lib/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
-import { INDEX } from '@/lib/routes';
 
 export default {
   components: {
@@ -38,11 +37,7 @@ export default {
       return this.$store.state.device.isNativeApp;
     },
   },
-  async asyncData({ store, redirect, req }) {
-    if (!(store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' || store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true)) {
-      redirect(302, INDEX.path, null);
-    }
-
+  async asyncData({ store, req }) {
     const body = get('body', req);
     const question = get('state.onlineConsultations.question', store);
 

@@ -1,7 +1,8 @@
 export const IM1_PROVIDER = 'im1';
 export const INFORMATICA = 'informatica';
 export const INIT = 'INIT';
-export const ONLINE_CONSULTATIONS = 'online-consultations';
+export const CDSS_ADVICE = 'cdssAdvice';
+export const CDSS_ADMIN = 'cdssAdmin';
 export const SET_RULES = 'SET_RULES';
 
 export const initialState = () => ({
@@ -10,6 +11,11 @@ export const initialState = () => ({
     appointments: {
       provider: IM1_PROVIDER,
     },
-    onlineConsultations: true,
+    cdssAdvice: {
+      provider: 'none',
+    },
+    cdssAdmin: {
+      provider: 'none',
+    },
   },
 });

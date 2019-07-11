@@ -41,23 +41,6 @@ Feature: Appointment Service with no Javascript
       | TPP       |
       | VISION    |
 
- # These tests navigate directly to the pages where the features are to be tested, to save time.
-
-  Scenario Outline: A <GP System> user is presented with guidance when booking an appointment and can proceed to check
-  their symptoms with javascript disabled
-    Given there are available appointment slots with different criteria for <GP System>
-    And I am logged in
-    When I retrieve the 'Appointment Guidance' page directly
-    And I click the 'Check symptoms' button
-    Then the Check My Symptoms page is displayed
-    And the Check My Symptoms page header and navigation menu are correct
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
   # Only EMIS has appointment slot guidance available
   # The guidance should always be visible with no javascript, in comparison to an expandable/collapsible box
   # with javascript

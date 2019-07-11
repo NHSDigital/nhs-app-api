@@ -2,44 +2,7 @@
 
   <div v-if="showTemplate" :class="[$style['pull-content'],
                                     !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <appointment-guidance v-if="isOnlineConsultationsEnabled"/>
-    <div v-else>
-      <h2 id="guidance_sub_header">
-        {{ $t('appointments.guidance.header') }}</h2>
-      <div :class="$style.info"
-           data-purpose="info">
-        <p>
-          {{ $t('appointments.guidance.text') }}</p>
-
-        <strong>
-          1. {{ $t('appointments.guidance.li1.header') }}</strong>
-        <p>
-          {{ $t('appointments.guidance.li1.text') }}</p>
-
-        <strong>
-          2. {{ $t('appointments.guidance.li2.header') }}</strong>
-        <p>
-          {{ $t('appointments.guidance.li2.text') }}</p>
-
-        <strong>
-          3. {{ $t('appointments.guidance.li3.header') }}</strong>
-        <p>
-          {{ $t('appointments.guidance.li3.text') }}</p>
-      </div>
-      <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
-                             :destination="symptomsPath"
-                             :tabindex="-1"
-                             data-purpose="generic-button">
-        <no-js-form :action="symptomsPath" :value="formData">
-          <generic-button id="btn_check_symptoms"
-                          :class="$style.button"
-                          tabindex="0"
-                          @click="onCheckSymptomClicked">
-            {{ $t('appointments.guidance.symptomButtonText') }}
-          </generic-button>
-        </no-js-form>
-      </analytics-tracked-tag>
-    </div>
+    <appointment-guidance-menu/>
 
     <no-js-form :action="appointmentBookingPath" :value="formData">
       <generic-button
@@ -51,7 +14,7 @@
       </generic-button>
     </no-js-form>
 
-    <generic-button v-if="$store.state.device.isNativeApp && isOnlineConsultationsEnabled"
+    <generic-button v-if="$store.state.device.isNativeApp"
                     id="back_btn"
                     :class="[$style.button, $style.grey]"
                     @click="onBackButtonClicked">
@@ -59,7 +22,7 @@
     </generic-button>
 
     <desktopGenericBackLink
-      v-if="isOnlineConsultationsEnabled && !$store.state.device.isNativeApp"
+      v-if="!$store.state.device.isNativeApp"
       :path="indexPath"
       :button-text="'appointments.guidance.backDesktopLinkText'"
       @clickAndPrevent="onBackButtonClicked"/>
@@ -73,8 +36,7 @@ import flow from 'lodash/fp/flow';
 /* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
 import { redirectTo, isTruthy } from '@/lib/utils';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import AppointmentGuidance from '@/components/appointments/AppointmentGuidanceMenu';
+import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import NoJsForm from '@/components/no-js/NoJsForm';
@@ -86,10 +48,9 @@ const isOnlineConsultationsEnabled = flow(
 
 export default {
   components: {
-    AnalyticsTrackedTag,
     GenericButton,
     NoJsForm,
-    AppointmentGuidance,
+    AppointmentGuidanceMenu,
     DesktopGenericBackLink,
   },
   data() {

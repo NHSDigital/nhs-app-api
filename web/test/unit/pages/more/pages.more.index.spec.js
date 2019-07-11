@@ -6,22 +6,19 @@ import { DATA_SHARING_PREFERENCES, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
 describe('more', () => {
   let wrapper;
   let $store;
-  let $env;
   let $router;
 
-  const mountAs = (enabled) => {
+  const mountAs = (cdssAdminEnabled) => {
     $router = createRouter();
-    $env = { ...$env, ONLINE_CONSULTATIONS_ENABLED: enabled };
     $store = createStore({
-      $env,
       state: {
         device: {
           isNativeApp: false,
         },
       },
     });
-
-    return mount(More, { $store, $env, $router });
+    $store.getters['serviceJourneyRules/cdssAdminEnabled'] = cdssAdminEnabled;
+    return mount(More, { $store, $router });
   };
 
   it('will include the organ donation link', () => {
@@ -30,33 +27,17 @@ describe('more', () => {
     expect(link.exists()).toBe(true);
   });
 
-  it('will not include the request Gp help link if online consultations disabled', () => {
+  it('will not include the request Gp help link if cdssAdmin disabled', () => {
     wrapper = mountAs(false);
-    expect(wrapper.find('#btn_gp_help').exists()).toBe(false);
-
-    wrapper = mountAs('false');
     expect(wrapper.find('#btn_gp_help').exists()).toBe(false);
   });
 
-  it('will include the request Gp help link if online consultations enabled', () => {
+  it('will include the request Gp help link if cdssAdmin enabled', () => {
     wrapper = mountAs(true);
-    expect(wrapper.find('#btn_gp_help').exists()).toBe(true);
-
-    wrapper = mountAs('true');
     expect(wrapper.find('#btn_gp_help').exists()).toBe(true);
   });
 
   describe('Methods', () => {
-    it('will return false when Online consultations env variable is falsy', () => {
-      wrapper = mountAs(false);
-      expect(wrapper.vm.isOnlineConsultationsEnabled).toBe(false);
-    });
-
-    it('will return true when Online consultations env variable is truthy', () => {
-      wrapper = mountAs(true);
-      expect(wrapper.vm.isOnlineConsultationsEnabled).toBe(true);
-    });
-
     it('will navigate to data preferences when data preferences menu item clicked', () => {
       wrapper = mountAs(false);
       wrapper.find('#btn_data_sharing').trigger('click');

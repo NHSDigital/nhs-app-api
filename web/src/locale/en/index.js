@@ -328,9 +328,13 @@ export default {
         header: 'Get help with symptoms',
         text: 'Find information about specific conditions',
       },
-      menuItem3: {
+      menuItem2: {
         header: 'Request GP help without an appointment',
         text: 'Get fit notes and GP letters or ask about recent tests',
+      },
+      menuItem3: {
+        header: 'Ask your GP for advice',
+        text: 'Consult your GP via a simple online form.',
       },
       symptomButtonText: 'Check symptoms',
       bookButtonText: 'Book new appointment',
@@ -889,6 +893,7 @@ export default {
     account: 'My account',
     appointments: 'My appointments',
     appointmentAdminHelp: 'GP help without an appointment',
+    appointmentGpAdvice: 'Ask your GP for advice',
     appointmentGuidance: 'Check before you book',
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
@@ -921,6 +926,7 @@ export default {
     account: 'My account',
     appointments: 'My appointments',
     appointmentAdminHelp: 'GP help without an appointment',
+    appointmentGpAdvice: 'Ask your GP for advice',
     appointmentGuidance: 'Check before you book - My appointments',
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',

@@ -21,7 +21,7 @@
           </a>
         </analytics-tracked-tag>
       </li>
-      <li v-if="isOnlineConsultationsEnabled">
+      <sjr-if journey="cdssAdmin" tag="li">
         <analytics-tracked-tag :text="$t('sc04.requestGpHelp.subheader')"
                                data-purpose="text_link">
           <a id="btn_gp_help"
@@ -32,37 +32,29 @@
             <p>{{ $t('sc04.requestGpHelp.body') }}</p>
           </a>
         </analytics-tracked-tag>
-      </li>
+      </sjr-if>
     </ul>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import get from 'lodash/fp/get';
-import flow from 'lodash/fp/flow';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
+import SjrIf from '@/components/SjrIf';
 import { DATA_SHARING_PREFERENCES, INDEX, APPOINTMENT_ADMIN_HELP, MORE } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
-import { isTruthy, redirectTo } from '@/lib/utils';
-
-const getOnlineConsultationEnabled = flow(
-  get('$store.app.$env.ONLINE_CONSULTATIONS_ENABLED'),
-  isTruthy,
-);
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     AnalyticsTrackedTag,
     OrganDonationLink,
+    SjrIf,
   },
   computed: {
     dataSharingPath() {
       return DATA_SHARING_PREFERENCES.path;
-    },
-    isOnlineConsultationsEnabled() {
-      return getOnlineConsultationEnabled(this);
     },
     requestAdminHelpPath() {
       const noJsData = {

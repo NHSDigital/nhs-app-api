@@ -8,6 +8,7 @@ import {
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CONFIRMATIONS,
+  APPOINTMENT_GP_ADVICE,
   APPOINTMENT_INFORMATICA,
   CHECKYOURSYMPTOMS,
   GP_FINDER,
@@ -96,6 +97,10 @@ export default function ({ route, store, app }) {
     case APPOINTMENT_ADMIN_HELP.name:
       route.meta.headerKey = 'pageHeaders.appointmentAdminHelp';
       route.meta.pageTitleKey = 'pageTitles.appointmentAdminHelp';
+      break;
+    case APPOINTMENT_GP_ADVICE.name:
+      route.meta.headerKey = 'pageHeaders.appointmentGpAdvice';
+      route.meta.pageTitleKey = 'pageTitles.appointmentGpAdvice';
       break;
     case GP_FINDER.name:
     case GP_FINDER_RESULTS.name:

@@ -6,6 +6,8 @@ export default {
   },
   async load({ commit }) {
     const response = await this.app.$http.getV1PatientJourneyConfiguration();
-    commit(SET_RULES, response);
+    if (response) {
+      commit(SET_RULES, response);
+    }
   },
 };
