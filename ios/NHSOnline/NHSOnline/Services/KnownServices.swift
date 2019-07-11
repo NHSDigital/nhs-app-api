@@ -108,8 +108,18 @@ class KnownServices {
         let openSourceLicensesURL: URL = URL(string: config.OpenSourceLicencesURL)!
         let medicalRecordAbbreviationsURL: URL = URL(string: config.MedicalRecordAbbreviationsURL)!
         let accessibilityStatementURL: URL = URL(string: config.AccessibilityStatementURL)!
+        
+        let helpURLOld: URL = URL(string: config.HelpURLOld)!
+        let termsAndConditionsURLOld: URL = URL(string: config.TermsAndConditionsURLOld)!
+        let privacyPolicyURLOld: URL = URL(string: config.PrivacyPolicyURLOld)!
+        let cookiesPolicyURLOld: URL = URL(string: config.CookiesPolicyURLOld)!
+        let openSourceLicensesURLOld: URL = URL(string: config.OpenSourceLicencesURLOld)!
+        let medicalRecordAbbreviationsURLOld: URL = URL(string: config.MedicalRecordAbbreviationsURLOld)!
+        let accessibilityStatementURLOld: URL = URL(string: config.AccessibilityStatementURLOld)!
+        
         let biometricsHelpURl: URL = URL(string: config.BiometricHelpURL)!
-        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL, biometricsHelpURl]
+        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL, biometricsHelpURl,
+                        helpURLOld, termsAndConditionsURLOld, privacyPolicyURLOld, cookiesPolicyURLOld, openSourceLicensesURLOld, medicalRecordAbbreviationsURLOld, accessibilityStatementURLOld]
     }
     
     private func buildKnownServices() {

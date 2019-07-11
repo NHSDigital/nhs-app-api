@@ -141,20 +141,34 @@
 	<string>$(APP_SCHEME)</string>
 	<key>MedicalRecordAbbreviationsURL</key>
 	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL)</string>
+	<key>MedicalRecordAbbreviationsURLOld</key>
+	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL_OLD)</string>
 	<key>HelpURL</key>
 	<string>https://$(HELP_URL)</string>
+	<key>HelpURLOld</key>
+	<string>https://$(HELP_URL_OLD)</string>
 	<key>TermsAndConditionsURL</key>
 	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
+	<key>TermsAndConditionsURLOld</key>
+	<string>https://$(TERMS_AND_CONDITIONS_URL_OLD)</string>
 	<key>PrivacyPolicyURL</key>
 	<string>https://$(PRIVACY_POLICY)</string>
+	<key>PrivacyPolicyURLOld</key>
+	<string>https://$(PRIVACY_POLICY_OLD)</string>
 	<key>CookiesPolicyURL</key>
 	<string>https://$(COOKIES_POLICY_URL)</string>
+	<key>CookiesPolicyURLOld</key>
+	<string>https://$(COOKIES_POLICY_URL_OLD)</string>
 	<key>OpenSourceLicencesURL</key>
 	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
+	<key>OpenSourceLicencesURLOld</key>
+	<string>https://$(OPEN_SOURCE_LICENCE_URL_OLD)</string>
 	<key>DataSharingUrlPath</key>
 	<string>$(DATA_SHARING_URL)</string>
 	<key>AccessibilityStatementURL</key>
 	<string>https://$(ACCESSIBILITY_STATEMENT_URL)</string>
+	<key>AccessibilityStatementURLOld</key>
+	<string>https://$(ACCESSIBILITY_STATEMENT_URL_OLD)</string>
 	<key>ResponseWaitingTime</key>
 	<integer>20</integer>
 	<key>SessionTimeout</key>

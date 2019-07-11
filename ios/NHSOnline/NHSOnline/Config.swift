@@ -6,7 +6,7 @@ struct Config: Decodable {
         case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
-        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL
+        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
         case BiometricHelpURL, FidoLoginErrorPath, BiometricRedirectURL, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
         case MenuTimeoutSeconds
@@ -43,6 +43,14 @@ struct Config: Decodable {
     let OpenSourceLicencesURL: String
     let MedicalRecordAbbreviationsURL: String
     let AccessibilityStatementURL: String
+    let HelpURLOld: String
+    let TermsAndConditionsURLOld: String
+    let PrivacyPolicyURLOld: String
+    let CookiesPolicyURLOld: String
+    let OpenSourceLicencesURLOld: String
+    let MedicalRecordAbbreviationsURLOld: String
+    let AccessibilityStatementURLOld: String
+    
     let BaseApiUrl: String
     let ConfigurationApiPath: String
     let AppStoreUrl: String

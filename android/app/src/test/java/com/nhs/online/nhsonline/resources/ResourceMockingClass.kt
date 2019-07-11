@@ -45,7 +45,14 @@ open class ResourceMockingClass {
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/"
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/",
+
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/"
             )
             on { getString(R.string.nhs_111_header_description) } doReturn  "one one one Online"
 

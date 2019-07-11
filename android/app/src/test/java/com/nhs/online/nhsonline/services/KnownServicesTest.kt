@@ -215,7 +215,7 @@ class KnownServicesTest : ResourceMockingClass() {
     @Test
     fun isExternalBrowserService_foundService() {
         val result =
-            testKnownServices.shouldURLOpenExternally(URL("https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/"))
+            testKnownServices.shouldURLOpenExternally(URL("https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/"))
 
         Assert.assertEquals(true, result)
     }

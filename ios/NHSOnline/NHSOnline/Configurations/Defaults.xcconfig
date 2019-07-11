@@ -17,13 +17,22 @@ NHS_ONLINE_REQUIRED_QUERY_STRING = ?source=ios
 CHECK_SYMPTOMS_URL_PATH = /check-your-symptoms
 DATA_SHARING_URL = /data-sharing
 APP_SCHEME = nhsapp
-MEDICAL_RECORD_ABBREVIATIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/
-HELP_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
-TERMS_AND_CONDITIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
-PRIVACY_POLICY = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
-COOKIES_POLICY_URL= www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
-OPEN_SOURCE_LICENCE_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/
-ACCESSIBILITY_STATEMENT_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/
+MEDICAL_RECORD_ABBREVIATIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/
+HELP_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/
+TERMS_AND_CONDITIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/
+PRIVACY_POLICY = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/
+COOKIES_POLICY_URL= www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/
+OPEN_SOURCE_LICENCE_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/
+ACCESSIBILITY_STATEMENT_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/
+
+MEDICAL_RECORD_ABBREVIATIONS_URL_OLD = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/
+HELP_URL_OLD = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
+TERMS_AND_CONDITIONS_URL_OLD = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
+PRIVACY_POLICY_OLD = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
+COOKIES_POLICY_URL_OLD= www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
+OPEN_SOURCE_LICENCE_URL_OLD = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/
+ACCESSIBILITY_STATEMENT_URL_OLD = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/
+
 RESPONSE_WAITING_TIME = 20
 CONFIGURATION_API_PATH = configuration?deviceName=iOS&nativeAppVersion=%@
 APP_STORE_SCHEME = itms-apps
