@@ -5,9 +5,9 @@
                        :class="[$style['record-content'],
                                 getCollapseState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else-if="!isCollapsed" :class="[$style['record-content'],
-                                         getCollapseState,
-                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
+  <div v-else-if="!isCollapsed"
+       :class="[$style['record-content'], getCollapseState,
+                !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">
     <div v-if="supplier === 'TPP' || supplier === 'EMIS'">
       <div v-for="(testResult, testIndex) in orderedTestResults"

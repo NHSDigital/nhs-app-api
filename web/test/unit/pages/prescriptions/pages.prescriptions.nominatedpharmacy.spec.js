@@ -40,6 +40,9 @@ describe('prescriptions/index.vue', () => {
       },
       $router,
       $store,
+      stubs: {
+        'page-title': '<div></div>',
+      },
     });
   };
 

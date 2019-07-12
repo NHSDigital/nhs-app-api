@@ -1,0 +1,51 @@
+<template>
+  <div :class="$style['nhsuk-card']">
+    <slot/>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Card',
+};
+</script>
+
+<style module lang="scss" scoped>
+  @import '~nhsuk-frontend/packages/core/settings/colours';
+  @import '~nhsuk-frontend/packages/core/tools/mixins';
+  @import '~nhsuk-frontend/packages/core/tools/spacing';
+  @import '~nhsuk-frontend/packages/core/settings/spacing';
+  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
+  @import '~nhsuk-frontend/packages/core/tools/typography';
+  @import '~nhsuk-frontend/packages/core/settings/typography';
+
+  /* ==========================================================================
+   COMPONENTS / #card
+   ========================================================================== */
+
+  @mixin card($card-background-color, $card-text-color) {
+
+    @include top-and-bottom();
+    @include nhsuk-responsive-margin(7, 'bottom');
+    @include nhsuk-responsive-margin(7, 'top');
+    @include nhsuk-responsive-padding(5);
+
+    background-color: $card-background-color;
+    color: $card-text-color;
+
+    @include mq($media-type: print) {
+      border: 1px solid $nhsuk-print-text-color;
+      page-break-inside: avoid;
+    }
+  }
+
+  .nhsuk-card {
+    @include card($color_nhsuk-white, $nhsuk-text-color);
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 20px;
+    border: 1px solid $color_nhsuk-grey-3;
+  }
+
+</style>

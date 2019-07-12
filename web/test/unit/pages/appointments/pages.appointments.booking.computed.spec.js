@@ -40,6 +40,7 @@ const createBookingPage = ($store) => {
     },
     stubs: {
       'nuxt-link': '<a>Back</a>',
+      'page-title': '<div></div>',
     },
   });
 };

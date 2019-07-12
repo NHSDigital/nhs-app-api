@@ -29,6 +29,9 @@ describe('appointments confirmation page', () => {
   const mountConfirmation = () => mount(Confirmation, {
     $store: createStore({ state }),
     $style,
+    stubs: {
+      'page-title': '<div></div>',
+    },
   });
 
   describe('errors', () => {

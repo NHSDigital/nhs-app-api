@@ -52,6 +52,7 @@ describe('Admin Help page', () => {
       showTemplate: () => true,
       stubs: {
         orchestrator: '<div class="orchestrator"></div>',
+        'page-title': '<div></div>',
       },
     });
   };

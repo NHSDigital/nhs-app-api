@@ -56,7 +56,11 @@ export default {
             case 'modal/SHOW_MODAL':
               if (this.$store.state.modal.config.content) {
                 this.$nextTick(() => {
-                  focusTrap.activate();
+                  try {
+                    return focusTrap.activate();
+                  } catch (e) {
+                    return e;
+                  }
                 });
               }
               break;

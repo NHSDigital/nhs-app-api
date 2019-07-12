@@ -36,7 +36,7 @@ export default {
   font-weight: normal;
   vertical-align: middle;
   padding-left: 0;
-  margin: 40px 0;
+  margin: 0 0 40px 0;
  }
 
 </style>

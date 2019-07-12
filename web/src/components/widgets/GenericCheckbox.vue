@@ -1,5 +1,5 @@
 <template>
-  <div class="nhsuk-checkboxes__item" style="padding: 0 0 0 40px">
+  <div class="nhsuk-checkboxes__item nhsuk-u-padding-bottom-1" style="padding: 0 0 0 40px">
     <input :id="checkboxId"
            ref="checkbox"
            v-model="selectedCheckbox"

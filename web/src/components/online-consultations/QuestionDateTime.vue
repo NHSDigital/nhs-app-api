@@ -8,17 +8,22 @@
         {{ singleError }}
       </span>
     </div>
-    <div :class="$style.dateTimeContainer">
-      <generic-date-input :id="id"
-                          v-model="dateTimeValue"
-                          :name="name"
-                          :error="error"
-                          :required="required"/>
-      <generic-time-input :id="id"
-                          v-model="dateTimeValue"
-                          :name="name"
-                          :error="error"
-                          :required="required"/>
+    <div>
+      <form>
+        <generic-date-input :id="id"
+                            v-model="dateTimeValue"
+                            :name="name"
+                            :error="error"
+                            :required="required"/>
+      </form>
+      <br>
+      <form>
+        <generic-time-input :id="id"
+                            v-model="dateTimeValue"
+                            :name="name"
+                            :error="error"
+                            :required="required"/>
+      </form>
     </div>
   </div>
 </template>
@@ -94,7 +99,4 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-.dateTimeContainer{
-  display: inline-flex;
-}
 </style>

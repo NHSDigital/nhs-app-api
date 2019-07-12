@@ -12,7 +12,7 @@ export default {
   props: {
     shouldShowDesktopVersion: {
       type: Boolean,
-      default: () => false,
+      default: () => true,
     },
   },
 };
@@ -31,7 +31,8 @@ export default {
      font-size: 2.250em;
      font-weight: 600;
      line-height: 1.250em;
-     padding-top: 1em;
+     padding-top: 16px;
+     padding-bottom: 16px;
    }
  }
 </style>

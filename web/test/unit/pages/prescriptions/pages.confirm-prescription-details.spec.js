@@ -23,7 +23,12 @@ describe('confirm prescriptions', () => {
     $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = hasNoNominatedPharmacy;
     $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = sjrEnabled;
 
-    return mount(ConfirmPrescription, { $store });
+    return mount(ConfirmPrescription, {
+      $store,
+      stubs: {
+        'page-title': '<div></div>',
+      },
+    });
   };
 
   describe('nominated pharmacy summary', () => {

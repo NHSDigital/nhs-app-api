@@ -22,7 +22,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     val bookButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='header-companion-button']",
+            webDesktopLocator = "//*[@id='book-appointments-button']",
             androidLocator = "//*[@id='book-appointments-button']",
             iOSLocator = "//*[@id='book-appointments-button']",
             page = this

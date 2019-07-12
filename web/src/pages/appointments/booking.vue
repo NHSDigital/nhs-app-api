@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" class="pull-content">
+  <div v-if="showTemplate">
     <form :action="bookingPath">
       <input :name="noJsInputName" :value="JSON.stringify(noJsData)" type="hidden">
       <ul :class="$style['sr-only']" role="list"
@@ -11,60 +11,81 @@
         </li>
       </ul>
 
-      <message-dialog v-if="noAvailableAppointments" message-type="warning">
-        <message-text :is-header="true">
-          {{ $t('appointments.booking.noAppointmentsAvailable.title') }}
-        </message-text>
-        <message-text>
-          {{ $t('appointments.booking.noAppointmentsAvailable.line1') }}
-        </message-text>
-        <message-text>
-          {{ $t('appointments.booking.noAppointmentsAvailable.line2') }}
-        </message-text>
-      </message-dialog>
+      <div v-if="noAvailableAppointments" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <message-dialog message-type="warning">
+            <message-text :is-header="true">
+              {{ $t('appointments.booking.noAppointmentsAvailable.title') }}
+            </message-text>
+            <message-text>
+              {{ $t('appointments.booking.noAppointmentsAvailable.line1') }}
+            </message-text>
+            <message-text>
+              {{ $t('appointments.booking.noAppointmentsAvailable.line2') }}
+            </message-text>
+          </message-dialog>
+        </div>
+      </div>
 
-      <filters
-        v-if="availableAppointments"
-        v-model="selectedOptions"
-        :options="filtersOptions"
-        :guidance-msg="bookingGuidanceMsg"
-      />
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <filters
+            v-if="availableAppointments"
+            v-model="selectedOptions"
+            :options="filtersOptions"
+            :guidance-msg="bookingGuidanceMsg"/>
+        </div>
+      </div>
 
-      <noscript inline-template>
-        <button :class="[this.$style.button, this.$style.desktopWeb]">
-        {{ $t('appointments.booking.nojs.findButton') }}
-        </button>
-      </noscript>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <noscript inline-template>
+            <button class="nhsuk-button">
+            {{ $t('appointments.booking.nojs.findButton') }}
+            </button>
+          </noscript>
+        </div>
+      </div>
 
-      <slot-list ref="slot_list" :available-slots="availableSlots" />
-
-      <div ref="noMatching" tabindex="-1">
-        <message-dialog v-if="showNoMatchingWarning"
-                        :icon-text="$t('appointments.booking.adjustSearch.title')"
-                        message-type="warning">
-          <message-text>
-            {{ $t('appointments.booking.adjustSearch.line1') }}
-          </message-text>
-          <message-text>
-            {{ $t('appointments.booking.adjustSearch.line2') }}
-          </message-text>
-        </message-dialog>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <slot-list ref="slot_list" :available-slots="availableSlots" />
+        </div>
+      </div>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <div ref="noMatching" tabindex="-1">
+            <message-dialog v-if="showNoMatchingWarning"
+                            :icon-text="$t('appointments.booking.adjustSearch.title')"
+                            message-type="warning">
+              <message-text>
+                {{ $t('appointments.booking.adjustSearch.line1') }}
+              </message-text>
+              <message-text>
+                {{ $t('appointments.booking.adjustSearch.line2') }}
+              </message-text>
+            </message-dialog>
+          </div>
+        </div>
       </div>
     </form>
 
-    <generic-button v-if="loadComplete && $store.state.device.isNativeApp"
-                    id="back-to-appointments"
-                    :class="[$style.button, $style.grey]"
-                    @click.stop.prevent="goBack">
-      {{ $t('appointments.booking.backButtonText') }}
-    </generic-button>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <generic-button v-if="loadComplete && $store.state.device.isNativeApp"
+                        id="back-to-appointments"
+                        :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                        @click.stop.prevent="goBack">
+          {{ $t('appointments.booking.backButtonText') }}
+        </generic-button>
 
-    <desktopGenericBackLink
-      v-else-if="loadComplete"
-      :path="appointmentsPath"
-      :button-text="'appointments.booking.desktopBackButtonText'"
-      @clickAndPrevent="goBack"
-    />
+        <desktopGenericBackLink
+          v-else-if="loadComplete"
+          :path="appointmentsPath"
+          :button-text="'appointments.booking.desktopBackButtonText'"
+          @clickAndPrevent="goBack"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -105,6 +126,7 @@ const getSlots = get('state.availableAppointments.slots');
 const hasLoaded = get('state.availableAppointments.hasLoaded');
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     MessageDialog,
@@ -240,10 +262,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/buttons";
 @import "../../style/accessibility";
-@import "../../style/textstyles";
-@import "../../style/fonts";
 
 div:focus {
   outline: none !important;

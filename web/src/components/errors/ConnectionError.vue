@@ -28,6 +28,13 @@ export default {
     MessageText,
   },
   mixins: [ErrorMessageMixin],
+  props: {
+    withTitle: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
+  },
   computed: {
     isVisible() {
       return this.showError();

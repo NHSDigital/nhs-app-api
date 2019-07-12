@@ -1,6 +1,17 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content',
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]" >
+  <div v-if="showTemplate">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <no-js-form :action="getContinueButtonPath()" method="get" :value="{}">
+          <button v-if="hasLoaded"
+                  id="order-prescription-button"
+                  class="nhsuk-button"
+                  @click.stop.prevent="onOrderRepeatPrescriptionClicked">
+            {{ $t('rp01.orderPrescriptionButton') }}
+          </button>
+        </no-js-form>
+      </div>
+    </div>
     <sjr-if journey="nominatedPharmacy">
       <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
         <ul :class="$style['list-menu-white']" role="list">
@@ -8,13 +19,11 @@
             <analytics-tracked-tag
               id="nominated-pharmacy"
               :click-func="onNominatedPharmacyDetailClicked"
-              :class="$style['no-decoration']"
               :text="$t('rp01.nominatedPharmacy')"
               :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
               tag="a">
               <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
-              <p id="pharmacy-name" :class="!$store.state.device.isNativeApp
-                && $style.desktopWeb">
+              <p id="pharmacy-name">
                 {{ pharmacyName }}
               </p>
             </analytics-tracked-tag>
@@ -22,12 +31,14 @@
         </ul>
       </div>
     </sjr-if>
-    <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
+    <div v-if="showNoPrescriptions"
+         data-purpose="no-prescriptions-error"
+         class="nhsuk-u-padding-bottom-6">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
-      <p>
+      <p class="nhsuk-u-padding-bottom-2">
         {{ $t('rp01.empty.line1') }}
       </p>
-      <p>
+      <p class="nhsuk-u-padding-bottom-2">
         {{ $t('rp01.empty.line2') }}
       </p>
     </div>
@@ -37,28 +48,23 @@
         <div v-if="getMedicationCourseStatus(key) != null">
           <h2>{{ getMedicationCourseStatus(key) }}</h2>
         </div>
-        <div v-for="(prescriptionCourse, index) in statusGroup"
-             :key="index"
-             data-label="historic-prescription">
-          <historic-prescription :prescription-course="prescriptionCourse" />
-        </div>
+
+        <CardGroup v-for="(prescriptionCourse, index) in statusGroup"
+                   :key="index" role="list" class="nhsuk-grid-row">
+          <CardGroupItem class="nhsuk-grid-column-full">
+            <Card data-label="historic-prescription">
+              <historic-prescription :prescription-course="prescriptionCourse" />
+            </Card>
+          </CardGroupItem>
+        </CardGroup>
+
       </div>
     </div>
-
-    <no-js-form v-if="$store.state.device.isNativeApp"
-                :action="getContinueButtonPath()" method="get" :value="{}">
-      <floating-button-bottom v-if="hasLoaded"
-                              id="order-prescription-button"
-                              @click.stop.prevent="onOrderRepeatPrescriptionClicked">
-        {{ $t('rp01.orderPrescriptionButton') }}
-      </floating-button-bottom>
-    </no-js-form>
   </div>
 </template>
 
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
@@ -67,14 +73,20 @@ import SjrIf from '@/components/SjrIf';
 import { each, isEmpty, keys, sortBy } from 'lodash/fp';
 import { redirectTo } from '@/lib/utils';
 import { NOMINATED_PHARMACY } from '@/lib/routes';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import Card from '@/components/widgets/card/Card';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
-    FloatingButtonBottom,
     HistoricPrescription,
     NoJsForm,
     SjrIf,
+    Card,
+    CardGroupItem,
+    CardGroup,
   },
   data() {
     return {
@@ -157,29 +169,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/spacings";
 @import '../../style/listmenu';
-@import "../../style/fonts";
-
-div {
-  &.desktopWeb {
-  max-width: 540px;
-  p {
-    font-family: $default_web;
-    font-weight: normal;
-    }
-  }
-}
-.desktopWeb {
-   font-family: $default-web;
-   max-width: 540px + 64px; // 64px (2em) to compasensate padding apply to the div by main.scss
-  p {
-   font-family: $default-web;
-   font-weight: lighter;
-   max-width: 540px;
-  }
- }
-.above-float-button {
-  margin-bottom: $marginBottomFullScreen;
-}
 </style>

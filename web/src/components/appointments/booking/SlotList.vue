@@ -1,5 +1,5 @@
 <template>
-  <form :class="[$style.appointmentTime, !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <form :class="[$style.appointmentTime]">
     <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
       <div v-if="hasAppointments(daySlots)" data-purpose="appointment-day">
         <h2 data-purpose="appointment-day-heading">{{ formatDate(daySlots[0]) }}</h2>

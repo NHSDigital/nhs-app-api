@@ -36,6 +36,7 @@ const createBookingPage = ($store, data) => {
       showTemplate: () => true,
     },
     stubs: {
+      'page-title': '<div></div>',
       'nuxt-link': '<a>Back</a>',
     },
   });

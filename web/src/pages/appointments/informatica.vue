@@ -1,23 +1,23 @@
 <template>
-  <div v-if="showTemplate"
-       :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]" >
-    <div>
-      <h2 id="guidance_sub_header">
-        {{ $t('appointments.informatica.header') }}
-      </h2>
-      <div data-purpose="info" :class="$style.info">
-        <p>{{ $t('appointments.informatica.description') }}</p>
+  <div v-if="showTemplate" >
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h2 id="guidance_sub_header">
+          {{ $t('appointments.informatica.header') }}
+        </h2>
+        <div :class="$style.info" data-purpose="info">
+          <p>{{ $t('appointments.informatica.description') }}</p>
 
-        <p>
-          {{ $t('appointments.informatica.link.prefix') }}
-          <analytics-tracked-tag
-            :href="informaticaUrl"
-            :text="$t('appointments.informatica.link.text')"
-            tag="a" target="_blank">
-            {{
-              $t('appointments.informatica.link.text')
-            }}</analytics-tracked-tag>.
-        </p>
+          <p>
+            {{ $t('appointments.informatica.link.prefix') }}
+            <analytics-tracked-tag
+              :href="informaticaUrl"
+              :text="$t('appointments.informatica.link.text')"
+              tag="a" target="_blank">
+              {{ $t('appointments.informatica.link.text') }}
+            </analytics-tracked-tag>.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -27,6 +27,8 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
+  layout: 'nhsuk-layout',
+
   components: {
     AnalyticsTrackedTag,
   },

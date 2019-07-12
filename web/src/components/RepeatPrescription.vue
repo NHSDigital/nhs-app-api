@@ -50,10 +50,7 @@ export default {
     }),
     repeatPrescriptionCourses() {
       const { repeatPrescriptionCourses } = this.$store.state.repeatPrescriptionCourses;
-      if (typeof repeatPrescriptionCourses === 'undefined' || !repeatPrescriptionCourses || repeatPrescriptionCourses.length === 0) {
-        return null;
-      }
-      return repeatPrescriptionCourses;
+      return (repeatPrescriptionCourses || []).length ? repeatPrescriptionCourses : null;
     },
   },
   methods: {

@@ -1,9 +1,8 @@
 <template>
-  <div v-if="activeButton && !(showApiError || hasConnectionProblem)"
-       :class="$style.headerCompanion">
+  <div v-if="activeButton && !(showApiError || hasConnectionProblem)">
     <no-js-form :action="path" :value="activeButton.formData">
       <button id="header-companion-button"
-              :class="$style.companionButton"
+              class="nhsuk-button"
               @click.stop.prevent="onButtonClicked(path)">
         {{ activeButton.text }}
       </button>
@@ -69,40 +68,4 @@ export default {
   },
 };
 </script>
-<style module lang="scss" scoped>
-  @import '../../style/colours';
-  @import '../../style/screensizes';
-  @import '../../style/textstyles';
-  @import "../../style/fonts";
-  @import '../../style/desktopcomponentsizes';
 
-  .headerCompanion {
-    @include main-container-width;
-    display: block;
-    margin: 1em auto;
-
-    .companionButton {
-      @include button;
-      box-sizing: border-box;
-      background-color: $nhs_blue;
-      border: none;
-      border-radius: 0.125em;
-      outline: none;
-      transition: all ease 0.5s;
-      cursor: pointer;
-      width: auto;
-      padding: 1em 16px 16px;
-      display: block;
-    }
-
-    .companionButton:focus {
-      outline-color: $focus_highlight;
-      box-shadow: 0 0 0 4px $focus_highlight;
-    }
-
-    .companionButton:hover {
-      outline-color: $focus_highlight;
-      box-shadow: 0 0 0 4px $focus_highlight;
-    }
-  }
-</style>

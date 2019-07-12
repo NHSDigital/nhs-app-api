@@ -72,9 +72,10 @@ export default {
       window.validateSession || (() => this.$store.dispatch('session/validate'));
   },
   created() {
-    if (Sources.isNative(this.$route.query.source)) {
+    const { source } = this.$route.query;
+    if (Sources.isNative(source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
-      this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
+      this.$store.dispatch('device/setSourceDevice', source);
     }
 
     if (process.browser) {

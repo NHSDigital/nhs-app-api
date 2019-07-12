@@ -1,146 +1,165 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['pull-content'],
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <div>
-      <form-post :action="confirmBookingPath">
-        <input :value="confirmationMessageKey" type="hidden" name="successMessageKey">
-        <input :value="slotEndTime" type="hidden" name="endTime">
-        <input :value="slotId" type="hidden" name="slotId">
-        <input :value="slotStartTime" type="hidden" name="startTime">
-        <message-dialog v-if="showError" message-type="error" role="alert">
-          <message-text data-purpose="error-heading">
-            {{ $t('appointments.confirmation.errorDialog') }}
-          </message-text>
-          <div data-purpose="error-dialog-list">
-            <message-list>
-              <li v-if="showTelephoneError" data-purpose="telephone-error">
-                <p>{{ $t('appointments.confirmation.noPhoneNumberError') }}</p>
-              </li>
-              <li v-if="showReasonError" data-purpose="reason-error">
-                <p>{{ $t('appointments.confirmation.noReasonError') }}</p>
-              </li>
-            </message-list>
-          </div>
-        </message-dialog>
+  <div v-if="showTemplate">
+    <form-post :action="confirmBookingPath">
+      <input :value="confirmationMessageKey" type="hidden" name="successMessageKey">
+      <input :value="slotEndTime" type="hidden" name="endTime">
+      <input :value="slotId" type="hidden" name="slotId">
+      <input :value="slotStartTime" type="hidden" name="startTime">
 
-        <div :class="$style.info"
-             data-purpose="info">
-          <p>
-            {{ $t('appointments.confirmation.info') }}</p>
+      <div v-if="showError" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <message-dialog message-type="error" role="alert">
+            <message-text data-purpose="error-heading">
+              {{ $t('appointments.confirmation.errorDialog') }}
+            </message-text>
+            <div data-purpose="error-dialog-list">
+              <message-list>
+                <li v-if="showTelephoneError" data-purpose="telephone-error">
+                  <p>{{ $t('appointments.confirmation.noPhoneNumberError') }}</p>
+                </li>
+                <li v-if="showReasonError" data-purpose="reason-error">
+                  <p>{{ $t('appointments.confirmation.noReasonError') }}</p>
+                </li>
+              </message-list>
+            </div>
+          </message-dialog>
         </div>
+      </div>
 
-        <appointment-slot v-if="slot" :appointment="slot" :show-cancellation-link="false"
-                          data-purpose="appointment-info"
-                          date-time-header="h2" />
-        <div v-if="showPhoneNumber()" :class="[$style.form, $style.phoneNumberForm]"
-             role="form" data-purpose="phone-number">
-          <fieldset :class="$style.fieldsetTelephoneNumberRadio">
-            <legend id="telephone-input-label" :class="$style.textPhoneNumberLabel">
-              {{ $t('appointments.confirmation.telephoneNumberLabel') }}
-            </legend>
-            <error-message v-if="showTelephoneError"
-                           id="telephone-error-label">
-              {{ $t('appointments.confirmation.noPhoneNumberError') }}
-            </error-message>
-            <div v-if="isJavascriptOn">
-              <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
-                   :key="index" :class="$style.customRadioItem">
-                <input :id="patientTelephoneNumber.telephoneNumber"
-                       v-model="telephoneNumber"
-                       :value="patientTelephoneNumber.telephoneNumber"
-                       :class="$style.customRadio"
-                       type="radio"
-                       name="radio"
-                       @change="selected">
-                <label :for="patientTelephoneNumber.telephoneNumber"
-                       :class="$style.customRadioLabel"
-                       @keypress="onKeyDown" @click="selected">
-                  {{ patientTelephoneNumber.telephoneNumber }}
-                </label>
-              </div >
-              <div v-if="patientTelephoneNumbers.length > 0" :class="$style.customRadioItem">
-                <input :id="'otherPhoneNumberRadioInput'"
-                       :class="$style.customRadio"
-                       type="radio"
-                       name="radio"
-                       @change="selected">
-                <label :for="'otherPhoneNumberRadioInput'"
-                       :class="$style.customRadioLabel"
-                       @keypress="onKeyDown" @click="selected">
-                  Use other phone number
-                </label>
+      <div class="nhsuk-grid-row" data-purpose="info">
+        <div class="nhsuk-grid-column-full">
+          <p class="nhsuk-u-padding-bottom-2">
+            {{ $t('appointments.confirmation.info') }}
+          </p>
+        </div>
+      </div>
+
+      <CardGroup class="nhsuk-grid-row">
+        <CardGroupItem class="nhsuk-grid-column-one-half">
+          <Card>
+            <appointment-slot v-if="slot" :appointment="slot"
+                              :show-cancellation-link="false"
+                              data-purpose="appointment-info"
+                              date-time-header="h2"/>
+          </Card>
+        </CardGroupItem>
+      </CardGroup>
+
+      <div v-if="showPhoneNumber()" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <div role="form" data-purpose="phone-number">
+            <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
+              <legend id="telephone-input-label" class="nhsuk-fieldset__legend">
+                {{ $t('appointments.confirmation.telephoneNumberLabel') }}
+              </legend>
+              <error-message v-if="showTelephoneError"
+                             id="telephone-error-label">
+                {{ $t('appointments.confirmation.noPhoneNumberError') }}
+              </error-message>
+              <div v-if="isJavascriptOn">
+                <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
+                     :key="index" class="nhsuk-radios__item">
+                  <input :id="patientTelephoneNumber.telephoneNumber"
+                         v-model="telephoneNumber"
+                         :value="patientTelephoneNumber.telephoneNumber"
+                         type="radio"
+                         name="radio"
+                         class="nhsuk-radios__input"
+                         @change="selected">
+                  <label :for="patientTelephoneNumber.telephoneNumber"
+                         class="nhsuk-label nhsuk-radios__label"
+                         @keypress="onKeyDown" @click="selected">
+                    {{ patientTelephoneNumber.telephoneNumber }}
+                  </label>
+                </div>
+                <div v-if="patientTelephoneNumbers.length > 0" class="nhsuk-radios__item">
+                  <input :id="'otherPhoneNumberRadioInput'"
+                         type="radio"
+                         name="radio"
+                         class="nhsuk-radios__input"
+                         @change="selected">
+                  <label :for="'otherPhoneNumberRadioInput'"
+                         class="nhsuk-label nhsuk-radios__label"
+                         @keypress="onKeyDown" @click="selected">
+                    Use other phone number
+                  </label>
+                </div>
               </div>
-            </div>
-            <div v-if="showPhoneNumberTextBox">
-              <generic-text-input id="telephoneNumberText"
-                                  ref="telephone"
-                                  v-model="otherTelephoneNumber"
-                                  :a-labelled-by="telephoneNumberTextAriaLabelledBy"
-                                  :text-area-classes="defaultClasses"
-                                  :required="true"
-                                  :class="showReasonError && $style.desktopWebErrorBorder"
-                                  name="telephoneNumberField"
-                                  pattern=".*[^ ].*"
-                                  type="tel"/>
-              <p id="telephone-number-desc">
-                {{ $t('appointments.confirmation.telephoneNumberDescription') }}
-              </p>
-            </div>
-          </fieldset>
+              <div v-if="showPhoneNumberTextBox">
+                <p id="telephone-number-desc" class="nhsuk-u-padding-bottom-2">
+                  {{ $t('appointments.confirmation.telephoneNumberDescription') }}
+                </p>
+                <generic-text-input id="telephoneNumberText"
+                                    ref="telephone"
+                                    v-model="otherTelephoneNumber"
+                                    :a-labelled-by="telephoneNumberTextAriaLabelledBy"
+                                    :text-area-classes="defaultClasses"
+                                    :required="true"
+                                    :class="showReasonError"
+                                    name="telephoneNumberField"
+                                    pattern=".*[^ ].*"
+                                    type="tel"/>
+              </div>
+            </fieldset>
+          </div>
         </div>
-        <div v-if="showBookingReason()" :class="[$style.form, $style.reasonForm]"
-             role="form" data-purpose="booking-reason">
-          <label id="booking-reason-label" :class="$style.textReasonLabel"
-                 for="reasonText">
-            {{ $t('appointments.confirmation.headerLabel') }}
-            {{ bookingReasonOptional() ? $t('appointments.confirmation.headerLabelSuffix') : '' }}
-          </label>
+      </div>
 
-          <error-message v-if="showReasonError" id="reason-error-label">
-            {{ $t('appointments.confirmation.noReasonError') }}
-          </error-message>
-          <generic-text-area id="reasonText"
-                             ref="reason"
-                             v-model="symptoms"
-                             :a-labelled-by="reasonBoxAriaLabelledBy"
-                             :text-area-classes="defaultClasses"
-                             :required="reasonRequired"
-                             :error.sync="showReasonError"
-                             name="bookingReason"
-                             maxlength="150"/>
-
-          <p id="max-reason-desc"
-             :class="$style.char">
-            {{ $t('appointments.confirmation.reasonDesc.line1') }}
-          </p>
-          <p>
-            {{ $t('appointments.confirmation.reasonDesc.line2') }}
-            {{ $t('appointments.confirmation.reasonDesc.line3') }}
-          </p>
+      <div v-if="showBookingReason()" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
+          <div role="form" data-purpose="booking-reason">
+            <label id="booking-reason-label" class="nhsuk-fieldset__legend"
+                   for="reasonText">
+              {{ $t('appointments.confirmation.headerLabel') }}
+              {{ bookingReasonOptional() ? $t('appointments.confirmation.headerLabelSuffix') : '' }}
+            </label>
+            <p id="max-reason-desc" class="nhsuk-u-padding-bottom-2">
+              {{ $t('appointments.confirmation.reasonDesc.line1') }}
+            </p>
+            <p class="nhsuk-u-padding-bottom-2">
+              {{ $t('appointments.confirmation.reasonDesc.line2') }}
+              {{ $t('appointments.confirmation.reasonDesc.line3') }}
+            </p>
+            <error-message v-if="showReasonError" id="reason-error-label">
+              {{ $t('appointments.confirmation.noReasonError') }}
+            </error-message>
+            <generic-text-area id="reasonText"
+                               ref="reason"
+                               v-model="symptoms"
+                               :a-labelled-by="reasonBoxAriaLabelledBy"
+                               :text-area-classes="defaultClasses"
+                               :required="reasonRequired"
+                               :error.sync="showReasonError"
+                               name="bookingReason"
+                               maxlength="150"/>
+          </div>
         </div>
-        <div :class="$style.confirmButton">
+      </div>
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
           <generic-button id="btn_book_appointment"
-                          :button-classes="[$store.state.device.isNativeApp
-                                              ?'button':'button-desktop',
-                                            'green']"
+                          :button-classes="['nhsuk-button']"
                           click-delay="medium"
                           @click.prevent="onConfirmButtonClicked">
             {{ $t('appointments.confirmation.confirmButtonText') }}
           </generic-button>
         </div>
-      </form-post>
+      </div>
+    </form-post>
 
-      <generic-button v-if="$store.state.device.isNativeApp" id="btn_cancel_appointment"
-                      :button-classes="['button' , 'grey']"
-                      @click.stop.prevent="onCancelButtonClicked">
-        {{ $t('appointments.confirmation.changeButtonText') }}
-      </generic-button>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <generic-button v-if="$store.state.device.isNativeApp" id="btn_cancel_appointment"
+                        :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                        @click.stop.prevent="onCancelButtonClicked">
+          {{ $t('appointments.confirmation.changeButtonText') }}
+        </generic-button>
 
-      <desktopGenericBackLink
-        v-else
-        :path="appointmentBookingPath"
-        :button-text="'appointments.confirmation.backButtonText'"
-        @clickAndPrevent="onCancelButtonClicked"/>
+        <desktopGenericBackLink v-else :path="appointmentBookingPath"
+                                :button-text="'appointments.confirmation.backButtonText'"
+                                @clickAndPrevent="onCancelButtonClicked"/>
+      </div>
     </div>
   </div>
 </template>
@@ -163,8 +182,13 @@ import Necessity from '@/lib/necessity';
 import FormPost from '@/components/FormPost';
 import channel from '@/lib/channel';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import Card from '@/components/widgets/card/Card';
 
 export default {
+  layout: 'nhsuk-layout',
+
   components: {
     DesktopGenericBackLink,
     GenericTextInput,
@@ -176,6 +200,9 @@ export default {
     GenericTextArea,
     GenericButton,
     FormPost,
+    Card,
+    CardGroupItem,
+    CardGroup,
   },
   data() {
     return {
@@ -208,7 +235,7 @@ export default {
       return this.showTelephoneError ? 'telephone-error-label telephone-number-desc' : 'telephone-number-desc';
     },
     defaultClasses() {
-      return this.showError ? [this.$style.error] : undefined;
+      return this.showError ? undefined : undefined;
     },
     showReasonError() {
       return this.reasonError && !this.symptoms;
@@ -369,168 +396,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import "../../style/forms";
-@import "../../style/info";
-@import "../../style/desktopWeb/inputcontrol";
-
-.reasonForm {
-  &.web {
-    margin-bottom: 24px;
-  }
-}
-
-.phoneNumberForm {
-  &.web {
-    margin-bottom: 6px;
-  }
-  &.desktopWeb{
-    margin-top: 1em;
-  }
-}
-
-.textReasonLabel {
-  padding-top: 8px;
-  font-weight: bold;
-  padding-bottom: 1em;
-  margin-top: 1em;
-
-}
-
-.textPhoneNumberLabel {
-  padding-top: 8px;
-  font-weight: bold;
-  padding: 1em 0 0.5em 0;
-  margin-top: 1em;
-}
-
-.patientPhoneNumberRadioButton {
-  float: left;
-  margin-right: 1em;
-}
-.patientPhoneNumberRadioLabel {
-  padding-top: 0;
-}
-
-.patientTelephoneNumberLabel {
-  margin-left: 0.5em;
-}
-
-.telephoneNumberContainer {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-
-  cursor: pointer;
-  font-size: 1em;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  margin-bottom: 12px;
-}
-
-.fieldsetTelephoneNumberRadio {
-  border: 0;
-}
-
-.customRadio {
-  cursor: pointer;
-  height: 32px;
-  left: 0;
-  margin: 0;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  width: 32px;
-  z-index: 1;
-}
-
-.customRadioLabel {
-  -ms-touch-action: manipulation;
-  cursor: pointer;
-  display: inline-block;
-  margin-bottom: 0;
-  padding: 8px 12px 4px;
-  touch-action: manipulation;
-}
-.customRadio + .customRadioLabel::before {
-  background: $white;
-  border: 2px #425563 solid;
-  border-radius: 50%;
-  box-sizing: border-box;
-  content: '';
-  height: 32px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 32px;
-}
-.customRadio + .customRadioLabel::after {
-  background: black;
-  border: 8px solid #212b32;
-  border-radius: 50%;
-  content: '';
-  height: 0;
-  left: 8px;
-  opacity: 0;
-  position: absolute;
-  top: 8px;
-  width: 0;
-}
-.customRadio:checked + .customRadioLabel::after {
-  opacity: 1;
-}
-
-.customRadio:focus + .customRadioLabel::before {
-  box-shadow: 0 0 0 4px #ffb81C;
-  outline: 4px solid transparent;
-  outline-offset: 4px;
-}
-
-.customRadioItem {
-  display: block;
-  position: relative;
-  min-height: 32px;
-  margin-bottom: 8px;
-  padding: 0 0 0 32px;
-  clear: left;
-}
-
-.confirmButton {
-  margin-top: 1em;
-}
-
-.errorBorder {
-  max-width: 540px;
-}
-
-div {
-  &.desktopWeb {
-    p {
-      font-family: $default-web;
-      font-weight: lighter;
-      max-width: 540px;
-    }
-    .info {
-      font-size: 1em;
-      margin-bottom: 1em;
-    }
-    .telephoneNumberContainer {
-      margin-bottom: 0px;
-    }
-    .patientTelephoneNumberLabel {
-      font-family: $default-web;
-      font-weight: lighter;
-    }
-    .textReasonLabel {
-      padding-top: 1em;
-      font-family: $default-web;
-      font-weight: lighter;
-      margin-top: 1em;
-    }
-  }
-}
-
-</style>

@@ -1,68 +1,98 @@
 <template>
   <div v-if="showTemplate" class="pull-content">
-    <message-dialog v-if="showError" message-type="error" role="alert">
-      <message-text data-purpose="error-heading">
-        {{ $t('appointments.cancelling.noReasonDialogError') }}
-      </message-text>
-      <message-list data-purpose="reason-error">
-        <li>{{ $t('appointments.cancelling.noReasonError') }}</li>
-      </message-list>
-    </message-dialog>
-    <div :class="$style.info" data-purpose="info">
-      <p>{{ $t('appointments.cancelling.info') }}</p>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <message-dialog v-if="showError" message-type="error" role="alert">
+          <message-text data-purpose="error-heading">
+            {{ $t('appointments.cancelling.noReasonDialogError') }}
+          </message-text>
+          <message-list data-purpose="reason-error">
+            <li>{{ $t('appointments.cancelling.noReasonError') }}</li>
+          </message-list>
+        </message-dialog>
+      </div>
+    </div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <div data-purpose="info">
+          <p class="nhsuk-u-padding-bottom-3">{{ $t('appointments.cancelling.info') }}</p>
+        </div>
+      </div>
     </div>
 
-    <div :class="$style.appointmentContainer">
-      <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false"
-                   data-purpose="appointment-info"
-                   :telephone-message="$t('appointments.index.upcoming.telephoneMessage')"
-                   date-time-header="h2" />
-    </div>
+    <CardGroup class="nhsuk-grid-row">
+      <CardGroupItem class="nhsuk-grid-column-one-half">
+        <Card>
+          <appointment v-if="appointment" :appointment="appointment"
+                       :show-cancellation-link="false"
+                       data-purpose="appointment-info"
+                       :telephone-message="$t('appointments.index.upcoming.telephoneMessage')"
+                       date-time-header="h2" />
+        </Card>
+      </CardGroupItem>
+    </CardGroup>
+
+
     <form-post :action="appointmentCancelPath">
       <input :value="appointment.id" type="hidden" name="id">
-      <div :class="[$style.form, $style.cancellationReason,
-                    !$store.state.device.isNativeApp && $style.desktopWeb]">
-        <div v-if="isReasonRequired">
-          <label for="txt_reason">
-            {{ $t('appointments.cancelling.form_label') }}
-          </label>
-
-          <error-message v-if="showError" id="error-label" :class="$style.form">
-            {{ $t('appointments.cancelling.noReasonError') }}
-          </error-message>
-
-          <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
-                           :class="[$style.reason, showError && $style.errorBorder]"
-                           select-id="txt_reason" select-name="reason">
-            <option disabled="" selected="" value="">
-              {{ $t('appointments.cancelling.dropdownDefaultOption') }}
-            </option>
-            <option v-for="reason in cancellationReasons" :key="reason.id" :value="reason.id">
-              {{ reason.displayName }}
-            </option>
-          </select-dropdown>
-
+      <div v-if="isReasonRequired">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <label for="txt_reason" class="nhsuk-u-padding-bottom-2">
+              {{ $t('appointments.cancelling.form_label') }}
+            </label>
+          </div>
         </div>
-        <generic-button id="btn_cancel_appointment"
-                        :button-classes="['button', 'green']"
-                        click-delay="medium"
-                        @click.stop.prevent="onCancelButtonClicked($event)">
-          {{ $t('appointments.cancelling.cancelButtonText') }}
-        </generic-button>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <error-message v-if="showError" id="error-label" :class="$style.form">
+              {{ $t('appointments.cancelling.noReasonError') }}
+            </error-message>
+          </div>
+        </div>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
+                             :class="[$style.reason, showError && $style.errorBorder]"
+                             select-id="txt_reason" select-name="reason">
+              <option disabled="" selected="" value="">
+                {{ $t('appointments.cancelling.dropdownDefaultOption') }}
+              </option>
+              <option v-for="reason in cancellationReasons" :key="reason.id" :value="reason.id">
+                {{ reason.displayName }}
+              </option>
+            </select-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full nhsuk-u-padding-top-6">
+          <generic-button id="btn_cancel_appointment"
+                          :button-classes="['nhsuk-button']"
+                          click-delay="medium"
+                          @click.stop.prevent="onCancelButtonClicked($event)">
+            {{ $t('appointments.cancelling.cancelButtonText') }}
+          </generic-button>
+        </div>
       </div>
     </form-post>
 
-    <generic-button v-if="$store.state.device.isNativeApp"
-                    id="btn_back_appointment"
-                    :button-classes="['button', 'grey']"
-                    @click.stop.prevent="onBackButtonClicked">
-      {{ $t('appointments.cancelling.backButtonText') }}
-    </generic-button>
-    <desktopGenericBackLink
-      v-else
-      :path="appointmentPath"
-      :button-text="'appointments.cancelling.backButtonText'"
-      @clickAndPrevent="onBackButtonClicked"/>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <generic-button v-if="$store.state.device.isNativeApp"
+                        id="btn_back_appointment"
+                        :button-classes="['nhsuk-button nhsuk-button--secondary']"
+                        @click.stop.prevent="onBackButtonClicked">
+          {{ $t('appointments.cancelling.backButtonText') }}
+        </generic-button>
+        <desktopGenericBackLink
+          v-else
+          :path="appointmentPath"
+          :button-text="'appointments.cancelling.backButtonText'"
+          @clickAndPrevent="onBackButtonClicked"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -78,8 +108,13 @@ import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS } from '@/lib/routes';
 import FormPost from '@/components/FormPost';
 import { redirectTo } from '@/lib/utils';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import Card from '@/components/widgets/card/Card';
 
 export default {
+  layout: 'nhsuk-layout',
+
   components: {
     DesktopGenericBackLink,
     GenericButton,
@@ -90,6 +125,9 @@ export default {
     ErrorMessage,
     SelectDropdown,
     FormPost,
+    CardGroup,
+    CardGroupItem,
+    Card,
   },
   data() {
     return {
@@ -162,23 +200,5 @@ export default {
 @import "../../style/forms";
 @import "../../style/info";
 @import "../../style/desktopWeb/inputcontrol";
-
-.cancellationReason {
-  &.desktopWeb {
-    max-width: 540px;
-  }
-
-  .errorBorder{
-    max-width: 540px;
-  }
-
-  .reason {
-    margin-bottom: 2em;
-  }
-}
-
-.appointmentContainer {
-  margin-bottom: 1em;
-}
 
 </style>

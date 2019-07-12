@@ -6,7 +6,12 @@ describe('confirmation.vue', () => {
   let state;
   let wrapper;
 
-  const createConfirmationPage = () => mount(ConfirmationPage, { state });
+  const createConfirmationPage = () => mount(ConfirmationPage, {
+    state,
+    stubs: {
+      'page-title': '<div></div>',
+    },
+  });
 
   beforeEach(() => {
     state = {

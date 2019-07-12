@@ -28,7 +28,14 @@ describe('booking guidance', () => {
     });
     $style = { info: 'info' };
 
-    return mount(BookingGuidancePage, { $store, $router, $style });
+    return mount(BookingGuidancePage, {
+      $store,
+      $router,
+      $style,
+      stubs: {
+        'page-title': '<div></div>',
+      },
+    });
   };
 
   it('will include the Appointment guidance menu if online consultations env var is truthy', () => {
@@ -72,7 +79,7 @@ describe('booking guidance', () => {
 
   it('will include the guidance text if online consultations env var is false', () => {
     wrapper = mountAs({ olcEnabled: false, isNativeApp: false });
-    const content = wrapper.find('.info');
+    const content = wrapper.find("div[data-purpose='info']");
 
     expect(wrapper.find(AppointmentGuidanceMenu).exists()).toBe(false);
 

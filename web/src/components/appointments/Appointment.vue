@@ -1,6 +1,6 @@
 <template>
-  <div :class="[$style.panel, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <div :class="$style.panelGroup">
+  <div :class="$style['nhsuk-appointment-card']">
+    <div :class="$style.appointmentGroup">
       <component :is="dateTimeHeader" :class="$style['date-time-header']">
         <div :class="$style.date"
              data-label="date">{{ formatDate(appointment.startTime) }}</div>
@@ -9,7 +9,7 @@
       </component>
     </div>
 
-    <div :class="$style.panelGroup">
+    <div :class="$style.appointmentGroup">
       <h3>{{ this.$t('appointments.index.appointmentTypeLabel') }}</h3>
       <p :class="$style.session" data-label="slot type">
         {{ appointment.type }}
@@ -28,7 +28,7 @@
       </p>
     </div>
 
-    <div :class="$style.panelGroup">
+    <div :class="$style.appointmentGroup">
       <h3>{{ this.$t('appointments.index.locationLabel') }}</h3>
       <p :class="$style.location">
         <span data-label="location">{{ appointment.location }}</span>
@@ -36,7 +36,7 @@
     </div>
 
     <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation"
-          :class="$style.panelGroup">
+          :class="$style.appointmentGroup">
       <hr :class="$style.cancel"
           aria-hidden="true">
       <p>
@@ -51,7 +51,7 @@
     </span>
 
     <span v-if="showCancellationLink && (cancellationDisabled || appointment.disableCancellation)"
-          :class="$style.panelGroup">
+          :class="$style.appointmentGroup">
       <hr :class="$style.cancel"
           aria-hidden="true">
       <p :class="$style['cancel-disabled']">
@@ -121,11 +121,18 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/panels";
-  @import "../../style/nhsuklinks";
+ @import '~nhsuk-frontend/packages/core/settings/colours';
+ @import '~nhsuk-frontend/packages/core/tools/mixins';
+ @import '~nhsuk-frontend/packages/core/tools/spacing';
+ @import '~nhsuk-frontend/packages/core/settings/spacing';
+ @import '~nhsuk-frontend/packages/core/tools/sass-mq';
+ @import '~nhsuk-frontend/packages/core/tools/typography';
+ @import '~nhsuk-frontend/packages/core/settings/typography';
+ @import "../../style/desktopWeb/accessibility";
 
-  .panel {
-    .panelGroup {
+  .nhsuk-appointment-card {
+
+    .appointmentGroup {
       padding-top: 0.25em;
       padding-bottom: 0.75em;
     }
@@ -147,44 +154,31 @@ export default {
     }
 
     .date-time-header {
-      font-family: $default-web;
       display: block;
       line-height: 1.5em;
 
       span.time {
-        font-family: $default-web;
       }
-    }
-
-    p {
-      font-family: $default-web;
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
     }
 
     p.person,
     p.location,
     p.telephone,
     p.cancel-disabled {
-      font-family: $default-web;
     }
 
-    a.cancel-link {
-      font-family: $default-web;
-      font-weight: normal;
+    a.nhsuk-action-link__link {
+      font-weight: bold;
+      color: $color_nhsuk-red;
     }
 
     p.sessionName {
       font-size: 1em;
     }
 
-    h3 {
-      padding-bottom: 0;
-      padding-top: 0;
-    }
-
-    hr {
-      margin-bottom: 0.5em;
+    a.nhsuk-action-link__link,
+    a.nhsuk-action-link__link-disabled {
+      margin: 0.5em 0;
     }
 
     a.cancel-link,
@@ -192,9 +186,16 @@ export default {
       margin: 0.5em 0;
     }
 
-    &.desktopWeb {
-      p {
-        max-width: 540px;
+    a.nhsuk-action-link__link {
+      &:focus {
+        @include linkFocusStyle;
+        color: $color_nhsuk-red;
+
+      }
+
+      &:hover {
+        @include linkHoverStyle;
+        color: $color_nhsuk-red;
       }
     }
   }

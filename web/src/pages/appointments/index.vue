@@ -1,84 +1,98 @@
 <template>
-  <div v-if="showTemplate" :class="[$style.content, 'pull-content',
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <div v-if="showNoUpcomingAppointments" data-purpose="upcoming-info">
-      <h2>{{ $t('appointments.index.empty.header') }}</h2>
-      <div :class="$style.upComingAppointments">
-        <p :class="$style.upComingAppointments">
-          {{ $t('appointments.index.empty.text1') }}</p>
+  <div v-if="showTemplate">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <no-js-form :action="guidancePath" :value="formData">
+          <button id="book-appointments-button"
+                  class="nhsuk-button"
+                  @click.stop.prevent="onBookButtonClicked">
+            {{ $t('appointments.index.bookButtonText') }}
+          </button>
+        </no-js-form>
       </div>
     </div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
 
-    <upcoming-appointments v-if="showUpcomingAppointments"
-                           :appointments="upcomingAppointments"
-                           :cancellation-disabled="cancellationDisabled"
-                           :class="$style.upcomingAppointmentContainer"/>
+        <div v-if="showNoUpcomingAppointments"
+             class="nhsuk-u-padding-bottom-6"
+             data-purpose="upcoming-info">
+          <h2>{{ $t('appointments.index.empty.header') }}</h2>
+          <div >
+            <p>
+              {{ $t('appointments.index.empty.text1') }}</p>
+          </div>
+        </div>
 
-    <div v-if="showNoPastAppointments" data-purpose="past-info">
-      <h2>{{ $t('appointments.index.emptyPast.header') }}</h2>
-      <div :class="$style.info">
-        <p>{{ $t('appointments.index.emptyPast.text1') }}</p>
+        <upcoming-appointments v-if="showUpcomingAppointments"
+                               :appointments="upcomingAppointments"
+                               :cancellation-disabled="cancellationDisabled"/>
       </div>
     </div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <div v-if="showNoPastAppointments" data-purpose="past-info">
+          <h2>{{ $t('appointments.index.emptyPast.header') }}</h2>
+          <div>
+            <p class="nhsuk-u-padding-bottom-6">
+              {{ $t('appointments.index.emptyPast.text1') }}
+            </p>
+          </div>
+        </div>
 
-    <past-appointments v-if="showPastAppointments"
-                       :appointments="pastAppointments" />
-
-    <no-js-form v-if="$store.state.device.isNativeApp" :action="guidancePath" :value="formData">
-      <floating-button-bottom v-if="showBookAppointmentButton"
-                              id="book-appointments-button"
-                              @click.stop.prevent="onBookButtonClicked">
-        {{ $t('appointments.index.bookButtonText') }}
-      </floating-button-bottom>
-    </no-js-form>
+        <past-appointments v-if="showPastAppointments"
+                           :appointments="pastAppointments"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import PastAppointments from '@/components/appointments/PastAppointments';
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  layout: 'nhsuk-layout',
+
   components: {
-    FloatingButtonBottom,
     PastAppointments,
     UpcomingAppointments,
     NoJsForm,
   },
   computed: {
+    hasConnectionProblem() {
+      return this.$store.state.errors.hasConnectionProblem;
+    },
+    showApiError() {
+      return this.$store.getters['errors/showApiError'];
+    },
     showNoUpcomingAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
-        this.$store.state.myAppointments.upcomingAppointments.length === 0
+          this.$store.state.myAppointments.upcomingAppointments.length === 0
       );
     },
     showNoPastAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
-        this.$store.state.myAppointments.pastAppointments.length === 0 &&
-        this.$store.state.myAppointments.pastAppointmentsEnabled
+          this.$store.state.myAppointments.pastAppointments.length === 0 &&
+          this.$store.state.myAppointments.pastAppointmentsEnabled
       );
     },
     showUpcomingAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
-        this.$store.state.myAppointments.upcomingAppointments.length > 0
+          this.$store.state.myAppointments.upcomingAppointments.length > 0
       );
     },
     showPastAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
-        this.$store.state.myAppointments.pastAppointments.length > 0 &&
-        this.$store.state.myAppointments.pastAppointmentsEnabled
-      );
-    },
-    showBookAppointmentButton() {
-      return (
-        this.$store.state.myAppointments.hasLoaded
+          this.$store.state.myAppointments.pastAppointments.length > 0 &&
+          this.$store.state.myAppointments.pastAppointmentsEnabled
       );
     },
     upcomingAppointments() {
@@ -121,21 +135,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import "../../style/info";
-
-.content {
-  padding-bottom : 5em;
-}
-
-div {
- &.desktopWeb {
-  p {
-   font-family: $default-web;
-   font-weight: lighter;
-   max-width: 540px;
-  }
- }
-}
-</style>

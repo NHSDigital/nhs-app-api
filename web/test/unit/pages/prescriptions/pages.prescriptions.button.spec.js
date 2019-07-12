@@ -35,19 +35,16 @@ describe('prescriptions page', () => {
       $store,
       $t,
       $style,
+      stubs: {
+        'page-title': '<div></div>',
+      },
     });
   });
 
   describe('order a repeat prescription button', () => {
-    it('will exist when app is native', () => {
+    it('will exist on page', () => {
       const button = wrapper.find('#order-prescription-button');
       expect(button.exists()).toBe(true);
-    });
-
-    it('won\'t exist when app is not native', () => {
-      state.device.isNativeApp = false;
-      const button = wrapper.find('#order-prescription-button');
-      expect(button.exists()).toBe(false);
     });
   });
 });

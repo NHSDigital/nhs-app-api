@@ -1,93 +1,97 @@
 <template>
 
-  <div v-if="showTemplate" :class="[$style['pull-content'],
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div v-if="showTemplate">
+    <div class="nhsuk-grid-row nhsuk-u-padding-bottom-6">
+      <div class="nhsuk-grid-column-full">
+        <message-dialog v-if="error" message-type="error" role="alert">
+          <message-text>
+            {{ $t('rp12.reasonMissing.summarySubHeader') }}
+          </message-text>
+          <message-list v-if="!courseSelectionValid">
+            <li>{{ $t('rp03.noMedicinesSelected') }}</li>
+          </message-list>
+          <message-list v-if="!specialRequestValid">
+            <li>{{ $t('rp03.specialRequestRequired') }}</li>
+          </message-list>
+        </message-dialog>
 
-    <message-dialog v-if="error" message-type="error" role="alert">
-      <message-text>
-        {{ $t('rp12.reasonMissing.summarySubHeader') }}
-      </message-text>
-      <message-list v-if="!courseSelectionValid">
-        <li>{{ $t('rp03.noMedicinesSelected') }}</li>
-      </message-list>
-      <message-list v-if="!specialRequestValid">
-        <li>{{ $t('rp03.specialRequestRequired') }}</li>
-      </message-list>
-    </message-dialog>
+        <div v-if="showRepeatCourses">
+          <no-js-form :action="confirmCoursesPath" :value="{formData}" method="post">
+            <div>
+              <div>
+                <error-message v-if="error && !courseSelectionValid" id="error-type">
+                  {{ $t('rp03.noMedicinesSelected') }}
+                </error-message>
+                <fieldset class="nhsuk-fieldset">
+                  <CardGroup role="list" class="nhsuk-grid-row">
+                    <CardGroupItem class="nhsuk-grid-column-full">
+                      <Card>
+                        <legend class="nhsuk-fieldset__legend"
+                                role="heading">{{ $t('rp03.subHeader') }}</legend>
+                        <repeat-prescription v-model="selected"/>
+                      </Card>
+                    </CardGroupItem>
+                  </CardGroup>
+                </fieldset>
+              </div>
+            </div>
+            <input :value="specialRequestNecessity" type="hidden" name="specialRequestNecessity">
+            <div v-if="specialRequestNecessity !== 'NotAllowed'"
+                 role="form">
+              <error-message v-if="error && !specialRequestValid" id="error-type">
+                {{ $t('rp03.specialRequestRequired') }}
+              </error-message>
+              <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest"
+                     class="nhsuk-u-padding-bottom-2">
+                {{ $t('rp03.specialRequestsLabelOptional') }}
+              </label>
+              <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest"
+                     class="nhsuk-u-padding-bottom-2">
+                {{ $t('rp03.specialRequestsLabelMandatory') }} </label>
+              <p id="maxSpecialRequest" class="char nhsuk-u-padding-bottom-2">
+                {{ $t('rp03.maxSpecialRequest') }}
+              </p>
+              <p id="disclaimer" class="nhsuk-u-padding-bottom-2">{{ $t('rp03.disclaimer') }}</p>
+              <div>
+                <p class="nhsuk-body-s nhsuk-u-padding-bottom-3">
+                  {{ $t('rp03.changePharmacyText') }}
+                </p>
+              </div>
+              <generic-text-area id="specialRequest"
+                                 v-model="specialRequest"
+                                 :required="(specialRequestNecessity === 'Mandatory')"
+                                 text-area-ref="specialRequest"
+                                 name="specialRequest"
+                                 maxlength="1000"/>
+            </div>
+            <button id="btn_order_prescription"
+                    class="nhsuk-button"
+                    @click.prevent="validate">
+              {{ $t('rp03.continueButton') }}
+            </button>
+          </no-js-form>
+        </div>
 
-    <div v-if="showRepeatCourses">
-      <no-js-form :action="confirmCoursesPath" :value="{formData}" method="post">
-        <div :class="$style.panel">
-          <div :class="{
-            [$style['validation-inline']]: (error && !courseSelectionValid),
-            [$style['validation-border-left']]: (error && !courseSelectionValid)}">
-            <error-message v-if="error && !courseSelectionValid" id="error-type"
-                           :class="$style['validatioin-text']">
-              {{ $t('rp03.noMedicinesSelected') }}
-            </error-message>
-            <fieldset>
-              <legend role="heading">{{ $t('rp03.subHeader') }}</legend>
-              <repeat-prescription v-model="selected"/>
-            </fieldset>
-          </div>
-        </div>
-        <input :value="specialRequestNecessity" type="hidden" name="specialRequestNecessity">
-        <div v-if="specialRequestNecessity !== 'NotAllowed'"
-             :class="[$style.form, {
-               [$style['validation-inline']]: (error && !specialRequestValid),
-               [$style['validation-border-left']]: (error && !specialRequestValid)}]"
-             role="form">
-          <error-message v-if="error && !specialRequestValid" id="error-type"
-                         :class="$style['validatioin-text']">
-            {{ $t('rp03.specialRequestRequired') }}
-          </error-message>
-          <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest">
-            {{ $t('rp03.specialRequestsLabelOptional') }}
-          </label>
-          <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest">
-            {{ $t('rp03.specialRequestsLabelMandatory') }}
-          </label>
-          <generic-text-area id="specialRequest"
-                             v-model="specialRequest"
-                             :required="(specialRequestNecessity === 'Mandatory')"
-                             text-area-ref="specialRequest"
-                             name="specialRequest"
-                             maxlength="1000"/>
-          <p id="maxSpecialRequest" class="char">{{ $t('rp03.maxSpecialRequest') }}</p>
-          <p id="disclaimer">{{ $t('rp03.disclaimer') }}</p>
-        </div>
-        <div :class="$style['info']">
+        <div v-if="showNoRepeatCourses" class="nhsuk-u-padding-bottom-6">
+          <h3>{{ $t('rp06.empty.subHeader') }}</h3>
           <p>
-            {{ $t('rp03.changePharmacyText') }}
+            {{ $t('rp06.empty.body') }}
           </p>
         </div>
-        <generic-button id="btn_order_prescription"
-                        :button-classes="['button' , 'green',
-                                          !$store.state.device.isNativeApp && 'medium']"
-                        @click.prevent="validate">
-          {{ $t('rp03.continueButton') }}
-        </generic-button>
-      </no-js-form>
+        <form v-if="$store.state.device.isNativeApp"
+              :action="getBackPath" method="get">
+          <generic-button id="back-to-prescriptions"
+                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                          @click.stop.prevent="backButtonClicked">
+            {{ $t('rp03.backButton') }}
+          </generic-button>
+        </form>
+        <desktopGenericBackLink v-else
+                                :path="getBackPath"
+                                :button-text="'rp03.backButton'"
+                                @clickAndPrevent="backButtonClicked"/>
+      </div>
     </div>
-
-    <div v-if="showNoRepeatCourses" :class="$style.info">
-      <h3>{{ $t('rp06.empty.subHeader') }}</h3>
-      <p>
-        {{ $t('rp06.empty.body') }}
-      </p>
-    </div>
-    <form v-if="$store.state.device.isNativeApp"
-          :action="getBackPath" method="get">
-      <generic-button id="back-to-prescriptions"
-                      :button-classes="['button' , 'grey']"
-                      @click.stop.prevent="backButtonClicked">
-        {{ $t('rp03.backButton') }}
-      </generic-button>
-    </form>
-    <desktopGenericBackLink v-else
-                            :path="getBackPath"
-                            :button-text="'rp03.backButton'"
-                            @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>
 
@@ -104,8 +108,12 @@ import GenericTextArea from '@/components/widgets/GenericTextArea';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import { PRESCRIPTIONS, PRESCRIPTION_CONFIRM_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import Card from '@/components/widgets/card/Card';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     RepeatPrescription,
@@ -116,10 +124,13 @@ export default {
     ErrorMessage,
     GenericTextArea,
     DesktopGenericBackLink,
+    Card,
+    CardGroupItem,
+    CardGroup,
   },
   data() {
     return {
-      specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest ? this.$store.state.repeatPrescriptionCourses.specialRequest : '',
+      specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest || '',
       prescriptionChoices: this.$store.state.repeatPrescriptionCourses,
       selected: this.$store.state.repeatPrescriptionCourses.selected,
     };
@@ -153,10 +164,7 @@ export default {
     },
     repeatPrescriptionCourses() {
       const { repeatPrescriptionCourses } = this.$store.state.repeatPrescriptionCourses;
-      if (typeof repeatPrescriptionCourses === 'undefined' || !repeatPrescriptionCourses || repeatPrescriptionCourses.length === 0) {
-        return null;
-      }
-      return repeatPrescriptionCourses;
+      return (repeatPrescriptionCourses || []).length ? repeatPrescriptionCourses : null;
     },
     showNoRepeatCourses() {
       const { repeatPrescriptionCourses, hasLoaded } = this.$store.state.repeatPrescriptionCourses;
@@ -174,14 +182,8 @@ export default {
         .specialRequestNecessity;
     },
     courseSelectionValid() {
-      const selectedCourses = [];
-      this.$store.state.repeatPrescriptionCourses.repeatPrescriptionCourses.forEach((course) => {
-        if (course.selected) {
-          selectedCourses.push(course);
-        }
-      });
-
-      return selectedCourses.length > 0;
+      return this.$store.state.repeatPrescriptionCourses.repeatPrescriptionCourses
+        .some(course => course.selected);
     },
     specialRequestValid() {
       if (this.specialRequestNecessity === 'Mandatory') {
@@ -238,34 +240,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/forms";
-  @import "../../style/panels";
-  @import "../../style/info";
-  @import "../../style/errorvalidation";
-  .pull-content {
-    fieldset {
-      border: none;
-      legend {
-        font-weight: bold;
-        margin-bottom: 16px;
-      }
-    }
-    .validatioin-text {
-      font-weight: normal !important;
-      color: $error !important;
-    }
-    &.desktopWeb {
-      font-family: $default-web;
-      &>* {
-        max-width: 540px;
-      }
-    }
-    .form {
-      label {
-        margin-top: 1em;
-      }
-    }
-  }
-</style>

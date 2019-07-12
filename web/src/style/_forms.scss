@@ -4,9 +4,6 @@
 @import './formspanelshared';
 
 .form {
-  &.desktopWeb{
-    max-width: 540px;
-  }
 	h3 {
 		@include h3;
 		padding-bottom: 0.5em;

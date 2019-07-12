@@ -63,6 +63,7 @@ import HeaderSlim from '@/components/HeaderSlim';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import { getDynamicStyle } from '@/lib/desktop-experience';
+import PageTitle from '@/components/widgets/PageTitle';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -77,6 +78,7 @@ const getMappedValue = ({ map, statusCode, errorCode }) => {
 export default {
   name: 'ApiError',
   components: {
+    PageTitle,
     ContactOrganDonation,
     DesktopGenericBackLink,
     GenericButton,
@@ -85,6 +87,13 @@ export default {
     MessageText,
   },
   mixins: [ErrorMessageMixin],
+  props: {
+    withTitle: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
+  },
   computed: {
     additionalInfo() {
       return this.getMessage('additionalInfo');

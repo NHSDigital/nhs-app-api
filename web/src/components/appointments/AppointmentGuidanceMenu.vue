@@ -1,7 +1,6 @@
 <template>
-  <div v-if="showTemplate" :class="$style['no-padding']" data-purpose="">
-    <ul :class="[$style['list-menu'], !$store.state.device.isNativeApp && $style.desktopWeb]"
-        role="list">
+  <div v-if="showTemplate" data-purpose="">
+    <ul :class="$style['list-menu']" role="list">
       <li role="link">
         <analytics-tracked-tag
           id="btn_symptoms"
@@ -12,10 +11,9 @@
           data-purpose="text_link">
           <a id="btn_symptoms_link"
              :href="symptomsPath"
-             :class="$style['no-decoration']"
              @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem1.header') }}</h2>
-            <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+            <p>
               {{ $t('appointments.guidance.menuItem1.text') }}</p>
           </a>
         </analytics-tracked-tag>
@@ -32,7 +30,7 @@
              :href="adminHelpPath"
              @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem2.header') }}</h2>
-            <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+            <p>
               {{ $t('appointments.guidance.menuItem2.text') }}</p>
           </a>
         </analytics-tracked-tag>
@@ -47,10 +45,9 @@
           data-purpose="text_link">
           <a id="btn_gp_advice"
              :href="gpAdviceConditionsPath"
-             :class="$style['no-decoration']"
              @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem3.header') }}</h2>
-            <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+            <p >
               {{ $t('appointments.guidance.menuItem3.text') }}</p>
           </a>
         </analytics-tracked-tag>
@@ -108,30 +105,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/buttons';
   @import '../../style/listmenu';
-  @import "../../style/desktopWeb/accessibility";
-
-  .list-menu a {
-    outline: 0;
-
-    &:focus {
-      @include outlineStyle;
-    }
-
-    &:hover {
-      @include outlineStyleLight;
-    }
-  }
-
-  .no-decoration {
-    text-decoration: none;
-  }
-
-  .no-padding {
-    margin-top: -0.5em;
-    margin-left: -1em;
-    margin-right: -1em;
-  }
-
 </style>

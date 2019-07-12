@@ -398,17 +398,21 @@ describe('orchestrator', () => {
         });
       });
 
-      describe('desktop back link', () => {
-        it('will not be shown', () => {
+      describe('desktop back button', () => {
+        it('will be shown until the desktop link refactoring work replaces it', () => {
           // Arrange
           store.state.device.isNativeApp = false;
 
           // Act
           mountOrchestrator();
-          const backLink = orchestrator.find('desktopgenericbacklink-stub');
 
+          const backLink = orchestrator.find('generic-button-stub[buttonclasses="nhsuk-button,nhsuk-button--secondary"]');
+          /*
+          TODO -- change this text to a link when desktop work is
+           undertaken and the result should be false.
+           */
           // Assert
-          expect(backLink.exists()).toBe(false);
+          expect(backLink.exists()).toBe(true);
         });
       });
 
@@ -416,12 +420,10 @@ describe('orchestrator', () => {
         it('will be shown', () => {
           // Act
           mountOrchestrator();
-
           // Assert
-          const backButton = orchestrator.find('back-button-stub');
+          const backButton = orchestrator.find('generic-button-stub[buttonclasses="nhsuk-button,nhsuk-button--secondary"]');
           expect(backButton.exists()).toBe(true);
-          expect(backButton.vm.text).toEqual('translate_appointments.admin_help.orchestrator.endMyConsultationButton');
-          expect(backButton.vm.gotoPath).toEqual('/');
+          expect(backButton.text()).toEqual('translate_appointments.admin_help.orchestrator.endMyConsultationButton');
         });
       });
 
@@ -462,7 +464,7 @@ describe('orchestrator', () => {
 
           // Assert
           const form = orchestrator.find('form[action=\\/]');
-          const backButton = form.find('back-button-stub');
+          const backButton = form.find('generic-button-stub[buttonclasses="nhsuk-button,nhsuk-button--secondary"]');
 
           expect(form.exists()).toBe(true);
           expect(backButton.exists()).toBe(true);

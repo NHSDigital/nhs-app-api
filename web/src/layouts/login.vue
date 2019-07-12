@@ -107,9 +107,11 @@ export default {
       window.validateSession || (() => this.$store.dispatch('session/validate'));
   },
   created() {
-    if (Sources.isNative(this.$route.query.source)) {
-      this.$store.dispatch('device/updateIsNativeApp', true);
-      this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
+    const { source } = this.$route.query;
+
+    if (source) {
+      this.$store.dispatch('device/updateIsNativeApp', Sources.isNative(source));
+      this.$store.dispatch('device/setSourceDevice', source);
     }
 
     const appVersion = this.$store.app.$env.VERSION_TAG;

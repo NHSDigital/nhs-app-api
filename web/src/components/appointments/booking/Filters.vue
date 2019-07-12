@@ -1,12 +1,17 @@
 <template>
-  <div :class="[$style.form, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <label for="type">{{ $t('appointments.booking.filters.type.label') }}</label>
-    <collapsible-dialog v-if="guidanceMsg">
-      <template slot="header">
-        {{ $t('appointments.booking.gpMessage.header') }}
-      </template>
-      <p>{{ guidanceMsg }}</p>
-    </collapsible-dialog>
+  <div :class="$style.form">
+    <label class="nhsuk-label" for="type">
+      {{ $t('appointments.booking.filters.type.label') }}
+    </label>
+    <div class="nhsuk-u-padding-bottom-3">
+      <collapsible-dialog v-if="guidanceMsg" >
+        <template slot="header">
+          {{ $t('appointments.booking.gpMessage.header') }}
+        </template>
+        <p>{{ guidanceMsg }}</p>
+      </collapsible-dialog>
+    </div>
+
     <select-dropdown v-model="type" select-id="type" select-name="type">
       <option v-for="option in options.types"
               :key="option.value"
@@ -19,7 +24,9 @@
       <optgroup v-if="this.$store.state.device.source === 'ios'" label=""/>
     </select-dropdown>
 
-    <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
+    <label class="nhsuk-label" for="location">
+      {{ $t('appointments.booking.filters.location.label') }}
+    </label>
     <select-dropdown v-model="location" select-id="location" select-name="location">
       <option v-for="option in options.locations"
               :key="option.value"
@@ -29,7 +36,9 @@
       </option>
     </select-dropdown>
 
-    <label for="clinician">{{ $t('appointments.booking.filters.clinician.label') }}</label>
+    <label class="nhsuk-label" for="clinician">
+      {{ $t('appointments.booking.filters.clinician.label') }}
+    </label>
     <select-dropdown
       v-model="clinician"
       :required="false"
@@ -40,7 +49,9 @@
       </option>
     </select-dropdown>
 
-    <label for="time-period">{{ $t('appointments.booking.filters.date.label') }}</label>
+    <label class="nhsuk-label" for="time-period">
+      {{ $t('appointments.booking.filters.date.label') }}
+    </label>
     <select-dropdown v-model="date" select-id="time-period" select-name="time-period">
       <option v-for="option in options.dates" :key="option.value" :value="option.value">
         {{ displayName(option) }}
@@ -135,42 +146,6 @@ export default {
   },
 };
 </script>
-
 <style module lang="scss" scoped>
-@import "../../../style/forms";
-@import "../../../style/colours";
-
-.line {
-  margin-top: 0.5em
-}
-
-.form {
-  :focus {
-    outline-color: $focus_highlight;
-  }
-  :hover{
-    outline-color: $focus_highlight;
-  }
-}
-div {
- &.desktopWeb {
-  max-width: 560px;
-  padding-right: 1em;
-  display: block;
-  width: auto;
-  position: relative;
-  .form {
-    max-width: 540px;
-   }
-  label {
-   font-family: $default-web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default-web;
-   font-weight: lighter;
-   max-width: 540px;
-  }
- }
-}
-</style>
+ @import "../../../style/forms";
+ </style>

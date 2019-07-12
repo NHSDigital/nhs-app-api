@@ -1,5 +1,5 @@
 <template>
-  <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+  <div>
     <span v-if="error" :id="errorId" class="nhsuk-error-message">
       <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
       {{ errorText }}
@@ -106,18 +106,8 @@ export default {
   @import '~nhsuk-frontend/packages/components/textarea/textarea';
 
   div {
-    &.desktopWeb {
-      max-width: 540px;
-    }
-
     .nhsuk-textarea {
-      width: 100%;
-    }
-
-    .nhsuk-textarea:hover {
-      box-shadow: 0 0 0 4px $hover_highlight;
-      outline: 4px solid transparent;
-      outline-offset: 4px;
+      /*width: 100%;*/
     }
   }
 </style>

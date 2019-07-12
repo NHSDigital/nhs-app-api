@@ -51,6 +51,7 @@ export default {
 
 <style module lang="scss" scoped>
   @import "../../style/colours";
+  @import "../../style/desktopWeb/accessibility";
 
   a {
     line-height: 1.5em;
@@ -60,6 +61,16 @@ export default {
 
   a:hover {
     text-decoration: none;
+  }
+
+  a {
+    &:focus {
+      @include linkFocusStyle;
+    }
+
+    &:hover {
+      @include linkHoverStyle;
+    }
   }
 
 </style>

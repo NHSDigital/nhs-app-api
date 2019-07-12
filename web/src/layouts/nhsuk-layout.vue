@@ -1,28 +1,27 @@
 <template>
   <div>
     <modal/>
-    <div id="app" ref="nhsAppRoot" :tabindex="!$store.state.device.isNativeApp ? -1 : false"
-         :class="{
-           [$style.desktopWeb]: !$store.state.device.isNativeApp,
-           [$style['nhs-app']]: true
-         }">
-      <div v-if="shouldShowFullDesktopHeader" :class="$style['header-container-desktop']">
+    <div id="app" ref="nhsAppRoot" :tabindex="!$store.state.device.isNativeApp ? -1 : false">
+      <div v-if="shouldShowFullDesktopHeader">
         <web-header ref="headerMenu"/>
       </div>
-      <div v-else-if="shouldShowSlimDesktopHeader" :class="$style['header-container-desktop']">
+      <div v-else-if="shouldShowSlimDesktopHeader">
         <web-header :show-menu="false" :show-links="false"/>
       </div>
-      <div id="maincontent"
-           ref="mainContent"
-           :tabindex="!$store.state.device.isNativeApp ? -1 : false"
-           :class="[mainClass, $style['main-container-desktop']]">
+
+      <div id="maincontent" ref="mainContent" tabindex="-1">
         <main :class="mainClass">
-          <header-companion-button v-if="shouldShowButton"/>
-          <spinner />
-          <connection-error />
-          <api-error />
-          <flash-message />
-          <nuxt/>
+          <spinner/>
+          <div class="nhsuk-width-container">
+            <div class="nhsuk-grid-row">
+              <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-top-3">
+                <connection-error :with-title="true"/>
+                <api-error :with-title="true"/>
+                <flash-message/>
+                <nuxt/>
+              </div>
+            </div>
+          </div>
         </main>
       </div>
 
@@ -31,7 +30,7 @@
 
       <hot-jar v-if="isAnalyticsCookieAccepted()"/>
 
-      <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
+      <div v-if="!$store.state.device.isNativeApp">
         <web-footer/>
       </div>
     </div>
@@ -41,7 +40,12 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import { findByName, getCrumbTrailForRoute, INDEX, LOGIN } from '@/lib/routes';
+import {
+  getCrumbTrailForRoute,
+  findByName,
+  INDEX,
+  LOGIN,
+} from '@/lib/routes';
 import NativeCallbacks from '@/services/native-app';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -49,13 +53,12 @@ import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import SurveyBar from '@/components/SurveyBar';
 import HotJar from '@/components/widgets/HotJar';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import Modal from '@/components/modal/Modal';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import Sources from '@/lib/sources';
+
 
 export default {
   components: {
@@ -65,7 +68,6 @@ export default {
     ApiError,
     ConnectionError,
     FlashMessage,
-    HeaderCompanionButton,
     SurveyBar,
     HotJar,
     Modal,
@@ -97,21 +99,22 @@ export default {
 
       if (durationSeconds) {
         head.noscript = [
-          { innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};url='/login?showExpiryMessage=true'">`, body: false },
+          {
+            innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};url='/login?showExpiryMessage=true'">`,
+            body: false,
+          },
         ];
       }
     }
 
-    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
-      const analyticsScript = [
-        {
-          src: this.$env.ANALYTICS_SCRIPT_URL,
-        },
-      ];
+    const analyticsScript = [
+      {
+        src: this.$env.ANALYTICS_SCRIPT_URL,
+      },
+    ];
 
-      if (this.isAnalyticsCookieAccepted()) {
-        head.script = analyticsScript;
-      }
+    if (this.isAnalyticsCookieAccepted()) {
+      head.script = analyticsScript;
     }
     return head;
   },
@@ -129,37 +132,34 @@ export default {
     showMenu() {
       return (
         !this.$store.state.device.isNativeApp &&
-        this.loggedIn &&
-        this.$route.name !== 'Login'
+          this.loggedIn &&
+          this.$route.name !== 'Login'
       );
     },
     shouldShowButton() {
       return (
         !this.$store.getters['errors/showApiError']
-        && !this.$store.state.device.isNativeApp
+          && !this.$store.state.device.isNativeApp
       );
     },
     shouldShowFullDesktopHeader() {
       return (
         !this.$store.state.device.isNativeApp &&
-        this.loggedIn &&
-        this.$route.name !== 'Login'
+          this.loggedIn &&
+          this.$route.name !== 'Login'
       );
     },
     shouldShowSlimDesktopHeader() {
       return (
         !this.$store.state.device.isNativeApp &&
-        !this.loggedIn
+          !this.loggedIn
       );
     },
     showSurvey() {
       return (this.isHotJarSurveyVisible() && this.$route.name === INDEX.name);
     },
     mainClass() {
-      if (this.isLoginPage()) {
-        return this.$style.homeMain;
-      }
-      const clazzes = ['content', 'pull-body'];
+      const clazzes = [];
       if (this.$store.state.device.isNativeApp) {
         clazzes.push('native');
         clazzes.push('web');
@@ -206,11 +206,9 @@ export default {
   },
   mounted() {
     if (process.client) {
-      EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
-
       this.$store.subscribe((mutation) => {
         if (mutation.type === 'myRecord/ACCEPT_TERMS') {
-          this.focusNhsAppRoot();
+          this.$refs.nhsAppRoot.focus();
         }
       });
 
@@ -218,25 +216,25 @@ export default {
       if (this.loggedIn) {
         this.$store.dispatch('session/startValidationChecking');
         window.validateSession =
-          window.validateSession || (() => {
-            this.$store.dispatch('session/validate');
-          });
+            window.validateSession || (() => {
+              this.$store.dispatch('session/validate');
+            });
 
         if (this.$store.state.device.isNativeApp) {
           this.$store.dispatch('auth/nativeLogin');
+        }
+        if (this.$store.state.device.isNativeApp) {
+          NativeCallbacks.resetPageFocus();
         }
       }
     }
   },
   updated() {
     if (this.pathChanged) {
-      this.focusNhsAppRoot();
+      this.$refs.nhsAppRoot.focus();
       this.pathChanged = false;
       NativeCallbacks.pageLoadComplete();
     }
-  },
-  beforeDestroy() {
-    EventBus.$off(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
   },
   methods: {
     isLoginPage() {
@@ -251,53 +249,11 @@ export default {
     isAnalyticsCookieAccepted() {
       return this.$store.state.termsAndConditions.analyticsCookieAccepted;
     },
-    focusNhsAppRoot() {
-      this.$refs.nhsAppRoot.focus();
-    },
   },
 };
 </script>
 
-<style lang="scss">
-  @import "../style/main";
-  @import "../style/pulltorefresh";
-  @import "../style/elements";
-</style>
 
-<style module lang="scss" scoped>
-@import "../style/home";
-@import "../style/webshared";
-
-/* Addressing webkit chrome yellow border around app */
-.nhs-app:focus {
-  outline: none;
-}
-
-div {
- &.desktopWeb {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-content: stretch;
-  align-items: flex-start;
-  min-height: 100vh;
-
-  .header-container-desktop, .footer-container-desktop {
-   order: 0;
-   flex: 0 0 auto;
-   align-self: stretch;
-  }
-
-  .main-container-desktop {
-   order: 0;
-   flex: 1 0 auto;
-   align-self: stretch;
-  }
- }
-}
-
-div:focus {
-  outline: none !important;
-}
+<style lang="scss" scoped>
+  @import "~nhsuk-frontend/packages/nhsuk";
 </style>

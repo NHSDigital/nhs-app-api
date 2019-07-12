@@ -63,10 +63,6 @@ export default {
         dropdownClass.push(this.$style['validation-select-border']);
       }
 
-      if (!this.$store.state.device.isNativeApp) {
-        dropdownClass.push(this.$style.desktopWeb);
-      }
-
       return dropdownClass;
     },
   },

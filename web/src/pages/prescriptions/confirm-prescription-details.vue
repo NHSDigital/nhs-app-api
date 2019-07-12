@@ -1,60 +1,63 @@
 <template>
 
-  <div v-if="showTemplate" :class="[$style['pull-content'],
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
-
-    <div :class="$style.info" data-purpose="info">
-      <p>
+  <div v-if="showTemplate">
+    <div data-purpose="info">
+      <p class="nhsuk-body nhsuk-u-padding-bottom-3">
         {{ $t('rp04.subHeader') }}
       </p>
     </div>
-    <div :class="$style.panel">
-      <div v-for="selectedPrescription in selectedPrescriptions"
-           :key="selectedPrescription.courseId"
-           data-purpose="selected-prescription">
-        <b data-purpose="prescription-name">{{ selectedPrescription.name }}</b>
-        <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
-      </div>
-      <hr>
-      <div v-if="specialRequestNecessity !== 'NotAllowed'">
-        <b>{{ $t('rp04.specialRequestsLabel') }}</b>
-        <p v-if="specialRequest"
-           id="specialRequestText"
-           :class="$style['keep-line-breaks']">{{ specialRequest }}
-        </p>
-        <p v-else id="specialRequestText">
-          {{ $t('rp03.noSpecialRequestDefaultText') }}
-        </p>
-      </div>
-      <sjr-if journey="nominatedPharmacy">
-        <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
+    <CardGroup role="list" class="nhsuk-grid-row">
+      <CardGroupItem class="nhsuk-grid-column-full">
+        <Card>
+          <div v-for="selectedPrescription in selectedPrescriptions"
+               :key="selectedPrescription.courseId"
+               data-purpose="selected-prescription">
+            <b data-purpose="prescription-name">{{ selectedPrescription.name }}</b>
+            <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
+          </div>
           <hr>
-          <b :class="$style.pharmacyHeader">{{ $t('rp04.nominatedPharmacyHeader') }}</b>
-          <pharmacy-summary id="pharmacy-summary"
-                            :pharmacy="nominatedPharmacy"
-                            :pharmacy-name-as-header="false" />
-        </div>
-      </sjr-if>
+          <div v-if="specialRequestNecessity !== 'NotAllowed'">
+            <b>{{ $t('rp04.specialRequestsLabel') }}</b>
+            <p v-if="specialRequest"
+               id="specialRequestText">{{ specialRequest }}
+            </p>
+            <p v-else id="specialRequestText">
+              {{ $t('rp03.noSpecialRequestDefaultText') }}
+            </p>
+          </div>
+          <sjr-if journey="nominatedPharmacy">
+            <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
+              <hr>
+              <b>{{ $t('rp04.nominatedPharmacyHeader') }}</b>
+              <pharmacy-summary id="pharmacy-summary"
+                                :pharmacy="nominatedPharmacy"
+                                :pharmacy-name-as-header="false" />
+            </div>
+          </sjr-if>
+        </Card>
+      </CardGroupItem>
+    </CardGroup>
+
+    <div>
+      <button id="btn_confirm_and_order_prescription"
+              class="nhsuk-button"
+              click-delay="medium"
+              @click="onConfirmButtonClicked">
+        {{ $t('rp04.confirmButton') }}
+      </button>
     </div>
-
-    <generic-button id="btn_confirm_and_order_prescription"
-                    :button-classes="['button' , 'green',
-                                      !$store.state.device.isNativeApp && 'medium']"
-                    click-delay="medium"
-                    @click="onConfirmButtonClicked">
-      {{ $t('rp04.confirmButton') }}
-    </generic-button>
-
-    <generic-button v-if="$store.state.device.isNativeApp"
-                    id="back-to-prescriptions"
-                    :button-classes="['button' , 'grey']"
-                    @click="backToPrescriptionsClicked">
-      {{ $t('rp04.backButton') }}
-    </generic-button>
-    <desktopGenericBackLink v-else
-                            :path="prescriptionRepeatCoursesPath"
-                            :button-text="'rp04.backButton'"
-                            @clickAndPrevent="backToPrescriptionsClicked"/>
+    <div>
+      <generic-button v-if="$store.state.device.isNativeApp"
+                      id="back-to-prescriptions"
+                      :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                      @click="backToPrescriptionsClicked">
+        {{ $t('rp04.backButton') }}
+      </generic-button>
+      <desktopGenericBackLink v-else
+                              :path="prescriptionRepeatCoursesPath"
+                              :button-text="'rp04.backButton'"
+                              @clickAndPrevent="backToPrescriptionsClicked"/>
+    </div>
   </div>
 </template>
 
@@ -65,13 +68,20 @@ import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import SjrIf from '@/components/SjrIf';
 import { redirectTo } from '@/lib/utils';
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import Card from '@/components/widgets/card/Card';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     GenericButton,
     PharmacySummary,
     SjrIf,
+    Card,
+    CardGroupItem,
+    CardGroup,
   },
   data() {
     return {
@@ -121,29 +131,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/forms";
-  @import "../../style/info";
-  @import "../../style/panels";
-
-.pull-content {
-    &.desktopWeb {
-      font-family: $frutiger-light;
-      &>* {
-        max-width: 540px;
-      }
-    }
-    .panel {
-      margin-bottom: 1em;
-    }
-    .pharmacyHeader {
-      font-size: 1.2em;
-    }
-    hr {
-      opacity: unset;
-    }
-    .keep-line-breaks {
-    white-space: pre-line;
-  }
-  }
-
+ hr {
+  margin: 0.5em auto 0.5em;
+ }
 </style>

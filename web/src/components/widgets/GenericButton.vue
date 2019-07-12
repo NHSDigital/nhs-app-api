@@ -29,7 +29,8 @@ export default {
   computed: {
     defaultClasses() {
       return [...this.buttonClasses]
-        .map(style => (typeof (style) === 'string' ? this.$style[style] : style));
+        .map(style => (((typeof (style) !== 'string') || style.match(/^nhsuk-/g))
+          ? style : this.$style[style]));
     },
   },
   methods: {

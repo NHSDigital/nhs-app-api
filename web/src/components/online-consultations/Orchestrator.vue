@@ -49,8 +49,7 @@
                      :render-as-html="true"
                      @validate="onAnswerValidate"/>
         </question>
-        <generic-button :button-classes="['button', 'green']"
-                        :class="$style.button"
+        <generic-button :button-classes="['nhsuk-button']"
                         click-delay="short"
                         @click.prevent="continueClicked">
           {{ $t('appointments.admin_help.orchestrator.continueButton') }}
@@ -80,17 +79,17 @@
                             @clickAndPrevent="backToHomeClicked"/>
     <no-js-form v-else-if="showBackButton" :value="noJsState" method="post">
       <input type="hidden" name="direction" value="back">
-      <generic-button :button-classes="['button', 'grey']"
-                      :class="$style.button"
+      <generic-button :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
                       click-delay="short"
                       @click.prevent="backClicked">
         {{ $t('appointments.admin_help.orchestrator.backButton') }}
       </generic-button>
     </no-js-form>
     <form v-else :action="indexPath">
-      <back-button :goto-path="indexPath"
-                   :class="$style.button"
-                   :text="$t(backButtonText)"/>
+      <generic-button :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                      @click.prevent="goBack">
+        {{ $t(backButtonText) }}
+      </generic-button>
     </form>
   </div>
 </template>
@@ -330,6 +329,9 @@ export default {
         responseErrors.forEach(c => errorMessages.push(c));
       }
       return errorMessages;
+    },
+    goBack() {
+      redirectTo(this, this.indexPath, null);
     },
   },
 };

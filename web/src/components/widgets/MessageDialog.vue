@@ -2,6 +2,7 @@
   <div data-purpose="error-container"
        :class="[mType,
                 ...extraClasses,
+                'nhsuk-width-container--full',
                 {[$style.desktopWeb] : !$store.state.device.isNativeApp},
                 plainStyle]">
     <div v-if="showIcon" :class="$style.icon">

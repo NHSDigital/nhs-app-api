@@ -59,7 +59,10 @@ export default {
 @import '../../style/desktopWeb/accessibility';
 
 div.info-message {
- &.desktopWeb {
+
+  cursor: pointer;
+
+  &.desktopWeb {
   .info-header {
     &:focus{
       @include outlineStyle;

@@ -1,26 +1,33 @@
 <template>
-  <div :class="[$style.panel, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <p v-if="prescriptionCourse.orderDate != null">
-      <b>{{ $t('rp02.orderDate') }}:</b>
-      <span data-label="order-date">
-        {{ prescriptionCourse.orderDate | longDate }}
-      </span>
-    </p>
+  <div>
+    <component :is="dateHeader" :class="$style['date-header']">
+      <div v-if="prescriptionCourse.orderDate != null">
+        <div :class="$style.dateHeaderTitle"
+             data-label="dateHeader">{{ $t('rp02.orderDate') }}
+        </div>
+        <div :class="$style.date" data-label="order-date">
+          {{ prescriptionCourse.orderDate | longDate }}
+        </div>
+      </div>
+
+      <div v-if="prescriptionCourse.status != null">
+        <div :class="getStatusStyle()">
+          <b>
+            <component :is="getIcon()"
+                       data-label="status-icon"
+                       :data-status="getStatusText()"
+                       focusable="false"/>
+            <span data-label="status-description">
+              {{ getStatusDescription() }}
+            </span>
+          </b>
+        </div>
+      </div>
+    </component>
+
     <hr v-if="prescriptionCourse.orderDate != null" aria-hidden="true">
     <b data-label="course-name">{{ prescriptionCourse.name }}</b>
     <p data-label="detail">{{ prescriptionCourse.details }}</p>
-    <div v-if="prescriptionCourse.status != null">
-      <hr aria-hidden="true">
-      <div :class="getStatusStyle()">
-        <b>
-          <component :is="getIcon()" focusable="false"/>
-          <span data-label="status">
-            {{ getStatusText() }}
-          </span>
-        </b>
-        <p data-label="status-description">{{ getStatusDescription() }}</p>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -41,6 +48,11 @@ export default {
     prescriptionCourse: {
       type: Object,
       required: true,
+    },
+    dateHeader: {
+      type: String,
+      default: 'h3',
+      validator: value => ['h2', 'h3'].indexOf(value) !== -1,
     },
   },
   created() {
@@ -84,13 +96,39 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../style/panels";
+@import "../style/colours";
 
-.panel {
-  &.desktopWeb {
-    hr {
-      opacity: unset;
-    }
-  }
+.dateHeaderTitle {
+ font-weight: bold;
+ font-size: 18px;
+}
+
+.date {
+ font-weight: normal;
+ font-size: 25px;
+ line-height: 1.5em;
+ margin-bottom: 1em
+}
+
+ hr {
+  margin-bottom: 0.5em
+ }
+
+.requested {
+ b {
+  color: $awaiting !important;
+ }
+}
+
+.issued {
+ b {
+  color: $approved !important;
+ }
+}
+
+.rejected {
+ b {
+  color: $error !important;
+ }
 }
 </style>

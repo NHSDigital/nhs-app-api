@@ -1,16 +1,20 @@
 <template>
-  <div v-if="showTemplate" :class="!isNativeApp && $style.desktopWeb">
-    <message-dialog v-if="isError" role="alert">
-      <message-text data-purpose="error-heading"
-                    :is-header="true">
-        {{ $t('appointments.admin_help.errors.header') }}
-      </message-text>
-      <message-text data-purpose="reason-error"
-                    :aria-label="$t('appointments.admin_help.errors.message.label')">
-        {{ $t('appointments.admin_help.errors.message.text') }}
-      </message-text>
-    </message-dialog>
-    <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
+  <div v-if="showTemplate">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <message-dialog v-if="isError" role="alert">
+          <message-text data-purpose="error-heading"
+                        :is-header="true">
+            {{ $t('appointments.admin_help.errors.header') }}
+          </message-text>
+          <message-text data-purpose="reason-error"
+                        :aria-label="$t('appointments.admin_help.errors.message.label')">
+            {{ $t('appointments.admin_help.errors.message.text') }}
+          </message-text>
+        </message-dialog>
+        <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,6 +29,8 @@ import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
 import { INDEX } from '@/lib/routes';
 
 export default {
+  layout: 'nhsuk-layout',
+
   components: {
     MessageDialog,
     MessageText,
@@ -80,8 +86,3 @@ export default {
   },
 };
 </script>
-<style module lang="scss" scoped>
-  div.desktopWeb {
-    max-width: 540px;
-  }
-</style>

@@ -1,28 +1,37 @@
 <template>
   <span>
-    <h2 :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-      {{ $t('appointments.index.past.header') }}</h2>
-
-    <div role="list">
-      <appointment v-for="appointment in appointments"
-                   :key="appointment.id"
-                   :class="$style.past"
-                   :appointment="appointment"
-                   :cancellation-disabled="true"
-                   :show-cancellation-link="false"
-                   :telephone-message="$t('appointments.index.past.telephoneMessage')"
-                   data-purpose="past-appointments"
-                   role="listitem"/>
-    </div>
+    <h2>
+      {{ $t('appointments.index.past.header') }}
+    </h2>
+    <CardGroup v-for="(chunk, index) in chunked" :key="index" role="list" class="nhsuk-grid-row">
+      <CardGroupItem v-for="appointment in chunk"
+                     :key="appointment.id" class="nhsuk-grid-column-one-half">
+        <Card>
+          <appointment :appointment="appointment"
+                       :cancellation-disabled="true"
+                       :show-cancellation-link="false"
+                       :telephone-message="$t('appointments.index.past.telephoneMessage')"
+                       data-purpose="past-appointments"
+                       role="listitem"/>
+        </Card>
+      </CardGroupItem>
+    </CardGroup>
   </span>
 </template>
 
 <script>
 import Appointment from '@/components/appointments/Appointment';
+import chunk from 'lodash/fp/chunk';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import Card from '@/components/widgets/card/Card';
 
 export default {
   name: 'PastAppointments',
   components: {
+    Card,
+    CardGroupItem,
+    CardGroup,
     Appointment,
   },
   props: {
@@ -31,19 +40,10 @@ export default {
       default: () => [],
     },
   },
+  computed: {
+    chunked() {
+      return chunk(2)(this.appointments);
+    },
+  },
 };
 </script>
-
-<style module lang="scss" scoped>
-
-.past {
-  display: table !important;
-}
-
-h2 {
- &.desktopWeb {
-  margin-top: 1em;
- }
-}
-
-</style>

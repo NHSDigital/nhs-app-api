@@ -3,8 +3,7 @@
     v-tabbing="defaultClasses"
     :class="getStyleClasses"
     @keypress="onKeyDown">
-    <a :class="!$store.state.device.isNativeApp && $style.desktopWeb"
-       :href="createLink()" @click.prevent="select">
+    <a :href="createLink()" @click.prevent="select">
       <span >
         <span :class="$style.strong"
               data-label="start time"
@@ -81,6 +80,7 @@ export default {
 <style module lang="scss" scoped>
 @import "../../../style/selectors";
 @import '../../../style/textstyles';
+@import '../../../style/desktopWeb/accessibility';
 
 .timeSlot {
   @extend .selector;
@@ -101,6 +101,7 @@ export default {
 
     &:hover {
       border-radius: 0.313em;
+        @include outlineStyleLight;
     }
   }
  .strong {

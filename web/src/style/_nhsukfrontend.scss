@@ -33,7 +33,7 @@
 @import '~nhsuk-frontend/packages/core/utilities/visually-hidden';
 @import '~nhsuk-frontend/packages/core/utilities/widths';
 
-
+// Components
 @import "~nhsuk-frontend/packages/components/back-link/back-link";
 @import "~nhsuk-frontend/packages/components/input/input";
 @import "~nhsuk-frontend/packages/components/error-message/error-message";
@@ -53,10 +53,16 @@
 @import "~nhsuk-frontend/packages/components/header/header";
 @import "~nhsuk-frontend/packages/core/styles/icons";
 
+// Misc
+@import '~nhsuk-frontend/packages/core/settings/typography';
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/components/panel/panel';
+@import '~nhsuk-frontend/packages/components/button/button';
+@import '~nhsuk-frontend/packages/components/details/details';
 
-/**
-  Removal of NHS UK grey background
- */
-html {
-  background-color: unset;
+
+* {
+  outline: none;
 }

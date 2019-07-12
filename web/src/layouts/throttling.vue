@@ -38,12 +38,12 @@ export default {
   },
   created() {
     const { source } = this.$route.query;
+
     if (Sources.isNative(source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
       this.$store.dispatch('device/setSourceDevice', source);
     }
   },
-
 };
 </script>
 

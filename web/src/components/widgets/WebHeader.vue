@@ -18,13 +18,7 @@
           <header-links v-if="showLinks" :anchor-links="links"/>
         </div>
       </div>
-      <div class="nhsuk-width-container">
-        <div class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-full">
-            <header-menu v-if="showMenu" />
-          </div>
-        </div>
-      </div>
+      <header-menu v-if="showMenu" />
     </header>
 
     <bread-crumb-trail :routes="currentBreadCrumbs"/>

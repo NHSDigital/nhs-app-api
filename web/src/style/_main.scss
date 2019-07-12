@@ -29,6 +29,11 @@ body {
 	@include fromDesktop {
 		font-size: 1em;
 	}
+
+	.web {
+		min-height: 100vh;
+		height: 100%;
+	}
 }
 * {
 	padding: 0;
@@ -45,9 +50,6 @@ main.content {
   width:  auto;
   display: block;
 
-  &.web {
-	  margin: 1em;
-  }
   &.desktopWeb {
 	  min-width: 200px;
       cursor: default;

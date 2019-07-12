@@ -45,7 +45,7 @@ class AppointmentGuidancePage : HybridPageObject() {
     )
 
     private val content = HybridPageElement(
-            webDesktopLocator = "$mainXPath/div[@data-purpose='info']",
+            webDesktopLocator = "//*[@data-purpose='info']",
             androidLocator = null,
             page = this
     )
