@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Support.UnitTests
     public class EnumHelperTests
     {
         [TestMethod]
-        public void GetType_WhenTypeNotEnum_ThrownsAnException()
+        public void GetType_WhenTypeNotEnum_ThrowsAnException()
         {
             // Arrange
             Action act = () => EnumHelper.GetType<int>();

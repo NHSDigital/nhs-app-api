@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
 {
@@ -13,6 +14,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
         
         public bool HasAccess { get; set; }
         public bool HasErrored { get; set; }
+        public int RecordCount => Data?.Count() ?? 0;
         public IEnumerable<ProblemItem> Data { get; set; }       
     }
 }

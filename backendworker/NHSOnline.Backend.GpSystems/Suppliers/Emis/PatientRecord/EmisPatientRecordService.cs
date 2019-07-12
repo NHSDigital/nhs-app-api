@@ -88,8 +88,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 myRecordResponse.Supplier = emisUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
-                _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
-
                 return new GetMyRecordResult.Success(myRecordResponse);
             }
             catch (HttpRequestException e)

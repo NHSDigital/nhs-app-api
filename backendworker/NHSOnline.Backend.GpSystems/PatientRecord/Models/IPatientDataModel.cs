@@ -4,5 +4,6 @@
     {
         bool HasAccess { get; set; }
         bool HasErrored { get; set; }
+        int RecordCount { get; }
     }
 }

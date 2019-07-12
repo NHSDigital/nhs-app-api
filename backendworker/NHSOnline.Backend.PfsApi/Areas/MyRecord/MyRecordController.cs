@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
@@ -14,15 +16,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<MyRecordController> _logger;
         private readonly IAuditor _auditor;
+        private readonly IMyRecordMetadataLogger _myRecordMetadataLogger;
         
         public MyRecordController(
             ILogger<MyRecordController> logger,
             IGpSystemFactory gpSystemFactory, 
-            IAuditor auditor)
+            IAuditor auditor,
+            IMyRecordMetadataLogger myRecordMetadataLogger)
         {
             _gpSystemFactory = gpSystemFactory;
             _logger = logger;
             _auditor = auditor;
+            _myRecordMetadataLogger = myRecordMetadataLogger;
         }
 
         [HttpGet]
@@ -45,9 +50,24 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             
             // Audit result of attempt to view patient record    
             await result.Accept(new MyRecordAuditingVisitor(_auditor, _logger));
+
+            LogMetadata(userSession, result);
             
             _logger.LogExit();
             return result.Accept(new MyRecordResultVisitor());
+        }
+
+        private void LogMetadata(UserSession userSession, GetMyRecordResult result)
+        {
+            try
+            {
+                _myRecordMetadataLogger.LogMyRecordMetadata(userSession, result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to log Patient Record Metadata. " +
+                                    "Catching exception to prevent inability to view medical record.");
+            }
         }
     }
 }

@@ -62,9 +62,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 _logger.LogInformation($"Mapping TPP responses to universal {nameof(MyRecordResponse)} class instance");
                 var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents, testResults);
                 myRecordResponse.Supplier = tppUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
-                
-                _logger.LogInformation($"{nameof(MyRecordResponse)}: {myRecordResponse}");
-                
+
                 return new GetMyRecordResult.Success(myRecordResponse);
             }
             catch (HttpRequestException e)
