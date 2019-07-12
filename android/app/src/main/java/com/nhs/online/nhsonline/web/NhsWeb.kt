@@ -207,7 +207,7 @@ class NhsWeb(
     }
 
     fun loadUrlInChromeTab(urlString: String) {
-        openBrowserActivity.start(activity, urlString)
+        openBrowserActivity.start(activity, urlString, uiInteractor)
     }
 
     fun openInChromeTabIfApplicable(url: String): Boolean {

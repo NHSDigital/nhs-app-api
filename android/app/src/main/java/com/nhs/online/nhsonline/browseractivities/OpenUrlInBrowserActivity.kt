@@ -9,6 +9,11 @@ import android.support.v4.content.ContextCompat
 import java.net.URL
 import android.support.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
 import android.content.pm.ResolveInfo
+import android.util.Log
+import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorType
+import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.KnownServices
 
 private const val CHROME_PACKAGE_NAME = "com.android.chrome"
@@ -31,7 +36,7 @@ class OpenUrlInBrowserActivity(private val nativeAppHosts: Array<String>) : Acti
         return true
     }
 
-    override fun start(context: Context, url: String) {
+    override fun start(context: Context, url: String, interactor: IInteractor) {
         if (!canStart(context, url)) {
             throw RuntimeException("Cannot open url in browser")
         }
@@ -55,7 +60,14 @@ class OpenUrlInBrowserActivity(private val nativeAppHosts: Array<String>) : Acti
         } else {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
-            ContextCompat.startActivity(context, intent, null)
+           if(intent.resolveActivity(context.packageManager) != null) {
+               ContextCompat.startActivity(context, intent, null)
+           }
+            else {
+               var unavailableErrorMessage = ErrorMessage(context, ErrorType.BrowserNotAvailable)
+               Log.d(Application.TAG, "Browser is unavailable or disabled")
+               interactor.showUnavailabilityError(unavailableErrorMessage)
+           }
         }
 
     }

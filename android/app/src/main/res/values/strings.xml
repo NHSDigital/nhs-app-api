@@ -65,6 +65,7 @@
     <string name="biometric_warning_message">
         All Fingerprint IDs registered on this device will be able to open your NHS account.
     </string>
+    <string name="biometric_registration_header">Error</string>
     <string name="biometric_registration_failure_message">
         Something went wrong when registering for Fingerprint ID.
     </string>
@@ -75,6 +76,14 @@
     <string name="apiUnavailableErrorMessage">You currently cannot use this service. \n\nIf the problem continues and you need to book an
         appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.
     </string>
+    <string name="browser_unavailable">There\'s been a problem loading this page</string>
+    <string name="browser_unavailable_message">
+        This could be because your device’s settings are preventing us from opening this page.\n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.
+        For urgent medical advice, call 111.</string>
+    <string name="accessible_browser_unavailable_message">
+        This could be because your device’s settings are preventing us from opening this page.\n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.
+        For urgent medical advice, call 111.</string>
+
     <string name="retryButtonText">Try again</string>
     <string name="errorIconText">Error</string>
     <string name="successIconText">Success</string>

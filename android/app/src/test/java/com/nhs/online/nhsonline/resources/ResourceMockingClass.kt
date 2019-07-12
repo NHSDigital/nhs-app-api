@@ -98,6 +98,7 @@ open class ResourceMockingClass {
             )
             on { getString(R.string.adminHelpPath) } doReturn "appointments/admin-help"
             on { getString(R.string.admin_help_header) } doReturn "GP help without an appointment"
+            on { getString(R.string.browser_unavailable) } doReturn "Browser is disabled"
         }
 
         return mock {

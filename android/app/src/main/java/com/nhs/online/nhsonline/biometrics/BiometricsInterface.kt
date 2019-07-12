@@ -1,9 +1,10 @@
 package com.nhs.online.nhsonline.biometrics
 
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
+import com.nhs.online.nhsonline.interfaces.IInteractor
 
 
-class BiometricsInterface(private val biometricsInteractor: IBiometricsInteractor) {
+class BiometricsInterface(private val biometricsInteractor: IBiometricsInteractor, private val interactor: IInteractor = biometricsInteractor as IInteractor) {
     private var fingerprintService: FingerprintService? = null
     var isFingerprintRegistered: Boolean
         get() = fingerprintService?.biometricState?.registered ?: false
@@ -16,7 +17,7 @@ class BiometricsInterface(private val biometricsInteractor: IBiometricsInteracto
         fidoServerUrl: String
     ): Boolean {
         val fingerprintService =
-            FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl)
+            FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl, interactor)
                     ?: return false
         this.fingerprintService = fingerprintService
         return true
@@ -39,7 +40,7 @@ class BiometricsInterface(private val biometricsInteractor: IBiometricsInteracto
         if (FingerprintSystemChecker.checkIfAndroidMOrAbove()) {
             biometricsInteractor.showBiometricRegistrationError()
         } else {
-            FingerprintSystemChecker.showCurrentOSNotSupportDialog(biometricsInteractor.getActivity())
+            FingerprintSystemChecker.showCurrentOSNotSupportDialog(biometricsInteractor.getActivity(), interactor)
         }
 
         return false

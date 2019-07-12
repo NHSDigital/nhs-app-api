@@ -9,10 +9,12 @@ import com.nhs.online.nhsonline.biometrics.utils.*
 import com.nhs.online.nhsonline.fido.uaf.client.operation.Authentication
 import com.nhs.online.nhsonline.fido.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.nhsonline.fido.uaf.util.FidoEndpointConfig
+import com.nhs.online.nhsonline.interfaces.IInteractor
 
 @TargetApi(Build.VERSION_CODES.M)
 class FingerprintService(
     biometricsInteractor: IBiometricsInteractor,
+    private val interactor: IInteractor,
     fidoKeystore: FidoKeystoreAndroidM,
     fingerprintSystemChecker: FingerprintSystemChecker,
     preferencesService: FingerprintSharedPreferences,
@@ -90,7 +92,8 @@ class FingerprintService(
 
         fun createIfDeviceSupported(
             biometricsInteractor: IBiometricsInteractor,
-            fidoServerUrl: String
+            fidoServerUrl: String,
+            interactor: IInteractor
         ): FingerprintService? {
             if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M) || fidoServerUrl.isEmpty())
                 return null
@@ -106,13 +109,14 @@ class FingerprintService(
             )
 
             val fingerprintManager = FingerprintManagerCompat.from(activity)
-            val fingerprintSystemChecker = FingerprintSystemChecker(fingerprintManager, activity)
+            val fingerprintSystemChecker = FingerprintSystemChecker(fingerprintManager, activity, interactor)
             val fidoKeystore = FidoKeystoreAndroidM()
             val preferencesService = FingerprintSharedPreferences(activity)
             val uafAuthenticator = Authentication(fidoEndpointConfig)
 
 
             return FingerprintService(biometricsInteractor,
+                    interactor,
                 fidoKeystore,
                 fingerprintSystemChecker,
                 preferencesService,

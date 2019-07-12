@@ -5,15 +5,17 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.support.AlertHelper
 
 
 class FingerprintSystemChecker(
     private val fingerprintManager: FingerprintManagerCompat,
-    val context: Context
+    val context: Context,
+    interactor: IInteractor
 ) {
 
-    private val alertHelper: AlertHelper = AlertHelper(context)
+    private val alertHelper: AlertHelper = AlertHelper(context, interactor)
 
     @RequiresApi(23)
     fun preRegistrationCheck(): Boolean {
@@ -89,9 +91,9 @@ class FingerprintSystemChecker(
             return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         }
 
-        fun showCurrentOSNotSupportDialog(context: Context) {
+        fun showCurrentOSNotSupportDialog(context: Context, interactor: IInteractor) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                AlertHelper(context).showDialog(
+                AlertHelper(context, interactor).showDialog(
                     context.getString(R.string.version_not_supported_header),
                     context.getString(R.string.version_not_supported_message))
             }

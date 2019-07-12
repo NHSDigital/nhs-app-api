@@ -4,6 +4,7 @@ import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhs.online.nhsonline.activities.MainActivity
+import com.nhs.online.nhsonline.interfaces.IInteractor
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -16,11 +17,13 @@ class FingerprintSystemCheckerTest {
     private lateinit var fingerprintSystemChecker: FingerprintSystemChecker
     private lateinit var fingerprintManagerMock: FingerprintManagerCompat
     private lateinit var contextMock: MainActivity
+    private lateinit var interactorMock: IInteractor
 
     @Before
     fun setUp() {
         contextMock = mock()
         fingerprintManagerMock = mock()
+        interactorMock = mock()
 
     }
 
@@ -31,7 +34,7 @@ class FingerprintSystemCheckerTest {
         fingerprintSystemChecker =
                 FingerprintSystemChecker(
                     fingerprintManagerMock,
-                    contextMock)
+                    contextMock, interactorMock)
         val result = fingerprintSystemChecker.checkIfHardwareSupported()
 
         Assert.assertFalse(result)
@@ -44,7 +47,7 @@ class FingerprintSystemCheckerTest {
         fingerprintSystemChecker =
                 FingerprintSystemChecker(
                     fingerprintManagerMock,
-                    contextMock)
+                    contextMock, interactorMock)
         val result = fingerprintSystemChecker.checkIfHardwareSupported()
 
         Assert.assertTrue(result)
@@ -57,7 +60,7 @@ class FingerprintSystemCheckerTest {
         fingerprintSystemChecker =
                 FingerprintSystemChecker(
                     fingerprintManagerMock,
-                    contextMock)
+                    contextMock, interactorMock)
         val result = fingerprintSystemChecker.checkIfFingerprintsExist()
 
         Assert.assertTrue(result)
@@ -70,7 +73,7 @@ class FingerprintSystemCheckerTest {
         fingerprintSystemChecker =
                 FingerprintSystemChecker(
                     fingerprintManagerMock,
-                    contextMock)
+                    contextMock, interactorMock)
         val result = fingerprintSystemChecker.checkIfFingerprintsExist()
 
         Assert.assertFalse(result)

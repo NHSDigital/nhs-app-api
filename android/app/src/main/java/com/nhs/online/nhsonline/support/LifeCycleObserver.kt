@@ -86,6 +86,7 @@ class LifeCycleObserver(
                 context.dismissProgressDialog()
 
                 context.isSuccessfulConfigCheck = false
+                Log.d(Application.TAG, "Configuration not available")
                 context.showUnavailabilityError(errorMessage)
 
             }

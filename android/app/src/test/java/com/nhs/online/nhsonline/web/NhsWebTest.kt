@@ -3,7 +3,6 @@ package com.nhs.online.nhsonline.web
 import android.app.Activity
 import android.content.res.Resources
 import android.webkit.CookieManager
-import android.webkit.WebSettings
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
@@ -12,7 +11,6 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.UrlLoader
-import com.nhs.online.nhsonline.support.PersistData
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
@@ -36,6 +34,7 @@ class NhsWebTest {
         interactorMock = mock()
         webViewMock = mock()
         urlLoader = mock()
+        interactorMock = mock()
         nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
@@ -139,7 +138,7 @@ class NhsWebTest {
         ReflectionHelpers.setField(nhsWeb, "openBrowserActivity", openBrowserActivityMock)
         val url = "http://unit-test.com"
         nhsWeb.loadUrlInChromeTab(url)
-        verify(openBrowserActivityMock).start(any(), any())
+        verify(openBrowserActivityMock).start(any(), any(), any())
     }
 
     @Test

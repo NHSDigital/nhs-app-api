@@ -2,7 +2,6 @@ package com.nhs.online.nhsonline.interfaces
 
 import com.nhs.online.nhsonline.data.ErrorMessage
 
-
 interface IInteractor {
 
     fun loadPage(url: String)
@@ -19,7 +18,7 @@ interface IInteractor {
 
     fun selectNavigationMenuActive(navigationMenuId: Int)
 
-    fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage)
+    fun showUnavailabilityError(errorMessage: ErrorMessage)
 
     fun showWebviewScreen()
 

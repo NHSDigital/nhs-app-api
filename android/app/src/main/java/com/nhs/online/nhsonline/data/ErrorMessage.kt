@@ -7,6 +7,7 @@ class ErrorMessage(context: Context, errorType: ErrorType) {
     var title:String
     var message:String?
     var accessibleMessage:String?
+    var isRetry:Boolean
 
     init {
         when(errorType){
@@ -14,16 +15,37 @@ class ErrorMessage(context: Context, errorType: ErrorType) {
                 title = context.resources.getString(R.string.connection_error_title)
                 message = context.resources.getString(R.string.connection_error_message)
                 accessibleMessage = context.resources.getString(R.string.Accessible_connection_error_message)
+                isRetry = true
             }
             ErrorType.ServiceUnavailable -> {
                 title = context.resources.getString(R.string.server_error_title)
                 message = context.resources.getString(R.string.server_error_message)
                 accessibleMessage = context.resources.getString(R.string.accessible_server_error_message)
+                isRetry = true
             }
             ErrorType.ApiCallFailure -> {
                 title = context.resources.getString(R.string.service_unavailable)
                 message = context.resources.getString(R.string.apiUnavailableErrorMessage)
                 accessibleMessage = context.resources.getString(R.string.accessible_apiUnavailableErrorMessage)
+                isRetry = true
+            }
+            ErrorType.BrowserNotAvailable -> {
+                title = context.resources.getString(R.string.browser_unavailable)
+                message = context.resources.getString(R.string.browser_unavailable_message)
+                accessibleMessage = context.resources.getString(R.string.accessible_browser_unavailable_message)
+                isRetry = true
+            }
+            ErrorType.BiometricDeviceFailure -> {
+                title = context.resources.getString(R.string.biometric_header)
+                message = context.resources.getString(R.string.biometric_device_failure_message)
+                accessibleMessage = context.resources.getString(R.string.biometric_device_failure_message)
+                isRetry = false
+            }
+            ErrorType.BiometricRegistrationFailure -> {
+                title = context.resources.getString(R.string.biometric_registration_header)
+                message = context.resources.getString(R.string.biometric_registration_failure_message)
+                accessibleMessage = context.resources.getString(R.string.biometric_device_failure_message)
+                isRetry = false
             }
         }
     }
@@ -44,5 +66,6 @@ class ErrorMessage(context: Context, errorType: ErrorType) {
 }
 
 enum class ErrorType {
-    NoConnection, ServiceUnavailable, ApiCallFailure
+    NoConnection, ServiceUnavailable, ApiCallFailure,
+    BrowserNotAvailable, BiometricDeviceFailure, BiometricRegistrationFailure
 }

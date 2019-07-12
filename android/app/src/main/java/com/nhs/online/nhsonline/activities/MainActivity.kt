@@ -19,10 +19,12 @@ import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
+import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
 import com.nhs.online.nhsonline.biometrics.IBiometricsInteractor
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
@@ -56,6 +58,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
     private lateinit var activityViewSwitcher: MainActivityViewSwitcher
+    private lateinit var context: Context
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -386,40 +389,40 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun showBiometricRegistrationError() {
-        try {
-            errorTextView.setServiceError(getString(R.string.errorIconText),
-                getString(R.string.biometric_registration_failure_message))
-            activityViewSwitcher.switchTo(ActivityView.ERROR)
-        } catch (e: Exception) {
-            logger.log(Level.WARNING,
-                    "${this::class.java.simpleName}: Unable to show error page $e")
-        }
+        val biometricDeviceErrorMessage = ErrorMessage(context, ErrorType.BiometricRegistrationFailure)
+        Log.d(Application.TAG, "Biometric registration failed")
+        showErrorScreen( biometricDeviceErrorMessage )
     }
 
     override fun showBiometricDeviceError() {
-        try {
-            errorTextView.setServiceError("Error",
-                    getString(R.string.biometric_device_failure_message))
-            activityViewSwitcher.switchTo(ActivityView.ERROR)
-        } catch (e: Exception) {
-            logger.log(Level.WARNING,
-                    "${this::class.java.simpleName}: Unable to show error page $e")
-        }
+        val biometricDeviceErrorMessage = ErrorMessage(context, ErrorType.BiometricDeviceFailure)
+        Log.d(Application.TAG, "Biometric device failed")
+        showErrorScreen( biometricDeviceErrorMessage )
     }
 
-    override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
-        appDialogs.dismissVersionUpgradeDialog()
-        showErrorScreen()
-        errorTextView.setServiceError(unavailabilityErrorMessage.title,
-            unavailabilityErrorMessage.message)
-        errorTextView.contentDescription = unavailabilityErrorMessage.title + ". " +
-                unavailabilityErrorMessage.accessibleMessage
-        if (unavailabilityErrorMessage.message != null) {
-            tryAgainTextView.visibility = GONE
+    override fun showUnavailabilityError(unavailableErrorMessage: ErrorMessage) {
+        showErrorScreen(unavailableErrorMessage)
+    }
 
-        } else {
-            tryAgainTextView.visibility = VISIBLE
+    private fun showErrorScreen (errorMessage: ErrorMessage) {
+        try {
+            errorTextView.setServiceError(errorMessage.title, errorMessage.message)
+            errorTextView.contentDescription = errorMessage.title + ". " +
+                    errorMessage.accessibleMessage
+
+            if (!errorMessage.isRetry) {
+                tryAgainTextView.visibility = GONE
+
+            } else {
+                tryAgainTextView.visibility = VISIBLE
+            }
+
+            appDialogs.dismissVersionUpgradeDialog()
+            showErrorScreen()
+        } catch (e: Exception) {
+            logger.log(Level.WARNING, "${this::class.java.simpleName}: Unable to show error page $e")
         }
+
     }
 
     private fun showErrorScreen() {

@@ -8,6 +8,7 @@ import com.nhs.online.nhsonline.biometrics.utils.*
 import com.nhs.online.nhsonline.fido.uaf.client.operation.Authentication
 import com.nhs.online.nhsonline.fido.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.nhsonline.fido.uaf.util.FidoEndpointConfig
+import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.support.BiometricsInvalidSignatureException
 import com.nhs.online.nhsonline.support.extractJSONString
 import org.junit.Assert
@@ -58,8 +59,9 @@ class FingerprintServiceTest {
         }
 
         val fidoKeystore: FidoKeystoreAndroidM = mock()
+        val interactor: IInteractor = mock()
 
-        fingerprintService = FingerprintService(biometricsInteractor,
+        fingerprintService = FingerprintService(biometricsInteractor, interactor,
             fidoKeystore,
             mock(),
             mockPreferencesService,
@@ -70,11 +72,12 @@ class FingerprintServiceTest {
     fun fingerprintServiceCompanionClass_ReturnsNonNullWhenApiVersionEqualOrHigherThan23() {
         val marshmallowOrHigherApis =
             listOf(Build.VERSION_CODES.M, Build.VERSION_CODES.N, Build.VERSION_CODES.O)
+        val interactor: IInteractor = mock()
 
         marshmallowOrHigherApis.forEach { version ->
             setAndroidApiVersion(version)
             val fingerprintService =
-                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl)
+                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl, interactor)
             Assert.assertNotNull(fingerprintService)
         }
     }
@@ -85,11 +88,12 @@ class FingerprintServiceTest {
             listOf(Build.VERSION_CODES.LOLLIPOP_MR1,
                 Build.VERSION_CODES.LOLLIPOP,
                 Build.VERSION_CODES.KITKAT)
+        val interactor: IInteractor = mock()
 
         lollipopOrLowerApis.forEach { version ->
             setAndroidApiVersion(version)
             val fingerprintService =
-                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl)
+                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl, interactor)
             Assert.assertNull(fingerprintService)
         }
     }

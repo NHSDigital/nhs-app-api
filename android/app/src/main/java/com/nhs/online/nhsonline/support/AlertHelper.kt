@@ -6,8 +6,9 @@ import android.util.Log
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
+import com.nhs.online.nhsonline.interfaces.IInteractor
 
-class AlertHelper(val context: Context) {
+class AlertHelper(val context: Context, val interactor: IInteractor) {
 
     fun showDialog(title: String, message: String, helpLink: String = "") {
         val builder = createDialogBuilder(title, message, helpLink)
@@ -28,7 +29,7 @@ class AlertHelper(val context: Context) {
             builder.setNeutralButton(context.resources.getString(R.string.biometrics_dialog_get_help)) { _, _ ->
                 val biometricHelpBrowserActivity =
                     OpenUrlInBrowserActivity(context.resources.getStringArray(R.array.nativeAppHosts))
-                biometricHelpBrowserActivity.start(context, helpLink)
+                biometricHelpBrowserActivity.start(context, helpLink, interactor)
             }
         }
 
