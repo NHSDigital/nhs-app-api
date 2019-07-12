@@ -13,27 +13,23 @@
     },
     {
       "resourceType": "Questionnaire",
-      "id": "TEST_GEC_ADM_AD_SICKNOTEDURATION",
+      "id": "GEC_ADM_AD_REFERRALPRIORITY",
       "status": "active",
       "item": [
         {
-          "linkId": "TEST_GEC_ADM_AD_SICKNOTEDURATION",
-          "text": "How long do you expect you'll be ill for?",
-          "type": "choice",
+          "linkId": "GEC_ADM_AD_REFERRALPRIORITY",
+          "text": "Between 0 and 10, 0 being low and 10 being high, what would you say the priority of the referral is?",
+          "type": "integer",
           "required": true,
           "repeats": false,
-          "option": [
+          "extension": [
             {
-              "valueCoding": {
-                "code": "TEST_GEC_ADM_AD_SICKNOTEDURATION_LT7",
-                "display": "Less than seven days"
-              }
+              "url": "http://fhirtypes.com/number/minValue",
+              "valueInteger": 0
             },
             {
-              "valueCoding": {
-                "code": "TEST_GEC_ADM_AD_SICKNOTEDURATION_GT7",
-                "display": "More than seven days"
-              }
+              "url": "http://fhirtypes.com/number/maxValue",
+              "valueInteger": 10
             }
           ]
         }
@@ -42,21 +38,21 @@
   ],
   "requestId": "1",
   "module": {
-    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/TEST_GEC_ADM"
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
   },
   "status": "data-required",
-  "occurrenceDateTime": "2019-05-23T11:17:34.334",
+  "occurrenceDateTime": "2019-05-23T11:18:04.864",
   "outputParameters": {
     "reference": "#outputParams"
   },
   "dataRequirement": [
     {
-      "id": "TEST_GEC_ADM_AD_SICKNOTEDURATION",
+      "id": "GEC_ADM_AD_REFERRALPRIORITY",
       "extension": [
         {
           "url": "https://www.hl7.org/fhir/questionnaire.html",
           "valueReference": {
-            "reference": "#TEST_GEC_ADM_AD_SICKNOTEDURATION"
+            "reference": "#GEC_ADM_AD_REFERRALPRIORITY"
           }
         }
       ],

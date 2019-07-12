@@ -1,3 +1,5 @@
+
+
 {
   "resourceType": "GuidanceResponse",
   "contained": [
@@ -20,7 +22,7 @@
       "activity": [
         {
           "detail": {
-            "description": "<ul><li>One of your GPs will now review your request.</li><li>Your practice will respond to you by phone or email before {date will appear here}</li></ul>"
+            "description": "<ul><li>Done without javascript</li><li>One of your GPs will now review your request.</li><li>Your practice will respond to you by phone or email before {date will appear here}</li></ul>"
           }
         }
       ]
@@ -87,7 +89,7 @@
   ],
   "requestId": "1",
   "module": {
-    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/TEST_GEC_ADM"
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
   },
   "status": "success",
   "occurrenceDateTime": "2019-05-23T09:36:03.132",

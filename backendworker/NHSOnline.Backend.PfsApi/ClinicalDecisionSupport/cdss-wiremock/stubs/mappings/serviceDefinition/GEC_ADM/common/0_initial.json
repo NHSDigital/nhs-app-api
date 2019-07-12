@@ -1,5 +1,5 @@
 {
-  "priority": 2,
+  "priority": 3,
   "request": {
     "method": "POST",
     "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate"

@@ -13,68 +13,77 @@
     },
     {
       "resourceType": "Questionnaire",
-      "id": "GEC_ADM_AD_ISSUE",
+      "id": "GEC_ADM_AD_TESTTYPELIST",
       "status": "active",
       "item": [
         {
-          "linkId": "GEC_ADM_AD_ISSUE",
-          "text": "What administrative issue can we help you with?",
+          "linkId": "GEC_ADM_AD_TESTTYPELIST",
+          "text": "Which test result(s) would you like to discuss?",
           "type": "choice",
           "required": true,
           "repeats": false,
           "option": [
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_REFERRAL",
-                "display": "Referral"
+                "code": "GEC_ADM_AD_TESTTYPELIST_BLOOD",
+                "display": "Blood Test"
               }
             },
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_DISCUSSTESTS",
-                "display": "Discuss recent tests"
+                "code": "GEC_ADM_AD_TESTTYPELIST_URINE",
+                "display": "Urine Test"
+              }
+            },{
+              "valueCoding": {
+                "code": "GEC_ADM_AD_TESTTYPELIST_POO",
+                "display": "Stool (poo) Test"
+              }
+            },{
+              "valueCoding": {
+                "code": "GEC_ADM_AD_TESTTYPELIST_SWAB",
+                "display": "Swab result"
+              }
+            },{
+              "valueCoding": {
+                "code": "GEC_ADM_AD_TESTTYPELIST_XRAY",
+                "display": "X-ray or ultrasound scan"
               }
             },
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_SICKNOTE",
-                "display": "Sick note (fit note)"
+                "code": "GEC_ADM_AD_TESTTYPELIST_CTMRI",
+                "display": "CT or MRI scan"
               }
             },
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_MATCERT",
-                "display": "Request Maternity Exemption Certificate"
+                "code": "GEC_ADM_AD_TESTTYPELIST_ECG",
+                "display": "ECG (heart tracing)"
               }
             },
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_GPLETTER",
-                "display": "GP letter"
+                "code": "GEC_ADM_AD_TESTTYPELIST_DAYECG",
+                "display": "24 hour or 7 day ECG"
               }
             },
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_MEDREPORT",
-                "display": "Medical Report"
+                "code": "GEC_ADM_AD_TESTTYPELIST_ECHO",
+                "display": "Echocardiogram"
               }
             },
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_MEDEXAM",
-                "display": "Medical Examination"
+                "code": "GEC_ADM_AD_TESTTYPELIST_ENDOCOLON",
+                "display": "Endoscopy or colonoscopy"
               }
             },
             {
               "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_OTHER",
-                "display": "Other"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GEC_ADM_AD_ISSUE_QUERY",
-                "display": "General Medical Query"
+                "code": "GEC_ADM_AD_TESTTYPELIST_OTHER",
+                "display": "Other test not listed above"
               }
             }
           ]
@@ -87,18 +96,18 @@
     "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
   },
   "status": "data-required",
-  "occurrenceDateTime": "2019-05-23T11:09:18.924",
+  "occurrenceDateTime": "2019-05-23T09:35:51.237",
   "outputParameters": {
     "reference": "#outputParams"
   },
   "dataRequirement": [
     {
-      "id": "GEC_ADM_AD_ISSUE",
+      "id": "GEC_ADM_AD_TESTTYPELIST",
       "extension": [
         {
           "url": "https://www.hl7.org/fhir/questionnaire.html",
           "valueReference": {
-            "reference": "#GEC_ADM_AD_ISSUE"
+            "reference": "#GEC_ADM_AD_TESTTYPELIST"
           }
         }
       ],

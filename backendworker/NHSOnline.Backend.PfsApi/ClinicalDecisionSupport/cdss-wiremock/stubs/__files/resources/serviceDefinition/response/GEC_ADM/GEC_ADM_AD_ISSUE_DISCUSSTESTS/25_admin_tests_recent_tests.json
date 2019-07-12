@@ -13,36 +13,22 @@
     },
     {
       "resourceType": "Questionnaire",
-      "id": "TEST_GEC_ADM_AD_SICKNOTEDETAIL",
+      "id": "GEC_ADM_AD_TESTREASON",
       "status": "active",
       "item": [
         {
-          "linkId": "TEST_GEC_ADM_AD_SICKNOTEDETAIL",
-          "text": "Is this a new request or extension of an existing sick note?",
-          "type": "choice",
+          "linkId": "GEC_ADM_AD_TESTREASON",
+          "text": "Why did you have this test?",
+          "type": "text",
           "required": true,
-          "repeats": false,
-          "option": [
-            {
-              "valueCoding": {
-                "code": "TEST_GEC_ADM_AD_SICKNOTEDETAIL_NEW",
-                "display": "New request"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "TEST_GEC_ADM_AD_SICKNOTEDETAIL_EXT",
-                "display": "Extension"
-              }
-            }
-          ]
+          "repeats": false
         }
       ]
     }
   ],
   "requestId": "1",
   "module": {
-    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/TEST_GEC_ADM"
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
   },
   "status": "data-required",
   "occurrenceDateTime": "2019-05-23T09:35:51.237",
@@ -51,12 +37,12 @@
   },
   "dataRequirement": [
     {
-      "id": "TEST_GEC_ADM_AD_SICKNOTEDETAIL",
+      "id": "GEC_ADM_AD_TESTREASON",
       "extension": [
         {
           "url": "https://www.hl7.org/fhir/questionnaire.html",
           "valueReference": {
-            "reference": "#TEST_GEC_ADM_AD_SICKNOTEDETAIL"
+            "reference": "#GEC_ADM_AD_TESTREASON"
           }
         }
       ],

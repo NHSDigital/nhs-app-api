@@ -1,0 +1,53 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "GEC_ADM_AD_REFERRALDOCUMENT",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "GEC_ADM_AD_REFERRALDOCUMENT",
+          "text": "Please attach the document you were given for this referral",
+          "type": "attachment",
+          "required": true,
+          "repeats": false
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:17:51.247",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "GEC_ADM_AD_REFERRALDOCUMENT",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GEC_ADM_AD_REFERRALDOCUMENT"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "GEC_ADM_AD_TESTADDITIONAL",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "GEC_ADM_AD_TESTADDITIONAL",
+          "text": "Please tell us what you would like to discuss regarding your test",
+          "type": "text",
+          "required": false,
+          "repeats": false
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T09:35:51.237",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "GEC_ADM_AD_TESTADDITIONAL",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GEC_ADM_AD_TESTADDITIONAL"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}
