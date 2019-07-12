@@ -6,7 +6,7 @@ import cucumber.api.java.en.When
 import features.im1Appointments.steps.MyAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.myrecord.stepDefinitions.MyRecordStepDefinitions
+import features.myrecord.stepDefinitions.MyRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.prescriptions.steps.PrescriptionsSteps
@@ -42,7 +42,7 @@ class HomePageStepDefinitions : AbstractSteps() {
     @Steps
     private lateinit var prescriptions: PrescriptionsSteps
     @Steps
-    private lateinit var recordSteps: MyRecordStepDefinitions
+    private lateinit var recordWarning: MyRecordWarningStepDefinitions
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -134,7 +134,7 @@ class HomePageStepDefinitions : AbstractSteps() {
 
     private fun followMedicalRecordLink() {
         homeSteps.homePage.viewMedicalRecordLink.click()
-        recordSteps.thenISeeRecordWarningPageOpened()
+        recordWarning.thenISeeRecordWarningPageOpened()
         navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
     }
 

@@ -5,7 +5,7 @@ Feature: View My Medical Record Information - Demographics
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
     And I am on the record warning page
-    When I click agree and continue
+    When I click continue
     Then the my record information screen is loaded
 
     Examples:
@@ -19,7 +19,7 @@ Feature: View My Medical Record Information - Demographics
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
     And I am on the record warning page
-    Then I click agree and continue
+    Then I click continue
     And I see header text is My medical record
     Then I see the My details heading on My Record
     And I see the patient information details

@@ -12,8 +12,6 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
-import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -65,19 +63,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         MyRecordFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
     }
 
-    @Given("^I am on the record warning page$")
-    fun givenIAmOnTheRecordWarningPage() {
-        browser.goToApp()
-        login.using(SerenityHelpers.getPatient())
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
-    }
-
     @Given("^I am on my record information page$")
     fun givenIAmOnMyRecordInformationPage() {
         browser.goToApp()
         login.using(SerenityHelpers.getPatient())
         nav.select(NavBarNative.NavBarType.MY_RECORD)
-        myRecordWarningPage.clickAgreeAndContinue()
+        myRecordWarningPage.clickWarningContinue()
         myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
@@ -102,21 +93,10 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun whenIGetTheUsersMyRecordData() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
-
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
-    }
-
-    @When("^I click agree and continue$")
-    fun whenIClickAgreeAndContinue() {
-        myRecordWarningPage.clickAgreeAndContinue()
-    }
-
-    @When("^I click the back to home$")
-    fun whenIClickTheBackToHome() {
-        myRecordWarningPage.clickBacktoHome()
     }
 
     @When("^I click My details heading$")
@@ -134,24 +114,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         nav.select(NavBarNative.NavBarType.SYMPTOMS)
     }
 
-    @Then("^I see record warning page opened$")
-    fun thenISeeRecordWarningPageOpened() {
-        thenISeeHeaderTextIsMyMedicalRecord()
-        thenISeeAgreeAndContinueButton()
-        thenISeeBackToHome()
-    }
-
-    @Then("^I see the my record warning page")
-    fun iSeeTheMyRecordWarningPage() {
-        thenISeeRecordWarningPageOpened()
-        thenISeeHeaderTextIsMyMedicalRecord()
-        theISeeYourRecordMayContainSensitiveInformationMessage()
-        thenISeeListOfSensitiveDataInformation()
-        thenISeeAgreeAndContinueButton()
-        thenISeeBackToHome()
-        thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
-    }
-
     @Then("^I see the my medical record page$")
     fun iSeeTheMyMedicalRecordPage() {
         thenISeeHeaderTextIsMyMedicalRecord()
@@ -163,32 +125,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see header text is My medical record$")
     fun thenISeeHeaderTextIsMyMedicalRecord() {
         headerNative.waitForPageHeaderText("My medical record")
-    }
-
-    @Then("^I see your record may contain sensitive information message$")
-    fun theISeeYourRecordMayContainSensitiveInformationMessage() {
-        assertEquals("Your record may contain sensitive information. If someone is pressuring you for this" +
-                " information, contact your GP surgery immediately.", myRecordWarningPage.warningText())
-    }
-
-    @Then("^I see list of sensitive data information$")
-    fun thenISeeListOfSensitiveDataInformation() {
-        val expected = ArrayList<String>()
-        expected.add("personal data, such as your details, allergies and medications")
-        expected.add("clinical terms that you may not be familiar with")
-        expected.add("your medical history, including problems and consultation notes")
-        expected.add("test results that you may not have discussed with your doctor")
-        assertArrayEquals(expected.toArray(), myRecordWarningPage.getSensitiveList().toArray())
-    }
-
-    @Then("^I see agree and continue button$")
-    fun thenISeeAgreeAndContinueButton() {
-        Assert.assertTrue("isAgreePresent", myRecordWarningPage.isAgreePresent())
-    }
-
-    @Then("^I see back to home$")
-    fun thenISeeBackToHome() {
-        Assert.assertTrue("isBackToHomePresent", myRecordWarningPage.isBackToHomePresent())
     }
 
     @Then("^I see my record button on the nav bar is highlighted$")

@@ -13,8 +13,14 @@ class MyRecordWarningPage : HybridPageObject() {
             page = this
     )
 
-    private val btnAgree = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(),'Agree and continue')]",
+    private val txtShownInformation = HybridPageElement(
+            webDesktopLocator = "//div[@data-purpose='info']/p",
+            androidLocator = null,
+            page = this
+    )
+
+    private val btnContinue = HybridPageElement(
+            webDesktopLocator = "//button[contains(text(),'Continue')]",
             androidLocator = null,
             page = this
     )
@@ -30,20 +36,24 @@ class MyRecordWarningPage : HybridPageObject() {
         return backToHome.isVisible
     }
 
-    fun isAgreePresent(): Boolean {
-        return btnAgree.isVisible
+    fun isContinuePresent(): Boolean {
+        return btnContinue.isVisible
     }
 
     fun warningText(): String {
         return txtWarning.text
     }
 
-    fun clickAgreeAndContinue() {
-        btnAgree.click()
+    fun clickWarningContinue() {
+        btnContinue.click()
     }
 
     fun clickBacktoHome() {
         backToHome.click()
+    }
+
+    fun getShownInformationDescription(): String {
+        return txtShownInformation.text
     }
 
     fun getSensitiveList(): ArrayList<String> {

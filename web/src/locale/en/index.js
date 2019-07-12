@@ -697,20 +697,15 @@ export default {
     nhsNumber: 'NHS Number',
     gpPractice: 'GP Practice',
     patient: 'Patient',
-    warning: {
+    personalRecordText: {
       warningText: 'Your record may contain sensitive information. If someone is pressuring you for this information, contact your GP surgery immediately.',
-      title: 'Your record will display:',
+      body: 'Your record shows personal data, such as your details, allergies and medications.',
+      bulletPointHeader: 'Depending on what your GP surgery shares, you may also see:',
       bulletPoints: {
-        bp1: 'personal data, such as your details, allergies and medications',
-        bp2: 'clinical terms that you may not be familiar with',
-      },
-      extraTitle: 'Depending on what your GP surgery has shared, you may also see:',
-      extraBulletPoints: {
         bp1: 'your medical history, including problems and consultation notes',
         bp2: 'test results that you may not have discussed with your doctor',
       },
-      agreementText: 'By continuing, you agree to viewing sensitive information within your medical record.',
-      agreeButtonText: 'Agree and continue',
+      agreeButtonText: 'Continue',
       backButtonText: 'Back to home',
     },
     noRecordAccess: {

@@ -4,23 +4,16 @@
        :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]">
     <message-dialog message-type="warning" icon-text="Important">
       <message-text :class="$style.warningText">
-        {{ $t('my_record.warning.warningText') }}
+        {{ $t('my_record.personalRecordText.warningText') }}
       </message-text>
     </message-dialog>
     <div :class="$style.info" data-purpose="info">
-      <h2 :class="[$style.h2]">{{ $t('my_record.warning.title') }}</h2>
+      <p >{{ $t('my_record.personalRecordText.body') }}</p>
+      <p>{{ $t('my_record.personalRecordText.bulletPointHeader') }}</p>
       <ul>
-        <li>{{ $t('my_record.warning.bulletPoints.bp1') }}</li>
-        <li>{{ $t('my_record.warning.bulletPoints.bp2') }}</li>
+        <li>{{ $t('my_record.personalRecordText.bulletPoints.bp1') }}</li>
+        <li>{{ $t('my_record.personalRecordText.bulletPoints.bp2') }}</li>
       </ul>
-      <h2 :class="[$style.h2]">{{ $t('my_record.warning.extraTitle') }}</h2>
-      <ul>
-        <li>{{ $t('my_record.warning.extraBulletPoints.bp1') }}</li>
-        <li>{{ $t('my_record.warning.extraBulletPoints.bp2') }}</li>
-      </ul>
-      <p>
-        {{ $t('my_record.warning.agreementText') }}
-      </p>
     </div>
     <form :action="myRecordPath" method="get">
       <input :value="JSON.stringify({ myRecord: { hasAcceptedTerms: true }})"
@@ -29,20 +22,20 @@
 
       <generic-button :class="[$style.button, $style.green]"
                       @click="onContinueButtonClicked">
-        {{ $t('my_record.warning.agreeButtonText') }}
+        {{ $t('my_record.personalRecordText.agreeButtonText') }}
       </generic-button>
     </form>
     <form v-if="$store.state.device.isNativeApp" :action="indexPath" method="get">
       <generic-button :class="[$style.button, $style.grey]"
                       @click="onBackButtonClicked">
-        {{ $t('my_record.warning.backButtonText') }}
+        {{ $t('my_record.personalRecordText.backButtonText') }}
       </generic-button>
     </form>
 
     <desktopGenericBackLink
       v-else
       :path="indexPath"
-      :button-text="'my_record.warning.backButtonText'"
+      :button-text="'my_record.personalRecordText.backButtonText'"
       @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>

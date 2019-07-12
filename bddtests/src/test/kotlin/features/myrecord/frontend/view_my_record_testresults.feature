@@ -125,7 +125,7 @@ Feature: View My Medical Record Information - Test Results
     And I click a test result
 
   @tech-debt @NHSO-5552
-  Scenario Outline: An user navigates back to my record page from test result detail
+  Scenario: An user navigates back to my record page from test result detail
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
     And the GP Practice has six test results

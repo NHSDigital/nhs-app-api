@@ -12,7 +12,7 @@ Feature: View My Medical Record Information - No Javascript
 
     When I am on the record warning page
     Then I see the my record warning page
-    When I click agree and continue
+    When I click continue
     Then I see the my medical record page
 
     Then I see one or more drug type allergies record displayed
@@ -65,6 +65,6 @@ Feature: View My Medical Record Information - No Javascript
     And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION
     When I am on the record warning page
     Then I see the my record warning page
-    When I click agree and continue
+    When I click continue
     Then I see the my medical record page
     And I see a drug and non drug allergy record from VISION
