@@ -1,36 +1,45 @@
 <template>
   <div>
-    <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
+    <span v-if="error && errorText" class="nhsuk-error-message">
       <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
       {{ errorText }}
     </span>
     <div class="nhsuk-input__item">
-      <label :id="quantityLabelId"
-             :for="quantityId"
-             class="nhsuk-label nhsuk-input__label">Quantity</label>
-      <input :id="quantityId"
-             v-model.number="quantity"
+      <label :id="`${name}-quantity-label`"
+             :for="`${name}-quantity`"
+             class="nhsuk-label nhsuk-input__label">
+        {{ $t('onlineConsultations.questions.quantity.labels.quantity') }}
+      </label>
+      <input :id="`${name}-quantity`"
+             v-model="quantity"
              :class="['nhsuk-input nhsuk-input--width-2', error && 'nhsuk-input--error']"
              type="number"
+             :name="`${name}-quantity`"
              pattern="[0-9]+"
              :min="0"
-             :max="maxValue">
+             :max="maxValue"
+             :required="required">
     </div>
 
     <div class="nhsuk-input__item">
-      <label :id="selectLabelId"
-             :for="selectId"
-             class="nhsuk-label nhsuk-input__label">Unit</label>
-      <select-dropdown v-model.number="unit"
-                       :select-id="selectId"
-                       :select-name="selectId"
-                       :error-border="error">
-        <option v-for="option in units"
-                :key="option.value"
-                :value="option.value"
-                :disabled="option.value === initialDropdownValue"
-                :selected="option.value === ''">
-          {{ option.value }}
+      <label :id="`${name}-select-label`"
+             :for="`${name}-unit`"
+             class="nhsuk-label nhsuk-input__label">
+        {{ $t('onlineConsultations.questions.quantity.labels.unit') }}
+      </label>
+      <select-dropdown v-model="unit"
+                       :select-id="`${name}-unit`"
+                       :select-name="`${name}-unit`"
+                       :error-border="error"
+                       :required="required">
+        <option disabled="" selected="" value="">
+          {{ $t('onlineConsultations.questions.quantity.initialUnitDropdownValue') }}
+        </option>
+        <option v-for="option in options"
+                :key="option.code"
+                :value="option.code"
+                :selected="option.code === quantityAnswer.unit">
+          {{ option.label }}
         </option>
       </select-dropdown>
     </div>
@@ -39,6 +48,7 @@
 
 <script>
 import SelectDropdown from '@/components/widgets/SelectDropdown';
+import { questionQuantityAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionQuantity',
@@ -46,31 +56,13 @@ export default {
     SelectDropdown,
   },
   props: {
-    quantityLabelId: {
+    name: {
       type: String,
       required: true,
     },
-    quantityId: {
-      type: String,
-      required: true,
-    },
-    selectLabelId: {
-      type: String,
-      required: true,
-    },
-    selectId: {
-      type: String,
-      required: true,
-    },
-    errorId: {
-      type: String,
-      required: true,
-    },
-    unitOptions: {
+    options: {
       type: Array,
-      default() {
-        return [];
-      },
+      required: true,
     },
     maxValue: {
       type: Number,
@@ -100,60 +92,42 @@ export default {
   },
   data() {
     return {
-      isValid: true,
-      initialDropdownValue: this.$t('onlineConsultations.questions.quantity.initialUnitDropdownValue'),
+      quantityAnswer: this.value,
     };
   },
   computed: {
-    units() {
-      return [{ value: this.initialDropdownValue }, ...this.unitOptions];
-    },
-    unit: {
-      get() {
-        return this.value.unit;
-      },
-      set(unit) {
-        this.value.unit = unit;
-        this.checkAndEmitIsValueValid(this.value);
-        this.$emit('input', {
-          ...this.value,
-          unit,
-        });
-      },
+    validValues() {
+      return this.options.map(o => o.code);
     },
     quantity: {
       get() {
-        return this.value.quantity;
+        return this.quantityAnswer.quantity;
       },
       set(quantity) {
-        this.value.quantity = quantity;
-        this.checkAndEmitIsValueValid(this.value);
-        this.$emit('input', {
-          ...this.value,
-          quantity,
-        });
+        this.quantityAnswer = { ...this.quantityAnswer, quantity };
       },
+    },
+    unit: {
+      get() {
+        return this.quantityAnswer.unit;
+      },
+      set(unit) {
+        this.quantityAnswer = { ...this.quantityAnswer, unit };
+      },
+    },
+  },
+  watch: {
+    quantityAnswer(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
-    this.checkAndEmitIsValueValid(this.value);
+    this.checkAndEmitIsValueValid(this.quantityAnswer);
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
-    },
-    isValidInput(value) {
-      const unitEmpty = value.unit === '' || value.unit === undefined;
-      const quantityEmpty = value.quantity === '' || value.quantity === undefined;
-
-      if (!this.required && quantityEmpty) {
-        return true;
-      }
-
-      const lessThanOrEqualToMax = this.maxValue === undefined || value.quantity <= this.maxValue;
-      const greaterThanOrEqualToMinValue = value.quantity >= 0;
-      return !unitEmpty && !quantityEmpty && lessThanOrEqualToMax && greaterThanOrEqualToMinValue;
+      this.$emit('validate', questionQuantityAnswerValid(value, this.required, this.maxValue, this.validValues));
     },
   },
 };

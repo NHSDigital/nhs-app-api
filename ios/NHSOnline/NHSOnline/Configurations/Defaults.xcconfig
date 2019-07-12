@@ -6,6 +6,7 @@ CONDITIONS_URL_PATH = www.nhs.uk/conditions/
 MORE_URL = /more
 MY_RECORD_URL_PATH = /my-record
 APPOINTMENTS_URL_PATH = /appointments
+ADMIN_HELP_URL_PATH = /appointments/admin-help
 SYMPTOMS_URL_PATH = /symptoms
 ORGAN_DONATION_URL_PATH = /organ-donation
 PRESCRIPTIONS_URL_PATH = /prescriptions

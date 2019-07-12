@@ -31,7 +31,7 @@ export default {
   props: {
     maxlength: {
       type: String,
-      default: '255',
+      default: undefined,
     },
     aLabelledBy: {
       type: String,

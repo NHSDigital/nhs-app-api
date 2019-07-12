@@ -130,7 +130,7 @@ const config = {
     DEBOUNCE_MEDIUM: 2000,
     DEBOUNCE_LONG: 5000,
     // Online consultations
-    ONLINE_CONSULTATIONS_ENABLED: false,
+    ONLINE_CONSULTATIONS_ENABLED: true,
   },
 };
 

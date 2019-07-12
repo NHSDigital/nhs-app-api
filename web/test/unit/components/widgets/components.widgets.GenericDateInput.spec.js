@@ -18,15 +18,9 @@ describe('GenericDateInput.vue', () => {
       });
     wrapper = mountConfirmation({
       propsData: {
-        name: 'name',
-        questionId: 'qid',
+        id: 'test-id',
+        name: 'test-name',
         text: 'This is a <strong>sample question</strong>?',
-        dayId: 'dayId',
-        monthId: 'monthId',
-        yearId: 'yearId',
-        dayName: 'dayName',
-        monthName: 'monthName',
-        yearName: 'yearName',
         value:
           {
             day: 15,
@@ -39,50 +33,50 @@ describe('GenericDateInput.vue', () => {
 
   describe('input', () => {
     it('should have all parts of date', () => {
-      expect(wrapper.find("[id='dayId']")
+      expect(wrapper.find("[id='test-id-day']")
         .exists())
         .toEqual(true);
 
-      expect(wrapper.find("[id='monthId']")
+      expect(wrapper.find("[id='test-id-month']")
         .exists())
         .toEqual(true);
 
-      expect(wrapper.find("[id='yearId']")
+      expect(wrapper.find("[id='test-id-year']")
         .exists())
         .toEqual(true);
     });
     it('should have dated limit of 31', () => {
-      const inputAttributes = wrapper.find("[id='dayId']").attributes();
+      const inputAttributes = wrapper.find("[id='test-id-day']").attributes();
 
       expect(inputAttributes.max).toEqual('31');
     });
 
     it('should have month limit of 12', () => {
-      const inputAttributes = wrapper.find("[id='monthId']").attributes();
+      const inputAttributes = wrapper.find("[id='test-id-month']").attributes();
 
       expect(inputAttributes.max).toEqual('12');
     });
 
     it('date should have pattern for only numbers', () => {
-      const inputAttributes = wrapper.find("[id='dayId']").attributes();
+      const inputAttributes = wrapper.find("[id='test-id-day']").attributes();
 
       expect(inputAttributes.pattern).toEqual('[0-9]*');
     });
 
     it('month should have pattern for only numbers', () => {
-      const inputAttributes = wrapper.find("[id='monthId']").attributes();
+      const inputAttributes = wrapper.find("[id='test-id-month']").attributes();
 
       expect(inputAttributes.pattern).toEqual('[0-9]*');
     });
 
     it('year should have pattern for only numbers', () => {
-      const inputAttributes = wrapper.find("[id='yearId']").attributes();
+      const inputAttributes = wrapper.find("[id='test-id-year']").attributes();
 
       expect(inputAttributes.pattern).toEqual('[0-9]*');
     });
 
     it('should emit the input if the month is changed', () => {
-      const input = wrapper.find("[id='monthId']");
+      const input = wrapper.find("[id='test-id-month']");
       input.element.value = 11;
       input.trigger('input');
 
@@ -92,7 +86,7 @@ describe('GenericDateInput.vue', () => {
     });
 
     it('should emit the input if the date is changed', () => {
-      const input = wrapper.find("[id='dayId']");
+      const input = wrapper.find("[id='test-id-day']");
       input.element.value = 13;
       input.trigger('input');
 
@@ -102,7 +96,7 @@ describe('GenericDateInput.vue', () => {
     });
 
     it('should emit the input if the year is changed', () => {
-      const input = wrapper.find("[id='yearId']");
+      const input = wrapper.find("[id='test-id-year']");
       input.element.value = 2020;
       input.trigger('input');
 

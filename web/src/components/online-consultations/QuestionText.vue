@@ -10,6 +10,7 @@
 
 <script>
 import GenericTextArea from '@/components/widgets/GenericTextArea';
+import { questionTextAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionText',
@@ -31,7 +32,7 @@ export default {
     },
     maxlength: {
       type: String,
-      default: '255',
+      default: undefined,
     },
     required: {
       type: Boolean,
@@ -48,18 +49,13 @@ export default {
   },
   data() {
     return {
-      isValid: true,
+      textValue: this.value,
     };
   },
-  computed: {
-    textValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.checkAndEmitIsValueValid(value);
-        this.$emit('input', value);
-      },
+  watch: {
+    textValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
@@ -67,12 +63,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
-    },
-    isValidInput(value) {
-      const isEmpty = (this.required && value === '');
-      return !isEmpty && (value.length <= this.maxlength);
+      this.$emit('validate', questionTextAnswerValid(value, this.required, this.maxlength));
     },
   },
 };

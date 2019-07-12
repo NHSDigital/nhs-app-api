@@ -9,12 +9,14 @@
                  :name="name"
                  :radios="options"
                  :current-value="selectedValue"
+                 :required="required"
                  @select="selected"/>
   </fieldset>
 </template>
 
 <script>
 import RadioGroup from '@/components/RadioGroup';
+import { questionChoiceAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionChoice',
@@ -36,10 +38,10 @@ export default {
     },
     errorText: {
       type: String,
-      default: 'Please make a choice',
+      default: undefined,
     },
-    // eslint-disable-next-line vue/require-prop-types
     value: {
+      type: String,
       default: undefined,
     },
     options: {
@@ -58,11 +60,13 @@ export default {
   },
   computed: {
     validValues() {
-      const codes = this.options.map(option => option.code);
-      if (!this.required) {
-        codes.push(undefined);
-      }
-      return codes;
+      return this.options.map(o => o.code);
+    },
+  },
+  watch: {
+    selectedValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
@@ -70,16 +74,10 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
+      this.$emit('validate', questionChoiceAnswerValid(value, this.required, this.validValues));
     },
     selected(value) {
       this.selectedValue = value;
-      this.checkAndEmitIsValueValid(value);
-      this.$emit('input', value);
-    },
-    isValidInput(value) {
-      return this.validValues.includes(value);
     },
   },
 };

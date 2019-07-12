@@ -50,18 +50,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/ifff";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/typography";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/typography";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/colours";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/globals";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/mixins";
- @import "../../../node_modules/nhsuk-frontend/packages/core/elements/table";
- @import "../../../node_modules/nhsuk-frontend/packages/core/utilities/visually-hidden";
- @import "../../../node_modules/nhsuk-frontend/packages/components/tables/tables";
-</style>

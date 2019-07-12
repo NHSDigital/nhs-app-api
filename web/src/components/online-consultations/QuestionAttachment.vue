@@ -4,12 +4,13 @@
                       :error="error"
                       :error-text="errorText"
                       :required="required"
+                      :accept="accept"
                       @change="onSelectedFileChanged($event)"/>
 </template>
 
 <script>
-
 import GenericAttachment from '@/components/widgets/GenericAttachment';
+import { questionAttachmentAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionAttachment',
@@ -31,32 +32,82 @@ export default {
     },
     errorText: {
       type: String,
-      default: '',
+      default: undefined,
     },
     required: {
       type: Boolean,
       default: true,
     },
+    accept: {
+      type: Array,
+      default: () => [],
+    },
+    maxSize: {
+      type: Number,
+      default: undefined,
+    },
   },
   data() {
     return {
-      fileValue: undefined,
+      file: undefined,
+      attachmentValue: undefined,
     };
   },
-  methods: {
-    checkAndEmitValueIsValid(fileValue) {
-      this.isValid = this.isValidInput(fileValue);
-      this.$emit('validate', this.isValid);
+  watch: {
+    attachmentValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
-    isValidInput(fileValue) {
-      return !this.required ? true : !!fileValue;
+  },
+  created() {
+    if (process.client) {
+      const reader = new FileReader();
+      reader.onload = this.onFileLoad;
+      reader.onerror = this.onFileError;
+      reader.onabort = this.onFileAbort;
+
+      this.reader = reader;
+    }
+    this.checkAndEmitIsValueValid(this.attachmentValue);
+  },
+  beforeDestroy() {
+    if (this.reader) {
+      this.reader.abort();
+    }
+  },
+  methods: {
+    checkAndEmitIsValueValid(value) {
+      this.$emit('validate', questionAttachmentAnswerValid(value, this.required, this.accept, this.maxSize));
     },
     onSelectedFileChanged(event) {
-      [this.fileValue] = event.target.files;
-      this.checkAndEmitValueIsValid(this.fileValue);
-      this.$emit('input', this.fileValue);
+      [this.file] = event.target.files;
+      this.getFileAsBase64();
+    },
+    getFileAsBase64() {
+      if (this.file !== undefined) {
+        this.$store.dispatch('onlineConsultations/fileLoading');
+        this.reader.readAsDataURL(this.file);
+      } else {
+        this.attachmentValue = undefined;
+      }
+    },
+    onFileLoad() {
+      this.$store.dispatch('onlineConsultations/fileLoadComplete');
+      this.attachmentValue = {
+        name: this.file.name,
+        base64: this.reader.result.replace(`data:${this.file.type};base64,`, ''),
+        type: this.file.type,
+        size: this.file.size,
+      };
+    },
+    onFileError() {
+      this.$store.dispatch('onlineConsultations/fileLoadComplete');
+      this.attachmentValue = undefined;
+    },
+    onFileAbort() {
+      this.$store.dispatch('onlineConsultations/fileLoadComplete');
+      this.attachmentValue = undefined;
     },
   },
 };
 </script>
-

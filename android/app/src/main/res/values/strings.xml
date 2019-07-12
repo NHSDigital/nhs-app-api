@@ -9,6 +9,7 @@
     <string name="organ_donation_header">My organ donation decision</string>
     <!--Data sharing header should be updated in Android, iOS, and Web if changed-->
     <string name="data_sharing_header">Find out why your data matters</string>
+    <string name="admin_help_header">GP help without an appointment</string>
     <string name="data_preferences_header">Sharing health data preferences</string>
     <string name="nhs_111_header">111 Online</string>
     <string name="nhs_111_header_description">one one one Online</string>

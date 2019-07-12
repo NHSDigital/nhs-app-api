@@ -1,36 +1,84 @@
 import {
   CLEAR,
-  SET_QUESTION_FROM_GUIDANCE_RESPONSE,
-  SET_SERVICE_DEFINITION_ID,
+  SET_SESSION_ID,
+  SET_STATUS,
+  SET_QUESTION,
+  SET_ANSWER,
+  SET_ANSWER_IS_VALID,
+  SET_VALIDATION_ERROR,
   SET_PREVIOUS_ROUTE,
+  SET_CARE_PLANS,
+  SET_REFERRAL_REQUESTS,
+  SET_ERROR,
+  SET_ANSWER_IS_EMPTY,
+  UPDATE_REQUEST_ID,
+  FILE_LOADING,
+  FILE_LOAD_COMPLETE,
 } from './mutation-types';
-import GuidanceResponseMapper from '@/lib/online-consultations/guidance-response-mapper';
 
 export default {
-  [CLEAR](state) {
-    state.serviceDefinitionId = undefined;
+  [CLEAR](state, resetRequestId) {
+    state.sessionId = undefined;
+    state.status = undefined;
     state.question = undefined;
+    state.answer = undefined;
+    state.answerIsValid = false;
+    state.answerIsEmpty = true;
+    state.latestErrorMessage = undefined;
+    state.validationError = false;
+    state.validationErrorMessage = undefined;
+    state.error = false;
+    state.previousRoute = undefined;
+    state.carePlans = undefined;
+    state.referralRequests = undefined;
+    state.isLoadingFile = false;
+    if (resetRequestId) {
+      state.requestId = 0;
+    }
   },
-  [SET_SERVICE_DEFINITION_ID](state, id) {
-    state.serviceDefinitionId = id;
+  [SET_SESSION_ID](state, sessionId) {
+    state.sessionId = sessionId;
+  },
+  [SET_STATUS](state, status) {
+    state.status = status;
+  },
+  [SET_QUESTION](state, question) {
+    state.question = question;
+  },
+  [SET_ANSWER](state, answer) {
+    state.answer = answer;
+  },
+  [SET_ANSWER_IS_VALID](state, { isValid, message, isEmpty } = {}) {
+    state.answerIsValid = isValid;
+    state.latestErrorMessage = message;
+    state.answerIsEmpty = isEmpty;
+  },
+  [SET_VALIDATION_ERROR](state) {
+    state.validationError = !state.answerIsValid;
+    state.validationErrorMessage = state.latestErrorMessage;
   },
   [SET_PREVIOUS_ROUTE](state, previousRoute) {
     state.previousRoute = previousRoute;
   },
-  [SET_QUESTION_FROM_GUIDANCE_RESPONSE](state, guidanceResponse) {
-    state.question = undefined;
-    state.error = false;
-
-    const dataRequirementId = GuidanceResponseMapper.getQuestionnaireId(guidanceResponse);
-    const questionnaire = GuidanceResponseMapper.getQuestionnaireById(
-      guidanceResponse,
-      dataRequirementId,
-    );
-    const question = GuidanceResponseMapper.getQuestionFromQuestionnaire(questionnaire);
-
-    if (question === undefined) {
-      state.error = true;
-    }
-    state.question = question;
+  [SET_CARE_PLANS](state, carePlans) {
+    state.carePlans = carePlans;
+  },
+  [SET_REFERRAL_REQUESTS](state, referralRequests) {
+    state.referralRequests = referralRequests;
+  },
+  [SET_ERROR](state, error) {
+    state.error = error;
+  },
+  [SET_ANSWER_IS_EMPTY](state, answerIsEmpty) {
+    state.answerIsEmpty = answerIsEmpty;
+  },
+  [UPDATE_REQUEST_ID](state) {
+    state.requestId += 1;
+  },
+  [FILE_LOADING](state) {
+    state.isLoadingFile = true;
+  },
+  [FILE_LOAD_COMPLETE](state) {
+    state.isLoadingFile = false;
   },
 };

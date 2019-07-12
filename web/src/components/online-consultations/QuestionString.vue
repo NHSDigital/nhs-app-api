@@ -4,11 +4,13 @@
                       :name="name"
                       :error="error"
                       :error-text="errorText"
-                      type="text"/>
+                      type="text"
+                      :required="required"/>
 </template>
 
 <script>
 import GenericTextInput from '@/components/widgets/GenericTextInput';
+import { questionStringAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionString',
@@ -43,18 +45,13 @@ export default {
   },
   data() {
     return {
-      isValid: true,
+      stringValue: this.value,
     };
   },
-  computed: {
-    stringValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.checkAndEmitIsValueValid(value);
-        this.$emit('input', value);
-      },
+  watch: {
+    stringValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
@@ -62,12 +59,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
-    },
-    isValidInput(value) {
-      const isEmpty = (this.required && value === '');
-      return !isEmpty;
+      this.$emit('validate', questionStringAnswerValid(value, this.required));
     },
   },
 };

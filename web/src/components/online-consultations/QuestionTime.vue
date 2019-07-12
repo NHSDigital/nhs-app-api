@@ -2,15 +2,15 @@
 <template>
   <generic-time-input :id="id"
                       v-model="timeValue"
-                      :hour-id="hourId"
-                      :minute-id="minuteId"
                       :required="required"
+                      :name="name"
                       :error="error"
                       :error-text="errorText"/>
 </template>
 
 <script>
 import GenericTimeInput from '@/components/widgets/GenericTimeInput';
+import { questionTimeAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionTime',
@@ -18,6 +18,14 @@ export default {
     GenericTimeInput,
   },
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
     value: {
       type: Object,
       default() {
@@ -26,18 +34,6 @@ export default {
           minute: '',
         };
       },
-    },
-    id: {
-      default: 'answer-id',
-      type: String,
-    },
-    hourId: {
-      default: 'hour-id',
-      type: String,
-    },
-    minuteId: {
-      default: 'minute-id',
-      type: String,
     },
     error: {
       type: Boolean,
@@ -54,18 +50,13 @@ export default {
   },
   data() {
     return {
-      isValid: true,
+      timeValue: this.value,
     };
   },
-  computed: {
-    timeValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.checkAndEmitIsValueValid(value);
-        this.$emit('input', value);
-      },
+  watch: {
+    timeValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
@@ -73,20 +64,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
-    },
-    isValidInput(time) {
-      const hourIsEmpty = time.hour === undefined || time.hour === '';
-      const timeIsEmpty = time.minute === undefined || time.minute === '';
-
-      if (!this.required && hourIsEmpty && timeIsEmpty) {
-        return true;
-      }
-
-      return !hourIsEmpty && !timeIsEmpty &&
-        (time.minute <= 59 && time.minute >= 0) &&
-        (time.hour <= 23 && time.hour >= 0);
+      this.$emit('validate', questionTimeAnswerValid(value, this.required));
     },
   },
 };

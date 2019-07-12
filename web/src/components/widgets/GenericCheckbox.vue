@@ -8,8 +8,7 @@
            :name="name"
            :required="required"
            :value="value"
-           @change="onChange"
-           @keypress="onKeyDown">
+           @change="onChange">
     <label :id="`${checkboxId}-label`"
            class="nhsuk-label nhsuk-checkboxes__label"
            :for="checkboxId">
@@ -19,11 +18,8 @@
 </template>
 
 <script>
-import TabFocusMixin from './TabFocusMixin';
-
 export default {
   name: 'GenericCheckbox',
-  mixins: [TabFocusMixin.tabMixin],
   props: {
     name: {
       type: String,
@@ -41,9 +37,9 @@ export default {
     value: {
       default: '',
     },
-    // eslint-disable-next-line vue/require-prop-types
     isSelected: {
-      default: '',
+      type: Boolean,
+      default: false,
     },
     required: {
       type: Boolean,
@@ -59,14 +55,6 @@ export default {
   methods: {
     onChange() {
       this.$emit('input', this.value);
-    },
-    onClick() {
-      this.$refs.checkbox.click();
-    },
-    onKeyDown(e) {
-      if (e.keyCode === 13) {
-        this.onClick();
-      }
     },
   },
 };

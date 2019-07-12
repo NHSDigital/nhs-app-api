@@ -1,28 +1,112 @@
 import {
   CLEAR,
-  SET_SERVICE_DEFINITION_ID,
-  SET_QUESTION_FROM_GUIDANCE_RESPONSE,
+  SET_SESSION_ID,
+  SET_STATUS,
+  SET_QUESTION,
+  SET_ANSWER,
+  SET_ANSWER_IS_VALID,
+  SET_VALIDATION_ERROR,
   SET_PREVIOUS_ROUTE,
+  SET_CARE_PLANS,
+  SET_REFERRAL_REQUESTS,
+  SET_ERROR,
+  SET_ANSWER_IS_EMPTY,
+  UPDATE_REQUEST_ID,
+  FILE_LOADING,
+  FILE_LOAD_COMPLETE,
 } from './mutation-types';
-import InitialAdminHelpGuidanceResponse from '@/lib/online-consultations/data/guidance-responses';
+import { getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/guidance-response';
+import getQuestion from '@/lib/online-consultations/mappers/item';
+import getParameters from '@/lib/online-consultations/mappers/parameters';
+import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
+
+const showError = (store) => {
+  store.dispatch('onlineConsultations/clearAndSetError');
+};
 
 export default {
-  clear({ commit }) {
-    commit(CLEAR);
+  clear({ commit }, resetRequestId) {
+    commit(CLEAR, resetRequestId);
   },
-  getAdminHelpServiceDefinitionId({ commit }) {
-    // todo: 5796 - get from SJR
-    commit(SET_SERVICE_DEFINITION_ID, 'TEST_GEC_ADM');
+  evaluateServiceDefinition({ commit, state, rootState }) {
+    const store = this;
+    const parameters = getParameters(state, rootState);
+
+    if (parameters === undefined) {
+      showError(store);
+      return undefined;
+    }
+
+    return store.app.$cdsApi.postFhirServiceDefinitionEvaluate({
+      parameters,
+      serviceDefinitionId: 'GEC_ADM',
+    }).then((response) => {
+      commit(CLEAR);
+      if (response === undefined) {
+        showError(store);
+        return;
+      }
+
+      const { status } = response;
+      commit(SET_STATUS, status);
+
+      if (status === DATA_REQUIRED) {
+        const sessionId = getSessionId(response);
+        const question = getQuestion(getQuestionnaireItem(response));
+
+        if (sessionId === undefined || question === undefined) {
+          showError(store);
+          return;
+        }
+
+        commit(SET_SESSION_ID, sessionId);
+        commit(SET_QUESTION, question);
+        return;
+      }
+
+      if (status === SUCCESS) {
+        const actions = getCarePlansAndReferralRequests(response);
+
+        if (actions === undefined) {
+          showError(store);
+          return;
+        }
+
+        commit(SET_CARE_PLANS, actions.carePlans);
+        commit(SET_REFERRAL_REQUESTS, actions.referralRequests);
+        return;
+      }
+
+      showError(store);
+    }).catch(() => {
+      showError(store);
+    }).finally(() => {
+      commit(UPDATE_REQUEST_ID);
+    });
   },
-  evaluateServiceDefinition({ commit, state }, parameters) {
-    if (state.serviceDefinitionId === undefined || parameters === undefined) return;
-
-    // todo: 5796 - post parameters to cds api for id
-    const guidanceResponse = InitialAdminHelpGuidanceResponse;
-
-    commit(SET_QUESTION_FROM_GUIDANCE_RESPONSE, guidanceResponse);
+  setAnswer({ commit }, answer) {
+    commit(SET_ANSWER, answer);
+  },
+  setAnswerIsValid({ commit }, validation) {
+    commit(SET_ANSWER_IS_VALID, validation);
+  },
+  setValidationError({ commit }) {
+    commit(SET_VALIDATION_ERROR);
   },
   setPreviousRoute({ commit }, previousRoute) {
     commit(SET_PREVIOUS_ROUTE, previousRoute);
+  },
+  setAnswerIsEmpty({ commit }, answerIsEmpty) {
+    commit(SET_ANSWER_IS_EMPTY, answerIsEmpty);
+  },
+  clearAndSetError({ commit }) {
+    commit(CLEAR);
+    commit(SET_ERROR, true);
+  },
+  fileLoading({ commit }) {
+    commit(FILE_LOADING);
+  },
+  fileLoadComplete({ commit }) {
+    commit(FILE_LOAD_COMPLETE);
   },
 };

@@ -4,26 +4,26 @@
       <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
       {{ errorText }}
     </span>
-    <generic-radio-button :key="optionOneKey"
+    <generic-radio-button :key="`${name}-true`"
                           :selected-value="selectedValue"
-                          :label="optionOneLabel"
+                          :label="$t('onlineConsultations.questions.boolean.labels.true')"
                           :name="name"
-                          :value="YES"
+                          :value="'true'"
+                          :required="required"
                           @select="selected"/>
-    <generic-radio-button :key="optionTwoKey"
+    <generic-radio-button :key="`${name}-false`"
                           :selected-value="selectedValue"
-                          :label="optionTwoLabel"
+                          :label="$t('onlineConsultations.questions.boolean.labels.false')"
                           :name="name"
-                          :value="NO"
+                          :value="'false'"
+                          :required="required"
                           @select="selected"/>
   </fieldset>
 </template>
 
 <script>
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
-
-const YES = 'Yes';
-const NO = 'No';
+import { questionBooleanAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionBoolean',
@@ -31,22 +31,6 @@ export default {
     GenericRadioButton,
   },
   props: {
-    optionOneKey: {
-      type: String,
-      default: undefined,
-    },
-    optionTwoKey: {
-      type: String,
-      default: undefined,
-    },
-    optionOneLabel: {
-      type: String,
-      required: true,
-    },
-    optionTwoLabel: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -61,12 +45,12 @@ export default {
     },
     errorText: {
       type: String,
-      default: 'Please make a choice',
+      default: undefined,
     },
     value: {
       type: String,
       default: undefined,
-      validator: value => ([YES, NO, undefined].includes(value)),
+      validator: value => (['true', 'false', undefined].includes(value)),
     },
     required: {
       type: Boolean,
@@ -75,18 +59,13 @@ export default {
   },
   data() {
     return {
-      YES,
-      NO,
       selectedValue: this.value,
     };
   },
-  computed: {
-    validValues() {
-      const values = [YES, NO];
-      if (!this.required) {
-        values.push(undefined);
-      }
-      return values;
+  watch: {
+    selectedValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
@@ -94,16 +73,10 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
+      this.$emit('validate', questionBooleanAnswerValid(value, this.required));
     },
     selected(value) {
       this.selectedValue = value;
-      this.checkAndEmitIsValueValid(value);
-      this.$emit('input', value);
-    },
-    isValidInput(value) {
-      return this.validValues.includes(value);
     },
   },
 };

@@ -9,8 +9,8 @@
 </template>
 
 <script>
-
 import GenericImageInput from '@/components/widgets/GenericImageInput';
+import { questionImageAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionImage',
@@ -45,28 +45,27 @@ export default {
   },
   data() {
     return {
-      clickPositions: [],
+      clickPosition: undefined,
     };
   },
+  watch: {
+    clickPosition(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
+    },
+  },
   created() {
-    this.checkAndEmitIsValueValid(this.clickPositions);
+    this.checkAndEmitIsValueValid(this.clickPosition);
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
-    },
-    isValidInput(value) {
-      return !this.required ? true : value.length > 0;
+      this.$emit('validate', questionImageAnswerValid(value, this.required));
     },
     onImageClicked(event) {
-      this.clickedPositionValue = {
-        x: event.clientX - event.target.offsetLeft,
-        y: event.clientY - event.target.offsetTop,
+      this.clickPosition = {
+        x: event.offsetX,
+        y: event.offsetY,
       };
-      this.clickPositions.push(this.clickedPositionValue);
-      this.checkAndEmitIsValueValid(this.clickPositions);
-      this.$emit('input', this.clickPositions);
     },
   },
 };

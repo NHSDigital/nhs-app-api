@@ -22,6 +22,7 @@
     <string name="myAccountPath">account</string>
     <string name="organDonationPath">organ-donation</string>
     <string name="dataSharingPath">data-sharing</string>
+    <string name="adminHelpPath">appointments/admin-help</string>
     <string name="fidoAuthQueryKey">fidoAuthResponse</string>
     <string name="fidoLoginPathWithAuthQueryKey">login?fidoAuthResponse</string>
     <string name="nhs111">https://111.nhs.uk/</string>

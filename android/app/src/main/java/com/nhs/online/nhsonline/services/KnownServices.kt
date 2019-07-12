@@ -136,6 +136,9 @@ class KnownServices(private val context: Context) {
         internalService.addPathInfo(fetchStringResource(R.string.dataSharingPath),
             true,
             fetchStringResource(R.string.data_sharing_header))
+        internalService.addPathInfo(fetchStringResource(R.string.adminHelpPath),
+            true,
+            fetchStringResource(R.string.admin_help_header))
         return internalService
     }
 

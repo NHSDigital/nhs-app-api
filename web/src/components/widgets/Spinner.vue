@@ -9,21 +9,21 @@ export default {
   name: 'Spinner',
   computed: {
     isVisible() {
-      return this.$store.state.http.isLoading;
+      return this.$store.state.http.isLoading
+        || this.$store.state.onlineConsultations.isLoadingFile;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-#loading-spinner {
-  position: fixed;
-  z-index: 10;
-  top: 0em;
-  right: 0em;
-  left: 0em;
-  bottom: 0em;
-  margin: auto;
-}
-
+  #loading-spinner {
+    position: fixed;
+    z-index: 10;
+    top: 0em;
+    right: 0em;
+    left: 0em;
+    bottom: 0em;
+    margin: auto;
+  }
 </style>

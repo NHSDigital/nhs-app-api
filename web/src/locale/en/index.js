@@ -527,6 +527,45 @@ export default {
         text: 'log in to Appointments Online',
       },
     },
+    admin_help: {
+      errors: {
+        pageTitle: 'Server error',
+        pageHeader: 'Server error',
+        header: 'Sorry, we\'re experiencing technical difficulties',
+        subheader: 'Please try again later.',
+        message: {
+          text: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
+        validation: {
+          header: 'There\'s a problem',
+          message: {
+            attachment: 'Select an attachment',
+            boolean: 'Select one of the options',
+            choice: 'Select one of the options',
+            date: 'Enter a valid date',
+            dateTime: 'Enter a valid date and time',
+            decimal: 'Enter a valid number',
+            image: 'Choose at least one location',
+            integer: 'Enter a valid number',
+            multiple_choice: 'Select at least one of the options',
+            quantity: 'Enter a quantity and choose a unit',
+            string: 'Enter an answer',
+            text: 'Enter an answer',
+            time: 'Enter a valid time',
+            default: 'Answer all required questions',
+          },
+        },
+      },
+      question: {
+        optional_label: 'optional',
+      },
+      orchestrator: {
+        continueButton: 'Continue',
+        endMyConsultationButton: 'End my consultation',
+        backToHomeButton: 'Back to home',
+      },
+    },
   },
   prescriptions: {
     errors: {
@@ -1658,17 +1697,35 @@ export default {
     },
   },
   onlineConsultations: {
-    orchestrator: {
-      continueButton: 'Continue',
-      backButton: 'Back',
-    },
     questions: {
       quantity: {
         initialUnitDropdownValue: 'Select unit',
+        labels: {
+          unit: 'Unit',
+          quantity: 'Quantity',
+        },
+      },
+      date: {
+        labels: {
+          day: 'Day',
+          month: 'Month',
+          year: 'Year',
+        },
+      },
+      time: {
+        labels: {
+          hour: 'Hour',
+          minute: 'Minute',
+        },
+      },
+      boolean: {
+        labels: {
+          true: 'Yes',
+          false: 'No',
+        },
       },
     },
   },
-
   web: {
     home: {
       title: 'NHS App',

@@ -12,6 +12,7 @@
         <input :id="id"
                type="file"
                :name="name"
+               :accept="accepts"
                @change="onSelectedFileChange($event)">
       </div>
     </div>
@@ -43,10 +44,17 @@ export default {
       type: String,
       default: undefined,
     },
+    accept: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
     errorId() {
       return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+    accepts() {
+      return this.accept.join(', ');
     },
   },
   methods: {

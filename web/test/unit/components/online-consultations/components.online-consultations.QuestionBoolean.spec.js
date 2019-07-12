@@ -10,8 +10,6 @@ describe('radio buttons', () => {
         value: undefined,
         trueId: 'tid',
         falseId: 'fid',
-        optionOneLabel: 'labelOneText',
-        optionTwoLabel: 'labelTwoText',
         name: 'name',
         ...propsData,
       },
@@ -20,74 +18,70 @@ describe('radio buttons', () => {
 
   it('will have radio buttons for the question', () => {
     wrapper = mountQuestion();
-    expect(wrapper.find("[id='name-Yes']")
+    expect(wrapper.find("[id='name-true']")
       .exists())
       .toEqual(true);
 
-    expect(wrapper.find("[id='name-No']")
+    expect(wrapper.find("[id='name-false']")
       .exists())
       .toEqual(true);
   });
 
   it('will have true radio button with correct label', () => {
     wrapper = mountQuestion();
-    expect(wrapper.find("[for='name-Yes']")
+    expect(wrapper.find("[for='name-true']")
       .exists())
       .toEqual(true);
 
-    expect(wrapper.find("[for='name-Yes']").element.innerHTML)
-      .toEqual('labelOneText');
+    expect(wrapper.find("[for='name-true']").element.innerHTML)
+      .toEqual('translate_onlineConsultations.questions.boolean.labels.true');
   });
 
   it('will have false radio button with correct label', () => {
     wrapper = mountQuestion();
-    expect(wrapper.find("[for='name-No']")
+    expect(wrapper.find("[for='name-false']")
       .exists())
       .toEqual(true);
 
-    expect(wrapper.find("[for='name-No']").element.innerHTML)
-      .toEqual('labelTwoText');
+    expect(wrapper.find("[for='name-false']").element.innerHTML)
+      .toEqual('translate_onlineConsultations.questions.boolean.labels.false');
   });
 
   it('will emit true value when true clicked', () => {
     wrapper = mountQuestion();
     expect(wrapper.vm).toBeDefined();
     expect(wrapper.vm.selected).toBeDefined();
-    /* eslint-disable no-underscore-dangle */
-    expect(wrapper.vm._props.value).toBeUndefined();
+    expect(wrapper.vm.$props.value).toBeUndefined();
     expect(wrapper.emitted('select')).not.toBeDefined();
 
-    const input = wrapper.find("[id='name-Yes']");
+    const input = wrapper.find("[id='name-true']");
     expect(input).toBeDefined();
 
     input.trigger('click');
 
-    /* eslint-disable no-underscore-dangle */
-    expect(wrapper.vm.__emitted.input[0][0]).toBe('Yes');
+    expect(wrapper.emitted('input')[0][0]).toBe('true');
   });
 
   it('will emit false value when false clicked', () => {
     wrapper = mountQuestion();
     expect(wrapper.vm).toBeDefined();
     expect(wrapper.vm.selected).toBeDefined();
-    /* eslint-disable no-underscore-dangle */
-    expect(wrapper.vm._props.value).toBeUndefined();
+    expect(wrapper.vm.$props.value).toBeUndefined();
     expect(wrapper.emitted('select')).not.toBeDefined();
 
-    const input = wrapper.find("[id='name-No']");
+    const input = wrapper.find("[id='name-false']");
     expect(input).toBeDefined();
 
     input.trigger('click');
 
-    /* eslint-disable no-underscore-dangle */
-    expect(wrapper.vm.__emitted.input[0][0]).toBe('No');
+    expect(wrapper.emitted('input')[0][0]).toBe('false');
   });
 
   each([{
-    value: 'Yes',
+    value: 'true',
     isValid: true,
   }, {
-    value: 'No',
+    value: 'false',
     isValid: true,
   }, {
     value: undefined,
@@ -104,6 +98,7 @@ describe('radio buttons', () => {
 
     expect(validator && validator(data.value)).toBe(data.isValid);
   });
+
   it('will call checkAndEmitIsValueValid on create hook', () => {
     const checkAndEmitIsValueValid = jest.fn();
     wrapper = mountQuestion({
@@ -112,21 +107,5 @@ describe('radio buttons', () => {
       },
     });
     expect(checkAndEmitIsValueValid).toHaveBeenCalledTimes(1);
-  });
-
-  it('will add an undefined option to validValues if not required', () => {
-    wrapper = mountQuestion({
-      propsData: {
-        required: false,
-      },
-    });
-
-    expect(wrapper.vm.validValues).toEqual(['Yes', 'No', undefined]);
-  });
-
-  it('will not add undefined option to validValues if required', () => {
-    wrapper = mountQuestion();
-
-    expect(wrapper.vm.validValues).toEqual(['Yes', 'No']);
   });
 });

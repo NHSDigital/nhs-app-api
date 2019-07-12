@@ -1,0 +1,103 @@
+import { get, isEmpty } from 'lodash/fp';
+import { CARE_PLAN, PARAMETERS, QUESTIONNAIRE, QUESTIONNAIRE_RESPONSE, REFERRAL_REQUEST, REQUEST_GROUP } from '@/lib/online-consultations/constants/resource-types';
+import { SESSION_ID } from '@/lib/online-consultations/constants/parameter-names';
+import { ACTIVE } from '@/lib/online-consultations/constants/status-types';
+
+function getQuestionnaireId(guidanceResponse) {
+  const questionnaireIds = guidanceResponse.dataRequirement
+    .filter(d => d.type === QUESTIONNAIRE_RESPONSE);
+
+  return questionnaireIds[0].id;
+}
+
+function getQuestionnaire(guidanceResponse, questionnaireId) {
+  const activeQuestionnaires = guidanceResponse.contained
+    .filter(c => c.resourceType === QUESTIONNAIRE &&
+                 c.id === questionnaireId &&
+                 c.status === ACTIVE);
+
+  return activeQuestionnaires[0];
+}
+
+function getRequestGroupId(guidanceResponse) {
+  const requestGroupId = guidanceResponse.result.reference;
+
+  return requestGroupId.substring(1);
+}
+
+function getRequestGroupActionIds(guidanceResponse, requestGroupId) {
+  const requestGroup = guidanceResponse.contained
+    .filter(c => c.resourceType === REQUEST_GROUP &&
+                 c.id === requestGroupId)[0];
+
+  return requestGroup.action.map(a => a.resource.reference.substring(1));
+}
+
+function getRequestGroupActions(guidanceResponse, actionIds) {
+  const carePlans = [];
+  const referralRequests = [];
+
+  guidanceResponse.contained
+    .filter(c => actionIds.indexOf(c.id) !== -1)
+    .forEach((c) => {
+      const { id, title, activity = [], description } = c;
+
+      if (c.resourceType === CARE_PLAN) {
+        const activities = activity
+          .map(a => get('detail.description', a))
+          .filter(a => a !== undefined);
+
+        carePlans.push({ id, title, activities });
+      }
+
+      if (c.resourceType === REFERRAL_REQUEST && !isEmpty(description)) {
+        referralRequests.push({ id, description });
+      }
+    });
+
+  return {
+    carePlans,
+    referralRequests,
+  };
+}
+
+export function getSessionId(guidanceResponse) {
+  try {
+    const outputParamsId = guidanceResponse.outputParameters.reference;
+    const outputParams = guidanceResponse.contained
+      .filter(c => c.resourceType === PARAMETERS &&
+                   c.id === outputParamsId.substring(1));
+    const parameters = outputParams[0].parameter;
+
+    return parameters.filter(p => p.name === SESSION_ID)[0].valueString;
+  } catch (e) {
+    return undefined;
+  }
+}
+
+export function getQuestionnaireItem(guidanceResponse) {
+  try {
+    const questionnaireId = getQuestionnaireId(guidanceResponse);
+    const questionnaire = getQuestionnaire(guidanceResponse, questionnaireId);
+
+    return questionnaire.item[0];
+  } catch (e) {
+    return undefined;
+  }
+}
+
+export function getCarePlansAndReferralRequests(guidanceResponse) {
+  try {
+    const requestGroupId = getRequestGroupId(guidanceResponse);
+    const requestGroupActionIDs = getRequestGroupActionIds(guidanceResponse, requestGroupId);
+    const actions = getRequestGroupActions(guidanceResponse, requestGroupActionIDs);
+
+    if (isEmpty(actions.carePlans) && isEmpty(actions.referralRequests)) {
+      return undefined;
+    }
+
+    return actions;
+  } catch (e) {
+    return undefined;
+  }
+}

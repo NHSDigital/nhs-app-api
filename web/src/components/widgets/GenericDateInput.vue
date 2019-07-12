@@ -6,44 +6,50 @@
     </span>
     <div class="nhsuk-date-input__item">
       <div class="nhsuk-form-group">
-        <label class="nhsuk-label nhsuk-date-input__label" :for="dayId">
-          Day
+        <label class="nhsuk-label nhsuk-date-input__label"
+               :for="`${id}-day`">
+          {{ $t('onlineConsultations.questions.date.labels.day') }}
         </label>
-        <input :id="dayId"
+        <input :id="`${id}-day`"
                ref="day"
                v-model.number="dayValue"
                class="nhsuk-input nhsuk-date-input__input' nhsuk-input--width-2"
                :class="inputClasses(2)"
-               :name="dayName" type="number"
+               :name="`${name}-day`" type="number"
+               :required="required"
                pattern="[0-9]*" max="31" >
       </div>
     </div>
     <div class="nhsuk-date-input__item">
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
-               :for="monthId">
-          Month
+               :for="`${id}-month`">
+          {{ $t('onlineConsultations.questions.date.labels.month') }}
         </label>
-        <input :id="monthId"
+        <input :id="`${id}-month`"
                ref="month"
                v-model.number="monthValue"
                :class="inputClasses(2)"
-               :name="monthName" type="number"
+               :name="`${name}-month`"
+               :required="required"
+               type="number"
                pattern="[0-9]*" max="12">
       </div>
     </div>
     <div class="nhsuk-date-input__item">
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
-               :for="yearId">
-          Year
+               :for="`${id}-year`">
+          {{ $t('onlineConsultations.questions.date.labels.year') }}
         </label>
-        <input :id="yearId"
+        <input :id="`${id}-year`"
                ref="year"
                v-model.number="yearValue"
                class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-4"
                :class="inputClasses(4)"
-               :name="yearName" type="number"
+               :name="`${name}-year`"
+               :required="required"
+               type="number"
                pattern="[0-9]*">
       </div>
     </div>
@@ -53,29 +59,13 @@
 export default {
   name: 'GenericDateInput',
   props: {
-    dayId: {
+    id: {
       type: String,
-      default: undefined,
+      required: true,
     },
-    monthId: {
+    name: {
       type: String,
-      default: undefined,
-    },
-    yearId: {
-      type: String,
-      default: undefined,
-    },
-    dayName: {
-      type: String,
-      default: undefined,
-    },
-    monthName: {
-      type: String,
-      default: undefined,
-    },
-    yearName: {
-      type: String,
-      default: undefined,
+      required: true,
     },
     value: {
       type: Object,
@@ -94,6 +84,10 @@ export default {
     errorText: {
       type: String,
       default: undefined,
+    },
+    required: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

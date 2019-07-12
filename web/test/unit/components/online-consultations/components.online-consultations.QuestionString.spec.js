@@ -37,9 +37,10 @@ describe('QuestionString.vue', () => {
       input.element.value = 'test';
       input.trigger('input');
 
-      expect(wrapper.emitted('input')).toBeDefined();
-      expect(wrapper.emitted().input[0].length).toEqual(1);
-      expect(wrapper.emitted().input[0][0]).toEqual('test');
+      const emittedInputs = wrapper.emitted('input');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual('test');
     });
 
     it('has a type of text', async () => {

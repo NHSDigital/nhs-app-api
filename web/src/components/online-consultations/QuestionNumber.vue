@@ -2,7 +2,6 @@
 <template>
   <generic-text-input :id="id"
                       v-model="numberValue"
-                      :a-labelled-by="questionId"
                       :name="name"
                       :min="min"
                       :max="max"
@@ -15,9 +14,8 @@
 
 <script>
 import GenericTextInput from '@/components/widgets/GenericTextInput';
-
-const integerPattern = '^-?\\d+$';
-const decimalPattern = '^-?\\d+(\\.\\d+)?$';
+import { INTEGER, DECIMAL } from '@/lib/online-consultations/constants/question-types';
+import { questionNumberAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionNumber',
@@ -25,17 +23,13 @@ export default {
     GenericTextInput,
   },
   props: {
-    questionId: {
-      type: String,
-      default: 'number-question',
-    },
     id: {
       type: String,
-      default: 'number-answer',
+      default: undefined,
     },
     name: {
       type: String,
-      default: 'number-answer',
+      default: undefined,
     },
     max: {
       type: Number,
@@ -51,8 +45,8 @@ export default {
     },
     type: {
       type: String,
-      default: 'integer',
-      validator: value => (['integer', 'decimal'].includes(value)),
+      default: INTEGER,
+      validator: value => ([INTEGER, DECIMAL].includes(value)),
     },
     error: {
       type: Boolean,
@@ -68,24 +62,14 @@ export default {
     },
   },
   data() {
-    const isInteger = this.type === 'integer';
-
     return {
-      isInteger,
-      pattern: isInteger ? integerPattern : decimalPattern,
-      regex: new RegExp(isInteger ? integerPattern : decimalPattern),
-      isValid: true,
+      numberValue: this.value,
     };
   },
-  computed: {
-    numberValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.checkAndEmitIsValueValid(value);
-        this.$emit('input', value);
-      },
+  watch: {
+    numberValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
@@ -93,22 +77,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
-    },
-    isValidInput(value) {
-      if (!this.required && !value) {
-        return true;
-      }
-      const isANumber = !Number.isNaN(value);
-      const lessThanOrEqualToMax = this.max === undefined || value <= this.max;
-      const moreThanOrEqualToMin = this.min === undefined || value >= this.min;
-      const matchesRegex = `${value}`.match(this.regex) !== null;
-
-      return isANumber &&
-             lessThanOrEqualToMax &&
-             moreThanOrEqualToMin &&
-             matchesRegex;
+      this.$emit('validate', questionNumberAnswerValid(value, this.required, this.type, this.min, this.max));
     },
   },
 };

@@ -4,17 +4,23 @@
       <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
       {{ errorText }}
     </span>
+    <!--
+      temporarily set required to false from the checkbox group until we
+      can determine if ALL checkboxes are required or specific values
+      are required.
+    -->
     <checkbox-group :key="name"
                     v-model="selectedValues"
                     :name="name"
                     :checkboxes="options"
-                    :value="selectedValues"
+                    :required="false"
                     @select="selectedValuesChanged" />
   </fieldset>
 </template>
 
 <script>
 import CheckboxGroup from '@/components/CheckboxGroup';
+import { questionMultipleChoiceAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionMultipleChoice',
@@ -36,7 +42,7 @@ export default {
     },
     errorText: {
       type: String,
-      default: 'Please make a choice',
+      default: undefined,
     },
     value: {
       type: Array,
@@ -56,21 +62,26 @@ export default {
       selectedValues: this.value,
     };
   },
+  computed: {
+    validValues() {
+      return this.options.map(o => o.code);
+    },
+  },
+  watch: {
+    selectedValues(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
+    },
+  },
   created() {
     this.checkAndEmitIsValueValid(this.selectedValues);
   },
   methods: {
-    checkAndEmitIsValueValid(val) {
-      this.isValid = this.isValidInput(val);
-      this.$emit('validate', this.isValid);
+    checkAndEmitIsValueValid(value) {
+      this.$emit('validate', questionMultipleChoiceAnswerValid(value, this.required, this.validValues));
     },
-    selectedValuesChanged(val) {
-      this.selectedValues = val;
-      this.checkAndEmitIsValueValid(val);
-      this.$emit('input', val);
-    },
-    isValidInput(val) {
-      return !this.required ? true : val.length > 0;
+    selectedValuesChanged(value) {
+      this.selectedValues = value;
     },
   },
 };

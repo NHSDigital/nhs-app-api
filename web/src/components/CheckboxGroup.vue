@@ -18,7 +18,6 @@
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 
 export default {
-
   name: 'CheckboxGroup',
   components: {
     GenericCheckbox,
@@ -43,24 +42,30 @@ export default {
   },
   data() {
     return {
-      selectedValues: {
-        type: Array,
-        default: [],
-      },
+      selectedValues: [],
     };
   },
   methods: {
     selectedValueChanged(checkbox) {
-      this.checkboxes[this.checkboxes.indexOf(checkbox)].selected = !checkbox.selected;
-      const selected = this.checkboxes.filter(c => c.selected).map(c => c.code);
-      this.$emit('select', selected);
+      const { code } = checkbox;
+      const selectedValueIndex = this.selectedValues.indexOf(code);
+
+      if (selectedValueIndex >= 0) {
+        this.selectedValues.splice(selectedValueIndex, 1);
+      } else {
+        this.selectedValues.push(code);
+      }
+
+      // need to slice to duplicate array to prevent
+      // store mutations on subsequent selectedValueChanged event
+      this.$emit('select', this.selectedValues.slice());
     },
   },
 };
 </script>
 
-<style module lang="scss">
-.nhsuk-fieldset{
- margin-bottom: 16px;
+<style lang="scss">
+.nhsuk-checkboxes {
+  margin-bottom: 16px;
 }
 </style>

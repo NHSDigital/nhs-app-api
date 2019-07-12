@@ -80,8 +80,7 @@ describe('questionChoice compoonent', () => {
 
       input.trigger('click');
 
-      /* eslint-disable no-underscore-dangle */
-      expect(wrapper.vm.__emitted.input[0][0]).toBe('first');
+      expect(wrapper.emitted('input')[0][0]).toBe('first');
     });
 
     it('will emit second value when second clicked', () => {
@@ -97,8 +96,7 @@ describe('questionChoice compoonent', () => {
 
       input.trigger('click');
 
-      /* eslint-disable no-underscore-dangle */
-      expect(wrapper.vm.__emitted.input[0][0]).toBe('second');
+      expect(wrapper.emitted('input')[0][0]).toBe('second');
     });
 
     it('will emit third value when second clicked', () => {
@@ -114,24 +112,7 @@ describe('questionChoice compoonent', () => {
 
       input.trigger('click');
 
-      /* eslint-disable no-underscore-dangle */
-      expect(wrapper.vm.__emitted.input[0][0]).toBe('third');
-    });
-
-    it('will add an undefined option to validValues if not required', () => {
-      wrapper = mountQuestion({
-        propsData: {
-          required: false,
-        },
-      });
-
-      expect(wrapper.vm.validValues).toEqual(['first', 'second', 'third', undefined]);
-    });
-
-    it('will not add undefined option to validValues if required', () => {
-      wrapper = mountQuestion();
-
-      expect(wrapper.vm.validValues).toEqual(['first', 'second', 'third']);
+      expect(wrapper.emitted('input')[0][0]).toBe('third');
     });
   });
 });

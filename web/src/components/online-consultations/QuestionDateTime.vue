@@ -6,26 +6,23 @@
       {{ errorText }}
     </span>
     <div :class="$style.dateTimeContainer">
-      <generic-date-input :id="dateAnswerId"
+      <generic-date-input :id="id"
                           v-model="dateTimeValue"
-                          :day-id="dayId"
-                          :month-id="monthId"
-                          :year-id="yearId"
-                          :day-name="dayName"
-                          :month-name="monthName"
-                          :year-name="yearName"
-                          :error="error"/>
-      <generic-time-input :id="timeAnswerId"
+                          :name="name"
+                          :error="error"
+                          :required="required"/>
+      <generic-time-input :id="id"
                           v-model="dateTimeValue"
-                          :hour-id="hourId"
-                          :minute-id="minuteId"
-                          :error="error"/>
+                          :name="name"
+                          :error="error"
+                          :required="required"/>
     </div>
   </div>
 </template>
 <script>
 import GenericDateInput from '@/components/widgets/GenericDateInput';
 import GenericTimeInput from '@/components/widgets/GenericTimeInput';
+import { questionDateTimeAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionDatetime',
@@ -36,39 +33,11 @@ export default {
   props: {
     id: {
       type: String,
-      default: 'datetime-answer',
+      required: true,
     },
-    dayId: {
+    name: {
       type: String,
-      default: undefined,
-    },
-    monthId: {
-      type: String,
-      default: undefined,
-    },
-    yearId: {
-      type: String,
-      default: undefined,
-    },
-    dayName: {
-      type: String,
-      default: undefined,
-    },
-    monthName: {
-      type: String,
-      default: undefined,
-    },
-    yearName: {
-      type: String,
-      default: undefined,
-    },
-    hourId: {
-      default: 'hour-id',
-      type: String,
-    },
-    minuteId: {
-      default: 'minute-id',
-      type: String,
+      required: true,
     },
     value: {
       type: Object,
@@ -97,27 +66,18 @@ export default {
   },
   data() {
     return {
-      isValid: true,
+      dateTimeValue: this.value,
     };
   },
   computed: {
-    dateTimeValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.checkAndEmitIsValueValid(value);
-        this.$emit('input', value);
-      },
-    },
-    dateAnswerId() {
-      return `${this.id}-date`;
-    },
-    timeAnswerId() {
-      return `${this.id}-time`;
-    },
     errorId() {
       return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+  },
+  watch: {
+    dateTimeValue(to) {
+      this.checkAndEmitIsValueValid(to);
+      this.$emit('input', to);
     },
   },
   created() {
@@ -125,40 +85,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.isValid = this.isValidInput(value);
-      this.$emit('validate', this.isValid);
-    },
-    isValidInput(datetime) {
-      const dayEmpty = datetime.day === undefined || datetime.day === '';
-      const monthEmpty = datetime.month === undefined || datetime.month === '';
-      const yearEmpty = datetime.year === undefined || datetime.year === '';
-      const hourEmpty = datetime.hour === undefined || datetime.hour === '';
-      const minuteEmpty = datetime.minute === undefined || datetime.minute === '';
-
-      if (!this.required &&
-          dayEmpty &&
-          monthEmpty &&
-          yearEmpty &&
-          hourEmpty &&
-          minuteEmpty) {
-        return true;
-      }
-
-      if (dayEmpty ||
-          monthEmpty ||
-          yearEmpty ||
-          hourEmpty ||
-          minuteEmpty ||
-          datetime.year < 1000 ||
-          datetime.year > 9999 ||
-          datetime.hour < 0 ||
-          datetime.hour > 23 ||
-          datetime.minute < 0 ||
-          datetime.minute > 59) {
-        return false;
-      }
-
-      return !Number.isNaN(new Date(`${datetime.year}-${datetime.month}-${datetime.day}`).getTime());
+      this.$emit('validate', questionDateTimeAnswerValid(value, this.required));
     },
   },
 };

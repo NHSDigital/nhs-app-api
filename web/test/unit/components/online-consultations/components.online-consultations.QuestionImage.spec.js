@@ -3,6 +3,7 @@ import QuestionImage from '@/components/online-consultations/QuestionImage';
 import GenericImageInput from '@/components/widgets/GenericImageInput';
 import { mount } from '../../helpers';
 
+const imageValidationMessage = 'appointments.admin_help.errors.validation.message.image';
 let wrapper;
 
 const getImageWrapper = (useComponent = true) => wrapper.find(useComponent ? GenericImageInput : 'img');
@@ -37,64 +38,44 @@ describe('QuestionImage.vue', () => {
   describe('Initial values', () => {
     it('should emit if data is invalid', () => {
       wrapper = mountQuestion();
-      wrapper.vm.checkAndEmitIsValueValid([]);
+      wrapper.vm.checkAndEmitIsValueValid();
+      const expectedValidation = {
+        isValid: false,
+        isEmpty: true,
+        message: imageValidationMessage,
+      };
 
-      expect(wrapper.emitted('validate')).toBeDefined();
-      expect(wrapper.emitted().validate[0].length).toEqual(1);
-      expect(wrapper.emitted().validate[0][0]).toBe(false);
+      const emittedInputs = wrapper.emitted('validate');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual(expectedValidation);
     });
 
     it('should emit if data is invalid', () => {
       const propsData = { required: false };
       wrapper = mountQuestion({ propsData });
-      wrapper.vm.checkAndEmitIsValueValid([]);
-      expect(wrapper.emitted('validate')).toBeDefined();
-      expect(wrapper.emitted().validate[0].length).toEqual(1);
-      expect(wrapper.emitted().validate[0][0]).toBe(true);
+      wrapper.vm.checkAndEmitIsValueValid({ offsetX: 10, offsetY: 10 });
+      const expectedValidation = {
+        isValid: true,
+        isEmpty: true,
+      };
+
+      const emittedInputs = wrapper.emitted('validate');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual(expectedValidation);
     });
   });
 
   describe('Methods', () => {
-    describe('isValid', () => {
-      it('should validate true if input it not required and no input is given', () => {
-        const propsData = { required: false };
-        wrapper = mountQuestion({ propsData });
-        const isValidInput = wrapper.vm.isValidInput([]);
-        expect(isValidInput).toEqual(true);
-      });
-
-      it('should validate true if input is required and input is given', () => {
-        const propsData = { required: true };
-        wrapper = mountQuestion({ propsData });
-        const isValidInput = wrapper.vm.isValidInput([{ x: 10, y: 15 }]);
-        expect(isValidInput).toEqual(true);
-      });
-
-      it('should validate false if input is required and no input is given', () => {
-        const propsData = { required: true };
-        wrapper = mountQuestion({ propsData });
-        const isValidInput = wrapper.vm.isValidInput([]);
-        expect(isValidInput).toEqual(false);
-      });
-    });
-
-    // {x: 10, y: 15}
     describe('onImageClicked', () => {
       it('should emit on image clicked', () => {
-        const eventClientX = 200;
-        const eventCLientY = 100;
-        const offsetLeft = 36;
-        const offsetTop = -89;
-        const xCoordinate = eventClientX - offsetLeft;
-        const yCoordinate = eventCLientY - offsetTop;
+        const offsetX = 200;
+        const offsetY = 100;
 
         const clickEvent = {
-          clientX: 200,
-          clientY: 100,
-          target: {
-            offsetLeft,
-            offsetTop,
-          },
+          offsetX,
+          offsetY,
         };
 
         const checkAndEmitIsValueValid = jest.fn();
@@ -106,10 +87,11 @@ describe('QuestionImage.vue', () => {
 
         wrapper.vm.onImageClicked(clickEvent);
 
-        expect(wrapper.emitted('input')).toBeDefined();
-        expect(checkAndEmitIsValueValid).toBeCalledWith([{ x: xCoordinate, y: yCoordinate }]);
-        expect(wrapper.emitted().input[0].length).toEqual(1);
-        expect(wrapper.emitted().input[0][0]).toEqual([{ x: xCoordinate, y: yCoordinate }]);
+        const emittedInputs = wrapper.emitted('input');
+        expect(emittedInputs).toBeDefined();
+        expect(emittedInputs[0].length).toEqual(1);
+        expect(emittedInputs[0][0]).toEqual({ x: offsetX, y: offsetY });
+        expect(checkAndEmitIsValueValid).toBeCalledWith({ x: offsetX, y: offsetY });
       });
     });
   });

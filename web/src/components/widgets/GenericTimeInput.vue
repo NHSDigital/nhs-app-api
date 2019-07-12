@@ -8,14 +8,17 @@
       <div class="nhsuk-date-input__item">
         <label id="hourInputLabel"
                class="nhsuk-label nhsuk-date-input__label"
-               :for="hourId">Hour</label>
-        <input :id="hourId"
+               :for="`${id}-hour`">
+          {{ $t('onlineConsultations.questions.time.labels.hour') }}
+        </label>
+        <input :id="`${id}-hour`"
                ref="hourInput"
                v-model.number="hourValue"
                pattern="[0-9]+"
                :min="0"
-               :max="24"
+               :max="23"
                :required="required"
+               :name="`${name}-hour`"
                type="number"
                step="any"
                :class="inputClasses">
@@ -24,14 +27,17 @@
       <div class="nhsuk-date-input__item">
         <label id="minuteInputLabel"
                class="nhsuk-label nhsuk-date-input__label"
-               :for="minuteId">Minute</label>
-        <input :id="minuteId"
+               :for="`${id}-minute`">
+          {{ $t('onlineConsultations.questions.time.labels.minute') }}
+        </label>
+        <input :id="`${id}-minute`"
                ref="minuteInput"
                v-model.number="minuteValue"
                pattern="[0-9]+"
                :min="0"
                :max="59"
                :required="required"
+               :name="`${name}-minute`"
                type="number"
                step="any"
                :class="inputClasses">
@@ -44,13 +50,13 @@
 export default {
   name: 'GenericTimeInput',
   props: {
-    hourId: {
+    id: {
       type: String,
-      default: 'hour-input',
+      required: true,
     },
-    minuteId: {
+    name: {
       type: String,
-      default: 'minute-input',
+      required: true,
     },
     value: {
       type: Object,
@@ -80,7 +86,6 @@ export default {
         return this.value.hour;
       },
       set(hourValue) {
-        this.value.hour = hourValue;
         this.$emit('input', {
           ...this.value,
           hour: (hourValue !== '' && hourValue < 10) ? `0${hourValue}` : hourValue,
@@ -92,7 +97,6 @@ export default {
         return this.value.minute;
       },
       set(minuteValue) {
-        this.value.minute = minuteValue;
         this.$emit('input', {
           ...this.value,
           minute: (minuteValue !== '' && minuteValue < 10) ? `0${minuteValue}` : minuteValue,

@@ -12,6 +12,7 @@ class KnownServices {
     private let accessibleConditionsTitle = NSLocalizedString("AccessibleConditionsTitle", comment: "")
     private let symptomsTitle = NSLocalizedString("SymptomsTitle", comment: "")
     private let appointmentsTitle = NSLocalizedString("AppointmentsTitle", comment: "")
+    private let adminHelpTitle = NSLocalizedString("AdminHelpTitle", comment: "")
     private let prescriptionsTitle = NSLocalizedString("PrescriptionsTitle", comment: "")
     private let myRecordTitle = NSLocalizedString("MyRecordTitle", comment: "")
     private let moreTitle = NSLocalizedString("MoreTitle", comment: "")
@@ -141,6 +142,7 @@ class KnownServices {
         nhsoService.addPathInfo(path: config.SymptomsUrlPath, service: .SYMPTOMS, validateSession: true, allowNativeInteraction: true, title: symptomsTitle)
         nhsoService.addPathInfo(path: config.CheckSymptomsUrlPath, service: .NHS_ONLINE, validateSession: false,  allowNativeInteraction: false, title: symptomsTitle)
         nhsoService.addPathInfo(path: config.AppointmentsUrlPath, service: .APPOINTMENTS,validateSession: true,  allowNativeInteraction: true, title: appointmentsTitle)
+        nhsoService.addPathInfo(path: config.AdminHelpUrlPath, service: .ADMIN_HELP, validateSession: true,  allowNativeInteraction: true, title:adminHelpTitle)
         nhsoService.addPathInfo(path: config.PrescriptionsUrlPath, service: .PRESCRIPTIONS, validateSession: true, allowNativeInteraction: true, title: prescriptionsTitle)
         nhsoService.addPathInfo(path: config.MyRecordUrlPath, service: .MY_RECORD,validateSession: true,  allowNativeInteraction: true, title: myRecordTitle)
         nhsoService.addPathInfo(path: config.MoreUrlPath, service: .MORE, validateSession: true, allowNativeInteraction: true, title: moreTitle)
@@ -151,7 +153,7 @@ class KnownServices {
     }
     
     enum Service {
-        case NHS_111, CONDITIONS, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION, DATA_SHARING;
+        case NHS_111, CONDITIONS, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, ADMIN_HELP, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION, DATA_SHARING;
     }
 }
 

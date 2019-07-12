@@ -8,16 +8,8 @@ let wrapper;
 const mountQuestion = ({ propsData = {} } = {}) =>
   mount(QuestionDatetime, {
     propsData: {
-      name: 'name',
-      dayId: 'dayId',
-      monthId: 'monthId',
-      yearId: 'yearId',
-      hourId: 'hourId',
-      minuteId: 'minuteId',
-      dayName: 'dayName',
-      monthName: 'monthName',
-      yearName: 'yearName',
-      id: 'id',
+      id: 'test-id',
+      name: 'test-name',
       ...propsData,
     },
     state: {
@@ -42,16 +34,8 @@ describe('QuestionDateTime.vue', () => {
   });
   describe('Data properties', () => {
     it('should be properly configured based on the component properties', () => {
-      /* eslint-disable no-underscore-dangle */
-      expect(wrapper.vm._props.dayId).toEqual('dayId');
-      expect(wrapper.vm._props.monthId).toEqual('monthId');
-      expect(wrapper.vm._props.yearId).toEqual('yearId');
-      expect(wrapper.vm._props.hourId).toEqual('hourId');
-      expect(wrapper.vm._props.minuteId).toEqual('minuteId');
-      expect(wrapper.vm._props.dayName).toEqual('dayName');
-      expect(wrapper.vm._props.monthName).toEqual('monthName');
-      expect(wrapper.vm._props.yearName).toEqual('yearName');
-      expect(wrapper.vm._props.id).toEqual('id');
+      expect(wrapper.vm.$props.id).toEqual('test-id');
+      expect(wrapper.vm.$props.name).toEqual('test-name');
     });
     it('should be properly configured based on the component data', () => {
       const dateObj = wrapper.vm.dateTimeValue;
@@ -66,15 +50,14 @@ describe('QuestionDateTime.vue', () => {
 
   describe('Computed properties', () => {
     it('should emit the input date when it is invalid', () => {
-      wrapper.vm.isValidInput = jest.fn()
-        .mockImplementation(() => false);
-      const input = wrapper.find("[id='dayId']");
+      const input = wrapper.find("[id='test-id-day']");
       input.element.value = '999999999';
       input.trigger('input');
 
-      expect(wrapper.emitted('input')).toBeDefined();
-      expect(wrapper.emitted().input[0].length).toEqual(1);
-      expect(wrapper.emitted().input[0][0]).toEqual({
+      const emittedInputs = wrapper.emitted('input');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual({
         day: 999999999,
         month: 4,
         year: 2019,
@@ -84,126 +67,92 @@ describe('QuestionDateTime.vue', () => {
     });
 
     it('should emit the input day when it is valid', () => {
-      wrapper.vm.isValidInput = jest.fn()
-        .mockImplementation(() => false);
-      const input = wrapper.find("[id='dayId']");
+      const input = wrapper.find("[id='test-id-day']");
       input.element.value = '10';
       input.trigger('input');
 
-      expect(wrapper.emitted('input'))
-        .toBeDefined();
-      expect(wrapper.emitted().input[0].length)
-        .toEqual(1);
-      expect(wrapper.emitted().input[0][0])
-        .toEqual(
-          {
-            day: 10,
-            month: 4,
-            year: 2019,
-            hour: 10,
-            minute: 40,
-          },
-        );
+      const emittedInputs = wrapper.emitted('input');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual({
+        day: 10,
+        month: 4,
+        year: 2019,
+        hour: 10,
+        minute: 40,
+      });
     });
 
     it('should emit the input  month when it is valid', () => {
-      wrapper.vm.isValidInput = jest.fn()
-        .mockImplementation(() => false);
-      const input = wrapper.find("[id='monthId']");
+      const input = wrapper.find("[id='test-id-month']");
       input.element.value = '10';
       input.trigger('input');
-
-      expect(wrapper.emitted('input'))
-        .toBeDefined();
-      expect(wrapper.emitted().input[0].length)
-        .toEqual(1);
-      expect(wrapper.emitted().input[0][0])
-        .toEqual(
-          {
-            day: 3,
-            month: 10,
-            year: 2019,
-            hour: 10,
-            minute: 40,
-          },
-        );
+      const emittedInputs = wrapper.emitted('input');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual({
+        day: 3,
+        month: 10,
+        year: 2019,
+        hour: 10,
+        minute: 40,
+      });
     });
 
     it('should emit the input year when it is valid', () => {
-      wrapper.vm.isValidInput = jest.fn()
-        .mockImplementation(() => false);
-      const input = wrapper.find("[id='yearId']");
+      const input = wrapper.find("[id='test-id-year']");
       input.element.value = '2010';
       input.trigger('input');
 
-      expect(wrapper.emitted('input'))
-        .toBeDefined();
-      expect(wrapper.emitted().input[0].length)
-        .toEqual(1);
-      expect(wrapper.emitted().input[0][0])
-        .toEqual(
-          {
-            day: 3,
-            month: 4,
-            year: 2010,
-            hour: 10,
-            minute: 40,
-          },
-        );
+      const emittedInputs = wrapper.emitted('input');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual({
+        day: 3,
+        month: 4,
+        year: 2010,
+        hour: 10,
+        minute: 40,
+      });
     });
 
     it('should emit the input hour when it is valid', () => {
-      wrapper.vm.isValidInput = jest.fn()
-        .mockImplementation(() => false);
-      const input = wrapper.find("[id='hourId']");
+      const input = wrapper.find("[id='test-id-hour']");
       input.element.value = '10';
       input.trigger('input');
 
-      expect(wrapper.emitted('input'))
-        .toBeDefined();
-      expect(wrapper.emitted().input[0].length)
-        .toEqual(1);
-      expect(wrapper.emitted().input[0][0])
-        .toEqual(
-          {
-            day: 3,
-            month: 4,
-            year: 2019,
-            hour: 10,
-            minute: 40,
-          },
-        );
+      const emittedInputs = wrapper.emitted('input');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual({
+        day: 3,
+        month: 4,
+        year: 2019,
+        hour: 10,
+        minute: 40,
+      });
     });
 
     it('should emit the input minute when it is valid', () => {
-      wrapper.vm.isValidInput = jest.fn()
-        .mockImplementation(() => false);
-      const input = wrapper.find("[id='minuteId']");
+      const input = wrapper.find("[id='test-id-minute']");
       input.element.value = '10';
       input.trigger('input');
 
-      expect(wrapper.emitted('input'))
-        .toBeDefined();
-      expect(wrapper.emitted().input[0].length)
-        .toEqual(1);
-      expect(wrapper.emitted().input[0][0])
-        .toEqual(
-          {
-            day: 3,
-            month: 4,
-            year: 2019,
-            hour: 10,
-            minute: 10,
-          },
-        );
+      const emittedInputs = wrapper.emitted('input');
+      expect(emittedInputs).toBeDefined();
+      expect(emittedInputs[0].length).toEqual(1);
+      expect(emittedInputs[0][0]).toEqual({
+        day: 3,
+        month: 4,
+        year: 2019,
+        hour: 10,
+        minute: 10,
+      });
     });
 
     each([{
-      id: undefined,
-      errorId: 'datetime-answer-error-message',
-    }, {
-      id: 'myid',
-      errorId: 'myid-error-message',
+      id: 'test-id',
+      errorId: 'test-id-error-message',
     }, {
       id: '',
       errorId: 'error-message',
@@ -215,130 +164,6 @@ describe('QuestionDateTime.vue', () => {
       });
 
       expect(wrapper.vm.errorId).toEqual(data.errorId);
-    });
-  });
-
-  describe('Methods', () => {
-    describe('isValidInput', () => {
-      it('should evaluate true on correct fields', () => {
-        const isValid = wrapper.vm.isValidInput({
-          day: 3,
-          month: 4,
-          year: 2019,
-          hour: 10,
-          minute: 30,
-        });
-
-        expect(isValid).toEqual(true);
-      });
-
-      it('should evaluate false on incorrect date', () => {
-        const isValid = wrapper.vm.isValidInput({
-          day: 3000,
-          month: 4,
-          year: 2019,
-          hour: 10,
-          minute: 30,
-        });
-
-        expect(isValid).toEqual(false);
-      });
-
-      it('should evaluate false on incorrect month', () => {
-        const isValid = wrapper.vm.isValidInput({
-          day: 3,
-          month: 4000,
-          year: 2019,
-          hour: 10,
-          minute: 30,
-        });
-
-        expect(isValid).toEqual(false);
-      });
-
-      it('should evaluate false on incorrect year', () => {
-        const isValid = wrapper.vm.isValidInput({
-          day: 3,
-          month: 4000,
-          year: 0,
-          hour: 10,
-          minute: 30,
-        });
-
-        expect(isValid).toEqual(false);
-      });
-
-      it('should evaluate false on incorrect hour', () => {
-        const isValid = wrapper.vm.isValidInput({
-          day: 3,
-          month: 4000,
-          year: 0,
-          hour: 10000,
-          minute: 30,
-        });
-
-        expect(isValid).toEqual(false);
-      });
-
-      it('should evaluate false on incorrect minute', () => {
-        const isValid = wrapper.vm.isValidInput({
-          day: 3,
-          month: 4000,
-          year: 0,
-          hour: 10,
-          minute: 30000,
-        });
-
-        expect(isValid).toEqual(false);
-      });
-
-      it('should evaluate false on minus figure', () => {
-        const isValid = wrapper.vm.isValidInput({
-          day: -3,
-          month: 4,
-          year: 0,
-          hour: 10,
-          minute: 30,
-        });
-
-        expect(isValid).toEqual(false);
-      });
-
-      each([{}, {
-        day: '',
-        month: '',
-        year: '',
-        hour: '',
-        minute: '',
-      }]).it('should return true if not required and all fields are empty or undefined', (datetime) => {
-        wrapper = mountQuestion({
-          propsData: {
-            required: false,
-          },
-        });
-        expect(wrapper.vm.isValidInput(datetime)).toEqual(true);
-      });
-
-      each([{
-        day: '1',
-        month: undefined,
-        year: '3',
-        hour: '',
-        minute: undefined,
-      }, {
-        day: undefined,
-        month: '1',
-        year: undefined,
-        hour: '3',
-        minute: '',
-      }]).it('should return false if not required and not all fields are empty or undefined', (datetime) => {
-        wrapper = mountQuestion({
-          propsData: {
-            required: false,
-          },
-        });
-        expect(wrapper.vm.isValidInput(datetime)).toEqual(false);
-      });
     });
   });
 });

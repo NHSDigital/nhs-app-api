@@ -123,6 +123,8 @@
 	<string>$(MY_RECORD_URL_PATH)</string>
 	<key>AppointmentsUrlPath</key>
 	<string>$(APPOINTMENTS_URL_PATH)</string>
+	<key>AdminHelpUrlPath</key>
+	<string>$(ADMIN_HELP_URL_PATH)</string>
 	<key>SymptomsUrlPath</key>
 	<string>$(SYMPTOMS_URL_PATH)</string>
 	<key>PrescriptionsUrlPath</key>

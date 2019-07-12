@@ -67,22 +67,4 @@ describe('QuestionText.vue', () => {
       expect(textAreaInputVm.maxlength).toEqual('20');
     });
   });
-
-  describe('Methods', () => {
-    describe('isValidInput', () => {
-      it('will be invalid if text length is greater than maxlength', () => {
-        wrapper = mountQuestion();
-        const isValidInput = wrapper.vm.isValidInput('This is longer than 20 characters.');
-
-        expect(isValidInput).toEqual(false);
-      });
-      it('will be invalid if text is required and value is blank', () => {
-        const propsData = { text: 'Another question?', required: true };
-        wrapper = mountQuestion({ ...defaultPropsData, propsData });
-        const isValidInput = wrapper.vm.isValidInput('');
-
-        expect(isValidInput).toEqual(false);
-      });
-    });
-  });
 });

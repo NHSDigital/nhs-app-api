@@ -16,6 +16,7 @@
                               :label="getLabel(radio)"
                               :name="name"
                               :value="getValue(radio)"
+                              :required="required"
                               class="nhsuk-radios__item"
                               @select="selected"/>
       </div>
@@ -63,6 +64,10 @@ export default {
     showError: {
       type: Boolean,
       default: false,
+    },
+    required: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
