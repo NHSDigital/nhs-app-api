@@ -79,8 +79,10 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                     NhsNumber = nhsNumberFormatted,
                     Session = new CitizenIdUserSession()
                     {
-                        AccessToken = cidUserProfile.AccessToken
-                    }
+                        AccessToken = cidUserProfile.AccessToken,
+                        FamilyName = cidUserProfile.FamilyName,
+                        DateOfBirth = dateOfBirthParsed.Value
+                    },
                 };
             }
             finally

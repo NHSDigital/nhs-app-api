@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
 
@@ -158,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             _mockGpSearchService.Verify(x => x.IsGpPracticeEPSEnabled(It.IsAny<string>()), Times.Never);
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Never);
             _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
 
@@ -191,7 +191,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             _mockGpSearchService.Verify();
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Never);
             _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
 
@@ -218,7 +218,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             _mockGpSearchService.Verify();
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Never);
             _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
 
@@ -247,7 +247,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             _mockGpSearchService.Verify();
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Never);
             _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
 
@@ -273,7 +273,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
 
@@ -322,7 +322,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
             
@@ -354,7 +354,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
             
@@ -386,7 +386,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
 
@@ -417,7 +417,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             _mockNominatedPharmacyGatewayUpdateService
-                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode))
+                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(new StatusCodeResult((int)HttpStatusCode.OK)))
                 .Verifiable();
             
@@ -442,7 +442,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             _mockNominatedPharmacyGatewayUpdateService
-                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode))
+                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, _userSession.CitizenIdUserSession))
                 .Throws<Exception>()
                 .Verifiable();
 
@@ -475,7 +475,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
 
             // Assert
-            _mockNominatedPharmacyGatewayUpdateService.Verify(x => x.UpdateNominatedPharmacy(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockNominatedPharmacyGatewayUpdateService.Verify(x => x.UpdateNominatedPharmacy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Never);
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             value.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
         }

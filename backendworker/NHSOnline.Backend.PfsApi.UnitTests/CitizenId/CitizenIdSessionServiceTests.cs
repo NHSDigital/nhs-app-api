@@ -33,6 +33,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private string _nhsNumber = "0123456789";
         private string _formattedNhsNumber = "012 345 6789";
         private string _odsCode;
+        private string _familyName;
+
         
         private const string _dateFormat = "yyyy-MM-dd";
         private const string CookieDomain = "CookieDomain";
@@ -59,6 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             _accessToken = _fixture.Create<string>();
             _im1Token = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
+            _familyName = _fixture.Create<string>();
 
             _systemUnderTest = _fixture.Create<CitizenIdSessionService>();
         }
@@ -79,7 +82,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 DateOfBirth = dateTimeNow.ToString(_dateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _im1Token,
                 NhsNumber = _nhsNumber,
-                OdsCode = _odsCode
+                OdsCode = _odsCode,
+                FamilyName = _familyName
             };
             
             _mockCitizenIdService
@@ -99,7 +103,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 OdsCode = _odsCode,
                 Session = new CitizenIdUserSession
                 {
-                    AccessToken = _accessToken
+                    AccessToken = _accessToken,
+                    DateOfBirth = dateTimeNow.Date,
+                    FamilyName = _familyName
                 },
                 StatusCode = 200
             };

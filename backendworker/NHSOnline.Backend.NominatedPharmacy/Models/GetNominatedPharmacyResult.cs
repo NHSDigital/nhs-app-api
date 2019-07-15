@@ -12,25 +12,25 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 
         public string PertinentSerialChangeNumber { get; }
 
-        public bool HasValidPharmacyType { get; }
+        public bool HaveAllChecksPassed { get; }
 
         public GetNominatedPharmacyResult(HttpStatusCode httpStatusCode)
         {
             HttpStatusCode = httpStatusCode;
         }
 
-        public GetNominatedPharmacyResult(HttpStatusCode httpStatusCode, bool hasValidPharmacyType) : this(httpStatusCode)
+        public GetNominatedPharmacyResult(HttpStatusCode httpStatusCode, bool haveAllChecksPassed) : this(httpStatusCode)
         {
             HttpStatusCode = httpStatusCode;
-            HasValidPharmacyType = hasValidPharmacyType;
+            HaveAllChecksPassed = haveAllChecksPassed;
         }
         
-        public GetNominatedPharmacyResult(HttpStatusCode httpStatusCode, string pharmacyOdsCode, string pertinentSerialChangeNumber, bool hasValidPharmacyType, string nominatedPharmacyType) : this(httpStatusCode)
+        public GetNominatedPharmacyResult(HttpStatusCode httpStatusCode, string pharmacyOdsCode, string pertinentSerialChangeNumber, bool haveAllChecksPassed, string nominatedPharmacyType) : this(httpStatusCode)
         {
             PharmacyOdsCode = pharmacyOdsCode;
             NominatedPharmacyType = nominatedPharmacyType;
             PertinentSerialChangeNumber = pertinentSerialChangeNumber;
-            HasValidPharmacyType = hasValidPharmacyType;
+            HaveAllChecksPassed = haveAllChecksPassed;
         }
     }
 }

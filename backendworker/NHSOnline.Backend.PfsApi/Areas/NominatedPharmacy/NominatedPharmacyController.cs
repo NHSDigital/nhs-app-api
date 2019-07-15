@@ -80,23 +80,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = false });
             }
 
-            var result = await _nominatedPharmacyService.GetNominatedPharmacy(userSession.GpUserSession.NhsNumber);
+            var result = await _nominatedPharmacyService.GetNominatedPharmacy(userSession.GpUserSession.NhsNumber, userSession.CitizenIdUserSession);
 
             if (!HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
             {
                 return new StatusCodeResult(GetErrorStatusCode("Error retrieving nominated pharmacy ods code from Spine with status code",
                     result.HttpStatusCode));
             }
-            if (!result.HasValidPharmacyType)
+            if (!result.HaveAllChecksPassed)
             {
-                _logger.LogInformation("Invalid nominated pharmacy type or multiple pharmacy types exist");
-                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = result.HasValidPharmacyType });
+                _logger.LogInformation("Not all nominated pharmacy checks have passed");
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = result.HaveAllChecksPassed });
             }
 
             if (string.IsNullOrEmpty(result.PharmacyOdsCode))
             {
                 _logger.LogInformation("No nominated pharmacy. Returning Success.");
-                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = result.HasValidPharmacyType });
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = result.HaveAllChecksPassed });
             }
 
             _logger.LogInformation($"Nominated pharmacy retrieved with ods code: { result.PharmacyOdsCode }");
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 new PharmacyDetailsResponse
                 {
                     PharmacyDetails = pharmacyDetails,
-                    NominatedPharmacyEnabled = result.HasValidPharmacyType
+                    NominatedPharmacyEnabled = result.HaveAllChecksPassed
                 });
         }
 
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
             try
             {
-                var result = await _nominatedPharmacyGatewayUpdateService.UpdateNominatedPharmacy(userSession.GpUserSession.NhsNumber, model.OdsCode);
+                var result = await _nominatedPharmacyGatewayUpdateService.UpdateNominatedPharmacy(userSession.GpUserSession.NhsNumber, model.OdsCode, userSession.CitizenIdUserSession);
                 return result;
             }
             catch (Exception ex)

@@ -59,6 +59,10 @@ data class Patient(
                 DateTimeFormats.frontendBasicDateFormat)
     }
 
+    fun dateOfBirthDigitsOnly(): String {
+        return dateOfBirth.replace("-", "")
+    }
+
     fun formattedFullName(): String {
         val fullName = "$title $firstName $surname"
         return fullName.trim()

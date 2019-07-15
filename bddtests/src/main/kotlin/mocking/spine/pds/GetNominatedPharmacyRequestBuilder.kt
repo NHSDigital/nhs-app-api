@@ -9,7 +9,7 @@ class GetNominatedPharmacyRequestBuilder
         private const val fromAsid = "200000000355"
         private const val toAsid = "200000000355"
 
-        fun getResponse(nhsNumber: String): String {
+        fun getResponse(nhsNumber: String, surname: String, dateOfBirth: String): String {
             return """
             <?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
@@ -84,7 +84,7 @@ class GetNominatedPharmacyRequestBuilder
                               <id root="2.16.840.1.113883.2.1.4.1" extension="${nhsNumber}"/>
                               <patientPerson classCode="PSN" determinerCode="INSTANCE">
                                 <administrativeGenderCode code="1"/>
-                                <birthTime value="19230326"/>
+                                <birthTime value="${dateOfBirth}"/>
                                 <playedOtherProviderPatient classCode="PAT">
                                   <subjectOf typeCode="SBJ">
                                     <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
@@ -121,7 +121,7 @@ class GetNominatedPharmacyRequestBuilder
                                       <prefix>MR</prefix>
                                       <given>Roland</given>
                                       <given>Lionel</given>
-                                      <family>HANLON</family>
+                                      <family>${surname}</family>
                                       <validTime>
                                         <low value="20090308"/>
                                       </validTime>
@@ -151,8 +151,8 @@ class GetNominatedPharmacyRequestBuilder
         """.trimIndent()
         }
 
-        fun getResponse(nhsNumber: String, odsCode: String,
-                        pharmacyTypes: kotlin.Array<String>, code : String? = null): String {
+        fun getResponse(personalCheckDetails: PersonalCheckDetails,
+                        odsCode: String, pharmacyTypes: kotlin.Array<String>, code : String? = null): String {
             return """
             <?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
@@ -232,10 +232,10 @@ class GetNominatedPharmacyRequestBuilder
                           <subject typeCode="SBJ">
                             <patientRole classCode="PAT">
                               ${ getConfidentialityCode(code) }
-                              <id root="2.16.840.1.113883.2.1.4.1" extension="${nhsNumber}"/>
+                              <id root="2.16.840.1.113883.2.1.4.1" extension="${personalCheckDetails.nhsNumber}"/>
                               <patientPerson classCode="PSN" determinerCode="INSTANCE">
                                 <administrativeGenderCode code="1"/>
-                                <birthTime value="19230326"/>
+                                <birthTime value="${personalCheckDetails.dateOfBirth}"/>
                                 <playedOtherProviderPatient classCode="PAT">
                                   <subjectOf typeCode="SBJ">
                                     <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
@@ -273,7 +273,7 @@ class GetNominatedPharmacyRequestBuilder
                                       <prefix>MR</prefix>
                                       <given>Roland</given>
                                       <given>Lionel</given>
-                                      <family>HANLON</family>
+                                      <family>${personalCheckDetails.surname}</family>
                                       <validTime>
                                         <low value="20090308"/>
                                       </validTime>

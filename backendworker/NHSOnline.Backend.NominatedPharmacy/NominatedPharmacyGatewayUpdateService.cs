@@ -31,11 +31,12 @@ namespace NHSOnline.Backend.NominatedPharmacy
             _config = config;
         }
 
-        public async Task<StatusCodeResult> UpdateNominatedPharmacy(string nhsNumber, string updatedOdsCode)
+        public async Task<StatusCodeResult> UpdateNominatedPharmacy(string nhsNumber, string updatedOdsCode,
+            CitizenIdUserSession cidUserSession)
         {
             _logger.LogEnter();
             
-            var result = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber);
+            var result = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber, cidUserSession);
 
             if (NominatedPharmacyGetHasError(result, out StatusCodeResult errorResult))
             {
@@ -75,7 +76,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
 
             // Retrieve nominated pharmacy again to confirm it's been updated.
-            var confirmNominatedPharmacyUpdatedResult = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber);
+            var confirmNominatedPharmacyUpdatedResult = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber, cidUserSession);
 
             if (!HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
             {
@@ -115,9 +116,9 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 return true;
             }
             
-            if (!result.HasValidPharmacyType)
+            if (!result.HaveAllChecksPassed)
             {
-                _logger.LogError("Invalid pharmacy type or combination");
+                _logger.LogError("Invalid pharmacy type, combination or family name / dob mismatch");
                 errorResult = new StatusCodeResult((int)HttpStatusCode.BadGateway);
                 return true;
             }

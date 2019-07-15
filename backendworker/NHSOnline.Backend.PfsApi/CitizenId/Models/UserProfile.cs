@@ -7,5 +7,7 @@
         public string DateOfBirth { get; set; }
         public string NhsNumber { get; set; }
         public string AccessToken { get; set; }
+        public string FamilyName { get; set; }
     }
+    
 }

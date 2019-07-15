@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -50,7 +50,8 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 var odsCode = principal.FindFirstValue(Constants.CitizenIdClaimTypes.OdscodeClaim);
                 var dateOfBirth = principal.FindFirstValue(ClaimTypes.DateOfBirth);
                 var nhsNumber = principal.FindFirstValue(Constants.CitizenIdClaimTypes.NhsNumber);
-            
+                var familyName = principal.FindFirstValue(Constants.CitizenIdClaimTypes.Surname);
+
                 if (im1Token == null)
                 {
                     _logger.LogError("Invalid IdToken, does not contain an im1_token");
@@ -69,6 +70,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                     OdsCode = odsCode,
                     DateOfBirth = dateOfBirth,
                     NhsNumber = nhsNumber,
+                    FamilyName = familyName,   
                 });
             }
             catch (Exception e)

@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
         const string NominatedPharmacyCode = "P1";
         const string MedicalApplianceCode = "P2";
         const string DispensingDoctorCode = "P3";
+        const string DateOfBirthFormat = "yyyyMMdd";
 
         private readonly ILogger<NominatedPharmacyService> _logger;
         private readonly INominatedPharmacyClient _prescriptionTrackingClient;
@@ -42,7 +43,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             _auditor = auditor;
         }
 
-        public async Task<GetNominatedPharmacyResult> GetNominatedPharmacy(string nhsNumber)
+        public async Task<GetNominatedPharmacyResult> GetNominatedPharmacy(string nhsNumber, CitizenIdUserSession cidUserSession)
         {
             const string Dev = "DEV";
             const string Instance = "INSTANCE";
@@ -195,7 +196,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
                     ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
                     .Where(y => knownPharmacyTypes.Contains(y?.Code?.Code));
-
+                
                 string odsCode = null;
 
                 PharmacyCheck pharmacyCheck = new PharmacyCheck { IsValid = false };
@@ -222,6 +223,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     return new GetNominatedPharmacyResult(result.StatusCode, false);
                 }
 
+                var familyNameReturned = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
+                    ?.PatientRole?.PatientPerson?.COCTMT000203UK02PartOfWhole?.PartPerson?.Name?.Family;
+
+                var dateOfBirthReturned = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
+                    ?.PatientRole?.PatientPerson?.BirthTime?.Value;
+
+                var personalDetailsCheck = await CheckPersonalDetails(nhsNumber.RemoveWhiteSpace(), nhsNumberReturned, familyNameReturned, dateOfBirthReturned, cidUserSession);
 
                 var pertinentSerialChangeNumber = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse
                     ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?.Value;
@@ -230,7 +238,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     result.StatusCode,
                     odsCode,
                     pertinentSerialChangeNumber,
-                    pharmacyCheck.IsValid,
+                    pharmacyCheck.IsValid && personalDetailsCheck.IsValid,
                     pharmacyCheck.PharmacyType);
                 return successResult;
             }
@@ -279,7 +287,90 @@ namespace NHSOnline.Backend.NominatedPharmacy
             {
                 _logger.LogExit();
             }
-        }       
+        }
+
+        private async Task<PersonalDetailsCheck> CheckPersonalDetails(string nhsNumber, string nhsNumberReturned, 
+            string familyNameReturned, string dateOfBirthReturned,  CitizenIdUserSession cidUserSession)
+        {                
+            var personalDetailsCheck = new PersonalDetailsCheck { IsValid = false };
+            
+            if (!string.IsNullOrEmpty(nhsNumberReturned))
+            {
+                if (!nhsNumberReturned.Equals(nhsNumber, StringComparison.Ordinal))
+                {
+                    _logger.LogInformation($"Returned NhsNumber {nhsNumberReturned} " +
+                                           $"did not match expected NhsNumber {nhsNumber}");
+                    
+                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                        $"Returned NhsNumber {nhsNumberReturned} did not match expected NhsNumber {nhsNumber}");
+
+                    return personalDetailsCheck;
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Could not extract nhsNumber from result of PDS Trace request");
+                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                    "Could not extract nhsNumber from result of PDS Trace request");
+                
+                return personalDetailsCheck;
+            }
+
+            if (!string.IsNullOrEmpty(familyNameReturned))
+            {
+                if (!familyNameReturned.Equals(cidUserSession.FamilyName, StringComparison.OrdinalIgnoreCase))
+                {
+                    _logger.LogInformation($"Returned family name {familyNameReturned} " +
+                                           $"did not match expected family name {cidUserSession.FamilyName}");
+                    
+                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                        $"Returned family name {familyNameReturned} did not match expected " +
+                        $"family name {cidUserSession.FamilyName}");
+
+                    return personalDetailsCheck;
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Could not extract patient surname from result of PDS Trace request");
+                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                    "Could not extract patient surname from result of PDS Trace request");
+                
+                return personalDetailsCheck;
+            }
+
+            if (DateTime.TryParseExact(dateOfBirthReturned, DateOfBirthFormat,
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out var returnedDobParsed))
+            {
+                if (!returnedDobParsed.Equals(cidUserSession.DateOfBirth))
+                {
+                    _logger.LogInformation($"Returned date of birth {returnedDobParsed} " +
+                                           $"did not match expected date of birth {cidUserSession.DateOfBirth}");
+                    
+                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                        $"Returned date of birth {returnedDobParsed} " +
+                        $"did not match expected date of birth {cidUserSession.DateOfBirth}");
+
+                    return personalDetailsCheck;
+                }            
+            }
+            else
+            {
+                _logger.LogInformation("Could not extract patient dateOfBirth from result of PDS Trace request");
+                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                    "Could not extract patient dateOfBirth from result of PDS Trace request");
+                
+                return personalDetailsCheck;
+            }
+
+            _logger.LogInformation("All Personal Details Checks have passed");
+            await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                "All Personal Details Checks have passed");
+
+            personalDetailsCheck.IsValid = true;
+
+            return personalDetailsCheck;
+        }
 
         private async Task<PharmacyCheck> CheckPharmacy(
             IEnumerable<PatientCareProvisionEvent> patientCareProvisionEvents)

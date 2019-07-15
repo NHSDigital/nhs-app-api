@@ -119,6 +119,7 @@ namespace NHSOnline.Backend.Support
             public const string Im1ConnectionTokenClaim = "im1_token";
             public const string OdscodeClaim = "ods_code";
             public const string NhsNumber = "nhs_number";
+            public const string Surname = "surname";
         }
 
         public static class Regex

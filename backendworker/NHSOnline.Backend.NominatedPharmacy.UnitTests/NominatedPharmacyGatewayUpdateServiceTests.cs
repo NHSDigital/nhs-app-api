@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -12,6 +12,7 @@ using Moq;
 using UnitTestHelper;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
@@ -27,6 +28,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
         private NominatedPharmacyGatewayUpdateService _systemUnderTest;
         private IFixture _fixture;
+        private UserSession _userSession;
+
 
         private Mock<ILogger<NominatedPharmacyGatewayUpdateService>> _mockLogger;
         private Mock<INominatedPharmacyService> _mockNominatedPharmacyService;
@@ -42,6 +45,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockLogger = _fixture.Freeze<Mock<ILogger<NominatedPharmacyGatewayUpdateService>>>();
             _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
             _auditor = _fixture.Freeze<Mock<IAuditor>>();
+            
+            _userSession = _fixture.Create<UserSession>();
 
             _systemUnderTest = _fixture.Create<NominatedPharmacyGatewayUpdateService>();
         }
@@ -54,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nominatedPharmacyResultAfterUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, UpdatedOdsCode, pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
 
             _mockNominatedPharmacyService
-                .SetupSequence(x => x.GetNominatedPharmacy(nhsNumber))
+                .SetupSequence(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResultBeforeUpdate)) // first call
                 .Returns(Task.FromResult(nominatedPharmacyResultAfterUpdate)); // second call
 
@@ -71,11 +76,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession);
 
             // Assert
             _mockNominatedPharmacyService.Verify();
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Exactly(2));
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Exactly(2));
             _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(It.Is<NominatedPharmacyUpdate>(
                     npu =>
                     string.Equals(npu.NhsNumber, nhsNumber, StringComparison.Ordinal) &&
@@ -92,7 +97,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
 
             _mockNominatedPharmacyService
-                .SetupSequence(x => x.GetNominatedPharmacy(nhsNumber))
+                .SetupSequence(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResultBeforeUpdate)) // first call
                 .Returns(Task.FromResult(nominatedPharmacyResultBeforeUpdate)); // second call also returns same value, indicating update failed
 
@@ -109,12 +114,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession);
 
             // Assert
             _mockNominatedPharmacyService.Verify();
 
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Exactly(2));
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Exactly(2));
             _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(It.Is<NominatedPharmacyUpdate>(
                     npu =>
                     string.Equals(npu.NhsNumber, nhsNumber, StringComparison.Ordinal) &&
@@ -132,15 +137,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.BadGateway, OdsCode, pertinentSerialChangeNumber, false, NominatedPharmacyTypeP3);
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession);
 
             // Assert
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Once);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Once);
             _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdate>()), Times.Never);
 
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
@@ -154,7 +159,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
 
@@ -171,10 +176,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession);
 
             // Assert
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Once);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Once);
             _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(It.Is<NominatedPharmacyUpdate>(
                     npu =>
                     string.Equals(npu.NhsNumber, nhsNumber, StringComparison.Ordinal) &&
@@ -194,15 +199,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
 
             _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
+                .Setup(x => x.GetNominatedPharmacy(nhsNumber, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession);
 
             // Assert
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Once);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Once);
 
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             value.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
