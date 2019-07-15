@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -24,10 +24,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentsMapper> _logger;
+        private readonly IEmisEnumMapper _enumMapper;
 
-        public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentsMapper> logger)
+        public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, IEmisEnumMapper enumMapper, 
+            ILogger<AppointmentsMapper> logger)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _enumMapper = enumMapper;
             _logger = logger;
         }
 
@@ -76,6 +79,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                     ? string.Empty : sourceAppointment.SlotTypeName;
                 appointment.SessionName = string.IsNullOrWhiteSpace(sessionName) 
                     ? string.Empty : sessionName;
+                appointment.Channel = _enumMapper.MapSlotTypeStatus(sourceAppointment.SlotTypeStatus, Channel.Unknown);
+                appointment.TelephoneNumber = sourceAppointment.TelephoneAppointmentDetails?.TelephoneNumber 
+                                              ?? string.Empty;
 
                 appointments.Add(appointment);
             }

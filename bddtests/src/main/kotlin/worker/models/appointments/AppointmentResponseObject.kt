@@ -1,5 +1,7 @@
 package worker.models.appointments
 
+import mocking.emis.models.SlotTypeStatus
+
 data class AppointmentResponseObject(
         val id: String,
         val type: String,
@@ -8,5 +10,7 @@ data class AppointmentResponseObject(
         val endTime: String? = null,
         val location: String,
         val clinicians: List<String> = emptyList(),
-        val disableCancellation: String? = "false"
+        var disableCancellation: String? = "false",
+        var channel: SlotTypeStatus? = SlotTypeStatus.Unknown,
+        val telephoneNumber: String = ""
 )

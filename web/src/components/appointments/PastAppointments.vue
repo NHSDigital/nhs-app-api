@@ -10,6 +10,7 @@
                    :appointment="appointment"
                    :cancellation-disabled="true"
                    :show-cancellation-link="false"
+                   :telephone-message="$t('appointments.index.past.telephoneMessage')"
                    data-purpose="past-appointments"
                    role="listitem"/>
     </div>

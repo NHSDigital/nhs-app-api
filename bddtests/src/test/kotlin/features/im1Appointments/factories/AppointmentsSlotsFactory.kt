@@ -2,6 +2,7 @@ package features.im1Appointments.factories
 
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExample
+import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
@@ -19,6 +20,7 @@ private const val APPOINTMENT_SLOT_RESPONSE_VALIDITY_TIME = 10L
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     private val appointmentSlotsExample = AppointmentsSlotsExample()
+    private val appointmentSlotsTelephoneExample = AppointmentSlotsTelephoneExample()
 
     fun generateDefaultAvailableAppointmentSlotExample(
             startDate: ZonedDateTime? = null,
@@ -33,9 +35,20 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
             startDate: ZonedDateTime? = null,
             endDate: ZonedDateTime? = null,
             guidanceMessage: String? = null,
+            reasonNecessity: NecessityOption = NecessityOption.MANDATORY,
+            telephoneNumber: String =""
+    ) {
+        generateExample(retrieveSlotsExampleIncludingTelephoneAppointments(telephoneNumber),
+                startDate, endDate, guidanceMessage, reasonNecessity)
+    }
+
+    fun generateAvailableSlotExampleIncludingTelephoneAppointment1(
+            startDate: ZonedDateTime? = null,
+            endDate: ZonedDateTime? = null,
+            guidanceMessage: String? = null,
             reasonNecessity: NecessityOption = NecessityOption.MANDATORY
     ) {
-        generateExample(retrieveSlotsExampleIncludingTelephoneAppointments(),
+        generateExample(retrieveSlotsExampleIncludingTelephoneAppointments1(),
                 startDate, endDate, guidanceMessage, reasonNecessity)
     }
 
@@ -87,8 +100,27 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
             respondWithSuccess(example)
         }
 
+        val expected = getExpectedApiResponseSlots(example)
+        println(expected)
+        val expectedUi = getExpectedUiRepresentationOfFilteredSlots(
+                sessionVariableCalled<AppointmentFilterFacade>(
+                        AppointmentsSlotsExampleBuilderWithExpectations
+                                .AppointmentSlotSerenityKeys
+                                .APPOINTMENT_FILTER_FACADE_KEY
+                )
+        )
+        println(expectedUi)
         Serenity.setSessionVariable(Expectations.EXPECTED_API_RESPONSE_OF_AVAILABLE_APPOINTMENTS)
                 .to(getExpectedApiResponseSlots(example))
+
+        val expectedUiFiltered =  getExpectedUiRepresentationOfFilteredSlots(
+                sessionVariableCalled<AppointmentFilterFacade>(
+                        AppointmentsSlotsExampleBuilderWithExpectations
+                                .AppointmentSlotSerenityKeys
+                                .APPOINTMENT_FILTER_FACADE_KEY
+                )
+        )
+        println(expectedUiFiltered)
         Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS)
                 .to(
                         getExpectedUiRepresentationOfFilteredSlots(
@@ -106,8 +138,11 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     private fun retrieveSlotsExample() = appointmentSlotsExample.getGenericExample()
 
-    private fun retrieveSlotsExampleIncludingTelephoneAppointments() = appointmentSlotsExample
-            .slotExampleIncludingTelephoneAppointments()
+    private fun retrieveSlotsExampleIncludingTelephoneAppointments(telephoneNumber: String) =
+            appointmentSlotsTelephoneExample.slotExampleIncludingTelephoneAppointments(telephoneNumber)
+
+    private fun retrieveSlotsExampleIncludingTelephoneAppointments1() =
+        appointmentSlotsTelephoneExample.slotExampleIncludingTelephoneAppointments("")
 
     fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
         generateAppointmentSlotResponse(

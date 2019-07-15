@@ -11,11 +11,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
     public class AppointmentsMapper : IAppointmentsMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private readonly IMicrotestEnumMapper _enumMapper;
         private readonly ILogger<AppointmentsMapper> _logger;
 
-        public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentsMapper> logger)
+        public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, IMicrotestEnumMapper enumMapper, 
+            ILogger<AppointmentsMapper> logger)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _enumMapper = enumMapper;
             _logger = logger;
         }
 
@@ -73,6 +76,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 ? string.Empty
                 : sourceAppointment.Type;
             resultAppointment.SessionName = string.Empty;
+            resultAppointment.Channel = _enumMapper.MapChannel(sourceAppointment.Channel, Channel.Unknown);
+            resultAppointment.TelephoneNumber = string.IsNullOrWhiteSpace(sourceAppointment.TelephoneNumber)
+                ? string.Empty : sourceAppointment.TelephoneNumber;
         }
 
         private DateTimeOffset? ParseSlotTime(string time, string usage)

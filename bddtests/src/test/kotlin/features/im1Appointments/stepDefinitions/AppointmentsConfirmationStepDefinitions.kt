@@ -4,8 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.factories.AppointmentsBookingFactory
-import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
-import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
 import features.im1Appointments.steps.AvailableAppointmentFilterSteps
 import features.im1Appointments.steps.AvailableAppointmentsSteps
@@ -52,19 +50,23 @@ class AppointmentsConfirmationStepDefinitions {
             "second" ->
                 SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
                         .TELEPHONE_NUMBER_TO_BOOK_AGAINST, patient.telephoneSecond)
+            "custom" ->
+                SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
+                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, AppointmentsBookingFactory.telephoneNumberValueToEnter)
             else -> Assert.fail("Invalid phone number type. ")
         }
     }
 
     @Given("^I will manually enter this phone number$")
     fun iWillManuallyEnterThisPhoneNumber() {
-        val telephoneNumberToEnter = Serenity.sessionVariableCalled<String>(AppointmentsConfirmationSteps
-                .SerenityVariable.TELEPHONE_NUMBER_TO_BOOK_AGAINST)
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
+                .TELEPHONE_NUMBER_TO_BOOK_AGAINST, AppointmentsBookingFactory.telephoneNumberValueToEnter)
         Assert.assertNotNull(
                 "No phone number has been referenced, so don't know what telephone number will be entered. ",
-                telephoneNumberToEnter
+                AppointmentsBookingFactory.telephoneNumberValueToEnter
         )
-        Serenity.setSessionVariable(AppointmentsBookingFactory.telephoneNumberToEnter).to(telephoneNumberToEnter)
+        Serenity.setSessionVariable(AppointmentsConfirmationSteps.SerenityVariable.TELEPHONE_NUMBER_TO_BOOK_AGAINST)
+                .to(AppointmentsBookingFactory.telephoneNumberValueToEnter)
     }
 
     @Given("^I have selected a telephone appointment slot to book$")
@@ -79,7 +81,7 @@ class AppointmentsConfirmationStepDefinitions {
 
     @When("^I enter symptoms$")
     fun whenIEnterSymptoms() {
-        val symptoms = Serenity.sessionVariableCalled<String>(symptomsToEnter)
+        val symptoms = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.symptomsToEnter)
         Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
         appointmentsConfirmationSteps.appointmentsConfirmation.describeSymptoms(symptoms)
     }
@@ -120,7 +122,8 @@ class AppointmentsConfirmationStepDefinitions {
 
     @When("^I enter a phone number for the appointment$")
     fun whenIEnterAPhoneNumberForTheAppointment() {
-        val telephoneNumber = Serenity.sessionVariableCalled<String>(telephoneNumberToEnter)
+        val telephoneNumber = Serenity.sessionVariableCalled<String>(AppointmentsConfirmationSteps.SerenityVariable
+                .TELEPHONE_NUMBER_TO_BOOK_AGAINST)
         Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
         appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }

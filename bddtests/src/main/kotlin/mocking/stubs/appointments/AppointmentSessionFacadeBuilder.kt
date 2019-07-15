@@ -1,6 +1,7 @@
 package mocking.stubs.appointments
 
 import mocking.emis.models.SlotTypeStatus
+import mocking.emis.models.TelephoneAppointmentDetails
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import java.util.*
@@ -85,6 +86,8 @@ class AppointmentSlotFacadeBuilder {
     private var slotInThePast: Boolean = false
     private lateinit var channel: SlotTypeStatus
     private lateinit var slotDetails: String
+    private lateinit var telephoneNumber: String
+    private lateinit var telephoneAppointmentDetails: TelephoneAppointmentDetails
 
     fun slotId(value: Int): AppointmentSlotFacadeBuilder {
         slotId = value
@@ -116,6 +119,11 @@ class AppointmentSlotFacadeBuilder {
         return this
     }
 
+    fun telephoneNumber(value: String): AppointmentSlotFacadeBuilder {
+        telephoneNumber = value
+        return this
+    }
+
     // Need to think if there's a way to dynamically set this
     fun slotDetails(slotTypeName: String, sessionName: String, clinician: String):
     AppointmentSlotFacadeBuilder {
@@ -131,8 +139,8 @@ class AppointmentSlotFacadeBuilder {
                 slotTypeId = slotTypeId,
                 slotInThePast = slotInThePast,
                 slotDetails = slotDetails,
-                channel = channel
-
+                channel = channel,
+                telephoneNumber = telephoneNumber
         )
     }
 }

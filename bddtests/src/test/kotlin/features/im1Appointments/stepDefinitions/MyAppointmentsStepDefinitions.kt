@@ -3,6 +3,7 @@ package features.im1Appointments.stepDefinitions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
+import features.im1Appointments.steps.MyAppointmentsTelephoneSteps
 import features.im1Appointments.steps.MyAppointmentsUISteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -19,6 +20,8 @@ class MyAppointmentsStepDefinitions {
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
     @Steps
     lateinit var myAppointmentsUISteps: MyAppointmentsUISteps
+    @Steps
+    lateinit var myAppointmentsTelephoneSteps: MyAppointmentsTelephoneSteps
 
     lateinit var headerNative: HeaderNative
 
@@ -155,5 +158,19 @@ class MyAppointmentsStepDefinitions {
     @Then("^I see the appropriate error messages for the appointment data error$")
     fun iSeeTheAppropriateErrorMessagesForTheAppointmentDataError() {
         myAppointmentsUISteps.checkAppointmentDataErrorMessagesAreCorrect()
+    }
+
+    @Then("^I can see the list of upcoming telephone appointments")
+    fun thenICanSeeTheListOfUpcomingTelephoneAppointments() {
+        myAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
+    }
+    @Then("^I can see the list of past telephone appointments$")
+    fun thenICanSeeTheListOfPastTelephoneAppointments() {
+        myAppointmentsTelephoneSteps.checkPastTelephoneAppointmentsAreCorectlyPopulated()
+    }
+    @Then("^I can see the booked telephone appointment and it has a cancel link")
+    fun thenICanSeeTheBookedTelephoneAppointmentAndItHasACancelLink() {
+        myAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
+        myAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 }

@@ -35,7 +35,10 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
                                 "",
                                 slot.startTime!!,
                                 slot.endTime!!,
-                                appointmentSlotsFactoryHelper.getLocationNameFromId(session)
+                                appointmentSlotsFactoryHelper.getLocationNameFromId(session),
+                                emptyList(),
+                                "false",
+                                slot.channel
                         )
                     }
                 },
@@ -48,7 +51,9 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
                                 slot.startTime!!,
                                 slot.endTime!!,
                                 appointmentSlotsFactoryHelper.getLocationNameFromId(session),
-                                disableCancellation = null
+                                emptyList(),
+                                null,
+                                slot.channel
                         )
                     }
                 }

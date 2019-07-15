@@ -30,7 +30,6 @@ Feature: My appointments UI without Javascript
     Then I see page header indicating there is an appointment data error
     And I see the appropriate error messages for the appointment data error
 
-
 #  This Scenario can be removed once implemented for ALL GP Systems
   Scenario: A VISION user sees appropriate messages when they have no upcoming or historical appointments
     Given I have no booked appointments for VISION
@@ -40,7 +39,6 @@ Feature: My appointments UI without Javascript
     And I am informed I have no upcoming appointments
     And I am not informed I have no historical appointments
     And I can book an appointment
-
 
   Scenario: An EMIS user can see their upcoming appointments and a message if there are no historical appointments
     Given I have upcoming appointments before cutoff time for EMIS
@@ -71,6 +69,19 @@ Feature: My appointments UI without Javascript
     And I am given the list of historical appointments
     And I can book an appointment
 
+  Scenario: An EMIS user can see the telephone number they will be phoned on for an upcoming telephone appointment
+    Given I have upcoming telephone appointments before cutoff time for EMIS
+    And I am logged in
+    When I retrieve the 'My Appointments' page directly
+    Then the page title is "My appointments"
+    And I can see the list of upcoming telephone appointments
+
+  Scenario: An EMIS user can see the telephone number they have been phoned on for a past telephone appointment
+    Given I have historical telephone appointments for EMIS
+    And I am logged in
+    When I retrieve the 'My Appointments' page directly
+    Then the page title is "My appointments"
+    And I can see the list of past telephone appointments
 
 #  This Scenario can be removed once implemented for ALL GP Systems
   Scenario: A VISION user can see their upcoming appointments

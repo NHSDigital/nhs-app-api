@@ -56,7 +56,7 @@ class GenerateAppointmentData {
                                    staff: StaffDetailsFacade,
                                    slotTypes: List<SlotTypeFacade>,
                                    dates: ArrayList<AppointmentDate>,
-                                   channel: SlotTypeStatus = SlotTypeStatus.Unknown):
+                                   telephoneNumber: String = ""):
             AppointmentSessionFacade {
 
         val appointmentSessionFacade = sessionDetails.build()
@@ -64,7 +64,7 @@ class GenerateAppointmentData {
 
         return sessionDetails
                 .sessionId(sessionId++)
-                .slots { generateSlotsForAppointment(dates, slotTypes, channel, staff, sessionType!!) }
+                .slots { generateSlotsForAppointment(dates, slotTypes, staff, sessionType!!, telephoneNumber) }
                 .build()
     }
 
@@ -99,12 +99,13 @@ class GenerateAppointmentData {
     private fun generateSlotsForAppointment(
             dates: List<AppointmentDate>,
             types: List<SlotTypeFacade>,
-            channel: SlotTypeStatus,
             staff: StaffDetailsFacade,
-            sessionType: String
+            sessionType: String,
+            telephoneNumber: String
     ):
             AppointmentSlotFacadeArrayBuilder {
 
+        // get telephone number better
         val appointmentSlotFacadeArrayBuilder = AppointmentSlotFacadeArrayBuilder()
 
         for (date in dates) {
@@ -112,6 +113,7 @@ class GenerateAppointmentData {
 
             val startDate = FilterSlotDetails(date.date, date.hour, date.minute)
             val endDate = FilterSlotDetails(startDate.dateAsLocalDateTime.plusMinutes(date.duration.toLong()))
+            val channel = if (telephoneNumber != "") SlotTypeStatus.Telephone else SlotTypeStatus.Unknown
 
             for (type in types) {
                 val appointment = AppointmentSlotFacadeBuilder()
@@ -122,6 +124,7 @@ class GenerateAppointmentData {
                         .channel(channel)
                         .setSlotInThePast(isSlotInPast)
                         .slotDetails(type.slotTypeName, sessionType, staff.staffName)
+                        .telephoneNumber(telephoneNumber)
 
                 appointmentSlotFacadeArrayBuilder.addAppointment { appointment }
             }

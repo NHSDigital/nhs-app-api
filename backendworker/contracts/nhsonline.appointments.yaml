@@ -257,6 +257,11 @@ components:
         disableCancellation:
           type: boolean
           description: Indicates the appointment cannot be cancelled.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        telephoneNumber:
+          type: string
+          description: patients telephone number
     PastAppointment:
       type: object
       properties:
@@ -285,6 +290,11 @@ components:
           description: Array of Clinicians, accounts for joint sessions.
           items:
             type: string
+        channel:
+          $ref: '#/components/schemas/Channel'
+        telephoneNumber:
+          type: string
+          description: patients telephone number
     CancellationReason:
       type: object
       properties:
@@ -329,8 +339,10 @@ components:
           items:
             type: string
         channel:
-          type: string
-          enum:
-            - Unknown
-            - Telephone
-          description: Indicates slot channel type supplied by GP practice
+          $ref: '#/components/schemas/Channel'
+    Channel:
+      type: string
+      enum:
+        - Unknown
+        - Telephone
+      description: Indicates Slot or Appointment channel type supplied by GP practice

@@ -113,6 +113,27 @@ Feature: My appointments UI with Javascript
     | GP System |
     | VISION    |
 
+  Scenario Outline: A <GP System> user can see the telephone number they will be phoned on for an upcoming telephone appointment
+    Given I have upcoming telephone appointments before cutoff time for <GP System>
+    And I am logged in
+    When I retrieve the 'My Appointments' page directly
+    Then the page title is "My appointments"
+    And I can see the list of upcoming telephone appointments
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
+
+  Scenario Outline: A <GP System> user can see the telephone number they have been phoned on for a past telephone appointment
+    Given I have historical telephone appointments for <GP System>
+    And I am logged in
+    When I retrieve the 'My Appointments' page directly
+    Then the page title is "My appointments"
+    And I can see the list of past telephone appointments
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
       # VISION Specific test

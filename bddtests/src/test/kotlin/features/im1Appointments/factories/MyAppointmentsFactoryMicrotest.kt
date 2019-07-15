@@ -1,5 +1,6 @@
 package features.im1Appointments.factories
 
+import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
@@ -42,7 +43,9 @@ class MyAppointmentsFactoryMicrotest : MyAppointmentsFactory("MICROTEST") {
                                         .staffDetailsid
                             }!!.staffName
                         },
-                        disableCancellation
+                        disableCancellation,
+                        slot.channel,
+                        slot.telephoneNumber
                 )
             }
         }
@@ -82,7 +85,13 @@ class MyAppointmentsFactoryMicrotest : MyAppointmentsFactory("MICROTEST") {
                 slotType = appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
                 location = location,
                 clinicians = HashSet(cliniciansNames),
-                id = slot.slotId
+                id = slot.slotId,
+                //this here
+                channel = slot.channel.toString(),
+                telephoneNumber = when (slot.telephoneNumber) {
+                    telephoneNumberToEnter -> ""
+                    else -> slot.telephoneNumber
+                }
         )
     }
 }

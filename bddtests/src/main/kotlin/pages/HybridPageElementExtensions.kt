@@ -25,7 +25,11 @@ val HybridPageElement.isCurrentlyEnabled: Boolean
 val HybridPageElement.isPresent: Boolean
   get () {
       var isPresent = false
-      actOnTheElement { isPresent = it.isPresent }
+      try {
+          actOnTheElement { isPresent = it.isPresent }
+      } catch (e: org.openqa.selenium.NoSuchElementException) {
+          isPresent = false
+      }
       return isPresent
   }
 

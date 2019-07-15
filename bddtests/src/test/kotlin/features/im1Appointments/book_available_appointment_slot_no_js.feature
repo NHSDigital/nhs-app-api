@@ -1,7 +1,7 @@
 @appointments
 @book
 @noJs
-Feature: Book an available appointment slot UI without Javascript
+  Feature: Book an available appointment slot UI without Javascript
   In order to complete a booking appointment
   As a logged in user with Javascript switched off
   I want to be able to select, confirm and book selected appointment
@@ -35,6 +35,7 @@ Feature: Book an available appointment slot UI without Javascript
 
   Scenario Outline: A <GP System> user with noJs can only enter a phone number for phone appointments, when they have <User's Telephone Numbers> phone number saved
     Given I have <User's Telephone Numbers> telephone number(s) stored for <GP System>
+    But I will manually enter this phone number
     And there are appointments available to book which are of telephone type for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
@@ -137,6 +138,7 @@ Feature: Book an available appointment slot UI without Javascript
   Scenario Outline: A <GP System> user with noJs receives an error if a phone number is entered for telephone appointments, but no reason
     Given I wish to book an appointment without specifying a reason
     And I have no telephone number(s) stored for <GP System>
+    But I will manually enter this phone number
     And there are appointments available to book which are of telephone type for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
@@ -154,6 +156,7 @@ Feature: Book an available appointment slot UI without Javascript
   Scenario: An EMIS user with noJS can book a telephone appointment if a phone number is provided without describing symptoms when booking reason is optional
     Given I wish to book an appointment without specifying a reason
     And I have no telephone number(s) stored for EMIS
+    But I will manually enter this phone number
     And there are appointments available to book which are of telephone type with optional booking reason for EMIS
     And a booked appointment can be cancelled
     And I am logged in

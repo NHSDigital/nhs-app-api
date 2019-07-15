@@ -81,12 +81,14 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
         return getDateTimestampsOfSlots(historicalAppointmentParentXpath)
     }
 
-    fun getAllUpcomingSlots(areCliniciansExpected: Boolean = false): ArrayList<Slot> {
-        return getAllSlots(upcomingAppointmentParentXpath, areCliniciansExpected)
+    fun getAllUpcomingSlots(areCliniciansExpected: Boolean = false,
+                            isTelephoneAppointment: Boolean = false): ArrayList<Slot> {
+        return getAllSlots(upcomingAppointmentParentXpath, areCliniciansExpected, isTelephoneAppointment)
     }
 
-    fun getAllHistoricalSlots(areCliniciansExpected: Boolean = false): ArrayList<Slot> {
-        return getAllSlots(historicalAppointmentParentXpath, areCliniciansExpected)
+    fun getAllHistoricalSlots(areCliniciansExpected: Boolean = false,
+                              isTelephoneAppointment: Boolean =  false): ArrayList<Slot> {
+        return getAllSlots(historicalAppointmentParentXpath, areCliniciansExpected, isTelephoneAppointment)
     }
 
     fun getWebAppointmentSlotDivs(): List<WebElementFacade> {
@@ -107,5 +109,9 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun getNumberOfAppointmentsThatCannotBeCancelled(): Int {
         return cannotCancelAppointmentText.withoutRetrying().elements.size
+    }
+
+    fun getTelephoneField(): ArrayList<String> {
+        return getTelephoneSlot(upcomingAppointmentParentXpath)
     }
 }

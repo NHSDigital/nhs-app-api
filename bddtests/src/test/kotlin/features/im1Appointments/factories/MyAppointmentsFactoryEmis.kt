@@ -1,5 +1,6 @@
 package features.im1Appointments.factories
 
+import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
@@ -25,7 +26,13 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                                 slot.startTime!!,
                                 slot.endTime!!,
                                 appointmentSlotsFactoryHelper.getLocationNameFromId(session),
-                                appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session)
+                                appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session),
+                                "false",
+                                slot.channel,
+                                when (slot.telephoneNumber) {
+                                    telephoneNumberToEnter -> ""
+                                    else -> slot.telephoneNumber
+                                }
                         )
                     }
                 },
@@ -39,7 +46,12 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                                 slot.endTime!!,
                                 appointmentSlotsFactoryHelper.getLocationNameFromId(session),
                                 appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session),
-                                null
+                                null,
+                                slot.channel,
+                                when (slot.telephoneNumber) {
+                                    telephoneNumberToEnter -> ""
+                                    else -> slot.telephoneNumber
+                                }
                         )
                     }
                 }
@@ -79,7 +91,12 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                 slotType = appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
                 location = appointmentSlotsFactoryHelper.getLocationNameFromId(session),
                 clinicians = appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session).toSet(),
-                id = slot.slotId
+                id = slot.slotId,
+                channel = slot.channel.toString(),
+                telephoneNumber = when (slot.telephoneNumber) {
+                    telephoneNumberToEnter -> ""
+                    else -> slot.telephoneNumber
+                }
         )
     }
 }

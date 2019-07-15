@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
@@ -27,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private DateTime _twoDaysFromNow;
         private DateTime _lastMonth;
         private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
+        private Mock<IMicrotestEnumMapper> _mockMicrotestEnumMapper;
 
         [TestInitialize]
         public void TestInitialize()
@@ -41,12 +44,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             });
 
             _dateTimeOffsetProviderMock = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
+            _mockMicrotestEnumMapper = _fixture.Freeze<Mock<IMicrotestEnumMapper>>();
 
             var logger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentsMapper>();
 
             _fixture.Inject(_dateTimeOffsetProviderMock);
 
-            _systemUnderTest = new AppointmentsMapper(_dateTimeOffsetProviderMock.Object, logger);
+            _systemUnderTest = new AppointmentsMapper(_dateTimeOffsetProviderMock.Object,
+                _mockMicrotestEnumMapper.Object, logger);
 
             _testDate = DateTime.Today;
             _tomorrow = _testDate.AddDays(1);
@@ -73,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             var appointment =
                 CreateAppointment("101", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_twoDaysFromNow),
-                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), null, "Emergency");
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), null, "Emergency", "Unknown", "012345");
 
             var appointments = new[] { appointment };
 
@@ -91,7 +96,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "",
                 StartTime = (DateTimeOffset) slotTime,
                 Type = "Emergency",
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = "012345"
             };
             var expectedResponse = new[] { expectedAppointment };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -119,7 +126,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             // Arrange
             var appointment =
                 CreateAppointment("101", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_tomorrow),
-                    invalidEndTime, "Leeds", "Emergency");
+                    invalidEndTime, "Leeds", "Emergency", "Unknown", "012345");
 
             var appointments = new[] { appointment };
 
@@ -137,7 +144,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTime,
                 Type = "Emergency",
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = "012345"
             };
             var expectedResponse = new[] { expectedAppointment };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -152,11 +161,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             // Arrange
             var appointmentWithInvalidStartTime =
                 CreateAppointment("101", new[] { "Dr Zoidberg" }, invalidStartTime,
-                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency");
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency", "Unknown", "012345");
 
             var appointment2 =
                 CreateAppointment("101", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_twoDaysFromNow),
-                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency");
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency", "Unknown", "012345");
 
             var appointments = new[] { appointmentWithInvalidStartTime, appointment2 };
 
@@ -174,7 +183,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTimeTwoDays,
                 Type = "Emergency",
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = "012345"
             };
 
             var expectedResponse = new[] { expectedAppointment };
@@ -188,24 +199,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             // Arrange
             var appointment1 =
                 CreateAppointment("101", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_tomorrow),
-                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency");
+                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency", "Unknown", "012345");
 
             var appointment2 =
                 CreateAppointment("102", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_twoDaysFromNow),
-                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency");
+                    DateTimeHelper.DateTimeToJson(_twoDaysFromNow), "Leeds", "Emergency", "Unknown", "012345");
 
             var appointment3 =
                 CreateAppointment("103", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_nextMonth),
-                    DateTimeHelper.DateTimeToJson(_nextMonth), "Leeds", null);
+                    DateTimeHelper.DateTimeToJson(_nextMonth), "Leeds", null, "Unknown", null);
 
             var appointment4 =
                 CreateAppointment("104", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_today),
-                    DateTimeHelper.DateTimeToJson(_today), "Leeds", "Emergency");
+                    DateTimeHelper.DateTimeToJson(_today), "Leeds", "Emergency", "Unknown", "");
 
             var appointment5 =
                 CreateAppointment("105", new[] { "Dr Zoidberg" }, DateTimeHelper.DateTimeToJson(_lastMonth),
-                    DateTimeHelper.DateTimeToJson(_lastMonth), "Leeds", null);
-            
+                    DateTimeHelper.DateTimeToJson(_lastMonth), "Leeds", null, "Unknown", "012345");
+
             var appointments = new[] { appointment1, appointment2, appointment3, appointment4, appointment5 };
 
             var slotTimeTwoDays = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow);
@@ -226,7 +237,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTimeTomorrow,
                 Type = "Emergency",
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = "012345"
             };
 
             var expectedAppointment2 = new UpcomingAppointment
@@ -237,7 +250,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTimeTwoDays,
                 Type = "Emergency",
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = "012345"
             };
 
             var expectedAppointment3 = new UpcomingAppointment
@@ -248,7 +263,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTimeNextMonth,
                 Type = string.Empty,
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = ""
             };
 
             var expectedAppointment4 = new PastAppointment
@@ -259,7 +276,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTimeToday,
                 Type = "Emergency",
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = ""
             };
 
             var expectedAppointment5 = new PastAppointment
@@ -270,7 +289,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTimeLastMonth,
                 Type = string.Empty,
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = "012345"
             };
 
             var expectedResponse = new NHSOnline.Backend.GpSystems.Appointments.Models.Appointment[]
@@ -288,7 +309,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             // Arrange
             var appointment =
                 CreateAppointment("101", null, DateTimeHelper.DateTimeToJson(_tomorrow),
-                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency");
+                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency", "Unknown", "012345");
 
             var slotSessions = new[] { appointment };
 
@@ -306,7 +327,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Location = "Leeds",
                 StartTime = (DateTimeOffset) slotTime,
                 Type = "Emergency",
-                SessionName = ""
+                SessionName = "",
+                Channel = Channel.Unknown,
+                TelephoneNumber = "012345"
             };
 
             var expectedResponse = new[] { expectedAppointment };
@@ -314,8 +337,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
+        [DataTestMethod]
+        [DataRow("telephone", Channel.Telephone)]
+        [DataRow("unknown", Channel.Unknown)]
+        public void Map_ReturnsChannelObtainedFromMicrotestEnumMapper(string inputSlotTypeStatus,
+            Channel expectedOutputChannel)
+        {
+            // Arrange
+            var appointment =
+                CreateAppointment("101", null, DateTimeHelper.DateTimeToJson(_tomorrow),
+                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency", inputSlotTypeStatus, "012345");
+
+            var slotSessions = new[] { appointment };
+
+            _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
+
+            _mockMicrotestEnumMapper.Setup(x => x.MapChannel(inputSlotTypeStatus, Channel.Unknown))
+                .Returns(expectedOutputChannel);
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions);
+
+            // Assert
+            actualResponse.Single().Channel.Should().Be(expectedOutputChannel);
+        }
+
         private static Appointment CreateAppointment(string slotId, IEnumerable<string> clinicians, string startTime,
-            string endTime, string location, string type)
+            string endTime, string location, string type, string channel, string telephoneNumber)
         {
             var appointment = new Appointment
             {
@@ -324,7 +372,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 StartTime = startTime,
                 Clinicians = clinicians,
                 Location = location,
-                Type = type
+                Type = type,
+                Channel = channel,
+                TelephoneNumber = telephoneNumber
             };
 
             return appointment;

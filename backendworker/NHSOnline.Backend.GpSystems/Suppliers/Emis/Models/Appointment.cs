@@ -7,5 +7,7 @@
         public string EndTime { get; set; }
         public int SessionId { get; set; }
         public string SlotTypeName { get; set; }
+        public string SlotTypeStatus { get; set; }
+        public TelephoneAppointmentDetails TelephoneAppointmentDetails { get; set; }
     }
 }

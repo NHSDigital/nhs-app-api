@@ -31,11 +31,10 @@ abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFact
 
     fun generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage: String? = null,
                                                                   reasonNecessityOption: NecessityOption =
-                                                                          NecessityOption.MANDATORY,
-                                                                  telephoneNumberToEnter: String = "") {
+                                                                          NecessityOption.MANDATORY) {
         val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = guidanceMessage,
-                reasonNecessity = reasonNecessityOption)
+                reasonNecessity = reasonNecessityOption, telephoneNumber = telephoneNumberToEnter)
 
         setSessionVariable(telephoneNumberToEnter).to(telephoneNumberToEnter)
     }
@@ -151,6 +150,7 @@ abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFact
         const val appointmentToBookKey = "appointmentToBook"
         const val symptomsToEnter = "symptomsToEnter"
         const val telephoneNumberToEnter = "telephoneNumberToEnter"
+        const val telephoneNumberValueToEnter = "01642 849 894"
         const val selectedSlot = "selectedSlot"
 
         const val defaultApptBookingReason = "I have a bad back."

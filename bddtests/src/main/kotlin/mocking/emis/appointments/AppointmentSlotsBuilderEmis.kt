@@ -87,7 +87,11 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                         convertStringToEmisTimeString(slot.startTime!!),
                         convertStringToEmisTimeString(slot.endTime!!),
                         slotTypeName!!.slotTypeName,
-                        slot.channel
+                        slot.channel,
+                        when (slot.telephoneNumber) {
+                            "telephoneNumberToEnter" -> ""
+                            else -> slot.telephoneNumber
+                        }
                 )
             }
             AppointmentSession(

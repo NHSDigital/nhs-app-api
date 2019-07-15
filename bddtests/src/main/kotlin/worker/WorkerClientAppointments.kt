@@ -2,6 +2,7 @@ package worker
 
 import com.google.gson.Gson
 import config.Config
+import mocking.emis.models.SlotTypeStatus
 import org.apache.http.HttpResponse
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
@@ -32,7 +33,16 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
         httpGet.releaseConnection()
         println(result)
 
-        return gson.fromJson<MyAppointmentsResponse>(result, MyAppointmentsResponse::class.java)
+        val response = gson.fromJson<MyAppointmentsResponse>(result, MyAppointmentsResponse::class.java)
+        response.upcomingAppointments.forEach { appt ->
+            appt.channel = appt.channel ?: SlotTypeStatus.Unknown
+            appt.disableCancellation = appt.disableCancellation ?: "false"
+        }
+        response.pastAppointments.forEach { appt ->
+            appt.channel = appt.channel ?: SlotTypeStatus.Unknown
+        }
+
+        return response
     }
 
     fun getAppointmentSlots(fromDate: String? = null,

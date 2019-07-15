@@ -17,6 +17,9 @@
       <p v-if="appointment.sessionName" :class="$style.sessionName" data-label="session name">
         {{ appointment.sessionName }}
       </p>
+      <p v-if="showPhoneNumber()" :class="$style.telephone" data-label="phone number">
+        {{ telephoneMessage }}{{ appointment.telephoneNumber }}
+      </p>
       <p v-for="(clinician, index) in appointment.clinicians"
          :key="clinician" :class="$style.person">
         <span :data-label="'clinician ' + (index + 1)">
@@ -63,6 +66,7 @@ import moment from 'moment-timezone';
 import { APPOINTMENT_CANCELLING } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
+import channel from '@/lib/channel';
 
 export default {
   name: 'Appointment',
@@ -84,6 +88,10 @@ export default {
       default: 'h3',
       validator: value => ['h2', 'h3'].indexOf(value) !== -1,
     },
+    telephoneMessage: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     appointmentCancellingPath() {
@@ -104,6 +112,9 @@ export default {
         this.$store.dispatch('myAppointments/select', this.appointment);
       }
       redirectTo(this, APPOINTMENT_CANCELLING.path, null);
+    },
+    showPhoneNumber() {
+      return (this.appointment || {}).channel === channel.Telephone;
     },
   },
 };
@@ -153,6 +164,7 @@ export default {
 
     p.person,
     p.location,
+    p.telephone,
     p.cancel-disabled {
       font-family: $default-web;
     }

@@ -9,5 +9,6 @@ data class AppointmentSlotFacade(
         var slotTypeId: Int = 1,
         var slotInThePast: Boolean? = false,
         var channel: SlotTypeStatus = SlotTypeStatus.Unknown,
-        var slotDetails: String = ""
+        var slotDetails: String = "",
+        var telephoneNumber: String = ""
 )

@@ -16,5 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments
         public string Location { get; set; }
 
         public IEnumerable<string> Clinicians { get; set; } = Array.Empty<string>();
+        public string Channel { get; set; }
+        public string TelephoneNumber { get; set; }
     }
 }

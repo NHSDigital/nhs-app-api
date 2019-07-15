@@ -29,7 +29,6 @@ open class MyAppointmentsUISteps {
     private val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
     private val cancellationSuccessMessage = "Your appointment has been cancelled."
 
-
     private val expectedNoUpcomingText = "Upcoming appointments\n" +
             "You don't currently have any appointments booked.\n" +
             "Once you've booked an appointment here, you'll be able to view details and cancel it.\n" +
@@ -89,8 +88,8 @@ open class MyAppointmentsUISteps {
         )
     }
 
-    private fun checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
-            sessionVariableKey: MyAppointmentsFactory.Expectations
+    fun checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
+            sessionVariableKey: MyAppointmentsFactory.Expectations, isTelephoneAppointment: Boolean = false
     ) {
         val expectedSlots = Serenity.sessionVariableCalled<List<Slot>>(sessionVariableKey).map { slot ->
             slot.copy(id = null)
@@ -98,9 +97,9 @@ open class MyAppointmentsUISteps {
         val areCliniciansExpected = expectedSlots.isNotEmpty() && expectedSlots[0].clinicians.isNotEmpty()
         val slots = when (sessionVariableKey) {
             MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS ->
-                myAppointmentsPage.getAllUpcomingSlots(areCliniciansExpected)
+                myAppointmentsPage.getAllUpcomingSlots(areCliniciansExpected, isTelephoneAppointment)
             MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS ->
-                myAppointmentsPage.getAllHistoricalSlots(areCliniciansExpected)
+                myAppointmentsPage.getAllHistoricalSlots(areCliniciansExpected, isTelephoneAppointment)
             else -> null
         }
         assertNotNull("Invalid session variable key. ", slots)

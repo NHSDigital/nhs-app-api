@@ -41,6 +41,7 @@ class AppointmentsBookingFactoryMicrotest : AppointmentsBookingFactory("MICROTES
                 date = date,
                 time = time,
                 sessionName = null,
+                channel = slot.channel.name,
                 slotType = appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
                 location = appointmentSlotsFactoryHelper.getLocationNameFromId(session),
                 clinicians = setOf(appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session).first()),

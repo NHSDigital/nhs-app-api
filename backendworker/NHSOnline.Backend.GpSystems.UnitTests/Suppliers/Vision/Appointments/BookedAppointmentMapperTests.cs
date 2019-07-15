@@ -125,7 +125,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                     StartTime = slotTime1.Start, 
                     EndTime = slotTime1.End,
                     Clinicians = new []{ _owner1.Name },
-                    SessionName = _generalSession.Description
+                    SessionName = _generalSession.Description,
+                    TelephoneNumber = string.Empty
                 },
                 new UpcomingAppointment
                 {
@@ -299,7 +300,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                     EndTime = slotTime1.End,
                     Clinicians = new []{ _owner1.Name },
                     DisableCancellation = true,
-                    SessionName = _generalSession.Description
+                    SessionName = _generalSession.Description,
+                    TelephoneNumber = string.Empty
                 },
                 new UpcomingAppointment
                 {

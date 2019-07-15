@@ -9,5 +9,6 @@ class Appointment (
     val endTime: String,
     val location: String,
     val clinicians: List<String>,
-    val channel: String
+    val channel: String,
+    val telephoneNumber: String
 )

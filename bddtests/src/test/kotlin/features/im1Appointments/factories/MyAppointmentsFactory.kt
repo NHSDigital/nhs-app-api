@@ -2,6 +2,7 @@ package features.im1Appointments.factories
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import features.sharedSteps.SupplierSpecificFactory
+import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.emis.models.AppointmentCancellationReason
@@ -47,6 +48,25 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
     fun createSuccessfulMyAppointmentsResponse(
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
             = AppointmentsSlotsExample().getGenericExample(),
+            numberOfCancellationReasons: Int = getDefaultCancellationReasons().size
+    ) {
+        appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons().subList(
+                0,
+                numberOfCancellationReasons
+        )
+
+        val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
+        createMyAppointments{
+            respondWithSuccess(myAppointmentsFacade)
+        }
+        Serenity.setSessionVariable(Expectations.EXPECTED_API_RESPONSE_OF_MY_APPOINTMENTS)
+                .to(getExpectedApiResponse(myAppointmentsFacade))
+        setSerenityVariablesForUITests(myAppointmentsFacade)
+    }
+
+    fun createSuccessfulMyTelephoneAppointmentsResponse(
+            appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
+            = AppointmentSlotsTelephoneExample().getGenericTelephoneExample(),
             numberOfCancellationReasons: Int = getDefaultCancellationReasons().size
     ) {
         appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons().subList(

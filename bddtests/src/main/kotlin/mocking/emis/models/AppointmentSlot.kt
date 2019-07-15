@@ -5,5 +5,6 @@ data class AppointmentSlot(
         var startTime: String? = null,
         var endTime: String? = null,
         var slotTypeName: String? = null,
-        var slotTypeStatus: SlotTypeStatus = SlotTypeStatus.Unknown
+        var slotTypeStatus: SlotTypeStatus = SlotTypeStatus.Unknown,
+        var telephoneNumber: String
 )

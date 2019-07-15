@@ -8,6 +8,7 @@
                    :class="$style.upcoming"
                    :appointment="appointment"
                    :cancellation-disabled="cancellationDisabled"
+                   :telephone-message="$t('appointments.index.upcoming.telephoneMessage')"
                    data-purpose="upcoming-appointments"
                    role="listitem"/>
     </div>

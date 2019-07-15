@@ -272,9 +272,11 @@ export default {
       upcoming: {
         header: 'Upcoming appointments',
         info: 'Click in the appointment if you need to cancel it',
+        telephoneMessage: 'We will call you on ',
       },
       past: {
         header: 'Past appointments',
+        telephoneMessage: 'The phone number you gave us was ',
       },
       errors: {
         pageTitle: 'Appointment data error',

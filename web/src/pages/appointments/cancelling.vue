@@ -15,6 +15,7 @@
     <div :class="$style.appointmentContainer">
       <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false"
                    data-purpose="appointment-info"
+                   :telephone-message="$t('appointments.index.upcoming.telephoneMessage')"
                    date-time-header="h2" />
     </div>
     <form-post :action="appointmentCancelPath">

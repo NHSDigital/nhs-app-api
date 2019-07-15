@@ -169,6 +169,15 @@
                           disableCancellation: 
                             type: "boolean"
                             description: "Indicates the appointment cannot be cancelled."
+                          channel: 
+                            type: "string"
+                            enum: 
+                              - "Unknown"
+                              - "Telephone"
+                            description: "Indicates slot channel type supplied by GP practice"
+                          telephoneNumber: 
+                            type: "string"
+                            description: "patients telephone number"
                     pastAppointments: 
                       type: "array"
                       description: "Array of past Appointments."
@@ -200,6 +209,15 @@
                             description: "Array of Clinicians, accounts for joint sessions."
                             items: 
                               type: "string"
+                          channel: 
+                            type: "string"
+                            enum: 
+                              - "Unknown"
+                              - "Telephone"
+                            description: "Indicates slot channel type supplied by GP practice"
+                          telephoneNumber: 
+                            type: "string"
+                            description: "patients telephone number"
                     cancellationReasons: 
                       type: "array"
                       description: "Array of Cancellation Reasons."

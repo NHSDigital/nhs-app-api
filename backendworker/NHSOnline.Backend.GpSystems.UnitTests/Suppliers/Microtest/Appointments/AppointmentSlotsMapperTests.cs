@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -28,17 +29,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private DateTime _lastMonth;
         private IAppointmentSlotsMapper _systemUnderTest;
         private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
+        private Mock<IMicrotestEnumMapper> _mockMicrotestEnumMapper;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            var mapper = _fixture.Create<IMicrotestEnumMapper>();
+            _mockMicrotestEnumMapper = _fixture.Freeze<Mock<IMicrotestEnumMapper>>();
             var logger = _fixture.Create<ILogger<AppointmentSlotsMapper>>();
             _dateTimeOffsetProviderMock = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
 
-            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProviderMock.Object, mapper, logger);
+            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProviderMock.Object,
+                _mockMicrotestEnumMapper.Object, logger);
 
             _testDate = DateTime.Today;
             _tomorrow = _testDate.AddDays(1);
@@ -193,7 +196,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             var slot4 =
                 CreateSlot("104", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_today),
-                    DateTimeHelper.DateTimeToJson(_today), "Leeds", "Emergency", "Uknown");
+                    DateTimeHelper.DateTimeToJson(_today), "Leeds", "Emergency", "Unknown");
 
             var slot5 =
                 CreateSlot("105", new[] { "Dr Venkman" }, DateTimeHelper.DateTimeToJson(_lastMonth),
@@ -311,6 +314,30 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             var expectedResponse = new[] { expectedSlot };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [DataTestMethod]
+        [DataRow("telephone", Channel.Telephone)]
+        [DataRow("unknown", Channel.Unknown)]
+        public void Map_ReturnsChannelObtainedFromMicrotestEnumMapper(string inputSlotTypeStatus,
+            Channel expectedOutputChannel)
+        {
+            // Arrange
+            var slot =
+                CreateSlot("101", null, DateTimeHelper.DateTimeToJson(_tomorrow),
+                    DateTimeHelper.DateTimeToJson(_tomorrow), "Leeds", "Emergency", inputSlotTypeStatus);
+            var slotSessions = new[] { slot };
+
+            _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
+
+            _mockMicrotestEnumMapper.Setup(x => x.MapChannel(inputSlotTypeStatus, Channel.Unknown))
+                .Returns(expectedOutputChannel);
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions);
+
+            // Assert
+            actualResponse.Single().Channel.Should().Be(expectedOutputChannel);
         }
 
         private static SlotSupplier CreateSlot(string slotId, IEnumerable<string> clinicians, string startTime,

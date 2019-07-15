@@ -6,6 +6,7 @@ import mocking.emis.models.Location
 import mocking.emis.models.Session
 import mocking.emis.models.SessionHolder
 import mocking.emis.models.SessionType
+import mocking.emis.models.TelephoneAppointmentDetails
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -28,7 +29,9 @@ class GetAppointmentHelper {
                             convertDateToEmisTime(slot.endTime!!),
                             slotTypeName = facade.slotTypes.find { slotType ->
                                 slotType.slotTypeId == slot.slotTypeId
-                            }!!.slotTypeName
+                            }!!.slotTypeName,
+                            slotTypeStatus = slot.channel,
+                            telephoneAppointmentDetails = TelephoneAppointmentDetails(slot.telephoneNumber)
                     )
                 }
             }

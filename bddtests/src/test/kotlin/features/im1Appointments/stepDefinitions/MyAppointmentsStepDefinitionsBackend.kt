@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.factories.MyAppointmentsFactory
 import features.im1Appointments.steps.MyAppointmentsBackendSteps
+import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.MyAppointmentsFacade
@@ -22,6 +23,7 @@ class MyAppointmentsStepDefinitionsBackend {
     lateinit var myAppointmentsBackendSteps: MyAppointmentsBackendSteps
 
     private val appointmentSlotsExample = AppointmentsSlotsExample()
+    private val appointmentSlotsTelephoneExample = AppointmentSlotsTelephoneExample()
 
     @Given("^I have no booked appointments for (.*)$")
     fun iHaveNoBookedAppointments(gpService: String) {
@@ -33,6 +35,21 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointments(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse()
+    }
+
+    @Given("^I have upcoming telephone appointments before cutoff time for (\\w+)$")
+    fun iHaveUpcomingTelephoneAppointments(gpService: String) {
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulMyTelephoneAppointmentsResponse()
+    }
+
+    @Given("^I have historical telephone appointments for (\\w+)$")
+    fun iHaveHistoricalTelephoneAppointments(gpService: String) {
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulMyTelephoneAppointmentsResponse(
+                appointmentSlotsExample.getGenericExample(
+                        arrayListOf(appointmentSlotsTelephoneExample.getHistoricalTelephoneAppointmentSession())
+                ))
     }
 
     @Given("^I have historical appointments for (\\w+)$")
@@ -194,7 +211,8 @@ class MyAppointmentsStepDefinitionsBackend {
 
     @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
     fun whenTheAPICallFailsWithCsrfTokenOf(provider: String, csrfToken: String) {
-        Assert.assertEquals("Test setup incorrect: Step only implemented for EMIS", "EMIS", provider.toUpperCase())
+        Assert.assertEquals("Test setup incorrect: Step only implemented for EMIS", "EMIS",
+                provider.toUpperCase())
 
         try {
             val result = Serenity

@@ -36,7 +36,11 @@ class GetAppointmentBuilderMicrotest(val patient: Patient)
                                     .staffDetailsid
                                 }!!.staffName
                             },
-                            slot.channel.toString()
+                            slot.channel.toString(),
+                            when (slot.telephoneNumber) {
+                                "telephoneNumberToEnter" -> ""
+                                else -> slot.telephoneNumber
+                            }
                         )
                     }
                 }

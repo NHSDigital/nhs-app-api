@@ -1,6 +1,7 @@
 package features.im1Appointments.factories
 
 import constants.DateTimeFormats
+import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -52,7 +53,12 @@ abstract class AppointmentsFactory(gpSupplier: String) {
                 slotType = appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
                 location = appointmentSlotsFactoryHelper.getLocationNameFromId(session),
                 clinicians = setOf(appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session).first()),
-                id = slot.slotId
+                id = slot.slotId,
+                channel = slot.channel.toString(),
+                telephoneNumber = when (slot.telephoneNumber) {
+                    telephoneNumberToEnter -> ""
+                    else -> slot.telephoneNumber
+                }
         )
     }
 
