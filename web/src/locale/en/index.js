@@ -334,10 +334,10 @@ export default {
       },
       menuItem3: {
         header: 'Ask your GP for advice',
-        text: 'Consult your GP via a simple online form.',
+        text: 'Consult your GP via a simple online form. Your GP surgery will reply by phone or email.',
       },
       symptomButtonText: 'Check symptoms',
-      bookButtonText: 'Book new appointment',
+      bookButtonText: 'Book a GP appointment',
       backDesktopLinkText: 'Back',
       backButtonText: 'Back to my appointments',
     },

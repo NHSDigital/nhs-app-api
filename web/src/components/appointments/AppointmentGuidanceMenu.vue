@@ -5,7 +5,7 @@
       <li role="link">
         <analytics-tracked-tag
           id="btn_symptoms"
-          :class="$style['no-decoration']"
+          :tabindex="-1"
           :text="$t('appointments.guidance.menuItem1.header')"
           :aria-label="`${$t('appointments.guidance.menuItem1.header')}.
             ${$t('appointments.guidance.menuItem1.text')}`"
@@ -23,7 +23,7 @@
       <sjr-if journey="cdssAdmin" tag="li" role="link">
         <analytics-tracked-tag
           id="btn_gpHelpNoAppointment"
-          :class="$style['no-decoration']"
+          :tabindex="-1"
           :text="$t('appointments.guidance.menuItem2.header')"
           :aria-label="`${$t('appointments.guidance.menuItem2.header')}.
             ${$t('appointments.guidance.menuItem2.text')}`"
@@ -40,10 +40,11 @@
       <sjr-if journey="cdssAdvice" tag="li" role="link">
         <analytics-tracked-tag
           id="btn_gpAdvice"
-          :class="$style['no-decoration']"
+          :tabindex="-1"
           :text="$t('appointments.guidance.menuItem3.header')"
           :aria-label="`${$t('appointments.guidance.menuItem3.header')}.
-            ${$t('appointments.guidance.menuItem3.text')}`">
+            ${$t('appointments.guidance.menuItem3.text')}`"
+          data-purpose="text_link">
           <a id="btn_gp_help"
              :href="gpAdvicePath"
              :class="$style['no-decoration']"
@@ -87,6 +88,9 @@ export default {
     gpAdvicePath() {
       return APPOINTMENT_GP_ADVICE.path;
     },
+  },
+  mounted() {
+    document.activeElement.blur();
   },
   methods: {
     navigate(event) {
