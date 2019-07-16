@@ -68,6 +68,11 @@ export default {
       redirectTo(this, this.prescriptionsPath, null);
     }
   },
+  mounted() {
+    if (this.$store.state.nominatedPharmacy.hasLoaded) {
+      this.$store.dispatch('flashMessage/show');
+    }
+  },
   methods: {
     backButtonClicked() {
       redirectTo(this, this.prescriptionsPath, null);

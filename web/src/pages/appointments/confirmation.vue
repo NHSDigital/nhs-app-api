@@ -329,7 +329,7 @@ export default {
       );
       this.$store.dispatch('availableAppointments/clear');
     },
-    confirmTheBook(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
+    async confirmTheBook(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
       if (!slot) return;
 
       const bookingData = {
@@ -340,14 +340,16 @@ export default {
         TelephoneNumber: (telephoneNumberField !== null && telephoneNumberField !== '')
           ? telephoneNumberField : otherTelephoneNumberField,
       };
-      this.$store.dispatch('availableAppointments/book', bookingData)
-        .then(() => {
-          if (process.client) {
-            this.$store.dispatch('analytics/trackUserProperty', { key: 'gpBookingSlot', value: moment(slot.startTime).format('dddd | HH:mm:ss') });
-          }
-          this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
-          redirectTo(this, APPOINTMENTS.path, null);
-        });
+      await this.$store.dispatch('availableAppointments/book', bookingData);
+      console.log('Appointment booked');
+      if (process.client) {
+        console.log('INSIDE IF');
+        this.$store.dispatch('analytics/trackUserProperty', { key: 'gpBookingSlot', value: moment(slot.startTime).format('dddd | HH:mm:ss') });
+      }
+      console.log('adding success message');
+      this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
+      console.log('redirecting....');
+      redirectTo(this, APPOINTMENTS.path, null);
     },
     onCancelButtonClicked() {
       redirectTo(this, this.cancelBookingPath, null);
