@@ -29,28 +29,22 @@ private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
 
 class ServiceJourneyRulesStepDefinitions {
 
-    private val journeysOdsMap = mapOf(
+    private val journeysToGpInformationMap = mapOf(
             EnumSet.of(JourneyType.APPOINTMENTS_IM1,
                     JourneyType.MEDICAL_RECORD_IM1,
                     JourneyType.PRESCRIPTIONS_IM1,
                     JourneyType.NOMINATED_PHARMACY_ENABLED)
-                    to ODSCODE_IM1_ECONSULT_NOMINATED_PHARMACY_ENABLED,
+                    to GpInformation(EMIS_GP_SUPPLIER, ODSCODE_IM1_ECONSULT_NOMINATED_PHARMACY_ENABLED),
             EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
                     JourneyType.MEDICAL_RECORD_IM1,
                     JourneyType.PRESCRIPTIONS_IM1,
                     JourneyType.NOMINATED_PHARMACY_DISABLED)
-                    to ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED,
+                    to GpInformation(EMIS_GP_SUPPLIER,  ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED),
             EnumSet.of(JourneyType.APPOINTMENTS_GPATHAND,
                     JourneyType.MEDICAL_RECORD_GPATHAND,
                     JourneyType.PRESCRIPTIONS_GPATHAND)
-                    to ODSCODE_GP_AT_HAND_CONFIGURATIONS
+                    to GpInformation(EMIS_GP_SUPPLIER, ODSCODE_GP_AT_HAND_CONFIGURATIONS)
     )
-
-    @Given("^I am a user whose ODS Code has a specific journey configuration set up$")
-    fun iAmAUserWhoseODSCodeHasASpecificJourneyConfigurationSetUp() {
-        // EMIS is used as the default odsCode exists within gpinfo.csv
-        SerenityHelpers.setGpSupplier(EMIS_GP_SUPPLIER)
-    }
 
     @Given("^I am a user whose ODS Code does not have specific journey configuration set up$")
     fun iAmAUserWhoseODSCodeDoesNotHaveASpecificJourneyConfigurationSetUp() {
@@ -65,18 +59,20 @@ class ServiceJourneyRulesStepDefinitions {
 
     @Given("^I am a user where the journey configurations are:$")
     fun iAmAUserWhereTheJourneyConfigurationsAre(configurations: List<Configuration>) {
-        val journeyTypes = mapToJourneyTypes(configurations)
-        val odsCode = findOdsCode(journeyTypes)
-        Assert.assertNotNull("Cannot find a matching ODS code with the given configuration in SJR", odsCode)
+        val journeyTypes =
+                configurations.map{configuration-> configuration.toJourneyType()}
+        val gpInformation = findGpInformation(journeyTypes)
+        Assert.assertNotNull("Cannot find a matching ODS code with the given configuration in SJR",
+                gpInformation?.odsCode)
 
         // copying at moment until a new instance is returned per request
-        val patient = Patient.getDefault(EMIS_GP_SUPPLIER).copy(odsCode = odsCode!!)
+        val patient = Patient.getDefault(gpInformation?.gpSupplier!!).copy(odsCode = gpInformation.odsCode)
 
-        SerenityHelpers.setGpSupplier(EMIS_GP_SUPPLIER)
+        SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
         SerenityHelpers.setPatient(patient)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(EMIS_GP_SUPPLIER, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpInformation.gpSupplier, mockingClient).createFor(patient)
     }
 
     @When("^I request the service journey rules for my ODS Code$")
@@ -149,44 +145,38 @@ class ServiceJourneyRulesStepDefinitions {
                 serviceJourneyRulesResponse.journeys.nominatedPharmacy)
     }
 
-    private fun mapToJourneyTypes(configurations: List<Configuration>): Collection<JourneyType> {
-        val journeyTypes = mutableListOf<JourneyType>()
+    private fun findGpInformation(journeyTypes: Collection<JourneyType>): GpInformation? {
+        journeysToGpInformationMap.forEach { (journeyTypesConfig, gpInformation) ->
+            if (journeyTypesConfig.size >= journeyTypes.size && journeyTypesConfig.containsAll(journeyTypes)) {
+                return gpInformation
+            }
+        }
+        return null
+    }
 
-        configurations.forEach { configuration ->
-            val journey = configuration.journey
-            val value = configuration.value
-            val journeyType = "${journey.replace(" ", "_").toUpperCase()}_${value.toUpperCase()}"
+    class Configuration(val journey: String, val value: String) {
+
+        fun toJourneyType(): JourneyType {
+            val journeyType = "${journey}_$value".replace(" ", "_").toUpperCase()
 
             Assert.assertTrue("Test setup incorrect, journey `$journey` does not contain value for `$value`",
                     enumValues<JourneyType>().any { it.name == journeyType })
 
-            journeyTypes.add(JourneyType.valueOf(journeyType))
+            return JourneyType.valueOf(journeyType)
         }
-
-        return journeyTypes
     }
 
-    private fun findOdsCode(journeyTypes: Collection<JourneyType>): String? {
-        journeysOdsMap.forEach { (journeyTypesConfig, odsCode) ->
-            if (journeyTypesConfig.size >= journeyTypes.size && journeyTypesConfig.containsAll(journeyTypes)) {
-                return odsCode
-            }
-        }
-
-        return null
-    }
-
-    data class Configuration(val journey: String, val value: String)
+    data class GpInformation(val gpSupplier: String, val odsCode: String)
 
     enum class JourneyType {
         APPOINTMENTS_IM1,
         APPOINTMENTS_GPATHAND,
         APPOINTMENTS_INFORMATICA,
-        MEDICAL_RECORD_IM1,
         MEDICAL_RECORD_GPATHAND,
-        PRESCRIPTIONS_IM1,
-        PRESCRIPTIONS_GPATHAND,
+        MEDICAL_RECORD_IM1,
         NOMINATED_PHARMACY_DISABLED,
-        NOMINATED_PHARMACY_ENABLED
+        NOMINATED_PHARMACY_ENABLED,
+        PRESCRIPTIONS_IM1,
+        PRESCRIPTIONS_GPATHAND
     }
 }

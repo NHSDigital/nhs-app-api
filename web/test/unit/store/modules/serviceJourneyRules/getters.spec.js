@@ -36,27 +36,27 @@ describe('getters', () => {
     });
   });
 
-  describe('im1PrescriptionsEnabled', () => {
-    const { im1PrescriptionsEnabled } = getters;
+  describe('im1MyRecordEnabled', () => {
+    const { im1MyRecordEnabled } = getters;
 
     beforeEach(() => {
       currentState = {
         rules: {
-          prescriptions: {
+          medicalRecord: {
             provider: 'im1',
           },
         },
       };
     });
 
-    it('will be true if the prescriptions provider is im1', () => {
-      currentState.rules.prescriptions.provider = IM1_PROVIDER;
-      expect(im1PrescriptionsEnabled(currentState)).toBe(true);
+    it('will be false if the medicalRecord provider is gp at hand', () => {
+      currentState.rules.medicalRecord.provider = GP_AT_HAND;
+      expect(im1MyRecordEnabled(currentState)).toBe(false);
     });
 
-    it('will be false if the prescriptions provider is gp at hand', () => {
-      currentState.rules.prescriptions.provider = GP_AT_HAND;
-      expect(im1PrescriptionsEnabled(currentState)).toBe(false);
+    it('will be true if the medicalRecord provider is im1', () => {
+      currentState.rules.medicalRecord.provider = IM1_PROVIDER;
+      expect(im1MyRecordEnabled(currentState)).toBe(true);
     });
   });
 
@@ -81,6 +81,29 @@ describe('getters', () => {
     it('will be false if the prescriptions provider is im1', () => {
       currentState.rules.prescriptions.provider = IM1_PROVIDER;
       expect(gpAtHandPrescriptionsEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('im1PrescriptionsEnabled', () => {
+    const { im1PrescriptionsEnabled } = getters;
+    beforeEach(() => {
+      currentState = {
+        rules: {
+          prescriptions: {
+            provider: 'im1',
+          },
+        },
+      };
+    });
+
+    it('will be false if the prescriptions provider is gp at hand', () => {
+      currentState.rules.prescriptions.provider = GP_AT_HAND;
+      expect(im1PrescriptionsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be true if the prescriptions provider is im1', () => {
+      currentState.rules.prescriptions.provider = IM1_PROVIDER;
+      expect(im1PrescriptionsEnabled(currentState)).toBe(true);
     });
   });
 

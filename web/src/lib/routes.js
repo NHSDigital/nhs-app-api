@@ -10,9 +10,19 @@ const gpAdviceRedirect = {
   url: '/appointments',
 };
 
+const gpAtHandMyRecordRedirect = {
+  condition: 'serviceJourneyRules/gpAtHandMyRecordEnabled',
+  url: '/my-record/gp-at-hand',
+};
+
 const gpAtHandPrescriptionsRedirect = {
   condition: 'serviceJourneyRules/gpAtHandPrescriptionsEnabled',
   url: '/prescriptions/gp-at-hand',
+};
+
+const informaticaAppointmentRedirect = {
+  condition: 'serviceJourneyRules/informaticaAppointmentsEnabled',
+  url: '/appointments/informatica',
 };
 
 const im1AppointmentRedirect = {
@@ -20,14 +30,14 @@ const im1AppointmentRedirect = {
   url: '/appointments',
 };
 
+const im1MyRecordRedirect = {
+  condition: 'serviceJourneyRules/im1MyRecordEnabled',
+  url: '/my-record',
+};
+
 const im1PrescriptionsRedirect = {
   condition: 'serviceJourneyRules/im1PrescriptionsEnabled',
   url: '/prescriptions',
-};
-
-const informaticaAppointmentRedirect = {
-  condition: 'serviceJourneyRules/informaticaAppointmentsEnabled',
-  url: '/appointments/informatica',
 };
 
 const routes = {
@@ -307,6 +317,23 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    redirectRules: [
+      gpAtHandMyRecordRedirect,
+    ],
+  },
+  MYRECORD_GP_AT_HAND: {
+    name: 'my-record-gp-at-hand',
+    path: '/my-record/gp-at-hand',
+    crumb: {
+      enabled: true,
+      i8nKey: 'myRecordGpAtHand',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    redirectRules: [
+      im1MyRecordRedirect,
+    ],
   },
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',
@@ -545,11 +572,12 @@ const routes = {
       },
     },
   },
-  PRESCRIPTION_GP_AT_HAND: {
+  PRESCRIPTIONS_GP_AT_HAND: {
     name: 'prescriptions-gp-at-hand',
     path: '/prescriptions/gp-at-hand',
     crumb: {
-      i8nKey: 'prescriptionGpAtHand',
+      enabled: true,
+      i8nKey: 'prescriptionsGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -598,6 +626,9 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    redirectRules: [
+      gpAtHandMyRecordRedirect,
+    ],
   },
 };
 
@@ -674,6 +705,7 @@ export const {
   LOGOUT,
   MORE,
   MYRECORD,
+  MYRECORD_GP_AT_HAND,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
@@ -698,9 +730,9 @@ export const {
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
   PRESCRIPTIONS,
+  PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
-  PRESCRIPTION_GP_AT_HAND,
   SYMPTOMS,
   TERMSANDCONDITIONS,
 } = routes;

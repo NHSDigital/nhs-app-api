@@ -1,5 +1,5 @@
 import conditionalRedirect from '@/middleware/conditionalRedirect';
-import { APPOINTMENTS, APPOINTMENT_INFORMATICA, PRESCRIPTIONS, PRESCRIPTION_GP_AT_HAND } from '@/lib/routes';
+import { APPOINTMENTS, APPOINTMENT_INFORMATICA, MYRECORD, MYRECORD_GP_AT_HAND, PRESCRIPTIONS, PRESCRIPTIONS_GP_AT_HAND } from '@/lib/routes';
 
 describe('middleware/conditionalRedirect', () => {
   let getters;
@@ -19,9 +19,9 @@ describe('middleware/conditionalRedirect', () => {
   });
 
   describe('appointments im1 redirect rules', () => {
-    describe('sjr informatica disabled', () => {
+    describe('sjr im1 enabled', () => {
       beforeEach(() => {
-        getters['serviceJourneyRules/informaticaAppointmentsEnabled'] = false;
+        getters['serviceJourneyRules/im1AppointmentsEnabled'] = true;
         callConditionalRedirect(APPOINTMENTS);
       });
 
@@ -54,7 +54,7 @@ describe('middleware/conditionalRedirect', () => {
       });
     });
 
-    describe('sjr im1 disabled', () => {
+    describe('sjr informatica enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1AppointmentsEnabled'] = false;
         callConditionalRedirect(APPOINTMENT_INFORMATICA);
@@ -62,6 +62,54 @@ describe('middleware/conditionalRedirect', () => {
 
       it('will not redirect', () => {
         expect(redirect).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('my record gp at hand redirect rules', () => {
+    describe('sjr im1 enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/im1MyRecordEnabled'] = true;
+        callConditionalRedirect(MYRECORD_GP_AT_HAND);
+      });
+
+      it('will redirect to my record', () => {
+        expect(redirect).toBeCalledWith('301', MYRECORD.path);
+      });
+    });
+
+    describe('sjr gp at hand enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/gpAtHandMyRecordEnabled'] = true;
+        callConditionalRedirect(MYRECORD_GP_AT_HAND);
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('my record im1 redirect rules', () => {
+    describe('sjr im1 enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/im1MyRecordRedirect'] = true;
+        callConditionalRedirect(MYRECORD);
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
+    });
+
+    describe('sjr gp at hand enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/gpAtHandMyRecordEnabled'] = true;
+        callConditionalRedirect(MYRECORD);
+      });
+
+      it('will redirect to my record gp at hand', () => {
+        expect(redirect).toBeCalledWith('301', MYRECORD_GP_AT_HAND.path);
       });
     });
   });
@@ -85,7 +133,7 @@ describe('middleware/conditionalRedirect', () => {
       });
 
       it('will redirect to prescriptions gp at hand', () => {
-        expect(redirect).toBeCalledWith('301', PRESCRIPTION_GP_AT_HAND.path);
+        expect(redirect).toBeCalledWith('301', PRESCRIPTIONS_GP_AT_HAND.path);
       });
     });
   });
@@ -94,7 +142,7 @@ describe('middleware/conditionalRedirect', () => {
     describe('sjr im1 prescriptions enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1PrescriptionsEnabled'] = true;
-        callConditionalRedirect(PRESCRIPTION_GP_AT_HAND);
+        callConditionalRedirect(PRESCRIPTIONS_GP_AT_HAND);
       });
 
       it('will redirect to prescriptions', () => {
@@ -105,11 +153,59 @@ describe('middleware/conditionalRedirect', () => {
     describe('sjr im1 prescriptions disabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1PrescriptionsEnabled'] = false;
-        callConditionalRedirect(PRESCRIPTION_GP_AT_HAND);
+        callConditionalRedirect(PRESCRIPTIONS_GP_AT_HAND);
       });
 
       it('will not redirect', () => {
         expect(redirect).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('prescriptions gp at hand redirect rules', () => {
+    describe('sjr im1 enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/im1PrescriptionsEnabled'] = true;
+        callConditionalRedirect(PRESCRIPTIONS_GP_AT_HAND);
+      });
+
+      it('will redirect to prescriptions', () => {
+        expect(redirect).toBeCalledWith('301', PRESCRIPTIONS.path);
+      });
+    });
+
+    describe('sjr gp at hand enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/gpAtHandPrescriptionsEnabled'] = true;
+        callConditionalRedirect(PRESCRIPTIONS_GP_AT_HAND);
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('prescriptions im1 redirect rules', () => {
+    describe('sjr im1 enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/im1PrescriptionsRedirect'] = true;
+        callConditionalRedirect(PRESCRIPTIONS);
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
+    });
+
+    describe('sjr gp at hand enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/gpAtHandPrescriptionsEnabled'] = true;
+        callConditionalRedirect(PRESCRIPTIONS);
+      });
+
+      it('will redirect to prescriptions gp at hand', () => {
+        expect(redirect).toBeCalledWith('301', PRESCRIPTIONS_GP_AT_HAND.path);
       });
     });
   });

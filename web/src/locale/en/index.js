@@ -580,6 +580,37 @@ export default {
       },
     },
   },
+  gp_at_hand: {
+    appointments: {
+      headerTag: 'book GP appointments',
+      contentTag: 'book appointments',
+    },
+    myRecord: {
+      headerTag: 'access your medical record',
+      contentTag: 'view your medical record',
+    },
+    prescriptions: {
+      headerTag: 'order prescriptions',
+      contentTag: 'order prescriptions',
+    },
+    content: {
+      header: 'Sorry, you cannot {headerTag} through the NHS App',
+      paragraphs: [
+        {
+          prefix: 'To {contentTag} with Babylon GP at Hand, please ',
+          linkText: 'use the Babylon app',
+          linkUrl: 'https://www.gpathand.nhs.uk/download-app',
+          suffix: '.',
+        },
+        {
+          prefix: 'Please contact Babylon GP at Hand on 0330 808 2217 or ',
+          linkText: 'gpathand@nhs.net',
+          linkUrl: 'mailto:gpathand@nhs.net',
+          suffix: ' if you have any problems.',
+        },
+      ],
+    },
+  },
   prescriptions: {
     errors: {
       pageTitle: 'Prescription data error',
@@ -666,23 +697,6 @@ export default {
           message: 'If you need more medication sooner, contact your GP.',
         },
       },
-    },
-    gp_at_hand: {
-      header: 'Sorry, you cannot order prescriptions through the NHS App',
-      paragraphs: [
-        {
-          prefix: 'To order prescriptions with Babylon GP at Hand, please ',
-          linkText: 'use the Babylon app',
-          linkUrl: 'https://www.gpathand.nhs.uk/download-app',
-          suffix: '.',
-        },
-        {
-          prefix: 'Please contact Babylon GP at Hand on 0330 808 2217 or ',
-          linkText: 'gpathand@nhs.net',
-          linkUrl: 'mailto:gpathand@nhs.net',
-          suffix: ' if you have any problems.',
-        },
-      ],
     },
   },
   nominated_pharmacy: {

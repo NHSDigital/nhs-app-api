@@ -33,6 +33,18 @@ export default {
   [`${INFORMATICA}AppointmentsEnabled`](state) {
     return get('rules.appointments.provider')(state) === INFORMATICA;
   },
+  [`${IM1_PROVIDER}MyRecordEnabled`](state) {
+    return get('rules.medicalRecord.provider')(state) === IM1_PROVIDER;
+  },
+  [`${GP_AT_HAND}MyRecordEnabled`](state) {
+    return get('rules.medicalRecord.provider')(state) === GP_AT_HAND;
+  },
+  [`${IM1_PROVIDER}PrescriptionsEnabled`](state) {
+    return get('rules.prescriptions.provider')(state) === IM1_PROVIDER;
+  },
+  [`${GP_AT_HAND}PrescriptionsEnabled`](state) {
+    return get('rules.prescriptions.provider')(state) === GP_AT_HAND;
+  },
   [`${NOMINATED_PHARMACY}Enabled`](state) {
     return get('rules.nominatedPharmacy')(state);
   },

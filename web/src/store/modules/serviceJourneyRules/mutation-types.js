@@ -1,8 +1,8 @@
 export const CDSS_ADMIN = 'cdssAdmin';
 export const CDSS_ADVICE = 'cdssAdvice';
+export const GP_AT_HAND = 'gpAtHand';
 export const IM1_PROVIDER = 'im1';
 export const INFORMATICA = 'informatica';
-export const GP_AT_HAND = 'gpAtHand';
 export const INIT = 'INIT';
 export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const SET_RULES = 'SET_RULES';
@@ -13,10 +13,10 @@ export const initialState = () => ({
     appointments: {
       provider: IM1_PROVIDER,
     },
-    cdssAdvice: {
+    cdssAdmin: {
       provider: 'none',
     },
-    cdssAdmin: {
+    cdssAdvice: {
       provider: 'none',
     },
     nominatedPharmacy: false,

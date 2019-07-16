@@ -29,6 +29,7 @@ import {
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
+  MYRECORD_GP_AT_HAND,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
@@ -41,8 +42,8 @@ import {
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
   PRESCRIPTIONS,
+  PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_CONFIRM_COURSES,
-  PRESCRIPTION_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,
   SYMPTOMS,
   TERMSANDCONDITIONS,
@@ -180,12 +181,7 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.prescriptions';
       route.meta.pageTitleKey = 'pageTitles.prescriptions';
       break;
-    case PRESCRIPTION_CONFIRM_COURSES.name:
-      store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'pageHeaders.confirmPrescription';
-      route.meta.pageTitleKey = 'pageTitles.confirmPrescription';
-      break;
-    case PRESCRIPTION_GP_AT_HAND.name:
+    case PRESCRIPTIONS_GP_AT_HAND.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.serviceUnavailable';
       route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
@@ -194,6 +190,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.repeatPrescriptionCourses';
       route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionCourses';
+      break;
+    case PRESCRIPTION_CONFIRM_COURSES.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.confirmPrescription';
+      route.meta.pageTitleKey = 'pageTitles.confirmPrescription';
       break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:
@@ -205,6 +206,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.myRecord';
       route.meta.pageTitleKey = 'pageTitles.myRecord';
+      break;
+    case MYRECORD_GP_AT_HAND.name:
+      store.dispatch('navigation/setNewMenuItem', 3);
+      route.meta.headerKey = 'pageHeaders.serviceUnavailable';
+      route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
       break;
     case MORE.name:
       store.dispatch('navigation/setNewMenuItem', 4);
