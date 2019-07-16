@@ -11,9 +11,9 @@ import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
+import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
+import features.prescriptions.stepDefinitions.ProviderTypes
 import features.prescriptions.steps.PrescriptionsSteps
-import features.sharedStepDefinitions.BaseStepDefinition
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.data.prescriptions.IPrescriptionLoader
@@ -31,6 +31,8 @@ import net.thucydides.core.annotations.Steps
 import pages.prescription.PrescriptionsPage
 import utils.SerenityHelpers
 import utils.assertTrueWithRetry
+import utils.getOrNull
+import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
@@ -39,7 +41,7 @@ import java.util.*
 
 private const val WAIT_TIME_GREATER_THAN_THIRTY_SECS = 31L
 
-open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
+open class PrescriptionsSubmissionStepDefinitions {
 
     @Steps
     lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
@@ -71,7 +73,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Given("^I have a repeat prescription request with (\\d+) courses")
     fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int) {
-        currentPatient = Patient.getDefault("EMIS")
+        SerenityHelpers.setPatient(Patient.getDefault("EMIS"))
 
         val uuids: MutableList<String> = mutableListOf()
 
@@ -96,6 +98,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     @Given("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days " +
             "when submitting the repeat prescription")
     fun emisRespondsWithErrorIndicatingAnIncludedCourseHasAlreadyBeenOrderedWhenSubmittingRepeatPrescription() {
+        val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithAlreadyAPendingRequestInTheLast30Days()
@@ -104,6 +107,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Given("^Emis responds with an error indicating a course is invalid")
     fun emisRespondsWithAnErrorIndicatingACourseIsInvalid() {
+        val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithBadRequestErrorIndicatingACourseIsInvalid()
@@ -112,6 +116,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Given("^EMIS responds with a Created success code when submitting the repeat prescription")
     fun emisRespondsWithACreatedSuccessCodeWhenSubmittingRepeatPrescription() {
+        val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithCreated()
@@ -121,6 +126,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     @Given("^EMIS responds with an error indicating prescriptions is not enabled when submitting the repeat " +
             "prescription")
     fun emisRespondsWithAnErrorIndicatingPrescriptionsIsNotEnabled() {
+        val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithPrescriptionsNotEnabled()
@@ -129,6 +135,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Given("^EMIS takes longer than 30 seconds to respond when a repeat prescription is submitted")
     fun emisTakesTooLongToRespondWhenARepeatPrescriptionIsSubmitted() {
+        val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithCreated().delayedBy(Duration.ofSeconds(WAIT_TIME_GREATER_THAN_THIRTY_SECS))
@@ -166,12 +173,11 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         @Given("^I am using (.*) GP System to submit my prescription$")
         fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
             SerenityHelpers.setGpSupplier(gpSystem)
-            currentPatient = Patient.getDefault(gpSystem)
+            val currentPatient = Patient.getDefault(gpSystem)
             SerenityHelpers.setPatient(currentPatient)
             CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
             SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
-            currentProvider = ProviderTypes.valueOf(gpSystem)
-            currentPatient = Patient.getDefault(gpSystem)
+            PrescriptionsSerenityHelpers.PROVIDER.set(ProviderTypes.valueOf(gpSystem))
             prescriptionLoader = PrescriptionsFactory.getForSupplier(gpSystem).getPrescriptionsLoader
             val emisPrescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
             Serenity.setSessionVariable("EmisPrescriptionsMap").to(emisPrescriptionMap)
@@ -184,7 +190,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
             ViewSpinePdsStubs(mockingClient).generateSpineStubs()
             initialHistoricPrescriptionsCount = amount
             prescriptionLoader.loadData(amount, amount, amount)
+            val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
+            val currentPatient = SerenityHelpers.getPatient()
             when (currentProvider) {
                 ProviderTypes.EMIS -> {
                     val data = prescriptionLoader.data as PrescriptionRequestsGetResponse
@@ -250,6 +258,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
         @Then("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
         fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
+            val currentPatient = SerenityHelpers.getPatient()
             mockingClient.forEmis {
                 prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                         .respondWithGenericInternalServerError()
@@ -261,6 +270,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
             assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
                     "Expected order success text to be visible")
+            val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
             when (currentProvider) {
                 ProviderTypes.TPP -> {

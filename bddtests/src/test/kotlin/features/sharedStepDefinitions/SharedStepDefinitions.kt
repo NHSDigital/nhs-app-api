@@ -41,10 +41,6 @@ open class SharedStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
-    companion object {
-        lateinit var patient: Patient
-    }
-
     @After
     fun stopBrowserstackIfRunning() {
         BrowserstackLocalService.stop()
@@ -56,7 +52,7 @@ open class SharedStepDefinitions {
         mockingClient.clearWiremock()
         mockingClient.favicon()
 
-        patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)
 
@@ -66,7 +62,7 @@ open class SharedStepDefinitions {
 
     @Given("^I am logged in$")
     fun iAmLoggedIn() {
-        SharedStepDefinitions.patient = SerenityHelpers.getPatientOrNull() ?: SharedStepDefinitions.patient
+        val patient = SerenityHelpers.getPatient()
         browser.goToApp()
         login.using(patient)
         home.waitForLoginToCompleteSuccessfully()

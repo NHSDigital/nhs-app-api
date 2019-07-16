@@ -13,8 +13,6 @@ import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
-import features.sharedStepDefinitions.BaseStepDefinition
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.backend.CommonSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -45,6 +43,8 @@ import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.navigation.HeaderNative
 import pages.text
+import utils.getOrNull
+import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionsListResponse
@@ -59,7 +59,7 @@ private const val NUM_OF_PRESCRIPTIONS = 10
 
 @Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
         "if possible, break down steps into functional areas")
-open class PrescriptionsStepDefinitions : BaseStepDefinition() {
+open class PrescriptionsStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -139,7 +139,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Given("^I am patient using the (.*) GP System$")
     fun givenIAmAPatientUsingGPSystem(gpSystem: String) {
         SerenityHelpers.setGpSupplier(gpSystem)
-        currentPatient = Patient.getDefault(gpSystem)
+        val currentPatient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient( currentPatient)
         SerenityHelpers.setPatient(currentPatient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
@@ -174,59 +175,63 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Given("^the GP System has disabled prescriptions$")
     fun theGPSystemHasDisabledPrescriptions() {
+        var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
             initialize(Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM))
+            currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         }
-        SerenityHelpers.setPatient(currentPatient)
         PrescriptionsFactory.getForSupplier(currentProvider.toString()).disableAtGPLevel()
     }
 
     @Given("^the GP System session has expired when viewing prescriptions$")
     fun theGPSystemSessionHasExpired() {
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
             initialize(Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM))
         }
-        SerenityHelpers.setPatient(currentPatient)
         PrescriptionsFactory.getForSupplier(currentProvider.toString()).gpSessionHasExpired()
     }
 
     @Given("prescriptions is disabled at a GP Practice level")
     fun prescriptionsIsDisabledAtAGPLevel() {
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentPatient = SerenityHelpers.getPatient()
         when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                mockingClient
-                        .forEmis {
-                            prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                        }
+        ProviderTypes.EMIS -> {
+            mockingClient
+                    .forEmis {
+                        prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                    }
 
-                mockingClient
-                        .forEmis {
-                            prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                        }
-            }
-            ProviderTypes.TPP -> {
-                mockingClient
-                        .forTpp {
-                            prescriptions.listRepeatMedication(currentPatient)
-                                    .respondWithError(
-                                            Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                                    "Error Occurred",
-                                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                        }
-            }
-            ProviderTypes.VISION -> {
-                mockingClient
-                        .forVision {
-                            authentication.getConfigurationRequest(
-                                    VisionMockDefaults.visionUserSessionPrescriptionDisabled)
-                                    .respondWithSuccess(VisionMockDefaults
-                                            .visionConfigurationResponsePrescriptionsDisabled)
-                        }
-            }
-            else -> {
-                throw NotImplementedError("Invalid GP System")
-            }
+            mockingClient
+                    .forEmis {
+                        prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                    }
         }
+        ProviderTypes.TPP -> {
+            mockingClient
+                    .forTpp {
+                        prescriptions.listRepeatMedication(currentPatient)
+                                .respondWithError(
+                                        Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                                "Error Occurred",
+                                                "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                    }
+        }
+        ProviderTypes.VISION -> {
+            mockingClient
+                    .forVision {
+                        authentication.getConfigurationRequest(
+                                VisionMockDefaults.visionUserSessionPrescriptionDisabled)
+                                .respondWithSuccess(VisionMockDefaults
+                                        .visionConfigurationResponsePrescriptionsDisabled)
+                    }
+        }
+        else -> {
+            throw NotImplementedError("Invalid GP System")
+        }
+    }
+        theGPSystemHasDisabledPrescriptions()
     }
 
     @Given("each course has (.*)")
@@ -234,6 +239,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         val showDosage = contents.toLowerCase().contains("dosage")
         val showQuantity = contents.toLowerCase().contains("quantity")
 
+        val currentPatient = SerenityHelpers.getPatient()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
         prescriptionLoader.loadData(
@@ -367,6 +374,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun thenIReceiveAListOfXPrescriptions(count: Int) {
 
         assertNotNull(prescriptionsListResponse)
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
         when (currentProvider) {
             ProviderTypes.EMIS -> {
@@ -402,6 +410,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     private fun providerHasAllPrescriptionFields(): Boolean {
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         return currentProvider == ProviderTypes.EMIS ||
                 currentProvider == ProviderTypes.VISION ||
                 currentProvider == ProviderTypes.MICROTEST
@@ -434,6 +443,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                                      numOfCourses: Int = this.numOfCourses,
                                      numOfRepeats: Int = this.numOfRepeats) {
 
+        val currentPatient = SerenityHelpers.getPatient()
         if (!::prescriptionLoader.isInitialized) {
             val gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
             initialize(gpSystem)
@@ -444,6 +454,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 numOfCourses,
                 numOfRepeats)
 
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         when (currentProvider) {
             ProviderTypes.EMIS -> {
                 mockingClient
@@ -480,6 +491,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     private fun getResponseToExpectedPrescriptionFormat(): List<HistoricPrescription> {
 
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         return when (currentProvider) {
             ProviderTypes.EMIS ->
                 EmisPrescriptionMapper.map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
@@ -505,6 +517,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 numOfRepeats,
                 numOfRepeats)
 
+        val currentPatient = SerenityHelpers.getPatient()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         when (currentProvider) {
             ProviderTypes.EMIS -> {
 
@@ -545,16 +559,15 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
+    private fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
-
     private fun initialize(gpSystem: String) {
-        currentProvider = ProviderTypes.valueOf(gpSystem)
-        currentPatient = Patient.getDefault(gpSystem)
+        PrescriptionsSerenityHelpers.PROVIDER.set( ProviderTypes.valueOf(gpSystem))
+        SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
 
-        when (currentProvider) {
+        when (ProviderTypes.valueOf(gpSystem)) {
             ProviderTypes.EMIS -> {
                 prescriptionLoader = EmisPrescriptionLoader
             }

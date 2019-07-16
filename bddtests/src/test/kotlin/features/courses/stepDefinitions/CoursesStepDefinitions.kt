@@ -8,9 +8,9 @@ import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.helpers.PrescriptionHelpers
+import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
+import features.prescriptions.stepDefinitions.ProviderTypes
 import features.prescriptions.steps.PrescriptionsSteps
-import features.sharedStepDefinitions.BaseStepDefinition
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 import mocking.emis.practices.NecessityOption
@@ -22,8 +22,10 @@ import net.thucydides.core.annotations.Steps
 import pages.nominatedPharmacy.NominatedPharmacyCheckPage
 import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
+import utils.getOrNull
+import utils.set
 
-open class CoursesStepDefinitions : BaseStepDefinition() {
+open class CoursesStepDefinitions {
 
     private val isVisibleIndicator = "is"
 
@@ -68,8 +70,11 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @Given("^I have historic prescriptions$")
     fun iHaveHistoricPrescriptions() {
+        val currentPatient = SerenityHelpers.getPatient()
+        var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
             initialize()
+            currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         }
 
         if (currentProvider == ProviderTypes.EMIS) {
@@ -133,6 +138,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         initialize()
 
         PrescriptionHelpers.setPrescriptionCommentsAllowed(true)
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
         if (currentProvider == ProviderTypes.EMIS) {
             setupSpecialRequestConfigEmis()
@@ -144,6 +150,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         initialize()
 
         PrescriptionHelpers.setPrescriptionCommentsAllowed(false)
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
         if (currentProvider == ProviderTypes.EMIS) {
             setupSpecialRequestConfigEmis()
@@ -158,6 +165,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         } else {
             response.inputRequirements.prescribingComment = NecessityOption.NOT_ALLOWED.text
         }
+        val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             practiceSettingsRequest(currentPatient)
                     .respondWithSuccess(response)
@@ -258,6 +266,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     }
 
     private fun setupWiremockandCreateData() {
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
             initialize()
         }
@@ -276,11 +285,12 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         val gpSystem = SerenityHelpers.getGpSupplier()
         val factory = PrescriptionsFactory.getForSupplier(gpSystem)
 
-        currentPatient = factory.patient
+        SerenityHelpers.setPatient(factory.patient)
         coursesLoader = factory.getCoursesLoader
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
         if (currentProvider == null) {
-            currentProvider = ProviderTypes.valueOf(gpSystem)
+            PrescriptionsSerenityHelpers.PROVIDER.set( ProviderTypes.valueOf(gpSystem))
         }
     }
 }

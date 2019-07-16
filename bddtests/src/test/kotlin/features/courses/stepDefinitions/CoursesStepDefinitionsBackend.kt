@@ -2,7 +2,6 @@ package features.courses.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.sharedStepDefinitions.BaseStepDefinition
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -10,7 +9,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
 
-class CoursesStepDefinitionsBackend : BaseStepDefinition() {
+class CoursesStepDefinitionsBackend {
 
     @When("I get the users courses with a valid cookie")
     fun whenIGetTheUsersCoursesWithAnValidCookie() {

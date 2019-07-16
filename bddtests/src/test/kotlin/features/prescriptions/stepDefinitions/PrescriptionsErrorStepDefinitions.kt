@@ -5,7 +5,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.steps.PrescriptionsSteps
-import features.sharedStepDefinitions.BaseStepDefinition
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.TppMockDefaults
@@ -17,7 +16,7 @@ import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import utils.SerenityHelpers
 
-class PrescriptionsErrorStepDefinitions : BaseStepDefinition() {
+class PrescriptionsErrorStepDefinitions {
 
     @Steps
     lateinit var prescriptions: PrescriptionsSteps

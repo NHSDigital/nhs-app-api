@@ -67,7 +67,14 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
         throw NotImplementedError()
     }
 
-    override fun disableAtGPLevel() {}
+    override fun disableAtGPLevel() {
+        mockingClient
+            .forVision {
+                authentication.getConfigurationRequest(
+                        VisionMockDefaults.visionUserSessionPrescriptionDisabled)
+                        .respondWithSuccess(VisionMockDefaults
+                                .visionConfigurationResponsePrescriptionsDisabled)
+            }}
 
     override fun prescriptionsEndpointTimeout(patient: Patient) {
         mockingClient

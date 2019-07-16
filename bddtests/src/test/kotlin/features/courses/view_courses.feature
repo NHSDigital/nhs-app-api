@@ -175,7 +175,6 @@ Feature: View courses
       | VISION    |
       | MICROTEST |
 
-  @smoketest
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I am a <GP System> patient
     And I have historic prescriptions
