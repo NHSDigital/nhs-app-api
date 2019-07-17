@@ -4,8 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
-import features.courses.steps.CourseSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
@@ -19,7 +17,10 @@ import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.hamcrest.CoreMatchers.containsString
+import org.junit.Assert
 import pages.nominatedPharmacy.NominatedPharmacyCheckPage
+import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
 import utils.getOrNull
@@ -30,19 +31,15 @@ open class CoursesStepDefinitions {
     private val isVisibleIndicator = "is"
 
     @Steps
-    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
-    @Steps
-    lateinit var courseSteps: CourseSteps
-    @Steps
     lateinit var login: LoginSteps
     @Steps
     lateinit var prescriptionsSteps: PrescriptionsSteps
 
     val mockingClient = MockingClient.instance
 
-    lateinit var repeatPrescriptions : RepeatPrescriptionsPage
-
-    lateinit var nominatedPharmacyCheckPage : NominatedPharmacyCheckPage
+    private lateinit var repeatPrescriptions : RepeatPrescriptionsPage
+    private lateinit var nominatedPharmacyCheckPage : NominatedPharmacyCheckPage
+    private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
 
     lateinit var coursesLoader: ICoursesLoader<*>
 
@@ -88,22 +85,19 @@ open class CoursesStepDefinitions {
         }
     }
 
-    @Given("I select (\\d+) repeatable prescriptions out of (\\d+) available$")
+    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available$")
     fun iSelectXRepeatablePrescriptionsOutOf(numberOfPrescriptionsToSelect: Int, numberOfPrescriptions: Int) {
         iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
 
         repeatPrescriptions.verifyVisiblePrescriptionCount(numberOfPrescriptions)
     }
 
-    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
-    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int,
-                                                  numberOfPrescriptionsToCreate: Int,
+    @Given("^I have (\\d+) repeatable prescriptions available which have (.*)")
+    fun iHaveXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToCreate: Int,
                                                   content: String) {
         iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
         xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
-
-        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
     }
 
     fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
@@ -111,7 +105,9 @@ open class CoursesStepDefinitions {
         nominatedPharmacyCheckPage.continueButton.click()
         val courses = getAvailableCoursesFilteredSortedOrdered()
         val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
-        courseSteps.selectRepeatPrescriptions(coursesToSelect)
+        for (course in coursesToSelect) {
+            repeatPrescriptions.selectRepeatPrescription(course)
+        }
         selectedCourses = coursesToSelect
     }
 
@@ -175,7 +171,7 @@ open class CoursesStepDefinitions {
     @When("I enter text \"(.*)\" for special request")
     fun iEnterTextForSpecialRequest(text: String) {
         Serenity.setSessionVariable("specialRequestText")
-                .to(courseSteps.repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text))
+                .to(repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text))
     }
 
     @When("I click 'Order a new repeat prescription'")
@@ -185,80 +181,88 @@ open class CoursesStepDefinitions {
 
     @When("I click Continue on the Order a repeat prescription page")
     fun iClickContinueOnTheOrderARepeatPrescriptionsPage() {
-        courseSteps.repeatPrescriptions.orderRepeatPrescriptionButton.click()
+        repeatPrescriptions.clickOnButtonContainingText("Continue")
     }
 
     @When("I click 'Change this repeat prescription' on the Prescription confirmation page")
     fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
-        confirmRepeatPrescriptionOrderSteps.clickChangeThisPrescriptionButton()
+        confirmRepeatPrescriptionsOrderPage.clickChangeThisPrescriptionButton()
     }
 
     @When("I select (\\d+) additional repeat prescriptions")
     fun iSelectXAdditionalRepeatPrescriptions(numberOfAdditionalRepeatPrescriptionsToSelect: Int) {
         val courses = getAvailableCoursesFilteredSortedOrdered()
-        val coursesToSelect = courses.drop(selectedCourses.size).take(numberOfAdditionalRepeatPrescriptionsToSelect)
-        courseSteps.selectRepeatPrescriptions(coursesToSelect)
+        val coursesToSelect = courses.drop(selectedCourses.size)
+                .take(numberOfAdditionalRepeatPrescriptionsToSelect)
+        for (course in coursesToSelect) {
+            repeatPrescriptions.selectRepeatPrescription(course)
+        }
         selectedCourses = selectedCourses.plus(coursesToSelect)
     }
 
     @Then("a message is displayed indicating that you don't have any medication available to order")
     fun aMessageIsDisplayedIndicatingThatYouDontHaveAnyRepeatMedicationAvailableToOrder() {
-        courseSteps.assertNoMedicationAvailableToOrderMessageShown()
+        Assert.assertTrue(repeatPrescriptions.isNoMedicationAvailableToOrderMessageVisible())
     }
 
     @Then("I see the available repeatable prescriptions")
     fun iSeeTheAvailableRepeatablePrescriptions() {
-        courseSteps.isLoaded()
+        repeatPrescriptions.shouldBeDisplayed()
         val coursesToCheck = getAvailableCoursesFilteredSortedOrdered()
-        courseSteps.assertCorrectRepeatPrescriptionsShown(coursesToCheck)
+        repeatPrescriptions.verifyVisiblePrescriptions(coursesToCheck)
     }
 
     @Then("I don't see the special request text on prescription confirmation")
     fun iDontSeeTheSpecialRequestTextOnPrescriptionConfirmation() {
-        confirmRepeatPrescriptionOrderSteps.isLoaded()
-        confirmRepeatPrescriptionOrderSteps.assertSpecialRequestNotShown()
+        confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
+        Assert.assertFalse(confirmRepeatPrescriptionsOrderPage.specialRequestElementIsVisible())
     }
 
     @Then("I see the previously selected prescriptions on the Confirm repeat prescription page")
     fun iSeeThePreviouslySelectedPrescriptionsOnTheConfirmRepeatPrescriptionPage() {
-        confirmRepeatPrescriptionOrderSteps.isLoaded()
-        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage
+        confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
+        confirmRepeatPrescriptionsOrderPage
                 .verifySelectedRepeatPrescriptions(selectedCourses)
     }
 
     @Then("I see the entered special request text")
     fun iSeeTheSpecialRequestText() {
-        confirmRepeatPrescriptionOrderSteps.isLoaded()
-        confirmRepeatPrescriptionOrderSteps.assertSpecialRequest(Serenity.sessionVariableCalled("specialRequestText"))
+        confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
+        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getSpecialRequest(),
+                containsString(Serenity.sessionVariableCalled("specialRequestText")))
     }
 
     @Then("I see the default special request text")
     fun iSeeTheDefaultSpecialRequestText() {
-        confirmRepeatPrescriptionOrderSteps.isLoaded()
-        confirmRepeatPrescriptionOrderSteps.assertSpecialRequest("None")
+        confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
+        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getSpecialRequest(), containsString("None"))
     }
 
     @Then("I see the special request text area")
     fun iSeeTheSpecialRequestTextbox() {
-        courseSteps.isLoaded()
-        courseSteps.assertSpecialRequestTextAreaShown()
+        repeatPrescriptions.shouldBeDisplayed()
+        Assert.assertTrue(repeatPrescriptions.isSpecialRequestTextAreaVisible())
     }
 
     @Then("I don't see the special request text area")
     fun iDontSeeTheSpecialRequestTextbox() {
-        courseSteps.isLoaded()
-        courseSteps.assertSpecialRequestTextAreaNotShown()
+        repeatPrescriptions.shouldBeDisplayed()
+        Assert.assertFalse(repeatPrescriptions.isSpecialRequestTextAreaVisible())
     }
 
     @Then("I see my previously selected repeat prescriptions selected")
     fun iSeeMyPreviouslySelectedRepeatPrescriptionsSelected() {
-        courseSteps.isLoaded()
-        courseSteps.assertCorrectRepeatPrescriptionsSelected(selectedCourses)
+        repeatPrescriptions.shouldBeDisplayed()
+        for (course in selectedCourses) {
+            repeatPrescriptions.verifyPrescriptionIsSelected(course)
+        }
     }
 
     @Then("A validation message (.*) displayed indicating the user has not selected any repeat prescriptions")
     fun aValidationMessageIsDisplayedIndicatingTheUserHasNotSelectedAnyRepeatPrescriptions(visibility: String) {
-        courseSteps.assertNoRepeatPrescriptionsSelectedMessageVisibility(visibility.toLowerCase() == isVisibleIndicator)
+        Assert.assertTrue(
+                repeatPrescriptions.isNoRepeatPrescriptionsSelectedMessageVisible() ==
+                (visibility.toLowerCase() == isVisibleIndicator))
     }
 
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {

@@ -8,14 +8,20 @@ import org.openqa.selenium.Keys
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.asciiText
-import pages.navigation.HeaderNative
 import pages.sendKeys
 
+const val HEADER_RETRIES = 20
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/confirm-prescription-details")
 open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
-    var headerText: String = "Confirm prescription"
-    lateinit var headerBar: HeaderNative
-
+    val title by lazy {
+        HybridPageElement(
+                "//h1[normalize-space(text())='Confirm prescription']",
+                "//h1[normalize-space(text())='Confirm prescription']",
+                null,
+                null,
+                this,
+                helpfulName = "header")
+    }
     val specialRequestTextXPath = "//*[@id='specialRequestText']"
 
     val confirmAndOrderRepeatPrescriptionButton = HybridPageElement(
@@ -38,7 +44,7 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     val serverErrorRetryButtonText = "Back to my repeat prescriptions"
 
     override fun shouldBeDisplayed() {
-        headerBar.assertIsVisible(headerText)
+        title.waitForElement(HEADER_RETRIES)
         super.shouldBeDisplayed()
     }
 

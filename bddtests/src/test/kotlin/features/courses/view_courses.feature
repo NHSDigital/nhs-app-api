@@ -313,9 +313,10 @@ Feature: View courses
   Scenario: The User has selected repeat prescriptions to order with missing quantity info
     Given I am a EMIS patient
     And I have historic prescriptions
+    And I have 1 repeatable prescriptions available which have only dosage info
     And I am logged in
     And I navigate to prescriptions
-    And I select 1 repeatable prescriptions out of 1 available which have only dosage info
+    And I select 1 repeatable prescriptions out of 1 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
@@ -323,9 +324,10 @@ Feature: View courses
     Given I am a EMIS patient
     And I have historic prescriptions
     And there are 1 repeatable prescriptions available
+    And I have 1 repeatable prescriptions available which have only quantity info
     And I am logged in
     And I navigate to prescriptions
-    And I select 1 repeatable prescriptions out of 1 available which have only quantity info
+    And I select 1 repeatable prescriptions out of 1 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
@@ -333,8 +335,9 @@ Feature: View courses
     Given I am a EMIS patient
     And I have historic prescriptions
     And there are 1 repeatable prescriptions available
+    And I have 1 repeatable prescriptions available which have no info
     And I am logged in
     And I navigate to prescriptions
-    And I select 1 repeatable prescriptions out of 1 available which have no info
+    And I select 1 repeatable prescriptions out of 1 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page

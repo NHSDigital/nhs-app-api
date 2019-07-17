@@ -5,7 +5,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.courses.stepDefinitions.CoursesStepDefinitions
-import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
@@ -28,7 +27,11 @@ import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
+import pages.ErrorPage
+import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
+import pages.text
 import utils.SerenityHelpers
 import utils.assertTrueWithRetry
 import utils.getOrNull
@@ -44,8 +47,6 @@ private const val WAIT_TIME_GREATER_THAN_THIRTY_SECS = 31L
 open class PrescriptionsSubmissionStepDefinitions {
 
     @Steps
-    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
-    @Steps
     lateinit var coursesStepDefinitions: CoursesStepDefinitions
     @Steps
     lateinit var prescriptionSteps: PrescriptionsSteps
@@ -60,7 +61,9 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     var currentScenarioState: String = Scenario.STARTED
 
-    lateinit var prescriptionPage: PrescriptionsPage
+    private lateinit var prescriptionPage: PrescriptionsPage
+    private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
+    private lateinit var errorPage: ErrorPage
 
     private var initialHistoricPrescriptionsCount = 0
 
@@ -142,7 +145,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
     }
 
-    @Given("I select (\\d+) repeatable prescriptions to order")
+    @Given("^I select (\\d+) repeatable prescriptions to order$")
     fun iSelectXRepeatablePrescriptionsToOrder(amount: Int) {
         prescriptionSubmissionWireMockAndDataSetup(amount, SerenityHelpers.getGpSupplier())
     }
@@ -252,7 +255,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
         @When("I click Confirm and order repeat prescription")
         fun iClickConfirmAndOrderRepeatPrescription() {
-            confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage
+            confirmRepeatPrescriptionsOrderPage
                     .clickConfirmAndOrderRepeatPrescriptionButton()
         }
 
@@ -304,12 +307,21 @@ open class PrescriptionsSubmissionStepDefinitions {
 
         @Then("I see a message indicating there was an error sending my order")
         fun iSeeAMessageOrderNotSuccessful() {
-            confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
+            Assert.assertTrue("Expected error to be visible",
+                    confirmRepeatPrescriptionsOrderPage.errorSendingOrderErrorIsVisible())
         }
 
         @Then("I see a message indicating I've previously ordered " +
                 "one of the selected medications within the last 30 days")
         fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
-            confirmRepeatPrescriptionOrderSteps.assertMedicationOrderedWithinTheLast30DaysErrorShown()
+            val expectedHeader = "We cannot complete this order"
+            val expectedSubHeader = "You previously ordered at least one of these medications in the last 30 days."
+            val expectedText = "If you need more medication sooner, contact your GP."
+            Assert.assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.text}",
+                    expectedHeader, errorPage.heading.text)
+            Assert.assertEquals("expected error text $expectedSubHeader but found ${errorPage.subHeading.text}",
+                    expectedSubHeader, errorPage.subHeading.text)
+            Assert.assertEquals("expected error text $expectedText but found ${errorPage.errorText1.text}",
+                    expectedText, errorPage.errorText1.text)
         }
     }
