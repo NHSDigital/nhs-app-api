@@ -58,13 +58,6 @@ class ExtensionsKtTest {
     }
 
     @Test
-    fun spannableStringBuilderExtensionAppendTextParam_IsBold_SetsSpecifiedTextBold() {
-        val builder = serviceUnavailableSpannableStringBuilder(isHeader = true)
-        val bold = builder.getSpans(0, builder.length, StyleSpan::class.java)[0]
-        Assert.assertTrue(bold.style == BOLD)
-    }
-
-    @Test
     fun spannableStringBuilderExtensionAppendTextWithNonNegativeSpecifiedBeforeNewLineValue_IsSameAsAdditionEmptyNewLines() {
         val builder = serviceUnavailableSpannableStringBuilder(5)
         Assert.assertEquals(5, countOccurrences("\n", builder))
@@ -77,12 +70,11 @@ class ExtensionsKtTest {
     }
 
     private fun serviceUnavailableSpannableStringBuilder(
-        lines: Int = 1,
-        isHeader: Boolean = false
+        lines: Int = 1
     ): SpannableStringBuilder {
         val serviceUnavailable = context.resources.getString(R.string.service_unavailable)
         val builder = SpannableStringBuilder()
-        builder.appendText(serviceUnavailable, lines, isHeader)
+        builder.appendText(serviceUnavailable, lines)
         return builder
     }
 
@@ -115,8 +107,8 @@ class ExtensionsKtTest {
     private fun mockContext(): Context {
         val mockedResource: Resources = mock {
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
-            on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
-            on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again. \n\nIf the problem continues and you need to " +
+            on { getString(R.string.connection_error_title) } doReturn "There's a problem with your internet connection"
+            on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again. If the problem continues and you need to " +
                     "book an appointment or get a prescription now, contact your GP surgery directly." +
                     " For urgent medical advice, call 111."
         }

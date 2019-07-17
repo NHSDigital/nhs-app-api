@@ -188,8 +188,8 @@ export default {
     backButton: 'Back',
   },
   noConnection: {
-    header: 'Connection error',
-    subheader: 'There\'s an issue with your internet connection',
+    header: 'Internet connection error',
+    subheader: 'There is a problem with your internet connection',
     retryButtonText: 'Try again',
     message: {
       text: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',

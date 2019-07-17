@@ -32,8 +32,8 @@ class ErrorTextView: UITextView {
     }
     
     private func toHeaderAttributedText(headerText:String)-> NSMutableAttributedString {
-        let boldAttribute = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17)]
-        return NSMutableAttributedString(string: headerText, attributes: boldAttribute)
+        let fontAttribute = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17)]
+        return NSMutableAttributedString(string: headerText, attributes: fontAttribute)
     }
     
     private func toAttributedText(text:String, anyNewLines:Int = 1)-> NSMutableAttributedString {

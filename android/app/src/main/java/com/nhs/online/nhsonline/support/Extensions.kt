@@ -10,7 +10,7 @@ import org.json.JSONObject
 
 fun TextView.setServiceError(header: String, message: String? = null) {
     val builder = SpannableStringBuilder()
-    builder.appendText(header, 0, true)
+    builder.appendText(header, 0)
     message?.let { builder.appendText(it) }
 
     this.text = builder
@@ -18,18 +18,13 @@ fun TextView.setServiceError(header: String, message: String? = null) {
 
 fun SpannableStringBuilder.appendText(
     text: String,
-    beforeNewLines: Int = 1,
-    isHeader: Boolean = false
+    beforeNewLines: Int = 1
 ): SpannableStringBuilder {
     if (beforeNewLines > 0)
         this.append(beforeNewLines.toStringNewLines())
 
-    val start = this.length
     this.append(text)
-    if (isHeader) {
-        val boldSpan = StyleSpan(BOLD)
-        this.setSpan(boldSpan, start, this.length, 0)
-    }
+
     return this
 }
 
