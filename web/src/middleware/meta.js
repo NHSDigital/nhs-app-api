@@ -64,10 +64,6 @@ function setPageTitle(route, store, app) {
     title = app.i18n.tc(route.meta.pageTitleKey);
   }
 
-  if (route.name === APPOINTMENTS.name) {
-    return;
-  }
-
   store.dispatch('header/updateHeaderText', header);
   store.dispatch('pageTitle/updatePageTitle', title);
 }
@@ -135,6 +131,8 @@ export default function ({ route, store, app }) {
       break;
     case APPOINTMENTS.name:
       store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaders.appointments';
+      route.meta.pageTitleKey = 'pageTitles.appointments';
       break;
     case APPOINTMENT_BOOKING.name:
       store.dispatch('navigation/setNewMenuItem', 1);
@@ -258,7 +256,7 @@ export default function ({ route, store, app }) {
       break;
   }
   store.dispatch('http/cancelRequests');
-  store.dispatch('flashMessage/clear');
+  store.dispatch('flashMessage/validate');
   store.dispatch('errors/setRoutePath', route);
 
   setPageTitle(route, store, app);

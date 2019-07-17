@@ -135,11 +135,6 @@ export default {
       nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
     };
   },
-  mounted() {
-    if (this.hasLoaded) {
-      this.$store.dispatch('flashMessage/show');
-    }
-  },
   methods: {
     onNominatedPharmacyDetailClicked() {
       this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
