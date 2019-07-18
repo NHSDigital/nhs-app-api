@@ -16,6 +16,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
+import pages.navigation.WebHeader
 import pages.text
 import worker.WorkerClient
 import worker.models.appointments.GenericResponseObject
@@ -27,6 +28,7 @@ open class CancelAppointmentSteps {
     lateinit var login: LoginSteps
     @Steps
     lateinit var navigation: NavigationSteps
+    lateinit var webHeader: WebHeader
 
     private lateinit var cancelAppointmentPage: CancelAppointmentPage
 
@@ -119,5 +121,10 @@ open class CancelAppointmentSteps {
     @Step
     fun retrieveSlotIdOfAppointmentToCancel(): Int {
         return retrieveSlotOfAppointmentToCancel().id!!
+    }
+
+    @Step
+    fun clickOnBreadcrumb() {
+        webHeader.getBreadCrumbToGoBackOneLevel().click()
     }
 }

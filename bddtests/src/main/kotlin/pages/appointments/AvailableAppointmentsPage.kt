@@ -106,13 +106,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             helpfulName = "Text displayed when there are no appointments on a particular date. "
     )
 
-    val backToMyAppointmentsButton = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'Back to my appointments')]",
-            androidLocator = "//button[contains(text(),'Back to my appointments')]",
-            iOSLocator = "//button[contains(text(),'Back to my appointments')]",
-            page = this
-    )
-
     private val desktopBackLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='main-back-button']",
             page = this

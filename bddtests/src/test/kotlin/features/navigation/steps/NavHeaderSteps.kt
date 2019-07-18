@@ -1,13 +1,18 @@
 package features.navigation.steps
 
 import net.thucydides.core.annotations.Step
+import net.thucydides.core.annotations.Steps
 import pages.HomePage
 import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 open class NavHeaderSteps {
 
     lateinit var header: HeaderNative
     lateinit var homePage: HomePage
+
+    @Steps
+    lateinit var webHeader: WebHeader
 
     @Step
     fun clickMyAccount() {
@@ -26,6 +31,6 @@ open class NavHeaderSteps {
 
     @Step
     fun assertHomePageHeaderVisible() {
-        header.assertIsVisible(homePage.headerText)
+        webHeader.getPageTitle().withText(homePage.headerText)
     }
 }

@@ -39,6 +39,7 @@ import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
+import kotlinx.android.synthetic.main.breadcrumb_layout.*
 import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
@@ -93,6 +94,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         homeLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
+        breadcrumb.setOnClickListener { onBreadcrumbSelected() }
         connectionStateMonitor = ConnectionStateMonitor(this)
         connectionStateMonitor.registerNetworkCallback()
     }
@@ -297,17 +299,13 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         nhsWeb.loadUrlInChromeTab(resources.getString(R.string.helpURL))
     }
 
+    private fun onBreadcrumbSelected() {
+        nhsWeb.loadUrl(resources.getString(R.string.myAccountPath))
+        menuBar.deselectActiveItem()
+    }
+
     override fun setHeaderText(text: String, description: String?) {
         logger.info("Entering setHeaderText")
-
-        // Header text is updated before headers are shown and hidden.
-        // Set both, the correct one will be shown via showHeader or showHeaderSlim.
-
-        symptoms_header_text_view.text = text
-        symptoms_header_text_view.contentDescription = description
-
-        header_text_view.text = text
-        header_text_view.contentDescription = description
 
         nhsWeb.announceForAccessibility(description ?: text)
     }

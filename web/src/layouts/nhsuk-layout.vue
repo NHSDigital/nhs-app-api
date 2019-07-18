@@ -8,6 +8,9 @@
       <div v-else-if="shouldShowSlimDesktopHeader">
         <web-header :show-menu="false" :show-links="false"/>
       </div>
+      <content-header id="content-header"
+                      :show-bread-crumb="shouldShowBreadCrumb"
+                      :show-content-header="!isLoginPage()"/>
 
       <div id="maincontent" ref="mainContent" tabindex="-1">
         <main :class="mainClass">
@@ -48,6 +51,7 @@ import {
   INDEX,
   LOGIN,
 } from '@/lib/routes';
+import ContentHeader from '@/components/widgets/ContentHeader';
 import NativeCallbacks from '@/services/native-app';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -63,6 +67,7 @@ import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
   components: {
+    ContentHeader,
     WebHeader,
     WebFooter,
     Spinner,
@@ -143,6 +148,12 @@ export default {
       return (
         !this.$store.getters['errors/showApiError']
           && !this.$store.state.device.isNativeApp
+      );
+    },
+    shouldShowBreadCrumb() {
+      return (
+        this.loggedIn &&
+        this.$route.name !== 'Login'
       );
     },
     shouldShowFullDesktopHeader() {

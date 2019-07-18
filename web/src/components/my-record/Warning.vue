@@ -28,15 +28,9 @@
         {{ $t('my_record.personalRecordText.agreeButtonText') }}
       </generic-button>
     </form>
-    <form v-if="$store.state.device.isNativeApp" :action="indexPath" method="get">
-      <generic-button :class="[$style.button, $style.grey]"
-                      @click="onBackButtonClicked">
-        {{ $t('my_record.personalRecordText.backButtonText') }}
-      </generic-button>
-    </form>
 
     <desktopGenericBackLink
-      v-else
+      v-if="!$store.state.device.isNativeApp"
       :path="indexPath"
       :button-text="'my_record.personalRecordText.backButtonText'"
       @clickAndPrevent="onBackButtonClicked"/>

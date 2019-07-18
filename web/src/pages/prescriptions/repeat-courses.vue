@@ -81,14 +81,6 @@
             {{ $t('rp06.empty.body') }}
           </p>
         </div>
-        <form v-if="$store.state.device.isNativeApp"
-              :action="getBackPath" method="get">
-          <generic-button id="back-to-prescriptions"
-                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                          @click.stop.prevent="backButtonClicked">
-            {{ $t('rp03.backButton') }}
-          </generic-button>
-        </form>
         <desktopGenericBackLink v-else
                                 :path="getBackPath"
                                 :button-text="'rp03.backButton'"
@@ -102,7 +94,6 @@
 /* eslint-disable import/extensions */
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
@@ -125,7 +116,6 @@ import Card from '@/components/widgets/card/Card';
 export default {
   layout: 'nhsuk-layout',
   components: {
-    GenericButton,
     RepeatPrescription,
     MessageDialog,
     MessageText,

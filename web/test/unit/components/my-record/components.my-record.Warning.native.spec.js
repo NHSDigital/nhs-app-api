@@ -32,11 +32,10 @@ describe('Warning', () => {
     component = createComponent({ $store });
   });
 
-  it('will have a form that performs a get request to the index path when on native', () => {
+  it('will not have any form on native as removing all grey back buttons', () => {
     const form = component.find(`form[action="${INDEX.path}"]`);
 
-    expect(form.exists()).toBe(true);
-    expect(form.attributes().method).toEqual('get');
+    expect(form.exists()).toBe(false);
   });
 });
 

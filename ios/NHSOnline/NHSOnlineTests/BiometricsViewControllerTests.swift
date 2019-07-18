@@ -4,13 +4,13 @@ import WebKit
 
 class BiometricsViewControllerTests : XCTestCase {
     var biometricsViewController: BiometricsViewController!
-    
+    var homeViewController: HomeViewController!
+    var testWebview: WKWebView!
+
     override func setUp() {
         super.setUp()
-        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: BiometricsViewController = storyboard.instantiateViewController(withIdentifier: "BiometricsViewController") as! BiometricsViewController
-        
         biometricsViewController = vc
     }
     
@@ -34,4 +34,10 @@ class BiometricsViewControllerTests : XCTestCase {
         
         wait(for: [expectation], timeout: 10.0)
     }
+    
+    func test_biometricBreadcrumb_Returns_True() {
+        biometricsViewController.viewDidLoad()
+        XCTAssert(true, "MyAccountTitle")
+    }
 }
+    

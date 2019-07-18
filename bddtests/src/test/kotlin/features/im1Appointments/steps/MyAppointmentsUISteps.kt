@@ -13,6 +13,7 @@ import pages.ErrorPage
 import pages.appointments.MyAppointmentsPage
 import pages.isDisplayed
 import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.text
 import java.util.*
 
@@ -23,6 +24,7 @@ open class MyAppointmentsUISteps {
     lateinit var myAppointmentsPage: MyAppointmentsPage
     lateinit var errorPage: ErrorPage
     lateinit var headerNative: HeaderNative
+    lateinit var webHeader: WebHeader
 
     private val pageHeader = "My appointments"
 
@@ -53,7 +55,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkHeaderTextIsCorrect() {
-        headerNative.waitForPageHeaderText(pageHeader)
+        webHeader.getPageTitle().withText(pageHeader)
     }
 
     @Step

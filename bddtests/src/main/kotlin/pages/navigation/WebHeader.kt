@@ -56,8 +56,28 @@ open class WebHeader : HybridPageObject() {
     )
 
     fun getPageTitle(): HybridPageElement {
+        val headerXPath = "//h1"
         return HybridPageElement(
-                webDesktopLocator = "//h1",
+                webDesktopLocator = headerXPath,
+                webMobileLocator = headerXPath,
+                page = this
+        )
+    }
+
+    fun getAllBreadCrumb(): HybridPageElement {
+        val breadcrumbXPath = "//a[@class='nhsuk-breadcrumb__link nuxt-link-active']"
+        return HybridPageElement(
+                webDesktopLocator = breadcrumbXPath,
+                webMobileLocator = breadcrumbXPath,
+                page = this
+        )
+    }
+
+    fun getBreadCrumbToGoBackOneLevel(): HybridPageElement {
+        val breadcrumbXPath = "//a[@class='nhsuk-breadcrumb__link nuxt-link-active'][@href!='/']"
+        return HybridPageElement(
+                webDesktopLocator = breadcrumbXPath,
+                webMobileLocator = breadcrumbXPath,
                 page = this
         )
     }

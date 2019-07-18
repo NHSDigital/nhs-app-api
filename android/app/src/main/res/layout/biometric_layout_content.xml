@@ -1,133 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
-    android:padding="@dimen/_16sdp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    tools:keep="@layout/biometric_authentication_layout">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/biometric_content_layout"
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:background="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:id="@+id/error_label_border"
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/biometric_content_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15.000sp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/info_container">
-
-            <TextView
-                style="@style/default_warning_icon"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:paddingTop="@dimen/_6sdp"
-                android:text="@string/biometric_warning_header"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/default_warning_title_bar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:background="@drawable/warning_border"
-                android:orientation="horizontal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/error_content"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/error_label_border">
-
-            <TextView
-                android:id="@+id/errorTextViewN"
-                style="@style/default_warning_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/warning"
-                android:minHeight="@dimen/_40sdp"
-                android:text="@string/biometric_warning_message"
-                android:textColor="@color/black" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/info_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24.000sp"
-            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                style="@style/menu_default_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/biometric_information_message1"
-                android:textSize="@dimen/_16ssp"
-                android:textStyle="bold" />
+            <include
+                android:id="@+id/include"
+                layout="@layout/breadcrumb_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42ssp"/>
 
-            <TextView
-                android:id="@+id/link_text"
-                style="@style/menu_default_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5ssp"
-                android:linksClickable="true"
-                android:text="@string/biometric_information_message2"
-                android:textColorLink="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/toggle_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_25ssp"
-            android:layout_marginBottom="@dimen/_25ssp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/error_content">
-
-            <TextView
-                style="@style/menu_default_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/biometric_toggle_text"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_16sdp" />
-
-            <Space
+            <LinearLayout
+                android:id="@+id/error_label_border"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15.000sp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/_16sdp"
+                android:paddingRight="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/info_container">
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/biometricToggleSwitch"
-                android:checked="false"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/default_warning_icon"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:text="@string/biometric_warning_header"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/default_warning_title_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/warning_border"
+                    android:orientation="horizontal" />
+            </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/error_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/_16sdp"
+                android:paddingRight="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/error_label_border">
+
+                <TextView
+                    android:id="@+id/errorTextViewN"
+                    style="@style/default_warning_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/warning"
+                    android:minHeight="@dimen/_40sdp"
+                    android:text="@string/biometric_warning_message"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/info_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include">
+
+                <TextView
+                    style="@style/menu_default_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/biometric_information_message1"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/link_text"
+                    style="@style/menu_default_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5ssp"
+                    android:linksClickable="true"
+                    android:text="@string/biometric_information_message2"
+                    android:textColorLink="@color/colorPrimary"
+                    android:textSize="@dimen/_15ssp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/toggle_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25ssp"
+                android:layout_marginBottom="@dimen/_25ssp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/error_content">
+
+                <TextView
+                    style="@style/menu_default_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/biometric_toggle_text"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_16sdp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/biometricToggleSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
+</android.support.constraint.ConstraintLayout>
+
+
 
 

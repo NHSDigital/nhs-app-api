@@ -79,25 +79,12 @@
         </li>
       </ul>
 
-      <analytics-tracked-tag :text="$t('th03.errors.backButton')" :tabindex="-1">
-        <generic-button v-if="tooManyResults || technicalError || noResultsFound"
-                        :button-classes="[$store.state.device.isNativeApp
-                                            ?'button':'button-desktop',
-                                          'grey']" :class="$style.back"
-                        tabindex="0"
-                        @click="backButtonClicked">
-          {{ $t('th03.errors.backButton') }}
-        </generic-button>
-      </analytics-tracked-tag>
-
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable global-require */
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import { setCookie } from '@/lib/cookie-manager';
 import { GP_FINDER, GP_FINDER_PARTICIPATION } from '@/lib/routes';
@@ -106,8 +93,6 @@ import moment from 'moment';
 
 export default {
   components: {
-    AnalyticsTrackedTag,
-    GenericButton,
     MessageDialog,
   },
   data() {
@@ -249,7 +234,6 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/listmenu';
-@import '../../style/buttons';
 @import '../../style/throttling/throttling';
 @import '../../style/throttling/gpfinderresults';
 .webHeader {

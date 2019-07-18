@@ -72,15 +72,9 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <generic-button v-if="loadComplete && $store.state.device.isNativeApp"
-                        id="back-to-appointments"
-                        :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                        @click.stop.prevent="goBack">
-          {{ $t('appointments.booking.backButtonText') }}
-        </generic-button>
 
         <desktopGenericBackLink
-          v-else-if="loadComplete"
+          v-if="loadComplete && !$store.state.device.isNativeApp"
           :path="appointmentsPath"
           :button-text="'appointments.booking.desktopBackButtonText'"
           @clickAndPrevent="goBack"/>
@@ -99,7 +93,6 @@ import isEmpty from 'lodash/fp/isEmpty';
 import qs from 'qs';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import GenericButton from '@/components/widgets/GenericButton';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
 import VueScrollTo from 'vue-scrollto';
@@ -133,7 +126,6 @@ export default {
     MessageText,
     Filters,
     SlotList,
-    GenericButton,
   },
   data() {
     return {

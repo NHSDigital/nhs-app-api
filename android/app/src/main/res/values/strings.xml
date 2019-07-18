@@ -54,6 +54,9 @@
         get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.
     </string>
     <!--Start Content texts for the biometric authentication-->
+    <string name="biometric_information_breadcrumb">
+        <u><b>Back to My Account</b></u>
+    </string>
     <string name="biometric_information_message1">
         Log in using your fingerprint
     </string>

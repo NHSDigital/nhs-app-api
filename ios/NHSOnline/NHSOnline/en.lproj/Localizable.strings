@@ -64,6 +64,7 @@
 "OSNotSupportedMessage" = "You may be able to use it if you can update your operating system. Check with your operating system developer.";
 "BiometricsDialogHelp" = "Get Help";
 "BiometricRegistrationErrorHeader" = "Something went wrong";
+"BreadcrumbMessage" = "Back to My Account";
 
 /*BiometricLoginTimeout*/
 "BiometricSessionTimeoutHeader" = "Something went wrong";

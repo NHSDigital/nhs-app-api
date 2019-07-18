@@ -68,13 +68,21 @@ Feature: Login frontend
     Then I see the home page
     When I use the header link to log out of the website
     Then I see the login page
-
+    
   Scenario: A EMIS user can cycle the header links
     Given I am logged in as a EMIS user
     And I have no booked appointments for EMIS
     And I have no repeat prescriptions
     When I see the home page
     Then I can cycle through the header links
+
+  @nativesmoketest
+  Scenario: A EMIS user on a native device can cycle the header links
+    Given I am logged in as a EMIS user
+    And I have no booked appointments for EMIS
+    And I have no repeat prescriptions
+    When I see the home page
+    Then I can cycle through the native header links
 
   @manual
   # to enable survey link change HOTJAR_SURVEY_VISIBLE env variable value

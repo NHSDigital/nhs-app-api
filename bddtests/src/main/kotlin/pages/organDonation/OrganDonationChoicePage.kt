@@ -11,6 +11,7 @@ import utils.isTrueOrFalse
 class OrganDonationChoicePage : OrganDonationBasePage() {
 
     override val titleText: String by lazy {getCorrectTitleText()}
+    
     private val alreadyRegisteredLinkText = "Think you have registered already?"
     private val findOutMoreLinkText = "Find out more about organ donation"
     private val expectedLinksInAmendJourney = arrayOf(findOutMoreLinkText)
@@ -45,13 +46,17 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
         val expectedLinks = if (OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse())
             expectedLinksInAmendJourney else expectedLinksInNewJourney
 
-        Assert.assertArrayEquals("expectedLinks", expectedLinks, getAllLinks())
+        Assert.assertTrue(getAllLinks().contains(expectedLinks[0]))
+        if(!OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse()) {
+            Assert.assertTrue(getAllLinks().contains(expectedLinks[1]))
+        }
     }
 
     private fun getAllLinks(): Array<String> {
         val allLinks = HybridPageElement(
                 "//a",
-                page = this)
-        return allLinks.elements.map { link -> link.text }.toTypedArray()
+                page = this).elements
+        val allVisibleLinks = allLinks.filter { it.isCurrentlyVisible == true }
+        return allVisibleLinks.map { link -> link.text }.toTypedArray()
     }
 }

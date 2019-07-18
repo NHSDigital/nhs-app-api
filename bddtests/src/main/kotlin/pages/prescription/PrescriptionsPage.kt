@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.asciiText
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions")
 open class PrescriptionsPage : HybridPageObject() {
@@ -34,10 +34,10 @@ open class PrescriptionsPage : HybridPageObject() {
             page = this
     )
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("My repeat prescriptions")
+        webHeader.getPageTitle().withText("My repeat prescriptions")
     }
 
     fun isNoPrescriptionsMessageVisible(): Boolean {

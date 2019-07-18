@@ -11,6 +11,7 @@ import net.thucydides.core.annotations.Steps
 import pages.DataSharingPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
 
 private const val NEXT_BUTTON_WAIT_TIME = 500L
 
@@ -26,6 +27,7 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     lateinit var dataSharing: DataSharingPage
 
     lateinit var headerNative: HeaderNative
+    lateinit var webHeader: WebHeader
 
     private val overviewId = "Overview"
     private val dataUseId = "Where confidential patient information is used"
@@ -34,7 +36,7 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Given("^I am on the Data Sharing page$")
     fun iAmOnTheDataSharingPage() {
-        headerNative.waitForPageHeaderText("Find out why your data matters")
+        webHeader.getPageTitle().withText("Find out why your data matters")
         navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 

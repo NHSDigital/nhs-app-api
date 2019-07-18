@@ -2,15 +2,20 @@ package features.authentication.steps
 
 import models.Patient
 import net.thucydides.core.annotations.Step
+import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
 import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 open class HomeSteps {
 
     lateinit var homePage: HomePage
 
     lateinit var headerNative: HeaderNative
+
+    @Steps
+    lateinit var webHeader: WebHeader
 
     @Step
     fun assertWelcomeMessageShownFor(patient: Patient) {
@@ -30,7 +35,7 @@ open class HomeSteps {
 
     @Step
     fun assertHeaderVisible() {
-        headerNative.waitForPageHeaderText("Home")
+        webHeader.getPageTitle().withText("Home")
         Assert.assertTrue(homePage.isWelcomeHeaderVisible())
     }
 

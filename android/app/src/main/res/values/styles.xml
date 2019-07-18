@@ -87,4 +87,14 @@
     <style name="CustomSymptomsToolbar">
         <item name="navigationIcon">@drawable/back_arrow</item>
     </style>
+
+    <style name="CustomBackArrowForBreadcrumb">
+        <item name="navigationIcon">@drawable/back_arrow_breadcrumb</item>
+
+    </style>
+
+    <style name="biometric_breadcrumb_text" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">Frutiger W01 Helvetica, Arial, sans-serif</item>
+        <item name="android:textColor">#330072</item>
+    </style>
 </resources>

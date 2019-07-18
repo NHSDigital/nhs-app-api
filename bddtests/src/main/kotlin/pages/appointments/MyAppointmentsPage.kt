@@ -48,13 +48,6 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    private val backButton = HybridPageElement(
-            webDesktopLocator = "//a[@data-purpose='main-back-button']",
-            androidLocator = "//*[@id='btn_back_appointment']",
-            iOSLocator = "//*[@id='btn_back_appointment']",
-            page = this
-    )
-
     private val cannotCancelAppointmentText = HybridPageElement(
             webDesktopLocator = "//*[contains(text(),'To cancel this appointment, contact your GP surgery.')]",
             page = this
@@ -97,10 +90,6 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun clickFirstCancelAppointmentLink() {
         cancelAppointmentLink.click()
-    }
-
-    fun clickBackButton() {
-        backButton.click()
     }
 
     fun getNumberOfCancelLinks(): Int {

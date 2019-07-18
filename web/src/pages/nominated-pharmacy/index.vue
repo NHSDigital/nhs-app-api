@@ -15,14 +15,7 @@
     </div>
     <analytics-tracked-tag :text="$t('generic.backButton.text')"
                            :tabindex="-1">
-      <generic-button v-if="$store.state.device.isNativeApp"
-                      :id="'back-button'"
-                      :button-classes="['grey', 'button']"
-                      :class="$style.back"
-                      @click.prevent="backButtonClicked">
-        {{ $t('generic.backButton.text') }}
-      </generic-button>
-      <desktopGenericBackLink v-else
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                               :id="'back-button'"
                               :path="prescriptionsPath"
                               :button-text="'generic.backButton.text'"
@@ -34,7 +27,6 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
@@ -44,7 +36,6 @@ import { redirectTo } from '@/lib/utils';
 export default {
   components: {
     AnalyticsTrackedTag,
-    GenericButton,
     PharmacyDetail,
     DesktopGenericBackLink,
     NoNominatedPharmacyWarning,

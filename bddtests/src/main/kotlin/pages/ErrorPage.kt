@@ -3,6 +3,7 @@ package pages
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 open class ErrorPage : HybridPageObject() {
     private val errorTextFinderFormat = "//div[@data-purpose='error']/p[@data-purpose='%s']"
@@ -13,7 +14,9 @@ open class ErrorPage : HybridPageObject() {
     private val extraMessageTextLocator = String.format(errorTextFinderFormat, "msg-extratext")
     private val backButtonLocator = "//*[@data-purpose='retry-or-back-button']"
     private val desktopBackLinkLocator = "//*[@data-purpose='retry-or-back-button']"
+
     lateinit var headerNative: HeaderNative
+    lateinit var webHeader: WebHeader
 
     val heading = findElementByLocator(headerLocator)
 
@@ -50,7 +53,7 @@ open class ErrorPage : HybridPageObject() {
     }
 
     fun assertPageHeader(pageHeaderText: String): ErrorPage {
-        headerNative.waitForPageHeaderText(pageHeaderText)
+        webHeader.getPageTitle().withText(pageHeaderText)
         return this
     }
 

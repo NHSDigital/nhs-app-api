@@ -22,8 +22,10 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.joda.time.DateTime
 import org.junit.Assert
+import pages.assertIsVisible
 import pages.ServiceUnavailablePage
 import pages.account.MyAccountPage
+import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
 
@@ -218,48 +220,56 @@ class AuthenticationStepDefinitions {
     @Then("I can cycle through the header links")
     fun iLCycleTheHeaderLinks() {
         val linksToFollow = arrayListOf(
-                { followSymptomsHeaderLink() },
-                { followAppointmentHeaderLink() },
-                { followPrescriptionsHeaderLink() },
-                { followMedicalRecordHeaderLink() },
-                { followAccountHeaderLink() }
+                { NativeHeaderHelper.followSymptomsHeaderLink(webHeader) },
+                { NativeHeaderHelper.followAppointmentHeaderLink(webHeader) },
+                { NativeHeaderHelper.followPrescriptionsHeaderLink(webHeader) },
+                { NativeHeaderHelper.followMedicalRecordHeaderLink(webHeader) },
+                { NativeHeaderHelper.followAccountHeaderLink(webHeader) }
         )
 
         linksToFollow.forEachIndexed { index, link ->
             if (index != linksToFollow.size)
                 link.invoke()
         }
-
     }
 
-    private fun followAppointmentHeaderLink() {
-        webHeader.clickAppointmentsPageLink()
+    @Then("I can cycle through the native header links")
+    fun iLCycleTheNativeHeaderLinks(){
+        val linksToFollow = arrayListOf(
+                {followAppointmentNativeHeaderLink()},
+                {followPrescriptionsNativeHeaderLink()},
+                {followMyRecordNativeHeaderLink()},
+                {followSymptomsNativeHeaderLink()}
+        )
+
+        linksToFollow.forEachIndexed { index, link ->
+            if (index != linksToFollow.size)
+                link.invoke()
+        }
+    }
+
+    private fun followAppointmentNativeHeaderLink() {
+        nav.select(NavBarNative.NavBarType.APPOINTMENTS)
         webHeader.isPageTitleCorrect("Appointments")
+        webHeader.getAllBreadCrumb().assertIsVisible()
     }
 
-    private fun followSymptomsHeaderLink() {
-        webHeader.clickSymptomsPageLink()
-        webHeader.isPageTitleCorrect("Symptoms")
-    }
-
-    private fun followPrescriptionsHeaderLink() {
-        webHeader.clickPrescriptionsPageLink()
+    private fun followPrescriptionsNativeHeaderLink() {
+        nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
         webHeader.isPageTitleCorrect("Repeat prescriptions")
+        webHeader.getAllBreadCrumb().assertIsVisible()
     }
 
-    private fun followMedicalRecordHeaderLink() {
-        webHeader.clickMyRecordPageLink()
+    private fun followMyRecordNativeHeaderLink() {
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
         webHeader.isPageTitleCorrect("My medical record")
+        webHeader.getAllBreadCrumb().assertIsVisible()
     }
 
-    private fun followMoreHeaderLink() {
-        webHeader.clickMorePageLink()
-        webHeader.isPageTitleCorrect("More")
-    }
-
-    private fun followAccountHeaderLink() {
-        webHeader.clickAccount()
-        webHeader.isPageTitleCorrect("Account")
+    private fun followSymptomsNativeHeaderLink() {
+        nav.select(NavBarNative.NavBarType.SYMPTOMS)
+        webHeader.isPageTitleCorrect("Symptoms")
+        webHeader.getAllBreadCrumb().assertIsVisible()
     }
 
     @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")

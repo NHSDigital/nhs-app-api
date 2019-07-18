@@ -11,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
+import pages.navigation.WebHeader
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -21,13 +22,14 @@ import kotlin.collections.set
 open class AvailableAppointmentsSteps {
 
     private val pageHeader = "Book an appointment"
-    private val backComponentText = "Back"
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
+    lateinit var webHedaer: WebHeader
+
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
-        availableAppointmentsPage.headerNative.waitForPageHeaderText(pageHeader)
+        webHedaer.getPageTitle().withText(pageHeader)
     }
 
     @Step
@@ -68,8 +70,9 @@ open class AvailableAppointmentsSteps {
 
     @Step
     fun clickOnBackLink() {
-        if (availableAppointmentsPage.onMobile())
-            availableAppointmentsPage.clickOnButtonContainingText(backComponentText)
+        if (availableAppointmentsPage.onMobile()) {
+            webHedaer.getBreadCrumbToGoBackOneLevel().click()
+        }
         else
             availableAppointmentsPage.clickDesktopBackButton()
     }

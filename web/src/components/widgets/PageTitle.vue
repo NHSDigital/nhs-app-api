@@ -28,7 +28,7 @@ export default {
      color: #212B32;
      text-align: left;
      font-family: $frutiger-roman;
-     font-size: 2.250em;
+     font-size: 2em;
      font-weight: 600;
      line-height: 1.250em;
      padding-top: 16px;

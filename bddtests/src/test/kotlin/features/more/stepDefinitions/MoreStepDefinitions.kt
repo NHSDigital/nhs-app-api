@@ -13,6 +13,7 @@ import pages.HomePage
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
 
 class MoreStepDefinitions {
 
@@ -26,6 +27,7 @@ class MoreStepDefinitions {
     lateinit var organDonationSteps: OrganDonationStepDefinitions
 
     lateinit var headerNative: HeaderNative
+    lateinit var webHeader: WebHeader
 
     lateinit var morePage: MorePage
 
@@ -68,10 +70,7 @@ class MoreStepDefinitions {
 
     @Then("^I see the more page header$")
     fun pageHeaderVisible() {
-        if (morePage.onMobile()) {
-            headerNative.getPageTitle("More").isDisplayed()
-        }
-        headerNative.assertIsVisible("More")
+        webHeader.getPageTitle().withText("More")
     }
 
     @Then("I see and can follow links within the more page body$")
@@ -118,7 +117,7 @@ class MoreStepDefinitions {
     private fun followDataSharingLink() {
         morePage.btnDataSharing.click()
         morePage.locatorMethods.waitForNativeStepToComplete()
-        headerNative.waitForPageHeaderText("Find out why your data matters")
+        webHeader.getPageTitle().withText("Find out why your data matters")
         nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 

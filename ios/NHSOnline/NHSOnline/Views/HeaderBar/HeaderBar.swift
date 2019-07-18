@@ -3,9 +3,7 @@ import UIKit
 
 class HeaderBar: UIView {
     @IBOutlet var headerBarView: UIView!
-    @IBOutlet weak var headerTitle: UILabel!
     @IBOutlet weak var NHSHomeLogo: UIImageView!
-    @IBOutlet weak var homeLogo: UIImageView!
     @IBOutlet weak var helpIcon: UIButton!
     @IBOutlet weak var myAccountIcon: UIButton!
 
@@ -28,12 +26,8 @@ class HeaderBar: UIView {
         helpIcon.accessibilityHint = NSLocalizedString("HelpHint", comment: "")
         NHSHomeLogo.accessibilityLabel = NSLocalizedString("NHSAppHomeTitle", comment: "")
         NHSHomeLogo.accessibilityHint = NSLocalizedString("NHSAppHomeHint", comment: "")
-        self.headerTitle.font = UIFont.preferredFont(forTextStyle: .headline)
-        if #available(iOS 10.0, *) {
-            self.headerTitle.adjustsFontForContentSizeCategory = true
-        }
         // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
-        headerBarView.accessibilityElements = [NHSHomeLogo, helpIcon, myAccountIcon, headerTitle]
+        headerBarView.accessibilityElements = [NHSHomeLogo, helpIcon, myAccountIcon]
         addSubview(headerBarView)
     }
     

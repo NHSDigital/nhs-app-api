@@ -5,6 +5,7 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.appointments.AppointmentGuidancePage
 import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 open class AppointmentGuidanceSteps {
     private val expectedPageHeader = "Things to try before you book an appointment"
@@ -20,10 +21,11 @@ open class AppointmentGuidanceSteps {
 
     lateinit var appointmentGuidancePage: AppointmentGuidancePage
     lateinit var headerNative: HeaderNative
+    lateinit var webHeader: WebHeader
 
     @Step
     fun checkThePageHeaderIsCorrect() {
-        headerNative.waitForPageHeaderText(expectedPageHeader)
+        webHeader.getPageTitle().withText(expectedPageHeader)
     }
 
     @Step

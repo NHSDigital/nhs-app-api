@@ -47,20 +47,6 @@ describe('Warning', () => {
     expect(form.exists()).toBe(false);
   });
 
-  describe('onBackButtonClicked', () => {
-    beforeEach(() => {
-      component.vm.onBackButtonClicked(event);
-    });
-
-    it('will prevent default on the event', () => {
-      expect(event.preventDefault).toHaveBeenCalled();
-    });
-
-    it('will push the index page onto the route', () => {
-      expect(component.vm.$router).toContain(INDEX.path);
-    });
-  });
-
   describe('onContinueButtonClicked', () => {
     beforeEach(() => {
       component.vm.onContinueButtonClicked(event);

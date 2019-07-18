@@ -20,17 +20,6 @@
       </div>
       <header-menu v-if="showMenu" />
     </header>
-
-    <bread-crumb-trail :routes="currentBreadCrumbs"/>
-
-    <div class="nhsuk-width-container">
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <page-title v-if="!isLoginPage"
-                      :should-show-desktop-version="!$store.state.device.isNativeApp"/>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -38,31 +27,24 @@
 /* eslint-disable no-unused-vars */
 import {
   executeHomeNavigationRule,
-  getCrumbTrailForRoute,
-  findByName,
 
   ACCOUNT,
   LOGIN,
   LOGOUT,
 } from '@/lib/routes';
-import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
 import SkipLink from '@/components/widgets/SkipLink';
-import PageTitle from './PageTitle';
 import CookieBanner from '../CookieBanner';
 import NhsHeaderLogo from './NhsHeaderLogo';
-
 
 export default {
   name: 'WebHeader',
   components: {
     SkipLink,
-    BreadCrumbTrail,
     NhsHeaderLogo,
     HeaderLinks,
     HeaderMenu,
-    PageTitle,
     CookieBanner,
   },
   head() {
@@ -103,12 +85,6 @@ export default {
     };
   },
   computed: {
-    currentBreadCrumbs() {
-      return getCrumbTrailForRoute(findByName(this.$route.name));
-    },
-    isLoginPage() {
-      return this.$route.name === LOGIN.name;
-    },
     accountPath() {
       return ACCOUNT.path;
     },
@@ -182,45 +158,45 @@ export default {
      }
     }
 
-   .menuButton {
-    margin-right: 0;
-   }
-
-   @include fromTablet() {
     .menuButton {
-     margin-right: 0;
+      margin-right: 0;
     }
-   }
+
+    @include fromTablet() {
+      .menuButton {
+        margin-right: 0;
+      }
+    }
 
     @include tabletAndBelow() {
-     .header-content {
-      a.mini-menu-toggler {
-       float: right;
-       margin-top: 0.8em;
-       display: inline-block;
-       font-family: $frutiger-roman;
-       font-weight: 700;
-       line-height: 2em;
-       color: $white;
-       @include kerneliOS;
-       font-size: 1.125em;
-       border: 1px $white solid;
-       border-radius: 0.5em;
-       padding: 0.125em 0.8em;
-       margin-left: 1em;
-       cursor: pointer;
+      .header-content {
+        a.mini-menu-toggler {
+          float: right;
+          margin-top: 0.8em;
+          display: inline-block;
+          font-family: $frutiger-roman;
+          font-weight: 700;
+          line-height: 2em;
+          color: $white;
+          @include kerneliOS;
+          font-size: 1.125em;
+          border: 1px $white solid;
+          border-radius: 0.5em;
+          padding: 0.125em 0.8em;
+          margin-left: 1em;
+          cursor: pointer;
 
-       &:focus {
-        box-shadow: 0 0 0 4px $focus_highlight;
-       }
+          &:focus {
+            box-shadow: 0 0 0 4px $focus_highlight;
+          }
 
-       &:hover {
-        background: #003d78;
-        box-shadow: 0 0 0 4px $focus_highlight;
-        text-decoration: none;
-       }
+          &:hover {
+            background: #003d78;
+            box-shadow: 0 0 0 4px $focus_highlight;
+            text-decoration: none;
+          }
+        }
       }
-     }
     }
-   }
+  }
 </style>

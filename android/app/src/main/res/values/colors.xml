@@ -33,4 +33,5 @@
     <color name="fingerprint_fill">#FFFFFF</color>
     <color name="card_solid">#fefefe</color>
     <color name="warning">#fffbce</color>
+    <color name="breadcrumb_fill">#FFFFFF</color>
 </resources>

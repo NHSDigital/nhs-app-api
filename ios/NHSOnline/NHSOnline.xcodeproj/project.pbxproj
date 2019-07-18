@@ -76,6 +76,10 @@
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
 		C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */; };
 		C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED05D521427E950036189C /* TabBar_Extension.swift */; };
+		DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */ = {isa = PBXBuildFile; fileRef = DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */; };
+		DB4B658722FADDB300C8EE99 /* BiometricBreadcrumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */; };
+		DB4B658D22FB1A3E00C8EE99 /* UnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */; };
+		DB75990E22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */; };
 		F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */; };
 		F01745BB207BA39200877E4D /* SafariTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578172028B94800CDBDC5 /* SafariTests.swift */; };
 		F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026199A2050AFE100EDDFE0 /* WebViewController.swift */; };
@@ -247,6 +251,10 @@
 		E49C2A4CC93A9A1D7993225E /* Pods-NHSOnline.scratch11.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch11.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch11.xcconfig"; sourceTree = "<group>"; };
 		E9DA6764D81081DCB709C7C8 /* Pods-NHSOnline.scratch9.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch9.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch9.xcconfig"; sourceTree = "<group>"; };
 		EBF1471FC84716B6FD4EBDC4 /* Pods-NHSOnlineTests.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.demo.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.demo.xcconfig"; sourceTree = "<group>"; };
+		DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BiometricBreadcrumb.xib; sourceTree = "<group>"; };
+        DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumb.swift; sourceTree = "<group>"; };
+        DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
+        DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumbTests.swift; sourceTree = "<group>"; };
 		F01745A6207B700700877E4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewUrlTests.swift; sourceTree = "<group>"; };
 		F026199A2050AFE100EDDFE0 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -547,6 +555,7 @@
 				30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */,
 				14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */,
 				14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */,
+				DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */,
 			);
 			path = NHSOnlineTests;
 			sourceTree = "<group>";
@@ -565,6 +574,7 @@
 		C276D560207B571A00F3B1E5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DB4B657C22F9AB2900C8EE99 /* BreadcrumbTextView */,
 				C2D9864320C8003800F19792 /* ErrorTextView */,
 				C2D9864220C8000C00F19792 /* HeaderBar */,
 			);
@@ -598,6 +608,16 @@
 				C2697F2820C66B8E001DD790 /* ErrorTextView.swift */,
 			);
 			path = ErrorTextView;
+			sourceTree = "<group>";
+		};
+		DB4B657C22F9AB2900C8EE99 /* BreadcrumbTextView */ = {
+			isa = PBXGroup;
+			children = (
+				DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */,
+				DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */,
+				DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */,
+			);
+			path = BreadcrumbTextView;
 			sourceTree = "<group>";
 		};
 		F07607F120B44B6900069F7F /* JavaScript */ = {
@@ -763,6 +783,7 @@
 				105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */,
 				14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
+				DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */,
 				105BB98C2179C08300571671 /* Scratch6.xcconfig in Resources */,
 				105BB9872179B67400571671 /* Scratch5.xcconfig in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
@@ -868,6 +889,8 @@
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
 				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
+				1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */,
+				DB4B658722FADDB300C8EE99 /* BiometricBreadcrumb.swift in Sources */,
 				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
 				3E60CCBA2317C222000AFA17 /* Logger.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
@@ -907,6 +930,8 @@
 				4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */,
 				609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */,
 				1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */,
+				DB4B658D22FB1A3E00C8EE99 /* UnderlinedLabel.swift in Sources */,
+				1381D48B21BFFFD300B54300 /* ChannelBindings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,6 +940,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2357EBC216575460033B98F /* KnownServicesTests.swift in Sources */,
+				DB75990E22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift in Sources */,
 				2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
 				14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */,

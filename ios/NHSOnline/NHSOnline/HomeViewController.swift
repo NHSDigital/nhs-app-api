@@ -30,6 +30,7 @@ class HomeViewController : UIViewController {
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
+    var myAccountUrl = config().MyAccountUrlPath
     var appVersionCheckError: Bool = false
     var apiConfigCallError: Bool = false
     var appWebInterface: AppWebInterface?
@@ -146,6 +147,10 @@ class HomeViewController : UIViewController {
         self.webViewController?.loadPage(url: pageUrl)
     }
     
+    func backToAccountPage() {
+        self.webViewController?.loadPage(url: myAccountUrl)
+    }
+    
     func setUpControllers() {
         webViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
         webViewController?.loadViewIfNeeded()
@@ -181,16 +186,8 @@ class HomeViewController : UIViewController {
     }
     
     func updateHeaderText(headerText: String?, accessibilityLabel: String? = nil) {
-        if (headerText != nil) {
-            self.headerBar.headerTitle.text = headerText
-            self.headerBar.headerTitle.accessibilityLabel = accessibilityLabel
-            self.headerBarSlim.headerTitle.text = headerText
-            self.headerBarSlim.headerTitle.accessibilityLabel = accessibilityLabel
-        }
         if let a11yLabel = accessibilityLabel {
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, a11yLabel)
-        } else {
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, headerText)
         }
     }
     

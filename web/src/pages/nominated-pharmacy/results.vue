@@ -46,12 +46,7 @@
     </div>
     <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')"
                            :tabindex="-1">
-      <generic-button v-if="$store.state.device.isNativeApp"
-                      :button-classes="['grey', 'button']" :class="$style.back"
-                      tabindex="0" @click="backButtonClicked">
-        {{ $t('nominatedPharmacySearchResults.backButton') }}
-      </generic-button>
-      <desktopGenericBackLink v-else
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                               :path="searchNominatedPharmacyPath"
                               :button-text="'nominatedPharmacyNotFound.backButton'"
                               @clickAndPrevent="backButtonClicked"/>
@@ -62,7 +57,6 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CONFIRM, PRESCRIPTIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
@@ -70,7 +64,6 @@ import { redirectTo } from '@/lib/utils';
 export default {
   components: {
     AnalyticsTrackedTag,
-    GenericButton,
     DesktopGenericBackLink,
   },
   data() {

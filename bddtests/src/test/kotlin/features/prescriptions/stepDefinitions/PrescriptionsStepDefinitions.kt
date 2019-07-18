@@ -40,6 +40,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.text
 import utils.getOrNull
 import utils.set
@@ -74,6 +75,7 @@ open class PrescriptionsStepDefinitions {
     lateinit var prescriptions: PrescriptionsSteps
 
     private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     val mockingClient = MockingClient.instance
 
@@ -425,8 +427,7 @@ open class PrescriptionsStepDefinitions {
 
     @Then("I see a message informing me that I don't currently have access to this service")
     fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
-        headerNative.waitForPageHeaderText("Repeat prescriptions unavailable")
-
+        webHeader.getPageTitle().withText("Repeat prescriptions unavailable")
         assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.text)
         assertEquals("Contact your GP surgery for more information. " +
                 "For urgent medical help, call 111.", errorPage.errorText1.text)

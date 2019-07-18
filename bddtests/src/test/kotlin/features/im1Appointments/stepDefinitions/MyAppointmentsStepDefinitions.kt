@@ -3,6 +3,7 @@ package features.im1Appointments.stepDefinitions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
+import features.im1Appointments.steps.CancelAppointmentSteps
 import features.im1Appointments.steps.MyAppointmentsTelephoneSteps
 import features.im1Appointments.steps.MyAppointmentsUISteps
 import net.thucydides.core.annotations.Steps
@@ -13,6 +14,7 @@ import pages.waitUntilPresent
 import pages.isDisplayed
 import pages.isCurrentlyEnabled
 import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 class MyAppointmentsStepDefinitions {
 
@@ -22,8 +24,12 @@ class MyAppointmentsStepDefinitions {
     lateinit var myAppointmentsUISteps: MyAppointmentsUISteps
     @Steps
     lateinit var myAppointmentsTelephoneSteps: MyAppointmentsTelephoneSteps
+    @Steps
+    lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
     lateinit var headerNative: HeaderNative
+    lateinit var webHeader: WebHeader
+
 
     @When("^I select \"([^\"]*)\" button$")
     fun whenISelectButton(buttonText: String) {
@@ -36,14 +42,14 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
-    @When("^I select a \"Back\" button$")
-    fun iSelectABackButton() {
-        myAppointmentsUISteps.myAppointmentsPage.clickBackButton()
+    @When("^I click on the breadcrumb$")
+    fun iSelectABreadcrumb() {
+        cancelAppointmentSteps.clickOnBreadcrumb()
     }
 
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
-        headerNative.waitForPageHeaderText("Confirm appointment")
+        webHeader.getPageTitle().withText("Confirm appointment")
         appointmentsConfirmationSteps.checkAppointmentDetails()
     }
 
@@ -152,7 +158,7 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^I see page header indicating there is an appointment data error$")
     fun iSeePageHeaderIndicatingAppointmentDataError() {
-        myAppointmentsUISteps.headerNative.waitForPageHeaderText("Appointment data error")
+        webHeader.getPageTitle().withText("Appointment data error")
     }
 
     @Then("^I see the appropriate error messages for the appointment data error$")

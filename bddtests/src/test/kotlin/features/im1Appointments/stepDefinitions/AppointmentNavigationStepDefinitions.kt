@@ -57,9 +57,7 @@ class AppointmentNavigationStepDefinitions {
     @Given("^I am on the Available Appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
         iTryToProgressToTheAvailableAppointmentsPage()
-        availableAppointments.availableAppointmentsPage.
-                locatorMethods.assertNativeElementsLoaded(
-                    availableAppointments.availableAppointmentsPage.backToMyAppointmentsButton)
+        availableAppointments.availableAppointmentsPage.assertPageFullyLoaded()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 

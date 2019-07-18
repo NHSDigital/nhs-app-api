@@ -19,10 +19,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lXZ-bo-CEV" customClass="HeaderBar" customModule="NHSOnline" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="20" width="375" height="100"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="61"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="3SX-vM-Asc"/>
+                                    <constraint firstAttribute="height" constant="61" id="3SX-vM-Asc"/>
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Bb-dr-urv" userLabel="Header Bar Slim" customClass="HeaderBarSlim" customModule="NHSOnline" customModuleProvider="target">
@@ -248,27 +248,37 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="4tR-Qj-Ct8">
-                                        <rect key="frame" x="310" y="228" width="51" height="31"/>
+                                        <rect key="frame" x="310" y="258" width="51" height="31"/>
                                         <connections>
                                             <action selector="biometricToggleChanged:" destination="864-kn-lE9" eventType="valueChanged" id="y23-D9-BVU"/>
                                         </connections>
                                     </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Biometric ID: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8N8-L7-UQv">
-                                        <rect key="frame" x="16" y="228" width="108" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Biometric ID: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8N8-L7-UQv">
+                                        <rect key="frame" x="16" y="284" width="108" height="21"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="orQ-Ms-Gcy" customClass="BiometricBreadcrumb" customModule="NHSOnline" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="hZi-7t-mnS"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.85882352939999995" green="0.87843137250000003" blue="0.88235294119999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="4tR-Qj-Ct8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8N8-L7-UQv" secondAttribute="trailing" constant="8" symbolic="YES" id="JrM-7j-V49"/>
+                                    <constraint firstItem="orQ-Ms-Gcy" firstAttribute="leading" secondItem="zDW-ot-rlp" secondAttribute="leading" id="QN0-eF-nI1"/>
+                                    <constraint firstItem="orQ-Ms-Gcy" firstAttribute="top" secondItem="zDW-ot-rlp" secondAttribute="top" id="ZQa-Lw-bWe"/>
                                     <constraint firstAttribute="trailing" secondItem="4tR-Qj-Ct8" secondAttribute="trailing" constant="16" id="g59-vk-ZmJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="orQ-Ms-Gcy" secondAttribute="trailing" id="t2y-Ij-cCD"/>
                                     <constraint firstItem="8N8-L7-UQv" firstAttribute="leading" secondItem="zDW-ot-rlp" secondAttribute="leading" constant="16" id="xbh-vz-NsQ"/>
                                 </constraints>
                             </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lcZ-vo-Wfd" customClass="ErrorTextView" customModule="NHSOnline" customModuleProvider="target">
-                                <rect key="frame" x="16" y="148" width="343" height="40"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lcZ-vo-Wfd" customClass="ErrorTextView" customModule="NHSOnline" customModuleProvider="target">
+                                <rect key="frame" x="16" y="189" width="343" height="40"/>
                                 <color key="backgroundColor" red="1" green="0.98431372549019602" blue="0.80784313725490198" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="z38-5Z-3AW"/>
@@ -276,14 +286,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do this instead of using a password and security code." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9JV-Pk-2Mh">
-                                <rect key="frame" x="16" y="71" width="343" height="41"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Do this instead of using a password and security code." lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9JV-Pk-2Mh">
+                                <rect key="frame" x="16" y="112" width="343" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in using your fingerprint" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQs-Ak-aMU">
-                                <rect key="frame" x="16" y="45" width="343" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Log in using your fingerprint" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQs-Ak-aMU">
+                                <rect key="frame" x="16" y="85" width="343" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="Qxk-dl-YU2"/>
                                 </constraints>
@@ -291,8 +301,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" scrollEnabled="NO" editable="NO" text="Important" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zZX-Wt-z31">
-                                <rect key="frame" x="16" y="132" width="109" height="32"/>
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" misplaced="YES" scrollEnabled="NO" editable="NO" text="Important" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zZX-Wt-z31">
+                                <rect key="frame" x="16" y="173.5" width="183" height="32"/>
                                 <color key="backgroundColor" red="1" green="0.92941176470588238" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" notEnabled="YES" header="YES"/>
@@ -310,17 +320,17 @@
                             <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstItem="9JV-Pk-2Mh" firstAttribute="bottom" secondItem="zZX-Wt-z31" secondAttribute="top" constant="-20" id="0ki-R2-Iqp"/>
+                            <constraint firstItem="9JV-Pk-2Mh" firstAttribute="bottom" secondItem="zZX-Wt-z31" secondAttribute="top" constant="-25" id="0ki-R2-Iqp"/>
                             <constraint firstItem="OgY-sx-Ez2" firstAttribute="trailing" secondItem="hQs-Ak-aMU" secondAttribute="trailing" constant="16" id="28z-7w-XuX"/>
                             <constraint firstItem="OgY-sx-Ez2" firstAttribute="trailing" secondItem="zZX-Wt-z31" secondAttribute="trailing" priority="250" constant="250" id="2SG-mA-dtQ"/>
                             <constraint firstItem="8N8-L7-UQv" firstAttribute="top" secondItem="lcZ-vo-Wfd" secondAttribute="bottom" constant="60" id="3Gt-zT-oT9"/>
-                            <constraint firstItem="zDW-ot-rlp" firstAttribute="top" secondItem="hQs-Ak-aMU" secondAttribute="bottom" constant="-46" id="3Qt-7d-wyv"/>
+                            <constraint firstItem="zDW-ot-rlp" firstAttribute="top" secondItem="hQs-Ak-aMU" secondAttribute="bottom" constant="-75" id="3Qt-7d-wyv"/>
                             <constraint firstItem="zDW-ot-rlp" firstAttribute="top" secondItem="OgY-sx-Ez2" secondAttribute="top" id="5fb-7H-Axd"/>
                             <constraint firstItem="zDW-ot-rlp" firstAttribute="bottom" secondItem="OgY-sx-Ez2" secondAttribute="bottom" id="BTM-K6-mWN"/>
                             <constraint firstItem="OgY-sx-Ez2" firstAttribute="trailing" secondItem="lcZ-vo-Wfd" secondAttribute="trailing" constant="16" id="C9t-O3-do7"/>
                             <constraint firstItem="4tR-Qj-Ct8" firstAttribute="top" secondItem="lcZ-vo-Wfd" secondAttribute="bottom" constant="60" id="MuY-aa-WWX"/>
                             <constraint firstItem="zDW-ot-rlp" firstAttribute="trailing" secondItem="OgY-sx-Ez2" secondAttribute="trailing" id="Xd5-Xv-3qm"/>
-                            <constraint firstItem="lcZ-vo-Wfd" firstAttribute="top" secondItem="zZX-Wt-z31" secondAttribute="bottom" constant="-16" id="aRR-Hc-8jj"/>
+                            <constraint firstItem="lcZ-vo-Wfd" firstAttribute="top" secondItem="zZX-Wt-z31" secondAttribute="bottom" constant="-20" id="aRR-Hc-8jj"/>
                             <constraint firstItem="zZX-Wt-z31" firstAttribute="leading" secondItem="OgY-sx-Ez2" secondAttribute="leading" constant="16" id="bXf-x0-s5b"/>
                             <constraint firstItem="zDW-ot-rlp" firstAttribute="leading" secondItem="OgY-sx-Ez2" secondAttribute="leading" id="fLQ-om-TFh"/>
                             <constraint firstItem="hQs-Ak-aMU" firstAttribute="leading" secondItem="OgY-sx-Ez2" secondAttribute="leading" constant="16" id="l0B-4b-cl1"/>
@@ -332,9 +342,10 @@
                         <viewLayoutGuide key="safeArea" id="OgY-sx-Ez2"/>
                     </view>
                     <connections>
+                        <outlet property="BiometricBreadcrumb" destination="orQ-Ms-Gcy" id="IoX-9R-fds"/>
                         <outlet property="BiometricLabel" destination="8N8-L7-UQv" id="rSF-e0-y82"/>
                         <outlet property="ContentLabel" destination="9JV-Pk-2Mh" id="Tjc-ds-aPm"/>
-                        <outlet property="ContentTextView" destination="lcZ-vo-Wfd" id="D3N-3t-LfJ"/>
+                        <outlet property="ContentTextView" destination="lcZ-vo-Wfd" id="Nms-lf-NOM"/>
                         <outlet property="HeaderTextView" destination="zZX-Wt-z31" id="ka0-1s-RG1"/>
                         <outlet property="TitleLabel" destination="hQs-Ak-aMU" id="iaa-HD-xUQ"/>
                         <outlet property="biometricToggle" destination="4tR-Qj-Ct8" id="Syq-Qy-MgP"/>
@@ -435,5 +446,5 @@
         <image name="SymptomsActiveIcon" width="25.5" height="25.5"/>
         <image name="SymptomsIcon" width="26.5" height="26.5"/>
     </resources>
-    <color key="tintColor" red="0.0047798985619999998" green="0.18509393930000001" blue="0.52652108669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

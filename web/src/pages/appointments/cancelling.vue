@@ -80,14 +80,8 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <generic-button v-if="$store.state.device.isNativeApp"
-                        id="btn_back_appointment"
-                        :button-classes="['nhsuk-button nhsuk-button--secondary']"
-                        @click.stop.prevent="onBackButtonClicked">
-          {{ $t('appointments.cancelling.backButtonText') }}
-        </generic-button>
         <desktopGenericBackLink
-          v-else
+          v-if="!$store.state.device.isNativeApp"
           :path="appointmentPath"
           :button-text="'appointments.cancelling.backButtonText'"
           @clickAndPrevent="onBackButtonClicked"/>

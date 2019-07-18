@@ -2,9 +2,7 @@
   <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="$store.state.device.isNativeApp"
          :class="[$style.webHeader, 'pull-content']">
-      <header-slim :show-in-native="true">
-        {{ pageHeader }}
-      </header-slim>
+      <header-slim :show-in-native="true" />
       <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
       <terms-conditions v-else/>
     </div>

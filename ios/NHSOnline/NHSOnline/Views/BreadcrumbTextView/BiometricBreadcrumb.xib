@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad12_9rounded" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BiometricBreadcrumb" customModule="NHSOnline" customModuleProvider="target">
+            <connections>
+                <outlet property="biometricLabel" destination="vJg-Qi-4bn" id="F4K-zA-dZK"/>
+                <outlet property="breadcrumbButton" destination="jv7-f7-pkw" id="aN5-26-5g1"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="2E2-7n-n9a"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="underlinedLabel" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vJg-Qi-4bn" customClass="UnderlinedLabel" customModule="NHSOnline" customModuleProvider="target">
+                    <rect key="frame" x="33" y="13" width="375" height="18"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="400" id="vzQ-Rr-UZe"/>
+                    </constraints>
+                    <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="14"/>
+                    <color key="textColor" red="0.082718266243939367" green="0.27352697917950086" blue="0.68510072969543145" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jv7-f7-pkw">
+                    <rect key="frame" x="7" y="10" width="8" height="8"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="8" id="bJi-GO-14q"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="backArrow_breadcrumb"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="vJg-Qi-4bn" firstAttribute="leading" secondItem="jv7-f7-pkw" secondAttribute="trailing" constant="8" id="KJo-v0-co9"/>
+                <constraint firstItem="vJg-Qi-4bn" firstAttribute="leading" secondItem="jv7-f7-pkw" secondAttribute="trailing" constant="8" id="UPX-nk-K8Q"/>
+                <constraint firstItem="vJg-Qi-4bn" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="aG8-fK-66a"/>
+                <constraint firstItem="jv7-f7-pkw" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="im2-KU-Qfg"/>
+                <constraint firstItem="jv7-f7-pkw" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="18" id="u2X-M6-w8P"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="jv7-f7-pkw" secondAttribute="bottom" constant="18" id="zEs-HS-LQf"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="UPX-nk-K8Q"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=regular">
+                <mask key="constraints">
+                    <exclude reference="KJo-v0-co9"/>
+                    <include reference="UPX-nk-K8Q"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="39.55078125" y="-358.41874084919471"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="backArrow_breadcrumb" width="16" height="24"/>
+    </resources>
+</document>

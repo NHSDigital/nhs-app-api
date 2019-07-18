@@ -3,7 +3,6 @@ import UIKit
 
 class HeaderBarSlim: UIView {
     @IBOutlet var headerBarView: UIView!
-    @IBOutlet weak var headerTitle: UILabel!
     @IBOutlet weak var backButtonArrow: UIButton!
     
     override init(frame: CGRect) {
@@ -21,12 +20,8 @@ class HeaderBarSlim: UIView {
         headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         backButtonArrow.accessibilityLabel = NSLocalizedString("BackArrowTitle", comment: "")
         backButtonArrow.accessibilityHint = NSLocalizedString("BackArrowHint", comment: "")
-        self.headerTitle.font = UIFont.preferredFont(forTextStyle: .headline)
-        if #available(iOS 10.0, *) {
-            self.headerTitle.adjustsFontForContentSizeCategory = true
-        }
         // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
-        headerBarView.accessibilityElements = [backButtonArrow, headerTitle]
+        headerBarView.accessibilityElements = [backButtonArrow]
         addSubview(headerBarView)
     }
     

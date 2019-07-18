@@ -271,7 +271,7 @@ const routes = {
     path: '/data-sharing',
     crumb: {
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.MORE;
       },
     },
   },
@@ -358,8 +358,9 @@ const routes = {
     name: 'more',
     path: '/more',
     crumb: {
+      i8nKey: 'more',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.INDEX;
       },
     },
     redirectRules: [{
@@ -470,7 +471,7 @@ const routes = {
     path: '/nominated-pharmacy/search',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
+        return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
   },
@@ -479,7 +480,7 @@ const routes = {
     path: '/nominated-pharmacy/confirm',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
+        return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
   },
@@ -488,7 +489,7 @@ const routes = {
     path: '/nominated-pharmacy/results',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
+        return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
   },
@@ -506,7 +507,7 @@ const routes = {
     path: '/nominated-pharmacy/cannot-change',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.PRESCRIPTIONS;
+        return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
   },
@@ -514,8 +515,9 @@ const routes = {
     name: 'organ-donation',
     path: '/organ-donation',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.MORE;
       },
     },
   },
@@ -523,8 +525,9 @@ const routes = {
     name: 'organ-donation-additional-details',
     path: '/organ-donation/additional-details',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -532,8 +535,9 @@ const routes = {
     name: 'organ-donation-amend',
     path: '/organ-donation/amend',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -541,8 +545,9 @@ const routes = {
     name: 'organ-donation-faith',
     path: '/organ-donation/faith',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -550,8 +555,9 @@ const routes = {
     name: 'organ-donation-more-about-organs',
     path: '/organ-donation/more-about-organs',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -559,8 +565,9 @@ const routes = {
     name: 'organ-donation-some-organs',
     path: '/organ-donation/some-organs',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -568,8 +575,9 @@ const routes = {
     name: 'organ-donation-review-your-decision',
     path: '/organ-donation/review-your-decision',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -577,8 +585,9 @@ const routes = {
     name: 'organ-donation-view-decision',
     path: '/organ-donation/view-decision',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.MORE;
       },
     },
   },
@@ -586,8 +595,9 @@ const routes = {
     name: 'organ-donation-withdraw-reason',
     path: '/organ-donation/withdraw-reason',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -595,8 +605,9 @@ const routes = {
     name: 'organ-donation-withdrawn',
     path: '/organ-donation/withdrawn',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },
@@ -604,8 +615,9 @@ const routes = {
     name: 'organ-donation-your-choice',
     path: '/organ-donation/your-choice',
     crumb: {
+      i8nKey: 'organ_donation',
       get parentRoute() {
-        return undefined;
+        return this.allRoutes.ORGAN_DONATION;
       },
     },
   },

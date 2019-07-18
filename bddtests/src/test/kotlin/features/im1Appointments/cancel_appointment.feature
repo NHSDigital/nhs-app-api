@@ -119,7 +119,7 @@ Feature: Cancel Appointments Frontend
     And I am logged in
     When I retrieve the 'My Appointments' page directly
     And I select a "Cancel this appointment" link
-    When I select a "Back" button
+    When I click on the breadcrumb
     Then the My Appointments page is displayed
     Examples:
       | GP System |

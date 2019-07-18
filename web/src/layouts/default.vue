@@ -6,12 +6,19 @@
            [$style.desktopWeb]: !$store.state.device.isNativeApp,
            [$style['nhs-app']]: true
          }">
-      <div v-if="shouldShowFullDesktopHeader" :class="$style['header-container-desktop']">
-        <web-header ref="headerMenu"/>
+
+      <div :class="$style['header-container-desktop']">
+        <div v-if="shouldShowFullDesktopHeader">
+          <web-header ref="headerMenu"/>
+        </div>
+        <div v-else-if="shouldShowSlimDesktopHeader">
+          <web-header :show-menu="false" :show-links="false"/>
+        </div>
+        <content-header id="content-header"
+                        :show-bread-crumb="shouldShowBreadCrumb"
+                        :show-content-header="!isLoginPage()"/>
       </div>
-      <div v-else-if="shouldShowSlimDesktopHeader" :class="$style['header-container-desktop']">
-        <web-header :show-menu="false" :show-links="false"/>
-      </div>
+
       <div id="maincontent"
            ref="mainContent"
            :tabindex="!$store.state.device.isNativeApp ? -1 : false"
@@ -41,7 +48,8 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import { findByName, getCrumbTrailForRoute, INDEX, LOGIN } from '@/lib/routes';
+import ContentHeader from '@/components/widgets/ContentHeader';
+import { INDEX, LOGIN } from '@/lib/routes';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import Spinner from '@/components/widgets/Spinner';
@@ -57,6 +65,7 @@ import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
   components: {
+    ContentHeader,
     WebHeader,
     WebFooter,
     Spinner,
@@ -121,9 +130,6 @@ export default {
     };
   },
   computed: {
-    currentBreadCrumbs() {
-      return getCrumbTrailForRoute(findByName(this.$route.name));
-    },
     showMenu() {
       return (
         !this.$store.state.device.isNativeApp &&
@@ -137,11 +143,16 @@ export default {
         && !this.$store.state.device.isNativeApp
       );
     },
+    shouldShowBreadCrumb() {
+      return (
+        this.loggedIn &&
+        this.$route.name !== 'Login'
+      );
+    },
     shouldShowFullDesktopHeader() {
       return (
         !this.$store.state.device.isNativeApp &&
-        this.loggedIn &&
-        this.$route.name !== 'Login'
+        this.shouldShowBreadCrumb
       );
     },
     shouldShowSlimDesktopHeader() {

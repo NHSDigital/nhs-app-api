@@ -2,118 +2,109 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/_16sdp"
-    android:layout_marginRight="@dimen/_16sdp"
-    android:gravity="center"
-    android:minHeight="@dimen/_96ssp">
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/_6sdp"
+    android:layout_marginRight="@dimen/_6sdp">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/top_header"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingTop="@dimen/_8sdp"
-        android:paddingBottom="@dimen/_8sdp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_header"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_centerVertical="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/homeLogoIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
-            android:background="@drawable/icon_drawable_boarder_focusable"
-            android:contentDescription="@string/nhsAppHome"
-            android:focusable="true"
-            android:nextFocusLeft="@id/more"
-            android:nextFocusUp="@id/more"
-            android:nextFocusDown="@id/webview"
-            android:nextFocusForward="@id/helpIcon"
-            android:paddingTop="@dimen/_8sdp"
-            android:src="@drawable/icon_drawable_home" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/_1sdp"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/helpIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/myAccountIcon"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_3ssp"
-            android:layout_toStartOf="@id/myAccountIcon"
-            android:adjustViewBounds="true"
-            android:background="@drawable/icon_drawable_boarder_focusable"
-            android:contentDescription="@string/header_icon_help"
-            android:focusable="true"
-            android:focusableInTouchMode="false"
-            android:nextFocusUp="@id/more"
-            android:nextFocusDown="@id/webview"
-            android:nextFocusForward="@id/myAccountIcon"
-            android:paddingStart="@dimen/_5sdp"
-            android:paddingTop="@dimen/_8sdp"
-            android:paddingEnd="@dimen/_5sdp"
-            android:src="@drawable/icon_drawable_help" />
+            <ImageView
+                android:id="@+id/homeLogoIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/icon_drawable_boarder_focusable"
 
-        <ImageView
-            android:id="@+id/myAccountIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
-            android:background="@drawable/icon_drawable_boarder_focusable"
-            android:contentDescription="@string/header_icon_account"
-            android:focusable="true"
-            android:focusableInTouchMode="false"
-            android:nextFocusUp="@id/more"
-            android:paddingStart="@dimen/_5sdp"
-            android:paddingTop="@dimen/_8sdp"
-            android:paddingEnd="0dp"
-            android:src="@drawable/icon_drawable_settings" />
+                android:contentDescription="@string/nhsAppHome"
+                android:focusable="true"
+                android:nextFocusDown="@id/webview"
+                android:nextFocusForward="@id/helpIcon"
+                android:nextFocusLeft="@id/more"
+                android:nextFocusUp="@id/more"
+                android:paddingTop="@dimen/_7sdp"
+                android:paddingBottom="@dimen/_7sdp"
+                android:src="@drawable/icon_drawable_home" />
+        </LinearLayout>
+
+
 
         <ImageView
             android:id="@+id/nhsLogoIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_height="fill_parent"
             android:adjustViewBounds="true"
             android:background="@drawable/icon_drawable_boarder_focusable"
             android:layout_centerInParent="true"
             android:contentDescription="@string/nhsApp"
             android:focusable="false"
-            android:paddingTop="@dimen/_8sdp"
+            android:paddingTop="@dimen/_7sdp"
+            android:paddingBottom="@dimen/_7sdp"
+            android:paddingRight="@dimen/_4sdp"
             android:src="@drawable/icon_drawable_nhs_logo" />
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/bottom_header"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_header"
-        app:layout_constraintVertical_bias="0.5">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="@dimen/_5sdp"
+            android:layout_height="match_parent">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:background="#40ffffff" />
+            <ImageView
+                android:id="@+id/helpIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/_3ssp"
+                android:adjustViewBounds="true"
 
-        <TextView
-            android:id="@+id/header_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:gravity="center"
-            android:text="@string/home_header"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/_18ssp" />
-    </RelativeLayout>
+                android:background="@drawable/icon_drawable_boarder_focusable"
+
+                android:contentDescription="@string/header_icon_help"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:nextFocusUp="@id/more"
+                android:nextFocusDown="@id/webview"
+                android:nextFocusForward="@id/myAccountIcon"
+                android:paddingTop="@dimen/_7sdp"
+                android:paddingRight="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_7sdp"
+                android:src="@drawable/icon_drawable_help" />
+
+            <ImageView
+                android:id="@+id/myAccountIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:adjustViewBounds="true"
+
+                android:background="@drawable/icon_drawable_boarder_focusable"
+                android:contentDescription="@string/header_icon_account"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:nextFocusUp="@id/more"
+                android:paddingTop="@dimen/_7sdp"
+                android:paddingBottom="@dimen/_7sdp"
+                android:src="@drawable/icon_drawable_settings" />
+        </LinearLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

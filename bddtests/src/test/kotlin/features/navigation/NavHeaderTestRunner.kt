@@ -1,4 +1,6 @@
-package features.myAccount
+package features.navigation
+
+
 
 import cucumber.api.CucumberOptions
 import net.serenitybdd.cucumber.CucumberWithSerenity
