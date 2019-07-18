@@ -64,6 +64,34 @@ fi
 info "Comparing $TAG to $VERSION_BELOW"
 
 
-git log --pretty=format:"%s" $VERSION_BELOW..$TAG > $TAG.txt
+GITLOG=`git log --pretty=format:"%s" $VERSION_BELOW..$TAG`
+IMPLEMENTATIONDATE="2019-22-07"
 
-info "Release notes written to $TAG.txt"
+SUBJECT="Release - $TAG"
+MESSAGE="Change Notification for NHS APP\n"
+MESSAGE="This change is approved by Solution Assurance and approval has been received from all necessary areas\n"
+MESSAGE="$MESSAGE SERVICE AFFECTED : NHS App\n"
+MESSAGE="$MESSAGE PRIORITY : Standard Change\n"
+MESSAGE="$MESSAGE DESCRIPTION : Standard Feature Release for NHS App\n"
+MESSAGE="$MESSAGE $GITLOG\n"
+MESSAGE="$MESSAGE PRIMARY CI : NHS App\n"
+MESSAGE="$MESSAGE PROPOSED IMPLEMENTOR : NHS App Team\n"
+MESSAGE="$MESSAGE PROPOSED START DATE : $IMPLEMENTATIONDATE 10:00\n"
+MESSAGE="$MESSAGE PROPOSED END DATE : $IMPLEMENTATIONDATE 11:00\n"
+MESSAGE="$MESSAGE IMPACT ASSESSMENT : LOW\n"
+MESSAGE="$MESSAGE PROPOSED RISK MITIGATION : Deployment is done to a cold namespace and tested before activating the new release. There is no service outage\n"
+MESSAGE="$MESSAGE TEST OUTCOME : Tested as part of\n"
+MESSAGE="$MESSAGE IMPLEMENTATION PLAN : Deploy to Cold Namespace, proove out deployment, route traffic to new namespace\n"
+MESSAGE="$MESSAGE BACKOUT PLAN : Revert back to previous namespace\n"
+MESSAGE="$MESSAGE POST IMPLEMENTATION TESTING : Sanity check of the release will be performed\n"
+MESSAGE="$MESSAGE SUCCESS CRITERIA : Sanity check of the release will be performed, post deployment.\n"
+
+EMAIL="from:TeamCity@teamcity.dev.nonlive.nhsapp.service.nhs.uk\n"
+EMAIL="$EMAIL to:lee.gathercole@nhs.net\n"
+EMAIL="$EMAIL subject: $SUBJECT\n"
+EMAIL="$EMAIL $MESSAGE"
+
+printf "$EMAIL" > $TAG.txt
+
+info "Release email written to $TAG.txt"
+
