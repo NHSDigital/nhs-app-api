@@ -5,7 +5,7 @@ struct Config: Decodable {
         case HomeUrl, Nhs111Url, Nhs111LocationUrl, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost
         case AppointmentsUrlPath, AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
         case NhsOnlineRequiredQueryString
-        case ResponseWaitingTime, SessionTimeout
+        case ResponseWaitingTime, SessionTimeout, ApiCallTimeoutSeconds
         case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
         case BiometricHelpURL, FidoLoginErrorPath, BiometricRedirectURL, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
@@ -69,6 +69,7 @@ struct Config: Decodable {
     let CidUrlSuffix: String
     let MenuTimeoutSeconds: Double
     let HomeHost: String
+    let ApiCallTimeoutSeconds: Int
 }
 
 func config() -> Config {

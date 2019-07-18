@@ -23,7 +23,15 @@ class   ConfigurationService : ConfigurationServiceProtocol {
                 }
                 semaphore.signal()
             }
-            semaphore.wait()
+            
+            if(semaphore.wait(timeout: DispatchTime.now() + DispatchTimeInterval.seconds(config().ApiCallTimeoutSeconds)) == DispatchTimeoutResult.timedOut)
+            {
+                if #available(iOS 10.0, *) {
+                    os_log("Failure doing native app version http check: %@", log: OSLog.default, type: .error, "Timed out")
+                } else {
+                    NSLog("Failure doing native app version http check: %@", "Timed out")
+                }
+            }
         }
     }
     

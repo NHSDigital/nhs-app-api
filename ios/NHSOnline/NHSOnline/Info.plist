@@ -183,5 +183,7 @@
 	<string>$(APP_STORE_SCHEME)://$(APP_STORE_URL)$(APP_STORE_ID)?mt=8</string>
 	<key>MenuTimeoutSeconds</key>
 	<integer>10</integer>
+	<key>ApiCallTimeoutSeconds</key>
+	<integer>10</integer>
 </dict>
 </plist>
