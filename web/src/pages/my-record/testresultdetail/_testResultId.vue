@@ -7,15 +7,15 @@
       <div :class="$style['above-float-button']">
         <div :class="$style.info" data-purpose="info">
           <h2>{{ $t('my_record.testresultdetail.testResultTitle') }}</h2>
-        </div>
-        <div :class="$style['test-result-content']">
-          <div v-if="!$store.state.myRecord.detailedTestResult.data">
-            <p> {{ $t('my_record.testresultdetail.noTestResultData') }} </p>
-          </div>
-          <div v-else>
-            <p>
-              <span v-html="$store.state.myRecord.detailedTestResult.data"/>
-            </p>
+          <div :class="$style['test-result-content']">
+            <div v-if="!$store.state.myRecord.detailedTestResult.data" id="noTestResult">
+              <p> {{ $t('my_record.testresultdetail.noTestResultData') }} </p>
+            </div>
+            <div v-else id="resultDetails">
+              <p>
+                <span v-html="$store.state.myRecord.detailedTestResult.data.testResult"/>
+              </p>
+            </div>
           </div>
         </div>
         <form v-if="$store.state.device.isNativeApp" :action="myRecordReturnPath" method="get">

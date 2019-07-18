@@ -266,6 +266,11 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         myRecordDetailedTestResultPage.clickBackToMyRecord()
     }
 
+    @Then("^I see the test result content$")
+    fun thenISeeTheTestResulsContent() {
+        myRecordDetailedTestResultPage.assertContent()
+    }
+
     @Then("^I see one test result with one value$")
     fun thenISeeOneTestResultWithOneValue() {
         assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
