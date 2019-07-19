@@ -65,7 +65,7 @@ info "Comparing $TAG to $VERSION_BELOW"
 
 
 GITLOG=`git log --pretty=format:"%s" $VERSION_BELOW..$TAG`
-IMPLEMENTATIONDATE="2019-22-07"
+IMPLEMENTATIONDATE=`date -dnext-monday +%d-%m-%Y`
 
 SUBJECT="Release - $TAG"
 MESSAGE="Change Notification for NHS APP\n"
