@@ -7,7 +7,7 @@ import pages.isDisplayed
 import pages.navigation.HeaderNative
 
 open class AppointmentGuidanceSteps {
-    private val expectedPageHeader = "Check before you book"
+    private val expectedPageHeader = "Things to try before you book an appointment"
 
     lateinit var appointmentGuidancePage: AppointmentGuidancePage
     lateinit var headerNative: HeaderNative
