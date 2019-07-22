@@ -39,6 +39,8 @@
       <p>
         <a :class="[$style['nhsuk-action-link__link'], $style['cancel-link']]"
            :href="appointmentCancellingPath"
+           :aria-label="this.$t('appointments.index.cancelButtonText') + ' - ' +
+             formatDate(appointment.startTime) + ' ' + formatTime(appointment.startTime)"
            @click.stop.prevent="onCancel">
           {{ this.$t('appointments.index.cancelButtonText') }}
         </a>
