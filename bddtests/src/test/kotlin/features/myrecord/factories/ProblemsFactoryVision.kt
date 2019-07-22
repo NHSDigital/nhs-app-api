@@ -3,6 +3,7 @@ package features.myrecord.factories
 import mocking.data.myrecord.ProblemsData
 import mocking.vision.VisionConstants
 import models.Patient
+import worker.models.myrecord.ProblemItem
 
 class ProblemsFactoryVision : ProblemsFactory() {
 
@@ -31,5 +32,9 @@ class ProblemsFactoryVision : ProblemsFactory() {
     override fun noAccess(patient: Patient) {
         mocker.generatePatientDataResponse(patient, VisionConstants.problemsView)
         { request -> request.respondWithAccessDeniedError() }
+    }
+
+    override fun getExpectedProblems(): List<ProblemItem> {
+        throw UnsupportedOperationException()
     }
 }

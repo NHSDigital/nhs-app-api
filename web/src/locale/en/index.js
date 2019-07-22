@@ -804,6 +804,7 @@ export default {
     },
     problems: {
       sectionHeader: 'Problems',
+      noStartDate: 'Unknown Date',
     },
     consultations: {
       sectionHeader: 'Consultations',

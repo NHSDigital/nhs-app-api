@@ -7,6 +7,8 @@ import mocking.microtest.myRecord.Allergy
 import mocking.microtest.myRecord.Allergies
 import mocking.microtest.myRecord.Immunisation
 import mocking.microtest.myRecord.Immunisations
+import mocking.microtest.myRecord.Problem
+import mocking.microtest.myRecord.Problems
 import utils.set
 
 object MicrotestMyRecordData {
@@ -14,13 +16,15 @@ object MicrotestMyRecordData {
     const val MAX_ALLERGIES = 3
     const val MAX_MEDICATIONS = 3
     const val MAX_IMMUNISATIONS = 3
+    const val MAX_PROBLEMS = 3
 
     fun getEmptyMicrotestMyRecord(): MyRecordResponseModel {
 
         val allergies = Allergies("true", "false", 0, mutableListOf<Allergy>())
         val medications = Medications("true", "false", 0, mutableListOf<Medication>())
         val immunisations = Immunisations("true", "false", 0, mutableListOf<Immunisation>())
-        return MyRecordResponseModel(allergies, medications, immunisations)
+        val problems = Problems("true", "false", 0, mutableListOf<Problem>())
+        return MyRecordResponseModel(allergies, medications, immunisations, problems)
     }
 
     fun getPopulatedMicrotestMyRecord(): MyRecordResponseModel {
@@ -73,10 +77,22 @@ object MicrotestMyRecordData {
             )
         }
 
+        val problemList = mutableListOf<Problem>()
+        for (i in 1..MAX_PROBLEMS) {
+            problemList.add(
+                    Problem(
+                            start_date = "2019-07-03",
+                            finish_date = "Ongoing",
+                            rubric = "Rubric $i"
+                    )
+            )
+        }
+
         val allergies = Allergies("true", "false", allergyList.size, allergyList)
         val medications = Medications("true", "false", medicationList.size, medicationList)
         val immunisations = Immunisations("true", "false", immunisationList.size, immunisationList)
-        val  myRecordResponseModel =  MyRecordResponseModel(allergies, medications, immunisations)
+        val problems = Problems("true", "false", problemList.size, problemList)
+        val myRecordResponseModel =  MyRecordResponseModel(allergies, medications, immunisations, problems)
 
         MyRecordSerenityHelpers.MY_RECORD_DATA.set(myRecordResponseModel)
 

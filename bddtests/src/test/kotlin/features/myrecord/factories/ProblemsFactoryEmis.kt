@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import mocking.data.myrecord.ProblemsData
 import models.Patient
+import worker.models.myrecord.ProblemItem
 
 class ProblemsFactoryEmis : ProblemsFactory(){
 
@@ -39,5 +40,9 @@ class ProblemsFactoryEmis : ProblemsFactory(){
             myRecord.problemsRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
+    }
+
+    override fun getExpectedProblems(): List<ProblemItem> {
+        throw UnsupportedOperationException()
     }
 }

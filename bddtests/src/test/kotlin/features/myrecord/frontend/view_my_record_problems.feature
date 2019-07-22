@@ -56,3 +56,11 @@ Feature: View My Medical Record Information - Problems
       |Service|
       |EMIS|
       |VISION|
+
+  Scenario: A MICROTEST user can view problems
+    Given the my record wiremocks are populated for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Problems heading on My Record
+    When I click the Problems section on My Record
+    Then I see the expected problems displayed

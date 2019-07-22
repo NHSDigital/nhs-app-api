@@ -12,21 +12,36 @@
       {{ $t('my_record.immunisations.sectionHeader') }}
     </analytics-tracked-tag>
     <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
+
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isProblemsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="PROBLEMS"
+                           :text="$t('my_record.problems.sectionHeader')"
+                           :aria-expanded="!isProblemsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.problems.sectionHeader') }}
+    </analytics-tracked-tag>
+    <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
   </div>
 </template>
 
 <script>
 import Immunisations from '@/components/my-record/SharedComponents/Immunisations';
+import Problems from '@/components/my-record/SharedComponents/Problems';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 const IMMUNISATIONS = 'immunisations';
-
+const PROBLEMS = 'problems';
 
 export default {
   name: 'DcrMICROTEST',
   components: {
     AnalyticsTrackedTag,
     Immunisations,
+    Problems,
   },
   props: {
     record: {
@@ -37,7 +52,9 @@ export default {
   data() {
     return {
       IMMUNISATIONS,
+      PROBLEMS,
       isImmunisationsCollapsed: process.client,
+      isProblemsCollapsed: process.client,
     };
   },
   methods: {
@@ -49,6 +66,10 @@ export default {
         case IMMUNISATIONS:
           this.isImmunisationsCollapsed =
             !this.isImmunisationsCollapsed;
+          break;
+        case PROBLEMS:
+          this.isProblemsCollapsed =
+            !this.isProblemsCollapsed;
           break;
         default:
           break;

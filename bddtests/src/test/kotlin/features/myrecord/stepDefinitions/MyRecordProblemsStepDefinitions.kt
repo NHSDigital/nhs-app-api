@@ -1,14 +1,18 @@
 package features.myrecord.stepDefinitions
 
+import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ProblemsFactory
 import net.serenitybdd.core.Serenity
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED = 3
 open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions() {
@@ -63,5 +67,30 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     @Then("^I see Problems records displayed$")
     fun thenISeeProblemsRecordsDisplayed() {
         assertEquals(NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED, myRecordInfoPage.problems.allRecordItems().count())
+    }
+
+    @Then("^I see the expected problems displayed$")
+    fun thenISeeTheExpectedProblemsDisplayed() {
+        val expectedProblems = ProblemsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .getExpectedProblems()
+
+        val onScreenProblems = myRecordInfoPage.problems.allRecordItems()
+
+        Assert.assertEquals(expectedProblems.count(), onScreenProblems.count())
+
+        for (i in onScreenProblems.indices) {
+            Assert.assertEquals(
+                    LocalDate.parse(
+                            expectedProblems[i].effectiveDate.value),
+                    LocalDate.parse(
+                            onScreenProblems[i].label,
+                            DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)
+                    ))
+
+            for (j in expectedProblems[i].lineItems.indices) {
+                Assert.assertEquals(expectedProblems[i].lineItems[j].text, onScreenProblems[i].bodyElements[j])
+            }
+        }
     }
 }

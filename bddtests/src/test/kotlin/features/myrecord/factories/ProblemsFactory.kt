@@ -3,6 +3,7 @@ package features.myrecord.factories
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
+import worker.models.myrecord.ProblemItem
 
 abstract class ProblemsFactory {
 
@@ -11,6 +12,7 @@ abstract class ProblemsFactory {
     abstract fun enabledWithRecords(patient: Patient)
     abstract fun errorRetrieving(patient: Patient)
     abstract fun noAccess(patient: Patient)
+    abstract fun getExpectedProblems(): List<ProblemItem>
 
     val mockingClient = MockingClient.instance
 
@@ -20,7 +22,8 @@ abstract class ProblemsFactory {
                 by lazy {
                     hashMapOf(
                             "EMIS" to { ProblemsFactoryEmis() },
-                            "VISION" to { ProblemsFactoryVision() })
+                            "VISION" to { ProblemsFactoryVision() },
+                            "MICROTEST" to { ProblemsFactoryMicrotest() })
                 }
 
     }

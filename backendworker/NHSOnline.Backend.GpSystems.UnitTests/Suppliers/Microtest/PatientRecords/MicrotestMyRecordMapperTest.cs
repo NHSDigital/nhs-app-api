@@ -5,6 +5,7 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
@@ -798,7 +799,228 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasDetailedRecordAccess.Should().BeFalse();
         }
 
+        [TestMethod]
+        public void MapPatientRecordGetResponse_WillMapProblemAndUseRawFinishDateValue_WhenFinishDateCannotBeParsed()
+        {
+            //Arrange
+            var microtestProblem = BuildMicrotestProblem("2019-03-27","Ongoing","Angina");
+            
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                ProblemData = new ProblemData
+                {
+                    Count = 3,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Problems = new List<Problem>
+                    {
+                        microtestProblem
+                    }
+                },
+            };
 
+            //Expected Results
+            var expectedResult = new MyRecordResponse
+            {
+                Problems = new Problems
+                {
+                    Data = new List<ProblemItem>
+                    {
+                        BuildProblemItem(microtestProblem.StartDate, microtestProblem.FinishDate, microtestProblem.Rubric)
+                    } 
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Problems.Data.Should().HaveCount(1);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
+        }     
+ 
+        [TestMethod]
+        public void MapPatientRecordGetResponse_CanSuccessfullyMapProblemsWhenFinishDateCanBeParsed()
+        {
+            //Arrange
+            var microtestProblem = BuildMicrotestProblem("2019-03-27","2022-03-27","Angina");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                ProblemData = new ProblemData
+                {
+                    Count = 3,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Problems = new List<Problem>
+                    {
+                        microtestProblem
+                    }
+                },
+            };
+
+            //Expected Results
+            var expectedResult = new MyRecordResponse
+            {
+                Problems = new Problems
+                {
+                    Data = new List<ProblemItem>
+                    {
+                        BuildProblemItem(microtestProblem.StartDate,"27 March 2022",microtestProblem.Rubric)
+                    } 
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Problems.Data.Should().HaveCount(1);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldMapProblemItemEvenWhenStartDateCannotBeParsed()
+        {
+            //Arrange
+            var microtestProblem = BuildMicrotestProblem("no date","2022-03-27","Angina");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                ProblemData = new ProblemData
+                {
+                    Count = 1,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Problems = new List<Problem>
+                    {
+                        microtestProblem
+                    }
+                },
+            };
+
+            //Expected Results
+            var expectedResult = new MyRecordResponse
+            {
+                Problems = new Problems
+                {
+                    Data = new List<ProblemItem>
+                    {
+                        BuildProblemItem(microtestProblem.StartDate,"27 March 2022",microtestProblem.Rubric)
+                    } 
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Problems.Data.Should().HaveCount(1);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("   ")]
+        [DataRow("No rubric recorded")]                            
+        [DataRow(" No rubric recorded ")]         //spaces at start and end of string
+        [DataRow("no RUBrIc RECOrded")]           //case insensitive check
+        [DataRow("   NO rubric RECOrdED    ")]    //case insensitive check with leading and trailing spaces
+        public void MapPatientRecordGetResponse_ShouldNotMapProblemItemWhenRubricValueIsNotValid(string rubric)
+        {
+            //Arrange
+            var microtestProblem = BuildMicrotestProblem("2019-03-27","2022-03-27", rubric);
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                ProblemData = new ProblemData
+                {
+                    Count = 1,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Problems = new List<Problem>
+                    {
+                        microtestProblem
+                    }
+                },
+            };
+
+            //Expected Results
+            var expectedResult = new MyRecordResponse
+            {
+                Problems = new Problems
+                {
+                    Data = new List<ProblemItem>()
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Problems.Data.Should().HaveCount(0);
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldOrderProblemsByStartDateDescending()
+        {
+            //Arrange
+            var prob1 = BuildMicrotestProblem("no date available","2022-03-27","Angina");          
+            var prob2 = BuildMicrotestProblem("2019-03-27",       "2022-03-27","Gout");           
+            var prob3 = BuildMicrotestProblem("2019-03-28",       "2022-03-27","Stroke");           
+            var prob4 = BuildMicrotestProblem("no date available","2022-03-27","Migraine");     
+            var prob5 = BuildMicrotestProblem("2019-03-26",       "Ongoing",   "Blind");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                ProblemData = new ProblemData
+                {
+                    Count = 5,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Problems = new List<Problem>
+                    {
+                        prob1, prob2, prob3, prob4, prob5
+                    }
+                },
+            };
+
+            //Expected Results
+            var expectedResult = new MyRecordResponse
+            {
+                Problems = new Problems
+                {
+                    Data = new List<ProblemItem>
+                    {
+                        BuildProblemItem(prob3.StartDate, "27 March 2022", prob3.Rubric),
+                        BuildProblemItem(prob2.StartDate, "27 March 2022", prob2.Rubric),
+                        BuildProblemItem(prob5.StartDate, prob5.FinishDate, prob5.Rubric),  
+                        BuildProblemItem(null, "27 March 2022", prob1.Rubric),   
+                        BuildProblemItem(null, "27 March 2022", prob4.Rubric)   
+                    }
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Problems.Data.Should().HaveCount(5);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
+        }
+  
         private static AllergyItem BuildAllergyItem(Allergy allergy)
         {
             return new AllergyItem
@@ -862,9 +1084,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 }
             }   
                 
-            return item;
-                    
-            
+            return item;  
+        }
+        
+       private static ProblemItem BuildProblemItem(string startDate, string finishDate, string rubric)
+        {
+            return new ProblemItem
+            {
+                EffectiveDate = GetMyRecordDate(startDate),
+                LineItems = new List<ProblemLineItem>
+                {
+                    new ProblemLineItem { Text = "Finish Date: " + finishDate },
+                    new ProblemLineItem { Text = rubric }
+                }
+            };
+        } 
+
+        private static MyRecordDate GetMyRecordDate(string date)
+        {
+            if (DateTime.TryParse(date, out var validDate))
+            {
+                return new MyRecordDate
+                {
+                    Value = validDate,
+                    DatePart = "Unknown"
+                };
+            } 
+            return null;
         }
 
         private static Allergy BuildMicrotestAllergy(int id, string severity, string desc, string startDate)
@@ -918,6 +1164,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Description = desc,
                 NextDate = nextDate,
                 Status = status
+            };
+        }
+        
+       
+        private static Problem BuildMicrotestProblem(string startDate, string finishDate, string rubric)
+        {
+            return new Problem
+            {
+                StartDate = startDate,
+                FinishDate = finishDate,
+                Rubric = rubric,
             };
         }
     }

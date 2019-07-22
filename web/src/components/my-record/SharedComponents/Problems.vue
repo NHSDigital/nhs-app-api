@@ -11,9 +11,10 @@
     <div v-for="(problem, problemIndex) in orderedProblems"
          :key="`problem-${problemIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <span v-if="problem.effectiveDate.value" :class="$style.fieldName">
+      <span v-if="problem.effectiveDate && problem.effectiveDate.value" :class="$style.fieldName">
         {{ problem.effectiveDate.value | datePart(problem.effectiveDate.datePart) }}
       </span>
+      <span v-else :class="$style.fieldName">{{ $t('my_record.problems.noStartDate') }}</span>
       <p v-for="(lineItem, lineItemIndex) in problem.lineItems"
          :key="`line-${lineItemIndex}`">
         {{ lineItem.text }}
@@ -54,12 +55,17 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedProblems() {
-      return orderBy([obj => obj.effectiveDate.value], ['desc'])(this.problems.data);
+      return orderBy([problem => this.getEffectiveDate(problem.effectiveDate, '')], ['desc'])(this.problems.data);
     },
     showError() {
       return this.problems.hasErrored ||
              this.problems.data.length === 0 ||
              !this.problems.hasAccess;
+    },
+  },
+  methods: {
+    getEffectiveDate(effectiveDate, defaultValue) {
+      return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
     },
   },
 };

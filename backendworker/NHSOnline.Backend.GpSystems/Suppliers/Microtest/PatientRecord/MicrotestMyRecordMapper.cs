@@ -1,15 +1,23 @@
 using System;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
+using Medication = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord.Medication;
+using Problem = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord.Problem;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 {
     public class MicrotestMyRecordMapper : IMicrotestMyRecordMapper
     {
         private readonly ILogger<MicrotestMyRecordMapper> _logger;
+        
+        private const string ProblemDateDisplayFormat = "d MMMM yyyy";
+
+        private const string NoRubric = "No rubric recorded";
 
         public MicrotestMyRecordMapper(ILogger<MicrotestMyRecordMapper> logger)
         {
@@ -28,6 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             MapAllergies(myRecordResponse, patientRecordGetResponse.AllergyData);
             MapMedications(myRecordResponse, patientRecordGetResponse.MedicationData);
             MapImmunisations(myRecordResponse, patientRecordGetResponse.ImmunisationData);
+            MapProblems(myRecordResponse, patientRecordGetResponse.ProblemData);
 
             SetHasSummaryRecordAccess(myRecordResponse);
             SetHasDetailedRecordAccess(myRecordResponse);
@@ -76,11 +85,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     {
                         if (medication.Type.Equals(MedicationType.Current, StringComparison.OrdinalIgnoreCase))
                         {
-                            AddMedicationItem(currentMeds, medication);
+                            AddMedicationItemIfValid(currentMeds, medication);
                         }
                         else if (medication.Type.Equals(MedicationType.Historic, StringComparison.OrdinalIgnoreCase))
                         {
-                            AddMedicationItem(historicMeds, medication);
+                            AddMedicationItemIfValid(historicMeds, medication);
                         }
                         else
                         {
@@ -90,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     }
                     else if (medication.Status.Equals(MedicationStatus.Acute, StringComparison.OrdinalIgnoreCase))
                     {
-                        AddMedicationItem(acuteMeds, medication);
+                        AddMedicationItemIfValid(acuteMeds, medication);
                     }
                     else
                     {
@@ -151,18 +160,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     .OrderByDescending(o => o.EffectiveDate?.Value.GetValueOrDefault())
                     .ToList();
             }
-        }        
+        }
+
+        private void MapProblems(MyRecordResponse myRecordResponse, ProblemData problemData)
+        {
+            if (problemData != null)
+            {
+                var problemItems = new List<ProblemItem>();
+
+                foreach (var problem in problemData.Problems)
+                {
+                    AddProblemItemIfValid(problemItems, problem);  
+                }
+                
+                myRecordResponse.Problems.Data 
+                    = problemItems.OrderByDescending(p => p.EffectiveDate?.Value.GetValueOrDefault());
+            }
+        }
         
         /**
          * Adds a medication item if a valid date is present.
          */
-        private void AddMedicationItem(List<MedicationItem> items, Medication medication)
+        private void AddMedicationItemIfValid(List<MedicationItem> medicationItems, Medication medication)
         {
             var validDate = DateTime.TryParse(medication.PrescribedDate, out var prescribedDate);
 
             if (validDate)
             {
-                items.Add(new MedicationItem
+                medicationItems.Add(new MedicationItem
                 {
                     Date = prescribedDate,
                     LineItems = new List<MedicationLineItem>
@@ -181,6 +206,76 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
         }
 
+        private void AddProblemItemIfValid(List<ProblemItem> problemItems, Problem problem)
+        {
+            var validRubric = IsRubricValid(problem.Rubric);
+            
+            if (validRubric)
+            {
+                MyRecordDate problemStartDate = null;
+                var validStartDate = DateTime.TryParse(problem.StartDate, out var parsedStartDate);
+
+                if (validStartDate)
+                {
+                    problemStartDate = new MyRecordDate
+                    {
+                        Value = parsedStartDate,
+                        DatePart = "Unknown"
+                    };
+                }
+
+                var lineItems = new List<ProblemLineItem>();
+
+                if (problem.FinishDate != null)
+                {
+                    var problemLineItem = new ProblemLineItem();
+                    
+                    var validFinishDate = DateTime.TryParse(problem.FinishDate, out var parsedFinishDate);
+                    if (validFinishDate)
+                    {
+                        problemLineItem.Text = "Finish Date: " +
+                                parsedFinishDate.ToString(ProblemDateDisplayFormat, CultureInfo.InvariantCulture);
+                    }
+                    else
+                    {
+                        problemLineItem.Text = "Finish Date: " + problem.FinishDate;
+                    }
+                    lineItems.Add(problemLineItem);
+                }
+
+                //This will always be valid at this point, so no need for any checks
+                lineItems.Add(new ProblemLineItem { Text = problem.Rubric });
+
+                problemItems.Add(new ProblemItem
+                {
+                    EffectiveDate = problemStartDate,
+                    LineItems = lineItems
+                });
+            }
+            else
+            {
+                _logger.LogInformation("No valid rubric found in MyRecord Problem from Microtest. " +
+                                       "This item will not be mapped");            
+            }
+        }
+
+
+        private static bool IsRubricValid(string rubric)
+        {
+            var isValid = false;
+
+            if (rubric != null)
+            {
+                var trimmedRubric = rubric.Trim();
+                if (trimmedRubric.Length > 0 && !trimmedRubric.Equals(NoRubric, StringComparison.OrdinalIgnoreCase))
+                {
+                    isValid = true;
+                }
+            }
+
+            return isValid;
+        }
+
         private static void SetHasSummaryRecordAccess(MyRecordResponse myRecordResponse)
         {
             myRecordResponse.HasSummaryRecordAccess =
@@ -192,7 +287,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 
         private static void SetHasDetailedRecordAccess(MyRecordResponse myRecordResponse)
         {
-            myRecordResponse.HasDetailedRecordAccess = IsAny(myRecordResponse.Immunisations.Data);
+            myRecordResponse.HasDetailedRecordAccess = 
+                IsAny(myRecordResponse.Immunisations.Data) ||
+                IsAny(myRecordResponse.Problems.Data);
         }
 
         private static bool IsAny<T>(IEnumerable<T> data)
