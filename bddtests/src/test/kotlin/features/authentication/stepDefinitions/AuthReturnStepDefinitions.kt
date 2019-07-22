@@ -6,7 +6,9 @@ import features.authentication.steps.LoginSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import models.patients.EmisPatients
 import models.Patient
+import models.patients.TppPatients
 import net.thucydides.core.annotations.Steps
 import pages.loggedOut.AuthReturnPage
 import pages.ErrorPage
@@ -26,7 +28,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
 
     @Given("^I am logged into Citizen ID but am receiving invalid data$")
     fun loggedInInCitizenIdInvalidData() {
-        this.patient = Patient.paulSmith
+        this.patient = EmisPatients.paulSmith
 
         CitizenIdSessionCreateJourney(mockingClient).createInvalidFor(patient)
 
@@ -36,7 +38,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
 
     @Given("^I am logged into Citizen ID but GP System authentication fails$")
     fun loggedInInCitizenIdGpAuthenticationFails() {
-        this.patient = Patient.kevinBarry
+        this.patient = TppPatients.kevinBarry
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
 
@@ -46,7 +48,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
 
     @Given("^I am logged into Citizen ID but GP System session cannot be established$")
     fun loggedInInCitizenIdSessionNotEstablished() {
-        this.patient = Patient.montelFrye
+        this.patient = EmisPatients.montelFrye
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
 

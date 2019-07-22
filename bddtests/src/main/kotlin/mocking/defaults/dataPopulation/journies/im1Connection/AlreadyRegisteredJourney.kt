@@ -6,10 +6,10 @@ import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
-import models.Patient
+import models.patients.EmisPatients
 
 class AlreadyRegisteredJourney(private val client: MockingClient) {
-    val patient = Patient.halleDawe
+    val patient = EmisPatients.halleDawe
 
     fun create() {
         client

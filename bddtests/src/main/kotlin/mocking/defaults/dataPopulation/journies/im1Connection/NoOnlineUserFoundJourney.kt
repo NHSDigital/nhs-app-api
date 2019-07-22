@@ -3,10 +3,10 @@ package mocking.defaults.dataPopulation.journies.im1Connection
 import mocking.MockingClient
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
-import models.Patient
+import models.patients.EmisPatients
 
 class NoOnlineUserFoundJourney(private val client: MockingClient) {
-    val patient = Patient.halleDawe
+    val patient = EmisPatients.halleDawe
 
     fun create() {
         client

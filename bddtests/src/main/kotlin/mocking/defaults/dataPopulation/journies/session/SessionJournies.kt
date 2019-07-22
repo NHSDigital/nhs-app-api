@@ -1,7 +1,9 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import mocking.MockingClient
-import models.Patient
+import models.patients.EmisPatients
+import models.patients.TppPatients
+import models.patients.VisionPatients
 
 class SessionJournies(private val client: MockingClient) {
     fun create() {
@@ -10,18 +12,18 @@ class SessionJournies(private val client: MockingClient) {
         val tppFactory = TppSessionCreateJourneyFactory(client)
         val visionFactory = VisionSessionCreateJourneyFactory(client)
 
-        cidFactory.createFor(Patient.alanCook)
-        emisFactory.createFor(Patient.alanCook)
-        cidFactory.createFor(Patient.jackJackson)
-        emisFactory.createFor(Patient.jackJackson)
-        cidFactory.createFor(Patient.paulSmith)
-        emisFactory.createFor(Patient.paulSmith)
-        cidFactory.createFor(Patient.montelFrye)
-        emisFactory.createFor(Patient.montelFrye)
+        cidFactory.createFor(EmisPatients.alanCook)
+        emisFactory.createFor(EmisPatients.alanCook)
+        cidFactory.createFor(EmisPatients.jackJackson)
+        emisFactory.createFor(EmisPatients.jackJackson)
+        cidFactory.createFor(EmisPatients.paulSmith)
+        emisFactory.createFor(EmisPatients.paulSmith)
+        cidFactory.createFor(EmisPatients.montelFrye)
+        emisFactory.createFor(EmisPatients.montelFrye)
 
-        cidFactory.createFor(Patient.kevinBarry)
-        tppFactory.createFor(Patient.kevinBarry)
+        cidFactory.createFor(TppPatients.kevinBarry)
+        tppFactory.createFor(TppPatients.kevinBarry)
 
-        visionFactory.createFor(Patient.aderynCanon)
+        visionFactory.createFor(VisionPatients.aderynCanon)
     }
 }

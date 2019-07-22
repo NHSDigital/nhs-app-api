@@ -1,6 +1,7 @@
 package mocking.stubs
 
 import models.Patient
+import models.patients.TppPatients
 
 class TppStubsPatientFactory {
     companion object {
@@ -19,7 +20,7 @@ class TppStubsPatientFactory {
             val pad = uniqueId.padStart(length, '0')
             //do not add end user session id here
 
-            return Patient.kevinBarry.copy(
+            return TppPatients.kevinBarry.copy(
                     firstName = "You are logged in as",
                     surname = loginID,
                     connectionToken = "00000000-0000-0000-0000-$pad"

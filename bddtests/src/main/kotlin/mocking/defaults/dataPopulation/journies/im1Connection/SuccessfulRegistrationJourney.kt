@@ -22,6 +22,7 @@ import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber
 import mocking.vision.models.Register
 import mocking.vision.models.VisionUserSession
+import models.patients.EmisPatients
 import models.Patient
 
 class SuccessfulRegistrationJourney(private val client: MockingClient) {
@@ -159,6 +160,6 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
     }
 
     companion object {
-        val patient = Patient.montelFrye
+        val patient = EmisPatients.montelFrye
     }
 }

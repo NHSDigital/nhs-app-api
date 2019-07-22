@@ -8,6 +8,7 @@ import features.sharedStepDefinitions.backend.AbstractSteps
 import mocking.emis.demographics.PatientIdentifier
 import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.VisionUserSession
+import models.NhsNumberFormatter
 import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -135,10 +136,10 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
         val connectionToken = sessionVariableCalled<String>("ConnectionToken")
         Assert.assertNotNull(result)
         val resultNhsNumbers = result.nhsNumbers!!.map {
-            number -> Patient.formatNHSNumber(number.nhsNumber) }
+            number -> NhsNumberFormatter.format(number.nhsNumber) }
                 .toTypedArray()
         val expectedNhsNumbers = nhsNumbers.map {
-            number -> Patient.formatNHSNumber(number.identifierValue!!) }
+            number -> NhsNumberFormatter.format(number.identifierValue!!) }
                 .toTypedArray()
         Assert.assertEquals(nhsNumbers.count(), resultNhsNumbers.count())
         Assert.assertArrayEquals("Expected NHS Numbers", expectedNhsNumbers, resultNhsNumbers)

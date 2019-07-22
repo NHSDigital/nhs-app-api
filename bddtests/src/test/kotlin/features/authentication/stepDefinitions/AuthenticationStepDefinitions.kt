@@ -23,6 +23,7 @@ import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
 import mockingFacade.linkage.LinkageInformationFacade
+import models.patients.EmisPatients
 import models.Patient
 import mongodb.MongoDBConnection
 import net.serenitybdd.core.Serenity
@@ -262,7 +263,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have a user's IM1 credentials with missing ODS Code$")
     fun iHaveAnEMISUsersIMCredentialsWithMissingODSCode() {
-        this.patient = Patient.johnSmith
+        this.patient = EmisPatients.johnSmith
         this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,

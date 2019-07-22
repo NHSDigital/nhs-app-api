@@ -6,7 +6,7 @@ import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import models.Patient
+import models.patients.EmisPatients
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertTrue
 import pages.throttling.GPFinderPage
@@ -31,7 +31,7 @@ open class GpFinderPageStepDefinitions {
         gpFinderPage.driver.manage().deleteAllCookies()
         browser.goToApp()
         //browser.appendSourceQueryString("ios")
-        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.jackJackson)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(EmisPatients.jackJackson)
     }
 
     @When("^I enter criteria and submit my search in the GP Practice finder")

@@ -1,6 +1,7 @@
 package mocking.stubs
 
 import config.Config
+import models.patients.EmisPatients
 import models.Patient
 import worker.models.session.UserSessionRequest
 
@@ -128,7 +129,7 @@ class EmisStubsPatientFactory {
             val pad = uniqueId.padStart(length, '0')
             //do not add end user session id here
 
-            return Patient.picaJones.copy(
+            return EmisPatients.picaJones.copy(
                     firstName = "You are logged in as",
                     surname = loginID,
                     cidUserSession = UserSessionRequest(

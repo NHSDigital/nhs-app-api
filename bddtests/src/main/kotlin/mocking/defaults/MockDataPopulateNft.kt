@@ -10,6 +10,7 @@ import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourney
 import mocking.emis.models.CourseRequestsGetResponse
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
+import models.patients.EmisPatients
 import models.Patient
 import models.prescriptions.MedicationCourse
 import worker.models.session.UserSessionRequest
@@ -26,7 +27,7 @@ class MockDataPopulateNft(private val mockingClient: MockingClient) {
 
             val index: String = i.toString()
             val pad = index.padStart(CONNECTION_TOKEN_SUFFIX_LENGTH, '0')
-            val patient = Patient.montelFrye.copy(
+            val patient = EmisPatients.montelFrye.copy(
                     firstName = "NFT.Patient",
                     surname = "Test$pad",
                     cidUserSession = UserSessionRequest(

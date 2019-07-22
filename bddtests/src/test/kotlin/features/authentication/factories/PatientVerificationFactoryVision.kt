@@ -55,7 +55,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
                             visionUserSession = VisionUserSession(
                                     "999999999",
                                     "nonexistingapikey",
-                                    Patient.aderynCanon.odsCode, patientId = Patient.aderynCanon.patientId))
+                                    patient.odsCode, patientId = patient.patientId))
                             .respondWitInvalidUserCredentials()
                 }
         Serenity.setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
@@ -70,10 +70,10 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
                 .forVision {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
-                                    Patient.aderynCanon.rosuAccountId,
-                                    Patient.aderynCanon.apiKey,
-                                    Patient.aderynCanon.odsCode,
-                                    Patient.aderynCanon.patientId))
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId))
                             .respondWithSuccess(configuration = Configuration(
                                     account = Account(patient.patientId,
                                             patientNumber = nhsNumbers.map { number -> PatientNumber(number = number) },

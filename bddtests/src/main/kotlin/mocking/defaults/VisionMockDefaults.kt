@@ -46,18 +46,18 @@ class VisionMockDefaults{
                 VisionConstants.newPrescriptionVersion)
 
         val visionUserSessionPrescriptionDisabled = VisionUserSession(
-                Patient.aderynCanon.rosuAccountId,
-                Patient.aderynCanon.apiKey,
-                Patient.aderynCanon.odsCode,
-                Patient.aderynCanon.patientId,
+                patientVision.rosuAccountId,
+                patientVision.apiKey,
+                patientVision.odsCode,
+                patientVision.patientId,
                 isRepeatPrescriptionsEnabled = false
         )
 
         val visionUserSession = VisionUserSession(
-                Patient.aderynCanon.rosuAccountId,
-                Patient.aderynCanon.apiKey,
-                Patient.aderynCanon.odsCode,
-                Patient.aderynCanon.patientId
+                patientVision.rosuAccountId,
+                patientVision.apiKey,
+                patientVision.odsCode,
+                patientVision.patientId
         )
 
         val visionConfigurationResponsePrescriptionsDisabled = Configuration(account = Account(patientVision.patientId,
