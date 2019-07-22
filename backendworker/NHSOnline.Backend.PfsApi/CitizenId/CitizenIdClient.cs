@@ -16,8 +16,10 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
     public interface ICitizenIdClient
     {
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, string redirectUrl);
-        Task<CitizenIdClient.CitizenIdApiObjectResponse<JsonWebKeySet>>GetSigningKeys();
+        Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier,
+            string redirectUrl);
+        Task<CitizenIdClient.CitizenIdApiObjectResponse<JsonWebKeySet>> GetSigningKeys();
+        Task<CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string accessToken);
     }
 
     public class CitizenIdClient : ICitizenIdClient
@@ -25,6 +27,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
         private readonly ILogger<CitizenIdClient> _logger;
         private const string TokenPath = "token";
         private const string SigningKeysPath = ".well-known/jwks.json";
+        private const string UserInfoPath = "userinfo";
 
         private readonly CitizenIdHttpClient _httpClient;
         private readonly string _clientId;
@@ -32,14 +35,14 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
         private readonly IJsonResponseParser _responseParser;
 
         public CitizenIdClient(
-            CitizenIdHttpClient httpClient, 
+            CitizenIdHttpClient httpClient,
             ICitizenIdConfig config,
             ILogger<CitizenIdClient> logger,
             IJsonResponseParser responseParser)
         {
             _logger = logger;
             _httpClient = httpClient;
-            
+
             _responseParser = responseParser;
             _clientId = config.ClientId;
             _basicAuthCredentials = Convert.ToBase64String(
@@ -47,12 +50,13 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
         }
 
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, string redirectUrl)
+        public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier,
+            string redirectUrl)
         {
             try
             {
                 _logger.LogEnter();
-                
+
                 var dict = new Dictionary<string, string>
                 {
                     { "grant_type", "authorization_code" },
@@ -62,14 +66,14 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                     { "client_id", _clientId },
                     { "code_challenge_method", "S256" }
                 };
-    
+
                 var request = new HttpRequestMessage(HttpMethod.Post, TokenPath)
                 {
                     Content = new FormUrlEncodedContent(dict)
                 };
-    
+
                 request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _basicAuthCredentials);
-    
+
                 var response = await SendRequestAndParseResponse<Token>(request);
                 return response;
             }
@@ -79,6 +83,16 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             }
         }
 
+        public async Task<CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string accessToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, UserInfoPath);
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await SendRequestAndParseResponse<UserInfo>(request);
+            return response;
+        }
+        
         public async Task<CitizenIdApiObjectResponse<JsonWebKeySet>> GetSigningKeys()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, SigningKeysPath);
@@ -89,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
 
         private async Task<CitizenIdApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
-        {   
+        {
             var responseMessage = await _httpClient.Client.SendAsync(request);
 
             var response = new CitizenIdApiObjectResponse<TResponse>(responseMessage.StatusCode);
@@ -108,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
 
             return response;
         }
-        
+
         public class CitizenIdApiResponse
         {
             protected CitizenIdApiResponse(HttpStatusCode statusCode)
@@ -118,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
 
             public HttpStatusCode StatusCode { get; set; }
             public ErrorResponse ErrorResponse { get; set; }
-            public bool HasSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
+            public bool HasSuccessStatusCode => (int) StatusCode >= 200 && (int) StatusCode <= 299;
         }
 
         public class CitizenIdApiObjectResponse<TBody> : CitizenIdApiResponse
@@ -131,4 +145,3 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
         }
     }
 }
-            

@@ -46,6 +46,7 @@ data class Patient(
                         "-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
                 redirectUrl = Config.instance.cidRedirectUri),
+        val subject: String = "3ad631b4-7a7a-434d-8a7b-1c8ac3c56132",
         val accessToken: String = "eyJzdWIiOiI0NTVmODBiYy02NTkyLTRmZTQtODVlMC0wZTdiOTdlYzFmYWQiLCJhdWQiOiJuaHMtb25s" +
                 "aW5lIiwia2lkIjoiYjcxNDk4NmFjNTI2ZWExMjY1NTVhMzdmMTY4NjU5ZmNlOGI5ZGIyNCIsImlzcyI6Imh0dHBzOi8vYXV0aC" +
                 "5leHQuc2lnbmluLm5ocy51ayIsInR5cCI6IkpXVCIsImV4cCI6MTU2MjMxNTg4MSwiaWF0IjoxNTYyMzEyMjgxLCJhbGciOiJS" +
@@ -62,7 +63,7 @@ data class Patient(
                 "Hyc8YLcSZ2b3VRsMjTPIadVOdJeLq2vIbhhiDZ2a9GX5FnwcgE0pW241-5FbOQy9nvtW-gA-7dtQWXObg4QcAqxpRmr1rIbFlB" +
                 "4FeK26UZs6IT9dZ-foYfIBl_4Eyggg",
         val tppUserSession: TppUserSession? = null,
-        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null,
+        val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157"
 ) {
 
@@ -197,7 +198,7 @@ data class Patient(
                 accountId = "4140044939",
                 linkageKey = "vVGO8bgV6fvPb",
                 userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
-                im1ConnectionTokenAsJson = montelFryeIm1ConnectionToken
+                im1ConnectionToken = montelFryeIm1ConnectionToken
         )
 
         val picaJones = Patient(
@@ -284,7 +285,7 @@ data class Patient(
                         "84df400000000000",
                         TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                         "84df400000000000"),
-                im1ConnectionTokenAsJson = kevinBarryIm1ConnectionToken
+                im1ConnectionToken = kevinBarryIm1ConnectionToken
         )
 
         ////////// VISION PATIENTS /////////////
@@ -325,7 +326,7 @@ data class Patient(
                 patientId = "1017",
                 accountId = "104969",
                 linkageKey = "kWWG9kHfNMSjm",
-                im1ConnectionTokenAsJson = adreynCanonIm1ConnectionToken
+                im1ConnectionToken = adreynCanonIm1ConnectionToken
         )
 
         ////////// MICROTEST PATIENTS /////////////
@@ -355,7 +356,7 @@ data class Patient(
                 patientId = "",
                 accountId = "MICROTEST_ACCOUNT_ID",
                 linkageKey = "MICROTEST_LINKAGE_KEY",
-                im1ConnectionTokenAsJson = Im1ConnectionToken()
+                im1ConnectionToken = Im1ConnectionToken()
         )
 
         fun formatNHSNumber(nhsNumber: String): String {

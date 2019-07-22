@@ -240,7 +240,7 @@ class Im1ConnectionV2StepDefinitions : AbstractSteps() {
     @Then("^the Im1 connection response has the expected connection token$")
     fun theResponseHasTheExpectedConnectionToken() {
         val result = Im1ConnectionSerenityHelpers.Im1ConnectionResponse.getOrFail<Im1ConnectionResponse>()
-        val expectedIm1ConnectionToken = SerenityHelpers.getPatient().im1ConnectionTokenAsJson
+        val expectedIm1ConnectionToken = SerenityHelpers.getPatient().im1ConnectionToken
         val actualIm1ConnectionToken = GsonFactory.asPascal.fromJson<Im1ConnectionToken>(
                 result.connectionToken,
                 Im1ConnectionToken::class.java

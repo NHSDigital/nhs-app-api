@@ -34,6 +34,10 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
             tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
                     .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
         }
+
+        mockingClient.forCitizenId {
+            userInfoRequest().respondWithSuccess(patient)
+        }
     }
 
     fun createInvalidFor(patient: Patient) {

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.PfsApi.CitizenId.Models;
 using NHSOnline.Backend.Support.Http;
@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
             services.AddSingleton<ITokenValidationParameterBuilder, TokenValidationParameterBuilder>();
-            services.AddSingleton<IJwtTokenService<UserProfile>, IdTokenService>();
+            services.AddSingleton<IJwtTokenService<IdToken>, IdTokenService>();
             services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
             services.AddScoped<ICitizenIdSessionService, CitizenIdSessionService>();
 

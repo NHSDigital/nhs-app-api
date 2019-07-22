@@ -137,7 +137,9 @@
         "DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS": "500",
         "NOMINATED_PHARMACY_ENABLED": "true",
         "GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE": "B83054",
-        "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086"
+        "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086",
+        "PARTY_ID_FROM": "ABC",
+        "PARTY_ID_TO": "CBA"
       }
     },
     "NHSOnline.Backend.PfsApi.Bdd": {

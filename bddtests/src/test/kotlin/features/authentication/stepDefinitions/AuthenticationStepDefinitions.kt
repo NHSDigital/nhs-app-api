@@ -115,6 +115,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forCitizenId {
             tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
                     .respondWithServerError()
+            userInfoRequest().respondWithServerError()
         }
         SessionCreateJourneyFactory.getForSupplier("EMIS", mockingClient).createFor(patient)
     }
@@ -371,7 +372,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I am logged in as a (.*) user created before Im1 Cache Keys existed$")
     fun iAmLoggedInWithoutIm1CacheKey(gpSystem: String) {
-        this.patient = Patient.getDefault(gpSystem).copy(im1ConnectionTokenAsJson = null)
+        this.patient = Patient.getDefault(gpSystem).copy(im1ConnectionToken = null)
         setupAndLogIn(patient, gpSystem)
     }
 
@@ -617,7 +618,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun theResponseHasTheExpectedConnectionToken() {
         val result = this.im1ConnectionResponse
 
-        val expectedIm1ConnectionToken = this.patient.im1ConnectionTokenAsJson
+        val expectedIm1ConnectionToken = this.patient.im1ConnectionToken
 
         val actualIm1ConnectionToken = GsonFactory.asPascal.fromJson<Im1ConnectionToken>(
                 result?.connectionToken,

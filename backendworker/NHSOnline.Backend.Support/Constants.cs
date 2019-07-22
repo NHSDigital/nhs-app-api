@@ -114,14 +114,6 @@ namespace NHSOnline.Backend.Support
             public const string GpPracticeEnglandWales = @"^[A-Z0-9]{6}$";
         }
 
-        public static class CitizenIdClaimTypes
-        {
-            public const string Im1ConnectionTokenClaim = "im1_token";
-            public const string OdscodeClaim = "ods_code";
-            public const string NhsNumber = "nhs_number";
-            public const string Surname = "surname";
-        }
-
         public static class Regex
         {
             public const string GuidRegex = @"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}";

@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -18,11 +19,11 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
     {
         private readonly ICitizenIdClient _citizenIdClient;
         private readonly ICitizenIdSigningKeysService _citizenIdKeysService;
-        private readonly IJwtTokenService<UserProfile> _idTokenService;
-        private readonly ILogger<CitizenIdService>  _logger;
+        private readonly IJwtTokenService<IdToken> _idTokenService;
+        private readonly ILogger<CitizenIdService> _logger;
 
         public CitizenIdService(ICitizenIdClient citizenIdClient, ICitizenIdSigningKeysService citizenIdKeysService,
-            IJwtTokenService<UserProfile> idTokenService, ILogger<CitizenIdService> logger)
+            IJwtTokenService<IdToken> idTokenService, ILogger<CitizenIdService> logger)
         {
             _citizenIdClient = citizenIdClient;
             _citizenIdKeysService = citizenIdKeysService;
@@ -38,13 +39,12 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
 
             try
             {
-
                 var isValid = new ValidateAndLog(_logger).IsNotNullOrWhitespace(authCode, nameof(authCode))
                     .IsNotNullOrWhitespace(codeVerifier, nameof(codeVerifier))
                     .IsNotNullOrWhitespace(redirectUrl, nameof(redirectUrl))
                     .IsValid();
 
-                if(!isValid)
+                if (!isValid)
                 {
                     result.StatusCode = HttpStatusCode.BadRequest;
                     result.UserProfile = Option.None<UserProfile>();
@@ -74,36 +74,77 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                     return result;
                 }
 
-                result.UserProfile = _idTokenService
-                    .ReadToken(tokenResponse.Body.IdToken,
-                        signingKeys.ValueOrFailure())
-                    .IfSome((userProfile) =>
+                _idTokenService.ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure())
+                    .IfSome(idToken =>
                     {
-                        result.StatusCode = HttpStatusCode.OK;
-                        userProfile.AccessToken = tokenResponse.Body.AccessToken;
-                        return Option.Some(userProfile);
+                        result = GetUserProfile(tokenResponse.Body.AccessToken, idToken);
+
+                        return Option.Some(idToken);
                     })
                     .IfNone(() =>
                     {
+                        _logger.LogError("Failed to read ID Token");
                         result.StatusCode = HttpStatusCode.BadRequest;
-                        return Option.None<UserProfile>();
+                        result.UserProfile = Option.None<UserProfile>();
+                        return Option.None<IdToken>();
                     });
 
                 return result;
             }
             finally
             {
-                _logger.LogExit();    
+                _logger.LogExit();
             }
+        }
+
+        private GetUserProfileResult GetUserProfile(string accessToken, IdToken idToken)
+        {
+            var userInfo = _citizenIdClient.GetUserInfo(accessToken).Result;
+
+            if (!userInfo.HasSuccessStatusCode)
+            {
+                LogError(userInfo, "Failed to retrieve User Profile.");
+                return new GetUserProfileResult
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    UserProfile = Option.None<UserProfile>()
+                };
+            }
+
+            if (!idToken.Subject.Equals(userInfo.Body.Subject, StringComparison.Ordinal))
+            {
+                _logger.LogError("Value of subject claim differed between Token and UserInfo responses");
+                return new GetUserProfileResult
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    UserProfile = Option.None<UserProfile>()
+                };
+            }
+
+            var userProfile = new UserProfile
+            {
+                NhsNumber = userInfo.Body.NhsNumber,
+                OdsCode = userInfo.Body.GpIntegrationCredentials.OdsCode,
+                Im1ConnectionToken = userInfo.Body.Im1ConnectionToken,
+                FamilyName = userInfo.Body.FamilyName,
+                DateOfBirth = userInfo.Body.Birthdate,
+                AccessToken = accessToken
+            };
+
+            return new GetUserProfileResult
+            {
+                StatusCode = HttpStatusCode.OK,
+                UserProfile = Option.Some(userProfile)
+            };
         }
 
         private void LogError<T>(CitizenIdClient.CitizenIdApiObjectResponse<T> apiResponse, string errorMessage)
         {
             _logger.LogError($"{errorMessage} Error code: '{apiResponse.ErrorResponse?.Error}'");
         }
-        
+
         private static HttpStatusCode MapCitizenIdErrorStatusCode(HttpStatusCode code)
-        {           
+        {
             return code == HttpStatusCode.BadRequest
                 ? HttpStatusCode.BadRequest
                 : HttpStatusCode.BadGateway;

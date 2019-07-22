@@ -63,7 +63,14 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
             tokenType: String = "Bearer",
             idToken: String = ""): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andJsonBody(SucceededResponse(accessToken, tokenType, expiresIn, scope, idToken))
+            andJsonBody(
+                    SucceededResponse(
+                            accessToken,
+                            tokenType,
+                            expiresIn,
+                            scope,
+                            idToken)
+            )
         }
     }
 
@@ -75,3 +82,5 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) { build() }
     }
 }
+
+

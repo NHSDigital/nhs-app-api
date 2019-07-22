@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private CitizenIdClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private CitizenIdHttpClient _httpClient;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
-        
+
         [TestMethod]
         public async Task GetSigningKeys_ErrorResponseReceived_ReturnsErrorMessage()
         {
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
-        
+
         [TestMethod]
         public async Task GetSigningKeys_ReceivedOkWithPoorlyFormedJson_ReturnsErrorMessage()
         {
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
-        
+
         [TestMethod]
         public async Task GetSigningKeys_ReceivedOkWithNoContent_ReturnsErrorMessage()
         {
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
-        
+
         [TestMethod]
         public async Task GetSigningKeys_HappyPath()
         {
@@ -189,11 +189,96 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
 
+        [TestMethod]
+        public async Task GetUserInfo_HappyPath()
+        {
+            // Arrange
+            var bearerToken = _fixture.Create<string>();
+
+            var expectedTokenResponse = _fixture.Create<UserInfo>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, "userinfo").ToString())
+                .WithHeaders("Authorization", $"Bearer {bearerToken}")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedTokenResponse));
+
+            // Act
+            var response = await _systemUnderTest.GetUserInfo(bearerToken);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedTokenResponse);
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+
+        [TestMethod]
+        public async Task GetUserInfo_ErrorResponseReceived_ReturnsErrorMessage()
+        {
+            // Arrange
+            var bearerToken = _fixture.Create<string>();
+
+            var expectedErrorResponse = _fixture.Create<ErrorResponse>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, "userinfo").ToString())
+                .WithHeaders("Authorization", $"Bearer {bearerToken}")
+                .Respond(HttpStatusCode.InternalServerError, "application/json",
+                    JsonConvert.SerializeObject(expectedErrorResponse));
+
+            // Act
+            var response = await _systemUnderTest.GetUserInfo(bearerToken);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(new UserInfo());
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+
+        [TestMethod]
+        public async Task GetUserInfo_EndpointCalled_ReturnsErrorResponseCodeWithNullBody_ResponseHasEmptyErrorProperties()
+        {
+            // Arrange
+            var bearerToken = _fixture.Create<string>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, "userinfo").ToString())
+                .WithHeaders("Authorization", $"Bearer {bearerToken}")
+                .Respond(HttpStatusCode.Forbidden);
+
+            // Act
+            var response = await _systemUnderTest.GetUserInfo(bearerToken);
+
+            // Assert
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [TestMethod]
+        public async Task GetUserInfo_EndpointCalled_ReturnsErrorResponseCodeWithEmptyBody_ResponseHasEmptyErrorProperties()
+        {
+            // Arrange
+            var bearerToken = _fixture.Create<string>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, "userinfo").ToString())
+                .WithHeaders("Authorization", $"Bearer {bearerToken}")
+                .Respond(HttpStatusCode.Forbidden, "application/json", string.Empty);
+
+            // Act
+            var response = await _systemUnderTest.GetUserInfo(bearerToken);
+
+            // Assert
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
         public void Dispose()
         {
             _mockHttpHandler.Dispose();
         }
-        
+
         private Dictionary<string, string> CreateTokenBody(string authCode, string redirectUrl, string codeVerifier)
         {
             var dict = new Dictionary<string, string>

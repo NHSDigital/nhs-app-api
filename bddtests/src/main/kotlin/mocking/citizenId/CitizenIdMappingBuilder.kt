@@ -5,6 +5,7 @@ import mocking.MappingBuilder
 import mocking.citizenId.login.AccountRegistrationRequestBuilder
 import mocking.citizenId.login.CompleteLoginRequestBuilder
 import mocking.citizenId.login.InitialLoginRequestBuilder
+import mocking.citizenId.login.UserInfoRequestBuilder
 import mocking.citizenId.login.SigningKeysRequestBuilder
 import mocking.citizenId.login.TokenRequestBuilder
 import mocking.citizenId.models.TokenRequest
@@ -31,6 +32,8 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
     fun tokenRequest(codeVerifier: String, authCode: String? = null,
                      customTokenRequest: TokenRequest? = null) = TokenRequestBuilder(
             codeVerifier, authCode, customTokenRequest)
+
+    fun userInfoRequest() = UserInfoRequestBuilder()
 
     fun signingKeyRequest() = SigningKeysRequestBuilder()
 }

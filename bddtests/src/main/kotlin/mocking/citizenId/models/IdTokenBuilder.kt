@@ -22,27 +22,26 @@ class IdTokenBuilder(issuer: String, audience: String) {
          return Date(Date().time + DELAY_IN_SECONDS * EXPIRATION_TIME_MULTIPLIER)
     }
 
-    private fun getHeader(): JWSHeader {
+    private fun getHeader(patient: Patient): JWSHeader {
         return JWSHeader.Builder(JWSAlgorithm.RS512)
                 .type(JOSEObjectType.JWT)
-                .customParam("sub","3ad631b4-7a7a-434d-8a7b-1c8ac3c56132")
+                .customParam("sub", patient.subject)
                 .customParam("aud", usedAudience)
                 .customParam("iss", usedIssuer)
                 .customParam("exp", createExpirationDate().toInstant().epochSecond)
                 .customParam("iat", Date().toInstant().epochSecond)
                 .customParam("jti", "2581a97f-13ba-4bd5-89d4-099c70531db2")
                 .build()
-
     }
 
     private fun getClaims(patient: Patient): JWTClaimsSet {
-        var im1ConnectionToken = patient.im1ConnectionTokenAsJson ?: patient.connectionToken
+        var im1ConnectionToken = patient.im1ConnectionToken ?: patient.connectionToken
         if (im1ConnectionToken.javaClass == Im1ConnectionToken::class.java) {
             im1ConnectionToken = GsonFactory.asPascal.toJson(im1ConnectionToken)
         }
 
         return JWTClaimsSet.Builder()
-                .subject("3ad631b4-7a7a-434d-8a7b-1c8ac3c56132")
+                .subject(patient.subject)
                 .issuer(usedIssuer)
                 .audience(usedAudience)
                 .expirationTime(createExpirationDate())
@@ -62,7 +61,7 @@ class IdTokenBuilder(issuer: String, audience: String) {
 
     fun getSignedToken(signer: RSASSASigner, patient: Patient): SignedJWT {
         val signedJWT = SignedJWT(
-                getHeader(),
+                getHeader(patient),
                 getClaims(patient))
 
         signedJWT.sign(signer)
