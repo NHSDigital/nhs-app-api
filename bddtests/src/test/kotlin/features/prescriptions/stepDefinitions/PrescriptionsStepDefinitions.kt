@@ -564,9 +564,11 @@ open class PrescriptionsStepDefinitions {
     }
 
     private fun initialize(gpSystem: String) {
-        PrescriptionsSerenityHelpers.PROVIDER.set( ProviderTypes.valueOf(gpSystem))
-        SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
-
+        PrescriptionsSerenityHelpers.PROVIDER.set(ProviderTypes.valueOf(gpSystem))
+        val existingPatient = SerenityHelpers.getPatientOrNull()
+        if (existingPatient == null) {
+            SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
+        }
         when (ProviderTypes.valueOf(gpSystem)) {
             ProviderTypes.EMIS -> {
                 prescriptionLoader = EmisPrescriptionLoader
