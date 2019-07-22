@@ -37,7 +37,6 @@ class StubsPatientFactory {
                             codeVerifier = "codeVerifier$pad",
                             redirectUrl = Config.instance.cidRedirectUri
                     ),
-                    accessToken = "accessToken$pad",
                     connectionToken = "00000000-0000-0000-0000-$pad",
                     userPatientLinkToken = "userPatientLinkToken$pad"
             )
