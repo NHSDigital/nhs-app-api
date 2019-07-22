@@ -4,7 +4,10 @@
                :class="'nhsuk-header__link'"
                :to="indexPath"
                aria-label="NHS homepage">
-      <svg class="nhsuk-logo nhsuk-logo--white" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" viewBox="0 0 40 16">
+      <svg class="nhsuk-logo nhsuk-logo--white"
+           xmlns="http://www.w3.org/2000/svg"
+           focusable="false"
+           viewBox="0 0 40 16">
         <path fill="#fff" d="M0 0h40v16H0z"/>
         <path
           fill="#005eb8"
