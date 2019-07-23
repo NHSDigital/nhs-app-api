@@ -1,8 +1,19 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime
+ARG PROJECT_NAME=NHSOnline.Backend.CidApi
+ARG PORT=8084
+ARG RUNTIME_IMAGE=mcr.microsoft.com/dotnet/core/runtime:2.1
+ARG SDK_IMAGE=mcr.microsoft.com/dotnet/core/sdk:2.1
+ARG PROJECT_PLATFORM=linux-x64
+
+FROM ${RUNTIME_IMAGE} AS runtime
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y netcat sudo && \
-    rm -rf /var/lib/apt/lists/* && \
+    rm -rf \
+      /var/cache/debconf/* \
+      /var/lib/apt/lists/* \
+      /var/log/* \
+      /tmp/* \
+      /var/tmp/* && \
     useradd -m aspnetcore && \
     curl -L -o /usr/local/bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for && \
     chmod +rx /usr/local/bin/wait-for
@@ -10,34 +21,46 @@ RUN apt-get update && \
 RUN echo "aspnetcore ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers.d/default; \
     chmod 400 /etc/sudoers.d/default
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM ${SDK_IMAGE} AS build
 RUN apt-get update && \
     apt-get upgrade -y && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf \
+      /var/cache/debconf/* \
+      /var/lib/apt/lists/* \
+      /var/log/* \
+      /tmp/* \
+      /var/tmp/*
 
 FROM build as dependencies
+ARG PROJECT_NAME
+ARG PROJECT_PLATFORM
 WORKDIR /src
 COPY *.sln ./
-WORKDIR /src/NHSOnline.Backend.CidApi
-COPY NHSOnline.Backend.CidApi/NHSOnline.Backend.CidApi.csproj ./
-RUN dotnet restore  -r linux-x64
+WORKDIR /src/${PROJECT_NAME}
+COPY ${PROJECT_NAME}/${PROJECT_NAME}.csproj ./
+RUN dotnet restore  -r ${PROJECT_PLATFORM}
 
 FROM dependencies as built
+ARG PROJECT_NAME
+ARG PROJECT_PLATFORM
+ARG COMMIT_ID
 WORKDIR /src
 COPY . .
-WORKDIR /src/NHSOnline.Backend.CidApi
-
-ARG COMMIT_ID
+WORKDIR /src/${PROJECT_NAME}
 RUN sed -i "s/.*\"CommitId\":.*/    \"CommitId\": \"$COMMIT_ID\"/" appsettings.json
-
-RUN dotnet build -c Release -o /app  -r linux-x64
+RUN dotnet build -c Release -o /app  -r ${PROJECT_PLATFORM}
 
 FROM built AS publish
-RUN dotnet publish -c Release -o /app -r linux-x64
+ARG PROJECT_PLATFORM
+RUN dotnet publish -c Release -o /app -r ${PROJECT_PLATFORM}
 COPY /certs/* /app/certs/
 
 FROM runtime AS final
-ENV PORT=
+ARG PROJECT_NAME
+ARG PORT
+
+ENV PROJECT_NAME=$PROJECT_NAME
+ENV PORT=$PORT
 ENV ASPNETCORE_ENVIRONMENT Production
 ENV ASPNETCORE_URLS=
 ENV CORS_AUTHORITY https://www-preview.devuks1.bitraft.io
@@ -91,8 +114,8 @@ ENV IM1CACHE_MONGO_DATABASE_COLLECTION im1cache
 ENV VISION_ODS_REMAP_ENABLED false
 
 WORKDIR /app
-EXPOSE $PORT
-COPY --from=publish /app .
+RUN chown aspnetcore:aspnetcore /app
+COPY --chown=aspnetcore:aspnetcore --from=publish /app .
 
 # Setup trusts for self-signed certificates
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppDev.crt /usr/local/share/ca-certificates/TppDev.crt
@@ -101,6 +124,6 @@ COPY NHSOnline.Backend.GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt
 RUN chmod 644 /usr/local/share/ca-certificates/*
 RUN update-ca-certificates
 
-RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet NHSOnline.Backend.CidApi.dll
+EXPOSE $PORT
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet ${PROJECT_NAME}.dll

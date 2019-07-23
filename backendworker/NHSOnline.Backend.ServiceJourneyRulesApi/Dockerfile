@@ -1,33 +1,59 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime
+ARG PROJECT_NAME=NHSOnline.Backend.ServiceJourneyRulesApi
+ARG PORT=8086
+ARG RUNTIME_IMAGE=mcr.microsoft.com/dotnet/core/runtime:2.1
+ARG SDK_IMAGE=mcr.microsoft.com/dotnet/core/sdk:2.1
+ARG PROJECT_PLATFORM=linux-x64
+
+FROM ${RUNTIME_IMAGE} AS runtime
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y netcat sudo && \
-    rm -rf /var/lib/apt/lists/* && \
+    rm -rf \
+      /var/cache/debconf/* \
+      /var/lib/apt/lists/* \
+      /var/log/* \
+      /tmp/* \
+      /var/tmp/* && \
     useradd -m aspnetcore
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM ${SDK_IMAGE} AS build
 RUN apt-get update && \
     apt-get upgrade -y && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf \
+      /var/cache/debconf/* \
+      /var/lib/apt/lists/* \
+      /var/log/* \
+      /tmp/* \
+      /var/tmp/*
 
 FROM build as dependencies
+ARG PROJECT_NAME
+ARG PROJECT_PLATFORM
 WORKDIR /src
 COPY *.sln ./
-WORKDIR /src/NHSOnline.Backend.ServiceJourneyRulesApi
-COPY NHSOnline.Backend.ServiceJourneyRulesApi/NHSOnline.Backend.ServiceJourneyRulesApi.csproj ./
-RUN dotnet restore  -r linux-x64
+WORKDIR /src/${PROJECT_NAME}
+COPY ${PROJECT_NAME}/${PROJECT_NAME}.csproj ./
+RUN dotnet restore  -r ${PROJECT_PLATFORM}
 
 FROM dependencies as built
+ARG PROJECT_NAME
+ARG PROJECT_PLATFORM
 WORKDIR /src
 COPY . .
-WORKDIR /src/NHSOnline.Backend.ServiceJourneyRulesApi
-RUN dotnet build -c Release -o /app  -r linux-x64
+WORKDIR /src/${PROJECT_NAME}
+RUN dotnet build -c Release -o /app  -r ${PROJECT_PLATFORM}
+
 
 FROM built AS publish
-RUN dotnet publish -c Release -o /app -r linux-x64
+ARG PROJECT_PLATFORM
+RUN dotnet publish -c Release -o /app -r ${PROJECT_PLATFORM}
 
 FROM runtime AS final
-ENV PORT=8086
+ARG PROJECT_NAME
+ARG PORT
+
+ENV PROJECT_NAME=$PROJECT_NAME
+ENV PORT=$PORT
 ENV ASPNETCORE_URLS=
 ENV AUDIT_SINK_TYPE FILE
 ENV SESSION_MONGO_DATABASE_NAME development
@@ -40,9 +66,9 @@ ENV INPUT_FOLDER_PATH=
 ENV SJR_ARGS=
 
 WORKDIR /app
-EXPOSE $PORT
-COPY --from=publish /app .
+RUN chown aspnetcore:aspnetcore /app
+COPY --chown=aspnetcore:aspnetcore --from=publish /app .
 
-RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD exec dotnet NHSOnline.Backend.ServiceJourneyRulesApi.dll $SJR_ARGS
+EXPOSE $PORT
+CMD exec dotnet ${PROJECT_NAME}.dll $SJR_ARGS
