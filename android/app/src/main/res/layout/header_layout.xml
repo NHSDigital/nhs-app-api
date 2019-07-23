@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.5">
 
         <ImageView
-            android:id="@+id/nhsOnlineLogoIcon"
+            android:id="@+id/homeLogoIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -34,7 +34,7 @@
             android:nextFocusDown="@id/webview"
             android:nextFocusForward="@id/helpIcon"
             android:paddingTop="@dimen/_8sdp"
-            android:src="@drawable/icon_drawable_nhs_logo" />
+            android:src="@drawable/icon_drawable_home" />
 
         <ImageView
             android:id="@+id/helpIcon"
@@ -71,8 +71,21 @@
             android:nextFocusUp="@id/more"
             android:paddingStart="@dimen/_5sdp"
             android:paddingTop="@dimen/_8sdp"
-            android:paddingEnd="@dimen/_5sdp"
-            android:src="@drawable/icon_drawable_account" />
+            android:paddingEnd="0dp"
+            android:src="@drawable/icon_drawable_settings" />
+
+        <ImageView
+            android:id="@+id/nhsLogoIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:background="@drawable/icon_drawable_boarder_focusable"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/nhsApp"
+            android:focusable="false"
+            android:paddingTop="@dimen/_8sdp"
+            android:src="@drawable/icon_drawable_nhs_logo" />
     </RelativeLayout>
 
     <RelativeLayout

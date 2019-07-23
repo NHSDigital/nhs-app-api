@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_0" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,16 +24,6 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NHS Online - Logo" translatesAutoresizingMaskIntoConstraints="NO" id="kyn-vf-7A4">
-                    <rect key="frame" x="16" y="16" width="60" height="23"/>
-                    <accessibility key="accessibilityConfiguration" identifier="NHS Online - Logo">
-                        <accessibilityTraits key="traits" button="YES"/>
-                        <bool key="isElement" value="YES"/>
-                    </accessibility>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="60" id="KiL-db-edk"/>
-                    </constraints>
-                </imageView>
                 <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ycK-JE-PkZ" userLabel="Line Separator">
                     <rect key="frame" x="16" y="50" width="343" height="1"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -61,19 +51,38 @@
                     </attributedString>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1uG-Rr-7gl">
-                    <rect key="frame" x="333" y="5" width="37" height="42"/>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1uG-Rr-7gl">
+                    <rect key="frame" x="334" y="12" width="26" height="26"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="37" id="3zf-Hg-PrS"/>
+                        <constraint firstAttribute="width" constant="26" id="3zf-Hg-PrS"/>
                     </constraints>
-                    <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                     <inset key="imageEdgeInsets" minX="-2" minY="5" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" image="Icon - Header - Account"/>
+                    <state key="normal" image="Settings"/>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8JB-cx-FgP">
-                    <rect key="frame" x="293" y="5" width="37" height="42"/>
+                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="NHS Online - Logo" translatesAutoresizingMaskIntoConstraints="NO" id="vtS-qf-fCF">
+                    <rect key="frame" x="157.66666666666666" y="15" width="60" height="26"/>
+                    <accessibility key="accessibilityConfiguration" identifier="NHS Online - Logo">
+                        <accessibilityTraits key="traits" button="YES"/>
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
                     <constraints>
-                        <constraint firstAttribute="width" constant="37" id="FZ8-Mh-hvt"/>
+                        <constraint firstAttribute="width" constant="60" id="G3I-Or-E7U"/>
+                    </constraints>
+                </imageView>
+                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Home" translatesAutoresizingMaskIntoConstraints="NO" id="kyn-vf-7A4">
+                    <rect key="frame" x="16" y="15" width="26" height="26"/>
+                    <accessibility key="accessibilityConfiguration" identifier="NHS Online - Logo">
+                        <accessibilityTraits key="traits" button="YES"/>
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="26" id="KiL-db-edk"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8JB-cx-FgP">
+                    <rect key="frame" x="300" y="12" width="26" height="26"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="26" id="FZ8-Mh-hvt"/>
                     </constraints>
                     <inset key="imageEdgeInsets" minX="0.0" minY="4" maxX="0.0" maxY="0.0"/>
                     <state key="normal" image="icon_header_help"/>
@@ -82,22 +91,25 @@
             <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="1uG-Rr-7gl" firstAttribute="leading" secondItem="8JB-cx-FgP" secondAttribute="trailing" constant="3" id="2bu-ha-slH"/>
+                <constraint firstItem="1uG-Rr-7gl" firstAttribute="leading" secondItem="8JB-cx-FgP" secondAttribute="trailing" constant="14" id="2bu-ha-slH"/>
                 <constraint firstItem="8JB-cx-FgP" firstAttribute="baseline" secondItem="1uG-Rr-7gl" secondAttribute="baseline" id="6IC-ma-Gas"/>
                 <constraint firstAttribute="trailing" secondItem="ycK-JE-PkZ" secondAttribute="trailing" constant="16" id="9WA-eZ-FGq"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="9i1-qI-xvL"/>
                 <constraint firstItem="2kX-eU-qpv" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="F1J-Hl-Xg7"/>
-                <constraint firstItem="1uG-Rr-7gl" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="5" id="Iyf-W3-nbn"/>
+                <constraint firstItem="1uG-Rr-7gl" firstAttribute="top" secondItem="vtS-qf-fCF" secondAttribute="top" constant="-13" id="Iyf-W3-nbn"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2kX-eU-qpv" secondAttribute="trailing" constant="16" id="Qdc-xx-bEI"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="kyn-vf-7A4" secondAttribute="bottom" constant="11" id="RWe-ue-G1R"/>
-                <constraint firstItem="8JB-cx-FgP" firstAttribute="bottom" secondItem="1uG-Rr-7gl" secondAttribute="bottom" id="SBc-DG-my9"/>
+                <constraint firstItem="8JB-cx-FgP" firstAttribute="bottom" secondItem="vtS-qf-fCF" secondAttribute="bottom" constant="-1" id="SBc-DG-my9"/>
+                <constraint firstItem="vtS-qf-fCF" firstAttribute="bottom" secondItem="kyn-vf-7A4" secondAttribute="bottom" id="SRx-WY-Ywr"/>
+                <constraint firstItem="vtS-qf-fCF" firstAttribute="top" secondItem="kyn-vf-7A4" secondAttribute="top" id="THC-Ze-Alt"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="2kX-eU-qpv" secondAttribute="bottom" id="VXz-kb-2es"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="1uG-Rr-7gl" secondAttribute="trailing" constant="5" id="Vbl-TE-P6b"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="1uG-Rr-7gl" secondAttribute="trailing" constant="14" id="Vbl-TE-P6b"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="dfh-PR-ohj"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="mNB-eG-aaV"/>
                 <constraint firstItem="2kX-eU-qpv" firstAttribute="top" secondItem="ycK-JE-PkZ" secondAttribute="bottom" id="q3h-Nq-Dgz"/>
+                <constraint firstItem="vtS-qf-fCF" firstAttribute="centerX" secondItem="ycK-JE-PkZ" secondAttribute="centerX" id="r0z-Mg-BaQ"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="1uG-Rr-7gl" secondAttribute="bottom" constant="3" id="tmo-o7-Fel"/>
-                <constraint firstItem="8JB-cx-FgP" firstAttribute="top" secondItem="1uG-Rr-7gl" secondAttribute="top" id="xlo-xt-ecQ"/>
+                <constraint firstItem="8JB-cx-FgP" firstAttribute="top" secondItem="vtS-qf-fCF" secondAttribute="top" constant="-3" id="xlo-xt-ecQ"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
@@ -107,8 +119,9 @@
         </view>
     </objects>
     <resources>
-        <image name="Icon - Header - Account" width="21" height="24"/>
+        <image name="Home" width="81" height="81"/>
         <image name="NHS Online - Logo" width="59" height="24"/>
-        <image name="icon_header_help" width="25" height="25"/>
+        <image name="Settings" width="81" height="81"/>
+        <image name="icon_header_help" width="25.333333969116211" height="25"/>
     </resources>
 </document>

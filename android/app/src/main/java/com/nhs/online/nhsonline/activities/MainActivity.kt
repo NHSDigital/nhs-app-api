@@ -88,7 +88,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         menuBar.nhsWeb = nhsWeb
         backToAccountButton.setOnClickListener { onSuccessButton() }
         retryButton.setOnClickListener { onErrorRetryButton() }
-        nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
+        homeLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
         connectionStateMonitor = ConnectionStateMonitor(this)
@@ -533,7 +533,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun resetFocusToNhsLogoForAccessibility() {
         val a11yMng = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
         if (logged_in_header.visibility == View.VISIBLE && a11yMng.isTouchExplorationEnabled && a11yMng.isEnabled) {
-            nhsOnlineLogoIcon.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+            homeLogoIcon.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
         }
     }
 
