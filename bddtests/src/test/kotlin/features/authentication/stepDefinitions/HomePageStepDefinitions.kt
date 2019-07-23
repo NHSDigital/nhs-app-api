@@ -61,11 +61,6 @@ class HomePageStepDefinitions : AbstractSteps() {
         loginSteps.loginPage.clickHelpIcon()
     }
 
-    @Then("^I see the beta banner$")
-    fun iSeeTheBetaBanner() {
-        homeSteps.homePage.assertBetaBannerVisible()
-    }
-
     @Then("^I see the current app version")
     fun iSeeTheCurrentAppVersion() {
         homeSteps.homePage.assertVersionNumberVisible()

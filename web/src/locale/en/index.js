@@ -196,10 +196,6 @@ export default {
       label: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
     },
   },
-  betaBanner: {
-    label: 'BETA',
-    caption: 'This is a new service.',
-  },
   cookieBanner: {
     caption: {
       line1: 'The NHS website uses cookies to improve your on-site experience.',
@@ -1455,10 +1451,6 @@ export default {
     },
   },
   th02: {
-    banner: {
-      labelText: 'NEW',
-      message: 'We\'re still testing this app',
-    },
     heading1: 'Check what features you can use',
     heading2: 'Find your GP surgery',
     hintText: 'Enter postcode, town or GP surgery name',

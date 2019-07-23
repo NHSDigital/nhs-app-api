@@ -19,11 +19,6 @@
         </div>
         <div v-else id="mainContent" ref="mainContent" tabindex="-1"
              :class="$style['main-container-desktop']">
-          <div :class="$style['banner-container']">
-            <div>
-              <beta-banner :banner-class="[$style.banner]" data-sid="beta-flag"/>
-            </div>
-          </div>
           <section :class="$style['pull-content']">
             <h1 :class="$style['web-page-title']">{{ $t('web.home.title') }}</h1>
             <ul :class="$style['intro-bullets']">
@@ -62,13 +57,11 @@ import { getDynamicStyle } from '@/lib/desktop-experience';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import SymptomBanner from '@/components/SymptomBanner';
-import BetaBanner from '@/components/BetaBanner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 
 export default {
   components: {
     HomeHeader,
-    BetaBanner,
     SymptomBanner,
     WebHeader,
     WebFooter,
@@ -142,30 +135,6 @@ export default {
 
 .error-container {
   @include space(padding, all, 1em);
-}
-.banner-container {
-  background: $white;
-  padding-top: 1em;
-  padding-bottom:  0.7em;
-}
-
-.banner-container > div {
-  margin: 0 1em;
-  @include main-container-width;
-}
-
-@include tablet-and-above {
-  .banner-container > div {
-    margin: 0 2em;
-    padding: 0 1em;
-  }
-}
-
-@include desktop {
-  .banner-container > div {
-    margin: 0 auto;
-    padding: 0 1em;
-  }
 }
 
 .login-app-header-flex-container {

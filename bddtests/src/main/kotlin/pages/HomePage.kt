@@ -24,14 +24,6 @@ open class HomePage : HybridPageObject() {
             helpfulName = "Dismiss Button"
         ).withText("Dismiss", false)
 
-    private val betaBanner = HybridPageElement(
-            webDesktopLocator = "//div[span[@data-purpose = 'beta-banner']]//span[contains(text(), " +
-                    "'BETA')]/following-sibling::span[contains(text(),'This is a new service')]",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Beta Banner"
-    )
-
     private val surveyPath = "//div[@data-purpose='survey']"
 
     private val surveyLinkTab = HybridPageElement(
@@ -130,10 +122,6 @@ open class HomePage : HybridPageObject() {
                 expectedLinks.count(),
                 links.count())
         expectedLinks.forEach { link -> link.assertSingleElementPresent() }
-    }
-
-    fun assertBetaBannerVisible() {
-        betaBanner.assertSingleElementPresent()
     }
 
     fun assertVersionNumberVisible() {
