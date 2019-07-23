@@ -1,20 +1,14 @@
 using System;
-using System.Net;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
-    public interface ICitizenIdService
-    {
-        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        Task<GetUserProfileResult> GetUserProfile(string authCode, string codeVerifier, string redirectUrl);
-    }
-
     public class CitizenIdService : ICitizenIdService
     {
         private readonly ICitizenIdClient _citizenIdClient;
@@ -77,7 +71,10 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 _idTokenService.ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure())
                     .IfSome(idToken =>
                     {
-                        result = GetUserProfile(tokenResponse.Body.AccessToken, idToken);
+                        var resultTask = GetUserProfile(tokenResponse.Body.AccessToken, idToken.Subject);
+                        resultTask.Wait();
+
+                        result = resultTask.Result;
 
                         return Option.Some(idToken);
                     })
@@ -97,9 +94,37 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             }
         }
 
-        private GetUserProfileResult GetUserProfile(string accessToken, IdToken idToken)
+        public async Task<GetUserProfileResult> GetUserProfile(string accessToken)
         {
-            var userInfo = _citizenIdClient.GetUserInfo(accessToken).Result;
+            _logger.LogEnter();
+            var result = new GetUserProfileResult();
+
+            try
+            {
+                var isValid = new ValidateAndLog(_logger)
+                    .IsNotNullOrWhitespace(accessToken, nameof(accessToken))
+                    .IsValid();
+
+                if (!isValid)
+                {
+                    result.StatusCode = HttpStatusCode.BadRequest;
+                    result.UserProfile = Option.None<UserProfile>();
+                    return result;
+                }
+
+                var accessTokenObject = AccessToken.Parse(_logger, accessToken);
+
+                return await GetUserProfile(accessToken, accessTokenObject.Subject);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private async Task<GetUserProfileResult> GetUserProfile(string accessToken, string subject)
+        {
+            var userInfo = await _citizenIdClient.GetUserInfo(accessToken);
 
             if (!userInfo.HasSuccessStatusCode)
             {
@@ -111,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 };
             }
 
-            if (!idToken.Subject.Equals(userInfo.Body.Subject, StringComparison.Ordinal))
+            if (!subject.Equals(userInfo.Body.Subject, StringComparison.Ordinal))
             {
                 _logger.LogError("Value of subject claim differed between Token and UserInfo responses");
                 return new GetUserProfileResult
@@ -138,7 +163,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             };
         }
 
-        private void LogError<T>(CitizenIdClient.CitizenIdApiObjectResponse<T> apiResponse, string errorMessage)
+        private void LogError<T>(CitizenIdApiObjectResponse<T> apiResponse, string errorMessage)
         {
             _logger.LogError($"{errorMessage} Error code: '{apiResponse.ErrorResponse?.Error}'");
         }

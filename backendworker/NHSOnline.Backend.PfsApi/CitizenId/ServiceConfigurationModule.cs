@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
+using NHSOnline.Backend.Auth;
+using NHSOnline.Backend.Auth.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.CitizenId
@@ -10,11 +12,11 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<CitizenIdHttpRequestIdentifier>();
-            
+
             services.AddHttpClient<CitizenIdHttpClient>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<CitizenIdHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<CitizenIdHttpRequestIdentifier>>();
-            
+
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();

@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -121,22 +120,17 @@ namespace NHSOnline.Backend.Auditing
             return auditRecord;
         }
 
-        private static string DeriveNhsLoginSubject(string accessToken)
+        private string DeriveNhsLoginSubject(string accessToken)
         {
-            string nhsLoginSubject;
-
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.ReadJwtToken(accessToken);
-                nhsLoginSubject = token.Subject;
+                var token = Auth.CitizenId.Models.AccessToken.Parse(_logger, accessToken);
+                return token.Subject;
             }
             catch (Exception e)
             {
                 throw new NoAuditKeyException(ExceptionMessages.AccessTokenInvalid, e);
             }
-
-            return nhsLoginSubject;
         }
     }
 }

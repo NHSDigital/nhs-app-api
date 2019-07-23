@@ -10,12 +10,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
+using NHSOnline.Backend.Auth.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
+namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 {
     [TestClass]
     public sealed class CitizenIdClientTests : IDisposable

@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId.Models
+namespace NHSOnline.Backend.Auth.CitizenId.Models
 {
     [Serializable]
     public class UserInfo

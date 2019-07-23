@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.Auth\NHSOnline.Backend.Auth.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.NominatedPharmacy\NHSOnline.Backend.NominatedPharmacy.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj" />

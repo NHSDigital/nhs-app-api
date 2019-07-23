@@ -3,9 +3,9 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.PfsApi.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
+namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 {
     [TestClass]
     public class CitizenIdHttpRequestIdentifierTests

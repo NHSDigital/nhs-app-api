@@ -7,8 +7,9 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 

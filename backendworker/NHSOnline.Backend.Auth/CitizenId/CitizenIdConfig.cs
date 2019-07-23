@@ -3,16 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
-    public interface ICitizenIdConfig
-    {
-        Uri CitizenIdApiBaseUrl { get; set; }
-        string ClientId { get; set; }
-        string ClientSecret { get; set; }
-        string Issuer { get; set; }
-    }
-
     public class CitizenIdConfig : ICitizenIdConfig
     {
         public Uri CitizenIdApiBaseUrl { get; set; }

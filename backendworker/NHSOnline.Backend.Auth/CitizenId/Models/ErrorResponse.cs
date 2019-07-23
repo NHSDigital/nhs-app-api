@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId.Models
+namespace NHSOnline.Backend.Auth.CitizenId.Models
 {
     [Serializable]
     public class ErrorResponse

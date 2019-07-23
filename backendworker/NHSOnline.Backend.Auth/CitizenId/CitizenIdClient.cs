@@ -1,27 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
-using NHSOnline.Backend.Support.ResponseParsers;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.ResponseParsers;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
-    public interface ICitizenIdClient
-    {
-        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier,
-            string redirectUrl);
-        Task<CitizenIdClient.CitizenIdApiObjectResponse<JsonWebKeySet>> GetSigningKeys();
-        Task<CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string accessToken);
-    }
-
     public class CitizenIdClient : ICitizenIdClient
     {
         private readonly ILogger<CitizenIdClient> _logger;
@@ -121,27 +111,6 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             response.ErrorResponse = _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage);
 
             return response;
-        }
-
-        public class CitizenIdApiResponse
-        {
-            protected CitizenIdApiResponse(HttpStatusCode statusCode)
-            {
-                StatusCode = statusCode;
-            }
-
-            public HttpStatusCode StatusCode { get; set; }
-            public ErrorResponse ErrorResponse { get; set; }
-            public bool HasSuccessStatusCode => (int) StatusCode >= 200 && (int) StatusCode <= 299;
-        }
-
-        public class CitizenIdApiObjectResponse<TBody> : CitizenIdApiResponse
-        {
-            public CitizenIdApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
-            {
-            }
-
-            public TBody Body { get; set; }
         }
     }
 }

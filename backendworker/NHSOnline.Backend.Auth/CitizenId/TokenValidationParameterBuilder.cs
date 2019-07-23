@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
     public interface ITokenValidationParameterBuilder
     {

@@ -1,7 +1,7 @@
 using System.Net.Http;
 using NHSOnline.Backend.Support.Http;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
     public class CitizenIdHttpRequestIdentifier : IHttpRequestIdentifier
     {

@@ -6,11 +6,11 @@ using FluentAssertions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
+using NHSOnline.Backend.Auth.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
+namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 {
     [TestClass]
     public class CitizenIdSigningKeysServiceTests
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var signingKeys = new JsonWebKeySet(_signingKey);
             var expectedResponse = Option.Some(signingKeys);
             
-            var signingKeysResponse = new CitizenIdClient.CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.OK)
+            var signingKeysResponse = new CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.OK)
             {
                 Body = signingKeys,
                 ErrorResponse = null
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             //Arrange
             var expectedResult = Option.None<JsonWebKeySet>();
             
-            var signingKeysResponse = new CitizenIdClient.CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.BadRequest)
+            var signingKeysResponse = new CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.BadRequest)
             {
                 Body = null,
                 ErrorResponse = new ErrorResponse { Error = "invalid_grant" }
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             //Arrange
             var expectedResult = Option.None<JsonWebKeySet>();
             
-            var signingKeysResponse = new CitizenIdClient.CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.BadRequest)
+            var signingKeysResponse = new CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.BadRequest)
             {
                 Body = null,
                 ErrorResponse = new ErrorResponse { Error = "invalid_grant" }

@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.PfsApi.CitizenId.Models
+﻿namespace NHSOnline.Backend.Auth.CitizenId.Models
 {
     public class UserProfile
     {

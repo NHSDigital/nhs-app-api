@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
     public class CitizenIdHttpClient
     {

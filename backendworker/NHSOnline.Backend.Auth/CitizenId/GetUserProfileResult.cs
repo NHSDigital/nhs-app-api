@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
     public class GetUserProfileResult
     {

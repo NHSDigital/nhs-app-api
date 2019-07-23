@@ -5,9 +5,9 @@ using FluentAssertions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.PfsApi.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
+namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 {
     [TestClass]
     public class TokenValidationParameterBuilderTests

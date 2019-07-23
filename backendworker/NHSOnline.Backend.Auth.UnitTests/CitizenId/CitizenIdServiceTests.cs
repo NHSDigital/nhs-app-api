@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -9,12 +11,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.PfsApi.CitizenId.Models;
+using NHSOnline.Backend.Auth.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
+namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 {
     [TestClass]
     public sealed class CitizenIdServiceTests : IDisposable
@@ -99,11 +101,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         public async Task GetUserProfile_TokenCallUnsuccessful_ReturnsNone(HttpStatusCode statusCode)
         {
             // Arrange
-            var tokenResponse = new CitizenIdClient.CitizenIdApiObjectResponse<Token>(HttpStatusCode.BadRequest)
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(statusCode)
             {
                 Body = null,
                 ErrorResponse = new ErrorResponse { Error = "invalid_grant" },
-                StatusCode = statusCode
             };
 
             var authCode = _fixture.Create<string>();
@@ -143,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var redirectUrl = _fixture.Create<string>();
             var subject = _fixture.Create<string>();
 
-            var tokenResponse = new CitizenIdClient.CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
             {
                 Body = token,
                 ErrorResponse = null
@@ -163,8 +164,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var userInfo = _fixture.Build<UserInfo>()
                 .With(x => x.Subject, subject)
                 .Create();
-            
-            var userProfileResponse = new CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>(HttpStatusCode.OK)
+
+            var userProfileResponse = new CitizenIdApiObjectResponse<UserInfo>(HttpStatusCode.OK)
             {
                 Body = userInfo,
                 ErrorResponse = null
@@ -211,7 +212,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var codeVerifier = _fixture.Create<string>();
             var redirectUrl = _fixture.Create<string>();
 
-            var tokenResponse = new CitizenIdClient.CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
             {
                 Body = token,
                 ErrorResponse = null
@@ -248,7 +249,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var codeVerifier = _fixture.Create<string>();
             var redirectUrl = _fixture.Create<string>();
 
-            var tokenResponse = new CitizenIdClient.CitizenIdApiObjectResponse<Token>(HttpStatusCode.BadRequest)
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.BadRequest)
             {
                 Body = null,
                 ErrorResponse = new ErrorResponse { Error = "invalid_grant" }
@@ -287,7 +288,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var codeVerifier = _fixture.Create<string>();
             var redirectUrl = _fixture.Create<string>();
 
-            var tokenResponse = new CitizenIdClient.CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
             {
                 Body = token,
                 ErrorResponse = null
@@ -324,7 +325,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Failed to read ID Token", Times.Once());
         }
-        
+
         [TestMethod]
         public async Task GetUserProfile_SubjectMismatch_ReturnsNone()
         {
@@ -334,7 +335,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var codeVerifier = _fixture.Create<string>();
             var redirectUrl = _fixture.Create<string>();
 
-            var tokenResponse = new CitizenIdClient.CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
             {
                 Body = token,
                 ErrorResponse = null
@@ -349,7 +350,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var tokenServiceResponse = Option.Some(idToken);
 
             var userInfo = _fixture.Create<UserInfo>();
-            var userProfileResponse = new CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>(HttpStatusCode.OK)
+            var userProfileResponse = new CitizenIdApiObjectResponse<UserInfo>(HttpStatusCode.OK)
             {
                 Body = userInfo,
                 ErrorResponse = null
@@ -381,6 +382,58 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Value of subject claim differed between Token and UserInfo responses", Times.Once());
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("     ")]
+        public async Task GetUserProfile_AccessTokenNullOrWhiteSpace_ReturnsNone(string accessToken)
+        {
+            // Act
+            var actualResult = await _systemUnderTest.GetUserProfile(accessToken);
+
+            // Assert
+            actualResult.Should().NotBeNull();
+            actualResult.UserProfile.HasValue.Should().BeFalse();
+            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [TestMethod]
+        public async Task GetUserProfile_ValidAccessToken_ReturnsMappedUserProfile()
+        {
+            // Arrange
+            var subject = _fixture.Create<string>();
+
+            var accessToken = JwtToken.Generate(new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, subject),
+                new Claim("nhs_number", "9987574309"),
+            });
+
+            var userProfileResponse = new CitizenIdApiObjectResponse<UserInfo>(HttpStatusCode.OK)
+            {
+                Body = _fixture.Build<UserInfo>()
+                    .With(u => u.Subject, subject)
+                    .Create(),
+                ErrorResponse = null
+            };
+
+            _citizenIdClientMock
+                .Setup(x => x.GetUserInfo(accessToken))
+                .ReturnsAsync(userProfileResponse);
+
+            // Act
+            var actualResult = await _systemUnderTest.GetUserProfile(accessToken);
+
+            // Assert
+            actualResult.Should().NotBeNull();
+            actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+            actualResult.UserProfile.HasValue.Should().BeTrue();
+
+            var actualUserProfile = actualResult.UserProfile.ValueOrFailure();
+            actualUserProfile.Im1ConnectionToken.Should().Be(userProfileResponse.Body.Im1ConnectionToken);
+            actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpIntegrationCredentials.OdsCode);
+            actualUserProfile.AccessToken.Should().Be(accessToken);
         }
 
         public void Dispose()

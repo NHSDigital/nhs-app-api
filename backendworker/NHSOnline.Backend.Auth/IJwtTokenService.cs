@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth
 {
     public interface IJwtTokenService<T>
     {

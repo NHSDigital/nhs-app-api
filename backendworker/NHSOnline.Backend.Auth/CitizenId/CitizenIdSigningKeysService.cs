@@ -6,13 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
-namespace NHSOnline.Backend.PfsApi.CitizenId
+namespace NHSOnline.Backend.Auth.CitizenId
 {
-    public interface ICitizenIdSigningKeysService
-    {
-        Task<Option<JsonWebKeySet>> GetSigningKeys();
-    }
-
     public class CitizenIdSigningKeysService : ICitizenIdSigningKeysService
     {
         private readonly ICitizenIdClient _citizenIdClient;

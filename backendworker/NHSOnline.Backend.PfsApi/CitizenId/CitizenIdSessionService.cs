@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Temporal;
