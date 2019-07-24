@@ -22,4 +22,10 @@ open class PharmacyDetailComponent : HybridPageObject() {
             androidLocator = null,
             page = this
     )
+
+    fun isVisible(): Boolean {
+        return findByXpath(pharmacyName.webDesktopLocator).isVisible ||
+                findByXpath(pharmacyAddress.webDesktopLocator).isVisible ||
+                findByXpath(pharmacyPhoneNumber.webDesktopLocator).isVisible
+    }
 }

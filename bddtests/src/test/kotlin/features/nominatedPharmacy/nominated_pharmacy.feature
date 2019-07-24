@@ -158,3 +158,18 @@ Feature: nominated pharmacy journey
     Examples:
       | GP System | OdsCode |
       | EMIS      | SW11XR  |
+
+  Scenario Outline: The <GP System> user can see nominated pharmacy on the prescriptions summary page
+    Given the scenario is submit prescription
+    And I am using <GP System> GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And my GP Practice is EPS enabled
+    And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
+    And I am logged in
+    When I retrieve the 'My Prescriptions' page directly
+    And I select 1 repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    Then I see nominated pharmacy information is shown and correct
+    Examples:
+      | GP System | Pharmacy type | OdsCode |
+      | EMIS      | P1            | SW11XR  |

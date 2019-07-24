@@ -5,6 +5,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.Keys
+import pages.nominatedPharmacy.PharmacyDetailComponent
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.asciiText
@@ -23,6 +24,8 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
                 helpfulName = "header")
     }
     val specialRequestTextXPath = "//*[@id='specialRequestText']"
+
+    val pharmacyDetailComponent = PharmacyDetailComponent()
 
     val confirmAndOrderRepeatPrescriptionButton = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_confirm_and_order_prescription']",

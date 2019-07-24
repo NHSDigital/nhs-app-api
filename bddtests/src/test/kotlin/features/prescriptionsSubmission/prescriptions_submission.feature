@@ -7,7 +7,7 @@ Feature: Prescriptions submission
     Given the scenario is submit prescription
 
   #This test covers navigation via buttons/links
-
+  @nominatedPharmacy
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
@@ -17,6 +17,7 @@ Feature: Prescriptions submission
     And I select 5 repeatable prescriptions to order
     And I enter text "As soon as possible please" for special request
     And I click Continue on the Order a repeat prescription page
+    Then I cannot see any nominated pharmacy information
     When I click Confirm and order repeat prescription
     Then I see a order successful message on the Repeat prescription page with 6 prescriptions
   @smoketest

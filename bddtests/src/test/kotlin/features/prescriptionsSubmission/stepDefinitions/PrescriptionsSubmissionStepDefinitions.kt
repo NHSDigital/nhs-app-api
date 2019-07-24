@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.courses.stepDefinitions.CoursesStepDefinitions
+import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
@@ -22,6 +23,7 @@ import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.stubs.pds.ViewSpinePdsStubs
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
@@ -35,6 +37,7 @@ import pages.text
 import utils.SerenityHelpers
 import utils.assertTrueWithRetry
 import utils.getOrNull
+import utils.getOrFail
 import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -323,5 +326,45 @@ open class PrescriptionsSubmissionStepDefinitions {
                     expectedSubHeader, errorPage.subHeading.text)
             Assert.assertEquals("expected error text $expectedText but found ${errorPage.errorText1.text}",
                     expectedText, errorPage.errorText1.text)
+        }
+
+        @When("I see nominated pharmacy information is shown and correct")
+        fun iSeeNominatedPharmacyInformationIsCorrect() {
+
+            val component = confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent
+            Assert.assertTrue("PharmacyDetailComponent is not visible", component.isVisible())
+
+            val actualPharmacyName= component.pharmacyName.text
+            val actualPharmacyAddress= component.pharmacyAddress.text
+            val actualPhoneNumber= component.pharmacyPhoneNumber.text
+
+            val myNominatedPharmacy =
+                    NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.getOrFail<NhsAzureSearchOrganisationItem>()
+
+            Assert.assertEquals(
+                    "Nominated Pharmacy name is not correct",
+                    myNominatedPharmacy.OrganisationName, actualPharmacyName)
+
+            Assert.assertEquals(
+                    "Nominated Pharmacy address is not correct",
+                    myNominatedPharmacy.addressFormatted(), actualPharmacyAddress)
+
+            val expectedPhoneNumber = myNominatedPharmacy.primaryPhone()
+            if (expectedPhoneNumber != null) {
+                Assert.assertEquals(
+                        "Nominated Pharmacy phone number is not correct",
+                        expectedPhoneNumber, actualPhoneNumber)
+            }
+        }
+
+        @Then("^I cannot see any nominated pharmacy information$")
+        fun iCannotSeeNominatedPharmacyInformation() {
+            Assert.assertNotNull(
+                    "PharmacyDetailComponent is null",
+                    confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent)
+
+            Assert.assertFalse(
+                    "PharmacyDetailComponent is visible",
+                    confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent.isVisible())
         }
     }
