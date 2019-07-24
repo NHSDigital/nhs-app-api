@@ -135,17 +135,19 @@ ENV NHS_SEARCH_BASE_URL=https://nhsuk-apim-int-uks.azure-api.net/
 ENV PHARMACY_API_RESULT_LIMIT=10
 ENV VISION_ODS_REMAP_ENABLED false
 ENV SERVICE_JOURNEY_RULES_BASE_URL http://servicejourneyrulesapi.local.bitraft.io:8086
-ENV SPINE_ACCREDITED_SYSTEM_ID_FROM 200000000355
-ENV SPINE_ACCREDITED_SYSTEM_ID_TO 200000000267
-ENV SPINE_CPA_ID S2011405A2055612
 ENV PDS_QUERY_FROM_ADDRESS 10.0.255.22
 ENV PDS_QUERY_TO https://192.168.128.11/syncservice-pds/pds
-ENV NOMINATED_PHARMACY_URL https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/
+ENV SPINE_URL https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/
 ENV DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS 500
-ENV NOMINATED_PHARMACY_ENABLED true
+ENV NOMINATED_PHARMACY_ENABLED false
 ENV GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE B83054
-ENV PARTY_ID_FROM E87021-820463
-ENV PARTY_ID_TO YEA-801248
+ENV SPINE_LDAP_LOOKUP_ENABLED false
+ENV SPINE_LDAP_HOST=40.120.39.2
+ENV SPINE_LDAP_PORT=443
+ENV SPINE_LDAP_LOGIN_DN="ou=services, o=nhs"
+ENV SPINE_LDAP_CERT_PATH=./certs/spine.pfx
+ENV SPINE_LDAP_CERT_PASSWORD=
+ENV NHS_APP_PARTY_ID_FOR_SPINE=E87021-820463
 
 WORKDIR /app
 RUN chown aspnetcore:aspnetcore /app
@@ -155,6 +157,7 @@ COPY --chown=aspnetcore:aspnetcore --from=publish /app .
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppDev.crt /usr/local/share/ca-certificates/TppDev.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppProd.crt /usr/local/share/ca-certificates/TppProd.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt /usr/local/share/ca-certificates/vision-test-env.crt
+# COPY certs/root.crt /usr/local/share/ca-certificates/root.crt
 RUN chmod 644 /usr/local/share/ca-certificates/*
 RUN update-ca-certificates
 

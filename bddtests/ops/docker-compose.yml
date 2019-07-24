@@ -51,7 +51,7 @@ services:
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
       - ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS=86400
       - ConfigurationSettings__CurrentTermsConditionsEffectiveDate=2018-12-12T00:00:00+00:00
-      - NOMINATED_PHARMACY_URL=http://stubs.local.bitraft.io:8080/spine/
+      - SPINE_URL=http://stubs.local.bitraft.io:8080/spine/
       - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
     depends_on:
       - nhsonline.redis.sds

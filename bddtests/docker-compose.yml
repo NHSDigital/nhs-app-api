@@ -76,7 +76,7 @@ services:
       - TERMS_CONDITIONS_COSMOS_DATABASE_ID=local
       - TERMS_CONDITIONS_COSMOS_COLLECTION_NAME=consent
       - TERMS_CONDITIONS_COSMOS_AUTH_KEY=
-      - NOMINATED_PHARMACY_URL=http://stubs.local.bitraft.io:8080/spine/
+      - SPINE_URL=http://stubs.local.bitraft.io:8080/spine/
       - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
       - ConfigurationSettings__CurrentTermsConditionsEffectiveDate=2018-12-12T00:00:00+00:00
       - NHS_SEARCH_BASE_URL=http://stubs.local.bitraft.io:8080/nhs-search-indexes/
@@ -91,6 +91,10 @@ services:
       - OnlineConsultationsProvidersSettings__Providers__1__Provider=eConsult
       - OnlineConsultationsProvidersSettings__Providers__1__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
       - OnlineConsultationsProvidersSettings__Providers__1__BearerToken=shfjlkasdhflashfl
+      - SPINE_LDAP_LOOKUP_ENABLED=false
+      - TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE=xxx
+      - NOMINATED_PHARMACY_ENABLED=true
+      - SPINE_LDAP_CERT_PASSWORD=xxx
     depends_on:
       - nhsonline.redis.sds
     ports:

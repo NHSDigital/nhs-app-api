@@ -51,16 +51,16 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
 
                     writer.WriteElementString(Wsa, "MessageID", null, String.Format(CultureInfo.InvariantCulture, "uuid:{0}", messageId.ToString()));
                     writer.WriteElementString(Wsa, "Action", null, serviceDefinition.SoapActionName);
-                    writer.WriteElementString(Wsa, "To", null, config.PdsQueryTo);
+                    writer.WriteElementString(Wsa, "To", null, config.PdsTraceConfigurationSettings.ToAddress);
                     writer.WriteStartElement(Wsa, "From", null);
-                    writer.WriteElementString(Wsa, "Address", null, config.PdsQueryFromAddress);
+                    writer.WriteElementString(Wsa, "Address", null, config.PdsTraceConfigurationSettings.FromAddress);
                     writer.WriteEndElement();
                     
                     writer.WriteStartElement(hl7, "communicationFunctionRcv", null);
                     writer.WriteStartElement(hl7, "device", null);
                     writer.WriteStartElement(hl7, "id", null);
                     writer.WriteAttributeString("root", "1.2.826.0.1285.0.2.0.107");
-                    writer.WriteAttributeString("extension", config.SpineAccreditedSystemIdTo);
+                    writer.WriteAttributeString("extension", config.PdsTraceConfigurationSettings.FromAsid);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                     writer.WriteEndElement();
@@ -69,13 +69,13 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
                     writer.WriteStartElement(hl7, "device", null);
                     writer.WriteStartElement(hl7, "id", null);
                     writer.WriteAttributeString("root", "1.2.826.0.1285.0.2.0.107");
-                    writer.WriteAttributeString("extension", config.SpineAccreditedSystemIdFrom);
+                    writer.WriteAttributeString("extension", config.PdsTraceConfigurationSettings.ToAsid);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                     writer.WriteEndElement();
 
                     writer.WriteStartElement(Wsa, "ReplyTo", null);
-                    writer.WriteElementString(Wsa, "Address", null, config.PdsQueryFromAddress);
+                    writer.WriteElementString(Wsa, "Address", null, config.PdsTraceConfigurationSettings.FromAddress);
                     writer.WriteEndElement();
 
                     writer.WriteEndElement();

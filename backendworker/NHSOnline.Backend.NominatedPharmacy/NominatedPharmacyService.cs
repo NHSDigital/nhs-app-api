@@ -80,8 +80,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 {
                     Code = "NE",
                 },
-                CommunicationFunctionRcv = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
-                CommunicationFunctionSnd = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
+                CommunicationFunctionRcv = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionRcv(_config.PdsTraceConfigurationSettings.FromAsid),
+                CommunicationFunctionSnd = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionSnd(_config.PdsTraceConfigurationSettings.ToAsid),
                 ControlActEvent = new ControlActEvent
                 {
                     ClassCode = "CACT",
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                                 DeterminerCode = Instance,
                                 Id = new Id
                                 {
-                                    Extension = _config.SpineAccreditedSystemIdFrom,
+                                    Extension = _config.PdsTraceConfigurationSettings.FromAsid,
                                     Root = "1.2.826.0.1285.0.2.0.107",
                                 },
                             },

@@ -46,14 +46,11 @@
         "TPP_CERTIFICATE_PASSWORD": "",
         "TPP_CERTIFICATE_PATH": "../certs/TppNhsTest.pfx",
         "VISION_ODS_REMAP_ENABLED": "false",
-        "SPINE_ACCREDITED_SYSTEM_ID_FROM": "200000000355",
-        "SPINE_ACCREDITED_SYSTEM_ID_TO": "200000000627",
-        "SPINE_CPA_ID": "S2011405A2055612",
         "PDS_QUERY_FROM_ADDRESS": "10.0.255.22",
         "PDS_QUERY_TO": "https://192.168.128.11/syncservice-pds/pds",
-        "NOMINATED_PHARMACY_URL": "https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/",
+        "SPINE_URL": "https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/",
         "DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS": "500",
-        "NOMINATED_PHARMACY_ENABLED": "true"
+        "NOMINATED_PHARMACY_ENABLED": "false"
       }
     },
     "NHSOnline.Backend.PfsApi": {
@@ -128,18 +125,19 @@
         "BROTHER_MAILER_SIG": "",
         "BROTHER_MAILER_USER_ID": "",
         "VISION_ODS_REMAP_ENABLED": "false",
-        "SPINE_ACCREDITED_SYSTEM_ID_FROM": "200000000355",
-        "SPINE_ACCREDITED_SYSTEM_ID_TO": "200000000267",
-        "SPINE_CPA_ID": "S2011405A2055612",
         "PDS_QUERY_FROM_ADDRESS": "10.0.255.22",
         "PDS_QUERY_TO": "https://192.168.128.11/syncservice-pds/pds",
-        "NOMINATED_PHARMACY_URL": "https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/",
+        "SPINE_URL": "https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/",
         "DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS": "500",
-        "NOMINATED_PHARMACY_ENABLED": "true",
+        "NOMINATED_PHARMACY_ENABLED": "false",
         "GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE": "B83054",
         "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086",
-        "PARTY_ID_FROM": "ABC",
-        "PARTY_ID_TO": "CBA"
+        "SPINE_LDAP_HOST": "40.120.39.2",
+        "SPINE_LDAP_PORT": "443",
+        "SPINE_LDAP_LOGIN_DN": "ou=services, o=nhs",
+        "SPINE_LDAP_CERT_PATH": "../certs/spine.pfx",
+        "SPINE_LDAP_CERT_PASSWORD": "",
+        "NHS_APP_PARTY_ID_FOR_SPINE": "E87021-820463"
       }
     },
     "NHSOnline.Backend.PfsApi.Bdd": {

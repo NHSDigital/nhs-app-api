@@ -28,9 +28,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         private IFixture _fixture;
         private UserSession _userSession;
 
-
         private const string SpineAccreditedSystemIdFrom = "0001";
         private const string SpineAccreditedSystemIdTo = "0002";
+
         private const string NhsNumber = "239 372 9384";
         private const string NhsNumberTrimmed = "2393729384";
         private const string RandomNhsNumber = "1234567890";
@@ -44,8 +44,12 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             _nominatedPharmacyClient = _fixture.Freeze<Mock<INominatedPharmacyClient>>();
             _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
-            _configMock.SetupGet(x => x.SpineAccreditedSystemIdFrom).Returns(SpineAccreditedSystemIdFrom);
-            _configMock.SetupGet(x => x.SpineAccreditedSystemIdTo).Returns(SpineAccreditedSystemIdTo);
+            var pdsTraceConfigurationSettings = new PdsTraceConfigurationSettings
+            {
+                FromAsid = SpineAccreditedSystemIdFrom,
+                ToAsid = SpineAccreditedSystemIdTo,
+            };
+            _configMock.SetupGet(x => x.PdsTraceConfigurationSettings).Returns(pdsTraceConfigurationSettings);
 
             _userSession = _fixture.Create<UserSession>();
 
@@ -63,9 +67,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
@@ -192,9 +196,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase))
@@ -343,9 +347,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase))
@@ -470,9 +474,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
@@ -554,9 +558,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
@@ -732,9 +736,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase))

@@ -65,7 +65,13 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 
         private string GetEbXmlBody()
         {   
-            var envelope = UpdatePharmacySOAPEnvelope.BuildSOAPEnvelope(_messageId.ToString(), _hl7Time, _config.PartyIdFrom, _config.PartyIdTo, _config.SpineCpaId);  
+            var envelope = UpdatePharmacySOAPEnvelope.BuildSOAPEnvelope(
+                _messageId.ToString(),
+                _hl7Time,
+                _config.PdsUpdateConfigurationSettings.FromPartyId,
+                _config.PdsUpdateConfigurationSettings.ToPartyId,
+                _config.PdsUpdateConfigurationSettings.CpaId);
+
             return envelope.OuterXml;
         }
 
@@ -103,7 +109,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                             Id = new NominatedPharmacyTypes.Id
                             {
                                 Root = "1.2.826.0.1285.0.2.0.107",
-                                Extension = _config.SpineAccreditedSystemIdFrom
+                                Extension = _config.PdsUpdateConfigurationSettings.FromAsid,
                             }
                         }
                     }
@@ -236,8 +242,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                 {
                     Code = "NE"
                 },
-                CommunicationFunctionRcv = CreateCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
-                CommunicationFunctionSnd = CreateCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
+                CommunicationFunctionRcv = CreateCommunicationFunctionRcv(_config.PdsUpdateConfigurationSettings.FromAsid),
+                CommunicationFunctionSnd = CreateCommunicationFunctionSnd(_config.PdsUpdateConfigurationSettings.ToAsid),
                 ControlActEvent = controlActEventBody
             };
 

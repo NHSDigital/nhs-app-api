@@ -28,6 +28,17 @@ Steps to follow:
    - backendworker folder
    - web folder
 
+### Enabling Spine LDAP locally
+Spine LDAP integration is done via a reverse proxy - the IP for this is exposed in SPINE_LDAP_HOST.
+If the dev cluster needs rebuilt this ip can change.
+The LDAP integration is enabled/disabled via SPINE_LDAP_LOOKUP_ENABLED
+Authentication is done via certficates.  Spine.pfx needs copied into the certs folder.
+In addition copy the root.crt into the cert folder.  This needs to be marked as a trusted cert and is done be commenting out line 160 in the Docekerfile.( COPY certs/root.crt /usr/local/share/ca-certificates/root.crt ) 
+All cert files are in keybase - (nhsonline -> spine)
+Presently we have only run this via docker - not locally.  If it needs ot be run locally then the 
+root.crt will need to be imported as a trusted cert onto the dev machine.
+Also presently all certs are not in the dev cluster and would need added.
+
 ### Running the backend worker on its own
 There are circumstances, however, when you will want to spin up the backend worker on its
 own (for example when running the web locally using `npm run dev`).  To launch the worker, the stubs

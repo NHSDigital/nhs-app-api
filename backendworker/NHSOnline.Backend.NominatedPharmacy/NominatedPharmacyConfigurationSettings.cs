@@ -8,47 +8,27 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public NominatedPharmacyConfigurationSettings(
             bool isNominatedPharmacyEnabled,
             Uri baseUrl,
-            string spineAccreditedSystemIdFrom,
-            string spineAccreditedSystemIdTo,
-            string spineCpaId,
-            string pdsQueryFromAddress,
-            string pdsQueryToAddress,
             int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
-            string partyIdFrom,
-            string partyIdTo)
+            PdsTraceConfigurationSettings pdsTraceConfigurationSettings,
+            PdsUpdateConfigurationSettings pdsUpdateConfigurationSettings
+            )
         {
             IsNominatedPharmacyEnabled = isNominatedPharmacyEnabled;
             BaseUrl = baseUrl;
-            SpineAccreditedSystemIdFrom = spineAccreditedSystemIdFrom;
-            SpineAccreditedSystemIdTo = spineAccreditedSystemIdTo;
-            SpineCpaId = spineCpaId;
-            PdsQueryFromAddress = pdsQueryFromAddress;
-            PdsQueryTo = pdsQueryToAddress;
             ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds = artificialDelayAfterNominatedPharmacyUpdateInMilliseconds;
-            PartyIdFrom = partyIdFrom;
-            PartyIdTo = partyIdTo;
+            PdsTraceConfigurationSettings = pdsTraceConfigurationSettings;
+            PdsUpdateConfigurationSettings = pdsUpdateConfigurationSettings;
         }
 
         public bool IsNominatedPharmacyEnabled { get; }
 
         public Uri BaseUrl { get; }
-
-        public string SpineAccreditedSystemIdFrom { get; }
-
-        public string SpineAccreditedSystemIdTo { get; }
-
-        public string SpineCpaId { get; }
-
-        public string PdsQueryFromAddress { get; }
-
-        public string PdsQueryTo { get; }
         
         public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
-        
-        public string PartyIdFrom { get; }
-        
-        public string PartyIdTo { get; }
 
+        public PdsTraceConfigurationSettings PdsTraceConfigurationSettings { get; }
+
+        public PdsUpdateConfigurationSettings PdsUpdateConfigurationSettings { get; }
 
         public void Validate()
         {
@@ -57,40 +37,18 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 throw new ConfigurationNotFoundException(nameof(BaseUrl));
             }
 
-            if (string.IsNullOrEmpty(SpineAccreditedSystemIdFrom))
+            if (PdsTraceConfigurationSettings == null)
             {
-                throw new ConfigurationNotFoundException(nameof(SpineAccreditedSystemIdFrom));
-            }
-
-            if (string.IsNullOrEmpty(SpineAccreditedSystemIdTo))
-            {
-                throw new ConfigurationNotFoundException(nameof(SpineAccreditedSystemIdTo));
-            }
-
-            if (string.IsNullOrEmpty(SpineCpaId))
-            {
-                throw new ConfigurationNotFoundException(nameof(SpineCpaId));
-            }
-
-            if (string.IsNullOrEmpty(PdsQueryFromAddress))
-            {
-                throw new ConfigurationNotFoundException(nameof(PdsQueryFromAddress));
-            }
-
-            if (string.IsNullOrEmpty(PdsQueryTo))
-            {
-                throw new ConfigurationNotFoundException(nameof(PdsQueryTo));
+                throw new ConfigurationNotFoundException(nameof(PdsTraceConfigurationSettings));
             }
             
-            if (string.IsNullOrEmpty(PartyIdFrom))
+            if (PdsUpdateConfigurationSettings == null)
             {
-                throw new ConfigurationNotFoundException(nameof(PartyIdFrom));
+                throw new ConfigurationNotFoundException(nameof(PdsUpdateConfigurationSettings));
             }
-            
-            if (string.IsNullOrEmpty(PartyIdTo))
-            {
-                throw new ConfigurationNotFoundException(nameof(PartyIdTo));
-            }
+
+            PdsTraceConfigurationSettings.Validate();
+            PdsUpdateConfigurationSettings.Validate();
         }
     }
 }

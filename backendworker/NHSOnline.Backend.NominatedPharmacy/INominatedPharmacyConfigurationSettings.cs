@@ -8,21 +8,10 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         Uri BaseUrl { get; }
 
-        string SpineAccreditedSystemIdFrom { get; }
-
-        string SpineAccreditedSystemIdTo { get; }
-
-        string SpineCpaId { get; }
-
-        string PdsQueryTo { get; }
-
-        string PdsQueryFromAddress { get; }
-
         int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
-        
-        string PartyIdFrom { get; }
-        
-        string PartyIdTo { get; }
 
+        PdsTraceConfigurationSettings PdsTraceConfigurationSettings { get; }
+
+        PdsUpdateConfigurationSettings PdsUpdateConfigurationSettings { get; }
     }
 }
