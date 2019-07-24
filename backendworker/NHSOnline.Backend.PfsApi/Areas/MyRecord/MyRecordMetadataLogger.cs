@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             LogInformation(myRecordMetadata);
         }
 
-        internal MedicalRecordMetadata BuildMyRecordMetadata(UserSession userSession, 
+        internal static MedicalRecordMetadata BuildMyRecordMetadata(UserSession userSession, 
             GetMyRecordResult.Success successfulResult)
         {
             Debug.Assert(successfulResult != null);

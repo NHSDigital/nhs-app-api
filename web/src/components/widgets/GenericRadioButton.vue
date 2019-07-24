@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="nhsuk-radios__item">
     <input :id="inputId"
@@ -10,7 +11,10 @@
            :required="required"
            @click.stop="selected">
     <label class="nhsuk-label nhsuk-radios__label"
-           :for="inputId">{{ label }}</label>
+           :for="inputId">
+      <template v-if="renderAsHtml"><span v-html="label"/></template>
+      <template v-else>{{ label }}</template>
+    </label>
     <span v-if="hint" :id="hintId" class="nhsuk-hint nhsuk-radios__hint">{{ hint }}</span>
   </div>
 </template>
@@ -42,6 +46,10 @@ export default {
     required: {
       type: Boolean,
       default: true,
+    },
+    renderAsHtml: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

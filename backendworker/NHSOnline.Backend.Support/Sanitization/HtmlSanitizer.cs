@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.Support.Sanitization
             { "meta" }
         };
 
-        public string SanitizeHtml(string html)
+        public string SanitizeHtml(string html, HashSet<string> whitelist)
         {
             if (string.IsNullOrEmpty(html))
             {

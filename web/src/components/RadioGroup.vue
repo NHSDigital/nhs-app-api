@@ -17,6 +17,7 @@
                               :name="name"
                               :value="getValue(radio)"
                               :required="required"
+                              :render-as-html="renderAsHtml"
                               class="nhsuk-radios__item"
                               @select="selected"/>
       </div>
@@ -68,6 +69,10 @@ export default {
     required: {
       type: Boolean,
       default: true,
+    },
+    renderAsHtml: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

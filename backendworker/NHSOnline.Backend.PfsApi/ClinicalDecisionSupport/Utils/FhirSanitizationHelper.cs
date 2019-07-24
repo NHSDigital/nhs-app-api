@@ -8,6 +8,18 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 {
     public class FhirSanitizationHelper : IFhirSanitizationHelper
     {
+        private static readonly HashSet<string> whitelist = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "em",
+            "br",
+            "b",
+            "a",
+            "strong",
+            "ul",
+            "li",
+            "span"
+        };
+        
         public void SanitizeGuidanceResponse(GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
         {
             if (guidanceResponse == null) return;
@@ -79,14 +91,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         {
             if (referralRequest == null) return;
 
-            referralRequest.Description = htmlSanitizer.SanitizeHtml(referralRequest.Description);
+            referralRequest.Description = htmlSanitizer.SanitizeHtml(referralRequest.Description, null);
         }
 
         private static void SanitizeCarePlan(CarePlan carePlan, IHtmlSanitizer htmlSanitizer)
         {
             if (carePlan == null) return;
             
-            carePlan.Title = htmlSanitizer.SanitizeHtml(carePlan.Title);
+            carePlan.Title = htmlSanitizer.SanitizeHtml(carePlan.Title, null);
             SanitizeCarePlanActivities(carePlan.Activity, htmlSanitizer);
         }
 
@@ -96,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
             foreach (var activityComponent in activityComponents)
             {
-                activityComponent.Detail.Description = htmlSanitizer.SanitizeHtml(activityComponent.Detail?.Description);
+                activityComponent.Detail.Description = htmlSanitizer.SanitizeHtml(activityComponent.Detail?.Description, null);
             }
         }
         
@@ -137,18 +149,31 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 SanitizeItems(questionnaire?.Item, htmlSanitizer);
             }
         }
-        
+
         private static void SanitizeItems(List<Questionnaire.ItemComponent> items, IHtmlSanitizer htmlSanitizer)
         {
             if (items == null || items.Count == 0)
             {
                 return;
             }
-            
+
             items.ForEach(item =>
             {
-                item.Text = htmlSanitizer.SanitizeHtml(item.Text);
-                
+                item.Text = htmlSanitizer.SanitizeHtml(item.Text, null);
+
+                if (item.Option == null || item.Option.Count == 0)
+                {
+                    return;
+                }
+
+                item.Option.ForEach(option =>
+                {
+
+                    var optionValue = (Coding) option.Value;
+                    optionValue.Display = htmlSanitizer.SanitizeHtml(optionValue.Display, whitelist);
+                    option.Value = optionValue;
+                });
+
                 SanitizeItems(item.Item, htmlSanitizer);
             });
         }

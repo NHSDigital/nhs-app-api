@@ -2,6 +2,7 @@ import QuestionMultipleChoice from '@/components/online-consultations/QuestionMu
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import CheckboxGroup from '@/components/CheckboxGroup';
 import { mount } from '../../helpers';
+import each from 'jest-each';
 
 const multiChoiceValidationMessage = 'appointments.admin_help.errors.validation.message.multiple_choiceAtLeastOneRequired';
 let wrapper;
@@ -61,6 +62,16 @@ describe('QuestionMultipleChoice.vue', () => {
         isEmpty: false,
         message: multiChoiceValidationMessage,
       });
+    });
+    each([
+      true,
+      false,
+    ]).it('will set renderAsHtml on radio group', (renderAsHtml) => {
+      wrapper = mountQuestion({ propsData: { renderAsHtml } });
+
+      const checkboxGroup = wrapper.find(CheckboxGroup);
+
+      expect(checkboxGroup.vm.renderAsHtml).toEqual(renderAsHtml);
     });
   });
 

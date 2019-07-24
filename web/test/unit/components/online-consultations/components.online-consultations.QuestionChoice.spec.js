@@ -1,6 +1,8 @@
 import QuestionChoice from '@/components/online-consultations/QuestionChoice';
+import RadioGroup from '@/components/RadioGroup';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import { mount } from '../../helpers';
+import each from 'jest-each';
 
 describe('questionChoice compoonent', () => {
   let wrapper;
@@ -17,6 +19,19 @@ describe('questionChoice compoonent', () => {
         ...propsData,
       },
     });
+
+  describe('renderAsHtml', () => {
+    each([
+      true,
+      false,
+    ]).it('will set renderAsHtml on radio group', (renderAsHtml) => {
+      wrapper = mountQuestion({ propsData: { renderAsHtml } });
+
+      const radioGroup = wrapper.find(RadioGroup);
+
+      expect(radioGroup.vm.renderAsHtml).toEqual(renderAsHtml);
+    });
+  });
 
   describe('radio buttons', () => {
     it('will have radio button for the question with value of first', () => {

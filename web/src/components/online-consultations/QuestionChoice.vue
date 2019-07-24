@@ -13,6 +13,7 @@
                  :radios="options"
                  :current-value="selectedValue"
                  :required="required"
+                 :render-as-html="renderAsHtml"
                  @select="selected"/>
   </fieldset>
 </template>
@@ -54,6 +55,10 @@ export default {
     required: {
       type: Boolean,
       default: true,
+    },
+    renderAsHtml: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

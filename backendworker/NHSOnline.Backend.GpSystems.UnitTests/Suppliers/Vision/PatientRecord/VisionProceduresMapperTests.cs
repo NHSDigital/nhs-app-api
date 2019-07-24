@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
                 await EmbeddedResourceFileHelper.ReadEmbeddedResource(
                     "NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord.TestData.Procedures.CleanedProcedures.html");
 
-            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns(proceduresHtml);
+            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>(), null)).Returns(proceduresHtml);
 
             //Act
             var mappedResponse = _mapper.Map(new VisionPatientDataResponse()

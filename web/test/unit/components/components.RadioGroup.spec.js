@@ -1,7 +1,8 @@
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import RadioGroup from '@/components/RadioGroup';
-import { mount } from '../helpers';
+import { shallowMount, mount } from '../helpers';
+import each from 'jest-each';
 
 const mountGroup = propsData => mount(RadioGroup, {
   propsData,
@@ -12,7 +13,9 @@ const mountGroup = propsData => mount(RadioGroup, {
   },
 });
 
-const createPropsData = ({ header = '', errorMessage = '', showError = false } = {}) => ({
+const shallowMountGroup = propsData => shallowMount(RadioGroup, { propsData });
+
+const createPropsData = ({ header = '', errorMessage = '', showError = false, renderAsHtml = false } = {}) => ({
   errorMessage,
   header,
   radios: [
@@ -20,6 +23,7 @@ const createPropsData = ({ header = '', errorMessage = '', showError = false } =
     { value: 'second', label: 'second label' },
   ],
   showError,
+  renderAsHtml,
 });
 
 describe('Radio group', () => {
@@ -79,6 +83,20 @@ describe('Radio group', () => {
 
     it('will use legend to display header', () => {
       expect(wrapper.find('legend').text()).toBe(header);
+    });
+  });
+
+  describe('renderAsHtml', () => {
+    each([
+      true,
+      false,
+    ]).it('will set renderAsHtml on radio button', (renderAsHtml) => {
+      const propsData = createPropsData({ renderAsHtml });
+      wrapper = shallowMountGroup(propsData);
+
+      const radioButton = wrapper.findAll('generic-radio-button-stub').at(0);
+
+      expect(radioButton.vm.renderAsHtml).toEqual(renderAsHtml);
     });
   });
 });

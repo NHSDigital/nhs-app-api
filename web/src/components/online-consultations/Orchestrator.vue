@@ -43,6 +43,7 @@
                      :error-text="
                        validationErrorMessages(
                          validationErrorMessage, validationErrorMessageFromResponse)"
+                     :render-as-html="true"
                      @validate="onAnswerValidate"/>
         </question>
         <generic-button :button-classes="['button', 'green']"

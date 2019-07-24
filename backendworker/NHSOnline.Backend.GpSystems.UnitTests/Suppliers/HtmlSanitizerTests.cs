@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers
                     "NHSOnline.Backend.GpSystems.UnitTests.Suppliers.TestData.HtmlDataToSanitize.html");
            
             // Act
-            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize);
+            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize, null);
 
             // Assert
             Assert.IsTrue(!string.IsNullOrEmpty(sanitizedHtml));
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers
                      "NHSOnline.Backend.GpSystems.UnitTests.Suppliers.TestData.HtmlDataToSanitize.html");
 
             // Act
-            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize);
+            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize, null);
 
             // Assert
             Assert.IsTrue(!string.IsNullOrEmpty(htmlToSanitize));

@@ -51,7 +51,7 @@
             {
               "valueCoding": {
                 "code": "GEC_ADM_AD_ISSUE_REFERRAL",
-                "display": "Referral"
+                "display": "<strong>Referral</strong>"
               }
             },
             {

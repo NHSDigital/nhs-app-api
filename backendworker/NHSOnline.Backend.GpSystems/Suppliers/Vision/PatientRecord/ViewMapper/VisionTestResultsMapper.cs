@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
                     return testResults;
                 }
                 
-                var sanitizedHtml = _htmlSanitizer.SanitizeHtml(response.Record);
+                var sanitizedHtml = _htmlSanitizer.SanitizeHtml(response.Record, null);
                     
                 var formattedHtml = Regex.Replace(sanitizedHtml, @"((background:).*(;))", string.Empty);
                 formattedHtml = Regex.Replace(formattedHtml, @"((font-size:).*(!important;))", string.Empty);

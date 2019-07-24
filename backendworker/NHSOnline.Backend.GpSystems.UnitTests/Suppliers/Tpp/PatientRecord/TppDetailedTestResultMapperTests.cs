@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 await ReadTestDataFile(
                     "NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord.TestData.TppTestResultData.html");
 
-            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns("<p>sanitized html</p>");
+            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>(), null)).Returns("<p>sanitized html</p>");
             
             var testResultsViewReply = new TestResultsViewReply
             {
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             var result = _mapper.Map(testResultsViewReply);
             
             // Assert
-            _htmlSanitizer.Verify(mock => mock.SanitizeHtml(testResultsHtml));
+            _htmlSanitizer.Verify(mock => mock.SanitizeHtml(testResultsHtml, null));
             Assert.IsTrue(!string.IsNullOrEmpty(result.TestResult));
         }
         

@@ -17,6 +17,7 @@
                     :name="name"
                     :checkboxes="options"
                     :required="allOptionsRequired"
+                    :render-as-html="renderAsHtml"
                     @select="selectedValuesChanged" />
   </fieldset>
 </template>
@@ -58,6 +59,10 @@ export default {
     required: {
       type: Boolean,
       default: true,
+    },
+    renderAsHtml: {
+      type: Boolean,
+      default: false,
     },
     allOptionsRequired: {
       type: Boolean,

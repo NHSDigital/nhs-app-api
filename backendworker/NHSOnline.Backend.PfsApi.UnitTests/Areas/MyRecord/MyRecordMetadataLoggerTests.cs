@@ -112,7 +112,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public void LogEmisMyRecordMetadata_TppDcrEventsAreNull()
         {
             // Arrange
-            var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();
             var myRequestResponse = new MyRecordResponse();
             var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
             var userSession = _fixture.Build<UserSession>()
@@ -120,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Create();
 
             // Act
-            var result = systemUnderTest.BuildMyRecordMetadata(userSession, getMyRecordResponse);
+            var result = MyRecordMetadataLogger.BuildMyRecordMetadata(userSession, getMyRecordResponse);
             
             // Assert
             FindRecordDetailMetadata(result, "Tpp Dcr Events").HasAccess.Should().BeNull();
@@ -140,7 +139,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         )
         {
             // Arrange
-            var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();
             var myRequestResponse = BuildPopulatedMyRecordResponse(
                 allergyCount, medicationCount,immunisationCount,
                 problemCount,tppDcrEventCount,consultationCount, testResultCount);
@@ -150,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Create();
 
             // Act
-            var result = systemUnderTest.BuildMyRecordMetadata(userSession, getMyRecordResponse);
+            var result = MyRecordMetadataLogger.BuildMyRecordMetadata(userSession, getMyRecordResponse);
             
             // Assert
             var allergyData = FindRecordDetailMetadata(result, "Allergies");
@@ -186,7 +184,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public void LogTppMyRecordMetadata_EmisRecordDetailMetadataitemsAreNull()
         {
             // Arrange
-            var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();
             var myRequestResponse = new MyRecordResponse();
             var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
             var userSession = _fixture.Build<UserSession>()
@@ -194,7 +191,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Create();
 
             // Act
-            var result = systemUnderTest.BuildMyRecordMetadata(userSession, getMyRecordResponse);
+            var result = MyRecordMetadataLogger.BuildMyRecordMetadata(userSession, getMyRecordResponse);
             
             // Assert
             FindRecordDetailMetadata(result, "Immunisations").HasAccess.Should().BeNull();
@@ -216,7 +213,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             )
         {
             // Arrange
-            var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();
             var myRequestResponse = BuildPopulatedMyRecordResponse(
                 allergyCount, medicationCount,immunisationCount,
                 problemCount,tppDcrEventCount,consultationCount, testResultCount);
@@ -226,7 +222,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Create();
 
             // Act
-            var result = systemUnderTest.BuildMyRecordMetadata(userSession, getMyRecordResponse);
+            var result = MyRecordMetadataLogger.BuildMyRecordMetadata(userSession, getMyRecordResponse);
             
             // Assert
             var allergyData = FindRecordDetailMetadata(result, "Allergies");

@@ -3,9 +3,14 @@ import CheckboxGroup from '@/components/CheckboxGroup';
 import { mount } from '../helpers';
 
 const checkboxOptions = [
-  { label: 'ONE', selected: false, code: 1 },
-  { label: 'TWO', selected: false, code: 2 },
-  { label: 'THREE', selected: false, code: 3 },
+  { label: 'One', selected: false, code: 1 },
+  { label: 'Two', selected: false, code: 2 },
+  { label: 'Three', selected: false, code: 3 },
+];
+const htmlCheckboxOptions = [
+  { label: '<span id="one">One</span>', selected: false, code: 1 },
+  { label: '<span id="two">Two</span>', selected: false, code: 2 },
+  { label: '<span id="three">Three</span>', selected: false, code: 3 },
 ];
 
 const mountComponent = ({ propsData = {}, methods = {} } = {}) =>
@@ -28,12 +33,43 @@ const mountComponent = ({ propsData = {}, methods = {} } = {}) =>
 describe('Check box group', () => {
   let wrapper;
 
-  beforeEach(() => {
+  it('will display all checkboxes', () => {
     wrapper = mountComponent();
+    expect(wrapper.findAll(GenericCheckbox).length).toBe(3);
   });
 
-  it('will display all checkboxes', () => {
-    expect(wrapper.findAll(GenericCheckbox).length).toBe(3);
+  describe('renderAsHtml', () => {
+    it('will render input labels as html if renderAsHtml is true', () => {
+      wrapper = mountComponent({
+        propsData: {
+          renderAsHtml: true,
+          checkboxes: htmlCheckboxOptions,
+        },
+      });
+
+      const labelOne = wrapper.find('label span#one');
+      const labelTwo = wrapper.find('label span#two');
+      const labelThree = wrapper.find('label span#three');
+
+      expect(labelOne).toBeDefined();
+      expect(labelTwo).toBeDefined();
+      expect(labelThree).toBeDefined();
+    });
+
+    it('will not render input labels as html if renderAsHtml is false', () => {
+      wrapper = mountComponent({ propsData: { renderAsHtml: false } });
+
+      const labelOne = wrapper.find('label#checkbox-1-label');
+      const labelTwo = wrapper.find('label#checkbox-2-label');
+      const labelThree = wrapper.find('label#checkbox-3-label');
+
+      expect(labelOne).toBeDefined();
+      expect(labelOne.element.innerHTML).toEqual('One');
+      expect(labelTwo).toBeDefined();
+      expect(labelTwo.element.innerHTML).toEqual('Two');
+      expect(labelThree).toBeDefined();
+      expect(labelThree.element.innerHTML).toEqual('Three');
+    });
   });
 
   describe('checkbox selected', () => {

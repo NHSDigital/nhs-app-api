@@ -15,13 +15,13 @@
           "item": [
             {
               "linkId": "GLO_PRE_DISCLAIMERS_1",
-              "text": "I have read the privacy notice, and I consent to you using the personal and health data I give you to provide an online consultation. I can withdraw my consent at any time by abandoning the form.",
+              "text": "I have read the <strong>privacy notice</strong>, and I consent to you using the personal and health data I give you to provide an online consultation. I can withdraw my consent at any time by abandoning the form.",
               "type": "boolean",
               "required": true
             },
             {
               "linkId": "GLO_PRE_DISCLAIMERS_2",
-              "text": "I consent to you sharing my personal and health data with {{practice.name}}.",
+              "text": "I consent to you sharing my <strong>personal and health data</strong> with {{practice.name}}.",
               "type": "boolean",
               "required": true
             }

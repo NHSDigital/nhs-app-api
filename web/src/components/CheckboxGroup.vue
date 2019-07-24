@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="nhsuk-form-group">
     <div class="nhsuk-checkboxes">
@@ -9,7 +10,8 @@
                         :checkbox-id="`checkbox-${checkbox.code}`"
                         :is-selected="selectedValues.includes(checkbox.code)"
                         @input="selectedValueChanged(checkbox)">
-        <span>{{ checkbox.label }}</span>
+        <template v-if="renderAsHtml"><span v-html="checkbox.label"/></template>
+        <template v-else>{{ checkbox.label }}</template>
       </generic-checkbox>
     </div>
   </div>
@@ -39,6 +41,10 @@ export default {
     value: {
       type: Array,
       default: () => [],
+    },
+    renderAsHtml: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
