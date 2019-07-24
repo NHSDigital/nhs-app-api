@@ -224,7 +224,7 @@ export default {
     },
     confirmationMessageKey() {
       return this.$store.state.myAppointments.disableCancellation
-        ? 'appointments.index.succcessAndCancellationDisabledText'
+        ? 'appointments.index.successAndCancellationDisabledText'
         : 'appointments.index.successText';
     },
     confirmationMessage() {

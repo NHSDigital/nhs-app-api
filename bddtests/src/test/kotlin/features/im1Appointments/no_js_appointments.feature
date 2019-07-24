@@ -13,10 +13,10 @@ Feature: Appointment Service with no Javascript
     And I am on the My Appointments page
     Then I am informed I have no upcoming appointments
 
-    When I click the 'Book new appointment' button
+    When I click the 'Book an appointment' button
     Then I am given guidance as to my options before booking an appointment
 
-    When I click the 'Book a GP appointment' button
+    When I click the 'Book an appointment' button
     Then the Available Appointments page is displayed
 
     When I have filtered such that there is one time displayed that represents multiple slots

@@ -30,9 +30,7 @@ open class MyAppointmentsUISteps {
     private val cancellationSuccessMessage = "Your appointment has been cancelled."
 
     private val expectedNoUpcomingText = "Upcoming appointments\n" +
-            "You don't currently have any appointments booked.\n" +
-            "Once you've booked an appointment here, you'll be able to view details and cancel it.\n" +
-            "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
+            "If you have an upcoming appointment that is not shown here, contact your GP surgery for more information."
     private val expectedNoPastText = "Past appointments\n" +
             "You have no recent past appointments. To find out about older appointments, contact your GP surgery."
 

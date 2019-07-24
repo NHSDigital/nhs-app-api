@@ -6,10 +6,6 @@
       <div :class="$style.upComingAppointments">
         <p :class="$style.upComingAppointments">
           {{ $t('appointments.index.empty.text1') }}</p>
-        <p :class="$style.upComingAppointments">
-          {{ $t('appointments.index.empty.text2') }} </p>
-        <p :class="$style.upComingAppointments">
-          {{ $t('appointments.index.empty.text3') }} </p>
       </div>
     </div>
 

@@ -91,7 +91,7 @@ Feature: Session Expiry and Extend
     Then I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
-    When I select "Book new appointment" button
+    When I select "Book an appointment" button
     Then I am given guidance as to my options before booking an appointment
 
   @android
@@ -133,7 +133,7 @@ Feature: Session Expiry and Extend
     When I am idle long enough on a secure page for the session expiry dialog box to appear
     When I click to extend the session
     Then the dialog box is not visible on the screen
-    When I select "Book new appointment" button
+    When I select "Book an appointment" button
     Then I am given guidance as to my options before booking an appointment
 
   @android
@@ -193,7 +193,7 @@ Feature: Session Expiry and Extend
     Then I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
-    When I select "Book new appointment" button
+    When I select "Book an appointment" button
     Then I am given guidance as to my options before booking an appointment
 
   @android
@@ -242,7 +242,7 @@ Feature: Session Expiry and Extend
     When I click to extend the session
     Then the dialog box is not visible on the screen
     And I see the header
-    When I select "Book new appointment" button
+    When I select "Book an appointment" button
     Then I am given guidance as to my options before booking an appointment
 
   @manual
