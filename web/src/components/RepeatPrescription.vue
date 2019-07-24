@@ -15,15 +15,14 @@
           name="prescription"
           @input="selectedValueChanged(repeatPrescription)">
           <span data-label="prescription-name"
-                :aria-label="`${repeatPrescription.name}. ${repeatPrescription.details}`"
+                :aria-label="`${repeatPrescription.name}`"
                 role="text">
             {{ repeatPrescription.name }}
           </span>
-          <p :class="$style.prescriptionDescription"
-             data-label="prescription-description"
-             aria-hidden="true">
+          <span :class="$style.prescriptionDescription"
+                data-label="prescription-description">
             {{ repeatPrescription.details }}
-          </p>
+          </span>
         </generic-checkbox>
       </div>
     </div>
@@ -78,6 +77,7 @@ export default {
   .prescriptionDescription {
     padding-top: 0.250em;
     padding-bottom: 0.250em;
+    display: block;
   }
 
   label {

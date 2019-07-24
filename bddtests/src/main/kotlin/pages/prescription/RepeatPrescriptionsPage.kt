@@ -128,8 +128,8 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
                 webDesktopLocator = "//label[contains(.," +
                         "'${instructions[0]}') " +
                         when(instructions.size) {
-                           2 -> " and contains(.,'${instructions[1]}')"
-                           else -> ""
+                            2 -> " and contains(.,'${instructions[1]}')"
+                            else -> ""
                         } +
                         " and contains(.,'${courseToSelect.name}')]",
                 androidLocator = null,
