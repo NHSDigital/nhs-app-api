@@ -304,7 +304,6 @@ class HomeViewController : UIViewController {
     func showBiometricSessionError () {
         self.webViewDelegate?.failedUrl = URL(string: config().HomeUrl + "login")
         self.errorViewController?.setUnavailabilityError(errorMessage: ErrorMessage(.BiometricLoginSessionError))
-        self.errorViewController?.hideTryAgainLabel()
         self.errorViewController?.setTryAgainButtonText(text: NSLocalizedString("BiometricSessionTimeoutButtonText", comment: ""))
         self.updateHeaderText(headerText: NSLocalizedString("BiometricSessionTimeoutHeader", comment: ""))
         showErrorViewContainer()

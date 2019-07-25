@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -176,17 +176,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please try again later." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-Zq-YNl">
-                                <rect key="frame" x="16" y="124" width="343" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="ffM-XV-Y5g"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Qz-lq-7kU">
-                                <rect key="frame" x="16" y="161" width="343" height="34"/>
+                                <rect key="frame" x="16" y="124" width="343" height="34"/>
                                 <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="IfL-FP-Acc"/>
@@ -225,16 +216,13 @@
                             <constraint firstItem="sIw-cn-ITE" firstAttribute="top" secondItem="J0Q-Cj-kkS" secondAttribute="topMargin" constant="32" id="84X-Kf-yWt"/>
                             <constraint firstItem="FfV-2y-pL7" firstAttribute="trailing" secondItem="31B-C0-G75" secondAttribute="trailing" constant="16" id="Am0-6p-adc"/>
                             <constraint firstItem="7J3-ga-aZb" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" id="Dxd-ua-na6"/>
-                            <constraint firstItem="eyJ-Zq-YNl" firstAttribute="top" secondItem="31B-C0-G75" secondAttribute="bottom" constant="16" id="J33-Gk-dBl"/>
+                            <constraint firstItem="4Qz-lq-7kU" firstAttribute="top" secondItem="31B-C0-G75" secondAttribute="bottom" constant="16" id="IGI-fB-TfW"/>
                             <constraint firstItem="FfV-2y-pL7" firstAttribute="trailing" secondItem="4Qz-lq-7kU" secondAttribute="trailing" constant="16" id="JTr-c4-WyL"/>
                             <constraint firstItem="sIw-cn-ITE" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="gF9-XT-EmR"/>
-                            <constraint firstItem="eyJ-Zq-YNl" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="gJF-uQ-ctD"/>
                             <constraint firstItem="31B-C0-G75" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="gaI-fr-V1F"/>
                             <constraint firstItem="FfV-2y-pL7" firstAttribute="trailing" secondItem="sIw-cn-ITE" secondAttribute="trailing" constant="250" id="mZn-ny-7dh"/>
                             <constraint firstItem="4Qz-lq-7kU" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="mpG-q9-2ze"/>
-                            <constraint firstItem="FfV-2y-pL7" firstAttribute="trailing" secondItem="eyJ-Zq-YNl" secondAttribute="trailing" constant="16" id="nSG-Io-xby"/>
                             <constraint firstItem="7J3-ga-aZb" firstAttribute="top" secondItem="FfV-2y-pL7" secondAttribute="top" id="oKR-sf-dAA"/>
-                            <constraint firstItem="4Qz-lq-7kU" firstAttribute="top" secondItem="eyJ-Zq-YNl" secondAttribute="bottom" constant="16" id="ya4-t9-eyw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FfV-2y-pL7"/>
                     </view>
@@ -242,7 +230,6 @@
                         <outlet property="errorIconTextView" destination="sIw-cn-ITE" id="AlP-qF-DYd"/>
                         <outlet property="errorTextView" destination="31B-C0-G75" id="jS8-Ag-fle"/>
                         <outlet property="tryAgainButton" destination="4Qz-lq-7kU" id="eBY-d9-Q9c"/>
-                        <outlet property="tryAgainLabel" destination="eyJ-Zq-YNl" id="KyG-Yj-KhJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gcx-wZ-NfJ" userLabel="First Responder" sceneMemberID="firstResponder"/>

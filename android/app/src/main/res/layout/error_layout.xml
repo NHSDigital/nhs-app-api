@@ -43,13 +43,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_40sdp" />
 
-            <TextView
-                android:id="@+id/tryAgainTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:text="@string/tryLaterText"
-                android:textSize="@dimen/errorTextSize" />
         </LinearLayout>
 
         <Button

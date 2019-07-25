@@ -8,7 +8,6 @@
     <dimen name="menuBarItemFontSize">@dimen/_7ssp</dimen>
 
     <dimen name="errorTextSize">@dimen/_16ssp</dimen>
-    <dimen name="tryAgainLaterTextSize">@dimen/_14ssp</dimen>
 
     <dimen name="fingerprint_square_dimen">40dp</dimen>
     <dimen name="fingerprint_square_dimen_viewport" type="float">40.0</dimen>

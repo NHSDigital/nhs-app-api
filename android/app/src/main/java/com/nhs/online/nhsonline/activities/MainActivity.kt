@@ -410,13 +410,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             errorTextView.contentDescription = errorMessage.title + ". " +
                     errorMessage.accessibleMessage
 
-            if (!errorMessage.isRetry) {
-                tryAgainTextView.visibility = GONE
-
-            } else {
-                tryAgainTextView.visibility = VISIBLE
-            }
-
             appDialogs.dismissVersionUpgradeDialog()
             showErrorScreen()
         } catch (e: Exception) {

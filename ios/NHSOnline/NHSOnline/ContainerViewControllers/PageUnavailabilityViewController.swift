@@ -4,7 +4,6 @@ import os.log
 class PageUnavailabilityViewController: UIViewController {
     @IBOutlet weak var errorIconTextView: UITextView!
     @IBOutlet weak var errorTextView: ErrorTextView!
-    @IBOutlet weak var tryAgainLabel: UILabel!
     @IBOutlet weak var tryAgainButton: UIButton!
     
     var failedUrl: String? = nil
@@ -26,21 +25,12 @@ class PageUnavailabilityViewController: UIViewController {
     }
     
     func setUnavailabilityError(errorMessage:ErrorMessage) {
-        if errorMessage.message != nil {
-            self.tryAgainLabel.hideView()
-        } else {
-            self.tryAgainLabel.showView()
-        }
         errorTextView.setServiceError(title: errorMessage.title, message: errorMessage.message)
         var accessibilityText = errorMessage.title
         if let extraAccessibilityText = errorMessage.accessibleMessage {
             accessibilityText.append(". " + extraAccessibilityText)
         }
         errorTextView.accessibilityValue = accessibilityText
-    }
-    
-    func hideTryAgainLabel() {
-        self.tryAgainLabel.hideView()
     }
     
     func setTryAgainButtonText(text: String) {
