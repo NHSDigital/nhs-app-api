@@ -198,41 +198,40 @@ open class PrescriptionsStepDefinitions {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         val currentPatient = SerenityHelpers.getPatient()
         when (currentProvider) {
-        ProviderTypes.EMIS -> {
-            mockingClient
-                    .forEmis {
-                        prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                    }
+            ProviderTypes.EMIS -> {
+                mockingClient
+                        .forEmis {
+                            prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                        }
 
-            mockingClient
-                    .forEmis {
-                        prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                    }
+                mockingClient
+                        .forEmis {
+                            prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                        }
+            }
+            ProviderTypes.TPP -> {
+                mockingClient
+                        .forTpp {
+                            prescriptions.listRepeatMedication(currentPatient)
+                                    .respondWithError(
+                                            Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                                    "Error Occurred",
+                                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                        }
+            }
+            ProviderTypes.VISION -> {
+                mockingClient
+                        .forVision {
+                            authentication.getConfigurationRequest(
+                                    VisionMockDefaults.visionUserSessionPrescriptionDisabled)
+                                    .respondWithSuccess(VisionMockDefaults
+                                            .visionConfigurationResponsePrescriptionsDisabled)
+                        }
+            }
+            else -> {
+                throw NotImplementedError("Invalid GP System")
+            }
         }
-        ProviderTypes.TPP -> {
-            mockingClient
-                    .forTpp {
-                        prescriptions.listRepeatMedication(currentPatient)
-                                .respondWithError(
-                                        Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                                "Error Occurred",
-                                                "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                    }
-        }
-        ProviderTypes.VISION -> {
-            mockingClient
-                    .forVision {
-                        authentication.getConfigurationRequest(
-                                VisionMockDefaults.visionUserSessionPrescriptionDisabled)
-                                .respondWithSuccess(VisionMockDefaults
-                                        .visionConfigurationResponsePrescriptionsDisabled)
-                    }
-        }
-        else -> {
-            throw NotImplementedError("Invalid GP System")
-        }
-    }
-        theGPSystemHasDisabledPrescriptions()
     }
 
     @Given("each course has (.*)")
