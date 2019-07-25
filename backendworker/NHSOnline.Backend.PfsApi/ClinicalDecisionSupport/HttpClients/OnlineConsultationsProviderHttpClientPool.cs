@@ -18,15 +18,17 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
         {
             _logger = logger;
             _pool = new Dictionary<string, IOnlineConsultationsProviderHttpClient>();
-            
+
             foreach (var providerSettings in onlineConsultationsProvidersSettings.Providers)
             {
-                _pool.Add(
-                    providerSettings.Provider,
-                    new OnlineConsultationsProviderHttpClient(
-                        new HttpClient(),
-                        providerSettings,
-                        loggerFactory.CreateLogger<OnlineConsultationsProviderHttpClient>()));
+                if (!_pool.ContainsKey(providerSettings.Provider)) {
+                    _pool.Add(
+                        providerSettings.Provider,
+                        new OnlineConsultationsProviderHttpClient(
+                            new HttpClient(),
+                            providerSettings,
+                            loggerFactory.CreateLogger<OnlineConsultationsProviderHttpClient>()));
+               }
             }
         }
         

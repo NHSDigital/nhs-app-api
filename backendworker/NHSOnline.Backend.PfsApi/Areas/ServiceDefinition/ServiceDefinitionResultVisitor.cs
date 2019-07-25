@@ -31,5 +31,25 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         {
             return new StatusCodeResult(StatusCodes.Status404NotFound);
         }
+
+        public IActionResult Visit(ServiceDefinitionResult.DemographicsBadGateway result)
+        {
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+        }
+
+        public IActionResult Visit(ServiceDefinitionResult.DemographicsRetrievalFailed result)
+        {
+            return new StatusCodeResult(StatusCodes.Status404NotFound);
+        }
+
+        public IActionResult Visit(ServiceDefinitionResult.DemographicsForbidden result)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
+
+        public IActionResult Visit(ServiceDefinitionResult.DemographicsInternalServerError result)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
     }
 }

@@ -11,7 +11,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/common/4_sex_choice.json",
+    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/common/6_admin_issue_choice.json",
     "headers": {
       "Content-Type": "application/json+fhir"
     }

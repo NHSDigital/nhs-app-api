@@ -35,7 +35,13 @@ function getQuestion(item) {
         code: i.linkId,
         label: mapHtmlTags(i.text),
         selected: false,
+        required: i.required,
       }));
+      question.options.forEach((option) => {
+        if (!option.required) {
+          question.allOptionsRequired = false;
+        }
+      });
       if (!question.options.length) {
         return undefined;
       }

@@ -95,5 +95,12 @@ namespace NHSOnline.Backend.Support
             public const string EthnicityCodingSystem = "http://www.nhsbt.nhs.uk/fhir/ethnic-categories";
             public const string WithdrawReasonCodingSystem = "http://www.nhsbt.nhs.uk/fhir/withdraw-reasons";
         }
+
+        public static class OnlineConsultationsConstants
+        {
+           public const string DemographicsOptionCode = "GLO_PRE_DISCLAIMERS_DEMOGRAPHIC"; 
+           public const string DemographicsLabel = "I consent to the NHS App sharing my name, date of birth, gender, NHS number and postal address with {0}. (Optional)";
+
+        }
     }
 }

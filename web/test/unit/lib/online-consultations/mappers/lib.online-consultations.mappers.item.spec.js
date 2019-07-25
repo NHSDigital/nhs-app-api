@@ -55,9 +55,11 @@ describe('online consultations mappers item', () => {
         item.item = [{
           linkId: 'code-1',
           text: 'Option 1',
+          required: true,
         }, {
           linkId: 'code-2',
           text: 'Option 2',
+          required: true,
         }];
         expectedQuestion.type = QuestionTypes.MULTIPLE_CHOICE;
         expectedQuestion.name = `${item.linkId}-${QuestionTypes.MULTIPLE_CHOICE}`;
@@ -67,10 +69,12 @@ describe('online consultations mappers item', () => {
           code: 'code-1',
           label: 'mapped-html',
           selected: false,
+          required: true,
         }, {
           code: 'code-2',
           label: 'mapped-html',
           selected: false,
+          required: true,
         }];
         expectedQuestion.validCodes = ['code-1', 'code-2'];
         expectedQuestion.allOptionsRequired = true;

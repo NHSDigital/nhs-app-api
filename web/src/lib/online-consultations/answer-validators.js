@@ -188,6 +188,7 @@ export function questionMultipleChoiceAnswerValid(
   answer = [],
   required,
   allOptionsRequired,
+  options = [],
   validCodes = [],
 ) {
   const isEmpty = answer.length === 0;
@@ -195,10 +196,12 @@ export function questionMultipleChoiceAnswerValid(
   if (!required && isEmpty) {
     return { isValid: true, isEmpty };
   }
-
+  const requiredOptions = options.filter(c => c.required).map(x => x.code);
+  console.log(`requiredOptions: ${requiredOptions}`);
   const isValid = allOptionsRequired
     ? !isEmpty && validCodes.every(o => answer.includes(o))
-    : !isEmpty && answer.every(o => validCodes.includes(o));
+    : !isEmpty && (answer.every(o => validCodes.includes(o) &&
+                    requiredOptions.every(p => answer.includes(p))));
 
   const message = allOptionsRequired
     ? `${baseMessagePath}multiple_choiceAllRequired`
@@ -389,6 +392,7 @@ export function isAnswerValid(answer, question = {}) {
         answer,
         question.required,
         question.allOptionsRequired,
+        question.options,
         question.validCodes,
       );
     case QuestionTypes.QUANTITY:

@@ -1133,6 +1133,20 @@ describe('online consultations answer validators', () => {
         // Arrange
         const answer = ['choice-1', 'choice-2'];
         const validCodes = ['choice-2', 'choice-1', 'choice-3'];
+        const options = [
+          {
+            code: 'choice-1',
+            required: false,
+          },
+          {
+            code: 'choice-2',
+            required: false,
+          },
+          {
+            code: 'choice-3',
+            required: false,
+          },
+        ];
         const expectedValidation = {
           isValid: true,
           message,
@@ -1140,7 +1154,7 @@ describe('online consultations answer validators', () => {
         };
 
         // Act
-        const validation = validator(answer, true, false, validCodes);
+        const validation = validator(answer, true, false, options, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -1175,6 +1189,20 @@ describe('online consultations answer validators', () => {
           // Arrange
           const answer = ['choice-1', 'choice-3'];
           const validCodes = ['choice-2', 'choice-1', 'choice-3'];
+          const options = [
+            {
+              code: 'choice-1',
+              required: false,
+            },
+            {
+              code: 'choice-2',
+              required: false,
+            },
+            {
+              code: 'choice-3',
+              required: false,
+            },
+          ];
           const expectedValidation = {
             isValid: false,
             message,
@@ -1182,7 +1210,7 @@ describe('online consultations answer validators', () => {
           };
 
           // Act
-          const validation = validator(answer, true, true, validCodes);
+          const validation = validator(answer, true, true, options, validCodes);
 
           // Assert
           expect(validation).toEqual(expectedValidation);

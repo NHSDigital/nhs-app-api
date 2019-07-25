@@ -3,9 +3,12 @@ using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using Constants = NHSOnline.Backend.Support.Constants;
 
@@ -99,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                     return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
 
-                var result = await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId);
+                var result = await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId, provider);
 
                 return result.Accept(visitor);
             }
@@ -139,7 +142,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                     return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
-
+                
+                var userSession = HttpContext.GetUserSession();
                 var httpClient =
                     _onlineConsultationsProviderHttpClientPool.GetClientByProviderName(
                         provider);
@@ -158,7 +162,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                         serviceDefinitionId,
                         parameters,
                         "true".Equals(Request.Headers[Constants.HttpHeaders.JavascriptDisabled],
-                            StringComparison.Ordinal)))
+                            StringComparison.Ordinal),
+                        userSession))
                     .Accept(visitor);
             }
             finally

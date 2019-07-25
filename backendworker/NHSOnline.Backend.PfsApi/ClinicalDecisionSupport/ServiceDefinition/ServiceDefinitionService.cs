@@ -1,13 +1,22 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Mappers;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Sanitization;
 
@@ -21,11 +30,21 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         
         private readonly FhirJsonParser _parser;
         private readonly FhirJsonSerializer _serializer;
+        private readonly IMapper<DemographicsResponse, OlcDemographics> _demographicsOlcMapper;
+        private readonly IOlcDataMaps _olcDataMapper;
+        private readonly IAuditor _auditor;
+        private readonly IGpSystemFactory _gpSystemFactory;
+        private readonly OnlineConsultationsProvidersSettings _olcProvidersSettings;
+        private readonly ICreateFhirParameter _createFhirParameter;
 
         public ServiceDefinitionService(
             ILogger<ServiceDefinitionService> logger,
             IHtmlSanitizer htmlSanitizer,
-            IFhirSanitizationHelper fhirSanitizationHelper)
+            IFhirSanitizationHelper fhirSanitizationHelper,
+            IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
+            IOlcDataMaps dataMaps, IAuditor auditor, IGpSystemFactory gpSystemFactory,
+            OnlineConsultationsProvidersSettings olcProvidersSettings,
+            ICreateFhirParameter createFhirParameter)
         {
             _logger = logger;
             _htmlSanitizer = htmlSanitizer;
@@ -33,9 +52,19 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             _serializer = new FhirJsonSerializer();
             _parser = new FhirJsonParser();
+            
+            _demographicsOlcMapper = demographicsRegistrationMapper;
+            _olcDataMapper = dataMaps;
+
+            _auditor = auditor;
+            
+            _gpSystemFactory = gpSystemFactory;
+
+            _olcProvidersSettings = olcProvidersSettings;
+            _createFhirParameter = createFhirParameter;
         }
 
-        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId)
+        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, string provider)
         {
             try
             {
@@ -95,7 +124,41 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 }
 
                 _fhirSanitizationHelper.SanitizeServiceDefinition(serviceDefinition, _htmlSanitizer);
+                
+                var providerSettings = _olcProvidersSettings.getProvider(provider);
+                foreach (var child in serviceDefinition.Children)
+                {
 
+                    if (child.TypeName.Equals("Questionnaire",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        foreach (var questionnaireElement in ((Questionnaire) child).Children)
+                        {
+                            if (questionnaireElement.TypeName.Equals(new Questionnaire.ItemComponent().TypeName,
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                var linkIdElement = new FhirString { Value = Support.Constants.OnlineConsultationsConstants.DemographicsOptionCode };
+                                var textElement = new FhirString
+                                {
+                                    Value = string.Format(CultureInfo.InvariantCulture, Support.Constants.OnlineConsultationsConstants.DemographicsLabel, providerSettings.ProviderName)
+                                };
+                                var typeElement = new Code<Questionnaire.QuestionnaireItemType>
+                                {
+                                    Value = Questionnaire.QuestionnaireItemType.Boolean
+                                };
+                                var required = new FhirBoolean { Value = false };
+                                var newAnswer = new Questionnaire.ItemComponent
+                                {
+                                    LinkIdElement = linkIdElement,
+                                    TextElement = textElement,
+                                    TypeElement = typeElement,
+                                    RequiredElement = required
+                                };
+                                ((Questionnaire.ItemComponent) questionnaireElement).Item.Add(newAnswer);
+                            }
+                        }
+                    }
+                }
                 return new ServiceDefinitionResult.Success(_serializer.SerializeToString(serviceDefinition));
 
             }
@@ -169,7 +232,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             IOnlineConsultationsProviderHttpClient httpClient,
             string serviceDefinitionId,
             Parameters parameters,
-            bool addJavascriptDisabledHeader)
+            bool addJavascriptDisabledHeader,
+            UserSession userSession)
         {
             try
             {
@@ -183,6 +247,67 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     _logger.LogError("Parameters can not be null");
 
                     return new ServiceDefinitionResult.BadRequest();
+                }
+
+                var addPatient = false;
+                foreach (var param in parameters.Parameter)
+                {
+                    if (param.Resource?.Children != null)
+                    {
+                        foreach (var resource in (param.Resource).Children)
+                        {
+                            if (resource.TypeName.Equals(new QuestionnaireResponse.ItemComponent().TypeName,
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                QuestionnaireResponse.AnswerComponent answerToRemove = null ;
+                                foreach (var answer in ((QuestionnaireResponse.ItemComponent) resource).Answer)
+                                {
+                                    if (answer.Value.TypeName.Equals(new Coding().TypeName,
+                                            StringComparison.OrdinalIgnoreCase) && ((Coding) answer.Value).CodeElement.Value.Equals(
+                                            Support.Constants.OnlineConsultationsConstants
+                                                .DemographicsOptionCode,
+                                            StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        addPatient = true;
+                                        answerToRemove = answer;
+                                    }
+                                }
+
+                                if (answerToRemove != null)
+                                {
+                                    ((QuestionnaireResponse.ItemComponent) resource).Answer.Remove(answerToRemove);
+                                }
+                            }
+                        }
+                            
+                    }
+                }
+                
+                if (addPatient)
+                {
+                    _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier.ToString()}");
+
+                    var demographicsService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
+                        .GetDemographicsService();
+
+                    _logger.LogDebug("Fetching Demographics");
+                    var demographics = await demographicsService.GetDemographics(userSession.GpUserSession);
+            
+                    if (!(demographics is DemographicsResult.Success demographicsResult))
+                    {
+                        return GetDemographicsErrorResult(demographics);
+                    }
+                    
+                    parameters.Add("patient", _createFhirParameter.CreatePatientFhir(_demographicsOlcMapper, demographicsResult));
+                    await _auditor.Audit(
+                        AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
+                        "User has agreed to share their name, age, gender, NHS number and postal address.");
+                }
+                else
+                {
+                    await _auditor.Audit(
+                        AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
+                        "User has not agreed to share their name, age, gender, NHS number and postal address.");
                 }
 
                 try
@@ -232,6 +357,25 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             finally
             {
                 _logger.LogExit();
+            }
+        }
+        
+        private ServiceDefinitionResult GetDemographicsErrorResult(DemographicsResult myRecord)
+        {
+            switch (myRecord)
+            {
+                case DemographicsResult.BadGateway _:
+                    _logger.LogDebug("GP systems demographics call was unsuccessful");
+                    return new ServiceDefinitionResult.DemographicsBadGateway();
+                case DemographicsResult.Forbidden _:
+                    _logger.LogDebug("GP systems demographics forbidden");
+                    return new ServiceDefinitionResult.DemographicsForbidden();
+                case DemographicsResult.InternalServerError _:
+                    _logger.LogDebug("GP systems demographics threw an internal server error");
+                    return new ServiceDefinitionResult.DemographicsInternalServerError();
+                default:
+                    _logger.LogDebug("GP systems demographics record not successfully retrieved");
+                    return new ServiceDefinitionResult.DemographicsRetrievalFailed();
             }
         }
     }

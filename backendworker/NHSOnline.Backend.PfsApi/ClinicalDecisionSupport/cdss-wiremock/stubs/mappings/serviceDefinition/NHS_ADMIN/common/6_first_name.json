@@ -5,13 +5,13 @@
     "url": "/fhir/ServiceDefinition/NHS_ADMIN/$evaluate",
     "bodyPatterns": [
       {
-        "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/NHS_STD_AD_DOB')]"
+        "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/NHS_STD_AD_FNAME')]"
       }
     ]
   },
   "response": {
     "status": 200,
-    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/common/6_first_name.json",
+    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/common/7_last_name.json",
     "headers": {
       "Content-Type": "application/json+fhir"
     }

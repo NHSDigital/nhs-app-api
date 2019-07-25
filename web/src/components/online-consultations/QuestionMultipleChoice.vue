@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.$emit('validate', questionMultipleChoiceAnswerValid(value, this.required, this.allOptionsRequired, this.validValues));
+      this.$emit('validate', questionMultipleChoiceAnswerValid(value, this.required, this.allOptionsRequired, this.options, this.validValues));
     },
     selectedValuesChanged(value) {
       this.selectedValues = value;

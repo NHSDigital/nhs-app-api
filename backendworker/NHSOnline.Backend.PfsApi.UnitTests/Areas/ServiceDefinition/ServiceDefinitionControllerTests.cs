@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Areas.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
+using NHSOnline.Backend.Support;
 using UnitTestHelper;
 using Task = System.Threading.Tasks.Task;
 
@@ -30,6 +33,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
         private string _provider;
         private string _id;
         private Parameters _evaluateParameters;
+        private UserSession _userSession;
+        private readonly DemographicsResult.Success _successResponse = new DemographicsResult.Success(new DemographicsResponse());
         
         [TestInitialize]
         public void TestInitialize()
@@ -46,12 +51,29 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             _mockProviderHttpClient = _fixture
                 .Freeze<Mock<IOnlineConsultationsProviderHttpClient>>();
 
-            _serviceDefinitionController = _fixture.Create<ServiceDefinitionController>();
-
             _successResult = new ServiceDefinitionResult.Success("");
             _provider = "eConsult";
             _id = "testId";
             _evaluateParameters = new Parameters();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+
+            _userSession = _fixture.Create<UserSession>();
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
+
+            _serviceDefinitionController = _fixture.Create<ServiceDefinitionController>();
+            
+            _serviceDefinitionController.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContextMock.Object
+            };
+            
+            _successResponse.Response.Address = "Test";                                       
+            _successResponse.Response.NhsNumber = "111 111 111";                              
+            _successResponse.Response.DateOfBirth = DateTime.UtcNow;                          
+            _successResponse.Response.Sex = "Male";
         }
 
         [TestMethod]
@@ -108,7 +130,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             value.Subject.StatusCode.Should().Be(400);
             _mockServiceDefinitionService.Verify(
                 s => s.EvaluateServiceDefinition(It.IsAny<IOnlineConsultationsProviderHttpClient>(), It.IsAny<string>(),
-                    It.IsAny<Parameters>(), It.IsAny<bool>()), Times.Never);
+                    It.IsAny<Parameters>(), It.IsAny<bool>(), _userSession), Times.Never);
         }
 
         [TestMethod]
@@ -126,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             value.Subject.StatusCode.Should().Be(400);
             _mockServiceDefinitionService.Verify(
                 s => s.EvaluateServiceDefinition(It.IsAny<IOnlineConsultationsProviderHttpClient>(), It.IsAny<string>(),
-                    It.IsAny<Parameters>(), It.IsAny<bool>()), Times.Never);
+                    It.IsAny<Parameters>(), It.IsAny<bool>(), _userSession), Times.Never);
         }
 
         [TestMethod]
@@ -138,7 +160,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             // Act
             var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
 
-
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
@@ -148,6 +169,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
         [TestMethod]
         public async Task EvaluateServiceDefinition_WhenCalledWithIdParametersAndClientFound_ServiceEvaluateServiceDefinition()
         {
+            
             // Arrange
             SetupHttpClientPool(true);
             _mockServiceDefinitionService
@@ -155,12 +177,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                         c => c == _mockProviderHttpClient.Object),
                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                    It.IsAny<bool>()))
+                    It.IsAny<bool>(),
+                    It.IsAny<UserSession>()))
                 .Returns(Task.FromResult(_successResult));
-            
-            // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
 
+            // Act
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers.Add("NHSO-Javascript-Disabled", "false");
+            _serviceDefinitionController.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -171,7 +199,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                         c => c == _mockProviderHttpClient.Object),
                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                    It.IsAny<bool>()),
+                    It.IsAny<bool>(),
+                    It.IsAny<UserSession>()),
                 Times.Once);
         }
 
@@ -185,7 +214,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                         c => c == _mockProviderHttpClient.Object),
                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                    It.Is<bool>( addJsDisabledHeader => addJsDisabledHeader)))
+                    It.IsAny<bool>(),
+                    It.IsAny<UserSession>()))
                 .Returns(Task.FromResult(_successResult));
             
             // Act
@@ -197,7 +227,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             };
             var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
 
-
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
             var value = actualResponse.Should().BeAssignableTo<OkObjectResult>();
@@ -207,7 +236,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                         c => c == _mockProviderHttpClient.Object),
                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                    It.Is<bool>(addJsDisabledHeader => addJsDisabledHeader)),
+                    It.IsAny<bool>(),
+                    It.IsAny<UserSession>()),
                 Times.Once);
         }
 

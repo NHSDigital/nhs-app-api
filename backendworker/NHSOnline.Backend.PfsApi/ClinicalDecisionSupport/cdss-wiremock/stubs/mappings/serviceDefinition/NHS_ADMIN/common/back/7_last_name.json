@@ -1,17 +1,17 @@
 {
-  "priority": 3,
+  "priority": 2,
   "request": {
     "method": "POST",
     "url": "/fhir/ServiceDefinition/NHS_ADMIN/$evaluate",
     "bodyPatterns": [
       {
-        "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/NHS_STD_AD_DOB')]"
+        "matchesJsonPath": "$.parameter[?(@.name === 'inputData')].resource.item[?(@.linkId == 'NHS_STD_AD_LNAME_PREV')]"
       }
     ]
   },
   "response": {
     "status": 200,
-    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/common/6_first_name.json",
+    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/common/back/7_last_name.json",
     "headers": {
       "Content-Type": "application/json+fhir"
     }

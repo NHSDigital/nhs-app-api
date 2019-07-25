@@ -6,7 +6,7 @@
                         :key="checkbox.code"
                         :value="checkbox.code"
                         :name="name"
-                        :required="required"
+                        :required="getRequired(checkbox)"
                         :checkbox-id="`checkbox-${checkbox.code}`"
                         :is-selected="selectedValues.includes(checkbox.code)"
                         @input="selectedValueChanged(checkbox)">
@@ -66,6 +66,10 @@ export default {
       // need to slice to duplicate array to prevent
       // store mutations on subsequent selectedValueChanged event
       this.$emit('select', this.selectedValues.slice());
+    },
+    getRequired(checkbox) {
+      return (checkbox.required !== null && checkbox.required !== undefined)
+        ? checkbox.required : this.required;
     },
   },
 };

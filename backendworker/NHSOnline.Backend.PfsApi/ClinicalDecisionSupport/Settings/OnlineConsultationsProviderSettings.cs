@@ -8,6 +8,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings
         public string Provider { get; set; }
         public string BaseAddress { get; set; }
         public string BearerToken { get; set; }
+        
+        public string ProviderName { get; set; }
 
         public void Validate()
         {

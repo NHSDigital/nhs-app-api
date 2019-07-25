@@ -50,5 +50,25 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Mod
                 return visitor.Visit(this);
             }
         }
+        
+        public class DemographicsBadGateway : ServiceDefinitionResult
+        {
+            public override T Accept<T>(IServiceDefinitionResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public class DemographicsRetrievalFailed : ServiceDefinitionResult
+        {
+            public override T Accept<T>(IServiceDefinitionResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public class DemographicsForbidden : ServiceDefinitionResult
+        {
+            public override T Accept<T>(IServiceDefinitionResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public class DemographicsInternalServerError : ServiceDefinitionResult
+        {
+            public override T Accept<T>(IServiceDefinitionResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }
