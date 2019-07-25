@@ -33,7 +33,7 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
                      customTokenRequest: TokenRequest? = null) = TokenRequestBuilder(
             codeVerifier, authCode, customTokenRequest)
 
-    fun userInfoRequest() = UserInfoRequestBuilder()
+    fun userInfoRequest(accessToken: String) = UserInfoRequestBuilder(accessToken)
 
     fun signingKeyRequest() = SigningKeysRequestBuilder()
 }

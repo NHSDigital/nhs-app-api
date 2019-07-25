@@ -116,7 +116,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forCitizenId {
             tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
                     .respondWithServerError()
-            userInfoRequest().respondWithServerError()
+            userInfoRequest(patient.accessToken).respondWithServerError()
         }
         SessionCreateJourneyFactory.getForSupplier("EMIS", mockingClient).createFor(patient)
     }
@@ -161,7 +161,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have valid OAuth details and (.*) fails to respond in (\\d+) seconds$")
     fun iHaveValidOAuthDetailsAndEmisFailsToRespondInXSeconds(gpSystem: String, delayBySeconds: Int) {
-
             mockingClient = SerenityHelpers.getMockingClient()
             CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
             AuthenticationFactory.getForSupplier(gpSystem)

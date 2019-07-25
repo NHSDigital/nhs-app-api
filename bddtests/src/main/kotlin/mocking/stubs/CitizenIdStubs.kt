@@ -40,7 +40,7 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
         }
 
         mockingClient.forCitizenId {
-            userInfoRequest().respondWithSuccess(patient)
+            userInfoRequest(patient.accessToken).respondWithSuccess(patient)
         }
     }
 }

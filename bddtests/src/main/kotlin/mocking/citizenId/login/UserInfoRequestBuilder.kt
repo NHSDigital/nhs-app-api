@@ -4,15 +4,16 @@ import mocking.GsonFactory
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.UserInfo
 import mocking.citizenId.models.GpIntegrationCredentials
-import mocking.defaults.EmisMockDefaults
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 
-class UserInfoRequestBuilder : CitizenIdMappingBuilder("GET", "/userinfo") {
+class UserInfoRequestBuilder(
+        accessToken: String
+) : CitizenIdMappingBuilder("GET", "/userinfo") {
     init {
         requestBuilder
-                .andHeader("Authorization", "Bearer ${EmisMockDefaults.patientEmis.accessToken}", "contains")
+                .andHeader("Authorization", "Bearer $accessToken", "contains")
     }
 
     fun respondWithSuccess(patient: Patient): Mapping {
