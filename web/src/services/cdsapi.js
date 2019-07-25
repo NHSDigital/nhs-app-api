@@ -9,6 +9,7 @@ import get from 'lodash/fp/get'
 import {
 	resolveApiClient,
 } from '../middleware/urlResolution'
+import { v4 as uuid } from 'uuid'
 
 const getWebVersion = get('store.state.appVersion.webVersion');
 const getNativeVersion = get('store.state.appVersion.nativeVersion');
@@ -114,7 +115,17 @@ class CDSApi {
 		const cookie = get('cookie')(parameters) || this.cookie;
 		if (cookie) {
 			headers['Cookie'] = cookie;
-		}
+    }
+    
+    let nhsoRequestId;
+
+    if (process.server) {
+      nhsoRequestId = this.res.locals.nhsoRequestId;
+    } else {
+      nhsoRequestId = uuid();
+    }
+    
+    headers['NHSO-Request-ID'] = nhsoRequestId;
 
 		const webVersion = getWebVersion(this);
 		const nativeVersion = getNativeVersion(this);
