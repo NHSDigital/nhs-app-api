@@ -100,10 +100,6 @@ class NhsWeb(
             requiresFullPageLoad = true
             isUserLoggedIn = false
         }
-
-        knownService?.header?.let { nativeHeader ->
-            uiInteractor.setHeaderText(nativeHeader)
-        }
         urlLoader.loadUrl(url, requiresFullPageLoad)
     }
 
