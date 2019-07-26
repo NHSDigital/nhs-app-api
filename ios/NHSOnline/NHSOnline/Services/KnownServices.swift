@@ -36,6 +36,13 @@ class KnownServices {
     func shouldURLOpenExternally(_ url: URL) -> Bool {
         return externalSites.contains(url)
     }
+    
+    func getUnavailabilityErrorMessageForService(_ url: URL?) -> ErrorMessage {
+        guard findMatchingKnownServiceInfo(url: url) != nil else {
+            return ErrorMessage(.ServiceUnavailable)
+        }
+        return ErrorMessage(.NoInternetConnection)
+    }
 
     func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {
         if let theHost = hostname {
@@ -129,6 +136,7 @@ class KnownServices {
         let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
         let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111,title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
         let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111,  title: nhs111Title, validateSession: false, allowNativeInteraction: false)
+
         let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
         
         self.serviceList.append(nhsoService)
@@ -137,7 +145,7 @@ class KnownServices {
         self.serviceList.append(nhs111LocationService)
         self.serviceList.append(dataPrefService)
     }
-    
+
     private func buildNhsoService()-> KnownService {
         let nhsoService = KnownService(serviceUrl: config.HomeUrl, service: .NHS_ONLINE, title: homeTitle, validateSession: true, allowNativeInteraction: true, urlQueryString: config.NhsOnlineRequiredQueryString)
         nhsoService.addPathInfo(path: config.SymptomsUrlPath, service: .SYMPTOMS, validateSession: true, allowNativeInteraction: true, title: symptomsTitle)

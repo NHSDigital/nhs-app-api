@@ -222,7 +222,6 @@ class NhsWeb(
         urlLoader.reloadRequest(Optional.of(knownServices.getPostRequestReloadUrl(reloadUrl.orEmpty())).orElse(
             reloadUrl))
 
-
     fun getFileUploadCallback() = chromeClient.getFileUploadCallback()
 
     fun resetFileUploadCallback() = chromeClient.resetFileUploadCallback()

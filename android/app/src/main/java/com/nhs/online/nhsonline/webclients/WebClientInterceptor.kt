@@ -2,12 +2,16 @@ package com.nhs.online.nhsonline.webclients
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.http.SslError
 import android.os.Handler
+import android.os.Build
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.webkit.WebResourceError
+import android.webkit.SslErrorHandler
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -92,6 +96,7 @@ class WebClientInterceptor(
 
         nhsWeb.reloadUrl = sanitizedUrl
         cancelTrackingWebRequestResponse()
+
         if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onPageStarted > no internet")
@@ -135,6 +140,37 @@ class WebClientInterceptor(
         super.onLoadResource(view, url)
     }
 
+    override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+        Log.d(Application.TAG,
+                "${this::class.java.simpleName}: Entering onReceivedSslError")
+
+        if (isNHSAppPage(view)) {
+            handleUnavailability(view?.url, WebViewClient.ERROR_CONNECT)
+        }
+    }
+
+    override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+        Log.d(Application.TAG,
+                "${this::class.java.simpleName}: Entering onReceivedHttpError")
+        if (isNHSAppPage(view) && !isNHSApi(request)) {
+            cancelTrackingWebRequestResponse()
+            handleUnavailability(view?.url, WebViewClient.ERROR_CONNECT)
+        }
+    }
+
+    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+        Log.d(Application.TAG,
+                "${this::class.java.simpleName}: Entering onReceivedError")
+        if (isNHSAppPage(view) && shouldHandleUnavailability(view?.url)) {
+            cancelTrackingWebRequestResponse()
+            if (error != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    handleUnavailability(view?.url, error.errorCode)
+                }
+            }
+        }
+    }
+
     @Suppress("OverridingDeprecatedMember")
     override fun onReceivedError(
         view: WebView?,
@@ -142,11 +178,14 @@ class WebClientInterceptor(
         description: String?,
         failingUrl: String?
     ) {
+
         if (shouldHandleUnavailability(failingUrl)) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedError > failingUrl $failingUrl > Error Description: $description")
             cancelTrackingWebRequestResponse()
-            handleUnavailability(failingUrl, errorCode)
+            if (isNHSAppPage(view)) {
+                handleUnavailability(failingUrl, errorCode)
+            }
         }
     }
 
@@ -241,6 +280,15 @@ class WebClientInterceptor(
         return matchingKnownService != null
     }
 
+    private fun isNHSAppPage(view: WebView?): Boolean {
+        val url = URL(view?.url)
+        return url?.host == context.getString(R.string.baseHost)
+    }
+
+    private fun isNHSApi(request: WebResourceRequest?): Boolean {
+        return request?.url?.host == URL(context.getString(R.string.baseApiURL))?.host
+    }
+
     private fun hasMissingQueryString(url: String?): Boolean {
         if (url == null)
             return false
@@ -329,6 +377,7 @@ class WebClientInterceptor(
             "${this::class.java.simpleName}: HandleUnavailability -> ErrorMessage Type:  ${errorMessage.title}")
         uiInteractor.showUnavailabilityError(errorMessage)
         uiInteractor.setHeaderText(pageHeader)
+
         logger.info("Failing Url: $failingUrl with error code: $errorCode")
     }
 

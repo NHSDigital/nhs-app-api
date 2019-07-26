@@ -82,12 +82,10 @@ class HomeViewController : UIViewController {
                                               homeViewController: self)
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
         
-    
         guard apiConfigCallError else {
             self.webViewController?.loadPage(url: pageUrl)
             return
         }
-        
     }
     
     func apiCallFailure() {
@@ -356,6 +354,7 @@ class HomeViewController : UIViewController {
         guard Reachability.isConnectedToNetwork() else {
             let error = ErrorMessage(.NoInternetConnection)
             showNativeViewContainer(errorMessage: error)
+
             return true
         }
         return false

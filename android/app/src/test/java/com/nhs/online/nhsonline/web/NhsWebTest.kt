@@ -18,6 +18,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.util.ReflectionHelpers
+import java.net.URL
 
 @RunWith(RobolectricTestRunner::class)
 class NhsWebTest {
@@ -63,7 +64,12 @@ class NhsWebTest {
     @Test
     fun loadUrl_WithNoConnection_Calls_ShowUnavailabilityError() {
         val url = "http://unit-test.com"
+
+        whenever(spyActivity.getString(R.string.baseHost)).thenReturn(URL(url).host)
+        whenever(webViewMock?.url).thenReturn(url)
+
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
+
         nhsWeb.loadUrl(url)
         verify(interactorMock).showUnavailabilityError(any())
     }

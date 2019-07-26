@@ -17,6 +17,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var javascript: String!
     var webAppInterface: WebAppInterface
     var schemeHandlers: SchemeHandlers
+    var badResponse: Bool = false
     
     init(controller: HomeViewController, knownServices: KnownServices, webAppInterface: WebAppInterface) {
         self.viewController = controller
@@ -26,6 +27,23 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.webAppInterface = webAppInterface
         self.schemeHandlers = SchemeHandlers()
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        if let response = navigationResponse.response as? HTTPURLResponse {
+            
+            let url = self.viewController.webViewController?.webView.url
+            let baseUrl = URL(string: config().HomeUrl)
+            let statusCode = response.statusCode
+            
+            if ((url?.host==baseUrl?.host) && statusCode >= 400) {
+                badResponse = true
+                return decisionHandler(.cancel)
+            } else {
+                badResponse = false
+                return decisionHandler(.allow)
+            }
+        }
     }
     
     func webView(_ webView: WKWebView,
@@ -61,7 +79,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if(!Reachability.isConnectedToNetwork()) {
                 decisionHandler(.cancel)
-                self.showNativeViewContainerWithError()
+                self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
                 return
             }
 
@@ -133,7 +151,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         
         if shouldHandleErrors {
-           self.showNativeViewContainerWithError()
+            if badResponse {
+                return self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+            }
+            
+            if withError._domain == "NSURLErrorDomain" {
+                if let info = withError._userInfo as? [String: Any] {
+                    if let url = info["NSErrorFailingURLKey"] as? URL {                        self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+                    }
+                }
+            } else {
+                self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(webView.url))
+            }
+            
             if #available(iOS 10.0, *) {
                 os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
             } else {
@@ -219,7 +249,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break
             case "updateHeaderText":
                 if(!Reachability.isConnectedToNetwork()) {
-                    self.showNativeViewContainerWithError()
+                    self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
                     return
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
@@ -298,7 +328,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 NSLog("Page is not responding for a long time, loading stoped.")
             }
             self.viewController.webViewController?.webView.stopLoading()
-            self.showNativeViewContainerWithError()
+            let url = self.viewController.webViewController?.webView.url
+            let baseUrl = URL(string: config().HomeUrl)
+            if (url?.host==baseUrl?.host){ self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+            }
         }
     }
     
@@ -339,15 +372,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         stopActivityIndicator()
     }
     
-    func showNativeViewContainerWithError() {
+    func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
         clearTimer()
         stopActivityIndicator()
         if !Reachability.isConnectedToNetwork() {
             self.viewController.showNativeViewContainer(errorMessage: ErrorMessage(.NoInternetConnection))
         } else {
-            self.viewController.showNativeViewContainer(errorMessage: ErrorMessage(.ServiceUnavailable))
+            self.viewController.showNativeViewContainer(errorMessage: errorMessage)
         }
-        
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
     }
     

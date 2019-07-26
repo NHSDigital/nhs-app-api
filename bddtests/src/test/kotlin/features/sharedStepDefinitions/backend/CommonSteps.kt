@@ -20,6 +20,11 @@ import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.contains
 import utils.set
+import org.openqa.selenium.WebDriver
+import pages.WEB_CONTEXT
+import webdrivers.getMobileDriver
+import webdrivers.isAndroid
+import webdrivers.isIOS
 import worker.WorkerClient
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
@@ -48,7 +53,11 @@ class CommonSteps : AbstractSteps() {
     @After
     fun afterEachScenario() {
 
-        val driver = getWebdriverManager().currentDriver
+        var driver = getWebdriverManager().currentDriver
+
+        if(driver!=null && (driver.isAndroid() || driver.isIOS())) {
+            driver = switchWebview(driver)
+        }
 
         if(driver!=null) {
             val logs = driver.manage().logs().get("browser")
@@ -58,6 +67,24 @@ class CommonSteps : AbstractSteps() {
             Assert.assertTrue("There should not be any console logs but found: \r\n $logs",
                     logs.isEmpty())
         }
+    }
+
+    private fun switchWebview(currentDriver: WebDriver): WebDriver? {
+        var driver = currentDriver
+        driver = driver.getMobileDriver()
+        if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
+            println("Already in $WEB_CONTEXT context: ${driver.context}")
+        } else {
+            for (context in driver.contextHandles) {
+                if (context.contains(WEB_CONTEXT, true)) {
+                    println("Switching context to $context... Currently on: ${driver.context}")
+                    driver.context(context)
+                    println("Switched context! Now on: ${driver.context}")
+                    break
+                }
+            }
+        }
+        return driver
     }
 
     @Given("^(EMIS|TPP|VISION) is not available$")

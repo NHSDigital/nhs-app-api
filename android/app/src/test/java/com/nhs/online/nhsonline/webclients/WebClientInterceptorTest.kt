@@ -25,6 +25,7 @@ import org.junit.Assert.assertEquals
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import java.io.InputStream
+import java.net.URL
 
 
 @Suppress("DEPRECATION")
@@ -355,13 +356,17 @@ class WebClientInterceptorTest {
         val webInterceptor = WebClientInterceptor(
             uiInteractorMock,
             nhsWebMock,
-            resourceMock.mockDisconnectedContext(),
+            contextMock,
             KnownServices(resourceMock.mockContext()),
             schemeHandlersMock
         )
 
+        val url = "https://www.nhs.uk"
+        whenever(contextMock.getString(R.string.baseHost)).thenReturn("www.nhs.uk")
+        whenever(webViewMock?.url).thenReturn(url)
+
         webInterceptor.onReceivedError(webViewMock, 404,
-            "Error", "https://www.nhs.uk")
+            "Error", url)
 
         val knownUrlErrorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
 
@@ -412,7 +417,11 @@ class WebClientInterceptorTest {
             schemeHandlersMock
         )
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
+
+        whenever(webViewMock?.url).thenReturn("https://www.111.nhs.uk")
         webInterceptor.onPageStarted(webViewMock, "https://www.111.nhs.uk", null)
+
+        whenever(webViewMock?.url).thenReturn("https://111.nhs.uk")
         webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
         verify(uiInteractorMock, times(1)).dismissProgressDialog()
     }
