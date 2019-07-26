@@ -96,16 +96,22 @@ export default {
     }
   },
   methods: {
-    onConfirmButtonClicked() {
+    async onConfirmButtonClicked() {
       const repeatPrescriptionOrder = {
         CourseIds: this.selectedPrescriptions.map(x => x.id),
         SpecialRequest: this.specialRequest,
       };
-      this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder)
-        .then(() => {
-          this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
-          redirectTo(this, PRESCRIPTIONS.path, null);
-        });
+      try {
+        await this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder);
+        this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
+        redirectTo(this, PRESCRIPTIONS.path, null);
+      } catch (error) {
+        /*
+        empty catch block as the
+        ApiError.vue (component) handles and
+        surfaces appropriate error content based on the http status code returned from the API
+        */
+      }
     },
     backToPrescriptionsClicked() {
       redirectTo(this, this.prescriptionRepeatCoursesPath, null);

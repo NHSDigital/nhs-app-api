@@ -5,7 +5,7 @@ import {
   ADD,
   CLEAR,
   INIT,
-  VALIDATE,
+  SHOW,
   HAS_BEEN_SHOWN,
 } from './mutation-types';
 
@@ -22,7 +22,9 @@ export default {
     state.type = flashMessage.type;
   },
   [CLEAR](state) {
-    clear(state);
+    if (state.hasBeenShown) {
+      clear(state);
+    }
   },
   [HAS_BEEN_SHOWN](state) {
     state.hasBeenShown = true;
@@ -30,11 +32,7 @@ export default {
   [INIT](state) {
     clear(state);
   },
-  [VALIDATE](state) {
-    if (state.hasBeenShown) {
-      clear(state);
-    } else {
-      state.show = state.message !== '';
-    }
+  [SHOW](state) {
+    state.show = state.message !== '';
   },
 };

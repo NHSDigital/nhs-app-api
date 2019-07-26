@@ -56,10 +56,18 @@ export default {
   },
   methods: {
     async submitNominatedPharmacy() {
-      await this.$store.dispatch('nominatedPharmacy/update', this.nominatedPharmacy.odsCode);
-      this.$store.dispatch('flashMessage/addSuccess', this.$t('nominated_pharmacy.confirm.pharmacyChanged'));
-      this.$store.dispatch('nominatedPharmacy/clearSelectedNominatedPharmacy');
-      redirectTo(this, NOMINATED_PHARMACY.path, null);
+      try {
+        await this.$store.dispatch('nominatedPharmacy/update', this.nominatedPharmacy.odsCode);
+        this.$store.dispatch('flashMessage/addSuccess', this.$t('nominated_pharmacy.confirm.pharmacyChanged'));
+        this.$store.dispatch('nominatedPharmacy/clearSelectedNominatedPharmacy');
+        redirectTo(this, NOMINATED_PHARMACY.path, null);
+      } catch (error) {
+        /*
+        empty catch block as the
+        ApiError.vue (component) handles and
+        surfaces appropriate error content based on the http status code returned from the API
+        */
+      }
     },
     cancelButtonClicked() {
       redirectTo(this, this.nominatedPharmacySearchResultsPath, null);

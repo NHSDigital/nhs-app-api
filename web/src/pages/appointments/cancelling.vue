@@ -124,7 +124,7 @@ export default {
     this.$store.dispatch('myAppointments/clearSelectedAppointment');
   },
   methods: {
-    onCancelButtonClicked() {
+    async onCancelButtonClicked() {
       if (this.cancellationReasons.length === 0 || this.selectedReason) {
         this.submissionError = false;
 
@@ -133,12 +133,17 @@ export default {
           cancellationReasonId: this.selectedReason,
         };
         this.labelledBy = undefined;
-
-        this.$store.dispatch('myAppointments/cancel', data)
-          .then(() => {
-            this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
-            redirectTo(this, APPOINTMENTS.path, null);
-          });
+        try {
+          await this.$store.dispatch('myAppointments/cancel', data);
+          this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
+          redirectTo(this, APPOINTMENTS.path, null);
+        } catch (error) {
+          /*
+          empty catch block as the
+          ApiError.vue (component) handles and
+          surfaces appropriate error content based on the http status code returned from the API
+          */
+        }
       } else {
         this.submissionError = true;
         window.scrollTo(0, 0);

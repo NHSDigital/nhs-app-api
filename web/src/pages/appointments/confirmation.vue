@@ -195,6 +195,9 @@ export default {
     cancelBookingPath() {
       return APPOINTMENT_BOOKING.path;
     },
+    appointmentPath() {
+      return APPOINTMENTS.path;
+    },
     confirmBookingPath() {
       return APPOINTMENT_BOOK_NOJS.path;
     },
@@ -258,7 +261,8 @@ export default {
     if (!this.slot) {
       redirectTo(this, APPOINTMENT_BOOKING.path, null);
     }
-
+  },
+  created() {
     if (process.client) {
       this.isJavascriptOn = true;
       this.showPhoneNumberTextBox =
@@ -301,7 +305,7 @@ export default {
         this.selected(e);
       }
     },
-    onConfirmButtonClicked(e) {
+    async onConfirmButtonClicked(e) {
       e.preventDefault();
       this.reasonError = false;
       this.telephoneNumberError = false;
@@ -326,15 +330,29 @@ export default {
         return;
       }
 
-      this.confirmTheBook(
-        this.slot, this.symptoms, this.telephoneNumber,
-        this.otherTelephoneNumber.trim(),
-      );
-      this.$store.dispatch('availableAppointments/clear');
+      try {
+        await this.confirmTheAppointmentSlot(this.slot, this.symptoms,
+          this.telephoneNumber, this.otherTelephoneNumber.trim());
+        if (process.client) {
+          this.$store.dispatch('analytics/trackUserProperty', {
+            key: 'gpBookingSlot',
+            value: moment(this.slot.startTime).format('dddd | HH:mm:ss'),
+          });
+        }
+        this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
+        redirectTo(this, this.appointmentPath, null);
+      } catch (error) {
+        /*
+        empty catch block as the
+        ApiError.vue (component) handles and
+        surfaces appropriate error content based on the http status code returned from the API
+        */
+      }
     },
-    confirmTheBook(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
-      if (!slot) return;
-
+    async confirmTheAppointmentSlot(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
+      if (!slot) {
+        throw new ErrorMessage('Slot should not be null');
+      }
       const bookingData = {
         SlotId: slot.id,
         BookingReason: reason,
@@ -343,14 +361,7 @@ export default {
         TelephoneNumber: (telephoneNumberField !== null && telephoneNumberField !== '')
           ? telephoneNumberField : otherTelephoneNumberField,
       };
-      this.$store.dispatch('availableAppointments/book', bookingData)
-        .then(() => {
-          if (process.client) {
-            this.$store.dispatch('analytics/trackUserProperty', { key: 'gpBookingSlot', value: moment(slot.startTime).format('dddd | HH:mm:ss') });
-          }
-          this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
-          redirectTo(this, APPOINTMENTS.path, null);
-        });
+      await this.$store.dispatch('availableAppointments/book', bookingData);
     },
     onCancelButtonClicked() {
       redirectTo(this, this.cancelBookingPath, null);

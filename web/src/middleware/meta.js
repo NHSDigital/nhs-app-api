@@ -262,7 +262,7 @@ export default function ({ route, store, app }) {
       break;
   }
   store.dispatch('http/cancelRequests');
-  store.dispatch('flashMessage/validate');
+  store.dispatch('flashMessage/clear');
   store.dispatch('errors/setRoutePath', route);
 
   setPageTitle(route, store, app);

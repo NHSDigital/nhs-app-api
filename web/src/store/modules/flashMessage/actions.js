@@ -2,7 +2,7 @@ import {
   ADD,
   CLEAR,
   HAS_BEEN_SHOWN,
-  VALIDATE,
+  SHOW,
   INIT,
 } from './mutation-types';
 
@@ -22,7 +22,7 @@ export default {
   hasBeenShown({ commit }) {
     commit(HAS_BEEN_SHOWN);
   },
-  validate({ commit }, routeName) {
-    commit(VALIDATE, routeName);
+  show({ commit }) {
+    commit(SHOW);
   },
 };

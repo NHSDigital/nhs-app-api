@@ -109,6 +109,11 @@ export default {
     store.dispatch('myAppointments/clear');
     return store.dispatch('myAppointments/load');
   },
+  mounted() {
+    if (this.$store.state.myAppointments.hasLoaded) {
+      this.$store.dispatch('flashMessage/show');
+    }
+  },
   beforeDestroy() {
     this.$store.dispatch('myAppointments/clearAppointments');
   },
