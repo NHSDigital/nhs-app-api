@@ -275,6 +275,7 @@ export default {
   @import '../../style/buttons';
   @import '../../style/throttling/throttling';
   @import '../../style/throttling/gpfindersearch';
+  @import '../../style/screensizes';
 
   .inputSpacing{
     margin-bottom: 1em;
@@ -283,6 +284,11 @@ export default {
     &.web {
       margin-top: -3.625em;
     }
+  }
+  @include fromTablet {
+   .flexContainer {
+     padding: 0;
+   }
   }
 
   .desktopContent {
