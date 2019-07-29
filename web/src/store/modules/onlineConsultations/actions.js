@@ -1,3 +1,4 @@
+import { get } from 'lodash/fp';
 import {
   CLEAR,
   SET_SESSION_ID,
@@ -42,10 +43,14 @@ export default {
   clear({ commit }, resetRequestId) {
     commit(CLEAR, resetRequestId);
   },
-  getServiceDefinition({ commit }) {
+  getServiceDefinition({ commit, rootState }, journey) {
     const store = this;
+
+    const { serviceDefinition, provider } = get(journey, rootState.serviceJourneyRules.rules) || {};
+
     return store.app.$cdsApi.getFhirServiceDefinition({
-      serviceDefinitionId: 'GEC_ADM',
+      serviceDefinition,
+      provider,
     }).then((response) => {
       commit(CLEAR);
       if (response === undefined) {
@@ -82,7 +87,7 @@ export default {
       commit(UPDATE_REQUEST_ID);
     });
   },
-  evaluateServiceDefinition({ commit, state, rootState }) {
+  evaluateServiceDefinition({ commit, state, rootState }, journey) {
     const store = this;
     const parameters = getParameters(state, rootState);
 
@@ -91,9 +96,12 @@ export default {
       return undefined;
     }
 
+    const { serviceDefinition, provider } = get(journey, rootState.serviceJourneyRules.rules) || {};
+
     return store.app.$cdsApi.postFhirServiceDefinitionEvaluate({
+      serviceDefinition,
+      provider,
       parameters,
-      serviceDefinitionId: 'GEC_ADM',
     }).then((response) => {
       commit(CLEAR);
       if (response === undefined) {

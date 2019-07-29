@@ -15,6 +15,18 @@ export default {
   [`${CDSS_ADVICE}Disabled`](state) {
     return state.rules.cdssAdvice.provider === 'none';
   },
+  [`${CDSS_ADMIN}Provider`](state) {
+    return state.rules.cdssAdmin.provider;
+  },
+  [`${CDSS_ADVICE}Provider`](state) {
+    return state.rules.cdssAdvice.provider;
+  },
+  [`${CDSS_ADMIN}Id`](state) {
+    return state.rules.cdssAdmin.serviceDefinition;
+  },
+  [`${CDSS_ADVICE}Id`](state) {
+    return state.rules.cdssAdvice.serviceDefinition;
+  },
   [`${IM1_PROVIDER}AppointmentsEnabled`](state) {
     return get('rules.appointments.provider')(state) === IM1_PROVIDER;
   },

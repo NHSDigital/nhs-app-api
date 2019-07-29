@@ -144,6 +144,12 @@ export default {
     QuestionTime,
     QuestionAttachment,
   },
+  props: {
+    journey: {
+      type: String,
+      default: undefined,
+    },
+  },
   computed: {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
@@ -268,7 +274,7 @@ export default {
       await this.$store.dispatch('onlineConsultations/setValidationError');
       if (!this.isValidationError) {
         document.activeElement.blur();
-        await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition');
+        await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', this.journey);
         if (this.isNativeApp) {
           NativeApp.resetPageFocus();
         } else {
@@ -280,7 +286,7 @@ export default {
     async backClicked() {
       document.activeElement.blur();
       await this.$store.dispatch('onlineConsultations/setPrevious');
-      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition');
+      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', this.journey);
       if (this.isNativeApp) {
         NativeApp.resetPageFocus();
       } else {

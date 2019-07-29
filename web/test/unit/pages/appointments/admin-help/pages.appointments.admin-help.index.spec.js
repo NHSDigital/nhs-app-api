@@ -166,7 +166,7 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition');
+          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
         });
         it('should dispatch get action', async () => {
           // Arrange
@@ -177,7 +177,7 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition');
+          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition', 'cdssAdmin');
         });
       });
       describe('with valid answer in store', () => {
@@ -191,7 +191,7 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition');
+          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
         });
       });
       describe('with a question and invalid answer', () => {
@@ -205,7 +205,7 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition');
+          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
         });
       });
     });

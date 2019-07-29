@@ -6,7 +6,7 @@ target:
 journeys:
   cdssAdvice:
     provider: eConsult
-    serviceDefinition: foo
+    serviceDefinition: GEC_GEN
   cdssAdmin:
     provider: eConsult
-    serviceDefinition: foo
+    serviceDefinition: GEC_ADM

@@ -260,7 +260,6 @@ class CDSApi {
 	 * @method
 	 * @name CDSApi#postFhirServiceDefinitionEvaluate
 	 * @param {object} parameters - method options and parameters
-   * @param {string} parameters.serviceDefinitionId - the id of the service definition against which to evaluate the parameters
 	 * @param {object} parameters.parameters - the wrapping parameters resource to be evaluated
 	 */
 	postFhirServiceDefinitionEvaluate(parameters) {
@@ -270,17 +269,22 @@ class CDSApi {
 		let ignoreError = parameters.ignoreError || false;
 		let deferred = $q.defer();
 		let domain = this.domain;
-		let path = '/fhir/ServiceDefinition/{serviceDefinitionId}/$evaluate';
+		let path = '/fhir/ServiceDefinition/{provider}/{id}/$evaluate';
 		let body = {};
 		let headers = {};
 		let form = {};
 
 		let queryParameters = {};
 
-		headers['Content-Type'] = ['application/json+fhir'];
+    headers['Content-Type'] = ['application/json+fhir'];
 
-    if (parameters['serviceDefinitionId'] === undefined) {
+    if (parameters['serviceDefinition'] === undefined) {
       deferred.reject(new Error('Missing required parameter: serviceDefinitionId'));
+      return deferred.promise;
+    }
+
+    if (parameters['provider'] === undefined) {
+      deferred.reject(new Error('Missing required parameter: provider'));
       return deferred.promise;
     }
 
@@ -289,7 +293,8 @@ class CDSApi {
 			return deferred.promise;
     }
 
-    path = path.replace('{serviceDefinitionId}', parameters.serviceDefinitionId);
+    path = path.replace('{id}', parameters['serviceDefinition']);
+    path = path.replace('{provider}', parameters['provider']);
 
     body = parameters['parameters'];
 
@@ -313,8 +318,8 @@ class CDSApi {
 	/**
 	 * Gets the Service Definition resource for the given ID
 	 * @method
-	 * @name CDSApi#getFhirServiceDefinition
-   * @param {string} parameters.serviceDefinitionId - the id of the service definition to get
+	 * @name CDSApi#getFhirSer\viceDefinition
+   * @param {string} parameters.provider - the provider of the online consultation journey
 	 */
 	getFhirServiceDefinition(parameters) {
 		if (parameters === undefined) {
@@ -323,7 +328,7 @@ class CDSApi {
 		let ignoreError = parameters.ignoreError || false;
 		let deferred = $q.defer();
 		let domain = this.domain;
-		let path = '/fhir/ServiceDefinition?_id={serviceDefinitionId}';
+		let path = '/fhir/ServiceDefinition/{provider}/{id}';
 		let body = {};
 		let headers = {};
 		let form = {};
@@ -332,12 +337,18 @@ class CDSApi {
 
 		headers['Accept'] = ['application/json+fhir'];
 
-    if (parameters['serviceDefinitionId'] === undefined) {
+    if (parameters['serviceDefinition'] === undefined) {
       deferred.reject(new Error('Missing required parameter: serviceDefinitionId'));
       return deferred.promise;
     }
 
-    path = path.replace('{serviceDefinitionId}', parameters.serviceDefinitionId);
+    if (parameters['provider'] === undefined) {
+      deferred.reject(new Error('Missing required parameter: provider'));
+      return deferred.promise;
+    }
+
+    path = path.replace('{provider}', parameters['provider']);
+    path = path.replace('{id}', parameters['serviceDefinition']);
 
 		queryParameters = this.mergeQueryParams(parameters, queryParameters);
 

@@ -10,7 +10,7 @@
         {{ $t('appointments.admin_help.errors.message.text') }}
       </message-text>
     </message-dialog>
-    <orchestrator v-else journey="cdssAdmin"/>
+    <orchestrator v-else journey="cdssAdvice"/>
   </div>
 </template>
 
@@ -48,17 +48,18 @@ export default {
       await store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
       await store.dispatch('onlineConsultations/setValidationError');
     }
+
     if (question === undefined) {
-      await store.dispatch('onlineConsultations/getServiceDefinition', 'cdssAdmin');
+      await store.dispatch('onlineConsultations/getServiceDefinition', 'cdssAdvice');
     } else if (store.state.onlineConsultations.answerIsValid) {
-      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdvice');
     }
 
     const previousClicked = get('direction', body) === 'back';
 
     if (previousClicked) {
       await store.dispatch('onlineConsultations/setPrevious');
-      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdvice');
     }
   },
   beforeDestroy() {

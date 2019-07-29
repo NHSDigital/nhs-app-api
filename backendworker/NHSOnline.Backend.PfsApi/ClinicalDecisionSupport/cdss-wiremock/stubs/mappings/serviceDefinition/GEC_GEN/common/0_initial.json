@@ -1,0 +1,14 @@
+{
+  "priority": 3,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/GEC_GEN/$evaluate"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/GEC_GEN/common/0_initial.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}

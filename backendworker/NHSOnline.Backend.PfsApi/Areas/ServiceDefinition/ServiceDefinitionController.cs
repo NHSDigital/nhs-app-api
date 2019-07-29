@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
@@ -29,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         
         [HttpGet]
         [Route("fhir/ServiceDefinition")]
-        public async Task<IActionResult> SearchServiceDefinitionsByQuery([FromQuery(Name = "_id")] string serviceDefinitionId)
+        public async Task<IActionResult> SearchServiceDefinitionsByQuery([FromQuery(Name = "_provider")] string provider)
         {
             try
             {
@@ -37,22 +36,68 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 var visitor = new ServiceDefinitionResultVisitor();
 
-                const string Provider = Constants.OnlineConsultationsProviders.EConsult;
-                
+                if (string.IsNullOrWhiteSpace(provider))
+                {
+                  _logger.LogError("Missing provider in route");
+                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                }
+
                 var httpClient =
                     _onlineConsultationsProviderHttpClientPool.GetClientByProviderName(
-                        Provider);
+                        provider);
 
                 if (httpClient == null)
                 {
-                    _logger.LogError($"No http client found for provider {Provider}");
+                    _logger.LogError($"No http client found for provider {provider}");
 
                     return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
 
-                var result = string.IsNullOrWhiteSpace(serviceDefinitionId)
-                    ? await _service.SearchServiceDefinitionsByQuery(httpClient)
-                    : await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId);
+                var result = await _service.SearchServiceDefinitionsByQuery(httpClient);
+
+                return result.Accept(visitor);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [Route("fhir/ServiceDefinition/{provider}/{id}")]
+        public async Task<IActionResult> GetServiceDefinitionsById([FromRoute(Name = "id")] string serviceDefinitionId, 
+          [FromRoute(Name = "provider")] string provider)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var visitor = new ServiceDefinitionResultVisitor();
+
+                if (string.IsNullOrWhiteSpace(provider))
+                {
+                  _logger.LogError("Missing provider in route");
+                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                }
+
+                if (string.IsNullOrWhiteSpace(serviceDefinitionId))
+                {
+                  _logger.LogError("Missing serviceDefinition in route");
+                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                }
+
+                var httpClient =
+                    _onlineConsultationsProviderHttpClientPool.GetClientByProviderName(
+                        provider);
+
+                if (httpClient == null)
+                {
+                    _logger.LogError($"No http client found for provider {provider}");
+
+                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                }
+
+                var result = await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId);
 
                 return result.Accept(visitor);
             }
@@ -63,23 +108,28 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpPost]
-        [Route("fhir/ServiceDefinition/{id}/$evaluate")]
-        public async Task<IActionResult> EvaluateServiceDefinition([FromRoute(Name = "id")] string serviceDefinitionId, [FromBody] Parameters parameters)
+        [Route("fhir/ServiceDefinition/{provider}/{id}/$evaluate")]
+        public async Task<IActionResult> EvaluateServiceDefinition([FromRoute(Name = "provider")] string provider, 
+          [FromRoute(Name = "id")] string serviceDefinitionId, [FromBody] Parameters parameters)
         {
             try
             {
-                _logger.LogEnter();
-
                 var visitor = new ServiceDefinitionResultVisitor();
 
-                const string Provider = Constants.OnlineConsultationsProviders.EConsult;
+                if (string.IsNullOrWhiteSpace(provider))
+                {
+                  _logger.LogError("Missing provider in querystring");
+                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                }
+
 
                 if (string.IsNullOrWhiteSpace(serviceDefinitionId))
                 {
-                    _logger.LogError("Missing ServiceDefinition id in route");
-
-                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                  _logger.LogError("Missing service definition in querystring");
+                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
+                
+                _logger.LogEnter();
 
                 if (parameters == null)
                 {
@@ -90,11 +140,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 var httpClient =
                     _onlineConsultationsProviderHttpClientPool.GetClientByProviderName(
-                        Provider);
+                        provider);
 
                 if (httpClient == null)
                 {
-                    _logger.LogError($"No http client found for provider {Provider}");
+                    _logger.LogError($"No http client found for provider {provider}");
 
                     return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }

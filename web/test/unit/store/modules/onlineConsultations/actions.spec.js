@@ -37,6 +37,18 @@ const rootState = {
   session: {
     gpOdsCode: 'A29928',
   },
+  serviceJourneyRules: {
+    rules: {
+      cdssAdmin: {
+        serviceDefinition: 'GEC_ADM',
+        provider: 'eConsult',
+      },
+      cdssAdvice: {
+        serviceDefinition: 'GEC_GEN',
+        provider: 'eConsult',
+      },
+    },
+  },
 };
 
 describe('online consultations store actions', () => {
@@ -48,10 +60,17 @@ describe('online consultations store actions', () => {
   });
 
   describe('getServiceDefinition', () => {
-    let request;
+    let serviceDefinition;
+    let provider;
+    let parameters;
 
-    beforeEach(() => {
-      request = { serviceDefinitionId: 'GEC_ADM' };
+    beforeAll(() => {
+      serviceDefinition = 'GEC_ADM';
+      provider = 'eConsult';
+      parameters = {
+        serviceDefinition,
+        provider,
+      };
     });
 
     afterEach(() => {
@@ -67,11 +86,11 @@ describe('online consultations store actions', () => {
 
         // Act
         return getServiceDefinition
-          .call(store, { commit })
+          .call(store, { rootState, commit }, 'cdssAdmin')
           .then(() => {
             // Assert
             const { getFhirServiceDefinition } = store.app.$cdsApi;
-            expect(getFhirServiceDefinition).toHaveBeenCalledWith(request);
+            expect(getFhirServiceDefinition).toHaveBeenCalledWith(parameters);
             expect(getFhirServiceDefinition).toHaveBeenCalledTimes(1);
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
             expect(store.dispatch).toHaveBeenCalledTimes(1);
@@ -93,7 +112,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return getServiceDefinition
-            .call(store, { commit })
+            .call(store, { rootState, commit }, 'cdssAdmin')
             .then(() => {
               // Assert
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -112,7 +131,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return getServiceDefinition
-            .call(store, { commit })
+            .call(store, { rootState, commit }, 'cdssAdmin')
             .then(() => {
               // Assert
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -137,7 +156,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return getServiceDefinition
-            .call(store, { commit })
+            .call(store, { rootState, commit }, 'cdssAdmin')
             .then(() => {
               // Assert
               expect(commit).toHaveBeenCalledWith(SET_DATA_REQUIREMENTS, expectedDataRequirements);
@@ -160,7 +179,7 @@ describe('online consultations store actions', () => {
 
               // Act
               return getServiceDefinition
-                .call(store, { commit })
+                .call(store, { rootState, commit }, 'cdssAdmin')
                 .then(() => {
                   // Assert
                   expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -188,7 +207,7 @@ describe('online consultations store actions', () => {
 
               // Act
               return getServiceDefinition
-                .call(store, { commit })
+                .call(store, { rootState, commit }, 'cdssAdmin')
                 .then(() => {
                   // Assert
                   expect(commit).toHaveBeenCalledWith(SET_STATUS, 'data-required');
@@ -209,7 +228,7 @@ describe('online consultations store actions', () => {
         getParameters.mockReturnValue(undefined);
 
         // Act
-        const result = evaluateServiceDefinition.call(store, { commit, state, rootState });
+        const result = evaluateServiceDefinition.call(store, { commit, state, rootState }, 'cdssAdmin');
 
         // Assert
         expect(result).toBeUndefined();
@@ -225,14 +244,16 @@ describe('online consultations store actions', () => {
       let parameters;
       let request;
 
-      beforeAll(() => {
+      beforeEach(() => {
         parameters = {
           parameters: 'test',
         };
         request = {
           parameters,
-          serviceDefinitionId: 'GEC_ADM',
+          serviceDefinition: 'GEC_ADM',
+          provider: 'eConsult',
         };
+
         getParameters.mockClear();
         getParameters.mockReturnValue(parameters);
       });
@@ -250,7 +271,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return evaluateServiceDefinition
-            .call(store, { commit, state, rootState })
+            .call(store, { commit, state, rootState }, 'cdssAdmin')
             .then(() => {
               // Assert
               const { postFhirServiceDefinitionEvaluate } = store.app.$cdsApi;
@@ -276,7 +297,7 @@ describe('online consultations store actions', () => {
 
             // Act
             return evaluateServiceDefinition
-              .call(store, { commit, state, rootState })
+              .call(store, { commit, state, rootState }, 'cdssAdmin')
               .then(() => {
                 // Assert
                 expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');

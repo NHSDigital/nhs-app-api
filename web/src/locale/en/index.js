@@ -334,7 +334,7 @@ export default {
       },
       menuItem3: {
         header: 'Ask your GP for advice',
-        text: 'Consult your GP via a simple online form. Your GP surgery will reply by phone or email.',
+        text: 'Get advice about general symptoms like tiredness, bleeding, pain or weakness',
       },
       symptomButtonText: 'Check symptoms',
       bookButtonText: 'Book a GP appointment',
