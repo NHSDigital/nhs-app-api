@@ -51,6 +51,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             _successResult = new ServiceDefinitionResult.Success("");
             _provider = Constants.OnlineConsultationsProviders.EConsult;
             _id = "testId";
+            _provider = "provider";
             _evaluateParameters = new Parameters();
         }
 
@@ -136,7 +137,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(true);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
             
             // Assert
             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
@@ -154,7 +155,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(true);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_id, evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
             
             // Assert
             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
@@ -171,7 +172,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(false);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -192,7 +194,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                 .Returns(Task.FromResult(_successResult));
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
