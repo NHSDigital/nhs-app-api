@@ -69,9 +69,13 @@ class WebClientInterceptor(
         if (schemeHandlers.handleUrl(url))
             return true
 
-        if (URL(url).host?.equals(URL(context.getString(R.string.dataPreferencesBaseUrl)).host)!!) {
-            view.loadUrl(url)
-            return true
+        try {
+            if (URL(url).host?.equals(URL(context.getString(R.string.dataPreferencesBaseUrl)).host)!!) {
+                view.loadUrl(url)
+                return true
+            }
+        } catch (exception: MalformedURLException) {
+            return false
         }
 
         val openedInChromeTab = nhsWeb.openInChromeTabIfApplicable(url)
