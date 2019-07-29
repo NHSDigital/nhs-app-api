@@ -49,9 +49,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             _serviceDefinitionController = _fixture.Create<ServiceDefinitionController>();
 
             _successResult = new ServiceDefinitionResult.Success("");
-            _provider = Constants.OnlineConsultationsProviders.EConsult;
+            _provider = "eConsult";
             _id = "testId";
-            _provider = "provider";
             _evaluateParameters = new Parameters();
         }
 
@@ -62,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(false);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.SearchServiceDefinitionsByQuery(_id);
+            var actualResponse = await _serviceDefinitionController.SearchServiceDefinitionsByQuery(_provider);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -71,11 +70,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
         }
 
         [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("   ")]
-        public async Task SearchServiceDefinitionsByQuery_WhenCalledWithoutIdParameter_ServiceSearchServiceDefinitionByQuery(
-            string id)
+        public async Task SearchServiceDefinitionsByQuery_WhenCalledWithProviderParameter_ServiceGetServiceDefinitionById()
         {
             // Arrange
             SetupHttpClientPool(true);
@@ -85,33 +80,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                 .Returns(Task.FromResult(_successResult));
 
             // Act
-            var actualResponse = await _serviceDefinitionController.SearchServiceDefinitionsByQuery(id);
-
-            // Assert
-            VerifyGetFromClientPoolCalledWithProvider(_provider);
-            var value = actualResponse.Should().BeAssignableTo<OkObjectResult>();
-            value.Subject.StatusCode.Should().Be(200);
-            _mockServiceDefinitionService.Verify(
-                s => s.SearchServiceDefinitionsByQuery(It.Is<IOnlineConsultationsProviderHttpClient>(
-                    c => c == _mockProviderHttpClient.Object)), Times.Once);
-            _mockServiceDefinitionService.Verify(
-                s => s.GetServiceDefinitionById(It.IsAny<IOnlineConsultationsProviderHttpClient>(), It.IsAny<string>()),
-                Times.Never);
-        }
-
-        [TestMethod]
-        public async Task SearchServiceDefinitionsByQuery_WhenCalledWithIdParameter_ServiceGetServiceDefinitionById()
-        {
-            // Arrange
-            SetupHttpClientPool(true);
-            _mockServiceDefinitionService
-                .Setup(s => s.GetServiceDefinitionById(It.Is<IOnlineConsultationsProviderHttpClient>(
-                    c => c == _mockProviderHttpClient.Object), It.Is<string>(
-                    id => _id.Equals(id, StringComparison.Ordinal))))
-                .Returns(Task.FromResult(_successResult));
-
-            // Act
-            var actualResponse = await _serviceDefinitionController.SearchServiceDefinitionsByQuery(_id);
+            var actualResponse = await _serviceDefinitionController.SearchServiceDefinitionsByQuery(_provider);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -119,11 +88,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             value.Subject.StatusCode.Should().Be(200);
             _mockServiceDefinitionService.Verify(
                 s => s.SearchServiceDefinitionsByQuery(It.IsAny<IOnlineConsultationsProviderHttpClient>()),
-                Times.Never);
-            _mockServiceDefinitionService.Verify(
-                s => s.GetServiceDefinitionById(It.Is<IOnlineConsultationsProviderHttpClient>(
-                        c => c == _mockProviderHttpClient.Object),
-                    It.Is<string>(p => _id.Equals(p, StringComparison.Ordinal))),
                 Times.Once);
         }
 
@@ -137,7 +101,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(true);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, id, _evaluateParameters);
             
             // Assert
             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
@@ -155,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(true);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, evaluateParameters);
             
             // Assert
             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
