@@ -75,7 +75,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
 
     fun verifyVisiblePrescriptions(coursesData: List<MedicationCourse>) {
         val nameXpath = "//span[@data-label=\"prescription-name\"]"
-        val instructionsXpath = "//p[@data-label=\"prescription-description\"]"
+        val instructionsXpath = "//span[@data-label=\"prescription-description\"]"
 
         val namesListed = findAllByXpath(nameXpath)
         val instructionsListed = findAllByXpath(instructionsXpath)
