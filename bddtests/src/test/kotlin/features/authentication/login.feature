@@ -43,20 +43,6 @@ Feature: Login
       | TPP       |
       | VISION    |
 
-
-  Scenario Outline: A <GP System> user sees a beta banner on the home page
-    Given I am logged in as a <GP System> user
-    Then I see the home page
-    And I see the beta banner
-    Examples:
-      | GP System |
-      | TPP       |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
   @pending
   @nativesmoketest
   Scenario: Any user sees the current app version on the login page

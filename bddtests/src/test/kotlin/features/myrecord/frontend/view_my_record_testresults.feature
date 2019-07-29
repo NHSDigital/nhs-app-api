@@ -123,9 +123,20 @@ Feature: View My Medical Record Information - Test Results
     And I am on my record information page
     When I click the test result section
     And I click a test result
+    Then I see the appropriate error message for retrieving test result detail
 
-  @tech-debt @NHSO-5552
-  Scenario: An user navigates back to my record page from test result detail
+  Scenario: A TPP user can navigate to an individual test result
+    Given the my record wiremocks are initialised for TPP
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has six test results
+    And the GP Practice has test result details
+    And I am on my record information page
+    When I select a test result
+    Then I see header text is My medical record
+    And I see the test result content
+
+  @bug @NHSO-6233
+  Scenario: A user can navigate back to my record page from test result detail
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
     And the GP Practice has six test results

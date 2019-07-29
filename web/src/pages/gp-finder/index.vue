@@ -20,7 +20,6 @@
         <nhs-logo :class="$style.nhsoLogo"/>
         <div :class="$style.spacer" />
       </header>
-      <throttling-banner />
     </div>
     <div :class="[$style.webHeader,
                   $style.throttlingContent,
@@ -72,7 +71,6 @@ import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import HelpIcon from '@/components/icons/HelpIcon';
 import NhsLogo from '@/components/icons/NhsLogo';
-import ThrottlingBanner from '@/components/ThrottlingBanner';
 import { setCookie } from '@/lib/cookie-manager';
 import { GP_FINDER_RESULTS, LOGIN } from '@/lib/routes';
 import NativeCallbacks from '@/services/native-app';
@@ -82,7 +80,6 @@ export default {
   components: {
     NhsLogo,
     HelpIcon,
-    ThrottlingBanner,
     LoginBanner,
     ErrorMessage,
     GenericTextInput,
