@@ -1,0 +1,77 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Users-API 
+  description: NHS App Users-API - endpoints pertaining to Users, all require an Authorisation-Bearer Token to be included in the header.
+paths:
+  /users/devices:
+    post:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - user-devices
+      summary: Registers the new device for notifications.
+      description: Using the accesstoken, will register the user's wish to receive notifications on this device
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+      requestBody:
+        x-name: AddDeviceRequest
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddDeviceRequest"
+        description: Details of the device to be registered
+        required: true
+      responses:
+        201:
+          description: Successfully registered device for notifications
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/UnexpectedError' 
+components:
+  securitySchemes:
+    nhsLoginBearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT   
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+    UnexpectedError:
+      description: An unexpected error occurred processing the request.
+  schemas:
+    DeviceType:
+      type: string
+      enum: 
+          - ios
+          - android
+    AddDeviceRequest:
+      type: object
+      properties:
+        devicePNS:
+          type: string
+        deviceType:
+          $ref: '#/components/schemas/DeviceType'
+      example:
+        devicePNS: b1f99cf0-278d-49ca-a325-0a1504799488
+        deviceType: android
+    Device:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        deviceType: 
+          $ref: '#/components/schemas/DeviceType'        
+      example:
+        deviceId: 2f2c28c8-3de9-4ffc-9d0b-23533363d7d3
+        deviceType: android

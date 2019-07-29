@@ -1,0 +1,15 @@
+version: "3.2"
+services:
+  users.local.bitraft.io:
+    image: nhsonline.backend.users
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.UsersApi/Dockerfile
+    ports:
+      - "8088:8088"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8088
+      - PORT=8088
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=users_docker_main

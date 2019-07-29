@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  version: 0.0.7
+  version: 0.0.8
   title: NHS App API
   description: This is the API for the NHS App.
 paths:
@@ -47,4 +47,6 @@ paths:
     $ref: ./nhsonline.nominatedpharmacy.yaml#/paths/~1nominated-pharmacy
   /v1/patient/journey-configuration:
     $ref: ./nhsonline.journey.yaml#/paths/~1journey-configuration
+  /v1/users/devices:
+    $ref: ./nhsonline.users.yaml#/paths/~1users~1devices
     

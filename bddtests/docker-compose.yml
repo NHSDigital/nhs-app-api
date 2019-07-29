@@ -166,6 +166,16 @@ services:
       - servicejourneyrulesapi.config
     volumes:
       - 'servicejourneyrules_data:/app/input'
+  users.local.bitraft.io:
+    image: nhsonline.backend.usersapi
+    ports:
+      - "8088:8088"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8088
+      - PORT=8088
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=users_docker_main
   stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
     command: --local-response-templating

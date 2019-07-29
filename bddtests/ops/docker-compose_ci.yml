@@ -95,6 +95,14 @@ services:
       - servicejourneyrulesapi.config
     volumes:
       - 'servicejourneyrules_data:/app/input'
+  users.local.bitraft.io:
+    image: nhsapp.azurecr.io/nhsonline-backendusersapi:${BACKEND_TAG}
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8088
+      - PORT=8088
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=users_docker_main
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
     environment:

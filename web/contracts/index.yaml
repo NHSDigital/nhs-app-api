@@ -1,7 +1,7 @@
 ---
   openapi: "3.0.2"
   info: 
-    version: "0.0.7"
+    version: "0.0.8"
     title: "NHS App API"
     description: "This is the API for the NHS App."
   paths: 
@@ -174,7 +174,7 @@
                             enum: 
                               - "Unknown"
                               - "Telephone"
-                            description: "Indicates slot channel type supplied by GP practice"
+                            description: "Indicates Slot or Appointment channel type supplied by GP practice"
                           telephoneNumber: 
                             type: "string"
                             description: "patients telephone number"
@@ -214,7 +214,7 @@
                             enum: 
                               - "Unknown"
                               - "Telephone"
-                            description: "Indicates slot channel type supplied by GP practice"
+                            description: "Indicates Slot or Appointment channel type supplied by GP practice"
                           telephoneNumber: 
                             type: "string"
                             description: "patients telephone number"
@@ -373,7 +373,7 @@
                             enum: 
                               - "Unknown"
                               - "Telephone"
-                            description: "Indicates slot channel type supplied by GP practice"
+                            description: "Indicates Slot or Appointment channel type supplied by GP practice"
           401: 
             description: "User session has expired."
           403: 
@@ -1996,6 +1996,7 @@
                                       description: "The cdss provider"
                                       enum: 
                                         - "eConsult"
+                                        - "stubs"
                                     serviceDefinition: 
                                       type: "string"
                                       description: "The service definition"
@@ -2018,6 +2019,7 @@
                                       description: "The cdss provider"
                                       enum: 
                                         - "eConsult"
+                                        - "stubs"
                                     serviceDefinition: 
                                       type: "string"
                                       description: "The service definition"
@@ -2331,6 +2333,7 @@
                                   description: "The cdss provider"
                                   enum: 
                                     - "eConsult"
+                                    - "stubs"
                                 serviceDefinition: 
                                   type: "string"
                                   description: "The service definition"
@@ -2353,6 +2356,7 @@
                                   description: "The cdss provider"
                                   enum: 
                                     - "eConsult"
+                                    - "stubs"
                                 serviceDefinition: 
                                   type: "string"
                                   description: "The service definition"
@@ -2384,6 +2388,64 @@
                           type: "bool"
           404: 
             description: "Service Journey Rules Configuration not found."
+          500: 
+            description: "An unexpected error occurred processing the request."
+    /v1/users/devices: 
+      post: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "user-devices"
+        summary: "Registers the new device for notifications."
+        description: "Using the accesstoken, will register the user's wish to receive notifications on this device"
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+        requestBody: 
+          x-name: "AddDeviceRequest"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  devicePNS: 
+                    type: "string"
+                  deviceType: 
+                    type: "string"
+                    enum: 
+                      - "ios"
+                      - "android"
+                example: 
+                  devicePNS: "b1f99cf0-278d-49ca-a325-0a1504799488"
+                  deviceType: "android"
+          description: "Details of the device to be registered"
+          required: true
+        responses: 
+          201: 
+            description: "Successfully registered device for notifications"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    deviceId: 
+                      type: "string"
+                    deviceType: 
+                      type: "string"
+                      enum: 
+                        - "ios"
+                        - "android"
+                  example: 
+                    deviceId: "2f2c28c8-3de9-4ffc-9d0b-23533363d7d3"
+                    deviceType: "android"
+          401: 
+            description: "Access token is missing or invalid."
           500: 
             description: "An unexpected error occurred processing the request."
 
