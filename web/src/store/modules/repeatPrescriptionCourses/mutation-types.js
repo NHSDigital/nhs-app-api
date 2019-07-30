@@ -3,7 +3,6 @@ export const INIT_REPEAT_PRESCRIPTIONS = 'INIT_REPEAT_PRESCRIPTIONS';
 export const SELECT_REPEAT_PRESCRIPTION = 'SELECT_REPEAT_PRESCRIPTION';
 export const REPEAT_PRESCRIPTION_VALIDATED = 'REPEAT_PRESCRIPTION_VALIDATED';
 export const REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO = 'REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO';
-export const UPDATE_SELECTED_REPEAT_PRESCRIPTION = 'UPDATE_SELECTED_REPEAT_PRESCRIPTION';
 export const PARTIAL_ORDER_RESULT = 'PARTIAL_ORDER_RESULT';
 
 export const initialState = () => ({
@@ -15,5 +14,6 @@ export const initialState = () => ({
   hasErrored: false,
   validated: false,
   isValid: false,
-  selected: [],
+  selectedCoursesNoJs: [],
+  submitted: false,
 });

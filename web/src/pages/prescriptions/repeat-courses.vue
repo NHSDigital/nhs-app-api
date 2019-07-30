@@ -16,7 +16,7 @@
         </message-dialog>
 
         <div v-if="showRepeatCourses">
-          <no-js-form :action="confirmCoursesPath" :value="{formData}" method="post">
+          <no-js-form :action="repeatCoursesPath" :value="{}" method="post">
             <div>
               <div>
                 <error-message v-if="error && !courseSelectionValid" id="error-type">
@@ -28,7 +28,6 @@
                       <fieldset class="nhsuk-fieldset">
                         <legend class="nhsuk-fieldset__legend"
                                 role="heading">{{ $t('rp03.subHeader') }}</legend>
-
                         <repeat-prescription v-model="selected"/>
                       </fieldset>
                     </Card>
@@ -36,7 +35,10 @@
                 </CardGroup>
               </div>
             </div>
-            <input :value="specialRequestNecessity" type="hidden" name="specialRequestNecessity">
+            <input value="true" type="hidden" name="nojs.repeatPrescriptionCourses.submitted">
+            <input :value="specialRequestNecessity"
+                   type="hidden"
+                   name="nojs.repeatPrescriptionCourses.specialRequestNecessity">
             <div v-if="specialRequestNecessity !== 'NotAllowed'"
                  role="form">
               <error-message v-if="error && !specialRequestValid" id="error-type">
@@ -62,7 +64,7 @@
                                  v-model="specialRequest"
                                  :required="(specialRequestNecessity === 'Mandatory')"
                                  text-area-ref="specialRequest"
-                                 name="specialRequest"
+                                 name="nojs.repeatPrescriptionCourses.specialRequest"
                                  maxlength="1000"/>
             </div>
             <button id="btn_order_prescription"
@@ -98,17 +100,24 @@
 
 <script>
 /* eslint-disable import/extensions */
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
+import GenericButton from '@/components/widgets/GenericButton';
+import GenericTextArea from '@/components/widgets/GenericTextArea';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
-import ErrorMessage from '@/components/widgets/ErrorMessage';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import GenericButton from '@/components/widgets/GenericButton';
-import GenericTextArea from '@/components/widgets/GenericTextArea';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
-import { PRESCRIPTIONS, PRESCRIPTION_CONFIRM_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_CHECK,
+  PRESCRIPTIONS,
+  PRESCRIPTION_CONFIRM_COURSES,
+  PRESCRIPTION_REPEAT_COURSES,
+} from '@/lib/routes';
+import { isEmpty } from 'lodash/fp';
 import { redirectTo } from '@/lib/utils';
+import { ensureNoJsPostedValueIsArray } from '@/lib/noJs';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
@@ -133,16 +142,10 @@ export default {
     return {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest || '',
       prescriptionChoices: this.$store.state.repeatPrescriptionCourses,
-      selected: this.$store.state.repeatPrescriptionCourses.selected,
+      selected: this.$store.getters['repeatPrescriptionCourses/selectedIds'],
     };
   },
   computed: {
-    formData() {
-      return {
-        repeatCourses: this.$store.state.repeatPrescriptionCourses,
-        selectedCourses: this.$store.state.repeatPrescriptionCourses.selected,
-      };
-    },
     error() {
       const { validated } = this.$store.state.repeatPrescriptionCourses;
 
@@ -150,15 +153,16 @@ export default {
 
       if (validated && !this.courseSelectionValid) {
         errors.push(this.$t('rp03.noMedicinesSelected'));
-        return true;
       }
       if (validated && !this.specialRequestValid) {
         errors.push(this.$t('rp03.noMedicinesSelected'));
-        return true;
       }
 
       if (validated && errors.length > 0) {
-        this.$store.app.$analytics.validationError(errors);
+        if (process.client) {
+          this.$store.app.$analytics.validationError(errors);
+        }
+        return true;
       }
 
       return false;
@@ -183,12 +187,11 @@ export default {
         .specialRequestNecessity;
     },
     courseSelectionValid() {
-      return this.$store.state.repeatPrescriptionCourses.repeatPrescriptionCourses
-        .some(course => course.selected);
+      return this.$store.getters['repeatPrescriptionCourses/isValid'];
     },
     specialRequestValid() {
       if (this.specialRequestNecessity === 'Mandatory') {
-        if (!this.specialRequest || this.specialRequest === '') {
+        if (!this.specialRequest || this.specialRequest.trim() === '') {
           return false;
         }
       }
@@ -201,17 +204,49 @@ export default {
     confirmCoursesPath() {
       return PRESCRIPTION_CONFIRM_COURSES.path;
     },
+    repeatCoursesPath() {
+      return PRESCRIPTION_REPEAT_COURSES.path;
+    },
   },
-  async asyncData({ store, route }) {
-    const hasQueryError = route.query.noneSelected || route.query.missingSpecialRequest;
-
+  async fetch({ store }) {
+    const storeData = store;
     if (!store.state.repeatPrescriptionCourses.hasLoaded) {
       await store.dispatch('repeatPrescriptionCourses/load');
     }
-    if (store.state.repeatPrescriptionCourses.validated || hasQueryError) {
-      await store.dispatch('repeatPrescriptionCourses/validate', {
-        submitted: store.state.repeatPrescriptionCourses.validated ? false : hasQueryError,
-      });
+
+    if (store.state.repeatPrescriptionCourses.submitted) {
+      if (isEmpty(store.state.repeatPrescriptionCourses.specialRequest)) {
+        storeData.state.repeatPrescriptionCourses.specialRequest = null;
+      }
+
+      storeData.state.repeatPrescriptionCourses.submitted = false;
+      const { selectedCoursesNoJs } = store.state.repeatPrescriptionCourses;
+
+      if (selectedCoursesNoJs) {
+        const courseSelection = ensureNoJsPostedValueIsArray(selectedCoursesNoJs).map(String);
+
+        storeData.state.repeatPrescriptionCourses.repeatPrescriptionCourses.forEach((course) => {
+          const courseToCheckIsSelected = course;
+          courseSelection.forEach((selection) => {
+            if (courseToCheckIsSelected.id === selection) {
+              courseToCheckIsSelected.selected = true;
+            }
+          });
+        });
+      }
+
+      const courseSelectionValid = store.getters['repeatPrescriptionCourses/isValid'];
+      const specialRequestValid = store.getters['repeatPrescriptionCourses/specialRequestValid'];
+
+      if (courseSelectionValid && specialRequestValid) {
+        store.app.router.push(PRESCRIPTION_CONFIRM_COURSES.path);
+      } else {
+        const validationObj = {
+          isValid: courseSelectionValid && specialRequestValid,
+          submitted: true,
+        };
+        store.dispatch('repeatPrescriptionCourses/validate', validationObj);
+      }
     }
   },
   methods: {

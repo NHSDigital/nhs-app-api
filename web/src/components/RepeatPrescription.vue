@@ -10,9 +10,9 @@
         <generic-checkbox
           :checkbox-id="repeatPrescription.id"
           :value="repeatPrescription.id"
-          :is-selected="value"
+          :is-selected="value.includes(repeatPrescription.id)"
           :required="false"
-          name="prescription"
+          name="nojs.repeatPrescriptionCourses.selectedCoursesNoJs"
           @input="selectedValueChanged(repeatPrescription)">
           <span data-label="prescription-name"
                 :aria-label="`${repeatPrescription.name}`"
@@ -42,7 +42,6 @@ export default {
       type: Array,
       default: () => [],
     },
-
   },
   computed: {
     ...mapGetters({
@@ -57,10 +56,7 @@ export default {
     selectedValueChanged(checkbox) {
       this.$store.dispatch('repeatPrescriptionCourses/select', checkbox.id);
       this.$store.dispatch('repeatPrescriptionCourses/validate', { isValid: this.isValid });
-      const storeSelected = this.$store.state.repeatPrescriptionCourses.repeatPrescriptionCourses
-        .filter(c => c.selected === true)
-        .map(item => item.id);
-      this.$store.dispatch('repeatPrescriptionCourses/updateSelected', storeSelected);
+      const storeSelected = this.$store.getters['repeatPrescriptionCourses.selectedIds'];
       this.$emit('input', storeSelected);
     },
   },

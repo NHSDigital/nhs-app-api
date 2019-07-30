@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string odsCode,
             string nhsNumber);
 
-        Task<MicrotestClient.MicrotestApiObjectResponse<string>> PrescriptionsPost(
+        Task<MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>> PrescriptionsPost(
             string odsCode,
             string nhsNumber,
             PrescriptionRequestsPost model);

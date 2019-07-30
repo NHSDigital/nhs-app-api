@@ -117,9 +117,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                 if (response.IsPartialSuccess)
                 {
                     _logger.LogDebug("Prescription order partially succeeded");
-                    var partialSuccessResponse = response.RawResponse.DeserializeJson<PrescriptionOrderPartiallySuccessfulResponse>();
 
-                    var mappedPrescriptionPartialSuccess = _microtestPrescriptionMapper.Map(partialSuccessResponse);
+                    var mappedPrescriptionPartialSuccess = _microtestPrescriptionMapper.Map(response.Body);
 
                     _logger.LogInformation(
                         "Partial success ordering prescription. Attempted to order course ids: {0}, Successful course ids: {1}, Unsuccessful course ids: {2}",

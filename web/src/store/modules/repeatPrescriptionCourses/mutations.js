@@ -5,7 +5,6 @@ import {
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
-  UPDATE_SELECTED_REPEAT_PRESCRIPTION,
   PARTIAL_ORDER_RESULT,
   initialState,
 } from './mutation-types';
@@ -28,11 +27,10 @@ export default {
     state.hasLoaded = true;
   },
   [INIT_REPEAT_PRESCRIPTIONS](state) {
+    const defaultValues = initialState();
     mapKeys((key) => {
-      state[key] = initialState[key];
-    })(initialState);
-    state.hasLoaded = false;
-    state.specialRequest = null;
+      state[key] = defaultValues[key];
+    })(state);
     state.selected = [];
   },
   [REPEAT_PRESCRIPTION_VALIDATED](state, validationObject) {
@@ -49,9 +47,6 @@ export default {
   },
   [REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO](state, repeatPrescriptionAdditionalInfo) {
     state.specialRequest = repeatPrescriptionAdditionalInfo.specialRequest;
-  },
-  [UPDATE_SELECTED_REPEAT_PRESCRIPTION](state, ids) {
-    state.selected = ids;
   },
   [PARTIAL_ORDER_RESULT](state, data) {
     state.partialOrderResult = data;

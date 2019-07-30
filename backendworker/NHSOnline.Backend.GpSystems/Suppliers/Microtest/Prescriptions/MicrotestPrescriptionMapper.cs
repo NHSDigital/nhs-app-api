@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             };
         }
 
-        public PrescriptionRequestPostPartialSuccessResponse Map(PrescriptionOrderPartiallySuccessfulResponse prescriptionOrderPartiallySuccessfulResponse)
+        public PrescriptionRequestPostPartialSuccessResponse Map(PrescriptionOrderResponse prescriptionOrderPartiallySuccessfulResponse)
         {
             var successfulOrders = new List<Order>();
             var unsuccessfulOrders = new List<Order>();

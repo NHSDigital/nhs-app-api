@@ -5,8 +5,6 @@ import isString from 'lodash/fp/isString';
 import mapKeys from 'lodash/fp/mapKeys';
 import set from 'lodash/fp/set';
 import qs from 'qs';
-import { PRESCRIPTION_CONFIRM_COURSES } from '@/lib/routes';
-import { parseSelectedRepeatCourses } from '@/lib/noJs';
 
 const NO_JS_PARAM_PREFIX = 'nojs.';
 
@@ -58,31 +56,14 @@ const parseQs = req => flow([
   parseJson,
 ])(req);
 
-const parseAdditionalFormState = (path, data) => {
-  let result = {};
-
-  if (PRESCRIPTION_CONFIRM_COURSES.path === path) {
-    result = parseSelectedRepeatCourses({ data });
-    return result;
-  }
-
-  return result;
-};
-
-export default ({ redirect, req, store }) => {
+export default ({ req, store }) => {
   if (process.client) return;
   const qsNoJs = parseQs(req);
   const bodyNoJs = parseBody(req);
   const noJs = { ...qsNoJs, ...bodyNoJs };
 
-  const parsedData = parseAdditionalFormState(req.path, req.body);
-  if (parsedData.shouldRedirect) {
-    redirect(parsedData.redirectPath, parsedData.redirectQuery);
-    return;
-  }
-
   if (noJs) {
-    const merged = { ...store.state, ...noJs, ...parsedData.state };
+    const merged = { ...store.state, ...noJs };
     mapKeys((key) => {
       store.state[key] = merged[key];
     })(merged);

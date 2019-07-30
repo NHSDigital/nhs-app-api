@@ -1,29 +1,29 @@
-import { assign } from 'lodash/fp';
-
 export default {
-  /* eslint-disable no-shadow */
-  repeatPrescriptionCourses(state) {
-    state.repeatPrescriptionCourses.map((course) => {
-      const result = assign({}, course);
-      return result;
-    });
-  },
   selectedPrescriptions(state) {
     const selectedCourses = [];
-    state.repeatPrescriptionCourses.forEach((course) => {
-      if (course.selected) {
-        selectedCourses.push(course);
-      }
-    });
+
+    if (state.repeatPrescriptionCourses) {
+      state.repeatPrescriptionCourses.forEach((course) => {
+        if (course.selected) {
+          selectedCourses.push(course);
+        }
+      });
+    }
+
     return selectedCourses;
   },
-  isValid(state) {
-    const selectedCourses = [];
-    state.repeatPrescriptionCourses.forEach((course) => {
-      if (course.selected) {
-        selectedCourses.push(course);
+  isValid(state, getters) {
+    return getters.selectedPrescriptions.length > 0;
+  },
+  specialRequestValid(state) {
+    if (state.specialRequestNecessity === 'Mandatory') {
+      if (!state.specialRequest || state.specialRequest.trim() === '') {
+        return false;
       }
-    });
-    return selectedCourses.length > 0;
+    }
+    return true;
+  },
+  selectedIds(state, getters) {
+    return getters.selectedPrescriptions.map(item => item.id);
   },
 };

@@ -1,6 +1,4 @@
 import noJsState from '@/middleware/noJsState';
-import { PRESCRIPTION_CONFIRM_COURSES } from '@/lib/routes';
-import { parseSelectedRepeatCourses } from '@/lib/noJs';
 
 jest.mock('@/lib/noJs');
 
@@ -153,31 +151,6 @@ describe('noJsState middleware', () => {
           const req = createPostReq('nojs', '{}', '/foo');
           noJsState({ redirect, store, req });
           expect(redirect).toHaveBeenCalledTimes(0);
-        });
-
-        it('will redirect if parsedData shouldRedirect is true', () => {
-          const req = createPostReq('nojs', '{}', PRESCRIPTION_CONFIRM_COURSES.path);
-          parseSelectedRepeatCourses.mockReturnValueOnce({
-            shouldRedirect: true,
-            redirectPath: '',
-            redirectQuery: {},
-          });
-          noJsState({ redirect, store, req });
-          expect(redirect).toHaveBeenCalledTimes(1);
-        });
-
-        it('will merge additional form state to store', () => {
-          const req = createPostReq('nojs', '{}', PRESCRIPTION_CONFIRM_COURSES.path);
-          parseSelectedRepeatCourses.mockReturnValueOnce({
-            shouldRedirect: false,
-            state: {
-              mockAdditionalState: {
-                foo: 'bar',
-              },
-            },
-          });
-          noJsState({ redirect, store, req });
-          expect(store.state.mockAdditionalState).toBeDefined();
         });
       });
     });

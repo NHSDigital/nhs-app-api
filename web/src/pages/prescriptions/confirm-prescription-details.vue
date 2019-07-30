@@ -37,14 +37,23 @@
         </Card>
       </CardGroupItem>
     </CardGroup>
-
     <div>
-      <button id="btn_confirm_and_order_prescription"
-              class="nhsuk-button"
-              click-delay="medium"
-              @click="onConfirmButtonClicked">
-        {{ $t('rp04.confirmButton') }}
-      </button>
+      <no-js-form :action="confirmPrescriptionsPath" :value="{}" method="post">
+        <input value="true" type="hidden" name="nojs.repeatPrescriptionCourses.submitted">
+        <input :value="JSON.stringify($store.state.repeatPrescriptionCourses.selectedCoursesNoJs)"
+               type="hidden"
+               name="nojs.repeatPrescriptionCourses.selectedCoursesNoJs">
+        <input :value="$store.state.repeatPrescriptionCourses.specialRequest"
+               type="hidden"
+               name="nojs.repeatPrescriptionCourses.specialRequest">
+
+        <button id="btn_confirm_and_order_prescription"
+                class="nhsuk-button"
+                click-delay="medium"
+                @click="onConfirmButtonClicked">
+          {{ $t('rp04.confirmButton') }}
+        </button>
+      </no-js-form>
     </div>
     <div>
       <generic-button v-if="$store.state.device.isNativeApp"
@@ -70,11 +79,24 @@ import { redirectTo } from '@/lib/utils';
 import {
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
+  PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
 } from '@/lib/routes';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
+import NoJsForm from '@/components/no-js/NoJsForm';
+import { createUri, ensureNoJsPostedValueIsArray } from '@/lib/noJs';
+import { isEmpty } from 'lodash/fp';
+
+const onSubmit = async (store, selectedCourseIds, specialRequest) => {
+  const repeatPrescriptionOrder = {
+    CourseIds: selectedCourseIds,
+    SpecialRequest: specialRequest,
+  };
+
+  await store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder);
+};
 
 export default {
   layout: 'nhsuk-layout',
@@ -86,6 +108,7 @@ export default {
     Card,
     CardGroupItem,
     CardGroup,
+    NoJsForm,
   },
   data() {
     return {
@@ -103,20 +126,60 @@ export default {
     prescriptionRepeatCoursesPath() {
       return PRESCRIPTION_REPEAT_COURSES.path;
     },
+    confirmPrescriptionsPath() {
+      return PRESCRIPTION_CONFIRM_COURSES.path;
+    },
+  },
+  async fetch({ store, redirect }) {
+    const storeData = store;
+    if (isEmpty(store.state.repeatPrescriptionCourses.specialRequest)) {
+      storeData.state.repeatPrescriptionCourses.specialRequest = null;
+    }
+
+    if (store.state.repeatPrescriptionCourses.submitted) {
+      storeData.state.repeatPrescriptionCourses.submitted = false;
+      const { selectedCoursesNoJs } = store.state.repeatPrescriptionCourses;
+      const { specialRequest } = store.state.repeatPrescriptionCourses;
+      const courseSelection = ensureNoJsPostedValueIsArray(selectedCoursesNoJs).map(String);
+
+      await onSubmit(store, courseSelection, specialRequest);
+
+      if (store.getters['errors/showApiError']) {
+        return;
+      }
+
+      if (store.state.repeatPrescriptionCourses.partialOrderResult) {
+        store.app.router.push(PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path);
+        return;
+      }
+
+      const uri = createUri({
+        path: PRESCRIPTIONS.path,
+        noJs: {
+          flashMessage: {
+            show: true,
+            key: 'rp05.confirmationMessage',
+          },
+        },
+      });
+
+      redirect(uri);
+    }
   },
   created() {
-    if (this.selectedPrescriptions === null || this.selectedPrescriptions.length === 0) {
+    if (!this.$store.getters['errors/showApiError'] &&
+      (!this.selectedPrescriptions || this.selectedPrescriptions.length === 0)) {
       redirectTo(this, PRESCRIPTIONS.path, null);
     }
   },
   methods: {
     async onConfirmButtonClicked() {
-      const repeatPrescriptionOrder = {
-        CourseIds: this.selectedPrescriptions.map(x => x.id),
-        SpecialRequest: this.specialRequest,
-      };
       try {
-        await this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder);
+        await onSubmit(
+          this.$store,
+          this.selectedPrescriptions.map(x => x.id),
+          this.specialRequest,
+        );
 
         if (this.$store.state.repeatPrescriptionCourses.partialOrderResult) {
           redirectTo(this, PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path, null);

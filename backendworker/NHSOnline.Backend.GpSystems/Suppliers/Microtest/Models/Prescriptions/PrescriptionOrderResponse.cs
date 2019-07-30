@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions
 {
-    public class PrescriptionOrderPartiallySuccessfulResponse
+    public class PrescriptionOrderResponse
     {
         public IEnumerable<PatientRequest> PatientRequests { get; set; }
     }

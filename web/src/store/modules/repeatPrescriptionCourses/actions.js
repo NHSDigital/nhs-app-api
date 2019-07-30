@@ -5,7 +5,6 @@ import {
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
-  UPDATE_SELECTED_REPEAT_PRESCRIPTION,
   PARTIAL_ORDER_RESULT,
 } from './mutation-types';
 
@@ -23,9 +22,6 @@ export default {
   },
   select({ commit }, id) {
     commit(SELECT_REPEAT_PRESCRIPTION, id);
-  },
-  updateSelected({ commit }, ids) {
-    commit(UPDATE_SELECTED_REPEAT_PRESCRIPTION, ids);
   },
   orderRepeatPrescription({ commit }, repeatPrescriptionOrder) {
     const param = {

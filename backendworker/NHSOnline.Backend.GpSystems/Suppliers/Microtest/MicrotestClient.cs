@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             _logger.LogEnter();
             _logger.LogDebug($"booking slot: {bookAppointmentSlotPostRequest.SlotId}");
 
-            var response = await Post(bookAppointmentSlotPostRequest, AppointmentsPath, odsCode, nhsNumber);
+            var response = await Post<BookAppointmentSlotPostRequest, string>(bookAppointmentSlotPostRequest, AppointmentsPath, odsCode, nhsNumber);
 
             _logger.LogExit();
             return response;
@@ -171,14 +171,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return response;
         }
 
-        public async Task<MicrotestApiObjectResponse<string>> PrescriptionsPost(
+        public async Task<MicrotestApiObjectResponse<PrescriptionOrderResponse>> PrescriptionsPost(
             string odsCode,
             string nhsNumber,
             PrescriptionRequestsPost model)
         {
             _logger.LogEnter();
 
-            var response = await Post(model, PrescriptionsHistoryPath, odsCode: odsCode, nhsNumber: nhsNumber);
+            var response = await Post<PrescriptionRequestsPost, PrescriptionOrderResponse>(model, PrescriptionsHistoryPath, odsCode: odsCode, nhsNumber: nhsNumber);
 
             _logger.LogExit();
             return response;
@@ -193,7 +193,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return await SendRequestAndParseResponse<TResponse>(request);
         }
 
-        private async Task<MicrotestApiObjectResponse<string>> Post<TRequest>(
+        private async Task<MicrotestApiObjectResponse<TResponse>> Post<TResponse>(
+            string path,
+            string odsCode = null,
+            string nhsNumber = null
+        )
+        {
+            var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
+            return await SendRequestAndGetResponse<TResponse>(request);
+        }
+
+        private async Task<MicrotestApiObjectResponse<TResponse>> Post<TRequest, TResponse>(
             TRequest requestBody,
             string path,
             string odsCode = null,
@@ -204,7 +214,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             var requestBodyJson = JsonConvert.SerializeObject(requestBody);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
 
-            return await SendRequestAndGetResponse(request);
+            return await SendRequestAndGetResponse<TResponse>(request);
         }
 
         private async Task<MicrotestApiObjectResponse<string>> Delete<TRequest>(
@@ -218,7 +228,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             var requestBodyJson = JsonConvert.SerializeObject(requestBody);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
 
-            return await SendRequestAndGetResponse(request);
+            return await SendRequestAndGetResponse<string>(request);
         }
 
         private static HttpRequestMessage BuildRequest(
@@ -242,13 +252,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return request;
         }
 
-        private async Task<MicrotestApiObjectResponse<string>> SendRequestAndGetResponse(
+        private async Task<MicrotestApiObjectResponse<TResponse>> SendRequestAndGetResponse<TResponse>(
             HttpRequestMessage request)
         {
             _logger.LogEnter();
 
             var responseMessage = await _httpClient.Client.SendAsync(request);
-            var response = new MicrotestApiObjectResponse<string>(responseMessage.StatusCode);
+            var response = new MicrotestApiObjectResponse<TResponse>(responseMessage.StatusCode);
             await response.Parse(responseMessage, _responseParser, _logger);
 
             if (response.HasUnauthorisedResponse)
@@ -303,16 +313,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             }
 
             public TBody Body { get; set; }
-
-            public string RawResponse { get; set; }
-
+            
             public async Task<MicrotestApiObjectResponse<TBody>> Parse(
                 HttpResponseMessage responseMessage,
                 IJsonResponseParser responseParser,
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
-                RawResponse = stringResponse;
                 return string.IsNullOrEmpty(stringResponse)
                     ? this
                     : ParseResponse(responseParser,

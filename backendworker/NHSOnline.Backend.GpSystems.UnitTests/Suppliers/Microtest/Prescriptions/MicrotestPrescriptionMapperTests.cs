@@ -242,7 +242,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         public void MapPrescriptionOrderPartiallySuccessfulResponse_ToPrescriptionRequestPostPartialSuccessResponse_MapsCorrectly()
         {
             // Arrange
-            var response = new PrescriptionOrderPartiallySuccessfulResponse()
+            var response = new PrescriptionOrderResponse()
             {
                 PatientRequests = new List<PatientRequest>
                 {

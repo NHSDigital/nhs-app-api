@@ -36,14 +36,16 @@
         </div>
       </div>
 
-      <generic-button
-        id="btn_back_to_prescriptions"
-        :button-classes="['grey', 'button']"
-        :class="$style.back"
-        tabindex="0"
-        @click="backToPrescriptionsClicked">
-        {{ $t('prescriptions.partialSuccess.backButton') }}
-      </generic-button>
+      <no-js-form :action="prescriptionsHomeUrl" :value="{}" method="get">
+        <generic-button
+          id="btn_back_to_prescriptions"
+          :button-classes="['grey', 'button']"
+          :class="$style.back"
+          tabindex="0"
+          @click="backToPrescriptionsClicked">
+          {{ $t('prescriptions.partialSuccess.backButton') }}
+        </generic-button>
+      </no-js-form>
     </div>
   </div>
 </template>
@@ -52,6 +54,7 @@
 import GreenTick from '@/components/icons/GreenTick';
 import RedCross from '@/components/icons/RedCross';
 import GenericButton from '@/components/widgets/GenericButton';
+import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
 import { PRESCRIPTIONS } from '@/lib/routes';
 
@@ -60,6 +63,7 @@ export default {
     GreenTick,
     RedCross,
     GenericButton,
+    NoJsForm,
   },
   data() {
     return {
@@ -67,6 +71,7 @@ export default {
         .partialOrderResult.successfulOrders,
       unsuccessfulOrders: this.$store.state.repeatPrescriptionCourses
         .partialOrderResult.unsuccessfulOrders,
+      prescriptionsHomeUrl: PRESCRIPTIONS.path,
     };
   },
   created() {

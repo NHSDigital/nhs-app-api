@@ -354,7 +354,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 It.IsAny<PrescriptionRequestsPost>()))
                 .Callback<string, string, PrescriptionRequestsPost>((ods, nhs, prp) => capturedPostRequest = prp)
                 .Returns(Task.FromResult(
-                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.OK)));
+                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.OK)));
 
             // Act
             var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
@@ -376,7 +376,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 _microtestUserSession.NhsNumber,
                 It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.InternalServerError)));
+                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.InternalServerError)));
 
             // Act
             var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
@@ -394,7 +394,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     _microtestUserSession.NhsNumber,
                     It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Conflict)));
+                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.Conflict)));
 
             // Act
             var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
@@ -431,7 +431,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     _microtestUserSession.NhsNumber,
                     It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Forbidden)));
+                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.Forbidden)));
 
             // Act
             var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
@@ -474,7 +474,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 SpecialRequestMessage = _repeatPrescriptionRequest.SpecialRequest,
             };
 
-            var rawResponse = new PrescriptionOrderPartiallySuccessfulResponse
+            var response = new PrescriptionOrderResponse
             {
                 PatientRequests = new List<PatientRequest>
                 {
@@ -499,9 +499,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 It.IsAny<PrescriptionRequestsPost>()))
                 .Callback<string, string, PrescriptionRequestsPost>((ods, nhs, prp) => capturedPostRequest = prp)
                 .Returns(Task.FromResult(
-                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Accepted)
+                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.Accepted)
                     {
-                        RawResponse = JsonConvert.SerializeObject(rawResponse),
+                        Body = response,
                     }));
 
             // Act
