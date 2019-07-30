@@ -1,7 +1,7 @@
 openapi: 3.0.0
 
 info:
-  version: 2.0.0
+  version: 2.0.1
   title: NHS App Middleware for NHS Login.
   description: NHS App Middleware endpoints to allow NHS Login to retrieve and validate linkage details and IM1 Connection Tokens.
 
