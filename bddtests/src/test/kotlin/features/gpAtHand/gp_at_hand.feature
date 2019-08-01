@@ -1,7 +1,6 @@
 @gpathand
 Feature: GP at Hand
 
-  @tech-debt @NHSO-4503
   @appointments
   Scenario: A user sees an appropriate message when the appointments journey configuration is set to Gp at Hand
     Given I am a user where the journey configurations are:

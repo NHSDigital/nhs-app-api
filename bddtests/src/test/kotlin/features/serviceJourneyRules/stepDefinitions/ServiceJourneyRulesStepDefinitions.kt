@@ -50,7 +50,6 @@ class ServiceJourneyRulesStepDefinitions {
     fun iAmAUserWhoseODSCodeDoesNotHaveASpecificJourneyConfigurationSetUp() {
         SerenityHelpers.setGpSupplier("TPP")
 
-        // copying at moment until a new instance is returned per request
         val patient = Patient.getDefault("TPP")
                 .copy(odsCode = TPP_ODS_CODE_NO_SJR_CONFIGURATION)
         patient.tppUserSession!!.copy(unitId = TPP_ODS_CODE_NO_SJR_CONFIGURATION)
@@ -60,13 +59,13 @@ class ServiceJourneyRulesStepDefinitions {
     @Given("^I am a user where the journey configurations are:$")
     fun iAmAUserWhereTheJourneyConfigurationsAre(configurations: List<Configuration>) {
         val journeyTypes =
-                configurations.map{configuration-> configuration.toJourneyType()}
+                configurations.map { configuration -> configuration.toJourneyType() }
         val gpInformation = findGpInformation(journeyTypes)
-        Assert.assertNotNull("Cannot find a matching ODS code with the given configuration in SJR",
-                gpInformation?.odsCode)
 
-        // copying at moment until a new instance is returned per request
-        val patient = Patient.getDefault(gpInformation?.gpSupplier!!).copy(odsCode = gpInformation.odsCode)
+        Assert.assertNotNull("Test setup incorrect: Cannot find a matching ODScode with given configuration in SJR",
+                gpInformation)
+
+        val patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
 
         SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
         SerenityHelpers.setPatient(patient)
@@ -114,8 +113,9 @@ class ServiceJourneyRulesStepDefinitions {
         val serviceJourneyRulesResponse =
                 ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
                         .getOrFail<ServiceJourneyRulesResponse>()
-
-        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+        Assert.assertNotNull(
+                "Service Journey Rules response expected, but was null",
+                serviceJourneyRulesResponse)
         Assert.assertEquals("Service Journey Rules Medical Record provider",
                 MedicalRecordProvider.valueOf(provider),
                 serviceJourneyRulesResponse.journeys.medicalRecord.provider)
@@ -140,7 +140,7 @@ class ServiceJourneyRulesStepDefinitions {
                         .getOrFail<ServiceJourneyRulesResponse>()
 
         Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
-        Assert.assertEquals("Service Journey Rules Appointments provider",
+        Assert.assertEquals("Service Journey Rules nominated pharmacy provider",
                 enabled == "enabled",
                 serviceJourneyRulesResponse.journeys.nominatedPharmacy)
     }
@@ -169,14 +169,14 @@ class ServiceJourneyRulesStepDefinitions {
     data class GpInformation(val gpSupplier: String, val odsCode: String)
 
     enum class JourneyType {
-        APPOINTMENTS_IM1,
         APPOINTMENTS_GPATHAND,
+        APPOINTMENTS_IM1,
         APPOINTMENTS_INFORMATICA,
         MEDICAL_RECORD_GPATHAND,
         MEDICAL_RECORD_IM1,
         NOMINATED_PHARMACY_DISABLED,
         NOMINATED_PHARMACY_ENABLED,
-        PRESCRIPTIONS_IM1,
-        PRESCRIPTIONS_GPATHAND
+        PRESCRIPTIONS_GPATHAND,
+        PRESCRIPTIONS_IM1
     }
 }

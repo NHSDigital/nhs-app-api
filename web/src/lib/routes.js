@@ -10,6 +10,11 @@ const gpAdviceRedirect = {
   url: '/appointments',
 };
 
+const gpAtHandAppointmentRedirect = {
+  condition: 'serviceJourneyRules/gpAtHandAppointmentsEnabled',
+  url: '/appointments/gp-at-hand',
+};
+
 const gpAtHandMyRecordRedirect = {
   condition: 'serviceJourneyRules/gpAtHandMyRecordEnabled',
   url: '/my-record/gp-at-hand',
@@ -18,11 +23,6 @@ const gpAtHandMyRecordRedirect = {
 const gpAtHandPrescriptionsRedirect = {
   condition: 'serviceJourneyRules/gpAtHandPrescriptionsEnabled',
   url: '/prescriptions/gp-at-hand',
-};
-
-const informaticaAppointmentRedirect = {
-  condition: 'serviceJourneyRules/informaticaAppointmentsEnabled',
-  url: '/appointments/informatica',
 };
 
 const im1AppointmentRedirect = {
@@ -38,6 +38,11 @@ const im1MyRecordRedirect = {
 const im1PrescriptionsRedirect = {
   condition: 'serviceJourneyRules/im1PrescriptionsEnabled',
   url: '/prescriptions',
+};
+
+const informaticaAppointmentRedirect = {
+  condition: 'serviceJourneyRules/informaticaAppointmentsEnabled',
+  url: '/appointments/informatica',
 };
 
 const routes = {
@@ -71,6 +76,7 @@ const routes = {
       },
     },
     redirectRules: [
+      gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
   },
@@ -131,6 +137,7 @@ const routes = {
       },
     },
     redirectRules: [
+      gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
   },
@@ -164,6 +171,21 @@ const routes = {
       },
     },
   },
+  APPOINTMENT_GP_AT_HAND: {
+    name: 'appointments-gp-at-hand',
+    path: '/appointments/gp-at-hand',
+    crumb: {
+      enabled: true,
+      i8nKey: 'appointmentsGpAtHand',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    redirectRules: [
+      im1AppointmentRedirect,
+      informaticaAppointmentRedirect,
+    ],
+  },
   APPOINTMENT_INFORMATICA: {
     name: 'appointments-informatica',
     path: '/appointments/informatica',
@@ -175,6 +197,7 @@ const routes = {
       },
     },
     redirectRules: [
+      gpAtHandAppointmentRedirect,
       im1AppointmentRedirect,
     ],
   },
@@ -689,6 +712,7 @@ export const {
   APPOINTMENT_CANCEL_NOJS,
   APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_GP_ADVICE,
+  APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
   AUTH_RETURN,
   BEGINLOGIN,

@@ -1,5 +1,3 @@
-
-@file:Suppress("EnumNaming", "Must be lower case")
 package worker.models.serviceJourneyRules
 
 data class ServiceJourneyRulesResponse( var journeys : Journey)

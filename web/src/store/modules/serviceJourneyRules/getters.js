@@ -3,17 +3,20 @@ import { CDSS_ADMIN, CDSS_ADVICE, GP_AT_HAND, IM1_PROVIDER, INFORMATICA, NOMINAT
 
 
 export default {
+  [`${CDSS_ADMIN}Disabled`](state) {
+    return state.rules.cdssAdmin.provider === 'none';
+  },
   [`${CDSS_ADMIN}Enabled`](state) {
     return !(state.rules.cdssAdmin.provider === 'none');
+  },
+  [`${CDSS_ADVICE}Disabled`](state) {
+    return state.rules.cdssAdvice.provider === 'none';
   },
   [`${CDSS_ADVICE}Enabled`](state) {
     return !(state.rules.cdssAdvice.provider === 'none');
   },
-  [`${CDSS_ADMIN}Disabled`](state) {
-    return state.rules.cdssAdmin.provider === 'none';
-  },
-  [`${CDSS_ADVICE}Disabled`](state) {
-    return state.rules.cdssAdvice.provider === 'none';
+  [`${GP_AT_HAND}AppointmentsEnabled`](state) {
+    return get('rules.appointments.provider')(state) === GP_AT_HAND;
   },
   [`${CDSS_ADMIN}Provider`](state) {
     return state.rules.cdssAdmin.provider;
@@ -33,25 +36,25 @@ export default {
   [`${INFORMATICA}AppointmentsEnabled`](state) {
     return get('rules.appointments.provider')(state) === INFORMATICA;
   },
-  [`${IM1_PROVIDER}MyRecordEnabled`](state) {
-    return get('rules.medicalRecord.provider')(state) === IM1_PROVIDER;
-  },
   [`${GP_AT_HAND}MyRecordEnabled`](state) {
     return get('rules.medicalRecord.provider')(state) === GP_AT_HAND;
   },
+  [`${IM1_PROVIDER}MyRecordEnabled`](state) {
+    return get('rules.medicalRecord.provider')(state) === IM1_PROVIDER;
+  },
+  [`${GP_AT_HAND}PrescriptionsEnabled`](state) {
+    return get('rules.prescriptions.provider')(state) === GP_AT_HAND;
+  },
   [`${IM1_PROVIDER}PrescriptionsEnabled`](state) {
     return get('rules.prescriptions.provider')(state) === IM1_PROVIDER;
   },
   [`${GP_AT_HAND}PrescriptionsEnabled`](state) {
     return get('rules.prescriptions.provider')(state) === GP_AT_HAND;
+  },
+  [`${IM1_PROVIDER}PrescriptionsEnabled`](state) {
+    return get('rules.prescriptions.provider')(state) === IM1_PROVIDER;
   },
   [`${NOMINATED_PHARMACY}Enabled`](state) {
     return get('rules.nominatedPharmacy')(state);
-  },
-  [`${GP_AT_HAND}PrescriptionsEnabled`](state) {
-    return get('rules.prescriptions.provider')(state) === GP_AT_HAND;
-  },
-  [`${IM1_PROVIDER}PrescriptionsEnabled`](state) {
-    return get('rules.prescriptions.provider')(state) === IM1_PROVIDER;
   },
 };

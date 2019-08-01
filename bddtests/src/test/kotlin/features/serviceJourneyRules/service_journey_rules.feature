@@ -2,21 +2,6 @@
 Feature: Service Journey Rules
   #This endpoint is GPSystem agnostic
 
-  @backend
-  Scenario: A user fetching the service journey rules for an ODS code not configured will receive a 404
-    Given I am a user whose ODS Code does not have specific journey configuration set up
-    When I login but service journey rules has no configuration for my GP practice
-    Then I receive a "Not Found" error
-
-  @long-running
-  @backend
-  Scenario: A user fetching the service journey rules but the session has expired, will receive Unauthorized
-    Given I am a user whose ODS Code has a specific journey configuration set up
-    And I have logged in and have a valid session cookie
-    And My session has expired
-    When I request the service journey rules for my ODS Code
-    Then I receive a "Unauthorized" error
-
   Scenario: A user with appointments configured to Im1 navigates directly to Informatica appointments page and is
   redirected to the Im1 Appointments page
     Given I am a user where the journey configurations are:
@@ -26,7 +11,6 @@ Feature: Service Journey Rules
     When I retrieve the 'Informatica Appointments' page directly
     Then I am redirected to the 'My Appointments' page
 
-  @tech-debt @NHSO-4503
   Scenario: A user with appointments configured to Im1 navigates directly to GP at Hand Appointments page and is
   redirected to the Im1 Appointments page
     Given I am a user where the journey configurations are:
@@ -45,7 +29,6 @@ Feature: Service Journey Rules
     When I retrieve the 'My Appointments' page directly
     Then I am redirected to the 'Informatica Appointments' page
 
-  @tech-debt @NHSO-4503
   Scenario: A user with appointments configured to Informatica navigates directly to GP at Hand Appointments page and
   is redirected to the Informatica Appointments page
     Given I am a user where the journey configurations are:
@@ -55,7 +38,6 @@ Feature: Service Journey Rules
     When I retrieve the 'GP at Hand Appointments' page directly
     Then I am redirected to the 'Informatica Appointments' page
 
-  @tech-debt @NHSO-4503
   Scenario: A user with appointments configured to GP at Hand navigates directly to Im1 Appointments page and is
   redirected to the GP at Hand Appointments page
     Given I am a user where the journey configurations are:
@@ -65,7 +47,6 @@ Feature: Service Journey Rules
     When I retrieve the 'My Appointments' page directly
     Then I am redirected to the 'GP at Hand Appointments' page
 
-  @tech-debt @NHSO-4503
   Scenario: A user with appointments configured to GP at Hand navigates directly to Informatica Appointments page and
   is redirected to the GP at Hand Appointments page
     Given I am a user where the journey configurations are:

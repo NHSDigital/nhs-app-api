@@ -9,6 +9,7 @@ import {
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_GP_ADVICE,
+  APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
   CHECKYOURSYMPTOMS,
   GP_FINDER,
@@ -156,6 +157,7 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.appointmentConfirmation';
       route.meta.pageTitleKey = 'pageTitles.appointmentConfirmation';
       break;
+    case APPOINTMENT_GP_AT_HAND.name:
     case APPOINTMENT_INFORMATICA.name:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.serviceUnavailable';

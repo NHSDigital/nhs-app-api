@@ -8,8 +8,42 @@ describe('getters', () => {
     currentState = initialState();
   });
 
+  describe('gpAtHandAppointmentsEnabled', () => {
+    const { gpAtHandAppointmentsEnabled } = getters;
+
+    beforeEach(() => {
+      currentState = {
+        rules: {
+          appointments: {
+            provider: 'gpAtHand',
+          },
+        },
+      };
+    });
+
+    it('will be true if the appointments provider is gp at hand', () => {
+      currentState.rules.appointments.provider = GP_AT_HAND;
+      expect(gpAtHandAppointmentsEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if the appointments provider is informatica', () => {
+      currentState.rules.appointments.provider = INFORMATICA;
+      expect(gpAtHandAppointmentsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be false if the appointments provider is im1', () => {
+      currentState.rules.appointments.provider = IM1_PROVIDER;
+      expect(gpAtHandAppointmentsEnabled(currentState)).toBe(false);
+    });
+  });
+
   describe('im1AppointmentsEnabled', () => {
     const { im1AppointmentsEnabled } = getters;
+
+    it('will be false if the appointments provider is gp at hand', () => {
+      currentState.rules.appointments.provider = GP_AT_HAND;
+      expect(im1AppointmentsEnabled(currentState)).toBe(false);
+    });
 
     it('will be true if the appointments provider is im1', () => {
       currentState.rules.appointments.provider = IM1_PROVIDER;
@@ -25,7 +59,12 @@ describe('getters', () => {
   describe('informaticaAppointmentsEnabled', () => {
     const { informaticaAppointmentsEnabled } = getters;
 
-    it('will be true if the appointments provider is informatica', () => {
+    it('will be false if the appointments provider is gp at hand', () => {
+      currentState.rules.appointments.provider = GP_AT_HAND;
+      expect(informaticaAppointmentsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be true if the appointments provider is Informatica', () => {
       currentState.rules.appointments.provider = INFORMATICA;
       expect(informaticaAppointmentsEnabled(currentState)).toBe(true);
     });
@@ -33,6 +72,30 @@ describe('getters', () => {
     it('will be false if the appointments provider is im1', () => {
       currentState.rules.appointments.provider = IM1_PROVIDER;
       expect(informaticaAppointmentsEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('gpAtHandMyRecordEnabled', () => {
+    const { gpAtHandMyRecordEnabled } = getters;
+
+    beforeEach(() => {
+      currentState = {
+        rules: {
+          medicalRecord: {
+            provider: 'gpAtHand',
+          },
+        },
+      };
+    });
+
+    it('will be true if the medicalRecord provider is gp at hand', () => {
+      currentState.rules.medicalRecord.provider = GP_AT_HAND;
+      expect(gpAtHandMyRecordEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if the medicalRecord provider is im1', () => {
+      currentState.rules.medicalRecord.provider = IM1_PROVIDER;
+      expect(gpAtHandMyRecordEnabled(currentState)).toBe(false);
     });
   });
 
