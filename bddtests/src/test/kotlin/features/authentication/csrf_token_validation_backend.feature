@@ -1,7 +1,7 @@
 @authentication
 @authentication-crsfTokenValidation
 @backend
-Feature: CRSF Token Validation
+Feature: CRSF Token Validation Backend
   Tests authentication failure when the CRSF token is not sent correctly.
 
   Scenario: API fails with no csrf token

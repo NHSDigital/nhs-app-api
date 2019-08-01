@@ -1,6 +1,6 @@
 @courses
 @prescription
-Feature: View courses
+Feature: View Courses Frontend
   In order to view courses associated with a user
   As a logged in user
   I want to see a list of repeat courses that I can order
@@ -254,7 +254,7 @@ Feature: View courses
       | EMIS      |
       | VISION    |
 
-  Scenario Outline: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
+  Scenario Outline: An <GP System> User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given I am patient using the <GP System> GP System
     And prescriptions is disabled at a GP Practice level
     And I have historic prescriptions

@@ -1,6 +1,6 @@
 @my-record
 @vision-diagnosis
-Feature: View My Medical Record Information - Diagnosis
+Feature: View My Medical Record Information - Diagnosis Frontend
 
   Scenario: A VISION user has no access to diagnosis section
     Given the my record wiremocks are initialised for VISION

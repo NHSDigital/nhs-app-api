@@ -24,7 +24,7 @@ Feature: Throttling
     Then I see the NHS login page
 
   @techdebt @NHSO-5824
-  Scenario Outline: A user searches can find their GP when searching using a valid postcode or outward code
+  Scenario Outline: A user search can find their GP when searching using <Postcode>
     Given there is a GP Practice with a postcode like <Postcode>
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 1 search results

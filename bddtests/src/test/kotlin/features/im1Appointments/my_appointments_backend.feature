@@ -1,7 +1,7 @@
 @appointments
 @my
 @backend
-Feature: My appointments backend
+Feature: My Appointments Backend
   In order control my booked appointments
   As a logged user
   I want to see my appointments

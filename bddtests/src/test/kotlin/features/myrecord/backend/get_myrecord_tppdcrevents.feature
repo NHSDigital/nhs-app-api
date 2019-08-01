@@ -1,6 +1,6 @@
 @my-record
 @backend
-Feature: Get TPP Dcr Event Data
+Feature: Get TPP Dcr Event Data Backend
   A user can get their Tpp Dcr Event information
 
   Scenario: Requesting multiple tpp dcr events returns multiple tpp dcr events data for TPP

@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information - Warning
+Feature: View My Medical Record Information - Warning Frontend
 
   Scenario: A user navigates to my record warning page
     Given the my record wiremocks are initialised for EMIS

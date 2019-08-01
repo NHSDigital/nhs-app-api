@@ -1,10 +1,10 @@
 @my-record
 @backend
-Feature: Get patient problems data
+Feature: Get patient problems data Backend
   A user can get their patient problems information
 
-  Scenario Outline: GP practice has enabled problems functionality
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user can get problems data when GP practice has enabled problems functionality
+    Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie
     And the GP Practice has enabled problems functionality
     When I get the users my record data
@@ -14,12 +14,12 @@ Feature: Get patient problems data
     And the field indicating supplier is set
 
     Examples:
-      |Service|
-      |EMIS|
-      |VISION|
+      | GP System |
+      | EMIS      |
+      | VISION    |
 
-  Scenario Outline: GP practice has disabled problems functionality
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user cannot get problems data when GP practice has disabled problems functionality
+    Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie
     And the GP Practice has disabled problems functionality
     When I get the users my record data
@@ -29,6 +29,6 @@ Feature: Get patient problems data
     And the field indicating supplier is set
 
     Examples:
-      |Service|
-      |EMIS|
-      |VISION|
+      | GP System |
+      | EMIS      |
+      | VISION    |

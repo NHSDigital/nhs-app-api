@@ -1,6 +1,6 @@
 @my-record
 @backend
-Feature: Get Allergies data
+Feature: Get Allergies data Backend
   A user can get their patient allergy information
 
   Scenario Outline: GP practice for <Service> has enabled allergies functionality

@@ -1,6 +1,6 @@
 @appointments
 @book
-Feature: Book an available appointment slot UI with Javascript
+Feature: Book Appointments Frontend
   In order to complete a booking appointment
   As a logged in user
   I want to be able to select, confirm and book selected appointment
@@ -286,7 +286,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | MICROTEST |
 
-  Scenario Outline: An <GP System> user can select one of their phone numbers for phone appointments, when they have <User's Telephone Numbers> phone number saved, and can successfully book
+  Scenario Outline: An <GP System> user can select one of their phone numbers for phone appointments, when they have <User's Telephone Numbers> phone number saved, and can successfully book using <Telephone Number Type To Select> phone number
     Given I have <User's Telephone Numbers> telephone number(s) stored for <GP System>
     And I wish to book a telephone appointment using my <Telephone Number Type To Select> phone number
     And there are appointments available to book which are of telephone type for <GP System>

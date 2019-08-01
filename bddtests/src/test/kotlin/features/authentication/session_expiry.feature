@@ -2,7 +2,7 @@
 @authentication-session-expiry
 @authentication-session-extend
 @native
-Feature: Session Expiry and Extend
+Feature: Session Expiry and Extend Frontend
   Notes on the terminology for the following tests:
   * A 'secure screen' is a page that is within our native app, e.g. Appointments Booking Page
   * A 'non secure screen' is a page that is not within our native app, but surfaced as part of the functionality,

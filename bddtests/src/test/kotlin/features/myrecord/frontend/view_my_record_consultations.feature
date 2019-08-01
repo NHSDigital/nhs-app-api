@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information - Consultations
+Feature: View My Medical Record Information - Consultations Frontend
 
   Scenario Outline: An <Service> user has no Consultations on their record
     Given the my record wiremocks are initialised for <Service>

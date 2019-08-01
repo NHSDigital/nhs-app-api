@@ -1,5 +1,5 @@
 @my-record
-Feature: My Record - User Not Enabled
+Feature: My Record - User Not Enabled Frontend
 
   Scenario: A user without access to their medical record receives an error message
     Given the my record wiremocks are initialised for TPP

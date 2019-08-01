@@ -1,6 +1,6 @@
 @prescription
 
-Feature: Prescriptions submission
+Feature: Prescriptions submission Frontend
   A user can submit a request for a repeat prescription
 
   Background:

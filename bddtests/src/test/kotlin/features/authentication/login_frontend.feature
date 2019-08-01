@@ -1,6 +1,6 @@
 @authentication
 @authentication-login
-Feature: Login
+Feature: Login frontend
   Logging into the service is handled via the CitizenID service.
   A user will be shown personalised welcome messages upon successful login.
 

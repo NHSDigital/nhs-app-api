@@ -36,8 +36,7 @@ Feature: Service Journey Rules Backend
     Then I receive an "Ok" success code
     And the service journey rules response will have nominated pharmacy disabled
 
-  Scenario: API call for SJR can return a response with appointments, medical record and prescriptions
-  configured to IM1
+  Scenario: API call for SJR can return a response with appointments, medical record and prescriptions configured to IM1
     Given I am a user where the journey configurations are:
       | Journey            | Value   |
       | appointments       | im1     |
@@ -59,8 +58,7 @@ Feature: Service Journey Rules Backend
     Then I receive an "Ok" success code
     And the service journey rules response will have appointments set to informatica
 
-  Scenario: API call for SJR can return a response with appointments, medical record and prescriptions
-  configured to GP at Hand
+  Scenario: API call for SJR can return a response with appointments, medical record and prescriptions configured to GP at Hand
     Given I am a user where the journey configurations are:
       | Journey            | Value     |
       | appointments       | gpAtHand  |

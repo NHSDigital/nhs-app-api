@@ -1,5 +1,5 @@
 @organ-donation
-Feature: Organ Donation Withdraw
+Feature: Organ Donation Withdraw Frontend
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 

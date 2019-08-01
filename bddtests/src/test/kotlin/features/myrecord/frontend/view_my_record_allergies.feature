@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information - Allergies
+Feature: View My Medical Record Information - Allergies Frontend
 
   Scenario Outline: A <Service> user without Summary Care Record access cannot view allergies section
     Given the my record wiremocks are initialised for <Service>

@@ -1,6 +1,6 @@
 @my-record
 @test-results
-Feature: View My Medical Record Information - Test Results
+Feature: View My Medical Record Information - Test Results Frontend
 
   Scenario Outline: A <Service> user has no access to test result section
     Given the my record wiremocks are initialised for <Service>

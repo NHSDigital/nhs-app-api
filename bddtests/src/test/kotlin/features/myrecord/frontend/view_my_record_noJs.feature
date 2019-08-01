@@ -1,6 +1,6 @@
 @my-record
 @noJs
-Feature: View My Medical Record Information - No Javascript
+Feature: View My Medical Record Information - No Javascript Frontend
 
   Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
     Given I have disabled javascript

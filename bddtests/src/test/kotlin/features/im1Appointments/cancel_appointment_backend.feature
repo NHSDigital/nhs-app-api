@@ -1,7 +1,7 @@
 @appointments
 @cancel
 @backend
-Feature: Ability to cancel an appointment via api
+Feature: Cancel Appointments Backend
 
   Scenario Outline: <GP System> API will cancel the appointment if valid reason is provided
     Given <GP System> is available to cancel a previously booked appointment before cutoff time

@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information - Demographics
+Feature: View My Medical Record Information - Demographics Frontend
 
   Scenario Outline: A <Service> user with access navigates to the patient record information page
     Given the my record wiremocks are initialised for <Service>

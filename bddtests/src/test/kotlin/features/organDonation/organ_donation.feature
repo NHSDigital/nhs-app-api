@@ -1,5 +1,5 @@
 @organ-donation
-Feature: Organ Donation
+Feature: Organ Donation Frontend
 
 #  This test covers navigation via buttons/links
 

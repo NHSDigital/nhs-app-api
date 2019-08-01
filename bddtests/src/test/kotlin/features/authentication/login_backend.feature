@@ -1,7 +1,7 @@
 @authentication
 @authentication-login
 @backend
-Feature: Login
+Feature: Login backend
 
   Tests Im1 Connection Token caching
 

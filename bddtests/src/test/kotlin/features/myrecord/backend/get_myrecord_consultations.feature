@@ -1,6 +1,6 @@
 @my-record
 @backend
-Feature: Get Consultations Data
+Feature: Get Consultations Data Backend
   A user can get their consultation information
 
   Scenario Outline: Requesting multiple consultations results returns multiple consultations data

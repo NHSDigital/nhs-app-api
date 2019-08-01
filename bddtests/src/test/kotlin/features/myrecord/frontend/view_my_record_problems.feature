@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information - Problems
+Feature: View My Medical Record Information - Problems Frontend
 
   Scenario Outline: A <Service> user has no Problems on their record
     Given the my record wiremocks are initialised for <Service>

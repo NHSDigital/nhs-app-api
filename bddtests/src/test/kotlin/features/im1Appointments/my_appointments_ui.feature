@@ -1,6 +1,6 @@
 @appointments
 @my
-Feature: My appointments UI with Javascript
+Feature: My Appointments Frontend
   Users can view their upcoming and past appointments in the My Appointments screen.
 
   #This test covers navigation via buttons/links

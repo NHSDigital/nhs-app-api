@@ -1,5 +1,5 @@
 @gpathand
-Feature: GP at Hand
+Feature: GP at Hand Frontend
 
   @appointments
   Scenario: A user sees an appropriate message when the appointments journey configuration is set to Gp at Hand

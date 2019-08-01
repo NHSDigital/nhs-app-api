@@ -1,6 +1,6 @@
 @appointments
 @cancel
-Feature: Ability to cancel an appointment
+Feature: Cancel Appointments Frontend
 
   #This test covers navigation via buttons/links
 

@@ -1,10 +1,10 @@
 @my-record
 @backend
-Feature: Get medications data
+Feature: Get medications data Backend
   A user can get their medication information
 
-  Scenario Outline: Requesting medications returns medications data
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user can get medications data when GP Practice has enabled medications functionality
+    Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie
     And the GP Practice has enabled medications functionality
     When I get the users my record data
@@ -14,12 +14,12 @@ Feature: Get medications data
     And the field indicating supplier is set
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
-  Scenario Outline: GP practice has disabled medications functionality
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user cannot get medications data when GP Practice has disabled medications functionality
+    Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie
     But the GP Practice has disabled medications functionality
     When I get the users my record data
@@ -28,6 +28,6 @@ Feature: Get medications data
     And the field indicating supplier is set
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
+      | GP System |
+      | EMIS      |
+      | TPP       |

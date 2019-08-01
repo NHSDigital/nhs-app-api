@@ -1,6 +1,6 @@
 @my-record
 
-Feature: View My Medical Record Information - Combined I see the my record warning page
+Feature: View My Medical Record Information - Combined Frontend
 
   Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
     Given the my record wiremocks are initialised for <Service>

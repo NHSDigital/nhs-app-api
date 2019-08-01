@@ -1,6 +1,6 @@
 @authentication
 @backend
-Feature: Registration
+Feature: Patient Registration Backend
   A user can create a new NHS account from the login page, allowing them to access the app
 
   Scenario Outline: Patient registers for a <GP System> account with NHS Numbers of <NHS Numbers>

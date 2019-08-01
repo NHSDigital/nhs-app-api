@@ -1,6 +1,6 @@
 @my-record
 @vision-examinations
-Feature: View My Medical Record Information - Examinations
+Feature: View My Medical Record Information - Examinations Frontend
 
   Scenario: A VISION user has no access to examinations section
     Given the my record wiremocks are initialised for VISION

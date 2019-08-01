@@ -1,6 +1,6 @@
 @authentication
 @backend
-Feature: Patient Verification
+Feature: Patient Verification Backend
   The system validates the patient data
 
   Scenario Outline: <GP System> patient has single NHS Number

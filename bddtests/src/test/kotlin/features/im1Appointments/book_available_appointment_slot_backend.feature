@@ -1,7 +1,7 @@
 @appointments
 @book
 @backend
-Feature: Book appointments API
+Feature: Book Appointments  Backend
   In order to visit a clinician
   As a logged in user
   I want to book an appointment to see a clinician at my GP practice

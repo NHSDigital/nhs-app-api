@@ -1,7 +1,8 @@
 @appointments
 @book
 @noJs
-  Feature: Book an available appointment slot UI without Javascript
+
+Feature: Book Appointments With Javascript Disabled
   In order to complete a booking appointment
   As a logged in user with Javascript switched off
   I want to be able to select, confirm and book selected appointment

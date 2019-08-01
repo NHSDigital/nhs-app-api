@@ -1,7 +1,7 @@
 @appointments
 @view
 @backend
-Feature: View available appointment slots backend
+Feature: View Available Appointment Slots Backend
   In order book appointment
   As a logged user
   I want to see available appointment slots
@@ -49,7 +49,7 @@ Feature: View available appointment slots backend
     Then I receive an "Unauthorized" error
     And the response contains an empty body
 
-  Scenario Outline: Requesting available appointment slots when <GP system> is unavailable returns "Bad gateway" error
+  Scenario Outline: Requesting available appointment slots when <GP System> is unavailable returns "Bad gateway" error
     Given I have logged into <GP System> and have a valid session cookie
     When the available appointment slots are retrieved
     Then I receive a "Bad Gateway" error

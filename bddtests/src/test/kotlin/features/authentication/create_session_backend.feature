@@ -1,7 +1,7 @@
 @authentication
 @authentication-session
 @backend
-Feature: Session Registration
+Feature: Create Session Backend
 
   The application verifies the user session
 

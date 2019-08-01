@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information - Immunisations
+Feature: View My Medical Record Information - Immunisations Frontend
 
   Scenario Outline: A <Service> user has no immunisations on their record
     Given the my record wiremocks are initialised for <Service>

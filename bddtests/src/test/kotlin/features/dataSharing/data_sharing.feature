@@ -1,6 +1,6 @@
 @data-sharing
 @more
-Feature: Data Sharing
+Feature: Data Sharing Frontend
   A user can access Data Sharing
 
   Background:
@@ -10,7 +10,7 @@ Feature: Data Sharing
     When I choose to set my data sharing preferences
 
   @nativesmoketest
-  Scenario Outline: A user navigates through Data Sharing Preferences pages via the Next/Previous buttons
+  Scenario Outline: A user navigates through Data Sharing Preferences pages via the Next/Previous buttons to page with heading <TargetPage>
     Given I am on the Data Sharing <StartingPage> page
     When I click the Next button <Clicks> times
     Then I am on the Data Sharing <TargetPage> page
@@ -23,7 +23,7 @@ Feature: Data Sharing
   |Overview    |3     |Make your choice                               |
 
   @nativesmoketest
-  Scenario Outline: A use navigates through the Data Sharing Preferences pages via the Contents links
+  Scenario Outline: A use navigates through the Data Sharing Preferences pages via the Contents links to page with heading <TargetPage>
     Given I am on the Data Sharing <StartingPage> page
     When I click the <ContentsLink> contents link
     Then I am on the Data Sharing <TargetPage> page

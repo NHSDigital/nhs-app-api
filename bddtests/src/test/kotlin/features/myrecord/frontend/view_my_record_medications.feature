@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information - Medications
+Feature: View My Medical Record Information - Medications Frontend
 
   Scenario Outline: A <Service> user has no acute medications
     Given the my record wiremocks are initialised for <Service>

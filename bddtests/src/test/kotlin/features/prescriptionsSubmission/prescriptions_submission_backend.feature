@@ -1,6 +1,6 @@
 @prescription
 @backend
-Feature: View prescriptions
+Feature: Prescriptions Submission Backend
   A user can view information about their prescriptions after logging in
 
 

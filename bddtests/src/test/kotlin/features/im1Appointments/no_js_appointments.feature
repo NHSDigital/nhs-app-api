@@ -1,6 +1,6 @@
 @appointments
 @noJs
-Feature: Appointment Service with no Javascript
+Feature: Appointments Service With Javascript Disabled
 
   Background:
     Given I have disabled javascript

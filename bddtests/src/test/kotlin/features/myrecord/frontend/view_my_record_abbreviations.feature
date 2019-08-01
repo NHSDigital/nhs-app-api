@@ -1,5 +1,5 @@
 @my-record
-Feature: My Record - Clinical Abbreviations
+Feature: My Record - Clinical Abbreviations Frontend
 
   Scenario: A patient can navigate to the clinical abbreviations page
     Given the my record wiremocks are initialised for EMIS

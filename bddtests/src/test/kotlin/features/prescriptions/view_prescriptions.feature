@@ -1,5 +1,5 @@
 @prescription
-Feature: View prescriptions
+Feature: View prescriptions Frontend
   A user can view information about their prescriptions after logging in
 
   #This test covers navigation via buttons/links

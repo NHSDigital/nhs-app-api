@@ -1,6 +1,6 @@
 @appointments
 @view
-Feature: View available appointment slots
+Feature: View Available Appointment Slots Frontend
   Users can view available appointments from the available appointments Page.
 
   #This test covers navigation via buttons/links

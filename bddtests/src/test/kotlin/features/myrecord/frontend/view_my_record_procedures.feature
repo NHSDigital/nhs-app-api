@@ -1,6 +1,6 @@
 @my-record
 @vision-procedures
-Feature: View My Medical Record Information - Procedures
+Feature: View My Medical Record Information - Procedures Frontend
 
   Scenario: A VISION user has no access to procedures section
     Given the my record wiremocks are initialised for VISION

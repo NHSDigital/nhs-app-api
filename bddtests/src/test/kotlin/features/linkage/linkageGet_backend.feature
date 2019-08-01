@@ -98,7 +98,7 @@ Feature: Linkage Get Key
     When I call the Linkage GET endpoint
     Then I receive a "Not Found" error
 
-  Scenario Outline: Linkage request GET returns 502, when GP system responds with 500
+  Scenario Outline: Linkage request GET returns 502, when <GP System> responds with 500
     Given I have valid <GP System> linkage details but the GP system responds with an internal server error retrieving the linkage key
     When I call the Linkage GET endpoint
     Then I receive a "Bad Gateway" error
@@ -116,7 +116,8 @@ Feature: Linkage Get Key
     Given I have valid VISION linkage details but my patient record was not found
     When I call the Linkage GET endpoint
     Then I receive a "Not Found" error
-@tech-debt @NHSO-6181
+
+  @tech-debt @NHSO-6181
   Scenario: Linkage request GET for Vision returns 403 Forbidden, linkage key revoked
     Given I have valid VISION linkage details but my linkage key has been revoked
     When I call the Linkage GET endpoint
