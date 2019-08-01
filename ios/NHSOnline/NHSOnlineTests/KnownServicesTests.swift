@@ -118,8 +118,8 @@ class KnownServicesTests: XCTestCase {
     func test_getUnavailabilityErrorMessageForService_ReturnConnectionError_WhenProvidedValidServiceUrl() {
         let externalURL = URL(string: "https://111.nhs.uk")
         let errorMessage = self.knownServices.getUnavailabilityErrorMessageForService(externalURL)
-        XCTAssertEqual("There's an issue with your internet connection", errorMessage.title)
-        XCTAssertEqual("\nCheck your connection and try again. \n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.", errorMessage.message)
+        XCTAssertEqual("There is a problem with your internet connection", errorMessage.title)
+        XCTAssertEqual("\nCheck your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.", errorMessage.message)
     }
     
     func test_getUnavailabilityErrorMessageForService_ReturnServiceUnavailable_WhenProvidedUnknownUrl() {

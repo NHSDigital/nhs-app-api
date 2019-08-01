@@ -269,6 +269,7 @@ class HomeViewController : UIViewController {
     
     func showWebViewContainer() {
         if (!appVersionCheckError) {
+            applicationState.unBlock()
             self.cycleFromViewController(oldViewController: self.currentNativeViewController!, toViewController: self.webViewController!)
         }
     }
