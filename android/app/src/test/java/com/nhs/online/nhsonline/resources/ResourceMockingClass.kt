@@ -12,6 +12,8 @@ import org.mockito.Mockito
 
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.net.Network
+import android.net.NetworkCapabilities
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.eq
 import org.mockito.ArgumentMatchers.anyInt
@@ -109,11 +111,19 @@ open class ResourceMockingClass {
     fun mockDisconnectedContext(): Context {
         val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
         val networkInfo = Mockito.mock(NetworkInfo::class.java)
+        val network = Mockito.mock(Network::class.java)
+        val capabilities = Mockito.mock(NetworkCapabilities::class.java)
 
+        //api < 23
         Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(networkInfo)
         Mockito.`when`(networkInfo.isConnected).thenReturn(false)
-        Mockito.`when`(networkInfo.isAvailable).thenReturn(false)
-        Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(false)
+
+        //api >= 23
+        Mockito.`when`(connectivityManager.activeNetwork).thenReturn(network)
+        Mockito.`when`(connectivityManager.getNetworkCapabilities(network)).thenReturn(capabilities)
+        Mockito.`when`(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)).thenReturn(false)
+        Mockito.`when`(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)).thenReturn(false)
+        Mockito.`when`(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)).thenReturn(false)
 
         val mockResource: Resources = mock {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
@@ -137,8 +147,6 @@ open class ResourceMockingClass {
 
         Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(networkInfo)
         Mockito.`when`(networkInfo.isConnected).thenReturn(true)
-        Mockito.`when`(networkInfo.isAvailable).thenReturn(true)
-        Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(true)
 
         val mockresource: Resources = mock {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"

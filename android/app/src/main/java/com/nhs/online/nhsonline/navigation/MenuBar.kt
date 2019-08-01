@@ -137,7 +137,7 @@ class MenuBar @JvmOverloads constructor(
 
         val selectedPosition: Optional<Int>
 
-        constructor(superState: Parcelable, selectedPosition: Optional<Int>) : super(superState) {
+        constructor(superState: Parcelable?, selectedPosition: Optional<Int>) : super(superState) {
             this.selectedPosition = selectedPosition
         }
 

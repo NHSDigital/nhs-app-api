@@ -8,6 +8,8 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhaarman.mockito_kotlin.*
+import com.nhs.online.nhsonline.utils.SdkVersionHelper
+
 @RunWith(RobolectricTestRunner::class)
 class ConnectionStateMonitorTests {
 
@@ -44,6 +46,26 @@ class ConnectionStateMonitorTests {
 
     @Test
     fun connectionStateMonitorWithConnectedThenDisconnectedThenConnectedContext() {
+        mockConnectionStateMonitor.mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
+        assert(isConnectedToNetwork) {
+            "Failed: Returns false for a connected network"
+        }
+
+        mockConnectionStateMonitor.mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
+        assert(!isConnectedToNetwork) {
+            "Failed: Returns true for a connected network"
+        }
+
+        mockConnectionStateMonitor.mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
+        assert(isConnectedToNetwork) {
+            "Failed: Returns false for a connected network"
+        }
+    }
+
+    @Test
+    fun connectionStateMonitorWithConnectedThenDisconnectedThenConnectedContext_PreSDK_23() {
+        SdkVersionHelper.setSdkVersion(22)
+
         mockConnectionStateMonitor.mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
         assert(isConnectedToNetwork) {
             "Failed: Returns false for a connected network"

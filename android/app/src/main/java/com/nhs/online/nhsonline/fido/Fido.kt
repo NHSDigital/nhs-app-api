@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.fido
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import com.nhs.online.nhsonline.fido.uaf.crypto.Base64url
@@ -40,10 +41,25 @@ object Fido {
     @SuppressLint("PackageManagerGetSignatures") // This vulnerability can only be exploited in Android version 4.4 and below. This is below the minimum supported version of the app
     fun getFacetId(context: Context): String? {
         try {
-            val packageInfo = context.packageManager.getPackageInfo(context.packageName,
-                PackageManager.GET_SIGNATURES)
-            val byteArrayInputStream =
-                ByteArrayInputStream(packageInfo.signatures[0].toByteArray())
+            val byteArrayInputStream: ByteArrayInputStream
+
+            if (Build.VERSION.SDK_INT <=27) {
+                val packageInfo = context.packageManager.getPackageInfo(context.packageName,
+                        PackageManager.GET_SIGNATURES)
+
+                byteArrayInputStream =
+                        ByteArrayInputStream(packageInfo.signatures[0].toByteArray())
+            } else {
+                val packageInfo = context.packageManager.getPackageInfo(context.packageName,
+                        PackageManager.GET_SIGNING_CERTIFICATES)
+
+                byteArrayInputStream = if (packageInfo.signingInfo.hasMultipleSigners()) {
+                    ByteArrayInputStream(packageInfo.signingInfo.apkContentsSigners[0].toByteArray())
+                } else {
+                    ByteArrayInputStream(packageInfo.signingInfo.signingCertificateHistory[0].toByteArray())
+                }
+            }
+
             val certificate =
                 CertificateFactory.getInstance(CERTIFICATE_TYPE_X509)
                     .generateCertificate(byteArrayInputStream)

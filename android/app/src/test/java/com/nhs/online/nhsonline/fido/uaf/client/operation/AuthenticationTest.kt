@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
+import android.content.pm.SigningInfo
 import com.google.gson.Gson
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
@@ -26,6 +27,7 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.robolectric.RobolectricTestRunner
 import java.security.KeyPair
 import java.security.PublicKey
+import com.nhs.online.nhsonline.utils.SdkVersionHelper
 
 @RunWith(RobolectricTestRunner::class)
 class AuthenticationTest {
@@ -40,6 +42,7 @@ class AuthenticationTest {
     private lateinit var fidoEndpointConfig: FidoEndpointConfig
 
     private lateinit var auth: Authentication
+    private lateinit var signingInfo: SigningInfo
 
 
     @Before
@@ -47,9 +50,16 @@ class AuthenticationTest {
         dataToReturn = byteArrayOf(1)
         signature = Signature(getSignature())
 
+        signingInfo = mock {
+            on { hasMultipleSigners() } doReturn true
+            on { apkContentsSigners } doReturn arrayOf(signature)
+            on { signingCertificateHistory } doReturn arrayOf(signature)
+        }
+
         packageInfo = PackageInfo()
         packageInfo.packageName = "testPackageName"
         packageInfo.signatures = arrayOf(signature)
+        packageInfo.signingInfo = signingInfo
 
         packageManager = mock {
             on { getPackageInfo(any<String>(), anyInt()) } doReturn packageInfo
@@ -110,6 +120,19 @@ class AuthenticationTest {
         Assert.assertFalse("Uaf authentication message can't be empty", regLoginUafMsg.isEmpty())
         Assert.assertFalse("Escape double quotes is (\\\") is not expected",
             regLoginUafMsg.contains("\\\""))
+    }
+
+    @Test
+    fun requestUafAuthenticationMsg_ReturnsNonEmptyUafMsg_PreSDK_28() {
+        SdkVersionHelper.setSdkVersion(27)
+
+        val facetId = Fido.getFacetId(mockContext)
+        Assert.assertNotNull(facetId)
+        val regLoginUafMsg = auth.requestUafAuthenticationMessage(facetId!!)
+        Assert.assertNotNull(regLoginUafMsg)
+        Assert.assertFalse("Uaf authentication message can't be empty", regLoginUafMsg.isEmpty())
+        Assert.assertFalse("Escape double quotes is (\\\") is not expected",
+                regLoginUafMsg.contains("\\\""))
     }
 
     @Test

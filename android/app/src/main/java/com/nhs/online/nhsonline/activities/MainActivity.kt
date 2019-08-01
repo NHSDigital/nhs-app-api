@@ -152,7 +152,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         super.onActivityResult(requestCode, resultCode, intent)
 
         var results: Array<Uri>? = null
-        var fileUploadCallback = nhsWeb.getFileUploadCallback()
+        val fileUploadCallback = nhsWeb.getFileUploadCallback()
 
         logger.log(Level.WARNING,
             "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
@@ -161,7 +161,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             if (resultCode == Activity.RESULT_OK) {
                 if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
 
-                    var uploadedFileLocation = nhsWeb.getUploadedFileLocation()
+                    val uploadedFileLocation = nhsWeb.getUploadedFileLocation()
 
                     if (fileUploadCallback == null) {
                         return
@@ -203,7 +203,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     private fun handleNewIntent(intent: Intent?) {
         intent?.data?.let { uri ->
-            val hasFidoLoginError = uri.path.contains(getString(R.string.authRedirectPath)) &&
+            val uriPath = uri.path ?: ""
+
+            val hasFidoLoginError = uriPath.contains(getString(R.string.authRedirectPath)) &&
                     biometricsInterface.isFingerprintRegistered &&
                     uri.queryParameterNames.contains(getString(R.string.redirectErrorQueryParam))
             if (hasFidoLoginError) {
@@ -311,7 +313,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun onBackPressed() {
         logger.info("${this::class.java.simpleName}: Entering onBackPressed")
 
-        var path = getCurrentPath(webview.url)
+        val path = getCurrentPath(webview.url)
 
         when {
             nhsWeb.isUserLoggedIn -> showExitDialog()
@@ -400,8 +402,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         showErrorScreen( biometricDeviceErrorMessage )
     }
 
-    override fun showUnavailabilityError(unavailableErrorMessage: ErrorMessage) {
-        showErrorScreen(unavailableErrorMessage)
+    override fun showUnavailabilityError(errorMessage: ErrorMessage) {
+        showErrorScreen(errorMessage)
     }
 
     private fun showErrorScreen (errorMessage: ErrorMessage) {

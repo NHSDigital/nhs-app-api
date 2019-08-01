@@ -56,7 +56,7 @@ class MenuBarItem @JvmOverloads constructor(
 
         inactiveIconResId = getRequiredResourceId(array, R.styleable.MenuBarItem_inactiveIcon)
         activeIconResId = getRequiredResourceId(array, R.styleable.MenuBarItem_activeIcon)
-        title = array.getString(R.styleable.MenuBarItem_menuTitle)
+        title = array.getString(R.styleable.MenuBarItem_menuTitle) ?: ""
 
         array.recycle()
     }

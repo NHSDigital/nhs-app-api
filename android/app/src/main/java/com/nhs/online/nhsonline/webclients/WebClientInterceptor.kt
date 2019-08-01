@@ -286,11 +286,11 @@ class WebClientInterceptor(
 
     private fun isNHSAppPage(view: WebView?): Boolean {
         val url = URL(view?.url)
-        return url?.host == context.getString(R.string.baseHost)
+        return url.host == context.getString(R.string.baseHost)
     }
 
     private fun isNHSApi(request: WebResourceRequest?): Boolean {
-        return request?.url?.host == URL(context.getString(R.string.baseApiURL))?.host
+        return request?.url?.host == URL(context.getString(R.string.baseApiURL)).host
     }
 
     private fun hasMissingQueryString(url: String?): Boolean {
