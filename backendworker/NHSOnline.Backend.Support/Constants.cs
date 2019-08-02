@@ -47,6 +47,7 @@ namespace NHSOnline.Backend.Support
             public const string NativeAppVersion = NhsoPrefix + "Native-Version-Tag";
             public const string CorrelationIdentifier = NhsoPrefix + "Request-ID";
             public const string LoginClient = NhsoPrefix + "NHS-Login-Client";
+            public const string JavascriptDisabled = NhsoPrefix + "Javascript-Disabled";
         }
 
         public static class HttpContextItems

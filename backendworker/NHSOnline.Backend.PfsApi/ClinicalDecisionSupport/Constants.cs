@@ -2,11 +2,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport
 {
     public static class Constants
     {
-        public static class OnlineConsultationsProviders
-        {
-            public const string EConsult = "eConsult";
-        }
-
         public static class CdsApiEndpoints
         {
             public const string ServiceDefinitionPath = "fhir/ServiceDefinition";
@@ -19,7 +14,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport
             public const string ApplicationJsonFhir = "application/json+fhir";
         }
 
-        public static class HttpRequestHeaders
+        public static class HttpRequestHeaderValues
         {
             public const string AuthorizationFormat = "Bearer {0}";
         }

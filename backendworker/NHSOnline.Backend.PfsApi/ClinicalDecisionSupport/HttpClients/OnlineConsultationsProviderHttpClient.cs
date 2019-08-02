@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
     public class OnlineConsultationsProviderHttpClient : IOnlineConsultationsProviderHttpClient
     {
         private readonly ILogger<OnlineConsultationsProviderHttpClient> _logger;
-        private readonly AuthenticationHeaderValue AuthorizationBearer;
+        private readonly AuthenticationHeaderValue _authorizationBearer;
         
         private HttpClient Client { get; }
 
@@ -28,10 +28,10 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
 
             Client.BaseAddress = new Uri(provider.BaseAddress);
 
-            AuthorizationBearer = AuthenticationHeaderValue.Parse(
+            _authorizationBearer = AuthenticationHeaderValue.Parse(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    Constants.HttpRequestHeaders.AuthorizationFormat,
+                    Constants.HttpRequestHeaderValues.AuthorizationFormat,
                     provider.BearerToken));
         }
 
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                 {
                     Headers =
                     {
-                        Authorization = AuthorizationBearer
+                        Authorization = _authorizationBearer
                     }
                 };
 
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                     {
                         Headers =
                         {
-                            Authorization = AuthorizationBearer
+                            Authorization = _authorizationBearer
                         }
                     };
 
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
             }
         }
 
-        public async Task<HttpResponseMessage> EvaluateServiceDefinition(string serviceDefinitionId, string requestBody)
+        public async Task<HttpResponseMessage> EvaluateServiceDefinition(string serviceDefinitionId, string requestBody, bool addJavascriptDisabledHeader)
         {
             try
             {
@@ -104,9 +104,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                     Content = new StringContent(requestBody, Encoding.UTF8, MediaTypeNames.Application.Json),
                     Headers =
                     {
-                        Authorization = AuthorizationBearer
+                        Authorization = _authorizationBearer
                     }
                 };
+
+                if (addJavascriptDisabledHeader)
+                {
+                    requestMessage.Headers.Add(Support.Constants.HttpHeaders.JavascriptDisabled, "true");
+                }
 
                 return await Client.SendAsync(requestMessage);
             }

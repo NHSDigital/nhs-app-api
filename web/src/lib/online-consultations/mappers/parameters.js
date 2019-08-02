@@ -4,6 +4,8 @@ import { PARAMETERS, QUESTIONNAIRE_RESPONSE, ORGANIZATION as ORGANIZATION_RESOUR
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import moment from 'moment';
 
+const pointRegExp = /^Point:(\d*),(\d*)$/;
+
 function prependZero(value) {
   return (value < 10 && `${value}`.length === 1) ? `0${value}` : value;
 }
@@ -170,11 +172,13 @@ export function getAnswerFromItem(question, answer) {
       break;
     case QuestionTypes.IMAGE:
       answer.answer.forEach((c) => {
-        const splitCoordinates = c.valueString.split(',');
-        answerFromResponse.push({
-          x: splitCoordinates[0],
-          y: splitCoordinates[1],
-        });
+        const match = pointRegExp.exec(c.valueString);
+        if (match !== null) {
+          answerFromResponse.push({
+            x: match[1],
+            y: match[2],
+          });
+        }
       });
       break;
     case QuestionTypes.MULTIPLE_CHOICE:

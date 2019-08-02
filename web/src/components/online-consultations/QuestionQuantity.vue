@@ -11,7 +11,7 @@
       <label :id="`${name}-quantity-label`"
              :for="`${name}-quantity`"
              class="nhsuk-label nhsuk-input__label">
-        {{ $t('onlineConsultations.questions.quantity.labels.quantity') }}
+        {{ $t('generic.questions.quantity.labels.quantity') }}
       </label>
       <input :id="`${name}-quantity`"
              v-model="quantity"
@@ -28,7 +28,7 @@
       <label :id="`${name}-select-label`"
              :for="`${name}-unit`"
              class="nhsuk-label nhsuk-input__label">
-        {{ $t('onlineConsultations.questions.quantity.labels.unit') }}
+        {{ $t('generic.questions.quantity.labels.unit') }}
       </label>
       <select-dropdown v-model="unit"
                        :select-id="`${name}-unit`"
@@ -36,7 +36,7 @@
                        :error-border="error"
                        :required="required">
         <option disabled="" selected="" value="">
-          {{ $t('onlineConsultations.questions.quantity.initialUnitDropdownValue') }}
+          {{ $t('generic.questions.quantity.initialUnitDropdownValue') }}
         </option>
         <option v-for="option in options"
                 :key="option.code"

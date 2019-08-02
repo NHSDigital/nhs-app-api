@@ -1,0 +1,19 @@
+{
+  "priority": 3,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/NHS_ADVICE/$evaluate",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference === 'Questionnaire/NHS_ADMIN_AD_REFERRALPRIORITY')]"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/NHS_ADMIN_AD_ISSUE_REFERRAL/17_referral_any_current_medications.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}

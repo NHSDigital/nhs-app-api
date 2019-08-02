@@ -9,14 +9,14 @@
     </div>
     <generic-radio-button :key="`${name}-true`"
                           :selected-value="selectedValue"
-                          :label="$t('onlineConsultations.questions.boolean.labels.true')"
+                          :label="$t('generic.questions.boolean.labels.true')"
                           :name="name"
                           :value="'true'"
                           :required="required"
                           @select="selected"/>
     <generic-radio-button :key="`${name}-false`"
                           :selected-value="selectedValue"
-                          :label="$t('onlineConsultations.questions.boolean.labels.false')"
+                          :label="$t('generic.questions.boolean.labels.false')"
                           :name="name"
                           :value="'false'"
                           :required="required"

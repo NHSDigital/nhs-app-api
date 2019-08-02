@@ -1,0 +1,80 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "NHS_ADMIN_AD_REFERENCE",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "NHS_ADMIN_AD_REFERENCE_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "NHS_ADMIN_AD_REFERENCE_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "linkId": "NHS_ADMIN_AD_REFERENCE",
+              "text": "What is the full name of the referrer?",
+              "type": "string",
+              "required": true,
+              "repeats": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://cdss.nhsapp.service.nhs.uk/fhir/ServiceDefinition/NHS_ADMIN"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T09:35:51.237",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "NHS_ADMIN_AD_REFERENCE",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#NHS_ADMIN_AD_REFERENCE"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

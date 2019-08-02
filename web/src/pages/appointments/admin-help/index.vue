@@ -41,24 +41,34 @@ export default {
     const body = get('body', req);
     const question = get('state.onlineConsultations.question', store);
 
+    let addJavascriptDisabledHeader = false;
+
     if (get(noJsParameterName, body) !== undefined && question !== undefined) {
       const answer = getAnswerFromRequestBody(body, question);
-      await store.dispatch('onlineConsultations/setAnswer', answer);
+      addJavascriptDisabledHeader = process.server;
 
+      await store.dispatch('onlineConsultations/setAnswer', answer);
       await store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
       await store.dispatch('onlineConsultations/setValidationError');
     }
+
     if (question === undefined) {
       await store.dispatch('onlineConsultations/getServiceDefinition', 'cdssAdmin');
     } else if (store.state.onlineConsultations.answerIsValid) {
-      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
+      await store.dispatch(
+        'onlineConsultations/evaluateServiceDefinition',
+        { journey: 'cdssAdmin', addJavascriptDisabledHeader },
+      );
     }
 
     const previousClicked = get('direction', body) === 'back';
 
     if (previousClicked) {
       await store.dispatch('onlineConsultations/setPrevious');
-      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
+      await store.dispatch(
+        'onlineConsultations/evaluateServiceDefinition',
+        { journey: 'cdssAdmin', addJavascriptDisabledHeader },
+      );
     }
   },
   beforeDestroy() {

@@ -1,0 +1,19 @@
+{
+  "priority": 3,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/NHS_ADMIN/$evaluate",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/NHS_STD_AD_EMERGENCY')]"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/common/3_verify_practice.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}
