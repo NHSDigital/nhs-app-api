@@ -28,6 +28,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.HttpClients
         private const string MockedProviderResponse = "{\"test\": \"value\"}";
         private const string MockedEvaluateRequestBody = "{\"request\": \"body\"}";
         private string _searchServiceDefinitionPath;
+
+        private bool addJsDisabledHeader;
         
         private readonly OnlineConsultationsProviderSettings TestProviderSettings =
             new OnlineConsultationsProviderSettings
@@ -103,7 +105,43 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.HttpClients
                 .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
             
             // Act
-            var response = await _onlineConsultationsProviderHttpClient.EvaluateServiceDefinition(ServiceDefinitionId, MockedEvaluateRequestBody);
+            var response = await _onlineConsultationsProviderHttpClient.EvaluateServiceDefinition(ServiceDefinitionId, MockedEvaluateRequestBody, false);
+            
+            // Assert
+            (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
+        }
+
+        [TestMethod]
+        public async Task EvaluateServiceDefinition_WhenInvokedWithAddJSDisabledHeaderTrue_AddsHeader()
+        {
+            // Arrange
+            addJsDisabledHeader = true;
+            _mockHttpMessageHandler
+                .When(HttpMethod.Post, GetFormattedUrl(Constants.CdsApiEndpoints.EvaluateServiceDefinitionPathFormat, ServiceDefinitionId))
+                .With(ValidateMockRequestHeaders)
+                .With(ValidateMockEvaluateRequestBody)
+                .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
+            
+            // Act
+            var response = await _onlineConsultationsProviderHttpClient.EvaluateServiceDefinition(ServiceDefinitionId, MockedEvaluateRequestBody, addJsDisabledHeader);
+            
+            // Assert
+            (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
+        }
+        
+        [TestMethod]
+        public async Task EvaluateServiceDefinition_WhenInvokedWithAddJSDisabledHeaderFalse_DoesNotAddHeader()
+        {
+            // Arrange
+            addJsDisabledHeader = false;
+            _mockHttpMessageHandler
+                .When(HttpMethod.Post, GetFormattedUrl(Constants.CdsApiEndpoints.EvaluateServiceDefinitionPathFormat, ServiceDefinitionId))
+                .With(ValidateMockRequestHeaders)
+                .With(ValidateMockEvaluateRequestBody)
+                .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
+            
+            // Act
+            var response = await _onlineConsultationsProviderHttpClient.EvaluateServiceDefinition(ServiceDefinitionId, MockedEvaluateRequestBody, addJsDisabledHeader);
             
             // Assert
             (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
@@ -119,7 +157,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.HttpClients
 
         private bool ValidateMockRequestHeaders(HttpRequestMessage request)
         {
-            return "Bearer".Equals(request.Headers.Authorization.Scheme, StringComparison.Ordinal) &&
+            return 
+                "Bearer".Equals(request.Headers.Authorization.Scheme, StringComparison.Ordinal) &&
+                   (!addJsDisabledHeader || request.Headers.Contains(Constants.HttpRequestHeaders.NHSOJavascriptDisabled)) &&
                    TestProviderSettings.BearerToken.Equals(request.Headers.Authorization.Parameter,
                        StringComparison.Ordinal);
         }

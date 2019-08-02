@@ -1,0 +1,97 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "NHS_ADMIN_AD_REFERRALTIME",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "NHS_ADMIN_AD_REFERRALTIME_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "NHS_ADMIN_AD_REFERRALTIME_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "linkId": "NHS_ADMIN_AD_REFERRALTIME",
+              "text": "What time were you referred at?",
+              "type": "time",
+              "required": false,
+              "repeats": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resourceType": "QuestionnaireResponse",
+      "questionnaire": {
+        "reference": "Questionnaire/NHS_ADMIN_AD_REFERRALTIME"
+      },
+      "status": "completed",
+      "item": [
+        {
+          "linkId": "NHS_ADMIN_AD_REFERRALTIME",
+          "answer": [
+            {
+              "valueTime": "11:11"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://cdss.nhsapp.service.nhs.uk/fhir/ServiceDefinition/NHS_ADMIN"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:18:04.864",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "NHS_ADMIN_AD_REFERRALTIME",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#NHS_ADMIN_AD_REFERRALTIME"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

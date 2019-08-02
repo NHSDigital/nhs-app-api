@@ -95,6 +95,7 @@ components:
           description: The cdss provider
           enum:
             - eConsult
+            - stubs
         serviceDefinition:
           type: string
           description: The service definition

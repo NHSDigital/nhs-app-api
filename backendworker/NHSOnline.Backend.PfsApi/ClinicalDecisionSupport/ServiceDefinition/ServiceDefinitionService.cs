@@ -165,13 +165,17 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
         }
 
-        public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, Parameters parameters)
+        public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(
+            IOnlineConsultationsProviderHttpClient httpClient,
+            string serviceDefinitionId,
+            Parameters parameters,
+            bool addJavascriptDisabledHeader)
         {
             try
             {
                 HttpResponseMessage responseMessage;
                 GuidanceResponse guidanceResponse;
-                
+
                 _logger.LogEnter();
 
                 if (parameters == null)
@@ -183,7 +187,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                 try
                 {
-                    responseMessage = await httpClient.EvaluateServiceDefinition(serviceDefinitionId, _serializer.SerializeToString(parameters));
+                    responseMessage = await httpClient.EvaluateServiceDefinition(serviceDefinitionId,
+                        _serializer.SerializeToString(parameters), addJavascriptDisabledHeader);
                 }
                 catch (HttpRequestException hre)
                 {

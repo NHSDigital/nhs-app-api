@@ -9,7 +9,7 @@
         <label id="hourInputLabel"
                class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-hour`">
-          {{ $t('onlineConsultations.questions.time.labels.hour') }}
+          {{ $t('generic.questions.time.labels.hour') }}
         </label>
         <input :id="`${id}-hour`"
                ref="hourInput"
@@ -28,7 +28,7 @@
         <label id="minuteInputLabel"
                class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-minute`">
-          {{ $t('onlineConsultations.questions.time.labels.minute') }}
+          {{ $t('generic.questions.time.labels.minute') }}
         </label>
         <input :id="`${id}-minute`"
                ref="minuteInput"

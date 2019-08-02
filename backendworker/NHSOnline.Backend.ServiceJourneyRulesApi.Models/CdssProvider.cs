@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum CdssProvider
     {
         none,
-        eConsult
+        eConsult,
+        stubs
     }
 }

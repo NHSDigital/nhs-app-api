@@ -7,6 +7,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
     {
         Task<HttpResponseMessage> GetServiceDefinitionById(string serviceDefinitionId);
         Task<HttpResponseMessage> SearchServiceDefinitionsByQuery();
-        Task<HttpResponseMessage> EvaluateServiceDefinition(string serviceDefinitionId, string requestBody);
+        Task<HttpResponseMessage> EvaluateServiceDefinition(string serviceDefinitionId, string requestBody, bool addJavascriptDisabledHeader);
     }
 }

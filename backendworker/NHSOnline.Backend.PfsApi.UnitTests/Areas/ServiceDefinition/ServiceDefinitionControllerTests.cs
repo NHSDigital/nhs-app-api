@@ -3,6 +3,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Hl7.Fhir.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -107,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             value.Subject.StatusCode.Should().Be(400);
             _mockServiceDefinitionService.Verify(
                 s => s.EvaluateServiceDefinition(It.IsAny<IOnlineConsultationsProviderHttpClient>(), It.IsAny<string>(),
-                    It.IsAny<Parameters>()), Times.Never);
+                    It.IsAny<Parameters>(), It.IsAny<bool>()), Times.Never);
         }
 
         [TestMethod]
@@ -125,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             value.Subject.StatusCode.Should().Be(400);
             _mockServiceDefinitionService.Verify(
                 s => s.EvaluateServiceDefinition(It.IsAny<IOnlineConsultationsProviderHttpClient>(), It.IsAny<string>(),
-                    It.IsAny<Parameters>()), Times.Never);
+                    It.IsAny<Parameters>(), It.IsAny<bool>()), Times.Never);
         }
 
         [TestMethod]
@@ -153,7 +154,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                 .Setup(s => s.EvaluateServiceDefinition(It.Is<IOnlineConsultationsProviderHttpClient>(
                         c => c == _mockProviderHttpClient.Object),
                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
-                    It.Is<Parameters>(parameters => _evaluateParameters == parameters)))
+                    It.Is<Parameters>(parameters => _evaluateParameters == parameters),
+                    It.IsAny<bool>()))
                 .Returns(Task.FromResult(_successResult));
             
             // Act
@@ -168,7 +170,44 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                 s => s.EvaluateServiceDefinition(It.Is<IOnlineConsultationsProviderHttpClient>(
                         c => c == _mockProviderHttpClient.Object),
                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
-                    It.Is<Parameters>(parameters => _evaluateParameters == parameters)),
+                    It.Is<Parameters>(parameters => _evaluateParameters == parameters),
+                    It.IsAny<bool>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task EvaluateServiceDefinition_WhenRequestHasJSDisabledHeader_EvaluateCalledWithAddJSDisabledHeaderTrue()
+        {
+            // Arrange
+            SetupHttpClientPool(true);
+            _mockServiceDefinitionService
+                .Setup(s => s.EvaluateServiceDefinition(It.Is<IOnlineConsultationsProviderHttpClient>(
+                        c => c == _mockProviderHttpClient.Object),
+                    It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
+                    It.Is<Parameters>(parameters => _evaluateParameters == parameters),
+                    It.Is<bool>( addJsDisabledHeader => addJsDisabledHeader)))
+                .Returns(Task.FromResult(_successResult));
+            
+            // Act
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers.Add(Constants.HttpRequestHeaders.NHSOJavascriptDisabled, "true");
+            _serviceDefinitionController.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+
+
+            // Assert
+            VerifyGetFromClientPoolCalledWithProvider(_provider);
+            var value = actualResponse.Should().BeAssignableTo<OkObjectResult>();
+            value.Subject.StatusCode.Should().Be(200);
+            _mockServiceDefinitionService.Verify(
+                s => s.EvaluateServiceDefinition(It.Is<IOnlineConsultationsProviderHttpClient>(
+                        c => c == _mockProviderHttpClient.Object),
+                    It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
+                    It.Is<Parameters>(parameters => _evaluateParameters == parameters),
+                    It.Is<bool>(addJsDisabledHeader => addJsDisabledHeader)),
                 Times.Once);
         }
 

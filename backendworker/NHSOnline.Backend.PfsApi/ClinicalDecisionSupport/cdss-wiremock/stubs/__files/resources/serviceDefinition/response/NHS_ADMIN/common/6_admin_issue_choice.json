@@ -1,0 +1,136 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "NHS_ADMIN_AD_ISSUE",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "NHS_ADMIN_AD_ISSUE_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "NHS_ADMIN_AD_ISSUE_REFERRAL_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "linkId": "NHS_ADMIN_AD_ISSUE",
+              "text": "What administrative issue can we help you with?",
+              "type": "choice",
+              "required": true,
+              "repeats": false,
+              "option": [
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_REFERRAL",
+                    "display": "Referral"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_DISCUSSTESTS",
+                    "display": "Discuss recent tests"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_SICKNOTE",
+                    "display": "Sick note (fit note)"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_MATCERT",
+                    "display": "Request Maternity Exemption Certificate"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_GPLETTER",
+                    "display": "GP letter"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_MEDREPORT",
+                    "display": "Medical Report"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_MEDEXAM",
+                    "display": "Medical Examination"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_OTHER",
+                    "display": "Other"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "NHS_ADMIN_AD_ISSUE_QUERY",
+                    "display": "General Medical Query"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://cdss.nhsapp.service.nhs.uk/fhir/ServiceDefinition/NHS_ADMIN"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:09:18.924",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "NHS_ADMIN_AD_ISSUE",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#NHS_ADMIN_AD_ISSUE"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

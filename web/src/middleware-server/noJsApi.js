@@ -2,16 +2,20 @@ import bodyParser from 'body-parser';
 import express, { Router } from 'express';
 
 import {
+  APPOINTMENT_ADMIN_HELP,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_YOUR_CHOICE,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
+  APPOINTMENT_GP_ADVICE,
 } from '../lib/routes';
 import appointments from './routes/appointments';
 import organDonation from './routes/organ-donation';
-
+import onlineConsultations from './routes/online-consultations';
 
 const postEndpoints = [
+  APPOINTMENT_ADMIN_HELP,
+  APPOINTMENT_GP_ADVICE,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_YOUR_CHOICE,
@@ -23,6 +27,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(appointments());
 app.use(organDonation());
+app.use(onlineConsultations());
 
 const router = Router();
 postEndpoints.map(path => router.post(path, (req, res, next) => next()));

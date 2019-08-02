@@ -87,7 +87,10 @@ export default {
       commit(UPDATE_REQUEST_ID);
     });
   },
-  evaluateServiceDefinition({ commit, state, rootState }, journey) {
+  evaluateServiceDefinition(
+    { commit, state, rootState },
+    { journey, addJavascriptDisabledHeader } = {},
+  ) {
     const store = this;
     const parameters = getParameters(state, rootState);
 
@@ -101,6 +104,7 @@ export default {
     return store.app.$cdsApi.postFhirServiceDefinitionEvaluate({
       serviceDefinition,
       provider,
+      addJavascriptDisabledHeader,
       parameters,
     }).then((response) => {
       commit(CLEAR);

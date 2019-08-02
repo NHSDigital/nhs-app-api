@@ -1,7 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
@@ -118,17 +120,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 if (string.IsNullOrWhiteSpace(provider))
                 {
-                  _logger.LogError("Missing provider in querystring");
-                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                    _logger.LogError("Missing provider in querystring");
+                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
 
 
                 if (string.IsNullOrWhiteSpace(serviceDefinitionId))
                 {
-                  _logger.LogError("Missing service definition in querystring");
-                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                    _logger.LogError("Missing service definition in querystring");
+                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
-                
+
                 _logger.LogEnter();
 
                 if (parameters == null)
@@ -151,7 +153,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 _logger.LogInformation($"Evaluating ServiceDefinition: {serviceDefinitionId}");
 
-                return (await _service.EvaluateServiceDefinition(httpClient, serviceDefinitionId, parameters))
+                return (await _service.EvaluateServiceDefinition(
+                        httpClient,
+                        serviceDefinitionId,
+                        parameters,
+                        "true".Equals(Request.Headers[Constants.HttpRequestHeaders.NHSOJavascriptDisabled],
+                            StringComparison.Ordinal)))
                     .Accept(visitor);
             }
             finally

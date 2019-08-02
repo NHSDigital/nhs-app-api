@@ -1,0 +1,19 @@
+{
+  "priority": 3,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/NHS_ADMIN/$evaluate",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference === 'Questionnaire/NHS_ADMIN_AD_REFERRALPROGRESSIVEPAIN')]"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/NHS_ADMIN/NHS_ADMIN_AD_ISSUE_REFERRAL/19_referral_decimal.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}
