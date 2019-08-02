@@ -1,12 +1,10 @@
 import Question from '@/components/online-consultations/Question';
 import each from 'jest-each';
 import { mount } from '../../helpers';
-import { SUCCESS } from '@/lib/online-consultations/constants/status-types';
 
 const defaultPropsData = {
   text: 'test',
 };
-const optionalSuffix = '<br><p>(translate_appointments.admin_help.question.optional_label)</p>';
 
 describe('Question', () => {
   describe('Question element', () => {
@@ -41,6 +39,37 @@ describe('Question', () => {
       });
 
       expect(wrapper.find('label[for=test-input-id]').element).toBeDefined();
+    });
+  });
+  describe('Optional label', () => {
+    each([{
+      required: true,
+      status: 'dataRequired',
+      visible: false,
+    }, {
+      required: false,
+      status: 'success',
+      visible: false,
+    }, {
+      required: false,
+      status: 'dataRequired',
+      visible: true,
+    }]).it('should only render the optional label if required is false and olc status is not success', ({ required, status, visible }) => {
+      const wrapper = mount(Question, {
+        propsData: {
+          ...defaultPropsData,
+          required,
+        },
+        $store: {
+          state: {
+            onlineConsultations: {
+              status,
+            },
+          },
+        },
+      });
+
+      expect(wrapper.find('p.optionalLabel').exists()).toBe(visible);
     });
   });
   describe('Slots', () => {
@@ -93,35 +122,6 @@ describe('Question', () => {
         });
 
         expect(wrapper.vm.formGroupClasses).toEqual(data.classes);
-      });
-    });
-    describe('htmlText', () => {
-      each([{
-        required: true,
-        status: 'test-status',
-        expectedText: defaultPropsData.text,
-      }, {
-        required: false,
-        status: SUCCESS,
-        expectedText: defaultPropsData.text,
-      }, {
-        required: false,
-        status: 'test-status',
-        expectedText: `${defaultPropsData.text}${optionalSuffix}`,
-      }]).it('should append optional unless status is success or question is required', ({ required, status, expectedText }) => {
-        const wrapper = mount(Question, {
-          propsData: {
-            ...defaultPropsData,
-            required,
-          },
-          state: {
-            onlineConsultations: {
-              status,
-            },
-          },
-        });
-
-        expect(wrapper.vm.htmlText).toEqual(expectedText);
       });
     });
   });

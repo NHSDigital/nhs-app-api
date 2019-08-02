@@ -33,7 +33,7 @@ function getQuestion(item) {
       question.allOptionsRequired = true;
       question.options = item.item.map(i => ({
         code: i.linkId,
-        label: i.text,
+        label: mapHtmlTags(i.text),
         selected: false,
       }));
       if (!question.options.length) {
@@ -55,7 +55,7 @@ function getQuestion(item) {
       question.isLegend = true;
       question.options = item.option.map(o => ({
         code: o.valueCoding.code,
-        label: o.valueCoding.display,
+        label: mapHtmlTags(o.valueCoding.display),
         selected: item.repeats ? false : undefined,
       }));
       if (!question.options.length) {

@@ -65,11 +65,11 @@ describe('online consultations mappers item', () => {
         expectedQuestion.isLegend = true;
         expectedQuestion.options = [{
           code: 'code-1',
-          label: 'Option 1',
+          label: 'mapped-html',
           selected: false,
         }, {
           code: 'code-2',
-          label: 'Option 2',
+          label: 'mapped-html',
           selected: false,
         }];
         expectedQuestion.validCodes = ['code-1', 'code-2'];
@@ -80,7 +80,7 @@ describe('online consultations mappers item', () => {
 
         // Assert
         expect(question).toEqual(expectedQuestion);
-        expect(mapHtmlTags).toBeCalledTimes(1);
+        expect(mapHtmlTags).toBeCalledTimes(3);
         expect(mapHtmlTags).toBeCalledWith(item.text);
       });
 
@@ -171,10 +171,10 @@ describe('online consultations mappers item', () => {
         expectedQuestion.isLegend = true;
         expectedQuestion.options = [{
           code: 'code-1',
-          label: 'Option 1',
+          label: 'mapped-html',
         }, {
           code: 'code-2',
-          label: 'Option 2',
+          label: 'mapped-html',
         }];
         expectedQuestion.validCodes = ['code-1', 'code-2'];
 
@@ -183,7 +183,7 @@ describe('online consultations mappers item', () => {
 
         // Assert
         expect(question).toEqual(expectedQuestion);
-        expect(mapHtmlTags).toBeCalledTimes(1);
+        expect(mapHtmlTags).toBeCalledTimes(3);
         expect(mapHtmlTags).toBeCalledWith(item.text);
       });
 
@@ -363,11 +363,11 @@ describe('online consultations mappers item', () => {
         expectedQuestion.isLegend = true;
         expectedQuestion.options = [{
           code: 'code-1',
-          label: 'Option 1',
+          label: 'mapped-html',
           selected: false,
         }, {
           code: 'code-2',
-          label: 'Option 2',
+          label: 'mapped-html',
           selected: false,
         }];
         expectedQuestion.validCodes = ['code-1', 'code-2'];
@@ -377,7 +377,7 @@ describe('online consultations mappers item', () => {
 
         // Assert
         expect(question).toEqual(expectedQuestion);
-        expect(mapHtmlTags).toBeCalledTimes(1);
+        expect(mapHtmlTags).toBeCalledTimes(3);
         expect(mapHtmlTags).toBeCalledWith(item.text);
       });
 

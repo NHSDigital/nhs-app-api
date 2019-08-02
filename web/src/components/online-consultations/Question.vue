@@ -3,9 +3,13 @@
   <div :class="formGroupClasses">
     <component :is="questionTag"
                :id="id"
-               :class="[questionClass, 'question']"
+               :class="[questionClass, 'question', required && 'required']"
                :for="isLabel && labelFor"
-               v-html="htmlText"/>
+               v-html="text"/>
+    <p v-if="showOptional"
+       class="nhsuk-hint optionalLabel marginBottom">
+      ({{ this.$t('appointments.admin_help.question.optional_label') }})
+    </p>
     <slot />
   </div>
 </template>
@@ -56,21 +60,26 @@ export default {
     formGroupClasses() {
       return this.error ? ['nhsuk-form-group', 'nhsuk-form-group--error'] : 'nhsuk-form-group';
     },
-    htmlText() {
-      return this.required || get('$store.state.onlineConsultations.status', this) === SUCCESS
-        ? this.text
-        : `${this.text}<br><p>(${this.$t('appointments.admin_help.question.optional_label')})</p>`;
+    showOptional() {
+      return !(this.required || get('$store.state.onlineConsultations.status', this) === SUCCESS);
     },
   },
 };
 </script>
 
 <style lang="scss">
+  .question.required,
+  .optionalLabel.marginBottom {
+    margin-bottom: 1em !important;
+  }
+
   .question {
-    margin-bottom: 1em;
+    .nhsuk-hint:last-of-type {
+      margin-bottom: 0 !important;
+    }
 
     a {
-      display: inline-block;
+      display: inline;
       vertical-align: baseline;
     }
   }
