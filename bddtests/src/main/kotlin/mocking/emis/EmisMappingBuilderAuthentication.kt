@@ -11,7 +11,7 @@ import mocking.emis.session.EmisEndUserSessionBuilder
 import mocking.emis.session.EmisSessionBuilder
 import models.Patient
 
-class EmisMappingBuilderAuthentication(private var configuration: EmisConfiguration?, private val method: String){
+class EmisMappingBuilderAuthentication(private var configuration: EmisConfiguration?){
 
     fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(
             configuration!!, patient.endUserSessionId, model)

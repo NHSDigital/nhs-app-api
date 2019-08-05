@@ -3,16 +3,16 @@ package mocking
 import config.Config
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.defaults.EmisMockDefaults
-import mocking.emis.EmisMappingBuilder
+import mocking.emis.EmisMappingRouter
 import mocking.favicon.FaviconMappingBuilder
-import mocking.microtest.MicrotestMappingBuilder
+import mocking.microtest.MicrotestMappingRouter
 import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.spine.SpineMappingBuilder
 import mocking.throttling.BrotherMailerMappingBuilder
-import mocking.tpp.TppMappingBuilder
-import mocking.vision.VisionMappingBuilder
+import mocking.tpp.TppMappingRouter
+import mocking.vision.VisionMappingRouter
 
 class MockingClient(configuration: MockingConfiguration): WiremockHelper(configuration) {
 
@@ -25,9 +25,9 @@ class MockingClient(configuration: MockingConfiguration): WiremockHelper(configu
         this.postMapping(mapping)
     }
 
-    fun forEmis(method: String = "GET", resolver: EmisMappingBuilder.() -> Mapping) {
-        val mappingBuilder = EmisMappingBuilder(configuration.emisConfiguration, method)
-        val mapping: Mapping = mappingBuilder.resolver()
+    fun forEmis(resolver: EmisMappingRouter.() -> Mapping) {
+        val router = EmisMappingRouter(configuration.emisConfiguration)
+        val mapping: Mapping = router.resolver()
 
         this.postMapping(mapping)
     }
@@ -39,23 +39,23 @@ class MockingClient(configuration: MockingConfiguration): WiremockHelper(configu
         this.postMapping(mapping)
     }
 
-    fun forTpp(method: String = "POST", resolver: TppMappingBuilder.() -> Mapping) {
-        val mappingBuilder = TppMappingBuilder(method)
-        val mapping: Mapping = mappingBuilder.resolver()
+    fun forTpp(resolver: TppMappingRouter.() -> Mapping) {
+        val router = TppMappingRouter()
+        val mapping: Mapping = router.resolver()
 
         this.postMapping(mapping)
     }
 
-    fun forVision(method: String = "POST", resolver: VisionMappingBuilder.() -> Mapping) {
-        val mappingBuilder = VisionMappingBuilder(method)
-        val mapping: Mapping = mappingBuilder.resolver()
+    fun forVision(resolver: VisionMappingRouter.() -> Mapping) {
+        val router = VisionMappingRouter()
+        val mapping: Mapping = router.resolver()
 
         this.postMapping(mapping)
     }
 
-    fun forMicrotest(method: String = "GET", resolver: MicrotestMappingBuilder.() -> Mapping) {
-        val mappingBuilder = MicrotestMappingBuilder(method)
-        val mapping: Mapping = mappingBuilder.resolver()
+    fun forMicrotest(resolver: MicrotestMappingRouter.() -> Mapping) {
+        val router = MicrotestMappingRouter()
+        val mapping: Mapping = router.resolver()
 
         this.postMapping(mapping)
     }

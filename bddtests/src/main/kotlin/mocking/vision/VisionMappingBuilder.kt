@@ -7,13 +7,7 @@ import mocking.vision.helpers.VisionConstantsHelper
 import mocking.vision.models.ServiceDefinition
 import org.apache.http.HttpStatus
 
-open class VisionMappingBuilder(
-        method: String = "POST") : MappingBuilder(method, "/vision/pfs/") {
-
-    var appointments = VisionMappingBuilderAppointments()
-    var prescriptions = VisionMappingBuilderPrescriptions()
-    var myRecord = VisionMappingBuilderMyRecord()
-    var authentication = VisionMappingBuilderAuthentication()
+abstract class VisionMappingBuilder(method: String = "POST") : MappingBuilder(method, "/vision/pfs/") {
 
     fun respondWithCorruptedContent(serviceDefinition: ServiceDefinition, content: String = ""): Mapping {
         return respondWith(HttpStatus.SC_OK) {

@@ -10,7 +10,7 @@ import mocking.tpp.models.Error
 import org.apache.http.HttpStatus
 import java.util.*
 
-open class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") :
+abstract class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") :
         IErrorMappingBuilder, MappingBuilder(method, relativePath) {
 
     companion object {
@@ -25,15 +25,6 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
         requestBuilder.andHeader(HEADER_CONTENT_TYPE, "text/xml; charset=UTF-8")
     }
 
-    val appointments = TppMappingBuilderAppointments()
-
-    var myRecord = TppMappingBuilderMyRecord()
-
-    var prescriptions = TppMappingBuilderPrescriptions()
-
-    var authentication = TppMappingBuilderAuthentication()
-
-    var requestMessages = TppMappingBuilderMessages()
 
     fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
         val errorMsg = "You don't have access to this online service"

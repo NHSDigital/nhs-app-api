@@ -10,7 +10,7 @@ import utils.SerenityHelpers
 const val HEADER_API_ODS_CODE = "NHSO-ODS-Code"
 const val HEADER_API_NHS_NUMBER = "NHSO-Nhs-Number"
 
-open class MicrotestMappingBuilder(method: String, relativePath: String = "")
+abstract class MicrotestMappingBuilder(method: String, relativePath: String = "")
     : MappingBuilder(method, "/microtest/patient$relativePath"), IErrorMappingBuilder {
 
     init {
@@ -20,10 +20,6 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
                 .andHeader(HEADER_API_NHS_NUMBER, patient.nhsNumbers.first())
     }
 
-    var appointments = MicrotestMappingBuilderAppointments()
-    var demographics = MicrotestMappingBuilderDemographics()
-    var myRecord = MicrotestMappingBuilderMyRecord()
-    var prescriptions = MicrotestMappingBuilderPrescriptions()
 
     fun respondWithCorruptedContent(content: String): Mapping {
         return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }

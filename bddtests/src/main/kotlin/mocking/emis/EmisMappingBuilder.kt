@@ -8,10 +8,8 @@ import mocking.MappingBuilder
 import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ErrorResponse
 import mocking.emis.models.ExceptionResponse
-import mocking.emis.practices.PracticeSettingsBuilderEmis
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
-import models.Patient
 import org.apache.http.HttpStatus
 
 const val HEADER_API_APPLICATION_ID = "X-API-ApplicationId"
@@ -20,7 +18,7 @@ const val HEADER_API_SESSION_ID = "X-API-SessionId"
 const val HEADER_API_VERSION = "X-API-Version"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
-open class EmisMappingBuilder(configuration: EmisConfiguration?,
+abstract class EmisMappingBuilder(configuration: EmisConfiguration?,
                               method: String, relativePath: String = "") : IErrorMappingBuilder,
         MappingBuilder(method, "/emis$relativePath") {
 
@@ -31,14 +29,6 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
                     .andHeader(HEADER_API_VERSION, configuration.version)
         }
     }
-
-    var appointments = EmisMappingBuilderAppointments(configuration)
-
-    var myRecord = EmisMappingBuilderMyRecord(configuration)
-
-    var prescriptions = EmisMappingBuilderPrescriptions(configuration)
-
-    var authentication = EmisMappingBuilderAuthentication(configuration, method)
 
     fun respondWithBadRequest(message: String, fieldName: String): Mapping {
         val responseBody = BadRequestResponse(message, fieldName)
@@ -87,8 +77,6 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
                     .build()
         }
     }
-
-    fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
 
     fun respondWithStandardError(internalResponseCode: Int, httpResponseCode: Int, message: String = ""): Mapping {
         val responseBody = ErrorResponse(internalResponseCode, message)
