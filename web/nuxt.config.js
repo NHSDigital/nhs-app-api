@@ -129,6 +129,8 @@ const config = {
     DEBOUNCE_SHORT: 500,
     DEBOUNCE_MEDIUM: 2000,
     DEBOUNCE_LONG: 5000,
+    // Online Consultations
+    ONLINE_CONSULTATIONS_ENABLED: false,
   },
 };
 

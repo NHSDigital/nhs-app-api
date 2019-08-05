@@ -1,6 +1,7 @@
 import { mount } from '../../../helpers';
 import each from 'jest-each';
 import AdminHelpPage from '@/pages/appointments/admin-help/index';
+import { INDEX } from '@/lib/routes';
 import { noJsParameterName } from '@/lib/noJs';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
@@ -11,8 +12,14 @@ jest.mock('@/lib/online-consultations/answer-validators');
 describe('Admin Help page', () => {
   let page;
   const dispatch = jest.fn(() => Promise.resolve());
+  const redirect = jest.fn();
 
   const $store = {
+    app: {
+      $env: {
+        ONLINE_CONSULTATIONS_ENABLED: true,
+      },
+    },
     state: {
       device: {
         isNativeApp: true,
@@ -39,6 +46,7 @@ describe('Admin Help page', () => {
 
   beforeEach(() => {
     dispatch.mockClear();
+    redirect.mockClear();
   });
 
   describe('computed properties', () => {
@@ -85,6 +93,40 @@ describe('Admin Help page', () => {
 
   describe('asyncData', () => {
     let req = {};
+
+    describe('with online consultations disabled', () => {
+      each([
+        'false',
+        false,
+        'not true but truthy',
+      ]).it('should redirect to logged in home page', async (olcEnabled) => {
+        // Arrange
+        $store.app.$env.ONLINE_CONSULTATIONS_ENABLED = olcEnabled;
+        mountPage();
+
+        // Act
+        await page.vm.$options.asyncData({ store: $store, redirect });
+
+        // Assert
+        expect(redirect).toHaveBeenCalledWith(302, INDEX.path, null);
+      });
+    });
+    describe('with online consultations enabled', () => {
+      each([
+        'true',
+        true,
+      ]).it('should not redirect to logged in home page', async (olcEnabled) => {
+        // Arrange
+        $store.app.$env.ONLINE_CONSULTATIONS_ENABLED = olcEnabled;
+        mountPage();
+
+        // Act
+        await page.vm.$options.asyncData({ store: $store, redirect });
+
+        // Assert
+        expect(redirect).toHaveBeenCalledTimes(0);
+      });
+    });
     describe('nojs', () => {
       describe('with nojs body not present in request or question not present in store', () => {
         each([{
