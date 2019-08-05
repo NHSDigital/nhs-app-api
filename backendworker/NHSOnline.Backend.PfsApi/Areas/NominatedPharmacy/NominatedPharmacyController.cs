@@ -5,13 +5,15 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using System;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using System.Linq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.GpSearch;
+using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
@@ -117,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             
             var pharmacyDetails = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
             pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
-            await _auditor.Audit(Support.Constants.AuditingTitles.GetNominatedPharmacy, "Successfully retrieved nominated pharmacy");
+            await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, "Successfully retrieved nominated pharmacy");
 
             return new OkObjectResult(
                 new PharmacyDetailsResponse
@@ -181,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                         pharmacySearchResponse.Pharmacies,
                         pharmacySearchResponse.PostcodeCoordinate);
 
-                    await _auditor.Audit(Support.Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, $"Returning { pharmacies.Count() } pharmacies");
+                    await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, $"Returning { pharmacies.Count() } pharmacies");
 
                     return Ok(pharmacies);
                 }

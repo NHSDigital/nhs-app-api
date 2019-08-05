@@ -1,8 +1,5 @@
 using System;
-using System.Threading;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Settings;
-using Microsoft.Extensions.Configuration;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
 {
@@ -19,7 +16,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             NhsSearchBaseUrl = nhsSearchBaseUrl;
             GpLookupApiKey = gpLookupApiKey;
             PostcodeLookupSearchRadiusKm = postcodeLookupSearchRadiusKm;
-            
         }
 
         public void Validate() 

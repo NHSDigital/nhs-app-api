@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -8,9 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
@@ -19,7 +16,6 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {

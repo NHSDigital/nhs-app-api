@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Support.Middleware
             if (options == null)
                 throw new ArgumentNullException(nameof (options));
 
-            return app.UseMiddleware<LogRequestHeaderMiddleware>((object) Microsoft.Extensions.Options.Options.Create<LogRequestHeaderOptions>(options));
+            return app.UseMiddleware<LogRequestHeaderMiddleware>((object) Microsoft.Extensions.Options.Options.Create(options));
         }
     }
 }

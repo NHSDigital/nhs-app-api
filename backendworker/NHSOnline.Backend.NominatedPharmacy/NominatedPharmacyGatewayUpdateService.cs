@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.NominatedPharmacy
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
 
             _logger.LogInformation($"Nominated pharmacy retrieved. Updating nominated pharmacy from { result.PharmacyOdsCode } to: { updatedOdsCode }");
-            await _auditor.Audit(Constants.AuditingTitles.UpdatedNominatedPharmacy, $"Attempting to update nominated pharmacy from" +
+            await _auditor.Audit(AuditingOperations.UpdatedNominatedPharmacy, $"Attempting to update nominated pharmacy from" +
                                                                                             $" { result.PharmacyOdsCode } to: { updatedOdsCode }");
 
             var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
@@ -61,13 +62,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
             {
                 string errorMessage = $"Error updating nominated pharmacy from { result.PharmacyOdsCode } to { updatedOdsCode }";
                 _logger.LogError(errorMessage);
-                await _auditor.Audit(Constants.AuditingTitles.UpdatedNominatedPharmacy, errorMessage);
+                await _auditor.Audit(AuditingOperations.UpdatedNominatedPharmacy, errorMessage);
                 return new StatusCodeResult((int)HttpStatusCode.BadGateway);
             }
 
             string successMessage = $"Successfully requested requested change of nominated pharmacy from { result.PharmacyOdsCode } to { updatedOdsCode }";
             _logger.LogInformation(successMessage);
-            await _auditor.Audit(Constants.AuditingTitles.UpdatedNominatedPharmacy, successMessage);
+            await _auditor.Audit(AuditingOperations.UpdatedNominatedPharmacy, successMessage);
 
             // Update to Nominated Pharmacy in Spine is asynchronous. Allow a configurable delay.
             if (_config.ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds > 0)
@@ -89,12 +90,12 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 string error = $"Nominated pharmacy update of ods code from { result.PharmacyOdsCode } to { updatedOdsCode } was accepted  " +
                     $"but call to get nominated pharmacy still returns the old ods code.";
                 _logger.LogError(error);
-                await _auditor.Audit(Constants.AuditingTitles.UpdatedNominatedPharmacy, error);
+                await _auditor.Audit(AuditingOperations.UpdatedNominatedPharmacy, error);
                 return new StatusCodeResult((int)HttpStatusCode.BadGateway);
             }
 
             await _auditor.Audit(
-                Constants.AuditingTitles.UpdatedNominatedPharmacy,
+                AuditingOperations.UpdatedNominatedPharmacy,
                 $"Successfully updated nominated pharmacy from { result.PharmacyOdsCode } to { updatedOdsCode }");
 
             return new OkResult();

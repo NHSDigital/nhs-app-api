@@ -8,8 +8,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
     {
         public PharmacySearchResponse(HttpStatusCode statusCode, List<Organisation> pharmacies = null)
         {
-            this.StatusCode = statusCode;
-            this.Pharmacies = pharmacies ?? new List<Organisation>();
+            StatusCode = statusCode;
+            Pharmacies = pharmacies ?? new List<Organisation>();
         }
 
         public HttpStatusCode StatusCode { get; }

@@ -31,7 +31,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NHSOnline.Backend.ApiSupport\NHSOnline.Backend.ApiSupport.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.NominatedPharmacy\NHSOnline.Backend.NominatedPharmacy.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj" />

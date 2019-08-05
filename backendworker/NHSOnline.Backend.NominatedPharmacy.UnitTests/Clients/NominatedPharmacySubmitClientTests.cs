@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
         private MockHttpMessageHandler _mockHttpHandler;
         private Mock<INominatedPharmacyConfigurationSettings> _configMock;
         private IFixture _fixture;
-        private string _odsCode;
         private NominatedPharmacyHttpClient _httpClient;
         private static readonly Uri ApiUrl = new Uri("http://spine_nominated_pharmacy_base_url/", UriKind.Absolute);
         private const string PdsPath = "sync-service";
@@ -35,9 +34,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
             _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(ApiUrl);
-
-            _odsCode = _fixture.Create<string>();
-
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new NominatedPharmacyHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 

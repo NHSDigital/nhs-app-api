@@ -1,14 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -19,21 +18,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IAuditor _auditor;
         private readonly ISessionCacheService _sessionCacheService;
-        private readonly IServiceJourneyRulesService _serviceJourneyRulesService;
 
         public AppointmentsController(
             ILogger<AppointmentsController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
-            ISessionCacheService sessionCacheService,
-            IServiceJourneyRulesService serviceJourneyRulesService
+            ISessionCacheService sessionCacheService
             )
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
             _sessionCacheService = sessionCacheService;
-            _serviceJourneyRulesService = serviceJourneyRulesService;
         }
 
         [HttpDelete]
@@ -54,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                     return BadRequest();
                 }
 
-                await _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {model.AppointmentId}");
+                await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {model.AppointmentId}");
 
                 var appointmentsService = GetAppointmentsService(userSession);
                 var cancelResult = await appointmentsService.Cancel(userSession.GpUserSession, model);
@@ -76,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogEnter();
                 
-                await _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
+                await _auditor.Audit(AuditingOperations.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
                               
                 var userSession = HttpContext.GetUserSession();
                 
@@ -98,13 +94,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
+                await _auditor.Audit(AuditingOperations.BookAppointmentAuditTypeRequest,
                     $"Attempting to book appointment with id: {model.SlotId} and startTime: {model.StartTime:O}");
 
                 var userSession = HttpContext.GetUserSession();
 
-                var appointentValidator = GetAppointmentsValidationService(userSession);
-                if (!appointentValidator.IsPostValid(model))
+                var appointmentValidator = GetAppointmentsValidationService(userSession);
+                if (!appointmentValidator.IsPostValid(model))
                 {
                     _logger.LogError("Invalid request body supplied to post request");
                     return BadRequest();

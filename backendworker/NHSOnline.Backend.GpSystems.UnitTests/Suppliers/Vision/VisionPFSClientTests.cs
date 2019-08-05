@@ -10,7 +10,6 @@ using System.Xml;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments;
@@ -21,7 +20,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.ResponseParsers;
-using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Certificate;
 using RichardSzalay.MockHttp;
 using NHSOnline.Backend.Support;
@@ -37,16 +35,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private IFixture _fixture;
         private VisionConnectionToken _connectionToken;
         private string _odsCode;
-        private string ApplicationProviderId = "ApplicationProviderId";
+        private const string ApplicationProviderId = "ApplicationProviderId";
         private VisionUserSession _visionUserSession;
         private VisionPFSHttpClient _httpClient;
         private const string RequestUserName = "username";
-        private const string certificatePassphrase = "CertificatePassphrase";
-        private const string certificatePath = "CertificatePath";
-        private const string visionSenderUserName = "visionuser";
-        private const string visionSenderFullName = "visionuser";
-        private const string visionSenderUserIdentity = "username";
-        private const string visionSenderUserRole = "admin";
+        private const string CertificatePassphrase = "CertificatePassphrase";
+        private const string CertificatePath = "CertificatePath";
+        private const string VisionSenderUserName = "visionuser";
+        private const string VisionSenderFullName = "visionuser";
+        private const string VisionSenderUserIdentity = "username";
+        private const string VisionSenderUserRole = "admin";
         private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const string Path = "Suppliers/Vision/Resources/mycert.pfx";
         private const string Passphrase = "password1";
@@ -57,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private const string OrderNewPrescriptionServiceDefinitionName = "VONREP.NewPrescription";
         private const string GetAvailableAppointmentsServiceDefinitionName = "VOAPP.GetAvailableAppointments";
         private const int VisionAppointmentSlotsRequestCount = 50;
-        private const string environment = "environment";
+        private const string Environment = "environment";
         
         private Mock<ICertificateService> _mockCertificateService;
         private Mock<IEnvelopeService> _mockEnvelopeService;
@@ -70,8 +68,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
 
             _visionConfig = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
-                certificatePath, certificatePassphrase, RequestUserName, visionSenderUserName, 
-                visionSenderFullName, visionSenderUserIdentity, visionSenderUserRole, 50, 100, 100, environment);
+                CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName, 
+                VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, 50, 100, 100, Environment);
             
             _mockCertificateService = _fixture.Freeze<Mock<ICertificateService>>();
             _mockEnvelopeService = _fixture.Freeze<Mock<IEnvelopeService>>();

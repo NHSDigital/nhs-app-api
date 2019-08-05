@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
   </ItemGroup>
 

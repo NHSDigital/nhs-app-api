@@ -166,6 +166,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
                     LogTemplate = "bar:{value}{value}"
                 });
             
+            // ReSharper disable once ObjectCreationAsStatement
             Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
             //Act
@@ -179,6 +180,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             //Arrange  
             OptionsWrapper<LogRequestHeaderOptions> options = null;
             
+            // ReSharper disable once ObjectCreationAsStatement
             Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
             //Act
@@ -192,6 +194,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             var options = new OptionsWrapper<LogRequestHeaderOptions>(
                 null);
             
+            // ReSharper disable once ObjectCreationAsStatement
             Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
             //Act

@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.OrganDonation;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
@@ -33,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(Constants.AuditingTitles.GetOrganDonationReferenceDataAuditTypeRequest,
+                await _auditor.Audit(AuditingOperations.GetOrganDonationReferenceDataAuditTypeRequest,
                     "Attempting to get organ donation reference data");
 
                 _logger.LogDebug("Fetching organ donation reference data");

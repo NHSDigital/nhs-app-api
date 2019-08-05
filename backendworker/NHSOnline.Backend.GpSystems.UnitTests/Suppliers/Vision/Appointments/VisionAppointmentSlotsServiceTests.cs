@@ -32,23 +32,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private Mock<IAvailableAppointmentsResponseMapper> _mockAppointmentsMapper;
         private Mock<ILogger<VisionAppointmentSlotsService>> _mockLogger;
         private IEnumerable<Slot> _mappedSlots;
-        private VisionConfigurationSettings _mockOptions;
-        private readonly string ApplicationProviderId = "ApplicationProviderId";
+        private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
-        private const string certificatePassphrase = "CertificatePassphrase";
-        private const string certificatePath = "CertificatePath";
-        private const string visionSenderUserName = "visionuser";
-        private const string visionSenderFullName = "visionuser";
-        private const string visionSenderUserIdentity = "username";
-        private const string visionSenderUserRole = "admin";
+        private const string CertificatePassphrase = "CertificatePassphrase";
+        private const string CertificatePath = "CertificatePath";
+        private const string VisionSenderUserName = "visionuser";
+        private const string VisionSenderFullName = "visionuser";
+        private const string VisionSenderUserIdentity = "username";
+        private const string VisionSenderUserRole = "admin";
         private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const int VisionAppointmentSlotsRequestCount = 50;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
 
         private VisionConfigurationSettings _settings;
-        private const string environment = "environment";
-
+        private const string Environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -68,11 +66,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockLogger = _fixture.Freeze<Mock<ILogger<VisionAppointmentSlotsService>>>();
 
             _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
-                certificatePath, certificatePassphrase, RequestUserName, visionSenderUserName, 
-                visionSenderFullName, visionSenderUserIdentity, visionSenderUserRole, VisionAppointmentSlotsRequestCount, 
-                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, environment);
-
-            _mockOptions = _fixture.Freeze<VisionConfigurationSettings>();
+                CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName, 
+                VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, VisionAppointmentSlotsRequestCount, 
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
             
             var slotsResponse = new VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
             {

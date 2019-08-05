@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NHSOnline.Backend.ApiSupport\NHSOnline.Backend.ApiSupport.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
   </ItemGroup>

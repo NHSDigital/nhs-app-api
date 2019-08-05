@@ -1,9 +1,8 @@
 ﻿using System;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.Support.Auditing;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Auditing;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -13,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly ILogger<AppointmentsController> _logger;
         private readonly string _slotId;
         private readonly DateTimeOffset? _slotStartTime;
-        private const string AuditType = Constants.AuditingTitles.BookAppointmentAuditTypeResponse;
+        private const string AuditType = AuditingOperations.BookAppointmentAuditTypeResponse;
 
         public AppointmentBookAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string slotId, DateTimeOffset? slotStartTime)
         {

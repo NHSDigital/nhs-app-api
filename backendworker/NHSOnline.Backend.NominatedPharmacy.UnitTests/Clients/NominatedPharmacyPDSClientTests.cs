@@ -21,11 +21,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
     [TestClass]
     public sealed class NominatedPharmacyPDSClientTests : IDisposable
     {
-        private INominatedPharmacyPDSClient _sut;
+        private INominatedPharmacyPDSClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private Mock<INominatedPharmacyConfigurationSettings> _configMock;
         private IFixture _fixture;
-        private string _odsCode;
         private NominatedPharmacyHttpClient _httpClient;
         private static readonly Uri ApiUrl = new Uri("http://spine_nominated_pharmacy_base_url/", UriKind.Absolute);
         private const string GetNominatedPharmacySoapActionName = "urn:nhs:names:services:pdsquery/QUPA_IN000008UK02";
@@ -42,14 +41,12 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
             _configMock.SetupGet(x => x.BaseUrl).Returns(ApiUrl);
 
             _mockEnvelopeService = _fixture.Freeze<Mock<INominatedPharmacyEnvelopeService>>();
-            _odsCode = _fixture.Create<string>();
-
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new NominatedPharmacyHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
             _fixture.Inject(_httpClient);
 
-            _sut = _fixture.Create<NominatedPharmacyPDSClient>();
+            _systemUnderTest = _fixture.Create<NominatedPharmacyPDSClient>();
         }
 
         [TestMethod]
@@ -85,7 +82,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            var response = await _sut.NominatedPharmacyGet(request);
+            var response = await _systemUnderTest.NominatedPharmacyGet(request);
 
             // Assert
             response.Body.QUPAIN000009UK03.Should().BeEquivalentTo(bodyResponse.Body.RetrievalQueryResponse.QUPAIN000009UK03);

@@ -3,14 +3,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {

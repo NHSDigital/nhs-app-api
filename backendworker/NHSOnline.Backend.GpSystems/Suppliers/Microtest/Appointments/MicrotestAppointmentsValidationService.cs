@@ -6,11 +6,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 {
     public class MicrotestAppointmentsValidationService : AppointmentsValidationService
     {
-        private readonly ILogger<MicrotestAppointmentsValidationService> _logger;
-
         public MicrotestAppointmentsValidationService(ILogger<MicrotestAppointmentsValidationService> logger) : base(logger)
         {
-            _logger = logger;
         }
 
         protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request)

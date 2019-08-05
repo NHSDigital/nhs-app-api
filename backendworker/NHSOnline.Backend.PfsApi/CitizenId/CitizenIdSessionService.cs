@@ -3,11 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.PfsApi.CitizenId
 {

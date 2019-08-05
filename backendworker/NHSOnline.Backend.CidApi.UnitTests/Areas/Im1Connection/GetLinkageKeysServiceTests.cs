@@ -6,12 +6,12 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 
 namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 {

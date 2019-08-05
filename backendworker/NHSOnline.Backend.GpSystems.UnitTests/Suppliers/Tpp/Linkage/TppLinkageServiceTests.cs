@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Im1Connection;
@@ -18,7 +17,6 @@ using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Temporal;
 using static NHSOnline.Backend.GpSystems.Suppliers.Tpp.TppClient;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 {
@@ -35,12 +33,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         private DateTime _dateOfBirth;
         private const string CookieDomain = "CookieDomain";
-        private int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
+        private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;
         private const int DefaultSessionExpiryMinutes  = 10;
         private const int DefaultHttpTimeoutSeconds = 6;
-        private int MinimumAppAge = 16;
-        private int MinimumLinkageAge = 16;
-        
+        private const int MinimumAppAge = 16;
+        private const int MinimumLinkageAge = 16;
+
         private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
 
         [TestInitialize]

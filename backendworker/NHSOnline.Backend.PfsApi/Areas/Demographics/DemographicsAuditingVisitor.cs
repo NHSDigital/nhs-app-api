@@ -1,9 +1,8 @@
 using System;
-using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems.Demographics;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Demographics
 {
@@ -11,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<DemographicsController> _logger;
-        private const string AuditType = Constants.AuditingTitles.GetDemographicsAuditTypeResponse;
+        private const string AuditType = AuditingOperations.GetDemographicsAuditTypeResponse;
 
         public DemographicsAuditingVisitor(IAuditor auditor, ILogger<DemographicsController> logger)
         {

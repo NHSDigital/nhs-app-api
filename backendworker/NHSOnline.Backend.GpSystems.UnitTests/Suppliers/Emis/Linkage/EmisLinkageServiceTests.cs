@@ -7,7 +7,6 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.CidApi.Areas.Linkage;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
@@ -16,7 +15,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 {
@@ -399,12 +397,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             var mockResponse = new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(httpStatusCodeResponse);
 
-            // Add emis specific error code if unit test requires it.
+            // Add EMIS specific error code if unit test requires it.
             mockResponse.StandardErrorResponse = new StandardErrorResponse
             {
-                InternalResponseCode = (int)emisApiErrorCode,
+                InternalResponseCode = emisApiErrorCode,
             };
-
 
             _emisClient.Setup(x => x.NhsUserPost(
                 It.Is<EmisHeaderParameters>(

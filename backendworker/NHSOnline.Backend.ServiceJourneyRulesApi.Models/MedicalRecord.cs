@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models

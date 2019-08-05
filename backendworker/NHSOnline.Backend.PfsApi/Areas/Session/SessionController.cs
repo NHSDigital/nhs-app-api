@@ -8,15 +8,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
 
@@ -120,7 +121,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 citizenIdSessionResult.Session.AccessToken,
                 citizenIdSessionResult.NhsNumber, 
                 gpSystem.Supplier,
-                Constants.AuditingTitles.SessionCreateRequest,
+                AuditingOperations.SessionCreateRequest,
                 "Attempting to create Session");
 
             // Validate the format of the IM1 connection token for this GP system.
@@ -133,7 +134,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     citizenIdSessionResult.Session.AccessToken,
                     citizenIdSessionResult.NhsNumber, 
                     gpSystem.Supplier,
-                    Constants.AuditingTitles.SessionCreateResponse, 
+                    AuditingOperations.SessionCreateResponse, 
                     errorMessage);
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
@@ -156,7 +157,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     citizenIdSessionResult.Session.AccessToken,
                     citizenIdSessionResult.NhsNumber, 
                     gpSystem.Supplier,
-                    Constants.AuditingTitles.SessionCreateResponse, 
+                    AuditingOperations.SessionCreateResponse, 
                     errorMessage);
                 return new StatusCodeResult(gpSessionCreatedResultVisited.StatusCode);
             }
@@ -182,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     citizenIdSessionResult.Session.AccessToken,
                     citizenIdSessionResult.NhsNumber, 
                     userSession.GpUserSession.Supplier,
-                    Constants.AuditingTitles.SessionCreateResponse, 
+                    AuditingOperations.SessionCreateResponse, 
                     errorMessage);
                 return new StatusCodeResult(serviceJourneyRulesResultVisited.StatusCode);
             }
@@ -204,7 +205,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             // Audit that the user is logged on.
             HttpContext.SetUserSession(userSession);
-            await _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, "Session successfully created.");
+            await _auditor.Audit(AuditingOperations.SessionCreateResponse, "Session successfully created.");
 
             _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
 
@@ -218,7 +219,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             try
             {
                 _logger.LogEnter();
-                await _auditor.Audit(Constants.AuditingTitles.SessionDeleteRequest, "Session delete called.");
+                await _auditor.Audit(AuditingOperations.SessionDeleteRequest, "Session delete called.");
 
                 // Delete GP supplier session                
                 var userSession = HttpContext.GetUserSession();
@@ -241,7 +242,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                         citizenIdUserSession.AccessToken,
                         gpUserSession.NhsNumber, 
                         gpUserSession.Supplier,
-                        Constants.AuditingTitles.SessionDeleteResponse, 
+                        AuditingOperations.SessionDeleteResponse, 
                         "Delete session failed");
 
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -260,7 +261,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                         citizenIdUserSession.AccessToken,
                         gpUserSession.NhsNumber, 
                         gpUserSession.Supplier,
-                        Constants.AuditingTitles.SessionDeleteResponse, 
+                        AuditingOperations.SessionDeleteResponse, 
                         "Delete session failed");
 
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -280,7 +281,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     citizenIdUserSession.AccessToken,
                     gpUserSession.NhsNumber, 
                     gpUserSession.Supplier,
-                    Constants.AuditingTitles.SessionDeleteResponse, 
+                    AuditingOperations.SessionDeleteResponse, 
                     "Session successfully deleted");
 
                 return new StatusCodeResult(StatusCodes.Status204NoContent);

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Linkage;
 using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;

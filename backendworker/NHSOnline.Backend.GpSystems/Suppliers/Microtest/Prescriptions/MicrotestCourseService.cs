@@ -5,11 +5,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                         };
 
                         await _auditor.Audit(
-                            Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsResponse,
+                            AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsResponse,
                             $"Total courses before filtering: {totalCourses.ToString(CultureInfo.InvariantCulture)}, Total courses after filtering: {coursesResponse.Body.Courses.Count().ToString(CultureInfo.InvariantCulture)}");
 
                         _logger

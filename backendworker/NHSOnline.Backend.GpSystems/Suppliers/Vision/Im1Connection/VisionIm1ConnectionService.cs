@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                     }
                     catch (SocketException ex)
                     {
-                        _logger.LogError(ex, $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked." + ex.ToString() );
+                        _logger.LogError(ex, $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked." + ex );
                         return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
                     }
 

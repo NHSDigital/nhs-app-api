@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 

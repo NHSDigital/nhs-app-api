@@ -4,7 +4,6 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
 using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 {

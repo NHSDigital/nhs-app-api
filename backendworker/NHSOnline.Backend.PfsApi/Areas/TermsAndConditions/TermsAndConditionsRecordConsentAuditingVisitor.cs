@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 {
@@ -46,12 +45,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
         private void AuditConsent(string message)
         {
-            _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsRecordConsentAuditTypeResponse, message + " consent - ConsentGiven: {0} and DateOfConsent: {1:O}",
+            _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeResponse, message + " consent - ConsentGiven: {0} and DateOfConsent: {1:O}",
                 _consentGiven, _dateOfConsent);
 
             if (!_isUpdatingConsent)
             {
-                _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
+                _auditor.Audit(AuditingOperations.TermsAndConditionsAnalyticsCookieAcceptance,
                     message + " analytics cookie acceptance - AnalyticsCookieAccepted: {0}{1}",
                     _analyticsCookieAccepted,
                     _analyticsCookieAccepted

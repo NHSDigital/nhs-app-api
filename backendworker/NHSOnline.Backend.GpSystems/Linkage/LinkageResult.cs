@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using NHSOnline.Backend.GpSystems.Im1Connection;
-using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 
 namespace NHSOnline.Backend.GpSystems.Linkage

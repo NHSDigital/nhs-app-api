@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.PfsApi.Areas.Configuration;
+using NHSOnline.Backend.Support.Settings;
 using static NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.Devices

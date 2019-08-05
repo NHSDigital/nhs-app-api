@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
         private Mock<IGuidCreator> _guidCreator;
         private IFixture _fixture;
-        private const string environment = "environment";
+        private const string Environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             _tppConfig = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, 
                 ApplicationProviderId, ApplicationDeviceType, CertificatePassphrase, CertificatePath, 
-                PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, environment);
+                PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, Environment);
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new TppHttpClient(new HttpClient(_mockHttpHandler), _tppConfig);
 
@@ -232,7 +232,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkRequestModel.OrganisationCode = UnitId;
             linkRequestModel.Uuid = Uuid;
             linkRequestModel.ApiVersion = ApiVersion;
-            linkRequestModel.Application = createApplication();
+            linkRequestModel.Application = CreateApplication();
 
             var expectedLinkAccountResponse = _fixture.Create<LinkAccountReply>();
             expectedLinkAccountResponse.ProviderId = _tppConfig.ApplicationProviderId;
@@ -270,7 +270,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
             linkAccountRequestModel.ApiVersion = ApiVersion;
-            linkAccountRequestModel.Application = createApplication();
+            linkAccountRequestModel.Application = CreateApplication();
 
             var expectedErrorResponse = _fixture.Create<Error>();
 
@@ -305,7 +305,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
             linkAccountRequestModel.ApiVersion = ApiVersion;
-            linkAccountRequestModel.Application = createApplication();
+            linkAccountRequestModel.Application = CreateApplication();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -330,7 +330,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             addNhsUserRequestModel.OrganisationCode = UnitId;
             addNhsUserRequestModel.Uuid = Uuid;
             addNhsUserRequestModel.ApiVersion = ApiVersion;
-            addNhsUserRequestModel.Application = createApplication();
+            addNhsUserRequestModel.Application = CreateApplication();
 
             var expectedLinkAccountResponse = _fixture.Create<AddNhsUserResponse>();
             expectedLinkAccountResponse.ProviderId = _tppConfig.ApplicationProviderId;
@@ -368,7 +368,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             nhsAddUserRequestModel.OrganisationCode = UnitId;
             nhsAddUserRequestModel.Uuid = Uuid;
             nhsAddUserRequestModel.ApiVersion = ApiVersion;
-            nhsAddUserRequestModel.Application = createApplication();
+            nhsAddUserRequestModel.Application = CreateApplication();
 
             var expectedErrorResponse = _fixture.Create<Error>();
 
@@ -403,7 +403,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             addNhsUserRequestModel.OrganisationCode = UnitId;
             addNhsUserRequestModel.Uuid = Uuid;
             addNhsUserRequestModel.ApiVersion = ApiVersion;
-            addNhsUserRequestModel.Application = createApplication();
+            addNhsUserRequestModel.Application = CreateApplication();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -491,7 +491,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
             linkAccountRequestModel.ApiVersion = ApiVersion;
-            linkAccountRequestModel.Application = createApplication();
+            linkAccountRequestModel.Application = CreateApplication();
 
             var expectedErrorResponse = new Error
             {
@@ -631,7 +631,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             _mockHttpHandler.Dispose();
         }
 
-        private Application createApplication()
+        private Application CreateApplication()
         {
             return new Application 
             {

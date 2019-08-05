@@ -9,7 +9,6 @@ using System.Web;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
@@ -23,7 +22,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using RichardSzalay.MockHttp;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 {
@@ -44,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
 
-        private const string environment = "testEnv";
+        private const string Environment = "testEnv";
 
         private IEmisClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
@@ -65,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             _emisConfig = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, 
-                environment);
+                Environment);
 
             _configurationSettings = _fixture.Create<EmisConfigurationSettings>();
             _configurationSettings.DefaultHttpTimeoutSeconds = 2;

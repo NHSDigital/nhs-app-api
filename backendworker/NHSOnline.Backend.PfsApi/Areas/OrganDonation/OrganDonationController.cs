@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.OrganDonation.Models;
-using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.PfsApi.OrganDonation;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(Constants.AuditingTitles.GetOrganDonationAuditTypeRequest,
+                await _auditor.Audit(AuditingOperations.GetOrganDonationAuditTypeRequest,
                     "Attempting to get organ donation record");
 
                 var userSession = HttpContext.GetUserSession();
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                     return BadRequest();
                 }
 
-                await _auditor.Audit(Constants.AuditingTitles.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
+                await _auditor.Audit(AuditingOperations.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
                 
                 var userSession = HttpContext.GetUserSession();
 
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                     return BadRequest();
                 }
 
-                await _auditor.Audit(Constants.AuditingTitles.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
+                await _auditor.Audit(AuditingOperations.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
 
                 var userSession = HttpContext.GetUserSession();
 
@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                     return BadRequest();
                 }
 
-                await _auditor.Audit(Constants.AuditingTitles.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
+                await _auditor.Audit(AuditingOperations.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
 
                 var userSession = HttpContext.GetUserSession();
 

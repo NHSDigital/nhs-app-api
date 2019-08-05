@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             var appointments = new[] { appointment };
 
-            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow);
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow).Value;
 
             // Act
             var actualResponse = _systemUnderTest.Map(appointments);
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = slotTime,
                 Location = "",
-                StartTime = (DateTimeOffset) slotTime,
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             var appointments = new[] { appointment };
 
-            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow).Value;
 
             // Act
             var actualResponse = _systemUnderTest.Map(appointments);
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = null,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTime,
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             var appointments = new[] { appointmentWithInvalidStartTime, appointment2 };
 
-            var slotTimeTwoDays = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow);
+            var slotTimeTwoDays = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow).Value;
 
             // Act
             var actualResponse = _systemUnderTest.Map(appointments);
@@ -181,7 +181,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = slotTimeTwoDays,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTimeTwoDays,
+                StartTime = slotTimeTwoDays,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -219,11 +219,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             var appointments = new[] { appointment1, appointment2, appointment3, appointment4, appointment5 };
 
-            var slotTimeTwoDays = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow);
-            var slotTimeTomorrow = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
-            var slotTimeNextMonth = _dateTimeOffsetProviderMock.MockDateTimeOffset(_nextMonth);
-            var slotTimeToday = _dateTimeOffsetProviderMock.MockDateTimeOffset(_today);
-            var slotTimeLastMonth = _dateTimeOffsetProviderMock.MockDateTimeOffset(_lastMonth);
+            var slotTimeTwoDays = _dateTimeOffsetProviderMock.MockDateTimeOffset(_twoDaysFromNow).Value;
+            var slotTimeTomorrow = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow).Value;
+            var slotTimeNextMonth = _dateTimeOffsetProviderMock.MockDateTimeOffset(_nextMonth).Value;
+            var slotTimeToday = _dateTimeOffsetProviderMock.MockDateTimeOffset(_today).Value;
+            var slotTimeLastMonth = _dateTimeOffsetProviderMock.MockDateTimeOffset(_lastMonth).Value;
 
             // Act
             var actualResponse = _systemUnderTest.Map(appointments);
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = slotTimeTomorrow,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTimeTomorrow,
+                StartTime = slotTimeTomorrow,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -248,7 +248,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = slotTimeTwoDays,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTimeTwoDays,
+                StartTime = slotTimeTwoDays,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -261,7 +261,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = slotTimeNextMonth,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTimeNextMonth,
+                StartTime = slotTimeNextMonth,
                 Type = string.Empty,
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -274,7 +274,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = slotTimeToday,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTimeToday,
+                StartTime = slotTimeToday,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -287,7 +287,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = new[] { "Dr Zoidberg" },
                 EndTime = slotTimeLastMonth,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTimeLastMonth,
+                StartTime = slotTimeLastMonth,
                 Type = string.Empty,
                 SessionName = "",
                 Channel = Channel.Unknown,
@@ -313,7 +313,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             var slotSessions = new[] { appointment };
 
-            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow);
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset(_tomorrow).Value;
 
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions);
@@ -325,7 +325,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 Clinicians = null,
                 EndTime = slotTime,
                 Location = "Leeds",
-                StartTime = (DateTimeOffset) slotTime,
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown,

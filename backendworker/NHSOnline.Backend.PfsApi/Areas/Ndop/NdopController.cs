@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Ndop;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Ndop
 {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
 
                 var userSession = HttpContext.GetUserSession();
 
-                await _auditor.Audit(Constants.AuditingTitles.GetNdopTokenAuditTypeRequest, "Getting Ndop JWT Token");
+                await _auditor.Audit(AuditingOperations.GetNdopTokenAuditTypeRequest, "Getting Ndop JWT Token");
 
                 var result = _ndopService.GetJwtToken(userSession.GpUserSession.NhsNumber);
                 

@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Temporal;
@@ -46,7 +45,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 var linkageService = gpSystem.GetLinkageService();
 
                 await _auditor.AuditRegistrationEvent(request.NhsNumber, gpSystem.Supplier,
-                    Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
+                    AuditingOperations.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
 
                 return await linkageService.CreateLinkageKey(request);
             }

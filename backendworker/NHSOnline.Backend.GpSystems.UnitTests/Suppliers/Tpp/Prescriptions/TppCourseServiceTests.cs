@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
@@ -16,7 +15,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions;
 using TppUserSession = NHSOnline.Backend.GpSystems.Suppliers.Tpp.TppUserSession;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 {
@@ -39,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         private const int CoursesMaxCoursesLimit = 100;
         private const string CertificatePath = "CertificatePath";
         private const string CertificatePassphrase = "CerticiatePassphrase";
-        private const string environment = "testEnv";
+        private const string Environment = "testEnv";
 
         [TestInitialize]
         public void TestInitialize()
@@ -53,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _tppCourseMapper = _fixture.Freeze<Mock<ITppCourseMapper>>();
             
             _settings = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, ApplicationProviderId, ApplicationDeviceType, 
-                CertificatePath, CertificatePassphrase, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, environment);
+                CertificatePath, CertificatePassphrase, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, Environment);
 
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<TppCourseService>();

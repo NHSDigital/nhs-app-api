@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Clients.Models

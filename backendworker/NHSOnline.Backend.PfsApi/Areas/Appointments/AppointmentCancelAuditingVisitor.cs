@@ -1,9 +1,8 @@
 using System;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -12,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IAuditor _auditor;
         private readonly ILogger<AppointmentsController> _logger;
         private readonly string _appointmentId;
-        private const string AuditType = Constants.AuditingTitles.CancelAppointmentAuditTypeResponse;
+        private const string AuditType = AuditingOperations.CancelAppointmentAuditTypeResponse;
 
         public AppointmentCancelAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string appointmentId)
         {

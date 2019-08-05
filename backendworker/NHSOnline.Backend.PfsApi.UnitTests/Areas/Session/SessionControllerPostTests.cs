@@ -13,12 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.CitizenId.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Session;
@@ -294,7 +294,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber, 
                     Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, 
+                    AuditingOperations.SessionCreateRequest, 
                     "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
@@ -303,7 +303,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber, 
                     Supplier.Emis, 
-                    Constants.AuditingTitles.SessionCreateResponse, 
+                    AuditingOperations.SessionCreateResponse, 
                     "Failed to validate Im1 connection", 
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
@@ -333,7 +333,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber, 
                     Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, 
+                    AuditingOperations.SessionCreateRequest, 
                     "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
@@ -342,7 +342,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber, 
                     Supplier.Emis, 
-                    Constants.AuditingTitles.SessionCreateResponse, 
+                    AuditingOperations.SessionCreateResponse, 
                     "Creating the session failed with status code: '403'", It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
@@ -371,7 +371,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber, 
                     Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, 
+                    AuditingOperations.SessionCreateRequest, 
                     "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
@@ -380,7 +380,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken, 
                     _userProfile.NhsNumber, 
                     Supplier.Emis, 
-                    Constants.AuditingTitles.SessionCreateResponse, 
+                    AuditingOperations.SessionCreateResponse, 
                     "Creating the session failed with status code: '502'", 
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
@@ -420,7 +420,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber, 
                     Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateResponse, 
+                    AuditingOperations.SessionCreateResponse, 
                     "Retrieving Service Journey Rules failed with status code: '404'", 
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
@@ -479,11 +479,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber, 
                     Supplier.Emis,
-                    Constants.AuditingTitles.SessionCreateRequest, 
+                    AuditingOperations.SessionCreateRequest, 
                     "Attempting to create Session",
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask);
-            _mockAuditor.Setup(x => x.Audit(Constants.AuditingTitles.SessionCreateResponse,
+            _mockAuditor.Setup(x => x.Audit(AuditingOperations.SessionCreateResponse,
                     "Session successfully created.", It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask);
 

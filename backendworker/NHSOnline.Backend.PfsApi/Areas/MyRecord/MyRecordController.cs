@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
@@ -38,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             var userSession = HttpContext.GetUserSession();
             
             // Audit attempt made to view patient record
-            await _auditor.Audit(Constants.AuditingTitles.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
+            await _auditor.Audit(AuditingOperations.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
  
             _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession.Supplier}");           
             var patientRecordService = _gpSystemFactory

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 {

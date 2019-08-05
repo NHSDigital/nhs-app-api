@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Linkage;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Sanitization;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests

@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private AppointmentsGetResponse _microtestClientGetResponse;
         private Mock<IAppointmentsResponseMapper> _mockResponseMapper;
         private AppointmentsResponse _mappedResponse;
-        private DateTimeOffset oneYearAgoDate;
+        private DateTimeOffset _oneYearAgoDate;
 
         [TestInitialize]
         public void TestInitialize()
@@ -41,12 +41,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             {
                 Body = _microtestClientGetResponse
             };
-            oneYearAgoDate =  DateTimeOffset.Now.AddYears(-1).Date;
+            _oneYearAgoDate =  DateTimeOffset.Now.AddYears(-1).Date;
             _mockMicrotestClient
                 .Setup(x => x.AppointmentsGet(
                         It.Is<string>( o => o.Equals(_microtestUserSession.OdsCode, StringComparison.Ordinal)),
                         It.Is<string>(n => n.Equals(_microtestUserSession.NhsNumber, StringComparison.Ordinal)),
-                        It.Is<DateTimeOffset>(d => d.Date.Equals(oneYearAgoDate.Date))
+                        It.Is<DateTimeOffset>(d => d.Date.Equals(_oneYearAgoDate.Date))
                     )
                 )
                 .ReturnsAsync(response);

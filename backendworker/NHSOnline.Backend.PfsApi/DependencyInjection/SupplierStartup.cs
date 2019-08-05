@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.DependencyInjection
 {

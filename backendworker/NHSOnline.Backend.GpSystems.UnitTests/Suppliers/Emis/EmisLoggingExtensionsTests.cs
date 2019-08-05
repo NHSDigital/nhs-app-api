@@ -20,25 +20,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
     {
         private IFixture _fixture;
         private static Regex _guidRegex;
-        private static TestContext _context;
         private static Mock<ILogger<EmisSessionService>> _logger;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
-            _context = testContext;
-            _guidRegex = new Regex(Constants.Regex.GuidRegex, RegexOptions.IgnoreCase);
-        }
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _logger =  _fixture.Freeze<Mock<ILogger<EmisSessionService>>>();
+            _guidRegex = new Regex(Constants.Regex.GuidRegex, RegexOptions.IgnoreCase);
         }
 
         [TestMethod]
-        public void CensoryFilter_PatientSensitiveData_attributes()
+        public void CensorResponse_PatientSensitiveData_attributes()
         {
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
             var demoResponse = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Conflict)
@@ -54,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         }
         
         [TestMethod]
-        public void CensoryFilter_PatientSensitiveData_attributeValue()
+        public void CensorResponse_PatientSensitiveData_attributeValue()
         {
             const string userIdentityGuid = "User Identity 'efa22060-9221-43a6-a0f0-6c0350b8f44d'";
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
@@ -75,6 +68,4 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             return guidMatch.Success;
         }
     }
-    
-    
 }

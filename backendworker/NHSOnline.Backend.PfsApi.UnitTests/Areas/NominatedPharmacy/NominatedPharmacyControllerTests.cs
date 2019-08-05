@@ -11,16 +11,15 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using System.Net;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.PfsApi.GpSearch;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
@@ -28,16 +27,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
     [TestClass]
     public class NominatedPharmacyControllerTests
     {
-        const string odsCode = "AB123";
-        const string updatedOdsCode = "BB999";
-        const string NominatedPharmacyType = "P1";
-        readonly string pertinentSerialChangeNumber = Guid.NewGuid().ToString();
+        private const string OdsCode = "AB123";
+        private const string UpdatedOdsCode = "BB999";
+        private const string NominatedPharmacyType = "P1";
+        private readonly string _pertinentSerialChangeNumber = Guid.NewGuid().ToString();
         
         private NominatedPharmacyController _systemUnderTest;
         private IFixture _fixture;
         private UserSession _userSession;
 
-        private Mock<ILogger<NominatedPharmacyController>> _mockLogger;
         private Mock<INominatedPharmacyService> _mockNominatedPharmacyService;
         private Mock<IPharmacySearchService> _mockPharmacySearchService;
         private Mock<IPharmacyService> _mockPharmacyService;
@@ -59,7 +57,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             _userSession = _fixture.Create<UserSession>();
 
-            _mockLogger = _fixture.Freeze<Mock<ILogger<NominatedPharmacyController>>>();
             _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
             _mockPharmacyService = _fixture.Freeze<Mock<IPharmacyService>>();
             _mockPharmacySearchService = _fixture.Freeze<Mock<IPharmacySearchService>>();
@@ -92,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType);
             
             var pharmacyOrgansation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrgansation);
@@ -109,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             _mockPharmacyService
-                .Setup(x => x.GetPharmacyDetail(odsCode))
+                .Setup(x => x.GetPharmacyDetail(OdsCode))
                 .Returns(Task.FromResult(pharmacyDetailResponse))
                 .Verifiable();
             
@@ -261,7 +258,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType);
             
             var pharmacyOrgansation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrgansation);
@@ -278,7 +275,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             _mockPharmacyService
-                .Setup(x => x.GetPharmacyDetail(odsCode))
+                .Setup(x => x.GetPharmacyDetail(OdsCode))
                 .Returns(Task.FromResult(pharmacyDetailResponse))
                 .Verifiable(); 
             
@@ -313,7 +310,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 PharmacyDetails = null
             };
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType);
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
@@ -377,7 +374,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType );
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType );
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
@@ -393,7 +390,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.BadRequest);
 
             _mockPharmacyService
-                .Setup(x => x.GetPharmacyDetail(odsCode))
+                .Setup(x => x.GetPharmacyDetail(OdsCode))
                 .Returns(Task.FromResult(pharmacyDetailResponse))
                 .Verifiable();
 
@@ -417,13 +414,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             _mockNominatedPharmacyGatewayUpdateService
-                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, _userSession.CitizenIdUserSession))
+                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession))
                 .Returns(Task.FromResult(new StatusCodeResult((int)HttpStatusCode.OK)))
                 .Verifiable();
             
             var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
             {
-                OdsCode = updatedOdsCode
+                OdsCode = UpdatedOdsCode
             };
 
             // Act
@@ -442,13 +439,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             _mockNominatedPharmacyGatewayUpdateService
-                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, _userSession.CitizenIdUserSession))
+                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession))
                 .Throws<Exception>()
                 .Verifiable();
 
             var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
             {
-                OdsCode = updatedOdsCode
+                OdsCode = UpdatedOdsCode
             };
 
             // Act
@@ -468,7 +465,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             
             var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
             {
-                OdsCode = updatedOdsCode
+                OdsCode = UpdatedOdsCode
             };
 
             // Act
@@ -519,7 +516,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Assert
             _mockPharmacySearchService.Verify();
             _mockMapper.Verify();
-            _auditor.Verify(x => x.Audit(Support.Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
 
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(mappedResult);

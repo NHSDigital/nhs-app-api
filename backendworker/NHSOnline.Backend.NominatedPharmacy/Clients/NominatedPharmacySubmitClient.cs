@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             }
         }
 
-        private HttpRequestMessage BuildHttpRequest(string path, StringContent content)
+        private static HttpRequestMessage BuildHttpRequest(string path, StringContent content)
         {
             var httpRequest =
                 new HttpRequestMessage(HttpMethod.Post, path)
@@ -68,11 +68,11 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
 
         private static StringContent BuildContent(NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest)
         {
-            const string ContentType = "Content-Type";
+            const string contentType = "Content-Type";
             var content = new StringContent(nominatedPharmacyUpdateRequest.Body(), Encoding.UTF8);
 
-            content.Headers.Remove(ContentType);
-            var added = content.Headers.TryAddWithoutValidation(ContentType,
+            content.Headers.Remove(contentType);
+            content.Headers.TryAddWithoutValidation(contentType,
                 new[]
                 {
                     "multipart/related; boundary=\"--=_MIME-Boundary\"; type=\"text/xml\"; start=\"<ebXMLHeader@spine.nhs.uk>\";"

@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems;
 
 namespace NHSOnline.Backend.PfsApi.HealthCheck
 {

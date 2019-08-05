@@ -5,11 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 
 namespace NHSOnline.Backend.CidApi.DependencyInjection
 {

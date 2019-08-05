@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             {
                 _logger.LogEnter();
                 
-                await _auditor.Audit(Constants.AuditingTitles.GetServiceJourneyRulesAuditTypeRequest,
+                await _auditor.Audit(AuditingOperations.GetServiceJourneyRulesAuditTypeRequest,
                     "Attempting to get service journey rules");
 
                 var userSession = HttpContext.GetUserSession();

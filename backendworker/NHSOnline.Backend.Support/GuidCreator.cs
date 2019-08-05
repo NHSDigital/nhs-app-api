@@ -13,6 +13,5 @@ namespace NHSOnline.Backend.Support
         {
             return Guid.NewGuid();
         }
-        
     }
 }

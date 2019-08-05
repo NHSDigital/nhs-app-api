@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.PfsApi", "NHSOnline.Backend.PfsApi\NHSOnline.Backend.PfsApi.csproj", "{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}"
 EndProject
@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.configuration.yaml = contracts\nhsonline.configuration.yaml
 		contracts\nhsonline.demographics.yaml = contracts\nhsonline.demographics.yaml
 		contracts\nhsonline.gpsearch.yaml = contracts\nhsonline.gpsearch.yaml
+		contracts\nhsonline.journey.yaml = contracts\nhsonline.journey.yaml
 		contracts\nhsonline.myrecord.yaml = contracts\nhsonline.myrecord.yaml
 		contracts\nhsonline.ndop.yaml = contracts\nhsonline.ndop.yaml
 		contracts\nhsonline.nominatedpharmacy.yaml = contracts\nhsonline.nominatedpharmacy.yaml
@@ -25,14 +26,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.organdonation.yaml = contracts\nhsonline.organdonation.yaml
 		contracts\nhsonline.pharmacies.yaml = contracts\nhsonline.pharmacies.yaml
 		contracts\nhsonline.prescriptions.yaml = contracts\nhsonline.prescriptions.yaml
+		contracts\nhsonline.shared.yaml = contracts\nhsonline.shared.yaml
 		contracts\nhsonline.termsandconditions.yaml = contracts\nhsonline.termsandconditions.yaml
 		contracts\nhsonline.usersession.yaml = contracts\nhsonline.usersession.yaml
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
-		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
 		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
-		contracts\nhsonline.journey.yaml = contracts\nhsonline.journey.yaml
-		contracts\nhsonline.shared.yaml = contracts\nhsonline.shared.yaml
+		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"
@@ -59,15 +59,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.CidApi", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.CidApi.UnitTests", "NHSOnline.Backend.CidApi.UnitTests\NHSOnline.Backend.CidApi.UnitTests.csproj", "{8F641323-98A0-4DC6-A50C-0BEFD770A2E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ApiSupport", "NHSOnline.Backend.ApiSupport\NHSOnline.Backend.ApiSupport.csproj", "{9221CCAE-498F-46EB-8D71-C103591D72B4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ApiSupport.UnitTests", "NHSOnline.Backend.ApiSupport.UnitTests\NHSOnline.Backend.ApiSupport.UnitTests.csproj", "{329BE237-4AB4-4DA1-A49E-75739A0E7861}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests", "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests\NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.csproj", "{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi", "NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj", "{C8D4E4FC-316C-4535-A89F-23DD34ADA155}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi.Models", "NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj", "{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi.Models", "NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj", "{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auditing", "NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj", "{C0E7FBCE-181D-47D0-8DAF-B98BB09C4426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auditing.UnitTests", "NHSOnline.Backend.Auditing.UnitTests\NHSOnline.Backend.Auditing.UnitTests.csproj", "{87E70C51-990A-466A-B656-60FA86A00D28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,14 +119,6 @@ Global
 		{8F641323-98A0-4DC6-A50C-0BEFD770A2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F641323-98A0-4DC6-A50C-0BEFD770A2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F641323-98A0-4DC6-A50C-0BEFD770A2E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9221CCAE-498F-46EB-8D71-C103591D72B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9221CCAE-498F-46EB-8D71-C103591D72B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9221CCAE-498F-46EB-8D71-C103591D72B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9221CCAE-498F-46EB-8D71-C103591D72B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{329BE237-4AB4-4DA1-A49E-75739A0E7861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{329BE237-4AB4-4DA1-A49E-75739A0E7861}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{329BE237-4AB4-4DA1-A49E-75739A0E7861}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{329BE237-4AB4-4DA1-A49E-75739A0E7861}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -139,11 +131,22 @@ Global
 		{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E7FBCE-181D-47D0-8DAF-B98BB09C4426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E7FBCE-181D-47D0-8DAF-B98BB09C4426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E7FBCE-181D-47D0-8DAF-B98BB09C4426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E7FBCE-181D-47D0-8DAF-B98BB09C4426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87E70C51-990A-466A-B656-60FA86A00D28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E70C51-990A-466A-B656-60FA86A00D28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E70C51-990A-466A-B656-60FA86A00D28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E70C51-990A-466A-B656-60FA86A00D28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {977BD944-985E-4AE2-8D9D-9D61E71ED054}
+	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = ".\NHSOnline.Backend.Worker.ndproj"
 	EndGlobalSection
 EndGlobal

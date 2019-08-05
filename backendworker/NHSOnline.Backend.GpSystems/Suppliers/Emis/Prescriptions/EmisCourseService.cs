@@ -5,11 +5,9 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
@@ -23,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         private readonly EmisConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
-        private const string AuditType = Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsResponse;
+        private const string AuditType = AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsResponse;
 
         public EmisCourseService(IAuditor auditor, ILogger<EmisCourseService> logger, EmisConfigurationSettings settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {

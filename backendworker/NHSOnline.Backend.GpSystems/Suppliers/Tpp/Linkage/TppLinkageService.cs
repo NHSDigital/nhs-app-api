@@ -1,15 +1,11 @@
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;

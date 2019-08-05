@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IAuditor _auditor;
         private readonly UserSession _userSession;
         
-        private const string AuditType = Constants.AuditingTitles.GetSlotsAuditTypeResponse;
+        private const string AuditType = AuditingOperations.GetSlotsAuditTypeResponse;
 
         public AppointmentSlotsAuditingVisitor(IAuditor auditor, ILogger<AppointmentSlotsController> logger, UserSession userSession)
         {

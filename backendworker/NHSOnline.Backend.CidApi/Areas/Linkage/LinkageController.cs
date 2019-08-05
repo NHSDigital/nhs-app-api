@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Temporal;
 
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                     var linkageService = gpSystem.GetLinkageService();
 
                     await _auditor.AuditRegistrationEvent(nhsNumber, gpSystem.Supplier,
-                        Constants.AuditingTitles.GetLinkageDetailsAuditTypeRequest,
+                        AuditingOperations.GetLinkageDetailsAuditTypeRequest,
                         "Attempting to get linkage details.");
 
                     var result = await linkageService.GetLinkageKey(getLinkageRequest);
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                     await result.Accept(new LinkageResultAuditingVisitor<LinkageController>(
                         _auditor, _logger, gpSystem.Supplier, nhsNumber,
-                        Constants.AuditingTitles.GetLinkageDetailsAuditTypeResponse));
+                        AuditingOperations.GetLinkageDetailsAuditTypeResponse));
 
                     return await result.Accept(new LinkageResultVisitor(_logger));
                 });
@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                         var linkageService = gpSystem.GetLinkageService();
 
                         await _auditor.AuditRegistrationEvent(createLinkageRequest.NhsNumber, gpSystem.Supplier,
-                            Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest,
+                            AuditingOperations.CreateLinkageKeyAuditTypeRequest,
                             "Attempting to create linkage key.");
 
                         var result = await linkageService.CreateLinkageKey(createLinkageRequest);
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                         await result.Accept(new LinkageResultAuditingVisitor<LinkageController>(
                             _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
-                            Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
+                            AuditingOperations.CreateLinkageKeyAuditTypeResponse));
 
                         return await result.Accept(new LinkageResultVisitor(_logger));
                     });
@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
             await linkageResult.Accept(new LinkageResultAuditingVisitor<LinkageController>(
                 _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
-                Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
+                AuditingOperations.CreateLinkageKeyAuditTypeResponse));
 
             return await linkageResult.Accept(new LinkageResultVisitor(_logger));
         }

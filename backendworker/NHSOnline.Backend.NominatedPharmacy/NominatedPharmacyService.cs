@@ -7,12 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
+ using NHSOnline.Backend.Auditing;
+ using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
-using NHSOnline.Backend.Support.Logging;
+ using NHSOnline.Backend.Support.Logging;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 
@@ -80,8 +80,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 {
                     Code = "NE",
                 },
-                CommunicationFunctionRcv = NominatedPharmacyUpdateRequest.createCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
-                CommunicationFunctionSnd = NominatedPharmacyUpdateRequest.createCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
+                CommunicationFunctionRcv = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
+                CommunicationFunctionSnd = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
                 ControlActEvent = new ControlActEvent
                 {
                     ClassCode = "CACT",
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                         HistoricDataIndicator = new HistoricDataIndicator
                         {
                             SemanticsText = "HistoricDataIndicator",
-                            Value = new GetNominatedPharmacyTypes.ValueElement
+                            Value = new ValueElement
                             {
                                 Code = "0",
                                 CodeSystem = "2.16.840.1.113883.2.1.3.2.4.17.36",
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                         PersonId = new PersonId
                         {
                             SemanticsText = "Person.id",
-                            Value = new GetNominatedPharmacyTypes.ValueElement
+                            Value = new ValueElement
                             {
                                 Root = "2.16.840.1.113883.2.1.4.1",
                                 Extension = nhsNumber.RemoveWhiteSpace(),
@@ -301,7 +301,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     _logger.LogInformation($"Returned NhsNumber {nhsNumberReturned} " +
                                            $"did not match expected NhsNumber {nhsNumber}");
                     
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                    await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, 
                         $"Returned NhsNumber {nhsNumberReturned} did not match expected NhsNumber {nhsNumber}");
 
                     return personalDetailsCheck;
@@ -310,7 +310,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             else
             {
                 _logger.LogInformation("Could not extract nhsNumber from result of PDS Trace request");
-                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, 
                     "Could not extract nhsNumber from result of PDS Trace request");
                 
                 return personalDetailsCheck;
@@ -323,7 +323,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     _logger.LogInformation($"Returned family name {familyNameReturned} " +
                                            $"did not match expected family name {cidUserSession.FamilyName}");
                     
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                    await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, 
                         $"Returned family name {familyNameReturned} did not match expected " +
                         $"family name {cidUserSession.FamilyName}");
 
@@ -333,7 +333,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             else
             {
                 _logger.LogInformation("Could not extract patient surname from result of PDS Trace request");
-                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, 
                     "Could not extract patient surname from result of PDS Trace request");
                 
                 return personalDetailsCheck;
@@ -347,7 +347,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     _logger.LogInformation($"Returned date of birth {returnedDobParsed} " +
                                            $"did not match expected date of birth {cidUserSession.DateOfBirth}");
                     
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                    await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, 
                         $"Returned date of birth {returnedDobParsed} " +
                         $"did not match expected date of birth {cidUserSession.DateOfBirth}");
 
@@ -357,14 +357,14 @@ namespace NHSOnline.Backend.NominatedPharmacy
             else
             {
                 _logger.LogInformation("Could not extract patient dateOfBirth from result of PDS Trace request");
-                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+                await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, 
                     "Could not extract patient dateOfBirth from result of PDS Trace request");
                 
                 return personalDetailsCheck;
             }
 
             _logger.LogInformation("All Personal Details Checks have passed");
-            await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, 
+            await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, 
                 "All Personal Details Checks have passed");
 
             personalDetailsCheck.IsValid = true;
@@ -389,7 +389,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             if (!patientCareSections.Any())
             {
                 _logger.LogInformation("Patient does not have a nominated pharmacy set");
-                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                await _auditor.Audit(AuditingOperations.GetNominatedPharmacy,
                     "Patient does not have a nominated pharmacy set");
                 return new PharmacyCheck { IsValid = true, PatientCareProvisionEvent = null };
             }
@@ -401,7 +401,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 logBuilder.Append(JsonConvert.SerializeObject(keys));
 
                 _logger.LogWarning(logBuilder.ToString());
-                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, logBuilder.ToString());
+                await _auditor.Audit(AuditingOperations.GetNominatedPharmacy, logBuilder.ToString());
                 return new PharmacyCheck { IsValid = false, PatientCareProvisionEvent = null };
             }
 
@@ -410,7 +410,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             {
                 case NominatedPharmacyCode:
                     _logger.LogInformation($"Patient has a valid {NominatedPharmacyCode} pharmacy");
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                    await _auditor.Audit(AuditingOperations.GetNominatedPharmacy,
                         $"Successfully retrieved a valid {NominatedPharmacyCode} pharmacy");
                     return new PharmacyCheck
                     {
@@ -421,7 +421,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 case MedicalApplianceCode:
                     _logger.LogInformation(
                         $"Patient has a {MedicalApplianceCode} pharmacy which is not a valid pharmacy type");
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                    await _auditor.Audit(AuditingOperations.GetNominatedPharmacy,
                         $"Patient has a {MedicalApplianceCode} pharmacy");
                     return new PharmacyCheck
                     {
@@ -430,7 +430,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     };
                 case DispensingDoctorCode:
                     _logger.LogInformation($"Patient has a valid {DispensingDoctorCode} pharmacy");
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                    await _auditor.Audit(AuditingOperations.GetNominatedPharmacy,
                         $"Successfully retrieved a valid {DispensingDoctorCode} pharmacy");
                     return new PharmacyCheck
                     {

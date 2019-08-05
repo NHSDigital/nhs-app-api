@@ -1,113 +1,137 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<NDepend AppName="NHSOnline.Backend.Worker" Platform="DotNet" FileWrittenByProductVersion="2018.2.1.9119">
+<NDepend AppName="NHSOnline.Backend.Worker" Platform="DotNet" FileWrittenByProductVersion="2019.2.6.9270">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
+  <IDEFiles />
   <Assemblies>
-    <Name>NHSOnline.Backend.Worker</Name>
-    <Name>NHSOnline.Backend.Worker.UnitTests</Name>
+    <Name>NHSOnline.Backend.PfsApi</Name>
+    <Name>NHSOnline.Backend.GpSystems</Name>
+    <Name>NHSOnline.Backend.Support</Name>
+    <Name>NHSOnline.Backend.NominatedPharmacy</Name>
+    <Name>NHSOnline.Backend.CidApi</Name>
+    <Name>NHSOnline.Backend.ApiSupport</Name>
+    <Name>NHSOnline.Backend.ServiceJourneyRulesApi</Name>
+    <Name>NHSOnline.Backend.ServiceJourneyRulesApi.Models</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>System.Runtime</Name>
     <Name>System.Resources.ResourceManager</Name>
+    <Name>System.Diagnostics.Debug</Name>
+    <Name>Newtonsoft.Json</Name>
+    <Name>System.Diagnostics.Tools</Name>
     <Name>Microsoft.AspNetCore.Mvc.Core</Name>
     <Name>Microsoft.AspNetCore.Razor.Runtime</Name>
-    <Name>System.Diagnostics.Debug</Name>
-    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
-    <Name>Microsoft.Extensions.Logging.Abstractions</Name>
-    <Name>StackExchange.Redis</Name>
-    <Name>Microsoft.AspNetCore.Authentication.Cookies</Name>
     <Name>System.Threading.Tasks</Name>
-    <Name>Microsoft.AspNetCore.Authentication</Name>
-    <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
-    <Name>Microsoft.Extensions.Primitives</Name>
-    <Name>System.Security.Claims</Name>
-    <Name>System.Diagnostics.Tools</Name>
-    <Name>System.Net.Primitives</Name>
-    <Name>MongoDB.Driver</Name>
-    <Name>Newtonsoft.Json</Name>
-    <Name>MongoDB.Bson</Name>
-    <Name>Microsoft.Extensions.DependencyInjection.Abstractions</Name>
+    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
+    <Name>Microsoft.Extensions.Hosting.Abstractions</Name>
     <Name>Microsoft.AspNetCore.Hosting.Abstractions</Name>
+    <Name>Microsoft.Extensions.DependencyInjection.Abstractions</Name>
     <Name>Microsoft.Extensions.Logging</Name>
-    <Name>System.Xml.XmlSerializer</Name>
-    <Name>System.Xml.ReaderWriter</Name>
-    <Name>System.Runtime.Extensions</Name>
-    <Name>System.ComponentModel</Name>
+    <Name>Microsoft.Extensions.Logging.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
     <Name>Microsoft.AspNetCore.Mvc.Formatters.Json</Name>
     <Name>Microsoft.AspNetCore.HttpsPolicy</Name>
     <Name>Microsoft.AspNetCore.Cors</Name>
-    <Name>System.ComponentModel.Annotations</Name>
-    <Name>Microsoft.Azure.DocumentDB.Core</Name>
-    <Name>System.Linq.Expressions</Name>
+    <Name>System.ComponentModel</Name>
     <Name>System.Collections</Name>
-    <Name>Microsoft.AspNetCore.Authentication.Abstractions</Name>
-    <Name>System.Net.Http</Name>
-    <Name>Microsoft.Extensions.Options</Name>
-    <Name>System.Security.Cryptography.Csp</Name>
-    <Name>Microsoft.AspNetCore.Authorization</Name>
-    <Name>System.Security.Cryptography.Algorithms</Name>
-    <Name>System.Security.Cryptography.Primitives</Name>
-    <Name>System.Security.Cryptography.X509Certificates</Name>
-    <Name>System.Threading</Name>
-    <Name>System.Runtime.Serialization.Primitives</Name>
-    <Name>Microsoft.IdentityModel.Tokens</Name>
-    <Name>System.IdentityModel.Tokens.Jwt</Name>
-    <Name>System.Security.Cryptography.Xml</Name>
-    <Name>System.Text.RegularExpressions</Name>
-    <Name>Microsoft.AspNetCore.Http.Extensions</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
-    <Name>Microsoft.AspNetCore.Mvc.ViewFeatures</Name>
-    <Name>Microsoft.AspNetCore.Antiforgery</Name>
-    <Name>System.Collections.Concurrent</Name>
+    <Name>System.IO.FileSystem</Name>
+    <Name>System.Runtime.Extensions</Name>
+    <Name>CsvHelper</Name>
     <Name>System.Linq</Name>
-    <Name>Microsoft.AspNetCore.Hosting</Name>
+    <Name>YamlDotNet</Name>
+    <Name>NJsonSchema</Name>
+    <Name>System.ComponentModel.Primitives</Name>
+    <Name>Microsoft.Extensions.DependencyInjection</Name>
+    <Name>Microsoft.AspNetCore.Authorization</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
     <Name>Microsoft.Extensions.Configuration</Name>
     <Name>Microsoft.Extensions.Configuration.EnvironmentVariables</Name>
     <Name>Microsoft.Extensions.Configuration.CommandLine</Name>
+    <Name>Microsoft.Extensions.Hosting</Name>
     <Name>Microsoft.AspNetCore</Name>
-    <Name>System.Console</Name>
+    <Name>Microsoft.AspNetCore.Hosting</Name>
     <Name>Microsoft.Extensions.Logging.Console</Name>
-    <Name>Microsoft.Extensions.Options.ConfigurationExtensions</Name>
     <Name>Microsoft.AspNetCore.Mvc</Name>
-    <Name>Microsoft.AspNetCore.Http.Features</Name>
+    <Name>Microsoft.Extensions.Options</Name>
     <Name>Microsoft.Extensions.Logging.Debug</Name>
     <Name>Microsoft.AspNetCore.Diagnostics</Name>
-    <Name>System.IO.FileSystem</Name>
-    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>Microsoft.Extensions.Logging.Configuration</Name>
+    <Name>System.Console</Name>
+    <Name>Microsoft.AspNetCore.Http.Features</Name>
+    <Name>Microsoft.Extensions.Primitives</Name>
+    <Name>System.Linq.Expressions</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Versioning</Name>
+    <Name>Microsoft.AspNetCore.Http.Extensions</Name>
+    <Name>Microsoft.Net.Http.Headers</Name>
+    <Name>Microsoft.AspNetCore.Authentication.Abstractions</Name>
+    <Name>System.Net.Primitives</Name>
+    <Name>Microsoft.AspNetCore.Mvc.ViewFeatures</Name>
+    <Name>Microsoft.Extensions.Caching.Memory</Name>
+    <Name>Microsoft.IdentityModel.Tokens</Name>
+    <Name>System.IdentityModel.Tokens.Jwt</Name>
+    <Name>Microsoft.AspNetCore.Authentication</Name>
+    <Name>StackExchange.Redis</Name>
+    <Name>System.Net.Http</Name>
+    <Name>System.Xml.ReaderWriter</Name>
+    <Name>System.Xml.XmlSerializer</Name>
+    <Name>System.Xml.XDocument</Name>
     <Name>Microsoft.Extensions.Http</Name>
     <Name>System.Text.Encoding.Extensions</Name>
+    <Name>System.Text.RegularExpressions</Name>
+    <Name>System.Security.Cryptography.X509Certificates</Name>
+    <Name>System.Threading.Thread</Name>
     <Name>System.Web.HttpUtility</Name>
-    <Name>Microsoft.Extensions.Identity.Core</Name>
+    <Name>System.ComponentModel.Annotations</Name>
+    <Name>System.Security.Cryptography.Csp</Name>
+    <Name>System.Collections.Concurrent</Name>
+    <Name>MongoDB.Driver</Name>
+    <Name>MongoDB.Bson</Name>
+    <Name>HtmlAgilityPack</Name>
+    <Name>System.Security.Cryptography.Algorithms</Name>
+    <Name>System.Security.Cryptography.Primitives</Name>
+    <Name>System.Threading</Name>
+    <Name>Microsoft.Azure.DocumentDB.Core</Name>
+    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>System.Security.Cryptography.Xml</Name>
+    <Name>CorrelationId</Name>
+    <Name>Microsoft.Extensions.Caching.Abstractions</Name>
+    <Name>System.Security.Claims</Name>
+    <Name>Microsoft.AspNetCore.Antiforgery</Name>
+    <Name>Hl7.Fhir.STU3.Core</Name>
+    <Name>GeoCoordinate.NetCore</Name>
+    <Name>Microsoft.AspNetCore.Authentication.Cookies</Name>
+    <Name>System.Runtime.Serialization.Primitives</Name>
+    <Name>Microsoft.Extensions.Options.ConfigurationExtensions</Name>
     <Name>Microsoft.EntityFrameworkCore</Name>
-    <Name>Microsoft.Net.Http.Headers</Name>
+    <Name>Microsoft.Extensions.Identity.Core</Name>
     <Name>System.Linq.Queryable</Name>
     <Name>System.Security.Principal</Name>
-    <Name>Microsoft.VisualStudio.TestPlatform.TestFramework</Name>
-    <Name>Moq</Name>
-    <Name>AutoFixture</Name>
-    <Name>Microsoft.Extensions.DependencyInjection</Name>
-    <Name>RichardSzalay.MockHttp</Name>
-    <Name>Microsoft.AspNetCore.Http</Name>
-    <Name>System.Xml.XDocument</Name>
-    <Name>Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions</Name>
-    <Name>FluentAssertions</Name>
-    <Name>System.Runtime.InteropServices.RuntimeInformation</Name>
-    <Name>AutoFixture.AutoMoq</Name>
-    <Name>Microsoft.AspNetCore.Routing.Abstractions</Name>
-    <Name>System.Threading.Thread</Name>
-    <Name>Castle.Core</Name>
-    <Name>Microsoft.Extensions.Caching.Abstractions</Name>
-    <Name>HtmlAgilityPack</Name>
-    <Name>Microsoft.Extensions.Caching.Memory</Name>
+    <Name>mscorlib</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.7</Dir>
-    <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.0</Dir>
-    <Dir>C:\Program Files\dotnet\sdk\NuGetFallbackFolder</Dir>
-    <Dir>C:\Users\Ian\.nuget\packages</Dir>
     <Dir>.\NHSOnline.Backend.Worker\bin\debug\netcoreapp2.0</Dir>
     <Dir>.\NHSOnline.Backend.Worker.UnitTests\bin\debug\netcoreapp2.0</Dir>
     <Dir>.\NHSOnline.Backend.Worker\bin\debug\netcoreapp2.1</Dir>
     <Dir>.\NHSOnline.Backend.Worker.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.PfsApi\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.PfsApi.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.GpSystems\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.Support\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.Support.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.GpSystems.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\UnitTestHelper\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.NominatedPharmacy\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.NominatedPharmacy.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.CidApi\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.CidApi.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.ApiSupport\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.ApiSupport.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.ServiceJourneyRulesApi\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.ServiceJourneyRulesApi.Models\bin\debug\netcoreapp2.1</Dir>
+    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.12</Dir>
+    <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.0</Dir>
+    <Dir>C:\Program Files\dotnet\sdk\NuGetFallbackFolder</Dir>
+    <Dir>C:\Users\Ian\.nuget\packages</Dir>
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />

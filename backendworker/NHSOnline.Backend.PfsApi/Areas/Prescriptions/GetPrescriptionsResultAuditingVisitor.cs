@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
-using NHSOnline.Backend.GpSystems.Prescriptions;
-using NHSOnline.Backend.Support.Auditing;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems.Prescriptions;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
@@ -13,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly IAuditor _auditor;
         private readonly ILogger<PrescriptionsController> _logger;
         
-        private const string AuditType = Constants.AuditingTitles.RepeatPrescriptionsViewHistoryResponse;
+        private const string AuditType = AuditingOperations.RepeatPrescriptionsViewHistoryResponse;
 
         public GetPrescriptionsResultAuditingVisitor(IAuditor auditor, ILogger<PrescriptionsController> logger)
         {

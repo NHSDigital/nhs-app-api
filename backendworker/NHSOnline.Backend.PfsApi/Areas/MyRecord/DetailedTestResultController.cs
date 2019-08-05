@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             {
                 _logger.LogEnter();
                 
-                await _auditor.Audit(Constants.AuditingTitles.GetTestResultAuditTypeRequest,
+                await _auditor.Audit(AuditingOperations.GetTestResultAuditTypeRequest,
                     "Attempting to view test result");
 
                 var userSession = HttpContext.GetUserSession();

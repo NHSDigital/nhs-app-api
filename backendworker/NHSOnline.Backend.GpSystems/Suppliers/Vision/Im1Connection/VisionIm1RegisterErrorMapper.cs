@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
@@ -22,8 +21,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 .AddKeyToEnum("200-2", InternalCode.UserAlreadyLinked)
                 .AddKeyToEnum("200-19", InternalCode.UserAccountDisabled)
                 .AddKeyToEnum("200-15", InternalCode.UserAccountDisabled);
-
-
 
         public static Im1ConnectionRegisterResult Map(
             VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> response, ILogger<VisionIm1ConnectionService> logger)

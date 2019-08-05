@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 
 namespace NHSOnline.Backend.NominatedPharmacy
 {
@@ -8,7 +6,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
     {
         public static void AddIfValueNotNull<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
         {
-            if ((object)value != null)
+            if (value != null)
                 dictionary.Add(key, value);
         }
     }

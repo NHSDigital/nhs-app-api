@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
@@ -15,7 +14,6 @@ using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 {
@@ -29,16 +27,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private EmisUserSession _emisUserSession;
         private IFixture _fixture;
         private RepeatPrescriptionRequest _repeatPrescriptionRequest;
-        public const string DefaultEmisVersion = "2.1.0.0";
-        public static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
-        public static readonly Uri BaseUri = new Uri("http://emis_base_url/");
+        private const string DefaultEmisVersion = "2.1.0.0";
+        private static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
+        private static readonly Uri BaseUri = new Uri("http://emis_base_url/");
         private const string CertificatePath = "CertificatePath";
         private const string CertificatePassphrase = "CerticiatePassphrase";
         private const int EmisExtendedHttpTimeoutSeconds = 6;
         private const int DefaultHttpTimeoutSeconds = 2;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
-        private const string environment = "testEnv";
+        private const string Environment = "testEnv";
 
         [TestInitialize]
         public void TestInitialize()
@@ -51,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             
             _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, 
-                environment);
+                Environment);
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<EmisPrescriptionService>();
             _repeatPrescriptionRequest = new RepeatPrescriptionRequest

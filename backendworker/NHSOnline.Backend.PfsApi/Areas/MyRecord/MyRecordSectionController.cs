@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
@@ -40,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 return BadRequest("The Test Results endpoint only works with Vision");
             }
 
-            await _auditor.Audit(Constants.AuditingTitles.ViewPatientRecordSectionAuditTypeRequest,
+            await _auditor.Audit(AuditingOperations.ViewPatientRecordSectionAuditTypeRequest,
                 $"Viewing Patient Record {section}");
 
             _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession.Supplier}");

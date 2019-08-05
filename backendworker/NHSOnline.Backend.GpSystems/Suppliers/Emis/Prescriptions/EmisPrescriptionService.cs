@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         private async Task<PrescriptionRequestsGetResponse> GetPrescriptionsWithoutRepeatCourses(
             PrescriptionRequestsGetResponse prescriptionsResponse)
         {
-            const string auditType = Constants.AuditingTitles.RepeatPrescriptionsViewHistoryResponse;
+            const string auditType = AuditingOperations.RepeatPrescriptionsViewHistoryResponse;
 
             int totalCoursesRunningTotal = 0;
             var repeatCourses = prescriptionsResponse.MedicationCourses
@@ -176,7 +176,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
         public async Task<OrderPrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            const string auditType = Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsResponse;
+            const string auditType = AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsResponse;
 
             var emisUserSession = (EmisUserSession) gpUserSession;
 

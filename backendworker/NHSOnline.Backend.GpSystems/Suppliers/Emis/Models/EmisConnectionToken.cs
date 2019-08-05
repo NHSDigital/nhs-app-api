@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models
 {

@@ -10,15 +10,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
-using NHSOnline.Backend.CidApi.Areas.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using PatientIm1ConnectionResponse = NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.PatientIm1ConnectionResponse;
 
 namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
@@ -157,7 +156,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             actualResponse.Should().BeEquivalentTo(expectedResponse);
 
             _auditor.Verify(x => x.AuditRegistrationEvent(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
-                Constants.AuditingTitles.Im1ConnectionVerifyResponse, It.IsAny<string>(), It.IsAny<object[]>()));
+                AuditingOperations.Im1ConnectionVerifyResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -260,7 +259,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             actualResponse.Should().BeEquivalentTo(expectedResponse);
 
             _auditor.Verify(x => x.AuditRegistrationEvent(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
-                Constants.AuditingTitles.Im1ConnectionRegisterResponse, It.IsAny<string>(), It.IsAny<object[]>()));
+                AuditingOperations.Im1ConnectionRegisterResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]

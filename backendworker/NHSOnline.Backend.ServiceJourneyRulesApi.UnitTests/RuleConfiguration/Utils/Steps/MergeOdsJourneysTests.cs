@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
@@ -17,15 +15,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
     public class MergeOdsJourneysTests
     {
         private IValidatorStep _step;
-        private Mock<ILogger<MergeOdsJourneys>> _mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             var fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-
-            _mockLogger = fixture.Freeze<Mock<ILogger<MergeOdsJourneys>>>();
 
             _step = fixture.Create<MergeOdsJourneys>();
         }

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionService = gpSystem.GetPrescriptionService();
 
-            await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
+            await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
             _logger.LogInformation($"Calling prescription service to get prescriptions");
             var result = await prescriptionService.GetPrescriptions(userSession.GpUserSession, fromDate, DateTimeOffset.Now);
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 
             var courseIds = FormatCourseIds(repeatPrescriptionRequest.CourseIds);
             
-            await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
+            await _auditor.Audit(AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
             
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();

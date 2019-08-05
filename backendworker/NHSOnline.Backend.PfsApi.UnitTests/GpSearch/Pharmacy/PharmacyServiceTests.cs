@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.GpSearch;
@@ -19,7 +18,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
     public class PharmacyServiceTests
     {
         private PharmacyService _pharmacyService;
-        private Mock<ILogger<PharmacyService>> _logger;
         private IFixture _fixture;
         private Mock<IGpLookupClient> _gpLookupClient;
 
@@ -27,7 +25,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Freeze<Mock<ILogger<PharmacyService>>>();
             _gpLookupClient = _fixture.Freeze<Mock<IGpLookupClient>>();
 
             _pharmacyService = _fixture.Create<PharmacyService>();

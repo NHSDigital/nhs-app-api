@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
     public class NominatedPharmacyClientTests
     {
         private IFixture _fixture;
-        private INominatedPharmacyClient _sut;
+        private INominatedPharmacyClient _systemUnderTest;
         private Mock<INominatedPharmacyPDSClient> _nominatedPharmacyPDSClientMock;
         private Mock<INominatedPharmacySubmitClient> _nominatedPharmacySubmitClientMock;
 
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
             _nominatedPharmacyPDSClientMock = _fixture.Freeze<Mock<INominatedPharmacyPDSClient>>();
             _nominatedPharmacySubmitClientMock = _fixture.Freeze<Mock<INominatedPharmacySubmitClient>>();
 
-            _sut = _fixture.Create<NominatedPharmacyClient>();
+            _systemUnderTest = _fixture.Create<NominatedPharmacyClient>();
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
                 .Verifiable();
 
             // Act
-            var result = await _sut.NominatedPharmacyGet(getNominatedPharmacyRequest);
+            var result = await _systemUnderTest.NominatedPharmacyGet(getNominatedPharmacyRequest);
 
             // Assert
             _nominatedPharmacyPDSClientMock.Verify();
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
                 .Verifiable();
 
             // Act
-            var result = await _sut.UpdateNominatedPharmacy(nominatedPharmacyUpdateRequest);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nominatedPharmacyUpdateRequest);
 
             // Assert
             _nominatedPharmacySubmitClientMock.Verify();

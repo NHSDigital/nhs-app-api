@@ -2,12 +2,12 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Temporal;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogEnter();
                 
-                await _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
+                await _auditor.Audit(AuditingOperations.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
                 var userSession = HttpContext.GetUserSession();
                 _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.GpUserSession.Supplier}'.");

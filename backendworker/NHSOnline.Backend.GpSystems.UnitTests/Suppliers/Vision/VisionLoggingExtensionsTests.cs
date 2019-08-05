@@ -17,29 +17,19 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 {
-
     [TestClass]
     public class VisionLoggingExtensionsTests
     {
         private Mock<ILogger<VisionSessionService>> _logger;
         private IFixture _fixture;
         private static Regex _guidRegex;
-        private static TestContext _context;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
-            _context = testContext;
-            _guidRegex = new Regex(Constants.Regex.GuidRegex, RegexOptions.IgnoreCase);
-        }
-
         
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
             _logger =  _fixture.Freeze<Mock<ILogger<VisionSessionService>>>();
+            _guidRegex = new Regex(Constants.Regex.GuidRegex, RegexOptions.IgnoreCase);
         }
 
         [TestMethod]
@@ -59,7 +49,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                     It.IsAny<Func<object, Exception, string>>()
                 )
             );
-
         }
 
         [TestMethod]

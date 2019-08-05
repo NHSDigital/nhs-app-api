@@ -4,7 +4,6 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 {

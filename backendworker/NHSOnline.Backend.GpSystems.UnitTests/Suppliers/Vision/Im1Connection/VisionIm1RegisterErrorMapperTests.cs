@@ -2,7 +2,6 @@
 using System.Net;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using Castle.Core.Logging;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

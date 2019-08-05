@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
-using System.Threading.Tasks;
-
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -18,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly ILogger<AppointmentsController> _logger;
         private readonly UserSession _userSession;
         
-        private const string AuditType = Constants.AuditingTitles.ViewAppointmentAuditTypeResponse;
+        private const string AuditType = AuditingOperations.ViewAppointmentAuditTypeResponse;
 
         public AppointmentsAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, UserSession userSession)
         {

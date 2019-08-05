@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
@@ -17,7 +16,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 {
@@ -31,19 +29,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private VisionUserSession _visionUserSession;
         private IFixture _fixture;
         private VisionResponseEnvelope<EligibleRepeatsResponse> _eligibleRepeatsResponse;
-        private string ApplicationProviderId = "ApplicationProviderId";
+        private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
-        private const string certificatePassphrase = "CertificatePassphrase";
-        private const string certificatePath = "CertificatePath";
-        private const string visionSenderUserName = "visionuser";
-        private const string visionSenderFullName = "visionuser";
-        private const string visionSenderUserIdentity = "username";
-        private const string visionSenderUserRole = "admin";
+        private const string CertificatePassphrase = "CertificatePassphrase";
+        private const string CertificatePath = "CertificatePath";
+        private const string VisionSenderUserName = "visionuser";
+        private const string VisionSenderFullName = "visionuser";
+        private const string VisionSenderUserIdentity = "username";
+        private const string VisionSenderUserRole = "admin";
         private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
         private const int VisionAppointmentSlotsRequestCount = 100;
-        private const string environment = "environment";
+        private const string Environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -58,9 +56,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
 
             _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
-                certificatePath, certificatePassphrase, RequestUserName, visionSenderUserName, 
-                visionSenderFullName, visionSenderUserIdentity, visionSenderUserRole, VisionAppointmentSlotsRequestCount, 
-                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, environment);
+                CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName, 
+                VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, VisionAppointmentSlotsRequestCount, 
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
 
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<VisionCourseService>();

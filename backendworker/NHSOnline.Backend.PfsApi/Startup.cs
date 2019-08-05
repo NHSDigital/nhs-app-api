@@ -21,6 +21,7 @@ using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
@@ -28,8 +29,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
-using NHSOnline.Backend.ApiSupport;
-using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.PfsApi.Devices;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
@@ -37,7 +36,10 @@ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.RequestFormatters;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.PfsApi.Filters;
-using SettingValidationStartupFilter = NHSOnline.Backend.Support.SettingValidationStartupFilter;
+using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.AspNet.Filters;
+using NHSOnline.Backend.Support.DependencyInjection;
+using SettingValidationStartupFilter = NHSOnline.Backend.Support.AspNet.Filters.SettingValidationStartupFilter;
 using NHSOnline.Backend.Support.Middleware;
 
 namespace NHSOnline.Backend.PfsApi
@@ -75,7 +77,6 @@ namespace NHSOnline.Backend.PfsApi
             _supplierStartup = new SupplierStartup(configuration, loggerFactory, new GpSystemRegistrationService());
 
             _logger = loggerFactory.CreateLogger<Startup>();
-
         }
 
         private string GetApiAppVersion()
@@ -135,7 +136,6 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));    
-            
             
             services.Configure<OnlineConsultationsProvidersSettings>(Configuration.GetSection("OnlineConsultationsProvidersSettings"));
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();

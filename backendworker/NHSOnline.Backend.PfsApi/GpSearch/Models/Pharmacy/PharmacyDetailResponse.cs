@@ -6,8 +6,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
     {
         public PharmacyDetailResponse(HttpStatusCode statusCode, Organisation pharmacy = null)
         {
-            this.StatusCode = statusCode;
-            this.Pharmacy = pharmacy;
+            StatusCode = statusCode;
+            Pharmacy = pharmacy;
         }
 
         public HttpStatusCode StatusCode { get; set; }

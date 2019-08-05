@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-
-namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
+﻿namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
     public enum EmisApiErrorCode
     {

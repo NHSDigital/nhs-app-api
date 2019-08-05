@@ -2,7 +2,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecords

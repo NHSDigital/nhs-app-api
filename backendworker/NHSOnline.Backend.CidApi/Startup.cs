@@ -18,6 +18,7 @@ using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
@@ -25,18 +26,17 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.CidApi.DependencyInjection;
-using NHSOnline.Backend.ApiSupport;
-using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.CidApi.Filters;
+using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.AspNet.Filters;
+using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Middleware;
 
 namespace NHSOnline.Backend.CidApi
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _env;
-        private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<Startup> _logger;
         private IConfiguration Configuration { get; }
         private readonly ModularStartup _modularStartup;
@@ -46,8 +46,6 @@ namespace NHSOnline.Backend.CidApi
         public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
-            _env = env;
-            _loggerFactory = loggerFactory;
 
             if (env.IsDevelopment())
             {
@@ -60,7 +58,6 @@ namespace NHSOnline.Backend.CidApi
             _supplierStartup = new SupplierStartup(configuration, loggerFactory, new GpSystemRegistrationService());
 
             _logger = loggerFactory.CreateLogger<Startup>();
-
         }
 
         private string GetApiAppVersion()
@@ -109,11 +106,8 @@ namespace NHSOnline.Backend.CidApi
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
             services.AddSingleton<IGuidCreator, GuidCreator>();
-            services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
-            services.AddSingleton<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
-            services.AddSingleton<IUserSessionManager, UserSessionManager>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddSingleton<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();
             services.AddSingleton<IGetLinkageKeysService, GetLinkageKeysService>();
@@ -210,7 +204,6 @@ namespace NHSOnline.Backend.CidApi
 
             var visionConfig = CreateAndValidateVisionEnvironmentVariables(environment);
             services.AddSingleton(visionConfig);
-
         }
 
         private ConfigurationSettings CreateAndValidateEnvironmentVariables()
@@ -248,7 +241,6 @@ namespace NHSOnline.Backend.CidApi
             var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
             var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
             
-
             var config = new EmisConfigurationSettings(new Uri(emisBaseUrl, UriKind.Absolute), applicationId, version, certificatePath, certificatePassphrase,
              emisExtendedHttpTimeoutSeconds, defaultHttpTimeoutSeconds, coursesMaxCoursesLimit, prescriptionsMaxCoursesSoftLimit, environment);
             config.Validate();
@@ -304,7 +296,7 @@ namespace NHSOnline.Backend.CidApi
         {
             var applicationProviderId = Configuration.GetOrWarn("VISION_APPLICATION_PROVIDER_ID", _logger);
             var apiBaseUriString = Configuration.GetOrWarn("VISION_BASE_URI", _logger);
-            var visionPFSPath = Configuration.GetOrWarn("VISION_PFS_PATH", _logger);
+            var visionPfsPath = Configuration.GetOrWarn("VISION_PFS_PATH", _logger);
             var certificatePath = Configuration.GetOrWarn("VISION_CERT_PATH", _logger);
             var certificatePassphrase = Configuration.GetOrWarn("VISION_CERT_PASSPHRASE", _logger);
             var requestUsername = Configuration.GetOrWarn("VISION_USERNAME", _logger);
@@ -319,7 +311,7 @@ namespace NHSOnline.Backend.CidApi
 
             var config = new VisionConfigurationSettings(
                 applicationProviderId,
-                new Uri(apiBaseUriString + visionPFSPath, UriKind.Absolute),
+                new Uri(apiBaseUriString + visionPfsPath, UriKind.Absolute),
                 certificatePath,
                 certificatePassphrase,
                 requestUsername,
@@ -335,7 +327,6 @@ namespace NHSOnline.Backend.CidApi
 
             config.Validate();
             return config;
-
         }
 
         private static void UseSecurityHeaders(IApplicationBuilder app, string apiAppVersion, ILogger<Startup> startupLogger)

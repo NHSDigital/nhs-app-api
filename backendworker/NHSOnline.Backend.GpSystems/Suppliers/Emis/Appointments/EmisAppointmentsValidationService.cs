@@ -6,11 +6,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 {
     public class EmisAppointmentsValidationService : AppointmentsValidationService
     {
-        private readonly ILogger<EmisAppointmentsValidationService> _logger;
-
         public EmisAppointmentsValidationService(ILogger<EmisAppointmentsValidationService> logger) : base(logger)
         {
-            _logger = logger;
         }
 
         protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request)

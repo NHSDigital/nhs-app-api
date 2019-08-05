@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("M81001", "20180121")]
         [DataRow("X1001", "20180921")]
         public void GetGpInfo_WhenCalledWithValidFileName_ReturnsLatestRecordForGivenOdsCode(string odsCode,
-            string EndpointCreated)
+            string endpointCreated)
         {
             // Arrange            
             SetupFileHandlerForMultipleOdsCode();
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
             // Assert
             result.Should().ContainKey(odsCode);
-            result[odsCode].EndpointCreated.Should().Be(EndpointCreated);
+            result[odsCode].EndpointCreated.Should().Be(endpointCreated);
         }
 
         [TestMethod]

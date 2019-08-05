@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch

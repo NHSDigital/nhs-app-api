@@ -7,8 +7,8 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
 
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             var formattedAcceptanceString = termsAndConditionsAcceptanceDate.ToString(CultureInfo.InvariantCulture);
             string cookieAccepted = request.AnalyticsCookieAccepted ? $" at DateAnalyticsCookieAccepted={formattedAcceptanceString}" : string.Empty;
 
-            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
+            await _auditor.Audit(AuditingOperations.TermsAndConditionsAnalyticsCookieAcceptance,
                 $"Attempting to record analytics cookies acceptance - {nameof(request.AnalyticsCookieAccepted)}={request.AnalyticsCookieAccepted}{cookieAccepted}");
         }
 

@@ -18,6 +18,5 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
         public HttpStatusCode HttpStatusCode { get; }
 
         public bool IsGpEpsEnabled { get; }
-
     }
 }

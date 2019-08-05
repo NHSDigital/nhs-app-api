@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.PfsApi
 {

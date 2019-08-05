@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.CidApi.Areas.Linkage;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems;
@@ -14,7 +14,7 @@ using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     model.OdsCode = _odsCodeMassager.CheckOdsCode(model.OdsCode);
                 }
 
-                var isValid = new Im1ConnectionValidator(_logger).IsPostValid(model, out var invalidParams);
+                var isValid = new Im1ConnectionValidator(_logger).IsPostValid(model, out _);
 
                 if (!isValid)
                 {
@@ -228,7 +228,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                             _logger,
                             gpSystem.Supplier,
                             im1RegistrationRequest.NhsNumber,
-                            Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
+                            AuditingOperations.CreateLinkageKeyAuditTypeResponse));
                     return await retrieveLinkageResult.Accept(new LinkageV2ResultVisitor(_errorCodes, gpSystem.Supplier, _logger));
                 }
             }

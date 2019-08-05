@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 {
     public class FhirSanitizationHelper : IFhirSanitizationHelper
     {
-        private static readonly HashSet<string> whitelist = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly HashSet<string> Whitelist = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "em",
             "br",
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 {
 
                     var optionValue = (Coding) option.Value;
-                    optionValue.Display = htmlSanitizer.SanitizeHtml(optionValue.Display, whitelist);
+                    optionValue.Display = htmlSanitizer.SanitizeHtml(optionValue.Display, Whitelist);
                     option.Value = optionValue;
                 });
 

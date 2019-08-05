@@ -1,6 +1,4 @@
-using System;
 using System.Xml.Serialization;
-using System.Collections.Generic;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Soap
 {

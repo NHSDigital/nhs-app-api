@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace NHSOnline.Backend.GpSystems
+namespace NHSOnline.Backend.Support
 {
     public abstract class ApiResponse
     {

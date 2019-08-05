@@ -236,8 +236,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                 {
                     Code = "NE"
                 },
-                CommunicationFunctionRcv = createCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
-                CommunicationFunctionSnd = createCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
+                CommunicationFunctionRcv = CreateCommunicationFunctionRcv(_config.SpineAccreditedSystemIdTo),
+                CommunicationFunctionSnd = CreateCommunicationFunctionSnd(_config.SpineAccreditedSystemIdFrom),
                 ControlActEvent = controlActEventBody
             };
 
@@ -246,9 +246,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             return xdoc.OuterXml;
         }
 
-        public static XmlDocument RemoveXmlns(String xml)
+        private static XmlDocument RemoveXmlns(string xml)
         {
-            XDocument d = XDocument.Parse(xml);
+            var d = XDocument.Parse(xml);
             d.Root.Descendants().Attributes().Where(x => x.IsNamespaceDeclaration).Remove();
 
             foreach (var elem in d.Descendants())
@@ -260,7 +260,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             return xmlDocument;
         }
 
-        public static NominatedPharmacyTypes.CommunicationFunctionSnd createCommunicationFunctionSnd(string extension)
+        public static NominatedPharmacyTypes.CommunicationFunctionSnd CreateCommunicationFunctionSnd(string extension)
         {
             var communicationFuncSndObject = new NominatedPharmacyTypes.CommunicationFunctionSnd
             {
@@ -278,9 +278,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             return communicationFuncSndObject;
         }
         
-        public static NominatedPharmacyTypes.CommunicationFunctionRcv createCommunicationFunctionRcv(string extension)
+        public static NominatedPharmacyTypes.CommunicationFunctionRcv CreateCommunicationFunctionRcv(string extension)
         {
-            NominatedPharmacyTypes.CommunicationFunctionRcv communicationFuncSndObject =
+            var communicationFuncSndObject =
                 new NominatedPharmacyTypes.CommunicationFunctionRcv
                 {
                     Device = new NominatedPharmacyTypes.Device

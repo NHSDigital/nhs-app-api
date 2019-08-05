@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
-namespace NHSOnline.Backend.GpSystems.CreateIm1Connection
+namespace NHSOnline.Backend.GpSystems.Im1Connection
 {
        public class CreateIm1ConnectionService : ICreateIm1ConnectionService
     {

@@ -1,6 +1,3 @@
-using System;
-using NHSOnline.Backend.Support.Settings;
-
 namespace NHSOnline.Backend.PfsApi.Ndop {
 
     public class NdopConfigurationSettings {
@@ -20,7 +17,6 @@ namespace NHSOnline.Backend.PfsApi.Ndop {
             ClaimIssuer = claimIssuer;
             CertificatePath = certificatePath;
             CertificatePassword = certificatePassword;
-
         }
     }
 }

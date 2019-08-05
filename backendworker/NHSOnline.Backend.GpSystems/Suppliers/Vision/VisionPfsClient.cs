@@ -17,7 +17,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.VisionServiceDefinition;
 using NHSOnline.Backend.Support.Certificate;
 using NHSOnline.Backend.Support;
-
+using NHSOnline.Backend.Support.Http;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 using NHSOnline.Backend.Support.ResponseParsers;
 

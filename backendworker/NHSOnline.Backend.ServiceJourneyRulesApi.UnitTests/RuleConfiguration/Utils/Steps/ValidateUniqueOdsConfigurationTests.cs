@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using FluentAssertions.Types;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -47,7 +46,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .And.Contain(x =>
                     ((ArgumentNullException) x).ParamName.Equals("FolderConfigurations", StringComparison.Ordinal))
                 .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("GpInfos", StringComparison.Ordinal));
-            ;
         }
 
         [TestMethod]

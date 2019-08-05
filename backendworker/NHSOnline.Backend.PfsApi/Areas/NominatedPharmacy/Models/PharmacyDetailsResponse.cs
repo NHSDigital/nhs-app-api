@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models
+﻿namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models
 {
     public class PharmacyDetailsResponse
     {

@@ -15,7 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Linkage;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 {
@@ -265,7 +265,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
         public async Task CreateLinkageKey_ReturnsCorrectErrorCaseResponse_WhenVisionRespondsWithUnknownError(
             string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse)
         {
-            var result = await CreateLinkageKey(visionApiErrorCode, httpStatusCodeResponse,
+            await CreateLinkageKey(visionApiErrorCode, httpStatusCodeResponse,
                 typeof(LinkageResult.UnmappedErrorWithStatusCode));
         }
 

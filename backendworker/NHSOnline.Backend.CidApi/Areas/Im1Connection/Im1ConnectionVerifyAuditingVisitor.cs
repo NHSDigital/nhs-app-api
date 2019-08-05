@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using NHSOnline.Backend.GpSystems.Im1Connection;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 {
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         private readonly ILogger<Im1ConnectionController> _logger;
         private readonly Supplier _supplier;
 
-        private const string AuditType = Constants.AuditingTitles.Im1ConnectionVerifyResponse;
+        private const string AuditType = AuditingOperations.Im1ConnectionVerifyResponse;
 
         public Im1ConnectionVerifyAuditingVisitor(IAuditor auditor, ILogger<Im1ConnectionController> logger,
             Supplier supplier)
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 {
                     await _auditor.AuditRegistrationEvent(
                         result.Response.NhsNumbers.First().NhsNumber, _supplier,
-                        Constants.AuditingTitles.Im1ConnectionVerifyResponse,
+                        AuditingOperations.Im1ConnectionVerifyResponse,
                         "IM1 connection successfully verified with GP system.");
                 }
             }

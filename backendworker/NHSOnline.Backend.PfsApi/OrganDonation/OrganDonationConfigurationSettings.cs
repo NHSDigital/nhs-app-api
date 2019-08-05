@@ -1,20 +1,15 @@
 using System;
-using System.Globalization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
-
     public class OrganDonationConfigurationSettings
     {
         public OrganDonationConfigurationSettings( Uri baseUrlString, string clientIdHeader, 
-            string supscriptionHeader, int referenceDataExpirySeconds)
+            string subscriptionHeader, int referenceDataExpirySeconds)
         {
             BaseUrl = baseUrlString; 
             ClientIdHeader = clientIdHeader;
-            SubscriptionHeader = supscriptionHeader;
+            SubscriptionHeader = subscriptionHeader;
             ReferenceDataExpirySeconds = referenceDataExpirySeconds;
         }
 

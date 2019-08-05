@@ -1,9 +1,8 @@
 using System;
-using NHSOnline.Backend.PfsApi.Ndop;
-using NHSOnline.Backend.Support.Auditing;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.PfsApi.Ndop;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Ndop
 {
@@ -12,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
         private readonly IAuditor _auditor;
         private readonly ILogger<NdopController> _logger;
         
-        private const string AuditType = Constants.AuditingTitles.ViewPatientRecordAuditTypeResponse;
+        private const string AuditType = AuditingOperations.ViewPatientRecordAuditTypeResponse;
 
         public NdopAuditingVisitor(IAuditor auditor, ILogger<NdopController> logger)
         {

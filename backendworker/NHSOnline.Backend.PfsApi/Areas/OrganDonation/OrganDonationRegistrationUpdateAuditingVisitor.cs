@@ -1,13 +1,12 @@
-﻿using NHSOnline.Backend.PfsApi.OrganDonation;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+﻿using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.PfsApi.OrganDonation;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
     public class OrganDonationRegistrationUpdateAuditingVisitor : IOrganDonationRegistrationResultVisitor<object>
     {
         private readonly IAuditor _auditor;
-        private const string AuditType = Constants.AuditingTitles.OrganDonationUpdateAuditTypeResponse;
+        private const string AuditType = AuditingOperations.OrganDonationUpdateAuditTypeResponse;
 
         public OrganDonationRegistrationUpdateAuditingVisitor(IAuditor auditor)
         {

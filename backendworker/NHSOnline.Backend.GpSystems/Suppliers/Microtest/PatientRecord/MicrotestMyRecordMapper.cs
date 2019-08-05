@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 using Medication = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord.Medication;
 using Problem = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord.Problem;
@@ -28,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         {
             if (patientRecordGetResponse == null)
             {
-                throw new System.ArgumentNullException(nameof(patientRecordGetResponse));
+                throw new ArgumentNullException(nameof(patientRecordGetResponse));
             }
 
             var myRecordResponse = new MyRecordResponse();
@@ -71,9 +70,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 
         private void MapMedications(MyRecordResponse myRecordResponse, MedicationData microtestMedicationData)
         {
-            var acuteMeds = new List<MedicationItem>();
-            var currentMeds = new List<MedicationItem>();
-            var historicMeds = new List<MedicationItem>();
+            var acuteMedications = new List<MedicationItem>();
+            var currentMedications = new List<MedicationItem>();
+            var historicalMedications = new List<MedicationItem>();
 
             if (microtestMedicationData != null)
             {
@@ -85,11 +84,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     {
                         if (medication.Type.Equals(MedicationType.Current, StringComparison.OrdinalIgnoreCase))
                         {
-                            AddMedicationItemIfValid(currentMeds, medication);
+                            AddMedicationItemIfValid(currentMedications, medication);
                         }
                         else if (medication.Type.Equals(MedicationType.Historic, StringComparison.OrdinalIgnoreCase))
                         {
-                            AddMedicationItemIfValid(historicMeds, medication);
+                            AddMedicationItemIfValid(historicalMedications, medication);
                         }
                         else
                         {
@@ -99,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     }
                     else if (medication.Status.Equals(MedicationStatus.Acute, StringComparison.OrdinalIgnoreCase))
                     {
-                        AddMedicationItemIfValid(acuteMeds, medication);
+                        AddMedicationItemIfValid(acuteMedications, medication);
                     }
                     else
                     {
@@ -110,15 +109,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
 
             myRecordResponse.Medications.Data.AcuteMedications =
-                acuteMeds.OrderByDescending(med => med.Date.GetValueOrDefault());
+                acuteMedications.OrderByDescending(med => med.Date.GetValueOrDefault());
             
             myRecordResponse.Medications.Data.CurrentRepeatMedications = 
-                currentMeds.OrderByDescending(med => med.Date.GetValueOrDefault());
+                currentMedications.OrderByDescending(med => med.Date.GetValueOrDefault());
             
             myRecordResponse.Medications.Data.DiscontinuedRepeatMedications = 
-                historicMeds.OrderByDescending(med => med.Date.GetValueOrDefault());
+                historicalMedications.OrderByDescending(med => med.Date.GetValueOrDefault());
         }
-
         
         private static void MapImmunisations(MyRecordResponse myRecordResponse, ImmunisationData immunisationData)
         {
@@ -259,7 +257,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
         }
 
-
         private static bool IsRubricValid(string rubric)
         {
             var isValid = false;
@@ -297,5 +294,4 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             return data != null && data.Any();
         }
     }
-
 }

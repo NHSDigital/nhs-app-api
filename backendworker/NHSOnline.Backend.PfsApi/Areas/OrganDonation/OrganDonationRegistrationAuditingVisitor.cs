@@ -1,9 +1,8 @@
 using System;
-using NHSOnline.Backend.PfsApi.OrganDonation;
-using NHSOnline.Backend.Support.Auditing;
-using NHSOnline.Backend.Support;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.PfsApi.OrganDonation;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
@@ -12,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         private readonly IAuditor _auditor;
         private readonly ILogger<OrganDonationController> _logger;
         
-        private const string AuditType = Constants.AuditingTitles.OrganDonationRegistrationAuditTypeResponse;
+        private const string AuditType = AuditingOperations.OrganDonationRegistrationAuditTypeResponse;
 
         public OrganDonationRegistrationAuditingVisitor(IAuditor auditor, ILogger<OrganDonationController> logger)
         {

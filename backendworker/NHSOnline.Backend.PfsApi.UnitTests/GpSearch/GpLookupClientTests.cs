@@ -23,7 +23,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
         private Uri _gLookupClientApiBaseUrl;
         private string _gpLookupApiKey;
-        private string _clientId;
         private MockHttpMessageHandler _mockHttpHandler;
         private GpLookupHttpClient _httpClient;
         private Mock<IGpLookupConfig> _mockConfig;
@@ -35,7 +34,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
             _gLookupClientApiBaseUrl = _fixture.Create<Uri>();
             _gpLookupApiKey = _fixture.Create<string>();
-            _clientId = _fixture.Create<string>();
 
             _mockHttpHandler = new MockHttpMessageHandler();
             _mockConfig = _fixture.Freeze<Mock<IGpLookupConfig>>();
@@ -53,10 +51,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         public async Task PharmaciesSearch_CallsCorrectEndpoint_AndHandlesResponse()
         {
             // Arrange
-            var authCode = _fixture.Create<string>();
-            var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
-
             var request = new OrganisationSearchData();
 
             var expectedResponse = _fixture.Create<NhsOrganisationSearchResponse>();

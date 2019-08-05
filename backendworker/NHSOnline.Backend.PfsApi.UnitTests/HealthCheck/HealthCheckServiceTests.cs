@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.PfsApi.HealthCheck;
 using FluentAssertions;
 using Moq;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.HealthCheck
 {

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,7 +15,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
     [TestClass]
     public class PharmacyDetailsToPharmacyDetailsResponseMapperTests
     {
-        private IFixture _fixture;
         private IPharmacyDetailsToPharmacyDetailsResponseMapper _mapper;
         private ILogger<PharmacyDetailsToPharmacyDetailsResponseMapper> _logger;
         
@@ -27,9 +24,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         {
             _logger = Mock.Of<ILogger<PharmacyDetailsToPharmacyDetailsResponseMapper>>();
             _mapper = new PharmacyDetailsToPharmacyDetailsResponseMapper(_logger);
-
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
         }
 
         [TestMethod]

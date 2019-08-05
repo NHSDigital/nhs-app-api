@@ -1,6 +1,5 @@
-﻿
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
+﻿using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems;
 
 namespace NHSOnline.Backend.PfsApi.HealthCheck
 {

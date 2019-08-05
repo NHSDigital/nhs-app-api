@@ -6,15 +6,14 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
@@ -40,9 +39,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private int PrescriptionsDefaultLastNumberMonthsToDisplay;   
         private const int DefaultSessionExpiryMinutes  = 10;
         private const int DefaultHttpTimeoutSeconds = 6;
-        private int MinimumAppAge = 16;
-        private int MinimumLinkageAge = 16;
-        
+        private const int MinimumAppAge = 16;
+        private const int MinimumLinkageAge = 16;
+
         private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         
         private const string PostRequestAuditType = "RepeatPrescriptions_OrderRepeatMedications_Request";

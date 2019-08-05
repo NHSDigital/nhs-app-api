@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Internal;
 using Moq;

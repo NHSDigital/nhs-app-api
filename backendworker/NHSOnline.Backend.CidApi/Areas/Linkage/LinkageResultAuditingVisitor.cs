@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems.Im1Connection;
 
 namespace NHSOnline.Backend.CidApi.Areas.Linkage
 {

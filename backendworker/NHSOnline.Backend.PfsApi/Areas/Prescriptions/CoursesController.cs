@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             var userSession = HttpContext.GetUserSession();
 
-            await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
+            await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
             _logger.LogInformation($"Fetching courses interface for supplier {userSession.GpUserSession.Supplier}");
             
             var courseService = _gpSystemFactory

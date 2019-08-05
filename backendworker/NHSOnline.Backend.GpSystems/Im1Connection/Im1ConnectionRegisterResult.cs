@@ -1,5 +1,4 @@
-﻿using System.Net;
-using NHSOnline.Backend.GpSystems.Im1Connection.Models;
+﻿using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 
 namespace NHSOnline.Backend.GpSystems.Im1Connection
 {

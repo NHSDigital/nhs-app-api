@@ -7,7 +7,6 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.Settings;
@@ -39,7 +38,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             _emisConfigurationSettings.EmisExtendedHttpTimeoutSeconds = 6;
 
             _fixture.Inject(_configurationSettings);
-
         }
 
         [TestMethod]

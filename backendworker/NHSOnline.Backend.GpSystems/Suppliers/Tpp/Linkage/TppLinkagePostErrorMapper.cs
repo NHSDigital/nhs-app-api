@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
@@ -25,7 +24,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                     Im1ConnectionErrorCodes.InternalCode.InvalidProviderId
                 }
             };
-        
 
         public static LinkageResult Map(TppClient.TppApiObjectResponse<AddNhsUserResponse> response, ILogger<TppLinkageService> logger)
         {

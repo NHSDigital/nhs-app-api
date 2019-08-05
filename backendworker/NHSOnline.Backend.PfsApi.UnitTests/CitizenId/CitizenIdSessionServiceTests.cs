@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.CitizenId.Models;
-using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 
@@ -22,7 +20,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private IFixture _fixture;
         private Mock<ICitizenIdService> _mockCitizenIdService;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
-        private ConfigurationSettings _mockSettings;
         private CitizenIdSessionService _systemUnderTest;
 
         private string _authCode;
@@ -30,20 +27,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private string _redirectUrl;
         private string _accessToken;
         private string _im1Token;
-        private string _nhsNumber = "0123456789";
-        private string _formattedNhsNumber = "012 345 6789";
+        private const string NhsNumber = "0123456789";
+        private const string FormattedNhsNumber = "012 345 6789";
         private string _odsCode;
         private string _familyName;
-
-        
-        private const string _dateFormat = "yyyy-MM-dd";
-        private const string CookieDomain = "CookieDomain";
-        private int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
-        private const int DefaultSessionExpiryMinutes  = 10;
-        private const int DefaultHttpTimeoutSeconds = 6;
-        private int MinimumAppAge = 16;
-        private int MinimumLinkageAge = 16;
-        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
+        private const string DateFormat = "yyyy-MM-dd";
         
         [TestInitialize]
         public void TestInitialize()
@@ -52,8 +40,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
-            _mockSettings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultSessionExpiryMinutes, 
-                DefaultHttpTimeoutSeconds, MinimumAppAge, MinimumLinkageAge, CurrentTermsConditionsEffectiveDate); 
 
             _authCode = _fixture.Create<string>();
             _codeVerifier = _fixture.Create<string>();
@@ -76,12 +62,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             var dateTimeNow = DateTime.Now;
             
-            var userProfile = new UserProfile()
+            var userProfile = new UserProfile
             {
                 AccessToken = _accessToken,
-                DateOfBirth = dateTimeNow.ToString(_dateFormat, CultureInfo.InvariantCulture),
+                DateOfBirth = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _im1Token,
-                NhsNumber = _nhsNumber,
+                NhsNumber = NhsNumber,
                 OdsCode = _odsCode,
                 FamilyName = _familyName
             };
@@ -99,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             {
                 DateOfBirth = dateTimeNow.Date,
                 Im1ConnectionToken = _im1Token,
-                NhsNumber = _formattedNhsNumber,
+                NhsNumber = FormattedNhsNumber,
                 OdsCode = _odsCode,
                 Session = new CitizenIdUserSession
                 {
@@ -151,9 +137,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var userProfile = new UserProfile()
             {
                 AccessToken = _accessToken,
-                DateOfBirth = dateTimeNow.ToString(_dateFormat, CultureInfo.InvariantCulture),
+                DateOfBirth = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _im1Token,
-                NhsNumber = _nhsNumber,
+                NhsNumber = NhsNumber,
                 OdsCode = _odsCode
             };
             
@@ -186,7 +172,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 AccessToken = _accessToken,
                 DateOfBirth = null,
                 Im1ConnectionToken = _im1Token,
-                NhsNumber = _nhsNumber,
+                NhsNumber = NhsNumber,
                 OdsCode = _odsCode
             };
             
@@ -223,7 +209,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var userProfile = new UserProfile()
             {
                 AccessToken = _accessToken,
-                DateOfBirth = dateTimeNow.ToString(_dateFormat, CultureInfo.InvariantCulture),
+                DateOfBirth = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _im1Token,
                 NhsNumber = null,
                 OdsCode = _odsCode

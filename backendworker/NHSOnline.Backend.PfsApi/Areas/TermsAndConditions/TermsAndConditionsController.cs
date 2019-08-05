@@ -3,11 +3,11 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
-using NHSOnline.Backend.Support.Auditing;
-using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
+using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 {
@@ -75,13 +75,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         {
             var formattedDate = time.ToString(CultureInfo.InvariantCulture);
 
-            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsRecordConsentAuditTypeRequest,
+            await _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeRequest,
                    $"Attempting to record patient consent - {nameof(model.ConsentGiven)}={model.ConsentGiven} " +
                    $"at DateOfConsent={formattedDate}");
 
             string cookieAcceptedLog = model.AnalyticsCookieAccepted ? $" at DateAnalyticsCookieAccepted={formattedDate}" : string.Empty;
 
-            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
+            await _auditor.Audit(AuditingOperations.TermsAndConditionsAnalyticsCookieAcceptance,
                     $"Attempting to record analytics cookies acceptance - {nameof(model.AnalyticsCookieAccepted)}={model.AnalyticsCookieAccepted}" +
                     $"{cookieAcceptedLog}");
         }

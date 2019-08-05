@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
@@ -41,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     return new StatusCodeResult(sessionExtendedResultVisited.StatusCode);
                 }
 
-                await _auditor.Audit(Constants.AuditingTitles.SessionExtendResponse, "Session successfully extended.");
+                await _auditor.Audit(AuditingOperations.SessionExtendResponse, "Session successfully extended.");
 
                 _logger.LogDebug(
                     $"Finished session extend post with status code {sessionExtendedResultVisited.StatusCode}");
