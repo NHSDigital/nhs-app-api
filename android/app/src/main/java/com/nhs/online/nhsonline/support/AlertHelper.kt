@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.support
 
+import android.app.Activity
 import android.support.v7.app.AlertDialog
 import android.content.Context
 import android.util.Log
@@ -8,12 +9,14 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
 
-class AlertHelper(val context: Context, val interactor: IInteractor) {
+class AlertHelper(val context: Activity, val interactor: IInteractor) {
 
     fun showDialog(title: String, message: String, helpLink: String = "") {
-        val builder = createDialogBuilder(title, message, helpLink)
-        val dialog = builder.create()
-        dialog.show()
+        if (!context.isFinishing) {
+            val builder = createDialogBuilder(title, message, helpLink)
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
 
     private fun createDialogBuilder(

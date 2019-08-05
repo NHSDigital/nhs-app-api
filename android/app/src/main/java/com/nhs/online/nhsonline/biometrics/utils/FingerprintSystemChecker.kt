@@ -1,6 +1,6 @@
 package com.nhs.online.nhsonline.biometrics.utils
 
-import android.content.Context
+import android.app.Activity
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
@@ -11,7 +11,7 @@ import com.nhs.online.nhsonline.support.AlertHelper
 
 class FingerprintSystemChecker(
     private val fingerprintManager: FingerprintManagerCompat,
-    val context: Context,
+    val context: Activity,
     interactor: IInteractor
 ) {
 
@@ -91,7 +91,7 @@ class FingerprintSystemChecker(
             return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         }
 
-        fun showCurrentOSNotSupportDialog(context: Context, interactor: IInteractor) {
+        fun showCurrentOSNotSupportDialog(context: Activity, interactor: IInteractor) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 AlertHelper(context, interactor).showDialog(
                     context.getString(R.string.version_not_supported_header),

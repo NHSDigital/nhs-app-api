@@ -17,16 +17,19 @@ class AppDialogs(private val activity: Activity) {
     private var exitDialog: AlertDialog? = null
 
     fun showVersionUpgradeDialog() {
-        val showing = showDialogIfAvailable(upgradeDialog)
-        if (showing) return
+        if (!activity.isFinishing) {
+            val showing = showDialogIfAvailable(upgradeDialog)
+            if (showing) return
 
-        val content = getResourceString(R.string.UpdateHeader) +
-                "<br/><br/>" +
-                getResourceString(R.string.UpdateNativeLink) +
-                "<br/><br/>" +
-                getResourceString(R.string.UpdateDesc)
-        val title = getResourceString(R.string.UpdateRequiredHeader)
-        upgradeDialog = showNonCancellableDialog(title, content)
+            val content = getResourceString(R.string.UpdateHeader) +
+                    "<br/><br/>" +
+                    getResourceString(R.string.UpdateNativeLink) +
+                    "<br/><br/>" +
+                    getResourceString(R.string.UpdateDesc)
+            val title = getResourceString(R.string.UpdateRequiredHeader)
+            upgradeDialog = showNonCancellableDialog(title, content)
+        }
+        return
     }
 
     private fun showNonCancellableDialog(
@@ -46,17 +49,20 @@ class AppDialogs(private val activity: Activity) {
     }
 
     fun showExitDialog(onLogoutClicked: () -> Unit) {
-        val showing = showDialogIfAvailable(exitDialog)
-        if (showing) return
+        if (!activity.isFinishing) {
+            val showing = showDialogIfAvailable(exitDialog)
+            if (showing) return
 
-        val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
-        builder.setMessage(getResourceString(R.string.logoutWarning))
-            .setPositiveButton(getResourceString(R.string.logout)) { _, _ -> onLogoutClicked.invoke() }
-            .setNegativeButton(getResourceString(R.string.cancel)) { _, _ -> }
+            val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
+            builder.setMessage(getResourceString(R.string.logoutWarning))
+                    .setPositiveButton(getResourceString(R.string.logout)) { _, _ -> onLogoutClicked.invoke() }
+                    .setNegativeButton(getResourceString(R.string.cancel)) { _, _ -> }
 
-        val dialog: AlertDialog = builder.create()
-        exitDialog = dialog
-        dialog.show()
+            val dialog: AlertDialog = builder.create()
+            exitDialog = dialog
+            dialog.show()
+        }
+        return
     }
 
     private fun createDialogBuilder(

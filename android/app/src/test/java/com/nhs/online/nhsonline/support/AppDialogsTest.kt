@@ -70,6 +70,15 @@ class AppDialogsTest {
     }
 
     @Test
+    fun showExitDialog_NoAlertDialogue_IfActivityIsFinishing() {
+        val spyActivity = spy(activity)
+        whenever(spyActivity.isFinishing).thenReturn(true)
+        appDialogs = AppDialogs(spyActivity)
+        appDialogs.showExitDialog {}
+        Assert.assertNull(ShadowDialog.getLatestDialog())
+    }
+
+    @Test
     fun showExtendSessionDialogue() {
         val sessionDuration = 10
         val expectedMessageText =
