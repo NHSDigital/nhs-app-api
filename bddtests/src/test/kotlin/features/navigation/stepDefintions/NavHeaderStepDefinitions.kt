@@ -34,7 +34,7 @@ class NavHeaderStepDefinitions {
         navHeader.clickHelp()
     }
 
-    @When("^I click the nhs logo$")
+    @When("^I click the home icon$")
     fun iClickTheNHSLogo() {
         navHeader.clickHome()
     }

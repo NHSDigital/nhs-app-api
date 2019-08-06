@@ -18,8 +18,8 @@ Feature: Use the navigation header bar
     Then I am on the My Account page
 
   @nativesmoketest
-  Scenario: A patient can access the home page by clicking the nhs logo
+  Scenario: A patient can access the home page by clicking the home icon
     Given I see the header
     And I navigate away from the home page
-    When I click the nhs logo
+    When I click the home icon
     Then I see the home page

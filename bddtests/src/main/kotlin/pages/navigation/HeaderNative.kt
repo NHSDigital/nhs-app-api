@@ -17,7 +17,7 @@ class HeaderNative : NativePageObject() {
     }
 
     private val homeIcon = NativePageElement(
-            androidLocator = getAndroidIconLocator("nhsOnlineLogoIcon"),
+            androidLocator = getAndroidIconLocator("homeLogoIcon"),
             webDesktopLocator = "//*[@id='nhs_logo']",
             webMobileLocator = "//*[@id='nhs_logo']",
             iOSAccessID = "NHS App Home",
