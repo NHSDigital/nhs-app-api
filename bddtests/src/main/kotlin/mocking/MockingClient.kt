@@ -8,8 +8,6 @@ import mocking.favicon.FaviconMappingBuilder
 import mocking.microtest.MicrotestMappingBuilder
 import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
-import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationMappingBuilder
-import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.spine.SpineMappingBuilder
 import mocking.throttling.BrotherMailerMappingBuilder
@@ -17,6 +15,8 @@ import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
 
 class MockingClient(configuration: MockingConfiguration): WiremockHelper(configuration) {
+
+    var forAzure = AzureMockingClient(configuration)
 
     fun forCitizenId(method: String = "GET", resolver: CitizenIdMappingBuilder.() -> Mapping) {
         val mappingBuilder = CitizenIdMappingBuilder(method)
@@ -69,24 +69,6 @@ class MockingClient(configuration: MockingConfiguration): WiremockHelper(configu
 
     fun forBrotherMailer(method: String = "POST", resolver: BrotherMailerMappingBuilder.() -> Mapping) {
         val mappingBuilder = BrotherMailerMappingBuilder(method)
-        val mapping: Mapping = mappingBuilder.resolver()
-
-        this.postMapping(mapping)
-    }
-
-    fun forNhsAzureSearchOrganisation(method: String = "POST", resolver:
-    NhsAzureSearchOrganisationMappingBuilder.()
-    -> Mapping) {
-        val mappingBuilder = NhsAzureSearchOrganisationMappingBuilder(method)
-        val mapping: Mapping = mappingBuilder.resolver()
-
-        this.postMapping(mapping)
-    }
-
-    fun forNhsAzureSearchPostcodesAndPlaces(method: String = "POST", resolver:
-    NhsAzureSearchPostcodesAndPlacesMappingBuilder.()
-    -> Mapping) {
-        val mappingBuilder = NhsAzureSearchPostcodesAndPlacesMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)

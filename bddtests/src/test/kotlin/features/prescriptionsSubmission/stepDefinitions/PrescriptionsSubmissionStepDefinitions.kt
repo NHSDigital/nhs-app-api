@@ -164,7 +164,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                         initialHistoricPrescriptionsCount,
                         amount)
 
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(null
             ).respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange(true))
         }

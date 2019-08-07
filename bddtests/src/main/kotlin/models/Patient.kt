@@ -2,7 +2,7 @@ package models
 
 import config.Config
 import constants.DateTimeFormats
-import mocking.citizenId.models.IdTokenBuilder
+import mocking.IdTokenBuilder
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MicrotestMockDefaults
 import mocking.defaults.MockDefaults
@@ -102,13 +102,8 @@ data class Patient(
                 postcode = "AA00 0AA"
         )
 
-        private val idTokenBuilder = IdTokenBuilder(
-                Config.instance.cidJwtIssuer,
-                Config.instance.cidClientId
-        )
-
         fun getIdToken(patient: Patient): String {
-            return idTokenBuilder.getSignedToken(Config.keyStore.signer, patient).serialize()
+            return IdTokenBuilder().getSignedToken(patient).serialize()
         }
 
         fun getDefault(gpSystem: String): Patient {

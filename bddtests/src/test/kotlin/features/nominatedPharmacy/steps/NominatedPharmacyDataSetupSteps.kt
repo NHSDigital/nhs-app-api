@@ -131,7 +131,7 @@ open class NominatedPharmacyDataSetupSteps {
     fun setupWiremockForNominatedPharmacyWhenAzureSearchFails() {
         val odsCode = SerenityHelpers.getPatient().odsCode
 
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 1,
                     filter = "OrganisationTypeID eq 'GPB' and NACSCode eq '$odsCode'",
@@ -183,7 +183,7 @@ open class NominatedPharmacyDataSetupSteps {
     }
 
     private fun setupWiremockToReturnPharmacyWhenSearchedFor(organisation: NhsAzureSearchOrganisationItem) {
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 1,
                     search = "*",
@@ -202,7 +202,7 @@ open class NominatedPharmacyDataSetupSteps {
         val odsCode = SerenityHelpers.getPatient().odsCode
         val data = NhsAzureSearchData.generatePharmacyData(1)
 
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 1,
                     filter = "OrganisationTypeID eq 'GPB' and NACSCode eq '$odsCode'",
@@ -221,7 +221,7 @@ open class NominatedPharmacyDataSetupSteps {
         val data = NhsAzureSearchData.generatePharmacyData(1)
         data.value.get(0).Metrics = ""
 
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 1,
                     filter = "OrganisationTypeID eq 'GPB' and NACSCode eq '${odsCode}'",
@@ -236,7 +236,7 @@ open class NominatedPharmacyDataSetupSteps {
     }
 
     fun setupWiremockForPharmacyTextSearch(searchText: String, data: NhsAzureSearchOrganisationReply) {
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 10,
                     search = "Metrics:10051 AND ${searchText}*",

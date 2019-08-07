@@ -53,13 +53,13 @@ open class ThrottlingStepDefinitions {
             }
         }
         ThrottlingSerenityHelpers.SEARCH_TEXT.set(postcode)
-        mockingClient.forNhsAzureSearchPostcodesAndPlaces {
+        mockingClient.forAzure.forSearchPostcodesAndPlaces {
             nhsAzureSearch.nhsAzureSearchPostcodesAndPlacesRequest(NhsAzureSearchPostcodesAndPlacesRequestBody(
                     search = "\"$expectedSearch\"",
                     filter = filterType
             )).respondWithSuccess(NhsAzureSearchData.getSuccessfulPostcodeMatch())
         }
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchPostcodeOrganisationRequest(NhsAzureSearchOrganisationWithPostcodeRequestBody(
                     filter = getGeoDistanceFilterForLatLon(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
                     select = SELECT_ORGANISATIONS_GEOCODE_SEARCH,
@@ -74,7 +74,7 @@ open class ThrottlingStepDefinitions {
     @Given("^there are (\\d+) GP Practices for my search criteria$")
     fun thereAreXGPPracticesForMySearchCriteria(numberOfPractices: Int) {
         val data = NhsAzureSearchData.generateOrganisationData(numberOfPractices)
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     search = "${GPFinderPage.validSearch}*"))
                     .respondWithSuccess(data)
@@ -84,7 +84,7 @@ open class ThrottlingStepDefinitions {
 
     @Given("^the NHS Service Search is unavailable$")
     fun iSearchForAGPPracticeWhenTheNHSServiceSearchIsUnavailable() {
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     search = "${GPFinderPage.validSearch}*"))
                     .respondWithServiceUnavailable()

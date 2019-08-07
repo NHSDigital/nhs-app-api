@@ -34,6 +34,7 @@ class WorkerClient(config:Config = Config.instance) {
     val session = WorkerClientSession(config, workerClientSender, gson)
     val organDonation = WorkerClientOrganDonation(config, workerClientSender, gson)
     val serviceJourneyRules = WorkerClientServiceJourneyRules(config, workerClientSender, gson)
+    val userDevices = WorkerClientUserDevices(config, workerClientSender, gson)
 
     companion object {
 

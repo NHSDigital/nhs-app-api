@@ -70,7 +70,7 @@ open class SharedStepDefinitions {
 
     @And("Azure organisation search is working")
     fun azureOrganisationSearchIsWorking() {
-        mockingClient.forNhsAzureSearchOrganisation {
+        mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(null)
                     .respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
         }

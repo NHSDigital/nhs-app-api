@@ -10,6 +10,7 @@ class Config private constructor() {
     var url: String
     var pfsBackendUrl: String
     var cidBackendUrl: String
+    var usersBackendUrl: String
     var wiremockUrl: String
     var nodeEnv: String
     var port: String
@@ -61,6 +62,7 @@ class Config private constructor() {
         wiremockUrl = envOrDefault("wiremockUrl", wiremockUrlString)
         cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
         pfsBackendUrl = envOrDefault("pfsBackendUrl", "http://api.local.bitraft.io:8082")
+        usersBackendUrl = envOrDefault("usersBackendUrl", "http://users.local.bitraft.io:8088")
         nodeEnv = envOrDefault("NODE_ENV", "production")
         port = envOrDefault("PORT", "3000")
 
