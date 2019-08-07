@@ -4,7 +4,7 @@
 export default {
   name: 'HotJar',
   head() {
-    if (this.$env.HOTJAR_SITE_ID) {
+    if (this.$env.HOTJAR_SITE_ID && this.$env.HOTJAR_SITE_ID !== 'NOT_SET') {
       /* eslint-disable prefer-template */
       const hotJar = '(function (h, o, t, j, a, r) {' +
                    'h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments); };' +
@@ -21,7 +21,9 @@ export default {
         }],
       };
     }
-    return null;
+    return {
+      script: [],
+    };
   },
 };
 </script>

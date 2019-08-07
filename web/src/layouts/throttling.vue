@@ -17,17 +17,21 @@ export default {
     Spinner,
   },
   head() {
-    return {
+    const head = {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
-      script: [
+      script: [],
+    };
+    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
+      head.script = [
         {
           src: this.$env.ANALYTICS_SCRIPT_URL,
         },
-      ],
-    };
+      ];
+    }
+    return head;
   },
   mounted() {
     NativeVersionSetup(this.$store, this.$route);

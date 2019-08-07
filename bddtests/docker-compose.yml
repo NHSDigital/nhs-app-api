@@ -23,9 +23,9 @@ services:
       - THROTTLING_ENABLED=false
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
       - ONLINE_CONSULTATIONS_ENABLED=false
-      - HOTJAR_SITE_ID=null
+      - HOTJAR_SITE_ID=NOT_SET
       - HOT_JAR_SURVEY_VISIBLE=false
-      - ANALYTICS_SCRIPT_URL=null
+      - ANALYTICS_SCRIPT_URL=NOT_SET
   api.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:

@@ -31,14 +31,17 @@ export default {
         htmlAttrs: {
           lang: `${this.$t('language')}`,
         },
-        script: [
+        title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
+        __dangerouslyDisableSanitizers: ['noscript'],
+        script: [],
+      };
+      if (this.$store.app.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
+        head.script = [
           {
             src: this.$store.app.$env.ANALYTICS_SCRIPT_URL,
           },
-        ],
-        title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
-        __dangerouslyDisableSanitizers: ['noscript'],
-      };
+        ];
+      }
     } else {
       head = {
         htmlAttrs: {

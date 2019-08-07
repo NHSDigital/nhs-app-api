@@ -26,6 +26,8 @@ import utils.SerenityHelpers
 import utils.getOrNull
 import utils.set
 
+private const val MILLISECONDS_TO_WAIT_FOR_CONTINUE: Long = 500
+
 open class CoursesStepDefinitions {
 
     private val isVisibleIndicator = "is"
@@ -181,6 +183,7 @@ open class CoursesStepDefinitions {
 
     @When("I click Continue on the Order a repeat prescription page")
     fun iClickContinueOnTheOrderARepeatPrescriptionsPage() {
+        Thread.sleep(MILLISECONDS_TO_WAIT_FOR_CONTINUE)
         repeatPrescriptions.clickOnButtonContainingText("Continue")
     }
 
