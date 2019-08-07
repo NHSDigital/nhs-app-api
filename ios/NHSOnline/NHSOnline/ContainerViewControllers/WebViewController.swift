@@ -107,6 +107,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         
         var urlToNavigateTo = url        
         let urlIsValid = verifyUrl(urlString: urlToNavigateTo)
+        self.webViewDelegate?.updateHeaderAndNavigationMenu(url: URL(string: url))
         
         if(!urlIsValid) {
             urlToNavigateTo = homeUrl + urlToNavigateTo
