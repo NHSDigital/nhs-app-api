@@ -5,6 +5,7 @@ module.exports = (api) => {
 
   const ignore = [
     '**/.transpiled',
+    '/(node_modules)',
   ];
 
   const presets = [

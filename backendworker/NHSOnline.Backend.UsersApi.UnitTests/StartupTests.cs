@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("USERS_MONGO_DATABASE_NAME");
         }
 
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION");
         }
 
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("USERS_MONGO_DATABASE_HOST");
         }
 
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("USERS_MONGO_DATABASE_PORT");
         }
 
@@ -230,7 +230,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("AZURE_NOTIFICATION_HUB_PATH");
         }
 
@@ -258,7 +258,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("AZURE_NOTIFICATION_HUB_CONNECTION_STRING");
         }
 
@@ -285,7 +285,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY");
         }
 

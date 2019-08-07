@@ -1,270 +1,79 @@
-version: "3.2"
+version: "3.4"
+
+secrets:
+  tpp_cert:
+    file: "./bddtests/dummysecrets/tpp_client_cert.pfx"
+  tpp_cert_password:
+    file: "./bddtests/dummysecrets/tpp_client_cert.password"
+  session_encryption_key:
+    file: "./bddtests/dummysecrets/session_encryption_key"
+  microtest_cert:
+    file: "./bddtests/dummysecrets/microtest_client_cert.pfx"
+  microtest_cert_password:
+    file: "./bddtests/dummysecrets/microtest_client_cert.password"
+  spine_cert:
+    file: "./bddtests/dummysecrets/spine_client_cert.pfx"
+  spine_cert_password:
+    file: "./bddtests/dummysecrets/spine_client_cert.password"
+  azure_notification_hub_key:
+    file: "~/.nhsonline/secrets/azure_notification_hub_key_bdd"
+
 services:
-  nhsonline.mongodb:
-    image: mongo:latest
-    ports:
-    - "27017:27017"
-  api.local.bitraft.io:
-    image: nginx:alpine
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-    ports:
-      - "8089:8089"
-    depends_on:
-      - log.local.bitraft.io
-      - messages.local.bitraft.io
-      - pfs.local.bitraft.io
-      - userinfo.local.bitraft.io
-      - users.local.bitraft.io
+
   web.local.bitraft.io:
-    image: nhsonline.web
-    ports:
-      - "3000:3000"
-    environment:
-      - URI_FORMAT_API_CLIENT=http://api{host}:8089
-      - API_HOST_SERVER=http://api.local.bitraft.io:8089
-      - URI_FORMAT_CID_REDIRECT_WEB=http://web{host}:3000/auth-return
-      - URI_FORMAT_CID_REDIRECT_NATIVE=http://web{host}:3000/auth-return
-      - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
-      - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
-      - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/createsession
-      - GP_LOOKUP_API_RESULTS_LIMIT=20
-      - COOKIE_DOMAIN=.bitraft.io
-      - VERSION_TAG=dev_bdd_docker_main
-      - BIOMETRICS_ENABLED=true
-      - THROTTLING_ENABLED=false
-      - ORGAN_DONATION_INTEGRATION_ENABLED=true
-      - ONLINE_CONSULTATIONS_ENABLED=false
-      - HOTJAR_SITE_ID=NOT_SET
-      - HOT_JAR_SURVEY_VISIBLE=false
-      - ANALYTICS_SCRIPT_URL=NOT_SET
-      - MY_RECORD_DOCUMENTS_ENABLED=true
+    env_file:
+     - ./bddtests/docker/web.env
+
   pfs.local.bitraft.io:
-    image: nhsonline.backend.pfsapi
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8082
-      - PORT=8082
-      - CORS_AUTHORITY=*
-      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
-      - CITIZEN_ID_AUTHENTICATION_TYPE=JWT
-      - CITIZEN_ID_CLIENT_ID=nhs-online
-      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
-      - NHSLOGIN_KEY_PATH=/app/bddcerts/private_key.pem
-      - NHSLOGIN_KEY_PASSWORD=test
-      - ConfigurationSettings__DefaultSessionExpiryMinutes=3
-      - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
-      - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
-      - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
-      - MICROTEST_BASE_URL=http://stubs.local.bitraft.io:8080/microtest/
-      - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10
-      - VISION_PFS_PATH=pfs/
-      - VISION_LINKAGE_PATH=linkage/
-      - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
-      - VISION_CERT_PASSPHRASE=GnewUt4z3y
-      - VISION_SENDER_USERNAME=Username123123asdas
-      - VISION_SENDER_USERFULLNAME=Name
-      - VISION_SENDER_USERIDENTITY=65489761321654
-      - VISION_SENDER_USERROLE=ROSU
-      - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
-      - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
-      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
-      - GP_PROVIDER_ENABLED_EMIS=true
-      - GP_PROVIDER_ENABLED_TPP=true
-      - GP_PROVIDER_ENABLED_VISION=true
-      - GP_PROVIDER_ENABLED_MICROTEST=true
-      - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
-      - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
-      - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
-      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
-      - EMIS_LINKAGE_USE_STUBBED_DATA=false
-      - STUB_TERMS_AND_CONDITIONS=true
-      - ConfigurationSettings__CookieDomain=.bitraft.io
-      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb
-      - SESSION_MONGO_DATABASE_PORT=27017
-      - SESSION_MONGO_DATABASE_USERNAME=
-      - SESSION_MONGO_DATABASE_PASSWORD=
-      - ORGAN_DONATION_BASE_URL=http://stubs.local.bitraft.io:8080/organdonation/
-      - ORGAN_DONATION_CLIENT_ID=ODR-26-NHSAP
-      - ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY=781859de3cce4bc48a715dfc8f36dc6f
-      - ORGAN_DONATION_INTEGRATION_ENABLED=true
-      - ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS=0
-      - TERMS_CONDITIONS_COSMOS_ENDPOINT_URI=https://nhsapp-local-test.documents.azure.com:443/
-      - TERMS_CONDITIONS_COLLECTION_LINK=dbs/local/colls/consent/
-      - TERMS_CONDITIONS_COSMOS_DATABASE_ID=local
-      - TERMS_CONDITIONS_COSMOS_COLLECTION_NAME=consent
-      - TERMS_CONDITIONS_COSMOS_AUTH_KEY=
-      - SPINE_PDS_URL=http://stubs.local.bitraft.io:8080/spine/
-      - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
-      - ConfigurationSettings__CurrentTermsConditionsEffectiveDate=2018-12-12T00:00:00+00:00
-      - NHS_SEARCH_BASE_URL=http://stubs.local.bitraft.io:8080/nhs-search-indexes/
-      - GP_LOOKUP_API_KEY=testnhssearchservicekey
-      - GP_LOOKUP_API_RESULTS_LIMIT=20
-      - POSTCODE_LOOKUP_SEARCH_RADIUS_KM=10
-      - BROTHER_MAILER_URL=http://stubs.local.bitraft.io:8080/brothermailer/
-      - BROTHER_MAILER_ADDRESSBOOK_ID=brothermaileraddressid
-      - BROTHER_MAILER_SIG=brothermailersig
-      - BROTHER_MAILER_USER_ID=brothermaileruserid
-      - SERVICE_JOURNEY_RULES_BASE_URL=http://servicejourneyrulesapi.local.bitraft.io:8086
-      - OnlineConsultationsProvidersSettings__Providers__1__Provider=eConsult
-      - OnlineConsultationsProvidersSettings__Providers__1__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
-      - OnlineConsultationsProvidersSettings__Providers__1__BearerToken=shfjlkasdhflashfl
-      - SPINE_LDAP_LOOKUP_ENABLED=false
-      - TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE=xxx
-      - NOMINATED_PHARMACY_ENABLED=true
-      - SPINE_CERT_PASSWORD=xxx
-      - NHS_APP_PARTY_ID_FOR_SPINE=xxx
-      - PROXY_ACCESS_ENABLED=true
-      - USERINFO_API_BASE_URL=http://userinfo.local.bitraft.io:8091/v1/api/me/info
-    ports:
-      - "8082:8082"
+    env_file:
+      - ./bddtests/docker/brothermailer_connectivity.env
+      - ./bddtests/docker/emis_connectivity.env
+      - ./bddtests/docker/gplookup_connectivity.env
+      - ./bddtests/docker/microtest_connectivity.env
+      - ./bddtests/docker/nhslogin_connectivity.env
+      - ./bddtests/docker/onlineconsultationsproviders_connectivity.env
+      - ./bddtests/docker/organdonation_connectivity.env
+      - ./bddtests/docker/session_database.env
+      - ./bddtests/docker/spine_connectivity.env
+      - ./bddtests/docker/tpp_connectivity.env
+      - ./bddtests/docker/vision_connectivity.env
+      - ./bddtests/docker/pfs.env
     volumes:
-      - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
+      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
+
   cid.local.bitraft.io:
-    image: nhsonline.backend.cidapi
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8084
-      - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=15
-      - PORT=8084
-      - CORS_AUTHORITY=*
-      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
-      - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
-      - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
-      - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
-      - VISION_PFS_PATH=pfs/
-      - VISION_LINKAGE_PATH=linkage/
-      - TPP_CERTIFICATE_PASSWORD
-      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
-      - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
-      - VISION_CERT_PASSPHRASE=GnewUt4z3y
-      - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
-      - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
-      - MICROTEST_BASE_URL=http://stubs.local.bitraft.io:8080/microtest/
-      - GP_PROVIDER_ENABLED_EMIS=true
-      - GP_PROVIDER_ENABLED_TPP=true
-      - GP_PROVIDER_ENABLED_VISION=true
-      - GP_PROVIDER_ENABLED_MICROTEST=true
-      - NDOP_CERTIFICATE_PASSWORD
-      - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
-      - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
-      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
-      - STUB_TERMS_AND_CONDITIONS=true
-      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb
-      - SESSION_MONGO_DATABASE_PORT=27017
-      - SESSION_MONGO_DATABASE_USERNAME=
-      - SESSION_MONGO_DATABASE_PASSWORD=
-      - TERMS_CONDITIONS_COSMOS_ENDPOINT_URI=https://nhsapp-local-test.documents.azure.com:443/
-      - TERMS_CONDITIONS_COLLECTION_LINK=dbs/local/colls/consent/
-      - TERMS_CONDITIONS_COSMOS_DATABASE_ID=local
-      - TERMS_CONDITIONS_COSMOS_COLLECTION_NAME=consent
-      - TERMS_CONDITIONS_COSMOS_AUTH_KEY=
-    ports:
-      - "8084:8084"
+    env_file:
+      - ./bddtests/docker/emis_connectivity.env
+      - ./bddtests/docker/microtest_connectivity.env
+      - ./bddtests/docker/nhslogin_connectivity.env
+      - ./bddtests/docker/session_database.env
+      - ./bddtests/docker/tpp_connectivity.env
+      - ./bddtests/docker/vision_connectivity.env
     volumes:
-      - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
-  servicejourneyrulesapi.config:
-    image: nhsonline-service-journey-dev-config
-    volumes:
-      - 'servicejourneyrules_data:/output'
-  servicejourneyrulesapi.local.bitraft.io:
-    image: nhsonline.backend.servicejourneyrulesapi
-    ports:
-      - "8086:8086"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8086
-      - PORT=8086
-      - CORS_AUTHORITY=*
-      - VERSION_TAG=servicejourneyrules_docker_main
-      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb
-      - SESSION_MONGO_DATABASE_PORT=27017
-      - SESSION_MONGO_DATABASE_USERNAME=
-      - SESSION_MONGO_DATABASE_PASSWORD=
-      - INPUT_FOLDER_PATH=/app/input
-    depends_on:
-      - servicejourneyrulesapi.config
-    volumes:
-      - 'servicejourneyrules_data:/app/input'
+      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
+
   users.local.bitraft.io:
-    image: nhsonline.backend.usersapi
-    ports:
-      - "8083:8083"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8083
-      - PORT=8083
-      - CORS_AUTHORITY=*
-      - VERSION_TAG=users_docker_main
-      - USERS_MONGO_DATABASE_HOST=nhsonline.mongodb
-      - USERS_MONGO_DATABASE_PORT=27017
-      - USERS_MONGO_DATABASE_USERNAME=
-      - USERS_MONGO_DATABASE_PASSWORD=
-      - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive-bdd
-      - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive-bdd.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-      - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
-      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
-      - CITIZEN_ID_CLIENT_ID=nhs-online
-      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
+    env_file:
+      - ./bddtests/docker/nhslogin_connectivity.env
+      - ./bddtests/docker/notificationhub_connectivity.env
+
   userinfo.local.bitraft.io:
-    image: nhsonline.backend.userinfoapi
-    ports:
-      - "8091:8091"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8091
-      - PORT=8091
-      - CORS_AUTHORITY=*
-      - VERSION_TAG=userinfo_docker_main
-      - USERINFO_MONGO_DATABASE_HOST=nhsonline.mongodb
-      - USERINFO_MONGO_DATABASE_PORT=27017
-      - USERINFO_MONGO_DATABASE_USERNAME=
-      - USERINFO_MONGO_DATABASE_PASSWORD=
-      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
-      - CITIZEN_ID_CLIENT_ID=nhs-online
-      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
+    env_file:
+      - ./bddtests/docker/nhslogin_connectivity.env
+    volumes:
+      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
+
   messages.local.bitraft.io:
-    image: nhsonline.backend.messagesapi
-    ports:
-      - "8085:8085"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8085
-      - PORT=8085
-      - CORS_AUTHORITY=*
-      - VERSION_TAG=messages_docker_main
-      - MESSAGES_MONGO_DATABASE_HOST=nhsonline.mongodb
-      - MESSAGES_MONGO_DATABASE_PORT=27017
-      - MESSAGES_MONGO_DATABASE_USERNAME=
-      - MESSAGES_MONGO_DATABASE_PASSWORD=
-      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
-      - CITIZEN_ID_CLIENT_ID=nhs-online
-      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
-  log.local.bitraft.io:
-    image: nhsonline.backend.loggerapi
-    ports:
-      - "8090:8090"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8090
-      - PORT=8090
-      - CORS_AUTHORITY=*
-      - VERSION_TAG=log_docker_main
+    env_file:
+      - ./bddtests/docker/nhslogin_connectivity.env
+
   stubs.local.bitraft.io:
-    image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
+    image: ${WIREMOCK_DOCKER_REGISTRY:-nhsapp.azurecr.io}/wiremock:${WIREMOCK_DOCKER_TAG:-2.22.0-alpine}
     command: --local-response-templating
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "8080:8080"
     tty: true
-  mongo_seed:
-    image: mongo:latest
-    links:
-      - nhsonline.mongodb
-    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:180})' development"
-    depends_on:
-      - nhsonline.mongodb
+
 volumes:
   servicejourneyrules_data:
     driver: local

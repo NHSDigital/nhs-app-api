@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp {
 
             if(String.IsNullOrEmpty(CertificatePath))
             {
-                throw new ConfigurationNotFoundException("Path cannot be null or empty");
+                throw new ConfigurationNotFoundException("CertificatePath cannot be null or empty");
             }
 
             if(string.IsNullOrEmpty(ApiVersion))

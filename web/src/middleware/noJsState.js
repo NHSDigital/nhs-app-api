@@ -19,8 +19,6 @@ const parseJson = (json, mustParse = true) => {
   try {
     return JSON.parse(json);
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log(`Error parsing JSON: ${json}.`);
     return mustParse ? {} : json;
   }
 };

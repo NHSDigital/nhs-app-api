@@ -144,4 +144,7 @@
   <data name="OdsCodeLookupUnknownSupplierCode" xml:space="preserve">
     <value>ODS Code '{0}' is associated with unexpected supplier '{1}'.</value>
   </data>
+  <data name="ConfigurationValueNotValid" xml:space="preserve">
+    <value>Configuration value '{0}' is not valid</value>
+  </data>
 </root>

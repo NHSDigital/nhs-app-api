@@ -49,49 +49,44 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision {
         }
         public void Validate()
         { 
-            if (VisionAppointmentSlotsRequestCount == default(int))
+            if (VisionAppointmentSlotsRequestCount == default)
             {
                 throw new ConfigurationNotFoundException(nameof(VisionAppointmentSlotsRequestCount));
             }
 
-            if (PrescriptionsMaxCoursesSoftLimit == default(int))
+            if (PrescriptionsMaxCoursesSoftLimit.HasValue && PrescriptionsMaxCoursesSoftLimit <= 0)
             {
-                throw new ConfigurationNotFoundException(nameof(PrescriptionsMaxCoursesSoftLimit));
+                throw new ConfigurationNotValidException(nameof(PrescriptionsMaxCoursesSoftLimit));
             }
 
-            if (CoursesMaxCoursesLimit == default(int))
+            if (CoursesMaxCoursesLimit.HasValue && CoursesMaxCoursesLimit <= 0)
             {
-                throw new ConfigurationNotFoundException(nameof(CoursesMaxCoursesLimit));
+                throw new ConfigurationNotValidException(nameof(CoursesMaxCoursesLimit));
             }
 
-            if(String.IsNullOrEmpty(ApplicationProviderId))
+            if (string.IsNullOrEmpty(ApplicationProviderId))
             {
-                throw new ConfigurationNotFoundException("ApiVersion cannot be null or empty");
+                throw new ConfigurationNotFoundException(nameof(ApplicationProviderId));
             }
 
-            if(String.IsNullOrEmpty(RequestUsername))
+            if (string.IsNullOrEmpty(RequestUsername))
             {
-                throw new ConfigurationNotFoundException("ApplicationDeviceType cannot be null or empty");
+                throw new ConfigurationNotFoundException(nameof(RequestUsername));
             }
 
-            if(String.IsNullOrEmpty(VisionSenderUserFullName))
+            if (string.IsNullOrEmpty(VisionSenderUserFullName))
             {
-                throw new ConfigurationNotFoundException("ApplicationDeviceType cannot be null or empty");
+                throw new ConfigurationNotFoundException(nameof(VisionSenderUserFullName));
             }
 
-            if(String.IsNullOrEmpty(VisionSenderUserName))
+            if (string.IsNullOrEmpty(VisionSenderUserName))
             {
-                throw new ConfigurationNotFoundException("ApplicationDeviceType cannot be null or empty");
+                throw new ConfigurationNotFoundException(nameof(VisionSenderUserName));
             }
 
-            if(String.IsNullOrEmpty(VisionSenderUserIdentity))
+            if (string.IsNullOrEmpty(VisionSenderUserIdentity))
             {
-                throw new ConfigurationNotFoundException("ApplicationDeviceType cannot be null or empty");
-            }
-
-            if(String.IsNullOrEmpty(VisionSenderUserIdentity))
-            {
-                throw new ConfigurationNotFoundException("ApplicationDeviceType cannot be null or empty");
+                throw new ConfigurationNotFoundException(nameof(VisionSenderUserIdentity));
             }
         }
     }

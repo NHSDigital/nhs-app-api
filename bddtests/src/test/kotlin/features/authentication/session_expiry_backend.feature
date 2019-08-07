@@ -24,7 +24,7 @@ Feature: Session Extend Backend
 
     #Special case that the mock comes after login or the 504 will occur too early
   Scenario Outline: When the session extend endpoint is called with a valid session but the call times out. The system throws an exception and the <GP System> user receives a 504 response.
-    When I am logged in as a <GP System> user expecting a "gateway timeout" response when extending their session
+    Given I am logged in as a <GP System> user expecting a "gateway timeout" response when extending their session
     When I try to extend my session
     Then I receive a "gateway timeout" error with service desk reference prefixed "<Prefix>"
     Examples:
@@ -32,9 +32,10 @@ Feature: Session Extend Backend
       | EMIS      | ze     |
       | TPP       | zt     |
 
+  @long-running
   Scenario Outline: When the session extend endpoint is called but the session has become invalid, the <GP System> user receives a 401 response.
     Given I am logged in as a <GP System> user expecting a "unauthorized" response when extending their session
-    When I am idle long enough for the backend session to expire
+    And I allow my session to expire
     When I try to extend my session
     Then I receive a "unauthorized" error
     Examples:

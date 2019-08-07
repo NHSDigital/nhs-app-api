@@ -12,3 +12,13 @@ docker-compose.*.yml
 */obj
 !obj/Docker/publish/*
 !obj/Docker/empty/
+
+**/*.assets.json
+**/*.deps.json
+
+
+buildscripts/
+TestResults/
+coverage/
+Makefile
+

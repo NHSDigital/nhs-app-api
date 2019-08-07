@@ -34,9 +34,12 @@ resources/*
 target/*
 browserstack.err
 *.override.yml
+.classpath
+.project
+.settings
 
 # runtime files created while running docker_tests.sh
-ops/docker-compose_ci_run.yml
+ops/docker-compose.ci-run.yml
 ops/vars_ci_run.env
 
 .gradle/

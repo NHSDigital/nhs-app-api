@@ -10,13 +10,13 @@ namespace NHSOnline.Backend.Support.Settings
         {
         }
 
-        public ConfigurationNotFoundException(string message) 
-            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotFound, message))
+        public ConfigurationNotFoundException(string name)
+            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotFound, name))
         {
         }
 
-        public ConfigurationNotFoundException(string message, Exception inner) 
-            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotFound, message), inner)
+        public ConfigurationNotFoundException(string name, Exception inner)
+            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotFound, name), inner)
         {
         }
 

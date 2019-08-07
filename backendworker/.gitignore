@@ -328,3 +328,7 @@ coverage/
 appsettings.Development.json
 
 # End of https://www.gitignore.io/api/osx,aspnetcore
+
+coverage.json
+*.trx
+TestResults

@@ -17,8 +17,7 @@
     </div>
     <div :class="$style.info">
       <h2>{{ $t('organDonation.someOrgans.subheader') }}</h2>
-      <a href="#"
-         @click="moreAboutOrgansClicked">
+      <a @click.prevent="moreAboutOrgansClicked">
         <external-link-arrow-right-icon />
         {{ $t('organDonation.someOrgans.moreAboutOrgansLinkText') }}
       </a>

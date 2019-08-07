@@ -1,7 +1,5 @@
 package config
 
-import java.net.URI
-
 private const val SESSION_EXPIRY_MINUTES: Long = 2
 private const val MONGODB_DEFAULT_PORT: Long = 27017L
 
@@ -61,9 +59,7 @@ class Config private constructor() {
 
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
-        val uri = URI(url)
-        val wiremockUrlString = if (uri.port == -1) "${uri.scheme}://${uri.host}" else "http://${uri.host}:8080"
-        wiremockUrl = envOrDefault("wiremockUrl", wiremockUrlString)
+        wiremockUrl = envOrDefault("wiremockUrl", "http://stubs.local.bitraft.io:8080")
         cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
         apiBackendUrl = envOrDefault("apiBackendUrl", "http://api.local.bitraft.io:8089")
         nodeEnv = envOrDefault("NODE_ENV", "production")

@@ -64,6 +64,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_URLS": "http://*:8082",
         "AUDIT_SINK_TYPE": "FILE",
+        "CITIZEN_ID_AUTHENTICATION_TYPE": "BASIC",
         "CITIZEN_ID_BASE_URL": "https://auth.ext.signin.nhs.uk/",
         "CITIZEN_ID_CLIENT_ID": "nhs-online",
         "CITIZEN_ID_CLIENT_SECRET": "secret",

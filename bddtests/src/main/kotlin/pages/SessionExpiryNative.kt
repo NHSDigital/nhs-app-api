@@ -1,23 +1,11 @@
 package pages
 
+import config.Config
 import org.openqa.selenium.NoSuchElementException
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 
-/**
- * This constant is used for screen lock prevention on native
- * devices.
- */
 const val SCREEN_LOCK_PREVENTION_INTERVAL = 30_000L
-
-/**
- * This constant defines the wait time for the session
- * expiry modal to appear.
- */
-const val WAIT_FOR_EXPIRY_MODAL_DURATION = 120_000L
-
-/**
- * Describes the duration to which the session expiry modal
- * is displayed before automatic logout.
- */
 const val SESSION_EXPIRY_MODAL_DISPLAY_DURATION = 60_000L
 
 open class SessionExpiryNative : NativePageObject() {
@@ -70,22 +58,18 @@ open class SessionExpiryNative : NativePageObject() {
     }
 
      fun waitForSessionExpiryModal() {
-         return when (onMobile()) {
-             false -> Thread.sleep(WAIT_FOR_EXPIRY_MODAL_DURATION)
-             true -> {
-                 scrollAndroidNativePage()
-                 waitAndScrollToKeepActive()
-                 scrollAndroidNativePage()
-                 waitAndScrollToKeepActive()
+         val timeoutMillis = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
+         val modalDelayMillis = timeoutMillis - SESSION_EXPIRY_MODAL_DISPLAY_DURATION
+         val modalDelaySeconds = TimeUnit.MILLISECONDS.toSeconds(modalDelayMillis)
+         val delayUtil = LocalDateTime.now().plusSeconds(modalDelaySeconds)
+
+         while (LocalDateTime.now().isBefore(delayUtil)) {
+             Thread.sleep(SCREEN_LOCK_PREVENTION_INTERVAL)
+             if (onMobile()) {
                  scrollAndroidNativePage()
              }
          }
      }
-
-    fun waitAndScrollToKeepActive() {
-        Thread.sleep(SCREEN_LOCK_PREVENTION_INTERVAL)
-        scrollAndroidNativePage()
-    }
 
     fun waitForSessionExpiryAfterModalDisplay(){
         Thread.sleep(SESSION_EXPIRY_MODAL_DISPLAY_DURATION)

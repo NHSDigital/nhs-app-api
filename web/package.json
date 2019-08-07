@@ -8,7 +8,8 @@
     "build": "npm run swagger-node-full && npm run transpile && nuxt build",
     "dev": "npm run swagger-node-full && npm run transpile && nuxt",
     "generate": "npm run swagger-node-full && nuxt generate",
-    "lint": "npm run transpile && eslint --ext .js,.vue src test nuxt.config.js",
+    "lint-raw": "eslint --ext .js,.vue src test nuxt.config.js",
+    "lint": "npm run transpile && npm run lint-raw",
     "lintfix": "npm run transpile && eslint --fix --ext .js,.vue .",
     "start": "nuxt start",
     "test": "npm run swagger-node-full && npm run lint && jest",
@@ -26,8 +27,12 @@
     "verbose": true,
     "collectCoverage": true,
     "coverageReporters": [
+      "html",
       "teamcity",
-      "html"
+      "cobertura"
+    ],
+    "reporters": [
+      "jest-junit"
     ],
     "coverageDirectory": "test/unit/coverage",
     "moduleFileExtensions": [
@@ -52,6 +57,13 @@
       "@/routes$": "<rootDir>/src/lib/routes",
       "@/(.*)$": "<rootDir>/src/$1"
     }
+  },
+  "jest-junit": {
+    "outputDirectory": ".",
+    "outputName": "./junit.xml"
+  },
+  "vue": {
+    "prettify": false
   },
   "dependencies": {
     "@babel/polyfill": "7.2.5",
@@ -129,6 +141,7 @@
     "fs": "0.0.2",
     "glob": "7.1.3",
     "jest": "24.5.0",
+    "jest-junit": "7.0.0",
     "jest-each": "24.5.0",
     "jest-serializer-vue": "2.0.2",
     "jest-vue-preprocessor": "1.5.0",

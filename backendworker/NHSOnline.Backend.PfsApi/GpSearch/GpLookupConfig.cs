@@ -17,10 +17,9 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
         public GpLookupConfig(IConfiguration configuration, ILogger<GpLookupConfig> logger)
         {
-            GpLookupApiResultsLimit = int.Parse(configuration.GetOrWarn("GP_LOOKUP_API_RESULTS_LIMIT", logger), Thread.CurrentThread.CurrentCulture);
+            GpLookupApiResultsLimit = configuration.GetIntOrThrow("GP_LOOKUP_API_RESULTS_LIMIT", logger);
             
-            PharmacySearchApiLimit =
-                int.Parse(configuration.GetOrWarn("PHARMACY_API_RESULT_LIMIT", logger), Thread.CurrentThread.CurrentCulture);
+            PharmacySearchApiLimit = configuration.GetIntOrThrow("PHARMACY_API_RESULT_LIMIT", logger);
       
             var gpLookupApiUriString = configuration.GetOrWarn("NHS_SEARCH_BASE_URL", logger);
           

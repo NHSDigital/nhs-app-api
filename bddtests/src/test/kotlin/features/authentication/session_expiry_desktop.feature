@@ -9,7 +9,8 @@ Feature: Session Expiry and Extend for Desktop
    e.g. Health A-Z (accessed from the symptoms page)
 
   Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, extends their session and stays signed in
-    Given there are EMIS appointments available to book
+    Given there are EMIS appointments available to book with a reason
+    And a booked appointment can be cancelled
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     When I am idle long enough for the session expiry dialog box to appear

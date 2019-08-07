@@ -3,3 +3,12 @@ Dockerfile
 src/services/nhsonlineapi.js
 src/services/v1nhsonlineapi.js
 src/services/fhircdsapi.js
+
+
+# Build process files
+web-unit-test-results.xml
+web-unit-test-coverage.xml
+
+buildscripts/
+**/.transpiled
+Makefile

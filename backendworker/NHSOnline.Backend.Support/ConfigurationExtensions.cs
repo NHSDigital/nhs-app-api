@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Support
             }
 
             logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
-            throw new ConfigurationNotFoundException(key);
+            throw new ConfigurationNotValidException(key);
         }
 
         public static string GetOrNull(this IConfiguration configuration, string key)
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Support
             }
 
             logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key));
-            throw new ConfigurationNotFoundException(key);
+            throw new ConfigurationNotValidException(key);
         }
 
         public static int GetIntOrDefault<T>(this IConfiguration configuration, string key, ILogger<T> logger)

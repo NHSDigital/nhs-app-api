@@ -1,0 +1,8 @@
+version: "3.4"
+
+services:
+
+  servicejourneyrulesapi.local.bitraft.io:
+    image: alpine/socat
+    entrypoint: ["socat"]
+    command: tcp-l:8086,fork,reuseaddr tcp:host.docker.internal:8086

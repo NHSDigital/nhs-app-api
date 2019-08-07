@@ -1,0 +1,12 @@
+
+[*.{cs,csproj}]
+end_of_line=lf
+charset = utf-8
+
+[Makefile]
+indent_style = tab
+indent_size = 4
+
+[*.make]
+indent_style = tab
+indent_size = 4

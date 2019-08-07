@@ -42,8 +42,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             // Assert
             create
                 .Should()
-                .Throw<ConfigurationNotFoundException>()
-                .WithMessage("Configuration value 'ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS' not found");
+                .Throw<ConfigurationNotValidException>()
+                .WithMessage("Configuration value 'ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS' is not valid");
         }
 
         [TestMethod]

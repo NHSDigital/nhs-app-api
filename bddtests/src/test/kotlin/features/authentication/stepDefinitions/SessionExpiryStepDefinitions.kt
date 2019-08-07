@@ -1,4 +1,5 @@
 package features.authentication.stepDefinitions
+import config.Config
 import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -16,13 +17,12 @@ import pages.SessionExpiryNative
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
+import java.util.concurrent.TimeUnit
 
-private const val SESSION_EXPIRY_IN_MILLIS_SECONDS = 120L
 private const val DELAY_SECONDS_FOR_WAITING = 2000L
 private const val DELAY_BEFORE_RESUME = 10_000L
 private const val BACKGROUND_DURATION = 100L
-private const val DELAY_FOR_DIALOG = 120_000L
-private const val DESKTOP_EXPIRY_INTERVAL = 180_000L
+private const val ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE = 60_000
 
 class SessionExpiryStepDefinitions  {
 
@@ -83,14 +83,11 @@ class SessionExpiryStepDefinitions  {
         sessionExpiry.waitForSessionExpiryAfterModalDisplay()
     }
 
-    @When("^I am idle long enough for the backend session to expire")
-    fun iAmIdleLongEnoughForSessionExpiryDialogBackEnd() {
-        Thread.sleep(DELAY_FOR_DIALOG)
-    }
-
+    @Given("I allow my session to expire")
     @When("I am idle long enough for the desktop session to expire")
-    fun iAmIdleLongEnoughForTheDesktopSessionToExpire() {
-        Thread.sleep(DESKTOP_EXPIRY_INTERVAL)
+    fun givenIAllowMySessionToExpire() {
+        val delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
+        Thread.sleep(delayTime + ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE)
     }
 
     @When("^I click to extend the session$")
@@ -149,7 +146,8 @@ class SessionExpiryStepDefinitions  {
 
     @Then("^I background the app long enough for the session expiry and bring it back to foreground$")
     fun iBackgroundTheAppForSessionExpiry() {
-        sessionExpiry.backgroundAndroidAppforDurationBeforeReturning(SESSION_EXPIRY_IN_MILLIS_SECONDS)
+        sessionExpiry.backgroundAndroidAppforDurationBeforeReturning(
+                TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes))
     }
 
     @Then("^I lock the device$")

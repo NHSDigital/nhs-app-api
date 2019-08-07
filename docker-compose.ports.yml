@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+
+  nhsonline.mongodb:
+    ports:
+      - "27017:27017"
+
+  api.local.bitraft.io:
+    ports:
+      - "8089:8089"

@@ -492,49 +492,50 @@ namespace NHSOnline.Backend.PfsApi
         public NominatedPharmacyConfigurationSettings CreateAndValidateSpineEnvironmentVariables(NhsAppSpinePdsTraceProperties nhsAppSpinePdsTraceProperties, NhsAppSpinePdsUpdateProperties nhsAppSpinePdsUpdateProperties)
         {
             var isNominatedPharmacyEnabled = bool.TrueString.Equals(Configuration.GetOrWarn("NOMINATED_PHARMACY_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
-            var nominatedPharmacyUriString = Configuration.GetOrWarn("SPINE_PDS_URL", _logger);
-            var nominatedPharmacyUriPathString = Configuration.GetOrWarn("SPINE_PDS_URL_PATH", _logger);
-            var pdsQueryFromAddress = Configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", _logger);
-            var pdsQueryTo = Configuration.GetOrWarn("PDS_QUERY_TO", _logger);
-            var artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = Configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", _logger);
-
-            var pdsTraceConfigurationSettings = new PdsTraceConfigurationSettings
-            {
-                FromAddress = pdsQueryFromAddress,
-                ToAddress = pdsQueryTo,
-                FromAsid = nhsAppSpinePdsTraceProperties.FromAsid,
-                ToAsid = nhsAppSpinePdsTraceProperties.ToAsid,
-            };
-
-            var pdsUpdateConfigurationSettings = new PdsUpdateConfigurationSettings
-            {
-                FromAsid = nhsAppSpinePdsUpdateProperties.FromAsid,
-                ToAsid = nhsAppSpinePdsUpdateProperties.ToAsid,
-                CpaId = nhsAppSpinePdsUpdateProperties.CpaId,
-                FromPartyId = Configuration.GetOrWarn("NHS_APP_PARTY_ID_FOR_SPINE", _logger),
-                ToPartyId = nhsAppSpinePdsUpdateProperties.ToPartyId,
-            };
-
-            var config = new NominatedPharmacyConfigurationSettings(
-                isNominatedPharmacyEnabled,
-                new Uri(nominatedPharmacyUriString, UriKind.Absolute),
-                nominatedPharmacyUriPathString,
-                artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
-                pdsTraceConfigurationSettings,
-                pdsUpdateConfigurationSettings
-                );
-
             if (isNominatedPharmacyEnabled)
             {
+                var nominatedPharmacyUriString = Configuration.GetOrWarn("SPINE_PDS_URL", _logger);
+                var nominatedPharmacyUriPathString = Configuration.GetOrWarn("SPINE_PDS_URL_PATH", _logger);
+                var pdsQueryFromAddress = Configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", _logger);
+                var pdsQueryTo = Configuration.GetOrWarn("PDS_QUERY_TO", _logger);
+                var artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = Configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", _logger);
+
+                var pdsTraceConfigurationSettings = new PdsTraceConfigurationSettings
+                {
+                    FromAddress = pdsQueryFromAddress,
+                    ToAddress = pdsQueryTo,
+                    FromAsid = nhsAppSpinePdsTraceProperties.FromAsid,
+                    ToAsid = nhsAppSpinePdsTraceProperties.ToAsid,
+                };
+
+                var pdsUpdateConfigurationSettings = new PdsUpdateConfigurationSettings
+                {
+                    FromAsid = nhsAppSpinePdsUpdateProperties.FromAsid,
+                    ToAsid = nhsAppSpinePdsUpdateProperties.ToAsid,
+                    CpaId = nhsAppSpinePdsUpdateProperties.CpaId,
+                    FromPartyId = Configuration.GetOrWarn("NHS_APP_PARTY_ID_FOR_SPINE", _logger),
+                    ToPartyId = nhsAppSpinePdsUpdateProperties.ToPartyId,
+                };
+
+                var config = new NominatedPharmacyConfigurationSettings(
+                    isNominatedPharmacyEnabled,
+                    new Uri(nominatedPharmacyUriString, UriKind.Absolute),
+                    nominatedPharmacyUriPathString,
+                    artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
+                    pdsTraceConfigurationSettings,
+                    pdsUpdateConfigurationSettings
+                    );
+
                 var nominatedPharmacyConfigIsValid = config.Validate();
                 if (!nominatedPharmacyConfigIsValid)
                 {
                     _logger.LogWarning($"Not all nominated pharmacy config is populated, disabling nominated pharmacy feature (initial value was {isNominatedPharmacyEnabled})");
                     config.IsNominatedPharmacyEnabled = false;
                 }
-            }
 
-            return config;
+                return config;
+            }
+            return new NominatedPharmacyConfigurationSettings(false, null, null, 0, null, null);
         }
     }
 

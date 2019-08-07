@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="" tests="1" skipped="0" failures="1" errors="0" timestamp="" hostname="" time="">
-    <properties/>
-    <testcase name="Tranche Build Failure" classname="" time="">
-        <failure message="Tests in a feature file have not been run due to gradle build failure. Please search for
-        tranche name in the build log to find name of the feature file">
-             </failure>
-    </testcase>
-</testsuite>

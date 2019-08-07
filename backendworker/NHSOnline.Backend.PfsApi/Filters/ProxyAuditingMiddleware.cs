@@ -29,28 +29,35 @@ namespace NHSOnline.Backend.PfsApi.Filters
             {
                 var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
 
-                if (gpSystem.SupportsLinkedAccounts)
+                if (gpSystem.SupportsLinkedAccounts && TryParsePatientId(context, out var patientId))
                 {
-                    try
-                    {
-                        var patientId = Guid.Parse(context.Request.Headers[PatientId]);
-                        var linkedAccountsService = gpSystem.GetLinkedAccountsService();
-                        var result = linkedAccountsService.GetProxyAuditData(userSession.GpUserSession, patientId);
+                    var linkedAccountsService = gpSystem.GetLinkedAccountsService();
+                    var result = linkedAccountsService.GetProxyAuditData(userSession.GpUserSession, patientId);
 
-                        context.SetLinkedAccountAuditInfo(result);
-                    }
-                    catch (ArgumentNullException e)
-                    {
-                        _logger.LogWarning(e, "PatientId Header not found");
-                    }
-                    catch (FormatException e)
-                    {
-                        _logger.LogError(e, "Could not parse Guid from PatientId Header value");
-                    }
+                    context.SetLinkedAccountAuditInfo(result);
                 }
             }
 
             await _next(context);
+        }
+
+        private bool TryParsePatientId(HttpContext context, out Guid patientId)
+        {
+            string patientIdHeader = context.Request.Headers[PatientId];
+            if (patientIdHeader == null)
+            {
+                _logger.LogWarning("{PatientIdHeaderName} Header not found", PatientId);
+                patientId = default;
+                return false;
+            }
+
+            if (Guid.TryParse(patientIdHeader, out patientId))
+            {
+                return true;
+            }
+
+            _logger.LogError("Could not parse Guid from {PatientIdHeaderName} Header value: {PatientIdHeader}", PatientId, patientIdHeader);
+            return false;
         }
     }
 }

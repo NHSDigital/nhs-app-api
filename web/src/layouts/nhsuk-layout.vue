@@ -108,7 +108,7 @@ export default {
       if (durationSeconds) {
         head.noscript = [
           {
-            innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};url='/login?showExpiryMessage=true'">`,
+            innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};URL='/account/signout'">`,
             body: false,
           },
         ];

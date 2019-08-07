@@ -1,6 +1,5 @@
 import ResultsPage from '@/pages/gp-finder/results';
 import { mount } from '../../helpers';
-import '@babel/polyfill';
 
 describe(('GP Finder results page'), () => {
   describe(('getPracticeCodeFromNACSCode'), () => {

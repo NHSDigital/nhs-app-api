@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # set -x
+set -e
+
 function die () {
     echo >&2 "===]> Error: $@ "
     exit 1
@@ -10,25 +12,78 @@ function info () {
     echo >&2 "===]> Info: $@ ";
 }
 
-info "Output currently executing docker containers to aid debug"
-docker ps
-
-info "Cleaning up hanging containers"
-docker kill $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}') 2>/dev/null
-
-# create run time version of docker-compose and environment variables so we can amend values for throttling/cosmos tests
-cp docker-compose_ci.yml docker-compose_ci_run.yml
-cp vars_ci.env vars_ci_run.env
-sed -i '' -e 's/vars_ci.env/vars_ci_run.env/g' docker-compose_ci_run.yml
-
-# Check if DOCKER_TAG exists in envvar
+# Check if APP_DOCKER_TAG exists in envvar
 [ -z $APP_DOCKER_TAG ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
 
-[ -z $AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY ] && die "AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY is not specified, this is required to run notifications BDD tests"
-sed -i '' -e "s/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY/g" vars_ci_run.env
+if [ ! -f ~/.nhsonline/secrets/azure_notification_hub_key_bdd ]; then
+  [ -z $AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY ] && die "AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY is not specified, this is required to run notifications BDD tests"
+  mkdir -p ~/.nhsonline/secrets
+  echo "$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" >> ~/.nhsonline/secrets/azure_notification_hub_key_bdd
+fi
 
-#### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
-#### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
+if [ "$RUN_NATIVE" == 1 ]; then
+  if [ -z $BROWSERSTACK_ACCESSKEY ] && [ -f ~/.nhsonline/secrets/browserstack_accesskey ]; then
+    export BROWSERSTACK_ACCESSKEY=$(<~/.nhsonline/secrets/browserstack_accesskey)
+  fi
+
+  [ -z $BROWSERSTACK_ACCESSKEY ] && die "BROWSERSTACK_ACCESSKEY is not specified, this is required to run native BDD tests"
+  [ -z $BROWSERSTACK_APPPATH ] && die "BROWSERSTACK_APPPATH is not specified, this is required to run native BDD tests"
+  [ "$BROWSER" != "browserstack_ios" ] && [ "$BROWSER" != "browserstack_android" ] && die "BROWSER must be browserstack_ios or browserstack_android to run native BDD tests"
+
+  BROWSERSTACK_USERNAME=${BROWSERSTACK_USERNAME:-ops20}
+fi
+
+# Support TeamCity running with APP_DOCKER_TAG
+export WEB_DOCKER_TAG=${WEB_DOCKER_TAG:-$APP_DOCKER_TAG}
+export WEB_DOCKER_REGISTRY=${WEB_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export PFSAPI_DOCKER_TAG=${PFSAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
+export PFSAPI_DOCKER_REGISTRY=${PFSAPI_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export CIDAPI_DOCKER_TAG=${CIDAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
+export CIDAPI_DOCKER_REGISTRY=${CIDAPI_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export SJRCONFIG_DOCKER_TAG=${SJRCONFIG_DOCKER_TAG:-$APP_DOCKER_TAG}
+export SJRCONFIG_DOCKER_REGISTRY=${SJRCONFIG_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export SJRAPI_DOCKER_TAG=${SJRAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
+export SJRAPI_DOCKER_REGISTRY=${SJRAPI_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export USERSAPI_DOCKER_TAG=${USERSAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
+export USERSAPI_DOCKER_REGISTRY=${USERSAPI_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export USERINFOAPI_DOCKER_TAG=${USERINFOAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
+export USERINFOAPI_DOCKER_REGISTRY=${USERINFOAPI_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export LOGAPI_DOCKER_TAG=${LOGAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
+export LOGAPI_DOCKER_REGISTRY=${LOGAPI_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export MESSAGESAPI_DOCKER_TAG=${MESSAGESAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
+export MESSAGESAPI_DOCKER_REGISTRY=${MESSAGESAPI_DOCKER_REGISTRY:-nhsapp.azurecr.io}
+
+if [ -z "$TF_BUILD" ] # Azure DevOps creates clean build agents so no need to clean
+then
+  info "Output currently executing docker containers to aid debug"
+  docker ps
+
+  info "Cleaning up hanging containers"
+  HANGING_CONTAINERS=$(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}')
+  [ -z "$HANGING_CONTAINERS" ] || docker kill $HANGING_CONTAINERS
+fi
+
+# create run time version of docker-compose and environment variables so we can append values for throttling/cosmos tests
+DOCKER_COMPOSE_FILES="../../docker-compose.yml ../docker-compose.yml"
+if [ "$RUN_LOCAL_BDD" == 1 ]
+then
+  DOCKER_COMPOSE_PORT_FILES=$(env | grep _DOCKER_PORTS | sed 's#^.*_DOCKER_PORTS=#../../#')
+  DOCKER_COMPOSE_FILES="$DOCKER_COMPOSE_FILES ../../docker-compose.ports.yml ../docker-compose.ports.yml $DOCKER_COMPOSE_PORT_FILES"
+fi
+
+echo 'version: "3.4"' > docker-compose.ci-run.yml
+echo 'services:' >> docker-compose.ci-run.yml
+for SERVICE in `docker-compose -f $(echo $DOCKER_COMPOSE_FILES | sed "s/ / -f /g") config --services`; do
+SERVICE="$(echo -e "${SERVICE}" | tr -d '[:space:]')"
+  echo "  ${SERVICE}:" >> docker-compose.ci-run.yml
+  echo "    env_file:" >> docker-compose.ci-run.yml
+  echo "      - ./bddtests/ops/vars_ci_run.env" >> docker-compose.ci-run.yml
+done
+
+DOCKER_COMPOSE_FILES="$DOCKER_COMPOSE_FILES docker-compose.ci-run.yml"
+DOCKER_COMPOSE_FILES_ARG="-f $(echo $DOCKER_COMPOSE_FILES | sed "s/ / -f /g")"
+
+echo "VERSION_TAG=dev_bdd_docker_ops_ci" > vars_ci_run.env
 
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 BROWSER=${BROWSER:-chromeheadless}
@@ -41,6 +96,8 @@ ACCESSIBILITY_OUTPUT=${ACCESSIBILITY_OUTPUT_FOLDER:-accessibilityoutput}
 IOSURLSUFFIX="?source=ios"
 ADROIDURLSUFFIX="?source=android"
 XSLTPROC_DOCKER_IMAGE=hinesteve/xsltproc
+USER_ID=`id -u`
+GROUP_ID=`id -g`
 
 # Free up some docker space if on TC
 
@@ -60,14 +117,11 @@ DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
 DOCKER_IMAGE_BROWSERSTACK=$DOCKER_REGISTRY/browserstack:latest
 
-# List all docker images in the docker compose setup
-DOCKER_SERVICES=`docker-compose -f docker-compose_ci_run.yml config --services`
-
 if [ "$RUN_SUBSET" == 0 ]
 then
     info "Test options overridden - User specified Run Configured"
     BDD_CUCUMBER_OPTIONS_PREFIX="$SPECIFIC_TEST_TAGS"
-    TAGS=specific
+    TAGS=(specific)
 else
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
     CURRENT_TAG=$(git name-rev --tags --name-only $CURRENT_BRANCH)
@@ -98,21 +152,20 @@ else
           @tech-debt and not @long-running and not @throttling and not
           @cosmos and not @accessibility and not @onlineconsultations $SPECIFIC_TEST_TAGS"
         fi
-        if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ] &&  [ $MODE == "teamcity" ]
+        if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ]
         then
           TAGS=()
           val=1
           for filename in $(find .. | grep -F .feature | grep -v throttling.feature | sort); do
+            let tranche="$(( val++ % MAX_TESTTHREADS + 1))"
 
-            info "Tagging $filename as tranche$val"
+            info "Tagging $filename as tranche$tranche"
+            echo -e "@tranche$tranche\n$(cat $filename)" > $filename
 
-            echo -e "@tranche$val\n$(cat $filename)" > $filename
-
-            TAGS+=(tranche$val)
-
-            let "val +=1"
+            TAGS+=(tranche$tranche)
           done
 
+          TAGS=($(tr ' ' '\n' <<< "${TAGS[@]}" | sort -u | tr '\n' ' '))
           TAGS+=(throttling)
           TAGS+=(onlineconsultations)
 
@@ -127,7 +180,7 @@ else
     then
         [ -z "$COSMOS_AUTHKEY" ] && die "COSMOS_AUTHKEY not specified, it is required if cosmos tests are enabled"
         echo "TERMS_CONDITIONS_COSMOS_AUTH_KEY=$COSMOS_AUTHKEY" >> vars_ci_run.env
-        sed -i '' -e 's/STUB\_TERMS\_AND\_CONDITIONS\=true/STUB\_TERMS\_AND\_CONDITIONS\=false/g' vars_ci_run.env
+        echo 'STUB_TERMS_AND_CONDITIONS=false' >> vars_ci_run.env
         info "Main Tranche - Run Cosmos Tests"
         BDD_CUCUMBER_OPTIONS_PREFIX="--tags '@cosmos'"
         TAGS=(specific)
@@ -141,10 +194,11 @@ else
 fi
 
 info $BDD_CUCUMBER_OPTIONS_PREFIX
+info ${TAGS[*]}
 
-# Pin versions of docker images
-export WEB_TAG=$APP_DOCKER_TAG
-export BACKEND_TAG=$APP_DOCKER_TAG
+for TAG in ${TAGS[*]}; do
+  LAST_TAG=$TAG
+done
 
 # Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
 if [ "$BROWSER" == "browserstack_android" ] || [ "$BROWSER" == "browserstack_ios" ]
@@ -194,87 +248,100 @@ else
   workingDir=$(pwd)
 fi
 
-info $workingDir
+info "Working Directory: $workingDir"
 
 # Prepare for Run
-if [ $MODE == "teamcity" ]
+if [ "$SKIP_PREPARE" != 1 ]
 then
-docker run \
-  --cpus $TC_CPUS \
-  --memory $TC_RAM \
-  --rm \
-  -v $workingDir/../:/repo \
-  $DOCKER_IMAGE bash -c " \
-    cd /repo ; \
-    ./gradlew clean prepare"
-else
-docker run \
-  --rm \
-  -v $workingDir/../:/repo \
-  $DOCKER_IMAGE bash -c " \
-    cd /repo ; \
-    ./gradlew clean prepare"
-fi
-
-test_exit_code=$?
-
-if [ $test_exit_code != 0 ]
-then
-  exit $test_exit_code
-fi
-
-for s in $DOCKER_SERVICES; do
-  #Don't pull local images we've built as part of the pipeline
-  if [[ "$s" != "pfs.local.bitraft.io" && "$s" != "api.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "servicejourneyrulesapi.config" && "$s" != "servicejourneyrulesapi.local.bitraft.io" && "$s" != "users.local.bitraft.io" && "$s" != "cid.local.bitraft.io" ]]; then
-    docker-compose -f docker-compose_ci_run.yml pull $s
+  if [ $MODE == "teamcity" ]
+  then
+    docker run \
+    --cpus $TC_CPUS \
+    --memory $TC_RAM \
+    --rm \
+    -v $workingDir/../:/repo \
+    $DOCKER_IMAGE bash -c " \
+      set -e ; \
+      cd /repo ; \
+      ./gradlew --no-daemon clean prepare; \
+      chown -R $USER_ID:$GROUP_ID /repo"
+  else
+    docker run \
+    --rm \
+    -v $workingDir/../:/repo \
+    $DOCKER_IMAGE bash -c " \
+      set -e ; \
+      cd /repo ; \
+      ./gradlew --no-daemon clean prepare; \
+      chown -R $USER_ID:$GROUP_ID /repo"
   fi
-done
+fi
 
-# Output list of images contained in config
-docker-compose -f docker-compose_ci_run.yml config | grep image
+DOCKER_IMAGES=$(docker-compose $DOCKER_COMPOSE_FILES_ARG config | grep image | sed -e 's/^[[:space:]]*image: //' | sort -u)
+info "Configured images:"
+info $DOCKER_IMAGES
 
-#pre-cleanup
-rm -rf $workingDir/../../testRunFolder/*
+if [ -z "$NO_PULL" ]; then
+  # Don't try to pull local images
+  DOCKER_IMAGES_TO_PULL=$(echo $DOCKER_IMAGES | sed -e 's#local/[^[:space:]]\+##g' -e 's/ \+/ /' | sort -u)
+  for IMAGE_TO_PULL in $DOCKER_IMAGES_TO_PULL; do
+    docker pull $IMAGE_TO_PULL
+  done
+fi
+
+TEST_RUN_FOLDER="$workingDir/../../testRunFolder"
+if [ -e $TEST_RUN_FOLDER ]
+then
+  rm -rf $TEST_RUN_FOLDER
+fi
+mkdir -p $TEST_RUN_FOLDER
 
 for TAG in ${TAGS[*]}; do
   info "Creating test folder for $TAG"
 
-  cp -r $workingDir/../ $workingDir/../../testRunFolder/$TAG
-
+  cp -r $workingDir/../ $TEST_RUN_FOLDER/$TAG
 done
 
 PIDS=()
 
 for TAG in ${TAGS[*]}; do
 
-info "Running $TAG tests"
+  info "Running $TAG tests"
 
   if [ $TAG == "throttling" ]
   then
-    sed -i '' -e 's/THROTTLING\_ENABLED\=false/THROTTLING\_ENABLED\=true/g' vars_ci_run.env
+    echo 'THROTTLING_ENABLED=true' >> vars_ci_run.env
   else
-    sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci_run.env
+    echo 'THROTTLING_ENABLED=false' >> vars_ci_run.env
   fi
 
-    if [ $TAG == "onlineconsultations" ]
+  if [ $TAG == "onlineconsultations" ]
   then
-    sed -i '' -e 's/ONLINE\_CONSULTATIONS\_ENABLED\=false/ONLINE\_CONSULTATIONS\_ENABLED\=true/g' vars_ci_run.env
+    echo 'ONLINE_CONSULTATIONS_ENABLED=true' >> vars_ci_run.env
   else
-    sed -i '' -e 's/ONLINE\_CONSULTATIONS\_ENABLED\=true/ONLINE\_CONSULTATIONS\_ENABLED\=false/g' vars_ci_run.env
+    echo 'ONLINE_CONSULTATIONS_ENABLED=false' >> vars_ci_run.env
   fi
 
   if [ $TAG == "nativesmoketest" ]
   then
-    sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=5/g' vars_ci_run.env
-    sed -i '' -e 's/expireAfterSeconds:60/expireAfterSeconds:300/g' docker-compose_ci_run.yml
-    sed -i '' -e 's/ONLINE\_CONSULTATIONS\_ENABLED\=true/ONLINE\_CONSULTATIONS\_ENABLED\=false/g' vars_ci_run.env
+    echo 'ConfigurationSettings__DefaultSessionExpiryMinutes=5' >> vars_ci_run.env
+    echo 'EXPIRE_AFTER_SECONDS=300' >> vars_ci_run.env
+    echo 'SESSION_EXPIRY_MINUTES=5' >> vars_ci_run.env
+    echo 'ONLINE_CONSULTATIONS_ENABLED=false' >> vars_ci_run.env
   else
-    sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=5/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/g' vars_ci_run.env
-    sed -i '' -e 's/expireAfterSeconds:300/expireAfterSeconds:60/g' docker-compose_ci_run.yml
+    echo 'ConfigurationSettings__DefaultSessionExpiryMinutes=2' >> vars_ci_run.env
+    echo 'EXPIRE_AFTER_SECONDS=120' >> vars_ci_run.env
+    echo 'SESSION_EXPIRY_MINUTES=2' >> vars_ci_run.env
   fi
 
   # Run docker tests per tag
-  docker-compose -p $TAG -f docker-compose_ci_run.yml up -d --build || die "Docker compose failure"
+  docker-compose -p $TAG $DOCKER_COMPOSE_FILES_ARG up -d --build || die "Docker compose failure"
+
+  if [ "$RUN_LOCAL_BDD" == 1 ]
+  then
+    echo docker-compose -p $TAG $DOCKER_COMPOSE_FILES_ARG down
+    exit
+  fi
 
   ##################### Runtime vars
   WEB_ID=$(docker ps -qf name=${TAG}_web.*)
@@ -305,11 +372,12 @@ info "Running $TAG tests"
     fi
   fi
 
-  info $BDD_CUCUMBER_OPTIONS
+  info "BDD Cucumber Option: $BDD_CUCUMBER_OPTIONS"
 
-  if [ $DOCKER_IMAGE == $DOCKER_IMAGE_BROWSERSTACK ]
+  if [ "$DOCKER_IMAGE" == "$DOCKER_IMAGE_BROWSERSTACK" ]
   then
       BROWSERSTACK_LOCAL_STRING="(BrowserStackLocal --key $BROWSERSTACK_ACCESSKEY --force-local --local-identifier $NETWORK &) ;"
+      info BROWSERSTACK_LOCAL_STRING
   fi
 
   if [ $MODE == "teamcity" ]
@@ -318,21 +386,27 @@ info "Running $TAG tests"
       --name $TAG \
       --rm \
       --network $NETWORK \
+      --env-file vars_test_runner.env \
       --env-file vars_ci_run.env \
       --cpus $TC_CPUS \
       --memory $TC_RAM \
-      -v $workingDir/../../testRunFolder/$TAG/:/repo \
+      -v $TEST_RUN_FOLDER/$TAG/:/repo \
       $DOCKER_IMAGE bash -c " \
-        echo $(date) - $TAG Starting
+        echo $(date) - $TAG Starting \
+        set -e ; \
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
         BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
         APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
-        ./gradlew test --stacktrace \
+        ./gradlew test --no-daemon --stacktrace \
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
           -Dwebdriver.provided.type=$BROWSER \
           $APPIUM_TYPE \
-          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=') ; echo $(date) - $TAG Completed" &
+          -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'=') ; \
+          echo $(date) - $TAG Completed; \
+        chown -R $USER_ID:$GROUP_ID /repo" &
+      
+    PID=$!
 
     # give the test container time to startup
     echo "Sleeping for 10 seconds to allow the test container to start"
@@ -343,23 +417,26 @@ info "Running $TAG tests"
       --name $TAG \
       --rm \
       --network $NETWORK \
+      --env-file vars_test_runner.env \
       --env-file vars_ci_run.env \
-      -v $workingDir/../../testRunFolder/$TAG/:/repo \
+      -v $TEST_RUN_FOLDER/$TAG/:/repo \
       $DOCKER_IMAGE bash -c " \
+        set -e ; \
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
         BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
         APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
-        ./gradlew test --stacktrace \
+        ./gradlew test --no-daemon --stacktrace \
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
           -Dwebdriver.provided.type=$BROWSER \
           $APPIUM_TYPE \
-          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')" &
+          -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'='); \
+        chown -R $USER_ID:$GROUP_ID /repo" &
+      
+      PID=$!
   fi
 
-  PID=$!
-
-  if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ] &&  [ $MODE == "teamcity" ]
+  if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ]
   then
     while [ $MAX_TESTTHREADS -le $(docker ps | grep -v local.bitraft | grep -v nhsonline | wc -l) ]
     do
@@ -373,10 +450,11 @@ info "Running $TAG tests"
     for CONTAINER in ${CONTAINERS[*]}; do
       TAG=$(docker ps --format '{{.ID}} {{.Label "com.docker.compose.project"}}' | grep $CONTAINER | awk '{print $2}')
 
-      if [ $(docker ps | grep $TAG | grep -v local.bitraft | grep -v nhsonline | wc -l) == 0 ]
+      # Always leave 'LAST_TAG' running in case of re-run
+      if [ "$TAG" != "$LAST_TAG" ] && [ $(docker ps | grep $TAG | grep -v local.bitraft | grep -v nhsonline | wc -l) == 0 ]
       then
         info "Shutting down $TAG"
-        docker-compose -p $TAG -f docker-compose_ci_run.yml stop
+        docker-compose -p $TAG $DOCKER_COMPOSE_FILES_ARG stop
         docker network prune -f
         docker volume prune -f
       fi
@@ -390,53 +468,70 @@ info "Running $TAG tests"
 
 done
 
+set +e
+
 # Wait for all test runners
 info "Waiting for all processes to terminate"
 for PID in ${PIDS[*]}; do
     wait $PID
 done
 
+set -e
+
 info "Collecting failed test reports"
 touch $workingDir/../build/failures.txt
 for TAG in ${TAGS[*]}; do
   info "Collecting failed test reports for $TAG"
-  cp junit.xslt $workingDir/../../testRunFolder/$TAG/build/test-results/test/.
-  docker run --rm -v "$workingDir/../../testRunFolder/$TAG/build/test-results/test:/wrk" $XSLTPROC_DOCKER_IMAGE \
+  cp junit.xslt $TEST_RUN_FOLDER/$TAG/build/test-results/test/.
+  docker run --rm -v "$TEST_RUN_FOLDER/$TAG/build/test-results/test:/wrk" $XSLTPROC_DOCKER_IMAGE \
     bash -c "ls *.xml | xargs -n 1 -I {} xsltproc -o {} junit.xslt {}"
 
-  if [ -f $workingDir/../../testRunFolder/$TAG/build/failures.txt ]; then
-    cat $workingDir/../../testRunFolder/$TAG/build/failures.txt >> $workingDir/../build/failures.txt
+  if [ -f $TEST_RUN_FOLDER/$TAG/build/failures.txt ]; then
+    cat $TEST_RUN_FOLDER/$TAG/build/failures.txt >> $workingDir/../build/failures.txt
   fi
 done
 
 info "All failed tests for rerun"
 cat $workingDir/../build/failures.txt
 
+test_run_result=0
 if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -ge 1 ]
 then
+  test_run_result=1
+
+  if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -le 30 ]
+  then
     TAGS+=(RERUN)
 
-    if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -le 30 ]
-    then
-      cp -r $workingDir/../ $workingDir/../../testRunFolder/RERUN
+    cp -r $workingDir/../ $TEST_RUN_FOLDER/RERUN
 
-      docker run \
-        --name RERUN \
-        --rm \
-        --network $NETWORK \
-        --env-file vars_ci_run.env \
-        -v $workingDir/../../testRunFolder/RERUN/:/repo \
-        $DOCKER_IMAGE bash -c " \
-          cd /repo ; \
-          $BROWSERSTACK_LOCAL_STRING \
-          BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX \
-          APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
-          ./gradlew rerun --stacktrace \
-            -Dcucumber.options=\"--strict \" \
-            -Dwebdriver.provided.type=$BROWSER \
-            $APPIUM_TYPE \
-            -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')"
-    fi
+    set +e
+
+    docker run \
+      --name RERUN \
+      --rm \
+      --network $NETWORK \
+      --env-file vars_test_runner.env \
+      --env-file vars_ci_run.env \
+      -v $TEST_RUN_FOLDER/RERUN/:/repo \
+      $DOCKER_IMAGE bash -c " \
+        cd /repo ; \
+        $BROWSERSTACK_LOCAL_STRING \
+        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX \
+        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
+        ./gradlew rerun --no-daemon --stacktrace \
+          -Dcucumber.options=\"--strict \" \
+          -Dwebdriver.provided.type=$BROWSER \
+          $APPIUM_TYPE \
+          -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'='); \
+        test_run_result=\$?; \
+        chown -R $USER_ID:$GROUP_ID /repo; \
+        exit \$test_run_result"
+
+    test_run_result=$?
+
+    set -e
+  fi
 fi
 
 # Aggregate test results
@@ -444,59 +539,76 @@ info "Aggregating test results"
 info "Collecting reports"
 for TAG in ${TAGS[*]}; do
   info "Collecting serenity reports for $TAG"
-  cp -r $workingDir/../../testRunFolder/$TAG/target/site/serenity $workingDir/../target/site/.
-  cp -r $workingDir/../../testRunFolder/$TAG/target/site/Gherkin-Report.html $workingDir/../target/site/
-    if [ -d $workingDir/../../testRunFolder/$TAG/build/test-results ]
-    then
-      mkdir -p $workingDir/../build/test-results/$TAG
-      cp -r $workingDir/../../testRunFolder/$TAG/build/test-results/* $workingDir/../build/test-results/$TAG/.
-    else
-       mkdir -p $workingDir/../build/test-results/test
-       cp $workingDir/../TEST-TrancheFailed.xml $workingDir/../build/test-results/test/TEST-$TAG.xml
-       sed -i '' -e s/name=\"\"/name=\"$TAG\"/ $workingDir/../build/test-results/test/TEST-$TAG.xml
-       sed -i '' -e s/classname=\"\"/classname=\"$TAG\"/ $workingDir/../build/test-results/test/TEST-$TAG.xml
-    fi
-  cp -r $workingDir/../../testRunFolder/$TAG/$ACCESSIBILITY_OUTPUT $workingDir/../.
+  cp -r $TEST_RUN_FOLDER/$TAG/target/site/serenity $workingDir/../target/site/.
+  cp -r $TEST_RUN_FOLDER/$TAG/target/site/Gherkin-Report.html $workingDir/../target/site/
+  if [ -d $TEST_RUN_FOLDER/$TAG/build/test-results ]
+  then
+    mkdir -p $workingDir/../build/test-results/$TAG
+    cp -r $TEST_RUN_FOLDER/$TAG/build/test-results/* $workingDir/../build/test-results/$TAG/.
+  else
+    mkdir -p $workingDir/../build/test-results/test
+    cp $workingDir/../TEST-TrancheFailed.xml $workingDir/../build/test-results/test/TEST-$TAG.xml
+    sed -i '' -e s/name=\"\"/name=\"$TAG\"/ $workingDir/../build/test-results/test/TEST-$TAG.xml
+    sed -i '' -e s/classname=\"\"/classname=\"$TAG\"/ $workingDir/../build/test-results/test/TEST-$TAG.xml
+  fi
+  cp -r $TEST_RUN_FOLDER/$TAG/$ACCESSIBILITY_OUTPUT $workingDir/../.
 done
 
-if [ $MODE == "teamcity" ]
+if [ "$MODE" == "teamcity" ]
 then
-docker run \
-  --cpus $TC_CPUS \
-  --memory $TC_RAM \
-  --rm \
-  -v $workingDir/../:/repo \
-  $DOCKER_IMAGE bash -c " \
-    cd /repo ; \
-    ./gradlew aggregate"
+  docker run \
+    --cpus $TC_CPUS \
+    --memory $TC_RAM \
+    --rm \
+    -v $workingDir/../:/repo \
+    $DOCKER_IMAGE bash -c " \
+      set -e ; \
+      cd /repo ; \
+      ./gradlew --no-daemon aggregate; \
+      chown -R $USER_ID:$GROUP_ID /repo"
 else
-docker run \
-  --rm \
-  -v $workingDir/../:/repo \
-  $DOCKER_IMAGE bash -c " \
-    cd /repo ; \
-    ./gradlew aggregate"
+  docker run \
+    --rm \
+    -v $workingDir/../:/repo \
+    $DOCKER_IMAGE bash -c " \
+      set -e ; \
+      cd /repo ; \
+      ./gradlew --no-daemon aggregate; \
+      chown -R $USER_ID:$GROUP_ID /repo"
 fi
-
-test_exit_code=$?
 
 mkdir -p logs
 
 for TAG in ${TAGS[*]}; do
 
-  for container in $(docker-compose -p ${TAG} -f docker-compose_ci_run.yml ps | tail -n +3 | awk '{print $1}' ); do
-    docker logs $container >& ./logs/$container.log
+  for CONTAINER_ID in $(docker-compose -p ${TAG} $DOCKER_COMPOSE_FILES_ARG ps -q); do
+    CONTAINER_NAME=$(docker ps -a --filter "id=$CONTAINER_ID" --format '{{.Names}}')
+    info "Fetching logs for $CONTAINER_NAME ($CONTAINER_ID)"
+    docker logs $CONTAINER_NAME >& ./logs/$CONTAINER_NAME.log
   done
 
-  docker-compose -p $TAG -f docker-compose_ci_run.yml stop
+  docker-compose -p $TAG $DOCKER_COMPOSE_FILES_ARG stop
 
 done
 
-#cleanup
-rm -rf $workingDir/../../testRunFolder/*
-rm -rf docker-compose_ci_run.yml
-rm -rf vars_ci_run.env
+if [ -z "$TF_BUILD" ]; then
+  #cleanup
+  rm -rf $TEST_RUN_FOLDER
+  rm -rf docker-compose.ci-run.yml
+  rm -rf vars_ci_run.env
 
-docker rm -f $(docker ps -aq)
+  if [ $MODE == "teamcity" ]; then
+    info "Deleting all docker containers"
+    CONTAINERS=$(docker ps -aq)
+    [ -z "$CONTAINERS" ] || docker rm -f $CONTAINERS
 
-exit "$test_exit_code"
+    exit
+  fi;
+
+  exit $test_run_result
+fi;
+
+if [ $test_run_result -ne 0 ]; then
+  echo "##vso[task.logissue type=error]BDD Tests Failed"
+  echo "##vso[task.complete result=Failed;]BDD Tests Failed"
+fi;

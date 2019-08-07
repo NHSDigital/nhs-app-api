@@ -1,7 +1,0 @@
-version: "3.2"
-services:
-  servicejourneyrulesapi.config:
-    image: nhsonline-service-journey-dev-config
-    build:
-      context: .
-      dockerfile: configurations/Dockerfile

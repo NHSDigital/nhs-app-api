@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+
+  pfs.local.bitraft.io:
+    ports:
+      - "8082:8082"

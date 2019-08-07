@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("MESSAGES_MONGO_DATABASE_NAME");
         }
 
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION");
         }
 
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("MESSAGES_MONGO_DATABASE_HOST");
         }
 
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
 
             // Assert
-            act.Should().Throw<ConfigurationNotFoundException>()
+            act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("MESSAGES_MONGO_DATABASE_PORT");
         }
 

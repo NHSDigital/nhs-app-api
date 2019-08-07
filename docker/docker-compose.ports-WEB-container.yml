@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+
+  web.local.bitraft.io:
+    ports:
+      - "3000:3000"

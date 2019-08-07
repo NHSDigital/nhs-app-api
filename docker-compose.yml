@@ -1,0 +1,174 @@
+version: "3.4"
+
+secrets:
+  tpp_cert:
+    file: "~/.nhsonline/secrets/tpp_client_cert.pfx"
+  tpp_cert_password:
+    file: "~/.nhsonline/secrets/tpp_client_cert.password"
+  session_encryption_key:
+    file: "~/.nhsonline/secrets/session_encryption_key"
+  azure_notification_hub_key:
+    file: "~/.nhsonline/secrets/azure_notification_hub_key"
+  microtest_cert:
+    file: "~/.nhsonline/secrets/microtest_client_cert.pfx"
+  microtest_cert_password:
+    file: "~/.nhsonline/secrets/microtest_client_cert.password"
+  spine_cert:
+    file: "~/.nhsonline/secrets/spine_client_cert.pfx"
+  spine_cert_password:
+    file: "~/.nhsonline/secrets/spine_client_cert.password"
+
+
+services:
+
+  nhsonline.mongodb:
+    image: mongo:latest
+
+  api.local.bitraft.io:
+    image: nginx:alpine
+    volumes:
+      - ./backendworker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - log.local.bitraft.io
+      - messages.local.bitraft.io
+      - pfs.local.bitraft.io
+      - userinfo.local.bitraft.io
+      - users.local.bitraft.io
+
+  web.local.bitraft.io:
+    image: ${WEB_DOCKER_REGISTRY:-local}/nhsonline-web:${WEB_DOCKER_TAG:-latest}
+    env_file:
+      - ./docker/web.env
+      - ./docker/gplookup_connectivity.env
+
+  pfs.local.bitraft.io:
+    image: ${PFSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendpfsapi:${PFSAPI_DOCKER_TAG:-latest}
+    entrypoint:
+      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
+      - -c        # Therefore we run a script before starting the service to read the file into an env var
+      - |
+          export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
+          export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
+          export SPINE_CERT_PASSWORD=$$(<$$SPINE_CERT_PASSWORD)
+          exec $$*
+      - "--"
+    command: dotnet NHSOnline.Backend.PfsApi.dll
+    env_file:
+      - ./docker/emis_connectivity.env
+      - ./docker/gplookup_connectivity.env
+      - ./docker/im1cache_database.env
+      - ./docker/microtest_connectivity.env
+      - ./docker/nhslogin_connectivity.env
+      - ./docker/organdonation_connectivity.env
+      - ./docker/session_database.env
+      - ./docker/sjr_connectivity.env
+      - ./docker/spine_connectivity.env
+      - ./docker/tpp_connectivity.env
+      - ./docker/userinfo_connectivity.env
+      - ./docker/vision_connectivity.env
+      - ./docker/pfs.env
+    depends_on:
+      - servicejourneyrulesapi.local.bitraft.io
+    secrets:
+      - tpp_cert
+      - tpp_cert_password
+      - microtest_cert
+      - microtest_cert_password
+      - spine_cert
+      - spine_cert_password
+      - session_encryption_key
+
+  cid.local.bitraft.io:
+    image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}
+    entrypoint:
+      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
+      - -c        # Therefore we run a script before starting the service to read the file into an env var
+      - |
+          export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
+          export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
+          exec $$*
+      - "--"
+    command: dotnet NHSOnline.Backend.CidApi.dll
+    env_file:
+      - ./docker/emis_connectivity.env
+      - ./docker/im1cache_database.env
+      - ./docker/microtest_connectivity.env
+      - ./docker/sjr_connectivity.env
+      - ./docker/tpp_connectivity.env
+      - ./docker/vision_connectivity.env
+      - ./docker/cid.env
+    depends_on:
+      - servicejourneyrulesapi.local.bitraft.io
+    secrets:
+      - tpp_cert
+      - tpp_cert_password
+      - microtest_cert
+      - microtest_cert_password
+
+  servicejourneyrulesapi.config:
+    image: ${SJRCONFIG_DOCKER_REGISTRY:-local}/nhsonline-service-journey-dev-config:${SJRCONFIG_DOCKER_TAG:-latest}
+    volumes:
+      - 'servicejourneyrules_data:/output'
+
+  servicejourneyrulesapi.local.bitraft.io:
+    image: ${SJRAPI_DOCKER_REGISTRY:-local}/nhsonline-backendservicejourneyrulesapi:${SJRAPI_DOCKER_TAG:-latest}
+    command: dotnet NHSOnline.Backend.ServiceJourneyRulesApi.dll
+    env_file:
+      - ./docker/sjr.env
+    depends_on:
+      - servicejourneyrulesapi.config
+    volumes:
+      - 'servicejourneyrules_data:/app/input'
+
+  users.local.bitraft.io:
+    image: ${USERSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendusersapi:${USERSAPI_DOCKER_TAG:-latest}
+    entrypoint:
+      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
+      - -c        # Therefore we run a script before starting the service to read the file into an env var
+      - |
+          export AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
+          exec $$*
+      - "--"
+    command: dotnet NHSOnline.Backend.UsersApi.dll
+    env_file:
+      - ./docker/nhslogin_connectivity.env
+      - ./docker/notificationhub_connectivity.env
+      - ./docker/users.env
+    secrets:
+      - azure_notification_hub_key
+
+  userinfo.local.bitraft.io:
+    image: ${USERINFOAPI_DOCKER_REGISTRY:-local}/nhsonline-backenduserinfoapi:${USERINFOAPI_DOCKER_TAG:-latest}
+    env_file:
+      - ./docker/nhslogin_connectivity.env
+      - ./docker/userinfo.env
+
+  messages.local.bitraft.io:
+    image: ${MESSAGESAPI_DOCKER_REGISTRY:-local}/nhsonline-backendmessagesapi:${MESSAGESAPI_DOCKER_TAG:-latest}
+    env_file:
+      - ./docker/nhslogin_connectivity.env
+      - ./docker/messages.env
+
+  log.local.bitraft.io:
+    image: ${LOGAPI_DOCKER_REGISTRY:-local}/nhsonline-clientloggerapi:${LOGAPI_DOCKER_TAG:-latest}
+    env_file:
+      - ./docker/logger.env
+      
+  mongo_seed:
+    image: mongo:latest
+    links:
+      - nhsonline.mongodb
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+          sleep 5
+          EVAL="db.session.createIndex({_ts:1},{expireAfterSeconds:$${EXPIRE_AFTER_SECONDS:-120}})"
+          mongo --host nhsonline.mongodb --eval "$$EVAL" development
+      - "--"
+    depends_on:
+      - nhsonline.mongodb
+
+volumes:
+  servicejourneyrules_data:
+    driver: local

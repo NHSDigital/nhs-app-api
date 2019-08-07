@@ -3,61 +3,101 @@
 > NHS Online App
 
 ## Get code
+
 Clone from the GitLab repo: https://git.nhschoices.net/nhsonline/nhsonline-app.git
 
 ```bash
 git clone https://git.nhschoices.net/nhsonline/nhsonline-app.git
 ```
 
-2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
-  - backendworker folder
-  - web folder
-
-## Pipeline Tests
-**NOTE:**
-* Docker 17.05 or higher on the daemon and client is required (for example [docker4mac](https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac)).
-* Delete existing node_module folder if you already run `npm install` locally to prevent issues starting container with incompatible libraries
-
-To run the pipeline tests in a fully containerised environment execute the build and test script
+## Build code
 
 ```bash
-./build_and_test.sh
+make build
 ```
 
-It can optionally be called with reference to a specific test tag e.g.
+## Unit Tests
 
 ```bash
-./build_and_test.sh @prescription
+make test
 ```
 
-for full usage information for the script launch with the -h switch
+## BDD (Integration) Tests
+
+### Run Locally
+
+To build and start the application ready to run the BDD tests against (e.g. in IntelliJ)
 
 ```bash
-./build_and_test.sh -h
+make localbdd
 ```
+
+To start the locally built application ready to run the BDD tests against
+
+```bash
+make run-localbdd
+```
+
+To start a CI built application version ready to run the BDD tests against
+
+```bash
+make run-localbdd TAG=[tag]
+```
+
+Where \[tag\] is the CI tag to run, e.g. develop, 3355 (for a PR), or 08cafda6ed4f1ce3bd24ac3ec98810a27ee6f62c (for a specific commit). By default the latest version of any remote images will be pulled before running. To override this behaviour add `NO_PULL=1` to the make command.
+
+Run make with no arguments for more details on the available options.
+
+### Run Pipeline
+
+To run the BDD tests in a fully containerised environment as is done in CI
+
+```bash
+make run-bdd
+```
+
+The Makefile in the `bddtests` contains additional targets for common configurations (e.g. running native tests via BrowserStack).
+
+#### Options
+
+The following can be specified with `make run-bdd` to customise the behaviour
+
+| Option           | Description                                                                                                   |
+| ---------------  | -----------                                                                                                   |
+| RUN_LOCAL_BDD=1  | Starts the containers configured as specified but with ports exposed to allow local running of the BDD tests. |
+| SKIP_PREPARE=1   | Bypasses the gradle prepare step. Useful if restarting the containers and this has already been run.          |
+| TAG=[dockertag]  | Pull images with the specified \[dockertag\] to run the tests against.                                        |
 
 > IOS app
 
 ## Cocoapod install
+
 In a terminal run the following commands
 
 1. Make sure you have cocoapods on your machine:
-sudo gem install cocoapods
+
+    ```bash
+    sudo gem install cocoapods
+    ```
 
 2. Navigate to the ios/NHSOnline folder
 
 3. Check for any cocoapod updates:
-```
-pod install
-```
-The cocapod should now install as long as the pods are pulled down in the repo if not run:
-```
-pod update
-```
+
+    ```bash
+    pod install
+    ```
+
+    The cocapod should now install as long as the pods are pulled down in the repo if not run:
+
+    ```bash
+    pod update
+    ```
+
 4. To see the pod in your project you will need to open the NHSOnline.xcworkspace fiole in xcode instead of the NHSOnline.xcodeproj
 
 see more here: https://guides.cocoapods.org/using/using-cocoapods.html
 
 ## Troubleshooting
-if when you try to run 'pod update' or 'pod install'you see an error that mentions a target opvveride the 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' build setting then go to the build settings for NHSOnline and in build options change 'Yes' to '$(inherited)'
 
+if when you try to run 'pod update' or 'pod install'you see an error that mentions a target opvveride the 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' build setting then go to the build settings for NHSOnline and in build options change 'Yes' to '$(inherited)'

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -71,10 +71,16 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
         [TestMethod]
         public void InvalidCertificate_IncorrectPath()
         {
-            AssertInvalidCertificateMissingPath(
-                "GpSystems/Suppliers/Vision/Resources/wrongFile.pfx", 
-                Passphrase,
-                "Could not add client certificate due to file not existing in certificate path.");
+            var certificateService = new CertificateService(_mockCertificateServiceLogger.Object, _mockConfiguration.Object);
+            var certificate = certificateService.GetCertificate("GpSystems/Suppliers/Vision/Resources/wrongFile.pfx", Passphrase);
+            certificate.Should().BeNull();
+            _mockCertificateServiceLogger.Verify(x => x.Log(
+                LogLevel.Error, 
+                0,
+                It.Is<FormattedLogValues>(values => values.ToString().Equals("Could not add client certificate due to file GpSystems/Suppliers/Vision/Resources/wrongFile.pfx not existing in certificate path.", StringComparison.Ordinal)),
+                null,
+                It.IsAny<Func<object, Exception, string>>()
+            ));
         }
 
         [DataTestMethod]

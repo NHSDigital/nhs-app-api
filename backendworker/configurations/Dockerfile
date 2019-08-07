@@ -1,8 +1,10 @@
-FROM nhsonline.backend.servicejourneyrulesapi AS sjr
+ARG SJR_IMAGE=nhsonline.backend.servicejourneyrulesapi
+
+FROM ${SJR_IMAGE} AS validated
 WORKDIR /app
-COPY --chown=aspnetcore:aspnetcore configurations/gpinfo.csv ./configurations/gpinfo.csv
-COPY --chown=aspnetcore:aspnetcore configurations/Journeys/ ./configurations/Journeys/
-COPY --chown=aspnetcore:aspnetcore configurations/Rules/ ./configurations/Rules/
+COPY --chown=aspnetcore:aspnetcore gpinfo.csv ./configurations/gpinfo.csv
+COPY --chown=aspnetcore:aspnetcore Journeys/ ./configurations/Journeys/
+COPY --chown=aspnetcore:aspnetcore Rules/ ./configurations/Rules/
 
 ENV GP_INFO_FILE_PATH ./configurations/gpinfo.csv
 ENV CONFIGURATION_FOLDER_PATH ./configurations
@@ -13,5 +15,5 @@ RUN dotnet NHSOnline.Backend.ServiceJourneyRulesApi.dll --validate-only
 
 FROM alpine AS final
 WORKDIR /output
-COPY --from=sjr /app/configurations/output/ ./
+COPY --from=validated /app/configurations/output/ ./
 ENTRYPOINT ["sh"]

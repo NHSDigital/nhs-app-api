@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -27,7 +27,6 @@
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
     <PackageReference Include="ReportGenerator" Version="4.0.2" />
-    <PackageReference Include="RichardSzalay.MockHttp" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

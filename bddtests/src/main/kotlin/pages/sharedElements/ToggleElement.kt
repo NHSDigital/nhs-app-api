@@ -41,6 +41,7 @@ class ToggleElement(val page : HybridPageObject, text:String, id:String) {
     }
 
     private fun isLoading(): Boolean {
+        toggleSpinner.waitUntilPresent()
         return toggleSpinner.isCurrentlyVisible
     }
 

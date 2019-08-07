@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+
+  log.local.bitraft.io:
+    ports:
+      - "8090:8090"

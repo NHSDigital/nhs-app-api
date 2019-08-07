@@ -43,6 +43,7 @@ Feature: Prescriptions Submission Backend
     When I submit the repeat prescription
     Then I receive a "466" error status code with service desk reference prefixed "5g"
 
+  @long-running
   Scenario: Session expired (redis)
     Given I have a repeat prescription request with 1 courses
     And I have logged into EMIS and have a valid session cookie

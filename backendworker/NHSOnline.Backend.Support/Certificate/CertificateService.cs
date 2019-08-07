@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net.WebSockets;
 using System.Security.Cryptography.X509Certificates;
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.Support.Certificate
             }
             if (!File.Exists(certificatePath))
             {
-                _logger.LogError("Could not add client certificate due to file not existing in certificate path.");
+                _logger.LogError("Could not add client certificate due to file {CertificatePath} not existing in certificate path.", certificatePath);
                 valid= false;
             }
             return valid;

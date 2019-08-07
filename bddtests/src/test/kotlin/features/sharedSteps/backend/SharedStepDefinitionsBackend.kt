@@ -1,10 +1,8 @@
 package features.sharedSteps.backend
 
-import config.Config
 import constants.Supplier
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
-import cucumber.api.java.en.When
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
@@ -15,10 +13,8 @@ import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
 import utils.set
 import worker.WorkerClient
-import java.util.concurrent.TimeUnit
-import java.util.UUID
+import java.util.*
 
-private const val ADDITIONAL_TIME_TO_DELAY = 10
 open class SharedStepDefinitionsBackend{
 
     val mockingClient = MockingClient.instance
@@ -49,12 +45,6 @@ open class SharedStepDefinitionsBackend{
         val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .getPatientLinkedAccountsConfiguration()
         LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig.id)
-    }
-
-    @When("I allow my session to expire")
-    fun andIDelayMyRequestByTheDefaultTime() {
-        val delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
-        Thread.sleep(delayTime + ADDITIONAL_TIME_TO_DELAY)
     }
 
     @But("the patient id sent in the request is not valid")

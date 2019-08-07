@@ -38,7 +38,7 @@
         "USERINFO_MONGO_DATABASE_COLLECTION": "info",
         "USERINFO_MONGO_DATABASE_PASSWORD": "",
         "USERINFO_MONGO_DATABASE_HOST": "localhost",
-        "USERINFO_MONGO_DATABASE_PORT": "27017",
+        "USERINFO_MONGO_DATABASE_PORT": "27017"
       },
       "applicationUrl": "http://localhost:5000/"
     }

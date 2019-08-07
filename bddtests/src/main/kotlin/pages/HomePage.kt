@@ -166,10 +166,10 @@ open class HomePage : HybridPageObject() {
             expectedLinks
         }
 
+        linksToCheck.forEach { link -> link.assertSingleElementPresent() }
         Assert.assertEquals("Number of expected Links",
                 linksToCheck.count(),
                 links.count())
-        linksToCheck.forEach { link -> link.assertSingleElementPresent() }
     }
 
     fun assertHomePageLinksNotPresent() {

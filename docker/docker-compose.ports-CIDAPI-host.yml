@@ -1,0 +1,8 @@
+version: "3.4"
+
+services:
+
+  cid.local.bitraft.io:
+    image: alpine/socat
+    entrypoint: ["socat"]
+    command: tcp-l:8084,fork,reuseaddr tcp:host.docker.internal:8084
