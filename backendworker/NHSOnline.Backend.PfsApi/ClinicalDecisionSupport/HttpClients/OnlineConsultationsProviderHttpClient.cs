@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
             AuthorizationBearer = AuthenticationHeaderValue.Parse(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    Constants.HttpRequestHeaderValues.AuthorizationFormat,
+                    Constants.HttpRequestHeaders.AuthorizationFormat,
                     provider.BearerToken));
         }
 
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
             }
         }
 
-        public async Task<HttpResponseMessage> EvaluateServiceDefinition(string serviceDefinitionId, string requestBody, bool addJavascriptDisabledHeader)
+        public async Task<HttpResponseMessage> EvaluateServiceDefinition(string serviceDefinitionId, string requestBody)
         {
             try
             {
@@ -107,11 +107,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                         Authorization = AuthorizationBearer
                     }
                 };
-
-                if (addJavascriptDisabledHeader)
-                {
-                    requestMessage.Headers.Add(Constants.HttpRequestHeaders.NHSOJavascriptDisabled, "true");
-                }
 
                 return await Client.SendAsync(requestMessage);
             }

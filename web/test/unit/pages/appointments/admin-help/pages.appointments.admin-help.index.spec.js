@@ -166,7 +166,7 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: 'cdssAdmin' });
+          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
         });
         it('should dispatch get action', async () => {
           // Arrange
@@ -191,29 +191,7 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: 'cdssAdmin' });
-        });
-
-        describe('with nojs parameter present', () => {
-          each([
-            true,
-            undefined,
-          ]).it('should dispatch evaluate with addJavascriptDisabledHeader true if evaluating server side', async (serverSide) => {
-            // Arrange
-            process.server = serverSide;
-            $store.state.onlineConsultations.question = {};
-            $store.state.onlineConsultations.answerIsValid = true;
-            mountPage();
-
-            // Act
-            await page.vm.$options.asyncData({ store: $store, req });
-
-            // Assert
-            expect($store.dispatch).toHaveBeenCalledWith(
-              'onlineConsultations/evaluateServiceDefinition',
-              { journey: 'cdssAdmin', addJavascriptDisabledHeader: serverSide },
-            );
-          });
+          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
         });
       });
       describe('with a question and invalid answer', () => {
@@ -227,7 +205,7 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: 'cdssAdmin' });
+          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', 'cdssAdmin');
         });
       });
     });

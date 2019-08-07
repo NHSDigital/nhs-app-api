@@ -1,0 +1,17 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
+    "bodyPatterns" : [ {
+      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/PRE_STD_AD_PRACTICE')]"
+    } ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/GEC_ADM/common/4_verify_practice.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}

@@ -21,11 +21,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport
 
         public static class HttpRequestHeaders
         {
-            public const string NHSOJavascriptDisabled = "NHSO-Javascript-Disabled";
-        }
-
-        public static class HttpRequestHeaderValues
-        {
             public const string AuthorizationFormat = "Bearer {0}";
         }
     }

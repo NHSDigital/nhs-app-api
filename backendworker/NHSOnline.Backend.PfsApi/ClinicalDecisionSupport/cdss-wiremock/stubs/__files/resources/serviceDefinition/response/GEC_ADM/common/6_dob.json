@@ -1,0 +1,136 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "GEC_ADM_AD_ISSUE",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "PRE_STD_AD_ISSUE_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "PRE_STD_AD_ISSUE_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
+          "linkId": "GEC_ADM_AD_ISSUE",
+          "text": "What administrative issue can we help you with?",
+          "type": "choice",
+          "required": true,
+          "repeats": false,
+          "option": [
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_REFERRAL",
+                "display": "<strong>Referral</strong>"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_DISCUSSTESTS",
+                "display": "Discuss recent tests"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_SICKNOTE",
+                "display": "Sick note (fit note)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_MATCERT",
+                "display": "Request Maternity Exemption Certificate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_GPLETTER",
+                "display": "GP letter"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_MEDREPORT",
+                "display": "Medical Report"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_MEDEXAM",
+                "display": "Medical Examination"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_OTHER",
+                "display": "Other"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ISSUE_QUERY",
+                "display": "General Medical Query"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:09:18.924",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "GEC_ADM_AD_ISSUE",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GEC_ADM_AD_ISSUE"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

@@ -7,13 +7,12 @@
     <div class="nhsuk-date-input__item">
       <div class="nhsuk-form-group">
         <label class="nhsuk-label" :for="id">
-          {{ $t('generic.questions.attachment.label') }}
+          File
         </label>
         <input :id="id"
                type="file"
                :name="name"
                :accept="accepts"
-               :required="required"
                @change="onSelectedFileChange($event)">
       </div>
     </div>

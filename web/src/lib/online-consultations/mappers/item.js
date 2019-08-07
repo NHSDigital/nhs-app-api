@@ -24,6 +24,10 @@ function getQuestion(item) {
       type,
     };
 
+    // Assumed MultipleChoice with all options required, if type === group and text is present
+    // No text present indicates questions with a back navigation.
+
+    // todo: remove return undefined when previous navigation added in
     if (item.type === QuestionTypes.GROUP) {
       if (!item.text) {
         return undefined;

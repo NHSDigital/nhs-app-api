@@ -59,7 +59,6 @@
     "babel-eslint": "10.0.1",
     "babel-jest": "24.5.0",
     "body-parser": "1.18.3",
-    "busboy": "0.3.1",
     "circular-json": "0.5.9",
     "consola": "2.5.6",
     "cookie": "0.3.1",

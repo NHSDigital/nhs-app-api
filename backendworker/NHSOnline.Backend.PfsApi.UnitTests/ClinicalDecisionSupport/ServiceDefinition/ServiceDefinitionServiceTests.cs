@@ -277,7 +277,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         public async Task EvaluateServiceDefinition_WhenNullParametersProvided_ReturnsBadRequest()
         {
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, null, false);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, null);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -290,12 +290,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockProviderHttpClient
                 .Setup(pc => pc.EvaluateServiceDefinition(
                     It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
+                    It.IsAny<string>()))
                 .Throws<HttpRequestException>();
 
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters());
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -310,12 +309,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockProviderHttpClient
                 .Setup(pc => pc.EvaluateServiceDefinition(
                     It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
+                    It.IsAny<string>()))
                 .ReturnsAsync(httpResponse);
 
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters());
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -334,12 +332,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockProviderHttpClient
                 .Setup(pc => pc.EvaluateServiceDefinition(
                     It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
+                    It.IsAny<string>()))
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters());
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -361,12 +358,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockProviderHttpClient
                 .Setup(pc => pc.EvaluateServiceDefinition(
                     It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
+                    It.IsAny<string>()))
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters());
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -387,42 +383,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockProviderHttpClient
                 .Setup(pc => pc.EvaluateServiceDefinition(
                     It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
+                    It.IsAny<string>()))
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters());
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
-                It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
-        }
-        
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
-        public async Task EvaluateServiceDefinition_WillPassAddJsDisabledParameterToProviderClient(bool addJsDisabledHeader)
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
-
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.Is<bool>(addHeader => addHeader == addJsDisabledHeader)))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), addJsDisabledHeader);
-
-            // Assert
             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
                 It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
         }

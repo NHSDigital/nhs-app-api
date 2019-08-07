@@ -1,0 +1,93 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "PRE_STD_AD_EMERGENCY",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "PRE_STD_AD_EMERGENCY_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "PRE_STD_AD_EMERGENCY_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
+          "linkId": "PRE_STD_AD_EMERGENCY",
+          "text": "Next, let's make sure this isn't an emergency. Are you currently experiencing any of the following? <ul><li><em>Signs of a heart attack</em> - pain like a very tight band, heavy weight or squeezing in the centre of your chest</li><li><em>Signs of a stroke</em> - face drooping on one side, can't hold both arms up, difficulty speaking</li><li><em>Severe difficulty breathing</em> - gasping, not being able to get words out, choking or lips turning blue</li><li><em>Severe injuries</em> - heavy bleeding that won't stop or deep cuts after a serious accident</li></ul>",
+          "type": "choice",
+          "required": true,
+          "repeats": false,
+          "option": [
+            {
+              "valueCoding": {
+                "code": "PRE_STD_EMERGENCY_NO",
+                "display": "I'm NOT experiencing any of these"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "PRE_STD_EMERGENCY_YES",
+                "display": "I am experiencing some of these"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:06:47.918",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "PRE_STD_AD_EMERGENCY",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#PRE_STD_AD_EMERGENCY"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

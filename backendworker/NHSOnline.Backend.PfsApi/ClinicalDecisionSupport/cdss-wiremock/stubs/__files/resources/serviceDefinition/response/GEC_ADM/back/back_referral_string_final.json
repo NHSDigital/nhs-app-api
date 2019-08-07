@@ -1,0 +1,102 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "GEC_ADM_AD_REFERRALDOCUMENT",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "GEC_ADM_AD_REFERRALDOCUMENT_GROUP",
+          "type": "group",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "id": "codeableConcept",
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/ValueSet/questionnaire-item-control",
+                        "code": "button",
+                        "display": "back"
+                      }
+                    ],
+                    "text": "back"
+                  }
+                }
+              ],
+              "linkId": "GEC_ADM_AD_REFERRALDOCUMENT_PREV",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "linkId": "GEC_ADM_AD_REFERRALDOCUMENT",
+              "text": "Please attach the document you were given for this referral",
+              "type": "attachment",
+              "required": true,
+              "repeats": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resourceType": "QuestionnaireResponse",
+      "questionnaire": {
+        "reference": "Questionnaire/GEC_ADM_AD_REFERRALDOCUMENT"
+      },
+      "status": "completed",
+      "item": [
+        {
+          "linkId": "GEC_ADM_AD_REFERRALDOCUMENT",
+          "answer": [
+            {
+              "valueAttachment": {
+                "title": "name",
+                "contentType": "image/png",
+                "size": 9999,
+                "data": "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"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:17:51.247",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "GEC_ADM_AD_REFERRALDOCUMENT",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GEC_ADM_AD_REFERRALDOCUMENT"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

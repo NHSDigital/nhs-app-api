@@ -565,7 +565,7 @@ describe('orchestrator', () => {
             // Assert
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
             expect(blur).toHaveBeenCalled();
-            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: orchestrator.vm.$props.journey });
+            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', orchestrator.vm.$props.journey);
             expect(EventBus.$emit).not.toHaveBeenCalled();
             expect(NativeApp.resetPageFocus).toHaveBeenCalled();
             expect(scrollTo).toHaveBeenCalledWith(0, 0);
@@ -589,7 +589,7 @@ describe('orchestrator', () => {
             // Assert
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
             expect(blur).toHaveBeenCalled();
-            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: orchestrator.vm.$props.journey });
+            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', orchestrator.vm.$props.journey);
             expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_ROOT);
             expect(NativeApp.resetPageFocus).not.toHaveBeenCalled();
             expect(scrollTo).toHaveBeenCalledWith(0, 0);
@@ -613,7 +613,7 @@ describe('orchestrator', () => {
 
           // Assert
           expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/setValidationError');
-          expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: orchestrator.vm.$props.journey });
+          expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', orchestrator.vm.$props.journey);
           expect(store.dispatch).toHaveBeenCalledTimes(0);
         });
       });

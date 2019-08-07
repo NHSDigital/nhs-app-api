@@ -1,0 +1,17 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
+    "bodyPatterns" : [ {
+      "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference == 'Questionnaire/PRE_STD_AD_EMERGENCY')]"
+    } ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/GEC_ADM/common/3_is_emergency.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}

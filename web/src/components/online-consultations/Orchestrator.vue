@@ -15,10 +15,7 @@
         </message-list>
       </message-dialog>
 
-      <no-js-form :value="noJsState"
-                  :action="adminHelpPath"
-                  :enctype="enctype"
-                  method="post">
+      <no-js-form :value="noJsState" method="post">
         <question :id="question.id"
                   :is-legend="question.isLegend"
                   :label-for="question.name"
@@ -119,7 +116,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
-import { INDEX, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
+import { INDEX } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import NativeApp from '@/services/native-app';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -237,9 +234,6 @@ export default {
     indexPath() {
       return INDEX.path;
     },
-    adminHelpPath() {
-      return APPOINTMENT_ADMIN_HELP.path;
-    },
     showDesktopBackLink() {
       return !this.isNativeApp && this.isSuccess;
     },
@@ -261,11 +255,6 @@ export default {
     showBackButton() {
       return this.$store.state.onlineConsultations.previousQuestion !== undefined;
     },
-    enctype() {
-      return this.question.type === QuestionTypes.ATTACHMENT
-        ? 'multipart/form-data'
-        : undefined;
-    },
   },
   watch: {
     nothingToDisplay(to) {
@@ -286,7 +275,7 @@ export default {
       await this.$store.dispatch('onlineConsultations/setValidationError');
       if (!this.isValidationError) {
         document.activeElement.blur();
-        await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', { journey: this.journey });
+        await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', this.journey);
         if (this.isNativeApp) {
           NativeApp.resetPageFocus();
         } else {
@@ -298,7 +287,7 @@ export default {
     async backClicked() {
       document.activeElement.blur();
       await this.$store.dispatch('onlineConsultations/setPrevious');
-      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', { journey: this.journey });
+      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', this.journey);
       if (this.isNativeApp) {
         NativeApp.resetPageFocus();
       } else {

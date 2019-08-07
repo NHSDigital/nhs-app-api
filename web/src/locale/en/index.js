@@ -33,37 +33,6 @@ export default {
     message: 'Message',
   },
   generic: {
-    questions: {
-      attachment: {
-        label: 'File',
-      },
-      boolean: {
-        labels: {
-          true: 'Yes',
-          false: 'No',
-        },
-      },
-      quantity: {
-        initialUnitDropdownValue: 'Select unit',
-        labels: {
-          unit: 'Unit',
-          quantity: 'Quantity',
-        },
-      },
-      date: {
-        labels: {
-          day: 'Day',
-          month: 'Month',
-          year: 'Year',
-        },
-      },
-      time: {
-        labels: {
-          hour: 'Hour',
-          minute: 'Minute',
-        },
-      },
-    },
     backButton: {
       text: 'Back',
     },
@@ -1769,6 +1738,36 @@ export default {
           'You\'re choosing if data from your health records is used across the health and care system in England.',
           'You\'re not choosing if the NHS App uses your data.',
         ],
+      },
+    },
+  },
+  onlineConsultations: {
+    questions: {
+      quantity: {
+        initialUnitDropdownValue: 'Select unit',
+        labels: {
+          unit: 'Unit',
+          quantity: 'Quantity',
+        },
+      },
+      date: {
+        labels: {
+          day: 'Day',
+          month: 'Month',
+          year: 'Year',
+        },
+      },
+      time: {
+        labels: {
+          hour: 'Hour',
+          minute: 'Minute',
+        },
+      },
+      boolean: {
+        labels: {
+          true: 'Yes',
+          false: 'No',
+        },
       },
     },
   },

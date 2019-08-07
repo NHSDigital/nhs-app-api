@@ -1,0 +1,18 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
+    "bodyPatterns" : [ 
+      { "matchesJsonPath": "$.parameter[?(@.resource.questionnaire.reference === 'Questionnaire/GEC_ADM_AD_ISSUE')]"}, 
+      { "matchesJsonPath" : "$.parameter[?(@.name === 'inputData')].resource.item[?(@.linkId == 'GEC_ADM_AD_ISSUE')].answer[?(@.valueCoding.code === 'GEC_ADM_AD_ISSUE_REFERRAL')]"}
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/GEC_ADM/GEC_ADM_AD_ISSUE_REFERRAL/12_admin_issue_choice_referral.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}

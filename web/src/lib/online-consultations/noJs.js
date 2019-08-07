@@ -2,7 +2,7 @@ import { get, isString } from 'lodash/fp';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 
 function getAnswer(body, question) {
-  return get(question.name, body);
+  return get(`${question.id}-${question.type}`, body);
 }
 
 function getDateAnswer(body, question) {

@@ -1,0 +1,67 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "GEC_GEN_AD_SICKNOTEDETAIL",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "GEC_GEN_AD_SICKNOTEDETAIL",
+          "text": "Is this a new request or extension of an existing sick note?",
+          "type": "choice",
+          "required": true,
+          "repeats": false,
+          "option": [
+            {
+              "valueCoding": {
+                "code": "GEC_GEN_AD_SICKNOTEDETAIL_NEW",
+                "display": "New request"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_GEN_AD_SICKNOTEDETAIL_EXT",
+                "display": "Extension"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_GEN"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T09:35:51.237",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "GEC_GEN_AD_SICKNOTEDETAIL",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GEC_GEN_AD_SICKNOTEDETAIL"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

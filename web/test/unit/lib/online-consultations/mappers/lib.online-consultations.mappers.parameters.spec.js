@@ -495,7 +495,7 @@ describe('online consultations mappers parameters', () => {
                 };
                 const answer = {
                   answer: [{
-                    valueString: 'Point:10,6',
+                    valueString: '10,6',
                   }],
                 };
 

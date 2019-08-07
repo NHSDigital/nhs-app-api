@@ -40,11 +40,11 @@ const rootState = {
   serviceJourneyRules: {
     rules: {
       cdssAdmin: {
-        serviceDefinition: 'NHS_ADMIN',
+        serviceDefinition: 'GEC_ADM',
         provider: 'eConsult',
       },
       cdssAdvice: {
-        serviceDefinition: 'NHS_ADVICE',
+        serviceDefinition: 'GEC_GEN',
         provider: 'eConsult',
       },
     },
@@ -65,7 +65,7 @@ describe('online consultations store actions', () => {
     let parameters;
 
     beforeAll(() => {
-      serviceDefinition = 'NHS_ADMIN';
+      serviceDefinition = 'GEC_ADM';
       provider = 'eConsult';
       parameters = {
         serviceDefinition,
@@ -228,7 +228,7 @@ describe('online consultations store actions', () => {
         getParameters.mockReturnValue(undefined);
 
         // Act
-        const result = evaluateServiceDefinition.call(store, { commit, state, rootState }, { journey: 'cdssAdmin' });
+        const result = evaluateServiceDefinition.call(store, { commit, state, rootState }, 'cdssAdmin');
 
         // Assert
         expect(result).toBeUndefined();
@@ -250,7 +250,7 @@ describe('online consultations store actions', () => {
         };
         request = {
           parameters,
-          serviceDefinition: 'NHS_ADMIN',
+          serviceDefinition: 'GEC_ADM',
           provider: 'eConsult',
         };
 
@@ -262,32 +262,6 @@ describe('online consultations store actions', () => {
         expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_ID);
       });
 
-      describe('action called with addJavascriptDisabledHeader set to true', () => {
-        afterAll(() => {
-          request.addJavascriptDisabledHeader = undefined;
-        });
-
-        it('will include addJavascriptDisabledHeader in post parameter', () => {
-          // Arrange
-          store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-            () => Promise.reject(),
-          );
-          request.addJavascriptDisabledHeader = true;
-
-          // Act
-          return evaluateServiceDefinition
-            .call(store, { commit, state, rootState }, { journey: 'cdssAdmin', addJavascriptDisabledHeader: true })
-            .then(() => {
-              // Assert
-              const { postFhirServiceDefinitionEvaluate } = store.app.$cdsApi;
-              expect(postFhirServiceDefinitionEvaluate).toHaveBeenCalledWith(request);
-              expect(postFhirServiceDefinitionEvaluate).toHaveBeenCalledTimes(1);
-              expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
-              expect(store.dispatch).toHaveBeenCalledTimes(1);
-            });
-        });
-      });
-
       describe('attempted evaluation is rejected', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
@@ -297,7 +271,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return evaluateServiceDefinition
-            .call(store, { commit, state, rootState }, { journey: 'cdssAdmin' })
+            .call(store, { commit, state, rootState }, 'cdssAdmin')
             .then(() => {
               // Assert
               const { postFhirServiceDefinitionEvaluate } = store.app.$cdsApi;
@@ -323,7 +297,7 @@ describe('online consultations store actions', () => {
 
             // Act
             return evaluateServiceDefinition
-              .call(store, { commit, state, rootState }, { journey: 'cdssAdmin' })
+              .call(store, { commit, state, rootState }, 'cdssAdmin')
               .then(() => {
                 // Assert
                 expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');

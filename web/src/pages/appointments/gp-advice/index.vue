@@ -40,13 +40,11 @@ export default {
   async asyncData({ store, req }) {
     const body = get('body', req);
     const question = get('state.onlineConsultations.question', store);
-    let addJavascriptDisabledHeader = false;
 
     if (get(noJsParameterName, body) !== undefined && question !== undefined) {
-      addJavascriptDisabledHeader = process.server;
       const answer = getAnswerFromRequestBody(body, question);
-
       await store.dispatch('onlineConsultations/setAnswer', answer);
+
       await store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
       await store.dispatch('onlineConsultations/setValidationError');
     }
@@ -54,20 +52,14 @@ export default {
     if (question === undefined) {
       await store.dispatch('onlineConsultations/getServiceDefinition', 'cdssAdvice');
     } else if (store.state.onlineConsultations.answerIsValid) {
-      await store.dispatch(
-        'onlineConsultations/evaluateServiceDefinition',
-        { journey: 'cdssAdvice', addJavascriptDisabledHeader },
-      );
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdvice');
     }
 
     const previousClicked = get('direction', body) === 'back';
 
     if (previousClicked) {
       await store.dispatch('onlineConsultations/setPrevious');
-      await store.dispatch(
-        'onlineConsultations/evaluateServiceDefinition',
-        { journey: 'cdssAdvice', addJavascriptDisabledHeader },
-      );
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', 'cdssAdvice');
     }
   },
   beforeDestroy() {

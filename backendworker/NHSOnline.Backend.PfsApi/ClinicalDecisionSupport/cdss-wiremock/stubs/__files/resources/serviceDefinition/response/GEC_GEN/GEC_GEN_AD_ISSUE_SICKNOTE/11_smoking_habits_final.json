@@ -1,0 +1,100 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "CarePlan",
+      "id": "careplan1",
+      "status": "active",
+      "intent": "option",
+      "title": "What happens next?",
+      "activity": [
+        {
+          "detail": {
+            "description": "<ul><li>One of your GPs will now review your request.</li><li>Your practice will respond to you by phone or email before {date will appear here}</li></ul>"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "CarePlan",
+      "id": "careplan2",
+      "status": "active",
+      "intent": "option",
+      "title": "Here are two important tips for ensuring you receive a response:",
+      "activity": [
+        {
+          "detail": {
+            "description": "<ul><li>A call from your practice may sometimes appear on your phone as \"Blocked\", \"No caller ID\" or \"Private number\"</li><li>Check your junk email folder</li></ul>"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "CarePlan",
+      "id": "careplan3",
+      "status": "active",
+      "intent": "option",
+      "title": "What if I don’t get a call or email?<script>console.log('this is a script');</script>",
+      "activity": [
+        {
+          "detail": {
+            "description": "There is generally no need for you to contact the practice before {date will appear here}. But if they're unable to reach you by then, please let them know by using the link in your confirmation email or by calling the practice on {tel no will appear here}.<script>console.log('this is a script');</script>"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "ReferralRequest",
+      "id": "rr1",
+      "description": "Thank you, {name}. Your request for {consultation name} has been securely sent to your GPs at {practice name}.<script>console.log('this is a script');</script>"
+    },
+    {
+      "resourceType": "RequestGroup",
+      "id": "rg1",
+      "action": [
+        {
+          "resource": {
+            "reference": "#rr1"
+          }
+        },
+        {
+          "resource": {
+            "reference": "#careplan1"
+          }
+        },
+        {
+          "resource": {
+            "reference": "#careplan2"
+          }
+        },
+        {
+          "resource": {
+            "reference": "#careplan3"
+          }
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_GEN"
+  },
+  "status": "success",
+  "occurrenceDateTime": "2019-05-23T09:36:03.132",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "result": {
+    "reference": "#rg1"
+  }
+}

@@ -353,12 +353,7 @@ export function questionTimeAnswerValid(answer = {}, required) {
 export function isAnswerValid(answer, question = {}) {
   switch (question.type) {
     case QuestionTypes.ATTACHMENT:
-      return questionAttachmentAnswerValid(
-        answer,
-        question.required,
-        question.accept,
-        question.maxSize,
-      );
+      return questionAttachmentAnswerValid(answer, question.required);
     case QuestionTypes.BOOLEAN:
       return questionBooleanAnswerValid(answer, question.required);
     case QuestionTypes.CHOICE:
@@ -395,7 +390,6 @@ export function isAnswerValid(answer, question = {}) {
       return questionQuantityAnswerValid(
         answer,
         question.required,
-        question.min,
         question.max,
         question.validCodes,
       );

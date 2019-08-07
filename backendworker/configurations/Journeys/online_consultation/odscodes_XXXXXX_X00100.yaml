@@ -5,8 +5,8 @@ target:
    - XXXXXX
 journeys:
   cdssAdvice:
-    provider: stubs
-    serviceDefinition: NHS_ADVICE
+    provider: eConsult
+    serviceDefinition: GEC_GEN
   cdssAdmin:
-    provider: stubs
-    serviceDefinition: NHS_ADMIN
+    provider: eConsult
+    serviceDefinition: GEC_ADM

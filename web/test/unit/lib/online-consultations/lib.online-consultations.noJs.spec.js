@@ -54,16 +54,15 @@ describe('online consultations noJs', () => {
           QuestionTypes.TEXT,
         ]).it('will simply return the value', (questionType) => {
           // Arrange
-          const name = `${questionId}-${questionType}`;
+          const noJsKey = `${questionId}-${questionType}`;
           const expectedAnswer = 'stuff';
 
           question = {
-            name,
             id: questionId,
             type: questionType,
           };
           body = {
-            [name]: expectedAnswer,
+            [noJsKey]: expectedAnswer,
           };
 
           // Act
@@ -185,15 +184,14 @@ describe('online consultations noJs', () => {
           expectedAnswer: ['choice-1', 'choice-3'],
         }]).it('will return an array of values from the request body, even if only one option was selected', ({ noJsAnswer, expectedAnswer }) => {
           // Arrange
-          const name = `${questionId}-${QuestionTypes.MULTIPLE_CHOICE}`;
+          const noJsKey = `${questionId}-${QuestionTypes.MULTIPLE_CHOICE}`;
 
           question = {
-            name,
             id: questionId,
             type: QuestionTypes.MULTIPLE_CHOICE,
           };
           body = {
-            [name]: noJsAnswer,
+            [noJsKey]: noJsAnswer,
           };
 
           // Act

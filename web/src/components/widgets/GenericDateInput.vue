@@ -8,7 +8,7 @@
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-day`">
-          {{ $t('generic.questions.date.labels.day') }}
+          {{ $t('onlineConsultations.questions.date.labels.day') }}
         </label>
         <input :id="`${id}-day`"
                ref="day"
@@ -24,7 +24,7 @@
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-month`">
-          {{ $t('generic.questions.date.labels.month') }}
+          {{ $t('onlineConsultations.questions.date.labels.month') }}
         </label>
         <input :id="`${id}-month`"
                ref="month"
@@ -40,7 +40,7 @@
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-year`">
-          {{ $t('generic.questions.date.labels.year') }}
+          {{ $t('onlineConsultations.questions.date.labels.year') }}
         </label>
         <input :id="`${id}-year`"
                ref="year"

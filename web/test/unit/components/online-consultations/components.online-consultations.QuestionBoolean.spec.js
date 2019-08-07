@@ -34,7 +34,7 @@ describe('radio buttons', () => {
       .toEqual(true);
 
     expect(wrapper.find("[for='name-true']").element.innerHTML)
-      .toEqual('translate_generic.questions.boolean.labels.true');
+      .toEqual('translate_onlineConsultations.questions.boolean.labels.true');
   });
 
   it('will have false radio button with correct label', () => {
@@ -44,7 +44,7 @@ describe('radio buttons', () => {
       .toEqual(true);
 
     expect(wrapper.find("[for='name-false']").element.innerHTML)
-      .toEqual('translate_generic.questions.boolean.labels.false');
+      .toEqual('translate_onlineConsultations.questions.boolean.labels.false');
   });
 
   it('will emit true value when true clicked', () => {

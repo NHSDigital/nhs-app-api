@@ -1,0 +1,67 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "PRE_STD_AD_PRACTICE",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "PRE_STD_AD_PRACTICE",
+          "text": "Just to check: are you registered as a patient at {practice.name}? The practice address is {practice.address}.",
+          "type": "choice",
+          "required": true,
+          "repeats": false,
+          "option": [
+            {
+              "valueCoding": {
+                "code": "PRE_STD_AD_PRACTICE_Y",
+                "display": "Yes, I'm registered at {pracitce.name}"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "PRE_STD_AD_PRACTICE_N",
+                "display": "No, I am not registered at {practice.name}"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_GEN"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:06:51.451",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "PRE_STD_AD_PRACTICE",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#PRE_STD_AD_PRACTICE"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

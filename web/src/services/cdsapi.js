@@ -291,11 +291,7 @@ class CDSApi {
 		if (parameters['parameters'] === undefined) {
 			deferred.reject(new Error('Missing required parameter: parameters'));
 			return deferred.promise;
-		}
-		
-		if (parameters['addJavascriptDisabledHeader']) {
-			headers['NHSO-Javascript-Disabled'] = 'true';
-		}
+    }
 
     path = path.replace('{id}', parameters['serviceDefinition']);
     path = path.replace('{provider}', parameters['provider']);
