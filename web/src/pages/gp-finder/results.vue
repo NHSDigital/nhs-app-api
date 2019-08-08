@@ -111,7 +111,15 @@ export default {
     MessageDialog,
   },
   data() {
-    const { searchResults, searchQuery } = this.$store.state.throttling;
+    return {
+      practiceClicked: false,
+    };
+  },
+  asyncData({ store, redirect }) {
+    const { searchResults, searchQuery } = store.state.throttling;
+    if (!searchQuery) {
+      return redirect(302, GP_FINDER.path, null);
+    }
     const { organisations, technicalError, noResultsFound, tooManyResults } = searchResults;
     return {
       technicalError,
@@ -119,7 +127,6 @@ export default {
       tooManyResults,
       organisations,
       searchQuery,
-      practiceClicked: false,
     };
   },
   computed: {
