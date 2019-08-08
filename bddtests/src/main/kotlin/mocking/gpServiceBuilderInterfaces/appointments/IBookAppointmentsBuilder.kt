@@ -20,4 +20,8 @@ interface IBookAppointmentsBuilder : IBuilderCommonResponses {
     fun respondWithExceptionWhenInThePast(): Mapping
 
     fun respondWithExceptionWhenRequiredFieldMissing(): Mapping
+
+    fun respondWithExceptionWhenBeforePracticeDefinedDays(): Mapping
+
+    fun respondWithExceptionWhenAfterPracticeDefinedDays(): Mapping
 }

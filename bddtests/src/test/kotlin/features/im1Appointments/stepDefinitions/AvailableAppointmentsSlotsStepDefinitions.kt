@@ -214,7 +214,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun gpSystemIUnavailableForAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
-            respondWithGPServiceUnavailableException()
+            respondWithServiceUnavailable()
         }
     }
 

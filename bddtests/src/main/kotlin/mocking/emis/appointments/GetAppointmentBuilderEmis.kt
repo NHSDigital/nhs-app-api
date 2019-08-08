@@ -78,8 +78,4 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
     override fun respondWithCorrupted(): Mapping {
         return respondWithCorruptedContent("<<randomtag/>>")
     }
-
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
 }

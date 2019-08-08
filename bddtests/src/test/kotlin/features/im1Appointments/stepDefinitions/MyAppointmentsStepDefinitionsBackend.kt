@@ -173,7 +173,7 @@ class MyAppointmentsStepDefinitionsBackend {
         when (appointmentType) {
             "past" -> {
                 viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.PAST_ONLY) {
-                    respondWithGPServiceUnavailableException()
+                    respondWithServiceUnavailable()
                 }
                 viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.UPCOMING_ONLY) {
                     respondWithSuccess(example)
@@ -184,12 +184,12 @@ class MyAppointmentsStepDefinitionsBackend {
                     respondWithSuccess(example)
                 }
                 viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.UPCOMING_ONLY) {
-                    respondWithGPServiceUnavailableException()
+                    respondWithServiceUnavailable()
                 }
             }
             "both past and upcoming" -> {
                 viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.BOTH) {
-                    respondWithGPServiceUnavailableException()
+                    respondWithServiceUnavailable()
                 }
             }
             else -> Assert.fail("Unable to parse appointment types of $appointmentType")
@@ -200,7 +200,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun theAppointmentSystemIsUnavailable(gpSystem: String) {
         val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
         currentViewAppointmentFactory.createMyAppointments {
-            respondWithGPServiceUnavailableException()
+            respondWithServiceUnavailable()
         }
     }
 

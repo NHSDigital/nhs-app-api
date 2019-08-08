@@ -71,10 +71,6 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
         return respondWithCorruptedContent("appointment slots")
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     private fun convertStringToMicrotestTimeString(time: String): String {
         return convertDateToMicrotestTimeString(ZonedDateTime.parse(time))
     }

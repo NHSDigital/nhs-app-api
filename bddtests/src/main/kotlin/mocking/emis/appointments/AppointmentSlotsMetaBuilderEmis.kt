@@ -92,10 +92,6 @@ class AppointmentSlotsMetaBuilderEmis(
         return respondWithCorruptedContent("appointment slots metadata")
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
         return respondWithBody(exceptionResponse, SC_INTERNAL_SERVER_ERROR)
     }

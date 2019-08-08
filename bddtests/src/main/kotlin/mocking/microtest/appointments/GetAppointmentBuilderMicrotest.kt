@@ -56,10 +56,6 @@ class GetAppointmentBuilderMicrotest(val patient: Patient)
         return respondWithCorruptedContent("<<randomtag/>>")
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     override fun respondWithUnknownException(): Mapping {
         return respondWithUnknownExceptionError()
     }

@@ -107,7 +107,7 @@ Feature: Patient Verification
   Scenario Outline: <GP System> is not available
     Given <GP System> is not available
     When I verify patient data
-    Then I receive an "Bad Gateway" error
+    Then I receive a "Bad Gateway" error
     Examples:
       | GP System |
       | EMIS      |
@@ -124,10 +124,10 @@ Feature: Patient Verification
   Scenario: Vision responds with invalid request error
     Given Vision responds with an invalid request error
     When I verify patient data
-    Then I receive an "Bad Request" error
+    Then I receive a "Bad Request" error
 
 
   Scenario: Vision responds with an unknown error
     Given Vision responds with an unknown error
     When I verify patient data
-    Then I receive an "Bad Gateway" error
+    Then I receive a "Bad Gateway" error

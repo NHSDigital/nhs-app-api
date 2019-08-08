@@ -135,10 +135,6 @@ class AppointmentSlotsBuilderVision(
         return respondWithCorruptedContent(serviceDefinition, "")
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     private fun convertDateToVisionTime(time: ZonedDateTime?): String {
         val queryDateFormat = DateTimeFormatter.ofPattern(dateWithoutTimeFormat)
         return queryDateFormat.format(time)

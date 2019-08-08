@@ -24,6 +24,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private const string BookingReason = "I caught a cold!";
         private const string SlotId = "2862517";
         private const string TelephoneNumber = "07123456789";
+        
+        private const int ProvidedAppointmentSlotInPast = -1152;
+        private const int RequiredFieldValueMissing = -1014;
+        private const int AppointmentSlotIsBeforePracticeDefinedDays = -1153;
+        private const int AppointmentSlotIsAfterPracticeDefinedDays = -1154;
+        private const int OnlineUserMaxAppointmentBookCount = -1156;
 
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
@@ -133,7 +139,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
-            errorResponse.InternalResponseCode = (int) EmisApiErrorCode.ProvidedAppointmentSlotInPast;
+            errorResponse.InternalResponseCode = ProvidedAppointmentSlotInPast;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .BadRequest) {StandardErrorResponse = errorResponse};
@@ -171,7 +177,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenAppointmentsHasBeenAlreadyBooked_ReturnsSlotNotAvailable()
         {
-            //Arrange
+            // Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .Conflict);
             
@@ -185,8 +191,29 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
 
+        [DataTestMethod]
+        [DataRow(AppointmentSlotIsAfterPracticeDefinedDays)]
+        [DataRow(AppointmentSlotIsBeforePracticeDefinedDays)]
+        public async Task Book_WhenEmisReturnsSlotOutsidePracticeDefinedDays_ReturnsSlotNotAvailable(int emisErrorCode)
+        {
+            // Arrange
+            var errorResponse = _fixture.Create<StandardErrorResponse>();
+            errorResponse.InternalResponseCode = emisErrorCode;
+            
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                    .BadRequest)
+                { StandardErrorResponse = errorResponse };
 
-        
+            MockEmisClientAppointmentPostMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
+        }
+
         [TestMethod]
         public async Task Book_WhenEmisReturnsForbidden_ReturnsForbidden()
         {
@@ -251,7 +278,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Book_WhenPatientHasReachedAppointmentLimit_ReturnsAppointmentLimitReached()
         {
             var errorResponse = _fixture.Create<StandardErrorResponse>();
-            errorResponse.InternalResponseCode = (int) EmisApiErrorCode.OnlineUserMaxAppointmentBookCount;
+            errorResponse.InternalResponseCode = OnlineUserMaxAppointmentBookCount;
 
             //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
@@ -345,7 +372,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Book_WhenTelephoneNumberRequiredButNotProvided_ReturnsBadRequestResponse()
         {
             var errorResponse = _fixture.Create<StandardErrorResponse>();
-            errorResponse.InternalResponseCode = (int) EmisApiErrorCode.RequiredFieldValueMissing;
+            errorResponse.InternalResponseCode = RequiredFieldValueMissing;
 
             //Arrange
             
@@ -403,6 +430,5 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 )
             ).Verifiable();    
         }  
-       
     }
 }

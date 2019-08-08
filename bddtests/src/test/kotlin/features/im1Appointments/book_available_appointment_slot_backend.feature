@@ -139,7 +139,7 @@ Feature: Book appointments API
     Given online appointment booking is not available to the <GP System> patient, when wanting to book an appointment
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive an "Forbidden" error
+    Then I receive a "Forbidden" error
     And the response contains an empty body
     Examples:
       | GP System |
@@ -166,7 +166,7 @@ Feature: Book appointments API
     Given an appointment booking for <GP System> cannot be successful because the slot is in the past
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive an "Conflict" error
+    Then I receive a "Conflict" error
     And the response contains an empty body
     Examples:
       | GP System |
@@ -174,11 +174,25 @@ Feature: Book appointments API
       | TPP       |
       | MICROTEST |
 
+  Scenario: Booking an appointment with EMIS returns "Conflict" response if the chosen appointment slot is before the practice-defined date range.
+    Given an appointment booking for EMIS cannot be successful because the slot is before practice defined days
+    And I have logged in and have a valid session cookie
+    When an appointment booking is submitted
+    Then I receive a "Conflict" error
+    And the response contains an empty body
+
+  Scenario: Booking an appointment with EMIS returns "Conflict" response if the chosen appointment slot is after the practice-defined date range.
+    Given an appointment booking for EMIS cannot be successful because the slot is after practice defined days
+    And I have logged in and have a valid session cookie
+    When an appointment booking is submitted
+    Then I receive a "Conflict" error
+    And the response contains an empty body
+
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot has been booked by someone else
     Given an appointment booking for <GP System> cannot be successful because the slot has been booked by someone else
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive an "Conflict" error
+    Then I receive a "Conflict" error
     And the response contains an empty body
     Examples:
       | GP System |
@@ -259,4 +273,3 @@ Feature: Book appointments API
     And I have logged into EMIS and have a valid session cookie
     When an appointment booking is submitted without phone number
     Then I receive a "Bad Request" error
-

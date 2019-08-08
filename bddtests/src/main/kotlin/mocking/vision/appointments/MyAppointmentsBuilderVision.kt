@@ -77,9 +77,4 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
     override fun respondWithCorrupted(): Mapping {
         return respondWithCorruptedContent(serviceDefinition)
     }
-
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
 }

@@ -59,7 +59,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 
             if (SlotIsNotAvailableForBooking(response) || 
                 SlotIsInThePast(response) ||
-                SlotNotFound(response))
+                SlotNotFound(response) ||
+                SlotIsOutsidePracticeDefinedDays(response))
             {
                 return new AppointmentBookResult.SlotNotAvailable();
             }
@@ -110,6 +111,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
+        private bool SlotIsOutsidePracticeDefinedDays(EmisClient.EmisApiResponse response)
+        {
+            var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
+                            EmisApiErrorCode.AppointmentSlotIsAfterPracticeDefinedDays) ||
+                        response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
+                            EmisApiErrorCode.AppointmentSlotIsBeforePracticeDefinedDays);
+            if (check)
+            {
+                _logger.LogWarning("Slot is outside practice defined date range.");
+                _logger.LogEmisLogWarningResponse(response);
+            }
+            return check;
+        }
+
         private bool SlotNotFound(EmisClient.EmisApiResponse response)
         {
             var check = (response.StatusCode == HttpStatusCode.NotFound)
@@ -144,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 
             if (check)
             {
-                _logger.LogWarning("Slot is in the past.");
+                _logger.LogWarning("Booking limit reached.");
                 _logger.LogEmisWarningResponse(response);
             }
             return check;

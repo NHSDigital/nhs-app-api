@@ -29,7 +29,6 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
                 .andJsonBody(request, gson = GsonFactory.asPascal)
-
     }
 
     fun respondWithBookingLimitExceptionForOldEMIS(): Mapping {
@@ -49,10 +48,6 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
 
     override fun respondWithCorrupted(): Mapping {
         return respondWithCorruptedContent("< Non parsable {:< as a XML or JSON")
-    }
-
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
     }
 
     override fun respondWithConflictException(): Mapping {
@@ -82,6 +77,18 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.REQUESTED_APPOINTMENT_SLOT_IN_PAST.toInt())
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
+    }
+
+    override fun respondWithExceptionWhenBeforePracticeDefinedDays(): Mapping {
+        val errorResponse =
+                ErrorResponse(ErrorResponseCodeEmis.REQUESTED_APPOINTMENT_SLOT_BEFORE_PRACTICE_DEFINED_DAYS.toInt())
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
+    }
+
+    override fun respondWithExceptionWhenAfterPracticeDefinedDays(): Mapping {
+        val errorResponse =
+                ErrorResponse(ErrorResponseCodeEmis.REQUESTED_APPOINTMENT_SLOT_AFTER_PRACTICE_DEFINED_DAYS.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 

@@ -81,6 +81,20 @@ open class AppointmentsBookingStepDefinitionsBackend {
         defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithExceptionWhenInThePast() }
     }
 
+    @Given("^an appointment booking for (.*) cannot be successful because the slot is before practice defined days$")
+    fun appointmentBookingForSlotIsBeforePracticeDefinedDays(gpSystem: String) {
+
+        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder
+                .respondWithExceptionWhenBeforePracticeDefinedDays() }
+    }
+
+    @Given("^an appointment booking for (.*) cannot be successful because the slot is after practice defined days$")
+    fun appointmentBookingForSlotIsAfterPracticeDefinedDays(gpSystem: String) {
+
+        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder
+                .respondWithExceptionWhenAfterPracticeDefinedDays() }
+    }
+
     @Given("^an appointment booking for (.*) cannot be successful because the slot has been booked by someone else$")
     fun appointmentBookingForSlotIsBookedBySomeoneElse(gpSystem: String) {
 
@@ -91,8 +105,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     fun appointmentBookingUnavailable(gpSystem: String) {
 
         defaultAppointmentBookingSetupWithResult(gpSystem)
-        { builder -> builder
-                .respondWithGPServiceUnavailableException() }
+        { builder -> builder.respondWithServiceUnavailable() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system will time out$")

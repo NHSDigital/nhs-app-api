@@ -48,10 +48,6 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
         return respondWithCorruptedContent(response)
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     override fun respondWithConflictException(): Mapping {
 
         val error = Error(ErrorResponseCodeTpp.SLOT_ALREADY_BOOKED, errorText, TppConfig.uuid)
@@ -87,6 +83,14 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
     }
 
     override fun respondWithExceptionWhenRequiredFieldMissing(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
+    override fun respondWithExceptionWhenBeforePracticeDefinedDays(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
+    override fun respondWithExceptionWhenAfterPracticeDefinedDays(): Mapping {
         throw NotImplementedError("Not implemented for this GP system")
     }
 }

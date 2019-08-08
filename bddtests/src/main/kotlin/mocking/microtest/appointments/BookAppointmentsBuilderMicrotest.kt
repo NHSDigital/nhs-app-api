@@ -46,10 +46,6 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
         return respondWithCorruptedContent("< Non parsable {:< as a XML or JSON")
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     override fun respondWithConflictException(): Mapping {
         return respondWithConflictError()
     }
@@ -72,5 +68,13 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
         return respondWithConflictError()
+    }
+
+    override fun respondWithExceptionWhenBeforePracticeDefinedDays(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
+    override fun respondWithExceptionWhenAfterPracticeDefinedDays(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
     }
 }

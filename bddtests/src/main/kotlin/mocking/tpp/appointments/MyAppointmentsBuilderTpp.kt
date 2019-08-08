@@ -103,10 +103,6 @@ class MyAppointmentsBuilderTpp(
         return respondWithCorruptedContent(response)
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     enum class AppointmentType(val isFuture: Char) {
         FUTURE_APPOINTMENTS('Y'),
         PAST_APPOINTMENTS('N')

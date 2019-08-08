@@ -105,10 +105,6 @@ class AppointmentSlotsBuilderTpp(
         return respondWithCorruptedContent(response)
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     private fun listSlotsReplyConverter(model: AppointmentSlotsResponseFacade): ListSlotsReply {
 
         val sessionsList: MutableCollection<Session> = mutableListOf()

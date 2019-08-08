@@ -71,10 +71,6 @@ class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSl
         return respondWithCorruptedContent(serviceDefinition, "")
     }
 
-    override fun respondWithGPServiceUnavailableException(): Mapping {
-        return respondWithServiceUnavailable()
-    }
-
     override fun respondWithConflictException(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
@@ -117,5 +113,13 @@ class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSl
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody("").build()
         }
+    }
+
+    override fun respondWithExceptionWhenBeforePracticeDefinedDays(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
+    override fun respondWithExceptionWhenAfterPracticeDefinedDays(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
     }
 }

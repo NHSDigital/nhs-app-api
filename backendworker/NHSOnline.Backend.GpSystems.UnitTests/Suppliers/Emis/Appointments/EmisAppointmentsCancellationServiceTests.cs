@@ -27,6 +27,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private AppointmentCancelRequest _request;
         private string _cancellationReasonText;
         private Mock<ICancellationReasonService> _cancellationReasonService;
+        
+        private const int ProvidedAppointmentSlotInPast = -1152;
 
         [TestInitialize]
         public void TestInitialize()
@@ -118,7 +120,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
-            errorResponse.InternalResponseCode = (int) EmisApiErrorCode.ProvidedAppointmentSlotInPast;
+            errorResponse.InternalResponseCode = ProvidedAppointmentSlotInPast;
 
             var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                     .BadRequest)
