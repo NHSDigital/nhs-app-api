@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     Journeys = journeys
                 };
 
-                var filePath = Path.Join(_outputFolder, $"{odsCode}.yaml");
+                var filePath = Path.Combine($"{_outputFolder}/", $"{odsCode}.yaml");
 
                 _logger.LogDebug($"Creating '{filePath}'");
                 _yamlWriter.Write(filePath, targetConfiguration);

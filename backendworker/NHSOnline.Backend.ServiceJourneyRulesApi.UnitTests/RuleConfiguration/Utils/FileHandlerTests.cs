@@ -1,5 +1,6 @@
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -74,7 +75,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = _fileHandler.GetTextWriter("TestData/GpInfo/text.csv");
 
             // Assert
-            _directory.Verify(s => s.CreateDirectory("TestData/GpInfo"));
+            _directory.Verify(s => s.CreateDirectory(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "TestData\\GpInfo" : "TestData/GpInfo"));
 
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<TextWriter>();
