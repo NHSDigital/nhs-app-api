@@ -43,7 +43,7 @@ class AppointmentNavigationStepDefinitions {
         appointmentGuidanceSteps.appointmentGuidancePage.
                 locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
-        appointmentGuidanceSteps.checkTheContentIsCorrect()
+        appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
 
     @Given("^I click through to the online consultations Appointment Guidance page$")
@@ -66,6 +66,6 @@ class AppointmentNavigationStepDefinitions {
     @When("^I try to progress to the available appointments page$")
     fun iTryToProgressToTheAvailableAppointmentsPage() {
         iAmOnTheGuidancePage()
-        appointmentGuidanceSteps.clickBookAnAppointmentButton()
+        appointmentGuidanceSteps.appointmentGuidancePage.bookButton.click()
     }
 }

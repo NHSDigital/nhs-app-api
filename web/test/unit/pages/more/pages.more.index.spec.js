@@ -8,9 +8,12 @@ describe('more', () => {
   let $store;
   let $router;
 
-  const mountAs = (cdssAdminEnabled) => {
+  const mountAs = ({ olcEnabled = true, cdssAdminEnabled = false } = {}) => {
     $router = createRouter();
     $store = createStore({
+      $env: {
+        ONLINE_CONSULTATIONS_ENABLED: olcEnabled,
+      },
       state: {
         device: {
           isNativeApp: false,
@@ -22,24 +25,27 @@ describe('more', () => {
   };
 
   it('will include the organ donation link', () => {
-    wrapper = mountAs(false);
+    wrapper = mountAs();
     const link = wrapper.find(OrganDonationLink);
     expect(link.exists()).toBe(true);
   });
 
-  it('will not include the request Gp help link if cdssAdmin disabled', () => {
-    wrapper = mountAs(false);
+  it('will not include the request Gp help link if cdssAdmin disabled or online consultations toggle is disabled', () => {
+    wrapper = mountAs();
+    expect(wrapper.find('#btn_gp_help').exists()).toBe(false);
+
+    wrapper = mountAs({ olcEnabled: false });
     expect(wrapper.find('#btn_gp_help').exists()).toBe(false);
   });
 
   it('will include the request Gp help link if cdssAdmin enabled', () => {
-    wrapper = mountAs(true);
+    wrapper = mountAs({ cdssAdminEnabled: true });
     expect(wrapper.find('#btn_gp_help').exists()).toBe(true);
   });
 
   describe('Methods', () => {
     it('will navigate to data preferences when data preferences menu item clicked', () => {
-      wrapper = mountAs(false);
+      wrapper = mountAs();
       wrapper.find('#btn_data_sharing').trigger('click');
       const event = createEvent({ currentTarget: { pathname: DATA_SHARING_PREFERENCES.path } });
       wrapper.vm.navigate(event);
@@ -49,7 +55,7 @@ describe('more', () => {
     });
 
     it('will navigate to admin help when request gp admin help menu item clicked', () => {
-      wrapper = mountAs(true);
+      wrapper = mountAs({ cdssAdminEnabled: true });
       wrapper.find('#btn_gp_help').trigger('click');
       const event = createEvent({ currentTarget: { pathname: APPOINTMENT_ADMIN_HELP.path } });
       wrapper.vm.navigate(event);
