@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.UsersApi.Notifications;
 
-namespace NHSOnline.Backend.UsersApi.Azure
+namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
     internal class RegistrationResultVisitor : IRegistrationResultVisitor<IActionResult>
     {
@@ -19,10 +20,16 @@ namespace NHSOnline.Backend.UsersApi.Azure
             return new StatusCodeResult(StatusCodes.Status201Created);
         }
 
-        public IActionResult Visit(RegistrationResult.Failure result)
+        public IActionResult Visit(RegistrationResult.BadGateway result)
         {
             _logger.LogError("Registration failed");
-            return new StatusCodeResult(StatusCodes.Status503ServiceUnavailable);
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+        }
+        
+        public IActionResult Visit(RegistrationResult.InternalServerError result)
+        {
+            _logger.LogError("Registration failed");
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
 }

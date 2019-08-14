@@ -16,6 +16,9 @@ services:
       - ASPNETCORE_URLS=http://*:8088
       - PORT=8088
       - CORS_AUTHORITY=*
+      - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
+      - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
       - VERSION_TAG=users_docker_main
       - USERS_MONGO_DATABASE_HOST=nhsonline.mongodb
       - USERS_MONGO_DATABASE_PORT=27017

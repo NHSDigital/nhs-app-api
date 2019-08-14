@@ -10,20 +10,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Azure;
+using NHSOnline.Backend.UsersApi.Notifications;
 using NHSOnline.Backend.UsersApi.Repository;
 
-namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
+namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 {
     [TestClass]
     public sealed class DevicesControllerTests : IDisposable
     {
         private IFixture _fixture;
         private DevicesController _systemUnderTest;
-        private Mock<IAzureNotificationHubService> _hubService;
+        private Mock<INotificationRegistrationService> _hubService;
 
         private RegisterDeviceRequest _validRegisterDeviceRequest;
-        private Mock<IDeviceRepositoryService> _deviceRegistrationService;
+        private Mock<IDeviceRepositoryService> _deviceRepositoryService;
+
+        private const string DummyNhsLoginId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
 
         [TestInitialize]
         public void TestInitialize()
@@ -31,12 +33,12 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
             _fixture = new Fixture();
             _fixture.Customize(new AutoMoqCustomization());
 
-            _hubService = new Mock<IAzureNotificationHubService>();
-            _deviceRegistrationService = new Mock<IDeviceRepositoryService>();
+            _hubService = new Mock<INotificationRegistrationService>();
+            _deviceRepositoryService = new Mock<IDeviceRepositoryService>();
             var logger = new Mock<ILogger<DevicesController>>();
 
             _systemUnderTest = new DevicesController(_hubService.Object,
-                _deviceRegistrationService.Object,
+                _deviceRepositoryService.Object,
                 logger.Object);
 
             _validRegisterDeviceRequest = _fixture.Create<RegisterDeviceRequest>();
@@ -46,12 +48,12 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
         public async Task Post_Success()
         {
             // Arrange
-            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest)).ReturnsAsync(_fixture.Create<RegistrationResult.Success>());
+            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest, DummyNhsLoginId)).ReturnsAsync(_fixture.Create<RegistrationResult.Success>());
 
             var userDevice = _fixture.Create<UserDevice>();
 
-            _deviceRegistrationService.Setup(x => x.Create(
-                    It.IsAny<AzureRegistrationResponse>(), 
+            _deviceRepositoryService.Setup(x => x.Create(
+                    It.IsAny<NotificationRegistrationResult>(), 
                     _validRegisterDeviceRequest))
                 .ReturnsAsync(new DeviceRepositoryResult.Created(userDevice));
 
@@ -109,21 +111,21 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
         public async Task Post_HubServiceRegistrationFailure_ReturnsServiceUnavailable()
         {
             // Arrange
-            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest)).ReturnsAsync(_fixture.Create<RegistrationResult.Failure>());
+            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest, DummyNhsLoginId)).ReturnsAsync(_fixture.Create<RegistrationResult.BadGateway>());
             
             // Act
             var result = await _systemUnderTest.Post(_validRegisterDeviceRequest);
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status503ServiceUnavailable);
+            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
         }
 
         [TestMethod]
         public async Task Post_HubServiceRegistrationException_ReturnsInternalServerError()
         {
             // Arrange
-            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest)).Throws(new ArgumentException("Test"));
+            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest, DummyNhsLoginId)).Throws(new ArgumentException("Test"));
 
             // Act
             var result = await _systemUnderTest.Post(_validRegisterDeviceRequest);
@@ -137,10 +139,10 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
         public async Task Post_DeviceRegistrationFailure_ReturnsServiceUnavailable()
         {
             // Arrange
-            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest)).ReturnsAsync(_fixture.Create<RegistrationResult.Success>());
+            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest, DummyNhsLoginId)).ReturnsAsync(_fixture.Create<RegistrationResult.Success>());
 
-            _deviceRegistrationService.Setup(x => x.Create(
-                    It.IsAny<AzureRegistrationResponse>(),
+            _deviceRepositoryService.Setup(x => x.Create(
+                    It.IsAny<NotificationRegistrationResult>(),
                     _validRegisterDeviceRequest))
                 .ReturnsAsync(new DeviceRepositoryResult.Failure());
 
@@ -149,17 +151,17 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status503ServiceUnavailable);
+            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
         }
 
         [TestMethod]
         public async Task Post_DeviceRegistrationException_ReturnsInternalServerError()
         {
             // Arrange
-            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest)).ReturnsAsync(_fixture.Create<RegistrationResult.Success>());
+            _hubService.Setup(x => x.Register(_validRegisterDeviceRequest, DummyNhsLoginId)).ReturnsAsync(_fixture.Create<RegistrationResult.Success>());
 
-            _deviceRegistrationService.Setup(x => x.Create(
-                    It.IsAny<AzureRegistrationResponse>(),
+            _deviceRepositoryService.Setup(x => x.Create(
+                    It.IsAny<NotificationRegistrationResult>(),
                     _validRegisterDeviceRequest))
                 .Throws(new ArgumentException("Test"));
 

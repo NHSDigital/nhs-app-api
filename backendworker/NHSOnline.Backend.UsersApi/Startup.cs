@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.UsersApi
         public void ConfigureServices(IServiceCollection services)
         {
             SetupConfigurationSettings(services);
-
+            
             services
                 .AddMvc(ConfigureMvcOptions)
                 .AddJsonOptions(
@@ -64,6 +64,9 @@ namespace NHSOnline.Backend.UsersApi
         {
             var mongoConfiguration = CreateMongoConfiguration();
             services.AddSingleton(mongoConfiguration);
+            
+            var config = CreateAzureNotificationConfiguration();
+            services.AddSingleton(config);
         }
 
         private IMongoConfiguration CreateMongoConfiguration()
@@ -77,6 +80,14 @@ namespace NHSOnline.Backend.UsersApi
             var password = Configuration.GetOrNull("USERS_MONGO_DATABASE_PASSWORD");
 
             return new MongoConfiguration(host, port, databaseName, username, password, userDeviceCollectionName);
+        }
+
+        private AzureNotificationConfiguration CreateAzureNotificationConfiguration()
+        {
+            var azureConnectionString = Configuration.GetOrThrow("AZURE_NOTIFICATION_HUB_CONNECTION_STRING", _logger);
+            var notificationHubPath = Configuration.GetOrThrow("AZURE_NOTIFICATION_HUB_PATH", _logger);
+            var sharedAccessKey = Configuration.GetOrThrow("AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY", _logger);
+            return new AzureNotificationConfiguration(azureConnectionString, notificationHubPath, sharedAccessKey);
         }
 
         private static void ConfigureMvcOptions(MvcOptions options)

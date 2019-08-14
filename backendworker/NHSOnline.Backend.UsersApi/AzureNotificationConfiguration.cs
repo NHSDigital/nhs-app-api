@@ -1,0 +1,18 @@
+using NHSOnline.Backend.Support.Settings;
+
+namespace NHSOnline.Backend.UsersApi
+{
+    public class AzureNotificationConfiguration
+    {
+        public string ConnectionString { get; }
+        public string NotificationHubPath { get; }
+        public string SharedAccessKey { get; }
+        
+        public AzureNotificationConfiguration(string connectionString, string notificationHubPath, string sharedAccessKey)
+        {
+            ConnectionString = connectionString;
+            NotificationHubPath = notificationHubPath;
+            SharedAccessKey = sharedAccessKey;
+        }
+    }
+}

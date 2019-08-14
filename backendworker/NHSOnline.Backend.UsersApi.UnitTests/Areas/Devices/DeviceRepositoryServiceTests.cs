@@ -6,15 +6,15 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.UsersApi.Azure;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
+using NHSOnline.Backend.UsersApi.Notifications;
 using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 {
     [TestClass]
-    public class DeviceRegistrationServiceTests
+    public class DeviceRepositoryServiceTests
     {
         private IFixture _fixture;
         private DeviceRepositoryService _systemUnderTest;
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Act
             var result = await _systemUnderTest.Create(
-                _fixture.Create<AzureRegistrationResponse>(),
+                _fixture.Create<NotificationRegistrationResult>(),
                 request);
 
             // Assert
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Act
             var result = await _systemUnderTest.Create(
-                _fixture.Create<AzureRegistrationResponse>(),
+                _fixture.Create<NotificationRegistrationResult>(),
                 request);
 
             // Assert

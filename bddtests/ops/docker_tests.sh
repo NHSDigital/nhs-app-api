@@ -19,6 +19,9 @@ docker kill $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}') 
 # Check if DOCKER_TAG exists in envvar
 [ -z $APP_DOCKER_TAG ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
 
+[ -z $AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY ] && die "AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY is not specified, this is required to run notifications BDD tests"
+sed -i '' -e "s/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY/g" vars_ci.env
+
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
 

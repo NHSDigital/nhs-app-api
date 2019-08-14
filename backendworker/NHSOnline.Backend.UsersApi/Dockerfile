@@ -14,7 +14,7 @@ RUN apt-get update && \
       /var/log/* \
       /tmp/* \
       /var/tmp/* && \
-    useradd -m aspnetcore 
+    useradd -m aspnetcore
 
 FROM ${SDK_IMAGE} AS build
 RUN apt-get update && \
@@ -56,6 +56,8 @@ ENV PROJECT_NAME=$PROJECT_NAME
 ENV PORT=$PORT
 ENV ASPNETCORE_ENVIRONMENT Production
 ENV ASPNETCORE_URLS=
+ENV AUDIT_SINK_TYPE FILE
+ENV AUDIT_FILE audit.txt
 ENV CORS_AUTHORITY https://www-preview.devuks1.bitraft.io
 ENV TIMEZONE Europe/London
 ENV USERS_MONGO_DATABASE_HOST=
@@ -64,7 +66,9 @@ ENV USERS_MONGO_DATABASE_USERNAME=
 ENV USERS_MONGO_DATABASE_PASSWORD=
 ENV USERS_MONGO_DATABASE_NAME development
 ENV USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION devices
-
+ENV AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
+ENV AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+ENV AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
 WORKDIR /app
 RUN chown aspnetcore:aspnetcore /app
 COPY --chown=aspnetcore:aspnetcore --from=publish /app .

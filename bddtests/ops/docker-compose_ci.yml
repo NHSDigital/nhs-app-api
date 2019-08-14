@@ -97,6 +97,8 @@ services:
       - 'servicejourneyrules_data:/app/input'
   users.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendusersapi:${BACKEND_TAG}
+    env_file:
+      - vars_ci.env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8088
@@ -107,6 +109,8 @@ services:
       - USERS_MONGO_DATABASE_PORT=27017
       - USERS_MONGO_DATABASE_USERNAME=
       - USERS_MONGO_DATABASE_PASSWORD=
+      - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive-bdd
+      - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive-bdd.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
     environment:

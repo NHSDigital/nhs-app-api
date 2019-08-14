@@ -2838,4 +2838,6 @@
             description: "Access token is missing or invalid."
           500: 
             description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
 

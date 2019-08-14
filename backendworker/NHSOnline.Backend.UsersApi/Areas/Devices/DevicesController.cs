@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Azure;
+using NHSOnline.Backend.UsersApi.Notifications;
 using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
@@ -14,15 +15,17 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     [Route("api/users/devices")]
     public class DevicesController : Controller
     {
-        private readonly IAzureNotificationHubService _hubService;
+        private readonly INotificationRegistrationService _notificationRegistrationService;
         private readonly IDeviceRepositoryService _deviceServiceRepository;
         private readonly ILogger<DevicesController> _logger;
 
-        public DevicesController(IAzureNotificationHubService hubService,
+        private const string DummyNhsLoginId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+
+        public DevicesController(INotificationRegistrationService notificationRegistrationService,
             IDeviceRepositoryService deviceServiceRepository,
             ILogger<DevicesController> logger)
         {
-            _hubService = hubService;
+            _notificationRegistrationService = notificationRegistrationService;
             _deviceServiceRepository = deviceServiceRepository;
             _logger = logger;
         }
@@ -41,7 +44,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
                 try
                 {
-                    var registrationResponse = await _hubService.Register(model);
+                    var registrationResponse = await _notificationRegistrationService.Register(model, DummyNhsLoginId);
 
                     if (registrationResponse is RegistrationResult.Success successRegistrationResult)
                     {

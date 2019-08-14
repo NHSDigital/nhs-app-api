@@ -1,8 +1,8 @@
 using System;
 
-namespace NHSOnline.Backend.UsersApi.Azure
+namespace NHSOnline.Backend.UsersApi.Notifications
 {
-    public class AzureRegistrationResponse
+    public class NotificationRegistrationResult
     {
         public string RegistrationId { get; set; }
         public DateTime? RegistrationExpiry { get; set; }

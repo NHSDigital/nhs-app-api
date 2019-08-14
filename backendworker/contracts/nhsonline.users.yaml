@@ -37,6 +37,8 @@ paths:
         "401":
           $ref: '#/components/responses/UnauthorizedError'
         "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
           $ref: '#/components/responses/UnexpectedError' 
 components:
   securitySchemes:

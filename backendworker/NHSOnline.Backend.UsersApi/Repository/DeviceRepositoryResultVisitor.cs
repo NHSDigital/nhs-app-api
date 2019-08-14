@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
         public IActionResult Visit(DeviceRepositoryResult.Failure result)
         {
             _logger.LogError("Failure to register device.");
-            return new StatusCodeResult(StatusCodes.Status503ServiceUnavailable);
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
     }
 }

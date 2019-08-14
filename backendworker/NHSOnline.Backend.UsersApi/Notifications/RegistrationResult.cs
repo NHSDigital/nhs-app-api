@@ -1,4 +1,6 @@
-﻿namespace NHSOnline.Backend.UsersApi.Azure
+﻿using NHSOnline.Backend.UsersApi.Areas.Devices;
+
+namespace NHSOnline.Backend.UsersApi.Notifications
 {
     public abstract class RegistrationResult
     {
@@ -6,9 +8,9 @@
 
         public class Success : RegistrationResult
         {
-            public AzureRegistrationResponse Response { get; }
+            public NotificationRegistrationResult Response { get; }
 
-            public Success(AzureRegistrationResponse response)
+            public Success(NotificationRegistrationResult response)
             {
                 Response = response;
             }
@@ -18,13 +20,23 @@
                 return visitor.Visit(this);
             }
         }
-
-        public class Failure : RegistrationResult
+        
+        public class BadGateway : RegistrationResult
         {
             public override T Accept<T>(IRegistrationResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
+
+        }
+        
+        public class InternalServerError : RegistrationResult
+        {
+            public override T Accept<T>(IRegistrationResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+
         }
     }
 }

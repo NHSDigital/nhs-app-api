@@ -121,6 +121,9 @@ services:
       - USERS_MONGO_DATABASE_PORT=27017
       - USERS_MONGO_DATABASE_USERNAME=
       - USERS_MONGO_DATABASE_PASSWORD=
+      - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
+      - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:
