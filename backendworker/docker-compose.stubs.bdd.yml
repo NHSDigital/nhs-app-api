@@ -10,10 +10,10 @@ services:
   mongo_seed:
     image: mongo:latest
     links:
-      - nhsonline.mongodb.session
-    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
+      - nhsonline.mongodb
+    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
     depends_on:
-      - nhsonline.mongodb.session
+      - nhsonline.mongodb
   cid.local.bitraft.io:
     image: nhsonline.backend.worker
     depends_on:
@@ -43,7 +43,7 @@ services:
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - STUB_TERMS_AND_CONDITIONS=true
-      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
+      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
@@ -56,7 +56,7 @@ services:
       - "8084:8084"
     volumes:
       - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
-  nhsonline.mongodb.session:
+  nhsonline.mongodb:
     image: mongo:latest
     ports:
     - "27017:27017"
@@ -84,10 +84,10 @@ services:
   mongo_seed:
     image: mongo:latest
     links:
-      - nhsonline.mongodb.session
-    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
+      - nhsonline.mongodb
+    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
     depends_on:
-      - nhsonline.mongodb.session
+      - nhsonline.mongodb
 volumes:
   redis_data:
     driver: local

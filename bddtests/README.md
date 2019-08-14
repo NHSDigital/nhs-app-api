@@ -166,7 +166,7 @@ The backend worker session duration is set to 3 minutes (`180` seconds) for BDDs
 
 `docker-compose.yml`
 ```
-command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:180})' development"
+command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:180})' development"
 
 ```
 

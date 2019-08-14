@@ -1,6 +1,6 @@
 version: "3.2"
 services:
-  nhsonline.mongodb.session:
+  nhsonline.mongodb:
     image: mongo:latest
   web.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-web:${WEB_TAG}
@@ -13,7 +13,7 @@ services:
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis.session
-      - nhsonline.mongodb.session
+      - nhsonline.mongodb
     env_file:
       - vars_ci.env
     environment:
@@ -30,7 +30,7 @@ services:
       - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
       - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
       - ConfigurationSettings__CookieDomain=.bitraft.io
-      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
+      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
@@ -45,7 +45,7 @@ services:
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis.session
-      - nhsonline.mongodb.session
+      - nhsonline.mongodb
     env_file:
       - vars_ci.env
     environment:
@@ -61,7 +61,7 @@ services:
       - VISION_CERT_PASSPHRASE=GnewUt4z3y
       - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
       - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
-      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
+      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb
       - SESSION_MONGO_DATABASE_PORT=27017
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=15
       - SESSION_MONGO_DATABASE_USERNAME=
@@ -86,7 +86,7 @@ services:
       - PORT=8086
       - CORS_AUTHORITY=*
       - VERSION_TAG=servicejourneyrules_docker_main
-      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
+      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
@@ -103,6 +103,10 @@ services:
       - PORT=8088
       - CORS_AUTHORITY=*
       - VERSION_TAG=users_docker_main
+      - USERS_MONGO_DATABASE_HOST=nhsonline.mongodb
+      - USERS_MONGO_DATABASE_PORT=27017
+      - USERS_MONGO_DATABASE_USERNAME=
+      - USERS_MONGO_DATABASE_PASSWORD=
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
     environment:
@@ -125,10 +129,10 @@ services:
   mongo_seed3:
     image: mongo:latest
     links:
-      - nhsonline.mongodb.session
-    command: /bin/bash -c "sleep 10; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
+      - nhsonline.mongodb
+    command: /bin/bash -c "sleep 10; mongo --host nhsonline.mongodb --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
     depends_on:
-      - nhsonline.mongodb.session
+      - nhsonline.mongodb
 volumes:
   redis_data:
     driver: local

@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Arrange
             var request = _fixture.Create<RegisterDeviceRequest>();
             _deviceIdGenerator.Setup(x => x.Generate(It.IsAny<string>(), request)).Returns(_fixture.Create<string>());
-            _deviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>(), request)).Returns(Task.CompletedTask);
+            _deviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>())).Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Create(
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         {
             // Arrange
             var request = _fixture.Create<RegisterDeviceRequest>();
-            _deviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>(), request)).Throws(new ArgumentException("Test"));
+            _deviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>())).Throws(new ArgumentException("Test"));
 
             // Act
             var result = await _systemUnderTest.Create(

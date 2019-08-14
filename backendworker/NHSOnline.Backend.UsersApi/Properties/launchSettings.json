@@ -21,7 +21,13 @@
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development",
           "ASPNETCORE_URLS": "http://*:8088",
-          "CORS_AUTHORITY": "*"
+          "CORS_AUTHORITY": "*",
+          "USERS_MONGO_DATABASE_HOST": "localhost",
+          "USERS_MONGO_DATABASE_PORT": "27017",
+          "USERS_MONGO_DATABASE_USERNAME": "",
+          "USERS_MONGO_DATABASE_PASSWORD": "",
+          "USERS_MONGO_DATABASE_NAME": "users",
+          "USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION": "devices"
         }
       }
     }

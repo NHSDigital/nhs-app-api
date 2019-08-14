@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
             try
             {
-                await _deviceRepository.Create(userDevice, request);
+                await _deviceRepository.Create(userDevice);
                 return new DeviceRepositoryResult.Created(userDevice);
             }
             catch (Exception e)
