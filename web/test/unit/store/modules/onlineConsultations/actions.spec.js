@@ -41,11 +41,11 @@ const rootState = {
     rules: {
       cdssAdmin: {
         serviceDefinition: 'NHS_ADMIN',
-        provider: 'eConsult',
+        provider: 'stubs',
       },
       cdssAdvice: {
         serviceDefinition: 'NHS_ADVICE',
-        provider: 'eConsult',
+        provider: 'stubs',
       },
     },
   },
@@ -60,15 +60,15 @@ describe('online consultations store actions', () => {
   });
 
   describe('getServiceDefinition', () => {
-    let serviceDefinition;
+    let serviceDefinitionId;
     let provider;
     let parameters;
 
     beforeAll(() => {
-      serviceDefinition = 'NHS_ADMIN';
-      provider = 'eConsult';
+      serviceDefinitionId = 'NHS_ADMIN';
+      provider = 'stubs';
       parameters = {
-        serviceDefinition,
+        serviceDefinitionId,
         provider,
       };
     });
@@ -86,7 +86,7 @@ describe('online consultations store actions', () => {
 
         // Act
         return getServiceDefinition
-          .call(store, { rootState, commit }, 'cdssAdmin')
+          .call(store, { rootState, commit }, parameters)
           .then(() => {
             // Assert
             const { getFhirServiceDefinition } = store.app.$cdsApi;
@@ -112,7 +112,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return getServiceDefinition
-            .call(store, { rootState, commit }, 'cdssAdmin')
+            .call(store, { rootState, commit }, parameters)
             .then(() => {
               // Assert
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -131,7 +131,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return getServiceDefinition
-            .call(store, { rootState, commit }, 'cdssAdmin')
+            .call(store, { rootState, commit }, parameters)
             .then(() => {
               // Assert
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -156,7 +156,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return getServiceDefinition
-            .call(store, { rootState, commit }, 'cdssAdmin')
+            .call(store, { rootState, commit }, parameters)
             .then(() => {
               // Assert
               expect(commit).toHaveBeenCalledWith(SET_DATA_REQUIREMENTS, expectedDataRequirements);
@@ -179,7 +179,7 @@ describe('online consultations store actions', () => {
 
               // Act
               return getServiceDefinition
-                .call(store, { rootState, commit }, 'cdssAdmin')
+                .call(store, { rootState, commit }, parameters)
                 .then(() => {
                   // Assert
                   expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -207,7 +207,7 @@ describe('online consultations store actions', () => {
 
               // Act
               return getServiceDefinition
-                .call(store, { rootState, commit }, 'cdssAdmin')
+                .call(store, { rootState, commit }, parameters)
                 .then(() => {
                   // Assert
                   expect(commit).toHaveBeenCalledWith(SET_STATUS, 'data-required');
@@ -228,7 +228,10 @@ describe('online consultations store actions', () => {
         getParameters.mockReturnValue(undefined);
 
         // Act
-        const result = evaluateServiceDefinition.call(store, { commit, state, rootState }, { journey: 'cdssAdmin' });
+        const result = evaluateServiceDefinition.call(store, { commit, state, rootState }, {
+          provider: 'stubs',
+          serviceDefinitionId: 'NHS_ADMIN',
+        });
 
         // Assert
         expect(result).toBeUndefined();
@@ -243,6 +246,7 @@ describe('online consultations store actions', () => {
     describe('successfully get parameters from state', () => {
       let parameters;
       let request;
+      const actionParams = { provider: 'stubs', serviceDefinitionId: 'NHS_ADMIN', addJavascriptDisabledHeader: true };
 
       beforeEach(() => {
         parameters = {
@@ -250,8 +254,9 @@ describe('online consultations store actions', () => {
         };
         request = {
           parameters,
-          serviceDefinition: 'NHS_ADMIN',
-          provider: 'eConsult',
+          serviceDefinitionId: 'NHS_ADMIN',
+          provider: 'stubs',
+          addJavascriptDisabledHeader: true,
         };
 
         getParameters.mockClear();
@@ -263,20 +268,15 @@ describe('online consultations store actions', () => {
       });
 
       describe('action called with addJavascriptDisabledHeader set to true', () => {
-        afterAll(() => {
-          request.addJavascriptDisabledHeader = undefined;
-        });
-
         it('will include addJavascriptDisabledHeader in post parameter', () => {
           // Arrange
           store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
             () => Promise.reject(),
           );
-          request.addJavascriptDisabledHeader = true;
 
           // Act
           return evaluateServiceDefinition
-            .call(store, { commit, state, rootState }, { journey: 'cdssAdmin', addJavascriptDisabledHeader: true })
+            .call(store, { commit, state, rootState }, actionParams)
             .then(() => {
               // Assert
               const { postFhirServiceDefinitionEvaluate } = store.app.$cdsApi;
@@ -297,7 +297,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return evaluateServiceDefinition
-            .call(store, { commit, state, rootState }, { journey: 'cdssAdmin' })
+            .call(store, { commit, state, rootState }, actionParams)
             .then(() => {
               // Assert
               const { postFhirServiceDefinitionEvaluate } = store.app.$cdsApi;
@@ -323,7 +323,7 @@ describe('online consultations store actions', () => {
 
             // Act
             return evaluateServiceDefinition
-              .call(store, { commit, state, rootState }, { journey: 'cdssAdmin' })
+              .call(store, { commit, state, rootState }, actionParams)
               .then(() => {
                 // Assert
                 expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -344,7 +344,7 @@ describe('online consultations store actions', () => {
 
             // Act
             return evaluateServiceDefinition
-              .call(store, { commit, state, rootState })
+              .call(store, { commit, state, rootState }, actionParams)
               .then(() => {
                 // Assert
                 expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -385,7 +385,7 @@ describe('online consultations store actions', () => {
 
                 // Act
                 return evaluateServiceDefinition
-                  .call(store, { commit, state, rootState })
+                  .call(store, { commit, state, rootState }, actionParams)
                   .then(() => {
                     // Assert
                     expect(getSessionId).toHaveBeenCalledWith(expectedResponse);
@@ -413,7 +413,7 @@ describe('online consultations store actions', () => {
 
                 // Act
                 return evaluateServiceDefinition
-                  .call(store, { commit, state, rootState })
+                  .call(store, { commit, state, rootState }, actionParams)
                   .then(() => {
                     // Assert
                     expect(getSessionId).toHaveBeenCalledWith(expectedResponse);
@@ -443,7 +443,7 @@ describe('online consultations store actions', () => {
 
                 // Act
                 return evaluateServiceDefinition
-                  .call(store, { commit, state, rootState })
+                  .call(store, { commit, state, rootState }, actionParams)
                   .then(() => {
                     // Assert
                     expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -472,7 +472,7 @@ describe('online consultations store actions', () => {
 
                 // Act
                 return evaluateServiceDefinition
-                  .call(store, { commit, state, rootState })
+                  .call(store, { commit, state, rootState }, actionParams)
                   .then(() => {
                     // Assert
                     expect(getCarePlansAndReferralRequests).toHaveBeenCalledWith(expectedResponse);

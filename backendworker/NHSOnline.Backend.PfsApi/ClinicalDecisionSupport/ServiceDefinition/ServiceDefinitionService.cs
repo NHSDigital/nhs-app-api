@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
     public class ServiceDefinitionService: IServiceDefinitionService
     {
         private readonly ILogger<ServiceDefinitionService> _logger;
+        private readonly IServiceDefinitionListBuilder _serviceDefinitionListBuilder;
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IFhirSanitizationHelper _fhirSanitizationHelper;
         
@@ -39,6 +40,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
         public ServiceDefinitionService(
             ILogger<ServiceDefinitionService> logger,
+            IServiceDefinitionListBuilder serviceDefinitionListBuilder,
             IHtmlSanitizer htmlSanitizer,
             IFhirSanitizationHelper fhirSanitizationHelper,
             IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
@@ -47,6 +49,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             ICreateFhirParameter createFhirParameter)
         {
             _logger = logger;
+            _serviceDefinitionListBuilder = serviceDefinitionListBuilder;
             _htmlSanitizer = htmlSanitizer;
             _fhirSanitizationHelper = fhirSanitizationHelper;
 
@@ -168,7 +171,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
         }
 
-        public async Task<ServiceDefinitionResult> SearchServiceDefinitionsByQuery(IOnlineConsultationsProviderHttpClient httpClient)
+        public async Task<ServiceDefinitionListResult> GetServiceDefinitions(IOnlineConsultationsProviderHttpClient httpClient)
         {
             try
             {
@@ -185,14 +188,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 {
                     _logger.LogError($"Error sending request to CDSS supplier: {hre.Message}");
 
-                    return new ServiceDefinitionResult.BadRequest();
+                    return new ServiceDefinitionListResult.BadRequest();
                 }
 
                 if (!responseMessage.IsSuccessStatusCode)
                 {
                     _logger.LogError($"Supplier responded with status code: {responseMessage.StatusCode}");
 
-                    return new ServiceDefinitionResult.BadGateway();
+                    return new ServiceDefinitionListResult.BadGateway();
                 }
                 
                 _logger.LogInformation($"Supplier responded with status code: {responseMessage.StatusCode}");
@@ -200,6 +203,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 var stringResponse = responseMessage.Content != null
                     ? await responseMessage.Content.ReadAsStringAsync()
                     : null;
+
+                _logger.LogInformation($"Supplier responded with status code: {responseMessage.StatusCode}");
 
                 try
                 {
@@ -209,18 +214,18 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 {
                     _logger.LogError("Received null content from provider");
 
-                    return new ServiceDefinitionResult.BadGateway();
+                    return new ServiceDefinitionListResult.BadGateway();
                 }
                 catch (FormatException fe)
                 {
                     _logger.LogError($"Failed to parse search result bundle: {fe.Message}");
 
-                    return new ServiceDefinitionResult.BadGateway();
+                    return new ServiceDefinitionListResult.BadGateway();
                 }
                 
-                _fhirSanitizationHelper.SanitizeServiceDefinitionSearchBundle(bundle, _htmlSanitizer);
-                
-                return new ServiceDefinitionResult.Success(_serializer.SerializeToString(bundle));
+                var serviceDefinitionList = _serviceDefinitionListBuilder.BuildServiceDefinitionList(bundle);
+
+                return new ServiceDefinitionListResult.Success(serviceDefinitionList);
             }
             finally
             {
@@ -351,6 +356,11 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 }
 
                 _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);
+
+                if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
+                {
+                    _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}");
+                }
 
                 return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
             }

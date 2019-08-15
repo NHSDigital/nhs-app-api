@@ -29,12 +29,28 @@ const store = {
       isNativeApp: true,
     },
     onlineConsultations: initialState(),
+    serviceJourneyRules: {
+      rules: {
+        cdssAdmin: {
+          provider: 'stubs',
+          serviceDefinition: 'testId',
+        },
+        cdssAdvice: {
+          provider: 'stubs',
+          serviceDefinition: 'testId',
+        },
+      },
+    },
   },
   dispatch,
 };
 
 const mountOrchestrator = ({ stubbed = true, methods = {} } = {}) => {
   orchestrator = (stubbed ? shallowMount : mount)(Orchestrator, {
+    propsData: {
+      provider: 'stubs',
+      serviceDefinitionId: 'NHS_ADMIN',
+    },
     $store: store,
     methods,
     $style: {

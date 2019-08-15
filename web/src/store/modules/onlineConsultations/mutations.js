@@ -13,6 +13,7 @@ import {
   SET_REFERRAL_REQUESTS,
   SET_ERROR,
   SET_ANSWER_IS_EMPTY,
+  SET_SERVICE_DEFINITIONS,
   UPDATE_REQUEST_ID,
   FILE_LOADING,
   FILE_LOAD_COMPLETE,
@@ -20,6 +21,7 @@ import {
   CLEAR_VALIDATION,
   PREVIOUS_SELECTED,
   CLEAR_CLIENT_ERRORS,
+  SET_GP_ADVICE_SERVICE_DEFINITION_ID,
 } from './mutation-types';
 
 export default {
@@ -28,19 +30,17 @@ export default {
     state.status = undefined;
     state.dataRequirements = undefined;
     state.question = undefined;
+    state.conditions = undefined;
     state.previousQuestion = undefined;
     state.previousSelected = false;
     state.previousAnswers = undefined;
     state.answer = undefined;
     state.answerIsValid = false;
     state.answerIsEmpty = true;
-    state.min = undefined;
-    state.max = undefined;
     state.latestErrorMessage = undefined;
     state.validationError = false;
     state.validationErrorMessage = undefined;
     state.error = false;
-    state.previousRoute = undefined;
     state.carePlans = undefined;
     state.referralRequests = undefined;
     state.isLoadingFile = false;
@@ -63,6 +63,9 @@ export default {
   },
   [SET_QUESTION](state, question) {
     state.question = question;
+  },
+  [SET_SERVICE_DEFINITIONS](state, serviceDefinitions) {
+    state.serviceDefinitions = serviceDefinitions;
   },
   [SET_PREVIOUS_QUESTION](state, previousQuestion) {
     state.previousQuestion = previousQuestion;
@@ -102,6 +105,9 @@ export default {
   },
   [SET_ANSWER_IS_EMPTY](state, answerIsEmpty) {
     state.answerIsEmpty = answerIsEmpty;
+  },
+  [SET_GP_ADVICE_SERVICE_DEFINITION_ID](state, id) {
+    state.gpAdviceServiceDefinitionId = id;
   },
   [UPDATE_REQUEST_ID](state) {
     state.requestId += 1;

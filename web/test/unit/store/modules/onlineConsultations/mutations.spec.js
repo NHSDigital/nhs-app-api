@@ -60,6 +60,8 @@ describe('online consultations store mutations', () => {
       it('will reset state to initialState', () => {
         // Arrange
         const expectedState = initialState();
+        expectedState.serviceDefinitions = undefined;
+
         state = {
           sessionId: 1,
           status: 'success',
@@ -72,11 +74,11 @@ describe('online consultations store mutations', () => {
           validationError: true,
           validationErrorMessage: 'message',
           error: true,
-          previousRoute: '/here',
           carePlans: [],
           referralRequests: [],
           isLoadingFile: true,
           requestId: 2,
+          serviceDefinitions: undefined,
         };
 
         // Act
@@ -92,6 +94,7 @@ describe('online consultations store mutations', () => {
         // Arrange
         const expectedState = initialState();
         expectedState.requestId = 2;
+        expectedState.serviceDefinitions = undefined;
 
         state = {
           sessionId: 1,
@@ -105,11 +108,11 @@ describe('online consultations store mutations', () => {
           validationError: true,
           validationErrorMessage: 'message',
           error: true,
-          previousRoute: '/here',
           carePlans: [],
           referralRequests: [],
           isLoadingFile: true,
           requestId: 2,
+          serviceDefinitions: undefined,
         };
 
         // Act

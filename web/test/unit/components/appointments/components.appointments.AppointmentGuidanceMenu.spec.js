@@ -48,10 +48,10 @@ describe('Appointment guidance menu', () => {
           provider: '',
         },
         cdssAdvice: {
-          provider: 'eConsult',
+          provider: 'stubs',
         },
         cdssAdmin: {
-          provider: 'eConsult',
+          provider: 'stubs',
         },
       };
       const http = createHttp(mockRules);
@@ -132,7 +132,7 @@ describe('Appointment guidance menu', () => {
           provider: 'none',
         },
         cdssAdmin: {
-          provider: 'eConsult',
+          provider: 'stubs',
         },
       };
       const http = createHttp(mockRulesResponse);
@@ -178,7 +178,7 @@ describe('Appointment guidance menu', () => {
         provider: '',
       },
       cdssAdvice: {
-        provider: 'eConsult',
+        provider: 'stubs',
       },
       cdssAdmin: {
         provider: 'none',

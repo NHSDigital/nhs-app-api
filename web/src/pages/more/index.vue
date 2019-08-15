@@ -57,12 +57,10 @@ export default {
       return DATA_SHARING_PREFERENCES.path;
     },
     requestAdminHelpPath() {
-      const noJsData = {
-        onlineConsultations: {
-          previousRoute: MORE.path,
-        },
-      };
-      return createUri({ path: APPOINTMENT_ADMIN_HELP.path, noJs: noJsData });
+      return createUri({
+        path: APPOINTMENT_ADMIN_HELP.path,
+        noJs: { onlineConsultations: { previousRoute: MORE.path } },
+      });
     },
     onlineConsultationsEnabled() {
       return this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' ||

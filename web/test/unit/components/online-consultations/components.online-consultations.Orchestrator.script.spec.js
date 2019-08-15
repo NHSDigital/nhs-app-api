@@ -43,14 +43,27 @@ const store = {
       isNativeApp: true,
     },
     onlineConsultations: initialState(),
+    serviceJourneyRules: {
+      rules: {
+        cdssAdmin: {
+          provider: 'stubs',
+          serviceDefinition: 'testId',
+        },
+        cdssAdvice: {
+          provider: 'stubs',
+          serviceDefinition: 'testId',
+        },
+      },
+    },
   },
   dispatch,
 };
 
 const mountOrchestrator = (shallow = true) => {
   orchestrator = (shallow ? shallowMount : mount)(Orchestrator, {
-    props: {
-      journey: 'cdssAdmin',
+    propsData: {
+      provider: 'stubs',
+      serviceDefinitionId: 'NHS_ADMIN',
     },
     $store: store,
     $style: {
@@ -557,6 +570,10 @@ describe('orchestrator', () => {
             store.state.onlineConsultations.validationError = isValidationError;
             store.state.onlineConsultations.isLoadingFile = isLoadingFile;
             mountOrchestrator();
+            const expectedParams = {
+              provider: 'stubs',
+              serviceDefinitionId: 'NHS_ADMIN',
+            };
             document.activeElement.blur = blur;
 
             // Act
@@ -565,7 +582,7 @@ describe('orchestrator', () => {
             // Assert
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
             expect(blur).toHaveBeenCalled();
-            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: orchestrator.vm.$props.journey });
+            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', expectedParams);
             expect(EventBus.$emit).not.toHaveBeenCalled();
             expect(NativeApp.resetPageFocus).toHaveBeenCalled();
             expect(scrollTo).toHaveBeenCalledWith(0, 0);
@@ -582,6 +599,10 @@ describe('orchestrator', () => {
             store.state.onlineConsultations.isLoadingFile = isLoadingFile;
             mountOrchestrator();
             document.activeElement.blur = blur;
+            const expectedParams = {
+              provider: 'stubs',
+              serviceDefinitionId: 'NHS_ADMIN',
+            };
 
             // Act
             await orchestrator.vm.continueClicked();
@@ -589,7 +610,7 @@ describe('orchestrator', () => {
             // Assert
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
             expect(blur).toHaveBeenCalled();
-            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: orchestrator.vm.$props.journey });
+            expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', expectedParams);
             expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_ROOT);
             expect(NativeApp.resetPageFocus).not.toHaveBeenCalled();
             expect(scrollTo).toHaveBeenCalledWith(0, 0);
@@ -603,17 +624,21 @@ describe('orchestrator', () => {
           isLoadingFile = true;
         });
 
-        it('will dispatch setAnswerIsValid action with validation object as payload', async () => {
+        it('will not set validation error or attempt to evaluate', async () => {
           // Arrange
           store.state.onlineConsultations.isLoadingFile = isLoadingFile;
           mountOrchestrator();
+          const unexpectedParams = {
+            provider: 'stubs',
+            serviceDefinitionId: 'NHS_ADMIN',
+          };
 
           // Act
           await orchestrator.vm.continueClicked();
 
           // Assert
           expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/setValidationError');
-          expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: orchestrator.vm.$props.journey });
+          expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', unexpectedParams);
           expect(store.dispatch).toHaveBeenCalledTimes(0);
         });
       });

@@ -47,6 +47,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IDemographicsService> _mockDemographicsService;
         private Mock<ICreateFhirParameter> _mockCreateFhirParam;
+        private Mock<IServiceDefinitionListBuilder> _mockServiceDefinitionListBuilder;
         
         private const string ServiceDefinitionId = "testId";
         private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\" }";
@@ -89,6 +90,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _patient.Address = addressList;
 
             _parameters.Add("answer", _patient);
+            _mockServiceDefinitionListBuilder = new Mock<IServiceDefinitionListBuilder>();
             
             _fixture.Customize<UserSession>(c => c
                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
@@ -121,6 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
 
             _service = new ServiceDefinitionService(
                 _mockLogger.Object,
+                _mockServiceDefinitionListBuilder.Object,
                 _mockHtmlSanitizer.Object,
                 _mockFhirSanitizationHelper.Object,
                 _mockDemographicsOlcMapper.Object,
@@ -258,7 +261,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         }
 
         [TestMethod]
-        public async Task SearchServiceDefinitionsByQuery_WhenProviderClientThrowsException_ReturnsBadRequest()
+        public async Task GetServiceDefinitions_WhenProviderClientThrowsException_ReturnsBadRequest()
         {
             // Arrange
             _mockProviderHttpClient
@@ -266,14 +269,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .Throws<HttpRequestException>();
 
             // Act
-            var response = await _service.SearchServiceDefinitionsByQuery(_mockProviderHttpClient.Object);
+            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
 
             // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
+            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadRequest>();
         }
         
         [TestMethod]
-        public async Task SearchServiceDefinitionsByQuery_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
+        public async Task GetServiceDefinitions_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
         {
             // Arrange
             var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
@@ -283,14 +286,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
 
             // Act
-            var response = await _service.SearchServiceDefinitionsByQuery(_mockProviderHttpClient.Object);
+            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
 
             // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task SearchServiceDefinitionsByQuery_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
+        public async Task GetServiceDefinitions_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
         {
             // Arrange
             var httpResponse = new HttpResponseMessage
@@ -304,17 +307,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.SearchServiceDefinitionsByQuery(_mockProviderHttpClient.Object);
+            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
 
             // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
         }
 
         [TestMethod]
         [DataRow("")]
         [DataRow("  ")]
         [DataRow(ServiceDefinitionJsonContent)]
-        public async Task SearchServiceDefinitionsByQuery_WhenProviderClientReturnsNonBundleContent_ReturnsBadGateway(string content)
+        public async Task GetServiceDefinitions_WhenProviderClientReturnsNonBundleContent_ReturnsBadGateway(string content)
         {
             // Arrange
             var httpResponse = new HttpResponseMessage
@@ -328,16 +331,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.SearchServiceDefinitionsByQuery(_mockProviderHttpClient.Object);
+            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
 
             // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinitionSearchBundle(
                 It.IsAny<Bundle>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
         }
         
         [TestMethod]
-        public async Task SearchServiceDefinitionsByQuery_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
+        public async Task GetServiceDefinitions_WhenResponseParsedSuccessfully_BuildsListAndReturnsSuccess()
         {
             // Arrange
             var httpResponse = new HttpResponseMessage
@@ -351,12 +354,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.SearchServiceDefinitionsByQuery(_mockProviderHttpClient.Object);
+            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
 
             // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinitionSearchBundle(
-                It.IsAny<Bundle>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+            response.Should().BeAssignableTo<ServiceDefinitionListResult.Success>();
+
+            _mockServiceDefinitionListBuilder.Verify(a => a.BuildServiceDefinitionList(It.IsAny<Bundle>()), Times.Once);
         }
 
         [TestMethod]

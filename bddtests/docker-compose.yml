@@ -88,9 +88,9 @@ services:
       - BROTHER_MAILER_SIG=brothermailersig
       - BROTHER_MAILER_USER_ID=brothermaileruserid
       - SERVICE_JOURNEY_RULES_BASE_URL=http://servicejourneyrulesapi.local.bitraft.io:8086
-      - OnlineConsultationsProvidersSettings__Providers__0__Provider=eConsult
-      - OnlineConsultationsProvidersSettings__Providers__0__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
-      - OnlineConsultationsProvidersSettings__Providers__0__BearerToken=shfjlkasdhflashfl
+      - OnlineConsultationsProvidersSettings__Providers__1__Provider=eConsult
+      - OnlineConsultationsProvidersSettings__Providers__1__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
+      - OnlineConsultationsProvidersSettings__Providers__1__BearerToken=shfjlkasdhflashfl
     depends_on:
       - nhsonline.redis.sds
     ports:

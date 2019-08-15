@@ -558,6 +558,12 @@ export default {
         text: 'log in to Appointments Online',
       },
     },
+    gp_advice: {
+      conditions: {
+        paragraph: 'To ensure we ask you relevant questions, choose your condition.',
+        link: 'I cannot find my condition',
+      },
+    },
     admin_help: {
       errors: {
         pageTitle: 'Server error',

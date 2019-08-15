@@ -113,8 +113,10 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                     requestMessage.Headers.Add(Support.Constants.HttpHeaders.JavascriptDisabled, "true");
                 }
 
-                return await Client.SendAsync(requestMessage);
-            }
+                _logger.LogInformation("Answer Successfully posted");
+
+                return await Client.SendAsync(requestMessage); 
+            } 
             finally
             {
                 _logger.LogExit();

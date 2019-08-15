@@ -28,7 +28,7 @@
           :aria-label="`${$t('appointments.guidance.menuItem2.header')}.
             ${$t('appointments.guidance.menuItem2.text')}`"
           data-purpose="text_link">
-          <a id="btn_gp_advice"
+          <a id="btn_gp_help"
              :href="adminHelpPath"
              @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem2.header') }}</h2>
@@ -45,8 +45,8 @@
           :aria-label="`${$t('appointments.guidance.menuItem3.header')}.
             ${$t('appointments.guidance.menuItem3.text')}`"
           data-purpose="text_link">
-          <a id="btn_gp_help"
-             :href="gpAdvicePath"
+          <a id="btn_gp_advice"
+             :href="gpAdviceConditionsPath"
              :class="$style['no-decoration']"
              @click="navigate($event)">
             <h2>{{ $t('appointments.guidance.menuItem3.header') }}</h2>
@@ -62,7 +62,7 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { SYMPTOMS, APPOINTMENT_ADMIN_HELP, APPOINTMENT_BOOKING_GUIDANCE, APPOINTMENT_GP_ADVICE } from '@/lib/routes';
+import { SYMPTOMS, APPOINTMENT_ADMIN_HELP, APPOINTMENT_BOOKING_GUIDANCE, APPOINTMENT_GP_ADVICE_CONDITIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import { createUri } from '@/lib/noJs';
 import SjrIf from '@/components/SjrIf';
@@ -78,15 +78,16 @@ export default {
       return SYMPTOMS.path;
     },
     adminHelpPath() {
-      const noJsData = {
-        onlineConsultations: {
-          previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path,
-        },
-      };
-      return createUri({ path: APPOINTMENT_ADMIN_HELP.path, noJs: noJsData });
+      return createUri({
+        path: APPOINTMENT_ADMIN_HELP.path,
+        noJs: { onlineConsultations: { previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path } },
+      });
     },
-    gpAdvicePath() {
-      return APPOINTMENT_GP_ADVICE.path;
+    gpAdviceConditionsPath() {
+      return createUri({
+        path: APPOINTMENT_GP_ADVICE_CONDITIONS.path,
+        noJs: { onlineConsultations: { previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path } },
+      });
     },
   },
   mounted() {
@@ -94,22 +95,11 @@ export default {
   },
   methods: {
     navigate(event) {
-      let header;
-      let title;
       redirectTo(this, event.currentTarget.pathname, null);
       event.preventDefault();
 
-      if (event.currentTarget.pathname === APPOINTMENT_ADMIN_HELP.path) {
-        if (event.currentTarget.id === 'btn_gp_help') {
-          header = this.$t('pageHeaders.appointmentAdminHelp');
-          title = this.$t('pageTitles.appointmentAdminHelp');
-          this.$store.dispatch('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE.path);
-        } else {
-          header = this.$t('pageHeaders.appointmentGpAdvice');
-          title = this.$t('pageTitles.appointmentGpAdvice');
-        }
-        this.$store.dispatch('header/updateHeaderText', header);
-        this.$store.dispatch('pageTitle/updatePageTitle', title);
+      if (event.currentTarget.id !== 'btn_symptoms_link') {
+        this.$store.dispatch('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE.path);
         this.$store.dispatch('navigation/setNewMenuItem', 1);
       }
     },

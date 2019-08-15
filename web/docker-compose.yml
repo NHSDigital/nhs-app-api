@@ -59,9 +59,6 @@ services:
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
-      - OnlineConsultationsProvidersSettings__Providers__0__Provider=eConsult
-      - OnlineConsultationsProvidersSettings__Providers__0__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
-      - OnlineConsultationsProvidersSettings__Providers__0__BearerToken=shfjlkasdhflashfl
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis-data.sds

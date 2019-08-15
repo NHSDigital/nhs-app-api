@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
         private Mock<IOnlineConsultationsProviderHttpClient> _mockProviderHttpClient;
 
         private ServiceDefinitionResult _successResult;
+        private ServiceDefinitionListResult _getServiceDefinitionsSuccessResult;
         private string _provider;
         private string _id;
         private Parameters _evaluateParameters;
@@ -52,6 +54,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                 .Freeze<Mock<IOnlineConsultationsProviderHttpClient>>();
 
             _successResult = new ServiceDefinitionResult.Success("");
+            _getServiceDefinitionsSuccessResult = new ServiceDefinitionListResult.Success(new List<ServiceDefinitionCategory>());
             _provider = "eConsult";
             _id = "testId";
             _evaluateParameters = new Parameters();
@@ -83,7 +86,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(false);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.SearchServiceDefinitionsByQuery(_provider);
+            var actualResponse = await _serviceDefinitionController.GetServiceDefinitions(_provider);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -92,24 +95,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
         }
 
         [TestMethod]
-        public async Task SearchServiceDefinitionsByQuery_WhenCalledWithProviderParameter_ServiceGetServiceDefinitionById()
+        public async Task GetServiceDefinitions_WhenCalledWithProviderParameter_ServiceGetServiceDefinitionById()
         {
             // Arrange
             SetupHttpClientPool(true);
             _mockServiceDefinitionService
-                .Setup(s => s.SearchServiceDefinitionsByQuery(It.Is<IOnlineConsultationsProviderHttpClient>(
+                .Setup(s => s.GetServiceDefinitions(It.Is<IOnlineConsultationsProviderHttpClient>(
                     c => c == _mockProviderHttpClient.Object)))
-                .Returns(Task.FromResult(_successResult));
+                .Returns(Task.FromResult(_getServiceDefinitionsSuccessResult));
 
             // Act
-            var actualResponse = await _serviceDefinitionController.SearchServiceDefinitionsByQuery(_provider);
+            var actualResponse = await _serviceDefinitionController.GetServiceDefinitions(_provider);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
             var value = actualResponse.Should().BeAssignableTo<OkObjectResult>();
             value.Subject.StatusCode.Should().Be(200);
             _mockServiceDefinitionService.Verify(
-                s => s.SearchServiceDefinitionsByQuery(It.IsAny<IOnlineConsultationsProviderHttpClient>()),
+                s => s.GetServiceDefinitions(It.IsAny<IOnlineConsultationsProviderHttpClient>()),
                 Times.Once);
         }
 

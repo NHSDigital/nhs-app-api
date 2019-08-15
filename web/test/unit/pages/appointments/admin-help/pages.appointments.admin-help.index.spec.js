@@ -25,6 +25,14 @@ describe('Admin Help page', () => {
         isNativeApp: true,
       },
       onlineConsultations: {},
+      serviceJourneyRules: {
+        rules: {
+          cdssAdmin: {
+            provider: 'stubs',
+            serviceDefinition: 'NHS_ADMIN',
+          },
+        },
+      },
     },
     dispatch,
   };
@@ -35,6 +43,10 @@ describe('Admin Help page', () => {
 
   const mountPage = () => {
     page = mount(AdminHelpPage, {
+      data: () => ({
+        provider: 'stubs',
+        serviceDefinitionId: 'NHS_ADMIN',
+      }),
       $store,
       $style,
       showTemplate: () => true,
@@ -127,6 +139,21 @@ describe('Admin Help page', () => {
         expect(redirect).toHaveBeenCalledTimes(0);
       });
     });
+    it('should return provider and serviceDefinitionId from SJR rules store', async () => {
+      // Arrange
+      const expectedResult = {
+        provider: 'stubs',
+        serviceDefinitionId: 'NHS_ADMIN',
+        addJavascriptDisabledHeader: false,
+      };
+
+      // Act
+      const result = await page.vm.$options.asyncData({ store: $store, req });
+
+      // Assert
+      expect(result).toEqual(expectedResult);
+    });
+
     describe('nojs', () => {
       describe('with nojs body not present in request or question not present in store', () => {
         each([{
@@ -147,7 +174,7 @@ describe('Admin Help page', () => {
           mountPage();
 
           // Act
-          page.vm.$options.asyncData({ store: $store, req: request });
+          await page.vm.$options.asyncData({ store: $store, req: request });
 
           // Assert
           expect($store.dispatch).not.toBeCalledWith('onlineConsultations/setAnswer');
@@ -208,7 +235,11 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: 'cdssAdmin' });
+          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', {
+            provider: 'stubs',
+            serviceDefinitionId: 'NHS_ADMIN',
+            addJavascriptDisabledHeader: false,
+          });
         });
         it('should dispatch get action', async () => {
           // Arrange
@@ -219,7 +250,11 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition', 'cdssAdmin');
+          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition', {
+            provider: 'stubs',
+            serviceDefinitionId: 'NHS_ADMIN',
+            addJavascriptDisabledHeader: false,
+          });
         });
       });
       describe('with valid answer in store', () => {
@@ -233,28 +268,9 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: 'cdssAdmin' });
-        });
-
-        describe('with nojs parameter present', () => {
-          each([
-            true,
-            undefined,
-          ]).it('should dispatch evaluate with addJavascriptDisabledHeader true if evaluating server side', async (serverSide) => {
-            // Arrange
-            process.server = serverSide;
-            $store.state.onlineConsultations.question = {};
-            $store.state.onlineConsultations.answerIsValid = true;
-            mountPage();
-
-            // Act
-            await page.vm.$options.asyncData({ store: $store, req });
-
-            // Assert
-            expect($store.dispatch).toHaveBeenCalledWith(
-              'onlineConsultations/evaluateServiceDefinition',
-              { journey: 'cdssAdmin', addJavascriptDisabledHeader: serverSide },
-            );
+          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', {
+            provider: 'stubs',
+            serviceDefinitionId: 'NHS_ADMIN',
           });
         });
       });
@@ -269,7 +285,10 @@ describe('Admin Help page', () => {
           await page.vm.$options.asyncData({ store: $store, req });
 
           // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', { journey: 'cdssAdmin' });
+          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', {
+            provider: 'stubs',
+            serviceDefinitionId: 'NHS_ADMIN',
+          });
         });
       });
     });

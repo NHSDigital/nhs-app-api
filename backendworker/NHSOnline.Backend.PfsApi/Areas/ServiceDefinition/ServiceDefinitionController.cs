@@ -30,21 +30,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             _logger = loggerFactory.CreateLogger<ServiceDefinitionController>();
             _onlineConsultationsProviderHttpClientPool = onlineConsultationsProviderHttpClientPool;
         }
-        
+
         [HttpGet]
-        [Route("fhir/ServiceDefinition")]
-        public async Task<IActionResult> SearchServiceDefinitionsByQuery([FromQuery(Name = "_provider")] string provider)
+        [Route("fhir/ServiceDefinition/{provider}")]
+        public async Task<IActionResult> GetServiceDefinitions([FromRoute(Name = "provider")] string provider)
         {
             try
             {
                 _logger.LogEnter();
 
-                var visitor = new ServiceDefinitionResultVisitor();
+                var visitor = new ServiceDefinitionListResultVisitor();
 
                 if (string.IsNullOrWhiteSpace(provider))
                 {
                   _logger.LogError("Missing provider in route");
-                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                  return new ServiceDefinitionListResult.BadRequest().Accept(visitor);
                 }
 
                 var httpClient =
@@ -55,10 +55,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 {
                     _logger.LogError($"No http client found for provider {provider}");
 
-                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
+                    return new ServiceDefinitionListResult.BadRequest().Accept(visitor);
                 }
 
-                var result = await _service.SearchServiceDefinitionsByQuery(httpClient);
+                var result = await _service.GetServiceDefinitions(httpClient);
 
                 return result.Accept(visitor);
             }
@@ -103,6 +103,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 }
 
                 var result = await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId, provider);
+
+                _logger.LogInformation($"Starting consultation with ServiceDefinition: {serviceDefinitionId}");
 
                 return result.Accept(visitor);
             }

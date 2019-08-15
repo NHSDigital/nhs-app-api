@@ -16,7 +16,7 @@
       </message-dialog>
 
       <no-js-form :value="noJsState"
-                  :action="adminHelpPath"
+                  :action="noJSPath"
                   :enctype="enctype"
                   method="post">
         <question :id="question.id"
@@ -119,7 +119,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
-import { INDEX, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
+import { INDEX, APPOINTMENT_ADMIN_HELP, APPOINTMENT_GP_ADVICE } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import NativeApp from '@/services/native-app';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -149,9 +149,13 @@ export default {
     QuestionAttachment,
   },
   props: {
-    journey: {
+    provider: {
       type: String,
-      default: undefined,
+      required: true,
+    },
+    serviceDefinitionId: {
+      type: String,
+      required: true,
     },
   },
   computed: {
@@ -237,11 +241,15 @@ export default {
     indexPath() {
       return INDEX.path;
     },
-    adminHelpPath() {
-      return APPOINTMENT_ADMIN_HELP.path;
-    },
     showDesktopBackLink() {
       return !this.isNativeApp && this.isSuccess;
+    },
+    noJSPath() {
+      if (this.serviceDefinitionId ===
+        this.$store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition) {
+        return APPOINTMENT_ADMIN_HELP.path;
+      }
+      return `${APPOINTMENT_GP_ADVICE.path}?serviceDefinitionId=${this.serviceDefinitionId}`;
     },
     backButtonText() {
       return this.isSuccess
@@ -286,7 +294,10 @@ export default {
       await this.$store.dispatch('onlineConsultations/setValidationError');
       if (!this.isValidationError) {
         document.activeElement.blur();
-        await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', { journey: this.journey });
+        await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
+          provider: this.provider,
+          serviceDefinitionId: this.serviceDefinitionId,
+        });
         if (this.isNativeApp) {
           NativeApp.resetPageFocus();
         } else {
@@ -298,7 +309,10 @@ export default {
     async backClicked() {
       document.activeElement.blur();
       await this.$store.dispatch('onlineConsultations/setPrevious');
-      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', { journey: this.journey });
+      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
+        provider: this.provider,
+        serviceDefinitionId: this.serviceDefinitionId,
+      });
       if (this.isNativeApp) {
         NativeApp.resetPageFocus();
       } else {

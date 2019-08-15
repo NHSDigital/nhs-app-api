@@ -1,5 +1,6 @@
 import actions from './actions';
 import mutations from './mutations';
+import getters from './getters';
 import { initialState } from './mutation-types';
 
 export default {
@@ -7,4 +8,5 @@ export default {
   state: initialState,
   actions,
   mutations,
+  getters,
 };

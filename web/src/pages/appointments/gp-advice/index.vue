@@ -10,7 +10,7 @@
         {{ $t('appointments.admin_help.errors.message.text') }}
       </message-text>
     </message-dialog>
-    <orchestrator v-else journey="cdssAdvice"/>
+    <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ import MessageText from '@/components/widgets/MessageText';
 import { noJsParameterName } from '@/lib/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
-import { INDEX } from '@/lib/routes';
+import { INDEX, APPOINTMENT_GP_ADVICE_CONDITIONS } from '@/lib/routes';
 
 export default {
   components: {
@@ -38,43 +38,48 @@ export default {
       return this.$store.state.device.isNativeApp;
     },
   },
-  async asyncData({ store, redirect, req }) {
+  async asyncData({ store, req, route, redirect }) {
     if (!(store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' ||
           store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true)) {
       redirect(302, INDEX.path, null);
     }
-
     const body = get('body', req);
     const question = get('state.onlineConsultations.question', store);
-    let addJavascriptDisabledHeader = false;
+    const serviceDefinitionId = route.query.serviceDefinitionId ||
+        store.state.onlineConsultations.gpAdviceServiceDefinitionId;
+
+    if (!serviceDefinitionId) {
+      return redirect(302, APPOINTMENT_GP_ADVICE_CONDITIONS.path, null);
+    }
+
+    const actionParams = {
+      provider: store.state.serviceJourneyRules.rules.cdssAdvice.provider,
+      serviceDefinitionId,
+      addJavascriptDisabledHeader: false,
+    };
 
     if (get(noJsParameterName, body) !== undefined && question !== undefined) {
-      addJavascriptDisabledHeader = process.server;
+      actionParams.addJavascriptDisabledHeader = process.server;
       const answer = getAnswerFromRequestBody(body, question);
-
       await store.dispatch('onlineConsultations/setAnswer', answer);
       await store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
       await store.dispatch('onlineConsultations/setValidationError');
     }
 
     if (question === undefined) {
-      await store.dispatch('onlineConsultations/getServiceDefinition', 'cdssAdvice');
+      await store.dispatch('onlineConsultations/getServiceDefinition', actionParams);
     } else if (store.state.onlineConsultations.answerIsValid) {
-      await store.dispatch(
-        'onlineConsultations/evaluateServiceDefinition',
-        { journey: 'cdssAdvice', addJavascriptDisabledHeader },
-      );
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', actionParams);
     }
 
     const previousClicked = get('direction', body) === 'back';
 
     if (previousClicked) {
       await store.dispatch('onlineConsultations/setPrevious');
-      await store.dispatch(
-        'onlineConsultations/evaluateServiceDefinition',
-        { journey: 'cdssAdvice', addJavascriptDisabledHeader },
-      );
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', actionParams);
     }
+
+    return actionParams;
   },
   beforeDestroy() {
     this.$store.dispatch('onlineConsultations/clear', true);

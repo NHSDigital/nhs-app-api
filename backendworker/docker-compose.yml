@@ -52,10 +52,6 @@ services:
       - BROTHER_MAILER_ADDRESSBOOK_ID=
       - BROTHER_MAILER_SIG=
       - BROTHER_MAILER_USER_ID=
-      - OnlineConsultationsProvidersSettings__Providers__0__Provider=eConsult
-      - OnlineConsultationsProvidersSettings__Providers__0__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
-      - OnlineConsultationsProvidersSettings__Providers__0__BearerToken=shfjlkasdhflashfl
-      - OnlineConsultationsProvidersSettings__Providers__0__ProviderName=eConsult
   cid.local.bitraft.io:
     image: nhsonline.backend.cidapi
     build:

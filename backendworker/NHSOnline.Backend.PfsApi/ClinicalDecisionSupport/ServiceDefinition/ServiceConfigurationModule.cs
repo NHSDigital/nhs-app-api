@@ -20,8 +20,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 OlcDemographicsNameMapper>();
             services.AddSingleton<IOlcDataMaps, OlcDataMaps>();
             services.AddTransient<ICreateFhirParameter, CreateFhirParameter>();
+            services.AddTransient<IServiceDefinitionListBuilder, ServiceDefinitionListBuilder>();
             
             base.ConfigureServices(services, configuration);
         }
     }
-}
+} 

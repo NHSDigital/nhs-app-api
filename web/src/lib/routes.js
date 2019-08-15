@@ -106,6 +106,19 @@ const routes = {
       gpAdviceRedirect,
     ],
   },
+  APPOINTMENT_GP_ADVICE_CONDITIONS: {
+    name: 'appointments-gp-advice-conditions',
+    path: '/appointments/gp-advice/conditions',
+    crumb: {
+      i8nKey: 'appointmentsGpAdvice',
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
+    redirectRules: [
+      gpAdviceRedirect,
+    ],
+  },
   APPOINTMENT_BOOK_NOJS: {
     name: 'appointments-book-noJs',
     path: '/nojs/appointments/book',
@@ -713,6 +726,7 @@ export const {
   APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_GP_AT_HAND,
+  APPOINTMENT_GP_ADVICE_CONDITIONS,
   APPOINTMENT_INFORMATICA,
   AUTH_RETURN,
   BEGINLOGIN,

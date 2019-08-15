@@ -115,20 +115,6 @@ export default {
       practiceClicked: false,
     };
   },
-  asyncData({ store, redirect }) {
-    const { searchResults, searchQuery } = store.state.throttling;
-    if (!searchQuery) {
-      return redirect(302, GP_FINDER.path, null);
-    }
-    const { organisations, technicalError, noResultsFound, tooManyResults } = searchResults;
-    return {
-      technicalError,
-      noResultsFound,
-      tooManyResults,
-      organisations,
-      searchQuery,
-    };
-  },
   computed: {
     showGpPractices() {
       return !this.noResultsFound;
@@ -149,6 +135,20 @@ export default {
     foundNoResults() {
       return this.$t('th03.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
     },
+  },
+  asyncData({ store, redirect }) {
+    const { searchResults, searchQuery } = store.state.throttling;
+    if (!searchQuery) {
+      return redirect(302, GP_FINDER.path, null);
+    }
+    const { organisations, technicalError, noResultsFound, tooManyResults } = searchResults;
+    return {
+      technicalError,
+      noResultsFound,
+      tooManyResults,
+      organisations,
+      searchQuery,
+    };
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {

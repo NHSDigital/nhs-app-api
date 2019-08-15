@@ -21,9 +21,9 @@ services:
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
       - ConfigurationSettings__DefaultSessionExpiryMinutes=5
-      - OnlineConsultationsProvidersSettings__Providers__0__Provider=eConsult
-      - OnlineConsultationsProvidersSettings__Providers__0__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
-      - OnlineConsultationsProvidersSettings__Providers__0__BearerToken=shfjlkasdhflashfl
+      - OnlineConsultationsProvidersSettings__Providers__1__Provider=eConsult
+      - OnlineConsultationsProvidersSettings__Providers__1__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
+      - OnlineConsultationsProvidersSettings__Providers__1__BearerToken=shfjlkasdhflashfl
   servicejourneyrulesapi.config:
     image: nhsonline-service-journey-dev-config
     volumes:

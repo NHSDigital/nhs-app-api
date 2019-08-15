@@ -278,7 +278,7 @@ class CDSApi {
 
     headers['Content-Type'] = ['application/json+fhir'];
 
-    if (parameters['serviceDefinition'] === undefined) {
+    if (parameters['serviceDefinitionId'] === undefined) {
       deferred.reject(new Error('Missing required parameter: serviceDefinitionId'));
       return deferred.promise;
     }
@@ -297,8 +297,8 @@ class CDSApi {
 			headers['NHSO-Javascript-Disabled'] = 'true';
 		}
 
-    path = path.replace('{id}', parameters['serviceDefinition']);
     path = path.replace('{provider}', parameters['provider']);
+    path = path.replace('{id}', parameters['serviceDefinitionId']);
 
     body = parameters['parameters'];
 
@@ -322,8 +322,9 @@ class CDSApi {
 	/**
 	 * Gets the Service Definition resource for the given ID
 	 * @method
-	 * @name CDSApi#getFhirSer\viceDefinition
+	 * @name CDSApi#getFhirServiceDefinition
    * @param {string} parameters.provider - the provider of the online consultation journey
+   * @param {string} parameters.serviceDefinition - the service definition id of the online consultation journey
 	 */
 	getFhirServiceDefinition(parameters) {
 		if (parameters === undefined) {
@@ -341,7 +342,7 @@ class CDSApi {
 
 		headers['Accept'] = ['application/json+fhir'];
 
-    if (parameters['serviceDefinition'] === undefined) {
+    if (parameters['serviceDefinitionId'] === undefined) {
       deferred.reject(new Error('Missing required parameter: serviceDefinitionId'));
       return deferred.promise;
     }
@@ -352,7 +353,7 @@ class CDSApi {
     }
 
     path = path.replace('{provider}', parameters['provider']);
-    path = path.replace('{id}', parameters['serviceDefinition']);
+    path = path.replace('{id}', parameters['serviceDefinitionId']);
 
 		queryParameters = this.mergeQueryParams(parameters, queryParameters);
 
@@ -366,6 +367,47 @@ class CDSApi {
 			form,
 			deferred,
 			ignoreError
+		});
+
+		return deferred.promise;
+	}
+
+
+  	/**
+	 * Gets the list of preexisting conditions for the general advice journey
+	 * @method
+	 * @name CDSApi#getConditions
+	 */
+	getConditions(parameters) {
+    if (parameters === undefined) {
+			parameters = {};
+		}
+		let deferred = $q.defer();
+		let domain = this.domain;
+		let path = '/fhir/ServiceDefinition/{provider}';
+		let body = {};
+		let headers = {};
+		let form = {};
+    let queryParameters = {}
+
+		headers['Accept'] = ['application/json+fhir'];
+
+    if (parameters['provider'] === undefined) {
+      deferred.reject(new Error('Missing required parameter: provider'));
+      return deferred.promise;
+    }
+
+    path = path.replace('{provider}', parameters['provider']);
+    queryParameters = this.mergeQueryParams(parameters, queryParameters);
+
+		this.request({
+			method: 'GET',
+			url: domain + path,
+      parameters,
+			body,
+			headers,
+			form,
+			deferred,
 		});
 
 		return deferred.promise;

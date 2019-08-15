@@ -1,4 +1,3 @@
-import { get } from 'lodash/fp';
 import {
   CLEAR,
   SET_SESSION_ID,
@@ -21,6 +20,8 @@ import {
   CLEAR_VALIDATION,
   PREVIOUS_SELECTED,
   CLEAR_CLIENT_ERRORS,
+  SET_SERVICE_DEFINITIONS,
+  SET_GP_ADVICE_SERVICE_DEFINITION_ID,
 } from './mutation-types';
 import {
   getDataRequirements,
@@ -43,13 +44,31 @@ export default {
   clear({ commit }, resetRequestId) {
     commit(CLEAR, resetRequestId);
   },
-  getServiceDefinition({ commit, rootState }, journey) {
+  getServiceDefinitions({ commit }, params) {
     const store = this;
+    const { provider } = params;
 
-    const { serviceDefinition, provider } = get(journey, rootState.serviceJourneyRules.rules) || {};
+    return store.app.$cdsApi.getConditions({
+      provider,
+    }).then((response) => {
+      commit(CLEAR);
+
+      if (response === undefined) {
+        showError(store);
+        return;
+      }
+
+      commit(SET_SERVICE_DEFINITIONS, response);
+    }).catch(() => {
+      showError(store);
+    });
+  },
+  getServiceDefinition({ commit }, params) {
+    const store = this;
+    const { serviceDefinitionId, provider } = params;
 
     return store.app.$cdsApi.getFhirServiceDefinition({
-      serviceDefinition,
+      serviceDefinitionId,
       provider,
     }).then((response) => {
       commit(CLEAR);
@@ -87,11 +106,9 @@ export default {
       commit(UPDATE_REQUEST_ID);
     });
   },
-  evaluateServiceDefinition(
-    { commit, state, rootState },
-    { journey, addJavascriptDisabledHeader } = {},
-  ) {
+  evaluateServiceDefinition({ commit, state, rootState }, params) {
     const store = this;
+    const { serviceDefinitionId, provider, addJavascriptDisabledHeader } = params;
     const parameters = getParameters(state, rootState);
 
     if (parameters === undefined) {
@@ -99,10 +116,9 @@ export default {
       return undefined;
     }
 
-    const { serviceDefinition, provider } = get(journey, rootState.serviceJourneyRules.rules) || {};
 
     return store.app.$cdsApi.postFhirServiceDefinitionEvaluate({
-      serviceDefinition,
+      serviceDefinitionId,
       provider,
       addJavascriptDisabledHeader,
       parameters,
@@ -163,6 +179,9 @@ export default {
   },
   setAnswer({ commit }, answer) {
     commit(SET_ANSWER, answer);
+  },
+  setGpAdviceServiceDefinitionId({ commit }, id) {
+    commit(SET_GP_ADVICE_SERVICE_DEFINITION_ID, id);
   },
   setAnswerIsValid({ commit }, validation) {
     commit(SET_ANSWER_IS_VALID, validation);

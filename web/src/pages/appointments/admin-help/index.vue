@@ -10,7 +10,7 @@
         {{ $t('appointments.admin_help.errors.message.text') }}
       </message-text>
     </message-dialog>
-    <orchestrator v-else journey="cdssAdmin"/>
+    <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
   </div>
 </template>
 
@@ -46,36 +46,34 @@ export default {
 
     const body = get('body', req);
     const question = get('state.onlineConsultations.question', store);
-
-    let addJavascriptDisabledHeader = false;
+    const actionParams = {
+      provider: store.state.serviceJourneyRules.rules.cdssAdmin.provider,
+      serviceDefinitionId: store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition,
+      addJavascriptDisabledHeader: false,
+    };
 
     if (get(noJsParameterName, body) !== undefined && question !== undefined) {
       const answer = getAnswerFromRequestBody(body, question);
-      addJavascriptDisabledHeader = process.server;
-
+      actionParams.addJavascriptDisabledHeader = process.server;
       await store.dispatch('onlineConsultations/setAnswer', answer);
       await store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
       await store.dispatch('onlineConsultations/setValidationError');
     }
 
     if (question === undefined) {
-      await store.dispatch('onlineConsultations/getServiceDefinition', 'cdssAdmin');
+      await store.dispatch('onlineConsultations/getServiceDefinition', actionParams);
     } else if (store.state.onlineConsultations.answerIsValid) {
-      await store.dispatch(
-        'onlineConsultations/evaluateServiceDefinition',
-        { journey: 'cdssAdmin', addJavascriptDisabledHeader },
-      );
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', actionParams);
     }
 
     const previousClicked = get('direction', body) === 'back';
 
     if (previousClicked) {
       await store.dispatch('onlineConsultations/setPrevious');
-      await store.dispatch(
-        'onlineConsultations/evaluateServiceDefinition',
-        { journey: 'cdssAdmin', addJavascriptDisabledHeader },
-      );
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', actionParams);
     }
+
+    return actionParams;
   },
   beforeDestroy() {
     this.$store.dispatch('onlineConsultations/clear', true);
