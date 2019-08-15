@@ -116,7 +116,7 @@ else
 
           TAGS+=(throttling)
           TAGS+=(onlineconsultations)
-          
+
         elif [ "$RUN_NATIVE" == 1 ]
         then
           TAGS=(nativesmoketest)
@@ -227,7 +227,7 @@ fi
 
 for s in $DOCKER_SERVICES; do
   #Don't pull local images we've built as part of the pipeline
-  if [[ "$s" != "api.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "nhsonline-backendservicejourneyrulesapi" && "$s" != "nhsonline-backendcidapi" ]]; then 
+  if [[ "$s" != "pfs.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "nhsonline-backendservicejourneyrulesapi" && "$s" != "nhsonline-backendcidapi" ]]; then
     docker-compose -f docker-compose_ci_run.yml pull $s
   fi
 done
@@ -377,7 +377,7 @@ info "Running $TAG tests"
         docker volume prune -f
       fi
     done
-  else  
+  else
     wait $PID
     info "$(PID) is finished"
   fi

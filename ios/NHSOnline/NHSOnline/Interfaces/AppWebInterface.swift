@@ -15,9 +15,19 @@ class AppWebInterface {
         dispatchEvent(event: "session/extend")
     }
     
-    private func dispatchEvent(event: String) {
-        let eventString = "window.$nuxt.$store.dispatch('\(event)');"
-        
-        webView?.evaluateJavaScript(eventString)
+    func notificationsUnauthorised() {
+        dispatchEvent(event: "notifications/unAuthorised")
+    }
+
+    func notificationsAuthorised(devicePns: String) {
+        let response = "{\"devicePns\":\"\(devicePns)\",\"deviceType\":\"ios\"}"
+        dispatchEvent(event: "notifications/authorised", args: response)
+    }
+
+    private func dispatchEvent(event: String, args: Any = "") {
+        let eventString = "window.$nuxt.$store.dispatch('\(event)', '\(args)');"
+        DispatchQueue.main.async {
+            self.webView?.evaluateJavaScript(eventString)
+        }
     }
 }

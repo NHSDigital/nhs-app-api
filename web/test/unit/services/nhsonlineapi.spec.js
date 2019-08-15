@@ -20,13 +20,25 @@ describe('services/nhsonlineapi', () => {
   describe('request', () => {
     let store;
     let res;
-    const createRequestApi = () => new NHSOnlineApi({ store, res });
+    const accessToken = 'Access Token';
+    const cookies = {
+      get(name) {
+        if (name === 'nhso.session') {
+          return {
+            accessToken,
+          };
+        }
+        return undefined;
+      },
+    };
+    const createRequestApi = () => new NHSOnlineApi({ store, res, cookies });
     const request = ({
       api,
       headers,
       parameters,
       queryParameters,
       url,
+      useAccessToken = false,
     } = {}) =>
       (api || createRequestApi()).request({
         headers,
@@ -34,6 +46,7 @@ describe('services/nhsonlineapi', () => {
         queryParameters,
         url,
         deferred,
+        useAccessToken,
       });
 
     beforeEach(() => {
@@ -89,6 +102,62 @@ describe('services/nhsonlineapi', () => {
           const nhsoRequestIdHeader = headersSentInRequest['NHSO-Request-ID'];
           expect(nhsoRequestIdHeader).toBe(mockNhsoRequestID);
           expect(uuid.v4).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('use access token', () => {
+      let headers;
+
+      beforeEach(() => {
+        headers = {};
+      });
+
+      describe('set to true', () => {
+        beforeEach(() => {
+          const api = createRequestApi();
+          api.cookie = 'double chocolate fudge';
+          request({ headers, useAccessToken: true });
+        });
+
+        it('will set the Authorization header', () => {
+          expect(headers.Authorization).toBe(`Bearer ${accessToken}`);
+        });
+
+        describe('cookie exists', () => {
+          beforeEach(() => {
+            const api = createRequestApi();
+            api.cookie = 'double chocolate fudge';
+            request({ api, headers, useAccessToken: true });
+          });
+
+          it('will not set the Cookie header', () => {
+            expect(headers.Cookie).toBeUndefined();
+          });
+        });
+      });
+
+      describe('set to false', () => {
+        beforeEach(() => {
+          request({ headers, useAccessToken: false });
+        });
+
+        it('will not set the Authorization header', () => {
+          expect(headers.Authorization).toBeUndefined();
+        });
+
+        describe('cookie exists', () => {
+          let api;
+
+          beforeEach(() => {
+            api = createRequestApi();
+            api.cookie = 'double chocolate fudge';
+            request({ api, headers, useAccessToken: false });
+          });
+
+          it('will set the Cookie header', () => {
+            expect(headers.Cookie).toEqual(api.cookie);
+          });
         });
       });
     });

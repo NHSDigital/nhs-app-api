@@ -1,28 +1,31 @@
-import biometricBanner from './modules/biometricBanner';
-import nominatedPharmacy from './modules/nominatedPharmacy';
-import cookieBanner from './modules/cookieBanner';
-import modal from './modules/modal';
-import header from './modules/header';
-import pageTitle from './modules/pageTitle';
-import availableAppointments from './modules/availableAppointments';
+import analytics from './modules/analytics';
+import appVersion from './modules/appVersion';
 import auth from './modules/auth';
+import availableAppointments from './modules/availableAppointments';
+import biometricBanner from './modules/biometricBanner';
+import cookieBanner from './modules/cookieBanner';
 import device from './modules/device';
+import errors from './modules/errors';
+import flashMessage from './modules/flashMessage';
+import header from './modules/header';
 import http from './modules/http';
+import modal from './modules/modal';
+import myAppointments from './modules/myAppointments';
+import myRecord from './modules/myRecord';
 import navigation from './modules/navigation';
+import nominatedPharmacy from './modules/nominatedPharmacy';
+import notifications from './modules/notifications';
+import onlineConsultations from './modules/onlineConsultations';
+import organDonation from './modules/organDonation';
+import pageTitle from './modules/pageTitle';
 import prescriptions from './modules/prescriptions';
 import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
-import session from './modules/session';
-import errors from './modules/errors';
-import myAppointments from './modules/myAppointments';
-import flashMessage from './modules/flashMessage';
-import analytics from './modules/analytics';
-import termsAndConditions from './modules/termsAndConditions';
-import appVersion from './modules/appVersion';
-import myRecord from './modules/myRecord';
-import organDonation from './modules/organDonation';
 import serviceJourneyRules from './modules/serviceJourneyRules';
+import session from './modules/session';
+import spinner from './modules/spinner';
+import termsAndConditions from './modules/termsAndConditions';
 import throttling from './modules/throttling';
-import onlineConsultations from './modules/onlineConsultations';
+
 
 export const modules = {
   analytics,
@@ -36,10 +39,12 @@ export const modules = {
   flashMessage,
   header,
   http,
+  modal,
   myAppointments,
   myRecord,
   navigation,
   nominatedPharmacy,
+  notifications,
   onlineConsultations,
   organDonation,
   pageTitle,
@@ -47,9 +52,9 @@ export const modules = {
   repeatPrescriptionCourses,
   serviceJourneyRules,
   session,
+  spinner,
   termsAndConditions,
   throttling,
-  modal,
 };
 
 export const actions = {

@@ -54,7 +54,6 @@ import HotJar from '@/components/widgets/HotJar';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import Modal from '@/components/modal/Modal';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import Sources from '@/lib/sources';
 
 export default {
   components: {
@@ -187,13 +186,6 @@ export default {
     },
   },
   created() {
-    const { source } = this.$route.query;
-
-    if (source) {
-      this.$store.dispatch('device/updateIsNativeApp', Sources.isNative(source));
-      this.$store.dispatch('device/setSourceDevice', source);
-    }
-
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');
     }
@@ -202,6 +194,8 @@ export default {
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
+
+    this.$store.dispatch('spinner/prevent', false);
   },
   mounted() {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
@@ -223,6 +217,7 @@ export default {
     if (this.pathChanged) {
       this.focusNhsAppRoot();
       this.pathChanged = false;
+      this.$store.dispatch('spinner/prevent', false);
     }
   },
   beforeDestroy() {

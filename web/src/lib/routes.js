@@ -1,47 +1,47 @@
 import find from 'lodash/fp/find';
 
-const adminHelpRedirect = {
-  condition: 'serviceJourneyRules/cdssAdminDisabled',
+const adminHelpDisabledRedirect = {
+  journey_disabled: 'cdssAdmin',
   url: '/appointments',
 };
 
-const gpAdviceRedirect = {
-  condition: 'serviceJourneyRules/cdssAdviceDisabled',
+const gpAdviceDisabledRedirect = {
+  journey_disabled: 'cdssAdvice',
   url: '/appointments',
 };
 
 const gpAtHandAppointmentRedirect = {
-  condition: 'serviceJourneyRules/gpAtHandAppointmentsEnabled',
+  journey: 'gpAtHandAppointments',
   url: '/appointments/gp-at-hand',
 };
 
 const gpAtHandMyRecordRedirect = {
-  condition: 'serviceJourneyRules/gpAtHandMyRecordEnabled',
+  journey: 'gpAtHandMyRecord',
   url: '/my-record/gp-at-hand',
 };
 
 const gpAtHandPrescriptionsRedirect = {
-  condition: 'serviceJourneyRules/gpAtHandPrescriptionsEnabled',
+  journey: 'gpAtHandPrescriptions',
   url: '/prescriptions/gp-at-hand',
 };
 
 const im1AppointmentRedirect = {
-  condition: 'serviceJourneyRules/im1AppointmentsEnabled',
+  journey: 'im1Appointments',
   url: '/appointments',
 };
 
 const im1MyRecordRedirect = {
-  condition: 'serviceJourneyRules/im1MyRecordEnabled',
+  journey: 'im1MyRecord',
   url: '/my-record',
 };
 
 const im1PrescriptionsRedirect = {
-  condition: 'serviceJourneyRules/im1PrescriptionsEnabled',
+  journey: 'im1Prescriptions',
   url: '/prescriptions',
 };
 
 const informaticaAppointmentRedirect = {
-  condition: 'serviceJourneyRules/informaticaAppointmentsEnabled',
+  journey: 'informaticaAppointments',
   url: '/appointments/informatica',
 };
 
@@ -62,12 +62,17 @@ const routes = {
     crumb: {
       i8nKey: 'accountNotifications',
       get parentRoute() {
-        return this.allRoutes.INDEX;
+        return this.allRoutes.ACCOUNT;
       },
     },
     redirectRules: [{
-      condition: 'serviceJourneyRules/notificationsDisabled',
-      url: '/account',
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
+    sjrRedirectRules: [{
+      journey_disabled: 'notifications',
+      url: '/',
     }],
   },
   ACCOUNT_SIGNOUT: {
@@ -89,7 +94,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
@@ -103,8 +108,8 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
-    redirectRules: [
-      adminHelpRedirect,
+    sjrRedirectRules: [
+      adminHelpDisabledRedirect,
     ],
   },
   APPOINTMENT_GP_ADVICE: {
@@ -116,8 +121,8 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
-    redirectRules: [
-      gpAdviceRedirect,
+    sjrRedirectRules: [
+      gpAdviceDisabledRedirect,
     ],
   },
   APPOINTMENT_GP_ADVICE_CONDITIONS: {
@@ -129,8 +134,8 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
-    redirectRules: [
-      gpAdviceRedirect,
+    sjrRedirectRules: [
+      gpAdviceDisabledRedirect,
     ],
   },
   APPOINTMENT_BOOK_NOJS: {
@@ -163,7 +168,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
@@ -208,7 +213,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       im1AppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
@@ -223,7 +228,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       im1AppointmentRedirect,
     ],
@@ -357,6 +362,11 @@ const routes = {
         return undefined;
       },
     },
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
   },
   MYRECORD: {
     name: 'my-record',
@@ -367,7 +377,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       gpAtHandMyRecordRedirect,
     ],
   },
@@ -381,7 +391,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       im1MyRecordRedirect,
     ],
   },
@@ -608,7 +618,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       gpAtHandPrescriptionsRedirect,
     ],
   },
@@ -632,7 +642,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       im1PrescriptionsRedirect,
     ],
   },
@@ -686,7 +696,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
-    redirectRules: [
+    sjrRedirectRules: [
       gpAtHandMyRecordRedirect,
     ],
   },

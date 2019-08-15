@@ -46,7 +46,6 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import Sources from '@/lib/sources';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
@@ -107,13 +106,6 @@ export default {
       window.validateSession || (() => this.$store.dispatch('session/validate'));
   },
   created() {
-    const { source } = this.$route.query;
-
-    if (source) {
-      this.$store.dispatch('device/updateIsNativeApp', Sources.isNative(source));
-      this.$store.dispatch('device/setSourceDevice', source);
-    }
-
     const appVersion = this.$store.app.$env.VERSION_TAG;
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);

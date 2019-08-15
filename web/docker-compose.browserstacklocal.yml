@@ -1,5 +1,0 @@
-version: "3.2"
-services:
-  web.local.bitraft.io:
-    environment:
-      - NATIVE_CID_REDIRECT_URI=nhsapp://web.local.bitraft.io:3000/auth-return

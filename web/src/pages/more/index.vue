@@ -42,7 +42,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import SjrIf from '@/components/SjrIf';
-import { DATA_SHARING_PREFERENCES, INDEX, APPOINTMENT_ADMIN_HELP, MORE } from '@/lib/routes';
+import { DATA_SHARING_PREFERENCES, APPOINTMENT_ADMIN_HELP, MORE } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 
@@ -63,9 +63,6 @@ export default {
       });
     },
   },
-  created() {
-    this.redirectIfDesktop();
-  },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
   },
@@ -77,11 +74,6 @@ export default {
       if (event.currentTarget.pathname === this.requestAdminHelpPath) {
         this.$store.dispatch('navigation/setNewMenuItem', 4);
         this.$store.dispatch('onlineConsultations/setPreviousRoute', MORE.path);
-      }
-    },
-    redirectIfDesktop() {
-      if (!this.$store.state.device.isNativeApp) {
-        redirectTo(this, INDEX.path, null);
       }
     },
   },

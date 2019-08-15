@@ -1,3 +1,1 @@
-const sjrIf = ({ $store, journey }) => $store.getters[`serviceJourneyRules/${journey}Enabled`];
-
-export default sjrIf;
+export default ({ $store, journey, disabled = false }) => !disabled === $store.getters[`serviceJourneyRules/${journey}Enabled`];

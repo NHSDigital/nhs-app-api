@@ -27,7 +27,6 @@ describe('booking guidance', () => {
       },
       getters: {
         'serviceJourneyRules/onlineConsultationsEnabled': onlineConsultationsEnabled,
-        'serviceJourneyRules/onlineConsultationsDisabled': !onlineConsultationsEnabled,
       },
     });
     $style = { info: 'info' };

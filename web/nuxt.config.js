@@ -38,6 +38,7 @@ const config = {
     '~/plugins/mixins.js',
     '~/plugins/analytics.js',
     '~/plugins/logging.js',
+    '~/plugins/directives.js',
   ],
   serverMiddleware: [
     './.transpiled/middleware-server/noJsApi.js',
@@ -51,7 +52,9 @@ const config = {
       'urlResolution',
       'auth',
       'serviceJourneyRules',
+      'setSource',
       'conditionalRedirect',
+      'sjrRedirect',
       'meta',
       'termsAndConditions',
       'myRecordAcceptance',
@@ -67,8 +70,8 @@ const config = {
   ],
   env: {
     // URL Formats
-    URI_FORMAT_API_CLIENT: 'http://api{host}:8082',
-    API_HOST_SERVER: 'http://api.local.bitraft.io:8082',
+    URI_FORMAT_API_CLIENT: 'http://api{host}:8089',
+    API_HOST_SERVER: 'http://api.local.bitraft.io:8089',
     URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}:3000/auth-return',
     URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}:3000/auth-return',
     // Cookie settings

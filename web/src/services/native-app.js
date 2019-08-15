@@ -1,4 +1,84 @@
 export default {
+  attemptBiometricLogin() {
+    const app = window.nativeApp;
+    if (app && app.attemptBiometricLogin) {
+      app.attemptBiometricLogin();
+      return true;
+    }
+    return false;
+  },
+
+  clearMenuBarItem() {
+    const app = window.nativeApp;
+    if (app && app.clearMenuBarItem) {
+      app.clearMenuBarItem();
+      return true;
+    }
+    return false;
+  },
+
+  fetchNativeAppVersion() {
+    const app = window.nativeApp;
+    if (app && app.fetchNativeAppVersion) {
+      const appVersion = app.fetchNativeAppVersion();
+      return appVersion;
+    }
+    return '';
+  },
+
+  goToLoginOptions() {
+    const app = window.nativeApp;
+    if (app && app.goToLoginOptions) {
+      app.goToLoginOptions();
+      return true;
+    }
+    return false;
+  },
+
+  goToLoginOptionsExists() {
+    const app = window.nativeApp;
+    if (app && app.goToLoginOptions) {
+      return true;
+    }
+    return false;
+  },
+
+  hideHeader() {
+    const app = window.nativeApp;
+    if (app && app.hideHeader) {
+      app.hideHeader();
+      return true;
+    }
+    return false;
+  },
+
+  hideHeaderSlim() {
+    const app = window.nativeApp;
+    if (app && app.hideHeaderSlim) {
+      app.hideHeaderSlim();
+      return true;
+    }
+    return false;
+  },
+
+  hideMenuBar() {
+    const app = window.nativeApp;
+    if (app && app.hideMenuBar) {
+      app.hideMenuBar();
+      return true;
+    }
+    return false;
+  },
+
+  hideWhiteScreen() {
+    const app = window.nativeApp;
+    if (app && app.hideWhiteScreen) {
+      app.hideWhiteScreen();
+      return true;
+    }
+    return false;
+  },
+
   onLogin() {
     const app = window.nativeApp;
     if (app && app.onLogin) {
@@ -17,10 +97,37 @@ export default {
     return false;
   },
 
-  updateHeaderText(header) {
+  onSessionExpiring(sessionDuration) {
     const app = window.nativeApp;
-    if (app && app.updateHeaderText) {
-      app.updateHeaderText(header);
+    if (app && app.onSessionExpiring) {
+      app.onSessionExpiring(sessionDuration);
+      return true;
+    }
+    return false;
+  },
+
+  pageLoadComplete() {
+    const app = window.nativeApp;
+    if (app && app.pageLoadComplete) {
+      app.pageLoadComplete();
+      return true;
+    }
+    return false;
+  },
+
+  requestPnsToken() {
+    const app = window.nativeApp;
+    if (app && app.requestPnsToken) {
+      app.requestPnsToken();
+      return true;
+    }
+    return false;
+  },
+
+  resetPageFocus() {
+    const app = window.nativeApp;
+    if (app && app.resetPageFocus) {
+      app.resetPageFocus();
       return true;
     }
     return false;
@@ -30,33 +137,6 @@ export default {
     const app = window.nativeApp;
     if (app && app.setMenuBarItem) {
       app.setMenuBarItem(index);
-      return true;
-    }
-    return false;
-  },
-
-  clearMenuBarItem() {
-    const app = window.nativeApp;
-    if (app && app.clearMenuBarItem) {
-      app.clearMenuBarItem();
-      return true;
-    }
-    return false;
-  },
-
-  hideHeader() {
-    const app = window.nativeApp;
-    if (app && app.hideHeader) {
-      app.hideHeader();
-      return true;
-    }
-    return false;
-  },
-
-  hideMenuBar() {
-    const app = window.nativeApp;
-    if (app && app.hideMenuBar) {
-      app.hideMenuBar();
       return true;
     }
     return false;
@@ -80,59 +160,6 @@ export default {
     return false;
   },
 
-  hideHeaderSlim() {
-    const app = window.nativeApp;
-    if (app && app.hideHeaderSlim) {
-      app.hideHeaderSlim();
-      return true;
-    }
-    return false;
-  },
-
-  hideWhiteScreen() {
-    const app = window.nativeApp;
-    if (app && app.hideWhiteScreen) {
-      app.hideWhiteScreen();
-      return true;
-    }
-    return false;
-  },
-
-  resetPageFocus() {
-    const app = window.nativeApp;
-    if (app && app.resetPageFocus) {
-      app.resetPageFocus();
-      return true;
-    }
-    return false;
-  },
-
-  goToLoginOptions() {
-    const app = window.nativeApp;
-    if (app && app.goToLoginOptions) {
-      app.goToLoginOptions();
-      return true;
-    }
-    return false;
-  },
-
-  goToLoginOptionsExists() {
-    const app = window.nativeApp;
-    if (app && app.goToLoginOptions) {
-      return true;
-    }
-    return false;
-  },
-
-  attemptBiometricLogin() {
-    const app = window.nativeApp;
-    if (app && app.attemptBiometricLogin) {
-      app.attemptBiometricLogin();
-      return true;
-    }
-    return false;
-  },
-
   storeBetaCookie() {
     const app = window.nativeApp;
     if (app && app.storeBetaCookie) {
@@ -142,28 +169,10 @@ export default {
     return false;
   },
 
-  onSessionExpiring(sessionDuration) {
+  updateHeaderText(header) {
     const app = window.nativeApp;
-    if (app && app.onSessionExpiring) {
-      app.onSessionExpiring(sessionDuration);
-      return true;
-    }
-    return false;
-  },
-
-  fetchNativeAppVersion() {
-    const app = window.nativeApp;
-    if (app && app.fetchNativeAppVersion) {
-      const appVersion = app.fetchNativeAppVersion();
-      return appVersion;
-    }
-    return '';
-  },
-
-  pageLoadComplete() {
-    const app = window.nativeApp;
-    if (app && app.pageLoadComplete) {
-      app.pageLoadComplete();
+    if (app && app.updateHeaderText) {
+      app.updateHeaderText(header);
       return true;
     }
     return false;

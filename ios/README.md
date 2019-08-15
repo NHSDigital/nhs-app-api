@@ -1,11 +1,20 @@
 > IOS app
 
+## Building locally
+If xcode displays a message of
+>"NHSOnline" requires a provisioning profile with the Push Notifications feature."
+
+Please check the box for
+>Automatically enable signing
+
+This will allow Xcode to correctly resolve the project permissions
+
 ## Cocoapod install
 In a terminal run the following commands
 
 1. Make sure you have cocoapods on your machine:
         sudo gem install cocoapods
-    
+
 2. Navigate to the ios/NHSOnline folder
 
 3. Check for any cocoapod updates:

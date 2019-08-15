@@ -1,11 +1,12 @@
 import UIKit
+import UserNotifications
 import WebKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
     var rootViewController: UINavigationController?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         clearCaches()
         
@@ -13,12 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = UINavigationController(rootViewController: (self.window?.rootViewController as? HomeViewController)!)
         self.window?.rootViewController = navigationController
         rootViewController = navigationController
-
+        
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+        }
+        
         setLocale()
-
+        
         return true
     }
-
+    
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         clearCaches()
         
@@ -37,16 +42,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func clearCaches() {
         URLCache.shared.removeAllCachedResponses()
-
+        
         WKWebsiteDataStore.default().removeData(ofTypes: Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache]), modifiedSince: Date(timeIntervalSince1970: 0), completionHandler: {})
     }
     
     private func finishLoginToApp(_ url: String) {
-        let viewController = rootViewController?.childViewControllers.first as! HomeViewController
+        let viewController = getViewController()
         if(url == config().HomeUrl + config().FidoLoginErrorPath) {
-           viewController.showBiometricSessionError()
+            viewController.showBiometricSessionError()
         } else {
-           loadPageAndShowView(url, viewController)
+            loadPageAndShowView(url, viewController)
         }
     }
     
@@ -73,7 +78,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             comps.scheme = config().BaseScheme
             webPageUrl = comps.url!.absoluteString
         }
-
+        
         return webPageUrl
+    }
+    
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+        ) {
+        let viewController = getViewController()
+        
+        viewController.pushNotificationsAuthorised(deviceToken: deviceToken)
+    }
+    
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        let viewController = getViewController()
+        
+        viewController.failedToRegisterForNotifications()
+    }
+    
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    private func getViewController() -> HomeViewController {
+        return rootViewController?.childViewControllers.first as! HomeViewController;
     }
 }

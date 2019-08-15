@@ -26,7 +26,6 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import Sources from '@/lib/sources';
 import HeaderSlim from '@/components/HeaderSlim';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -83,14 +82,6 @@ export default {
       }
       return classes;
     },
-  },
-  created() {
-    const { source } = this.$route.query;
-
-    if (source) {
-      this.$store.dispatch('device/updateIsNativeApp', Sources.isNative(source));
-      this.$store.dispatch('device/setSourceDevice', source);
-    }
   },
   mounted() {
     NativeVersionSetup(this.$store, this.$route);

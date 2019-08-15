@@ -20,7 +20,7 @@
         "launchBrowser": true,
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development",
-          "ASPNETCORE_URLS": "http://*:8088",
+          "ASPNETCORE_URLS": "http://*:8083",
           "AUDIT_SINK_TYPE": "FILE",
           "CORS_AUTHORITY": "*",
           "USERS_MONGO_DATABASE_HOST": "localhost",

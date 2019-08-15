@@ -4,13 +4,22 @@ services:
     image: mongo:latest
     ports:
     - "27017:27017"
+  api.local.bitraft.io:
+    image: nginx:alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "8089:8089"
+    depends_on:
+      - pfs.local.bitraft.io
+      - users.local.bitraft.io
   web.local.bitraft.io:
     image: nhsonline.web
     ports:
       - "3000:3000"
     environment:
-      - URI_FORMAT_API_CLIENT=http://api{host}:8082
-      - API_HOST_SERVER=http://api.local.bitraft.io:8082
+      - URI_FORMAT_API_CLIENT=http://api{host}:8089
+      - API_HOST_SERVER=http://api.local.bitraft.io:8089
       - URI_FORMAT_CID_REDIRECT_WEB=http://web{host}:3000/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=http://web{host}:3000/auth-return
       - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
@@ -26,7 +35,7 @@ services:
       - HOTJAR_SITE_ID=NOT_SET
       - HOT_JAR_SURVEY_VISIBLE=false
       - ANALYTICS_SCRIPT_URL=NOT_SET
-  api.local.bitraft.io:
+  pfs.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

@@ -6,7 +6,7 @@
                            :text="$t('rp01.glossary.linkText')"
                            tag="a"
                            target="_blank">
-      <abbreviations-arrow-right-icon/>
+      <external-link-arrow-right-icon/>
       {{ $t('rp01.glossary.linkText') }}
     </analytics-tracked-tag>
     <hr aria-hidden="true">
@@ -15,14 +15,14 @@
 
 <script>
 /* eslint-disable import/extensions */
-import AbbreviationsArrowRightIcon from './icons/AbbreviationsArrowRightIcon';
 import AnalyticsTrackedTag from './widgets/AnalyticsTrackedTag';
+import ExternalLinkArrowRightIcon from './icons/ExternalLinkArrowRightIcon';
 
 export default {
   name: 'GlossaryHeader',
   components: {
-    AbbreviationsArrowRightIcon,
     AnalyticsTrackedTag,
+    ExternalLinkArrowRightIcon,
   },
   props: {
     extraClasses: {

@@ -1005,6 +1005,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My GP medical record',
+    notifications: 'Notifications',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
@@ -1039,6 +1040,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'Sensitive information - My record',
+    notifications: 'Notifications',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     dataSharing: 'Find out why your data matters',
@@ -1094,6 +1096,14 @@ export default {
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
     accessibilityStatement: 'Accessibility statement',
+  },
+  notifications: {
+    paragraphs: [
+      'You can choose whether to allow notifications on your device.',
+      'If you share this device with other people, they may be able to see your notifications.',
+    ],
+    toggleLabel: 'Allow notifications',
+    settingsLinkText: 'Manage your device\'s notifications settings',
   },
   sc04: {
     organDonation: {

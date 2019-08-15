@@ -1,17 +1,26 @@
 version: "3.2"
 services:
+  api.local.bitraft.io:
+    image: nginx:alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "8089:8089"
+    depends_on:
+      - pfs.local.bitraft.io
+      - users.local.bitraft.io
   web.local.bitraft.io:
     image: nhsonline.web
     environment:
       - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
       - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
-      - URI_FORMAT_API_CLIENT=http://api{host}:8082
-      - API_HOST_SERVER=http://api.local.bitraft.io:8082
+      - URI_FORMAT_API_CLIENT=http://api{host}:8089
+      - API_HOST_SERVER=http://api.local.bitraft.io:8089
       - URI_FORMAT_CID_REDIRECT_WEB=http://web{host}:3000/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://web{host}:3000/auth-return
       - VERSION_TAG=dev_bdd_docker_browserstack
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
-  api.local.bitraft.io:
+  pfs.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

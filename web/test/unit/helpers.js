@@ -3,11 +3,16 @@
 import get from 'lodash/fp/get';
 import has from 'lodash/fp/has';
 import isString from 'lodash/fp/isString';
-import _locale from '@/locale/en';
 import merge from 'lodash/fp/merge';
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { createLocalVue, mount as vueMount, shallowMount as vueShallowMount } from '@vue/test-utils';
+import '@/plugins/directives';
+import _locale from '@/locale/en';
+import {
+  createLocalVue,
+  mount as vueMount,
+  shallowMount as vueShallowMount,
+} from '@vue/test-utils';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

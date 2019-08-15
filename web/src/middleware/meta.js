@@ -2,6 +2,7 @@
 /* eslint-disable import/extensions */
 import {
   ACCOUNT,
+  ACCOUNT_NOTIFICATIONS,
   APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
@@ -98,6 +99,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.account';
       route.meta.pageTitleKey = 'pageTitles.account';
+      break;
+    case ACCOUNT_NOTIFICATIONS.name:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = 'pageHeaders.notifications';
+      route.meta.pageTitleKey = 'pageTitles.notifications';
       break;
     case APPOINTMENT_ADMIN_HELP.name:
       route.meta.headerKey = 'pageHeaders.appointmentAdminHelp';

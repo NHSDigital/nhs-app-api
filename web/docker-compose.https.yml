@@ -1,21 +1,21 @@
 version: "3.2"
 services:
-  nhsonline.reverse-https-proxy:
+  api.local.bitraft.io:
     image: nginx:alpine
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/https:/etc/nginx/conf.d
       - ~/.nhsonline/local-development-certificate:/etc/ssl
     ports:
       - "443:443"
       - "444:444"
     depends_on:
       - web.local.bitraft.io
-      - api.local.bitraft.io
+      - pfs.local.bitraft.io
   web.local.bitraft.io:
     image: nhsonline.web
     environment:
-      - URI_FORMAT_API_CLIENT=https://local.bitraft.io:444
-      - API_HOST_SERVER=http://api.local.bitraft.io:8082
+      - URI_FORMAT_API_CLIENT=https://api.local.bitraft.io:444
+      - API_HOST_SERVER=http://api.local.bitraft.io:444
       - URI_FORMAT_CID_REDIRECT_WEB=https://local.bitraft.io/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://local.bitraft.io/auth-return
       - SECURE_COOKIES=true
@@ -26,7 +26,7 @@ services:
       - POSTCODE_LOOKUP_SEARCH_RADIUS_KM=10
       - THROTTLING_ENABLED=
       - VERSION_TAG=dev_web_docker_https
-  api.local.bitraft.io:
+  pfs.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:
       - STUB_TERMS_AND_CONDITIONS=true

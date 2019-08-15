@@ -86,7 +86,7 @@ class NHSOnlineApi {
      * @param {object} headers - header parameters
      * @param {object} queryParameters - querystring parameters
      * @param {object} form - form data object
-     * @param {object} deferred - promise object   
+     * @param {object} deferred - promise object
      * @param {object} ignoreError - boolean to control dispatching ApiError message
      */
     request({
@@ -99,6 +99,7 @@ class NHSOnlineApi {
         form,
         deferred,
         ignoreError,
+        useAccessToken
       }) {
         const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null;
         const urlWithParams = url + (queryParams ? '?' + queryParams : '');
@@ -112,14 +113,19 @@ class NHSOnlineApi {
 
         this.store.dispatch('http/isLoading');
 
-        const csrfToken = get('csrfToken')(parameters) || get('store.state.session.csrfToken')(this);
-        if (csrfToken) {
-          headers['X-CSRF-TOKEN'] = csrfToken;
-        }
+        if (useAccessToken) {
+          const accessToken = get('accessToken')(this.cookies.get('nhso.session'));
+          headers['Authorization'] = `Bearer ${accessToken}`;
+        } else {
+          const csrfToken = get('csrfToken')(parameters) || get('store.state.session.csrfToken')(this);
+          if (csrfToken) {
+            headers['X-CSRF-TOKEN'] = csrfToken;
+          }
 
-        const cookie = get('cookie')(parameters) || this.cookie;
-        if (cookie) {
-          headers['Cookie'] = cookie;
+          const cookie = get('cookie')(parameters) || this.cookie;
+          if (cookie) {
+            headers['Cookie'] = cookie;
+          }
         }
 
         let nhsoRequestId;
@@ -254,7 +260,7 @@ class NHSOnlineApi {
                 });
             }
           }
-        
+
           reject({
               deferred,
               error
@@ -287,8 +293,17 @@ class NHSOnlineApi {
     let body = {};
     let headers = {};
     let form = {};
-
+    let useAccessToken = false;
     let queryParameters = {};
+
+    {{#../security}}
+      {{#each .}}
+        {{#ifEquals @key 'nhsLoginBearerAuth'}}
+    // Method has security setting of nhsLoginBearerAuth
+    useAccessToken = true;
+        {{/ifEquals}}
+      {{/each}}
+    {{/../security}}
 
   {{#ifEquals @key 'post'}}
     headers['Content-Type'] = ['application/json'];
@@ -302,15 +317,15 @@ class NHSOnlineApi {
   {{#ifEquals @key 'get'}}
     {{#each ../responses}}
       {{#ifEquals @key 200}}
-        {{#ifEquals x-header "Content-Type"}}     
+        {{#ifEquals x-header "Content-Type"}}
     headers['Content-Type'] = ['application/json'];
       {{else}}
-    headers['Accept'] = ['application/json'];    
+    headers['Accept'] = ['application/json'];
         {{/ifEquals}}
       {{/ifEquals}}
     {{/each}}
   {{/ifEquals}}
-  
+
     {{#each ../parameters}}
       {{#ifEquals this.in "query"}}
         if (parameters['{{this.name}}'] !== undefined) {
@@ -350,7 +365,8 @@ class NHSOnlineApi {
         queryParameters,
         form,
         deferred,
-        ignoreError
+        ignoreError,
+        useAccessToken
       });
 
       return deferred.promise;

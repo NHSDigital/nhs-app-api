@@ -57,7 +57,6 @@ import SurveyBar from '@/components/SurveyBar';
 import HotJar from '@/components/widgets/HotJar';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import Modal from '@/components/modal/Modal';
-import Sources from '@/lib/sources';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
@@ -190,13 +189,6 @@ export default {
     },
   },
   created() {
-    const { source } = this.$route.query;
-
-    if (source) {
-      this.$store.dispatch('device/updateIsNativeApp', Sources.isNative(source));
-      this.$store.dispatch('device/setSourceDevice', source);
-    }
-
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');
     }

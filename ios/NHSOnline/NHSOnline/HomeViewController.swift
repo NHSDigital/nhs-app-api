@@ -1,6 +1,7 @@
-import UIKit
+import Foundation
 import os.log
 import SafariServices
+import UIKit
 import WebKit
 
 class HomeViewController : UIViewController {
@@ -39,6 +40,7 @@ class HomeViewController : UIViewController {
     var goingBack: Bool = false
     var biometricService: BiometricService?
     var configurationService: ConfigurationService?
+    var notificationsService: NotificationsService?
     public var selectedTab: Int?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +83,7 @@ class HomeViewController : UIViewController {
                                               webViewController: webViewController!,
                                               homeViewController: self)
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
+        notificationsService = NotificationsService(appWebInterface: appWebInterface!)
         
         guard apiConfigCallError else {
             self.webViewController?.loadPage(url: pageUrl)
@@ -491,5 +494,16 @@ class HomeViewController : UIViewController {
             return absoluteUrl!.contains(config().CidUrlSuffix)
         }
     }
-}
 
+    func registerForPushNotifications() {
+        notificationsService?.registerForPushNotifications()
+    }
+
+    func pushNotificationsAuthorised(deviceToken: Data) {
+        notificationsService?.authorised(deviceToken: deviceToken)
+    }
+
+    func failedToRegisterForNotifications() {
+        notificationsService?.failedToRegister()
+    }
+}

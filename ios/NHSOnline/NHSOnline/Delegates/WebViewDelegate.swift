@@ -219,24 +219,31 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             switch message.name {
-            case "onLogin":
-                WebViewController.Properties.usingAbsoluteUri = false
+            case "attemptBiometricLogin":
+                viewController.delayedBiometricsStart(0.3)
                 break
-            case "onLogout":
-                WebViewController.Properties.usingAbsoluteUri = true
-                webAppInterface.onLogout()
+            case "clearMenuBarItem":
+                clearMenuBarItem()
+                break
+            case "fetchNativeAppVersion":
+                self.viewController.setupAppVersion()
+                break
+            case "focusElement":
+                let elementToFocus = message.body;
+                let script = "var result = jQuery('\(elementToFocus)').focus();"
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100), execute: {
+                    self.viewController.executeJavascript(scriptToExecute: script)
+                })
+                break
+            case "goToLoginOptions":
+                goToLoginOptions()
                 break
             case "hideHeader":
-                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
                 break
             case "hideWhiteScreen":
                 UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
-                break
-            case "showHeader":
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
-                break
-            case "showHeaderSlim":
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
                 break
             case "hideHeaderSlim":
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
@@ -244,35 +251,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "hideMenuBar":
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
                 break
-            case "resetPageFocus":
-                viewController.headerBar.setFocusToNhsLogoForA11y()
+            case "onLogin":
+                WebViewController.Properties.usingAbsoluteUri = false
                 break
-            case "updateHeaderText":
-                if(!Reachability.isConnectedToNetwork()) {
-                    self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
-                    return
-                }
-                viewController.updateHeaderText(headerText: String(describing: message.body))
-                break
-            case "clearMenuBarItem":
-                clearMenuBarItem()
-                break
-            case "setMenuBarItem":
-                setMenuBarItem(index: message.body as? Int ?? 0)
-                break
-            case "goToLoginOptions":
-                goToLoginOptions()
-                break
-            case "attemptBiometricLogin":
-                viewController.delayedBiometricsStart(0.3)
-                break
-            case "focusElement":
-                let elementToFocus = message.body;
-                let script = "var result = jQuery('\(elementToFocus)').focus();"
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100), execute: {
-                    self.viewController.executeJavascript(scriptToExecute: script)
-                })
+            case "onLogout":
+                WebViewController.Properties.usingAbsoluteUri = true
+                webAppInterface.onLogout()
                 break
             case "onSessionExpiring":
                 var sessionDuration : Int? = message.body as? Int
@@ -282,11 +266,30 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 
                 viewController.displayExtendSessionDialogue(sessionDuration: sessionDuration!)
                 break
-            case "fetchNativeAppVersion":
-                self.viewController.setupAppVersion()
-                break
             case "pageLoadComplete":
                 viewController.applicationState.unBlock()
+                break
+            case "requestPnsToken":
+                viewController.registerForPushNotifications()
+                break
+            case "resetPageFocus":
+                viewController.headerBar.setFocusToNhsLogoForA11y()
+                break
+            case "setMenuBarItem":
+                setMenuBarItem(index: message.body as? Int ?? 0)
+                break
+            case "showHeader":
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
+                break
+            case "showHeaderSlim":
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
+                break
+            case "updateHeaderText":
+                if(!Reachability.isConnectedToNetwork()) {
+                    self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
+                    return
+                }
+                viewController.updateHeaderText(headerText: String(describing: message.body))
                 break
             default:
                 break

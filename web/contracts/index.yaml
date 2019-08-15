@@ -2820,7 +2820,7 @@
             description: "Service Journey Rules Configuration not found."
           500: 
             description: "An unexpected error occurred processing the request."
-    /v1/users/devices: 
+    /v1/api/users/devices: 
       post: 
         security: 
           - 

@@ -2,13 +2,20 @@ version: "3.2"
 services:
   nhsonline.mongodb:
     image: mongo:latest
+  api.local.bitraft.io:
+    image: nginx:alpine
+    volumes:
+      - ../nginx:/etc/nginx/conf.d
+    depends_on:
+      - pfs.local.bitraft.io
+      - users.local.bitraft.io
   web.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-web:${WEB_TAG}
     env_file:
       - vars_ci.env
     environment:
       - BIOMETRICS_ENABLED=true
-  api.local.bitraft.io:
+  pfs.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendpfsapi:${BACKEND_TAG}
     depends_on:
       - nhsonline.redis.sds

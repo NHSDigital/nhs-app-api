@@ -1,3 +1,4 @@
+import getOr from 'lodash/fp/getOr';
 import { findByName } from '@/lib/routes';
 
 export default ({ redirect, route, store }) => {
@@ -6,11 +7,11 @@ export default ({ redirect, route, store }) => {
   if (routeDetail && routeDetail.redirectRules) {
     /* eslint-disable no-restricted-syntax */
     for (const rule of routeDetail.redirectRules) {
-      if (store.getters[rule.condition]) {
+      if (getOr(true, 'value', rule) === store.getters[rule.condition]) {
         if (routeDetail.path === rule.url) {
           break;
         }
-        redirect('301', rule.url);
+        redirect('302', rule.url);
         break;
       }
     }

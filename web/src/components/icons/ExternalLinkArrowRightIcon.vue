@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'AbbreviationsArrowRightIcon',
+  name: 'ExternalLinkArrowRightIcon',
 };
 </script>
 

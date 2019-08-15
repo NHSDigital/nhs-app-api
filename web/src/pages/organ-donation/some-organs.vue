@@ -19,7 +19,7 @@
       <h2>{{ $t('organDonation.someOrgans.subheader') }}</h2>
       <a href="#"
          @click="moreAboutOrgansClicked">
-        <abbreviations-arrow-right-icon />
+        <external-link-arrow-right-icon />
         {{ $t('organDonation.someOrgans.moreAboutOrgansLinkText') }}
       </a>
     </div>
@@ -42,9 +42,9 @@
 <script>
 /* eslint-disable no-restricted-syntax */
 import includes from 'lodash/fp/includes';
-import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
 import BackButton from '@/components/BackButton';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
+import ExternalLinkArrowRightIcon from '@/components/icons/ExternalLinkArrowRightIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
@@ -58,8 +58,8 @@ import { redirectTo } from '@/lib/utils';
 export default {
   scrollToTop: true,
   components: {
-    AbbreviationsArrowRightIcon,
     BackButton,
+    ExternalLinkArrowRightIcon,
     GenericButton,
     MessageDialog,
     MessageList,

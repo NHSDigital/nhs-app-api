@@ -24,11 +24,8 @@ export default {
     },
   },
   computed: {
-    isEnabled() {
-      return srjIf({ $store: this.$store, journey: this.journey });
-    },
     show() {
-      return !this.disabled === this.$store.getters[`serviceJourneyRules/${this.journey}Enabled`];
+      return srjIf({ $store: this.$store, journey: this.journey, disabled: this.disabled });
     },
   },
 };

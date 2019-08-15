@@ -9,40 +9,18 @@ import { CDSS_ADMIN,
   ONLINE_CONSULTATIONS,
 } from './mutation-types';
 
-
 export default {
-  [`${CDSS_ADMIN}Disabled`](state) {
-    return state.rules.cdssAdmin.provider === 'none';
-  },
-  [`${ONLINE_CONSULTATIONS}Enabled`](state) {
-    return !(state.rules.cdssAdmin.provider === 'none') || !(state.rules.cdssAdvice.provider === 'none');
-  },
-  [`${ONLINE_CONSULTATIONS}Disabled`](state) {
-    return (state.rules.cdssAdmin.provider === 'none') && (state.rules.cdssAdvice.provider === 'none');
+  [`${ONLINE_CONSULTATIONS}Enabled`](_, getters) {
+    return getters[`${CDSS_ADMIN}Enabled`] || getters[`${CDSS_ADVICE}Enabled`];
   },
   [`${CDSS_ADMIN}Enabled`](state) {
-    return !(state.rules.cdssAdmin.provider === 'none');
-  },
-  [`${CDSS_ADVICE}Disabled`](state) {
-    return state.rules.cdssAdvice.provider === 'none';
+    return get('rules.cdssAdmin.provider')(state) !== 'none';
   },
   [`${CDSS_ADVICE}Enabled`](state) {
-    return !(state.rules.cdssAdvice.provider === 'none');
+    return get('rules.cdssAdvice.provider')(state) !== 'none';
   },
   [`${GP_AT_HAND}AppointmentsEnabled`](state) {
     return get('rules.appointments.provider')(state) === GP_AT_HAND;
-  },
-  [`${CDSS_ADMIN}Provider`](state) {
-    return state.rules.cdssAdmin.provider;
-  },
-  [`${CDSS_ADVICE}Provider`](state) {
-    return state.rules.cdssAdvice.provider;
-  },
-  [`${CDSS_ADMIN}Id`](state) {
-    return state.rules.cdssAdmin.serviceDefinition;
-  },
-  [`${CDSS_ADVICE}Id`](state) {
-    return state.rules.cdssAdvice.serviceDefinition;
   },
   [`${IM1_PROVIDER}AppointmentsEnabled`](state) {
     return get('rules.appointments.provider')(state) === IM1_PROVIDER;

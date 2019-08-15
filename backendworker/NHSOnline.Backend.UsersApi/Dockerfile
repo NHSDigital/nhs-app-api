@@ -1,5 +1,5 @@
 ARG PROJECT_NAME=NHSOnline.Backend.UsersApi
-ARG PORT=8088
+ARG PORT=8083
 ARG RUNTIME_IMAGE=mcr.microsoft.com/dotnet/core/runtime:2.1
 ARG SDK_IMAGE=mcr.microsoft.com/dotnet/core/sdk:2.1
 ARG PROJECT_PLATFORM=linux-x64

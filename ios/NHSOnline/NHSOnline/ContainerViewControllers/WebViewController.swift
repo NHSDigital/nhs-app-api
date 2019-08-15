@@ -40,24 +40,25 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
-        webView.configuration.userContentController.add(delegate, name: "updateHeaderText")
+        webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
         webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
-        webView.configuration.userContentController.add(delegate, name: "setMenuBarItem")
-        webView.configuration.userContentController.add(delegate, name: "onLogin")
-        webView.configuration.userContentController.add(delegate, name: "onLogout")
-        webView.configuration.userContentController.add(delegate, name: "showHeader")
-        webView.configuration.userContentController.add(delegate, name: "showHeaderSlim")
+        webView.configuration.userContentController.add(delegate, name: "focusElement")
+        webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
+        webView.configuration.userContentController.add(delegate, name: "goToLoginOptions")
         webView.configuration.userContentController.add(delegate, name: "hideHeaderSlim")
-        webView.configuration.userContentController.add(delegate, name: "resetPageFocus")
         webView.configuration.userContentController.add(delegate, name: "hideHeader")
         webView.configuration.userContentController.add(delegate, name: "hideMenuBar")
         webView.configuration.userContentController.add(delegate, name: "hideWhiteScreen")
+        webView.configuration.userContentController.add(delegate, name: "onLogin")
+        webView.configuration.userContentController.add(delegate, name: "onLogout")
         webView.configuration.userContentController.add(delegate, name: "onSessionExpiring")
-        webView.configuration.userContentController.add(delegate, name: "goToLoginOptions")
-        webView.configuration.userContentController.add(delegate, name: "focusElement")
-        webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
-        webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
         webView.configuration.userContentController.add(delegate, name: "pageLoadComplete")
+        webView.configuration.userContentController.add(delegate, name: "requestPnsToken")
+        webView.configuration.userContentController.add(delegate, name: "resetPageFocus")
+        webView.configuration.userContentController.add(delegate, name: "setMenuBarItem")
+        webView.configuration.userContentController.add(delegate, name: "showHeader")
+        webView.configuration.userContentController.add(delegate, name: "showHeaderSlim")
+        webView.configuration.userContentController.add(delegate, name: "updateHeaderText")
     }
     
     private func loadSpaPage(path: String)  {
