@@ -8,6 +8,7 @@ Feature: Push Notifications Backend
     When I register the device for push notifications
     Then I receive a "Created" success code
     And I receive the newly created registered device details
+    And the device registration is available in the database
     Examples:
       | GP System |
       | EMIS      |

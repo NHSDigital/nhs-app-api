@@ -50,6 +50,8 @@ class Config private constructor() {
 
     val mongoDbHost: String
     val mongoDbPort: Long
+    val usersMongoDbHost: String
+    val usersMongoDbPort: Long
 
     val nativeUrlSuffix: String
 
@@ -104,6 +106,9 @@ class Config private constructor() {
 
         mongoDbHost = envOrDefault("SESSION_MONGO_DATABASE_HOST", "127.0.0.1")
         mongoDbPort = envOrDefault("SESSION_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
+
+        usersMongoDbHost = envOrDefault("USERS_MONGO_DATABASE_HOST", "127.0.0.1")
+        usersMongoDbPort = envOrDefault("USERS_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
         brotherMailerPath = "/brothermailer/signup.ashx"
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")

@@ -48,7 +48,6 @@ import worker.models.serviceJourneyRules.AppointmentsProvider
 import worker.models.serviceJourneyRules.CdssProvider
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
-import java.util.*
 
 const val INVALID_VALUE = "xxx-wrong-format-xxx"
 
@@ -450,7 +449,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^no IM1 Connection Token is currently cached$")
     fun im1ConnectionTokensClearedFromTheCache() {
-        MongoDBConnection.clearIm1Cache()
+        MongoDBConnection.Im1CacheCollection.clearCache()
     }
 
     @When("I log out")
@@ -810,19 +809,11 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^the IM1 Connection Token is in the cache$")
     fun theIm1ConnectionTokenIsInTheCache() {
-        Assert.assertEquals(
-                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
-                1,
-                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
-        )
+        MongoDBConnection.Im1CacheCollection.assertNumberOfDocuments(1)
     }
 
     @Then("^the IM1 Connection Token is no longer in the cache$")
     fun theIm1ConnectionTokenIsNoLongerInTheCache() {
-        Assert.assertEquals(
-                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
-                0,
-                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
-        )
+        MongoDBConnection.Im1CacheCollection.assertNumberOfDocuments(0)
     }
 }

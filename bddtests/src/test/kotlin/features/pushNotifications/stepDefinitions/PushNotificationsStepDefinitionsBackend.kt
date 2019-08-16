@@ -7,6 +7,8 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
+import mongodb.MongoDBConnection
+import mongodb.MongoRepositoryUserDevice
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -23,14 +25,24 @@ class PushNotificationsStepDefinitionsBackend {
 
     @Given("^I am a (\\w+) api user wishing to register their device for push notifications$")
     fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
+        setUpUser(gpSystem)
+        MongoDBConnection.UserDevicesCollection.clearCache()
+        setUpRegistration()
+    }
+
+    private fun setUpUser(gpSystem: String) {
         SerenityHelpers.setGpSupplier(gpSystem)
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+    }
+
+    private fun setUpRegistration() {
         val deviceType = "Android"
         val devicePns = "devicePns1234"
         PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.set(deviceType)
+        PushNotificationsSerenityHelpers.EXPECTED_PNS.set(devicePns)
         PushNotificationsSerenityHelpers.REGISTER_REQUEST.set(RegisterUserDevicesRequest(devicePns, deviceType))
     }
 
@@ -44,7 +56,7 @@ class PushNotificationsStepDefinitionsBackend {
         registerTheDeviceForPushNotifications(withAuthToken = false)
     }
 
-    private fun registerTheDeviceForPushNotifications( withAuthToken: Boolean = true) {
+    private fun registerTheDeviceForPushNotifications(withAuthToken: Boolean = true) {
         val request =
                 PushNotificationsSerenityHelpers.REGISTER_REQUEST.getOrFail<RegisterUserDevicesRequest>()
         try {
@@ -70,5 +82,22 @@ class PushNotificationsStepDefinitionsBackend {
         Assert.assertEquals("Register User Devices response DeviceType",
                 expectedDeviceType,
                 response.deviceType)
+    }
+
+    @Then("^the device registration is available in the database$")
+    fun theDeviceRegistrationIsAvailableInTheDatabase() {
+        //Cache has been cleared in data setup.
+        MongoDBConnection.UserDevicesCollection.assertNumberOfDocuments(1)
+        val userDevices = MongoDBConnection.UserDevicesCollection
+                .getValues<MongoRepositoryUserDevice>(MongoRepositoryUserDevice::class.java)
+        Assert.assertNotNull("User devices", userDevices)
+        Assert.assertEquals("Number of user devices", 1, userDevices.count())
+        val registeredDevice = userDevices.first()
+        Assert.assertNotNull("Registered device id. $registeredDevice", registeredDevice._id)
+        Assert.assertNotNull("Registered device nhsLoginId. $registeredDevice", registeredDevice.NhsLoginId)
+        Assert.assertNotNull("Registered device registrationId. $registeredDevice", registeredDevice.RegistrationId)
+        Assert.assertNotNull("Registered device pnsToken. $registeredDevice", registeredDevice.PnsToken)
+        val expectedPns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
+        Assert.assertEquals("Registered device pnsToken", expectedPns, registeredDevice.PnsToken)
     }
 }
