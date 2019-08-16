@@ -40,8 +40,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         private const string MediaType = "application/xml";
         private const string Suid = "session_id";
 
-        private int? PrescriptionsMaxCoursesSoftLimit = 100;
-        private int? CoursesMaxCoursesLimit = 100;
+        private readonly int? PrescriptionsMaxCoursesSoftLimit = 100;
+        private readonly int? CoursesMaxCoursesLimit = 100;
 
         private ITppClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
@@ -119,6 +119,51 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+            VerifyLogging(authenticateRequestModel);
+        }
+
+        [TestMethod]
+        public async Task AuthenticatePostRequest_ReturnsErrorWithInternalServerErrorCode_WhenResponseIsIncomplete()
+        {
+            var authenticateRequestModel = _fixture.Create<Authenticate>();
+            authenticateRequestModel.UnitId = UnitId;
+            authenticateRequestModel.Uuid = Uuid;
+            authenticateRequestModel.ApiVersion = ApiVersion;
+            authenticateRequestModel.Application = new Application
+            {
+                Name = ApplicationName,
+                Version = ApplicationVersion,
+                ProviderId = authenticateRequestModel.ProviderId,
+                DeviceType = ApplicationDeviceType
+            };
+
+            var expectedAuthenticateResponse = _fixture.Create<AuthenticateReply>();
+
+            var requestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, authenticateRequestModel.RequestType)
+            };
+
+            var responseHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.ResponseSuidHeader, Suid)
+            };
+
+            var responseBody = expectedAuthenticateResponse.SerializeXml();
+            // Deliberately screw up the XML, change uuid to be not a GUID so it won't deserialize
+            responseBody = responseBody.Replace(expectedAuthenticateResponse.Uuid.ToString(), "Not A Guid",
+                StringComparison.InvariantCulture);
+            var responseContent = new StringContent(responseBody);
+
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(requestHeaders)
+                .WithContent(authenticateRequestModel.SerializeXml())
+                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
+
+            var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
+            
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             VerifyLogging(authenticateRequestModel);
         }
 

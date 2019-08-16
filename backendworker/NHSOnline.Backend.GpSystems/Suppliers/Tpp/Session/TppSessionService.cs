@@ -44,10 +44,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 if (!reply.HasSuccessResponse)
                 {
-                    _logger.LogError("Failed to authenticate user for TPP");
-                    return new GpSessionCreateResult.BadGateway();
+                    if (reply.HasErrorWithCode(TppApiErrorCodes.ProblemLoggingOn))
+                    {
+                        _logger.LogError("Failed to authenticate user for TPP - Problem logging on");
+                        return new GpSessionCreateResult.Forbidden();
+                    }
+                    else
+                    {
+                        _logger.LogError("Failed to authenticate user for TPP");
+                        return new GpSessionCreateResult.BadGateway();
+                    }
                 }
-                
+
                 var userSession = _sessionMapper.Map(reply, odsCode, nhsNumber);
                 if (!userSession.HasValue)
                 {
@@ -57,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 var tppUserSession = userSession.ValueOrFailure();
                 await _client.PatientSelectedPost(tppUserSession);
-                
+
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new GpSessionCreateResult.Success(
                     reply.Body.User?.Person?.PersonName?.Name,

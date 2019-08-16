@@ -369,7 +369,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
             protected override bool FormatResponseIfUnsuccessful => false;
 
-            private TppApiObjectResponse<TBody> ParseResponse(
+            private void ParseResponse(
                 IResponseParser responseParser,
                 ILogger logger,
                 string stringResponse,
@@ -381,15 +381,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                     {
                         ErrorResponse = responseParser.ParseBody<Error>(stringResponse, responseMessage);
                         logger.LogError($"Server returned with error. {ErrorForLogging}");
-                        return this;
+                        return;
                     }
 
                     Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
                 }
-                catch (FormatException e)
+                catch (Exception e)
                 {
                     logger.LogError(e, "An error occured while parsing the response");
-                    return new TppApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
+                    StatusCode = HttpStatusCode.InternalServerError;
+                    return;
                 }
 
                 if (responseMessage.Headers.TryGetValues(ResponseSuidHeader, out var values))
@@ -399,8 +400,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                         { ResponseSuidHeader, values.First() }
                     };
                 }
-
-                return this;
             }
 
             private static bool IsErrorResponse(string responseString)

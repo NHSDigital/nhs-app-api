@@ -2,7 +2,6 @@ package features.authentication.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
 import mocking.defaults.TppMockDefaults
-import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
@@ -16,7 +15,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
         response.patientId = ""
 
         mockingClient.forTpp {
-            authentication.authenticateRequest(Authenticate())
+            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
                     .respondWithSuccess(response)
         }
     }
@@ -63,7 +62,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
 
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
         mockingClient.forTpp {
-            authentication.authenticateRequest(Authenticate())
+            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
                     // respond with error.  Unconfirmed format.
                     .respondWithError(Error(
                             errorCode = ErrorResponseCodeTpp.LOGIN_PROBLEM,
@@ -74,7 +73,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forTpp {
-            authentication.authenticateRequest(Authenticate())
+            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
                     // respond with error.  Unconfirmed format.
                     .respondWithError(Error(
                             errorCode = ErrorResponseCodeTpp.SERVICE_UNAVAILABLE,

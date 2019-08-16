@@ -193,14 +193,34 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task Create_WhenCalledWithErrorResponse_ReturnsBadGateway()
+        public async Task Create_WhenCalledWithErrorResponseProblemLoggingOn_ReturnsForbidden()
+        {
+            // Arrange 
+            var reply = CreateReply();
+            reply.ErrorResponse = new Error{ ErrorCode = "9" };
+
+            _mockTppClient.Setup(x => x
+                .AuthenticatePost(It.IsAny<Authenticate>()))
+                .ReturnsAsync(() => reply);
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act 
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
+            
+            // Assert 
+            result.Should().BeAssignableTo<GpSessionCreateResult.Forbidden>();
+        }
+        
+        [TestMethod]
+        public async Task Create_WhenCalledWithErrorResponseProblemOtherThanLoggingOn_ReturnsBadGateway()
         {
             // Arrange 
             var reply = CreateReply();
             reply.ErrorResponse = new Error();
 
             _mockTppClient.Setup(x => x
-                .AuthenticatePost(It.IsAny<Authenticate>()))
+                    .AuthenticatePost(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();

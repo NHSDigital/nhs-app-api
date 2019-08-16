@@ -407,7 +407,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 }
             }
 
-            private EmisApiObjectResponse<TBody> ParseResponse(
+            private void ParseResponse(
                 IResponseParser responseParser, 
                 string stringResponse, 
                 HttpResponseMessage responseMessage)
@@ -419,7 +419,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                     responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
                 ExceptionErrorResponse =
                     responseParser.ParseError<ExceptionErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
-                return this;
             }
 
             protected override bool FormatResponseIfUnsuccessful => true;

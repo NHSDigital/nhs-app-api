@@ -99,17 +99,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
             public ErrorResponse ErrorResponse { get; set; }
 
-            public async Task<VisionApiObjectResponse<TBody>> Parse(
+            public async Task Parse(
                 HttpResponseMessage responseMessage,
                 IJsonResponseParser responseParser,
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
-                return string.IsNullOrEmpty(stringResponse)
-                    ? this : ParseResponse(responseParser, stringResponse, responseMessage);
+
+                if (!string.IsNullOrEmpty(stringResponse))
+                {
+                    ParseResponse(responseParser, stringResponse, responseMessage);
+                }
             }
 
-            private VisionApiObjectResponse<TBody> ParseResponse(
+            private void ParseResponse(
                 IResponseParser responseParser,
                 string stringResponse,
                 HttpResponseMessage responseMessage)
@@ -121,8 +124,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                     var errorResponseWrapper = responseParser.ParseBody<ErrorResponseWrapper>(stringResponse, responseMessage);
                     ErrorResponse = errorResponseWrapper?.Error;
                 }
-
-                return this;
             }
 
             public override bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
