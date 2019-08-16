@@ -28,7 +28,8 @@
     </analytics-tracked-tag>
     <medications :is-collapsed="isAcuteMedicationsCollapsed"
                  :medications="record.medications.data.acuteMedications"
-                 :has-error="record.medications.hasErrored"/>
+                 :has-error="record.medications.hasErrored"
+                 :has-undetermined-access="record.medications.hasUndeterminedAccess" />
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isCurrentRepeatMedicationsCollapsed)]"
@@ -43,7 +44,8 @@
     </analytics-tracked-tag>
     <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
                  :medications="record.medications.data.currentRepeatMedications"
-                 :has-error="record.medications.data.hasErrored" />
+                 :has-error="record.medications.data.hasErrored"
+                 :has-undetermined-access="record.medications.hasUndeterminedAccess" />
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isDiscontinuedRepeatMedicationsCollapsed)]"
@@ -59,7 +61,8 @@
     </analytics-tracked-tag>
     <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
                  :medications="record.medications.data.discontinuedRepeatMedications"
-                 :has-error="record.medications.data.hasErrored" />
+                 :has-error="record.medications.data.hasErrored"
+                 :has-undetermined-access="record.medications.hasUndeterminedAccess" />
   </div>
 </template>
 

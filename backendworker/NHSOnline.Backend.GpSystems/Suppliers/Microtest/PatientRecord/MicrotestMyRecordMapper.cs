@@ -65,6 +65,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     })
                     .OrderByDescending(o => o.Date?.Value.GetValueOrDefault())
                     .ToList();
+
+                myRecordResponse.Allergies.HasUndeterminedAccess = !allergyData.Allergies.Any();
             }
         }
 
@@ -106,6 +108,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                                                medication.Status + ". This medication will not be mapped");
                     }
                 }
+                
+                myRecordResponse.Medications.HasUndeterminedAccess = !microtestMedicationData.Medications.Any();
             }
 
             myRecordResponse.Medications.Data.AcuteMedications =
@@ -157,6 +161,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     })
                     .OrderByDescending(o => o.EffectiveDate?.Value.GetValueOrDefault())
                     .ToList();
+
+                myRecordResponse.Immunisations.HasUndeterminedAccess = !immunisationData.Immunisations.Any();
             }
         }
 
@@ -173,6 +179,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                 
                 myRecordResponse.Problems.Data 
                     = problemItems.OrderByDescending(p => p.EffectiveDate?.Value.GetValueOrDefault());
+                
+                myRecordResponse.Problems.HasUndeterminedAccess = !problemData.Problems.Any();
             }
         }
         

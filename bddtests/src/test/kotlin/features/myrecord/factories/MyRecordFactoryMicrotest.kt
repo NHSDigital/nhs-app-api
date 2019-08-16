@@ -2,6 +2,8 @@ package features.myrecord.factories
 
 import models.Patient
 import mocking.data.myrecord.MicrotestMyRecordData
+import mocking.microtest.myRecord.MyRecordModuleCounts
+import org.apache.http.HttpStatus
 
 
 class MyRecordFactoryMicrotest: MyRecordFactory() {
@@ -18,7 +20,7 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
         }
     }
 
-    override fun enabledWithData(patient: Patient) {
+    override fun enabledWithData(patient: Patient, myRecordModuleCounts: MyRecordModuleCounts) {
         mockingClient.forMicrotest {
             demographics.demographicsRequest(patient).respondWithSuccess()
         }
@@ -26,7 +28,7 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
         mockingClient.forMicrotest {
             myRecord.myRecordRequest(patient)
                     .respondWithSuccess(
-                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord()
+                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord(myRecordModuleCounts)
                     )
         }
     }
@@ -39,8 +41,16 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
         mockingClient.forMicrotest {
             myRecord.myRecordRequest(patient)
                     .respondWithSuccess(
-                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord()
+                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord(MyRecordModuleCounts())
                     )
         }
+    }
+
+    override fun respondWithForbidden(patient: Patient) {
+        mockingClient
+                .forMicrotest {
+                    myRecord.myRecordRequest(patient)
+                            .respondWith(HttpStatus.SC_FORBIDDEN, resolve = {})
+                }
     }
 }

@@ -60,6 +60,15 @@ Feature: View My Medical Record Information - Allergies Frontend
     Then I do not see the Allergies and adverse reactions heading on My Record
     And I see a message informing me to contact my GP for this information
 
+  Scenario: A MICROTEST user can view allergies and adverse reactions section when no allergies are returned
+    Given I have 0 Allergies
+    And the my record wiremocks are populated for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Allergies and adverse reactions heading on My Record
+    When I click the Allergies and adverse reactions section on My Record
+    Then I see a message telling me to contact my GP for Allergies and adverse reactions information on My Record
+
   Scenario: A MICROTEST user can view allergies and adverse reactions section
     Given the my record wiremocks are populated for MICROTEST
     And the GP Practice has enabled demographics functionality

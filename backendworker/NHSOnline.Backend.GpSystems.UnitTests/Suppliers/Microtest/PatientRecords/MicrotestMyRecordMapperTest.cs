@@ -71,6 +71,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             };
 
             result.Allergies.Should().BeEquivalentTo(expectedResult.Allergies);
+            result.Allergies.HasUndeterminedAccess.Should().BeFalse();
         }
 
         [DataTestMethod]
@@ -98,9 +99,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             var result = _mapper.Map(item);
 
             result.Should().NotBeNull();
-            result.Allergies.Data.Should().HaveCount(1);
             result.HasSummaryRecordAccess.Should().BeTrue();
+            result.Allergies.Data.Should().HaveCount(1);
             result.Allergies.Data.ElementAt(0).Should().BeEquivalentTo(BuildAllergyItem(allergy2));
+            result.Allergies.HasUndeterminedAccess.Should().BeFalse();
         }
         
         [DataTestMethod]
@@ -128,9 +130,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             var result = _mapper.Map(item);
 
             result.Should().NotBeNull();
-            result.Allergies.Data.Should().HaveCount(2);
             result.HasSummaryRecordAccess.Should().BeTrue();
+            result.Allergies.Data.Should().HaveCount(2);
             result.Allergies.Data.ElementAt(0).Should().BeEquivalentTo(BuildAllergyItem(allergy2));
+            result.Allergies.HasUndeterminedAccess.Should().BeFalse();
         }
 
         [TestMethod]
@@ -151,6 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeFalse();
+            result.Allergies.HasUndeterminedAccess.Should().BeTrue();
         }
 
         [TestMethod]
@@ -176,6 +180,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeFalse();
             result.Allergies.Data.Should().HaveCount(0);
+            result.Allergies.HasUndeterminedAccess.Should().BeFalse();
         }
 
         [TestMethod]
@@ -203,8 +208,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeTrue();
-            result.Allergies.Data.Should().HaveCount(3);      
-
+            result.Allergies.Data.Should().HaveCount(3);
+            result.Allergies.HasUndeterminedAccess.Should().BeFalse();    
+            
             result.Allergies.Data.ElementAt(0).Should().BeEquivalentTo(BuildAllergyItem(allergy2));
             result.Allergies.Data.ElementAt(1).Should().BeEquivalentTo(BuildAllergyItem(allergy3));
             result.Allergies.Data.ElementAt(2).Should().BeEquivalentTo(BuildAllergyItem(allergy1));
@@ -280,10 +286,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
+            result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(1);
             result.Medications.Data.CurrentRepeatMedications.Should().HaveCount(1);
             result.Medications.Data.DiscontinuedRepeatMedications.Should().HaveCount(1);
-            result.HasSummaryRecordAccess.Should().BeTrue();
+            result.Medications.HasUndeterminedAccess.Should().BeFalse();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
 
@@ -332,10 +339,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
+            result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(0);
             result.Medications.Data.CurrentRepeatMedications.Should().HaveCount(1);
             result.Medications.Data.DiscontinuedRepeatMedications.Should().HaveCount(0);
-            result.HasSummaryRecordAccess.Should().BeTrue();
+            result.Medications.HasUndeterminedAccess.Should().BeFalse();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
 
@@ -383,10 +391,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
+            result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(0);
             result.Medications.Data.CurrentRepeatMedications.Should().HaveCount(0);
             result.Medications.Data.DiscontinuedRepeatMedications.Should().HaveCount(1);
-            result.HasSummaryRecordAccess.Should().BeTrue();
+            result.Medications.HasUndeterminedAccess.Should().BeFalse();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
 
@@ -434,10 +443,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
+            result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(1);
             result.Medications.Data.CurrentRepeatMedications.Should().HaveCount(0);
             result.Medications.Data.DiscontinuedRepeatMedications.Should().HaveCount(0);
-            result.HasSummaryRecordAccess.Should().BeTrue();
+            result.Medications.HasUndeterminedAccess.Should().BeFalse();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
 
@@ -519,10 +529,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
+            result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(4);
             result.Medications.Data.CurrentRepeatMedications.Should().HaveCount(3);
             result.Medications.Data.DiscontinuedRepeatMedications.Should().HaveCount(2);
-            result.HasSummaryRecordAccess.Should().BeTrue();
+            result.Medications.HasUndeterminedAccess.Should().BeFalse();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
 
@@ -588,10 +599,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
+            result.HasSummaryRecordAccess.Should().BeFalse();
             result.Medications.Data.AcuteMedications.Should().HaveCount(0);
             result.Medications.Data.CurrentRepeatMedications.Should().HaveCount(0);
             result.Medications.Data.DiscontinuedRepeatMedications.Should().HaveCount(0);
-            result.HasSummaryRecordAccess.Should().BeFalse();
+            result.Medications.HasUndeterminedAccess.Should().BeFalse();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
         
@@ -618,6 +630,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             //Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeFalse();
+            result.Medications.HasUndeterminedAccess.Should().BeTrue();
         }        
 
         /*
@@ -646,9 +659,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Immunisations.Data.Should().HaveCount(1);
             result.HasDetailedRecordAccess.Should().BeTrue();
-
+            result.Immunisations.Data.Should().HaveCount(1);
+            result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
+            
             var expectedResult = new MyRecordResponse
             {
                 Immunisations = new Immunisations
@@ -692,8 +706,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Immunisations.Data.Should().HaveCount(2);
             result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Immunisations.Data.Should().HaveCount(2);
+            result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
             result.Immunisations.Data.ElementAt(0).Should().BeEquivalentTo(BuildImmunisationItem(imm2));
         }
         
@@ -725,8 +740,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Immunisations.Data.Should().HaveCount(1);
             result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Immunisations.Data.Should().HaveCount(1);
+            result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
             result.Immunisations.Data.ElementAt(0).Should().BeEquivalentTo(BuildImmunisationItem(imm1));
         }
         
@@ -759,8 +775,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             
             //Assert
             result.Should().NotBeNull();
-            result.Immunisations.Data.Should().HaveCount(3);
             result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Immunisations.Data.Should().HaveCount(3);
+            result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
             
             var expectedResult = new MyRecordResponse
             {
@@ -796,6 +813,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeFalse();
+            result.Immunisations.HasUndeterminedAccess.Should().BeTrue();
         }
 
         [TestMethod]
@@ -835,8 +853,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Problems.Data.Should().HaveCount(1);
             result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Data.Should().HaveCount(1);
+            result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }     
  
@@ -877,8 +896,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Problems.Data.Should().HaveCount(1);
             result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Data.Should().HaveCount(1);
+            result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
         
@@ -919,8 +939,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Problems.Data.Should().HaveCount(1);
             result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Data.Should().HaveCount(1);
+            result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
 
@@ -965,8 +986,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Problems.Data.Should().HaveCount(0);
             result.HasDetailedRecordAccess.Should().BeFalse();
+            result.Problems.Data.Should().HaveCount(0);
+            result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
         
@@ -1015,8 +1037,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             //Assert
             result.Should().NotBeNull();
-            result.Problems.Data.Should().HaveCount(5);
             result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Problems.Data.Should().HaveCount(5);
+            result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
   

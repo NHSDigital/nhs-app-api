@@ -134,6 +134,10 @@ components:
           $ref: "#/components/schemas/TppDcrEvents"
         consultations:
           $ref: "#/components/schemas/Consultations"
+        examinations:
+          $ref: "#/components/schemas/Examinations"
+        procedures:
+          $ref: "#/components/schemas/Procedures"
     MyRecordSectionResponse:
       type: object
       properties:
@@ -152,6 +156,9 @@ components:
         hasErrored:
           type: boolean
           description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
         data:
           type: array
           description: An array of allergy information objects.
@@ -180,6 +187,9 @@ components:
         hasErrored:
           type: boolean
           description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
         data:
           type: object
           properties:
@@ -230,6 +240,9 @@ components:
         hasErrored:
           type: boolean
           description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
         data:
           type: object
           properties:
@@ -319,6 +332,9 @@ components:
         hasErrored:
           type: boolean
           description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
         data:
           type: object
           properties:
@@ -426,6 +442,30 @@ components:
           description: An array of associated texts.
           items:
             type: string
+    Examinations:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        rawHtml:
+          type: string
+          description: When working with Vision, raw HTML is returned instead of XML data
+    Procedures:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        rawHtml:
+          type: string
+          description: When working with Vision, raw HTML is returned instead of XML data
     Date:
       type: object
       properties:

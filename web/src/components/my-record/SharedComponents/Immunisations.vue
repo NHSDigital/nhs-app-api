@@ -3,7 +3,8 @@
                        :has-access="immunisations.hasAccess"
                        :has-errored="immunisations.hasErrored"
                        :class="[$style['record-content'], getCollapseState]"
-                       :aria-hidden="isCollapsed"/>
+                       :aria-hidden="isCollapsed"
+                       :has-undetermined-access="immunisations.hasUndeterminedAccess"/>
   <div v-else-if="!isCollapsed" :class="[$style['record-content'],
                                          getCollapseState,
                                          !$store.state.device.isNativeApp && $style.desktopWeb]"

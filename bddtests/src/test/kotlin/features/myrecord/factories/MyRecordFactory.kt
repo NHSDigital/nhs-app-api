@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
+import mocking.microtest.myRecord.MyRecordModuleCounts
 import models.Patient
 
 abstract class MyRecordFactory {
@@ -10,8 +11,9 @@ abstract class MyRecordFactory {
 
     abstract fun disabled(patient:Patient)
     abstract fun enabledWithBlankRecord(patient: Patient)
-    abstract fun enabledWithData(patient: Patient)
+    abstract fun enabledWithData(patient: Patient, myRecordModuleCounts: MyRecordModuleCounts)
     abstract fun enabledWithAllRecords(patient: Patient)
+    abstract fun respondWithForbidden(patient: Patient)
 
     companion object : SupplierSpecificFactory<MyRecordFactory>() {
 

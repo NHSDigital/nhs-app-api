@@ -2,7 +2,9 @@
   <scr-error-no-access v-if="showError"
                        :class="[$style['record-content'], getCollapseState]"
                        :aria-hidden="isCollapsed"
-                       :has-errored="allergies.hasErrored" />
+                       :has-errored="allergies.hasErrored"
+                       :has-undetermined-access="allergies.hasUndeterminedAccess"/>
+
   <div v-else-if="!isCollapsed" :class="[$style['record-content'], getCollapseState,
                                          !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">

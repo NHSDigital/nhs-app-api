@@ -10,6 +10,7 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.microtest.myRecord.MyRecordModuleCounts
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
@@ -46,6 +47,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
+    var myRecordModuleCounts = MyRecordModuleCounts()
+
     @Given("^the my record wiremocks are initialised for (.*)$")
     fun givenMyRecordWiremocksAreInitialisedFor(getService: String) {
         SerenityHelpers.setGpSupplier(getService)
@@ -73,13 +76,48 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
     }
 
+    @Given("^I have (.*) Allergies$")
+    fun givenIHaveCountOfAllergies(count: Int) {
+        myRecordModuleCounts.allergyCount = count
+    }
+
+    @Given("^I have (.*) Medications$")
+    fun givenIHaveCountOfMedications(count: Int) {
+        myRecordModuleCounts.medicationCount = count
+    }
+
+    @Given("^I have (.*) Problems$")
+    fun givenIHaveCountOfProblems(count: Int) {
+        myRecordModuleCounts.problemCount = count
+    }
+
+    @Given("^I have (.*) Immunisations$")
+    fun givenIHaveCountOfImmunisations(count: Int) {
+        myRecordModuleCounts.vaccinationsCount = count
+    }
+
+    @Then("^I see a message telling me to contact my GP for (.*) information on My Record$")
+    fun thenISeeAMessageTellingMeToContactMyGP(heading: String) {
+        assertTextInSection(heading,
+                "Sorry, this information isn't available through the NHS App. To access it, contact your GP surgery.")
+    }
+
+    @Given("^the my record wiremocks return a 403 for (.*)$")
+    fun givenMyRecordWiremocksReturnA403For(getService: String) {
+        SerenityHelpers.setGpSupplier(getService)
+        setPatientToDefaultFor(getService)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(getService).respondWithForbidden(SerenityHelpers.getPatient())
+    }
+
     @Given("^the my record wiremocks are populated for (.*)$")
     fun givenMyRecordWiremocksArePopulatedFor(getService: String) {
         SerenityHelpers.setGpSupplier(getService)
         setPatientToDefaultFor(getService)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
         SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(getService).enabledWithData(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(getService).enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts)
     }
 
     @When("^I enter url address for my record directly into the url$")

@@ -3,6 +3,9 @@
     <p v-if="hasErrored">
       {{ $t('my_record.genericErrorMessage') }}
     </p>
+    <p v-else-if="hasUndeterminedAccess">
+      {{ $t('my_record.noRecordsOrNoAccess.warningHeader') }}
+    </p>
     <p v-else>
       {{ $t('my_record.genericNoDataMessage') }}
     </p>
@@ -16,6 +19,10 @@ export default {
   name: 'SCRErrorNoAccess',
   props: {
     hasErrored: {
+      type: Boolean,
+      default: () => false,
+    },
+    hasUndeterminedAccess: {
       type: Boolean,
       default: () => false,
     },

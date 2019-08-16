@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
             HasAccess = true;
             HasErrored = false;
             Data = new MedicationsData();
+            HasUndeterminedAccess = false;
         }
         
         public bool HasAccess { get; set; }
@@ -19,5 +20,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
                                   (Data?.DiscontinuedRepeatMedications.Count() ?? 0);
         public string Errors { get; set; }
         public MedicationsData Data { get; set; }
+        public bool HasUndeterminedAccess { get; set; }
     }
 }

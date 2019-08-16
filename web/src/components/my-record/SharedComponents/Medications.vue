@@ -3,7 +3,8 @@
                        :data="medications"
                        :class="[$style['record-content'],
                                 getCollapseState]"
-                       :aria-hidden="isCollapsed"/>
+                       :aria-hidden="isCollapsed"
+                       :has-undetermined-access="hasUndeterminedAccess"/>
   <div v-else-if="!isCollapsed" :class="[$style['record-content'], getCollapseState,
                                          !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">
@@ -40,6 +41,10 @@ export default {
     medications: {
       type: Array,
       default: () => [],
+    },
+    hasUndeterminedAccess: {
+      type: Boolean,
+      default: false,
     },
     isCollapsed: {
       type: Boolean,

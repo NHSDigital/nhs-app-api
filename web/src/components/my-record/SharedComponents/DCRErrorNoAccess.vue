@@ -6,6 +6,9 @@
     <p v-else-if="!hasAccess">
       {{ $t('my_record.genericNoAccessMessage') }}
     </p>
+    <p v-else-if="hasUndeterminedAccess">
+      {{ $t('my_record.noRecordsOrNoAccess.warningHeader') }}
+    </p>
     <p v-else>
       {{ $t('my_record.genericNoDataMessage') }}
     </p>
@@ -23,6 +26,10 @@ export default {
       default: () => false,
     },
     hasErrored: {
+      type: Boolean,
+      default: () => false,
+    },
+    hasUndeterminedAccess: {
       type: Boolean,
       default: () => false,
     },

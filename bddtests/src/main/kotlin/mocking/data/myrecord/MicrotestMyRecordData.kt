@@ -2,6 +2,7 @@ package mocking.data.myrecord
 
 import mocking.microtest.myRecord.Medication
 import mocking.microtest.myRecord.Medications
+import mocking.microtest.myRecord.MyRecordModuleCounts
 import mocking.microtest.myRecord.MyRecordResponseModel
 import mocking.microtest.myRecord.Allergy
 import mocking.microtest.myRecord.Allergies
@@ -13,11 +14,6 @@ import utils.set
 
 object MicrotestMyRecordData {
 
-    const val MAX_ALLERGIES = 3
-    const val MAX_MEDICATIONS = 3
-    const val MAX_IMMUNISATIONS = 3
-    const val MAX_PROBLEMS = 3
-
     fun getEmptyMicrotestMyRecord(): MyRecordResponseModel {
 
         val allergies = Allergies("true", "false", 0, mutableListOf<Allergy>())
@@ -27,10 +23,10 @@ object MicrotestMyRecordData {
         return MyRecordResponseModel(allergies, medications, immunisations, problems)
     }
 
-    fun getPopulatedMicrotestMyRecord(): MyRecordResponseModel {
+    fun getPopulatedMicrotestMyRecord(myRecordModuleCounts: MyRecordModuleCounts): MyRecordResponseModel {
 
         val allergyList = mutableListOf<Allergy>()
-        for (i in 1..MAX_ALLERGIES) {
+        for (i in 1..myRecordModuleCounts.allergyCount) {
             allergyList.add(
                     Allergy(
                             id = "$i",
@@ -49,7 +45,7 @@ object MicrotestMyRecordData {
                 MicrotestMedicationType.History, MicrotestMedicationType.History)
 
         val medicationList = mutableListOf<Medication>()
-        for (i in 1..MAX_MEDICATIONS) {
+        for (i in 1..myRecordModuleCounts.medicationCount) {
             medicationList.add(
                     Medication(
                             id = "$i",
@@ -66,7 +62,7 @@ object MicrotestMyRecordData {
         }
 
         val immunisationList = mutableListOf<Immunisation>()
-        for (i in 1..MAX_IMMUNISATIONS) {
+        for (i in 1..myRecordModuleCounts.vaccinationsCount) {
             immunisationList.add(
                     Immunisation(
                             date = "2019-07-03",
@@ -78,7 +74,7 @@ object MicrotestMyRecordData {
         }
 
         val problemList = mutableListOf<Problem>()
-        for (i in 1..MAX_PROBLEMS) {
+        for (i in 1..myRecordModuleCounts.problemCount) {
             problemList.add(
                     Problem(
                             start_date = "2019-07-03",

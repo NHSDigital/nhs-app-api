@@ -45,3 +45,12 @@ Feature: View My Medical Record Information - Immunisations Frontend
     Then I see the Immunisations heading on My Record
     When I click the Immunisations section on My Record
     Then I see the expected immunisations displayed
+
+  Scenario: A MICROTEST user can view immunisations section when no immunisations are returned
+    Given I have 0 Immunisations
+    And the my record wiremocks are populated for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Immunisations heading on My Record
+    When I click the Immunisations section on My Record
+    Then I see a message telling me to contact my GP for Immunisations information on My Record

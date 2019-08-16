@@ -16,3 +16,9 @@ Feature: My Record - User Not Enabled Frontend
     And the GP Practice has multiple dcr events for TPP
     And I am on my record information page
     Then I see the Consultations heading on My Record
+
+  Scenario: A MICROTEST user who does not have medical record access will get a 403 returned
+    Given the my record wiremocks return a 403 for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see Service not offered by GP or to specific user or access revoked warning message

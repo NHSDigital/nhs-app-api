@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -34,18 +36,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 
             try
             {
-                var medicalRecord =
+                var medicalRecordResponse =
                     await _microtestClient.MedicalRecordGet(microtestUserSession.OdsCode,
                         microtestUserSession.NhsNumber);
-                _logger.LogInformation("Patient record tasks completed");
 
-                var myRecordResponse = _microtestMyRecordMapper.Map(medicalRecord.Body);
-                _logger.LogInformation(
-                    "Mapped MICROTEST PatientRecordGetResponse to universal MyRecordResponse class instance");
-
-                myRecordResponse.Supplier = microtestUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
-
-                return new GetMyRecordResult.Success(myRecordResponse);
+                if (medicalRecordResponse.HasSuccessResponse)
+                {
+                    return HandleSuccess(microtestUserSession, medicalRecordResponse);
+                }
+                else if (medicalRecordResponse.HasForbiddenResponse)
+                {
+                    _logger.LogError("The Microtest patient record service is not enabled");
+                    return new GetMyRecordResult.Success(new MyRecordResponse());
+                }
+                else
+                {
+                    _logger.LogError("Microtest system is currently unavailable");
+                    return new GetMyRecordResult.BadGateway();
+                }
             }
             catch (HttpRequestException e)
             {
@@ -63,9 +71,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
         }
 
+        private GetMyRecordResult HandleSuccess(MicrotestUserSession microtestUserSession,
+            MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse> medicalRecordResponse )
+        {
+            _logger.LogInformation("Patient record tasks completed");
+
+            var myRecordResponse = _microtestMyRecordMapper.Map(medicalRecordResponse.Body);
+            _logger.LogInformation(
+                "Mapped Microtest PatientRecordGetResponse to universal MyRecordResponse class instance");
+
+            myRecordResponse.Supplier =
+                microtestUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+
+            return new GetMyRecordResult.Success(myRecordResponse);        
+        }
+
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             throw new NotImplementedException();
         }
+
     }
 }

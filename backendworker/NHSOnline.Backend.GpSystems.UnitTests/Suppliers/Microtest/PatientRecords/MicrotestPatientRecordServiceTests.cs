@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
@@ -47,6 +48,40 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             
             result.Should().BeAssignableTo<GetMyRecordResult.Success>();
             ((GetMyRecordResult.Success) result).Response.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public async Task GetMyRecord_SuccessfullyHandles403ForbiddenResponse()
+        {
+            _microtestClient.Setup(x => x.MedicalRecordGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber))
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(HttpStatusCode.Forbidden)));
+            
+            //Act
+            var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
+            
+            //Assert
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>();
+            ((GetMyRecordResult.Success) result).Response.Should().BeEquivalentTo(new MyRecordResponse());
+        }
+
+        [DataTestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.Unauthorized)]
+        [DataRow(HttpStatusCode.InternalServerError)]
+        [DataRow(HttpStatusCode.NotFound)]
+        public async Task GetMyRecord_ReturnsBadGatewayForUnhandledErrorResponse(HttpStatusCode statusCode)
+        {
+            _microtestClient.Setup(x => x.MedicalRecordGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber))
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(statusCode)));
+            
+            //Act
+            var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
+            
+            //Assert
+            result.Should().BeAssignableTo<GetMyRecordResult.BadGateway>();
         }
     }
     
