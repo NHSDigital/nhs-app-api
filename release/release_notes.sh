@@ -63,33 +63,49 @@ fi
 
 info "Comparing $TAG to $VERSION_BELOW"
 
+WEBVER="1.XX.0"
+IOSVER="1.XX.0"
+ANDROIDVER="1.XX.0"
 
-GITLOG=`git log --pretty=format:"%s" $VERSION_BELOW..$TAG`
+GITLOG=`git log --pretty=format:"%s" $VERSION_BELOW..$TAG | awk 'ORS="<br/>"' | sed "s/\"/'/g"`
+
 IMPLEMENTATIONDATE=`date -dnext-monday +%d-%m-%Y`
 
 SUBJECT="New RFC : NHS App Release - $TAG"
-MESSAGE="Change Notification for NHS APP\n\n"
-MESSAGE="${MESSAGE}This change is approved by Solution Assurance and approval has been received from all necessary areas\n\n\n"
-MESSAGE="${MESSAGE}SERVICE AFFECTED : NHS App\n"
-MESSAGE="${MESSAGE}PRIORITY : Standard Change\n"
-MESSAGE="${MESSAGE}DESCRIPTION : Standard Feature Release for NHS App\n"
-MESSAGE="${MESSAGE}${GITLOG}\n\n"
-MESSAGE="${MESSAGE}PRIMARY CI : NHS App\n"
-MESSAGE="${MESSAGE}PROPOSED IMPLEMENTOR : NHS App Team\n"
-MESSAGE="${MESSAGE}PROPOSED START DATE : $IMPLEMENTATIONDATE 10:00\n"
-MESSAGE="${MESSAGE}PROPOSED END DATE : $IMPLEMENTATIONDATE 11:00\n"
-MESSAGE="${MESSAGE}IMPACT ASSESSMENT : LOW\n"
-MESSAGE="${MESSAGE}PROPOSED RISK MITIGATION : Deployment is done to a cold namespace and tested before activating the new release. There is no service outage\n"
-MESSAGE="${MESSAGE}TEST OUTCOME : Tested as part of standard release process\n"
-MESSAGE="${MESSAGE}IMPLEMENTATION PLAN : Deploy to Cold Namespace, proove out deployment, route traffic to new namespace\n"
-MESSAGE="${MESSAGE}BACKOUT PLAN : Revert back to previous namespace\n"
-MESSAGE="${MESSAGE}POST IMPLEMENTATION TESTING : Sanity check of the release will be performed\n"
-MESSAGE="${MESSAGE}SUCCESS CRITERIA : Sanity check of the release will be performed, post deployment.\n"
+MESSAGE="Change Notification for NHS APP<br><br>"
+MESSAGE="${MESSAGE}This change is approved by Solution Assurance and approval has been received from all necessary areas<br><br><br>"
+MESSAGE="${MESSAGE}<b>SERVICE AFFECTED</b> : NHS App<br>"
+MESSAGE="${MESSAGE}<b>PRIORITY</b> : Standard Change<br>"
+MESSAGE="${MESSAGE}<b>DESCRIPTION</b> : Standard Feature Release for NHS App<br>"
+MESSAGE="${MESSAGE}${GITLOG}<br><br>"
+MESSAGE="${MESSAGE}<b>PRIMARY CI</b> : NHS App<br>"
+MESSAGE="${MESSAGE}<b>NHS App Web Version</b> : $WEBVER<br>"
+MESSAGE="${MESSAGE}<b>NHS App iOS Version</b> : $IOSVER<br>"
+MESSAGE="${MESSAGE}<b>NHS App Android Version</b> : $ANDROIDVER<br>"
+MESSAGE="${MESSAGE}<b>PROPOSED IMPLEMENTOR</b> : NHS App Team<br>"
+MESSAGE="${MESSAGE}<b>PROPOSED START DATE</b> : $IMPLEMENTATIONDATE 10:00<br>"
+MESSAGE="${MESSAGE}<b>PROPOSED END DATE</b> : $IMPLEMENTATIONDATE 11:00<br>"
+MESSAGE="${MESSAGE}<b>IMPACT ASSESSMENT</b> : LOW<br>"
+MESSAGE="${MESSAGE}<b>PROPOSED RISK MITIGATION</b> : Deployment is done to a cold namespace and tested before activating the new release. There is no service outage<br>"
+MESSAGE="${MESSAGE}<b>TEST OUTCOME</b> : Tested as part of standard release process<br>"
+MESSAGE="${MESSAGE}<b>IMPLEMENTATION PLAN</b> : Deploy to Cold Namespace, prove out deployment, route traffic to new namespace<br>"
+MESSAGE="${MESSAGE}<b>BACKOUT PLAN</b> : Revert back to previous namespace<br>"
+MESSAGE="${MESSAGE}<b>POST IMPLEMENTATION TESTING</b> : Sanity check of the release will be performed<br>"
+MESSAGE="${MESSAGE}<b>SUCCESS CRITERIA</b> : Sanity check of the release will be performed, post deployment.<br>"
 
 EMAIL="from:TeamCity@teamcity.dev.nonlive.nhsapp.service.nhs.uk\n"
 EMAIL="${EMAIL}to:lee.gathercole@nhs.net\n"
 EMAIL="${EMAIL}subject: $SUBJECT\n"
 EMAIL="${EMAIL}${MESSAGE}"
+
+TOEMAILADDRESS="matthew.smith48@nhs.net"
+TOEMAILNAME="Matthew Smith"
+FROMEMAILADDRESS="TeamCity@teamcity.dev.nonlive.nhsapp.service.nhs.uk"
+FROMEMAILNAME="TeamCity"
+
+JSON_FMT='{"personalizations" : [{"to": [{"email": "%s","name": "%s"}],"subject": "%s"}],"from": {"email": "%s", "name": "%s"},"reply_to": {"email": "%s", "name": "%s"},"content": [{"type": "text/html","value": "%s"}]}'
+
+printf "$JSON_FMT" "$TOEMAILADDRESS" "$TOEMAILNAME" "$SUBJECT" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$MESSAGE" > $TAG.json
 
 printf "$EMAIL" > $TAG.txt
 
