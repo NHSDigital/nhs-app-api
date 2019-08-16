@@ -12,13 +12,13 @@ paths:
       description: Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
      
       responses:
-        200:
+        "200":
           description: Returns patient consent data for the logged in user.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsentResponse'
-        463:
+        "463":
           description: Unable to fetch consent at this time.
     post:
       tags:
@@ -34,9 +34,9 @@ paths:
         required: true
         x-name: ConsentRequest
       responses:
-        201:
+        "201":
           description: Appointment successfully created.
-        462:
+        "462":
           description: Unable to record consent at this time.
 components:
   schemas:

@@ -19,13 +19,13 @@ paths:
         required: true
         x-name: BrothermailerRequest
       responses:
-        200:
+        "200":
           description: Successfully signed up
-        400:
+        "400":
           description: Bad request. Supplied request is incomplete or invalid.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
 components:
   schemas:

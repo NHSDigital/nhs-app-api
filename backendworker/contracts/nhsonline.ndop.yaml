@@ -12,14 +12,14 @@ paths:
       summary: Request Ndop Token
       description: Returns a signed Jwt token to be passed to Ndop Web Page
       responses:
-        200:
+        "200":
           description: Token successfully created.
           x-header: Content-Type
           content:
              application/json:
               schema:
                 $ref: "#/components/schemas/NdopResponse"
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
 components:
   schemas:

@@ -48,20 +48,20 @@ paths:
         required: true
         x-name: UpdateNominatedPharmacyRequest
       responses:
-        200:
+        "200":
           description: Nominated pharmacy successfully updated.
-        400:
+        "400":
           description: Bad request. Supplied request is invalid.
-        401:
+        "401":
           description: User session missing or expired.
-        403:
+        "403":
           description: Patient's nominated pharmacy cannot be updated because the feature
             is disabled.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
 components:
   schemas:

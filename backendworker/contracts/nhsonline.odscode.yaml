@@ -21,15 +21,15 @@ paths:
             type: string
             format: string
       responses:
-        200:
+        "200":
           description: Returns ods code lookup result for the practice
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetOdsCodeLookupResult"
-        400:
+        "400":
           description: the ods code was not provided
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
 components:
   schemas:

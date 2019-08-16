@@ -26,16 +26,16 @@ paths:
             type: string
             format: string
       responses:
-        200:
+        "200":
           description: Returns configuration for the app.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetConfigurationResponse"
-        400:
+        "400":
           description: Either the device name was not provided or the device version number
             was not in the correct format.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
 components:
   schemas:

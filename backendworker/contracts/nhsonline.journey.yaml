@@ -11,13 +11,13 @@ paths:
       summary: Gets the service journey rules for a patients pratice
       description: This call returns the service journey rules for a patients pratice.
       responses:
-        200:
+        "200":
           description: Successful operation. Service Journey Rules returned
           content:
             application/json:
               schema:
                 $ref: "servicejourneyrules.yaml#/components/schemas/ServiceJourneyRulesResponse"
-        404:
+        "404":
           description: Service Journey Rules Configuration not found.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.

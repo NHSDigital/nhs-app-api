@@ -14,7 +14,7 @@ paths:
         available appointment slots for the logged in user. Requires
         NHSO-Session-Id cookie (obtained from session endpoint).
       responses:
-        200:
+        "200":
           description: Returns list of available slots and associated meta data. Returns
             empty collection of slots if GP system does not return a list of
             available slots.
@@ -22,16 +22,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AppointmentSlotsResponse"
-        401:
+        "401":
           description: User session has expired.
-        403:
+        "403":
           description: The patient does not have the necessary permissions within the GP
             system.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
   /appointments:
     delete:
@@ -50,25 +50,25 @@ paths:
               $ref: "#/components/schemas/AppointmentCancelRequest"
         
       responses:
-        204:
+        "204":
           description: Successfully cancelled the specified appointment.
-        400:
+        "400":
           description: Bad request. Supplied request is incomplete or invalid.
-        401:
+        "401":
           description: User session has expired.
-        403:
+        "403":
           description: The patient does not have the necessary permissions within the GP
             system.
-        409:
+        "409":
           description: The specified appointment does not exist or is not in a suitable
             state to be cancelled.
-        461:
+        "461":
           description: It is too late to cancel this appointment.
-        500:
+        "500":
           description: An unexpected error occurred during the processing of the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
     get:
       tags:
@@ -87,18 +87,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AppointmentsResponse"
-        400:
+        "400":
           description: Bad request. A querystring parameter is not in the expected format.
-        401:
+        "401":
           description: User session has expired.
-        403:
+        "403":
           description: The patient does not have the necessary permissions within the GP
             system.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
     post:
       tags:
@@ -118,25 +118,25 @@ paths:
           the booking being made.
         required: true
       responses:
-        201:
+        "201":
           description: Appointment successfully created.
-        400:
+        "400":
           description: Bad request. Supplied request is incomplete or invalid.
-        401:
+        "401":
           description: User session has expired.
-        403:
+        "403":
           description: The patient does not have the necessary permissions within the GP
             system.
-        409:
+        "409":
           description: Conflict. The chosen appointment slot is not available for booking.
-        460:
+        "460":
           description: The patient has reached the limit of pending appointments that may
             be booked.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
 components:
   schemas:

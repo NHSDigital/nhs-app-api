@@ -18,13 +18,13 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: Successful operation. Service Journey Rules returned
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServiceJourneyRulesResponse"
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
 components:
   schemas:

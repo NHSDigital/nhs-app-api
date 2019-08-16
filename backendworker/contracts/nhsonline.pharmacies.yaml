@@ -20,17 +20,17 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: Search Executed Successfully
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/PharmacySearchResponse"
-        400:
+        "400":
           description: Bad request. Supplied request is invalid.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
 components:
   schemas:

@@ -28,15 +28,15 @@ paths:
         description: Details of the device to be registered
         required: true
       responses:
-        201:
+        "201":
           description: Successfully registered device for notifications
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
-        401:
+        "401":
           $ref: '#/components/responses/UnauthorizedError'
-        500:
+        "500":
           $ref: '#/components/responses/UnexpectedError' 
 components:
   securitySchemes:

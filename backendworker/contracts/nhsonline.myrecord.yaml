@@ -13,19 +13,19 @@ paths:
       description: Returns the users medical record for the logged in user. Requires
         NHSO-Session-Id cookie (obtained from session endpoint).
       responses:
-        200:
+        "200":
           description: Returns myrecord data for the logged in user.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/MyRecordResponse"
-        401:
+        "401":
           description: User session has expired.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: The GP system is currently unavailable.
-        504:
+        "504":
           description: The GP system did not respond in a timely fashion.
   /my-record/section:
     get:
@@ -46,19 +46,19 @@ paths:
               - TestResults
               - Diagnosis
       responses:
-        200:
+        "200":
           description: Returns specified myrecord section for the logged in user.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/MyRecordSectionResponse"
-        401:
+        "401":
           description: User session has expired.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: The GP system is currently unavailable.
-        504:
+        "504":
           description: The GP system did not respond in a timely fashion.
   /test-result:
     get:
@@ -74,21 +74,21 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: Returns html for selected test result from TPP
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/TestResultResponse"
-        400:
+        "400":
           description: Bad request. A querystring parameter is not in the expected format.
-        401:
+        "401":
           description: User session has expired.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
 components:
   schemas:

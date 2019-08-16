@@ -13,22 +13,22 @@ paths:
       description: Returns personal details and address details for the logged-in user.
         Requires NHSO-Session-Id cookie (obtained from session endpoint).
       responses:
-        200:
+        "200":
           description: Returns demographic data for the logged in user.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DemographicResponse"
-        401:
+        "401":
           description: User session has expired.
-        403:
+        "403":
           description: The patient does not have the necessary permissions within the GP
             system.
-        500:
+        "500":
           description: An unexpected error occurred processing the request.
-        502:
+        "502":
           description: Bad response received from upstream system.
-        504:
+        "504":
           description: Timeout when calling upstream system.
 components:
   schemas:
