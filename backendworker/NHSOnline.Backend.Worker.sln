@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\bundleContracts.sh = contracts\bundleContracts.sh
 		contracts\citizenid.yaml = contracts\citizenid.yaml
 		contracts\citizenId_v2.yaml = contracts\citizenId_v2.yaml
-		contracts\gpSupplierSpecific\emis-linkage.yaml = contracts\gpSupplierSpecific\emis-linkage.yaml
 		contracts\nhsonline.appointments.yaml = contracts\nhsonline.appointments.yaml
 		contracts\nhsonline.brothermailer.yaml = contracts\nhsonline.brothermailer.yaml
 		contracts\nhsonline.configuration.yaml = contracts\nhsonline.configuration.yaml
@@ -33,7 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
-		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"
@@ -77,6 +75,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UsersApi", "NHSOnline.Backend.UsersApi\NHSOnline.Backend.UsersApi.csproj", "{9FBF6412-B72C-44CE-9B76-CE7F1003DAAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UsersApi.UnitTests", "NHSOnline.Backend.UsersApi.UnitTests\NHSOnline.Backend.UsersApi.UnitTests.csproj", "{3E119DBD-FB24-4960-82B8-8858832393F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GpSupplierSpecific", "GpSupplierSpecific", "{736E9543-7D67-4D77-822A-79BFD65E80CB}"
+ProjectSection(SolutionItems) = preProject
+	contracts\gpSupplierSpecific\emis-linkage.yaml = contracts\gpSupplierSpecific\emis-linkage.yaml
+	contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -173,5 +177,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NDepend) = preSolution
 		Project = ".\NHSOnline.Backend.Worker.ndproj"
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{736E9543-7D67-4D77-822A-79BFD65E80CB} = {24778223-5844-4C8C-97D5-DD64B27839E8}
 	EndGlobalSection
 EndGlobal
