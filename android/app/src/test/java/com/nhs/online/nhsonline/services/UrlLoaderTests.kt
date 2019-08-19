@@ -10,8 +10,8 @@ import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.verify
+import org.mockito.Mockito
+import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.util.ReflectionHelpers
 
@@ -27,6 +27,9 @@ class UrlLoaderTests {
     private val appPageUrlWithQueryParams = "$prescriptionsAppPageUrl?source=android"
     private val appointmentsPageUrlWithQueryParams = "$appointmentsAppPageUrl?source=android"
     private val externalPageUrl = "http://external-page"
+    private val reloadUrl = "http://page-to-reload.com"
+    private val reloadUrlWithQueryParams = "$reloadUrl?source=android"
+
 
     private lateinit var urlLoader: UrlLoader
     private lateinit var webviewMock: WebView
@@ -43,6 +46,7 @@ class UrlLoaderTests {
             on { findKnownServiceAndAddMissingQueryFor(prescriptionsAppPageUrl) } doReturn appPageUrlWithQueryParams
             on { findKnownServiceAndAddMissingQueryFor(externalPageUrl) } doReturn externalPageUrl
             on { findKnownServiceAndAddMissingQueryFor(appointmentsAppPageUrl) } doReturn appPageUrlWithQueryParams
+            on { findKnownServiceAndAddMissingQueryFor(reloadUrl) } doReturn (reloadUrlWithQueryParams)
         }
 
         this.urlLoader = UrlLoader(webviewMock, knownServicesMock, baseUrl)
@@ -103,11 +107,9 @@ class UrlLoaderTests {
 
     @Test
     fun testThatReloadRequest_LoadsTheValueOfReloadUrl_WhenReloadUrlIsNotNull() {
-        val reloadUrl = "http://page-to-reload.com"
-
         urlLoader.reloadRequest(reloadUrl)
 
-        verify(webviewMock).loadUrl(reloadUrl)
+        verify(webviewMock).loadUrl(reloadUrlWithQueryParams)
     }
 
     @Test

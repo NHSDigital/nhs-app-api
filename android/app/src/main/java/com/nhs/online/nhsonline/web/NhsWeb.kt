@@ -27,22 +27,22 @@ private val TAG = NhsWeb::class.java.simpleName
 private const val NATIVE_APP = "nativeApp"
 
 class NhsWeb(
-    private val activity: Activity,
-    private val uiInteractor: IInteractor,
-    private val webView: WebView
+        private val activity: Activity,
+        private val uiInteractor: IInteractor,
+        private val webView: WebView
 ) {
     private val knownServices = KnownServices(activity)
     private val openBrowserActivity =
-        OpenUrlInBrowserActivity(activity.resources.getStringArray(R.array.nativeAppHosts))
+            OpenUrlInBrowserActivity(activity.resources.getStringArray(R.array.nativeAppHosts))
     private val urlLoader =
-        UrlLoader(webView, knownServices, activity.getString(R.string.baseURL))
+            UrlLoader(webView, knownServices, activity.getString(R.string.baseURL))
     private val chromeClient = ChromeClientLocationHandler(activity)
     private val appPersistData = PersistData(activity)
     private val errorMessageHandler = ErrorMessageHandler(activity)
     private var originalWebViewZoom = 0
 
     var applicationState =
-        ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
+            ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
     var isUserLoggedIn = false
     var requiresFullPageLoad = true
     var reloadUrl: String? = null
@@ -57,7 +57,7 @@ class NhsWeb(
         schemeHandlers.registerHandler(MailToSchemeHandler(activity))
 
         val webInterceptor =
-            WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers)
+                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers)
         webView.webViewClient = webInterceptor
 
         val webInterface = WebAppInterface(activity, uiInteractor, this)
@@ -73,9 +73,9 @@ class NhsWeb(
         Log.d(TAG, "Entering loadUrl")
 
         val hasFidoLoginError =
-            path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
-                    uiInteractor.canDisplayBiometricLogin() &&
-                    path.contains(activity.resources.getString(R.string.redirectErrorQueryParam))
+                path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
+                        uiInteractor.canDisplayBiometricLogin() &&
+                        path.contains(activity.resources.getString(R.string.redirectErrorQueryParam))
         if (hasFidoLoginError) {
             Log.d(TAG, "Fido login error response url: $path")
             uiInteractor.displayBiometricLoginErrorOccurrence()
@@ -120,7 +120,7 @@ class NhsWeb(
 
     fun reloadLoginUrl() {
         val loginUrl =
-            readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
+                readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
         val currentUrl = webView.url ?: ""
 
         val isFidoLoginUrl = currentUrl.contains(loginUrl) &&
@@ -176,8 +176,8 @@ class NhsWeb(
 
     fun onBetaCookieStoreRequest() {
         val cookies: String? = CookieManager.getInstance()
-            .getCookie(activity.resources.getString(R.string.cookieDomain))
-            ?.takeIf { it.contains("BetaCookie=") }
+                .getCookie(activity.resources.getString(R.string.cookieDomain))
+                ?.takeIf { it.contains("BetaCookie=") }
         if (cookies != null) {
             val betaCookie = cookies.split("; ").first { it.startsWith("BetaCookie=") }
             appPersistData.storeBetaCookie(betaCookie)
@@ -186,11 +186,11 @@ class NhsWeb(
 
     fun onBiometricOptionChanged() {
         val cookies: String? = CookieManager.getInstance()
-            .getCookie(activity.resources.getString(R.string.cookieDomain))
-            ?.takeIf { it.contains("HideBiometricBanner=") }
+                .getCookie(activity.resources.getString(R.string.cookieDomain))
+                ?.takeIf { it.contains("HideBiometricBanner=") }
         if (cookies.isNullOrBlank()) {
             CookieManager.getInstance().setCookie(readResourceString(R.string.cookieDomain),
-                "HideBiometricBanner=true; max-age=${60 * 60 * 24 * 365 * 5}")
+                    "HideBiometricBanner=true; max-age=${60 * 60 * 24 * 365 * 5}")
         }
     }
 
@@ -214,9 +214,10 @@ class NhsWeb(
         return false
     }
 
-    fun reloadCurrentUrl() =
-        urlLoader.reloadRequest(Optional.of(knownServices.getPostRequestReloadUrl(reloadUrl.orEmpty())).orElse(
-            reloadUrl))
+    fun reloadCurrentUrl() {
+        knownServices.getPostRequestReloadUrl(reloadUrl.orEmpty())?.let { urlLoader.reloadRequest(it) }
+                ?: urlLoader.reloadRequest(reloadUrl)
+    }
 
     fun getFileUploadCallback() = chromeClient.getFileUploadCallback()
 
@@ -237,7 +238,7 @@ class NhsWeb(
     fun clearSessionCookies() {
         val host = readResourceString(R.string.baseHost)
         val allHosts = host.split('.')
-            .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
+                .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
         for (String in allHosts) {
             clearCookie("nhso.session", "https://$String")
             clearCookie("NHSO-Session-Id", "https://.$String")
@@ -253,7 +254,7 @@ class NhsWeb(
 
     fun shouldReloadHomepageOnBackReturn(urlString: String?): Boolean {
         val sitesFromResource: Array<String>? =
-            activity.resources.getStringArray(R.array.nativeReloadOnBackUrls)
+                activity.resources.getStringArray(R.array.nativeReloadOnBackUrls)
 
         if (urlString == null || sitesFromResource == null) return false
 
@@ -272,7 +273,7 @@ class NhsWeb(
 
     private fun clearCookie(cookieName: String, domain: String) {
         CookieManager.getInstance()
-            .setCookie(domain, "$cookieName=; Expires=Sat, 1 Jan 2000 00:00:01 UTC;")
+                .setCookie(domain, "$cookieName=; Expires=Sat, 1 Jan 2000 00:00:01 UTC;")
     }
 
 
