@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
@@ -8,8 +9,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class EmisConsultationMapper
     {
+        private readonly ILogger<EmisConsultationMapper> _logger;
+
         private const string Observation = "Observation";
         private const string Unknown = "UnKnown";
+
+        public EmisConsultationMapper(ILogger<EmisConsultationMapper> logger)
+        {
+            _logger = logger;
+        }
 
         public Consultations Map(MedicationRootObject consultationsGetResponse)
         {
@@ -27,26 +35,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
             var medicalRecord = consultationsGetResponse.MedicalRecord;
 
-            consultations.Data =
-                (medicalRecord.Consultations ?? Enumerable.Empty<Consultation>()).Select(FilterConsultationItem);
+            consultations.Data = (medicalRecord.Consultations ?? Enumerable.Empty<Consultation>())
+                .Select(FilterConsultationItem);
 
             return consultations;
         }
 
         private ConsultationItem FilterConsultationItem(Consultation response)
         {
-            var consultationHeaders = FilterConsultationHeaders(response);
-            MyRecordDate effectiveDate = null;
-
-            if (response.EffectiveDate?.Value != null)
+            if(response == null)
             {
-                effectiveDate = new MyRecordDate
+                _logger.LogWarning("Removing a consultation due to null response");
+                return null;
+            }
+            
+            var consultationHeaders = FilterConsultationHeaders(response);
+
+            MyRecordDate effectiveDate = response.EffectiveDate?.Value != null
+                ? new MyRecordDate
                 {
                     Value = response.EffectiveDate.Value,
                     DatePart = response.EffectiveDate.DatePart
-                };
-            }
-
+                }
+                : new MyRecordDate();
+            
             var consultantLocation = !string.IsNullOrEmpty(response.Location)
                 ? $"{response.Location} - {response.ConsultantName}"
                 : response.ConsultantName;

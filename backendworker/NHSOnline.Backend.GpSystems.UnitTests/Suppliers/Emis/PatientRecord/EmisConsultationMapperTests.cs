@@ -4,7 +4,9 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
@@ -43,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         [TestMethod]
         public void MapConsultationRequestGetResponseToConsultationListResponse_WithNullResponse_ThrowsNullReferenceException()
         {
-            Action act = () => new EmisConsultationMapper().Map(null);
+            Action act = () => new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(null);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("consultationsGetResponse");
         }
@@ -120,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
                 
             // Act
-            var result = new EmisConsultationMapper().Map(item);
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -279,7 +281,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
                 
             // Act
-            var result = new EmisConsultationMapper().Map(item);
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -379,7 +381,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
             
             // Act
-            var result = new EmisConsultationMapper().Map(item);
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -453,7 +455,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
             
             // Act
-            var result = new EmisConsultationMapper().Map(item);
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -493,7 +495,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
             
             // Act
-            var result = new EmisConsultationMapper().Map(item);
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -501,7 +503,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         }
         
         [TestMethod]
-        public void MapConsultationRequestsGetResponseToConsultationListResponse_WithNullEffectiveDateValue_ReturnsDataEmptyDate()
+        public void MapConsultationRequestsGetResponseToConsultationListResponse_WithNullEffectiveDateValue_ReturnsAConsultationRecordWithEmptyDate()
         {
             // Arrange
             var item = new MedicationRootObject {
@@ -524,19 +526,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
 
             // Act
-            var result = new EmisConsultationMapper().Map(item);
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Count().Should().Be(1);
 
-            var consultation = result.Data.First();
-            consultation.ConsultantLocation.Should().Be("Test SURGERY - Jean (Dr)");
-            consultation.EffectiveDate.Should().BeNull();
+            result.Data.Single().EffectiveDate.Should().NotBeNull();
+            result.Data.Single().EffectiveDate.DatePart.Should().BeNull();
+            result.Data.Single().EffectiveDate.Value.Should().BeNull();
         }
 
         [TestMethod]
-        public void MapConsultationRequestsGetResponseToConsultationListResponse_WithNullEffectiveDate_ReturnsDataWithEmptyDate()
+        public void MapConsultationRequestsGetResponseToConsultationListResponse_WithNullEffectiveDate_ReturnsAConsultationRecordWithEmptyDate()
         {
             // Arrange
             var item = new MedicationRootObject
@@ -555,15 +557,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
 
             // Act
-            var result = new EmisConsultationMapper().Map(item);
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Count().Should().Be(1);
 
-            var consultation = result.Data.First();
-            consultation.ConsultantLocation.Should().Be("Test SURGERY - Jean (Dr)");
-            consultation.EffectiveDate.Should().BeNull();
+            result.Data.Single().EffectiveDate.Should().NotBeNull();
+            result.Data.Single().EffectiveDate.DatePart.Should().BeNull();
+            result.Data.Single().EffectiveDate.Value.Should().BeNull();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
@@ -10,6 +11,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class EmisTestResultMapper
     {
+        private readonly ILogger<EmisTestResultMapper> _logger;
+
+        public EmisTestResultMapper(ILogger<EmisTestResultMapper> logger)
+        {
+            _logger = logger;
+        }
+
         public TestResults Map(MedicationRootObject testResultRequestsGetResponse)
         {
             if (testResultRequestsGetResponse == null)
@@ -34,23 +42,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
         private TestResultItem GetTestResultItem(TestResult response)
         {
+            if(response?.Value == null)
+            {
+                _logger.LogWarning("Removing a test result due to null response value");
+                return null;
+            }
+
             var testResultItem = new TestResultItem();
 
-            if (response.Value == null)
-            {
-                return testResultItem;                
-            }
-
-            if (response.Value.EffectiveDate?.Value != null)
-            {
-                testResultItem.Date =
-                    new MyRecordDate
-                    {
-                        Value = response.Value.EffectiveDate.Value,
-                        DatePart = response.Value.EffectiveDate.DatePart
-                    };
-            }
-            
+            testResultItem.Date = response.Value.EffectiveDate?.Value != null 
+                ? new MyRecordDate
+                { 
+                    Value = response.Value.EffectiveDate.Value,
+                    DatePart = response.Value.EffectiveDate.DatePart
+                } 
+                : new MyRecordDate();
+        
             if (response.ChildValues == null || !response.ChildValues.Any())
             {
                 var itemDescription = BuildItemDescriptionWithNoChildValues(response);

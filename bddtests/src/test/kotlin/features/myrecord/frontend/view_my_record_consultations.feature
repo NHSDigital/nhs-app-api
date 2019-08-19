@@ -24,6 +24,15 @@ Feature: View My Medical Record Information - Consultations Frontend
     When I click the Consultations section on My Record
     Then I see a message indicating that I have no access to view Consultations on My Record
 
+  Scenario: An EMIS user has two consultation records but one has no date
+    Given the my record wiremocks are initialised for EMIS
+    And the GP Practice has enabled demographics functionality
+    And the EMIS GP Practice has two consultations where the second record has no date
+    And I am on my record information page
+    When I click the Consultations section on My Record
+    Then I see 2 Consultations records displayed
+    Then The second consultation record has an unknown date
+
   Scenario Outline: An Error occurs retrieving Consultations data <Service>
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality

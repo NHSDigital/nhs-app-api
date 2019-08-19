@@ -23,6 +23,7 @@ import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
+@Suppress("LargeClass")
 open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
@@ -88,6 +89,15 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
+        }
+    }
+
+    @Given("^the EMIS GP Practice has two test results where the second record has no date$")
+    fun givenTheEmisGpPracticeHasATestResultWithNoDate() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            myRecord.testResultsRequest(SerenityHelpers.getPatient())
+                    .respondWithSuccess(TestResultsData.getTwoTestResultsWhereTheSecondRecordHasNoDate())
         }
     }
 
@@ -350,6 +360,12 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("^I see (.*) test results$")
     fun thenISeeMultipleTestResults(count: Int) {
         assertEquals("Expected test results", count, myRecordInfoPage.testResults.allRecordItems().count())
+    }
+
+    @Then("^The second test result record has an unknown date$")
+    fun thenTheSecondResultHasAnUnknownDate() {
+        val dateLabel = myRecordInfoPage.testResults.allRecordItems()[1].label
+        assertEquals("Test result date", "Unknown Date", dateLabel)
     }
 
     @Then("I see the my record page scrolled to the test result section")

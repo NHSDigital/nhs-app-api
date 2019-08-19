@@ -12,8 +12,12 @@
     <div v-for="(consultation, consultationIndex) in orderedConsultations"
          :key="`consultation-${consultationIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <span v-if="consultation.effectiveDate.value" :class="$style.fieldName">
+      <span v-if="consultation.effectiveDate && consultation.effectiveDate.value"
+            :class="$style.fieldName">
         {{ consultation.effectiveDate.value | datePart(consultation.effectiveDate.datePart) }}
+      </span>
+      <span v-else :class="$style.fieldName">
+        {{ $t('my_record.noStartDate') }}
       </span>
 
       <p> {{ consultation.consultantLocation }} </p>
@@ -75,12 +79,17 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedConsultations() {
-      return _.orderBy(this.consultations.data, [obj => obj.effectiveDate.value], ['desc']);
+      return _.orderBy(this.consultations.data, [consultation => this.getEffectiveDate(consultation.effectiveDate, '')], ['desc']);
     },
     showError() {
       return this.consultations.hasErrored
              || this.consultations.data.length === 0
              || !this.consultations.hasAccess;
+    },
+  },
+  methods: {
+    getEffectiveDate(effectiveDate, defaultValue) {
+      return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
     },
   },
 };

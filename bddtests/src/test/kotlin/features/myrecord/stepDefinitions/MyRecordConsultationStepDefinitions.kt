@@ -84,6 +84,14 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         }
     }
 
+    @Given("^the EMIS GP Practice has two consultations where the second record has no date$")
+    fun givenThePracticeHasAConsultationWithNoDate(){
+        mockingClient.forEmis {
+            myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
+                    .respondWithSuccess(ConsultationsData.getTwoConsultationsWhereTheSecondRecordHasNoDate())
+        }
+    }
+
     @Given("^an error occurred retrieving the consultations$")
     fun givenAnErrorOccurredRetrievingTestResults() {
         when (SerenityHelpers.getGpSupplier()) {
@@ -135,6 +143,17 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
     @Then("^I see Consultations records displayed$")
     fun thenISeeConsultationsRecordsDisplayed() {
         assertEquals(2, myRecordInfoPage.consultations.allRecordItems().count())
+    }
+
+    @Then("^I see (.*) Consultations records displayed$")
+    fun thenISeeConsultationsRecordsDisplayed(count: Int) {
+        assertEquals(count, myRecordInfoPage.consultations.allRecordItems().count())
+    }
+
+    @Then("^The second consultation record has an unknown date")
+    fun thenTheSecondConsultationRecordHasAnUnknownDate() {
+        val dateLabel = myRecordInfoPage.consultations.allRecordItems()[1].label
+        assertEquals("Consultation date", "Unknown Date", dateLabel)
     }
 }
 

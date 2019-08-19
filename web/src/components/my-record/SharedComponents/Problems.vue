@@ -15,7 +15,7 @@
       <span v-if="problem.effectiveDate && problem.effectiveDate.value" :class="$style.fieldName">
         {{ problem.effectiveDate.value | datePart(problem.effectiveDate.datePart) }}
       </span>
-      <span v-else :class="$style.fieldName">{{ $t('my_record.problems.noStartDate') }}</span>
+      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
       <p v-for="(lineItem, lineItemIndex) in problem.lineItems"
          :key="`line-${lineItemIndex}`">
         {{ lineItem.text }}

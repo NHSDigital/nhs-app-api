@@ -870,7 +870,6 @@ export default {
     },
     problems: {
       sectionHeader: 'Problems',
-      noStartDate: 'Unknown Date',
     },
     consultations: {
       sectionHeader: 'Consultations',
@@ -938,6 +937,7 @@ export default {
       text: 'You may see medical abbreviations that you aren’t familiar with.',
       link: 'Help with abbreviations',
     },
+    noStartDate: 'Unknown Date',
   },
   common: {
     or: 'OR',

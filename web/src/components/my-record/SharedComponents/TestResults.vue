@@ -16,6 +16,9 @@
         <span v-if="testResult.date.value" :class="$style.fieldName">
           {{ testResult.date.value | datePart(testResult.date.datePart) }}
         </span>
+        <span v-else :class="$style.fieldName">
+          {{ $t('my_record.noStartDate') }}
+        </span>
         <p v-if="supplier === 'TPP'">
           <a :href="getTestResultPath(testResult.id)"
              :class="$style.viewTestResult"
@@ -99,7 +102,7 @@ export default {
       return this.results;
     },
     orderedTestResults() {
-      return orderBy([obj => obj.date.value], ['desc'])(this.results.data);
+      return orderBy([result => this.getEffectiveDate(result.date, '')], ['desc'])(this.results.data);
     },
     showError() {
       if (this.supplier === 'VISION') {
@@ -130,6 +133,9 @@ export default {
       if (e.keyCode === 13) {
         this.activateTestResult(testResultId, e);
       }
+    },
+    getEffectiveDate(effectiveDate, defaultValue) {
+      return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
     },
   },
 };

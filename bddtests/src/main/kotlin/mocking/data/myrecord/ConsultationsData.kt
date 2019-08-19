@@ -10,6 +10,8 @@ import mocking.emis.consultations.Section
 
 object ConsultationsData {
 
+    private const val NUMBER_OF_CONSULTATION_RECORDS = 2
+
     fun getDefaultConsultationsData() : ConsultationsResponseModel {
         return ConsultationsResponseModel(
                 medicalRecord = ConsultationMedicalRecord(
@@ -18,21 +20,24 @@ object ConsultationsData {
         )
     }
 
-    fun getMultipleConsultationRecords(): ConsultationsResponseModel {
+    fun getTwoConsultationsWhereTheSecondRecordHasNoDate() : ConsultationsResponseModel {
+        val consultationsResponseModel = getMultipleConsultationRecords(2)
+        consultationsResponseModel.medicalRecord.consultations[1].effectiveDate.value = ""
+
+        return consultationsResponseModel;
+    }
+
+    fun getMultipleConsultationRecords(count :Int = NUMBER_OF_CONSULTATION_RECORDS): ConsultationsResponseModel {
 
         val consultations = mutableListOf<ConsultationResponse>()
 
-        consultations.add(ConsultationResponse("THE SURGERY - MOSS", "Jean (Dr)",
-                mutableListOf(Section("History", mutableListOf(
-                        Observation("C/O: a rash", mutableListOf(
-                                AssociatedText("Tired generally. Needs to have bloods etc")))))),
-                                EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")))
-
-        consultations.add(ConsultationResponse("THE SURGERY - LAMBERT", "James (Dr)",
-                mutableListOf(Section("History", mutableListOf(
-                        Observation("C/O: a lump", mutableListOf(
-                                AssociatedText("Tired. Needs to have bloods etc")))))),
-                EffectiveDate("YearMonthDay", "2016-02-22T19:34:44.327")))
+        for(i in 1..count){
+            consultations.add(ConsultationResponse("THE SURGERY - MOSS", "Jean (Dr)",
+                    mutableListOf(Section("History", mutableListOf(
+                            Observation("C/O: a rash", mutableListOf(
+                                    AssociatedText("Tired generally. Needs to have bloods etc")))))),
+                    EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")))
+        }
 
         return ConsultationsResponseModel(
                 medicalRecord = ConsultationMedicalRecord(

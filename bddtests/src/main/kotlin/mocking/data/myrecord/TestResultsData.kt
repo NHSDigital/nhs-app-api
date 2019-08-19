@@ -80,6 +80,13 @@ class TestResultsData {
             )
         }
 
+        fun getTwoTestResultsWhereTheSecondRecordHasNoDate(): TestResultResponseModel {
+            val testResults = getTestResultsForEmis(NUMBER_OF_TEST_RESULT_RECORDS)
+            testResults.medicalRecord.testResults[1].value.effectiveDate.value = ""
+
+            return testResults
+        }
+
         fun getSingleTestResultWithNoChildValuesOrRange(): TestResultResponseModel {
             val testResults = mutableListOf<TestResultResponse>()
             testResults.add(TestResultResponseDataBuilder().testResultResponseData(
