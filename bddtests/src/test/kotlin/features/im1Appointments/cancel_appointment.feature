@@ -5,20 +5,18 @@ Feature: Cancel Appointments Frontend
   #This test covers navigation via buttons/links
 
   @nativesmoketest
-  Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down
-    Given I have upcoming appointments before cutoff time for <GP System>
+  Scenario: An EMIS user is presented with the cancel appointment screen with a drop-down
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     And I am on the My Appointments page
     When I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
-    Examples:
-      | GP System |
-      | EMIS      |
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
+  @nativesmoketest
   Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
@@ -27,7 +25,6 @@ Feature: Cancel Appointments Frontend
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
-  @nativesmoketest
     Examples:
       | GP System |
       | VISION    |
@@ -149,7 +146,8 @@ Feature: Cancel Appointments Frontend
       | Reason 1         | VISION    |
       | Unable to attend | MICROTEST |
 
-  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
+    # covered in Manual Regression Test pack
+  @tech-debt   @NHSO-4061
   Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have upcoming appointments before cutoff time for VISION
     And I am logged in

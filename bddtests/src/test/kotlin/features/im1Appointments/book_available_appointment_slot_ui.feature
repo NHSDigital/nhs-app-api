@@ -84,7 +84,7 @@ Feature: Book Appointments Frontend
     And the booked appointment is correctly displayed without ability to cancel
 
   Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason
-    Given there are <GP System> appointments available to book and user attempts to enter booking reason <script>
+    Given there are <GP System> appointments available to book and user attempts to enter a dangerous booking reason
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected an appointment slot to book
@@ -602,7 +602,7 @@ Feature: Book Appointments Frontend
       | GP System |
       | EMIS      |
       | MICROTEST |
-    
+
   Scenario Outline: An appointment is booked for an <GP System> user if a phone number is provided for telephone appointments with optional booking reason
     Given I wish to book an appointment without specifying a reason
     And I have no telephone number(s) stored for <GP System>
@@ -694,7 +694,8 @@ Feature: Book Appointments Frontend
       | GP System |
       | EMIS      |
 
-  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
+    # covered in Manual Regression Test pack
+  @tech-debt   @NHSO-4061
   Scenario: Booking a appointment when there is no internet connection
     Given I am logged in
     When I retrieve the 'Appointment Booking' page directly

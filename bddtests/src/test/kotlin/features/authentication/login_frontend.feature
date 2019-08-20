@@ -24,15 +24,12 @@ Feature: Login frontend
       | EMIS      |
 
   #Once prescriptions are completed for microtest, this test can be merged with above
-  Scenario Outline: A <GP System> user sees the home page after logging in
-    Given I am a <GP System> patient
+  Scenario: A Microtest user sees the home page after logging in
+    Given I am a MICROTEST patient
     And I am logged in
     Then I see a welcome message
     And I see the patient details of name, date of birth and NHS number
     And I see the home page header
-    Examples:
-      | GP System |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
     Given I am logged in as a <GP System> user created before Im1 Cache Keys existed
@@ -90,8 +87,8 @@ Feature: Login frontend
       | EMIS      |
       | TPP       |
 
-
-  @manual # covered in Manual Regression Test pack
+    # covered in Manual Regression Test pack
+  @manual
   Scenario Outline: <GPSS> User logs in using CitizenID
     Given I am not logged in as a <GPSS> user
     When I log in

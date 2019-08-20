@@ -18,8 +18,7 @@ Feature: Organ Donation View Frontend
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
-  Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to not donate
-  their organs
+  Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to not donate their organs
     Given I am a <GP System> user registered with organ donation to not donate my organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -32,8 +31,7 @@ Feature: Organ Donation View Frontend
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate all
-  their organs
+  Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate all their organs
     Given I am a <GP System> user registered with organ donation to donate all organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -46,8 +44,7 @@ Feature: Organ Donation View Frontend
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate some
-  of their organs
+  Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate some of their organs
     Given I am a <GP System> user registered with organ donation to donate some organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -115,8 +112,7 @@ Feature: Organ Donation View Frontend
     When I click the link called 'Tell your family and friends' with a url of 'https://www.organdonation.nhs.uk/app/app-tell/'
     Then a new tab has been opened by the link
 
-  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when
-  retrieving their registration, is shown an error message and can retry
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when retrieving their registration, is shown an error message and can retry
     Given I am a EMIS user registered as opt-in, but on lookup OD returns recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -127,8 +123,7 @@ Feature: Organ Donation View Frontend
       | Error Code |
       | 504        |
 
-  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when
-  retrieving their registration, is shown an error message and can't retry
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when retrieving their registration, is shown an error message and can't retry
     Given I am a EMIS user registered with OD, but on lookup OD returns non-recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -137,8 +132,7 @@ Feature: Organ Donation View Frontend
       | Error Code |
       | 403        |
 
-  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when
-  retrieving reference data, is shown an error message and can retry
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when retrieving reference data, is shown an error message and can retry
     Given I am a EMIS user registered with OD, but the ReferenceData call returns recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -149,8 +143,7 @@ Feature: Organ Donation View Frontend
       | Error Code |
       | 429        |
 
-  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when
-  retrieving reference data, is shown an error message and can't retry
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when retrieving reference data, is shown an error message and can't retry
     Given I am a EMIS user registered with OD, but the ReferenceData call returns non-recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly

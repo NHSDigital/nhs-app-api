@@ -1,9 +1,9 @@
 @authentication
 @authentication-session-expiry
 @noJs
+@long-running
 Feature: NoJS Session Expiry
 
-  @long-running
   Scenario: On session expiry, a user on a secure screen is automatically signed out
     Given I have disabled javascript
     And I am a EMIS patient

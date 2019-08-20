@@ -14,7 +14,8 @@ Feature: Create Session Backend
     And the response has service journey rules
     And the cookie contains a session guid with http-only
 
-  @tech-debt @NHSO-725  # covered in Manual Regression Test pack
+  # covered in Manual Regression Test pack
+  @tech-debt @NHSO-725
   Scenario: We check the session cookie and response body for https
     Given I have a valid authCode and codeVerifier
     When I create a user session
@@ -96,7 +97,8 @@ Feature: Create Session Backend
       | TPP       | zt     |
       | VISION    | zs     |
 
-  @manual # covered in Manual Regression Test pack
+  # covered in Manual Regression Test pack
+  @manual
   Scenario: session fails to be saved in cache
     Given I have valid OAuth details and the <GP System> session fails to be saved in cache
     When I create a user session

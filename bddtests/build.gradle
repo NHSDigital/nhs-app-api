@@ -1,4 +1,5 @@
 defaultTasks 'clean','prepare','test','aggregate'
+
 repositories {
 //    maven {
 //        url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
@@ -36,6 +37,7 @@ buildscript {
         classpath "gradle.plugin.ua.eshepelyuk:ManifestClasspath:1.0.0"
         classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
         classpath "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.3.1"
     }
 }
 group 'org.nhsonline.tests'
@@ -44,6 +46,7 @@ apply plugin: 'kotlin'
 apply plugin: 'net.serenity-bdd.aggregator'
 apply plugin: 'ua.eshepelyuk.ManifestClasspath'
 apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: "com.moowork.node"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 configurations {
@@ -112,14 +115,25 @@ task pally(type: JavaExec) {
     args = ['./accessibilityoutput/','pa11y ','./target/site/pa11y/','./pa11yconfig.json']
 }
 
+node {
+    version = '10.16.2'
+    download = true
+}
+
+task lintGherkin(type: YarnTask) {
+    dependsOn yarn_install
+    args = ["lint"]
+}
+
 task frameworkUnitTests(type: Test) {
     test.ignoreFailures = true
     useJUnit {
         includeCategories 'pages.PageObjectTests'
     }
 }
+
 task prepare {
-    dependsOn compileTestKotlin, detektCheck
+    dependsOn compileTestKotlin, detektCheck, lintGherkin
 }
 test {
     testLogging.showStandardStreams = true

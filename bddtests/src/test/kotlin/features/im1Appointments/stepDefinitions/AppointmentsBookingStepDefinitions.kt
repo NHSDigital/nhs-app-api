@@ -51,9 +51,10 @@ class AppointmentsBookingStepDefinitions {
         factory.generateSuccessfulBookingResponse(bookingReasonOfSpecifiedLength)
     }
 
-    @Given("^there are (.*) appointments available to book and user attempts to enter booking reason (.*)\$")
-    fun thereAreAvailableAppointmentsToBookWithABookingReason(gpSystem: String, bookingReason: String) {
+    @Given("^there are (.*) appointments available to book and user attempts to enter a dangerous booking reason$")
+    fun thereAreAvailableAppointmentsToBookWithADangerousBookingReason(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        val bookingReason = "<script>"
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse(bookingReason)
         Serenity.setSessionVariable(symptomsToEnter).to(bookingReason)

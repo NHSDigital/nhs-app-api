@@ -43,3 +43,6 @@ ops/vars_ci_run.env
 
 # user settings file
 *.DotSettings.user
+
+# node modules folder
+node_modules/*

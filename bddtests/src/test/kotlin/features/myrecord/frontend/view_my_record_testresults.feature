@@ -76,7 +76,7 @@ Feature: View My Medical Record Information - Test Results Frontend
     When I click the test result section
     Then I see test results with multiple child values some of which have ranges
 
-  Scenario:
+  Scenario: An EMIS user has a test result with an unknown date
     Given the my record wiremocks are initialised for EMIS
     And the GP Practice has enabled demographics functionality
     And the EMIS GP Practice has two test results where the second record has no date

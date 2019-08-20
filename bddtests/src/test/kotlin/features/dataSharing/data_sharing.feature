@@ -1,5 +1,6 @@
 @data-sharing
 @more
+@nativesmoketest
 Feature: Data Sharing Frontend
   A user can access Data Sharing
 
@@ -9,7 +10,6 @@ Feature: Data Sharing Frontend
     And I retrieve the 'More' page directly
     When I choose to set my data sharing preferences
 
-  @nativesmoketest
   Scenario Outline: A user navigates through Data Sharing Preferences pages via the Next/Previous buttons to page with heading <TargetPage>
     Given I am on the Data Sharing <StartingPage> page
     When I click the Next button <Clicks> times
@@ -22,7 +22,6 @@ Feature: Data Sharing Frontend
   |Overview    |2     |Where your choice does not apply               |
   |Overview    |3     |Make your choice                               |
 
-  @nativesmoketest
   Scenario Outline: A use navigates through the Data Sharing Preferences pages via the Contents links to page with heading <TargetPage>
     Given I am on the Data Sharing <StartingPage> page
     When I click the <ContentsLink> contents link
@@ -40,8 +39,6 @@ Feature: Data Sharing Frontend
     When I click the link called 'Visit the NHS.UK website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
     Then a new tab has been opened by the link
 
-    
-  @nativesmoketest
   Scenario: A user chooses to manage their Data Sharing preferences
     Given I am on the Data Sharing Overview page
     And I click the Next button 3 times

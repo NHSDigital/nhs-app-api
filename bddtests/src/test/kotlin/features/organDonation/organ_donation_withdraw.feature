@@ -88,8 +88,7 @@ Feature: Organ Donation Withdraw Frontend
     Then the Organ Donation Check Details page is displayed
     And my decision to withdraw is recorded on the Organ Donation Check Details page
 
-  Scenario: A user, when attempting to withdraw a previously registered <Decision> organ donation decision,
-    but OD takes too long to respond, is shown decision pending page
+  Scenario: A user, when attempting to withdraw a previously registered <Decision> organ donation decision, but OD takes too long to respond, is shown decision pending page
     Given I am a EMIS user registered with organ donation with a decision to opt-in who wishes to opt-out but OD takes too long to respond
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -104,4 +103,3 @@ Feature: Organ Donation Withdraw Frontend
     When I click the 'Submit my decision' button on an Organ Donation page
     And I wait for 15 seconds
     Then I see an appropriate Organ Donation decision processing message without a retry option
-

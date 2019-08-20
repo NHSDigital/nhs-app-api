@@ -323,8 +323,7 @@ Feature: Organ Donation Frontend
     When I click the 'Back' button on an Organ Donation page
     Then the Organ Donation Specific Organ Choice page is displayed
 
-  Scenario Outline: A user opting out, where OD returns a <Error Code> recoverable error is shown an error message
-  and can retry
+  Scenario Outline: A user opting out, where OD returns a <Error Code> recoverable error is shown an error message and can retry
     Given I am a EMIS user who wishes to register as opt out, but OD returns recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -338,8 +337,7 @@ Feature: Organ Donation Frontend
       | Error Code |
       | 429        |
 
-  Scenario Outline: A user opting out, where OD returns a <Error Code> non-recoverable error, is shown an error
-  message and can't retry
+  Scenario Outline: A user opting out, where OD returns a <Error Code> non-recoverable error, is shown an error message and can't retry
     Given I am a EMIS user who wishes to register as opt out, but OD returns non-recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly

@@ -29,8 +29,7 @@ Feature: Session Expiry and Extend Frontend
     And the user login details are cleared from cookies
 
   @tech-debt @NHSO-1742
-  Scenario: On session expiry, a user of the native app, on a non secure screen,
-  is signed out on navigating back to a secure screen and sending a request
+  Scenario: On session expiry, a user of the native app, on a non secure screen, is signed out on navigating back to a secure screen and sending a request
     Given I am a EMIS patient
     And I am logged in
     And I navigate to Symptoms
@@ -39,7 +38,8 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page with the session expiry notification
     And the user login details are cleared from cookies
 
-  @tech-debt   @NHSO-4064 # covered in Manual Regression Test pack
+  # covered in Manual Regression Test pack
+  @tech-debt   @NHSO-4064
   Scenario: On session expiry, a user without an active internet connection is automatically signed out
     Given I am a EMIS patient
     And I am logged in
@@ -50,8 +50,7 @@ Feature: Session Expiry and Extend Frontend
     And the user login details are cleared from cookies
 
   @manual
-  Scenario: Before session expiry, a user without an active internet connection is prompted with the session
-  dialog box, extends their session and sees the internet connection error screen.
+  Scenario: Before session expiry, a user without an active internet connection is prompted with the session dialog box, extends their session and sees the internet connection error screen.
     Given I am a EMIS patient
     And I am logged in
     And I am on the home page
@@ -66,8 +65,7 @@ Feature: Session Expiry and Extend Frontend
     Then I am still on the connection error screen
 
   @manual
-  Scenario: Before session expiry, a user without an active internet connection is prompted with the session
-  dialog box, opts to logout.
+  Scenario: Before session expiry, a user without an active internet connection is prompted with the session dialog box, opts to logout.
     Given I am a EMIS patient
     And I am logged in
     And I am on the home page
@@ -81,8 +79,7 @@ Feature: Session Expiry and Extend Frontend
     And the user login details are cleared from cookies
 
   @android
-  Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
-  dialog box, extends their session and stays signed in
+  Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -95,8 +92,7 @@ Feature: Session Expiry and Extend Frontend
     Then I am given guidance as to my options before booking an appointment
 
   @android
-  Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
-  dialog box, opts to logout
+  Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -108,8 +104,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @android
-  Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
-  dialog box, does nothing and is signed out
+  Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -121,8 +116,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @android
-  Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
-  screen is prompted with the session extension dialog box, extends their session and stays signed in
+  Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     And I navigate to more
@@ -137,8 +131,7 @@ Feature: Session Expiry and Extend Frontend
     Then I am given guidance as to my options before booking an appointment
 
   @android
-  Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
-  screen is prompted with the session extension dialog box, opts to logout
+  Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     And I navigate to more
@@ -154,8 +147,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @android
-  Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
-  screen is prompted with the session extension dialog box, does nothing and is signed out
+  Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     And I navigate to more
@@ -172,8 +164,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @android
-  Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure
-  screen is signed out
+  Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure screen is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     And I navigate to more
@@ -184,8 +175,7 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page
 
   @android
-  Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
-  to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
+  Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -197,8 +187,7 @@ Feature: Session Expiry and Extend Frontend
     Then I am given guidance as to my options before booking an appointment
 
   @android
-  Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
-  to the foreground and the session extension dialog box is displayed, opts to logout
+  Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -209,8 +198,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @android
-  Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
-  to the foreground and the session extension dialog box is displayed, does nothing and is signed out
+  Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -221,8 +209,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @android
-  Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app
-  to the foreground and is signed out
+  Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app to the foreground and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -230,8 +217,7 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page
 
   @manual
-  Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
-  unlocks the device and the session extension dialog box is displayed, extends their session and stays signed in
+  Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user unlocks the device and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -246,8 +232,7 @@ Feature: Session Expiry and Extend Frontend
     Then I am given guidance as to my options before booking an appointment
 
   @manual
-  Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
-  unlocks the device and the session extension dialog box is displayed, opts to logout
+  Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user unlocks the device and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -264,8 +249,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @manual
-  Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
-  unlocks the device and the session extension dialog box is displayed, does nothing and is signed out
+  Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user unlocks the device and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I lock the device
@@ -279,8 +263,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @manual
-  Scenario: The user has locked the device with the native app on a secure screen. The session expires, the user
-  unlocks the device and is signed out
+  Scenario: The user has locked the device with the native app on a secure screen. The session expires, the user unlocks the device and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
@@ -295,7 +278,6 @@ Feature: Session Expiry and Extend Frontend
     Given the GP System session has expired when viewing prescriptions
     When I navigate to prescriptions
     Then I see the login page with the session expiry notification
-
     Examples:
       | GP System |
       | EMIS      |

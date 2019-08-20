@@ -1,15 +1,14 @@
 @authentication
 @authentication-session-expiry
 @authentication-session-extend
+@long-running
 Feature: Session Expiry and Extend for Desktop
    Notes on the terminology for the following tests:
    * A 'secure screen' is a page that is within the Desktop app, e.g. Appointments Booking Page
    * A 'non secure screen' is a page that is not within our native app, but surfaced as part of the functionality,
    e.g. Health A-Z (accessed from the symptoms page)
 
-  @long-running
-  Scenario: Before session expiry, on a secure screen, is prompted with the session extension
-  dialog box, extends their session and stays signed in
+  Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, extends their session and stays signed in
     Given there are EMIS appointments available to book
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
@@ -25,9 +24,7 @@ Feature: Session Expiry and Extend for Desktop
     And  I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
 
-  @long-running
-  Scenario: Before session expiry, on a secure screen, is prompted with the session extension
-  dialog box, opts to logout
+  Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, opts to logout
     Given there are EMIS appointments available to book
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
@@ -38,9 +35,7 @@ Feature: Session Expiry and Extend for Desktop
     Then I see the login page
     And the dialog box is not visible on the screen
 
- @long-running
-  Scenario: Before session expiry, on a secure screen, is prompted with the session extension
-  dialog box, does nothing and is signed out
+  Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, does nothing and is signed out
     Given there are EMIS appointments available to book
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
@@ -51,9 +46,7 @@ Feature: Session Expiry and Extend for Desktop
     Then I see the login page with the session expiry notification
     And the dialog box is not visible on the screen
 
- @long-running
-  Scenario: Before session expiry, on a secure screen, is prompted with the session extension
-  dialog box and check the focus trap
+  Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box and check the focus trap
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments

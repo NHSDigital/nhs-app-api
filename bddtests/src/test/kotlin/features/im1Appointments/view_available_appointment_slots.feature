@@ -296,8 +296,9 @@ Feature: View Available Appointment Slots Frontend
     And I decide I don't want to select an appointment and go back
     Then the My Appointments page is displayed
 
+    # covered in Manual Regression Test pack
   @native
-  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
+  @tech-debt   @NHSO-4061
   Scenario: A user sees appropriate information message when internet connection has been lost
     #    GP System agnostic scenario, so only need to test with EMIS
     Given I am on the My Appointments page

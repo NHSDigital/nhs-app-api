@@ -4,12 +4,11 @@ Feature: Sign out of mobile web
   In order to ensure privacy with personalised NHS services
   As a registered and signed in user
   I want to be able to sign out from my NHS account so personal data cannot be seen
-  
+
   Scenario Outline: A <GP Supplier> user is shown the onboarding sign in screen after clicking the "Sign out" button
     Given I am logged in as a <GP Supplier> user
     When I sign out
     Then I see the login page
-
     Examples:
       | GP Supplier |
       | EMIS        |
@@ -20,16 +19,11 @@ Feature: Sign out of mobile web
       | VISION      |
 
   @manual
-  Scenario Outline: A spinner is shown if there is a delay in the action of the "Sign out" button for a <GP Supplier> user
+  Scenario: A spinner is shown if there is a delay in the action of the "Sign out" button for a user
     # Cannot slow the sign-out down enough to detect the spinner icon.
 
-    Examples:
-      | GP Supplier |
-      | EMIS        |
-      | TPP         |
-      | VISION      |
-
-  @manual # covered in Manual Regression Test pack
+    # covered in Manual Regression Test pack
+  @manual
   Scenario: The nsho cookie should be clear of session and user information if server side sign out fails
     # Cannot induce session sign-out failure.
     Given I am logged in
@@ -42,7 +36,6 @@ Feature: Sign out of mobile web
     When I sign out
     Then I see the login page
     And I do not see the menu bar
-
     Examples:
       | GP Supplier |
       | EMIS        |
@@ -54,19 +47,15 @@ Feature: Sign out of mobile web
     When I sign out
     Then I see the login page
     And the user login details are cleared from cookies
-
     Examples:
       | GP Supplier |
       | EMIS        |
       | TPP         |
       | VISION      |
 
-  Scenario Outline: The nsho cookie should be clear of <GP Supplier> session and user information if server side sign out fails
+  Scenario: The nsho cookie should be clear of TPP session and user information if server side sign out fails
     # Only TPP has a sign out endpoint which can fail. Other suppliers tested manually
-    Given I am logged in as a <GP Supplier> user where the session will fail to clear on signout
+    Given I am logged in as a TPP user where the session will fail to clear on signout
     When I sign out
     Then I see the login page
     And the user login details are cleared from cookies
-    Examples:
-      | GP Supplier |
-      | TPP         |

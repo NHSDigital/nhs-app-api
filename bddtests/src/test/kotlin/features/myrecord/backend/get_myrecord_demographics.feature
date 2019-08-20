@@ -29,7 +29,8 @@ Feature: Get demographic data Backend
       | TPP       |
       | VISION    |
 
-  @tech-debt  @NHSO-2549   # covered in Manual Regression Test pack
+    # covered in Manual Regression Test pack
+  @tech-debt  @NHSO-2549
   Scenario Outline: When GP System is unavailable, the <GP System> user received Bad Gateway error
     Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie
@@ -42,7 +43,8 @@ Feature: Get demographic data Backend
       | EMIS      |
       | TPP       |
 
-  @tech-debt  @NHSO-2549   # covered in Manual Regression Test pack
+    # covered in Manual Regression Test pack
+  @tech-debt  @NHSO-2549
   Scenario Outline: When GP System times out, the <GP System> user receives Gateway Timeout error
     Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie

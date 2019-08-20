@@ -179,3 +179,13 @@ Found in ``pages/SessionExpiry.kt``
 
 
 If the session duration is altered these constants will need also adjusting to ensure validity of the tests.
+
+# Running Gherkin Linter
+Below commands will run gherkin linter against our feature files.
+```
+./gradlew lintGherkin
+OR
+./gradlew clean prepare
+
+```
+HTML Report is generated within /bddtests/target/site for the linter

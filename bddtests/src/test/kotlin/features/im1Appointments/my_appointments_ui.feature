@@ -99,8 +99,9 @@ Feature: My Appointments Frontend
       | TPP       |
       | MICROTEST |
 
-  Scenario Outline: A <GP System> user can see their upcoming appointments
-    Given I have upcoming appointments before cutoff time for <GP System>
+  @smoketest
+  Scenario: A VISION user can see their upcoming appointments
+    Given I have upcoming appointments before cutoff time for VISION
     And I am logged in
     When I retrieve the 'My Appointments' page directly
     Then the page title is "My appointments"
@@ -108,10 +109,6 @@ Feature: My Appointments Frontend
     And each appointment can be cancelled
     And I am not informed I have no historical appointments
     And I can book an appointment
-  @smoketest
-    Examples:
-    | GP System |
-    | VISION    |
 
   Scenario Outline: A <GP System> user can see the telephone number they will be phoned on for an upcoming telephone appointment
     Given I have upcoming telephone appointments before cutoff time for <GP System>
@@ -179,7 +176,8 @@ Feature: My Appointments Frontend
     And booked appointments before and one appointment within cutoff time are correctly displayed with relevant ability to cancel
     And I can book an appointment
 
-  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
+     # covered in Manual Regression Test pack
+  @tech-debt   @NHSO-4061
   Scenario: Requesting list of appointments, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have no booked appointments for EMIS
     And I am logged in

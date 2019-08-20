@@ -8,8 +8,9 @@ Feature: Prescriptions submission Frontend
 
   #This test covers navigation via buttons/links
   @nominatedPharmacy
-  Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
-    And I am using <GP System> GP System to submit my prescription
+  @smoketest
+  Scenario: The TPP user orders a repeat prescription with 5 entries
+    And I am using TPP GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And Azure organisation search is working
     And I am logged in
@@ -20,10 +21,6 @@ Feature: Prescriptions submission Frontend
     Then I cannot see any nominated pharmacy information
     When I click Confirm and order repeat prescription
     Then I see a order successful message on the Repeat prescription page with 6 prescriptions
-  @smoketest
-    Examples:
-    | GP System |
-    | TPP       |
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 

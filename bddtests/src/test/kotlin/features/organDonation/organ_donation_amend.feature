@@ -250,8 +250,7 @@ Feature: Organ Donation Amend Frontend
     When I click the link called 'Find out more about organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/'
     Then a new tab has been opened by the link
 
-  Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an
-  error message and can retry
+  Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an error message and can retry
     Given I am a EMIS user registered as opt-in amends to opt-out, but OD returns recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -268,8 +267,7 @@ Feature: Organ Donation Amend Frontend
       | Error Code |
       | 503        |
 
-  Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an
-  error message and can't retry
+  Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an error message and can't retry
     Given I am a EMIS user registered as opt-in amends to opt-out, but OD returns non-recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
