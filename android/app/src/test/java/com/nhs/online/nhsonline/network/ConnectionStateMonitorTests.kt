@@ -81,6 +81,24 @@ class ConnectionStateMonitorTests {
             "Failed: Returns false for a connected network"
         }
     }
+
+    @Test
+    fun connectionStateMonitorWithNullConnectionContext() {
+        mockConnectionStateMonitor.mockNetworkCallback(ResourceMockingClass().mockNullConnectionContext())
+        assert(!isConnectedToNetwork) {
+            "Failed: Returns true with no connected network"
+        }
+    }
+
+    @Test
+    fun connectionStateMonitorWithNullConnectionContext_PreSDK_23() {
+        SdkVersionHelper.setSdkVersion(22)
+
+        mockConnectionStateMonitor.mockNetworkCallback(ResourceMockingClass().mockNullConnectionContext())
+        assert(!isConnectedToNetwork) {
+            "Failed: Returns true with no connected network"
+        }
+    }
 }
 
 class MockConnectionStateMonitor {
@@ -89,9 +107,13 @@ class MockConnectionStateMonitor {
         val connectionStateMonitor = ConnectionStateMonitor(context)
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        when(connectivityManager.activeNetworkInfo.isConnected) {
-            true -> connectionStateMonitor.onAvailable(mock())
-            false -> connectionStateMonitor.onLost(mock())
+        if (connectivityManager.activeNetworkInfo != null) {
+            when (connectivityManager.activeNetworkInfo.isConnected) {
+                true -> connectionStateMonitor.onAvailable(mock())
+                false -> connectionStateMonitor.onLost(mock())
+            }
+        } else {
+            connectionStateMonitor.onLost(mock())
         }
     }
 }

@@ -12,6 +12,7 @@ class ConnectionStateMonitor(val context: Context) : NetworkCallback() {
         var isConnectedToNetwork: Boolean = false
             private set
     }
+
     private val networkRequest = NetworkRequest.Builder()
 
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -36,6 +37,8 @@ class ConnectionStateMonitor(val context: Context) : NetworkCallback() {
                 isConnectedToNetwork = (networkInfo.isConnected() &&
                         (networkInfo.getType() == ConnectivityManager.TYPE_WIFI ||
                                 networkInfo.getType() == ConnectivityManager.TYPE_MOBILE))
+            } else {
+                isConnectedToNetwork = false
             }
         } else {
             val activeNetwork = connectivityManager.getActiveNetwork()
@@ -49,6 +52,8 @@ class ConnectionStateMonitor(val context: Context) : NetworkCallback() {
                                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
                 }
+            } else {
+                isConnectedToNetwork = false
             }
         }
 

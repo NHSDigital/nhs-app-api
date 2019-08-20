@@ -163,6 +163,21 @@ open class ResourceMockingClass {
 
     }
 
+    fun mockNullConnectionContext(): Context {
+        val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
+        val networkInfo = Mockito.mock(NetworkInfo::class.java)
+
+        //api < 23
+        Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(null)
+
+        //api >= 23
+        Mockito.`when`(connectivityManager.activeNetwork).thenReturn(null)
+
+        return mock {
+            on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
+        }
+    }
+
     // Returns an activity which does returns permission granted when fine location permission
     // are checked
     fun mockGeolocationPermissionsAllow(): Activity {
