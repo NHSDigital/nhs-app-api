@@ -93,7 +93,7 @@ export default {
         {
           innerHTML: `
             <style type="text/css">
-              @media (max-width: 767px) {
+              @media (max-width: 989px) {
                 .nojs-mini-menu-expanded {
                   display: block !important;
                 }
