@@ -40,7 +40,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         private Mock<ILogger<ServiceDefinitionService>> _mockLogger;
         private Mock<IOnlineConsultationsProviderHttpClient> _mockProviderHttpClient;
         private Mock<IMapper<DemographicsResponse, OlcDemographics>> _mockDemographicsOlcMapper;
-        private Mock<IOlcDataMaps> _mockProviderMap;
         private Mock<IAuditor> _mockAuditor;
         private UserSession _userSession;
         private Mock<IGpSystem> _mockGpSystem;
@@ -73,7 +72,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockLogger = new Mock<ILogger<ServiceDefinitionService>>();
             _mockProviderHttpClient = new Mock<IOnlineConsultationsProviderHttpClient>();
             _mockDemographicsOlcMapper = new Mock<IMapper<DemographicsResponse, OlcDemographics>>();
-            _mockProviderMap = new Mock<IOlcDataMaps>();
             _mockAuditor = new Mock<IAuditor>();
             _mockCreateFhirParam = new Mock<ICreateFhirParameter>();
             
@@ -127,7 +125,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 _mockHtmlSanitizer.Object,
                 _mockFhirSanitizationHelper.Object,
                 _mockDemographicsOlcMapper.Object,
-                _mockProviderMap.Object,
                 _mockAuditor.Object,
                 _mockGpSystemFactory.Object,
                 providersSettings,
@@ -140,33 +137,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         {
             // Arrange
             _mockProviderHttpClient
-                .Setup(pc => pc.GetServiceDefinitionById(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal))))
+                .Setup(pc => pc.EvaluateServiceDefinition(
+                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()))
                 .Throws<HttpRequestException>();
 
             // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult");
+            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
-        }
-
-        [TestMethod]
-        public async Task GetServiceDefinitionById_WhenProviderClientReturnsNotFound_ReturnsNotFound()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.NotFound };
-
-            _mockProviderHttpClient
-                .Setup(pc => pc.GetServiceDefinitionById(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal))))
-                .ReturnsAsync(httpResponse);
-
-            // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult");
-
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.NotFound>();
         }
 
         [TestMethod]
@@ -176,12 +157,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
 
             _mockProviderHttpClient
-                .Setup(pc => pc.GetServiceDefinitionById(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal))))
+                .Setup(pc => pc.EvaluateServiceDefinition(
+                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()))
                 .ReturnsAsync(httpResponse);
 
             // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult");
+            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -198,12 +181,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             };
 
             _mockProviderHttpClient
-                .Setup(pc => pc.GetServiceDefinitionById(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal))))
+                .Setup(pc => pc.EvaluateServiceDefinition(
+                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()))
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult");
+            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -223,12 +208,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             };
             
             _mockProviderHttpClient
-                .Setup(pc => pc.GetServiceDefinitionById(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal))))
+                .Setup(pc => pc.EvaluateServiceDefinition(
+                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()))
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult");
+            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -239,25 +226,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         [TestMethod]
         public async Task GetServiceDefinitionById_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
         {
+            
             // Arrange
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(ServiceDefinitionJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+                Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
             };
 
             _mockProviderHttpClient
-                .Setup(pc => pc.GetServiceDefinitionById(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal))))
+                .Setup(pc => pc.EvaluateServiceDefinition(
+                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()))
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult");
+            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinition(
-                It.IsAny<Hl7.Fhir.Model.ServiceDefinition>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
+                It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
         }
 
         [TestMethod]

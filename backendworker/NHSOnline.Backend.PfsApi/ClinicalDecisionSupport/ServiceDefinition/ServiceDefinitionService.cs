@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
@@ -11,7 +10,6 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Mappers;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
@@ -32,7 +30,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly FhirJsonParser _parser;
         private readonly FhirJsonSerializer _serializer;
         private readonly IMapper<DemographicsResponse, OlcDemographics> _demographicsOlcMapper;
-        private readonly IOlcDataMaps _olcDataMapper;
         private readonly IAuditor _auditor;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly OnlineConsultationsProvidersSettings _olcProvidersSettings;
@@ -44,7 +41,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             IHtmlSanitizer htmlSanitizer,
             IFhirSanitizationHelper fhirSanitizationHelper,
             IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
-            IOlcDataMaps dataMaps, IAuditor auditor, IGpSystemFactory gpSystemFactory,
+            IAuditor auditor, 
+            IGpSystemFactory gpSystemFactory,
             OnlineConsultationsProvidersSettings olcProvidersSettings,
             ICreateFhirParameter createFhirParameter)
         {
@@ -57,7 +55,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _parser = new FhirJsonParser();
             
             _demographicsOlcMapper = demographicsRegistrationMapper;
-            _olcDataMapper = dataMaps;
 
             _auditor = auditor;
             
@@ -67,20 +64,26 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _createFhirParameter = createFhirParameter;
         }
 
-        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, string provider)
+        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, string provider, UserSession userSession)
         {
             try
             {
                 HttpResponseMessage responseMessage;
-                Hl7.Fhir.Model.ServiceDefinition serviceDefinition;
-
+    
                 _logger.LogEnter();
 
                 _logger.LogInformation($"Searching for Service Definition with id: {serviceDefinitionId}");
 
+                var bodyString = "{ \"resourceType\":\"Parameters\", \"meta\":{ \"profile\":[ " +
+                                 "\"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\" ] }, " +
+                                 "\"parameter\": [ { \"name\": \"organization\", \"resource\": { \"resourceType\": " +
+                                 "\"Organization\", \"identifier\": { \"value\": \"" + 
+                                 userSession.GpUserSession.OdsCode+ "\" }}}]}";
+
                 try
                 {
-                    responseMessage = await httpClient.GetServiceDefinitionById(serviceDefinitionId);
+                    responseMessage = await httpClient.EvaluateServiceDefinition(serviceDefinitionId,
+                        bodyString, false);
                 }
                 catch (HttpRequestException hre)
                 {
@@ -93,25 +96,18 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 {
                     _logger.LogError($"Supplier responded with status code: {responseMessage.StatusCode}");
 
-                    if (!responseMessage.StatusCode.Equals(HttpStatusCode.NotFound))
-                    {
-                        return new ServiceDefinitionResult.BadGateway();
-                    }
-
-                    _logger.LogError($"No service definition found for id: {serviceDefinitionId}");
-
-                    return new ServiceDefinitionResult.NotFound();
+                    return new ServiceDefinitionResult.BadGateway();
                 }
-
-                _logger.LogInformation($"Supplier responded with status code: {responseMessage.StatusCode}");
 
                 var stringResponse = responseMessage.Content != null
                     ? await responseMessage.Content.ReadAsStringAsync()
                     : null;
 
+                GuidanceResponse guidanceResponse;
+                
                 try
                 {
-                    serviceDefinition = _parser.Parse<Hl7.Fhir.Model.ServiceDefinition>(stringResponse);
+                    guidanceResponse = _parser.Parse<GuidanceResponse>(stringResponse);
                 }
                 catch (ArgumentNullException)
                 {
@@ -121,15 +117,21 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 }
                 catch (FormatException fe)
                 {
-                    _logger.LogError($"Failed to parse service definition: {fe.Message}");
+                    _logger.LogError($"Failed to parse guidance response: {fe.Message}");
 
                     return new ServiceDefinitionResult.BadGateway();
                 }
+                
+                _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);
 
-                _fhirSanitizationHelper.SanitizeServiceDefinition(serviceDefinition, _htmlSanitizer);
+                if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
+                {
+                    _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}");
+                }
+
                 
                 var providerSettings = _olcProvidersSettings.getProvider(provider);
-                foreach (var child in serviceDefinition.Children)
+                foreach (var child in guidanceResponse.Children)
                 {
 
                     if (child.TypeName.Equals("Questionnaire",
@@ -162,7 +164,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                         }
                     }
                 }
-                return new ServiceDefinitionResult.Success(_serializer.SerializeToString(serviceDefinition));
+                return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
 
             }
             finally

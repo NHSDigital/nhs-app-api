@@ -101,8 +101,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                     return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
+                
+                var userSession = HttpContext.GetUserSession();
 
-                var result = await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId, provider);
+                var result = await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId, provider, userSession);
 
                 _logger.LogInformation($"Starting consultation with ServiceDefinition: {serviceDefinitionId}");
 
