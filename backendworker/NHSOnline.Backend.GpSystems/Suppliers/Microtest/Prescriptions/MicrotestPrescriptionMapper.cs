@@ -147,5 +147,46 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                 Details = details
             };
         }
+
+        public PrescriptionRequestPostPartialSuccessResponse Map(PrescriptionOrderPartiallySuccessfulResponse prescriptionOrderPartiallySuccessfulResponse)
+        {
+            var successfulOrders = new List<Order>();
+            var unsuccessfulOrders = new List<Order>();
+
+            if (prescriptionOrderPartiallySuccessfulResponse?.PatientRequests != null)
+            {
+                foreach (var courseOrder in prescriptionOrderPartiallySuccessfulResponse.PatientRequests)
+                {
+                    if (string.Equals(courseOrder.Status, PrescriptionOrderItemRequestStatus.Success, StringComparison.OrdinalIgnoreCase))
+                    {
+                        successfulOrders.Add(new Order
+                        {
+                            CourseId = courseOrder.Id,
+                            Name = courseOrder.Name,
+                        });
+                    }
+                    else if (string.Equals(courseOrder.Status, PrescriptionOrderItemRequestStatus.Failed, StringComparison.OrdinalIgnoreCase))
+                    {
+                        unsuccessfulOrders.Add(new Order
+                        {
+                            CourseId = courseOrder.Id,
+                            Name = courseOrder.Name,
+                        });
+                    }
+                    else
+                    {
+                        _logger.LogError($"Error mapping order - unexpected status - courseId: {courseOrder.Id}, status: {courseOrder.Status}");
+                    }
+                }
+            }
+
+            var response = new PrescriptionRequestPostPartialSuccessResponse
+            {
+                SuccessfulOrders = successfulOrders,
+                UnsuccessfulOrders = unsuccessfulOrders,
+            };
+
+            return response;
+        }
     }
 }

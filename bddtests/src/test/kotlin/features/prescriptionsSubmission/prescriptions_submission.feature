@@ -92,3 +92,14 @@ Feature: Prescriptions submission Frontend
     But GP system responds with a conflict error when a repeat prescription is submitted
     When I click Confirm and order repeat prescription
     Then I see a message indicating there was an error sending my order
+
+  Scenario: The Microtest user see a partial success page if some of their orders fail
+    And I am using MICROTEST GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And I am logged in
+    When I retrieve the 'My Prescriptions' page directly
+    And I select 1 repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    But the GP system responds with an error indicating the order was partially successful
+    When I click Confirm and order repeat prescription
+    Then I can view which medications from my prescription order succeeded and failed

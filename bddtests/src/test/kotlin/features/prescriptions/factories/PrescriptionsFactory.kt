@@ -5,6 +5,7 @@ import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
+import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 
 const val TIME_TO_SLEEP_IN_MILLIS = 1000L
@@ -42,6 +43,7 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
     abstract fun gpSessionHasExpired()
     abstract fun generateSpineStubs()
     abstract fun orderPrescriptionReturnsConflictResponse()
+    abstract fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade)
 
     val mockingClient = MockingClient.instance
     val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)

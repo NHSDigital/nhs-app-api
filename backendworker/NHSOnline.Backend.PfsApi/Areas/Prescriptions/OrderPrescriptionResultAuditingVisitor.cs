@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -103,6 +104,24 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.MedicationAlreadyOrderedWithinLast30Days)}");
+            }
+        }
+
+        public async Task Visit(OrderPrescriptionResult.PartialSuccess result)
+        {
+            try
+            {
+                await _auditor.Audit(
+                    AuditType,
+                    "Partial Success ordering prescription: Attempted to order course ids: {0}, Successful course ids: {1}, Unsuccessful course ids: {2}",
+                    _courseIds,
+                    string.Join(',', result.Response.SuccessfulOrders.Select(x => x.CourseId)),
+                    string.Join(',', result.Response.UnsuccessfulOrders.Select(x => x.CourseId))
+                    );
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.PartialSuccess)}");
             }
         }
     }

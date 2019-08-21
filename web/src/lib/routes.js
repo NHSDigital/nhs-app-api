@@ -632,6 +632,16 @@ const routes = {
       },
     },
   },
+  PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS: {
+    name: 'prescriptions-repeat-partial-success',
+    path: '/prescriptions/repeat-partial-success',
+    crumb: {
+      i8nKey: 'prescriptionRepeatPartialSuccess',
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
   SYMPTOMS: {
     name: 'symptoms',
     path: '/symptoms',
@@ -771,6 +781,7 @@ export const {
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
+  PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
   SYMPTOMS,
   TERMSANDCONDITIONS,
 } = routes;

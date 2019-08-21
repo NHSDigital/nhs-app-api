@@ -41,5 +41,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status466MedicationAlreadyOrderedWithinLast30Days);
         }
+
+        public IActionResult Visit(OrderPrescriptionResult.PartialSuccess result)
+        {
+            return new OkObjectResult(result.Response)
+            {
+                StatusCode = StatusCodes.Status202Accepted,
+            };
+        }
     }
 }

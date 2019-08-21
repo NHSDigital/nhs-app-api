@@ -292,6 +292,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
                                                       $"Error Message:'{ErrorResponseMessage}'. ";
 
             protected override bool FormatResponseIfUnsuccessful => false;
+
+            public bool IsPartialSuccess => StatusCode == HttpStatusCode.Accepted;
         }
 
         public class MicrotestApiObjectResponse<TBody> : MicrotestApiResponse
@@ -302,12 +304,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
             public TBody Body { get; set; }
 
+            public string RawResponse { get; set; }
+
             public async Task<MicrotestApiObjectResponse<TBody>> Parse(
                 HttpResponseMessage responseMessage,
                 IJsonResponseParser responseParser,
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
+                RawResponse = stringResponse;
                 return string.IsNullOrEmpty(stringResponse)
                     ? this
                     : ParseResponse(responseParser,

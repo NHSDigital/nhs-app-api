@@ -8,5 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
         PrescriptionListResponse Map(PrescriptionHistoryGetResponse prescriptionHistoryGetResponse);
 
         CourseListResponse Map(CoursesGetResponse courseGetResponse);
+
+        PrescriptionRequestPostPartialSuccessResponse Map(PrescriptionOrderPartiallySuccessfulResponse prescriptionOrderPartiallySuccessfulResponse);
     }
 }

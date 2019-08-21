@@ -6,6 +6,7 @@ import {
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
   UPDATE_SELECTED_REPEAT_PRESCRIPTION,
+  PARTIAL_ORDER_RESULT,
 } from './mutation-types';
 
 export default {
@@ -31,7 +32,8 @@ export default {
       repeatPrescriptionRequest: repeatPrescriptionOrder,
     };
     return this.app.$http
-      .postV1PatientPrescriptions(param).then(() => {
+      .postV1PatientPrescriptions(param).then((data) => {
+        commit(PARTIAL_ORDER_RESULT, data);
         if (process.client) {
           this.dispatch('analytics/satelliteTrack', 'prescription_ordered');
         }

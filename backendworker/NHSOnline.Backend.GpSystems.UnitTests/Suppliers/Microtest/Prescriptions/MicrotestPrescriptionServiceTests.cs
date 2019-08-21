@@ -9,6 +9,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
@@ -437,6 +438,81 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.Forbidden>();
+        }
+
+        [TestMethod]
+        public async Task Post_ReturnsPartialSuccessResponse_WhenPartialSuccessResponseReceivedFromMicrotest()
+        {
+            // Arrange
+            PrescriptionRequestsPost capturedPostRequest = null;
+
+            var successfulOrder = new
+            {
+                courseId = _fixture.Create<string>(),
+                name = _fixture.Create<string>(),
+            };
+
+            var unsuccessfulOrder = new
+            {
+                courseId = _fixture.Create<string>(),
+                name = _fixture.Create<string>(),
+            };
+
+            _repeatPrescriptionRequest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>
+                {
+                    successfulOrder.courseId,
+                    unsuccessfulOrder.courseId,
+                },
+                SpecialRequest = _fixture.Create<string>(),
+            };
+
+            var expectedRequest = new PrescriptionRequestsPost
+            {
+                CourseIds = _repeatPrescriptionRequest.CourseIds,
+                SpecialRequestMessage = _repeatPrescriptionRequest.SpecialRequest,
+            };
+
+            var rawResponse = new PrescriptionOrderPartiallySuccessfulResponse
+            {
+                PatientRequests = new List<PatientRequest>
+                {
+                    new PatientRequest
+                    {
+                        Id = successfulOrder.courseId,
+                        Name = successfulOrder.name,
+                        Status = PrescriptionOrderItemRequestStatus.Success,
+                    },
+                    new PatientRequest
+                    {
+                        Id = successfulOrder.courseId,
+                        Name = successfulOrder.name,
+                        Status = PrescriptionOrderItemRequestStatus.Failed,
+                    }
+                }
+            };
+
+            _microtestClient.Setup(x => x.PrescriptionsPost(
+                _microtestUserSession.OdsCode,
+                _microtestUserSession.NhsNumber,
+                It.IsAny<PrescriptionRequestsPost>()))
+                .Callback<string, string, PrescriptionRequestsPost>((ods, nhs, prp) => capturedPostRequest = prp)
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Accepted)
+                    {
+                        RawResponse = JsonConvert.SerializeObject(rawResponse),
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+
+            // Assert
+            _microtestClient.Verify(x => x.PrescriptionsPost(_microtestUserSession.OdsCode,
+                _microtestUserSession.NhsNumber, It.IsAny<PrescriptionRequestsPost>()));
+            var successResult = result.Should().BeAssignableTo<OrderPrescriptionResult.PartialSuccess>().Subject;
+            successResult.Should().NotBeNull();
+            expectedRequest.Should().BeEquivalentTo(capturedPostRequest);
         }
     }
 }

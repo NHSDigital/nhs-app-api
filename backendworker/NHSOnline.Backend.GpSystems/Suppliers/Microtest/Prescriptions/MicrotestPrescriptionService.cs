@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
+using static NHSOnline.Backend.Support.SerializationExtensions;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
 {
@@ -103,19 +104,35 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             {
                 CourseIds = repeatPrescriptionRequest.CourseIds,
                 SpecialRequestMessage = repeatPrescriptionRequest.SpecialRequest,
-            };
+            };    
 
             try
             {
                 _logger.LogEnter();
                 _logger.LogInformation("Beginning order prescription");
-
+                 
                 var response = await _microtestClient.PrescriptionsPost(
-                   microtestUserSession.OdsCode, microtestUserSession.NhsNumber, postRequest);
-
-                if (response.HasSuccessResponse)
+                    microtestUserSession.OdsCode, microtestUserSession.NhsNumber, postRequest);
+                
+                if (response.IsPartialSuccess)
                 {
-                    _logger.LogDebug($"Prescription order placed successfully");
+                    _logger.LogDebug("Prescription order partially succeeded");
+                    var partialSuccessResponse = response.RawResponse.DeserializeJson<PrescriptionOrderPartiallySuccessfulResponse>();
+
+                    var mappedPrescriptionPartialSuccess = _microtestPrescriptionMapper.Map(partialSuccessResponse);
+
+                    _logger.LogInformation(
+                        "Partial success ordering prescription. Attempted to order course ids: {0}, Successful course ids: {1}, Unsuccessful course ids: {2}",
+                        string.Join(',', repeatPrescriptionRequest.CourseIds),
+                        string.Join(',', mappedPrescriptionPartialSuccess.SuccessfulOrders.Select(x => x.CourseId)),
+                        string.Join(',', mappedPrescriptionPartialSuccess.UnsuccessfulOrders.Select(x => x.CourseId))
+                        );
+
+                    return new OrderPrescriptionResult.PartialSuccess(mappedPrescriptionPartialSuccess);
+                }
+                else if (response.HasSuccessResponse)
+                {
+                    _logger.LogDebug("Prescription order placed successfully");
                     return new OrderPrescriptionResult.Success();
                 }
                 else if (response.HasForbiddenResponse)
@@ -134,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, $"Repeat prescription order failed");
+                _logger.LogError(e, "Repeat prescription order failed");
                 return new OrderPrescriptionResult.BadGateway();
             }
             finally

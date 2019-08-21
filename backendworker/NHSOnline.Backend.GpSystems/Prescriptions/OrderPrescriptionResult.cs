@@ -1,3 +1,5 @@
+using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+
 namespace NHSOnline.Backend.GpSystems.Prescriptions
 {
     public abstract class OrderPrescriptionResult
@@ -54,6 +56,21 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
 
         public class MedicationAlreadyOrderedWithinLast30Days : OrderPrescriptionResult
         {
+            public override T Accept<T>(IOrderPrescriptionResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+        
+        public class PartialSuccess : OrderPrescriptionResult
+        {
+            public PrescriptionRequestPostPartialSuccessResponse Response { get; }
+
+            public PartialSuccess(PrescriptionRequestPostPartialSuccessResponse response)
+            {
+                Response = response;
+            }
+
             public override T Accept<T>(IOrderPrescriptionResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

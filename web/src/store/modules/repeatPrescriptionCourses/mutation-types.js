@@ -4,10 +4,12 @@ export const SELECT_REPEAT_PRESCRIPTION = 'SELECT_REPEAT_PRESCRIPTION';
 export const REPEAT_PRESCRIPTION_VALIDATED = 'REPEAT_PRESCRIPTION_VALIDATED';
 export const REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO = 'REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO';
 export const UPDATE_SELECTED_REPEAT_PRESCRIPTION = 'UPDATE_SELECTED_REPEAT_PRESCRIPTION';
+export const PARTIAL_ORDER_RESULT = 'PARTIAL_ORDER_RESULT';
 
 export const initialState = () => ({
   courses: [],
   repeatPrescriptionCourses: [],
+  partialOrderResult: null,
   specialRequest: null,
   hasLoaded: false,
   hasErrored: false,

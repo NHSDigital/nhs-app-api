@@ -7,6 +7,7 @@ import cucumber.api.java.en.When
 import cucumber.api.java.en.But
 import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
+import features.prescriptions.PrescriptionSerenityHelpers
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
@@ -27,12 +28,14 @@ import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.stubs.pds.ViewSpinePdsStubs
 import mocking.vision.models.PrescriptionHistory
+import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.ErrorPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
+import pages.prescription.PartiallySuccessfulRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
@@ -67,6 +70,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     private lateinit var prescriptionPage: PrescriptionsPage
     private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
+    private lateinit var partiallySuccessfulPrescriptionsOrderPage : PartiallySuccessfulRepeatPrescriptionsOrderPage
     private lateinit var errorPage: ErrorPage
 
     private var initialHistoricPrescriptionsCount = 0
@@ -100,6 +104,24 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
 
         prescriptionSubmissionRequest!!.courseIds.addAll(uuids)
+    }
+
+    @Given("^the GP system responds with an error indicating the order was partially successful")
+    fun theGpSystemRespondsWithErrorIndicatingTheOrderWasPartiallySuccessful() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+
+        val successfulMedicationOrders = listOf("Amoxicillin", "Ibuprofen")
+        val unsuccessfulMedicationOrders = listOf("Tramadol", "Oxycodone", "Xanax")
+
+        val partialSuccessData = PartialSuccessFacade(
+                unsuccessfulMedications = unsuccessfulMedicationOrders,
+                successfulMedications = successfulMedicationOrders
+        )
+
+        PrescriptionsFactory.getForSupplier(gpSystem)
+                .prescriptionsOrderEndpointPartiallySuccessful(partialSuccessData)
+
+        PrescriptionSerenityHelpers.PARTIAL_SUCCESS_RESULT.set(partialSuccessData)
     }
 
     @Given("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days " +
@@ -279,7 +301,6 @@ open class PrescriptionsSubmissionStepDefinitions {
                     .orderPrescriptionReturnsConflictResponse()
         }
 
-
         @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
         fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
             assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
@@ -335,6 +356,16 @@ open class PrescriptionsSubmissionStepDefinitions {
             Assert.assertEquals("expected error text $expectedText but found ${errorPage.errorText1.text}",
                     expectedText, errorPage.errorText1.text)
         }
+
+    @Then("I can view which medications from my prescription order succeeded and failed")
+    fun iSeeAMessageIndicatingThePrescriptionWasPartiallySuccessful() {
+        partiallySuccessfulPrescriptionsOrderPage.shouldBeDisplayed()
+
+        val partialSuccessExpected = PrescriptionSerenityHelpers
+                .PARTIAL_SUCCESS_RESULT
+                .getOrFail<PartialSuccessFacade>()
+        partiallySuccessfulPrescriptionsOrderPage.verifyMedications(partialSuccessExpected)
+    }
 
         @When("I see nominated pharmacy information is shown and correct")
         fun iSeeNominatedPharmacyInformationIsCorrect() {

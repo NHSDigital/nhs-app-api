@@ -7,6 +7,7 @@ import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.stubs.prescriptions.ViewPrescriptionsStubs
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
+import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_FORBIDDEN
@@ -104,6 +105,10 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
     }
 
     override fun orderPrescriptionReturnsConflictResponse() {
+        throw UnsupportedOperationException()
+    }
+
+    override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
         throw UnsupportedOperationException()
     }
 }

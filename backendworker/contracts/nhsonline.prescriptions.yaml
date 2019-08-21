@@ -55,6 +55,12 @@ paths:
       responses:
         "201":
           description: Successful operation. Repeat Prescription Created.
+        "202":
+          description: Partial success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrescriptionRequestPostPartialSuccessResponse"
         "400":
           description: Bad request. Supplied connection details or request data is
             incomplete or invalid.
@@ -200,3 +206,25 @@ components:
           type: string
           description: Details of the course. Depending on the provider this may contain
             different information like dosage, quantity and status.
+    PrescriptionRequestPostPartialSuccessResponse:
+      type: object
+      properties:
+        successfulOrders:
+          type: array
+          description: successful orders array
+          items:
+            $ref: "#/components/schemas/Order"
+        unsuccessfulOrders:
+          type: array
+          description: unsuccessful orders array
+          items:
+            $ref: "#/components/schemas/Order"
+    Order:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: course id
+        name:
+          type: string
+          description: name of the drug

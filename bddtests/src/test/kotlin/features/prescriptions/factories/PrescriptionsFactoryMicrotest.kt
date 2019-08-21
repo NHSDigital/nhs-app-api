@@ -9,6 +9,7 @@ import mocking.microtest.prescriptions.Course
 import mocking.microtest.prescriptions.CoursesGetResponse
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.stubs.prescriptions.ViewPrescriptionsStubs
+import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
@@ -125,6 +126,14 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
         mockingClient.forMicrotest {
             prescriptions.repeatPrescriptionSubmissionRequest(patient)
                     .respondWithConflictError()
+        }
+    }
+
+    override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
+        mockingClient.forMicrotest {
+            prescriptions.repeatPrescriptionSubmissionRequest(patient)
+                    .respondWithPartiallySuccessful(partialSuccess)
+                    .whenScenarioStateIs(Scenario.STARTED)
         }
     }
 }

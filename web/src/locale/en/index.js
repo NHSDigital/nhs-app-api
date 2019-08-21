@@ -733,6 +733,13 @@ export default {
         },
       },
     },
+    partialSuccess: {
+      medicationNotOrdered: 'Medication not ordered',
+      needMedicationNow: 'If you need to order this medication now, contact your GP surgery directly.  For urgent medical advice, call 111.',
+      medicationOrdered: 'Medication ordered successfully',
+      orderStatusUpdate: 'The order status will be updated once it\'s been reviewed by your GP.',
+      backButton: 'Back to my prescriptions',
+    },
   },
   nominated_pharmacy: {
     line1: 'If you order repeat medication using the NHS App, this pharmacy is where it will be sent.',
@@ -989,6 +996,7 @@ export default {
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
     serviceUnavailable: 'Service unavailable',
+    repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
   },
   pageTitles: {
     home: 'Home',
@@ -1021,6 +1029,7 @@ export default {
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
     serviceUnavailable: 'Service unavailable',
+    repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',

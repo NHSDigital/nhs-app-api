@@ -9,5 +9,6 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
         T Visit(OrderPrescriptionResult.BadRequest result);
         T Visit(OrderPrescriptionResult.CannotReorderPrescription result);
         T Visit(OrderPrescriptionResult.MedicationAlreadyOrderedWithinLast30Days result);
+        T Visit(OrderPrescriptionResult.PartialSuccess result);
     }
 }

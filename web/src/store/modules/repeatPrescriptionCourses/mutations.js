@@ -6,6 +6,7 @@ import {
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
   UPDATE_SELECTED_REPEAT_PRESCRIPTION,
+  PARTIAL_ORDER_RESULT,
   initialState,
 } from './mutation-types';
 
@@ -51,6 +52,9 @@ export default {
   },
   [UPDATE_SELECTED_REPEAT_PRESCRIPTION](state, ids) {
     state.selected = ids;
+  },
+  [PARTIAL_ORDER_RESULT](state, data) {
+    state.partialOrderResult = data;
   },
 };
 

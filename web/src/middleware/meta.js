@@ -47,6 +47,7 @@ import {
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
+  PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
   SYMPTOMS,
   TERMSANDCONDITIONS,
   NOMINATED_PHARMACY,
@@ -199,6 +200,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.confirmPrescription';
       route.meta.pageTitleKey = 'pageTitles.confirmPrescription';
+      break;
+    case PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.repeatPrescriptionsPartialSuccess';
+      route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionsPartialSuccess';
       break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:

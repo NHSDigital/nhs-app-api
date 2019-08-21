@@ -237,5 +237,68 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             result.Should().BeEquivalentTo(expectedResult);
         }
+
+        [TestMethod]
+        public void MapPrescriptionOrderPartiallySuccessfulResponse_ToPrescriptionRequestPostPartialSuccessResponse_MapsCorrectly()
+        {
+            // Arrange
+            var response = new PrescriptionOrderPartiallySuccessfulResponse()
+            {
+                PatientRequests = new List<PatientRequest>
+                {
+                    new PatientRequest
+                    {
+                        Id = _fixture.Create<string>(),
+                        Name = _fixture.Create<string>(),
+                        Status = PrescriptionOrderItemRequestStatus.Success,
+                        RequestOutcome = _fixture.Create<string>(),
+                    },
+                    new PatientRequest
+                    {
+                        Id = _fixture.Create<string>(),
+                        Name = _fixture.Create<string>(),
+                        Status = PrescriptionOrderItemRequestStatus.Failed,
+                        RequestOutcome = _fixture.Create<string>(),
+                    },
+                    new PatientRequest
+                    {
+                        Id = _fixture.Create<string>(),
+                        Name = _fixture.Create<string>(),
+                        Status = "not valid status",
+                        RequestOutcome = _fixture.Create<string>(),
+                    },
+                }
+            };
+
+            // Act
+            var result = _mapper.Map(response);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SuccessfulOrders.Should().HaveCount(1);
+            result.UnsuccessfulOrders.Should().HaveCount(1);
+
+            var expectedResult = new PrescriptionRequestPostPartialSuccessResponse
+            {
+                SuccessfulOrders = new List<Order>
+                {
+                    new Order
+                    {
+                        CourseId = response.PatientRequests.ElementAt(0).Id,
+                        Name = response.PatientRequests.ElementAt(0).Name,
+                    },
+                },
+                UnsuccessfulOrders = new List<Order>
+                {
+                    new Order
+                    {
+                        CourseId = response.PatientRequests.ElementAt(1).Id,
+                        Name = response.PatientRequests.ElementAt(1).Name,
+                    },
+                },
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }

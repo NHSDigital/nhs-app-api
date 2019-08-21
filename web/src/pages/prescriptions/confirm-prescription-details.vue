@@ -67,7 +67,11 @@ import GenericButton from '@/components/widgets/GenericButton';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import SjrIf from '@/components/SjrIf';
 import { redirectTo } from '@/lib/utils';
-import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
+import {
+  PRESCRIPTIONS,
+  PRESCRIPTION_REPEAT_COURSES,
+  PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
+} from '@/lib/routes';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
@@ -113,8 +117,13 @@ export default {
       };
       try {
         await this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder);
-        this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
-        redirectTo(this, PRESCRIPTIONS.path, null);
+
+        if (this.$store.state.repeatPrescriptionCourses.partialOrderResult) {
+          redirectTo(this, PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path, null);
+        } else {
+          this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
+          redirectTo(this, PRESCRIPTIONS.path, null);
+        }
       } catch (error) {
         /*
         empty catch block as the

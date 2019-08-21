@@ -12,6 +12,7 @@ import mocking.vision.models.OrderNewPrescriptionRequest
 import mocking.vision.models.OrderNewPrescriptionResponse
 import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.VisionUserSession
+import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import org.apache.http.HttpStatus
 
@@ -113,6 +114,10 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     }
 
     override fun orderPrescriptionReturnsConflictResponse() {
+        throw UnsupportedOperationException()
+    }
+
+    override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
         throw UnsupportedOperationException()
     }
 }
