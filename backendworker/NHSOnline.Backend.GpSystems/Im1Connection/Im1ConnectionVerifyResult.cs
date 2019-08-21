@@ -56,5 +56,13 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
                 return visitor.Visit(this);
             }
         }
+        
+        public class Forbidden : Im1ConnectionVerifyResult
+        {
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

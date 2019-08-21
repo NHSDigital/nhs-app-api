@@ -26,15 +26,13 @@ Feature: Patient Registration Backend
     And the response has the expected connection token
     And the response has the expected NHS numbers
 
-  Scenario Outline: Patient registers for a Microtest account with NHS Number of "one"
+  Scenario Outline: Patient provides linkage details which do not exist in the cache
     Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
     When I register the user's IM1 credentials
-    Then I receive a "Created" success code
-    And the response has the expected connection token
-    And the response has the expected NHS numbers
+    Then I receive a "linkage not supported" code
     Examples:
       | GP System | NHS Numbers |
-      | MICROTEST |             |
+      | MICROTEST | 5785445875  |
 
   Scenario Outline: <GP System> Account ID doesn't match a user
     Given I have data for a <GP System> patient that does not exist

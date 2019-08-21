@@ -1,5 +1,6 @@
 package features.authentication.factories
 
+import features.myrecord.factories.DemographicsFactory
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.IdentifierType
 import mocking.defaults.MicrotestMockDefaults
@@ -7,6 +8,10 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 
 class PatientVerificationFactoryMicrotest: PatientVerificationFactory("MICROTEST"){
+
+    init {
+        DemographicsFactory.getForSupplier(gpSystem).enabled(Patient.getDefault(gpSystem))
+    }
 
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
         // Currently no session mocking required for vision
@@ -17,7 +22,6 @@ class PatientVerificationFactoryMicrotest: PatientVerificationFactory("MICROTEST
 
     override fun validPatientWithNoNhsNumber() {
         val patient =  Patient.getDefault(gpSystem)
-
         Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
         Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
         Serenity.setSessionVariable("NhsNumber").to("")

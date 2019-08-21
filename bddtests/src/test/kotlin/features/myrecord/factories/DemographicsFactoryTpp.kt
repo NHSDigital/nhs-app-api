@@ -44,4 +44,18 @@ class DemographicsFactoryTpp: DemographicsFactory() {
                     .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR,0){}
         }
     }
+
+    override fun throwForbiddenError(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.patientSelectedPost(patient.tppUserSession!!)
+                    .respondWith(HttpStatus.SC_FORBIDDEN,0){}
+        }
+    }
+
+    override fun throwBadGateway(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.patientSelectedPost(patient.tppUserSession!!)
+                    .respondWith(HttpStatus.SC_BAD_GATEWAY,0){}
+        }
+    }
 }

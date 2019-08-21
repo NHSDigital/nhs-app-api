@@ -119,7 +119,6 @@ Feature: Linkage Post Key
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Linkage request POST for <GP System> returns 201 Created when patient is at least 16
     Given I have valid <GP System> linkage details and try to create a linkage key as 16 years old

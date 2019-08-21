@@ -42,4 +42,20 @@ class DemographicsFactoryEmis: DemographicsFactory() {
                             HttpStatus.SC_INTERNAL_SERVER_ERROR)
         }
     }
+
+    override fun throwForbiddenError(patient: Patient) {
+        mockingClient.forEmis {
+            myRecord.demographicsRequest(patient)
+                    .respondWithStandardError(HttpStatus.SC_FORBIDDEN,
+                            HttpStatus.SC_FORBIDDEN)
+        }
+    }
+
+    override fun throwBadGateway(patient: Patient) {
+        mockingClient.forEmis {
+            myRecord.demographicsRequest(patient)
+                    .respondWithStandardError(HttpStatus.SC_BAD_GATEWAY,
+                            HttpStatus.SC_BAD_GATEWAY)
+        }
+    }
 }

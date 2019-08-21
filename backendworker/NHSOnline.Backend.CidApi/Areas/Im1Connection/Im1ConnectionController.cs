@@ -128,9 +128,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     _logger.LogError(
                         $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
                     return new StatusCodeResult(StatusCodes.Status501NotImplemented);
-
                 }
-
                 var gpSystem = gpSystemOption.ValueOrFailure();
                 var im1ConnectionService = gpSystem.GetIm1ConnectionService();
                 var registerResult = await im1ConnectionService.Register(model);

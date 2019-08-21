@@ -30,4 +30,18 @@ class DemographicsFactoryMicrotest: DemographicsFactory() {
                     .respondWithInternalServerError()
         }
     }
+
+    override fun throwForbiddenError(patient: Patient) {
+        mockingClient.forMicrotest {
+            demographics.demographicsRequest(patient)
+                    .respondWithForbiddenError()
+        }
+    }
+
+    override fun throwBadGateway(patient: Patient) {
+        mockingClient.forMicrotest {
+            demographics.demographicsRequest(patient)
+                    .respondWithBadGateway()
+        }
+    }
 }

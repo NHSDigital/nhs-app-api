@@ -117,6 +117,11 @@ data class Patient(
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }
+
+        fun getMicrotestPostLinkage(accountID: String, linkageKey: String): Patient {
+            return MicrotestPatients.microtestPostLinkageUserDetails(accountID, linkageKey)
+        }
+
     }
 }
 

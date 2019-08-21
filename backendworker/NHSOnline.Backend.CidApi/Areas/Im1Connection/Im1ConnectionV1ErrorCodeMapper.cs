@@ -49,6 +49,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     StatusCodes.Status403Forbidden
                 },
                 { InternalCode.LinkageKeyAlreadyExists, StatusCodes.Status409Conflict },
+                { InternalCode.LinkageKeysNotSupportedBySupplier, 678 }
             };
 
         public static int Map(InternalCode errorCode)

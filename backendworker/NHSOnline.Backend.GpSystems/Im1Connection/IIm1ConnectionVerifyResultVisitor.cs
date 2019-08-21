@@ -11,5 +11,6 @@
         T Visit(Im1ConnectionVerifyResult.InternalServerError result);
 
         T Visit(Im1ConnectionVerifyResult.BadRequest result);
+        T Visit(Im1ConnectionVerifyResult.Forbidden result);
     }
 }

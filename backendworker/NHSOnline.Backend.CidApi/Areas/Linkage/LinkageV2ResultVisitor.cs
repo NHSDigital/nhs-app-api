@@ -72,7 +72,6 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             return await Task.FromResult(new ObjectResult(response)
             {
                 StatusCode = StatusCodes.Status404NotFound
-
             });
         }
 

@@ -45,4 +45,12 @@ class DemographicsFactoryVision: DemographicsFactory() {
                     .respondWithUnknownError()
         }
     }
+
+    override fun throwForbiddenError(patient: Patient) {
+        throw NotImplementedError()
+    }
+
+    override fun throwBadGateway(patient: Patient) {
+        throw NotImplementedError()
+    }
 }

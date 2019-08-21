@@ -9,6 +9,7 @@ import cucumber.api.java.en.When
 import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.myrecord.factories.DemographicsFactory
 import features.navigation.steps.NavHeaderSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
@@ -41,6 +42,7 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
+import worker.models.linkage.LinkageResponse
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.Im1ConnectionToken
@@ -172,6 +174,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iHaveValidPatientDataToRegisterNewAccount(gpSystem: String, nhsNumbers: String) {
         val nhsNumbersList = nhsNumbers.split(",").filter { it.isNotEmpty() }
         this.patient = Patient.getDefault(gpSystem).copy(nhsNumbers = nhsNumbersList)
+        DemographicsFactory.getForSupplier(gpSystem).enabled(Patient.getDefault(gpSystem))
+        SerenityHelpers.setPatient(this.patient)
 
         SuccessfulRegistrationJourney(mockingClient).create(this.patient, gpSystem)
 
@@ -357,6 +361,17 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 DateOfBirth = patient.dateOfBirth)
     }
 
+    @Given("^I have a microtest user's IM1 credentials with a emis connection token$")
+    fun iHaveAMicrotestUsersIMCredentialsEmisConnectionToeken(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem)
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth
+        )
+    }
+
     @Given("^I have just logged out$")
     fun iHaveJustLoggedOut() {
         browser.goToApp()
@@ -478,6 +493,31 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAUsersIMCredentials() {
+        try {
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .authentication.postIm1Connection(this.im1ConnectionRequest!!)
+            setSessionVariable(Im1ConnectionResponse::class).to(result)
+            this.im1ConnectionResponse = result
+        } catch (httpException: NhsoHttpException) {
+            setErrorResponse(httpException)
+        }
+    }
+
+    @When("^I register the Microtest user's IM1 credentials after linkage$")
+    fun iRegisterTheMicrotestUsersIMCredentialsAfterLinkage() {
+        val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
+        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
+
+        Assert.assertNotNull(linkageResponse)
+        Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
+
+        this.patient = SerenityHelpers.getPatient()
+        DemographicsFactory.getForSupplier("MICROTEST").enabled(Patient.getDefault("MICROTEST"))
+
+        SuccessfulRegistrationJourney(mockingClient).create(this.patient, "MICROTEST")
+
+        setIm1Request()
+
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .authentication.postIm1Connection(this.im1ConnectionRequest!!)

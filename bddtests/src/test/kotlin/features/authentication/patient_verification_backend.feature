@@ -13,6 +13,7 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: <GP System> patient has multiple NHS Numbers
     Given I have valid credentials for a <GP System> patient with multiple NHS Numbers
@@ -55,6 +56,21 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
+
+  Scenario: Microtest patient tries to verify IM1 Connection details with Emis IM1 Connection Token.
+    Given I have an EMIS IM1 Connection Token and i try to verify as a microtest user
+    When I verify patient data
+    Then I receive a "Bad Request" error
+
+  Scenario Outline: <GP System> IM1 Demographics failure
+    Given I have an <GP System> IM1 Connection Token that has an incorrect NHS Number
+    When I verify patient data
+    Then I receive a "forbidden" error
+
+    Examples:
+      | GP System |
+      | MICROTEST |
 
   Scenario Outline: No IM1 Connection Token for the <GP System>
     Given I have no IM1 Connection Token for <GP System>
@@ -114,7 +130,6 @@ Feature: Patient Verification Backend
       | TPP       |
       | VISION    |
 
-
   Scenario: Vision responds with security header error
     Given Vision responds with a security header error
     When I verify patient data
@@ -131,3 +146,30 @@ Feature: Patient Verification Backend
     Given Vision responds with an unknown error
     When I verify patient data
     Then I receive a "Bad Gateway" error
+
+  Scenario Outline: Linkage request GET for Microtest returns an internal server error when demographics call fails
+    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
+    And the demographics endpoint responds with an "internal server error" error
+    When I verify patient data
+    Then I receive a "bad request" error
+    Examples:
+      | GP System | NHS Numbers |
+      | MICROTEST | 5785445875  |
+
+  Scenario Outline: Linkage request GET for Microtest returns a forbidden error when demographics call fails
+    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
+    And the demographics endpoint responds with a "forbidden" error
+    When I verify patient data
+    Then I receive a "bad request" error
+    Examples:
+      | GP System | NHS Numbers |
+      | MICROTEST | 5785445875  |
+
+  Scenario Outline: Linkage request GET for Microtest returns an bad gateway error when demographics call fails
+    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
+    And the demographics endpoint responds with a "bad gateway" error
+    When I verify patient data
+    Then I receive a "bad request" error
+    Examples:
+      | GP System | NHS Numbers |
+      | MICROTEST | 5785445875  |

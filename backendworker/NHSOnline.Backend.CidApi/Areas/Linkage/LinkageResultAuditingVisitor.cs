@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         {
             await AuditError("Unmapped Error", nameof(LinkageResult.UnmappedErrorWithStatusCode));
         }
-
+        
         private async Task AuditError(string errorType, string nameOfResultType)
         {
             try

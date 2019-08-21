@@ -65,5 +65,10 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         {
             return Task.CompletedTask;
         }
+
+        public Task Visit(Im1ConnectionVerifyResult.Forbidden result)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

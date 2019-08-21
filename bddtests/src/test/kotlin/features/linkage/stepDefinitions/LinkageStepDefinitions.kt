@@ -1,13 +1,17 @@
 package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.linkage.LinkageResult
+import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
+import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
+import mongodb.MongoDBConnection
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
 import org.junit.Assert
@@ -16,6 +20,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
+import worker.models.patient.Im1ConnectionRequest
 
 const val DELAY: Long = 4
 const val DEFAULT_TIMEOUT_MILLISECONDS: Int = 500
@@ -25,6 +30,8 @@ const val FOUR_SECOND_SLEEP: Long = 4000
 open class LinkageStepDefinitions {
 
     val mockingClient = MockingClient.instance
+    private var im1ConnectionRequest: Im1ConnectionRequest? = null
+    private lateinit var patient: Patient
 
     @Given("I have valid (.*) linkage details$")
     fun iHaveValidLinkageDetailsFor(gpSystem: String) {
@@ -341,9 +348,31 @@ open class LinkageStepDefinitions {
         Assert.assertEquals(linkage.linkageKey, linkageResponse.linkageKey)
     }
 
+    @When("^I receive a valid microtest linkage response$")
+    fun iReceiveAValidMicrotestResponse() {
+        val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
+        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
+
+        Assert.assertNotNull(linkageResponse)
+        Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
+
+        this.patient = Patient.getMicrotestPostLinkage(linkageResponse.accountId, linkageResponse.linkageKey)
+        DemographicsFactory.getForSupplier("MICROTEST").enabled(Patient.getDefault("MICROTEST"))
+        SerenityHelpers.resetPatient(this.patient)
+
+        SuccessfulRegistrationJourney(mockingClient).create(this.patient, "MICROTEST")
+
+        setIm1Request()
+    }
+
     @Then("^Wait for the request to complete$")
     fun waitForRequestToComplete() {
         Thread.sleep(FOUR_SECOND_SLEEP)
+    }
+
+    @And("^there are no details in the cache$")
+    fun noDetailsInCache() {
+        MongoDBConnection.Im1CacheCollection.clearCache()
     }
 
     private fun validLinkage(gpSystem: String): LinkageInformationFacade {
@@ -365,6 +394,15 @@ open class LinkageStepDefinitions {
 
     private fun setLinkageInformation(linkageInformationFacade: LinkageInformationFacade) {
         Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkageInformationFacade)
+    }
+
+    private fun setIm1Request() {
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
     }
 }
 

@@ -27,6 +27,21 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
         DemographicsFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
     }
 
+    @Given("^the demographics endpoint responds with (?:a|an) \"(.*)\" error$")
+    fun theDemographicsEndpointRespondsWitSpecifiedError(expectedError: String) {
+        val getService = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(getService)
+        if (expectedError.equals("internal server error")) {
+            DemographicsFactory.getForSupplier(getService).throwInternalError(SerenityHelpers.getPatient())
+        }
+        if (expectedError.equals("forbidden")) {
+            DemographicsFactory.getForSupplier(getService).throwForbiddenError(SerenityHelpers.getPatient())
+        }
+        if (expectedError.equals("bad gateway")) {
+            DemographicsFactory.getForSupplier(getService).throwForbiddenError(SerenityHelpers.getPatient())
+        }
+    }
+
     @Given("^the demographics endpoint responds with internal server error$")
     fun theDemographicsEndpointRespondsWithInternalServerError() {
         val getService = SerenityHelpers.getGpSupplier()

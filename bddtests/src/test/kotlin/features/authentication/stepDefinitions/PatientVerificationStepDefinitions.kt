@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.sharedStepDefinitions.backend.AbstractSteps
+import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.VisionUserSession
@@ -27,6 +28,18 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
     @Given("I have an (.*) IM1 Connection Token that is in an invalid format")
     fun givenIHaveAnIm1ConnectionTokenThatIsInAnInvalidFormat(gpSystem: String) {
         setSessionVariable("ConnectionToken").to("token")
+        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
+    }
+
+    @Given("I have an EMIS IM1 Connection Token and i try to verify as a microtest user")
+    fun givenIHaveAnIm1ConnectionTokenForEmisAndIAmMicrotest() {
+        setSessionVariable("ConnectionToken").to(EmisMockDefaults.DEFAULT_CONNECTION_TOKEN)
+        setDefaultNationalPracticeCodeSessionVariable("MICROTEST")
+    }
+
+    @Given("I have an (.*) IM1 Connection Token that has an incorrect NHS Number")
+    fun givenIHaveAnIm1ConnectionTokenThatHasAnIncorrectNHSNumber(gpSystem: String) {
+        setSessionVariable("ConnectionToken").to("{\"Im1CacheKey\" : \" test\", \"NhsNumber\" : \"5785445832\"}")
         setDefaultNationalPracticeCodeSessionVariable(gpSystem)
     }
 
@@ -106,7 +119,6 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
     fun givenIHaveValidCredentialsForAPatientWithMultipleNhsNumbers(gpSystem: String) {
         PatientVerificationFactory.getForSupplier(gpSystem).validPatientWithMultipleNumbers()
     }
-
 
     @Given("I have valid credentials for a (.*) patient with no NHS Number")
     fun givenIHaveValidCredentialsForAPatientWithNoNhsNumber(gpSystem: String) {

@@ -19,6 +19,13 @@ class SerenityHelpers {
             )
         }
 
+        fun resetPatient(patientToSet: Patient) {
+            val currentStoredValue = getValueOrNull<Any>(Patient::class)
+            if (currentStoredValue !== null) {
+                Serenity.setSessionVariable(Patient::class).to(patientToSet)
+            }
+        }
+
         fun getPatient(): Patient {
             Assert.assertTrue("Test setup incorrect, patient to be set",
                     Serenity.hasASessionVariableCalled(Patient::class))

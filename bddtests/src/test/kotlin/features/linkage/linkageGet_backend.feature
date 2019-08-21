@@ -123,14 +123,33 @@ Feature: Linkage Get Key
     When I call the Linkage GET endpoint
     Then I receive a "Forbidden" error
 
-  Scenario: Linkage request GET for Microtest returns 502 when demographics call fails
+  Scenario: Linkage request GET for Microtest returns an internal server error when demographics call fails
     Given I have valid MICROTEST linkage details
-    And the demographics endpoint responds with internal server error
+    And the demographics endpoint responds with an "internal server error" error
     When I call the Linkage GET endpoint
-    Then I receive a "Bad Gateway" error
+    Then I receive a "internal server error" error
 
-  Scenario: Linkage request GET for Microtest returns successful linkage response when demographics call is successful
+  Scenario: Linkage request GET for Microtest returns a forbidden error when demographics call fails
     Given I have valid MICROTEST linkage details
-    And the GP Practice has enabled demographics functionality
+    And the demographics endpoint responds with a "forbidden" error
     When I call the Linkage GET endpoint
-    Then I receive a valid linkage response
+    Then I receive a "bad request" error
+
+  Scenario: Linkage request GET for Microtest returns an bad gateway error when demographics call fails
+    Given I have valid MICROTEST linkage details
+    And the demographics endpoint responds with a "bad gateway" error
+    When I call the Linkage GET endpoint
+    Then I receive a "bad request" error
+
+  Scenario Outline: Microtest patient can get linkage details, and successfully register with the returned details.
+    Given I have valid <GP System> linkage details
+    And the GP Practice has enabled demographics functionality
+    And there are no details in the cache
+    When I call the Linkage GET endpoint
+    Then I receive a valid microtest linkage response
+    And the IM1 Connection Token is in the cache
+    When I register the Microtest user's IM1 credentials after linkage
+    Then I receive a "Created" success code
+    Examples:
+      | GP System |
+      | MICROTEST |

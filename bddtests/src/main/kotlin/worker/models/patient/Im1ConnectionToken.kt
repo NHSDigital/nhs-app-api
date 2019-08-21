@@ -8,6 +8,7 @@ data class Im1ConnectionToken(
         var passphrase: String? = null,
         var providerId: String? = null,
         var rosuAccountId: String? = null,
-        var apiKey: String? = null
+        var apiKey: String? = null,
+        var nhsNumber: String? = null
 
 )
