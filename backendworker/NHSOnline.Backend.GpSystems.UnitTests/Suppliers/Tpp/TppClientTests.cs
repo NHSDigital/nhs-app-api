@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
@@ -15,6 +17,7 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using RichardSzalay.MockHttp;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 {
@@ -45,9 +48,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         private TppHttpClient _httpClient;
         private TppConfigurationSettings _tppConfig;
 
-        private Mock<IGuidCreator> _guidCreator;
+        private Mock<IGuidCreator> _mockGuidCreator;
+        private Mock<ILogger<TppClient>> _mockLogger;
         private IFixture _fixture;
         private const string Environment = "environment";
+        private const string LoggingMessageTemplate = "Sending TPP REQUEST TYPE: {0} UUID: {1}";
 
         [TestInitialize]
         public void TestInitialize()
@@ -55,8 +60,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
 
-            _guidCreator = new Mock<IGuidCreator>();
-            _guidCreator.Setup(x => x.CreateGuid()).Returns(Uuid);
+            _mockGuidCreator = new Mock<IGuidCreator>();
+            _mockGuidCreator.Setup(x => x.CreateGuid()).Returns(Uuid);
+
+            _mockLogger = _fixture.Freeze<Mock<ILogger<TppClient>>>();
 
             _tppConfig = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, 
                 ApplicationProviderId, ApplicationDeviceType, CertificatePassphrase, CertificatePath, 
@@ -66,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             _fixture.Inject(_httpClient);
             _fixture.Inject(_tppConfig);
-            _fixture.Inject(_guidCreator);
+            _fixture.Inject(_mockGuidCreator);
 
             _systemUnderTest = _fixture.Create<TppClient>();
         }
@@ -105,13 +112,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithTppHeaders(requestHeaders)
                 .WithContent(authenticateRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
- 
+
             var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
 
             response.Body.Should().BeEquivalentTo(expectedAuthenticateResponse);
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+            VerifyLogging(authenticateRequestModel);
         }
 
         [TestMethod]
@@ -148,6 +156,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
+
+            VerifyLogging(authenticateRequestModel);
         }
 
         [TestMethod]
@@ -184,6 +194,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
+
+            VerifyLogging(authenticateRequestModel);
         }
 
 
@@ -195,6 +207,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             requestMedicationRequestModel.UnitId = UnitId;
             requestMedicationRequestModel.Uuid = Uuid;
             requestMedicationRequestModel.ApiVersion = ApiVersion;
+
             var expectedMedicationResponse = _fixture.Create<RequestMedicationReply>();
 
             var tppUserSession = _fixture.Create<TppUserSession>();
@@ -223,6 +236,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+
+            VerifyLogging(requestMedicationRequestModel);
         }
         
         [TestMethod]
@@ -261,6 +276,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+
+            VerifyLogging(linkRequestModel);
         }
         
         [TestMethod]
@@ -291,6 +308,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
+
+            VerifyLogging(linkAccountRequestModel);
         }
 
         [TestMethod]
@@ -321,6 +340,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
+
+            VerifyLogging(linkAccountRequestModel);
         }
 
         [TestMethod]
@@ -359,6 +380,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+
+            VerifyLogging(addNhsUserRequestModel);
         }
         
         [TestMethod]
@@ -389,6 +412,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
+
+            VerifyLogging(nhsAddUserRequestModel);
         }
 
         [TestMethod]
@@ -419,6 +444,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
+
+            VerifyLogging(addNhsUserRequestModel);
         }
 
         [TestMethod]
@@ -450,6 +477,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
+
+            VerifyLogging(logoffRequestModel);
         }
 
         [TestMethod]
@@ -481,6 +510,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
             response.Headers.Should().BeNull();
+
+            VerifyLogging(logoffRequestModel);
         }
 
         [TestMethod]
@@ -523,6 +554,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             // Assert
             Assert.IsNotNull(caughtException);
+
+            VerifyLogging(linkAccountRequestModel);
         }
 
         [TestMethod]
@@ -562,6 +595,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+
+            VerifyLogging(requestModel);
         }
 
         [TestMethod]
@@ -572,7 +607,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             requestModel.UnitId = UnitId;
             requestModel.Uuid = Uuid;
             requestModel.ApiVersion = ApiVersion;
-            
+
             var requestHeaders = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(TppClient.RequestTypeHeader, requestModel.RequestType),
@@ -593,6 +628,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
+
+            VerifyLogging(requestModel);
         }
         
         [TestMethod]
@@ -623,8 +660,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
+
+            VerifyLogging(requestModel);
         }
-        
+
         [TestCleanup]
         public void Dispose()
         {
@@ -640,6 +679,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 ProviderId = _tppConfig.ApplicationProviderId,
                 DeviceType = _tppConfig.ApplicationDeviceType 
             };
+        }
+
+        private void VerifyLogging(ITppRequest requestModel)
+        {
+            _mockLogger.VerifyLogger(LogLevel.Information, string.Format(CultureInfo.InvariantCulture,
+                LoggingMessageTemplate,
+                requestModel.RequestType,
+                requestModel.Uuid), Times.Once());
         }
     }
 }

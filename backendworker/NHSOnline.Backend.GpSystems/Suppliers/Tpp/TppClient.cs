@@ -61,9 +61,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticate)
         {
-            Console.WriteLine("APPLICATIONNAME: " + _config.ApplicationName);
-            Console.WriteLine("APPLICATIONVERSION: "+ _config.ApplicationVersion);
-            Console.WriteLine("APPLICATION DEVICE TYPE: "+_config.ApplicationDeviceType);
             authenticate.Application = new Application
             {
                 Name = _config.ApplicationName,
@@ -252,13 +249,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 SetApplicationOnRequest(applicationRequest);
             }
 
-            Console.WriteLine("API VERSION: "+_config.ApiVersion);
             model.ApiVersion = _config.ApiVersion;
             model.Uuid = _guidCreator.CreateGuid();
 
             var xml = model.SerializeXml();
             var content = new StringContent(xml, Encoding.UTF8, TppHttpClient.MediaType);
             var request = BuildTppRequest(HttpMethod.Post, model.RequestType, content, suid);
+
+            _logger.LogInformation($"Sending TPP REQUEST TYPE: {model.RequestType} UUID: {model.Uuid}");
 
             var response = await SendRequestAndParseResponse<TResponse>(request);
 
