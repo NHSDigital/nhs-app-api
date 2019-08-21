@@ -145,10 +145,10 @@ Feature: Organ Donation Lookup Backend
     Given I have logged into <GP System> and have a valid session cookie
     And I am an api user registered with organ donation, but demographics will time out
     When I request my organ donation details
-    Then I receive a "Gateway Timeout" error
+    Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |

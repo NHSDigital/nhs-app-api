@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NHSOnline.Backend.Support
 {
-    public class ErrorCodes<T, V> where T : struct where V : ApiErrorResponse, new()
+    public class ErrorCodes<T, V> where T : struct where V : IApiErrorResponse, new()
     {
         public Dictionary<int, V> GetAllErrorResponses()
         {

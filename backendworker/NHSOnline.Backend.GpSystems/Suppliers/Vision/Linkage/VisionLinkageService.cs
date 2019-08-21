@@ -6,7 +6,6 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Linkage;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage

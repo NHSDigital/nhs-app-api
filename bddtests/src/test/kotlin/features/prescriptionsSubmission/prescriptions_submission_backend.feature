@@ -78,4 +78,4 @@ Feature: Prescriptions Submission Backend
     But EMIS takes longer than 30 seconds to respond when a repeat prescription is submitted
     And I have logged into EMIS and have a valid session cookie
     When I submit the repeat prescription
-    Then I receive a "Gateway Timeout" error
+    Then I receive a "Gateway Timeout" error with service desk reference prefixed "ze"

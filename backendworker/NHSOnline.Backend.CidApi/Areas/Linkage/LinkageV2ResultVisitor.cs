@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         public async Task<IActionResult> Visit(LinkageResult.ErrorCase result)
         {
             Logger.LogInformation("Linkage resulted in an error which was mapped");
-            var response = (ApiErrorResponse) ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
+            var response = ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
             var externalErrorCode = ErrorCodes.GetExternalCode(result.ErrorCode);
             var statusCodeResult = Im1ConnectionV2ErrorCodeToStatusCodeMapper.Map(externalErrorCode);
 
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         public async Task<IActionResult> Visit(LinkageResult.NotFound result)
         {
             Logger.LogInformation("Linkage resulted in a not found error");
-            var response = (ApiErrorResponse) ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
+            var response = ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
             return await Task.FromResult(new ObjectResult(response)
             {
                 StatusCode = StatusCodes.Status404NotFound
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
         public async Task<IActionResult> Visit(LinkageResult.UnmappedErrorWithStatusCode result)
         {
             Logger.LogError("Linkage resulted in an error which was unmappable");
-            var response = (ApiErrorResponse) ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
+            var response = ErrorCodes.GetAndLogErrorResponse(result.ErrorCode, GpSystem, Logger);
             return await Task.FromResult(new ObjectResult(response)
             {
                 StatusCode = StatusCodes.Status502BadGateway

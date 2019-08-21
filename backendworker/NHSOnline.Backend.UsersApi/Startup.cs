@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -51,6 +52,10 @@ namespace NHSOnline.Backend.UsersApi
             services.AddCorrelationId();
 
             ConfigureAuth(services);
+            
+            services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
+            services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
+            services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
 
             _modularStartup.ConfigureServices(services);
         }

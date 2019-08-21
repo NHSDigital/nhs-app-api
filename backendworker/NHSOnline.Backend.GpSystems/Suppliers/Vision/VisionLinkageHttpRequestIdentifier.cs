@@ -4,11 +4,14 @@ using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
-    public class VisionLinkageHttpRequestIdentifier : IHttpRequestIdentifier
+    public class VisionLinkageHttpRequestIdentifier : HttpRequestIdentifier
     {
-        public HttpRequestIdentity Identify(HttpRequestMessage request)
+        protected override SourceApi SourceApi => SourceApi.Vision;
+        protected override string Provider => "Vision";
+
+        public override HttpRequestIdentity Identify(HttpRequestMessage request)
         {
-            return new HttpRequestIdentity($"{Supplier.Vision}", request);
+            return new HttpRequestIdentity(Provider, request, SourceApi);
         }
     }
 }

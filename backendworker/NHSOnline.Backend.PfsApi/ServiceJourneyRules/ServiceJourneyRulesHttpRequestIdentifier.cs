@@ -1,13 +1,11 @@
-using System.Net.Http;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 {
-    public class ServiceJourneyRulesHttpRequestIdentifier : IHttpRequestIdentifier
+    public class ServiceJourneyRulesHttpRequestIdentifier : HttpRequestIdentifier
     {
-        public HttpRequestIdentity Identify(HttpRequestMessage request)
-        {
-            return new HttpRequestIdentity("ServiceJourneyRules", request);
-        }
+        protected override SourceApi SourceApi => SourceApi.ServiceJourneyRules;
+        protected override string Provider => "ServiceJourneyRules";
     }
 }

@@ -11,6 +11,7 @@ using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
@@ -105,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public async Task Put_ReturnsBadGateway_WhenServiceReturnUpstreamErrorResult()
         {
             // Arrange
-            var response = _fixture.Create<ApiErrorResponse>();
+            var response = _fixture.Create<PfsErrorResponse>();
             var upstreamErrorResult = new OrganDonationRegistrationResult.UpstreamError(response);
 
             _mockOrganDonationService

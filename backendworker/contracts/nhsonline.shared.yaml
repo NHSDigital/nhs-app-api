@@ -12,3 +12,16 @@ components:
         - NotAllowed
         - Optional
         - Mandatory
+    PfsErrorResponse:
+      type: object
+      description: Error response from backend api.
+      properties:
+        errorCode:
+          type: integer
+          description: Error code
+        errorMessage:
+          type: string
+          description: Error message
+        serviceDeskReference: 
+          type: string
+          description: Six character service desk reference code.

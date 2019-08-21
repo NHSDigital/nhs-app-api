@@ -1,13 +1,11 @@
-using System.Net.Http;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.Auth.CitizenId
 {
-    public class CitizenIdHttpRequestIdentifier : IHttpRequestIdentifier
+    public class CitizenIdHttpRequestIdentifier : HttpRequestIdentifier
     {
-        public HttpRequestIdentity Identify(HttpRequestMessage request)
-        {
-            return new HttpRequestIdentity("CitizenId", request);
-        }
+        protected override SourceApi SourceApi => SourceApi.NhsLogin;
+        protected override string Provider => "CitizenId";
     }
 }

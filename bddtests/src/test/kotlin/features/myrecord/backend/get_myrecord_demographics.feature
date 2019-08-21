@@ -34,7 +34,7 @@ Feature: Get demographic data Backend
     Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie
     And the GP System is unavailable
-    When I communicate with <Service>
+    When I communicate with <GP System>
     Then I get a "Bad gateway" error
 
     Examples:
@@ -46,11 +46,11 @@ Feature: Get demographic data Backend
   Scenario Outline: When GP System times out, the <GP System> user receives Gateway Timeout error
     Given the my record wiremocks are initialised for <GP System>
     And I have logged in and have a valid session cookie
-    But the GP System times out for <Service>
-    When I communicate with <Service>
-    Then I get a "Gateway timeout" error
+    But the GP System times out for <GP System>
+    When I communicate with <GP System>
+    Then I receive a "Gateway timeout" error with service desk reference prefixed "<Prefix>"
 
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
+      | GP System | Prefix |
+      | EMIS    | ze     |
+      | TPP     | zt     |

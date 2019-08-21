@@ -27,6 +27,10 @@ paths:
           description: The GP system is currently unavailable.
         "504":
           description: The GP system did not respond in a timely fashion.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /my-record/section:
     get:
       tags:
@@ -60,6 +64,10 @@ paths:
           description: The GP system is currently unavailable.
         "504":
           description: The GP system did not respond in a timely fashion.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /test-result:
     get:
       tags:
@@ -90,6 +98,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     TestResultResponse:

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 {
@@ -30,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         public void MapOrganDonationAPIError_WhenRecoverableErrorHttpStatus_MapsToUpstreamErrorWithRetry(HttpStatusCode httpStatus)
         {
             // Arrange
-            var response = new ApiErrorResponse
+            var response = new PfsErrorResponse
             {
                 ErrorCode = 1,
                 ErrorMessage = "A recoverable exception has occurred processing the request"
@@ -51,7 +52,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         public void MapOrganDonationAPIError_WhenNonRecoverableErrorHttpStatus_MapsToUpstreamErrorWithoutRetry(HttpStatusCode httpStatus)
         {
             // Arrange
-            var response = new ApiErrorResponse
+            var response = new PfsErrorResponse
             {
                 ErrorCode = 0,
                 ErrorMessage = "A non-recoverable exception has occurred processing the request"

@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -49,7 +50,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             });
             
             services.AddSingleton(Configuration);
-            
+            services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
+            services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
+            services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
             services.AddSingleton(services);

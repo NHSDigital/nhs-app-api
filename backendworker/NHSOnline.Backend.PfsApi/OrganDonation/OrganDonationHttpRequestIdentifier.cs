@@ -5,12 +5,20 @@ using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
-    public class OrganDonationHttpRequestIdentifier : IHttpRequestIdentifier
+    public class OrganDonationHttpRequestIdentifier : HttpRequestIdentifier
     {
-        public HttpRequestIdentity Identify(HttpRequestMessage request)
+        protected override SourceApi SourceApi => SourceApi.OrganDonation;
+        protected override string Provider => "OrganDonation";
+
+        private class OrganDonationCorrelationIdentifier
         {
-            var requestIdentity =
-                new HttpRequestIdentity("OrganDonation", request);
+            public string SessionIdHeaderKey { get; set; }
+            public string SequenceIdHeaderKey { get; set; }
+        }
+
+        public override HttpRequestIdentity Identify(HttpRequestMessage request)
+        {
+            var requestIdentity = base.Identify(request);
 
             if (request.Method == HttpMethod.Get)
             {
@@ -18,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             }
 
             var correlationIdentifier = new OrganDonationCorrelationIdentifier();
-            
+
             if (request.Headers.Contains(Constants.OrganDonationConstants.SessionIdHeaderKey))
             {
                 request.Headers.TryGetValues(Constants.OrganDonationConstants.SessionIdHeaderKey, out var values);
@@ -32,12 +40,6 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             }
 
             return requestIdentity.SetCorrelationIdentifier(correlationIdentifier.SerializeJson());
-        }
-
-        private class OrganDonationCorrelationIdentifier
-        {
-            public string SessionIdHeaderKey { get; set; }
-            public string SequenceIdHeaderKey { get; set; }
         }
     }
 }

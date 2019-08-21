@@ -20,82 +20,106 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         }
 
         [TestMethod]
-        public void ToString_DefaultInstance_HappyPath()
+        [DataRow("TPP", SourceApi.Tpp)]
+        [DataRow("Emis", SourceApi.Emis)]
+        [DataRow("Vision", SourceApi.Vision)]
+        [DataRow("Microtest", SourceApi.Microtest)]
+        [DataRow("OrganDonation", SourceApi.OrganDonation)]
+        [DataRow("ServiceJourneyRules", SourceApi.ServiceJourneyRules)]
+        [DataRow("CitizenId", SourceApi.NhsLogin)]
+        public void ToString_DefaultInstance_HappyPath(string provider, SourceApi sourceApi)
         {
-            var provider = _fixture.Create<string>();
             var requestMessage = _fixture.Create<HttpRequestMessage>();
-            
-            _systemUnderTest = new HttpRequestIdentity(provider,requestMessage);
+
+            _systemUnderTest = new HttpRequestIdentity(provider, requestMessage, sourceApi);
 
             var result = _systemUnderTest.ToString();
-            
+
             result.Should().ContainAll(
-                $"Provider={provider}", 
-                $"UpStreamMethod={requestMessage.Method}", 
+                $"Provider={provider}",
+                $"UpStreamMethod={requestMessage.Method}",
                 $"UpStreamUrl={requestMessage.RequestUri}");
-            
+
             result.Should().NotContainAny("UpStreamIdentifier", "CorrelationIdentifier");
         }
-        
+
         [TestMethod]
-        public void ToString_WithIdentifier_HappyPath()
+        [DataRow("TPP", SourceApi.Tpp)]
+        [DataRow("Emis", SourceApi.Emis)]
+        [DataRow("Vision", SourceApi.Vision)]
+        [DataRow("Microtest", SourceApi.Microtest)]
+        [DataRow("OrganDonation", SourceApi.OrganDonation)]
+        [DataRow("ServiceJourneyRules", SourceApi.ServiceJourneyRules)]
+        [DataRow("CitizenId", SourceApi.NhsLogin)]
+        public void ToString_WithIdentifier_HappyPath(string provider, SourceApi sourceApi)
         {
-            var provider = _fixture.Create<string>();
             var requestMessage = _fixture.Create<HttpRequestMessage>();
             var identifier = _fixture.Create<string>();
-            
-            _systemUnderTest = new HttpRequestIdentity(provider,requestMessage)
+
+            _systemUnderTest = new HttpRequestIdentity(provider, requestMessage, sourceApi)
                 .SetUpStreamIdentifier(identifier);
-            
+
             var result = _systemUnderTest.ToString();
-            
+
             result.Should().ContainAll(
-                $"Provider={provider}", 
-                $"UpStreamMethod={requestMessage.Method}", 
+                $"Provider={provider}",
+                $"UpStreamMethod={requestMessage.Method}",
                 $"UpStreamUrl={requestMessage.RequestUri}",
                 $"UpStreamIdentifier={identifier}");
-            
+
             result.Should().NotContain("CorrelationIdentifier");
         }
-        
+
         [TestMethod]
-        public void ToString_WithCorrelationIdentifier_HappyPath()
+        [DataRow("TPP", SourceApi.Tpp)]
+        [DataRow("Emis", SourceApi.Emis)]
+        [DataRow("Vision", SourceApi.Vision)]
+        [DataRow("Microtest", SourceApi.Microtest)]
+        [DataRow("OrganDonation", SourceApi.OrganDonation)]
+        [DataRow("ServiceJourneyRules", SourceApi.ServiceJourneyRules)]
+        [DataRow("CitizenId", SourceApi.NhsLogin)]
+        public void ToString_WithCorrelationIdentifier_HappyPath(string provider, SourceApi sourceApi)
         {
-            var provider = _fixture.Create<string>();
             var requestMessage = _fixture.Create<HttpRequestMessage>();
             var correlationIdentifier = _fixture.Create<string>();
-            
-            _systemUnderTest = new HttpRequestIdentity(provider,requestMessage)
+
+            _systemUnderTest = new HttpRequestIdentity(provider, requestMessage, sourceApi)
                 .SetCorrelationIdentifier(correlationIdentifier);
-            
+
             var result = _systemUnderTest.ToString();
-            
+
             result.Should().ContainAll(
-                $"Provider={provider}", 
-                $"UpStreamMethod={requestMessage.Method}", 
+                $"Provider={provider}",
+                $"UpStreamMethod={requestMessage.Method}",
                 $"UpStreamUrl={requestMessage.RequestUri}",
                 $"CorrelationIdentifier={correlationIdentifier}");
-            
+
             result.Should().NotContain("UpStreamIdentifier");
         }
-        
+
         [TestMethod]
-        public void ToString_WithCorrelationIdentifierAndIdentifier_HappyPath()
+        [DataRow("TPP", SourceApi.Tpp)]
+        [DataRow("Emis", SourceApi.Emis)]
+        [DataRow("Vision", SourceApi.Vision)]
+        [DataRow("Microtest", SourceApi.Microtest)]
+        [DataRow("OrganDonation", SourceApi.OrganDonation)]
+        [DataRow("ServiceJourneyRules", SourceApi.ServiceJourneyRules)]
+        [DataRow("CitizenId", SourceApi.NhsLogin)]
+        public void ToString_WithCorrelationIdentifierAndIdentifier_HappyPath(string provider, SourceApi sourceApi)
         {
-            var provider = _fixture.Create<string>();
             var requestMessage = _fixture.Create<HttpRequestMessage>();
             var correlationIdentifier = _fixture.Create<string>();
             var identifier = _fixture.Create<string>();
-            
-            _systemUnderTest = new HttpRequestIdentity(provider,requestMessage)
+
+            _systemUnderTest = new HttpRequestIdentity(provider, requestMessage, sourceApi)
                 .SetCorrelationIdentifier(correlationIdentifier)
                 .SetUpStreamIdentifier(identifier);
-            
+
             var result = _systemUnderTest.ToString();
-            
+
             result.Should().ContainAll(
-                $"Provider={provider}", 
-                $"UpStreamMethod={requestMessage.Method}", 
+                $"Provider={provider}",
+                $"UpStreamMethod={requestMessage.Method}",
                 $"UpStreamUrl={requestMessage.RequestUri}",
                 $"CorrelationIdentifier={correlationIdentifier}",
                 $"UpStreamIdentifier={identifier}");

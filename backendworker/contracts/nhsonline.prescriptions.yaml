@@ -32,6 +32,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /prescriptions:
     post:
       tags:
@@ -71,6 +75,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
     get:
       tags:
         - prescriptions
@@ -109,6 +117,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     PrescriptionListResponse:

@@ -20,13 +20,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _systemUnderTest = _fixture.Create<ServiceJourneyRulesHttpRequestIdentifier>();
         }
-        
+
         [TestMethod]
         public void HttpRequestIdentifier_ValidGetRequest_ReturnsHttpRequestIdentity()
         {
             var request = _fixture.Create<HttpRequestMessage>();
             var result = _systemUnderTest.Identify(request);
-            
+
             result.Should().BeOfType(typeof(HttpRequestIdentity));
         }
     }

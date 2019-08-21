@@ -97,13 +97,13 @@ Feature: View prescriptions backend
     Given I have logged into <GP System> and have a valid session cookie
     But the GP System is too slow
     When I request prescriptions for the last 6 months
-    Then I receive a "Gateway Timeout" error
+    Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
 
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
     Given I have logged into <GP System> and have a valid session cookie

@@ -63,9 +63,9 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public class SearchUpstreamError : OrganDonationResult
         {
-            public ApiErrorResponse Response { get; }
+            public IApiErrorResponse Response { get; }
 
-            public SearchUpstreamError(ApiErrorResponse response)
+            public SearchUpstreamError(IApiErrorResponse response)
             {
                 Response = response;
             }

@@ -79,14 +79,13 @@ Feature: View Available Appointment Slots Backend
     Given the system will time out when trying to retrieve <GP System> appointment slots
     And I have logged in and have a valid session cookie
     When the available appointment slots are retrieved
-    Then I receive a "Gateway Timeout" error
-    And the response contains an empty body
+    Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
 
     # Only specific to EMIS and MICROTEST as we only look to retrieve them for these systems at the moment
   Scenario Outline: A <GP System> user who has <User's Telephone Numbers> phone number(s) stored are retrieved with available slots

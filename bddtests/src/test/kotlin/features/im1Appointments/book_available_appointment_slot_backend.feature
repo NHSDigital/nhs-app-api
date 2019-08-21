@@ -231,14 +231,13 @@ Feature: Book Appointments  Backend
     Given an appointment booking for <GP System> cannot be successful because the GP system will time out
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Gateway Timeout" error
-    And the response contains an empty body
+    Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
 
   Scenario Outline: <GP System> returns corrupted data
     Given <GP System> returns corrupted response for booking request

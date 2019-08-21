@@ -122,6 +122,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
       get: 
         tags: 
           - "appointments"
@@ -248,6 +263,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
       post: 
         tags: 
           - "appointments"
@@ -304,6 +334,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/appointment-slots: 
       get: 
         tags: 
@@ -384,6 +429,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/courses: 
       get: 
         tags: 
@@ -430,6 +490,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/demographics: 
       get: 
         tags: 
@@ -470,6 +545,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/my-record: 
       get: 
         tags: 
@@ -884,6 +974,21 @@
             description: "The GP system is currently unavailable."
           504: 
             description: "The GP system did not respond in a timely fashion."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/my-record/section: 
       get: 
         tags: 
@@ -923,6 +1028,21 @@
             description: "The GP system is currently unavailable."
           504: 
             description: "The GP system did not respond in a timely fashion."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/ndop: 
       get: 
         tags: 
@@ -1068,14 +1188,17 @@
               application/json: 
                 schema: 
                   type: "object"
-                  description: "error response from backend api."
+                  description: "Error response from backend api."
                   properties: 
                     errorCode: 
                       type: "integer"
-                      description: "error code."
+                      description: "Error code"
                     errorMessage: 
                       type: "string"
-                      description: "error message."
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
       post: 
@@ -1222,16 +1345,34 @@
               application/json: 
                 schema: 
                   type: "object"
-                  description: "error response from backend api."
+                  description: "Error response from backend api."
                   properties: 
                     errorCode: 
                       type: "integer"
-                      description: "error code."
+                      description: "Error code"
                     errorMessage: 
                       type: "string"
-                      description: "error message."
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
       put: 
         tags: 
           - "organDonation"
@@ -1374,16 +1515,34 @@
               application/json: 
                 schema: 
                   type: "object"
-                  description: "error response from backend api."
+                  description: "Error response from backend api."
                   properties: 
                     errorCode: 
                       type: "integer"
-                      description: "error code."
+                      description: "Error code"
                     errorMessage: 
                       type: "string"
-                      description: "error message."
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
       delete: 
         tags: 
           - "organDonation"
@@ -1477,16 +1636,34 @@
               application/json: 
                 schema: 
                   type: "object"
-                  description: "error response from backend api."
+                  description: "Error response from backend api."
                   properties: 
                     errorCode: 
                       type: "integer"
-                      description: "error code."
+                      description: "Error code"
                     errorMessage: 
                       type: "string"
-                      description: "error message."
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/organdonation/referencedata: 
       get: 
         tags: 
@@ -1571,16 +1748,34 @@
               application/json: 
                 schema: 
                   type: "object"
-                  description: "error response from backend api."
+                  description: "Error response from backend api."
                   properties: 
                     errorCode: 
                       type: "integer"
-                      description: "error code."
+                      description: "Error code"
                     errorMessage: 
                       type: "string"
-                      description: "error message."
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/prescriptions: 
       post: 
         tags: 
@@ -1625,6 +1820,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
       get: 
         tags: 
           - "prescriptions"
@@ -1700,6 +1910,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/terms-and-conditions/consent: 
       get: 
         tags: 
@@ -1795,6 +2020,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/gpsearch: 
       post: 
         tags: 
@@ -2051,18 +2291,123 @@
                               type: "bool"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           403: 
             description: "Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully authenticate with the GP system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           464: 
             description: "ODS code associated with a user is not supported or no nhs number found."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           465: 
             description: "User did not meet the minimum age requirement."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           500: 
             description: "An unexpected error occurred during the processing of the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           502: 
             description: "Bad response received from upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
       delete: 
         tags: 
           - "session"
@@ -2094,6 +2439,21 @@
             description: "Could not extend service. Can occur if already timed out, or there is a problem with the request."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/pharmacies: 
       get: 
         tags: 
@@ -2240,6 +2600,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
       post: 
         tags: 
           - "pharmacy"
@@ -2274,6 +2649,21 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/journey-configuration: 
       get: 
         tags: 

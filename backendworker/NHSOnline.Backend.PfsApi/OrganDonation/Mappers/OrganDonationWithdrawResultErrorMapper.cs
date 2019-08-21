@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
@@ -17,7 +18,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             new Tuple<OrganDonationWithdrawResult, string>(
                 new OrganDonationWithdrawResult.UpstreamError
                 (
-                    new ApiErrorResponse
+                    new PfsErrorResponse
                     {
                         ErrorCode = 0,
                         ErrorMessage = "A non-recoverable exception has occurred processing the request"
@@ -72,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 }
             };
 
-        private static Tuple<OrganDonationWithdrawResult, string> UpstreamError(ApiErrorResponse response,
+        private static Tuple<OrganDonationWithdrawResult, string> UpstreamError(IApiErrorResponse response,
             HttpStatusCode code)
         {
             return new Tuple<OrganDonationWithdrawResult, string>(

@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             new Tuple<OrganDonationReferenceDataResult, string>(
                 new OrganDonationReferenceDataResult.UpstreamError
                 (
-                    new ApiErrorResponse
+                    new PfsErrorResponse
                     {
                         ErrorCode = 0,
                         ErrorMessage = "A non-recoverable exception has occurred processing the request"

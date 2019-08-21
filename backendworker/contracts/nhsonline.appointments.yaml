@@ -33,6 +33,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /appointments:
     delete:
       tags:
@@ -70,6 +74,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
     get:
       tags:
         - appointments
@@ -100,6 +108,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
     post:
       tags:
         - appointments
@@ -138,6 +150,10 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     AppointmentBookRequest:

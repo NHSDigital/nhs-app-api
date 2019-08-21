@@ -5,9 +5,12 @@ using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 {
-    public class TppHttpRequestIdentifier : IHttpRequestIdentifier
+    public class TppHttpRequestIdentifier : HttpRequestIdentifier
     {
-        public HttpRequestIdentity Identify(HttpRequestMessage request)
+        protected override SourceApi SourceApi => SourceApi.Tpp;
+        protected override string Provider => "Tpp";
+
+        public override HttpRequestIdentity Identify(HttpRequestMessage request)
         {
             string identifier = null;
             if (request.Headers.Contains(Constants.TppConstants.RequestIdentifierHeader))
@@ -15,10 +18,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 request.Headers.TryGetValues(Constants.TppConstants.RequestIdentifierHeader, out var values);
                 identifier = values.FirstOrDefault();
             }
-            
-            return 
-                new HttpRequestIdentity($"{Supplier.Tpp}", request)
-                .SetUpStreamIdentifier(identifier);
+
+            return
+                new HttpRequestIdentity(Provider, request, SourceApi)
+                    .SetUpStreamIdentifier(identifier);
         }
     }
 }

@@ -7,13 +7,17 @@ namespace NHSOnline.Backend.Support.Http
     public class HttpRequestIdentity
     {
         private readonly Dictionary<string, string> _identifiers;
-        public HttpRequestIdentity(string provider, HttpRequestMessage request)
+
+        public SourceApi SourceApi { get; set; }
+
+        public HttpRequestIdentity(string provider, HttpRequestMessage request, SourceApi sourceApi)
         {
+            SourceApi = sourceApi;
             _identifiers = new Dictionary<string, string>
             {
                 { "Provider", provider },
                 { "UpStreamMethod", request.Method?.ToString() },
-                { "UpStreamUrl", request.RequestUri?.ToString() }
+                { "UpStreamUrl", request.RequestUri?.ToString() },
             };
         }
 

@@ -23,14 +23,13 @@ Feature: Cancel Appointments Backend
   Scenario Outline: Cancel a previously booked appointment the <GP System> times out and returns "Gateway Timeout" error
     Given  <GP System> will time out when trying to cancel a previously booked appointment
     When I send a cancellation request to the API with a valid cancellation reason
-    Then I receive a "Gateway Timeout" error
-    And the response contains an empty body
+    Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
 
   Scenario Outline: <GP System> returns corrupted data when trying to cancel a previously booked appointment
     Given <GP System> returns corrupted response when trying to cancel a previously booked appointment

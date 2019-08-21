@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.Support.Http
@@ -42,7 +43,13 @@ namespace NHSOnline.Backend.Support.Http
                 {
                     var requestIdentity = _requestIdentifier.Identify(request);
                     _logger.LogError($"Upstream request timeout: {requestIdentity}");
-                    throw new TimeoutException(_requestIdentifier.Identify(request).ToString());
+                    var message = _requestIdentifier.Identify(request).ToString();
+                    var timeoutType = new NhsTimeoutException(message)
+                    {
+                        SourceApi = requestIdentity.SourceApi
+                    };
+                    
+                    throw timeoutType;
                 }
             }
         }

@@ -11,13 +11,13 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
     {      
         private readonly ILogger<T> _logger;
         
-        protected readonly ApiErrorResponse RetryResponse = new ApiErrorResponse
+        protected readonly PfsErrorResponse RetryResponse = new PfsErrorResponse
         {
             ErrorCode = 1,
             ErrorMessage = "A recoverable exception has occurred processing the request"
         };
 
-        protected readonly ApiErrorResponse NoRetryResponse = new ApiErrorResponse
+        protected readonly PfsErrorResponse NoRetryResponse = new PfsErrorResponse
         {
             ErrorCode = 0,
             ErrorMessage = "A non-recoverable exception has occurred processing the request"

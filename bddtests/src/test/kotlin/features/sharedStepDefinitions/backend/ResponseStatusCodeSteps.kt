@@ -15,7 +15,7 @@ import worker.NhsoHttpExceptionErrorBody
 class ResponseStatusCodeSteps {
 
     @Then("^I receive (?:a|an) \"(.*)\" error$")
-    fun thenIReceiveAMessage(expectedStatusCode: String) {
+    fun thenIReceiveAnError(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val errorResponse = SerenityHelpers.getHttpException()
         assertNotNull(
@@ -23,6 +23,13 @@ class ResponseStatusCodeSteps {
                 errorResponse
         )
         assertEquals("Incorrect status code returned. ", converted, errorResponse!!.statusCode)
+    }
+
+    @Then("^I receive (?:a|an) \"(.*)\" error with service desk reference prefixed \"(.*)\"$")
+    fun thenIReceiveAnErrorWithServiceDeskReferencePrefixed(expectedStatusCodeName: String,
+                                                            expectedServiceDeskReferencePrefix: String) {
+        val expectedStatusCode = httpStatusCodeTransform(expectedStatusCodeName)
+        assertNhsoException(expectedStatusCode!!, null, expectedServiceDeskReferencePrefix);
     }
 
     @Then("the response contains an empty body$")
@@ -68,15 +75,28 @@ class ResponseStatusCodeSteps {
         Assert.assertEquals("Expected statusCode", HttpStatus.SC_INTERNAL_SERVER_ERROR, errorResponse!!.statusCode)
     }
 
-    private fun assertNhsoException(expectedHttpStatusCode : Int, expectedErrorCode : String) {
+    private fun assertNhsoException(expectedHttpStatusCode: Int,
+                                    expectedErrorCode: String? = null,
+                                    expectedServiceDeskReferencePrefix: String? = null) {
         val errorResponse = SerenityHelpers.getHttpException()
         val exception = GsonBuilder().create()
-                .fromJson<NhsoHttpExceptionErrorBody>(errorResponse?.body.toString(),
+                .fromJson(errorResponse?.body.toString(),
                         NhsoHttpExceptionErrorBody::class.java)
 
         Assert.assertNotNull("Expected Response", errorResponse)
         Assert.assertEquals("Expected statusCode", expectedHttpStatusCode, errorResponse!!.statusCode)
-        Assert.assertEquals("Expected errorCode", expectedErrorCode, exception?.errorCode ?: "")
+
+        if (expectedErrorCode!=null){
+            Assert.assertEquals("Expected errorCode", expectedErrorCode, exception?.errorCode ?: "")
+        }
+
+        if (expectedServiceDeskReferencePrefix!=null){
+            Assert.assertTrue(
+                    "Expected service desk error reference to start with " +
+                            expectedServiceDeskReferencePrefix + "  but was " +
+                            exception?.serviceDeskReference,
+                    (exception?.serviceDeskReference ?: "").startsWith(expectedServiceDeskReferencePrefix))
+        }
     }
 
     private val _statusCodeMapping: HashMap<String, Int> = hashMapOf(

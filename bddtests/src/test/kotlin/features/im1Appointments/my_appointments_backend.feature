@@ -104,14 +104,13 @@ Feature: My Appointments Backend
     Given <GP System> will time out when trying to retrieve my appointments
     And I have logged in and have a valid session cookie
     When my appointments are requested
-    Then I receive a "Gateway Timeout" error
-    And the response contains an empty body
+    Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
 
   Scenario Outline: <GP System> user sees an unknown exception on booked appointments request
     Given an unknown exception occurs when I want to view my <GP System> appointments

@@ -30,20 +30,48 @@ paths:
                 $ref: "#/components/schemas/UserSessionResponse"
         "400":
           description: Bad request. Supplied OAuth details are incomplete or invalid
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "403":
           description: Forbidden. Can occur if the IM1 connection token received from
             Citizen ID does not successfully authenticate with the GP system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "464":
           description: ODS code associated with a user is not supported or no nhs number
             found.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "465":
           description: User did not meet the minimum age requirement.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred during the processing of the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
     delete:
       tags:
         - session
@@ -80,6 +108,10 @@ paths:
             is a problem with the request.
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     UserSessionRequest:

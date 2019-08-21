@@ -6,7 +6,7 @@ Feature: Service Journey Rules Backend
   Scenario: A user fetching the service journey rules for an ODS code not configured will receive a 404
     Given I am a user whose ODS Code does not have specific journey configuration set up
     When I login but service journey rules has no configuration for my GP practice
-    Then I receive a "Not Found" error
+    Then I receive an "Internal Server Error" error with service desk reference prefixed "3j"
 
   @long-running
   Scenario: A user fetching the service journey rules but the session has expired, will receive Unauthorized

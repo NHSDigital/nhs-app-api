@@ -24,11 +24,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void HttpRequestIdentifier_ValidRequest_ReturnsValidIdentifier()
         {
             var request = _fixture.Create<HttpRequestMessage>();
-            
+
             var stringResponse = $"Provider=Emis UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri}";
 
             var result = _systemUnderTest.Identify(request);
-            
+
             result.ToString().Should().Be(stringResponse);
         }
     }

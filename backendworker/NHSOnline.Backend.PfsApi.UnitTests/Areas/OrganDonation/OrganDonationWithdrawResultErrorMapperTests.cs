@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public void MapOrganDonationAPIError_WhenRecoverableErrorHttpStatus_MapsToBadGatewayErrorWithRetry(HttpStatusCode httpStatus)
         {
             // Arrange         
-            var response = new ApiErrorResponse
+            var response = new PfsErrorResponse
             {
                 ErrorCode = 1,
                 ErrorMessage = "A recoverable exception has occurred processing the request"
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public void MapOrganDonationAPIError_WhenNonRecoverableErrorHttpStatus_MapsToBadGatewayErrorWithoutRetry(HttpStatusCode httpStatus)
         {
             // Arrange           
-            var response = new ApiErrorResponse
+            var response = new PfsErrorResponse
             {
                 ErrorCode = 0,
                 ErrorMessage = "A non-recoverable exception has occurred processing the request"

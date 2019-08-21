@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/apiErrorResponse"
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
     post:
@@ -75,9 +75,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/apiErrorResponse"
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
     put:
       tags:
         - organDonation
@@ -116,9 +120,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/apiErrorResponse"
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
     delete:
       tags:
         - organDonation
@@ -146,9 +154,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/apiErrorResponse"
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /organdonation/referencedata:
     get:
       tags:
@@ -173,9 +185,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/apiErrorResponse"
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   requestBodies:
     organDonationRegistrationRequest:
@@ -417,13 +433,3 @@ components:
         - addressFull
         - address
         - withdrawReasonId
-    apiErrorResponse:
-      type: object
-      description: error response from backend api.
-      properties:
-        errorCode:
-          type: integer
-          description: error code.
-        errorMessage:
-          type: string
-          description: error message.

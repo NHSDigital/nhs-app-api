@@ -3,6 +3,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Globalization;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -134,6 +135,9 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
+            services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
+            services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
+            services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));    
             
