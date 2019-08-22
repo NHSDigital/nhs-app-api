@@ -11,7 +11,7 @@ The Fido Client is pulled in from a maven repository hosted within gitlab. It ha
 In the event that the submodule has not been pulled / updated then you will need to run the following commands:
 
 ```
-git submodule update
+git submodule update --init
 cd android/maven
 git pull
 ```

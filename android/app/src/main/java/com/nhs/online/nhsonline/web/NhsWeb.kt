@@ -149,7 +149,7 @@ class NhsWeb(
     fun onbackButtonPressedOnCheckSymptomsUnsecurePage() {
         when {
             webView.canGoBack() -> webView.goBack()
-            else -> activity.onBackPressed()
+            else -> reloadHomepageOnBackReturn()
         }
     }
 

@@ -28,6 +28,8 @@ class NhsWebTest {
     private lateinit var webViewMock: WebView
     private lateinit var nhsWeb: NhsWeb
     private lateinit var urlLoader: UrlLoader
+    private lateinit var spyWeb: NhsWeb
+
 
     @Before
     fun setUp() {
@@ -37,6 +39,7 @@ class NhsWebTest {
         urlLoader = mock()
         interactorMock = mock()
         nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock)
+        spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
@@ -205,8 +208,8 @@ class NhsWebTest {
         nhsWeb.onWebLoggedIn()
         nhsWeb.onBiometricOptionChanged()
         val cookies: String? = CookieManager.getInstance()
-            .getCookie(activity.resources.getString(R.string.cookieDomain))
-            ?.takeIf { it.contains("HideBiometricBanner=") }
+                .getCookie(activity.resources.getString(R.string.cookieDomain))
+                ?.takeIf { it.contains("HideBiometricBanner=") }
         assert(!cookies.isNullOrBlank())
     }
 
@@ -232,7 +235,7 @@ class NhsWebTest {
         val url = "http://auth.ext.signin.nhs.uk"
         val resourceMock: Resources = mock {
             on { getStringArray(R.array.nativeReloadOnBackUrls) } doReturn arrayOf(
-                "https://ext.signin.nhs.uk"
+                    "https://ext.signin.nhs.uk"
             )
         }
         whenever(spyActivity.resources).thenReturn(resourceMock)
@@ -247,7 +250,7 @@ class NhsWebTest {
         val url = "http://any.fake.uk"
         val resourceMock: Resources = mock {
             on { getStringArray(R.array.nativeReloadOnBackUrls) } doReturn arrayOf(
-                "https://ext.signin.nhs.uk"
+                    "https://ext.signin.nhs.uk"
             )
         }
         whenever(spyActivity.resources).thenReturn(resourceMock)
@@ -262,7 +265,7 @@ class NhsWebTest {
         val url: String? = null
         val resourceMock: Resources = mock {
             on { getStringArray(R.array.nativeReloadOnBackUrls) } doReturn arrayOf(
-                "https://ext.signin.nhs.uk"
+                    "https://ext.signin.nhs.uk"
             )
         }
         whenever(spyActivity.resources).thenReturn(resourceMock)
@@ -270,5 +273,21 @@ class NhsWebTest {
         val result = nhsWeb.shouldReloadHomepageOnBackReturn(url)
 
         Assert.assertFalse(result)
+    }
+
+    @Test
+    fun onbackButtonPressedOnCheckSymptomsUnsecurePage_CallsReloadHomepageOnBackReturn_IfCanGoBackIsFalse() {
+        whenever(webViewMock.canGoBack()).thenReturn(false)
+        spyWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
+
+        verify(spyWeb).reloadHomepageOnBackReturn()
+    }
+
+    @Test
+    fun onbackButtonPressedOnCheckSymptomsUnsecurePage_CallsGoBack_IfCanGoBackIsTrue() {
+        whenever(webViewMock.canGoBack()).thenReturn(true)
+        spyWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
+
+        verify(webViewMock).goBack()
     }
 }
