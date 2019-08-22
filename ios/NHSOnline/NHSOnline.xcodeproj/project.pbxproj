@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03D2D097A7F082FA13F54BEA /* Pods_NHSOnline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F32C28B0605E3D28567797 /* Pods_NHSOnline.framework */; };
 		105BB9872179B67400571671 /* Scratch5.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9862179B67400571671 /* Scratch5.xcconfig */; };
 		105BB98C2179C08300571671 /* Scratch6.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB98B2179C08300571671 /* Scratch6.xcconfig */; };
 		105BB98E2179C09200571671 /* Scratch7.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB98D2179C09200571671 /* Scratch7.xcconfig */; };
@@ -14,57 +15,23 @@
 		105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9912179C0B100571671 /* Scratch9.xcconfig */; };
 		105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9932179C0C400571671 /* Scratch10.xcconfig */; };
 		107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */ = {isa = PBXBuildFile; fileRef = 107EA7B621CCE3CC006C675B /* nativeAppAssets */; };
-		135171A521C9CCF8001EC74B /* FidoURLSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A421C9CCF8001EC74B /* FidoURLSessionManager.swift */; };
 		135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A621C9EF78001EC74B /* CookieHandler.swift */; };
-		135171A921CB1D52001EC74B /* FidoClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A821CB1D52001EC74B /* FidoClientTests.swift */; };
-		13730A1B2201C1BA00437FC1 /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A1A2201C1BA00437FC1 /* FidoEndpointHelper.swift */; };
-		13730A1D2201C3E000437FC1 /* FidoRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A1C2201C3E000437FC1 /* FidoRequestHandler.swift */; };
-		13730A1F2201C80800437FC1 /* FidoEncodingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A1E2201C80800437FC1 /* FidoEncodingHandler.swift */; };
 		13730A22220454FF00437FC1 /* BiometricType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A21220454FF00437FC1 /* BiometricType.swift */; };
-		13730A24220460B700437FC1 /* BCryptSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A23220460B700437FC1 /* BCryptSwift.swift */; };
 		1381D46321BFFAE100B54300 /* Scratch12.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1381D46221BFFAE100B54300 /* Scratch12.xcconfig */; };
-		1381D46A21BFFF9000B54300 /* AlgAndEncodingEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */; };
-		1381D46B21BFFF9000B54300 /* TagsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46921BFFF9000B54300 /* TagsEnum.swift */; };
-		1381D46E21BFFFA800B54300 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46D21BFFFA800B54300 /* SwiftyJSON.swift */; };
-		1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47521BFFFCF00B54300 /* DisplayPNGCharacteristicsDescriptor.swift */; };
-		1381D48421BFFFD300B54300 /* FinalChallengeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47621BFFFCF00B54300 /* FinalChallengeParams.swift */; };
 		1381D48621BFFFD300B54300 /* AAID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47821BFFFD000B54300 /* AAID.swift */; };
-		1381D48721BFFFD300B54300 /* RGBPalletteEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47921BFFFD000B54300 /* RGBPalletteEntry.swift */; };
-		1381D48821BFFFD300B54300 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47A21BFFFD000B54300 /* Operation.swift */; };
-		1381D48921BFFFD300B54300 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47B21BFFFD100B54300 /* KeyPair.swift */; };
-		1381D48A21BFFFD300B54300 /* FidoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47C21BFFFD100B54300 /* FidoRequest.swift */; };
-		1381D48B21BFFFD300B54300 /* ChannelBindings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47D21BFFFD100B54300 /* ChannelBindings.swift */; };
-		1381D48C21BFFFD300B54300 /* OperationHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47E21BFFFD200B54300 /* OperationHeader.swift */; };
-		1381D48D21BFFFD300B54300 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47F21BFFFD200B54300 /* Extension.swift */; };
 		1381D48E21BFFFD300B54300 /* Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D48021BFFFD200B54300 /* Policy.swift */; };
-		1381D48F21BFFFD300B54300 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D48121BFFFD200B54300 /* Version.swift */; };
-		1381D49421C0000D00B54300 /* RegistrationAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D49221C0000D00B54300 /* RegistrationAssertionBuilder.swift */; };
-		1381D49821C0070000B54300 /* FidoKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D49721C0070000B54300 /* FidoKeyManager.swift */; };
-		1381D49A21C00AC500B54300 /* FidoClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D49921C00AC500B54300 /* FidoClient.swift */; };
-		138B177721F0DB97009FB223 /* FidoError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138B177621F0DB97009FB223 /* FidoError.swift */; };
 		139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */; };
 		139D331221F71B2200E6C92C /* BiometricAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331121F71B2200E6C92C /* BiometricAlert.swift */; };
 		139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */; };
 		139D331621F71B8200E6C92C /* BiometricAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331521F71B8200E6C92C /* BiometricAlertType.swift */; };
 		139D331821F71C0700E6C92C /* BiometricResultStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331721F71C0700E6C92C /* BiometricResultStrings.swift */; };
-		139D331E21F8AFB700E6C92C /* DeregRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331D21F8AFB700E6C92C /* DeregRequest.swift */; };
 		139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139F19262181D73300ED59A1 /* HeaderBarSlim.xib */; };
 		139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */; };
 		13F588AE21BA863D002857EA /* BiometricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F588AD21BA863D002857EA /* BiometricsViewController.swift */; };
-		13F9698121C1224300F6ACC7 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698021C1224300F6ACC7 /* UserDefaultsManager.swift */; };
-		13F9698521C2ABB800F6ACC7 /* UserVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698421C2ABB800F6ACC7 /* UserVerification.swift */; };
-		13F9698721C2ABE300F6ACC7 /* KeyProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698621C2ABE300F6ACC7 /* KeyProtection.swift */; };
-		13F9698921C2ABFF00F6ACC7 /* MatcherProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698821C2ABFF00F6ACC7 /* MatcherProtection.swift */; };
 		1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */; };
 		1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702521F5D334003E3EAB /* String_Extensions.swift */; };
-		1417702821F5D34D003E3EAB /* Data_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702721F5D34D003E3EAB /* Data_Extensions.swift */; };
-		14865E7E220AE7B300E72948 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14865E7D220AE7B300E72948 /* RegistrationRequest.swift */; };
 		14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */; };
 		14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */; };
-		14D4D20521E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */; };
-		14D4D20B21E8AD25008A65E0 /* EncodingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */; };
-		14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */; };
-		14D4D21521E8BA44008A65E0 /* DeregisterAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */; };
 		14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21821E8D711008A65E0 /* BiometricService.swift */; };
 		14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */; };
 		14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */; };
@@ -84,14 +51,12 @@
 		4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0F219C319A00C95F51 /* ConfigurationService.swift */; };
 		47D88A4621998CBD004771B5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D88A4521998CBD004771B5 /* Configuration.swift */; };
 		4A4F8E292201D59B00D6D224 /* BiometricErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */; };
-		4A5483DC21F5C51000DA8076 /* FidoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5483DB21F5C51000DA8076 /* FidoResponse.swift */; };
-		4A5483DE21F5C87500DA8076 /* Assertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5483DD21F5C87500DA8076 /* Assertion.swift */; };
-		4A5483E021F5DF8D00DA8076 /* FidoAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5483DF21F5DF8D00DA8076 /* FidoAssertionBuilder.swift */; };
-		4A6A1AA421E6189E00795BE2 /* AssertionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A1AA321E6189E00795BE2 /* AssertionTests.swift */; };
-		4A8A3EA421E4E4AA00E49E01 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8A3EA321E4E4AA00E49E01 /* ModelTests.swift */; };
 		4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */; };
-		4AD14FC521E8F9ED003D1904 /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD14FC421E8F9ED003D1904 /* BiometricState.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
+		64909CF83EEBD7876CEC4A9E /* Pods_NHSOnlineTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A57034DF92A742FFEFBF35D2 /* Pods_NHSOnlineTests.framework */; };
+		8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */; };
+		8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37F22F9B52200BB161F /* UserDefaultsManager.swift */; };
+		8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F38122F9B58A00BB161F /* BiometricState.swift */; };
 		9200DC9F21428562009EFFEF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200DC9E21428562009EFFEF /* Reachability.swift */; };
 		981E9E32214E5FB300DA80EB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981E9E31214E5FB300DA80EB /* Config.swift */; };
 		C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578022028B94800CDBDC5 /* AppDelegate.swift */; };
@@ -133,7 +98,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1A18791D22E0773200F2BACC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		00DA7C203DA54422209C6AB7 /* Pods-NHSOnlineTests.scratch14.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch14.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch14.xcconfig"; sourceTree = "<group>"; };
+		05AE6CF06261993521A3CB0B /* Pods-NHSOnlineTests.scratch1.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch1.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch1.xcconfig"; sourceTree = "<group>"; };
+		05C5A9A216E54A9D6768AEBF /* Pods-NHSOnlineTests.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.production.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.production.xcconfig"; sourceTree = "<group>"; };
+		0ECE893C0BD161095925CE56 /* Pods-NHSOnline.scratch14.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch14.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch14.xcconfig"; sourceTree = "<group>"; };
 		105BB9762178DC4300571671 /* Scratch1.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch1.xcconfig; sourceTree = "<group>"; };
 		105BB9772178DC5200571671 /* Scratch2.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch2.xcconfig; sourceTree = "<group>"; };
 		105BB9782178DC5D00571671 /* Scratch3.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch3.xcconfig; sourceTree = "<group>"; };
@@ -146,61 +128,28 @@
 		105BB9932179C0C400571671 /* Scratch10.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch10.xcconfig; sourceTree = "<group>"; };
 		105BB9A42186FA3E00571671 /* Defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Defaults.xcconfig; sourceTree = "<group>"; };
 		107EA7B621CCE3CC006C675B /* nativeAppAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nativeAppAssets; path = ../../nativeAppAssets; sourceTree = "<group>"; };
-		135171A421C9CCF8001EC74B /* FidoURLSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoURLSessionManager.swift; sourceTree = "<group>"; };
 		135171A621C9EF78001EC74B /* CookieHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CookieHandler.swift; sourceTree = "<group>"; };
-		135171A821CB1D52001EC74B /* FidoClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoClientTests.swift; sourceTree = "<group>"; };
-		13730A1A2201C1BA00437FC1 /* FidoEndpointHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoEndpointHelper.swift; sourceTree = "<group>"; };
-		13730A1C2201C3E000437FC1 /* FidoRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoRequestHandler.swift; sourceTree = "<group>"; };
-		13730A1E2201C80800437FC1 /* FidoEncodingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoEncodingHandler.swift; sourceTree = "<group>"; };
 		13730A21220454FF00437FC1 /* BiometricType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricType.swift; sourceTree = "<group>"; };
-		13730A23220460B700437FC1 /* BCryptSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCryptSwift.swift; sourceTree = "<group>"; };
 		1381D46221BFFAE100B54300 /* Scratch12.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch12.xcconfig; sourceTree = "<group>"; };
-		1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlgAndEncodingEnum.swift; sourceTree = "<group>"; };
-		1381D46921BFFF9000B54300 /* TagsEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsEnum.swift; sourceTree = "<group>"; };
-		1381D46D21BFFFA800B54300 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
-		1381D47521BFFFCF00B54300 /* DisplayPNGCharacteristicsDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayPNGCharacteristicsDescriptor.swift; sourceTree = "<group>"; };
-		1381D47621BFFFCF00B54300 /* FinalChallengeParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalChallengeParams.swift; sourceTree = "<group>"; };
 		1381D47821BFFFD000B54300 /* AAID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAID.swift; sourceTree = "<group>"; };
-		1381D47921BFFFD000B54300 /* RGBPalletteEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBPalletteEntry.swift; sourceTree = "<group>"; };
-		1381D47A21BFFFD000B54300 /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
-		1381D47B21BFFFD100B54300 /* KeyPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
-		1381D47C21BFFFD100B54300 /* FidoRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FidoRequest.swift; sourceTree = "<group>"; };
-		1381D47D21BFFFD100B54300 /* ChannelBindings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelBindings.swift; sourceTree = "<group>"; };
-		1381D47E21BFFFD200B54300 /* OperationHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationHeader.swift; sourceTree = "<group>"; };
-		1381D47F21BFFFD200B54300 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		1381D48021BFFFD200B54300 /* Policy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Policy.swift; sourceTree = "<group>"; };
-		1381D48121BFFFD200B54300 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
-		1381D49221C0000D00B54300 /* RegistrationAssertionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationAssertionBuilder.swift; sourceTree = "<group>"; };
-		1381D49721C0070000B54300 /* FidoKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoKeyManager.swift; sourceTree = "<group>"; };
-		1381D49921C00AC500B54300 /* FidoClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoClient.swift; sourceTree = "<group>"; };
-		138B177621F0DB97009FB223 /* FidoError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoError.swift; sourceTree = "<group>"; };
 		139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsResultViewController.swift; sourceTree = "<group>"; };
 		139D331121F71B2200E6C92C /* BiometricAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAlert.swift; sourceTree = "<group>"; };
 		139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricControllerStrings.swift; sourceTree = "<group>"; };
 		139D331521F71B8200E6C92C /* BiometricAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAlertType.swift; sourceTree = "<group>"; };
 		139D331721F71C0700E6C92C /* BiometricResultStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricResultStrings.swift; sourceTree = "<group>"; };
-		139D331D21F8AFB700E6C92C /* DeregRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeregRequest.swift; sourceTree = "<group>"; };
 		139F19272181D73300ED59A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBarSlim.xib; sourceTree = "<group>"; };
 		139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlim.swift; sourceTree = "<group>"; };
 		13F588AD21BA863D002857EA /* BiometricsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewController.swift; sourceTree = "<group>"; };
-		13F9698021C1224300F6ACC7 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
-		13F9698421C2ABB800F6ACC7 /* UserVerification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVerification.swift; sourceTree = "<group>"; };
-		13F9698621C2ABE300F6ACC7 /* KeyProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyProtection.swift; sourceTree = "<group>"; };
-		13F9698821C2ABFF00F6ACC7 /* MatcherProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatcherProtection.swift; sourceTree = "<group>"; };
 		1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationResponse.swift; sourceTree = "<group>"; };
 		1417702521F5D334003E3EAB /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
-		1417702721F5D34D003E3EAB /* Data_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_Extensions.swift; sourceTree = "<group>"; };
-		14865E7D220AE7B300E72948 /* RegistrationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
 		14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarDelegateTests.swift; sourceTree = "<group>"; };
 		14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackTC.xcconfig; sourceTree = "<group>"; };
-		14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationAssertionBuilder.swift; sourceTree = "<group>"; };
-		14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodingHelper.swift; sourceTree = "<group>"; };
-		14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionAssertationBuilder.swift; sourceTree = "<group>"; };
-		14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeregisterAuthenticator.swift; sourceTree = "<group>"; };
 		14D4D21821E8D711008A65E0 /* BiometricService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
 		14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewControllerTests.swift; sourceTree = "<group>"; };
 		14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDelegateTests.swift; sourceTree = "<group>"; };
 		14FD70C22282E02B0072B280 /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
+		19AB5F83EAB8FEAAC9B43F9C /* Pods-NHSOnlineTests.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.preview.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.preview.xcconfig"; sourceTree = "<group>"; };
 		2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandler.swift; sourceTree = "<group>"; };
@@ -208,29 +157,59 @@
 		2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlersTests.swift; sourceTree = "<group>"; };
 		30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTests.swift; sourceTree = "<group>"; };
 		3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlersTests.swift; sourceTree = "<group>"; };
+		30DC9CD1EB30D0B0FE83C615 /* Pods-NHSOnlineTests.scratch5.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch5.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch5.xcconfig"; sourceTree = "<group>"; };
+		336DF80898B643D063C57C9B /* Pods-NHSOnlineTests.scratch12.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch12.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch12.xcconfig"; sourceTree = "<group>"; };
+		36E6CDBB16253891937CC7AF /* Pods-NHSOnline.scratch12.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch12.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch12.xcconfig"; sourceTree = "<group>"; };
 		3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterface.swift; sourceTree = "<group>"; };
 		3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterface.swift; sourceTree = "<group>"; };
 		3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController_Extensions.swift; sourceTree = "<group>"; };
+		42F32C28B0605E3D28567797 /* Pods_NHSOnline.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NHSOnline.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43A5CBE4A6E969EF552FC0A1 /* Pods-NHSOnlineTests.scratch16.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch16.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch16.xcconfig"; sourceTree = "<group>"; };
+		44ABB054D17D93AF4A662E79 /* Pods-NHSOnline.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.debug.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.debug.xcconfig"; sourceTree = "<group>"; };
 		4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlers.swift; sourceTree = "<group>"; };
 		4703497921945F5C00F72D05 /* Preview.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Preview.xcconfig; sourceTree = "<group>"; };
 		4793CF0C219AF18500C95F51 /* CustomNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNotifications.swift; sourceTree = "<group>"; };
 		4793CF0F219C319A00C95F51 /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		47D88A4521998CBD004771B5 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricErrorStrings.swift; sourceTree = "<group>"; };
-		4A5483DB21F5C51000DA8076 /* FidoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoResponse.swift; sourceTree = "<group>"; };
-		4A5483DD21F5C87500DA8076 /* Assertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertion.swift; sourceTree = "<group>"; };
-		4A5483DF21F5DF8D00DA8076 /* FidoAssertionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoAssertionBuilder.swift; sourceTree = "<group>"; };
-		4A6A1AA321E6189E00795BE2 /* AssertionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssertionTests.swift; sourceTree = "<group>"; };
-		4A8A3EA321E4E4AA00E49E01 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsStringsHandler.swift; sourceTree = "<group>"; };
-		4AD14FC421E8F9ED003D1904 /* BiometricState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricState.swift; sourceTree = "<group>"; };
+		509B1B7167BF888B536DAFEC /* Pods-NHSOnlineTests.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.development.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.development.xcconfig"; sourceTree = "<group>"; };
+		53679BC1A447CFA9AD8C8661 /* Pods-NHSOnlineTests.scratch6.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch6.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch6.xcconfig"; sourceTree = "<group>"; };
+		53D22452A5E9D0B2BE1DD217 /* Pods-NHSOnlineTests.scratch2.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch2.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch2.xcconfig"; sourceTree = "<group>"; };
 		5598FF712189C27100767CAC /* BrowserstackLocal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackLocal.xcconfig; sourceTree = "<group>"; };
+		5651764798905ADB1A1ED248 /* Pods-NHSOnline.scratch3.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch3.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch3.xcconfig"; sourceTree = "<group>"; };
+		59E6F96CCEC50217ABB6ED03 /* Pods-NHSOnlineTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.debug.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5E01AB4AED48C58A6C63F7B1 /* Pods-NHSOnline.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.production.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.production.xcconfig"; sourceTree = "<group>"; };
 		609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime_Extensions.swift; sourceTree = "<group>"; };
+		62E61855971D414EE70893D6 /* Pods-NHSOnline.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.preview.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.preview.xcconfig"; sourceTree = "<group>"; };
+		6612AF2E1CCABAAF48069DCD /* Pods-NHSOnlineTests.scratch9.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch9.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch9.xcconfig"; sourceTree = "<group>"; };
+		677C88C146DF0514D6B87FC7 /* Pods-NHSOnline.scratch16.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch16.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch16.xcconfig"; sourceTree = "<group>"; };
+		6B08E80BF14ACD10D0843B6A /* Pods-NHSOnlineTests.browserstacktc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.browserstacktc.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.browserstacktc.xcconfig"; sourceTree = "<group>"; };
+		6BCA6DB8344452880A7A953F /* Pods-NHSOnline.scratch13.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch13.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch13.xcconfig"; sourceTree = "<group>"; };
+		6BEE74B1BDAB6D03F316712A /* Pods-NHSOnline.scratch7.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch7.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch7.xcconfig"; sourceTree = "<group>"; };
+		6CA4937E214F04A817AFB057 /* Pods-NHSOnline.scratch15.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch15.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch15.xcconfig"; sourceTree = "<group>"; };
+		7410A67FCF9D4CA6DAEA1A98 /* Pods-NHSOnline.browserstacklocal.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstacklocal.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstacklocal.xcconfig"; sourceTree = "<group>"; };
+		76958DC8A60575B9E5D140D4 /* Pods-NHSOnlineTests.scratch7.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch7.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch7.xcconfig"; sourceTree = "<group>"; };
+		772E2411D84FBB442C97198E /* Pods-NHSOnlineTests.scratch3.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch3.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch3.xcconfig"; sourceTree = "<group>"; };
+		7D0FAE6F7F153865CB3B7553 /* Pods-NHSOnlineTests.scratch15.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch15.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch15.xcconfig"; sourceTree = "<group>"; };
+		7F23D2A5B69881CB61D6FB57 /* Pods-NHSOnline.scratch4.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch4.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch4.xcconfig"; sourceTree = "<group>"; };
+		812369D7C7B073BB5030EDF4 /* Pods-NHSOnlineTests.scratch11.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch11.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch11.xcconfig"; sourceTree = "<group>"; };
+		8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoEndpointHelper.swift; sourceTree = "<group>"; };
+		8A78F37F22F9B52200BB161F /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		8A78F38122F9B58A00BB161F /* BiometricState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricState.swift; sourceTree = "<group>"; };
+		8A87FBD222E9D8EF00AF3E93 /* FidoClient */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FidoClient; path = "../externals/fido-client/FidoClient"; sourceTree = "<group>"; };
+		8CB18A1F4BCAA4E1A3AE4778 /* Pods-NHSOnlineTests.scratch4.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch4.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch4.xcconfig"; sourceTree = "<group>"; };
 		9200DC9E21428562009EFFEF /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		95266685A5B7527207E1E4E2 /* Pods-NHSOnline.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.development.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.development.xcconfig"; sourceTree = "<group>"; };
+		980A79385112CC859721CB02 /* Pods-NHSOnline.scratch5.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch5.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch5.xcconfig"; sourceTree = "<group>"; };
 		981E9E31214E5FB300DA80EB /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		981E9E33214E8EA200DA80EB /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		981E9E34214E8F1000DA80EB /* Demo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Demo.xcconfig; sourceTree = "<group>"; };
 		981E9E35214E8F2000DA80EB /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
+		9BAA5516DB0DD43B44D0F87D /* Pods-NHSOnlineTests.scratch13.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch13.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch13.xcconfig"; sourceTree = "<group>"; };
+		A57034DF92A742FFEFBF35D2 /* Pods_NHSOnlineTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NHSOnlineTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFF616165C1A4A8F23F71826 /* Pods-NHSOnlineTests.scratch8.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch8.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch8.xcconfig"; sourceTree = "<group>"; };
+		B0A6720928BA2BE3BEC60C39 /* Pods-NHSOnline.scratch6.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch6.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch6.xcconfig"; sourceTree = "<group>"; };
 		C20577FF2028B94800CDBDC5 /* NHSOnline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NHSOnline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C20578022028B94800CDBDC5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C20578072028B94800CDBDC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -255,6 +234,14 @@
 		C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextViewTests.swift; sourceTree = "<group>"; };
 		C2ED05D521427E950036189C /* TabBar_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar_Extension.swift; sourceTree = "<group>"; };
+		CC86C9C737113CF803FDDBC1 /* Pods-NHSOnline.scratch8.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch8.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch8.xcconfig"; sourceTree = "<group>"; };
+		D0C6DD2F3758E958DFF15BD1 /* Pods-NHSOnline.scratch1.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch1.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch1.xcconfig"; sourceTree = "<group>"; };
+		D6A0B15FD76D69A0D2903909 /* Pods-NHSOnline.scratch10.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch10.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch10.xcconfig"; sourceTree = "<group>"; };
+		D951DD71E68B6779AC303B2C /* Pods-NHSOnlineTests.scratch10.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch10.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch10.xcconfig"; sourceTree = "<group>"; };
+		D98271DFF053EF4BE2AB2451 /* Pods-NHSOnlineTests.browserstacklocal.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.browserstacklocal.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.browserstacklocal.xcconfig"; sourceTree = "<group>"; };
+		E49C2A4CC93A9A1D7993225E /* Pods-NHSOnline.scratch11.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch11.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch11.xcconfig"; sourceTree = "<group>"; };
+		E9DA6764D81081DCB709C7C8 /* Pods-NHSOnline.scratch9.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch9.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch9.xcconfig"; sourceTree = "<group>"; };
+		EBF1471FC84716B6FD4EBDC4 /* Pods-NHSOnlineTests.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.demo.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.demo.xcconfig"; sourceTree = "<group>"; };
 		F01745A6207B700700877E4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewUrlTests.swift; sourceTree = "<group>"; };
 		F026199A2050AFE100EDDFE0 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -268,6 +255,9 @@
 		F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebView_Extensions.swift; sourceTree = "<group>"; };
 		F0D2E5D520501EAA0067DEC4 /* WebViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDelegate.swift; sourceTree = "<group>"; };
 		F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageUnavailabilityViewController.swift; sourceTree = "<group>"; };
+		F1C008774FB9FCBEBBC57A5B /* Pods-NHSOnline.scratch2.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch2.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch2.xcconfig"; sourceTree = "<group>"; };
+		F2CCB1614CE17CAF075D799D /* Pods-NHSOnline.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.demo.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.demo.xcconfig"; sourceTree = "<group>"; };
+		FC9E248064386F82A81B7A8C /* Pods-NHSOnline.browserstacktc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstacktc.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstacktc.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +265,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03D2D097A7F082FA13F54BEA /* Pods_NHSOnline.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +273,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64909CF83EEBD7876CEC4A9E /* Pods_NHSOnlineTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,31 +334,11 @@
 		13199A0021FF5C200039DADB /* Fido */ = {
 			isa = PBXGroup;
 			children = (
-				13730A202201CD3800437FC1 /* AssertionBuilders */,
 				1381D47421BFFFC400B54300 /* Models */,
-				1381D46721BFFF8300B54300 /* Consts */,
-				138B177621F0DB97009FB223 /* FidoError.swift */,
-				14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */,
-				13F9698021C1224300F6ACC7 /* UserDefaultsManager.swift */,
-				135171A421C9CCF8001EC74B /* FidoURLSessionManager.swift */,
-				1381D49721C0070000B54300 /* FidoKeyManager.swift */,
-				1381D49921C00AC500B54300 /* FidoClient.swift */,
-				13730A1C2201C3E000437FC1 /* FidoRequestHandler.swift */,
-				13730A1E2201C80800437FC1 /* FidoEncodingHandler.swift */,
-				13730A1A2201C1BA00437FC1 /* FidoEndpointHelper.swift */,
+				8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */,
+				8A78F37F22F9B52200BB161F /* UserDefaultsManager.swift */,
 			);
 			path = Fido;
-			sourceTree = "<group>";
-		};
-		13730A202201CD3800437FC1 /* AssertionBuilders */ = {
-			isa = PBXGroup;
-			children = (
-				1381D49221C0000D00B54300 /* RegistrationAssertionBuilder.swift */,
-				14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */,
-				14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */,
-				4A5483DF21F5DF8D00DA8076 /* FidoAssertionBuilder.swift */,
-			);
-			path = AssertionBuilders;
 			sourceTree = "<group>";
 		};
 		1381D45721BFF90300B54300 /* Biometrics */ = {
@@ -375,56 +347,26 @@
 				131999FF21FF5BB50039DADB /* BiometricsViewHelpers */,
 				131999FE21FF5B6C0039DADB /* BiometricsAlertHandling */,
 				14D4D21821E8D711008A65E0 /* BiometricService.swift */,
-				1381D46C21BFFF9B00B54300 /* Frameworks */,
 				13199A0021FF5C200039DADB /* Fido */,
 			);
 			path = Biometrics;
 			sourceTree = "<group>";
 		};
-		1381D46721BFFF8300B54300 /* Consts */ = {
-			isa = PBXGroup;
-			children = (
-				1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */,
-				1381D46921BFFF9000B54300 /* TagsEnum.swift */,
-				13F9698421C2ABB800F6ACC7 /* UserVerification.swift */,
-				13F9698621C2ABE300F6ACC7 /* KeyProtection.swift */,
-				13F9698821C2ABFF00F6ACC7 /* MatcherProtection.swift */,
-			);
-			path = Consts;
-			sourceTree = "<group>";
-		};
-		1381D46C21BFFF9B00B54300 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				13730A23220460B700437FC1 /* BCryptSwift.swift */,
-				1381D46D21BFFFA800B54300 /* SwiftyJSON.swift */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
 		1381D47421BFFFC400B54300 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				14865E7D220AE7B300E72948 /* RegistrationRequest.swift */,
 				1381D47821BFFFD000B54300 /* AAID.swift */,
-				1381D47D21BFFFD100B54300 /* ChannelBindings.swift */,
-				1381D47521BFFFCF00B54300 /* DisplayPNGCharacteristicsDescriptor.swift */,
-				1381D47F21BFFFD200B54300 /* Extension.swift */,
-				1381D47621BFFFCF00B54300 /* FinalChallengeParams.swift */,
-				1381D47B21BFFFD100B54300 /* KeyPair.swift */,
-				1381D47A21BFFFD000B54300 /* Operation.swift */,
-				1381D47E21BFFFD200B54300 /* OperationHeader.swift */,
 				1381D48021BFFFD200B54300 /* Policy.swift */,
-				1381D47C21BFFFD100B54300 /* FidoRequest.swift */,
-				139D331D21F8AFB700E6C92C /* DeregRequest.swift */,
-				1381D47921BFFFD000B54300 /* RGBPalletteEntry.swift */,
-				1381D48121BFFFD200B54300 /* Version.swift */,
-				14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */,
-				4AD14FC421E8F9ED003D1904 /* BiometricState.swift */,
-				4A5483DB21F5C51000DA8076 /* FidoResponse.swift */,
-				4A5483DD21F5C87500DA8076 /* Assertion.swift */,
+				8A78F38122F9B58A00BB161F /* BiometricState.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		1A1878A122E0742B00F2BACC /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Framework;
 			sourceTree = "<group>";
 		};
 		2EC6C6C82243128900EE49B9 /* Utils */ = {
@@ -462,6 +404,69 @@
 			path = Lifecycle;
 			sourceTree = "<group>";
 		};
+		7282DE3DA4E658F6DCAAB637 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				509B1B7167BF888B536DAFEC /* Pods-NHSOnlineTests.development.xcconfig */,
+				D98271DFF053EF4BE2AB2451 /* Pods-NHSOnlineTests.browserstacklocal.xcconfig */,
+				6B08E80BF14ACD10D0843B6A /* Pods-NHSOnlineTests.browserstacktc.xcconfig */,
+				05AE6CF06261993521A3CB0B /* Pods-NHSOnlineTests.scratch1.xcconfig */,
+				53D22452A5E9D0B2BE1DD217 /* Pods-NHSOnlineTests.scratch2.xcconfig */,
+				772E2411D84FBB442C97198E /* Pods-NHSOnlineTests.scratch3.xcconfig */,
+				8CB18A1F4BCAA4E1A3AE4778 /* Pods-NHSOnlineTests.scratch4.xcconfig */,
+				30DC9CD1EB30D0B0FE83C615 /* Pods-NHSOnlineTests.scratch5.xcconfig */,
+				53679BC1A447CFA9AD8C8661 /* Pods-NHSOnlineTests.scratch6.xcconfig */,
+				76958DC8A60575B9E5D140D4 /* Pods-NHSOnlineTests.scratch7.xcconfig */,
+				AFF616165C1A4A8F23F71826 /* Pods-NHSOnlineTests.scratch8.xcconfig */,
+				6612AF2E1CCABAAF48069DCD /* Pods-NHSOnlineTests.scratch9.xcconfig */,
+				D951DD71E68B6779AC303B2C /* Pods-NHSOnlineTests.scratch10.xcconfig */,
+				812369D7C7B073BB5030EDF4 /* Pods-NHSOnlineTests.scratch11.xcconfig */,
+				336DF80898B643D063C57C9B /* Pods-NHSOnlineTests.scratch12.xcconfig */,
+				59E6F96CCEC50217ABB6ED03 /* Pods-NHSOnlineTests.debug.xcconfig */,
+				9BAA5516DB0DD43B44D0F87D /* Pods-NHSOnlineTests.scratch13.xcconfig */,
+				00DA7C203DA54422209C6AB7 /* Pods-NHSOnlineTests.scratch14.xcconfig */,
+				7D0FAE6F7F153865CB3B7553 /* Pods-NHSOnlineTests.scratch15.xcconfig */,
+				43A5CBE4A6E969EF552FC0A1 /* Pods-NHSOnlineTests.scratch16.xcconfig */,
+				EBF1471FC84716B6FD4EBDC4 /* Pods-NHSOnlineTests.demo.xcconfig */,
+				19AB5F83EAB8FEAAC9B43F9C /* Pods-NHSOnlineTests.preview.xcconfig */,
+				05C5A9A216E54A9D6768AEBF /* Pods-NHSOnlineTests.production.xcconfig */,
+				95266685A5B7527207E1E4E2 /* Pods-NHSOnline.development.xcconfig */,
+				7410A67FCF9D4CA6DAEA1A98 /* Pods-NHSOnline.browserstacklocal.xcconfig */,
+				FC9E248064386F82A81B7A8C /* Pods-NHSOnline.browserstacktc.xcconfig */,
+				D0C6DD2F3758E958DFF15BD1 /* Pods-NHSOnline.scratch1.xcconfig */,
+				F1C008774FB9FCBEBBC57A5B /* Pods-NHSOnline.scratch2.xcconfig */,
+				5651764798905ADB1A1ED248 /* Pods-NHSOnline.scratch3.xcconfig */,
+				7F23D2A5B69881CB61D6FB57 /* Pods-NHSOnline.scratch4.xcconfig */,
+				980A79385112CC859721CB02 /* Pods-NHSOnline.scratch5.xcconfig */,
+				B0A6720928BA2BE3BEC60C39 /* Pods-NHSOnline.scratch6.xcconfig */,
+				6BEE74B1BDAB6D03F316712A /* Pods-NHSOnline.scratch7.xcconfig */,
+				CC86C9C737113CF803FDDBC1 /* Pods-NHSOnline.scratch8.xcconfig */,
+				E9DA6764D81081DCB709C7C8 /* Pods-NHSOnline.scratch9.xcconfig */,
+				D6A0B15FD76D69A0D2903909 /* Pods-NHSOnline.scratch10.xcconfig */,
+				E49C2A4CC93A9A1D7993225E /* Pods-NHSOnline.scratch11.xcconfig */,
+				36E6CDBB16253891937CC7AF /* Pods-NHSOnline.scratch12.xcconfig */,
+				44ABB054D17D93AF4A662E79 /* Pods-NHSOnline.debug.xcconfig */,
+				6BCA6DB8344452880A7A953F /* Pods-NHSOnline.scratch13.xcconfig */,
+				0ECE893C0BD161095925CE56 /* Pods-NHSOnline.scratch14.xcconfig */,
+				6CA4937E214F04A817AFB057 /* Pods-NHSOnline.scratch15.xcconfig */,
+				677C88C146DF0514D6B87FC7 /* Pods-NHSOnline.scratch16.xcconfig */,
+				F2CCB1614CE17CAF075D799D /* Pods-NHSOnline.demo.xcconfig */,
+				62E61855971D414EE70893D6 /* Pods-NHSOnline.preview.xcconfig */,
+				5E01AB4AED48C58A6C63F7B1 /* Pods-NHSOnline.production.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		8A87FBC822E9B58B00AF3E93 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A87FBD222E9D8EF00AF3E93 /* FidoClient */,
+				42F32C28B0605E3D28567797 /* Pods_NHSOnline.framework */,
+				A57034DF92A742FFEFBF35D2 /* Pods_NHSOnlineTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9200DC9D2142854C009EFFEF /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -477,6 +482,8 @@
 				C20578162028B94800CDBDC5 /* NHSOnlineTests */,
 				C20578002028B94800CDBDC5 /* Products */,
 				107EA7B621CCE3CC006C675B /* nativeAppAssets */,
+				8A87FBC822E9B58B00AF3E93 /* Frameworks */,
+				7282DE3DA4E658F6DCAAB637 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -492,6 +499,7 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
+				1A1878A122E0742B00F2BACC /* Framework */,
 				4793CF0C219AF18500C95F51 /* CustomNotifications.swift */,
 				981E9E31214E5FB300DA80EB /* Config.swift */,
 				9200DC9D2142854C009EFFEF /* Network */,
@@ -527,12 +535,9 @@
 				F01745A6207B700700877E4D /* Info.plist */,
 				C20578172028B94800CDBDC5 /* SafariTests.swift */,
 				F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */,
-				135171A821CB1D52001EC74B /* FidoClientTests.swift */,
 				C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */,
 				C2357EB9216574F20033B98F /* KnownServiceTests.swift */,
 				C2357EBB216575460033B98F /* KnownServicesTests.swift */,
-				4A8A3EA321E4E4AA00E49E01 /* ModelTests.swift */,
-				4A6A1AA321E6189E00795BE2 /* AssertionTests.swift */,
 				30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */,
 				14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */,
 				14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */,
@@ -629,7 +634,6 @@
 				609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */,
 				3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */,
 				1417702521F5D334003E3EAB /* String_Extensions.swift */,
-				1417702721F5D34D003E3EAB /* Data_Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -650,9 +654,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C20578272028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnline" */;
 			buildPhases = (
+				B1284C8D167F793B1FB266D7 /* [CP] Check Pods Manifest.lock */,
 				C20577FB2028B94800CDBDC5 /* Sources */,
 				C20577FC2028B94800CDBDC5 /* Frameworks */,
 				C20577FD2028B94800CDBDC5 /* Resources */,
+				1A18791D22E0773200F2BACC /* Embed Frameworks */,
+				BB1F0C94CF4668FF44A319F2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -667,6 +674,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C205782A2028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnlineTests" */;
 			buildPhases = (
+				83AFE4ACF815B38ED6462031 /* [CP] Check Pods Manifest.lock */,
 				C205780F2028B94800CDBDC5 /* Sources */,
 				C20578102028B94800CDBDC5 /* Frameworks */,
 				C20578112028B94800CDBDC5 /* Resources */,
@@ -763,6 +771,73 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		83AFE4ACF815B38ED6462031 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NHSOnlineTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B1284C8D167F793B1FB266D7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NHSOnline-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BB1F0C94CF4668FF44A319F2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NHSOnline/Pods-NHSOnline-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FidoClientIOS/FidoClientIOS.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FidoClientIOS.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NHSOnline/Pods-NHSOnline-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C20577FB2028B94800CDBDC5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -770,49 +845,27 @@
 			files = (
 				C21428212164B21300F00948 /* KnownService.swift in Sources */,
 				4793CF0D219AF18500C95F51 /* CustomNotifications.swift in Sources */,
-				1381D49821C0070000B54300 /* FidoKeyManager.swift in Sources */,
 				F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */,
-				13730A24220460B700437FC1 /* BCryptSwift.swift in Sources */,
-				1381D46E21BFFFA800B54300 /* SwiftyJSON.swift in Sources */,
-				4AD14FC521E8F9ED003D1904 /* BiometricState.swift in Sources */,
 				139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */,
-				1417702821F5D34D003E3EAB /* Data_Extensions.swift in Sources */,
 				4A4F8E292201D59B00D6D224 /* BiometricErrorStrings.swift in Sources */,
+				8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */,
 				C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */,
-				4A5483DE21F5C87500DA8076 /* Assertion.swift in Sources */,
-				1381D48421BFFFD300B54300 /* FinalChallengeParams.swift in Sources */,
-				1381D48821BFFFD300B54300 /* Operation.swift in Sources */,
-				1381D48921BFFFD300B54300 /* KeyPair.swift in Sources */,
 				139D331821F71C0700E6C92C /* BiometricResultStrings.swift in Sources */,
-				13730A1F2201C80800437FC1 /* FidoEncodingHandler.swift in Sources */,
-				14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */,
-				1381D46A21BFFF9000B54300 /* AlgAndEncodingEnum.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
 				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
-				1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */,
 				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
-				13F9698921C2ABFF00F6ACC7 /* MatcherProtection.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
-				14D4D20521E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift in Sources */,
-				139D331E21F8AFB700E6C92C /* DeregRequest.swift in Sources */,
 				3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
 				139D331221F71B2200E6C92C /* BiometricAlert.swift in Sources */,
 				3EF9DDD421ABFDE40052C72A /* UIAlertController_Extensions.swift in Sources */,
 				14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */,
-				1381D46B21BFFF9000B54300 /* TagsEnum.swift in Sources */,
-				14D4D21521E8BA44008A65E0 /* DeregisterAuthenticator.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
-				14D4D20B21E8AD25008A65E0 /* EncodingHelper.swift in Sources */,
-				4A5483DC21F5C51000DA8076 /* FidoResponse.swift in Sources */,
-				1381D48D21BFFFD300B54300 /* Extension.swift in Sources */,
-				13F9698121C1224300F6ACC7 /* UserDefaultsManager.swift in Sources */,
 				47D88A4621998CBD004771B5 /* Configuration.swift in Sources */,
 				1381D48E21BFFFD300B54300 /* Policy.swift in Sources */,
-				1381D48C21BFFFD300B54300 /* OperationHeader.swift in Sources */,
 				2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */,
 				139D331621F71B8200E6C92C /* BiometricAlertType.swift in Sources */,
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
@@ -823,34 +876,22 @@
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
 				139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */,
 				C2142823216512D200F00948 /* KnownServices.swift in Sources */,
-				13730A1B2201C1BA00437FC1 /* FidoEndpointHelper.swift in Sources */,
-				138B177721F0DB97009FB223 /* FidoError.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */,
 				13F588AE21BA863D002857EA /* BiometricsViewController.swift in Sources */,
-				13730A1D2201C3E000437FC1 /* FidoRequestHandler.swift in Sources */,
+				8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */,
+				8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */,
 				135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */,
 				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
-				14865E7E220AE7B300E72948 /* RegistrationRequest.swift in Sources */,
 				9200DC9F21428562009EFFEF /* Reachability.swift in Sources */,
-				135171A521C9CCF8001EC74B /* FidoURLSessionManager.swift in Sources */,
-				1381D48721BFFFD300B54300 /* RGBPalletteEntry.swift in Sources */,
 				3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */,
-				1381D49A21C00AC500B54300 /* FidoClient.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
-				1381D49421C0000D00B54300 /* RegistrationAssertionBuilder.swift in Sources */,
 				C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */,
-				1381D48A21BFFFD300B54300 /* FidoRequest.swift in Sources */,
-				13F9698521C2ABB800F6ACC7 /* UserVerification.swift in Sources */,
-				13F9698721C2ABE300F6ACC7 /* KeyProtection.swift in Sources */,
-				4A5483E021F5DF8D00DA8076 /* FidoAssertionBuilder.swift in Sources */,
 				4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */,
 				609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */,
-				1381D48F21BFFFD300B54300 /* Version.swift in Sources */,
 				1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */,
-				1381D48B21BFFFD300B54300 /* ChannelBindings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,14 +902,11 @@
 				C2357EBC216575460033B98F /* KnownServicesTests.swift in Sources */,
 				2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
-				4A6A1AA421E6189E00795BE2 /* AssertionTests.swift in Sources */,
 				14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */,
 				F01745BB207BA39200877E4D /* SafariTests.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
-				135171A921CB1D52001EC74B /* FidoClientTests.swift in Sources */,
 				30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */,
 				14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */,
-				4A8A3EA421E4E4AA00E49E01 /* ModelTests.swift in Sources */,
 				C2357EBA216574F20033B98F /* KnownServiceTests.swift in Sources */,
 				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,
 				14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */,
@@ -999,11 +1037,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9762178DC4300571671 /* Scratch1.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch1;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1011,7 +1050,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1019,6 +1058,7 @@
 		};
 		105BB97C2179B49900571671 /* Scratch1 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05AE6CF06261993521A3CB0B /* Pods-NHSOnlineTests.scratch1.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1102,11 +1142,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9772178DC5200571671 /* Scratch2.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch2;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1114,7 +1155,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1122,6 +1163,7 @@
 		};
 		105BB97F2179B4A700571671 /* Scratch2 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53D22452A5E9D0B2BE1DD217 /* Pods-NHSOnlineTests.scratch2.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1205,11 +1247,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9782178DC5D00571671 /* Scratch3.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch3;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1217,7 +1260,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1225,6 +1268,7 @@
 		};
 		105BB9822179B4B700571671 /* Scratch3 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 772E2411D84FBB442C97198E /* Pods-NHSOnlineTests.scratch3.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1308,11 +1352,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9792178DC6C00571671 /* Scratch4.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch4;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1320,7 +1365,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1328,6 +1373,7 @@
 		};
 		105BB9852179B4C300571671 /* Scratch4 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8CB18A1F4BCAA4E1A3AE4778 /* Pods-NHSOnlineTests.scratch4.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1411,11 +1457,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9862179B67400571671 /* Scratch5.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch5;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1423,7 +1470,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1431,6 +1478,7 @@
 		};
 		105BB98A2179B68D00571671 /* Scratch5 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30DC9CD1EB30D0B0FE83C615 /* Pods-NHSOnlineTests.scratch5.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1514,11 +1562,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB98B2179C08300571671 /* Scratch6.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch6;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1526,7 +1575,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1534,6 +1583,7 @@
 		};
 		105BB9972179C10500571671 /* Scratch6 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53679BC1A447CFA9AD8C8661 /* Pods-NHSOnlineTests.scratch6.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1617,11 +1667,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB98D2179C09200571671 /* Scratch7.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch7;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1629,7 +1680,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1637,6 +1688,7 @@
 		};
 		105BB99A2179C10800571671 /* Scratch7 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76958DC8A60575B9E5D140D4 /* Pods-NHSOnlineTests.scratch7.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1720,11 +1772,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB98F2179C0A300571671 /* Scratch8.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch8;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1732,7 +1785,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1740,6 +1793,7 @@
 		};
 		105BB99D2179C10B00571671 /* Scratch8 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFF616165C1A4A8F23F71826 /* Pods-NHSOnlineTests.scratch8.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1823,11 +1877,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9912179C0B100571671 /* Scratch9.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch9;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1835,7 +1890,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1843,6 +1898,7 @@
 		};
 		105BB9A02179C10E00571671 /* Scratch9 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6612AF2E1CCABAAF48069DCD /* Pods-NHSOnlineTests.scratch9.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1926,11 +1982,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9932179C0C400571671 /* Scratch10.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch10;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1938,7 +1995,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1946,6 +2003,7 @@
 		};
 		105BB9A32179C11000571671 /* Scratch10 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D951DD71E68B6779AC303B2C /* Pods-NHSOnlineTests.scratch10.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2029,11 +2087,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1381D46221BFFAE100B54300 /* Scratch12.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch12;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2041,7 +2100,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2049,6 +2108,7 @@
 		};
 		1381D46621BFFC2F00B54300 /* Scratch12 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 336DF80898B643D063C57C9B /* Pods-NHSOnlineTests.scratch12.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2132,11 +2192,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = BrowserstackLocal;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2144,7 +2205,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstacklocal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Browserstack";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = YES;
@@ -2153,6 +2214,7 @@
 		};
 		14B849352226E9F9002E6851 /* BrowserstackTC */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B08E80BF14ACD10D0843B6A /* Pods-NHSOnlineTests.browserstacktc.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2167,6 +2229,111 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
 			};
 			name = BrowserstackTC;
+		};
+		1A18792122E07BD500F2BACC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_DISPLAY_NAME = Scratch12;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1A18792222E07BD500F2BACC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 44ABB054D17D93AF4A662E79 /* Pods-NHSOnline.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				APP_DISPLAY_NAME = Scratch12;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NHSOnline/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A18792322E07BD500F2BACC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59E6F96CCEC50217ABB6ED03 /* Pods-NHSOnlineTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				INFOPLIST_FILE = NHSOnlineTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = online.nhs.com.NHSOnlineTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
+			};
+			name = Debug;
 		};
 		4703497A21945FB300F72D05 /* Preview */ = {
 			isa = XCBuildConfiguration;
@@ -2230,12 +2397,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4703497921945F5C00F72D05 /* Preview.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = "NHS App Preview";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
@@ -2244,7 +2412,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.preview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Preview";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = NO;
@@ -2253,6 +2421,7 @@
 		};
 		4703497C21945FB300F72D05 /* Preview */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 19AB5F83EAB8FEAAC9B43F9C /* Pods-NHSOnlineTests.preview.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2336,11 +2505,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5598FF712189C27100767CAC /* BrowserstackLocal.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = BrowserstackLocal;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2348,7 +2518,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstacklocal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Browserstack";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = YES;
@@ -2357,6 +2527,7 @@
 		};
 		5598FF742189C32700767CAC /* BrowserstackLocal */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D98271DFF053EF4BE2AB2451 /* Pods-NHSOnlineTests.browserstacklocal.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2434,11 +2605,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 981E9E35214E8F2000DA80EB /* Production.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = "NHS App";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2446,7 +2618,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = NO;
@@ -2455,6 +2627,7 @@
 		};
 		987E7B42214AF7DB00433F9C /* Production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05C5A9A216E54A9D6768AEBF /* Pods-NHSOnlineTests.production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2595,11 +2768,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Development;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2607,7 +2781,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.development;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Development";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = YES;
@@ -2618,11 +2792,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 981E9E34214E8F1000DA80EB /* Demo.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = "NHS App Demo";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
@@ -2631,7 +2806,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Demo Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = NO;
@@ -2658,6 +2833,7 @@
 		};
 		C205782C2028B94800CDBDC5 /* Demo */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBF1471FC84716B6FD4EBDC4 /* Pods-NHSOnlineTests.demo.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2741,11 +2917,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C2466F462243EC7A006C336F /* Scratch11.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch11;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2753,7 +2930,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2761,6 +2938,7 @@
 		};
 		C2466F4D2243ED3B006C336F /* Scratch11 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 812369D7C7B073BB5030EDF4 /* Pods-NHSOnlineTests.scratch11.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2844,11 +3022,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C2466F472243ECBD006C336F /* Scratch13.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch13;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2856,7 +3035,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2864,6 +3043,7 @@
 		};
 		C2466F502243ED50006C336F /* Scratch13 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9BAA5516DB0DD43B44D0F87D /* Pods-NHSOnlineTests.scratch13.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2947,11 +3127,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C2466F482243ECC8006C336F /* Scratch14.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch14;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2959,7 +3140,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch14;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2967,6 +3148,7 @@
 		};
 		C2466F532243ED64006C336F /* Scratch14 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00DA7C203DA54422209C6AB7 /* Pods-NHSOnlineTests.scratch14.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3050,11 +3232,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C2466F492243ECD5006C336F /* Scratch15.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch15;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -3062,7 +3245,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch15;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3070,6 +3253,7 @@
 		};
 		C2466F562243ED72006C336F /* Scratch15 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D0FAE6F7F153865CB3B7553 /* Pods-NHSOnlineTests.scratch15.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3153,11 +3337,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C2466F4A2243ECE5006C336F /* Scratch16.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APP_DISPLAY_NAME = Scratch16;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -3165,7 +3350,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch16;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3173,6 +3358,7 @@
 		};
 		C2466F592243ED81006C336F /* Scratch16 */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A5CBE4A6E969EF552FC0A1 /* Pods-NHSOnlineTests.scratch16.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3209,6 +3395,7 @@
 				105BB9A12179C11000571671 /* Scratch10 */,
 				C2466F4B2243ED3B006C336F /* Scratch11 */,
 				1381D46421BFFC2F00B54300 /* Scratch12 */,
+				1A18792122E07BD500F2BACC /* Debug */,
 				C2466F4E2243ED50006C336F /* Scratch13 */,
 				C2466F512243ED64006C336F /* Scratch14 */,
 				C2466F542243ED72006C336F /* Scratch15 */,
@@ -3218,7 +3405,7 @@
 				987E7B40214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Production;
+			defaultConfigurationName = Scratch12;
 		};
 		C20578272028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnline" */ = {
 			isa = XCConfigurationList;
@@ -3238,6 +3425,7 @@
 				105BB9A22179C11000571671 /* Scratch10 */,
 				C2466F4C2243ED3B006C336F /* Scratch11 */,
 				1381D46521BFFC2F00B54300 /* Scratch12 */,
+				1A18792222E07BD500F2BACC /* Debug */,
 				C2466F4F2243ED50006C336F /* Scratch13 */,
 				C2466F522243ED64006C336F /* Scratch14 */,
 				C2466F552243ED72006C336F /* Scratch15 */,
@@ -3247,7 +3435,7 @@
 				987E7B41214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Production;
+			defaultConfigurationName = Scratch12;
 		};
 		C205782A2028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnlineTests" */ = {
 			isa = XCConfigurationList;
@@ -3267,6 +3455,7 @@
 				105BB9A32179C11000571671 /* Scratch10 */,
 				C2466F4D2243ED3B006C336F /* Scratch11 */,
 				1381D46621BFFC2F00B54300 /* Scratch12 */,
+				1A18792322E07BD500F2BACC /* Debug */,
 				C2466F502243ED50006C336F /* Scratch13 */,
 				C2466F532243ED64006C336F /* Scratch14 */,
 				C2466F562243ED72006C336F /* Scratch15 */,
@@ -3276,7 +3465,7 @@
 				987E7B42214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Production;
+			defaultConfigurationName = Scratch12;
 		};
 /* End XCConfigurationList section */
 	};

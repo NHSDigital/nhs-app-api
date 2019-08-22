@@ -129,7 +129,7 @@ class HomeViewController : UIViewController {
             if(UserDefaultsManager.getBiometricAvailability() == BiometricState.Registered) {
                 biometricService?.authenticate()
             } else if (UserDefaultsManager.getBiometricAvailability() == BiometricState.Invalidated) {
-                biometricService?.deRegister()
+                biometricService?.deRegister(deregisterFidoCredentials: false)
                 showBiometricsAlert(.BiometricsInvalidated)
             }
         }

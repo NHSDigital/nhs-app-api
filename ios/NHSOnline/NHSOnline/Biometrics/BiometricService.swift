@@ -1,6 +1,7 @@
 import LocalAuthentication
 import WebKit
 import os.log
+import FidoClientIOS
 
 protocol BiometricProtocol {
     @available(iOS 10.0, *)
@@ -8,12 +9,22 @@ protocol BiometricProtocol {
     @available(iOS 10.0, *)
     func authenticate()
     @available(iOS 10.0, *)
-    func deRegister()
+    func deRegister(deregisterFidoCredentials: Bool)
 }
 
 class BiometricService: BiometricProtocol {
     let homeViewController: HomeViewController
     let biometricViewController: BiometricsViewController
+    let FidoServerUrl: String = ConfigurationService.shared().FidoServerUrl()
+    lazy var endpointHelper = FidoEndpointHelper(
+        FidoServerUrl: FidoServerUrl,
+        BiometricsRegistrationRequestEndpoint: config().BiometricsRegistrationRequestEndpoint,
+        BiometricsRegistrationResponseEndpoint: config().BiometricsRegistrationResponseEndpoint,
+        BiometricsAuthenticationRequestEndpoint: config().BiometricsAuthenticationRequestEndpoint,
+        BiometricsDeregistrationRequestEndpoint: config().BiometricsDeregistrationRequestEndpoint)
+    let privateKeyLabel: String = config().PrivateKeyLabel
+    let BiometricsAssertionScheme: String = config().BiometricsAssertionScheme
+    let aaid: String = config().AAID
     
     init(homeViewController controller: HomeViewController, biometricViewController biometricController: BiometricsViewController) {
         self.homeViewController = controller
@@ -23,7 +34,10 @@ class BiometricService: BiometricProtocol {
     @available(iOS 10.0, *)
     func register() {
         do {
-            let success = try FidoClient().register()
+            let registrationUrl: String = endpointHelper.requestRequestEndpoint
+            let accessToken: String = try UserDefaultsManager.getAccessToken()
+            let registrationResponseEndpoint: String = endpointHelper.registrationResponseEndpoint
+            let success = try FidoClient().register(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, accessToken: accessToken, registrationUrl: registrationUrl, privateKeyLabel: privateKeyLabel, registrationResponseEndpoint: registrationResponseEndpoint)
             if success {
                 return  biometricViewController.goToResultsPage()
             }
@@ -42,7 +56,9 @@ class BiometricService: BiometricProtocol {
     func authenticate() {
         do {
             homeViewController.showWebViewContainer()
-            let base64Response = try FidoClient().completeAuthorisationRequestAndRetrieveBase64Response()
+            let authenticationUrl: String = endpointHelper.authenticationRequestEndpoint
+            
+            let base64Response = try FidoClient().completeAuthorisationRequestAndRetrieveBase64Response(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, privateKeyLabel: privateKeyLabel, authenticationUrl: authenticationUrl)
             let url = config().BiometricRedirectURL + base64Response
             let validLoginUrl = config().HomeUrl + url
             homeViewController.webViewController?.loadPage(url: validLoginUrl)
@@ -56,9 +72,14 @@ class BiometricService: BiometricProtocol {
     }
     
     @available(iOS 10.0, *)
-    func deRegister() {
+    func deRegister(deregisterFidoCredentials: Bool) {
         do {
-            try FidoClient().doDeregistration()
+            let deregistrationRequestEndpoint: String = endpointHelper.deregistrationRequestEndpoint
+            UserDefaultsManager.setBiometricState(nil)
+            if deregisterFidoCredentials {
+                let accessToken: String = try UserDefaultsManager.getAccessToken()
+                try FidoClient().doDeregistration(aaid: aaid, privateKeyLabel: privateKeyLabel, deregistrationRequestEndpoint: deregistrationRequestEndpoint, authToken: accessToken)
+            }
         } catch let error as FidoError {
             handleError(error)
         } catch {

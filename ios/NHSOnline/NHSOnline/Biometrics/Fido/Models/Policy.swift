@@ -1,3 +1,5 @@
+import SwiftyJSON
+
 public struct Policy : Codable {
     public let assertionScheme: String?
     public let accepted: [[AAID]]

@@ -1,5 +1,6 @@
 import Foundation
 import WebKit
+import SwiftyJSON
 
 class CookieHandler {    
     func getAccessTokenFromCookie(completion : @escaping (_: String?) -> ())  {

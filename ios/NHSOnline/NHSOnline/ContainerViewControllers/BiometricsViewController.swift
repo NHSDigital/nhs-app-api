@@ -2,6 +2,7 @@ import UIKit
 import WebKit
 import LocalAuthentication
 import os.log
+import FidoClientIOS
 
 class BiometricsViewController: UIViewController {
     
@@ -73,7 +74,7 @@ class BiometricsViewController: UIViewController {
     
     func attemptDeregistration() {
          if #available(iOS 10.0, *) {
-            biometricService?.deRegister()
+            biometricService?.deRegister(deregisterFidoCredentials: true)
             homeViewController?.showBiometricResultsContainer(registration: false)
         }
     }

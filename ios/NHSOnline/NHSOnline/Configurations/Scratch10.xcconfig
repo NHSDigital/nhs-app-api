@@ -1,4 +1,5 @@
 #include "Defaults.xcconfig"
+#include "Pods/Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch10.xcconfig"
 
 HOME_URL = www-scratch10.dev.nonlive.nhsapp.service.nhs.uk/
 BASE_API_URL = api-scratch10.dev.nonlive.nhsapp.service.nhs.uk/v1/

@@ -16,3 +16,7 @@ bddtests/target/site/
 
 # user settings file
 *.DotSettings.user
+
+ios/NHSonline/NHSOnline.xcworkspace
+ios/NHSOnline/Pods
+ios/NhsOnline/Podfile.lock
