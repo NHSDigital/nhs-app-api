@@ -997,6 +997,7 @@ export default {
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
+    settings: 'Settings',
     appointments: 'My appointments',
     appointmentAdminHelp: 'Additional GP services',
     appointmentGpAdvice: 'Ask your GP for advice',

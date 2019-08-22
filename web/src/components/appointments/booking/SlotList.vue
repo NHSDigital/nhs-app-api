@@ -53,21 +53,27 @@ export default {
 @import "../../../style/errorvalidation";
 @import "../../../style/appointmentsnew";
 
-form {
- &.desktopWeb {
-   max-width: 560px;
-   padding-right: 1em;
+  form {
+    &.desktopWeb {
+      max-width: 560px;
+      padding-right: 1em;
 
-  h2 {
-   font-family: $default-web;
-   font-weight: lighter;
+      h2 {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
+
+      .noAppointments {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
+    }
+
+    .appointmentTimeSelector {
+      padding-left: 0;
+    }
   }
-  .noAppointments {
-    font-family: $default-web;
-    font-weight: lighter;
-   }
- }
-}
+
   .noAppointments {
     margin-bottom: 1.2em;
   }

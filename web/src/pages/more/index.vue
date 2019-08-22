@@ -1,56 +1,53 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <ul :class="$style['list-menu']">
-      <sjr-if journey="cdssAdmin" tag="li">
-        <analytics-tracked-tag :text="$t('sc04.requestGpHelp.subheader')"
-                               data-purpose="text_link">
-          <a id="btn_gp_help"
-             :href="requestAdminHelpPath"
-             :class="$style['no-decoration']"
-             @click="navigate($event)">
-            <h2>{{ $t('sc04.requestGpHelp.subheader') }}</h2>
-            <p>{{ $t('sc04.requestGpHelp.body') }}</p>
-          </a>
-        </analytics-tracked-tag>
-      </sjr-if>
-      <li>
-        <organ-donation-link id="btn_organ_donation" :class-name="[$style['no-decoration']]">
-          <h2>{{ $t('sc04.organDonation.subheader') }}</h2>
-          <p>{{ $t('sc04.organDonation.body') }}</p>
-        </organ-donation-link>
-      </li>
-      <li>
-        <analytics-tracked-tag :text="$t('sc04.dataSharing.subheader')"
-                               :href="dataSharingPath"
-                               :tabindex="-1"
-                               data-purpose="text_link">
-          <a id="btn_data_sharing"
-             :class="$style['no-decoration']"
-             :href="dataSharingPath"
-             @click="navigate($event)">
-            <h2>{{ $t('sc04.dataSharing.subheader') }}</h2>
-            <p>{{ $t('sc04.dataSharing.body') }}</p>
-          </a>
-        </analytics-tracked-tag>
-      </li>
-    </ul>
+  <div v-if="showTemplate" id="mainDiv">
+    <menu-item-list>
+      <menu-item v-if="isCdssAdmin"
+                 id="btn_gp_help"
+                 header-tag="h2"
+                 data-purpose="text_link"
+                 :href="requestAdminHelpPath"
+                 :text="$t('sc04.requestGpHelp.subheader')"
+                 :description="$t('sc04.requestGpHelp.body')"
+                 :click-func="navigate"
+                 :aria-label="ariaLabelCaption(
+                   'sc04.requestGpHelp.subheader',
+                   'sc04.requestGpHelp.body')"/>
+
+      <organ-donation-link id="btn_organ_donation"
+                           header-tag="h2"
+                           :description="$t('sc04.organDonation.body')"/>
+
+      <menu-item id="btn_data_sharing"
+                 header-tag="h2"
+                 data-purpose="text_link"
+                 :href="dataSharingPath"
+                 :text="$t('sc04.dataSharing.subheader')"
+                 :description="$t('sc04.dataSharing.body')"
+                 :click-func="navigate"
+                 :aria-label="ariaLabelCaption(
+                   'sc04.dataSharing.subheader',
+                   'sc04.dataSharing.body')"/>
+
+    </menu-item-list>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import srjIf from '@/lib/sjrIf';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import SjrIf from '@/components/SjrIf';
-import { DATA_SHARING_PREFERENCES, APPOINTMENT_ADMIN_HELP, MORE } from '@/lib/routes';
+import { APPOINTMENT_ADMIN_HELP, DATA_SHARING_PREFERENCES, MORE } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
-    AnalyticsTrackedTag,
+    MenuItemList,
+    MenuItem,
     OrganDonationLink,
-    SjrIf,
   },
   computed: {
     dataSharingPath() {
@@ -61,6 +58,9 @@ export default {
         path: APPOINTMENT_ADMIN_HELP.path,
         noJs: { onlineConsultations: { previousRoute: MORE.path } },
       });
+    },
+    isCdssAdmin() {
+      return srjIf({ $store: this.$store, journey: 'cdssAdmin' });
     },
   },
   mounted() {
@@ -76,21 +76,15 @@ export default {
         this.$store.dispatch('onlineConsultations/setPreviousRoute', MORE.path);
       }
     },
+    ariaLabelCaption(header, body) {
+      return `${this.$t(header)}. ${this.$t(body)}`;
+    },
   },
 };
 </script>
 
 <style module lang="scss">
-@import '../../style/listmenu';
-
-.no-decoration {
-  text-decoration: none;
-}
-
-.no-padding {
-  margin-top: -0.5em;
-  margin-left: -1em;
-  margin-right: -1em;
-}
-
+  @import '../../style/colours';
+  @import '../../style/textstyles';
+  @import '../../style/fonts';
 </style>

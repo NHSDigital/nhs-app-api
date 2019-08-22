@@ -1,44 +1,41 @@
 <template>
   <div>
     <h2>{{ $t('organDonation.viewDecision.nextSteps.subheader') }}</h2>
-    <ul :class="$style['list-menu']">
-      <li role="link">
-        <analytics-tracked-tag id="btn_tellFamily" :href="tellFamilyUrl"
-                               :class="[$style['no-decoration'], $style.focusBorder]"
-                               :text="$t(
-                                 'organDonation.viewDecision.nextSteps.tellFamily.subheader')"
-                               :aria-label="`${$t(
-                                 'organDonation.viewDecision.nextSteps.tellFamily.subheader')}.
-                                 ${$t('organDonation.viewDecision.nextSteps.tellFamily.body')}`"
-                               tag="a" target="_blank">
-          <h3>{{ $t('organDonation.viewDecision.nextSteps.tellFamily.subheader') }}</h3>
-          <p>{{ $t('organDonation.viewDecision.nextSteps.tellFamily.body') }}</p>
-        </analytics-tracked-tag>
-      </li>
-      <li v-if="isOptInDecision" role="link">
-        <analytics-tracked-tag id="btn_shareDecision" :href="shareDecisionUrl"
-                               :class="[$style['no-decoration'], $style.focusBorder]"
-                               :text="$t(
-                                 'organDonation.viewDecision.nextSteps.shareDecision.subheader')"
-                               :aria-label="`${$t(
-                                 'organDonation.viewDecision.nextSteps.shareDecision.subheader')}.
-                               ${$t('organDonation.viewDecision.nextSteps.shareDecision.body')}`"
-                               tag="a" target="_blank">
-          <h3>{{ $t('organDonation.viewDecision.nextSteps.shareDecision.subheader') }}</h3>
-          <p>{{ $t('organDonation.viewDecision.nextSteps.shareDecision.body') }}</p>
-        </analytics-tracked-tag>
-      </li>
-    </ul>
+    <menu-item-list>
+      <menu-item id="btn_tellFamily"
+                 header-tag="h3"
+                 role="link"
+                 target="_blank"
+                 :href="tellFamilyUrl"
+                 :description="$t('organDonation.viewDecision.nextSteps.tellFamily.body')"
+                 :text="$t('organDonation.viewDecision.nextSteps.tellFamily.subheader')"
+                 :aria-label="`${$t('organDonation.viewDecision.nextSteps.tellFamily.subheader')}.
+                                 ${$t('organDonation.viewDecision.nextSteps.tellFamily.body')}`"/>
+
+      <menu-item v-if="isOptInDecision"
+                 id="btn_shareDecision"
+                 header-tag="h3"
+                 role="link"
+                 target="_blank"
+                 :href="shareDecisionUrl"
+                 :description="$t('organDonation.viewDecision.nextSteps.shareDecision.body')"
+                 :text="$t('organDonation.viewDecision.nextSteps.shareDecision.subheader')"
+                 :aria-label="`${$t(
+                   'organDonation.viewDecision.nextSteps.shareDecision.subheader')}.
+                   ${$t('organDonation.viewDecision.nextSteps.shareDecision.body')}`"/>
+    </menu-item-list>
   </div>
 </template>
 
 <script>
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 
 export default {
   name: 'NextSteps',
   components: {
-    AnalyticsTrackedTag,
+    MenuItemList,
+    MenuItem,
   },
   props: {
     isOptInDecision: {

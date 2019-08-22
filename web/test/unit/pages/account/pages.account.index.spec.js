@@ -3,10 +3,11 @@ import AboutUs from '@/components/account/AboutUs';
 import Settings from '@/components/account/Settings';
 import WebFooter from '@/components/widgets/WebFooter';
 import WelcomeSection from '@/components/WelcomeSection';
-import { createStore, initFilters, mount, toClass } from '../../helpers';
+import { create$T, createStore, initFilters, mount, toClass } from '../../helpers';
 
 describe('Account Page', () => {
   let wrapper;
+
 
   initFilters();
 
@@ -108,6 +109,44 @@ describe('Account Page', () => {
       it('will show Settings component', () => {
         expect(wrapper.find(Settings).exists()).toBe(true);
       });
+    });
+  });
+
+  describe('page title', () => {
+    let $store;
+    let $t;
+
+    beforeEach(() => {
+      $t = create$T();
+
+      $store = createStore({ state: $state });
+    });
+
+    it('will be set to "Settings" for native', () => {
+      $state.device.isNativeApp = true;
+      mount(AccountPage, {
+        $env,
+        $t,
+        $store,
+        $state,
+        $style: createStyle(),
+      });
+
+      expect($store.dispatch).toBeCalledWith('header/updateHeaderText', 'translate_pageHeaders.settings');
+    });
+
+    it('will remain as to "My Account" for desktop', () => {
+      $state.device.isNativeApp = false;
+
+      mount(AccountPage, {
+        $env,
+        $t,
+        $store,
+        $state,
+        $style: createStyle(),
+      });
+
+      expect($store.dispatch).not.toBeCalledWith('header/updateHeaderText', 'pageHeaders.settings');
     });
   });
 });

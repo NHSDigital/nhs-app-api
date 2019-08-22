@@ -49,7 +49,7 @@ open class HomePage : HybridPageObject() {
             helpfulName = "Survey Link"
     )
 
-    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a"
+    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/span"
 
 
     private fun listOfLinks(): HybridPageElement {

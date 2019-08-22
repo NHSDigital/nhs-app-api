@@ -1,27 +1,30 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
+  <div v-if="showTemplate">
     <h2>{{ $t('myAccount.aboutUsHeading') }}</h2>
-    <ul :class="[$style['list-menu'], $style.myAccountList]">
-      <li v-for="(link, index) in links" :key="index" :class="$style.listMenuItem">
-        <analytics-tracked-tag :href="link.url"
-                               :text="$t(link.localeLabel)"
-                               tag="a" target="_blank">
-          {{ $t(link.localeLabel) }}
-        </analytics-tracked-tag>
-      </li>
-    </ul>
+
+    <menu-item-list>
+      <menu-item v-for="(link, index) in links"
+                 :id="'account-menu-item' + index"
+                 :key="index"
+                 :target="'_blank'"
+                 :href="link.url"
+                 :text="$t(link.localeLabel)"
+                 :aria-label="$t(link.localeLabel)"/>
+    </menu-item-list>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import { accountLinks } from '@/lib/common-links';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 
 export default {
   name: 'AboutUs',
   components: {
-    AnalyticsTrackedTag,
+    MenuItem,
+    MenuItemList,
   },
   data() {
     return {
@@ -33,36 +36,8 @@ export default {
 
 <style module lang="scss" scoped>
   @import "../../style/accessibility";
-  @import "../../style/listmenu";
-  @import "../../style/colours";
+  @import '../../style/colours';
+  @import '../../style/textstyles';
+  @import '../../style/fonts';
   @import "../../style/webshared";
-  @import "../../style/nhsukoverrides";
-
-.myAccountList {
-  @include inner-container-width;
-
-  .listMenuItem {
-    font-family: $default-web;
-    font-weight: lighter;
-
-    a {
-      @extend .focusBorder;
-      &:hover {
-        color: #000;
-      }
-    }
-  }
-}
-.no-padding {
-  margin-top: -0.5em;
-  margin-left: -1em;
-  margin-right: -1em;
-  padding-bottom: 1em;
-
-  p,
-  h2 {
-    margin-left: 0.7em;
-    margin-top: 0.5em;
-  }
-}
 </style>

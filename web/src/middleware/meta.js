@@ -75,6 +75,9 @@ function setPageTitle(route, store, app) {
 }
 
 export default function ({ route, store, app }) {
+  const isNative = $store =>
+    ($store.state.device.source === 'android' || $store.state.device.source === 'ios');
+
   switch (route.name) {
     case INDEX.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
@@ -97,7 +100,7 @@ export default function ({ route, store, app }) {
       break;
     case ACCOUNT.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = 'pageHeaders.account';
+      route.meta.headerKey = isNative(store) ? 'pageHeaders.settings' : 'pageHeaders.account';
       route.meta.pageTitleKey = 'pageTitles.account';
       break;
     case ACCOUNT_NOTIFICATIONS.name:

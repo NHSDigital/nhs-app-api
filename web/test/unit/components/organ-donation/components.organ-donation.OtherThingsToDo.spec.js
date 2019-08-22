@@ -66,6 +66,7 @@ describe('OtherThingsToDo', () => {
 
       describe('click', () => {
         beforeEach(() => {
+          global.digitalData = {};
           link.trigger('click');
         });
         it('will push ORGAN_DONATION_WITHDRAW_REASON to the router', () => {

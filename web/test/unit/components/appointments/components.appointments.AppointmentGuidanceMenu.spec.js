@@ -63,22 +63,22 @@ describe('Appointment guidance menu', () => {
       const tagArray = wrapper.findAll(AnalyticsTrackedTag);
       expect(tagArray.length).toBe(3);
 
-      const symptomsButtonHeader = tagArray.at(0).find('a h2');
+      const symptomsButtonHeader = tagArray.at(0).find('a span h2');
       expect(symptomsButtonHeader.text()).toContain('translate_appointments.guidance.menuItem1.header');
 
-      const symptomsButtonText = tagArray.at(0).find('a p');
+      const symptomsButtonText = tagArray.at(0).find('a span p');
       expect(symptomsButtonText.text()).toContain('translate_appointments.guidance.menuItem1.text');
 
-      const requestGPAdviceButtonHeader = tagArray.at(1).find('a h2');
+      const requestGPAdviceButtonHeader = tagArray.at(1).find('a span h2');
       expect(requestGPAdviceButtonHeader.text()).toContain('translate_appointments.guidance.menuItem2.header');
 
-      const requestGPAdviceButtonText = tagArray.at(1).find('a p');
+      const requestGPAdviceButtonText = tagArray.at(1).find('a span p');
       expect(requestGPAdviceButtonText.text()).toContain('translate_appointments.guidance.menuItem2.text');
 
-      const requestGPHelpButtonHeader = tagArray.at(2).find('a h2');
+      const requestGPHelpButtonHeader = tagArray.at(2).find('a span h2');
       expect(requestGPHelpButtonHeader.text()).toContain('translate_appointments.guidance.menuItem3.header');
 
-      const requestGPHelpButtonText = tagArray.at(2).find('a p');
+      const requestGPHelpButtonText = tagArray.at(2).find('a span p');
       expect(requestGPHelpButtonText.text()).toContain('translate_appointments.guidance.menuItem3.text');
     });
 
@@ -108,7 +108,7 @@ describe('Appointment guidance menu', () => {
     expect(adminMenuItem.exists()).toBe(false);
   });
 
-  it('will only shows the symptoms admin menu item when an unddefined response is returned', async () => {
+  it('will only shows the symptoms admin menu item when an undefined response is returned', async () => {
     const http = createHttp();
     const rules = await http.getV1PatientJourneyConfiguration();
     const wrapper = createWrapper(rules);

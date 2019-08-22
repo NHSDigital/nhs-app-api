@@ -1,74 +1,62 @@
 <template>
   <div v-if="showTemplate" data-purpose="">
-    <ul :class="$style['list-menu']" role="list">
-      <li role="link">
-        <analytics-tracked-tag
-          id="btn_symptoms"
-          :tabindex="-1"
-          :text="$t('appointments.guidance.menuItem1.header')"
-          :aria-label="`${$t('appointments.guidance.menuItem1.header')}.
-            ${$t('appointments.guidance.menuItem1.text')}`"
-          data-purpose="text_link">
-          <a id="btn_symptoms_link"
-             :href="symptomsPath"
-             @click="navigate($event)">
-            <h2>{{ $t('appointments.guidance.menuItem1.header') }}</h2>
-            <p>
-              {{ $t('appointments.guidance.menuItem1.text') }}</p>
-          </a>
-        </analytics-tracked-tag>
-      </li>
-      <sjr-if journey="cdssAdmin" tag="li" role="link">
-        <analytics-tracked-tag
-          id="btn_gpHelpNoAppointment"
-          :tabindex="-1"
-          :text="$t('appointments.guidance.menuItem2.header')"
-          :aria-label="`${$t('appointments.guidance.menuItem2.header')}.
-            ${$t('appointments.guidance.menuItem2.text')}`"
-          data-purpose="text_link">
-          <a id="btn_gp_help"
-             :href="adminHelpPath"
-             @click="navigate($event)">
-            <h2>{{ $t('appointments.guidance.menuItem2.header') }}</h2>
-            <p>
-              {{ $t('appointments.guidance.menuItem2.text') }}</p>
-          </a>
-        </analytics-tracked-tag>
-      </sjr-if>
-      <sjr-if journey="cdssAdvice" tag="li" role="link">
-        <analytics-tracked-tag
-          id="btn_gpAdvice"
-          :tabindex="-1"
-          :text="$t('appointments.guidance.menuItem3.header')"
-          :aria-label="`${$t('appointments.guidance.menuItem3.header')}.
-            ${$t('appointments.guidance.menuItem3.text')}`"
-          data-purpose="text_link">
-          <a id="btn_gp_advice"
-             :href="gpAdviceConditionsPath"
-             @click="navigate($event)">
-            <h2>{{ $t('appointments.guidance.menuItem3.header') }}</h2>
-            <p >
-              {{ $t('appointments.guidance.menuItem3.text') }}</p>
-          </a>
-        </analytics-tracked-tag>
-      </sjr-if>
-    </ul>
+    <menu-item-list data-sid="navigation-list-menu">
+      <menu-item id="btn_symptoms"
+                 header-tag="h2"
+                 :href="symptomsPath"
+                 :text="$t('appointments.guidance.menuItem1.header')"
+                 :description="$t('appointments.guidance.menuItem1.text')"
+                 :click-func="navigate"
+                 :aria-label="ariaLabelCaption(
+                   'appointments.guidance.menuItem1.header',
+                   'appointments.guidance.menuItem1.text')"/>
+
+      <menu-item v-if="isCdssAdmin"
+                 id="btn_gpHelpNoAppointment"
+                 header-tag="h2"
+                 data-purpose="text_link"
+                 :href="adminHelpPath"
+                 :text="$t('appointments.guidance.menuItem2.header')"
+                 :description="$t('appointments.guidance.menuItem2.text')"
+                 :click-func="navigate"
+                 :aria-label="ariaLabelCaption(
+                   'appointments.guidance.menuItem2.header',
+                   'appointments.guidance.menuItem2.text')"/>
+
+      <menu-item v-if="isCdssAdvice"
+                 id="btn_gpAdvice"
+                 data-purpose="text_link"
+                 header-tag="h2"
+                 :href="gpAdviceConditionsPath"
+                 :text="$t('appointments.guidance.menuItem3.header')"
+                 :description="$t('appointments.guidance.menuItem3.text')"
+                 :click-func="navigate"
+                 :aria-label="ariaLabelCaption(
+                   'appointments.guidance.menuItem3.header',
+                   'appointments.guidance.menuItem3.text')"/>
+    </menu-item-list>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { SYMPTOMS, APPOINTMENT_ADMIN_HELP, APPOINTMENT_BOOKING_GUIDANCE, APPOINTMENT_GP_ADVICE_CONDITIONS } from '@/lib/routes';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
+import {
+  APPOINTMENT_ADMIN_HELP,
+  APPOINTMENT_BOOKING_GUIDANCE,
+  APPOINTMENT_GP_ADVICE_CONDITIONS,
+  SYMPTOMS,
+} from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import { createUri } from '@/lib/noJs';
-import SjrIf from '@/components/SjrIf';
+import srjIf from '@/lib/sjrIf';
 
 export default {
   name: 'AppointmentGuidanceMenu',
   components: {
-    AnalyticsTrackedTag,
-    SjrIf,
+    MenuItem,
+    MenuItemList,
   },
   computed: {
     symptomsPath() {
@@ -86,6 +74,12 @@ export default {
         noJs: { onlineConsultations: { previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path } },
       });
     },
+    isCdssAdmin() {
+      return srjIf({ $store: this.$store, journey: 'cdssAdmin' });
+    },
+    isCdssAdvice() {
+      return srjIf({ $store: this.$store, journey: 'cdssAdvice' });
+    },
   },
   mounted() {
     document.activeElement.blur();
@@ -100,11 +94,9 @@ export default {
         this.$store.dispatch('navigation/setNewMenuItem', 1);
       }
     },
+    ariaLabelCaption(header, body) {
+      return `${this.$t(header)}. ${this.$t(body)}`;
+    },
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../style/listmenu';
-  @import "../../style/nhsukoverrides";
-</style>

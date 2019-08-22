@@ -8,13 +8,13 @@
       </span>
     </p>
     <p v-if="dateOfBirth">
-      <strong :class="$style.fieldName" >Date of birth:</strong>
-      <span :class="$style.fieldValue" data-sid="user-date-of-birth">
+      <strong>Date of birth:</strong>
+      <span data-sid="user-date-of-birth">
         {{ dateOfBirth | longDate }}
       </span>
     </p>
     <p v-if="nhsNumber">
-      <strong :class="$style.fieldName">NHS number:</strong>
+      <strong >NHS number:</strong>
       <generic-voice-over-text-split :class="$style.fieldValue"
                                      :text="nhsNumber"
                                      :data-sid="'user-nhs-number'"/>
@@ -47,32 +47,6 @@ export default {
 
 <style module lang="scss">
   @import "../style/fonts";
-
-  div {
-   &.desktopWeb {
-    .fieldName {
-     font-family: $default-web;
-     font-weight: 500;
-     font-size: 1em;
-     line-height: 1.5em;
-     color: #425563;
-    }
-
-    .fieldValue {
-     font-family: $default-web;
-     font-weight: normal;
-     font-size: 1em;
-     line-height: 1.5em;
-     color: #425563;
-    }
-   }
-
-   .fieldName {
-   }
-
-   .fieldValue {
-   }
-  }
 
  .welcomeInfo {
   padding-bottom: 1em;

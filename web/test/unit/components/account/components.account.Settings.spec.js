@@ -37,6 +37,7 @@ describe('Settings', () => {
     });
 
     it('the notifications link will direct to notifications page', () => {
+      global.digitalData = {};
       notificationsLink.trigger('click');
       expect($router.push).toHaveBeenCalledWith(ACCOUNT_NOTIFICATIONS.path);
     });

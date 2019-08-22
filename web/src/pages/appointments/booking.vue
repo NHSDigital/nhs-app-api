@@ -91,7 +91,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
+import { APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
 import { noJsParameterName } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 import get from 'lodash/fp/get';

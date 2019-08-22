@@ -84,6 +84,7 @@ import ScrMicrotest from '@/components/my-record/SummaryCareRecord/ScrMICROTEST'
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import Warning from '@/components/my-record/Warning';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 const PATIENTDETAILS = 'patientdetails';
 
@@ -147,6 +148,7 @@ export default {
     if (this.hasAgreed) {
       await this.$store.dispatch('myRecord/acceptTerms');
       await this.$store.dispatch('myRecord/load');
+      EventBus.$emit(FOCUS_NHSAPP_ROOT);
     }
     this.$store.dispatch('device/unlockNavBar');
   },

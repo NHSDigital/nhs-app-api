@@ -8,6 +8,7 @@
 import symptomsCheck from '@/components/symptoms/SymptomsCheck';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     symptomsCheck,
   },
@@ -17,6 +18,3 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
-
-</style>

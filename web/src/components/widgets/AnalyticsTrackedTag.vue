@@ -1,9 +1,13 @@
 <template>
   <!-- JAWS screen reader (on IE11) doesn't recognise tag <a> with undefined href attribute value
     as a link. So role='link' is required to tell it is a link  -->
-  <component :is="tag" :id="id" :href="href" :role="tag==='a' && !href ? 'link': undefined"
+  <component :is="tag"
+             :id="id"
+             :href="href"
+             :role="tag === 'a' && !href ? 'link': undefined"
+             :target="tag === 'a' ? target : undefined"
              :tabindex="tabindex"
-             @click="trackClick($event);"
+             @click="trackClick($event)"
              @keypress="onKeyDown($event)">
     <slot/>
   </component>
@@ -24,6 +28,14 @@ export default {
     },
     text: {
       type: String,
+      default: undefined,
+    },
+    target: {
+      type: String,
+      default: undefined,
+    },
+    preventDefault: {
+      type: Boolean,
       default: undefined,
     },
     clickFunc: {
@@ -49,7 +61,7 @@ export default {
   },
   methods: {
     trackClick(evt) {
-      if (window.digitalData) {
+      if (global.digitalData) {
         const el = evt.currentTarget;
         const text = this.text.trim();
         const type = (el.hasAttribute('data-purpose')) ? el.getAttribute('data-purpose')
@@ -76,16 +88,21 @@ export default {
         this.$store.dispatch('analytics/trackLink', navigation);
 
         if (this.clickFunc) {
-          evt.preventDefault();
-          this.clickFunc(this.clickParam);
+          if (this.preventDefault) {
+            evt.preventDefault();
+          }
+          this.clickFunc(this.clickParam || evt);
         }
       }
     },
     getType(tagName) {
       switch (tagName) {
-        case 'A': return 'text_link'; break;
-        case 'H2': return 'accordion'; break;
-        default: return `unhandled_tag:${tagName}`; break;
+        case 'A':
+          return 'text_link';
+        case 'H2':
+          return 'accordion';
+        default:
+          return `unhandled_tag:${tagName}`;
       }
     },
     onKeyDown(e) {

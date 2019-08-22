@@ -1,38 +1,38 @@
 <template>
   <div>
     <h2>{{ $t('organDonation.otherThings.subheader') }}</h2>
-    <ul :class="$style['list-menu']">
-      <li v-if="canWithdraw">
-        <a id="btn_withdraw" :class="[$style.noDecoration, $style.focusBorder]" href="#"
-           @click.stop.prevent="withdrawDecision">
-          <h3>{{ $t('organDonation.otherThings.withdraw.subheader') }}</h3>
-          <p>{{ $t('organDonation.otherThings.withdraw.body') }}</p>
-        </a>
-      </li>
-      <li>
-        <analytics-tracked-tag id="btn_blood" :href="bloodDonationUrl"
-                               :class="[$style.noDecoration, $style.focusBorder]"
-                               :text="$t('organDonation.otherThings.bloodDonation.subheader')"
-                               :aria-label="`${$t(
-                                 'organDonation.otherThings.bloodDonation.subheader')}.
-                               ${$t('organDonation.otherThings.bloodDonation.body')}`"
-                               tag="a" target="_blank">
-          <h3>{{ $t('organDonation.otherThings.bloodDonation.subheader') }}</h3>
-          <p>{{ $t('organDonation.otherThings.bloodDonation.body') }}</p>
-        </analytics-tracked-tag>
-      </li>
-    </ul>
+    <menu-item-list>
+      <menu-item v-if="canWithdraw"
+                 id="btn_withdraw"
+                 header-tag="h3"
+                 href="#"
+                 :description="$t('organDonation.otherThings.withdraw.body')"
+                 :text="$t('organDonation.otherThings.withdraw.subheader')"
+                 :click-func="withdrawDecision"
+                 :aria-label="$t('organDonation.otherThings.withdraw.subheader')"/>
+
+      <menu-item id="btn_blood"
+                 header-tag="h3"
+                 :href="bloodDonationUrl"
+                 target="_blank"
+                 :description="$t('organDonation.otherThings.bloodDonation.body')"
+                 :text="$t('organDonation.otherThings.bloodDonation.subheader')"
+                 :aria-label="`${$t('organDonation.otherThings.bloodDonation.subheader')}.
+                               ${$t('organDonation.otherThings.bloodDonation.body')}`"/>
+    </menu-item-list>
   </div>
 </template>
 
 <script>
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import { ORGAN_DONATION_WITHDRAW_REASON } from '@/lib/routes';
+import MenuItemList from '@/components/MenuItemList';
+import MenuItem from '@/components/MenuItem';
 
 export default {
   name: 'OtherThingsToDo',
   components: {
-    AnalyticsTrackedTag,
+    MenuItem,
+    MenuItemList,
   },
   props: {
     canWithdraw: {

@@ -1,15 +1,15 @@
 <template>
-  <analytics-tracked-tag :href="organDonationUrl"
-                         :text="$t('sc04.organDonation.subheader')"
-                         :tabindex="-1">
-    <a :id="id"
-       :class="className"
-       :href="organDonationUrl"
-       :target="organDonationTarget"
-       @click="onClickOrganDonation($event)">
-      <slot/>
-    </a>
-  </analytics-tracked-tag>
+  <menu-item :id="id"
+             :href="organDonationUrl"
+             :text="$t('sc04.organDonation.subheader')"
+             :description="description"
+             :header-tag="headerTag"
+             :click-func="onClickOrganDonation"
+             :prevent-default="useIntegratedOrganDonation"
+             :target="organDonationTarget"
+             :aria-label="ariaLabelCaption(
+               'sc04.organDonation.subheader',
+               description)"/>
 </template>
 
 <script>
@@ -19,9 +19,9 @@ import flow from 'lodash/fp/flow';
 // For some reason, in this file, when the JEST tests run, it fails unless I add the '.vue'
 // extension.  Other tests seem fine but this one fails!
 // eslint-disable-next-line import/extensions
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag.vue';
 import { ORGAN_DONATION } from '@/lib/routes';
 import { isTruthy, redirectTo } from '@/lib/utils';
+import MenuItem from '@/components/MenuItem';
 
 const getIsNativeApp = get('$store.state.device.isNativeApp');
 const getOrganDonationUrl = get('$store.app.$env.ORGAN_DONATION_URL');
@@ -33,7 +33,7 @@ const getOrganDonationIntegrationEnabled = flow(
 export default {
   name: 'OrganDonationLink',
   components: {
-    AnalyticsTrackedTag,
+    MenuItem,
   },
   props: {
     id: {
@@ -43,6 +43,14 @@ export default {
     className: {
       type: Array,
       default: () => [],
+    },
+    description: {
+      type: String,
+      default: undefined,
+    },
+    headerTag: {
+      type: String,
+      default: 'span',
     },
   },
   computed: {
@@ -67,7 +75,12 @@ export default {
     },
 
     onClickOrganDonation(event) {
-      if (this.useIntegratedOrganDonation) this.navigate(event);
+      if (this.useIntegratedOrganDonation) {
+        this.navigate(event);
+      }
+    },
+    ariaLabelCaption(header, body) {
+      return `${this.$t(header)}. ${this.$t(body)}`;
     },
   },
 };

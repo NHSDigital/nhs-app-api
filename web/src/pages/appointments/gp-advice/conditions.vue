@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" :class="!isNativeApp && $style.desktopWeb">
+  <div v-if="showTemplate">
     <message-dialog v-if="isError" role="alert">
       <message-text data-purpose="error-heading"
                     :is-header="true">
@@ -20,10 +20,9 @@
         </a>
       </div>
       <div v-for="serviceDefinition in serviceDefinitions"
-           :key="serviceDefinition.category"
-           :class="$style['no-padding']">
+           :key="serviceDefinition.category">
         <h2>{{ serviceDefinition.category }}</h2>
-        <ul :class="$style['list-menu']">
+        <menu-item-list>
           <menu-item v-for="serviceDefinitionItem in serviceDefinition.items"
                      :id="serviceDefinitionItem.id"
                      :key="serviceDefinitionItem.title"
@@ -31,9 +30,8 @@
                      :text="serviceDefinitionItem.title"
                      :aria-label="serviceDefinitionItem.title"
                      :click-func="onConditionClicked"
-                     :click-param="serviceDefinitionItem.id"
-                     :class="$style.serviceDefinitionList"/>
-        </ul>
+                     :click-param="serviceDefinitionItem.id"/>
+        </menu-item-list>
       </div>
     </div>
     <a :href="generalAdvicePath"
@@ -59,16 +57,19 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import { APPOINTMENT_BOOKING_GUIDANCE, APPOINTMENT_GP_ADVICE } from '@/lib/routes';
 import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  layout: 'nhsuk-layout',
   name: 'Conditions',
   components: {
+    MenuItem,
+    MenuItemList,
     MessageDialog,
     MessageText,
-    MenuItem,
     GenericButton,
     DesktopGenericBackLink,
   },
@@ -129,7 +130,6 @@ export default {
   @import "../../../style/nhsukoverrides";
 
   div.desktopWeb {
-    max-width: 540px;
 
     .cannotFindConditionLink {
       margin-bottom: 1.5em !important;
@@ -144,28 +144,11 @@ export default {
     font-size: 1em;
     margin-bottom: 1em;
     padding-top: 1em;
-    max-width: 540px;
 
     p {
       font-family: $default_web;
       font-weight: normal;
     }
-  }
-
-  .no-padding {
-    margin-top: -0.5em;
-    margin-left: -1em;
-    margin-right: -1em;
-    padding-bottom: 1em;
-
-    p,
-    h2 {
-      margin-left: 0.7em;
-    }
-  }
-
-  .serviceDefinitionList {
-   padding-bottom: 10px
   }
 
 </style>

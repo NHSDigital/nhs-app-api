@@ -13,6 +13,7 @@ import HeaderSlim from '@/components/HeaderSlim';
 import symptomsCheck from '@/components/symptoms/SymptomsCheck';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     HeaderSlim,
     symptomsCheck,

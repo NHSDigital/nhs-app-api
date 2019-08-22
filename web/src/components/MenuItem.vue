@@ -3,13 +3,17 @@
     <analytics-tracked-tag :id="id"
                            :href="href"
                            :text="text"
-                           :aria-label="text"
+                           :aria-label="ariaLabel || text"
                            :tag="tag"
-                           :class="$style['no-decoration']"
+                           :target="target"
+                           :class="[$style['no-decoration'], $style.listMenuItemLink]"
                            :click-param="clickParam"
+                           :prevent-default="preventDefault"
                            :click-func="clickFunc">
-      <component :is="headerTag">{{ text }}</component>
-      <p>{{ description }}</p>
+      <span :class="$style.listMenuItemContainer">
+        <component :is="headerTag">{{ text }}</component>
+        <p v-if="description">{{ description }}</p>
+      </span>
     </analytics-tracked-tag>
   </li>
 </template>
@@ -34,10 +38,6 @@ export default {
       type: String,
       default: undefined,
     },
-    theClass: {
-      type: String,
-      default: undefined,
-    },
     text: {
       type: String,
       default: undefined,
@@ -49,6 +49,14 @@ export default {
     tag: {
       type: String,
       default: 'a',
+    },
+    target: {
+      type: String,
+      default: undefined,
+    },
+    preventDefault: {
+      type: Boolean,
+      default: true,
     },
     headerTag: {
       type: String,
@@ -66,27 +74,80 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-@import "../style/accessibility";
-@import "../style/listmenu";
-@import "../style/colours";
-@import "../style/webshared";
-@import "../style/info";
+@import '../style/accessibility';
+@import '../style/desktopWeb/accessibility';
+@import '../style/textstyles';
+@import '../style/fonts';
+@import '../style/colours';
+
+.listMenuItemLink {
+  display: block;
+  box-sizing: border-box;
+  background: $white url(~assets/icon_arrow_left.svg) no-repeat center right;
+  background-position: right 1em center;
+  position: relative;
+  margin-left: 0;
+
+  border-top: 1px $border_grey solid;
+  border-bottom: 1px $border_grey solid;
+
+  font-size: 1em;
+
+  &:hover {
+    @include outlineStyleLightMenuItem;
+    color: #000;
+  }
+
+  &:focus {
+    @include focusStyleLightMenuItem;
+    color: #000;
+  }
+
+  &.active {
+    outline: none;
+    text-decoration: underline;
+  }
+}
+
+.no-decoration {
+  text-decoration: none;
+}
 
 .listMenuItem {
   font-family: $default-web;
   font-weight: lighter;
+  display: block;
+  margin-bottom: 5px;
 
-  .no-decoration {
-    text-decoration: none;
+  :focus {
+    outline: none;
   }
 
-  a {
-    @extend .focusBorder;
-    &:hover {
-      color: #000;
+  .listMenuItemContainer {
+    padding: 1em;
+    display: block;
+
+    h2 {
+      margin: 0;
     }
-   padding-top: 0.5em;
-   padding-bottom: 0.5em;
+
+    h3 {
+      @include h3;
+      padding-top: 1em;
+    }
+
+    h4 {
+      @include h4;
+      padding-bottom: 0.5em;
+      padding-top: 0.5em;
+    }
+
+    p {
+      padding-bottom: 0.5em;
+      padding-top: 0.5em;
+      margin-bottom: 0;
+      width: 90%;
+    }
   }
 }
 </style>

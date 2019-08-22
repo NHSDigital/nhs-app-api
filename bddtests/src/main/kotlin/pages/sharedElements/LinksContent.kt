@@ -4,7 +4,7 @@ class LinksContent(override val linkBlockTitle: String,
                    override val containerXPath: String = "//div[h2[text()='$linkBlockTitle']]")
     : ILinksContent {
 
-    private val sections = "$containerXPath/ul/li/a"
+    private val sections = "$containerXPath/ul/li/a/span/span"
     override val links = arrayListOf<LinkContent>()
     override val hasDescriptionBody: Boolean = false
 

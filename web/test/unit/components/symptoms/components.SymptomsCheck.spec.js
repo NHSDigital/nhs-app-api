@@ -1,7 +1,7 @@
 import SymptomsCheck from '@/components/symptoms/SymptomsCheck';
 import { createStore, mount, createRouter, createEvent } from '../../helpers';
 import { APPOINTMENT_GP_ADVICE } from '@/lib/routes';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import MenuItem from '@/components/MenuItem';
 
 const createHttp = (rules = undefined) => ({
   getV1PatientJourneyConfiguration: jest.fn().mockImplementation(() => Promise.resolve(rules)),
@@ -41,25 +41,25 @@ describe('GP Guidence button tests', () => {
     });
 
     it('will contain the correct content ', async () => {
-      const tagArray = wrapper.findAll(AnalyticsTrackedTag);
+      const tagArray = wrapper.findAll(MenuItem);
       expect(tagArray.length).toBe(3);
 
-      const conditionsCheckerButtonHeader = tagArray.at(0).find('a h2');
+      const conditionsCheckerButtonHeader = tagArray.at(0).find('li a span h2');
       expect(conditionsCheckerButtonHeader.text()).toContain('translate_sy01.a_z.subheader');
 
-      const conditionsCheckerButtonText = tagArray.at(0).find('a p');
+      const conditionsCheckerButtonText = tagArray.at(0).find('li a span p');
       expect(conditionsCheckerButtonText.text()).toContain('translate_sy01.a_z.body');
 
-      const symptomsCheckerButtonHeader = tagArray.at(1).find('a h2');
+      const symptomsCheckerButtonHeader = tagArray.at(1).find('li a span h2');
       expect(symptomsCheckerButtonHeader.text()).toContain('translate_sy01.111.subheader');
 
-      const symptomsCheckerButtonText = tagArray.at(1).find('a p');
+      const symptomsCheckerButtonText = tagArray.at(1).find('li a span p');
       expect(symptomsCheckerButtonText.text()).toContain('translate_sy01.111.body');
 
-      const adviceButtonHeader = tagArray.at(2).find('a h2');
+      const adviceButtonHeader = tagArray.at(2).find('li a span h2');
       expect(adviceButtonHeader.text()).toContain('translate_appointments.guidance.menuItem3.header');
 
-      const adviceButtonText = tagArray.at(2).find('a p');
+      const adviceButtonText = tagArray.at(2).find('li a span p');
       expect(adviceButtonText.text()).toContain('translate_appointments.guidance.menuItem3.text');
     });
 

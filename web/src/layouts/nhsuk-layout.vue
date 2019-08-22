@@ -14,7 +14,9 @@
           <spinner/>
           <div class="nhsuk-width-container">
             <div class="nhsuk-grid-row">
-              <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-top-3">
+              <div class="nhsuk-grid-column-two-thirds
+              nhsuk-u-padding-top-3
+               nhsuk-u-padding-bottom-6">
                 <connection-error :with-title="true"/>
                 <api-error :with-title="true"/>
                 <flash-message/>
