@@ -8,9 +8,8 @@ private const val MONGODB_DEFAULT_PORT: Long = 27017L
 class Config private constructor() {
 
     var url: String
-    var pfsBackendUrl: String
+    var apiBackendUrl: String
     var cidBackendUrl: String
-    var usersBackendUrl: String
     var wiremockUrl: String
     var nodeEnv: String
     var port: String
@@ -63,8 +62,7 @@ class Config private constructor() {
         val wiremockUrlString = if (uri.port == -1) "${uri.scheme}://${uri.host}" else "http://${uri.host}:8080"
         wiremockUrl = envOrDefault("wiremockUrl", wiremockUrlString)
         cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
-        pfsBackendUrl = envOrDefault("pfsBackendUrl", "http://api.local.bitraft.io:8089")
-        usersBackendUrl = envOrDefault("usersBackendUrl", "http://api.local.bitraft.io:8089")
+        apiBackendUrl = envOrDefault("apiBackendUrl", "http://api.local.bitraft.io:8089")
         nodeEnv = envOrDefault("NODE_ENV", "production")
         port = envOrDefault("PORT", "3000")
 

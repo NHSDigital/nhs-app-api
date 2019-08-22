@@ -62,7 +62,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
 }
 
     fun postSessionConnection(requestBody: UserSessionRequest): UserSessionResponse {
-        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.sessionConnection)
+        val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.sessionConnection)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
@@ -86,7 +86,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
     }
 
     fun getNdopToken(): NdopResponse {
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.ndopConnection)
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.ndopConnection)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
         return gson.fromJson<NdopResponse>(result, NdopResponse::class.java)

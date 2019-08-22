@@ -4,9 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.AccessTokenBuilder
-import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
@@ -23,29 +20,11 @@ import worker.models.userDevices.RegisterUserDevicesResponse
 
 class PushNotificationsStepDefinitionsBackend {
 
-    val mockingClient = MockingClient.instance
-
     @Given("^I am a (\\w+) api user wishing to register their device for push notifications$")
     fun iAmAApiUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
-        setUpUser(gpSystem)
-        MongoDBConnection.UserDevicesCollection.clearCache()
-        setUpRegistration()
-    }
-
-    private fun setUpUser(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
-        val patient = Patient.getDefault(gpSystem)
-        SerenityHelpers.setPatient(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-    }
-
-    private fun setUpRegistration() {
-        val deviceType = "Android"
-        val devicePns = "devicePns1234"
-        PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.set(deviceType)
-        PushNotificationsSerenityHelpers.EXPECTED_PNS.set(devicePns)
-        PushNotificationsSerenityHelpers.REGISTER_REQUEST.set(RegisterUserDevicesRequest(devicePns, deviceType))
+        val factory = NotificationsFactory()
+        factory.setUpUser(gpSystem)
+        factory.setUpRegistration()
     }
 
     @When("^I register the device for push notifications$")
@@ -128,3 +107,4 @@ class PushNotificationsStepDefinitionsBackend {
         Assert.assertEquals("Registered device pnsToken", expectedPns, registeredDevice.PnsToken)
     }
 }
+

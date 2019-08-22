@@ -6,6 +6,8 @@ import cucumber.api.java.en.When
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
 import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
+import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
+import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -20,40 +22,10 @@ import worker.models.serviceJourneyRules.AppointmentsProvider
 import worker.models.serviceJourneyRules.MedicalRecordProvider
 import worker.models.serviceJourneyRules.PrescriptionsProvider
 import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
-import java.util.*
 
-private const val EMIS_GP_SUPPLIER = "EMIS"
 private const val TPP_GP_SUPPLIER = "TPP"
-private const val VISION_GP_SUPPLIER = "VISION"
-private const val ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED = "A11111"
-private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
-private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
-private const val TPP_ONLINE_CONSULTATIONS_DISABLED = "A55555"
-private const val VISION_ONLINE_CONSULTATIONS_DISABLED = "A66666"
 
 class ServiceJourneyRulesStepDefinitions {
-
-    private val journeysToGpInformationMap = mapOf(
-            GpInformation(EMIS_GP_SUPPLIER, ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED) to
-                    EnumSet.of(JourneyType.APPOINTMENTS_IM1,
-                    JourneyType.MEDICAL_RECORD_IM1,
-                    JourneyType.PRESCRIPTIONS_IM1,
-                    JourneyType.ONLINE_CONSULTATIONS_DISABLED,
-                    JourneyType.NOMINATED_PHARMACY_ENABLED),
-            GpInformation(EMIS_GP_SUPPLIER, ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED) to
-                    EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
-                    JourneyType.MEDICAL_RECORD_IM1,
-                    JourneyType.PRESCRIPTIONS_IM1,
-                    JourneyType.NOMINATED_PHARMACY_DISABLED),
-            GpInformation(EMIS_GP_SUPPLIER, ODSCODE_GP_AT_HAND_CONFIGURATIONS) to
-                    EnumSet.of(JourneyType.APPOINTMENTS_GPATHAND,
-                    JourneyType.MEDICAL_RECORD_GPATHAND,
-                    JourneyType.PRESCRIPTIONS_GPATHAND),
-            GpInformation(TPP_GP_SUPPLIER, TPP_ONLINE_CONSULTATIONS_DISABLED) to
-                    EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
-            GpInformation(VISION_GP_SUPPLIER, VISION_ONLINE_CONSULTATIONS_DISABLED) to
-                    EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED)
-    )
 
     @Given("^I am a user whose ODS Code does not have specific journey configuration set up$")
     fun iAmAUserWhoseODSCodeDoesNotHaveASpecificJourneyConfigurationSetUp() {
@@ -67,22 +39,11 @@ class ServiceJourneyRulesStepDefinitions {
 
 
     @Given("^I am a (.*) user where the journey configurations are:$")
-    fun iAmAUserWhereTheJourneyConfigurationsAre(gpSystem: String, configurations: List<Configuration>) {
-        val journeyTypes =
-                configurations.map { configuration -> configuration.toJourneyType() }
-        val gpInformation = findGpInformation(gpSystem, journeyTypes)
-
-        Assert.assertNotNull("Test setup incorrect: Cannot find a matching ods code for system:"
-                +gpSystem+ "and odsCode: " +gpInformation?.odsCode + ", with given configuration in SJR",
-                gpInformation)
-
-        val patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
-
-        SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
-        SerenityHelpers.setPatient(patient)
-
+    fun iAmAUserWhereTheJourneyConfigurationsAre(gpSystem: String,
+                                                 configurations: List<ServiceJourneyRulesConfiguration>) {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem, configurations)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpInformation.gpSupplier, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
     }
 
     @When("^I request the service journey rules for my ODS Code$")
@@ -154,42 +115,5 @@ class ServiceJourneyRulesStepDefinitions {
         Assert.assertEquals("Service Journey Rules nominated pharmacy provider",
                 enabled == "enabled",
                 serviceJourneyRulesResponse.journeys.nominatedPharmacy)
-    }
-
-    private fun findGpInformation(gpSystem: String, journeyTypes: Collection<JourneyType>): GpInformation? {
-        journeysToGpInformationMap.filter { map -> map.key.gpSupplier == gpSystem }
-                .forEach { (gpInformation, journeyTypesConfig) ->
-            if (journeyTypesConfig.size >= journeyTypes.size && journeyTypesConfig.containsAll(journeyTypes)) {
-                return gpInformation
-            }
-        }
-        return null
-    }
-
-    class Configuration(val journey: String, val value: String) {
-
-        fun toJourneyType(): JourneyType {
-            val journeyType = "${journey}_$value".replace(" ", "_").toUpperCase()
-
-            Assert.assertTrue("Test setup incorrect, journey `$journey` does not contain value for `$value`",
-                    enumValues<JourneyType>().any { it.name == journeyType })
-
-            return JourneyType.valueOf(journeyType)
-        }
-    }
-
-    data class GpInformation(val gpSupplier: String, val odsCode: String)
-
-    enum class JourneyType {
-        APPOINTMENTS_GPATHAND,
-        APPOINTMENTS_IM1,
-        APPOINTMENTS_INFORMATICA,
-        MEDICAL_RECORD_GPATHAND,
-        MEDICAL_RECORD_IM1,
-        NOMINATED_PHARMACY_DISABLED,
-        NOMINATED_PHARMACY_ENABLED,
-        PRESCRIPTIONS_GPATHAND,
-        PRESCRIPTIONS_IM1,
-        ONLINE_CONSULTATIONS_DISABLED,
     }
 }

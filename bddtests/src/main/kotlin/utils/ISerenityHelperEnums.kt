@@ -19,6 +19,12 @@ fun <T>ISerenityHelperEnums.set(value : T) {
     Serenity.setSessionVariable(this).to(value)
 }
 
+fun <T>ISerenityHelperEnums.addToList(value : T) {
+    val values = SerenityHelpers.getValueOrNull<ArrayList<T>>(this)?: arrayListOf()
+    values.add(value)
+    this.set(values)
+}
+
 fun ISerenityHelperEnums.isTrueOrFalse() : Boolean {
     return this.getOrNull<Boolean>() == true
 }

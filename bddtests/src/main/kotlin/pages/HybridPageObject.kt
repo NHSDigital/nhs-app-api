@@ -6,6 +6,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriverException
@@ -159,5 +160,10 @@ open class HybridPageObject : PageObject() {
         }
 
         namedLinkWthGivenUrl(linkTitle,url).click()
+    }
+
+    fun executeJavascript(script:String){
+        val jsExecutor = this.driver as JavascriptExecutor
+        jsExecutor.executeScript(script)
     }
 }

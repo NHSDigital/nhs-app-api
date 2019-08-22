@@ -22,7 +22,7 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
     }
 
     fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false): MyAppointmentsResponse {
-        val uriBuilder = URIBuilder(config.pfsBackendUrl)
+        val uriBuilder = URIBuilder(config.apiBackendUrl)
                 .setPath(WorkerPaths.myAppointments)
                 .addParameter("pastAppointmentsFromDate", fromDate)
                 .addParameter("includePastAppointments", includePastAppointments.toString())
@@ -61,7 +61,7 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
     }
 
     private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {
-        val uriBuilder = URIBuilder(config.pfsBackendUrl + WorkerPaths.appointmentSlots)
+        val uriBuilder = URIBuilder(config.apiBackendUrl + WorkerPaths.appointmentSlots)
         if (!fromDate.isNullOrEmpty()) {
             uriBuilder.setParameter("fromDate", fromDate)
         }
@@ -72,7 +72,7 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
     }
 
     fun deleteAppointment(requestBody: CancelAppointmentRequest): HttpResponse {
-        val httpDelete = WorkerClient.HttpDeleteWithBody(config.pfsBackendUrl + WorkerPaths.myAppointments)
+        val httpDelete = WorkerClient.HttpDeleteWithBody(config.apiBackendUrl + WorkerPaths.myAppointments)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpDelete.entity = entity
@@ -83,7 +83,7 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
     }
 
     fun postAppointment(appointmentBookRequest: AppointmentBookRequest, sessionCookie: Cookie? = null): HttpResponse {
-        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.myAppointments)
+        val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.myAppointments)
 
         if (sessionCookie != null) httpPost.addHeader("Cookie", sessionCookie.value.split(";")[0])
         val entity = StringEntity(gson.toJson(appointmentBookRequest), "UTF-8")

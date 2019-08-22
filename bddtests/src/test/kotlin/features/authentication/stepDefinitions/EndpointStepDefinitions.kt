@@ -39,14 +39,14 @@ class EndpointStepDefinitions : AbstractSteps() {
     @Given("^I target the IM1 endpoint$")
     fun iTargetTheIM1Endpoint() {
         val config = Config.createConfig()
-        config.pfsBackendUrl = config.cidBackendUrl
+        config.apiBackendUrl = config.cidBackendUrl
         targetPort(config)
     }
 
     @Given("^I target the Patient Facing Services endpoint$")
     fun iTargetThePatientFacingServicesEndpoint() {
         val config = Config.createConfig()
-        config.cidBackendUrl = config.pfsBackendUrl
+        config.cidBackendUrl = config.apiBackendUrl
         targetPort(config)
     }
 

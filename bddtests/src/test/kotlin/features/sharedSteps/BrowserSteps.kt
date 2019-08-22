@@ -5,9 +5,10 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.openqa.selenium.Cookie
-import org.openqa.selenium.Keys
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.loggedOut.LoginPage
+import utils.GlobalSerenityHelpers
+import utils.getOrNull
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -51,11 +52,18 @@ open class BrowserSteps {
         } else {
             loginPage.open()
         }
+        executeScripts()
     }
 
     @Step
     open fun browseTo(url: String) {
         loginPage.driver.get(url)
+        executeScripts()
+    }
+
+    private fun executeScripts() {
+        val scripts = GlobalSerenityHelpers.JAVASCRIPT_TO_EXECUTE_ON_WINDOW.getOrNull<ArrayList<String>>()
+        scripts?.forEach { script -> loginPage.executeJavascript(script) }
     }
 
     @Step
@@ -129,19 +137,5 @@ open class BrowserSteps {
         url += "?source=$source"
 
         browseTo(url)
-    }
-
-    fun iPressTheTabKey() {
-        loginPage.driver
-                .switchTo()
-                .activeElement()
-                .sendKeys(Keys.TAB)
-    }
-
-    fun iCheckThatElementIsInFocus(name: String) {
-        Assert.assertEquals(name, loginPage.driver
-                .switchTo()
-                .activeElement()
-                .text)
     }
 }

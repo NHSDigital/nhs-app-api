@@ -15,7 +15,7 @@ Feature: Use the navigation header bar
   Scenario: A patient can access the my account page by clicking the my account icon
     Given I see the header
     When I click the my account icon
-    Then I am on the My Account page
+    Then the Account page is displayed
 
   @nativesmoketest
   Scenario: A patient can access the home page by clicking the home icon

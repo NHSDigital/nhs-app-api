@@ -1,8 +1,8 @@
 package pages
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.sharedElements.MenuLinks
-import pages.sharedElements.MenuLinksContent
+import pages.sharedElements.LinksElement
+import pages.sharedElements.LinksWithDescriptionsContent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/more")
 open class MorePage : HybridPageObject() {
@@ -26,15 +26,15 @@ open class MorePage : HybridPageObject() {
             helpfulName = "More Title"
     )
 
-    var content = MenuLinksContent(
-            title = "More",
-            links = arrayOf(
-                    Pair(organDonationTitle, organDonationDescription),
-                    Pair(dataSharingTitle, dataSharingDescription),
-                    Pair(requestGpHelpTitle, requestGpHelpDescription)),
-            containerXPath = "//div[@id='mainDiv']")
+    var content = LinksWithDescriptionsContent(
+            linkBlockTitle = "More",
+            containerXPath = "//div[@id='mainDiv']",
+            linkStyling = "h2")
+            .addLink(organDonationTitle, organDonationDescription)
+            .addLink(dataSharingTitle, dataSharingDescription)
+            .addLink(requestGpHelpTitle, requestGpHelpDescription)
 
-    val links by lazy { MenuLinks(this, content) }
+    val links by lazy { LinksElement(this, content) }
 
     val btnOrganDonation by lazy { links.link(organDonationTitle) }
     val btnDataSharing by lazy { links.link(dataSharingTitle) }

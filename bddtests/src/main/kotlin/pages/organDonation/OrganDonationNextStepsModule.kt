@@ -2,14 +2,14 @@ package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
-import pages.sharedElements.MenuLinksContent
-import pages.sharedElements.MenuLinks
+import pages.sharedElements.LinksWithDescriptionsContent
+import pages.sharedElements.LinksElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-open class OrganDonationNextStepsModule(page :HybridPageObject) : MenuLinks(page, nextStepsContent) {
+open class OrganDonationNextStepsModule(page :HybridPageObject) : LinksElement(page, nextStepsContent) {
 
     fun assertOnlyTellFamilyLinkPresent() {
-        assertLinksPresent(tellFamilyLinkTitle)
+        assertReducedSetOfLinksPresent(tellFamilyLinkTitle)
     }
 
     companion object {
@@ -21,10 +21,10 @@ open class OrganDonationNextStepsModule(page :HybridPageObject) : MenuLinks(page
         private const val tellFamilyLinkDescription ="Use our message templates and " +
                 "conversation guides to tell your family and friends you are a donor."
 
-        private var nextStepsContent = MenuLinksContent(
-                title = "Next steps",
-                links = arrayOf(Pair(tellFamilyLinkTitle, tellFamilyLinkDescription),
-                        Pair(shareLinkTitle, shareLinkDescription)),
+        private var nextStepsContent = LinksWithDescriptionsContent(
+                linkBlockTitle = "Next steps",
                 linkStyling = "h3")
+                .addLink(tellFamilyLinkTitle, tellFamilyLinkDescription)
+                .addLink(shareLinkTitle, shareLinkDescription)
     }
 }

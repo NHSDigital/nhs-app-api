@@ -17,7 +17,7 @@ import worker.WorkerClient.HttpDeleteWithBody
 class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
     fun getOrganDonationConnection(): OrganDonationSearchResponse {
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.organDonationConnection)
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.organDonationConnection)
 
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
@@ -26,7 +26,7 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
     }
 
     fun getOrganDonationReferenceData(): ReferenceDataResponse {
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.organDonationConnection + "/ReferenceData")
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.organDonationConnection + "/ReferenceData")
 
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
@@ -35,7 +35,7 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
     }
 
     fun postRegistration(registration: OrganDonationRegistrationRequest): OrganDonationRegistrationResponse {
-        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.organDonationConnection )
+        val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.organDonationConnection )
 
         val jsonRequest = gson.toJson(registration)
         val entity = StringEntity(jsonRequest, "UTF-8")
@@ -50,7 +50,7 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
     }
 
     fun putRegistration(registration: OrganDonationRegistrationRequest): OrganDonationRegistrationResponse {
-        val httpPut = HttpPut(config.pfsBackendUrl + WorkerPaths.organDonationConnection)
+        val httpPut = HttpPut(config.apiBackendUrl + WorkerPaths.organDonationConnection)
 
         val jsonRequest = gson.toJson(registration)
         val entity = StringEntity(jsonRequest, "UTF-8")
@@ -65,7 +65,7 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
     }
 
     fun deleteRegistration(withdrawalRequestBody: OrganDonationWithdrawRequest): HttpResponse {
-        val httpDelete = HttpDeleteWithBody(config.pfsBackendUrl + WorkerPaths.organDonationConnection)
+        val httpDelete = HttpDeleteWithBody(config.apiBackendUrl + WorkerPaths.organDonationConnection)
         val entity = StringEntity(gson.toJson(withdrawalRequestBody), "UTF-8")
         entity.setContentType("application/json")
         httpDelete.entity = entity

@@ -17,7 +17,7 @@ class WorkerClientPrescriptions(val config: Config, val sender: WorkerClientSend
     fun getPrescriptionsConnection(fromDate: String?, context: HttpContext? = null): PrescriptionsListResponse {
         var queryString = ""
         if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
         val result = sender.sendAsyncAndGetResult(httpGet, context)
         httpGet.releaseConnection()
 
@@ -25,7 +25,7 @@ class WorkerClientPrescriptions(val config: Config, val sender: WorkerClientSend
     }
 
     fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?): HttpResponse {
-        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.postPrescriptionsConnection)
+        val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.postPrescriptionsConnection)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
@@ -36,7 +36,7 @@ class WorkerClientPrescriptions(val config: Config, val sender: WorkerClientSend
     }
 
     fun getCoursesConnection(): CoursesListResponse {
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getCoursesConnection)
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getCoursesConnection)
 
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()

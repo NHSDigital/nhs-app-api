@@ -7,19 +7,28 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
 
-class TextBlockElement private constructor(
-            title: String,
-            page: HybridPageObject,
-            titleStyling : String) {
+class TextBlockElement {
 
-    private val containerXPath = "//div[$titleStyling[normalize-space(text())=\"$title\"]]"
+    private var container : HybridPageElement
 
-    private val container = HybridPageElement(
-            containerXPath,
-            page = page,
-            helpfulName = "container for '$title' section")
+    private constructor(title: String, page: HybridPageObject, titleStyling: String) {
 
-    fun assertElementNotPresent(){
+        val containerXPath = "//div[$titleStyling[normalize-space(text())=\"$title\"]]"
+        container = HybridPageElement(
+                containerXPath,
+                page = page,
+                helpfulName = "container for '$title' section")
+    }
+
+    private constructor(page: HybridPageObject) {
+        val containerXPath = "//div"
+        container = HybridPageElement(
+                containerXPath,
+                page = page,
+                helpfulName = "container for entire page")
+    }
+
+    fun assertElementNotPresent() {
         container.assertElementNotPresent()
     }
 
@@ -49,7 +58,7 @@ class TextBlockElement private constructor(
         return assertInternal(".//p", expectedTexts)
     }
 
-    fun assertList(vararg expectedValues : String): TextBlockElement{
+    fun assertList(vararg expectedValues: String): TextBlockElement {
         return assertInternal("./ul/li", expectedValues)
     }
 
@@ -68,12 +77,16 @@ class TextBlockElement private constructor(
 
     companion object {
 
-        fun withH2Header(title: String, page: HybridPageObject):TextBlockElement{
+        fun withH2Header(title: String, page: HybridPageObject): TextBlockElement {
             return TextBlockElement(title, page, "h2")
         }
 
-        fun withH3Header(title: String, page: HybridPageObject):TextBlockElement{
+        fun withH3Header(title: String, page: HybridPageObject): TextBlockElement {
             return TextBlockElement(title, page, "h3")
+        }
+
+        fun withoutHeader(page: HybridPageObject): TextBlockElement {
+            return TextBlockElement(page)
         }
     }
 }

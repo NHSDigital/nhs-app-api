@@ -9,7 +9,7 @@ import worker.models.myrecord.MyRecordResponse
 class WorkerClientMyRecord(val config: Config, val sender: WorkerClientSender, val gson: Gson){
 
     fun getDemographics(): Demographics {
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getDemographicsConnection)
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getDemographicsConnection)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
 
@@ -17,7 +17,7 @@ class WorkerClientMyRecord(val config: Config, val sender: WorkerClientSender, v
     }
 
     fun getMyRecord(): MyRecordResponse {
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getMyRecordConnection)
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getMyRecordConnection)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
 

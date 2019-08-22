@@ -5,6 +5,8 @@ import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.PageUrl
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
+import org.openqa.selenium.Keys
 import pages.HybridPageObject
 import pages.clickOnActionContainingText
 
@@ -57,5 +59,21 @@ class GenericPageStepDefinitions {
     fun thenIAmRedirectedToThePage(pageName: String) {
         val redirectUrl = pageUrl.getPage(pageName, genericPage.onMobile())
         browser.shouldHaveUrl(redirectUrl)
+    }
+
+    @Then("^I press the tab key$")
+    fun iPressTheTabKey() {
+        genericPage.driver
+                .switchTo()
+                .activeElement()
+                .sendKeys(Keys.TAB)
+    }
+
+    @Then("^I check that '(.*)' is in focus$")
+    fun iCheckThatElementIsInFocus(name: String) {
+        Assert.assertEquals(name, genericPage.driver
+                .switchTo()
+                .activeElement()
+                .text)
     }
 }

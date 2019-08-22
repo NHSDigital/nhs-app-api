@@ -8,7 +8,7 @@ import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
 class WorkerClientServiceJourneyRules(val config: Config, val sender: WorkerClientSender, val gson: Gson){
 
     fun getServiceJourneyRulesConfiguration(): ServiceJourneyRulesResponse {
-        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.serviceJourneyRules)
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.serviceJourneyRules)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
         return gson.fromJson(result, ServiceJourneyRulesResponse::class.java)

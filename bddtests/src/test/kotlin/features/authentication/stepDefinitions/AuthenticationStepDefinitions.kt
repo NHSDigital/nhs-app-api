@@ -34,7 +34,7 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
 import org.joda.time.DateTime
 import org.junit.Assert
-import pages.MyAccountPage
+import pages.account.MyAccountPage
 import pages.ServiceUnavailablePage
 import pages.navigation.WebHeader
 import utils.GlobalSerenityHelpers

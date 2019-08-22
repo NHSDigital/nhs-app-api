@@ -12,7 +12,7 @@ class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender
     fun post(
              registration: RegisterUserDevicesRequest,
              authToken: String?): RegisterUserDevicesResponse {
-        val httpPost = HttpPost(config.usersBackendUrl + WorkerPaths.userDevices)
+        val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.userDevices)
 
         if (authToken != null) {
             httpPost.addHeader("Authorization", "Bearer $authToken")

@@ -4,9 +4,8 @@ import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.isDisplayed
-import pages.sharedElements.MenuLinksContent
-import pages.sharedElements.MenuLinks
-import utils.contains
+import pages.sharedElements.LinksWithDescriptionsContent
+import pages.sharedElements.LinksElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject() {
@@ -23,15 +22,15 @@ class AppointmentGuidancePage : HybridPageObject() {
     private val gpAdviceDescription = "Consult your GP through an online form. " +
             "Your GP surgery will reply by phone or email."
 
-    private var menuContent = MenuLinksContent(
-            title = "More",
-            links = arrayOf(
-                    Pair(checkSymptomsTitle, checkSymptomsDescription),
-                    Pair(gpAdminTitle, gpAdminDescription),
-                    Pair(gpAdviceTitle, gpAdviceDescription)),
-            containerXPath = mainXPath)
+    private var menuContent = LinksWithDescriptionsContent(
+            linkBlockTitle = "More",
+            containerXPath = mainXPath,
+            linkStyling = "h2")
+            .addLink(checkSymptomsTitle, checkSymptomsDescription)
+            .addLink(gpAdminTitle, gpAdminDescription)
+            .addLink(gpAdviceTitle, gpAdviceDescription)
 
-    private val menuLinks by lazy { MenuLinks(this, menuContent) }
+    private val menuLinks by lazy { LinksElement(this, menuContent) }
 
     val menuCheckSymptomsButton by lazy { menuLinks.link(checkSymptomsTitle) }
 

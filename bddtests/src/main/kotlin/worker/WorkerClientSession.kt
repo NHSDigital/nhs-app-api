@@ -8,7 +8,7 @@ import org.apache.http.client.methods.HttpPost
 class WorkerClientSession(val config: Config, val sender: WorkerClientSender, val gson: Gson){
 
     fun postSessionConnection(): HttpResponse {
-        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.sessionConnectionExtend)
+        val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.sessionConnectionExtend)
 
         val response = sender.sendAsync(httpPost)
         httpPost.releaseConnection()
