@@ -28,4 +28,4 @@
 }
 
 # For Fido data classes that are used during GSon reflection
--keepclassmembers class com.nhs.online.nhsonline.fido.uaf.msg.* {<fields>;}
+-keepclassmembers class com.nhs.online.fidoclient.uaf.message.* {<fields>;}
