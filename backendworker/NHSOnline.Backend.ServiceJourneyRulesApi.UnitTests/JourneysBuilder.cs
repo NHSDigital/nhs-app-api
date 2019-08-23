@@ -97,6 +97,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder NotificationsEnabled(bool? enabled)
+        {
+            _journeys.Notifications = enabled;
+            return this;
+        }
+
         public Journeys Build()
         {
             return _journeys;

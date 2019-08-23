@@ -56,6 +56,20 @@ const routes = {
       },
     },
   },
+  ACCOUNT_NOTIFICATIONS: {
+    name: 'account-notifications',
+    path: '/account/notifications',
+    crumb: {
+      i8nKey: 'accountNotifications',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    redirectRules: [{
+      condition: 'serviceJourneyRules/notificationsDisabled',
+      url: '/account',
+    }],
+  },
   ACCOUNT_SIGNOUT: {
     name: 'account-signout',
     path: '/account/signout',
@@ -725,6 +739,7 @@ export const getCrumbTrailForRoute = (route) => {
 
 export const {
   ACCOUNT,
+  ACCOUNT_NOTIFICATIONS,
   ACCOUNT_SIGNOUT,
   APPOINTMENTS,
   APPOINTMENT_ADMIN_HELP,

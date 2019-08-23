@@ -597,6 +597,9 @@
                         hasErrored: 
                           type: "boolean"
                           description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
                         data: 
                           type: "array"
                           description: "An array of allergy information objects."
@@ -637,6 +640,9 @@
                         hasErrored: 
                           type: "boolean"
                           description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
                         data: 
                           type: "object"
                           properties: 
@@ -721,6 +727,9 @@
                         hasErrored: 
                           type: "boolean"
                           description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
                         data: 
                           type: "object"
                           properties: 
@@ -832,6 +841,9 @@
                         hasErrored: 
                           type: "boolean"
                           description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
                         data: 
                           type: "object"
                           properties: 
@@ -966,6 +978,30 @@
                                           description: "An array of associated texts."
                                           items: 
                                             type: "string"
+                    examinations: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        rawHtml: 
+                          type: "string"
+                          description: "When working with Vision, raw HTML is returned instead of XML data"
+                    procedures: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        rawHtml: 
+                          type: "string"
+                          description: "When working with Vision, raw HTML is returned instead of XML data"
           401: 
             description: "User session has expired."
           500: 
@@ -2289,6 +2325,8 @@
                                         - "gpAtHand"
                             nominatedPharmacy: 
                               type: "bool"
+                            notifications: 
+                              type: "bool"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
             content: 
@@ -2775,6 +2813,8 @@
                                     - "im1"
                                     - "gpAtHand"
                         nominatedPharmacy: 
+                          type: "bool"
+                        notifications: 
                           type: "bool"
           404: 
             description: "Service Journey Rules Configuration not found."

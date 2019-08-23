@@ -8,28 +8,10 @@
                        :date-of-birth="$store.state.session.dateOfBirth"
                        :nhs-number="$store.state.session.nhsNumber" />
     </div>
-    <div v-if="shouldShowBiometrics">
-      <h2>{{ $t('myAccount.accountSettingsHeading') }}</h2>
-      <ul :class="$style['list-menu']">
-        <li @click="goToLoginOptions()">
-          <analytics-tracked-tag id="btn_passwordOptions"
-                                 :text="$t('myAccount.passwordOptions')"
-                                 tag="a">
-            {{ $t('myAccount.passwordOptions') }}
-          </analytics-tracked-tag>
-        </li>
-      </ul>
-    </div>
-    <h2>{{ $t('myAccount.aboutUsHeading') }}</h2>
-    <ul :class="[$style['list-menu'], $style.myAccountList]">
-      <li v-for="(link, index) in links" :key="index" :class="$style.listMenuItem">
-        <analytics-tracked-tag :href="link.url"
-                               :text="$t(link.localeLabel)"
-                               tag="a" target="_blank">
-          {{ $t(link.localeLabel) }}
-        </analytics-tracked-tag>
-      </li>
-    </ul>
+    <settings v-if="showBiometrics || showNotifications"
+              :show-notifications="showNotifications"
+              :show-biometrics="showBiometrics"/>
+    <about-us/>
     <p>
       Version {{ this.$store.state.appVersion.webVersion }}
       <span v-if="this.$store.state.appVersion.nativeVersion">
@@ -55,30 +37,37 @@
 
 <script>
 /* eslint-disable import/extensions */
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import AboutUs from '@/components/account/AboutUs';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import WelcomeSection from '@/components/WelcomeSection';
-import NativeCallbacks from '@/services/native-app';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
-import { accountLinks } from '@/lib/common-links';
+import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import NativeCallbacks from '@/services/native-app';
+import Settings from '@/components/account/Settings';
+import sjrIf from '@/lib/sjrIf';
+import WelcomeSection from '@/components/WelcomeSection';
 
 export default {
   components: {
+    AboutUs,
     AnalyticsTrackedTag,
-    FloatingButtonBottom,
-    WelcomeSection,
     CeMarkIcon,
+    FloatingButtonBottom,
+    Settings,
+    WelcomeSection,
   },
   data() {
     return {
-      links: accountLinks(this.$env),
       nativeLoginOptionsMethodExists: true,
     };
   },
   computed: {
-    shouldShowBiometrics() {
+    showBiometrics() {
       return this.$env.BIOMETRICS_ENABLED && this.nativeLoginOptionsMethodExists &&
-      (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
+        this.$store.state.device.isNativeApp;
+    },
+    showNotifications() {
+      return sjrIf({ $store: this.$store, journey: 'notifications' }) &&
+        this.$store.state.device.isNativeApp;
     },
   },
   mounted() {
@@ -101,38 +90,5 @@ export default {
 @import "../../style/listmenu";
 @import "../../style/colours";
 @import "../../style/webshared";
-
-.no-padding {
-  margin-top: -0.5em;
-  margin-left: -1em;
-  margin-right: -1em;
-  padding-bottom: 5em;
-
-  p,
-  h2 {
-    margin-left: 0.7em;
-    margin-top: 0.5em;
-  }
-}
-
-.welcomeSectionContainer {
-  margin-left: 1em;
-}
-
-.myAccountList {
-  @include inner-container-width;
-
-  .listMenuItem {
-    font-family: $default-web;
-    font-weight: lighter;
-
-    a {
-      @extend .focusBorder;
-      &:hover {
-        color: #000;
-      }
-    }
-  }
-}
 
 </style>

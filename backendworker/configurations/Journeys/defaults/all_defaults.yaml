@@ -13,3 +13,4 @@ journeys:
   prescriptions:
     provider: im1
   nominatedPharmacy: true
+  notifications: true

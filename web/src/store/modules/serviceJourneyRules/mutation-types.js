@@ -5,6 +5,7 @@ export const IM1_PROVIDER = 'im1';
 export const INFORMATICA = 'informatica';
 export const INIT = 'INIT';
 export const NOMINATED_PHARMACY = 'nominatedPharmacy';
+export const NOTIFICATIONS = 'notifications';
 export const SET_RULES = 'SET_RULES';
 export const ONLINE_CONSULTATIONS = 'onlineConsultations';
 
@@ -21,6 +22,7 @@ export const initialState = () => ({
       provider: 'none',
     },
     nominatedPharmacy: false,
+    notifications: false,
     prescriptions: {
       provider: IM1_PROVIDER,
     },

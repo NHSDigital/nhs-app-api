@@ -86,6 +86,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 {
                     currentJourneys.NominatedPharmacy = journeys.NominatedPharmacy;
                 }
+
+                if (journeys.Notifications.HasValue)
+                {
+                    currentJourneys.Notifications = journeys.Notifications;
+                }
             }
         }
     }

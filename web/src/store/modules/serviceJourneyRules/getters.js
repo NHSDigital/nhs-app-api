@@ -5,6 +5,7 @@ import { CDSS_ADMIN,
   IM1_PROVIDER,
   INFORMATICA,
   NOMINATED_PHARMACY,
+  NOTIFICATIONS,
   ONLINE_CONSULTATIONS,
 } from './mutation-types';
 
@@ -69,5 +70,8 @@ export default {
   },
   [`${NOMINATED_PHARMACY}Enabled`](state) {
     return get('rules.nominatedPharmacy')(state);
+  },
+  [`${NOTIFICATIONS}Enabled`](state) {
+    return get('rules.notifications')(state);
   },
 };

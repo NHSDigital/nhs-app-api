@@ -16,6 +16,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public bool? NominatedPharmacy { get; set; }
 
+        public bool? Notifications { get; set; }
+
         public Journeys Clone() => new Journeys
         {
             Appointments = Appointments?.Clone(),
@@ -23,7 +25,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             CdssAdmin = CdssAdmin?.Clone(),
             MedicalRecord = MedicalRecord?.Clone(),
             Prescriptions = Prescriptions?.Clone(),
-            NominatedPharmacy = NominatedPharmacy
+            NominatedPharmacy = NominatedPharmacy,
+            Notifications = Notifications
         };
     }
 }

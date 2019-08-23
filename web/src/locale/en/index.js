@@ -1059,14 +1059,17 @@ export default {
   },
   myAccount: {
     detailsHeading: 'Details',
-    accountSettingsHeading: 'Account settings',
+    accountSettings: {
+      header: 'Account settings',
+      passwordOptions: 'Login and password options',
+      notificationOptions: 'Notifications',
+    },
     aboutUsHeading: 'About us',
     termsAndConditions: 'Terms of use',
     privacyPolicy: 'Privacy policy',
     cookiesPolicy: 'Cookies policy',
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
-    passwordOptions: 'Login and password options',
     accessibilityStatement: 'Accessibility statement',
   },
   sc04: {

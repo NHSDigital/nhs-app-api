@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 MergedOdsJourneys = new Dictionary<string, Journeys>
                 {
                     {
-                        "A1", 
+                        "A1",
                         ValidJourneys().Build()
                     },
                     {
@@ -109,6 +109,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         ValidJourneys()
                             .NominatedPharmacyEnabled(null)
                             .Build()
+                    },
+                    {
+                        "A8",
+                        ValidJourneys()
+                            .NotificationsEnabled(null)
+                            .Build()
                     }
                 }
             };
@@ -145,6 +151,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
+                            .NotificationsEnabled(true)
                             .Build()
                     },
                     {
@@ -156,6 +163,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
+                            .NotificationsEnabled(true)
                             .Build()
                     },
                     {
@@ -167,6 +175,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
+                            .NotificationsEnabled(true)
                             .Build()
                     }
                 }
@@ -196,6 +205,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
+                            .NotificationsEnabled(true)
                             .Build()
                     },
                     {
@@ -207,6 +217,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(false)
+                            .NotificationsEnabled(false)
                             .Build()
                     },
                     {
@@ -218,6 +229,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
+                            .NotificationsEnabled(true)
                             .Build()
                     }
                 }
@@ -277,6 +289,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         ValidJourneys()
                             .NominatedPharmacyEnabled(null)
                             .Build()
+                    },
+                    {
+                        "A8",
+                        ValidJourneys()
+                            .NotificationsEnabled(null)
+                            .Build()
                     }
                 }
             };
@@ -291,6 +309,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A5'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A6'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A7'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A8'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -304,7 +323,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
                 .MedicalRecord(MedicalRecordProvider.gpAtHand)
                 .Prescriptions(PrescriptionsProvider.gpAtHand)
-                .NominatedPharmacyEnabled(true);
+                .NominatedPharmacyEnabled(true)
+                .NotificationsEnabled(true);
         }
     }
 }

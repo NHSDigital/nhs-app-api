@@ -59,6 +59,8 @@ components:
                 - $ref: "#/components/schemas/defaultProvider"
             nominatedPharmacy:
               type: bool
+            notifications:
+              type: bool
     defaultProvider:
       type: object
       properties:

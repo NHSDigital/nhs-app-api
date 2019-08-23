@@ -148,7 +148,8 @@
         "cdssAdmin": { "$ref": "#/definitions/cdssAdminJourney" },
         "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
-        "nominatedPharmacy": { "enum": ["true", "false"]  }
+        "nominatedPharmacy": { "enum": ["true", "false"]  },
+        "notifications": { "enum": ["true", "false"]  }
       },
       "anyOf": [
         {
@@ -168,6 +169,9 @@
         },
         {
           "required": [ "nominatedPharmacy" ]
+        },
+        {
+          "required": [ "notifications" ]
         }
       ]
     }

@@ -1,5 +1,8 @@
 import AccountPage from '@/pages/account/index';
+import AboutUs from '@/components/account/AboutUs';
+import Settings from '@/components/account/Settings';
 import WebFooter from '@/components/widgets/WebFooter';
+import WelcomeSection from '@/components/WelcomeSection';
 import { createStore, initFilters, mount, toClass } from '../../helpers';
 
 describe('Account Page', () => {
@@ -44,24 +47,67 @@ describe('Account Page', () => {
     return urls;
   };
 
-  beforeEach(() => {
-    wrapper = mount(AccountPage, { $env,
-      $store: createStore({ state: $state }),
+  const mountPage = ({ notificationsEnabled = false, isNativeApp = false }) => {
+    const $store = createStore({ state: $state });
+    $store.getters['serviceJourneyRules/notificationsEnabled'] = notificationsEnabled;
+    $state.device.isNativeApp = isNativeApp;
+    return mount(AccountPage, { $env,
+      $store,
       $state,
       $style: createStyle() });
+  };
+
+  describe('not on a native app', () => {
+    beforeEach(() => {
+      wrapper = mountPage({ notificationsEnabled: true, isNativeApp: false });
+    });
+
+    it('will not show Settings component', () => {
+      expect(wrapper.find(Settings).exists()).toBe(false);
+    });
   });
 
-  it('will verify that footer links are subset of links in account page', () => {
-    const webHeaderWrapper = mount(WebFooter, { $env });
-    const accountCssLinkPath = `ul${toClass('list-menu')} li a`;
+  describe('on a native app', () => {
+    it('will verify that footer links are subset of links in account page', () => {
+      const webHeaderWrapper = mount(WebFooter, { $env });
+      const accountCssLinkPath = `ul${toClass('list-menu')} li a`;
 
-    const footerLinkElements = webHeaderWrapper.findAll('ul li a');
-    const accountLinkElements = wrapper.findAll(accountCssLinkPath);
+      const footerLinkElements = webHeaderWrapper.findAll('ul li a');
+      const accountLinkElements = wrapper.findAll(accountCssLinkPath);
 
-    const footerLinks = findLinks(footerLinkElements.wrappers);
-    const accountLinks = findLinks(accountLinkElements.wrappers);
-    expect(accountLinks.length).toBeGreaterThan(0);
+      const footerLinks = findLinks(footerLinkElements.wrappers);
+      const accountLinks = findLinks(accountLinkElements.wrappers);
+      expect(accountLinks.length).toBeGreaterThan(0);
 
-    expect(footerLinks.every(link => accountLinks.includes(link))).toBeTruthy();
+      expect(footerLinks.every(link => accountLinks.includes(link))).toBeTruthy();
+    });
+
+    it('will show About Us component', () => {
+      expect(wrapper.find(AboutUs).exists()).toBe(true);
+    });
+
+    it('will show Welcome Section component', () => {
+      expect(wrapper.find(WelcomeSection).exists()).toBe(true);
+    });
+
+    describe('service journey rules notifications disabled', () => {
+      beforeEach(() => {
+        wrapper = mountPage({ notificationsEnabled: false, isNativeApp: true });
+      });
+
+      it('will not show Settings component', () => {
+        expect(wrapper.find(Settings).exists()).toBe(false);
+      });
+    });
+
+    describe('service journey rules notifications enabled', () => {
+      beforeEach(() => {
+        wrapper = mountPage({ notificationsEnabled: true, isNativeApp: true });
+      });
+
+      it('will show Settings component', () => {
+        expect(wrapper.find(Settings).exists()).toBe(true);
+      });
+    });
   });
 });

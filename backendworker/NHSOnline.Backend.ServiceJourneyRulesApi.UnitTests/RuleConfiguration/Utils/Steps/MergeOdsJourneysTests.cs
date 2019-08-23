@@ -64,6 +64,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MedicalRecord(MedicalRecordProvider.im1)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
+                    .NotificationsEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
@@ -75,6 +76,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MedicalRecord(MedicalRecordProvider.im1)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(false)
+                    .NotificationsEnabled(false)
                     .Build()
             );
 
@@ -89,6 +91,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MedicalRecord(MedicalRecordProvider.im1)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
+                    .NotificationsEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -106,6 +109,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MedicalRecord(MedicalRecordProvider.im1)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
+                    .NotificationsEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -113,6 +117,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MedicalRecord(MedicalRecordProvider.im1)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
+                    .NotificationsEnabled(false)
+                    .NotificationsEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -120,6 +126,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MedicalRecord(MedicalRecordProvider.gpAtHand)
                     .Prescriptions(PrescriptionsProvider.im1)
                     .NominatedPharmacyEnabled(false)
+                    .NotificationsEnabled(false)
                     .Build());
 
             var context = new ConfigurationContext

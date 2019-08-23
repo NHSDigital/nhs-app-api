@@ -183,4 +183,18 @@ describe('getters', () => {
       expect(nominatedPharmacyEnabled(currentState)).toBe(false);
     });
   });
+
+  describe('notificationsEnabled', () => {
+    const { notificationsEnabled } = getters;
+
+    it('will be true if notifications is true', () => {
+      currentState.rules.notifications = true;
+      expect(notificationsEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if nominated pharmacy is false', () => {
+      currentState.rules.nominatedPharmacy = false;
+      expect(notificationsEnabled(currentState)).toBe(false);
+    });
+  });
 });

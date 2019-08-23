@@ -89,7 +89,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _validator.ValidateJsonAgainstSchema(_rulesSchema, jsonFile);
 
             // Assert
-            _mockLogger.VerifyLogger(LogLevel.Error, "NoAdditionalPropertiesAllowed: #/additionalProperty", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "NoAdditionalPropertiesAllowed: #/additionalProperty",
+                Times.Once());
 
             result.Should().BeFalse();
         }
@@ -313,6 +314,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("\"prescriptions\": { \"provider\": \"gpAtHand\"}")]
         [DataRow("\"nominatedPharmacy\": \"true\"")]
         [DataRow("\"nominatedPharmacy\": \"false\"")]
+        [DataRow("\"notifications\": \"true\"")]
+        [DataRow("\"notifications\": \"false\"")]
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
             string journeys)
         {
@@ -335,22 +338,24 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             result.Should().BeTrue();
         }
 
-       [TestMethod]
+        [TestMethod]
         [DataRow("cdssAdvice", "{}", "PropertyRequired: #/journeys.cdssAdvice.provider", true)]
         [DataRow("cdssAdvice", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.cdssAdvice.provider", true)]
-        [DataRow("cdssAdvice", "{\"provider\": \"eConsult\"}", "PropertyRequired: #/journeys.cdssAdvice.serviceDefinition", true)]
-        [DataRow("cdssAdmin","{}", "PropertyRequired: #/journeys.cdssAdmin.provider", true)]
+        [DataRow("cdssAdvice", "{\"provider\": \"eConsult\"}","PropertyRequired: #/journeys.cdssAdvice.serviceDefinition", true)]
+        [DataRow("cdssAdmin", "{}", "PropertyRequired: #/journeys.cdssAdmin.provider", true)]
         [DataRow("cdssAdmin", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.cdssAdmin.provider", true)]
-        [DataRow("cdssAdmin", "{\"provider\": \"eConsult\"}", "PropertyRequired: #/journeys.cdssAdmin.serviceDefinition", true)]
+        [DataRow("cdssAdmin", "{\"provider\": \"eConsult\"}","PropertyRequired: #/journeys.cdssAdmin.serviceDefinition", true)]
         [DataRow("appointments", "{}", "PropertyRequired: #/journeys.appointments.provider", true)]
         [DataRow("appointments", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.appointments.provider", true)]
-        [DataRow("appointments", "{\"provider\": \"informatica\"}", "PropertyRequired: #/journeys.appointments.informaticaUrl", true)]
-        [DataRow("medicalRecord","{}", "PropertyRequired: #/journeys.medicalRecord.provider", false)]
-        [DataRow("medicalRecord", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.medicalRecord.provider", false)]
+        [DataRow("appointments", "{\"provider\": \"informatica\"}","PropertyRequired: #/journeys.appointments.informaticaUrl", true)]
+        [DataRow("medicalRecord", "{}", "PropertyRequired: #/journeys.medicalRecord.provider", false)]
+        [DataRow("medicalRecord", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.medicalRecord.provider",false)]
         [DataRow("prescriptions", "{}", "PropertyRequired: #/journeys.prescriptions.provider", false)]
-        [DataRow("prescriptions", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.prescriptions.provider", false)]
+        [DataRow("prescriptions", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.prescriptions.provider",false)]
         [DataRow("nominatedPharmacy", "\"\"", "NotInEnumeration: #/journeys.nominatedPharmacy", false)]
         [DataRow("nominatedPharmacy", "\"test\"", "NotInEnumeration: #/journeys.nominatedPharmacy", false)]
+        [DataRow("notifications", "\"\"", "NotInEnumeration: #/journeys.notifications", false)]
+        [DataRow("notifications", "\"test\"", "NotInEnumeration: #/journeys.notifications", false)]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
                 string journeyType, string value, string expectedError, bool oneOfMultipleOptions)
@@ -362,7 +367,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                               "    \"odsCode\":\"FOO\"" +
                               "  }," +
                               "  \"journeys\": {" +
-                              "    \""+ journeyType+ "\": " + value +
+                              "    \"" + journeyType + "\": " + value +
                               "  }" +
                               "}";
             var jsonFile = new FileData(string.Empty, fileContent);
@@ -375,6 +380,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             {
                 _mockLogger.VerifyLogger(LogLevel.Error, $"NotOneOf: #/journeys.{journeyType}", Times.Once());
             }
+
             if (!string.IsNullOrWhiteSpace(expectedError))
             {
                 _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());

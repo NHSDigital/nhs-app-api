@@ -119,6 +119,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
+                            .NotificationsEnabled(true)
                             .Build()
                     },
                     {
@@ -126,10 +127,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         new JourneysBuilder()
                             .AppointmentProvider(AppointmentsProvider.im1)
                             .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
+                            .CdssAdminProvider(CdssProvider.none)
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(false)
-                            .CdssAdminProvider(CdssProvider.none)
+                            .NotificationsEnabled(false)
                             .Build()
                     },
                     {
@@ -141,6 +143,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MedicalRecord(MedicalRecordProvider.im1)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
+                            .NotificationsEnabled(true)
                             .Build()
                     }
                 }
