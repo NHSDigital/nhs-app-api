@@ -25,7 +25,8 @@ class BiometricService: BiometricProtocol {
     let privateKeyLabel: String = config().PrivateKeyLabel
     let BiometricsAssertionScheme: String = config().BiometricsAssertionScheme
     let aaid: String = config().AAID
-    
+    let keyIDPrefix = "nhs-app-key-"
+
     init(homeViewController controller: HomeViewController, biometricViewController biometricController: BiometricsViewController) {
         self.homeViewController = controller
         self.biometricViewController = biometricController
@@ -37,7 +38,7 @@ class BiometricService: BiometricProtocol {
             let registrationUrl: String = endpointHelper.requestRequestEndpoint
             let accessToken: String = try UserDefaultsManager.getAccessToken()
             let registrationResponseEndpoint: String = endpointHelper.registrationResponseEndpoint
-            let success = try FidoClient().register(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, accessToken: accessToken, registrationUrl: registrationUrl, privateKeyLabel: privateKeyLabel, registrationResponseEndpoint: registrationResponseEndpoint)
+            let success = try FidoClient().register(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, accessToken: accessToken, registrationUrl: registrationUrl, privateKeyLabel: privateKeyLabel, registrationResponseEndpoint: registrationResponseEndpoint, keyIDPrefix: keyIDPrefix)
             if success {
                 return  biometricViewController.goToResultsPage()
             }
