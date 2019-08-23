@@ -10,12 +10,12 @@ describe('booking guidance', () => {
   let $router;
   let $style;
 
-  const mountAs = ({ olcEnabled = false, isNativeApp = false } = {}) => {
+  const mountAs = ({
+    onlineConsultationsEnabled = false,
+    isNativeApp = false,
+  } = {}) => {
     $router = createRouter();
     $store = createStore({
-      $env: {
-        ONLINE_CONSULTATIONS_ENABLED: olcEnabled,
-      },
       $router,
       state: {
         device: {
@@ -25,39 +25,43 @@ describe('booking guidance', () => {
           disableCancellation: false,
         },
       },
+      getters: {
+        'serviceJourneyRules/onlineConsultationsEnabled': onlineConsultationsEnabled,
+        'serviceJourneyRules/onlineConsultationsDisabled': !onlineConsultationsEnabled,
+      },
     });
     $style = { info: 'info' };
 
     return mount(BookingGuidancePage, { $store, $router, $style });
   };
 
-  it('will include the Appointment guidance menu if online consultations env var is truthy', () => {
-    wrapper = mountAs({ olcEnabled: true });
+  it('will include the Appointment guidance menu if cdss admin or cdss advice is enabled', () => {
+    wrapper = mountAs({ onlineConsultationsEnabled: true });
     expect(wrapper.find(AppointmentGuidanceMenu).exists()).toBe(true);
 
-    wrapper = mountAs({ olcEnabled: false });
+    wrapper = mountAs();
     expect(wrapper.find(AppointmentGuidanceMenu).exists()).toBe(false);
   });
 
-  it('will include the back button if online consultations env var is truthy and it is native', () => {
-    wrapper = mountAs({ olcEnabled: true, isNativeApp: true });
+  it('will include the back button online consultations enabled and it is native', () => {
+    wrapper = mountAs({ onlineConsultationsEnabled: true, isNativeApp: true });
     expect(wrapper.find('#back_btn').exists()).toBe(true);
   });
 
-  it('will include the destop back link if online consultations env var is truthy and it is not native', () => {
-    wrapper = mountAs({ olcEnabled: true, isNativeApp: false });
+  it('will include the destop back link if online consultations enabled and it is not native', () => {
+    wrapper = mountAs({ onlineConsultationsEnabled: true });
     expect(wrapper.find(DesktopGenericBackLink).exists()).toBe(true);
   });
 
   it('will go to the previous page the back button when clicked', () => {
-    wrapper = mountAs({ olcEnabled: true, isNativeApp: true });
+    wrapper = mountAs({ onlineConsultationsEnabled: true, isNativeApp: true });
     wrapper.find('#back_btn').trigger('click');
 
     expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
   });
 
   it('will go to the previous page when the desktop back link clicked', () => {
-    wrapper = mountAs({ olcEnabled: true, isNativeApp: false });
+    wrapper = mountAs({ onlineConsultationsEnabled: true });
     wrapper.find(DesktopGenericBackLink).trigger('click');
 
     expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
@@ -71,7 +75,7 @@ describe('booking guidance', () => {
   });
 
   it('will include the guidance text if online consultations env var is false', () => {
-    wrapper = mountAs({ olcEnabled: false, isNativeApp: false });
+    wrapper = mountAs();
     const content = wrapper.find('.info');
 
     expect(wrapper.find(AppointmentGuidanceMenu).exists()).toBe(false);
@@ -85,12 +89,12 @@ describe('booking guidance', () => {
   });
 
   it('will include the check symptoms button if online consultations env var is false', () => {
-    wrapper = mountAs({ olcEnabled: false, isNativeApp: false });
+    wrapper = mountAs();
     expect(wrapper.find('#btn_check_symptoms').exists()).toBe(true);
   });
 
   it('will not include the check symptoms button if online consultations env var is true', () => {
-    wrapper = mountAs({ olcEnabled: true, isNativeApp: false });
+    wrapper = mountAs({ onlineConsultationsEnabled: true });
     expect(wrapper.find('#btn_check_symptoms').exists()).toBe(false);
   });
 

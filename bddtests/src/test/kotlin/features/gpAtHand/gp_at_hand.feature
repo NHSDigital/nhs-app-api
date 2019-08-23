@@ -3,7 +3,7 @@ Feature: GP at Hand Frontend
 
   @appointments
   Scenario: A user sees an appropriate message when the appointments journey configuration is set to Gp at Hand
-    Given I am a user where the journey configurations are:
+    Given I am a EMIS user where the journey configurations are:
       | Journey            | Value     |
       | appointments       | gpAtHAnd  |
     And I am logged in
@@ -14,7 +14,7 @@ Feature: GP at Hand Frontend
 
   @my-record
   Scenario: A user sees an appropriate message when the medical record journey configuration is set to GP at Hand
-    Given I am a user where the journey configurations are:
+    Given I am a EMIS user where the journey configurations are:
       | Journey            | Value     |
       | medical record     | gpAtHAnd  |
     And I am logged in
@@ -25,7 +25,7 @@ Feature: GP at Hand Frontend
 
   @prescription
   Scenario: A user sees an appropriate message when the prescriptions journey configuration is set to GP at Hand
-    Given I am a user where the journey configurations are:
+    Given I am a EMIS user where the journey configurations are:
       | Journey            | Value     |
       | prescriptions      | gpAtHAnd  |
     And I am logged in

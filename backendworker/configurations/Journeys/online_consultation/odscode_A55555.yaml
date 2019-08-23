@@ -1,0 +1,15 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A55555"
+journeys:
+  appointments:
+    provider: im1
+  cdssAdvice:
+    provider: none
+  cdssAdmin:
+    provider: none
+  medicalRecord:
+    provider: im1
+  prescriptions:
+    provider: im1
+  nominatedPharmacy: true

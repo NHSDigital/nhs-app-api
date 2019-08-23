@@ -3,8 +3,6 @@ target:
   odsCode: "A82648"
 journeys:
   cdssAdvice:
-    provider: eConsult
-    serviceDefinition: GEC_GEN
+    provider: none
   cdssAdmin:
-    provider: eConsult
-    serviceDefinition: GEC_ADM
+    provider: none

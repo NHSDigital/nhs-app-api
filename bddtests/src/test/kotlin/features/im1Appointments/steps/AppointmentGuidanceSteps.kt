@@ -2,15 +2,12 @@ package features.im1Appointments.steps
 
 import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import pages.appointments.AppointmentGuidancePage
 import pages.navigation.HeaderNative
 
 open class AppointmentGuidanceSteps {
     private val expectedPageHeader = "Things to try before you book an appointment"
-    private val expectedContentHeader = "Want to avoid waiting?"
     private val expectedGuidanceLinesAndIfInBold = arrayListOf(
-            Pair("Three things to try before you book an appointment:", false),
             Pair("1. Self care", true),
             Pair("Many minor problems can be treated at home, for example through rest " +
                     "or appropriate over-the-counter medicines", false),
@@ -26,12 +23,6 @@ open class AppointmentGuidanceSteps {
     @Step
     fun checkThePageHeaderIsCorrect() {
         headerNative.waitForPageHeaderText(expectedPageHeader)
-    }
-
-    @Step
-    fun checkTheContentHeaderIsCorrect() {
-        assertTrue("Appointment guidance content header $expectedContentHeader is not found",
-                appointmentGuidancePage.isSubHeaderTextEqualTo(expectedContentHeader))
     }
 
     @Step

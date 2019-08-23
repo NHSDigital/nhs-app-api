@@ -607,10 +607,10 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 AppointmentsProvider.im1,
                 serviceJourneyRules!!.journeys.appointments.provider)
         Assert.assertEquals("Service Journey Rules CdssAdmin provider",
-                CdssProvider.eConsult,
+                CdssProvider.none,
                 serviceJourneyRules.journeys.cdssAdmin.provider)
         Assert.assertEquals("Service Journey Rules CdssAdvice provider",
-                CdssProvider.eConsult,
+                CdssProvider.none,
                 serviceJourneyRules.journeys.cdssAdvice.provider)
     }
 

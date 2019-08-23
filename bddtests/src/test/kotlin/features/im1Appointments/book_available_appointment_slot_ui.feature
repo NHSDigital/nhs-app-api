@@ -8,7 +8,10 @@ Feature: Book Appointments Frontend
   #This test covers navigation via buttons/links
 
   Scenario Outline: A <GP System> user can navigate to the available appointments page
-    Given there are multiple appointment slots at the same time, provided by <GP System>
+    Given I am a <GP System> user where the journey configurations are:
+      | Journey                         | Value    |
+      | online consultations            | disabled |
+    And there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in
     Then I am on the Available Appointments page
@@ -19,7 +22,7 @@ Feature: Book Appointments Frontend
   # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: Only one appointment slot time is displayed when multiple are available for <GP System>
-    Given there are multiple appointment slots at the same time, provided by <GP System>
+    And there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
@@ -70,7 +73,7 @@ Feature: Book Appointments Frontend
       | TPP       |
       | VISION    |
       | MICROTEST |
-
+    
   Scenario: A Vision user gets an alternative success message when booking and there's no ability to cancel
     Given there are VISION appointments available to book
     But a booked appointment cannot be cancelled

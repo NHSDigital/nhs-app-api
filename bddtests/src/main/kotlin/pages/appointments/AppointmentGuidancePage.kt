@@ -1,8 +1,6 @@
 package pages.appointments
 
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
-import org.openqa.selenium.StaleElementReferenceException
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.sharedElements.MenuLinksContent
@@ -45,27 +43,10 @@ class AppointmentGuidancePage : HybridPageObject() {
     )
 
     private val content = HybridPageElement(
-            webDesktopLocator = "$mainXPath/div[@data-purpose='info']",
+            webDesktopLocator = "$mainXPath/div/div[@data-purpose='info']",
             androidLocator = null,
             page = this
     )
-
-    fun isSubHeaderTextEqualTo(text: String, elementWasStale: Boolean = false): Boolean {
-        return try {
-            main.actOnTheElement {
-                it.findBy<WebElementFacade>("//*[@id='guidance_sub_header' and contains(text(), '$text')]")
-            }
-            true
-        } catch (e: StaleElementReferenceException) {
-            if (!elementWasStale) {
-                isSubHeaderTextEqualTo(text, true)
-            } else {
-                false
-            }
-        } catch (e: NoSuchElementException) {
-            false
-        }
-    }
 
 
     fun getGuidanceBody(): List<Pair<String, Boolean>> {

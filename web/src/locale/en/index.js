@@ -337,8 +337,6 @@ export default {
       },
     },
     guidance: {
-      header: 'Want to avoid waiting?',
-      text: 'Three things to try before you book an appointment:',
       li1: {
         header: 'Self care​',
         text: 'Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines​',
@@ -357,11 +355,11 @@ export default {
       },
       menuItem2: {
         header: 'Request GP help without an appointment',
-        text: 'Get fit notes and GP letters or ask about recent tests',
+        text: 'Get sick notes and GP letters or ask about recent tests',
       },
       menuItem3: {
         header: 'Ask your GP for advice',
-        text: 'Get advice about general symptoms like tiredness, bleeding, pain or weakness',
+        text: 'Consult your GP through an online form. Your GP surgery will reply by phone or email.',
       },
       symptomButtonText: 'Check symptoms',
       bookButtonText: 'Book an appointment',

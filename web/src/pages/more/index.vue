@@ -21,7 +21,7 @@
           </a>
         </analytics-tracked-tag>
       </li>
-      <sjr-if v-if="onlineConsultationsEnabled" journey="cdssAdmin" tag="li">
+      <sjr-if journey="cdssAdmin" tag="li">
         <analytics-tracked-tag :text="$t('sc04.requestGpHelp.subheader')"
                                data-purpose="text_link">
           <a id="btn_gp_help"
@@ -61,10 +61,6 @@ export default {
         path: APPOINTMENT_ADMIN_HELP.path,
         noJs: { onlineConsultations: { previousRoute: MORE.path } },
       });
-    },
-    onlineConsultationsEnabled() {
-      return this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' ||
-             this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true;
     },
   },
   created() {
