@@ -39,11 +39,3 @@ fun ByteArray.toBase64(): String {
         android.util.Base64.NO_WRAP)
 }
 
-fun String.extractJSONString(key: String): String {
-    return try {
-        JSONObject(this).getString(key)
-            .replace("\\\"", "\"")
-    } catch (e: JSONException) {
-        this
-    }
-}

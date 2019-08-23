@@ -6,14 +6,16 @@ import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Log
+import com.nhs.online.fidoclient.constants.UAF_AUTH_RESPONSE_FIELD
+import com.nhs.online.fidoclient.utils.fidoHelpers
+import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
+import com.nhs.online.fidoclient.exceptions.GenericFidoException
+import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
+import com.nhs.online.fidoclient.uaf.client.AuthAssertionBuilder
+import com.nhs.online.fidoclient.uaf.client.operation.Authentication
+import com.nhs.online.fidoclient.uaf.crypto.FidoSignerAndroidM
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.utils.*
-import com.nhs.online.nhsonline.fido.Fido
-import com.nhs.online.nhsonline.fido.uaf.client.AuthAssertionBuilder
-import com.nhs.online.nhsonline.fido.uaf.client.operation.Authentication
-import com.nhs.online.nhsonline.fido.uaf.crypto.FidoSignerAndroidM
-import com.nhs.online.nhsonline.support.BiometricsInvalidSignatureException
-import com.nhs.online.nhsonline.support.GenericBiometricException
 import com.nhs.online.nhsonline.support.toBase64
 import org.json.JSONObject
 import java.lang.RuntimeException
@@ -50,7 +52,7 @@ class AuthenticationService(
             biometricCleanupHelper.removeFidoData()
             return
         }
-        val facetId = Fido.getFacetId(activity) ?: return
+        val facetId = fidoHelpers.getFacetId(activity) ?: return
         isFingerprintLoginStarted = true
         biometricsInteractor.showProgressDialog()
         biometricAsyncHandler.requestUafAuthenticationMessage(facetId) { response: BiometricCallResult ->
@@ -75,7 +77,7 @@ class AuthenticationService(
             biometricsInteractor.dismissProgressDialog()
             val fingerprintContent = fingerprintDialog.generateFingerprintContent(false)
             fingerprintDialog.showFingerprintAuthDialog(signInCallback, fingerprintContent)
-        } catch (e: BiometricsInvalidSignatureException) {
+        } catch (e: FidoInvalidSignatureException) {
             isFingerprintLoginStarted = false
             handleInvalidKeys()
         } catch (e: IllegalStateException) {
@@ -108,7 +110,7 @@ class AuthenticationService(
     }
 
     private fun getLoginPathFromUafMessage(uafMessage: String): String {
-        val authResponse = JSONObject(uafMessage).getString(Fido.UAF_AUTH_RESPONSE_FIELD)
+        val authResponse = JSONObject(uafMessage).getString(UAF_AUTH_RESPONSE_FIELD)
         Log.d(TAG, "AuthResponse message is: $authResponse")
 
         val authResponseB64 = authResponse.toByteArray().toBase64()
@@ -123,15 +125,15 @@ class AuthenticationService(
     ): String {
         return try {
             val signature =
-                    cryptObj.signature ?: throw GenericBiometricException("Signature not found",
+                    cryptObj.signature ?: throw GenericFidoException("Signature not found",
                             RuntimeException())
             val fidoSigner = FidoSignerAndroidM(signature)
             val keyId: String = preferencesService.readStringFromSharedPref(BiometricConstants.KEY_ID)
             val authAssertionBuilder = AuthAssertionBuilder(fidoSigner, null, keyId)
             uafAuthenticator.auth(uafLoginMsg, authAssertionBuilder)
-        } catch (e: BiometricsInvalidSignatureException) {
+        } catch (e: FidoInvalidSignatureException) {
             handleInvalidKeys()
-        } catch (e: GenericBiometricException) {
+        } catch (e: GenericFidoException) {
             fingerprintSystemChecker.showInvalidFingerprintDialog()
             ""
         }

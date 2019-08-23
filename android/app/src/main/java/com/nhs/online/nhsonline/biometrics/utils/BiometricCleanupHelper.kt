@@ -1,11 +1,10 @@
 package com.nhs.online.nhsonline.biometrics.utils
 
 import android.util.Log
-import com.nhs.online.nhsonline.biometrics.BiometricConstants
+import com.nhs.online.fidoclient.exceptions.GenericFidoException
+import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
+import com.nhs.online.fidoclient.uaf.crypto.FidoKeystore
 import com.nhs.online.nhsonline.biometrics.BiometricState
-import com.nhs.online.nhsonline.biometrics.IBiometricsInteractor
-import com.nhs.online.nhsonline.fido.uaf.crypto.FidoKeystore
-import com.nhs.online.nhsonline.support.GenericBiometricException
 import java.security.KeyStoreException
 
 private val TAG = BiometricCleanupHelper::class.java.simpleName
@@ -29,7 +28,7 @@ class BiometricCleanupHelper(
             Log.i(TAG, "Successfully deleted FIDO Credentials")
         } catch (e: KeyStoreException) {
             Log.d(TAG, "Delete invalid credentials failed", e)
-        } catch (e: GenericBiometricException) {
+        } catch (e: GenericFidoException) {
             Log.d(TAG, "Delete invalid credentials failed", e)
         }
     }

@@ -3,8 +3,8 @@ package com.nhs.online.nhsonline.biometrics.utils
 import android.annotation.TargetApi
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
-import com.nhs.online.nhsonline.fido.uaf.crypto.FidoKeystore
-import com.nhs.online.nhsonline.support.BiometricsInvalidSignatureException
+import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
+import com.nhs.online.fidoclient.uaf.crypto.FidoKeystore
 import java.security.Signature
 
 @TargetApi(Build.VERSION_CODES.M)
@@ -22,7 +22,7 @@ class SigningHelper(
 
             return signature
         } catch (e: KeyPermanentlyInvalidatedException) {
-            throw BiometricsInvalidSignatureException("Biometric authentication revoked.", e)
+            throw FidoInvalidSignatureException("Biometric authentication revoked.", e)
         }
     }
 }

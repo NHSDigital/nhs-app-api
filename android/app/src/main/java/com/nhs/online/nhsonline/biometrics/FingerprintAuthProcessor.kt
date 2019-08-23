@@ -1,4 +1,4 @@
-package com.nhs.online.nhsonline.fido.uaf.fp
+package com.nhs.online.nhsonline.biometrics
 
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 

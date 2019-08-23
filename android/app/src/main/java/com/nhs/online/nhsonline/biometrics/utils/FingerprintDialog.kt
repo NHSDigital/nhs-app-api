@@ -5,11 +5,7 @@ import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.util.Log
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.biometrics.BiometricConstants
-import com.nhs.online.nhsonline.biometrics.BiometricState
-import com.nhs.online.nhsonline.fido.uaf.fp.createFingerprintAuthenticationDialogFragment
-import com.nhs.online.nhsonline.fido.uaf.fp.FingerprintAuthProcessor
-import com.nhs.online.nhsonline.fido.uaf.fp.FingerprintContent
+import com.nhs.online.nhsonline.biometrics.*
 
 private val TAG = FingerprintDialog::class.java.simpleName
 @TargetApi(Build.VERSION_CODES.M)

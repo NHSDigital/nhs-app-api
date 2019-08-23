@@ -1,12 +1,13 @@
 package com.nhs.online.nhsonline.biometrics
 
 import android.os.AsyncTask
-import com.nhs.online.nhsonline.fido.Fido
-import com.nhs.online.nhsonline.fido.uaf.client.operation.Authentication
-import com.nhs.online.nhsonline.fido.uaf.client.operation.DeRegistration
-import com.nhs.online.nhsonline.fido.uaf.client.operation.Registration
-import com.nhs.online.nhsonline.fido.uaf.operationcall.RegistrationCall
-import com.nhs.online.nhsonline.fido.uaf.util.FidoEndpointConfig
+import com.nhs.online.fidoclient.constants.CONNECTION_ERROR_CODE_KEY_AND_VALUE
+import com.nhs.online.fidoclient.constants.EMPTY_UAF_RESPONSE_MESSAGE
+import com.nhs.online.fidoclient.uaf.client.operation.Authentication
+import com.nhs.online.fidoclient.uaf.client.operation.DeRegistration
+import com.nhs.online.fidoclient.uaf.client.operation.Registration
+import com.nhs.online.fidoclient.uaf.operationcall.RegistrationCall
+
 
 class BiometricAsyncHandler(private val fidoEndpointConfig: FidoEndpointConfig) {
     private val asyncs = mutableSetOf<BiometricAsync>()
@@ -17,33 +18,36 @@ class BiometricAsyncHandler(private val fidoEndpointConfig: FidoEndpointConfig) 
         callback: (BiometricCallResult) -> Unit
     ) {
         performAsyncTask(callback) {
-            return@performAsyncTask Registration(fidoEndpointConfig)
-                .requestUafRegistrationMessage(facetId, accessToken)
+            return@performAsyncTask Registration()
+                .requestUafRegistrationMessage(facetId, accessToken, fidoEndpointConfig.getRegRequestGet())
         }
     }
 
     fun sendClientRegistrationMsg(uafMessage: String, callback: (BiometricCallResult) -> Unit) {
         performAsyncTask(callback) {
-            return@performAsyncTask RegistrationCall(fidoEndpointConfig)
-                .sendClientRegistrationMessage(uafMessage)
+            return@performAsyncTask RegistrationCall()
+                .sendClientRegistrationMessage(uafMessage, fidoEndpointConfig.getRegResponsePost())
         }
     }
 
     fun requestUafAuthenticationMessage(facetId: String, callback: (BiometricCallResult) -> Unit) {
         performAsyncTask(callback) {
-            return@performAsyncTask Authentication(fidoEndpointConfig)
-                .requestUafAuthenticationMessage(facetId)
+            return@performAsyncTask Authentication()
+                .requestUafAuthenticationMessage(facetId, fidoEndpointConfig.getAuthRequestGet())
         }
     }
 
     fun sendDeRegistrationOperation(
         appId: String,
         keyId: String,
+        accessToken: String?,
         callback: (BiometricCallResult?) -> Unit
     ) {
         performAsyncTask(callback) {
-            DeRegistration(fidoEndpointConfig)
-                .sendDeRegistrationOperation(appId, keyId)
+            if (accessToken != null) {
+                DeRegistration()
+                        .sendDeRegistrationOperation(appId, keyId, accessToken, fidoEndpointConfig.getDeregPost())
+            }
             return@performAsyncTask ""
         }
     }
@@ -83,10 +87,10 @@ class BiometricAsyncHandler(private val fidoEndpointConfig: FidoEndpointConfig) 
             if (result == null)
                 return BiometricCallResult("", ERROR)
 
-            if (result == Fido.EMPTY_UAF_RESPONSE_MESSAGE)
+            if (result == EMPTY_UAF_RESPONSE_MESSAGE)
                 return BiometricCallResult(result, ERROR)
 
-            if (result.contains(Fido.CONNECTION_ERROR_CODE_KV)) {
+            if (result.contains(CONNECTION_ERROR_CODE_KEY_AND_VALUE)) {
                 return BiometricCallResult(result, CONNECTION_ERROR)
             }
             return BiometricCallResult(result, OK)

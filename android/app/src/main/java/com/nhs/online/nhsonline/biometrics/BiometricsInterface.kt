@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.biometrics
 
+import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
 import com.nhs.online.nhsonline.interfaces.IInteractor
 

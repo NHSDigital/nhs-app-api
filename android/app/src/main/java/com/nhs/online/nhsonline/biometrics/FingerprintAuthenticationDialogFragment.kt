@@ -16,7 +16,7 @@
  * Modified heavily (including conversion to Kotlin) by NHS App
  */
 
-package com.nhs.online.nhsonline.fido.uaf.fp
+package com.nhs.online.nhsonline.biometrics
 
 import android.os.Build
 import android.os.Bundle
@@ -28,7 +28,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.google.gson.Gson
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.utils.SigningHelper
 import kotlinx.android.synthetic.main.fingerprint_dialog_container.*
@@ -53,7 +52,7 @@ fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
 @RequiresApi(Build.VERSION_CODES.M)
 class FingerprintAuthenticationDialogFragment : DialogFragment(),
     TextView.OnEditorActionListener,
-    FingerprintUiHelper.Callback {
+        FingerprintUiHelper.Callback {
     var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
     var fingerprintUiHelper: FingerprintUiHelper? = null
     var fingerprintContent: FingerprintContent? = null
@@ -106,7 +105,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
             val fingerprintManager = FingerprintManagerCompat.from(it)
             if (fingerprintManager.isHardwareDetected && fingerprintManager.hasEnrolledFingerprints()) {
                 fingerprintUiHelper = FingerprintUiHelper(fingerprintManager, fingerprintIcon,
-                    fingerprintStatus, this)
+                        fingerprintStatus, this)
                 return
             }
         }

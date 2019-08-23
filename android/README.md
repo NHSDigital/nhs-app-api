@@ -5,6 +5,19 @@ NHS Online Android
 
 The web app is currently running and accessible via localhost.  If you are planning to use an emulator on windows, this must be done using [docker-toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/) and the port forwarding script found in the [nhsonline-dev-utils repo](https://git.nhschoices.net/nhsonline/nhsonline-dev-utils).
 
+# Submodules
+
+The Fido Client is pulled in from a maven repository hosted within gitlab. It has been added as a submodule to this repository.
+In the event that the submodule has not been pulled / updated then you will need to run the following commands:
+
+```
+git submodule update
+cd android/maven
+git pull
+```
+
+This will ensure that the maven submodule has an up to date copy of it's repository. 
+
 # Backend-Worker
 
 In the docker-compose.yml file, set the NHS_WEB_APP_BASE_URL variable to the following:

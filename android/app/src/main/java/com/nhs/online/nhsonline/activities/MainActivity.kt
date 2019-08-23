@@ -19,10 +19,10 @@ import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
+import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
-import com.nhs.online.nhsonline.biometrics.IBiometricsInteractor
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
@@ -58,7 +58,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
     private lateinit var activityViewSwitcher: MainActivityViewSwitcher
-    private lateinit var context: Context
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -391,13 +390,13 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun showBiometricRegistrationError() {
-        val biometricDeviceErrorMessage = ErrorMessage(context, ErrorType.BiometricRegistrationFailure)
+        val biometricDeviceErrorMessage = ErrorMessage(this, ErrorType.BiometricRegistrationFailure)
         Log.d(Application.TAG, "Biometric registration failed")
         showErrorScreen( biometricDeviceErrorMessage )
     }
 
     override fun showBiometricDeviceError() {
-        val biometricDeviceErrorMessage = ErrorMessage(context, ErrorType.BiometricDeviceFailure)
+        val biometricDeviceErrorMessage = ErrorMessage(this, ErrorType.BiometricDeviceFailure)
         Log.d(Application.TAG, "Biometric device failed")
         showErrorScreen( biometricDeviceErrorMessage )
     }

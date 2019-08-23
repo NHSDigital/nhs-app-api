@@ -1,4 +1,4 @@
-package com.nhs.online.nhsonline.fido.uaf.util
+package com.nhs.online.nhsonline.biometrics
 
 class FidoEndpointConfig(
     private val server: String,

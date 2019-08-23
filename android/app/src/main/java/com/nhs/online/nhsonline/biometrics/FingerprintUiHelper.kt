@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-package com.nhs.online.nhsonline.fido.uaf.fp
+package com.nhs.online.nhsonline.biometrics
 
 import android.annotation.TargetApi
 import android.os.Build

@@ -5,12 +5,13 @@ import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.support.v4.app.FragmentActivity
 import com.nhaarman.mockito_kotlin.*
+import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
+import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
+import com.nhs.online.fidoclient.uaf.client.operation.Authentication
 import com.nhs.online.nhsonline.biometrics.utils.BiometricCleanupHelper
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintDialog
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintSharedPreferences
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
-import com.nhs.online.nhsonline.fido.uaf.client.operation.Authentication
-import com.nhs.online.nhsonline.support.BiometricsInvalidSignatureException
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -46,7 +47,7 @@ class AuthenticationServiceTest {
             on {
                 auth(any(), any()
                 )
-            } doThrow (BiometricsInvalidSignatureException::class)
+            } doThrow (FidoInvalidSignatureException::class)
         }
 
         mockPreferencesService = mock {

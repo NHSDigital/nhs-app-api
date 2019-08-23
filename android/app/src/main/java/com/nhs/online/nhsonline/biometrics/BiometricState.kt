@@ -1,16 +1,16 @@
 package com.nhs.online.nhsonline.biometrics
 
 import android.util.Log
+import com.nhs.online.fidoclient.uaf.crypto.FidoKeystore
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintSharedPreferences
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
-import com.nhs.online.nhsonline.fido.uaf.crypto.FidoKeystore
 
 private val TAG = BiometricState::class.java.simpleName
 
 class BiometricState(
-    private val preferencesService: FingerprintSharedPreferences,
-    private val fidoKeystore: FidoKeystore,
-    private val fingerprintSystemChecker: FingerprintSystemChecker
+        private val preferencesService: FingerprintSharedPreferences,
+        private val fidoKeystore: FidoKeystore,
+        private val fingerprintSystemChecker: FingerprintSystemChecker
 ) {
     var registered: Boolean = isUserFidoRegistered()
     var registrationStateChangeInProgress: Boolean = false
