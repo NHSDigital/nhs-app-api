@@ -497,7 +497,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
 
             var olcdem = new OlcDemographics
             {
-                Gender = "Male",
                 NameFull = "Test Test",
                 NhsNumber = "111 111 111",
                 AddressFull = "Test",

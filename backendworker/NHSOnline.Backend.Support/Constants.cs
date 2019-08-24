@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.Support
         public static class OnlineConsultationsConstants
         {
            public const string DemographicsOptionCode = "GLO_PRE_DISCLAIMERS_DEMOGRAPHIC"; 
-           public const string DemographicsLabel = "I consent to the NHS App sharing my name, date of birth, gender, NHS number and postal address with {0}. (Optional)";
+           public const string DemographicsLabel = "I consent to the NHS App sharing my name, date of birth, NHS number and postal address with {0}. (Optional)";
         }
     }
 }

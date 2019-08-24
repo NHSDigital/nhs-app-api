@@ -308,13 +308,13 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     parameters.Add("patient", _createFhirParameter.CreatePatientFhir(_demographicsOlcMapper, demographicsResult));
                     await _auditor.Audit(
                         AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
-                        "User has agreed to share their name, age, gender, NHS number and postal address.");
+                        "User has agreed to share their name, age, NHS number and postal address.");
                 }
                 else
                 {
                     await _auditor.Audit(
                         AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
-                        "User has not agreed to share their name, age, gender, NHS number and postal address.");
+                        "User has not agreed to share their name, age, NHS number and postal address.");
                 }
 
                 try

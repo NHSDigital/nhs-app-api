@@ -29,22 +29,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 Address = addressList
             };
 
-            var administrativeGender = AdministrativeGender.Other;
-
-            switch (response.Gender)
-            {
-                case "Male":
-                    administrativeGender = AdministrativeGender.Male;
-                    break;
-                case "Female":
-                    administrativeGender = AdministrativeGender.Female;
-                    break;
-            }
-            if (administrativeGender != AdministrativeGender.Other)
-            {
-                patient.Gender = administrativeGender;
-            }
-
             if (response.Name != null)
             {
                 var name = new HumanName { Family = response.Name.Surname };

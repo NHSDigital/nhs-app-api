@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Mappers
 
             return new OlcDemographics
             {
-                Gender = source.Sex,
                 AddressFull = source.Address,
                 NameFull = source.PatientName,
                 Name = MapName(source),
