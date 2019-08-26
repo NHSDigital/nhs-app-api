@@ -64,6 +64,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import PageTitle from '@/components/widgets/PageTitle';
+import NativeApp from '@/services/native-app';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -85,6 +86,7 @@ export default {
     HeaderSlim,
     MessageDialog,
     MessageText,
+    NativeApp,
   },
   mixins: [ErrorMessageMixin],
   props: {
@@ -181,7 +183,9 @@ export default {
   },
   methods: {
     setFocus() {
-      if (this.$refs.retryFormRef) {
+      if (this.$store.state.device.isNativeApp) {
+        NativeApp.resetPageFocus();
+      } else if (this.$refs.retryFormRef) {
         this.$refs.retryFormRef.focus();
       }
     },
