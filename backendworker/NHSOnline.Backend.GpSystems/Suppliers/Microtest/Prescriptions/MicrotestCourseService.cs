@@ -89,6 +89,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                         _logger.LogError(e, $"Something went wrong while building the response");
                         return new GetCoursesResult.InternalServerError();
                     }
+                }               
+                else if (coursesResponse.HasForbiddenResponse)
+                {
+                    _logger.LogError("Microtest prescriptions is not enabled");
+                    return new GetCoursesResult.Forbidden();
                 }
 
                 return GetCorrectErrorResult(coursesResponse);

@@ -75,6 +75,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                         return new GetPrescriptionsResult.InternalServerError();
                     }
                 }
+                else if (prescriptionsResponse.HasForbiddenResponse)
+                {
+                    _logger.LogError("Microtest prescriptions is not enabled");
+                    return new GetPrescriptionsResult.Forbidden();
+                }
 
                 _logger.LogError(prescriptionsResponse.ErrorForLogging);
                 return new GetPrescriptionsResult.BadGateway();
@@ -112,6 +117,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                 {
                     _logger.LogDebug($"Prescription order placed successfully");
                     return new OrderPrescriptionResult.Success();
+                }
+                else if (response.HasForbiddenResponse)
+                {
+                    _logger.LogError("Microtest prescriptions is not enabled");
+                    return new OrderPrescriptionResult.Forbidden();
                 }
 
                 _logger.LogError(response.ErrorForLogging);

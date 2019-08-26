@@ -324,5 +324,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
             _microtestClient.Verify();
         }
+        
+        [TestMethod]
+        public async Task Get_Returns403ForbiddenResponse_WhenForbiddenExceptionOccursCallingMicrotest()
+        {
+            // Arrange
+            _microtestClient.Setup(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber))
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<CoursesGetResponse>(HttpStatusCode
+                        .Forbidden)));
+
+            // Act
+            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+
+            // Assert
+            result.Should().BeAssignableTo<GetCoursesResult.Forbidden>();
+            _microtestClient.Verify();
+        }
     }
 }

@@ -110,7 +110,11 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
     }
 
     override fun disableAtGPLevel() {
-        throw NotImplementedError()
+        mockingClient
+                .forMicrotest {
+                    prescriptions.getPrescriptionHistoryRequest(patient)
+                            .respondWithForbiddenError()
+                }
     }
 
     override fun generateSpineStubs() {

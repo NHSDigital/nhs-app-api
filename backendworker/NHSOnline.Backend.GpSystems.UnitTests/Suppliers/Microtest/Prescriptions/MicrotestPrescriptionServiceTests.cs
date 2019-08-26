@@ -367,7 +367,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         }
 
         [TestMethod]
-        public async Task Post_ReturnsConflict_WhenErrorReceivedFromEmis()
+        public async Task Post_ReturnsConflict_WhenErrorReceivedFromMicrotest()
         {
             // Arrange
             _microtestClient.Setup(x => x.PrescriptionsPost(
@@ -382,6 +382,43 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsForbiddenResponse_WhenForbiddenErrorReceivedFromMicrotest()
+        {
+            // Arrange
+            DateTimeOffset? fromDate = DateTimeOffset.Now;
+            DateTimeOffset? toDate = DateTimeOffset.Now;
+
+            _microtestClient.Setup(x => x.PrescriptionHistoryGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber, fromDate))
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionHistoryGetResponse>(HttpStatusCode.Forbidden)));
+
+            // Act
+            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+
+            // Assert
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
+        }
+        
+        
+        [TestMethod]
+        public async Task Post_ReturnsForbidden_WhenForbiddenErrorReceivedFromMicrotest()
+        {
+            // Arrange
+            _microtestClient.Setup(x => x.PrescriptionsPost(
+                    _microtestUserSession.OdsCode,
+                    _microtestUserSession.NhsNumber,
+                    It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Forbidden)));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+
+            // Assert
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Forbidden>();
         }
     }
 }

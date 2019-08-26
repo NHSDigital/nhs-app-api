@@ -87,11 +87,15 @@ Feature: View prescriptions backend
       | VISION    |
       | MICROTEST |
 
-  Scenario: EMIS GP practice has disabled prescriptions functionality
-    Given I have logged into EMIS and have a valid session cookie
+  Scenario Outline: <GP System> GP practice has disabled prescriptions functionality
+    Given I have logged into <GP System> and have a valid session cookie
     And the GP System has disabled prescriptions
     When I request prescriptions for the last 6 months
     Then I receive a "Forbidden" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | MICROTEST |
 
   Scenario Outline: <GP System> GP system fails to return in a timely fashion
     Given I have logged into <GP System> and have a valid session cookie
