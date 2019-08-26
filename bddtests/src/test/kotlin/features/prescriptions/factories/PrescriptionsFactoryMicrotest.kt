@@ -120,4 +120,11 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
     override fun generateSpineStubs() {
         ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
+
+    override fun orderPrescriptionReturnsConflictResponse() {
+        mockingClient.forMicrotest {
+            prescriptions.repeatPrescriptionSubmissionRequest(patient)
+                    .respondWithConflictError()
+        }
+    }
 }

@@ -123,6 +123,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                     _logger.LogError("Microtest prescriptions is not enabled");
                     return new OrderPrescriptionResult.Forbidden();
                 }
+                else if (response.HasConflictResponse)
+                {
+                    _logger.LogError("The microtest prescription has already been ordered or is not available");
+                    return new OrderPrescriptionResult.CannotReorderPrescription();
+                }
 
                 _logger.LogError(response.ErrorForLogging);
                 return new OrderPrescriptionResult.BadGateway();

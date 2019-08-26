@@ -383,7 +383,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
         }
-        
+
+        [TestMethod]
+        public async Task Post_ReturnsConflict_When409ErrorReceivedFromMicrotest()
+        {
+            // Arrange
+            _microtestClient.Setup(x => x.PrescriptionsPost(
+                    _microtestUserSession.OdsCode,
+                    _microtestUserSession.NhsNumber,
+                    It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Conflict)));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+
+            // Assert
+            result.Should().BeAssignableTo<OrderPrescriptionResult.CannotReorderPrescription>();
+        }
+
         [TestMethod]
         public async Task Get_ReturnsForbiddenResponse_WhenForbiddenErrorReceivedFromMicrotest()
         {
@@ -401,8 +419,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             // Assert
             result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
         }
-        
-        
+
+
         [TestMethod]
         public async Task Post_ReturnsForbidden_WhenForbiddenErrorReceivedFromMicrotest()
         {

@@ -124,4 +124,8 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
     override fun generateSpineStubs() {
         ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
+
+    override fun orderPrescriptionReturnsConflictResponse() {
+        throw UnsupportedOperationException()
+    }
 }

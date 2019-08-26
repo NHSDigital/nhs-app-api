@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.stubbing.Scenario
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import cucumber.api.java.en.But
 import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.prescriptions.factories.PrescriptionsFactory
@@ -43,7 +44,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
-import java.util.*
+import java.util.UUID
 
 private const val WAIT_TIME_GREATER_THAN_THIRTY_SECS = 31L
 
@@ -269,6 +270,13 @@ open class PrescriptionsSubmissionStepDefinitions {
                 prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                         .respondWithGenericInternalServerError()
             }
+        }
+
+        @But("GP system responds with a conflict error when a repeat prescription is submitted")
+        fun gpSystemRespondsWithConflictErrorWhenARepeatPrescriptionIsSubmitted() {
+            PrescriptionsFactory
+                    .getForSupplier(SerenityHelpers.getGpSupplier())
+                    .orderPrescriptionReturnsConflictResponse()
         }
 
 

@@ -111,4 +111,8 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     override fun generateSpineStubs() {
         ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
+
+    override fun orderPrescriptionReturnsConflictResponse() {
+        throw UnsupportedOperationException()
+    }
 }

@@ -102,4 +102,8 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
     override fun generateSpineStubs() {
         ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
+
+    override fun orderPrescriptionReturnsConflictResponse() {
+        throw UnsupportedOperationException()
+    }
 }
