@@ -39,7 +39,8 @@ export default {
     },
   },
   async asyncData({ store, redirect, req }) {
-    if (get('state.serviceJourneyRules.rules.cdssAdmin.provider', store) === 'none') {
+    if (!(store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' ||
+          store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true)) {
       redirect(302, INDEX.path, null);
     }
 

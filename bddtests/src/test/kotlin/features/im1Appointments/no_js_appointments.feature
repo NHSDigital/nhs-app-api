@@ -7,7 +7,7 @@ Feature: Appointments Service With Javascript Disabled
 
   #This test covers navigation via buttons/links
 
-  Scenario Outline: A user can find and book available appointments with javascript disabled
+  Scenario Outline: A <GP System> user can find and book available appointments with javascript disabled
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
     And I am on the My Appointments page
@@ -45,10 +45,7 @@ Feature: Appointments Service With Javascript Disabled
 
   Scenario: An EMIS user is presented with guidance when booking an appointment and can proceed to check
   their symptoms with javascript disabled
-    Given I am a EMIS user where the journey configurations are:
-      | Journey                         | Value    |
-      | online consultations            | disabled |
-    And there are available appointment slots with different criteria for EMIS
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     When I retrieve the 'Appointment Guidance' page directly
     And I click the 'Check symptoms' button

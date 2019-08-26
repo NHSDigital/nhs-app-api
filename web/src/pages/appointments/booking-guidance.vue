@@ -1,11 +1,11 @@
 <template>
   <div v-if="showTemplate"
        :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <sjr-if journey="onlineConsultations">
-      <appointment-guidance-menu/>
-    </sjr-if>
-    <sjr-if journey="onlineConsultations" :disabled="true">
+    <appointment-guidance-menu v-if="onlineConsultationsEnabled"/>
+    <template v-else>
+      <h2 id="guidance_sub_header">{{ $t('appointments.guidance.header') }}</h2>
       <div :class="$style.info" data-purpose="info">
+        <p>{{ $t('appointments.guidance.text') }}</p>
         <strong>1. {{ $t('appointments.guidance.li1.header') }}</strong>
         <p>{{ $t('appointments.guidance.li1.text') }}</p>
         <strong>2. {{ $t('appointments.guidance.li2.header') }}</strong>
@@ -27,7 +27,7 @@
           </generic-button>
         </no-js-form>
       </analytics-tracked-tag>
-    </sjr-if>
+    </template>
 
     <no-js-form :action="appointmentBookingPath" :value="formData">
       <generic-button id="btn_appointment"
@@ -39,7 +39,7 @@
       </generic-button>
     </no-js-form>
 
-    <sjr-if journey="onlineConsultations">
+    <template v-if="onlineConsultationsEnabled">
       <generic-button v-if="$store.state.device.isNativeApp"
                       id="back_btn"
                       :class="$style.button"
@@ -51,7 +51,7 @@
                               :path="indexPath"
                               button-text="appointments.guidance.backDesktopLinkText"
                               @clickAndPrevent="onBackButtonClicked"/>
-    </sjr-if>
+    </template>
   </div>
 </template>
 
@@ -63,7 +63,6 @@ import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidan
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import SjrIf from '@/components/SjrIf';
 
 export default {
   components: {
@@ -72,7 +71,6 @@ export default {
     DesktopGenericBackLink,
     GenericButton,
     NoJsForm,
-    SjrIf,
   },
   data() {
     return {
@@ -83,6 +81,10 @@ export default {
   computed: {
     appointmentBookingPath() {
       return APPOINTMENT_BOOKING.path;
+    },
+    onlineConsultationsEnabled() {
+      return this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' ||
+             this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true;
     },
     formData() {
       return {

@@ -8,9 +8,12 @@ describe('more', () => {
   let $store;
   let $router;
 
-  const mountAs = ({ cdssAdminEnabled = false } = {}) => {
+  const mountAs = ({ olcEnabled = true, cdssAdminEnabled = false } = {}) => {
     $router = createRouter();
     $store = createStore({
+      $env: {
+        ONLINE_CONSULTATIONS_ENABLED: olcEnabled,
+      },
       state: {
         device: {
           isNativeApp: false,
@@ -27,8 +30,11 @@ describe('more', () => {
     expect(link.exists()).toBe(true);
   });
 
-  it('will not include the request Gp help link if cdssAdmin disabled', () => {
+  it('will not include the request Gp help link if cdssAdmin disabled or online consultations toggle is disabled', () => {
     wrapper = mountAs();
+    expect(wrapper.find('#btn_gp_help').exists()).toBe(false);
+
+    wrapper = mountAs({ olcEnabled: false });
     expect(wrapper.find('#btn_gp_help').exists()).toBe(false);
   });
 

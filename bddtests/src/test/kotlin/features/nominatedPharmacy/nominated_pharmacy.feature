@@ -109,7 +109,7 @@ Feature: nominated pharmacy journey
       | EMIS      |
 
   Scenario: Patient does not see nominated pharmacy when SJR has disabled it for their gp practice
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey            | Value    |
       | nominated pharmacy | disabled |
     And I have 1 past repeat prescriptions

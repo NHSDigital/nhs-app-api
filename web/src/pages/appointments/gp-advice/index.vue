@@ -38,8 +38,9 @@ export default {
       return this.$store.state.device.isNativeApp;
     },
   },
-  async asyncData({ store, req, redirect, route }) {
-    if (get('state.serviceJourneyRules.cdssAdmin.provider', store) === 'none') {
+  async asyncData({ store, req, route, redirect }) {
+    if (!(store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' ||
+          store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true)) {
       redirect(302, INDEX.path, null);
     }
     const body = get('body', req);

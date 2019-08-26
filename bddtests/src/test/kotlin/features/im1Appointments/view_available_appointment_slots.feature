@@ -9,10 +9,7 @@ Feature: View Available Appointment Slots Frontend
 
   @nativesmoketest
   Scenario: A user who is signed in sees the appointments navigation button highlighted
-  Given I am a EMIS user where the journey configurations are:
-      | Journey                         | Value    |
-      | online consultations            | disabled |
-    And there are available appointment slots with different criteria for EMIS
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the Available Appointments page
     Then the appointments menu button is highlighted

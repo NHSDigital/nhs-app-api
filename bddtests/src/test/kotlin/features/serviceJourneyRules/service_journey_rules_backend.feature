@@ -10,7 +10,7 @@ Feature: Service Journey Rules Backend
 
   @long-running
   Scenario: A user fetching the service journey rules but the session has expired, will receive Unauthorized
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey            | Value       |
       | appointments       | informatica |
     And I have logged in and have a valid session cookie
@@ -19,7 +19,7 @@ Feature: Service Journey Rules Backend
     Then I receive a "Unauthorized" error
 
   Scenario: API call for SJR can return a response with nominated pharmacy enabled
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey            | Value   |
       | nominated pharmacy | enabled |
     And I have logged in and have a valid session cookie
@@ -28,7 +28,7 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have nominated pharmacy enabled
 
   Scenario: API call for SJR can return a response with nominated pharmacy disabled
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey            | Value    |
       | nominated pharmacy | disabled |
     And I have logged in and have a valid session cookie
@@ -37,7 +37,7 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have nominated pharmacy disabled
 
   Scenario: API call for SJR can return a response with appointments, medical record and prescriptions configured to IM1
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey            | Value   |
       | appointments       | im1     |
       | medical record     | im1     |
@@ -50,7 +50,7 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have prescriptions set to im1
 
   Scenario: API call for SJR can return a response with appointments configured to Informatica Frontdesk
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey            | Value       |
       | appointments       | informatica |
     And I have logged in and have a valid session cookie
@@ -59,7 +59,7 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have appointments set to informatica
 
   Scenario: API call for SJR can return a response with appointments, medical record and prescriptions configured to GP at Hand
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey            | Value     |
       | appointments       | gpAtHand  |
       | medical record     | gpAtHand  |

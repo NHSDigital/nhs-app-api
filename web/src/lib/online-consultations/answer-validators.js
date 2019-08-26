@@ -197,6 +197,7 @@ export function questionMultipleChoiceAnswerValid(
     return { isValid: true, isEmpty };
   }
   const requiredOptions = options.filter(c => c.required).map(x => x.code);
+  console.log(`requiredOptions: ${requiredOptions}`);
   const isValid = allOptionsRequired
     ? !isEmpty && validCodes.every(o => answer.includes(o))
     : !isEmpty && (answer.every(o => validCodes.includes(o) &&

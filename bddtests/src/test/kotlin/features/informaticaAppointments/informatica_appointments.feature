@@ -4,7 +4,7 @@ Feature: Informatica Frontdesk Appointments
 
   Scenario: A user sees an appropriate message when the appointments journey configuration is set to
   Informatica Frontdesk
-    Given I am a EMIS user where the journey configurations are:
+    Given I am a user where the journey configurations are:
       | Journey      | Value       |
       | appointments | informatica |
     And I am logged in

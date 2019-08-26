@@ -6,7 +6,6 @@ export const INFORMATICA = 'informatica';
 export const INIT = 'INIT';
 export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const SET_RULES = 'SET_RULES';
-export const ONLINE_CONSULTATIONS = 'onlineConsultations';
 
 export const initialState = () => ({
   isLoaded: false,

@@ -15,6 +15,11 @@ describe('Admin Help page', () => {
   const redirect = jest.fn();
 
   const $store = {
+    app: {
+      $env: {
+        ONLINE_CONSULTATIONS_ENABLED: true,
+      },
+    },
     state: {
       device: {
         isNativeApp: true,
@@ -23,12 +28,8 @@ describe('Admin Help page', () => {
       serviceJourneyRules: {
         rules: {
           cdssAdmin: {
+            provider: 'stubs',
             serviceDefinition: 'NHS_ADMIN',
-            provider: 'stubs',
-          },
-          cdssAdvice: {
-            serviceDefinition: 'NHS_ADVICE',
-            provider: 'stubs',
           },
         },
       },
@@ -107,10 +108,12 @@ describe('Admin Help page', () => {
 
     describe('with online consultations disabled', () => {
       each([
-        'none',
-      ]).it('should redirect to logged in home page', async (provider) => {
-        $store.state.serviceJourneyRules.rules.cdssAdmin.provider = provider;
+        'false',
+        false,
+        'not true but truthy',
+      ]).it('should redirect to logged in home page', async (olcEnabled) => {
         // Arrange
+        $store.app.$env.ONLINE_CONSULTATIONS_ENABLED = olcEnabled;
         mountPage();
 
         // Act
@@ -122,10 +125,11 @@ describe('Admin Help page', () => {
     });
     describe('with online consultations enabled', () => {
       each([
-        'stubs',
-      ]).it('should not redirect to logged in home page', async (provider) => {
-        $store.state.serviceJourneyRules.rules.cdssAdmin.provider = provider;
+        'true',
+        true,
+      ]).it('should not redirect to logged in home page', async (olcEnabled) => {
         // Arrange
+        $store.app.$env.ONLINE_CONSULTATIONS_ENABLED = olcEnabled;
         mountPage();
 
         // Act

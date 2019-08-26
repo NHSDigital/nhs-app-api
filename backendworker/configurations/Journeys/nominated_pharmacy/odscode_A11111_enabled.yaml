@@ -3,7 +3,3 @@ target:
   odsCode: "A11111"
 journeys:
   nominatedPharmacy: true
-  cdssAdvice:
-    provider: none
-  cdssAdmin:
-    provider: none

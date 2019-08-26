@@ -18,9 +18,9 @@ Feature: Book Appointments With Javascript Disabled
     # Positive submission cases
 
   Scenario Outline: A <GP System> user without Javascript cannot enter or select a phone number for non phone appointments
-    And there are <GP System> appointments available to book
+    Given there are <GP System> appointments available to book
     And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
+    And I am on the Available Appointments page
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     When I have selected a time when multiple slots are available
@@ -214,7 +214,7 @@ Feature: Book Appointments With Javascript Disabled
     Given there are EMIS appointments available to book where booking reason is set optional
     And a booked appointment can be cancelled
     And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
+    And I am on the Available Appointments page
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     When I have selected a time when multiple slots are available

@@ -5,6 +5,8 @@ target:
    - XXXXXX
 journeys:
   cdssAdvice:
-    provider: none
+    provider: stubs
+    serviceDefinition: NHS_ADVICE
   cdssAdmin:
-    provider: none
+    provider: stubs
+    serviceDefinition: NHS_ADMIN

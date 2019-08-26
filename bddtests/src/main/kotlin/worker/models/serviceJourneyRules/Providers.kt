@@ -8,7 +8,6 @@ enum class AppointmentsProvider{
 }
 
 enum class CdssProvider{
-    none,
     eConsult
 }
 

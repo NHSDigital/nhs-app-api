@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" v-if="show">
+  <component :is="tag" v-if="isEnabled">
     <slot />
   </component>
 </template>
@@ -10,11 +10,7 @@ export default {
   props: {
     journey: {
       type: String,
-      default: undefined,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
+      required: true,
     },
     tag: {
       default: 'DIV',
@@ -22,8 +18,8 @@ export default {
     },
   },
   computed: {
-    show() {
-      return !this.disabled === this.$store.getters[`serviceJourneyRules/${this.journey}Enabled`];
+    isEnabled() {
+      return this.$store.getters[`serviceJourneyRules/${this.journey}Enabled`];
     },
   },
 };

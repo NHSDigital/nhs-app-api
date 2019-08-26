@@ -16,11 +16,18 @@ class AppointmentGuidanceStepDefinitions {
         appointmentGuidanceSteps.appointmentGuidancePage.checkSymptomsButton.click()
     }
 
+    //online-consultation-journey
+    @When("^I select the Appointment Guidance Check symptoms menu item$")
+    @Throws(Exception::class)
+    fun whenISelectAppointmentGuidancePageCheckSymptomsMenuItem() {
+        appointmentGuidanceSteps.appointmentGuidancePage.menuCheckSymptomsButton.click()
+    }
 
     @Then("^I am given guidance as to my options before booking an appointment$")
     @Throws(Exception::class)
     fun thenIAmGivenGuidanceAsToMyOptionsBeforeBookingAnAppointment() {
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+        appointmentGuidanceSteps.checkTheContentHeaderIsCorrect()
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
 }
