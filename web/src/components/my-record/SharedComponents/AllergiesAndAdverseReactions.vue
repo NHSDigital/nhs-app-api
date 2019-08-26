@@ -10,9 +10,11 @@
        :aria-hidden="isCollapsed">
     <div v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <span v-if="allergy.date.value" :class="$style.fieldName">
+      <span v-if="allergy.date && allergy.date.value" :class="$style.fieldName">
         {{ allergy.date.value | datePart(allergy.date.datePart) }}
       </span>
+      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
+
       <p>{{ allergy.name }}</p>
       <p v-if="allergy.drug">{{ allergy.drug }}</p>
       <p v-if="allergy.reaction">{{ allergy.reaction }}</p>

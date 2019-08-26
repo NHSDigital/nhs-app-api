@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ImmunisationsFactory
+import mocking.data.myrecord.ImmunisationsData
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -92,6 +93,39 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             Assert.assertEquals(expectedImmunisations[i].term, onScreenImmunisations[i].bodyElements[0])
             Assert.assertEquals(expectedImmunisations[i].nextDate, onScreenImmunisations[i].bodyElements[1])
             Assert.assertEquals(expectedImmunisations[i].status, onScreenImmunisations[i].bodyElements[2])
+        }
+    }
+
+    @Then("^I see the expected immunisations displayed with an unknown date for the first result$")
+    fun thenISeeTheExpectedImmunisationsDisplayedWithUnknownDateForFirstResult() {
+
+        val expectedImmunisations =
+                ImmunisationsData.getTwoImmunisationResultsWhereTheFirstRecordHasNoDate().medicalRecord.immunisations
+
+        val onScreenImmunisations = myRecordInfoPage.immunisations.allRecordItems()
+        Assert.assertEquals(expectedImmunisations.size, onScreenImmunisations.count())
+
+        for (i in onScreenImmunisations.indices) {
+
+            if (i == 0) {
+                Assert.assertEquals("Unknown Date", onScreenImmunisations[i].label)
+            } else {
+                val expectedDate = (expectedImmunisations[i].effectiveDate.value).takeWhile { !it.isLetter() }
+                val actualDate = LocalDate.parse(onScreenImmunisations[i].label,
+                        DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
+
+                Assert.assertEquals(expectedDate, actualDate)
+            }
+
+        }
+    }
+
+    @Given("^the EMIS GP Practice has two immunisation results where the first record has no date$")
+    fun givenTheEmisGpPracticeHasAnImmunisationResultWithNoDate() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            myRecord.immunisationsRequest(SerenityHelpers.getPatient())
+                    .respondWithSuccess(ImmunisationsData.getTwoImmunisationResultsWhereTheFirstRecordHasNoDate())
         }
     }
 }

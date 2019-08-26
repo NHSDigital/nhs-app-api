@@ -64,3 +64,30 @@ Feature: View My Medical Record Information - Medications Frontend
     Then I see the Repeat medications: discontinued heading on My Record
     When I click the Repeat medications: discontinued section on My Record
     Then I see a message telling me to contact my GP for Repeat medications: discontinued information on My Record
+
+  Scenario: A EMIS user can view the correct acute medications when the first result has no date
+    Given the my record wiremocks are initialised for EMIS
+    And the GP Practice has enabled demographics functionality
+    And the EMIS GP Practice has acute medication results where the first record has no date
+    And I am on my record information page
+    Then I see the Acute (short-term) medications heading on My Record
+    When I click the Acute (short-term) medications section on My Record
+    Then I see the expected acute medications displayed without the record with an unknown date
+
+  Scenario: A EMIS user can view the current repeat medications when the first result has no date
+    Given the my record wiremocks are initialised for EMIS
+    And the GP Practice has enabled demographics functionality
+    And the EMIS GP Practice has current repeat medication results where the first record has no date
+    And I am on my record information page
+    Then I see the Repeat medications: current heading on My Record
+    When I click the Repeat medications: current section on My Record
+    Then I see the expected current repeat medications displayed with the first record with unknown date
+
+  Scenario: A EMIS user can view the discontinued repeat medications when the first result has no date
+    Given the my record wiremocks are initialised for EMIS
+    And the GP Practice has enabled demographics functionality
+    And the EMIS GP Practice has discontinued repeat medication results where the first record has no date
+    And I am on my record information page
+    Then I see the Repeat medications: discontinued heading on My Record
+    When I click the Repeat medications: discontinued section on My Record
+    Then I see the expected discontinued repeat medications displayed with the first record with unknown date

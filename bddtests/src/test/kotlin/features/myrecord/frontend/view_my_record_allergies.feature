@@ -78,3 +78,11 @@ Feature: View My Medical Record Information - Allergies Frontend
     When I click the Allergies and adverse reactions section on My Record
     Then I see the expected allergies displayed
 
+  Scenario: An EMIS user has an allergies and adverse reactions result with an unknown date
+    Given the my record wiremocks are initialised for EMIS
+    And the GP Practice has enabled demographics functionality
+    And the EMIS GP Practice has two allergies results where the first record has no date
+    And I am on my record information page
+    Then I see the Allergies and adverse reactions heading on My Record
+    When I click the Allergies and adverse reactions section on My Record
+    Then I see the expected allergies displayed with unknown date for the first result

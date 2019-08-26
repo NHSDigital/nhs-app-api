@@ -19,6 +19,7 @@ import worker.models.myrecord.MedicationItem
 import worker.models.myrecord.MyRecordResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import mocking.data.myrecord.MedicationsData
 
 open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -58,6 +59,104 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
                                     "Requested record access is disabled by the practice",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
+            }
+        }
+    }
+
+    @Given("^the EMIS GP Practice has acute medication results where the first record has no date$")
+    fun theEmisGpPracticeHasAcuteMedicationResultsWhereTheFirstRecordHasNoDate() {
+        setPatientToDefaultFor("EMIS")
+        val patient = SerenityHelpers.getPatient()
+
+        mockingClient.forEmis {
+            myRecord.medicationsRequest(patient)
+                    .respondWithSuccess(MedicationsData.getEmisAcuteMedicationsResponseWhereTheFirstResultHasNoDate())
+        }
+    }
+
+    @Then("^I see the expected acute medications displayed without the record with an unknown date$")
+    fun thenISeeTheExpectedAcuteMedicationsDisplayedWithoutTheRecordWithAnUnknownDate() {
+        val expectedAcuteMedications = MedicationsData.
+                getEmisAcuteMedicationsResponseWhereTheFirstResultHasNoDate().medicalRecord.medication
+
+        val onScreenAcuteMedications = myRecordInfoPage.acuteMedications.allRecordItems()
+
+        Assert.assertEquals(expectedAcuteMedications.size -1, onScreenAcuteMedications.count())
+
+        for (i in onScreenAcuteMedications.indices){
+            Assert.assertNotEquals("Amoxicillin", onScreenAcuteMedications[i].label)
+            if(i == 0){
+                Assert.assertEquals("Unknown Date", onScreenAcuteMedications[i].label)
+            } else {
+                //First record in expectedAcuteMedications array will be removed by backend worker
+                val expectedDate = expectedAcuteMedications[i + 1].firstIssueDate?.takeWhile { !it.isLetter() }
+                val actualDate = LocalDate.parse(onScreenAcuteMedications[i].label,
+                        DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
+
+                Assert.assertEquals(expectedDate, actualDate)
+            }
+        }
+    }
+
+    @Given("^the EMIS GP Practice has current repeat medication results where the first record has no date$")
+    fun theEmisGpPracticeHasCurrentRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
+        setPatientToDefaultFor("EMIS")
+        val patient = SerenityHelpers.getPatient()
+
+        mockingClient.forEmis {
+            myRecord.medicationsRequest(patient)
+                    .respondWithSuccess(MedicationsData.
+                            getEmisCurrentRepeatMedicationsResponseWhereTheFirstResultHasNoDate())
+        }
+    }
+
+    @Then("^I see the expected current repeat medications displayed with the first record with unknown date$")
+    fun thenISeeTheExpectedCurrentRepeatMedicationsDisplayedWithTheFirstRecordWithUnknownDate() {
+        val expectedCurrentRepeatMedications = MedicationsData.
+                getEmisCurrentRepeatMedicationsResponseWhereTheFirstResultHasNoDate().medicalRecord.medication
+
+        val onScreenCurrentRepeatMedications = myRecordInfoPage.repeatMedications.allRecordItems()
+
+        Assert.assertEquals(expectedCurrentRepeatMedications.size, onScreenCurrentRepeatMedications.count())
+
+        for (i in onScreenCurrentRepeatMedications.indices){
+            if(i == 0){
+                Assert.assertEquals("Unknown Date", onScreenCurrentRepeatMedications[i].label)
+            } else {
+                val expectedDate = expectedCurrentRepeatMedications[i].firstIssueDate?.takeWhile { !it.isLetter() }
+                val actualDate = LocalDate.parse(onScreenCurrentRepeatMedications[i].label,
+                        DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
+
+                Assert.assertEquals(expectedDate, actualDate)
+            }
+        }
+    }
+
+    @Given("^the EMIS GP Practice has discontinued repeat medication results where the first record has no date$")
+    fun theEmisGpPracticeHasDiscontinuedRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
+        setPatientToDefaultFor("EMIS")
+        val patient = SerenityHelpers.getPatient()
+        mockingClient.forEmis {
+            myRecord.medicationsRequest(patient)
+                    .respondWithSuccess(MedicationsData.
+                            getEmisDiscontinuedRepeatMedicationsResponseWhereTheFirstResultHasNoDate())
+        }
+    }
+
+    @Then("^I see the expected discontinued repeat medications displayed with the first record with unknown date$")
+    fun thenISeeTheExpectedDiscontinuedRepeatMedicationsDisplayedWithTheFirstRecordWithUnknownDate() {
+        val expectedDiscontinuedRepeatMedications = MedicationsData.
+                getEmisDiscontinuedRepeatMedicationsResponseWhereTheFirstResultHasNoDate().medicalRecord.medication
+        val onScreenDiscontinuedRepeatMedications = myRecordInfoPage.discontinuedRepeatMedications.allRecordItems()
+        Assert.assertEquals(expectedDiscontinuedRepeatMedications.size, onScreenDiscontinuedRepeatMedications.count())
+        for (i in onScreenDiscontinuedRepeatMedications.indices){
+            if(i == 0){
+                Assert.assertEquals("Unknown Date", onScreenDiscontinuedRepeatMedications[i].label)
+            } else {
+                val expectedDate = expectedDiscontinuedRepeatMedications[i].firstIssueDate?.takeWhile { !it.isLetter()}
+                val actualDate = LocalDate.parse(onScreenDiscontinuedRepeatMedications[i].label,
+                        DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
+                Assert.assertEquals(expectedDate, actualDate)
             }
         }
     }

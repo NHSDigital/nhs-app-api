@@ -12,6 +12,7 @@
          :key="`medication-${medIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
       <span v-if="medication.date" :class="$style.fieldName">{{ medication.date | datePart }}</span>
+      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
       <p v-for="(lineItem, lineItemIndex) in medication.lineItems"
          :key="`line-${lineItemIndex}`">
         {{ lineItem.text }}

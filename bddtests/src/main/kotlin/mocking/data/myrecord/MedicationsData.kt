@@ -12,12 +12,12 @@ object MedicationsData {
     private const val TEN_MONTHS: Long = 10
     private const val ONE_MONTH: Long = 1
 
-    fun getEmisMedicationData(): MedicationsResponse {
+    private val now = LocalDateTime.now()
+    private val oneMonthAgo = now.minusMonths(ONE_MONTH).toString()
+    private val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
+    private val twentyMonthsAgo = now.minusMonths(TWENTY_MONTHS).toString()
 
-        val now = LocalDateTime.now()
-        val oneMonthAgo = now.minusMonths(ONE_MONTH).toString()
-        val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
-        val twentyMonthsAgo = now.minusMonths(TWENTY_MONTHS).toString()
+    fun getEmisMedicationData(): MedicationsResponse {
 
         return MedicationsResponse (
                 medicalRecord = MedicationMedicalRecord (
@@ -26,7 +26,7 @@ object MedicationsData {
                                 firstIssueDate = twentyMonthsAgo,
                                 prescriptionType = "Acute",
                                 drugStatus = "Active",
-                                term = "Penecillin",
+                                term = "Penicillin",
                                 isMixture = false,
                                 dosage = "One to be taken four times a day",
                                 quantityRepresentation = "28 Capsules",
@@ -117,4 +117,101 @@ object MedicationsData {
                 ))
     }
 
+    fun getEmisAcuteMedicationsResponseWhereTheFirstResultHasNoDate(): MedicationsResponse {
+        return MedicationsResponse (
+                medicalRecord = MedicationMedicalRecord (
+                        medication = mutableListOf(
+                                MedicationItem (
+                                        firstIssueDate = "",
+                                        prescriptionType = "Acute",
+                                        drugStatus = "Active",
+                                        term = "Amoxicillin",
+                                        isMixture = false,
+                                        dosage = "One to be taken four times a day",
+                                        quantityRepresentation = "28 Capsules",
+                                        lastIssueDate = ""
+                                ),
+                                MedicationItem (
+                                        firstIssueDate = "",
+                                        prescriptionType = "Acute",
+                                        drugStatus = "Active",
+                                        term = "Penicillin",
+                                        isMixture = false,
+                                        dosage = "One to be taken twice a day",
+                                        quantityRepresentation = "14 Capsules",
+                                        lastIssueDate = tenMonthsAgo
+                                ),
+                                MedicationItem (
+                                        firstIssueDate = tenMonthsAgo,
+                                        prescriptionType = "Acute",
+                                        drugStatus = "Active",
+                                        term = "Ibuprofen",
+                                        isMixture = false,
+                                        dosage = "One to be taken twice a day",
+                                        quantityRepresentation = "14 Capsules",
+                                        lastIssueDate = tenMonthsAgo
+                                )
+                        )
+                )
+        )
+    }
+    
+    fun getEmisCurrentRepeatMedicationsResponseWhereTheFirstResultHasNoDate(): MedicationsResponse {
+        return MedicationsResponse (
+                medicalRecord = MedicationMedicalRecord (
+                        medication = mutableListOf(
+                                MedicationItem (
+                                        firstIssueDate = "",
+                                        prescriptionType = "Repeat",
+                                        drugStatus = "Active",
+                                        term = "Penicillin",
+                                        isMixture = false,
+                                        dosage = "One to be taken four times a day",
+                                        quantityRepresentation = "28 Capsules",
+                                        lastIssueDate = tenMonthsAgo
+                                ),
+                                MedicationItem (
+                                        firstIssueDate = tenMonthsAgo,
+                                        prescriptionType = "Repeat",
+                                        drugStatus = "Active",
+                                        term = "Ibuprofen",
+                                        isMixture = false,
+                                        dosage = "One to be taken twice a day",
+                                        quantityRepresentation = "14 Capsules",
+                                        lastIssueDate = tenMonthsAgo
+
+                                )
+                        )
+                )
+        )
+    }
+
+    fun getEmisDiscontinuedRepeatMedicationsResponseWhereTheFirstResultHasNoDate(): MedicationsResponse {
+        return MedicationsResponse (
+                medicalRecord = MedicationMedicalRecord (
+                        medication = mutableListOf(
+                                MedicationItem (
+                                        firstIssueDate = "",
+                                        prescriptionType = "Repeat",
+                                        drugStatus = "Cancelled",
+                                        term = "Penicillin",
+                                        isMixture = false,
+                                        dosage = "One to be taken four times a day",
+                                        quantityRepresentation = "28 Capsules",
+                                        lastIssueDate = tenMonthsAgo
+                                ),
+                                MedicationItem (
+                                        firstIssueDate = twentyMonthsAgo,
+                                        prescriptionType = "Repeat",
+                                        drugStatus = "Cancelled",
+                                        term = "Ibuprofen",
+                                        isMixture = false,
+                                        dosage = "One to be taken twice a day",
+                                        quantityRepresentation = "14 Capsules",
+                                        lastIssueDate = twentyMonthsAgo
+                                )
+                        )
+                )
+        )
+    }
 }

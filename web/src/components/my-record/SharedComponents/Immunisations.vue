@@ -11,9 +11,10 @@
        :aria-hidden="isCollapsed">
     <div v-for="(item, index) in orderedImmunisations" :key="`item-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <span v-if="item.effectiveDate.value" :class="$style.fieldName">
+      <span v-if="item.effectiveDate && item.effectiveDate.value" :class="$style.fieldName">
         {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
       </span>
+      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
       <p>{{ item.term }}</p>
       <p v-if="item.nextDate != null">
         {{ $t('my_record.immunisations.nextDate') }}{{ getNextDateFormatted(item.nextDate) }}
@@ -25,6 +26,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 

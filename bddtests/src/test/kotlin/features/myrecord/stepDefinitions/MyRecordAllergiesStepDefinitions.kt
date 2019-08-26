@@ -67,6 +67,17 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
+    @Given("the EMIS GP Practice has two allergies results where the first record has no date")
+    fun givenTheEMISGPPracticeHasTwoAllergiesResultsWhereTheFirstRecordHasNoDate() {
+        setPatientToDefaultFor("EMIS")
+        val patient = SerenityHelpers.getPatient()
+
+        mockingClient.forEmis {
+            myRecord.allergiesRequest(patient)
+                    .respondWithSuccess(AllergiesData.getEmisAllergyRecordsWhereTheFirstRecordHasNoEffectiveDate())
+        }
+    }
+
     @Given("the GP Practice has disabled allergies functionality")
     fun butTheGPPracticeHasDisabledAllergiesFunctionalityForService() {
         val getService = SerenityHelpers.getGpSupplier()
@@ -196,5 +207,28 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         Assert.assertTrue("Expected records", allergyMessages.size == expectedMessages.size)
         allergyMessages.forEachIndexed { i, message -> Assert.assertTrue(message == expectedMessages[i]) }
     }
-}
 
+    @Then("^I see the expected allergies displayed with unknown date for the first result$")
+    fun thenISeeTheExpectedAllergiesDisplayedWithUnknownDateForFirstResult() {
+
+        val expectedAllergies =
+                AllergiesData.getEmisAllergyRecordsWhereTheFirstRecordHasNoEffectiveDate().medicalRecord.allergies
+
+
+        val onScreenAllergies = myRecordInfoPage.allergies.allRecordItems()
+        Assert.assertEquals(expectedAllergies.size, onScreenAllergies.count())
+
+        for (i in onScreenAllergies.indices) {
+            if (i == 0) {
+                Assert.assertEquals("Unknown Date", onScreenAllergies[i].label)
+            } else {
+                val expectedDate = (expectedAllergies[i].effectiveDate.value).takeWhile { !it.isLetter() }
+                val actualDate = LocalDate.parse(onScreenAllergies[i].label,
+                        DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
+
+                Assert.assertEquals(expectedDate, actualDate)
+            }
+
+        }
+    }
+}
