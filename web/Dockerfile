@@ -1,16 +1,29 @@
-FROM nhsapp.azurecr.io/nhsonline-web-base:latest AS base
+FROM node:8-stretch-slim AS base
 
 ENV HOST 0.0.0.0
 ENV PORT 3000
 ENV NODE_TLS_REJECT_UNAUTHORIZED 0
 
-RUN chown nodejs:nodejs -R /opt/app
-USER nodejs
+WORKDIR /opt/app
+RUN chown node:node /opt/app && \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y sudo && \
+    echo "node ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers.d/default && \
+    chmod 400 /etc/sudoers.d/default && \
+    rm -rf \
+      /var/cache/debconf/* \
+      /var/lib/apt/lists/* \
+      /var/log/* \
+      /tmp/* \
+      /var/tmp/*
 
-COPY --chown=nodejs:nodejs package.json .
-COPY --chown=nodejs:nodejs package-lock.json .
-COPY --chown=nodejs:nodejs .npmrc .
-COPY --chown=nodejs:nodejs lint/package.json lint/package.json
+USER node
+
+COPY --chown=node:node package.json .
+COPY --chown=node:node package-lock.json .
+COPY --chown=node:node .npmrc .
+COPY --chown=node:node lint/package.json lint/package.json
 
 # Production Dependencies
 FROM base AS production_dependencies
@@ -21,10 +34,9 @@ RUN npm install --only=production
 FROM production_dependencies as build_dependencies
 RUN npm install
 
-
 # Build
 FROM build_dependencies as build
-COPY --chown=nodejs:nodejs . .
+COPY --chown=node:node . .
 
 ARG COMMIT_ID
 RUN sed -i "s/.*COMMIT_ID:.*/    COMMIT_ID: '$COMMIT_ID',/" nuxt.config.js
@@ -39,14 +51,13 @@ RUN npm run build
 
 # Tests
 FROM build_dependencies AS test
-COPY --chown=nodejs:nodejs . .
-
+COPY --chown=node:node . .
 
 # Final image
 FROM production_dependencies AS release
-COPY --chown=nodejs:nodejs --from=build /opt/app/.nuxt ./.nuxt
-COPY --chown=nodejs:nodejs --from=build /opt/app/src ./src
-COPY --chown=nodejs:nodejs --from=build /opt/app/nuxt.config.js ./nuxt.config.js
+COPY --chown=node:node --from=build /opt/app/.nuxt ./.nuxt
+COPY --chown=node:node --from=build /opt/app/src ./src
+COPY --chown=node:node --from=build /opt/app/nuxt.config.js ./nuxt.config.js
 RUN rm -r lint
 
 EXPOSE $PORT
