@@ -1,7 +1,9 @@
 <template>
   <div>
-    <component :is="dateHeader" :class="$style['date-header']">
-      <div v-if="prescriptionCourse.orderDate != null">
+    <component :is="dateHeader"
+               v-if="prescriptionCourse.orderDate != null"
+               :class="$style['date-header']">
+      <div>
         <div :class="$style.dateHeaderTitle"
              data-label="dateHeader">{{ $t('rp02.orderDate') }}
         </div>

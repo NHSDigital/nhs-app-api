@@ -22,17 +22,18 @@
                 <error-message v-if="error && !courseSelectionValid" id="error-type">
                   {{ $t('rp03.noMedicinesSelected') }}
                 </error-message>
-                <fieldset class="nhsuk-fieldset">
-                  <CardGroup role="list" class="nhsuk-grid-row">
-                    <CardGroupItem class="nhsuk-grid-column-full">
-                      <Card>
+                <CardGroup role="list" class="nhsuk-grid-row">
+                  <CardGroupItem class="nhsuk-grid-column-full">
+                    <Card>
+                      <fieldset class="nhsuk-fieldset">
                         <legend class="nhsuk-fieldset__legend"
                                 role="heading">{{ $t('rp03.subHeader') }}</legend>
+
                         <repeat-prescription v-model="selected"/>
-                      </Card>
-                    </CardGroupItem>
-                  </CardGroup>
-                </fieldset>
+                      </fieldset>
+                    </Card>
+                  </CardGroupItem>
+                </CardGroup>
               </div>
             </div>
             <input :value="specialRequestNecessity" type="hidden" name="specialRequestNecessity">
