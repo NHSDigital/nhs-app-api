@@ -9,6 +9,7 @@ import mocking.citizenId.login.UserInfoRequestBuilder
 import mocking.citizenId.login.SigningKeysRequestBuilder
 import mocking.citizenId.login.TokenRequestBuilder
 import mocking.citizenId.models.TokenRequest
+import mocking.citizenId.notifications.ConfigurationRequestBuilder
 import models.Patient
 
 open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
@@ -35,4 +36,6 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
     fun userInfoRequest(accessToken: String) = UserInfoRequestBuilder(accessToken)
 
     fun signingKeyRequest() = SigningKeysRequestBuilder()
+
+    fun configurationRequest() = ConfigurationRequestBuilder()
 }

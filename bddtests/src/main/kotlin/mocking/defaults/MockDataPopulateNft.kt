@@ -35,7 +35,6 @@ class MockDataPopulateNft(private val mockingClient: MockingClient) {
                             codeVerifier = "codeVerifier$pad",
                             redirectUrl = Config.instance.cidRedirectUri
                     ),
-                    accessToken = "accessToken$pad",
                     endUserSessionId = "endUserSessionId",
                     connectionToken = "00000000-0000-0000-0000-$pad"
             )

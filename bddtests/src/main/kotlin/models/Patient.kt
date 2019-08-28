@@ -2,6 +2,7 @@ package models
 
 import config.Config
 import constants.DateTimeFormats
+import mocking.AccessTokenBuilder
 import mocking.IdTokenBuilder
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
@@ -10,6 +11,9 @@ import models.patients.MicrotestPatients
 import models.patients.TppPatients
 import models.patients.VisionPatients
 import utils.DateConverter
+import utils.GlobalSerenityHelpers
+import utils.getOrNull
+import utils.set
 import worker.models.demographics.TppUserSession
 import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
@@ -46,21 +50,6 @@ data class Patient(
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
                 redirectUrl = Config.instance.cidRedirectUri),
         val subject: String = "3ad631b4-7a7a-434d-8a7b-1c8ac3c56132",
-        val accessToken: String = "eyJzdWIiOiI0NTVmODBiYy02NTkyLTRmZTQtODVlMC0wZTdiOTdlYzFmYWQiLCJhdWQiOiJuaHMtb25s" +
-                "aW5lIiwia2lkIjoiYjcxNDk4NmFjNTI2ZWExMjY1NTVhMzdmMTY4NjU5ZmNlOGI5ZGIyNCIsImlzcyI6Imh0dHBzOi8vYXV0aC" +
-                "5leHQuc2lnbmluLm5ocy51ayIsInR5cCI6IkpXVCIsImV4cCI6MTU2MjMxNTg4MSwiaWF0IjoxNTYyMzEyMjgxLCJhbGciOiJS" +
-                "UzUxMiIsImp0aSI6IjRlZTA0Mjc1LThhY2QtNGE2NS04MTY2LTRjM2FkOWJjM2FlNSJ9.eyJzdWIiOiI0NTVmODBiYy02NTkyL" +
-                "TRmZTQtODVlMC0wZTdiOTdlYzFmYWQiLCJuaHNfbnVtYmVyIjoiOTc0NDM2Njc1MyIsImlzcyI6Imh0dHBzOi8vYXV0aC5leHQ" +
-                "uc2lnbmluLm5ocy51ayIsInZlcnNpb24iOjAsInZ0bSI6Imh0dHBzOi8vYXV0aC5leHQuc2lnbmluLm5ocy51ay90cnVzdG1hc" +
-                "msvYXV0aC5leHQuc2lnbmluLm5ocy51ayIsImNsaWVudF9pZCI6Im5ocy1vbmxpbmUiLCJyZXF1ZXN0aW5nX3BhdGllbnQiOiI" +
-                "5NzQ0MzY2NzUzIiwiYXVkIjoibmhzLW9ubGluZSIsInRva2VuX3VzZSI6ImFjY2VzcyIsImF1dGhfdGltZSI6MTU2MjMxMjI3O" +
-                "Swic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBuaHNfYXBwX2NyZWRlbnRpYWxzIGdwX2ludGVncmF0aW9uX2NyZWRlbnRpYWxzIiw" +
-                "idm90IjoiUDkuQ3AuQ2QiLCJleHAiOjE1NjIzMTU4ODEsImlhdCI6MTU2MjMxMjI4MSwicmVhc29uX2Zvcl9yZXF1ZXN0Ijoic" +
-                "GF0aWVudGFjY2VzcyIsImp0aSI6IjRlZTA0Mjc1LThhY2QtNGE2NS04MTY2LTRjM2FkOWJjM2FlNSJ9.AqVT_loj8Tzx46CYmo" +
-                "LgdFhPflA2NSBxhdAeImYq93Rzx4Q6B0jh3Kd9XMRLi7rtoKFLqjPvWBcZeL-A58qibvN_CtTESXFRzQbTcXnPY0qyV48oxIvd" +
-                "ghaw7eMuF2tJnFy-X2ozuqUn_4h-zsHrG80KG9bdu3htAT_hac4cXtY9GC519RQ0835ool-IV9Us7rVMKMCt_f_rNRWu_QhnJE" +
-                "Hyc8YLcSZ2b3VRsMjTPIadVOdJeLq2vIbhhiDZ2a9GX5FnwcgE0pW241-5FbOQy9nvtW-gA-7dtQWXObg4QcAqxpRmr1rIbFlB" +
-                "4FeK26UZs6IT9dZ-foYfIBl_4Eyggg",
         val tppUserSession: TppUserSession? = null,
         val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157"
@@ -103,6 +92,20 @@ data class Patient(
 
         fun getIdToken(patient: Patient): String {
             return IdTokenBuilder().getSignedToken(patient).serialize()
+        }
+
+        private fun setAccessToken(patient: Patient): String {
+            val accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
+            GlobalSerenityHelpers.ACCESS_TOKEN.set(accessToken)
+            return accessToken
+        }
+
+        fun getAccessToken(patient: Patient): String {
+            var existing = GlobalSerenityHelpers.ACCESS_TOKEN.getOrNull<String>()
+            if(existing == null) {
+                existing = setAccessToken(patient)
+            }
+            return existing
         }
 
         fun getDefault(gpSystem: String): Patient {

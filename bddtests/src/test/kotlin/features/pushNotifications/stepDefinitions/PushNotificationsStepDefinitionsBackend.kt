@@ -3,6 +3,7 @@ package features.pushNotifications.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.AccessTokenBuilder
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -10,6 +11,7 @@ import models.Patient
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
 import net.serenitybdd.core.Serenity.sessionVariableCalled
+import org.apache.http.HttpStatus
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -24,7 +26,7 @@ class PushNotificationsStepDefinitionsBackend {
     val mockingClient = MockingClient.instance
 
     @Given("^I am a (\\w+) api user wishing to register their device for push notifications$")
-    fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
+    fun iAmAApiUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
         setUpUser(gpSystem)
         MongoDBConnection.UserDevicesCollection.clearCache()
         setUpRegistration()
@@ -48,21 +50,46 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^I register the device for push notifications$")
     fun iRegisterTheDeviceForPushNotifications() {
-        registerTheDeviceForPushNotifications()
+        val authToken = Patient.getAccessToken(SerenityHelpers.getPatient())
+        registerTheDeviceForPushNotifications(authToken = authToken)
     }
 
     @When("^I register the device for push notifications without auth token$")
     fun iRegisterTheDeviceForPushNotificationsWithoutAuthToken() {
-        registerTheDeviceForPushNotifications(withAuthToken = false)
+        registerTheDeviceForPushNotifications(authToken = null)
     }
 
-    private fun registerTheDeviceForPushNotifications(withAuthToken: Boolean = true) {
+    @When("^a registration attempt with an invalid access token will return an Unauthorised error$")
+    fun aRegistrationAttemptWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
+        val invalidTokens = AccessTokenBuilder().getInvalidTokens(SerenityHelpers.getPatient())
+
+        invalidTokens.forEach { invalidToken ->
+            testInvalidToken(accessToken = invalidToken.first.serialize(), tokenParameterKey = invalidToken.second)
+        }
+    }
+
+    private fun testInvalidToken(accessToken: String, tokenParameterKey: String){
+        SerenityHelpers.clearHttpException()
+        registerTheDeviceForPushNotifications(authToken = accessToken)
+        val errorResponse = SerenityHelpers.getHttpException()
+        Assert.assertNotNull(
+                "An exception was expected but was not returned within the expected time limit. " +
+                        "Access Token invalid value: '$tokenParameterKey",
+                errorResponse
+        )
+        Assert.assertEquals("Incorrect status code returned. " +
+                "Access Token invalid value: '$tokenParameterKey",
+                HttpStatus.SC_UNAUTHORIZED,
+                errorResponse!!.statusCode)
+    }
+
+    private fun registerTheDeviceForPushNotifications(authToken: String?) {
         val request =
                 PushNotificationsSerenityHelpers.REGISTER_REQUEST.getOrFail<RegisterUserDevicesRequest>()
         try {
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .userDevices
-                    .post(SerenityHelpers.getPatient(), request, withAuthToken)
+                    .post(request, authToken)
 
             PushNotificationsSerenityHelpers.REGISTER_RESPONSE.set(response)
         } catch (httpException: NhsoHttpException) {

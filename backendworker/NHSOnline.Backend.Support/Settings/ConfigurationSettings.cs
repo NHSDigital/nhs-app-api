@@ -2,24 +2,7 @@
 
 namespace NHSOnline.Backend.Support.Settings
 {
-    public interface IConfigurationSettings 
-    {
-        string CookieDomain { get; set; }
-        
-        int? PrescriptionsDefaultLastNumberMonthsToDisplay { get; set; }
-
-        int DefaultSessionExpiryMinutes { get; set; }
-
-        int DefaultHttpTimeoutSeconds { get; set; }
-        
-        int MinimumAppAge { get; set; }
-        
-        int MinimumLinkageAge { get; set; }
-        
-        DateTimeOffset? CurrentTermsConditionsEffectiveDate { get; set; }  
-    }
-    
-    public class ConfigurationSettings: IConfigurationSettings
+    public class ConfigurationSettings: IConfigurationSettings, IHttpTimeoutConfigurationSettings
     {
         public string CookieDomain { get; set; }
         
@@ -81,7 +64,6 @@ namespace NHSOnline.Backend.Support.Settings
             {
                 throw new ConfigurationNotFoundException(nameof(CurrentTermsConditionsEffectiveDate));
             }
-
         }
     }
 }

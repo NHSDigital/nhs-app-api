@@ -6,7 +6,11 @@ import worker.models.patient.Im1ConnectionToken
 import java.util.*
 
 class IdTokenBuilder: JWTBuilder(){
-    override fun getClaims(patient: Patient): JWTClaimsSet {
+
+    override fun getClaims(patient: Patient,
+                           issuerOverride: String?,
+                           audienceOverride: String?,
+                           expirationTimeOverride: Date?): JWTClaimsSet {
         var im1ConnectionToken = patient.im1ConnectionToken ?: patient.connectionToken
         if (im1ConnectionToken.javaClass == Im1ConnectionToken::class.java) {
             im1ConnectionToken = GsonFactory.asPascal.toJson(im1ConnectionToken)

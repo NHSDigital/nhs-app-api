@@ -31,7 +31,11 @@
           "USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION": "devices",
           "AZURE_NOTIFICATION_HUB_PATH": "nhsapp-nonlive",
           "AZURE_NOTIFICATION_HUB_CONNECTION_STRING": "Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=",
-          "AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY": ""
+          "AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY": "",
+          "CITIZEN_ID_BASE_URL": "https://auth.ext.signin.nhs.uk/",
+          "CITIZEN_ID_CLIENT_ID": "nhs-online",
+          "CITIZEN_ID_CLIENT_SECRET": "secret",
+          "CITIZEN_ID_JWT_ISSUER": "https://auth.ext.signin.nhs.uk"
         }
       }
     }

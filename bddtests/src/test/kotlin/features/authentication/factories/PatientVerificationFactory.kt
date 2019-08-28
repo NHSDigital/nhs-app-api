@@ -13,7 +13,7 @@ abstract class PatientVerificationFactory(protected val gpSystem: String)  {
     abstract fun validPatientWithOneNhsNumber()
     abstract fun validPatientWithMultipleNumbers()
     abstract fun validPatientWithNoNhsNumber()
-    abstract fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String)
+    abstract fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String = "Success")
 
 
     companion object : SupplierSpecificFactory<PatientVerificationFactory>() {

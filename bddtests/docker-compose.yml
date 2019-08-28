@@ -169,11 +169,11 @@ services:
   users.local.bitraft.io:
     image: nhsonline.backend.usersapi
     ports:
-      - "8088:8088"
+      - "8083:8083"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8088
-      - PORT=8088
+      - ASPNETCORE_URLS=http://*:8083
+      - PORT=8083
       - CORS_AUTHORITY=*
       - VERSION_TAG=users_docker_main
       - USERS_MONGO_DATABASE_HOST=nhsonline.mongodb
@@ -183,6 +183,9 @@ services:
       - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive-bdd
       - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive-bdd.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
       - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
+      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - CITIZEN_ID_CLIENT_ID=nhs-online
+      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
   stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
     command: --local-response-templating

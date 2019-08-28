@@ -2,6 +2,7 @@ package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
 import mocking.MockingClient
+import mocking.citizenId.models.notifications.SuccessResponse
 import mocking.citizenId.models.signingKeys.SucceededResponse
 import models.Patient
 
@@ -24,6 +25,12 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
 
         val idToken = Patient.getIdToken(patient)
+        val accessToken = Patient.getAccessToken(patient)
+
+        mockingClient.forCitizenId {
+            configurationRequest()
+                    .respondWithSuccess(SuccessResponse())
+        }
 
         mockingClient.forCitizenId {
             signingKeyRequest()
@@ -32,11 +39,11 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
         mockingClient.forCitizenId {
             tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
-                    .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
+                    .respondWithSuccess(accessToken = accessToken, idToken = idToken)
         }
 
         mockingClient.forCitizenId {
-            userInfoRequest(patient.accessToken).respondWithSuccess(patient)
+            userInfoRequest(accessToken).respondWithSuccess(patient)
         }
     }
 
@@ -65,7 +72,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
         mockingClient.forCitizenId {
             tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
-                    .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
+                    .respondWithSuccess(accessToken = Patient.getAccessToken(patient), idToken = idToken)
         }
     }
 }

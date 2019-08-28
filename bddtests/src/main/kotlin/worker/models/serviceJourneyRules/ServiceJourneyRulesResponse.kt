@@ -1,6 +1,6 @@
 package worker.models.serviceJourneyRules
 
-data class ServiceJourneyRulesResponse( var journeys : Journey)
+data class ServiceJourneyRulesResponse(var journeys : Journey)
 
 data class Journey(var appointments: AppointmentsJourneyRules,
                    var cdssAdvice: CdssJourneyRules,

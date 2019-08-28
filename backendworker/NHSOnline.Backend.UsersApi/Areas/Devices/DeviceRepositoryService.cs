@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
@@ -25,14 +26,14 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         }
 
         public async Task<DeviceRepositoryResult> Create(
-            NotificationRegistrationResult registration,
-            RegisterDeviceRequest request)
-        {
+                NotificationRegistrationResult registration, 
+                RegisterDeviceRequest request,
+                AccessToken accessToken) {
             _logger.LogEnter();
             var userDevice = new UserDevice
             {
-                DeviceId = _deviceIdGenerator.Generate("XXXXXX", request),
-                NhsLoginId = "XXXXXX",
+                DeviceId = _deviceIdGenerator.Generate(accessToken, request),
+                NhsLoginId = accessToken.Subject,
                 PnsToken = request.DevicePns,
                 RegistrationId = registration.RegistrationId,
                 RegistrationExpiry = registration.RegistrationExpiry
@@ -50,7 +51,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             }
             finally
             {
-
                 _logger.LogExit();
             }
         }

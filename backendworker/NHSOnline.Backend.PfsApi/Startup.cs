@@ -199,11 +199,11 @@ namespace NHSOnline.Backend.PfsApi
             }
         }
 
-
         private void SetupConfigurationSettings(IServiceCollection services, string environment)
         {
             configurationSettings = CreateAndValidateEnvironmentVariables();
             services.AddSingleton(configurationSettings);
+            services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
 
             var deviceConfigurationSettings = CreateAndValidateDeviceEnvironmentVariables();
             services.AddSingleton(deviceConfigurationSettings);

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
@@ -18,8 +18,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         private readonly INotificationRegistrationService _notificationRegistrationService;
         private readonly IDeviceRepositoryService _deviceServiceRepository;
         private readonly ILogger<DevicesController> _logger;
-
-        private const string DummyNhsLoginId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
 
         public DevicesController(INotificationRegistrationService notificationRegistrationService,
             IDeviceRepositoryService deviceServiceRepository,
@@ -42,13 +40,15 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                     return BadRequest();
                 }
 
+                var accessToken = HttpContext.GetAccessToken(_logger);
+
                 try
                 {
-                    var registrationResponse = await _notificationRegistrationService.Register(model, DummyNhsLoginId);
+                    var registrationResponse = await _notificationRegistrationService.Register(model, accessToken);
 
                     if (registrationResponse is RegistrationResult.Success successRegistrationResult)
                     {
-                        var deviceRepositoryResult = await _deviceServiceRepository.Create(successRegistrationResult.Response, model);
+                        var deviceRepositoryResult = await _deviceServiceRepository.Create(successRegistrationResult.Response, model, accessToken);
                         return deviceRepositoryResult.Accept(new DeviceRepositoryResultVisitor(model, _logger));
                     }
 

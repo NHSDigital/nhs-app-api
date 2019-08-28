@@ -4,9 +4,11 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.Settings;
@@ -18,6 +20,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
     {
         private IFixture _fixture;
         private Mock<IConfiguration> _mockConfiguration;
+        private Mock<IHostingEnvironment> _mockHostingEnvironment;
         private Startup _systemUnderTest;
 
         [TestInitialize]
@@ -27,6 +30,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 .Customize(new AutoMoqCustomization());
 
             _mockConfiguration = _fixture.Freeze<Mock<IConfiguration>>();
+            _mockHostingEnvironment = _fixture.Freeze<Mock<IHostingEnvironment>>();
 
             _systemUnderTest = _fixture.Create<Startup>();
         }
@@ -45,6 +49,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -69,6 +76,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -92,6 +102,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -116,6 +129,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -146,11 +162,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
-            var serviceDescriptors = new List<ServiceDescriptor>();
-            var mockServiceCollection = _fixture.Freeze<Mock<IServiceCollection>>();
-            mockServiceCollection.Setup(x => x.Add(It.IsAny<ServiceDescriptor>()))
-                .Callback<ServiceDescriptor>(x => serviceDescriptors.Add(x));
+            var serviceDescriptors = GetServiceDescriptors(out var mockServiceCollection);
 
             // Act
             _systemUnderTest.ConfigureServices(mockServiceCollection.Object);
@@ -170,7 +186,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             mongoConfiguration.Username.Should().Be(username);
             mongoConfiguration.Password.Should().Be(password);
         }
-        
+
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
@@ -185,6 +201,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(hubpath);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -208,6 +227,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(hubConnectionString);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -231,6 +253,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(sharedKey);
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -258,6 +283,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(hubPath);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(hubConnectionString);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(sharedAccessKey);
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+            
             var serviceDescriptors = new List<ServiceDescriptor>();
             var mockServiceCollection = _fixture.Freeze<Mock<IServiceCollection>>();
             mockServiceCollection.Setup(x => x.Add(It.IsAny<ServiceDescriptor>()))
@@ -278,5 +307,90 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             azureConfiguration.ConnectionString.Should().Be(hubConnectionString);
             azureConfiguration.SharedAccessKey.Should().Be(sharedAccessKey);
         }
+        
+        [TestMethod]
+        public void ConfigureServices_ConfigureAuth_WhenInProduction_ShouldRequireHttpsMetadata()
+        {
+            // Arrange
+            SetupAllConfiguration();
+
+            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Production);
+
+            var serviceDescriptors = GetServiceDescriptors(out var mockServiceCollection);
+
+            // Act
+            _systemUnderTest.ConfigureServices(mockServiceCollection.Object);
+
+            // Assert
+            serviceDescriptors.Should().NotBeEmpty();
+
+            var configureJwtBearerOptions =
+                serviceDescriptors
+                    .FirstOrDefault(x => x.ImplementationInstance is IConfigureNamedOptions<JwtBearerOptions>)
+                    ?.ImplementationInstance as IConfigureNamedOptions<JwtBearerOptions>;
+
+            configureJwtBearerOptions.Should().NotBeNull();
+            var jwtBearerOptions = new JwtBearerOptions();
+
+            configureJwtBearerOptions.Configure("Bearer", jwtBearerOptions);
+
+            jwtBearerOptions.RequireHttpsMetadata.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void ConfigureServices_ConfigureAuth_WhenInDevelopment_ShouldNotRequireHttpsMetadata()
+        {
+            // Arrange
+            SetupAllConfiguration();
+
+            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Development);
+
+            var serviceDescriptors = GetServiceDescriptors(out var mockServiceCollection);
+
+            // Act
+            _systemUnderTest.ConfigureServices(mockServiceCollection.Object);
+
+            // Assert
+            serviceDescriptors.Should().NotBeEmpty();
+
+            var configureJwtBearerOptions =
+                serviceDescriptors
+                    .FirstOrDefault(x => x.ImplementationInstance is IConfigureNamedOptions<JwtBearerOptions>)
+                    ?.ImplementationInstance as IConfigureNamedOptions<JwtBearerOptions>;
+
+            configureJwtBearerOptions.Should().NotBeNull();
+            var jwtBearerOptions = new JwtBearerOptions();
+
+            configureJwtBearerOptions.Configure("Bearer", jwtBearerOptions);
+
+            jwtBearerOptions.RequireHttpsMetadata.Should().BeFalse();
+        }
+
+        private void SetupAllConfiguration()
+        {
+            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
+                .Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_HOST"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_PORT"]).Returns($"{_fixture.Create<int>()}");
+            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USERNAME"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_PASSWORD"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+        }
+
+        private List<ServiceDescriptor> GetServiceDescriptors(out Mock<IServiceCollection> mockServiceCollection)
+        {
+            var serviceDescriptors = new List<ServiceDescriptor>();
+            mockServiceCollection = _fixture.Freeze<Mock<IServiceCollection>>();
+            mockServiceCollection.Setup(x => x.Add(It.IsAny<ServiceDescriptor>()))
+                .Callback<ServiceDescriptor>(x => serviceDescriptors.Add(x));
+            return serviceDescriptors;
+        }
+
     }
 }

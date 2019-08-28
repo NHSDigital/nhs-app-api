@@ -11,11 +11,11 @@ namespace NHSOnline.Backend.Support.Http
     public class HttpTimeoutHandler<TRequestIdentifier> : DelegatingHandler where TRequestIdentifier : IHttpRequestIdentifier
     {
         private readonly ILogger<HttpTimeoutHandler<TRequestIdentifier>> _logger;
-        private readonly ConfigurationSettings _settings;
+        private readonly IHttpTimeoutConfigurationSettings _settings;
         private readonly IHttpRequestIdentifier _requestIdentifier;
         private readonly TimeSpan _defaultTimeout;
 
-        public HttpTimeoutHandler(ILogger<HttpTimeoutHandler<TRequestIdentifier>> logger, ConfigurationSettings settings
+        public HttpTimeoutHandler(ILogger<HttpTimeoutHandler<TRequestIdentifier>> logger, IHttpTimeoutConfigurationSettings settings
             , TRequestIdentifier requestIdentifier)
         {
             _logger = logger;

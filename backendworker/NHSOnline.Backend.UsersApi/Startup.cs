@@ -17,6 +17,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Settings;
@@ -26,14 +27,18 @@ namespace NHSOnline.Backend.UsersApi
     public class Startup
     {
         private IConfiguration Configuration { get; }
+        private IHostingEnvironment Environment { get; }
+        private bool IsDevelopment => Environment.IsDevelopment();
+
         private readonly ModularStartup _modularStartup;
         private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IHostingEnvironment env)
         {
             Configuration = configuration;
             _modularStartup = new ModularStartup(configuration, loggerFactory);
             _logger = loggerFactory.CreateLogger<Startup>();
+            Environment = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -51,13 +56,16 @@ namespace NHSOnline.Backend.UsersApi
             services.AddOptions();
             services.AddCorrelationId();
 
-            ConfigureAuth(services);
-            
             services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
             services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
             services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
 
+            services.AddSingleton(typeof(HttpTimeoutHandler<>));
+            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+
             _modularStartup.ConfigureServices(services);
+
+            ConfigureAuth(services);
         }
 
         private void SetupConfigurationSettings(IServiceCollection services)
@@ -101,7 +109,7 @@ namespace NHSOnline.Backend.UsersApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             // Read in optional log configuration...
             var logSettings = LoggingSettings.GetSettings(Configuration);
@@ -110,7 +118,7 @@ namespace NHSOnline.Backend.UsersApi
             loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel,
                 LogLevel.None, logSettings.CensorFilters));
 
-            if (env.IsDevelopment())
+            if (IsDevelopment)
             {
                 loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
@@ -151,16 +159,31 @@ namespace NHSOnline.Backend.UsersApi
             app.UseMvc();
         }
 
-        private static void ConfigureAuth(IServiceCollection services)
+        private void ConfigureAuth(IServiceCollection services)
         {
-            var tokenValidationParameters = new TokenValidationParameters();
+            var clientId = Configuration.GetOrThrow("CITIZEN_ID_CLIENT_ID", _logger);
+            var issuer = Configuration.GetOrThrow("CITIZEN_ID_JWT_ISSUER", _logger);
+            var authority = Configuration.GetOrThrow("CITIZEN_ID_BASE_URL", _logger);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.TokenValidationParameters = tokenValidationParameters;
-                    options.SecurityTokenValidators.Clear();
-                    options.SecurityTokenValidators.Add(new MockTokenValidation());
+                    options.Authority = authority;
+
+                    if (IsDevelopment)
+                    {
+                        options.RequireHttpsMetadata = false;
+                    }
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidAudience = clientId,
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        ValidIssuer = issuer,
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true
+                    };
                 });
         }
 

@@ -26,7 +26,9 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 ValidAudience = _audience,
                 ValidateAudience = true,
                 ValidateIssuer = true,
-                ValidIssuer = _issuer
+                ValidIssuer = _issuer,
+                RequireExpirationTime = true,
+                ValidateLifetime = true
             };
         }
     }

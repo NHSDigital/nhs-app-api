@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Auth.UnitTests.CitizenId.Models
 {

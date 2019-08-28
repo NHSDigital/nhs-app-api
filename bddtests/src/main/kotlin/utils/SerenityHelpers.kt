@@ -11,8 +11,6 @@ class SerenityHelpers {
 
     companion object {
 
-        private const val GpSupplier = "GpSupplier"
-
         fun setPatient(patientToSet: Patient) {
             setSerenityVariableIfNotAlreadySet(
                     Patient::class,
@@ -51,6 +49,10 @@ class SerenityHelpers {
 
         fun setHttpException(httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)
+        }
+
+        fun clearHttpException() {
+            Serenity.setSessionVariable("HttpException").to(null)
         }
 
         fun getHttpException(): NhsoHttpException? {

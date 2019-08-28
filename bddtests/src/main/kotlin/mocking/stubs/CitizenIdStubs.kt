@@ -36,11 +36,11 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
             val codeVerifier = patient.cidUserSession.codeVerifier
             val authCode = patient.cidUserSession.authCode
             tokenRequest(codeVerifier, authCode, TokenRequest(codeVerifier, code = authCode,redirectUri = ".*"))
-                    .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
+                    .respondWithSuccess(accessToken = Patient.getAccessToken(patient), idToken = idToken)
         }
 
         mockingClient.forCitizenId {
-            userInfoRequest(patient.accessToken).respondWithSuccess(patient)
+            userInfoRequest(Patient.getAccessToken(patient)).respondWithSuccess(patient)
         }
     }
 }

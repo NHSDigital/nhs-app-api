@@ -101,7 +101,7 @@ services:
       - vars_ci.env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:8088
+      - ASPNETCORE_URLS=http://*:8083
       - PORT=8088
       - CORS_AUTHORITY=*
       - VERSION_TAG=users_docker_main

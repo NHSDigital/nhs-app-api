@@ -69,6 +69,11 @@ ENV USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION devices
 ENV AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
 ENV AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 ENV AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
+ENV CITIZEN_ID_BASE_URL https://auth.ext.signin.nhs.uk/
+ENV CITIZEN_ID_CLIENT_ID nhs-online
+ENV CITIZEN_ID_CLIENT_SECRET secret
+ENV CITIZEN_ID_JWT_ISSUER https://auth.ext.signin.nhs.uk
+
 WORKDIR /app
 RUN chown aspnetcore:aspnetcore /app
 COPY --chown=aspnetcore:aspnetcore --from=publish /app .

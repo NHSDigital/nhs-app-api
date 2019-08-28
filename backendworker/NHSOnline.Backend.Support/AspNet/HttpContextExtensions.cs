@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.Support.AspNet
         {
             return (UserSession)httpContext.Items[Constants.HttpContextItems.UserSession];
         }
+        
         public static void SetUserSession(this HttpContext httpContext, UserSession value)
         {
             httpContext.Items[Constants.HttpContextItems.UserSession] = value;

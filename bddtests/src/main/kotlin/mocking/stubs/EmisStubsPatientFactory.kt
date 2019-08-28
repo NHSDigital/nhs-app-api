@@ -3,6 +3,8 @@ package mocking.stubs
 import config.Config
 import models.patients.EmisPatients
 import models.Patient
+import utils.GlobalSerenityHelpers
+import utils.set
 import worker.models.session.UserSessionRequest
 
 class EmisStubsPatientFactory {
@@ -129,6 +131,7 @@ class EmisStubsPatientFactory {
             val pad = uniqueId.padStart(length, '0')
             //do not add end user session id here
 
+            GlobalSerenityHelpers.ACCESS_TOKEN.set(accessToken)
             return EmisPatients.picaJones.copy(
                     firstName = "You are logged in as",
                     surname = loginID,
@@ -137,7 +140,6 @@ class EmisStubsPatientFactory {
                             codeVerifier = "codeVerifier$pad",
                             redirectUrl = Config.instance.cidRedirectUri
                     ),
-                    accessToken = accessToken,
                     connectionToken = "00000000-0000-0000-0000-$pad",
                     userPatientLinkToken = "userPatientLinkToken$pad"
             )

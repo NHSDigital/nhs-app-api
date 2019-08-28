@@ -5,12 +5,16 @@ import models.Patient
 import java.util.*
 
 class AccessTokenBuilder: JWTBuilder(){
-    override fun getClaims(patient: Patient): JWTClaimsSet {
+
+    override fun getClaims(patient: Patient,
+                           issuerOverride: String?,
+                           audienceOverride: String?,
+                           expirationTimeOverride: Date?): JWTClaimsSet {
         return JWTClaimsSet.Builder()
                 .subject(patient.subject)
-                .issuer(issuer)
-                .audience(audience)
-                .expirationTime(createExpirationDate())
+                .issuer(issuerOverride?: issuer)
+                .audience(audienceOverride?: audience)
+                .expirationTime(expirationTimeOverride?: createExpirationDate())
                 .issueTime(Date(Date().time))
                 .claim("nhs_number", patient.nhsNumbers.firstOrNull())
                 .claim("version", 0)
@@ -22,7 +26,7 @@ class AccessTokenBuilder: JWTBuilder(){
                 .claim("scope", "openid profile nhs_app_credentials gp_integration_credentials")
                 .claim("vot", "P9.Cp.Cd")
                 .claim("reason_for_request", "patientaccess")
-                .claim("jti", UUID.randomUUID())
+                .claim("jti", jwtId)
                 .build()
     }
 }

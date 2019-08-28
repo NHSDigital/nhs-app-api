@@ -2,8 +2,6 @@ package worker
 
 import com.google.gson.Gson
 import config.Config
-import mocking.AccessTokenBuilder
-import models.Patient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import worker.models.userDevices.RegisterUserDevicesRequest
@@ -11,13 +9,12 @@ import worker.models.userDevices.RegisterUserDevicesResponse
 
 class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
-    fun post(patient: Patient,
+    fun post(
              registration: RegisterUserDevicesRequest,
-             withAuthToken: Boolean = true): RegisterUserDevicesResponse {
+             authToken: String?): RegisterUserDevicesResponse {
         val httpPost = HttpPost(config.usersBackendUrl + WorkerPaths.userDevices)
 
-        if (withAuthToken) {
-            val authToken = AccessTokenBuilder().getSignedToken(patient).serialize()
+        if (authToken != null) {
             httpPost.addHeader("Authorization", "Bearer $authToken")
         }
 

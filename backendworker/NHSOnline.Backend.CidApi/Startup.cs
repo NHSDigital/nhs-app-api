@@ -192,6 +192,7 @@ namespace NHSOnline.Backend.CidApi
         {
             var configurationSettings = CreateAndValidateEnvironmentVariables();
             services.AddSingleton(configurationSettings);
+            services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
 
             var microtestConfig = CreateAndValidateMicrotestEnvironmentVariables(environment);
             services.AddSingleton(microtestConfig);

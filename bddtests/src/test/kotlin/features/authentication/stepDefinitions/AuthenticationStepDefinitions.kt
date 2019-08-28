@@ -112,11 +112,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iHaveValidOAuthDetailsAndCIDTokenEndpointFails() {
         val gpSystem = "EMIS"
         val patient = Patient.getDefault(gpSystem)
+        val accessToken = Patient.getAccessToken(patient)
         SerenityHelpers.setPatient(patient)
         mockingClient.forCitizenId {
             tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
                     .respondWithServerError()
-            userInfoRequest(patient.accessToken).respondWithServerError()
+            userInfoRequest(accessToken).respondWithServerError()
         }
         SessionCreateJourneyFactory.getForSupplier("EMIS", mockingClient).createFor(patient)
     }
@@ -601,11 +602,10 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^the response has service journey rules$")
     fun theResponseHasServiceJourneyRules() {
-        val serviceJourneyRules = this.userSessionResponse?.userSessionResponseBody?.serviceJourneyRules
-        checkNotNull(serviceJourneyRules)
+        val serviceJourneyRules = this.userSessionResponse!!.userSessionResponseBody.serviceJourneyRules
         Assert.assertEquals("Service Journey Rules Appointments provider",
                 AppointmentsProvider.im1,
-                serviceJourneyRules!!.journeys.appointments.provider)
+                serviceJourneyRules.journeys.appointments.provider)
         Assert.assertEquals("Service Journey Rules CdssAdmin provider",
                 CdssProvider.eConsult,
                 serviceJourneyRules.journeys.cdssAdmin.provider)

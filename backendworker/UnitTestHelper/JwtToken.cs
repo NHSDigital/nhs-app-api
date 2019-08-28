@@ -5,9 +5,9 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
+namespace UnitTestHelper
 {
-    internal static class JwtToken
+    public static class JwtToken
     {
         public static string Generate(IEnumerable<Claim> claims = null)  
         {  
