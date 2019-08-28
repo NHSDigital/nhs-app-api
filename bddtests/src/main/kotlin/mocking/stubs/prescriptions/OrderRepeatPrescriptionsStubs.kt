@@ -10,15 +10,23 @@ import mocking.stubs.prescriptions.PrescriptionMatchers.Companion.prescriptionNo
 import mocking.stubs.prescriptions.PrescriptionMatchers.Companion.prescriptionNotSubmittedMatcher
 import mocking.stubs.prescriptions.PrescriptionMatchers.Companion.successMatcher
 import mocking.stubs.prescriptions.PrescriptionMatchers.Companion.timeoutMatcher
+import mocking.tpp.models.RequestMedicationReply
+import mocking.tpp.prescriptionsSubmission.TppPrescriptionsSubmissionBuilder
 import models.Patient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
 
 class OrderRepeatPrescriptionsStubs(private val patient: Patient,
-                                    private val uuid: MutableList<String>,
-                                    private val mockingClient: MockingClient) {
+                                    private val mockingClient: MockingClient,
+                                    private val uuid: MutableList<String> ?= null) {
 
-    fun generateEMISStubs() {
+    fun generateStubs(supplier: String){
+        when (supplier){
+            "EMIS" -> generateEMISStubs()
+            "TPP" -> generateTPPStubs() }
+    }
+
+    private fun generateEMISStubs() {
         val mapEMISBookRepeatPrescriptionRequestStubs =
                 InputResponse<String, EmisPrescriptionsSubmissionBuilder>()
                         .addResponse(successMatcher) { builder
@@ -59,9 +67,31 @@ class OrderRepeatPrescriptionsStubs(private val patient: Patient,
                         }
 
         mapEMISBookRepeatPrescriptionRequestStubs.listResponse().forEach { scenario ->
-            val facade = PrescriptionSubmissionRequest(uuid, scenario.forMatcher)
+            val facade = PrescriptionSubmissionRequest(uuid!!, scenario.forMatcher)
             mockingClient.forEmis {
                 scenario.getResponse(prescriptions.repeatPrescriptionSubmissionRequest(patient, facade))
+            }
+        }
+    }
+
+   private fun generateTPPStubs() {
+        val mapTPPBookRepeatPrescriptionRequestStubs =
+                InputResponse<String, TppPrescriptionsSubmissionBuilder>()
+                        .addResponse(successMatcher) { builder ->
+                            builder.respondWithSuccess(RequestMedicationReply())
+                        }
+
+                        .addResponse(timeoutMatcher) { builder ->
+                            builder.respondWithSuccess(RequestMedicationReply())
+                                    .delayedBy(Duration.ofSeconds(TIMEOUT_DELAY))
+
+                        }
+
+        mapTPPBookRepeatPrescriptionRequestStubs.listResponse().forEach { scenario ->
+            val messageResponse = RequestMedicationReply(message = scenario.forMatcher)
+            mockingClient.forTpp {
+                scenario.getResponse(prescriptions.prescriptionSubmission(patient=patient, drugIds = null,
+                        notes= messageResponse))
             }
         }
     }

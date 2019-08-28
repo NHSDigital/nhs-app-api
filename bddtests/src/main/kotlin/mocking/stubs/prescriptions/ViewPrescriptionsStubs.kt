@@ -2,6 +2,7 @@ package mocking.stubs.prescriptions
 
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
+import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.spine.ePS.prescriptions.EPS111ItemDetailBuilder
 import mocking.spine.ePS.prescriptions.EPS111ItemSummaryBuilder
 import mocking.emis.models.PrescriptionRequestsGetResponse
@@ -13,22 +14,57 @@ import mocking.spine.ePS.models.SpineItemDetailGetResponse
 import mocking.spine.ePS.models.SpineItemDetailPrescription
 import mocking.spine.ePS.models.SpineItemSummaryGetResponse
 import mocking.spine.ePS.models.SpineItemSummaryPrescription
-import mocking.stubs.InputResponse
+import mocking.stubs.NUMBER_OF_REPEAT_PRESCRIPTIONS
+import mocking.stubs.NUMBER_OF_COURSES
+import mocking.stubs.NUMBER_OF_PRESCRIPTIONS
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.EmisStubsPatientFactory.Companion.goodPatientEMIS
 import mocking.stubs.EmisStubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
 import mocking.stubs.EmisStubsPatientFactory.Companion.timeoutPatientEMIS
+import mocking.stubs.InputResponse
+import mocking.stubs.TppStubsPatientFactory
+import mocking.tpp.models.ListRepeatMedicationReply
+import mocking.tpp.prescriptions.TppPrescriptionsBuilder
 import models.Patient
 import java.time.Duration
 
 class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
 
-    companion object {
-        private const val NUMBER_OF_PRESCRIPTIONS = 5
-        private const val NUMBER_OF_COURSES = 5
-        private const val NUMBER_OF_REPEAT_PRESCRIPTIONS = 5
+    fun generateStubs(supplier: String) {
+        when(supplier) {
+            "EMIS" -> generateEMISStubs()
+            "TPP" -> generateTPPStubs()
+        }
     }
-    fun generateEMISStubs() {
+
+    private fun generateTPPStubs() {
+        val loadTppPrescriptions = prescriptionLoaderTPP()
+        val mapTPPViewPrescriptionRequestStubs =
+                InputResponse<Patient, TppPrescriptionsBuilder>()
+                        .addResponse(TppStubsPatientFactory.goodPatientTPP) { builder
+                            ->
+                            builder.respondWithSuccess(loadTppPrescriptions)
+                                    .whenScenarioStateIs("Started")
+                        }
+
+        mapTPPViewPrescriptionRequestStubs.listResponse().forEach { scenario ->
+            mockingClient.forTpp { scenario.getResponse(prescriptions.listRepeatMedication(scenario.forMatcher)) }
+        }
+    }
+
+    private fun prescriptionLoaderTPP(): ListRepeatMedicationReply {
+        val prescriptionLoader = TppPrescriptionLoader
+        prescriptionLoader.loadData(
+                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,
+                noCourses = NUMBER_OF_COURSES,
+                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS,
+                showDosage = true,
+                showQuantity = true
+        )
+        return prescriptionLoader.data
+    }
+
+    private fun generateEMISStubs() {
         val loadEMISPrescriptions = prescriptionLoaderEMIS()
         val mapEMISViewPrescriptionRequestStubs =
                 InputResponse<Patient, EmisPrescriptionsBuilder>()

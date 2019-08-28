@@ -40,7 +40,7 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
 
     private fun generatePrescriptionStubs() {
 
-        ViewPrescriptionsStubs(mockingClient).generateEMISStubs()
+        ViewPrescriptionsStubs(mockingClient).generateStubs(GP_SUPPLIER)
         val loadEMISCourses = ViewCoursesStubs(mockingClient).coursesLoaderEMIS()
         ViewCoursesStubs(mockingClient).generateEMISStubs(loadEMISCourses)
 
@@ -48,7 +48,7 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
         val uuids: MutableList<String> = mutableListOf()
         uuids.add(courseListForOrderingPrescription)
 
-        OrderRepeatPrescriptionsStubs(goodPatientEMIS, uuids, mockingClient).generateEMISStubs()
+        OrderRepeatPrescriptionsStubs(goodPatientEMIS, mockingClient, uuids).generateStubs(GP_SUPPLIER)
     }
 
     private fun generateSpineStubs() {

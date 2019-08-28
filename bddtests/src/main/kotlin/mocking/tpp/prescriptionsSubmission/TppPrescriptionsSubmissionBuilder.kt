@@ -10,22 +10,24 @@ import java.io.StringWriter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
-class TppPrescriptionsSubmissionBuilder(patient: Patient, drugIds: List<String>?)
+class TppPrescriptionsSubmissionBuilder(patient: Patient, drugIds: List<String>?, notes: RequestMedicationReply?=null)
     : TppMappingBuilder("POST", "/tpp/") {
 
     private var suid: String = ""
 
     init {
+        var matchXPath = "//RequestMedication[" + "@patientId='${patient.patientId}'"
         requestBuilder.andHeader(HEADER_TYPE, "RequestMedication")
-        requestBuilder.andBodyMatchingXpath("//RequestMedication[" +
-                "@patientId='${patient.patientId}']")
 
         if (drugIds != null && !drugIds.isEmpty()) {
             for (drugId in drugIds) {
-                requestBuilder.andBodyMatchingXpath(
-                        "//Medication[@drugId='$drugId' and @type='Repeat']")
+                matchXPath = "//Medication[@drugId='$drugId' and @type='Repeat']"
             }
         }
+        if (notes != null && drugIds == null){
+            matchXPath += "and @notes='${notes.message}']"
+        }
+        requestBuilder.andBodyMatchingXpath(matchXPath)
     }
 
     fun respondWithSuccess(requestMedicationReply: RequestMedicationReply): Mapping {
