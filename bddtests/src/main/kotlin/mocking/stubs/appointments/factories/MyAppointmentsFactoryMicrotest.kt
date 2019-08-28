@@ -34,11 +34,11 @@ class MyAppointmentsFactoryMicrotest : MyAppointmentsFactory("MICROTEST") {
                         "",
                         slot.startTime!!,
                         slot.endTime!!,
-                        facade.myAppointments.locations.find { location -> // removed !! gives warning when present
+                        facade.myAppointments.locations.find { location ->
                             session.locationId == location.locationId
                         }!!.locationName,
                         session.staffDetails.map { clinician ->
-                            facade.myAppointments.staffDetails.find { staff -> // removed !! gives warning when present
+                            facade.myAppointments.staffDetails.find { staff ->
                                 clinician == staff
                                         .staffDetailsid
                             }!!.staffName

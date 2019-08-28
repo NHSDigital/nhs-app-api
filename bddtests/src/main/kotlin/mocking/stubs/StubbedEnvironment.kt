@@ -12,6 +12,6 @@ class StubbedEnvironment {
     fun generateStubs()
     {
         EmisStubbedEnvironment(MockingClient.instance).generateStubs()
-        TppStubbedEnvironment().generateStubs()
+        TppStubbedEnvironment(MockingClient.instance).generateStubs()
     }
 }

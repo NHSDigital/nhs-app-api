@@ -29,9 +29,9 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
 
     private fun generateAppointmentStubs() {
         ViewAppointmentsStubsEMIS(mockingClient).generateEMISStubs()
-        AppointmentSlotsStubs(mockingClient).generateEMISStubs()
-        BookAppoinmentStubs(goodPatientEMIS, mockingClient).generateEMISStubs()
-        CancelAppointmentsStubs(goodPatientEMIS, mockingClient).generateEMISStubs()
+        AppointmentSlotsStubs(mockingClient).generateStubs(GP_SUPPLIER)
+        BookAppoinmentStubs(mockingClient, goodPatientEMIS).generateStubs(GP_SUPPLIER)
+        CancelAppointmentsStubs(mockingClient, goodPatientEMIS).generateStubs(GP_SUPPLIER)
     }
 
     private fun generateMyMedicalRecordsStubs() {

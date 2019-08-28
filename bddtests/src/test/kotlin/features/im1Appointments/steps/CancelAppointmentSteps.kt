@@ -1,6 +1,6 @@
 package features.im1Appointments.steps
 
-import features.im1Appointments.factories.AppointmentsCancellingFactory
+import mocking.stubs.appointments.factories.AppointmentsCancellingFactory
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps

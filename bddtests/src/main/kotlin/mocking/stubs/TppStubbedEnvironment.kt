@@ -2,30 +2,37 @@ package mocking.stubs
 
 import mocking.MockingClient
 import mocking.stubs.TppStubsPatientFactory.Companion.TppPatientList
-import mocking.stubs.appointments.ViewAppointmentStubs
 import mocking.stubs.myMedicalRecord.MedicalRecordStubs
 import mocking.stubs.TppStubsPatientFactory.Companion.goodPatientTPP
 import mocking.stubs.prescriptions.OrderRepeatPrescriptionsStubs
 import mocking.stubs.prescriptions.ViewPrescriptionsStubs
+import mocking.stubs.appointments.ViewAppointmentStubsTPP
+import mocking.stubs.appointments.CancelAppointmentsStubs
+import mocking.stubs.appointments.AppointmentSlotsStubs
+import mocking.stubs.appointments.BookAppoinmentStubs
 
 private const val GP_SUPPLIER = "TPP"
-class TppStubbedEnvironment{
+class TppStubbedEnvironment(private val mockingClient : MockingClient){
     fun generateStubs() {
         generateAppointmentStubs()
         PatientDataGenerator.generatePatientData(TppPatientList, GP_SUPPLIER)
         generateMedicalRecordStubs()
         generatePrescriptionStubs()
+        PatientDataGenerator.generatePatientData(TppPatientList, GP_SUPPLIER)
     }
 
     private fun generateAppointmentStubs() {
-        ViewAppointmentStubs().createHistoricalUpcomingAppointments(GP_SUPPLIER)
+        AppointmentSlotsStubs(mockingClient).generateStubs(GP_SUPPLIER)
+        BookAppoinmentStubs(mockingClient).generateStubs(GP_SUPPLIER)
+        ViewAppointmentStubsTPP().createHistoricalAndUpcomingAppointmentsTPP(GP_SUPPLIER)
+        CancelAppointmentsStubs(mockingClient).generateStubs(GP_SUPPLIER)
     }
 
     private fun generateMedicalRecordStubs() {
-        MedicalRecordStubs(MockingClient.instance).generateStubs(GP_SUPPLIER)
+        MedicalRecordStubs(mockingClient).generateStubs(GP_SUPPLIER)
     }
     private fun generatePrescriptionStubs(){
-        ViewPrescriptionsStubs(MockingClient.instance).generateStubs(GP_SUPPLIER)
-        OrderRepeatPrescriptionsStubs(goodPatientTPP, MockingClient.instance).generateStubs(GP_SUPPLIER)
+        ViewPrescriptionsStubs(mockingClient).generateStubs(GP_SUPPLIER)
+        OrderRepeatPrescriptionsStubs(goodPatientTPP, mockingClient).generateStubs(GP_SUPPLIER)
     }
 }
