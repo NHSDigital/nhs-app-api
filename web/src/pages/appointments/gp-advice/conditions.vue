@@ -36,6 +36,7 @@
       </div>
     </div>
     <a :href="generalAdvicePath"
+       :class="$style.cannotFindConditionLink"
        role="link"
        @click.prevent="onConditionClicked()">
       {{ $t('appointments.gp_advice.conditions.link') }}
@@ -127,6 +128,10 @@ export default {
 
   div.desktopWeb {
     max-width: 540px;
+
+    .cannotFindConditionLink {
+      margin-bottom: 1.5em !important;
+    }
   }
 
   button {

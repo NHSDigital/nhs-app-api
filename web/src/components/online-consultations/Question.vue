@@ -68,6 +68,11 @@ export default {
 </script>
 
 <style lang="scss">
+  .nhsuk-form-group a {
+    vertical-align: baseline;
+    display: inline !important;
+  }
+
   .question.required,
   .optionalLabel.marginBottom {
     margin-bottom: 1em !important;
