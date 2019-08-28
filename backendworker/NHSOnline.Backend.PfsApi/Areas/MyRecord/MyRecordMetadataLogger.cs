@@ -59,8 +59,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
         public void LogMyRecordMetadata(UserSession userSession, GetMyRecordResult result)
         {
-            Debug.Assert(userSession?.GpUserSession != null);
-            
+            if (userSession?.GpUserSession == null)
+            {
+                return;
+            }
+
             if (!EnabledForSuppliers.Contains(userSession.GpUserSession.Supplier) || 
                 !(result is GetMyRecordResult.Success successfulResult))
             {

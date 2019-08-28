@@ -33,6 +33,40 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         }
         
         [TestMethod]
+        public void LogMyRecordMetadata_NullUserSession_DoesNotLog()
+        {
+            // Arrange
+            var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();
+            var myRequestResponse = new MyRecordResponse();
+            var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
+            
+            // Act
+            systemUnderTest.LogMyRecordMetadata(null, getMyRecordResponse);
+            
+            // Assert
+            _logger.VerifyLogger(LogLevel.Information, "medical_record_metadata=", Times.Never());
+        }
+        
+        [TestMethod]
+        public void LogMyRecordMetadata_NullGpUserSession_DoesNotLog()
+        {
+            // Arrange
+            var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();
+            var myRequestResponse = new MyRecordResponse();
+            var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
+
+            var userSession = _fixture.Build<UserSession>()
+                .With(x => x.GpUserSession, (EmisUserSession)null)
+                .Create();
+            
+            // Act
+            systemUnderTest.LogMyRecordMetadata(null, getMyRecordResponse);
+            
+            // Assert
+            _logger.VerifyLogger(LogLevel.Information, "medical_record_metadata=", Times.Never());
+        }
+        
+        [TestMethod]
         public void LogMyRecordMetadata_LogsForEmis()
         {
             // Arrange
@@ -50,13 +84,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Assert
             _logger.VerifyLogger(LogLevel.Information, "medical_record_metadata=", Times.Once());
         }
-        
+
         [TestMethod]
         public void LogMyRecordMetadata_LogsForTpp()
         {
             // Arrange
             var userSession = _fixture.Build<UserSession>()
-                .With(x => x.GpUserSession, _fixture.Create<EmisUserSession>())
+                .With(x => x.GpUserSession, _fixture.Create<TppUserSession>())
                 .Create();
             
             var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();

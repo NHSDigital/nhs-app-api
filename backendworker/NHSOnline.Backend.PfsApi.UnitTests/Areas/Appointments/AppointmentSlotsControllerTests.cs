@@ -16,6 +16,7 @@ using NHSOnline.Backend.PfsApi.Areas.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
@@ -27,11 +28,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
     {
         private AppointmentSlotsController _systemUnderTest;
         private IFixture _fixture;
-        private Mock<IGpSystemFactory> _gpSystemFactory;
+        private Mock<IGpSystem> _mockGpSystem;
+        private Mock<IGpSystemFactory> _mockGpSystemFactory;
+        private Mock<IAppointmentSlotsService> _mockAppointmentSlotsService;
         private UserSession _userSession;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
-        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<ILogger<AppointmentSlotsController>> _mockLogger;
 
         private const string RequestAuditType = "Appointments_GetSlots_Request";
         private const string ResponseAuditType = "Appointments_GetSlots_Response";
@@ -45,53 +48,55 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _gpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+            
             _userSession = _fixture.Create<UserSession>();
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
-
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-
+            
+            _mockAppointmentSlotsService = _fixture.Freeze<Mock<IAppointmentSlotsService>>();
+            
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentSlotsController>>>();
 
-            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
-            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+            var mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
+            mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(DateTime.UtcNow);
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, mockCurrentDateTimeProvider.Object);
 
             _fixture.Inject(_dateTimeOffsetProvider);
+            
+            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem
+                .Setup(x => x.GetAppointmentSlotsService())
+                .Returns(_mockAppointmentSlotsService.Object);
+            
+            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory
+                .Setup(x => x.CreateGpSystem(Supplier.Emis))
+                .Returns(_mockGpSystem.Object);
+            
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
+
             _systemUnderTest = _fixture.Create<AppointmentSlotsController>();
             _systemUnderTest.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContextMock.Object
             };
-
         }
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Arrange
-            var gpSystem = new Mock<IGpSystem>();
-            var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
-            var appointmentSlotsServicesGetResponse = _fixture.Create<AppointmentSlotsResponse>();
+            var slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
+            var successResponse = new AppointmentSlotsResult.Success(slotsResponse);
 
-            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
-                .Returns(gpSystem.Object);
-
-            gpSystem.Setup(x => x.GetAppointmentSlotsService())
-                .Returns(appointmentSlotsService.Object);
-
-            var successResponse = new AppointmentSlotsResult.Success(appointmentSlotsServicesGetResponse);
-
-            appointmentSlotsService
+            _mockAppointmentSlotsService
                 .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
                 .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
 
@@ -99,41 +104,72 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
-            gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
+            _mockAppointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {appointmentSlotsServicesGetResponse.Slots.Count()} slots"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {slotsResponse.Slots.Count()} slots"));
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotCount()
+        {
+            // Arrange
+            var slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
+            var successResponse = new AppointmentSlotsResult.Success(slotsResponse);
+
+            _mockAppointmentSlotsService
+                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
+                .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
+
+            // Act
+            await _systemUnderTest.Get();
+
+            // Assert
+            var expectedLogMessage =
+                $"Appointment Slot Count: Supplier=Emis OdsCode={_userSession.GpUserSession.OdsCode} " + 
+                $"Count={slotsResponse.Slots.Count()}";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotMetadata()
+        {
+            // Arrange
+            var slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
+            var successResponse = new AppointmentSlotsResult.Success(slotsResponse);
+
+            _mockAppointmentSlotsService
+                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
+                .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
+
+            // Act
+            await _systemUnderTest.Get();
+
+            // Assert
+            var locations = string.Join(",", slotsResponse.Slots.Select(x => "\"" + x.Location + "\""));
+            var slotTypes = string.Join(",", slotsResponse.Slots.Select(x => "\"" + x.Type + "\""));
+            var expectedLogMessage =
+                "appointment_slot_data={\"SlotTypes\":["+slotTypes+"],"+
+                "\"Locations\":["+locations+"]," +
+                "\"SlotCount\":"+slotsResponse.Slots.Count()+"}";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
         [TestMethod]
         public async Task Get_ReturnsBadGateway_WhenServiceReturnsBadGateway()
         {
             // Arrange
-            var gpSystem = new Mock<IGpSystem>();
-            var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
-
-            var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.BadGateway();
- 
-            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
-                .Returns(gpSystem.Object);
-
-            gpSystem.Setup(x => x.GetAppointmentSlotsService())
-                .Returns(appointmentSlotsService.Object);
-
-            appointmentSlotsService.Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
-                .Returns(Task.FromResult((AppointmentSlotsResult) getAppointmentSlotsServiceResult));
+            _mockAppointmentSlotsService.Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
+                .Returns(Task.FromResult((AppointmentSlotsResult) new AppointmentSlotsResult.BadGateway()));
 
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
-            gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
+
+            _mockAppointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
             result.Should().BeAssignableTo(typeof(StatusCodeResult));
 

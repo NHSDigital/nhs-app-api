@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<ICurrentDateTimeProvider> _mockDateTimeProvider;
         private IFixture _fixture;
         private AppointmentSlotTypeScraper _systemUnderTest;
-        private UserSession _userSession;
+        private GpUserSession _gpUserSession;
 
         [TestInitialize]
         public void TestInitialize()
@@ -30,10 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
 
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-
-            _userSession = _fixture.Create<UserSession>();
+            _gpUserSession = _fixture.Create<EmisUserSession>();
 
             _mockDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentSlotTypeScraper>>>();
@@ -42,28 +39,31 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public void CaptureAppointmentSlotTypes_AppointmentSlotsResultBadGateway_NoInformationBuiltNorLogged()
+        public void CaptureAppointmentSlotTypes_GpUserSessionNull_NoInformationBuiltNorLogged()
         {
             // Arrange
+            _gpUserSession = null;
+            
             var systemUnderTest = _fixture.Create<Mock<AppointmentSlotTypeScraper>>();
             systemUnderTest.CallBase = true;
-            var badResult = new AppointmentSlotsResult.BadGateway();
-
+            var slot = new Slot { Type = "Slot Type 1", SessionName = "Session Name 1" };
+            var result = BuildSuccessfulResult(slot);
+    
             // Act
-            systemUnderTest.Object.CaptureAppointmentSlotTypes(_userSession, badResult);
+            systemUnderTest.Object.CaptureAppointmentSlotTypes(_gpUserSession, result);
 
             // Assert
             systemUnderTest.VerifyAll();
             systemUnderTest.Verify(x => 
                     x.BuildSlotsInformation(
-                        It.IsAny<UserSession>(), It.IsAny<AppointmentSlotsResult.Success>()), 
+                        It.IsAny<GpUserSession>(), It.IsAny<AppointmentSlotsResult.Success>()), 
                 Times.Never());
             systemUnderTest.Verify(x => 
                     x.LogInformation(
                         It.IsAny<AppointmentSlotTypeScraper.AppointmentSlotsInformation>()), 
-                Times.Never());
+                Times.Never());           
         }
-        
+
         [TestMethod]
         public void CaptureAppointmentSlotTypes_AppointmentSlotsResultHasNoSlots_NoInformationBuiltNorLogged()
         {
@@ -73,13 +73,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var emptyResult = BuildSuccessfulResult();
 
             // Act
-            systemUnderTest.Object.CaptureAppointmentSlotTypes(_userSession, emptyResult);
+            systemUnderTest.Object.CaptureAppointmentSlotTypes(_gpUserSession, emptyResult);
 
             // Assert
             systemUnderTest.VerifyAll();
             systemUnderTest.Verify(x => 
                     x.BuildSlotsInformation(
-                        It.IsAny<UserSession>(), It.IsAny<AppointmentSlotsResult.Success>()), 
+                        It.IsAny<GpUserSession>(), It.IsAny<AppointmentSlotsResult.Success>()), 
                 Times.Never());
             systemUnderTest.Verify(x => 
                     x.LogInformation(
@@ -97,13 +97,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot);
             var slotsInformation = _fixture.Create<AppointmentSlotTypeScraper.AppointmentSlotsInformation>();
 
-            systemUnderTest.Setup(x => x.BuildSlotsInformation(_userSession, result))
+            systemUnderTest.Setup(x => x.BuildSlotsInformation(_gpUserSession, result))
                 .Returns(slotsInformation);
             systemUnderTest.Setup(x => x.ShouldBeLogged(slotsInformation))
                 .Returns(false);
 
             // Act
-            systemUnderTest.Object.CaptureAppointmentSlotTypes(_userSession, result);
+            systemUnderTest.Object.CaptureAppointmentSlotTypes(_gpUserSession, result);
 
             // Assert
             systemUnderTest.VerifyAll();
@@ -123,13 +123,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot);
             var slotsInformation = _fixture.Create<AppointmentSlotTypeScraper.AppointmentSlotsInformation>();
 
-            systemUnderTest.Setup(x => x.BuildSlotsInformation(_userSession, result))
+            systemUnderTest.Setup(x => x.BuildSlotsInformation(_gpUserSession, result))
                 .Returns(slotsInformation);
             systemUnderTest.Setup(x => x.ShouldBeLogged(slotsInformation))
                 .Returns(true);
 
             // Act
-            systemUnderTest.Object.CaptureAppointmentSlotTypes(_userSession, result);
+            systemUnderTest.Object.CaptureAppointmentSlotTypes(_gpUserSession, result);
 
             // Assert
             systemUnderTest.VerifyAll();
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.SlotTypes.Should().BeEquivalentTo("Slot Type 1");
@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot1, slot2);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.SlotTypes.Should().BeEquivalentTo("Slot Type 1", "Slot Type 2");
@@ -179,12 +179,58 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot1, slot2, slot3, slot4);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.SlotTypes.Should().BeEquivalentTo("Slot Type 1", "Slot Type 2", "Slot Type 3");
         }
+        
+        [TestMethod]
+        public void BuildSlotsInformation_OneLocation_LocationsIncludesOneLocation()
+        {
+            // Arrange
+            var slot = new Slot { Type = "Slot Type 1", SessionName = "Session Name 1", Location = "Location 1" };
+            var result = BuildSuccessfulResult(slot);
 
+            // Act
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
+
+            // Assert
+            information.Locations.Should().BeEquivalentTo("Location 1");
+        }
+
+        [TestMethod]
+        public void BuildSlotsInformation_TwoLocations_LocationsIncludesTwoLocations()
+        {
+            // Arrange
+            var slot1 = new Slot { Type = "Slot Type 1", SessionName = "Session Name 1", Location = "Location 1" };
+            var slot2 = new Slot { Type = "Slot Type 2", SessionName = "Session Name 2", Location = "Location 2" };
+            var result = BuildSuccessfulResult(slot1, slot2);
+
+            // Act
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
+
+            // Assert
+            information.Locations.Should().BeEquivalentTo("Location 1", "Location 2");
+        }
+
+        [TestMethod]
+        public void BuildSlotsInformation_MultipleIdenticalLocations_LocationsIncludesOnlyDistinctLocations()
+        {
+            // Arrange
+            var slot1 = new Slot { Type = "Slot Type 1", SessionName = "Session Name 1", Location = "Location 1" };
+            var slot2 = new Slot { Type = "Slot Type 2", SessionName = "Session Name 2", Location = "Location 2" };
+            var slot3 = new Slot { Type = "Slot Type 3", SessionName = "Session Name 3", Location = "Location 3"  };
+            var slot4 = new Slot { Type = "Slot Type 3", SessionName = "Session Name 4", Location = "Location 3"  };
+            var result = BuildSuccessfulResult(slot1, slot2, slot3, slot4);
+
+            // Act
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
+
+            // Assert
+            information.Locations.Should().BeEquivalentTo("Location 1", "Location 2", "Location 3");
+        }
+        
         [TestMethod]
         public void BuildSlotsInformation_OneSlot_SessionNamesIncludesOneSessionName()
         {
@@ -193,7 +239,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.SessionNames.Should().BeEquivalentTo("Session Name 1");
@@ -208,7 +254,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot1, slot2);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.SessionNames.Should().BeEquivalentTo("Session Name 1", "Session Name 2");
@@ -225,7 +271,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot1, slot2, slot3, slot4);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.SessionNames.Should().BeEquivalentTo("Session Name 1", "Session Name 2", "Session Name 3");
@@ -239,11 +285,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
-            information.Slots.Should().BeEquivalentTo(new[]
-                { new AppointmentSlotTypeScraper.Slot("Slot Type 1", "Session Name 1") });
+            information.Slots.Should().BeEquivalentTo(new AppointmentSlotTypeScraper.Slot("Slot Type 1", "Session Name 1"));
         }
         
         [TestMethod]
@@ -255,7 +300,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot1, slot2);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.Slots.Should().BeEquivalentTo(new[]
@@ -276,7 +321,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = BuildSuccessfulResult(slot1, slot2, slot3, slot4);
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
             information.Slots.Should().BeEquivalentTo(new[]
@@ -294,10 +339,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = _fixture.Create<AppointmentSlotsResult.Success>();
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
-            information.OdsCode.Should().Be(_userSession.GpUserSession.OdsCode);
+            information.OdsCode.Should().Be(_gpUserSession.OdsCode);
         }
 
         [TestMethod]
@@ -307,10 +352,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = _fixture.Create<AppointmentSlotsResult.Success>();
 
             // Act
-            var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
+            var information = _systemUnderTest.BuildSlotsInformation(_gpUserSession, result);
 
             // Assert
-            information.Supplier.Should().Be(_userSession.GpUserSession.Supplier.ToString());
+            information.Supplier.Should().Be(_gpUserSession.Supplier.ToString());
         }
 
         [TestMethod]
@@ -397,7 +442,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             var information2 = new AppointmentSlotTypeScraper.AppointmentSlotsInformation(
                 new[] { information.SlotTypes[0], information.SlotTypes[1] },
-                information.SessionNames, information.Slots, information.Supplier, information.OdsCode);
+                information.SessionNames, information.Locations, 
+                information.Slots, information.Supplier, information.OdsCode);
             var result3 = _systemUnderTest.ShouldBeLogged(information2);
 
             // Assert
@@ -428,7 +474,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                     information1.SlotTypes[0], information1.SlotTypes[1], information1.SlotTypes[2],
                     _fixture.Create<string>()
                 },
-                information1.SessionNames, information1.Slots, information1.Supplier, information1.OdsCode);
+                information1.SessionNames, information1.Locations, information1.Slots, 
+                information1.Supplier, information1.OdsCode);
             var result3 = _systemUnderTest.ShouldBeLogged(information2);
 
             // Assert
@@ -454,7 +501,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result2 = _systemUnderTest.ShouldBeLogged(information1);
 
             var information2 = new AppointmentSlotTypeScraper.AppointmentSlotsInformation(information1.SlotTypes,
-                information1.SessionNames, information1.Slots, information1.Supplier, _fixture.Create<string>());
+                information1.SessionNames, information1.Locations,
+                information1.Slots, information1.Supplier, _fixture.Create<string>());
             var result3 = _systemUnderTest.ShouldBeLogged(information2);
 
             // Assert

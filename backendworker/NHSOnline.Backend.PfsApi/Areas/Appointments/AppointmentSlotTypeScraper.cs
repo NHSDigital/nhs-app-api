@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public interface IAppointmentSlotTypeScraper
     {
-        void CaptureAppointmentSlotTypes(UserSession userSession, AppointmentSlotsResult result);
+        void CaptureAppointmentSlotTypes(GpUserSession gpUserSession, AppointmentSlotsResult.Success result);
     }
 
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global Members are marked as virtual to allow partial mocking in unit tests
@@ -37,14 +37,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             public string[] SlotTypes { get; }
             public string[] SessionNames { get; }
+            public string[] Locations { get; }
             public Slot[] Slots { get; }
             public string Supplier { get; }
             public string OdsCode { get; }
 
-            public AppointmentSlotsInformation(string[] slotTypes, string[] sessionNames, Slot[] slots, string supplier, string odsCode)
+            public AppointmentSlotsInformation(
+                string[] slotTypes, 
+                string[] sessionNames, 
+                string[] locations,
+                Slot[] slots, 
+                string supplier, 
+                string odsCode)
             {
                 SlotTypes = slotTypes;
                 SessionNames = sessionNames;
+                Locations = locations;
                 Slots = slots;
                 Supplier = supplier;
                 OdsCode = odsCode;
@@ -75,15 +83,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public void CaptureAppointmentSlotTypes(UserSession userSession, AppointmentSlotsResult result)
+        public void CaptureAppointmentSlotTypes(GpUserSession gpUserSession, AppointmentSlotsResult.Success result)
         {
-            if (!(result is AppointmentSlotsResult.Success successfulResult) 
-                || successfulResult.Response.Slots?.Any() == false)
+            if (result.Response.Slots?.Any() == false || gpUserSession==null)
             {
                 return;
             }
 
-            var appointmentSlotsInformation = BuildSlotsInformation(userSession, successfulResult);
+            var appointmentSlotsInformation = BuildSlotsInformation(gpUserSession, result);
 
             if (ShouldBeLogged(appointmentSlotsInformation))
             {
@@ -91,21 +98,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        internal virtual AppointmentSlotsInformation BuildSlotsInformation(UserSession userSession, 
+        internal virtual AppointmentSlotsInformation BuildSlotsInformation(GpUserSession gpUserSession, 
             AppointmentSlotsResult.Success successfulResult)
         {
-            Debug.Assert(userSession != null);
+            Debug.Assert(gpUserSession != null);
             Debug.Assert(successfulResult != null);
             Debug.Assert(successfulResult.Response.Slots?.Any() == true);
 
             var responseSlots = successfulResult.Response.Slots;
             var slotTypes = responseSlots.Select(x => x.Type).Distinct().ToArray();
             var sessionNames = responseSlots.Select(x => x.SessionName).Distinct().ToArray();
+            var locations = responseSlots.Select(x => x.Location).Distinct().ToArray();
             var slots = responseSlots.Select(s => new { s.Type, s.SessionName }).Distinct()
                                      .Select(s => new Slot(s.Type, s.SessionName)).ToArray();
             
-            var appointmentSlotsInformation = new AppointmentSlotsInformation(slotTypes, sessionNames, slots,
-                userSession.GpUserSession.Supplier.ToString(), userSession.GpUserSession.OdsCode);
+            var appointmentSlotsInformation = new AppointmentSlotsInformation(
+                slotTypes, sessionNames, locations, slots,
+                gpUserSession.Supplier.ToString(), gpUserSession.OdsCode);
 
             return appointmentSlotsInformation;
         }

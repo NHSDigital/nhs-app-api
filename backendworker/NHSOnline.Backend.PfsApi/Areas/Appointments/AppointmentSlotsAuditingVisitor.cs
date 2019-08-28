@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -15,15 +11,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     {
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAuditor _auditor;
-        private readonly UserSession _userSession;
         
         private const string AuditType = AuditingOperations.GetSlotsAuditTypeResponse;
 
-        public AppointmentSlotsAuditingVisitor(IAuditor auditor, ILogger<AppointmentSlotsController> logger, UserSession userSession)
+        public AppointmentSlotsAuditingVisitor(IAuditor auditor, ILogger<AppointmentSlotsController> logger)
         {
             _auditor = auditor;
             _logger = logger;
-            _userSession = userSession;
         }
 
         public async Task Visit(AppointmentSlotsResult.Success result)
@@ -38,15 +32,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.Success)}");
             }
-            
-            var kvp = new Dictionary<string, string>
-            {
-                { "Supplier", _userSession.GpUserSession.Supplier.ToString() },
-                { "OdsCode", _userSession.GpUserSession.OdsCode },
-                { "Count", slotCount.ToString(CultureInfo.InvariantCulture) }
-            };
-
-            _logger.LogInformationKeyValuePairs("Appointment Slot Count", kvp);   
         }
 
         public async Task Visit(AppointmentSlotsResult.BadGateway result)

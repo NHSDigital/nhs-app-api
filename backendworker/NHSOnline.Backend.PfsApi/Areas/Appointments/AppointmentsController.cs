@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -78,7 +82,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 
                 var result = await GetAppointmentsService(userSession).GetAppointments(userSession.GpUserSession);
 
-                await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
+                LogAppointmentsInformation(userSession.GpUserSession, result);
+                
+                await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger));
                 return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, userSession));
             }
             finally
@@ -134,6 +140,36 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetAppointmentsValidationService();
+        }
+
+        private void LogAppointmentsInformation(GpUserSession gpUserSession, AppointmentsResult result)
+        {
+            if (!(result is AppointmentsResult.Success successResult))
+            {
+                return;
+            }
+
+            try
+            {
+                var upcomingAppointmentsCount = successResult.Response?.UpcomingAppointments?.Count() ?? 0;
+                var pastAppointmentsCount = successResult.Response?.PastAppointments?.Count() ?? 0;
+            
+                var kvp = new Dictionary<string, string>
+                {
+                    { "Supplier", gpUserSession.Supplier.ToString() },
+                    { "OdsCode", gpUserSession.OdsCode },
+                    { "Count", (upcomingAppointmentsCount+pastAppointmentsCount).ToString(CultureInfo.InvariantCulture) },
+                    { "UpcomingCount", upcomingAppointmentsCount.ToString(CultureInfo.InvariantCulture) },
+                    { "HistoricalCount", pastAppointmentsCount.ToString(CultureInfo.InvariantCulture)}
+                };
+
+                _logger.LogInformationKeyValuePairs("Appointment Count", kvp);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to log appointment details. " +
+                                    "Catching exception to prevent inability to view appointments");
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<ILogger<AppointmentsController>> _mockLogger;
 
         private const string RequestAuditType = "Appointments_ViewBooked_Request";
         private const string ResponseAuditType = "Appointments_ViewBooked_Response";
@@ -52,6 +54,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentsController>>>();
 
             _appointmentsResponse = _fixture.Create<AppointmentsResponse>();
             var result = new AppointmentsResult.Success(_appointmentsResponse);
@@ -73,7 +76,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
             
             _systemUnderTest = _fixture.Create<AppointmentsController>();
-
             _systemUnderTest.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContextMock.Object
@@ -102,6 +104,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 appointmentsResponse.UpcomingAppointments.Count(),
                 appointmentsResponse.PastAppointments.Count());
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedResponseAuditMessage));
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResult_LogsAppointmentCount()
+        {
+            // Arrange
+            var appointmentsResponse = _fixture.Create<AppointmentsResponse>();
+            var successResponse = new AppointmentsResult.Success(appointmentsResponse);
+
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
+                .Returns(Task.FromResult((AppointmentsResult) successResponse));
+
+            // Act
+            await _systemUnderTest.Get();
+
+            // Assert
+            var expectedLogMessage =
+                $"Appointment Count: Supplier=Emis OdsCode={_userSession.GpUserSession.OdsCode} " + 
+                $"Count={appointmentsResponse.UpcomingAppointments.Count()+appointmentsResponse.PastAppointments.Count()} " +
+                $"UpcomingCount={appointmentsResponse.UpcomingAppointments.Count()} " + 
+                $"HistoricalCount={appointmentsResponse.PastAppointments.Count()}";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
         [TestMethod]
