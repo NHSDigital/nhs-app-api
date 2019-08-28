@@ -1,10 +1,16 @@
 package mocking.stubs
 
-import mocking.MockingClient
 import mocking.stubs.TppStubsPatientFactory.Companion.TppPatientList
+import mocking.stubs.appointments.ViewAppointmentStubs
 
-class TppStubbedEnvironment(private val mockingClient: MockingClient){
+private const val GP_SUPPLIER = "TPP"
+class TppStubbedEnvironment{
     fun generateStubs() {
-        PatientDataGenerator.generatePatientData(TppPatientList, "TPP")
+        generateAppointmentStubs()
+        PatientDataGenerator.generatePatientData(TppPatientList, GP_SUPPLIER)
+    }
+
+    private fun generateAppointmentStubs() {
+        ViewAppointmentStubs().createHistoricalUpcomingAppointments(GP_SUPPLIER)
     }
 }

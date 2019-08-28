@@ -1,4 +1,4 @@
-package features.im1Appointments.factories
+package mocking.stubs.appointments.factories
 
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations

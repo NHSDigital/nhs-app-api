@@ -1,7 +1,7 @@
 package features.im1Appointments.steps
 
 import com.google.common.collect.Ordering
-import features.im1Appointments.factories.MyAppointmentsFactory
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.MockingClient
 import models.Slot
 import net.serenitybdd.core.Serenity

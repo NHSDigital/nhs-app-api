@@ -1,7 +1,7 @@
 package features.myrecord.factories
 
 import features.myrecord.stepDefinitions.HTTP_EXCEPTION
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
 import net.serenitybdd.core.Serenity

@@ -1,6 +1,6 @@
 package features.authentication.factories
 
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade

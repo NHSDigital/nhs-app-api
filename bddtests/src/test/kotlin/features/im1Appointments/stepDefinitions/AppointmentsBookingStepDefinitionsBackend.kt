@@ -3,8 +3,8 @@ package features.im1Appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.im1Appointments.factories.AppointmentsBookingFactory
-import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.defaultTelephoneNumber
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.defaultTelephoneNumber
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import net.serenitybdd.core.Serenity

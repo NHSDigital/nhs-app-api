@@ -1,6 +1,6 @@
-package features.im1Appointments.factories
+package mocking.stubs.appointments.factories
 
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder

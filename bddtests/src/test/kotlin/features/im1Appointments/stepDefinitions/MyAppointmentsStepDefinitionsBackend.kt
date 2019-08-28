@@ -3,7 +3,7 @@ package features.im1Appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.im1Appointments.factories.MyAppointmentsFactory
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import features.im1Appointments.steps.MyAppointmentsBackendSteps
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample

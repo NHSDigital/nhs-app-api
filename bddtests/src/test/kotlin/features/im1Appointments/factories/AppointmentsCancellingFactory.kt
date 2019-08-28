@@ -1,8 +1,9 @@
 package features.im1Appointments.factories
 
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
+import mocking.stubs.appointments.factories.AppointmentsFactory
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import net.serenitybdd.core.Serenity

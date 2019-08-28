@@ -57,12 +57,11 @@ class AuthenticationStepDefinitionsBackend {
     fun iHaveValidOAuthDetailsAndCIDTokenEndpointFails() {
         val gpSystem = "EMIS"
         val patient = Patient.getDefault(gpSystem)
-        val accessToken = Patient.getAccessToken(patient)
         SerenityHelpers.setPatient(patient)
         mockingClient.forCitizenId {
             tokenRequest(codeVerifier!!, authCode)
                     .respondWithServerError()
-            userInfoRequest(accessToken).respondWithServerError()
+            userInfoRequest(patient.accessToken).respondWithServerError()
         }
         SessionCreateJourneyFactory.getForSupplier("EMIS", mockingClient).createFor(patient)
     }

@@ -1,6 +1,6 @@
 package features.authentication.factories
 
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import models.Patient
 import utils.SerenityHelpers
 

@@ -2,7 +2,7 @@ package features.linkage.stepDefinitions
 
 import features.linkage.LinkageResult
 import utils.SerenityHelpers
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
 import org.junit.Assert

@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.stubbing.Scenario
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.im1Appointments.factories.AppointmentsSlotsFactory
+import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import features.im1Appointments.steps.AvailableAppointmentFilterSteps
 import features.im1Appointments.steps.AvailableAppointmentFilterSteps.Companion.TODAY_OPTION
 import features.im1Appointments.steps.AvailableAppointmentsSteps

@@ -3,7 +3,7 @@ package features.authentication.stepDefinitions
 import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.im1Appointments.factories.AppointmentsBookingFactory
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import features.sharedStepDefinitions.backend.AbstractSteps
 import utils.SerenityHelpers
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney

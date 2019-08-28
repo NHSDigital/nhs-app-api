@@ -1,6 +1,5 @@
 package models.patients
 
-import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex

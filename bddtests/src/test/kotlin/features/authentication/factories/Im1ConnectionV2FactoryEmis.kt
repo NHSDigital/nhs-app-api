@@ -2,7 +2,6 @@ package features.authentication.factories
 
 import constants.DateTimeFormats
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel

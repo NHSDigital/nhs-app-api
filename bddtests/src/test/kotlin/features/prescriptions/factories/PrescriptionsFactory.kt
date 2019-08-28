@@ -1,7 +1,7 @@
 package features.prescriptions.factories
 
 import utils.SerenityHelpers
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader

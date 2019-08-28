@@ -1,7 +1,6 @@
 package models.patients
 
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import mocking.emis.demographics.Sex
 import models.Patient
 import worker.models.patient.Im1ConnectionToken
@@ -103,7 +102,7 @@ class EmisPatients {
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "4FIAcVogI4WI2jM47sZ0ic",
                 connectionToken = "7a3a3cf8-4fcc-a797-a4b9-629cdbe104fc",
-                endUserSessionId = "SY1iAcXGG8ZU7YjG1LYkOk",
+                endUserSessionId = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 nhsNumbers = listOf("6421509687"),
                 accountId = "4493941400",
                 linkageKey = "V6fvPbvVGO8bg",

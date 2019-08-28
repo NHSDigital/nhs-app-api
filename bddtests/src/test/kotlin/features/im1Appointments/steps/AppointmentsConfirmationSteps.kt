@@ -1,6 +1,6 @@
 package features.im1Appointments.steps
 
-import features.im1Appointments.factories.AppointmentsBookingFactory
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.MockingClient
 import models.Slot
 import net.serenitybdd.core.Serenity

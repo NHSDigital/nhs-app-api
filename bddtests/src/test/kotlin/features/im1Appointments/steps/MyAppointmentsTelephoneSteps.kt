@@ -1,6 +1,6 @@
 package features.im1Appointments.steps
 
-import features.im1Appointments.factories.MyAppointmentsFactory
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.MockingClient
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps

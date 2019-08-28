@@ -12,7 +12,7 @@ import mocking.stubs.EmisStubsPatientFactory.Companion.timeoutPatientEMIS
 import models.Patient
 import java.time.Duration
 
-class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
+class ViewAppointmentsStubsEMIS(private val mockingClient: MockingClient) {
     fun generateEMISStubs() {
         val appointmentsBody = JSonXmlConverter.toJsonWithUpperCamelCase(
                 EmisAppointmentData.instance.createGetAppointmentsResponse())

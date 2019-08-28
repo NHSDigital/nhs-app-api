@@ -1,10 +1,10 @@
-package features.im1Appointments.factories
+package mocking.stubs.appointments.factories
 
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.models.Mapping
 
-class MockingClientAppointmentMappingFactoryVision: MockingClientAppointmentMappingFactory(){
+class MockingClientAppointmentMappingFactoryTpp: MockingClientAppointmentMappingFactory(){
     override fun requestMapping(mapper: IAppointmentMappingBuilder.() -> Mapping) {
-        mockingClient.forVision { mapper(appointments) }
+        mockingClient.forTpp { mapper(appointments) }
     }
 }

@@ -1,7 +1,7 @@
 package features.im1Appointments.steps
 
 import features.im1Appointments.factories.AppointmentsCancellingFactory
-import features.im1Appointments.factories.MyAppointmentsFactory
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder

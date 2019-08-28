@@ -16,12 +16,12 @@ import net.serenitybdd.core.Serenity.getWebdriverManager
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
+import org.openqa.selenium.WebDriver
+import pages.WEB_CONTEXT
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.contains
 import utils.set
-import org.openqa.selenium.WebDriver
-import pages.WEB_CONTEXT
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
@@ -53,7 +53,6 @@ class CommonSteps : AbstractSteps() {
 
     @After
     fun afterEachScenario() {
-
         var driver = getWebdriverManager().currentDriver
 
         if(driver!=null && (driver.isAndroid() || driver.isIOS())) {

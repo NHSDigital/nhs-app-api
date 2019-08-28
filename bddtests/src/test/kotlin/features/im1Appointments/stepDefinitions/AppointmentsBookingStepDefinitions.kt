@@ -1,17 +1,16 @@
 package features.im1Appointments.stepDefinitions
 
 import cucumber.api.java.en.Given
-import features.im1Appointments.factories.AppointmentsBookingFactory
-import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
-import features.im1Appointments.factories.MyAppointmentsFactory
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
-import utils.set
 import java.time.Duration
 
 private const val DELAY_IN_SECONDS = 12L

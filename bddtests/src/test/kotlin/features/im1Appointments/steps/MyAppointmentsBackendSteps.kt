@@ -1,7 +1,7 @@
 package features.im1Appointments.steps
 
 import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
-import features.im1Appointments.factories.MyAppointmentsFactory
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.MockingClient
 import mocking.emis.models.AppointmentCancellationReason
 import net.serenitybdd.core.Serenity

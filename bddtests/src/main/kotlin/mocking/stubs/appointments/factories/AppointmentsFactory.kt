@@ -1,7 +1,7 @@
-package features.im1Appointments.factories
+package mocking.stubs.appointments.factories
 
 import constants.DateTimeFormats
-import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory

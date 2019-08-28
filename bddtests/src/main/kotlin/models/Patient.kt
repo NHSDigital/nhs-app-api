@@ -11,9 +11,6 @@ import models.patients.MicrotestPatients
 import models.patients.TppPatients
 import models.patients.VisionPatients
 import utils.DateConverter
-import utils.GlobalSerenityHelpers
-import utils.getOrNull
-import utils.set
 import worker.models.demographics.TppUserSession
 import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
@@ -54,6 +51,7 @@ data class Patient(
         val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157"
 ) {
+    var accessToken : String = AccessTokenBuilder().getSignedToken(this).serialize()
 
     fun formattedDateOfBirth(): String {
         return DateConverter.convertDateToDateTimeFormat(
@@ -92,20 +90,6 @@ data class Patient(
 
         fun getIdToken(patient: Patient): String {
             return IdTokenBuilder().getSignedToken(patient).serialize()
-        }
-
-        private fun setAccessToken(patient: Patient): String {
-            val accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
-            GlobalSerenityHelpers.ACCESS_TOKEN.set(accessToken)
-            return accessToken
-        }
-
-        fun getAccessToken(patient: Patient): String {
-            var existing = GlobalSerenityHelpers.ACCESS_TOKEN.getOrNull<String>()
-            if(existing == null) {
-                existing = setAccessToken(patient)
-            }
-            return existing
         }
 
         fun getDefault(gpSystem: String): Patient {

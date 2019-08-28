@@ -6,7 +6,7 @@ import mocking.stubs.EmisStubsPatientFactory.Companion.goodPatientEMIS
 import mocking.stubs.appointments.AppointmentSlotsStubs
 import mocking.stubs.appointments.BookAppoinmentStubs
 import mocking.stubs.appointments.CancelAppointmentsStubs
-import mocking.stubs.appointments.ViewAppointmentsStubs
+import mocking.stubs.appointments.ViewAppointmentsStubsEMIS
 import mocking.stubs.myMedicalRecord.AllergiesStubs
 import mocking.stubs.myMedicalRecord.ConsultationsStubs
 import mocking.stubs.myMedicalRecord.ImmunisationsStubs
@@ -31,7 +31,7 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
     }
 
     private fun generateAppointmentStubs() {
-        ViewAppointmentsStubs(mockingClient).generateEMISStubs()
+        ViewAppointmentsStubsEMIS(mockingClient).generateEMISStubs()
         AppointmentSlotsStubs(mockingClient).generateEMISStubs()
         BookAppoinmentStubs(goodPatientEMIS, mockingClient).generateEMISStubs()
         CancelAppointmentsStubs(goodPatientEMIS, mockingClient).generateEMISStubs()

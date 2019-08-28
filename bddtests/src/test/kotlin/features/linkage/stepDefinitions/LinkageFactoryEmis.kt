@@ -3,7 +3,6 @@ package features.linkage.stepDefinitions
 import constants.DateTimeFormats
 import features.linkage.LinkageResult
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
 import mocking.emis.models.AddNhsUserRequest

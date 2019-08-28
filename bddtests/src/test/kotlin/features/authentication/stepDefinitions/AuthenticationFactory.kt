@@ -1,7 +1,7 @@
 package features.authentication.stepDefinitions
 
 import utils.SerenityHelpers
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.emis.models.AssociationType
 import models.Patient
 

@@ -25,7 +25,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
 
         val idToken = Patient.getIdToken(patient)
-        val accessToken = Patient.getAccessToken(patient)
+        val accessToken = patient.accessToken
 
         mockingClient.forCitizenId {
             configurationRequest()
@@ -72,7 +72,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
         mockingClient.forCitizenId {
             tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
-                    .respondWithSuccess(accessToken = Patient.getAccessToken(patient), idToken = idToken)
+                    .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
         }
     }
 }

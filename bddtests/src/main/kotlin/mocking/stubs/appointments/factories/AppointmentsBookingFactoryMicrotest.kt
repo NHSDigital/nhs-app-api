@@ -1,4 +1,4 @@
-package features.im1Appointments.factories
+package mocking.stubs.appointments.factories
 
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade

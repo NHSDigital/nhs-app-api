@@ -1,6 +1,6 @@
-package features.im1Appointments.factories
+package mocking.stubs.appointments.factories
 
-import features.im1Appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
@@ -34,11 +34,11 @@ class MyAppointmentsFactoryMicrotest : MyAppointmentsFactory("MICROTEST") {
                         "",
                         slot.startTime!!,
                         slot.endTime!!,
-                        facade.myAppointments!!.locations.find { location ->
+                        facade.myAppointments.locations.find { location -> // removed !! gives warning when present
                             session.locationId == location.locationId
                         }!!.locationName,
                         session.staffDetails.map { clinician ->
-                            facade.myAppointments!!.staffDetails.find { staff ->
+                            facade.myAppointments.staffDetails.find { staff -> // removed !! gives warning when present
                                 clinician == staff
                                         .staffDetailsid
                             }!!.staffName

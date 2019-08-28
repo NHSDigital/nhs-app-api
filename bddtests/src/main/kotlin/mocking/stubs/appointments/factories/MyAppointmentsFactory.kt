@@ -1,7 +1,7 @@
-package features.im1Appointments.factories
+package mocking.stubs.appointments.factories
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations

@@ -4,7 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.AccessTokenBuilder
-import models.Patient
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
 import net.serenitybdd.core.Serenity.sessionVariableCalled
@@ -29,7 +28,7 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^I register the device for push notifications$")
     fun iRegisterTheDeviceForPushNotifications() {
-        val authToken = Patient.getAccessToken(SerenityHelpers.getPatient())
+        val authToken = SerenityHelpers.getPatient().accessToken
         registerTheDeviceForPushNotifications(authToken = authToken)
     }
 

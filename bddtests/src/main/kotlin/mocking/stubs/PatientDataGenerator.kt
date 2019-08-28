@@ -9,9 +9,10 @@ class PatientDataGenerator {
         var mockingClient = MockingClient.instance
 
         fun generatePatientData(patients: List<Patient>, supplier: String ) {
-            patients.forEach { patientDetails ->
-                CitizenIdStubs(mockingClient).createFor(patientDetails)
-                SessionCreateJourneyFactory.getForSupplier(supplier, MockingClient.instance).createFor(patientDetails)
+            patients.forEach { patient ->
+                CitizenIdStubs(mockingClient).createFor(patient)
+                SessionCreateJourneyFactory.getForSupplier(supplier,
+                        MockingClient.instance).createFor(patient)
             }
         }
     }

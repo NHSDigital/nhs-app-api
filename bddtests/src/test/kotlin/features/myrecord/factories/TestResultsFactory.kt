@@ -1,6 +1,6 @@
 package features.myrecord.factories
 
-import features.sharedSteps.SupplierSpecificFactory
+import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
 
