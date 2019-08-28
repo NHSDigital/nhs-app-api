@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace NHSOnline.Backend.Support.UnitTests
 {
     [TestClass]
-    public class ErrorReferenceGeneratorTests: IDisposable
+    public sealed class ErrorReferenceGeneratorTests: IDisposable
     {
         private ILoggerFactory _loggerFactory;
         private ILogger<ErrorReferenceGenerator> _logger;
@@ -36,6 +36,19 @@ namespace NHSOnline.Backend.Support.UnitTests
             _randomStringGenerator = new RandomStringGenerator(new DeterministicRandomGenerator());
             _errorReferenceGenerator = new ErrorReferenceGenerator(_logger, _randomStringGenerator);
         }
+
+        [DataTestMethod]
+        [DataRow(typeof(ErrorTypes.LoginBadRequest), "3a")]
+        [DataRow(typeof(ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound), "3j")]
+        [DataRow(typeof(ErrorTypes.LoginServiceJourneyRulesOtherError), "3k")]
+        public void Generate_ErrorReferenceCode_Login_UsingErrorType_ReturnsCorrectCode(Type type, string expectedPrefix)
+        {
+            var errorType = (ErrorTypes) Activator.CreateInstance(type);
+            var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorType);
+
+
+            errorCode.Should().StartWith(expectedPrefix);
+        }
         
         [DataTestMethod]
         [DataRow(ErrorCategory.Login, 400, "3a")]
@@ -43,7 +56,6 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Login, 464, "3f")]
         [DataRow(ErrorCategory.Login, 465, "3g")]
         [DataRow(ErrorCategory.Login, 500, "3h")]
-        
         public void Generate_ErrorReferenceCode_Login_UsingErrorCategoryAndStatusCode_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, string expectedPrefix)
         {
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode);
@@ -110,6 +122,14 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             errorCode.Should().StartWith("xx");
         }
+        
+        [TestMethod]
+        public void Generate_ErrorReferenceCode_Login_UsingErrorCategoryAndStatusCodeThatReturnsMoreThanOneObject_ReturnsXxCode()
+        {
+            var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(ErrorCategory.Login, 500, SourceApi.ServiceJourneyRules);
+
+            errorCode.Should().StartWith("xx");
+        }
 
         public void Dispose()
         {
@@ -122,7 +142,7 @@ namespace NHSOnline.Backend.Support.UnitTests
             Dispose(false);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (_disposed)
             {

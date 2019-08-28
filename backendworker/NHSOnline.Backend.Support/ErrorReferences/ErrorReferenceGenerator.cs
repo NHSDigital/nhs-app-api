@@ -101,12 +101,20 @@ namespace NHSOnline.Backend.Support
             return GenerateAndLogErrorReference(category, statusCode, sourceApi);
         }
 
-        private static ErrorTypes LookupErrorType(ErrorCategory category, int statusCode, SourceApi sourceApi)
+        private ErrorTypes LookupErrorType(ErrorCategory category, int statusCode, SourceApi sourceApi)
         {
-            return ErrorTypes.SingleOrDefault(x =>
-                x.Category == category &&
-                x.StatusCode == statusCode &&
-                x.SourceApi == sourceApi);
+            try
+            {
+                return ErrorTypes.Single(x =>
+                    x.Category == category &&
+                    x.StatusCode == statusCode &&
+                    x.SourceApi == sourceApi);
+            }
+            catch (InvalidOperationException)
+            {
+                _logger.LogWarning("LookupErrorTypeException=Cannot find a single ErrorType matching the provided parameters");
+                return null;
+            }
         }
     }
 }
