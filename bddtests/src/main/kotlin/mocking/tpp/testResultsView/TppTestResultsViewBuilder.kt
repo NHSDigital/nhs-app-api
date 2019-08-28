@@ -13,10 +13,8 @@ import java.time.OffsetDateTime
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
-class TppTestResultsViewBuilder(tppUserSession: TppUserSession,
-                                startDate: OffsetDateTime,
-                                endDate: OffsetDateTime) : TppMappingBuilder("POST",
-        "/tpp/") {
+class TppTestResultsViewBuilder(tppUserSession: TppUserSession, startDate: OffsetDateTime,
+                                endDate: OffsetDateTime) : TppMappingBuilder("POST", "/tpp/") {
     init {
         val typeHeader = "type"
         val typeValue = "TestResultsView"
@@ -31,6 +29,7 @@ class TppTestResultsViewBuilder(tppUserSession: TppUserSession,
                         "@unitId='${tppUserSession.unitId}' and " +
                         "starts-with(@startDate, '${getDateFormattedString(startDate)}') and " +
                         "starts-with(@endDate, '${getDateFormattedString(endDate)}')]")
+
     }
 
     fun respondWithSuccess(testResultsViewReply: TestResultsViewReply): Mapping {

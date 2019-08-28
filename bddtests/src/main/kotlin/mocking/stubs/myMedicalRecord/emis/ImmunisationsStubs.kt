@@ -1,8 +1,8 @@
-package mocking.stubs.myMedicalRecord
+package mocking.stubs.myMedicalRecord.emis
 
 import mocking.MockingClient
-import mocking.data.myrecord.ProblemsData
-import mocking.emis.problems.EmisProblemsBuilder
+import mocking.data.myrecord.ImmunisationsData
+import mocking.emis.immunisations.EmisImmunisationsBuilder
 import mocking.stubs.InputResponse
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.EmisStubsPatientFactory.Companion.goodPatientEMIS
@@ -11,14 +11,14 @@ import mocking.stubs.EmisStubsPatientFactory.Companion.timeoutPatientEMIS
 import models.Patient
 import java.time.Duration
 
-class ProblemsStubs(private val mockingClient: MockingClient) {
+class ImmunisationsStubs(private val mockingClient: MockingClient) {
     fun generateEMISStubs() {
-        val problemsDataLoader = ProblemsData.getProblemsData()
-        val mapEMISProblemsRequestStubs =
-                InputResponse<Patient, EmisProblemsBuilder>()
+        val immunisationDataLoader = ImmunisationsData.getImmunisationsData()
+        val mapEMISImmunisationResultsStubs =
+                InputResponse<Patient, EmisImmunisationsBuilder>()
                         .addResponse(goodPatientEMIS) { builder
                             ->
-                            builder.respondWithSuccess(problemsDataLoader)
+                            builder.respondWithSuccess(immunisationDataLoader)
                         }
 
                         .addResponse(serviceNotEnabledPatientEMIS) { builder
@@ -28,12 +28,12 @@ class ProblemsStubs(private val mockingClient: MockingClient) {
 
                         .addResponse(timeoutPatientEMIS) { builder
                             ->
-                            builder.respondWithSuccess(problemsDataLoader)
+                            builder.respondWithSuccess(immunisationDataLoader)
                                     .delayedBy(Duration.ofSeconds(TIMEOUT_DELAY))
                         }
 
-        mapEMISProblemsRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(myRecord.problemsRequest(scenario.forMatcher)) }
+        mapEMISImmunisationResultsStubs.listResponse().forEach { scenario ->
+            mockingClient.forEmis { scenario.getResponse(myRecord.immunisationsRequest(scenario.forMatcher)) }
         }
 
     }

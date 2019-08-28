@@ -7,23 +7,20 @@ import mocking.stubs.appointments.AppointmentSlotsStubs
 import mocking.stubs.appointments.BookAppoinmentStubs
 import mocking.stubs.appointments.CancelAppointmentsStubs
 import mocking.stubs.appointments.ViewAppointmentsStubsEMIS
-import mocking.stubs.myMedicalRecord.AllergiesStubs
-import mocking.stubs.myMedicalRecord.ConsultationsStubs
-import mocking.stubs.myMedicalRecord.ImmunisationsStubs
-import mocking.stubs.myMedicalRecord.MedicationsStubs
-import mocking.stubs.myMedicalRecord.ProblemsStubs
-import mocking.stubs.myMedicalRecord.TestResultsStubs
+import mocking.stubs.myMedicalRecord.MedicalRecordStubs
+import mocking.stubs.pds.ViewSpinePdsStubs
 import mocking.stubs.prescriptions.OrderRepeatPrescriptionsStubs
 import mocking.stubs.prescriptions.ViewCoursesStubs
 import mocking.stubs.prescriptions.ViewPrescriptionsStubs
-import mocking.stubs.pds.ViewSpinePdsStubs
+
+private const val GP_SUPPLIER = "EMIS"
 
 class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
 
     fun generateStubs() {
         mockingClient.clearWiremock()
         mockingClient.favicon()
-        PatientDataGenerator.generatePatientData(EMISPatientList, "EMIS")
+        PatientDataGenerator.generatePatientData(EMISPatientList, GP_SUPPLIER)
         generateAppointmentStubs()
         generateMyMedicalRecordsStubs()
         generatePrescriptionStubs()
@@ -38,12 +35,7 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
     }
 
     private fun generateMyMedicalRecordsStubs() {
-        TestResultsStubs(mockingClient).generateEMISStubs()
-        ImmunisationsStubs(mockingClient).generateEMISStubs()
-        AllergiesStubs(mockingClient).generateEMISStubs()
-        MedicationsStubs(mockingClient).generateEMISStubs()
-        ConsultationsStubs(mockingClient).generateEMISStubs()
-        ProblemsStubs(mockingClient).generateEMISStubs()
+        MedicalRecordStubs(mockingClient).generateStubs(GP_SUPPLIER)
     }
 
     private fun generatePrescriptionStubs() {

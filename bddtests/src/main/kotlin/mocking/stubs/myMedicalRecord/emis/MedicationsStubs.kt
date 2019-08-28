@@ -1,4 +1,4 @@
-package mocking.stubs.myMedicalRecord
+package mocking.stubs.myMedicalRecord.emis
 
 import mocking.MockingClient
 import mocking.data.myrecord.MedicationsData
