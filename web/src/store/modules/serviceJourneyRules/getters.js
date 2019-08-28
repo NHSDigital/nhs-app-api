@@ -1,10 +1,23 @@
 import get from 'lodash/fp/get';
-import { CDSS_ADMIN, CDSS_ADVICE, GP_AT_HAND, IM1_PROVIDER, INFORMATICA, NOMINATED_PHARMACY } from './mutation-types';
+import { CDSS_ADMIN,
+  CDSS_ADVICE,
+  GP_AT_HAND,
+  IM1_PROVIDER,
+  INFORMATICA,
+  NOMINATED_PHARMACY,
+  ONLINE_CONSULTATIONS,
+} from './mutation-types';
 
 
 export default {
   [`${CDSS_ADMIN}Disabled`](state) {
     return state.rules.cdssAdmin.provider === 'none';
+  },
+  [`${ONLINE_CONSULTATIONS}Enabled`](state) {
+    return !(state.rules.cdssAdmin.provider === 'none') || !(state.rules.cdssAdvice.provider === 'none');
+  },
+  [`${ONLINE_CONSULTATIONS}Disabled`](state) {
+    return (state.rules.cdssAdmin.provider === 'none') && (state.rules.cdssAdvice.provider === 'none');
   },
   [`${CDSS_ADMIN}Enabled`](state) {
     return !(state.rules.cdssAdmin.provider === 'none');

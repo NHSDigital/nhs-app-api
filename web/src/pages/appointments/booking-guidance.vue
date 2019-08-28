@@ -2,11 +2,11 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <appointment-guidance-menu v-if="onlineConsultationsEnabled"/>
-        <template v-else>
-          <h2 id="guidance_sub_header">{{ $t('appointments.guidance.header') }}</h2>
-          <div data-purpose="info">
-            <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.text') }}</p>
+        <sjr-if journey="onlineConsultations">
+          <appointment-guidance-menu/>
+        </sjr-if>
+        <sjr-if journey="onlineConsultations" :disabled="true">
+          <div id="info" data-purpose="info">
             <strong>1. {{ $t('appointments.guidance.li1.header') }}</strong>
             <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li1.text') }}</p>
             <strong>2. {{ $t('appointments.guidance.li2.header') }}</strong>
@@ -27,7 +27,7 @@
               </generic-button>
             </no-js-form>
           </analytics-tracked-tag>
-        </template>
+        </sjr-if>
       </div>
     </div>
 
@@ -47,7 +47,7 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <template v-if="onlineConsultationsEnabled">
+        <sjr-if journey="onlineConsultations">
           <generic-button v-if="$store.state.device.isNativeApp"
                           id="back_btn"
                           :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
@@ -58,7 +58,7 @@
                                   :path="indexPath"
                                   button-text="appointments.guidance.backDesktopLinkText"
                                   @clickAndPrevent="onBackButtonClicked"/>
-        </template>
+        </sjr-if>
       </div>
     </div>
   </div>
@@ -72,6 +72,7 @@ import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidan
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
+import SjrIf from '@/components/SjrIf';
 
 export default {
   layout: 'nhsuk-layout',
@@ -81,6 +82,7 @@ export default {
     NoJsForm,
     AppointmentGuidanceMenu,
     DesktopGenericBackLink,
+    SjrIf,
   },
   data() {
     return {
@@ -91,10 +93,6 @@ export default {
   computed: {
     appointmentBookingPath() {
       return APPOINTMENT_BOOKING.path;
-    },
-    onlineConsultationsEnabled() {
-      return this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === 'true' ||
-             this.$store.app.$env.ONLINE_CONSULTATIONS_ENABLED === true;
     },
     formData() {
       return {

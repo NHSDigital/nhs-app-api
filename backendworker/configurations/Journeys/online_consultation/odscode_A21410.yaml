@@ -1,0 +1,10 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A21410"
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: GEC_ADM

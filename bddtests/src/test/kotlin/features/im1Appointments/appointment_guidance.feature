@@ -17,14 +17,14 @@ Feature: Guidance prior to booking an appointment
     And I am logged in
     And I am on the My Appointments page
     When I select "Book an appointment" button
-    Then I am given guidance as to my options before booking an appointment
+    Then I am given guidance as to my options with OLC enabled before booking
 
   Scenario: A user with no upcoming appointments is presented with guidance
     Given I have no booked appointments for EMIS
     And I am logged in
     And I am on the My Appointments page
     When I select "Book an appointment" button
-    Then I am given guidance as to my options before booking an appointment
+    Then I am given guidance as to my options with OLC enabled before booking
 
   @onlineconsultations
   Scenario: A user with online consultations is presented with guidance when booking an appointment and can proceed to check their symptoms

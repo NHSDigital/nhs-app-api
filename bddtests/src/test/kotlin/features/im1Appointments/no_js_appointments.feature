@@ -6,7 +6,7 @@ Feature: Appointments Service With Javascript Disabled
     Given I have disabled javascript
 
   #This test covers navigation via buttons/links
-
+   
   Scenario Outline: A <GP System> user can find and book available appointments with javascript disabled
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
@@ -14,7 +14,7 @@ Feature: Appointments Service With Javascript Disabled
     Then I am informed I have no upcoming appointments
 
     When I click the 'Book an appointment' button
-    Then I am given guidance as to my options before booking an appointment
+    Then I am given guidance as to my options with OLC enabled before booking
 
     When I click the 'Book an appointment' button
     Then the Available Appointments page is displayed
@@ -48,7 +48,7 @@ Feature: Appointments Service With Javascript Disabled
     Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     When I retrieve the 'Appointment Guidance' page directly
-    And I click the 'Check symptoms' button
+    And I select Appointment Guidance Page Check symptoms button
     Then the Check My Symptoms page is displayed
     And the Check My Symptoms page header and navigation menu are correct
 

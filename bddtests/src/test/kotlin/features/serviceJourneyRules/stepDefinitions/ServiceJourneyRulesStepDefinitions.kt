@@ -23,46 +23,57 @@ import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
 import java.util.*
 
 private const val EMIS_GP_SUPPLIER = "EMIS"
-private const val ODSCODE_IM1_ECONSULT_NOMINATED_PHARMACY_ENABLED = "A11111"
+private const val TPP_GP_SUPPLIER = "TPP"
+private const val VISION_GP_SUPPLIER = "VISION"
+private const val ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED = "A11111"
 private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
 private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
+private const val TPP_ONLINE_CONSULTATIONS_DISABLED = "A55555"
+private const val VISION_ONLINE_CONSULTATIONS_DISABLED = "A66666"
 
 class ServiceJourneyRulesStepDefinitions {
 
     private val journeysToGpInformationMap = mapOf(
-            EnumSet.of(JourneyType.APPOINTMENTS_IM1,
+            GpInformation(EMIS_GP_SUPPLIER, ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED) to
+                    EnumSet.of(JourneyType.APPOINTMENTS_IM1,
                     JourneyType.MEDICAL_RECORD_IM1,
                     JourneyType.PRESCRIPTIONS_IM1,
-                    JourneyType.NOMINATED_PHARMACY_ENABLED)
-                    to GpInformation(EMIS_GP_SUPPLIER, ODSCODE_IM1_ECONSULT_NOMINATED_PHARMACY_ENABLED),
-            EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
+                    JourneyType.ONLINE_CONSULTATIONS_DISABLED,
+                    JourneyType.NOMINATED_PHARMACY_ENABLED),
+            GpInformation(EMIS_GP_SUPPLIER, ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED) to
+                    EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
                     JourneyType.MEDICAL_RECORD_IM1,
                     JourneyType.PRESCRIPTIONS_IM1,
-                    JourneyType.NOMINATED_PHARMACY_DISABLED)
-                    to GpInformation(EMIS_GP_SUPPLIER,  ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED),
-            EnumSet.of(JourneyType.APPOINTMENTS_GPATHAND,
+                    JourneyType.NOMINATED_PHARMACY_DISABLED),
+            GpInformation(EMIS_GP_SUPPLIER, ODSCODE_GP_AT_HAND_CONFIGURATIONS) to
+                    EnumSet.of(JourneyType.APPOINTMENTS_GPATHAND,
                     JourneyType.MEDICAL_RECORD_GPATHAND,
-                    JourneyType.PRESCRIPTIONS_GPATHAND)
-                    to GpInformation(EMIS_GP_SUPPLIER, ODSCODE_GP_AT_HAND_CONFIGURATIONS)
+                    JourneyType.PRESCRIPTIONS_GPATHAND),
+            GpInformation(TPP_GP_SUPPLIER, TPP_ONLINE_CONSULTATIONS_DISABLED) to
+                    EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
+            GpInformation(VISION_GP_SUPPLIER, VISION_ONLINE_CONSULTATIONS_DISABLED) to
+                    EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED)
     )
 
     @Given("^I am a user whose ODS Code does not have specific journey configuration set up$")
     fun iAmAUserWhoseODSCodeDoesNotHaveASpecificJourneyConfigurationSetUp() {
-        SerenityHelpers.setGpSupplier("TPP")
+        SerenityHelpers.setGpSupplier(TPP_GP_SUPPLIER)
 
-        val patient = Patient.getDefault("TPP")
+        val patient = Patient.getDefault(TPP_GP_SUPPLIER)
                 .copy(odsCode = TPP_ODS_CODE_NO_SJR_CONFIGURATION)
         patient.tppUserSession!!.copy(unitId = TPP_ODS_CODE_NO_SJR_CONFIGURATION)
         SerenityHelpers.setPatient(patient)
     }
 
-    @Given("^I am a user where the journey configurations are:$")
-    fun iAmAUserWhereTheJourneyConfigurationsAre(configurations: List<Configuration>) {
+
+    @Given("^I am a (.*) user where the journey configurations are:$")
+    fun iAmAUserWhereTheJourneyConfigurationsAre(gpSystem: String, configurations: List<Configuration>) {
         val journeyTypes =
                 configurations.map { configuration -> configuration.toJourneyType() }
-        val gpInformation = findGpInformation(journeyTypes)
+        val gpInformation = findGpInformation(gpSystem, journeyTypes)
 
-        Assert.assertNotNull("Test setup incorrect: Cannot find a matching ODScode with given configuration in SJR",
+        Assert.assertNotNull("Test setup incorrect: Cannot find a matching ods code for system:"
+                +gpSystem+ "and odsCode: " +gpInformation?.odsCode + ", with given configuration in SJR",
                 gpInformation)
 
         val patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
@@ -145,8 +156,9 @@ class ServiceJourneyRulesStepDefinitions {
                 serviceJourneyRulesResponse.journeys.nominatedPharmacy)
     }
 
-    private fun findGpInformation(journeyTypes: Collection<JourneyType>): GpInformation? {
-        journeysToGpInformationMap.forEach { (journeyTypesConfig, gpInformation) ->
+    private fun findGpInformation(gpSystem: String, journeyTypes: Collection<JourneyType>): GpInformation? {
+        journeysToGpInformationMap.filter { map -> map.key.gpSupplier == gpSystem }
+                .forEach { (gpInformation, journeyTypesConfig) ->
             if (journeyTypesConfig.size >= journeyTypes.size && journeyTypesConfig.containsAll(journeyTypes)) {
                 return gpInformation
             }
@@ -177,6 +189,7 @@ class ServiceJourneyRulesStepDefinitions {
         NOMINATED_PHARMACY_DISABLED,
         NOMINATED_PHARMACY_ENABLED,
         PRESCRIPTIONS_GPATHAND,
-        PRESCRIPTIONS_IM1
+        PRESCRIPTIONS_IM1,
+        ONLINE_CONSULTATIONS_DISABLED,
     }
 }

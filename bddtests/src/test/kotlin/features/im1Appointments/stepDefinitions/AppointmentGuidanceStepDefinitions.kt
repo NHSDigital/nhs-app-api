@@ -13,21 +13,25 @@ class AppointmentGuidanceStepDefinitions {
     @When("^I select Appointment Guidance Page Check symptoms button$")
     @Throws(Exception::class)
     fun whenISelectAppointmentGuidancePageCheckSymptomsButton() {
-        appointmentGuidanceSteps.appointmentGuidancePage.checkSymptomsButton.click()
+        appointmentGuidanceSteps.appointmentGuidancePage.menuCheckSymptomsButton.click()
     }
 
-    //online-consultation-journey
     @When("^I select the Appointment Guidance Check symptoms menu item$")
     @Throws(Exception::class)
     fun whenISelectAppointmentGuidancePageCheckSymptomsMenuItem() {
         appointmentGuidanceSteps.appointmentGuidancePage.menuCheckSymptomsButton.click()
     }
 
+    @When("^I am given guidance as to my options with OLC enabled before booking$")
+    @Throws(Exception::class)
+    fun thenIAmGivenGuidanceAsToMyOptionsBeforeBookingAnAppointmentOLCEnabled() {
+        appointmentGuidanceSteps.checkGuidanceItemsAreCorrectOLCEnabled()
+    }
+
     @Then("^I am given guidance as to my options before booking an appointment$")
     @Throws(Exception::class)
     fun thenIAmGivenGuidanceAsToMyOptionsBeforeBookingAnAppointment() {
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
-        appointmentGuidanceSteps.checkTheContentHeaderIsCorrect()
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
 }

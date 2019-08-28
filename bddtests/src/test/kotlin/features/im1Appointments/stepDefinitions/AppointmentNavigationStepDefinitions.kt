@@ -43,7 +43,7 @@ class AppointmentNavigationStepDefinitions {
         appointmentGuidanceSteps.appointmentGuidancePage.
                 locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
-        appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
+        appointmentGuidanceSteps.checkGuidanceItemsAreCorrectOLCEnabled();
     }
 
     @Given("^I click through to the online consultations Appointment Guidance page$")
