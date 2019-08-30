@@ -146,6 +146,7 @@ class NativePageElement(
                 when(retryCount) {
                     0 -> throw exception
                     else -> {
+                        println("Could not find element. RETRYING")
                         retryCount--
                         Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
                     }

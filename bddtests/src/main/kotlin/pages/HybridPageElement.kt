@@ -121,8 +121,10 @@ open class HybridPageElement(
                 staleElement = false
                 retryCountdown=0
             } catch (e: StaleElementReferenceException) {
+                println("Could not find element. RETRYING")
                 staleElement = true
             } catch (e: AssertionError) {
+                println("Could not find element. RETRYING")
                 Thread.sleep(waitTime)
                 retryCountdown--
                 if(retryCountdown==0)
@@ -232,6 +234,7 @@ open class HybridPageElement(
                     0 -> throw exception
                     else -> {
                         retryCount--
+                        println("Could not find element. RETRYING")
                         Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
                     }
                 }

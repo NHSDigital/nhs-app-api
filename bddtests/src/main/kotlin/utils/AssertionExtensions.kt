@@ -16,6 +16,7 @@ fun assertTrueWithRetry(condition: Boolean,
             retryCountdown=0
         }
         catch(e: AssertionError) {
+            println("Could not assert true. RETRYING")
             Thread.sleep(waitTime)
             retryCountdown--
             if(retryCountdown==0)

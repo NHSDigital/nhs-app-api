@@ -2,9 +2,13 @@ package mongodb
 
 import com.google.gson.GsonBuilder
 import com.mongodb.MongoClient
-import com.mongodb.client.MongoDatabase
+import com.mongodb.client.MongoCollection
 import config.Config
+import org.bson.Document
 import org.junit.Assert
+import pages.ELEMENT_RETRY_TIME
+import pages.MILLISECONDS_IN_A_SECOND
+import pages.TIME_TO_WAIT_FOR_ELEMENT
 import java.lang.reflect.Type
 
 class MongoDBConnection(private val collectionName: String, private val host: String, private val port: Int) {
@@ -16,17 +20,29 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         assertNumberOfDocuments(0)
     }
 
-    fun assertNumberOfDocuments(expected: Int) {
+    fun assertNumberOfDocuments(expected: Int){
         val mongoClient = getMongoClient()
         val mongoDatabase = mongoClient.getDatabase(developmentDatabaseName)
-        val numberOfDocuments = mongoDatabase
-                .getCollection(collectionName)
-                .countDocuments().toInt()
-        Assert.assertEquals(
-                "Number of documents in $collectionName. Present: ${getContents(mongoDatabase)}",
-                expected,
-                numberOfDocuments)
-        mongoClient.close()
+        var retryCount = (TIME_TO_WAIT_FOR_ELEMENT / ELEMENT_RETRY_TIME).toInt()
+        while(retryCount>=0) {
+            val collection = mongoDatabase.getCollection(collectionName)
+            val numberOfDocuments = collection.countDocuments().toInt()
+            if(numberOfDocuments == expected){break;}
+            else {
+                when (retryCount) {
+                    0 -> Assert.fail(
+                            "Number of documents in $collectionName. " +
+                                    "\nExpected:$expected, Actual:$numberOfDocuments " +
+                                    "\nPresent: ${formatContents(collection)}")
+                    else -> {
+                        println("Number of documents in $collectionName. " +
+                                "Expected:$expected, Actual:$numberOfDocuments. RETRYING")
+                        retryCount--
+                        Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
+                    }
+                }
+            }
+        }
     }
 
     fun <T> getValues(type: Type): List<T> {
@@ -41,8 +57,7 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         return values
     }
 
-    private fun getContents(mongoDatabase: MongoDatabase): String {
-        val collection = mongoDatabase.getCollection(collectionName)
+    private fun formatContents(collection: MongoCollection<Document>): String {
         val documents = collection.find()
         val contents = documents.map { document -> "\t\t\t${document.toJson()}" }.joinToString("\n")
         return "\n\t\t$collectionName\n\t$contents\n"
