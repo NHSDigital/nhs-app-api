@@ -183,7 +183,7 @@ export default {
   },
 
   watch: {
-    $route(from, to) {
+    $route(to, from) {
       if (from !== to) {
         this.pathChanged = true;
       }
@@ -207,29 +207,21 @@ export default {
     }
   },
   mounted() {
-    if (process.client) {
-      EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
+    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
 
-      this.$store.subscribe((mutation) => {
-        if (mutation.type === 'myRecord/ACCEPT_TERMS') {
-          this.focusNhsAppRoot();
-        }
-      });
+    NativeVersionSetup(this.$store, this.$route);
+    if (this.loggedIn) {
+      this.$store.dispatch('session/startValidationChecking');
+      window.validateSession =
+          window.validateSession || (() => {
+            this.$store.dispatch('session/validate');
+          });
 
-      NativeVersionSetup(this.$store, this.$route);
-      if (this.loggedIn) {
-        this.$store.dispatch('session/startValidationChecking');
-        window.validateSession =
-            window.validateSession || (() => {
-              this.$store.dispatch('session/validate');
-            });
-
-        if (this.$store.state.device.isNativeApp) {
-          this.$store.dispatch('auth/nativeLogin');
-        }
-        if (this.$store.state.device.isNativeApp) {
-          NativeCallbacks.resetPageFocus();
-        }
+      if (this.$store.state.device.isNativeApp) {
+        this.$store.dispatch('auth/nativeLogin');
+      }
+      if (this.$store.state.device.isNativeApp) {
+        NativeCallbacks.resetPageFocus();
       }
     }
   },
@@ -237,7 +229,6 @@ export default {
     if (this.pathChanged) {
       this.focusNhsAppRoot();
       this.pathChanged = false;
-      NativeCallbacks.pageLoadComplete();
     }
   },
   beforeDestroy() {

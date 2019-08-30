@@ -148,6 +148,7 @@ export default {
       await this.$store.dispatch('myRecord/acceptTerms');
       await this.$store.dispatch('myRecord/load');
     }
+    this.$store.dispatch('device/unlockNavBar');
   },
   methods: {
     getCollapsedState(collapsed) {

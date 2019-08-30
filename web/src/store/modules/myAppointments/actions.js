@@ -15,6 +15,9 @@ export default {
       .getV1PatientAppointments()
       .then((data) => {
         commit(LOADED, data);
+      })
+      .finally(() => {
+        this.dispatch('device/unlockNavBar');
       });
   },
   init({ commit }) {

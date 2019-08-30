@@ -50,6 +50,7 @@ import MessageText from '@/components/widgets/MessageText';
 import { INDEX, MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
   name: 'Warning',
@@ -77,6 +78,7 @@ export default {
       sessionStorage.setItem('hasAgreedToMedicalWarning', true);
       this.$store.dispatch('myRecord/acceptTerms');
       this.$store.dispatch('myRecord/load');
+      EventBus.$emit(FOCUS_NHSAPP_ROOT);
     },
     onBackButtonClicked(event) {
       event.preventDefault();

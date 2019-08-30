@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-import NativeCallbacks from '@/services/native-app';
 import { INIT_PAGE_TITLE, UPDATE_PAGE_TITLE } from './mutation-types';
 
 export default {

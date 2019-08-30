@@ -2,23 +2,38 @@
 import actions from '@/store/modules/myAppointments/actions';
 import { LOADED } from '@/store/modules/myAppointments/mutation-types';
 
-const API_HOST = 'http://unit.test';
-
 const { load, cancel } = actions;
 
 describe('load', () => {
+  it('will dispatch device/unlockNavBar', async () => {
+    const dispatch = jest.fn();
+    const that = {
+      app: {
+        $http: {
+          getV1PatientAppointments: jest.fn().mockImplementation(() => Promise.resolve()),
+        },
+      },
+      dispatch,
+    };
+
+    await load.call(that, { commit: jest.fn() });
+
+    expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+  });
+
   it('will request the patient appointments from the backend', () => {
     const that = {
       app: {
         $http: {
-          getV1PatientAppointments: jest.fn().mockResolvedValue(),
+          getV1PatientAppointments: jest.fn().mockImplementation(() => Promise.resolve()),
         },
       },
       dispatch: jest.fn(),
     };
-    return load.call(that, { commit: jest.fn() }, { API_HOST }).then(() => {
-      expect(that.app.$http.getV1PatientAppointments).toBeCalled();
-    });
+
+    return load
+      .call(that, { commit: jest.fn() })
+      .then(() => expect(that.app.$http.getV1PatientAppointments).toBeCalled());
   });
 
   it('will call commit with the data returned from the HTTP call', () => {
@@ -38,7 +53,7 @@ describe('load', () => {
     const commit = jest.fn();
 
     return load
-      .call(that, { commit }, { API_HOST })
+      .call(that, { commit })
       .then(() => expect(commit).toBeCalledWith(LOADED, expected));
   });
 });

@@ -41,6 +41,12 @@ describe('my-record', () => {
     $store = createStore({ $http: createHttp(), state: createState() });
   });
 
+  it('will call pageLoadComplete when mounted', () => {
+    mountPage({ $store });
+
+    expect($store.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+  });
+
   describe('terms not accepted', () => {
     beforeEach(() => {
       $store.state.myRecord.hasAcceptedTerms = false;

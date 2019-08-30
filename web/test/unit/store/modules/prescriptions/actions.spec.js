@@ -4,18 +4,35 @@ import { PRESCRIPTIONS_LOADED, PRESCRIPTIONS_CLEAR } from '@/store/modules/presc
 const { load, clear } = actions;
 
 describe('load', () => {
-  it('will request prescriptions and courses from the backend', () => {
+  it('will dispatch device/unlockNavBar', async () => {
+    const dispatch = jest.fn();
     const that = {
       app: {
         $http: {
-          getV1PatientPrescriptions: jest.fn().mockResolvedValue(),
+          getV1PatientPrescriptions: jest.fn().mockImplementation(() => Promise.resolve()),
+        },
+      },
+      dispatch,
+    };
+
+    await load.call(that, { commit: jest.fn() });
+
+    expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+  });
+
+  it('will request prescriptions and courses from the backend', async () => {
+    const that = {
+      app: {
+        $http: {
+          getV1PatientPrescriptions: jest.fn().mockImplementation(() => Promise.resolve()),
         },
       },
       dispatch: jest.fn(),
     };
-    return load.call(that, { commit: jest.fn() }).then(() => {
-      expect(that.app.$http.getV1PatientPrescriptions).toBeCalled();
-    });
+
+    return load
+      .call(that, { commit: jest.fn() })
+      .then(() => expect(that.app.$http.getV1PatientPrescriptions).toBeCalled());
   });
 
   it('will call commit with PRESCRIPTIONS_LOADED and the data returned from the HTTP call', () => {

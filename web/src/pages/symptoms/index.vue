@@ -11,6 +11,9 @@ export default {
   components: {
     symptomsCheck,
   },
+  mounted() {
+    this.$store.dispatch('device/unlockNavBar');
+  },
 };
 </script>
 

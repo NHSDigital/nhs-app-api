@@ -21,6 +21,11 @@ describe('more', () => {
     return mount(More, { $store, $router });
   };
 
+  it('will dispatch device/unlockNavBar when page mounted', () => {
+    wrapper = mountAs();
+    expect($store.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+  });
+
   it('will include the organ donation link', () => {
     wrapper = mountAs();
     const link = wrapper.find(OrganDonationLink);

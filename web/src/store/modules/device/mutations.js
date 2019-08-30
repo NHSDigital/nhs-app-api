@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-import NativeCallbacks from '@/services/native-app';
 import { CHECKYOURSYMPTOMS, GP_FINDER } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, GO_TO_CHECK_SYMPTOMS, GO_TO_GP_FINDER, initialState } from './mutation-types';

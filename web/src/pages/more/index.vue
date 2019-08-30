@@ -66,6 +66,9 @@ export default {
   created() {
     this.redirectIfDesktop();
   },
+  mounted() {
+    this.$store.dispatch('device/unlockNavBar');
+  },
   methods: {
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname, null);
