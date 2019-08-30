@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.state.myRecord.hasAcceptedTerms"
+  <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()"
        :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
       <glossary-header :extra-classes="[$style.glossary]"/>
@@ -106,6 +106,7 @@ export default {
     return {
       PATIENTDETAILS,
       clinicalAbbreviationsUrl: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
+      hasAgreed: false,
     };
   },
   computed: {
@@ -142,6 +143,12 @@ export default {
       this.$store.dispatch('myRecord/resetTerms');
     }
   },
+  async mounted() {
+    if (this.hasAgreed) {
+      await this.$store.dispatch('myRecord/acceptTerms');
+      await this.$store.dispatch('myRecord/load');
+    }
+  },
   methods: {
     getCollapsedState(collapsed) {
       return collapsed ? this.$style.closed : this.$style.opened;
@@ -157,6 +164,14 @@ export default {
     },
     hasRecordAccess() {
       return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
+    },
+    hasAgreedToMedicalWarning() {
+      try {
+        this.hasAgreed = !!sessionStorage.getItem('hasAgreedToMedicalWarning');
+      } catch (e) {
+        this.hasAgreed = false;
+      }
+      return this.hasAgreed;
     },
   },
 };

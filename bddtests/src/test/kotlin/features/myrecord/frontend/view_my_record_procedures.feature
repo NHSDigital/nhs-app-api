@@ -25,4 +25,5 @@ Feature: View My Medical Record Information - Procedures Frontend
     And I am on my record information page
     When I enter url address for procedures detail directly into the url
     Then I am redirected to the 'My Record' page
-    And I see the my record warning page
+    And I see the my medical record page
+    And I see the top of my medical record page

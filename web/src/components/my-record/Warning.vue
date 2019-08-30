@@ -71,6 +71,7 @@ export default {
   methods: {
     onContinueButtonClicked(event) {
       event.preventDefault();
+      sessionStorage.setItem('hasAgreedToMedicalWarning', true);
       this.$store.dispatch('myRecord/acceptTerms');
       this.$store.dispatch('myRecord/load');
     },
