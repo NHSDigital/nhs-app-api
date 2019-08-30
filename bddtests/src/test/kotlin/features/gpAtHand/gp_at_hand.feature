@@ -2,7 +2,6 @@
 Feature: GP at Hand Frontend
 
   @appointments
-    @james
   Scenario: A user sees an appropriate message when the appointments journey configuration is set to Gp at Hand
     Given I am a EMIS user where the journey configurations are:
       | Journey            | Value     |
