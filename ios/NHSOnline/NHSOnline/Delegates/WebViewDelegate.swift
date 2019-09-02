@@ -2,6 +2,7 @@ import UIKit
 import SafariServices
 import WebKit
 import os.log
+import iProov
 
 class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
     let knownServices: KnownServices
@@ -28,7 +29,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.schemeHandlers = SchemeHandlers()
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
     }
-
+    
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         if let response = navigationResponse.response as? HTTPURLResponse {
             
@@ -49,11 +50,35 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+
+        if (checkIfIproov(navigationAction: navigationAction)) {
+            let url = navigationAction.request.url;
+
+            launchIproov(url: url!, webView: webView);
+            decisionHandler(.cancel)
+            return;
+
+        }
+
+        navigate(webView: webView, navigationAction: navigationAction, decisionHandler: decisionHandler);
         
+    }
+    
+    func checkIfIproov (navigationAction: WKNavigationAction) -> Bool  {
+        if (navigationAction.navigationType == .linkActivated && navigationAction.request.url?.host == "iproov.app") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    
+    private func navigate(webView: WKWebView, navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+
         shouldHandleErrors = false
-        
+
         if let initialUrl = navigationAction.request.url {
-            
+
             let url = ensureSupportedScheme(initialUrl)
             
             if(url != initialUrl) {
@@ -61,24 +86,24 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 webView.loadPage(url: url.absoluteString)
                 return
             }
-            
+
             if(schemeHandlers.handleUrl(url: url)) {
                 decisionHandler(.cancel)
                 return
-            }            
-            
+            }
+
             if(url.absoluteString == config().HomeUrl + config().FidoLoginErrorPath) {
                 viewController.showBiometricSessionError()
                 stopActivityIndicator()
                 decisionHandler(.cancel)
                 return
             }
-            
+
             guard navigationAction.targetFrame?.isMainFrame != false else {
                 decisionHandler(.allow)
                 return
             }
-            
+
             if(!Reachability.isConnectedToNetwork()) {
                 decisionHandler(.cancel)
                 self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
@@ -90,20 +115,90 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 openInSafari(url: url)
                 return
             }
-            
+
             self.failedUrl = url
-            
+
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return;
             }
         }
-        
+
         self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         decisionHandler(.allow)
+        return
+
     }
     
+    func launchIproov(url: URL, webView: WKWebView) {
+        if (url.pathComponents.count < 2) {
+            NSLog("Too few path components")
+            return;
+        }
+
+        let token = url.pathComponents[1]
+
+        NSLog("Launching IProov")
+        let options = Options()
+        options.ui.title = NSLocalizedString("NHSLoginTitle", comment: "")
+        
+        let completionHandler: (Any?, Error?) -> Void = {
+            (data, error) in
+            if(error != nil || data == nil) {
+                if #available(iOS 10.0, *) {
+                    os_log("An error occured when attempting to navigate to the iProov page.",
+                           log: OSLog.default, type: .error)
+                } else {
+                    NSLog("An error occured when attempting to navigate to the iProov page.")
+                }
+                return;
+            }
+            // The if statement below has been added to mitigate a bug in iProov and should be removed when this has been resolved.
+            // This is covered in further detail in the Jira ticket NHSO-8203.
+            if(!Reachability.isConnectedToNetwork()) {
+                self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
+                return
+            }
+            IProov.launch(streamingURL: data as! String, token: token, options: options) { (status) in
+                self.checkIproovStatus(status: status);
+            }
+        }
+        webView.evaluateJavaScript("window.getIproovEndpoint()", completionHandler: completionHandler)
+    }
+    
+
+    private func checkIproovStatus(status: Status) {
+            switch status {
+            case let .processing(progress, message):
+                // The SDK will update your app with the progress of streaming to the server and authenticating
+                // the user. This will be called multiple time as the progress updates.
+                NSLog("IProov - Processing: progress = \(progress), message = \(message)")
+
+            case .success(_):
+                // The user was successfully verified/enrolled and the token has been validated.
+                // The token passed back will be the same as the one passed in to the original call.
+                NSLog("IProov - Success")
+
+            case let .failure(reason, feedbackCode):
+                // The user was not successfully verified/enrolled, as their identity could not be verified,
+                // or there was another issue with their verification/enrollment. A reason (as a string)
+                // is provided as to why the claim failed, along with a feedback code from the back-end.
+                NSLog("IProov - Failure: reason = \(reason), feedbackCode = \(feedbackCode)")
+
+            case .cancelled:
+                // The user cancelled iProov, either by pressing the close button at the top right, or sending
+                // the app to the background.
+                NSLog("IProov - Cancelled")
+
+            case let .error(error):
+                // The user was not successfully verified/enrolled due to an error (e.g. lost internet connection)
+                // along with an `iProovError` with more information about the error (NSError in Objective-C).
+                // It will be called once, or never.
+                NSLog("IProov - Error: error = \(error)")
+        }
+    }
+
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
@@ -183,8 +278,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func shouldOpenInSafari(url: URL) -> Bool {
         
         let nativeWebViewUrlParts = ["login",
-                          config().CidUrlSuffix]
-
+                                     config().CidUrlSuffix]
+        
         if(url.absoluteString.containsAnyOf(nativeWebViewUrlParts)) {
             return false
         }
@@ -412,7 +507,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             self.timer = nil
         }
     }
-
+    
     func checkPageLoadOriginAndStartActivityIndicator() {
         if(self.viewController.goingBack) {
             self.viewController.goingBack=false
@@ -430,7 +525,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.activityIndicator.startAnimating()
         UIApplication.shared.beginIgnoringInteractionEvents()
     }
-
+    
     func stopActivityIndicator() {
         UIApplication.shared.endIgnoringInteractionEvents()
         self.activityIndicator.stopAnimating()
