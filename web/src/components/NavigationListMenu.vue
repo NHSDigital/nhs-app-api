@@ -94,6 +94,7 @@ export default {
   @import "../style/accessibility";
   @import "../style/colours";
   @import "../style/fonts";
+  @import "../style/nhsukoverrides";
 
   .listMenu {
     border-top: 1px #D8DDE0 solid;

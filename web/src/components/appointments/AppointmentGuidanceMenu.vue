@@ -106,4 +106,5 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/listmenu';
+  @import "../../style/nhsukoverrides";
 </style>

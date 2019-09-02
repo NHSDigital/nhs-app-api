@@ -36,6 +36,7 @@ export default {
   @import "../../style/listmenu";
   @import "../../style/colours";
   @import "../../style/webshared";
+  @import "../../style/nhsukoverrides";
 
 .myAccountList {
   @include inner-container-width;

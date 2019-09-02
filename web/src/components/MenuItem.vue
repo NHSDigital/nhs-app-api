@@ -73,7 +73,6 @@ export default {
 @import "../style/info";
 
 .listMenuItem {
-  margin-top: -0.8em;
   font-family: $default-web;
   font-weight: lighter;
 
@@ -83,11 +82,11 @@ export default {
 
   a {
     @extend .focusBorder;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
     &:hover {
       color: #000;
     }
+   padding-top: 0.5em;
+   padding-bottom: 0.5em;
   }
 }
 </style>

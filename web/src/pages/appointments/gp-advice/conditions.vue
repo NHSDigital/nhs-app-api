@@ -23,15 +23,16 @@
            :key="serviceDefinition.category"
            :class="$style['no-padding']">
         <h2>{{ serviceDefinition.category }}</h2>
-        <ul v-for="serviceDefinitionItem in serviceDefinition.items"
-            :key="serviceDefinitionItem.title"
-            :class="$style['list-menu']">
-          <menu-item :id="serviceDefinitionItem.id"
+        <ul :class="$style['list-menu']">
+          <menu-item v-for="serviceDefinitionItem in serviceDefinition.items"
+                     :id="serviceDefinitionItem.id"
+                     :key="serviceDefinitionItem.title"
                      :href="getConditionHref(serviceDefinitionItem.id)"
                      :text="serviceDefinitionItem.title"
                      :aria-label="serviceDefinitionItem.title"
                      :click-func="onConditionClicked"
-                     :click-param="serviceDefinitionItem.id"/>
+                     :click-param="serviceDefinitionItem.id"
+                     :class="$style.serviceDefinitionList"/>
         </ul>
       </div>
     </div>
@@ -125,6 +126,7 @@ export default {
   @import "../../../style/info";
   @import '../../../style/textstyles';
   @import '../../../style/fonts';
+  @import "../../../style/nhsukoverrides";
 
   div.desktopWeb {
     max-width: 540px;
@@ -160,6 +162,10 @@ export default {
     h2 {
       margin-left: 0.7em;
     }
+  }
+
+  .serviceDefinitionList {
+   padding-bottom: 10px
   }
 
 </style>
