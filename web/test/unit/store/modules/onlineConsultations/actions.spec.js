@@ -24,8 +24,8 @@ const commit = jest.fn();
 const store = {
   app: {
     $cdsApi: {
-      postFhirServiceDefinitionEvaluate: jest.fn(),
-      getFhirServiceDefinition: jest.fn(),
+      postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate: jest.fn(),
+      getFhirServiceDefinitionByProviderByServicedefinitionid: jest.fn(),
     },
   },
   dispatch: jest.fn(),
@@ -54,8 +54,8 @@ const rootState = {
 describe('online consultations store actions', () => {
   beforeEach(() => {
     commit.mockClear();
-    store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockClear();
-    store.app.$cdsApi.getFhirServiceDefinition.mockClear();
+    store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate.mockClear();
+    store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid.mockClear();
     store.dispatch.mockClear();
   });
 
@@ -80,18 +80,21 @@ describe('online consultations store actions', () => {
     describe('attempted get service definition is rejected', () => {
       it('will dispatch clearAndSetError', () => {
         // Arrange
-        store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
-          () => Promise.reject(),
-        );
+        store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid
+          .mockImplementation(
+            () => Promise.reject(),
+          );
 
         // Act
         return getServiceDefinition
           .call(store, { rootState, commit }, parameters)
           .then(() => {
             // Assert
-            const { getFhirServiceDefinition } = store.app.$cdsApi;
-            expect(getFhirServiceDefinition).toHaveBeenCalledWith(parameters);
-            expect(getFhirServiceDefinition).toHaveBeenCalledTimes(1);
+            const { getFhirServiceDefinitionByProviderByServicedefinitionid } = store.app.$cdsApi;
+            expect(getFhirServiceDefinitionByProviderByServicedefinitionid)
+              .toHaveBeenCalledWith(parameters);
+            expect(getFhirServiceDefinitionByProviderByServicedefinitionid)
+              .toHaveBeenCalledTimes(1);
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
             expect(store.dispatch).toHaveBeenCalledTimes(1);
           });
@@ -106,9 +109,10 @@ describe('online consultations store actions', () => {
       describe('response is undefined', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
-          store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
-            () => Promise.resolve(undefined),
-          );
+          store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid
+            .mockImplementation(
+              () => Promise.resolve(undefined),
+            );
 
           // Act
           return getServiceDefinition
@@ -124,9 +128,10 @@ describe('online consultations store actions', () => {
       describe('getDataRequirements returns undefined', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
-          store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
-            () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
-          );
+          store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid
+            .mockImplementation(
+              () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
+            );
           getDataRequirements.mockReturnValue(undefined);
 
           // Act
@@ -150,9 +155,10 @@ describe('online consultations store actions', () => {
           };
           getDataRequirements.mockReturnValue(expectedDataRequirements);
 
-          store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
-            () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
-          );
+          store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid
+            .mockImplementation(
+              () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
+            );
 
           // Act
           return getServiceDefinition
@@ -198,9 +204,10 @@ describe('online consultations store actions', () => {
               };
               getDataRequirements.mockReturnValue(expectedDataRequirements);
 
-              store.app.$cdsApi.getFhirServiceDefinition.mockImplementation(
-                () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
-              );
+              store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid
+                .mockImplementation(
+                  () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
+                );
 
               const expectedQuestion = { type: 'text' };
               getQuestion.mockReturnValue(expectedQuestion);
@@ -239,7 +246,8 @@ describe('online consultations store actions', () => {
         expect(getParameters).toHaveBeenCalledTimes(1);
         expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
         expect(store.dispatch).toHaveBeenCalledTimes(1);
-        expect(store.app.$cdsApi.postFhirServiceDefinitionEvaluate).not.toHaveBeenCalled();
+        expect(store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate)
+          .not.toHaveBeenCalled();
       });
     });
 
@@ -270,18 +278,23 @@ describe('online consultations store actions', () => {
       describe('action called with addJavascriptDisabledHeader set to true', () => {
         it('will include addJavascriptDisabledHeader in post parameter', () => {
           // Arrange
-          store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-            () => Promise.reject(),
-          );
+          store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+            .mockImplementation(
+              () => Promise.reject(),
+            );
 
           // Act
           return evaluateServiceDefinition
             .call(store, { commit, state, rootState }, actionParams)
             .then(() => {
               // Assert
-              const { postFhirServiceDefinitionEvaluate } = store.app.$cdsApi;
-              expect(postFhirServiceDefinitionEvaluate).toHaveBeenCalledWith(request);
-              expect(postFhirServiceDefinitionEvaluate).toHaveBeenCalledTimes(1);
+              const {
+                postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate,
+              } = store.app.$cdsApi;
+              expect(postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                .toHaveBeenCalledWith(request);
+              expect(postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                .toHaveBeenCalledTimes(1);
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
               expect(store.dispatch).toHaveBeenCalledTimes(1);
             });
@@ -291,18 +304,23 @@ describe('online consultations store actions', () => {
       describe('attempted evaluation is rejected', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
-          store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-            () => Promise.reject(),
-          );
+          store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+            .mockImplementation(
+              () => Promise.reject(),
+            );
 
           // Act
           return evaluateServiceDefinition
             .call(store, { commit, state, rootState }, actionParams)
             .then(() => {
               // Assert
-              const { postFhirServiceDefinitionEvaluate } = store.app.$cdsApi;
-              expect(postFhirServiceDefinitionEvaluate).toHaveBeenCalledWith(request);
-              expect(postFhirServiceDefinitionEvaluate).toHaveBeenCalledTimes(1);
+              const {
+                postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate,
+              } = store.app.$cdsApi;
+              expect(postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                .toHaveBeenCalledWith(request);
+              expect(postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                .toHaveBeenCalledTimes(1);
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
               expect(store.dispatch).toHaveBeenCalledTimes(1);
             });
@@ -317,9 +335,10 @@ describe('online consultations store actions', () => {
         describe('response is undefined', () => {
           it('will dispatch clearAndSetError', () => {
             // Arrange
-            store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-              () => Promise.resolve(undefined),
-            );
+            store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+              .mockImplementation(
+                () => Promise.resolve(undefined),
+              );
 
             // Act
             return evaluateServiceDefinition
@@ -338,9 +357,10 @@ describe('online consultations store actions', () => {
             'unknown-status',
           ]).it('will dispatch clearAndSetError', (status) => {
             // Arrange
-            store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-              () => Promise.resolve({ status }),
-            );
+            store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+              .mockImplementation(
+                () => Promise.resolve({ status }),
+              );
 
             // Act
             return evaluateServiceDefinition
@@ -376,9 +396,10 @@ describe('online consultations store actions', () => {
                 // Arrange
                 const expectedQuestionnaireItem = { item: 'value' };
                 const expectedResponse = { status: 'data-required' };
-                store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-                  () => Promise.resolve(expectedResponse),
-                );
+                store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+                  .mockImplementation(
+                    () => Promise.resolve(expectedResponse),
+                  );
                 getSessionId.mockReturnValue(sessionId);
                 getQuestion.mockReturnValue(question);
                 getQuestionnaireItem.mockReturnValue(expectedQuestionnaireItem);
@@ -404,9 +425,10 @@ describe('online consultations store actions', () => {
                 const expectedQuestion = { text: 'question' };
                 const expectedResponse = { status: 'data-required' };
                 const expectedQuestionnaireItem = { item: 'value' };
-                store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-                  () => Promise.resolve(expectedResponse),
-                );
+                store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+                  .mockImplementation(
+                    () => Promise.resolve(expectedResponse),
+                  );
                 getSessionId.mockReturnValue(expectedSessionId);
                 getQuestion.mockReturnValue(expectedQuestion);
                 getQuestionnaireItem.mockReturnValue(expectedQuestionnaireItem);
@@ -436,9 +458,10 @@ describe('online consultations store actions', () => {
               it('will dispatch clearAndSetError', () => {
                 // Arrange
                 const expectedResponse = { status: 'success' };
-                store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-                  () => Promise.resolve(expectedResponse),
-                );
+                store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+                  .mockImplementation(
+                    () => Promise.resolve(expectedResponse),
+                  );
                 getCarePlansAndReferralRequests.mockReturnValue(undefined);
 
                 // Act
@@ -465,9 +488,10 @@ describe('online consultations store actions', () => {
               }]).it('will commit care plans and referral requests to store', ({ carePlans, referralRequests }) => {
                 // Arrange
                 const expectedResponse = { status: 'success' };
-                store.app.$cdsApi.postFhirServiceDefinitionEvaluate.mockImplementation(
-                  () => Promise.resolve(expectedResponse),
-                );
+                store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+                  .mockImplementation(
+                    () => Promise.resolve(expectedResponse),
+                  );
                 getCarePlansAndReferralRequests.mockReturnValue({ carePlans, referralRequests });
 
                 // Act

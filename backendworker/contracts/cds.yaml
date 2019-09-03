@@ -1,0 +1,476 @@
+openapi: 3.0.0
+info:
+  version: 0.0.4
+  title: NHS Online API - CDS API.
+  description: This is the API for NHS Online endpoints that are intended for CDS.
+paths:
+  /fhir/ServiceDefinition/{provider}/{serviceDefinitionId}:
+    get:
+      tags:
+        - cds-admin
+      summary: Gets the first question in admin help.
+      description: This call returns the first question in admin help.
+      parameters:
+        - in: path
+          name: serviceDefinitionId
+          description: service definition id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: provider
+          description: online consultations provider
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: NHSO-Request-ID
+          required: true
+          description: Request ID
+          schema:
+            type: string
+        - in: header
+          name: Accept
+          required: true
+          description: must be application/json+fhir
+          schema:
+            type: string
+        - in: header
+          name: NHSO-Native-Version-Tag
+          required: true
+          description: Version tag.
+          schema:
+            type: string
+        - in: header
+          name: X-CSRF-TOKEN
+          required: true
+          description: token sent with the request
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. First question returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cdsResponse"
+        "403":
+          description: Forbidden access when trying to obtain demographic details.
+        "404":
+          description: This is either that the demographic details could not be found or 
+          service definition ID could not be found with the provided details.
+        "500":
+          description: An unexpected error occurred processing the request to get the service ID, or to obtain paitent
+          demographics.
+        "502":
+          description: Bad response received from system.
+  /fhir/ServiceDefinition/{provider}/{serviceDefinitionId}/$evaluate:
+    post:
+      summary: Gets the first question in admin help.
+      description: This call returns the first question in admin help.
+      parameters:
+        - in: path
+          name: serviceDefinitionId
+          description: service definition id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: provider
+          description: online consultations provider
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Accept
+          required: true
+          description: must be application/json+fhir
+          schema:
+            type: string
+        - in: header
+          name: NHSO-Javascript-Disabled
+          required: false
+          description: Flag to indicate if javascript has been disabled
+          schema:
+            type: string
+        - in: header
+          name: Content-Type
+          required: true
+          description: needs to be 'application/json+fhir'.
+          schema:
+            type: string
+        - in: header
+          name: NHSO-Native-Version-Tag
+          required: true
+          description: Version tag.
+          schema:
+            type: string
+        - in: header
+          name: X-CSRF-TOKEN
+          required: true
+          description: token sent with the request
+          schema:
+            type: string
+      requestBody:
+        x-name: parameters
+        required: true
+        $ref: "#/components/requestBodies/olcEvaluate"
+      responses:
+        "200":
+          description: Successful operation. First question returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cdsResponse"
+        "403":
+          description: Forbidden access when trying to obtain demographic details.
+        "404":
+          description: This is either that the demographic details could not be found or
+          evaluate could not be carried out with the provided details.
+        "500":
+          description: An unexpected error occurred processing the request to evaluate the
+          answer, or to obtain paitent demographics.
+        "502":
+          description: Bad response received from system.
+  /fhir/ServiceDefinition/{provider}:
+    get:
+      summary: get service definition for provider
+      description: This call will return the service definitions for the provider eConsult
+      parameters:
+        - in: path
+          name: provider
+          description: online consultations provider
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Accept
+          required: true
+          description: must be application/json+fhir
+          schema:
+            type: string
+        - in: header
+          name: NHSO-Request-ID
+          required: true
+          description: id of the request
+          schema:
+            type: string
+        - in: header
+          name: X-CSRF-TOKEN
+          required: true
+          description: token sent with the request
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful return of the conditions list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/serviceDefinitionList"
+        "404":
+          description: Service definition list could not be found for the provider specified.
+        "500":
+          description: An unexpected error occurred processing the request.
+        "502":
+          description: Bad response received from system.
+components:
+  requestBodies:
+    olcEvaluate:
+      x-name: olcEvaluate
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/olcEvaluate"
+      description: Evaluate the question answer.
+      required: true
+  schemas:
+    cdsResponse:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          description: Resource type of the response.
+        contained:
+          type: array
+          description: Array of contained objects in the response.
+          items:
+            type: object
+            properties:
+              resourceType:
+                type: string
+                description: resource type of the contained object.
+              id:
+                type: string
+                description: id of the contained object
+              status:
+                type: string
+                description: status of the contained object
+              parameter:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: name of the paremeter
+                  valueString:
+                    type: string
+                    description: value of the parameter
+              intent:
+                type: string
+              title:
+                type: string
+                description: title of the resource
+              activity:
+                type: array
+                description: array of activities associated with the resource type
+                items:
+                  type: object
+                  properties:
+                    detail:
+                      type: object
+                      properties:
+                        description:
+                          type: string
+                          description: text for the resource
+              item:
+                type: array
+                description: Array of questions in the response.
+                items:
+                  type: object
+                  properties:
+                    linkId:
+                      type: string
+                      description: id which will provide a link to the question
+                    text:
+                      type: string
+                      description: provided text for the question
+                    type:
+                      type: string
+                    required:
+                      type: boolean
+                      description: boolean to indicate if the question is required
+                    item:
+                      type: array
+                      description: Array of answer(s) to the question in the response.
+                      items:
+                        type: object
+                        properties:
+                          linkId:
+                            type: string
+                            description: id which will provide a link to the question answer
+                          text:
+                            type: string
+                            description: provided text for the question answer
+                          type:
+                            type: string
+                          required:
+                            type: boolean
+                            description: boolean to indicate if the question answer is required
+        module:
+          type: object
+          description: module of the response
+          properties:
+            reference:
+              type: string
+              description: reference to the service definition
+        status:
+          type: string
+          description: status of the response
+        occurrenceDateTime:
+          type: string
+          description: date and time that the request occurec
+        outputParameters:
+          type: object
+          description: ouput parameters provided in the response
+          properties:
+            reference:
+              type: string
+              description: reference string to output parameter
+        result:
+          type: object
+          properties:
+            reference:
+              type: string
+              description: text reference to the result.
+        dataRequirement:
+          type: array
+          description: Array of contained objects in the response.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: id of the data requirement
+              type:
+                type: string
+                description: type of the required data
+              profile:
+                type: string
+                description: link to the profile of the data requirement.
+    olcEvaluate:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          description: Resource type of the request.
+        parameter:
+          type: array
+          description: Array of parameter objects in the response.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: name of the parameter
+              resource:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    description: Resource type of the parameter.
+                  identifier:
+                    type: object
+                    properties:
+                      value:
+                        type: string
+                        description: value for the identifier
+                  status:
+                    type: string
+                    description: status of the parameter
+                  item:
+                    type: array
+                    description: Array of questions answers.
+                    items:
+                      type: object
+                      properties:
+                        linkId:
+                          type: string
+                          description: id which will provide a link to the question
+                        answer:
+                          type: array
+                          description: array of question answers
+                          items:
+                            type: object
+                            properties:
+                              valueInteger:
+                                type: integer
+                                description: Value of type integer.
+                              valueDate:
+                                type: string
+                                description: Value of type date.
+                              valueTime:
+                                type: string
+                                description: Value of type time.
+                              valueString:
+                                type: string
+                                description: Value of type string.
+                              valueCoding:
+                                description: Value of type coding.
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                    description: Identity of the terminology system
+                                  version:
+                                    type: string
+                                    description: Version of the system - if relevant
+                                  code:
+                                    type: string
+                                    description: Symbol in syntax defined by the system
+                                  display:
+                                    type: string
+                                    description: Representation defined by the system
+                                  userSelected:
+                                    type: boolean
+                                    description: If this coding was chosen directly by the user
+                              valueBoolean:
+                                type: boolean
+                                description: Value of type boolean.
+                              valueDecimal:
+                                type: integer
+                                description: Value of type decimal.
+                              valueDateTime:
+                                type: string
+                                description: Value of type dateTime.
+                              valueUri:
+                                type: string
+                                description: Value of type uri.
+                              valueAttachment:
+                                description: Value of type attachment.
+                                type: object
+                                properties:
+                                  contentType:
+                                    type: string
+                                    description: Mime type of the content, with charset etc.
+                                  language:
+                                    type: string
+                                    description: Human language of the content (BCP-47)
+                                  data:
+                                    type: string
+                                    description: Data inline, base64ed
+                                  url:
+                                    type: string
+                                    description: Uri where the data can be found
+                                  size:
+                                    type: integer
+                                    description: Number of bytes of content (if url provided)
+                                  hash:
+                                    type: string
+                                    description: Hash of the data (sha-1, base64ed)
+                                  title:
+                                    type: string
+                                    description: Label to display in place of the data
+                                  creation:
+                                    type: string
+                                    description: Date attachment was first created
+                              valueQuantity:
+                                description: Value of type quantity.
+                                type: object
+                                properties:
+                                  value:
+                                    type: integer
+                                    description: Numerical value (with implicit precision)
+                                  comparator:
+                                    type: string
+                                    description: < | <= | >= | > - how to understand the value
+                                  unit:
+                                    type: string
+                                    description: Unit representation
+                                  system:
+                                    type: string
+                                    description: System that defines coded unit form
+                                  code:
+                                    type: string
+                                    description: Coded form of the unit
+                              valueReference:
+                                type: string
+                                description: Value of type reference.
+                              item:
+                                type: object
+                                description: Nested groups and questions.
+                            description: Valueset containing permitted answers.
+                  questionnaire:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                        description: reference to the questionnaire.
+    serviceDefinitionList:
+      type: array
+      properties:
+        category:
+          type: string
+          description: catageory of the service definitions
+        items:
+          type: array
+          description: Array of questions answers.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: service definition id
+              title:
+                type: string
+                description: title of the service definition
+                      

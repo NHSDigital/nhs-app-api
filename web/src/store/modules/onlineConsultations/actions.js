@@ -48,7 +48,7 @@ export default {
     const store = this;
     const { provider } = params;
 
-    return store.app.$cdsApi.getConditions({
+    return store.app.$cdsApi.getFhirServiceDefinitionByProvider({
       provider,
     }).then((response) => {
       commit(CLEAR);
@@ -67,7 +67,7 @@ export default {
     const store = this;
     const { serviceDefinitionId, provider } = params;
 
-    return store.app.$cdsApi.getFhirServiceDefinition({
+    return store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid({
       serviceDefinitionId,
       provider,
     }).then((response) => {
@@ -117,7 +117,7 @@ export default {
     }
 
 
-    return store.app.$cdsApi.postFhirServiceDefinitionEvaluate({
+    return store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate({
       serviceDefinitionId,
       provider,
       addJavascriptDisabledHeader,

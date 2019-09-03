@@ -1,6 +1,6 @@
 /* eslint-disable */
 import NHSOnlineApi from '@/services/v1nhsonlineapi';
-import CDSApi from '@/services/cdsapi';
+import CDSApi from '@/services/fhircdsapi';
 
 export default ({ app, store, res, req }) => {
 
