@@ -38,6 +38,7 @@
     <confirmation :submit-attempted="submitAttempted"/>
     <generic-button id="submit-button"
                     :class="[$style.button, $style.green]"
+                    :disabled="isDisabled"
                     click-delay="medium"
                     @click="clickSubmit">
       {{ $t('organDonation.reviewYourDecision.submitButton') }}
@@ -80,6 +81,7 @@ export default {
   mixins: [EnsureCanSubmit],
   data() {
     return {
+      isDisabled: false,
       isOptInDecision: this.$store.state.organDonation.registration.decision === DECISION_OPT_IN,
       isWithdrawing: this.$store.state.organDonation.isWithdrawing,
       submitAttempted: false,
@@ -126,6 +128,8 @@ export default {
         window.scrollTo(0, 0);
         return;
       }
+
+      this.isDisabled = true;
 
       this.$store.dispatch('organDonation/submitDecision');
     },

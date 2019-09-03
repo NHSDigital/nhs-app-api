@@ -357,3 +357,12 @@ Feature: Organ Donation Frontend
       And I click the 'Submit my decision' button on an Organ Donation page
       And I wait for 15 seconds
       And I see an appropriate Organ Donation decision processing message without a retry option
+
+    Scenario: A user cannot submit another registration request while waiting for the first to complete
+      Given I am a EMIS user who wishes to register as opt out, but OD takes too long to respond
+      And I am logged in
+      When I retrieve the 'Organ Donation' page directly
+      And I follow the opt-out journey to the 'Check Details' page
+      When I confirm that my details are accurate, and accept the privacy statement for organ donation
+      And I click the 'Submit my decision' button on an Organ Donation page
+      Then the 'Submit my decision' button has the 'disabled' attribute

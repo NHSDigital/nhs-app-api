@@ -168,4 +168,9 @@ open class OrganDonationStepDefinitions {
             false -> iAmOnTheExternalOrganDonationPage()
         }
     }
+
+    @Then("^the '(.*)' button has the '(.*)' attribute$")
+    fun theButtonHasTheAttribute(buttonText: String, attributeName: String) {
+        page.assertButtonHasAttribute(buttonText, attributeName)
+    }
 }

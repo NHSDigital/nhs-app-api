@@ -141,6 +141,10 @@ describe('review your decision', () => {
       expect(submitButton.text()).toBe('translate_organDonation.reviewYourDecision.submitButton');
     });
 
+    it('will not be disabled', () => {
+      expect(submitButton.attributes().disabled).toBeUndefined();
+    });
+
     describe('when neither T&C have been accepted', () => {
       beforeEach(() => {
         state.organDonation.isAccuracyAccepted = false;
@@ -171,6 +175,10 @@ describe('review your decision', () => {
         it('will scroll to the top', () => {
           expect(scrollTo).toHaveBeenCalledWith(0, 0);
         });
+
+        it('button will not be disabled', () => {
+          expect(submitButton.attributes().disabled).toBeUndefined();
+        });
       });
     });
 
@@ -199,6 +207,10 @@ describe('review your decision', () => {
 
         it('will scroll to the top', () => {
           expect(scrollTo).toHaveBeenCalledWith(0, 0);
+        });
+
+        it('button will not be disabled', () => {
+          expect(submitButton.attributes().disabled).toBeUndefined();
         });
       });
     });
@@ -229,6 +241,10 @@ describe('review your decision', () => {
         it('will scroll to the top', () => {
           expect(scrollTo).toHaveBeenCalledWith(0, 0);
         });
+
+        it('button will not be disabled', () => {
+          expect(submitButton.attributes().disabled).toBeUndefined();
+        });
       });
     });
 
@@ -249,6 +265,10 @@ describe('review your decision', () => {
 
       it('it will call organDonation/submitDecision', async () => {
         expect($store.dispatch).toHaveBeenCalledWith('organDonation/submitDecision');
+      });
+
+      it('button will be disabled', () => {
+        expect(submitButton.attributes().disabled).toBe('disabled');
       });
     });
   });

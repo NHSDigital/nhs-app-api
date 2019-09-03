@@ -1,7 +1,9 @@
 package pages.organDonation
 
+import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertIsVisible
 
 const val RACE_CONDITION_WAIT: Long = 50
 
@@ -27,6 +29,20 @@ abstract class OrganDonationBasePage: HybridPageObject() {
         //This wait has been added to ensure race condition does not occur on organ donation pages
         Thread.sleep(RACE_CONDITION_WAIT)
         clickOnButtonContainingText(buttonText)
+    }
+
+    fun assertButtonHasAttribute(buttonText: String, attributeName: String) {
+        HybridPageElement(
+            webDesktopLocator = "//button",
+            page = this
+        ).withText(buttonText, false)
+            .assertIsVisible()
+            .actOnTheElement {
+                Assert.assertTrue(
+                    "Expected attribute '$attributeName' not found on '$buttonText' button.",
+                    !it.getAttribute(attributeName).isNullOrBlank()
+                )
+            }
     }
 
     abstract fun assertDisplayed()
