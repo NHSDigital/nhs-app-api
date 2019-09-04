@@ -1,3 +1,5 @@
+using NHSOnline.Backend.Support;
+
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
 {
     internal class GpInfo

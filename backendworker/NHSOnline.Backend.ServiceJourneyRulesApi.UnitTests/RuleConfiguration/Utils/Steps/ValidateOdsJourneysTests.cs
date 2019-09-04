@@ -10,6 +10,7 @@ using Moq;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
+using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.Utils.Steps
@@ -152,6 +153,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
+                            .WithSupplier(Supplier.Emis)
                             .Build()
                     },
                     {
@@ -164,6 +166,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
+                            .WithSupplier(Supplier.Emis)
                             .Build()
                     },
                     {
@@ -176,6 +179,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
+                            .WithSupplier(Supplier.Emis)
                             .Build()
                     }
                 }
@@ -206,6 +210,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
+                            .WithSupplier(Supplier.Microtest)
                             .Build()
                     },
                     {
@@ -218,6 +223,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(false)
                             .NotificationsEnabled(false)
+                            .WithSupplier(Supplier.Emis)
                             .Build()
                     },
                     {
@@ -230,6 +236,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
+                            .WithSupplier(Supplier.Tpp)
                             .Build()
                     }
                 }
@@ -295,6 +302,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         ValidJourneys()
                             .NotificationsEnabled(null)
                             .Build()
+                    },
+                    {
+                        "A9",
+                        ValidJourneys()
+                            .WithSupplier(Supplier.Unknown)
+                            .Build()
                     }
                 }
             };
@@ -310,6 +323,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A6'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A7'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A8'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A9'.", Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -324,7 +338,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .MedicalRecord(MedicalRecordProvider.gpAtHand)
                 .Prescriptions(PrescriptionsProvider.gpAtHand)
                 .NominatedPharmacyEnabled(true)
-                .NotificationsEnabled(true);
+                .NotificationsEnabled(true)
+                .WithSupplier(Supplier.Emis);
         }
     }
 }

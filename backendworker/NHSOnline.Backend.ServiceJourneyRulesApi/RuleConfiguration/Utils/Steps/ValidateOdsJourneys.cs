@@ -53,7 +53,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     journeys.MedicalRecord?.Provider != null &&
                     journeys.Prescriptions?.Provider != null &&
                     journeys.NominatedPharmacy.HasValue &&
-                    journeys.Notifications.HasValue)
+                    journeys.Notifications.HasValue &&
+                    journeys.Supplier != Supplier.Unknown)
                 {
                     _logger.LogDebug($"Validation successful for '{odsCode}'");
                     continue;
@@ -66,7 +67,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                                  $"\tMedicalRecord: {journeys.MedicalRecord?.Provider}\n" +
                                  $"\tPrescriptions: {journeys.Prescriptions?.Provider}\n" +
                                  $"\tNominatedPharmacy: {journeys.NominatedPharmacy}\n" +
-                                 $"\tNotifications: {journeys.Notifications}");
+                                 $"\tNotifications: {journeys.Notifications}\n" +
+                                 $"\tSuppluer: {journeys.Supplier}");
                 isValid = false;
             }
 

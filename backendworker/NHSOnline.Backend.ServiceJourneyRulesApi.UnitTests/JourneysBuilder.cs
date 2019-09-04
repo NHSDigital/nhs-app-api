@@ -1,4 +1,5 @@
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
 {
@@ -100,6 +101,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
         public JourneysBuilder NotificationsEnabled(bool? enabled)
         {
             _journeys.Notifications = enabled;
+            return this;
+        }
+
+        public JourneysBuilder WithSupplier(Supplier supplier)
+        {
+            _journeys.Supplier = supplier;
             return this;
         }
 

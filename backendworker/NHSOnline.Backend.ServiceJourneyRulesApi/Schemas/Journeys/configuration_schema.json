@@ -149,7 +149,8 @@
         "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
         "nominatedPharmacy": { "enum": ["true", "false"]  },
-        "notifications": { "enum": ["true", "false"]  }
+        "notifications": { "enum": ["true", "false"]  },
+        "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] }
       },
       "anyOf": [
         {
@@ -172,6 +173,9 @@
         },
         {
           "required": [ "notifications" ]
+        },
+        {
+          "required": [ "supplier" ]
         }
       ]
     }
