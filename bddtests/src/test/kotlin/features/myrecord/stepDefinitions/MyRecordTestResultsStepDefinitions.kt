@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
+import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -14,6 +15,8 @@ import pages.ErrorPage
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import utils.SerenityHelpers
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
 open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
@@ -273,6 +276,37 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("I see the my record page scrolled to the test result section")
     fun thenISeeMyRecordPageScrolledToTestResultSection() {
         Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
+    }
+
+
+    @Then("^I see the expected test results displayed$")
+    fun thenISeeTheExpectedTestResultsDisplayed() {
+
+        val getService = SerenityHelpers.getGpSupplier()
+        val expectedTestResults = TestResultsFactory
+                .getForSupplier(getService)
+                .getExpectedTestResults()
+
+        val onScreenTestResults = myRecordInfoPage.testResults.allRecordItems()
+
+        Assert.assertEquals(expectedTestResults.count(), onScreenTestResults.count())
+
+        for (i in onScreenTestResults.indices) {
+            Assert.assertEquals(
+                    LocalDate.parse(
+                            expectedTestResults[i].date.value
+                    ),
+                    LocalDate.parse(
+                            onScreenTestResults[i].label,
+                            DateTimeFormatter.ofPattern(
+                                    DateTimeFormats.frontendBasicDateFormat)
+                    )
+            )
+
+            for (j in expectedTestResults[i].associatedTexts.indices) {
+               Assert.assertEquals(expectedTestResults[i].associatedTexts[j], onScreenTestResults[i].bodyElements[j])
+            }
+        }
     }
 }
 

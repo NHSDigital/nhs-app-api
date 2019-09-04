@@ -5,6 +5,7 @@ data class MyRecordResponseModel(
         var drugs: Medications,
         var vaccinations: Immunisations,
         var medicalProblems: Problems,
+        var testResults: TestResults,
         var medicalHistory: MedicalHistories,
         var recalls: Recalls
 )
@@ -68,6 +69,47 @@ data class Problem(
         var start_date: String,
         var finish_date: String,
         var rubric: String
+)
+
+data class TestResults(
+        var hasAccess: String,
+        var hasErrored: String,
+        var count: Int,
+        var data: TestResultData
+)
+
+data class TestResultData(
+        var inrResults: InrResults,
+        var pathResults: PathResults
+)
+
+data class InrResults(
+        var count: Int,
+        var data: MutableList<InrResult> = arrayListOf()
+)
+
+data class PathResults(
+        var count: Int,
+        var data: MutableList<PathResult> = arrayListOf()
+)
+
+data class InrResult(
+        var recordDateTime: String,
+        var codeDescr: String,
+        var therapy: String,
+        var target: String,
+        var value: String,
+        var dose: String,
+        var nextTestDate: String
+)
+
+data class PathResult(
+        var name: String,
+        var recordDate: String,
+        var elementName: String,
+        var value: String,
+        var units: String,
+        var status: String
 )
 
 data class MedicalHistories(

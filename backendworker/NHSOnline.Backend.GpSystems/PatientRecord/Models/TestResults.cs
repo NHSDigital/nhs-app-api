@@ -10,6 +10,8 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
             Data = new List<TestResultItem>();
             HasAccess = true;
             HasErrored = false;
+            HasUndeterminedAccess = false;        
+
         }
         
         public bool HasAccess { get; set; }
@@ -17,5 +19,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
         public int RecordCount => Data?.Count() ?? 0;
         public IEnumerable<TestResultItem> Data { get; set; }
         public string RawHtml { get; set; }
+        public bool HasUndeterminedAccess { get; set; }
     }
 }

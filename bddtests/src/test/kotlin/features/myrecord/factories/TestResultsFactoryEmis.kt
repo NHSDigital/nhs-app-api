@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import mocking.data.myrecord.TestResultsData
 import models.Patient
+import worker.models.myrecord.TestResultItem
 
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_SIX = 6
 class TestResultsFactoryEmis : TestResultsFactory(){
@@ -39,5 +40,9 @@ class TestResultsFactoryEmis : TestResultsFactory(){
             myRecord.testResultsRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
+    }
+
+    override fun getExpectedTestResults(): List<TestResultItem> {
+        throw UnsupportedOperationException("Not yet implemented")
     }
 }

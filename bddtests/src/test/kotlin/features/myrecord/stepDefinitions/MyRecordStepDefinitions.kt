@@ -11,6 +11,7 @@ import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.microtest.myRecord.MyRecordModuleCounts
+import mocking.microtest.myRecord.TestResultOptions
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
@@ -48,6 +49,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
     var myRecordModuleCounts = MyRecordModuleCounts()
+
+    var testResultOptions = TestResultOptions()
 
     @Given("^the my record wiremocks are initialised for (.*)$")
     fun givenMyRecordWiremocksAreInitialisedFor(getService: String) {
@@ -100,6 +103,22 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordModuleCounts.recallCount = count
     }
 
+    @Given("^I have (.*) INR TestResults and (.*) Path TestResults$")
+    fun givenIHaveCountOfTestResults(inrCount: Int, pathCount: Int) {
+        myRecordModuleCounts.inrResultCount = inrCount
+        myRecordModuleCounts.pathResultCount = pathCount
+    }
+
+    @Given("^I have Path TestResults Filtered out$")
+    fun givenIHavePathTestResultsFilteredOut() {
+        testResultOptions.includeFilteredOutPathStatuses = true
+    }
+
+    @Given("^the TestResults have interleaved dates$")
+    fun givenTestResultsHaveInterleavedDates () {
+        testResultOptions.interleavedPathAndInrDates = true
+    }
+
     @Given("^I have (.*) MedicalHistories$")
     fun givenIHaveCountOfMedicalHistories(count: Int) {
         myRecordModuleCounts.medicalHistoryCount = count
@@ -126,7 +145,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         setPatientToDefaultFor(getService)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
         SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(getService).enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts)
+        MyRecordFactory.getForSupplier(getService).
+                enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
     }
 
     @When("^I enter url address for my record directly into the url$")

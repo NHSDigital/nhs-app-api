@@ -144,3 +144,42 @@ Feature: View My Medical Record Information - Test Results Frontend
     Then I am redirected to the 'My Record' page
     And I see the my medical record page
     And I see the top of my medical record page
+
+  Scenario: A MICROTEST user can view test results section when no test results are returned
+    Given I have 0 INR TestResults and 0 Path TestResults
+    And the my record wiremocks are populated for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Test results heading on My Record
+    When I click the Test results section on My Record
+    Then I see a message telling me to contact my GP for Test results information on My Record
+
+  Scenario: A MICROTEST user can view test results section
+    Given the my record wiremocks are populated for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Test results heading on My Record
+    And I do not see a message informing me to contact my GP for this information
+    When I click the Test results section on My Record
+    Then I see the expected test results displayed
+
+  Scenario: A MICROTEST user has path results filtered from the test results section
+    Given I have Path TestResults Filtered out
+    And the my record wiremocks are populated for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Test results heading on My Record
+    And I do not see a message informing me to contact my GP for this information
+    When I click the Test results section on My Record
+    Then I see the expected test results displayed
+
+  Scenario: A MICROTEST user has test results ordered first by result type and in reverse chronological order
+    Given I have 4 INR TestResults and 5 Path TestResults
+    And the TestResults have interleaved dates
+    And the my record wiremocks are populated for MICROTEST
+    And the GP Practice has enabled demographics functionality
+    And I am on my record information page
+    Then I see the Test results heading on My Record
+    And I do not see a message informing me to contact my GP for this information
+    When I click the Test results section on My Record
+    Then I see the expected test results displayed

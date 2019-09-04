@@ -12,6 +12,7 @@ import models.Patient
 import mocking.data.myrecord.NUMBER_OF_ALLERGY_RECORDS
 import mocking.data.myrecord.NUMBER_OF_IMMUNISATION_RECORDS
 import mocking.microtest.myRecord.MyRecordModuleCounts
+import mocking.microtest.myRecord.TestResultOptions
 
 class MyRecordFactoryVision: MyRecordFactory() {
 
@@ -75,7 +76,8 @@ class MyRecordFactoryVision: MyRecordFactory() {
         }
     }
 
-    override fun enabledWithData(patient: Patient, myRecordModuleCounts: MyRecordModuleCounts) {
+    override fun enabledWithData(
+            patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions) {
         throw UnsupportedOperationException()
     }
 

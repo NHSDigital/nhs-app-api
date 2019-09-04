@@ -3,6 +3,7 @@ package features.myrecord.factories
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
+import worker.models.myrecord.TestResultItem
 
 abstract class TestResultsFactory {
 
@@ -11,6 +12,7 @@ abstract class TestResultsFactory {
     abstract fun enabledWithRecords(patient: Patient)
     abstract fun errorRetrieving(patient: Patient)
     abstract fun noAccess(patient: Patient)
+    abstract fun getExpectedTestResults() : List<TestResultItem>
 
     val mockingClient = MockingClient.instance
 
@@ -22,7 +24,8 @@ abstract class TestResultsFactory {
                     hashMapOf(
                             "EMIS" to { TestResultsFactoryEmis() },
                             "TPP" to { TestResultsFactoryTpp() },
-                            "VISION" to { TestResultsFactoryVision() })
+                            "VISION" to { TestResultsFactoryVision() },
+                            "MICROTEST" to { TestResultsFactoryMicrotest() })
                 }
 
     }

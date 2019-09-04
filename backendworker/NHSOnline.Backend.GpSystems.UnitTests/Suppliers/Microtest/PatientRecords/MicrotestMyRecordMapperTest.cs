@@ -21,8 +21,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization()); 
-            _mapper =  _fixture.Create<MicrotestMyRecordMapper>();
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _mapper = _fixture.Create<MicrotestMyRecordMapper>();
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         {
             var allergy1 = BuildMicrotestAllergy(0, severity, "Nut Allergy", "2019-03-27");
             var allergy2 = BuildMicrotestAllergy(1, "high", "Medication Allergy", "2019-04-27");
-        
+
             var item = new PatientRecordGetResponse
             {
                 AllergyData = new AllergyData
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     HasErrored = false,
                     Allergies = new List<Allergy>
                     {
-                        allergy1, allergy2        
+                        allergy1, allergy2
                     }
                 },
             };
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Allergies.Data.ElementAt(0).Should().BeEquivalentTo(BuildAllergyItem(allergy2));
             result.Allergies.HasUndeterminedAccess.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("invalidDate")]
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         {
             var allergy1 = BuildMicrotestAllergy(0, "low", "Nut Allergy", date);
             var allergy2 = BuildMicrotestAllergy(1, "high", "Medication Allergy", "2019-03-27");
-        
+
             var item = new PatientRecordGetResponse
             {
                 AllergyData = new AllergyData
@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     HasErrored = false,
                     Allergies = new List<Allergy>
                     {
-                        allergy1, allergy2        
+                        allergy1, allergy2
                     }
                 },
             };
@@ -172,7 +172,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Allergies = new List<Allergy>
                     {
                         BuildMicrotestAllergy(0, null, "Nut Allergy", "2019-03-27"),
-                        BuildMicrotestAllergy(1, "", "Medication Allergy", "2019-04-27"),          
+                        BuildMicrotestAllergy(1, "", "Medication Allergy", "2019-04-27"),
                     }
                 },
             };
@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         {
             var allergy1 = BuildMicrotestAllergy(0, "Medium", "Allergy A", "2019-03-27");
             var allergy2 = BuildMicrotestAllergy(1, "Severe", "Allergy B", "2019-04-27");
-            var allergy3 = BuildMicrotestAllergy(2, "Low","Allergy C","2019-04-26");
+            var allergy3 = BuildMicrotestAllergy(2, "Low", "Allergy C", "2019-04-26");
 
             var item = new PatientRecordGetResponse
             {
@@ -211,8 +211,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeTrue();
             result.Allergies.Data.Should().HaveCount(3);
-            result.Allergies.HasUndeterminedAccess.Should().BeFalse();    
-            
+            result.Allergies.HasUndeterminedAccess.Should().BeFalse();
+
             result.Allergies.Data.ElementAt(0).Should().BeEquivalentTo(BuildAllergyItem(allergy2));
             result.Allergies.Data.ElementAt(1).Should().BeEquivalentTo(BuildAllergyItem(allergy3));
             result.Allergies.Data.ElementAt(2).Should().BeEquivalentTo(BuildAllergyItem(allergy1));
@@ -274,7 +274,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                         AcuteMedications = new List<MedicationItem>
                         {
                             BuildMedicationItem(acuteMedication)
-                         },
+                        },
                         DiscontinuedRepeatMedications = new List<MedicationItem>
                         {
                             BuildMedicationItem(historicMedication)
@@ -509,8 +509,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                             BuildMedicationItem(acuteMedication),
                             BuildMedicationItem(acuteMedication),
                             BuildMedicationItem(acuteMedication)
-                        }
-                        ,
+                        },
                         CurrentRepeatMedications = new List<MedicationItem>
                         {
                             BuildMedicationItem(currentMedication),
@@ -539,7 +538,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
 
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("no last prescribed date")]
@@ -608,8 +607,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Medications.HasUndeterminedAccess.Should().BeFalse();
             result.Medications.Should().BeEquivalentTo(expectedResult.Medications);
         }
-        
-        
+
+
 
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldSetSummaryAccessToFalseWhenNoMedicationsReturned()
@@ -633,7 +632,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeFalse();
             result.Medications.HasUndeterminedAccess.Should().BeTrue();
-        }        
+        }
 
         /*
          Map Immunisation Tests
@@ -664,7 +663,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Immunisations.Data.Should().HaveCount(1);
             result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
-            
+
             var expectedResult = new MyRecordResponse
             {
                 Immunisations = new Immunisations
@@ -679,7 +678,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Immunisations.Should().BeEquivalentTo(expectedResult.Immunisations);
         }
 
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("invalidDate")]
@@ -688,7 +687,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             // Arrange
             var imm1 = BuildMicrotestImmunisation(date, "Mumps", "2022-03-27", "ok");
             var imm2 = BuildMicrotestImmunisation("2000-01-01", "Flu", "2022-03-27", "ok");
-        
+
             var item = new PatientRecordGetResponse
             {
                 ImmunisationData = new ImmunisationData
@@ -698,7 +697,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     HasErrored = false,
                     Immunisations = new List<Immunisation>
                     {
-                        imm1, imm2        
+                        imm1, imm2
                     }
                 },
             };
@@ -713,8 +712,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
             result.Immunisations.Data.ElementAt(0).Should().BeEquivalentTo(BuildImmunisationItem(imm2));
         }
-        
-        
+
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("no next date available")]
@@ -722,7 +721,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         {
             // Arrange
             var imm1 = BuildMicrotestImmunisation("2019-01-01", "Mumps", date, "ok");
-        
+
             var item = new PatientRecordGetResponse
             {
                 ImmunisationData = new ImmunisationData
@@ -732,7 +731,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     HasErrored = false,
                     Immunisations = new List<Immunisation>
                     {
-                        imm1        
+                        imm1
                     }
                 },
             };
@@ -747,9 +746,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
             result.Immunisations.Data.ElementAt(0).Should().BeEquivalentTo(BuildImmunisationItem(imm1));
         }
-        
-        
-        
+
+
+
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldOrderImmunisationsByDateDescending()
         {
@@ -767,20 +766,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     HasErrored = false,
                     Immunisations = new List<Immunisation>
                     {
-                        imm1, imm2, imm3        
+                        imm1, imm2, imm3
                     }
                 },
             };
 
             // Act
             var result = _mapper.Map(item);
-            
-            // Assert
+
+            //Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Immunisations.Data.Should().HaveCount(3);
             result.Immunisations.HasUndeterminedAccess.Should().BeFalse();
-            
+
             var expectedResult = new MyRecordResponse
             {
                 Immunisations = new Immunisations
@@ -823,7 +822,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         {
             // Arrange
             var microtestProblem = BuildMicrotestProblem("2019-03-27","Ongoing","Angina");
-            
+
             var microtestRecordResponse = new PatientRecordGetResponse
             {
                 ProblemData = new ProblemData
@@ -846,7 +845,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Data = new List<ProblemItem>
                     {
                         BuildProblemItem(microtestProblem.StartDate, microtestProblem.FinishDate, microtestProblem.Rubric)
-                    } 
+                    }
                 }
             };
 
@@ -859,8 +858,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Problems.Data.Should().HaveCount(1);
             result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
-        }     
- 
+        }
+
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapProblemsWhenFinishDateCanBeParsed()
         {
@@ -903,7 +902,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldMapProblemItemEvenWhenStartDateCannotBeParsed()
         {
@@ -951,10 +950,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [DataRow(null)]
         [DataRow("")]
         [DataRow("   ")]
-        [DataRow("No rubric recorded")]                            
-        [DataRow(" No rubric recorded ")]         //spaces at start and end of string
-        [DataRow("no RUBrIc RECOrded")]           //case insensitive check
-        [DataRow("   NO rubric RECOrdED    ")]    //case insensitive check with leading and trailing spaces
+        [DataRow("No rubric recorded")]
+        [DataRow(" No rubric recorded ")]       //spaces at start and end of string
+        [DataRow("no RUBrIc RECOrded")]         //case insensitive check
+        [DataRow("   NO rubric RECOrdED    ")]  //case insensitive check with leading and trailing spaces
         public void MapPatientRecordGetResponse_ShouldNotMapProblemItemWhenRubricValueIsNotValid(string rubric)
         {
             // Arrange
@@ -993,15 +992,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldOrderProblemsByStartDateDescending()
         {
             // Arrange
-            var prob1 = BuildMicrotestProblem("no date available","2022-03-27","Angina");          
-            var prob2 = BuildMicrotestProblem("2019-03-27",       "2022-03-27","Gout");           
-            var prob3 = BuildMicrotestProblem("2019-03-28",       "2022-03-27","Stroke");           
-            var prob4 = BuildMicrotestProblem("no date available","2022-03-27","Migraine");     
+            var prob1 = BuildMicrotestProblem("no date available","2022-03-27","Angina");
+            var prob2 = BuildMicrotestProblem("2019-03-27",       "2022-03-27","Gout");
+            var prob3 = BuildMicrotestProblem("2019-03-28",       "2022-03-27","Stroke");
+            var prob4 = BuildMicrotestProblem("no date available","2022-03-27","Migraine");
             var prob5 = BuildMicrotestProblem("2019-03-26",       "Ongoing",   "Blind");
 
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -1027,9 +1026,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     {
                         BuildProblemItem(prob3.StartDate, "27 March 2022", prob3.Rubric),
                         BuildProblemItem(prob2.StartDate, "27 March 2022", prob2.Rubric),
-                        BuildProblemItem(prob5.StartDate, prob5.FinishDate, prob5.Rubric),  
-                        BuildProblemItem(null, "27 March 2022", prob1.Rubric),   
-                        BuildProblemItem(null, "27 March 2022", prob4.Rubric)   
+                        BuildProblemItem(prob5.StartDate, prob5.FinishDate, prob5.Rubric),
+                        BuildProblemItem(null, "27 March 2022", prob1.Rubric),
+                        BuildProblemItem(null, "27 March 2022", prob4.Rubric)
                     }
                 }
             };
@@ -1044,7 +1043,250 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
-        
+
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldMapInrResultsAndPathResultsSuccessfully()
+        {
+            //Arrange
+            var inrResult = BuildMicrotestInrTestResult("2019-08-28", "Atrial fibrillation", "ECG", "2.5", "2.4","10mg/day", "1 Sept 2019");
+            var pathResult = BuildMicrotestPathTestResult("GFR", "2019-08-28", "Status 1", "GFR calculated", "None", "No units");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+               TestResultData = BuildMicrotestTestResult(new List<InrResult> {inrResult}, new List<PathResult> {pathResult})
+            };
+
+            //Expect
+            var expectedResult = new MyRecordResponse
+            {
+                TestResults = new TestResults
+                {
+                    Data = new List<TestResultItem>
+                    {
+                        BuildTestResultItem(inrResult),
+                        BuildTestResultItem(pathResult)
+                    }
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.TestResults.Data.Should().HaveCount(2);
+            result.TestResults.HasUndeterminedAccess.Should().BeFalse();
+            result.TestResults.Should().BeEquivalentTo(expectedResult.TestResults);
+        }
+
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldMapInrResultsOnlySuccessfully()
+        {
+            //Arrange
+            var inrResult = BuildMicrotestInrTestResult("2019-08-28", "Atrial fibrillation", "ECG", "2.5", "2.4","10mg/day", "1 Sept 2019");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                TestResultData = BuildMicrotestTestResult(new List<InrResult> {inrResult}, new List<PathResult> {})
+            };
+
+            //Expect
+            var expectedResult = new MyRecordResponse
+            {
+                TestResults = new TestResults
+                {
+                    Data = new List<TestResultItem>
+                    {
+                        BuildTestResultItem(inrResult),
+                    }
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.TestResults.Data.Should().HaveCount(1);
+            result.TestResults.HasUndeterminedAccess.Should().BeFalse();
+            result.TestResults.Should().BeEquivalentTo(expectedResult.TestResults);
+        }
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldMapPathResultsOnlySuccessfully()
+        {
+            //Arrange
+            var pathResult = BuildMicrotestPathTestResult("GFR", "2019-08-28", "Status 1", "GFR calculated", "None", "No units");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                TestResultData = BuildMicrotestTestResult(new List<InrResult> {}, new List<PathResult> {pathResult})
+            };
+
+            //Expect
+            var expectedResult = new MyRecordResponse
+            {
+                TestResults = new TestResults
+                {
+                    Data = new List<TestResultItem>
+                    {
+                        BuildTestResultItem(pathResult)
+                    }
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.TestResults.Data.Should().HaveCount(1);
+            result.TestResults.HasUndeterminedAccess.Should().BeFalse();
+            result.TestResults.Should().BeEquivalentTo(expectedResult.TestResults);
+        }
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldMapNoTestResultsSuccessfully()
+        {
+            //Arrange
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                TestResultData = BuildMicrotestTestResult(new List<InrResult>(), new List<PathResult>())
+            };
+
+            //Expect
+            var expectedResult = new MyRecordResponse
+            {
+                TestResults = new TestResults
+                {
+                    Data = new List<TestResultItem>()
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.TestResults.Data.Should().HaveCount(0);
+            result.TestResults.HasUndeterminedAccess.Should().BeTrue();
+        }
+
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldOrderTestResultsFirstByInrDescendingThenPathDescending()
+        {
+            //Arrange
+            var inrResult1 = BuildMicrotestInrTestResult("2019-01-02", "Atrial fibrillation", "ECG", "2", "2.4","2mg/wk", "13 Sept 2019");
+            var inrResult2 = BuildMicrotestInrTestResult("2019-01-03", "Blackouts", "XYZ", "3", "3.4","10mg/day", "1 Sept 2019");
+            var pathResult1 = BuildMicrotestPathTestResult("ABC", "2019-01-01", "Status 1", "ABC calculated", "2", "6");
+            var pathResult2 = BuildMicrotestPathTestResult("GFR", "2019-01-04", "Status 2", "GFR calculated", "3", "1");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                TestResultData = BuildMicrotestTestResult(
+                    new List<InrResult> {inrResult1, inrResult2}, new List<PathResult> {pathResult1, pathResult2})
+            };
+
+            //Expect
+            var expectedResult = new MyRecordResponse
+            {
+                TestResults = new TestResults
+                {
+                    Data = new List<TestResultItem>
+                    {
+                        BuildTestResultItem(inrResult2),
+                        BuildTestResultItem(inrResult1),
+                        BuildTestResultItem(pathResult2),
+                        BuildTestResultItem(pathResult1),
+                    }
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.TestResults.Data.Should().HaveCount(4);
+            result.TestResults.HasUndeterminedAccess.Should().BeFalse();
+            result.TestResults.Should().BeEquivalentTo(expectedResult.TestResults, o => o.WithStrictOrdering());
+        }
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldFilterOutPathResultsWithInvalidStatus()
+        {
+            //Arrange
+            var pathResult1 = BuildMicrotestPathTestResult("ABC", "2019-01-01", TestResultStatus.AwaitingResults, "ABC calculated", "2", "6");
+            var pathResult2 = BuildMicrotestPathTestResult("GFR", "2019-01-04", TestResultStatus.AwaitingResults, "GFR calculated", "3", "1");
+            var pathResult3 = BuildMicrotestPathTestResult("GFR", "2019-01-04", "Good Status", "GFR calculated", "3", "1");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                TestResultData = BuildMicrotestTestResult(
+                    new List<InrResult>(), new List<PathResult> {pathResult1, pathResult2, pathResult3})
+            };
+
+            //Expect
+            var expectedResult = new MyRecordResponse
+            {
+                TestResults = new TestResults
+                {
+                    Data = new List<TestResultItem>
+                    {
+                        BuildTestResultItem(pathResult2),
+                    }
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.TestResults.Data.Should().HaveCount(1);
+            result.TestResults.HasUndeterminedAccess.Should().BeFalse();
+            result.TestResults.Should().BeEquivalentTo(expectedResult.TestResults);
+        }
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldNotSetUndeterminedAccessTrueWhenAllTestResultsFilteredOut()
+        {
+            //Arrange
+            var pathResult1 = BuildMicrotestPathTestResult("ABC", "2019-01-01", TestResultStatus.AwaitingResults, "ABC calculated", "2", "6");
+            var pathResult2 = BuildMicrotestPathTestResult("GFR", "2019-01-04", TestResultStatus.AwaitingResults, "GFR calculated", "3", "1");
+
+            var microtestRecordResponse = new PatientRecordGetResponse
+            {
+                TestResultData = BuildMicrotestTestResult(
+                    new List<InrResult>(), new List<PathResult> {pathResult1, pathResult2})
+            };
+
+            //Expect
+            var expectedResult = new MyRecordResponse
+            {
+                TestResults = new TestResults()
+            };
+
+            //Act
+            var result = _mapper.Map(microtestRecordResponse);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.TestResults.Data.Should().HaveCount(0);
+            result.TestResults.HasUndeterminedAccess.Should().BeFalse();
+        }
+
+
         
         [TestMethod]
         public void MapPatientRecordGetResponse_MapOrderedMedicalHistoryWhenReturnsSuccessfully()
@@ -1340,7 +1582,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 new MedicationLineItem { Text = item.Name },
                 new MedicationLineItem { Text = item.Dosage },
                 new MedicationLineItem { Text = item.Quantity },
-                new MedicationLineItem { Text = "Reason: " + item.Reason }
+                new MedicationLineItem { Text = $"Reason: {item.Reason}" }
             });
 
             return new MedicationItem
@@ -1349,8 +1591,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 LineItems = medicationLineItems
             };
         }
-        
-        
+
+
         private static ImmunisationItem BuildImmunisationItem(Immunisation immunisation)
         {
             var item = new ImmunisationItem
@@ -1378,19 +1620,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 {
                     item.NextDate.RawValue = immunisation.NextDate;
                 }
-            }   
-                
-            return item;  
+            }
+
+            return item;
         }
-        
-       private static ProblemItem BuildProblemItem(string startDate, string finishDate, string rubric)
+
+        private static ProblemItem BuildProblemItem(string startDate, string finishDate, string rubric)
         {
             return new ProblemItem
             {
                 EffectiveDate = GetMyRecordDate(startDate),
                 LineItems = new List<ProblemLineItem>
                 {
-                    new ProblemLineItem { Text = "Finish Date: " + finishDate },
+                    new ProblemLineItem { Text = $"Finish Date: {finishDate}" },
                     new ProblemLineItem { Text = rubric }
                 }
             };
@@ -1427,9 +1669,53 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Value = validDate,
                     DatePart = "Unknown"
                 };
-            } 
+            }
             return null;
         }
+
+
+        private static TestResultItem BuildTestResultItem(InrResult inrResult)
+        {
+            return new TestResultItem
+            {
+                Date = new MyRecordDate
+                {
+                    Value = DateTime.TryParse(inrResult.RecordDateTime, out var recordDateTime)
+                        ? recordDateTime
+                        : (DateTimeOffset?) null,
+                    DatePart = "Unknown"
+                },
+                AssociatedTexts = new List<string>
+                {
+                    $"INR Results: {inrResult.Value} (target - {inrResult.Target})",
+                    $"Condition: {inrResult.CodeDescription}",
+                    $"Therapy: {inrResult.Therapy}",
+                    $"Dose: {inrResult.Dose}",
+                    $"Next test date: {inrResult.NextTestDate}"
+                }
+            };
+        }
+
+        private static TestResultItem BuildTestResultItem(PathResult pathResult)
+        {
+            return new TestResultItem
+            {
+                Date = new MyRecordDate
+                {
+                    Value = DateTime.TryParse(pathResult.RecordDate, out var recordDate)
+                        ? recordDate
+                        : (DateTimeOffset?) null,
+                    DatePart = "Unknown"
+                },
+                AssociatedTexts = new List<string>
+                {
+                    $"{pathResult.Name}: {pathResult.ElementName}",
+                    $"Value: {pathResult.Value}",
+                    $"Units: {pathResult.Units}"
+                }
+            };
+        }
+
 
         private static Allergy BuildMicrotestAllergy(int id, string severity, string desc, string startDate)
         {
@@ -1482,8 +1768,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Reason = reason
             };
         }
-        
-        
+
         private static Immunisation BuildMicrotestImmunisation(string date, string desc, string nextDate, string status)
         {
             return new Immunisation
@@ -1494,8 +1779,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Status = status
             };
         }
-        
-       
+
         private static Problem BuildMicrotestProblem(string startDate, string finishDate, string rubric)
         {
             return new Problem
@@ -1503,6 +1787,58 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 StartDate = startDate,
                 FinishDate = finishDate,
                 Rubric = rubric,
+            };
+        }
+
+        private static InrResult BuildMicrotestInrTestResult(string recordDateTime, string code, string therapy,
+            string target, string value, string dose, string nextTestDate)
+        {
+            return new InrResult
+            {
+                RecordDateTime = recordDateTime,
+                CodeDescription = code,
+                Therapy = therapy,
+                Target = target,
+                Value = value,
+                Dose = dose,
+                NextTestDate = nextTestDate
+            };
+        }
+
+        private static PathResult BuildMicrotestPathTestResult(string name, string recordDate, string status,
+            string elementName, string value, string units)
+        {
+            return new PathResult
+            {
+                Name = name,
+                RecordDate = recordDate,
+                Status = status,
+                ElementName = elementName,
+                Value = value,
+                Units = units
+            };
+        }
+
+        private static TestResultData BuildMicrotestTestResult(List<InrResult> inrResults, List<PathResult> pathResults)
+        {
+            return new TestResultData
+            {
+                Count = 2,
+                HasAccess = true,
+                HasErrored = false,
+                TestResult = new GpSystems.Suppliers.Microtest.Models.PatientRecord.TestResult
+                {
+                    InrResultsData = new InrResultData
+                    {
+                        Count = inrResults.Count,
+                        InrResults = inrResults
+                    },
+                    PathResultsData = new PathResultData
+                    {
+                        Count = pathResults.Count,
+                        PathResults = pathResults
+                    }
+                }
             };
         }
 

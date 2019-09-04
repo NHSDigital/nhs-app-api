@@ -4,6 +4,7 @@ import constants.ErrorResponseCodeTpp
 import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
 import models.Patient
+import worker.models.myrecord.TestResultItem
 import java.time.OffsetDateTime
 
 
@@ -124,6 +125,11 @@ class TestResultsFactoryTpp : TestResultsFactory(){
                                     "clicking Manage Online Services in the Account section.",
                             "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
         }
+    }
+
+
+    override fun getExpectedTestResults(): List<TestResultItem> {
+        throw UnsupportedOperationException("Not yet implemented")
     }
 }
 

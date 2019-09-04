@@ -16,8 +16,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         
         private const string ProblemDateDisplayFormat = "d MMMM yyyy";
 
-        private const string NoRubric = "No rubric recorded";
-
         public MicrotestMyRecordMapper(ILogger<MicrotestMyRecordMapper> logger)
         {
             _logger = logger;
@@ -36,6 +34,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             MapMedications(myRecordResponse, patientRecordGetResponse.MedicationData);
             MapImmunisations(myRecordResponse, patientRecordGetResponse.ImmunisationData);
             MapProblems(myRecordResponse, patientRecordGetResponse.ProblemData);
+            MapTestResults(myRecordResponse, patientRecordGetResponse.TestResultData);
             MapMedicalHistory(myRecordResponse, patientRecordGetResponse.MedicalHistoryData);
             MapRecalls(myRecordResponse, patientRecordGetResponse.RecallData);
 
@@ -186,6 +185,101 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
         }
         
+        
+        private void MapTestResults(MyRecordResponse myRecordResponse, TestResultData testResultData)
+        {
+            if (testResultData?.TestResult != null)
+            {            
+                var testResultItems = new List<TestResultItem>();
+  
+                testResultItems.AddRange(MapInrResults(testResultData.TestResult.InrResultsData)); 
+                testResultItems.AddRange(MapPathResults(testResultData.TestResult.PathResultsData));
+                   
+                myRecordResponse.TestResults.Data = testResultItems;
+
+                myRecordResponse.TestResults.HasUndeterminedAccess =
+                    !testResultData.TestResult.InrResultsData.InrResults.Any() &&
+                    !testResultData.TestResult.PathResultsData.PathResults.Any();
+            }
+        }
+
+
+        private List<TestResultItem> MapInrResults(InrResultData inrResultsData) 
+        {
+            var inrItems = new List<TestResultItem>();
+            
+            if (inrResultsData != null)
+            {
+                foreach (var inrResult in inrResultsData.InrResults)
+                {   
+                    var associatedTexts = new List<string>();
+                    associatedTexts.Add($"INR Results: {inrResult.Value} (target - {inrResult.Target})");
+                    associatedTexts.Add($"Condition: {inrResult.CodeDescription}");
+                    associatedTexts.Add($"Therapy: {inrResult.Therapy}");
+                    associatedTexts.Add($"Dose: {inrResult.Dose}");
+                    associatedTexts.Add($"Next test date: {inrResult.NextTestDate}");
+
+                    inrItems.Add(new TestResultItem
+                    {
+                        Date = new MyRecordDate
+                        {
+                            Value = DateTime.TryParse(inrResult.RecordDateTime, out var outDate)
+                                ? outDate
+                                : (DateTimeOffset?) null,
+                            DatePart = "Unknown"
+                        },
+                        AssociatedTexts = associatedTexts
+                    });
+                }
+            }
+
+            inrItems = inrItems.OrderByDescending(i => i.Date?.Value.GetValueOrDefault()).ToList();
+
+            return inrItems;
+        }
+
+        private List<TestResultItem> MapPathResults(PathResultData pathResultsData)
+        {
+            var pathItems = new List<TestResultItem>();
+
+            if (pathResultsData != null)
+            {
+                var pathResults = pathResultsData.PathResults.Where(pr =>
+                    !string.Equals(pr.Status, TestResultStatus.AwaitingResults, StringComparison.OrdinalIgnoreCase));
+
+                var removedCount = pathResultsData.PathResults.Count - pathResults.Count();
+                if (removedCount != 0)
+                {
+                    _logger.LogInformation(
+                        $"{removedCount} items filtered out of PathResults due to value stored in Status field.");
+                }
+
+                foreach (var pathResult in pathResults)
+                {
+                    var associatedTexts = new List<string>();
+                    associatedTexts.Add($"{pathResult.Name}: {pathResult.ElementName}");
+                    associatedTexts.Add($"Value: {pathResult.Value}");
+                    associatedTexts.Add($"Units: {pathResult.Units}");
+
+                    pathItems.Add(new TestResultItem
+                    {
+                        Date = new MyRecordDate
+                        {
+                            Value = DateTime.TryParse(pathResult.RecordDate, out var outDate)
+                                ? outDate
+                                : (DateTimeOffset?) null,
+                            DatePart = "Unknown"
+                        },
+                        AssociatedTexts = associatedTexts
+                    });   
+                }
+            }
+
+            pathItems = pathItems.OrderByDescending(i => i.Date?.Value.GetValueOrDefault()).ToList();
+            
+            return pathItems;
+        }
+        
         private void MapMedicalHistory(MyRecordResponse myRecordResponse, MedicalHistoryData medicalHistoryData)
         {
             if (medicalHistoryData != null)
@@ -279,7 +373,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                         new MedicationLineItem { Text = medication.Name },
                         new MedicationLineItem { Text = medication.Dosage },
                         new MedicationLineItem { Text = medication.Quantity },
-                        new MedicationLineItem { Text = "Reason: " + medication.Reason }
+                        new MedicationLineItem { Text = $"Reason: {medication.Reason}" }
                     }
                 });
             }
@@ -322,7 +416,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     }
                     else
                     {
-                        problemLineItem.Text = "Finish Date: " + problem.FinishDate;
+                        problemLineItem.Text = $"Finish Date: {problem.FinishDate}";
                     }
                     lineItems.Add(problemLineItem);
                 }
@@ -338,8 +432,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
             else
             {
-                _logger.LogInformation("No valid rubric found in MyRecord Problem from Microtest. " +
-                                       "This item will not be mapped");            
+                _logger.LogInformation(
+                    "No valid rubric found in MyRecord Problem from Microtest. This item will not be mapped");            
             }
         }       
 
@@ -350,7 +444,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             if (rubric != null)
             {
                 var trimmedRubric = rubric.Trim();
-                if (trimmedRubric.Length > 0 && !trimmedRubric.Equals(NoRubric, StringComparison.OrdinalIgnoreCase))
+                if (trimmedRubric.Length > 0 && !trimmedRubric.Equals(ProblemRubric.NoRubric, StringComparison.OrdinalIgnoreCase))
                 {
                     isValid = true;
                 }
@@ -373,6 +467,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             myRecordResponse.HasDetailedRecordAccess = 
                 IsAny(myRecordResponse.Immunisations.Data) ||
                 IsAny(myRecordResponse.Problems.Data) ||
+                IsAny(myRecordResponse.TestResults.Data) ||
                 IsAny(myRecordResponse.MedicalHistories.Data) ||
                 IsAny(myRecordResponse.Recalls.Data);
         }

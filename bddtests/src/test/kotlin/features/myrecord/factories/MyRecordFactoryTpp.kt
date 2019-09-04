@@ -5,6 +5,7 @@ import mocking.data.myrecord.TestResultsData
 import mocking.data.myrecord.TppDcrData
 import mocking.data.myrecord.ViewPatientOverviewData
 import mocking.microtest.myRecord.MyRecordModuleCounts
+import mocking.microtest.myRecord.TestResultOptions
 import mocking.tpp.models.Error
 import models.Patient
 import java.time.OffsetDateTime
@@ -44,7 +45,8 @@ class MyRecordFactoryTpp: MyRecordFactory() {
         }
     }
 
-    override fun enabledWithData(patient: Patient, myRecordModuleCounts: MyRecordModuleCounts) {
+    override fun enabledWithData(
+            patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions) {
         throw UnsupportedOperationException()
     }
 

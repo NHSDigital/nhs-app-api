@@ -26,6 +26,21 @@
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 
+    <analytics-tracked-tag id="testResultsHeader"
+                           :class="[$style['record-title'],
+                                    getCollapsedState(isTestResultsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="TESTRESULTS"
+                           :text="$t('my_record.testResults.sectionHeader.default')"
+                           :aria-expanded="!isTestResultsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.testResults.sectionHeader.default') }}
+    </analytics-tracked-tag>
+    <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
+                  :supplier="record.supplier" />
+
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isMedicalHistoryCollapsed)]"
                            :click-func="myRecordSectionClick"
@@ -58,11 +73,13 @@
 <script>
 import Immunisations from '@/components/my-record/SharedComponents/Immunisations';
 import Problems from '@/components/my-record/SharedComponents/Problems';
+import TestResults from '@/components/my-record/SharedComponents/TestResults';
 import MedicalHistory from '@/components/my-record/SharedComponents/MedicalHistory';
 import Recalls from '@/components/my-record/SharedComponents/Recalls';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 const IMMUNISATIONS = 'immunisations';
+const TESTRESULTS = 'testresults';
 const PROBLEMS = 'problems';
 const MEDICAL_HISTORY = 'medicalHistory';
 const RECALLS = 'recalls';
@@ -73,6 +90,7 @@ export default {
     AnalyticsTrackedTag,
     Immunisations,
     Problems,
+    TestResults,
     MedicalHistory,
     Recalls,
   },
@@ -85,10 +103,12 @@ export default {
   data() {
     return {
       IMMUNISATIONS,
+      TESTRESULTS,
       PROBLEMS,
       MEDICAL_HISTORY,
       RECALLS,
       isImmunisationsCollapsed: process.client,
+      isTestResultsCollapsed: process.client,
       isProblemsCollapsed: process.client,
       isMedicalHistoryCollapsed: process.client,
       isRecallsCollapsed: process.client,
@@ -103,6 +123,10 @@ export default {
         case IMMUNISATIONS:
           this.isImmunisationsCollapsed =
             !this.isImmunisationsCollapsed;
+          break;
+        case TESTRESULTS:
+          this.isTestResultsCollapsed =
+            !this.isTestResultsCollapsed;
           break;
         case PROBLEMS:
           this.isProblemsCollapsed =

@@ -3,6 +3,7 @@ package features.gpMedicalRecord.factories
 import models.Patient
 import mocking.data.myrecord.MicrotestMyRecordData
 import mocking.microtest.myRecord.MyRecordModuleCounts
+import mocking.microtest.myRecord.TestResultOptions
 import org.apache.http.HttpStatus
 
 
@@ -28,7 +29,8 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
         mockingClient.forMicrotest {
             myRecord.myRecordRequest(patient)
                     .respondWithSuccess(
-                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord(myRecordModuleCounts)
+                            MicrotestMyRecordData.
+                                    getPopulatedMicrotestMyRecord(myRecordModuleCounts, TestResultOptions())
                     )
         }
     }
@@ -41,7 +43,8 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
         mockingClient.forMicrotest {
             myRecord.myRecordRequest(patient)
                     .respondWithSuccess(
-                            MicrotestMyRecordData.getPopulatedMicrotestMyRecord(MyRecordModuleCounts())
+                            MicrotestMyRecordData.
+                                    getPopulatedMicrotestMyRecord(MyRecordModuleCounts(), TestResultOptions())
                     )
         }
     }

@@ -4,7 +4,8 @@
                        :has-errored="results.hasErrored"
                        :class="[$style['record-content'],
                                 getCollapseState]"
-                       :aria-hidden="isCollapsed"/>
+                       :aria-hidden="isCollapsed"
+                       :has-undetermined-access="results.hasUndeterminedAccess"/>
   <div v-else-if="!isCollapsed"
        :class="[$style['record-content'], getCollapseState,
                 !$store.state.device.isNativeApp && $style.desktopWeb]"
@@ -28,7 +29,8 @@
           </a>
         </p>
         <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
-          {{ testResult.description }}</p>
+          {{ testResult.description }}
+        </p>
         <ul :class="$style.testResultNoChild">
           <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
               :key="`associatedText-${associatedTextItemIndex}`">
@@ -48,6 +50,23 @@
             </ul>
           </li>
         </ul>
+        <hr aria-hidden="true">
+      </div>
+    </div>
+    <div v-else-if="supplier === 'MICROTEST'">
+      <div v-for="(testResult, testIndex) in results.data"
+           :key="`testResult-${testIndex}`" :class="$style['record-item']"
+           data-purpose="record-item">
+        <span v-if="testResult.date.value" :class="$style.fieldName">
+          {{ testResult.date.value | datePart(testResult.date.datePart) }}
+        </span>
+        <span v-else :class="$style.fieldName">
+          {{ $t('my_record.noStartDate') }}
+        </span>
+        <p v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
+           :key="`associatedText-${associatedTextItemIndex}`">
+          {{ associatedText }}
+        </p>
         <hr aria-hidden="true">
       </div>
     </div>

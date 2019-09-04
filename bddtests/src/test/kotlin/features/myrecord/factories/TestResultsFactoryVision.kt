@@ -4,6 +4,7 @@ import mocking.data.myrecord.TestResultsData
 import mocking.vision.VisionConstants.htmlResponseFormat
 import mocking.vision.VisionConstants.testResultsView
 import models.Patient
+import worker.models.myrecord.TestResultItem
 
 class TestResultsFactoryVision : TestResultsFactory() {
 
@@ -53,6 +54,10 @@ class TestResultsFactoryVision : TestResultsFactory() {
                 htmlResponseFormat) {
             request -> request.respondWithAccessDeniedError()
         }
+    }
+
+    override fun getExpectedTestResults(): List<TestResultItem> {
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
 }
