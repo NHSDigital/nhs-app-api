@@ -107,14 +107,16 @@ export default {
       }
     }
 
-    const analyticsScript = [
-      {
-        src: this.$env.ANALYTICS_SCRIPT_URL,
-      },
-    ];
+    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET' && this.isAnalyticsCookieAccepted()) {
+      const analyticsScript = [
+        {
+          src: this.$env.ANALYTICS_SCRIPT_URL,
+        },
+      ];
 
-    if (this.isAnalyticsCookieAccepted()) {
-      head.script = analyticsScript;
+      if (this.isAnalyticsCookieAccepted()) {
+        head.script = analyticsScript;
+      }
     }
     return head;
   },
