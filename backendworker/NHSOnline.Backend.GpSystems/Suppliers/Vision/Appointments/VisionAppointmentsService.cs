@@ -14,20 +14,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         private readonly VisionAppointmentsRetrievalService _getter;
         private readonly VisionAppointmentsBookingService _booker;
         private readonly VisionAppointmentsCancellationService _canceller;
-        private readonly IAppointmentCancellationReasonScraper _appointmentCancellationReasonScraper;
+        private readonly IAppointmentCancellationReasonLogger _appointmentCancellationReasonLogger;
 
         public VisionAppointmentsService(
             ILogger<VisionAppointmentsService> logger,
             VisionAppointmentsRetrievalService getter,
             VisionAppointmentsBookingService booker, 
             VisionAppointmentsCancellationService canceller,
-            IAppointmentCancellationReasonScraper appointmentCancellationReasonScraper)
+            IAppointmentCancellationReasonLogger appointmentCancellationReasonLogger)
         {
             _logger = logger;
             _getter = getter;
             _booker = booker;
             _canceller = canceller;
-            _appointmentCancellationReasonScraper = appointmentCancellationReasonScraper;
+            _appointmentCancellationReasonLogger = appointmentCancellationReasonLogger;
         }
         
         public async Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request)
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 
             try
             {
-                _appointmentCancellationReasonScraper.CaptureCancellationReasons(gpUserSession, appointmentsResult);
+                _appointmentCancellationReasonLogger.CaptureCancellationReasons(gpUserSession, appointmentsResult);
             }
             catch (Exception e)
             {

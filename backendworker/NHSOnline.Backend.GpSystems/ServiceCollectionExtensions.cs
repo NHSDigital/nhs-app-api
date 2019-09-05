@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems
             services.AddSingleton<IGpSystemFactory, GpSystemFactory>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IIm1CacheKeyGenerator, Im1CacheKeyGenerator>();
-            services.AddSingleton<IAppointmentCancellationReasonScraper, AppointmentCancellationReasonScraper>();
+            services.AddSingleton<IAppointmentCancellationReasonLogger, AppointmentCancellationReasonLogger>();
 
             services.AddSingleton<IIm1ConnectionErrorCodes, Im1ConnectionErrorCodes>();
 

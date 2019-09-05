@@ -37,21 +37,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAuditor _auditor;
-        private readonly IAppointmentSlotTypeScraper _appointmentSlotTypeScraper;
+        private readonly IAppointmentSlotMetadataLogger _appointmentSlotMetadataLogger;
 
         public AppointmentSlotsController(
             IGpSystemFactory gpSystemFactory,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             ILogger<AppointmentSlotsController> logger,
             IAuditor auditor,
-            IAppointmentSlotTypeScraper appointmentSlotTypeScraper
+            IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger
         )
         {
             _gpSystemFactory = gpSystemFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = logger;
             _auditor = auditor;
-            _appointmentSlotTypeScraper = appointmentSlotTypeScraper;
+            _appointmentSlotMetadataLogger = appointmentSlotMetadataLogger;
         }
 
         [HttpGet]
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             
             try
             {
-                _appointmentSlotTypeScraper.CaptureAppointmentSlotTypes(gpUserSession, successResult);
+                _appointmentSlotMetadataLogger.CaptureAppointmentSlotTypes(gpUserSession, successResult);
                 
                 var slots = successResult.Response?.Slots ?? Array.Empty<Slot>();
                 var slotCount = slots.Count();

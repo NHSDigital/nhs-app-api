@@ -7,12 +7,12 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems
 {
-    public interface IAppointmentCancellationReasonScraper
+    public interface IAppointmentCancellationReasonLogger
     {
         void CaptureCancellationReasons(GpUserSession gpUserSession, AppointmentsResult result);
     }
     
-    public class AppointmentCancellationReasonScraper : IAppointmentCancellationReasonScraper
+    public class AppointmentCancellationReasonLogger : IAppointmentCancellationReasonLogger
     {
         private static readonly ConcurrentDictionary<string, CancellationReasonsValue> CapturedCancellationReasons = 
             new ConcurrentDictionary<string, CancellationReasonsValue>();
@@ -46,10 +46,10 @@ namespace NHSOnline.Backend.GpSystems
             }
         }
 
-        private readonly ILogger<AppointmentCancellationReasonScraper> _logger;
+        private readonly ILogger<AppointmentCancellationReasonLogger> _logger;
 
-        public AppointmentCancellationReasonScraper(
-            ILogger<AppointmentCancellationReasonScraper> logger)
+        public AppointmentCancellationReasonLogger(
+            ILogger<AppointmentCancellationReasonLogger> logger)
         {
             _logger = logger;
         }

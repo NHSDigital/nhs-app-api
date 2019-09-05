@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
                 new ServiceDescriptor(typeof(IGpSystemFactory), typeof(GpSystemFactory), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IIm1CacheService), typeof(Im1CacheService), ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IIm1CacheKeyGenerator), typeof(Im1CacheKeyGenerator), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IAppointmentCancellationReasonScraper), typeof(AppointmentCancellationReasonScraper), ServiceLifetime.Singleton)
+                new ServiceDescriptor(typeof(IAppointmentCancellationReasonLogger), typeof(AppointmentCancellationReasonLogger), ServiceLifetime.Singleton)
             };
 
             foreach (var dependency in dependencies) {
