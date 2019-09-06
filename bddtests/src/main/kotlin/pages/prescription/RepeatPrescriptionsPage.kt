@@ -4,6 +4,7 @@ import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
+import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.asciiText
@@ -101,7 +102,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
             repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
         }
         for (i in 0..(numberOfSubscriptionsToSelect - 1)) {
-            val label = repeatPrescriptionContainers[i].findElement(By.tagName("label"))
+            val label = repeatPrescriptionContainers[i].findElement<WebElement>(By.tagName("label"))
             label.click()
         }
     }
@@ -143,9 +144,9 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         val testedCourses = arrayListOf<String>()
 
         repeatPrescriptionContainers.forEach { el ->
-            val nameOnScreen = el.findElement(prescriptionNameLocator)
-            val instructionsOnScreen = el.findElement(prescriptionInstructionsLocator)
-            val inputElement = el.findElement(By.cssSelector("input[type=checkbox]"))
+            val nameOnScreen = el.findElement<WebElement>(prescriptionNameLocator)
+            val instructionsOnScreen = el.findElement<WebElement>(prescriptionInstructionsLocator)
+            val inputElement = el.findElement<WebElement>(By.cssSelector("input[type=checkbox]"))
 
             if (medicationCourse.name == nameOnScreen.text
                     && medicationCourse.getInstructionsText() == instructionsOnScreen.asciiText

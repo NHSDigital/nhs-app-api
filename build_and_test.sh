@@ -85,9 +85,18 @@ WEB_NAME=nhsonline-web
 CID_BACKEND_NAME=nhsonline-backendcidapi
 PFS_BACKEND_NAME=nhsonline-backendpfsapi
 SJR_BACKEND_NAME=nhsonline-backendservicejourneyrulesapi
+SJR_CONFIG_NAME=nhsonline-service-journey-dev-config
 CDS_BACKEND_NAME=nhsonline-backendclinicaldecisionsupportapi
 USERS_BACKEND_NAME=nhsonline-backendusersapi
 TAG=$(git rev-parse HEAD)
+
+if [ ! -f bddtests/docker-compose.override.yml ]
+then
+  echo "You must have the docker compose override bdd file from keybase to run this script"
+  exit 1
+fi
+
+AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$(cat bddtests/docker-compose.override.yml | grep AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY | sed s/'      - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY='//)
 
 cd bddtests/ops
 
@@ -116,12 +125,12 @@ docker tag $DOCKER_REGISTRY/$PFS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$PFS_BACKEND
 docker build . -t $DOCKER_REGISTRY/$SJR_BACKEND_NAME:$TAG -f NHSOnline.Backend.ServiceJourneyRulesApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$SJR_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$SJR_BACKEND_NAME:latest
 
-docker build . -t $DOCKER_REGISTRY/$CDS_BACKEND_NAME:$TAG -f NHSOnline.Backend.ClinicalDecisionSupportApi/Dockerfile
-docker tag $DOCKER_REGISTRY/$CDS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$CDS_BACKEND_NAME:latest
+docker build . -t $DOCKER_REGISTRY/$SJR_CONFIG_NAME:$TAG -f configurations/Dockerfile
+docker tag $DOCKER_REGISTRY/$SJR_CONFIG_NAME:$TAG $DOCKER_REGISTRY/$SJR_CONFIG_NAME:latest
 
 docker build . -t $DOCKER_REGISTRY/$USERS_BACKEND_NAME:$TAG -f NHSOnline.Backend.UsersApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$USERS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$USERS_BACKEND_NAME:latest
 
 
 cd ../bddtests/ops
-RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET ENABLE_LONG_RUNNING=$ENABLE_LONG_RUNNING SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ENABLE_COSMOS_TESTS=$ENABLE_COSMOS_TESTS COSMOS_AUTHKEY=$COSMOS_AUTHKEY ./docker_tests.sh
+AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET ENABLE_LONG_RUNNING=$ENABLE_LONG_RUNNING SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ENABLE_COSMOS_TESTS=$ENABLE_COSMOS_TESTS COSMOS_AUTHKEY=$COSMOS_AUTHKEY ./docker_tests.sh

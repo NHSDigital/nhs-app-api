@@ -3,6 +3,7 @@ package pages.prescription
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
+import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.asciiText
@@ -66,15 +67,15 @@ open class PrescriptionsPage : HybridPageObject() {
 
             if (allFieldsProvided) {
                 p = HistoricPrescription(
-                        name = el.findElement(By.xpath(courseNameXpath)).asciiText,
-                        dosage = el.findElement(By.xpath(dosageXpath)).asciiText)
+                        name = el.findElement<WebElement>(By.xpath(courseNameXpath)).asciiText,
+                        dosage = el.findElement<WebElement>(By.xpath(dosageXpath)).asciiText)
 
-                p.orderDate = el.findElement(By.xpath(orderDateXpath)).asciiText
-                p.status = el.findElement(By.xpath(statusXpath)).getAttribute("data-status")
+                p.orderDate = el.findElement<WebElement>(By.xpath(orderDateXpath)).asciiText
+                p.status = el.findElement<WebElement>(By.xpath(statusXpath)).getAttribute("data-status")
             } else {
                 p = HistoricPrescription(
-                        name = el.findElement(By.xpath(courseNameXpath)).asciiText,
-                        dosage = el.findElement(By.xpath(dosageXpath)).asciiText)
+                        name = el.findElement<WebElement>(By.xpath(courseNameXpath)).asciiText,
+                        dosage = el.findElement<WebElement>(By.xpath(dosageXpath)).asciiText)
             }
 
             historicPrescriptions.add(p)

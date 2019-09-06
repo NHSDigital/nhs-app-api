@@ -11,7 +11,7 @@ fun WebDriver.isIOS(): Boolean {
     val isIOS = this is IOSDriver<*>
     val isProxyForIOS = when (this is WebDriverFacade) {
         true -> {
-            (this as WebDriverFacade).isAProxyFor(IOSDriver::class.java)
+            (this).isAProxyFor(IOSDriver::class.java)
         }
         false -> {
             false
@@ -24,7 +24,7 @@ fun WebDriver.isAndroid(): Boolean {
     val isAndroid = this is AndroidDriver<*>
     val isProxyForAndroid = when (this is WebDriverFacade) {
         true -> {
-            (this as WebDriverFacade).isAProxyFor(AndroidDriver::class.java)
+            (this).isAProxyFor(AndroidDriver::class.java)
         }
         false -> {
             false

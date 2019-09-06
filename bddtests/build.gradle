@@ -12,8 +12,8 @@ repositories {
     // jcenter()
 }
 buildscript {
-    ext.kotlin_version = '1.2.71'
-    ext.serenity_version = '2.0.8'
+    ext.kotlin_version = '1.3.50'
+    ext.serenity_version = '2.0.70'
     ext.detekt_version = '1.0.0.RC8'
     ext.mongodb_version = '3.9.0'
     repositories {
@@ -59,20 +59,19 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "org.jetbrains.kotlin:kotlin-reflect"
     compile group: 'com.browserstack', name: 'browserstack-local-java', version: '1.0.2'
-    compile 'io.github.bonigarcia:webdrivermanager:2.2.0'
+    compile 'io.github.bonigarcia:webdrivermanager:3.6.2'
     compile "com.github.tomakehurst:wiremock-standalone:2.17.0"
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile "com.nimbusds:nimbus-jose-jwt:6.0"
     compile "junit:junit:4.12"
-    compile "net.serenity-bdd:serenity-core:2.0.8"
-    compile "net.serenity-bdd:serenity-junit:2.0.8"
-    compile 'net.serenity-bdd:serenity-cucumber:1.9.19'
-    compile 'net.serenity-bdd:serenity-rest-assured:2.0.8'
+    compile "net.serenity-bdd:serenity-core:2.0.70"
+    compile "net.serenity-bdd:serenity-junit:2.0.70"
+    compile 'net.serenity-bdd:serenity-cucumber:1.9.45'
+    compile 'net.serenity-bdd:serenity-rest-assured:2.0.70'
     compile "org.assertj:assertj-core:3.8.0"
-    compile 'com.neovisionaries:nv-websocket-client:2.6'
+    compile 'com.neovisionaries:nv-websocket-client:2.9'
     compile "org.mongodb:mongo-java-driver:$mongodb_version"
     compile "com.microsoft.azure:azure-cosmosdb:2.2.0"
-    compile 'com.neovisionaries:nv-websocket-client:2.6'
 }
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
@@ -135,10 +134,36 @@ task frameworkUnitTests(type: Test) {
 task prepare {
     dependsOn compileTestKotlin, detektCheck, lintGherkin
 }
+
+def failures = new File("${projectDir}/build/failures.txt")
+def failedTests = []
+if (failures.exists()) {
+    failures.eachLine { line ->
+        failedTests << line
+    }
+    failures.delete()
+}
+
+task rerun (type: Test) {
+    systemProperties System.getProperties()
+        filter {
+            failedTests.each { testName ->
+                includeTestsMatching("*${testName}")
+            }
+        }
+}
+
 test {
     testLogging.showStandardStreams = true
     /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
     systemProperties System.getProperties()
+
+    afterTest { desc, result ->
+        if ("FAILURE" == result.resultType as String) {
+            failures.withWriterAppend {
+                it.write("${desc.className}.${desc.name}\n")
+            }
+        }
+    }
 }
 gradle.startParameter.continueOnFailure = false
-

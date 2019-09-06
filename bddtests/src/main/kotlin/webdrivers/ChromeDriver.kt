@@ -1,5 +1,6 @@
 package webdrivers
 
+import config.Config
 import io.github.bonigarcia.wdm.WebDriverManager
 import net.thucydides.core.webdriver.DriverSource
 import org.openqa.selenium.WebDriver
@@ -7,11 +8,31 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import webdrivers.options.ChromeOptionManager.Companion.DEBUG_PORT
 
-private const val LATEST_STABLE_CHROME_DRIVER_MAJOR_VERSION_NUMBER = "77"
+private const val LATEST_STABLE_CHROME_DRIVER_MAJOR_VERSION_NUMBER = "75"
+private const val CHROME_PROCESS_NAME = "chrome"
 
 open class ChromeDriver : DriverSource {
 
     override fun newDriver(): WebDriver? {
+
+        if(Config.instance.isDockerised) {
+            val chromeProcessList = "ps -ae".runCommand()
+                    .split('\n')
+                    .filter { it.contains(CHROME_PROCESS_NAME) }
+
+            if (chromeProcessList.any()) {
+                chromeProcessList.forEach { chromeProcess ->
+                    println("Found a zombie chrome: $chromeProcess")
+                    val pid = chromeProcess.trim(' ').split(" ").first()
+                    println("Killing the process with pid: $pid")
+
+                    "kill -9 $pid".runCommand()
+                }
+                println("Process list after kill is:")
+                println("ps -ae".runCommand())
+            }
+        }
+
         WebDriverManager.chromedriver().version(LATEST_STABLE_CHROME_DRIVER_MAJOR_VERSION_NUMBER).setup()
 
         /**
@@ -30,4 +51,17 @@ open class ChromeDriver : DriverSource {
     override fun takesScreenshots(): Boolean {
         return true
     }
+
+    private fun String.runCommand(): String {
+        return ProcessBuilder(split(" "))
+                .redirectOutput(ProcessBuilder.Redirect.PIPE)
+                .redirectError(ProcessBuilder.Redirect.INHERIT)
+                .start()
+                .inputStream
+                .bufferedReader()
+                .readText()
+
+
+    }
+
 }

@@ -2,6 +2,7 @@ package pages.sharedElements
 
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
@@ -18,7 +19,7 @@ class CheckBoxElement(val page : HybridPageObject, text:String) {
     }
 
     fun click() {
-        checkBoxElement.actOnTheElement { it.findElement(By.xpath("./label")).click() }
+        checkBoxElement.actOnTheElement { it.findElement<WebElement>(By.xpath("./label")).click() }
     }
 
     fun assertChecked() {
@@ -44,7 +45,8 @@ class CheckBoxElement(val page : HybridPageObject, text:String) {
 
         checkBoxElement.actOnTheElement {
             inlineErrors.addAll(
-                    it.findElements(By.xpath("./preceding-sibling::p[contains(@class, error-message)]/span"))
+                    it.findElements<WebElement>(
+                            By.xpath("./preceding-sibling::p[contains(@class, error-message)]/span"))
                             .map { webElement -> webElement.text }
             )
         }
@@ -57,7 +59,7 @@ class CheckBoxElement(val page : HybridPageObject, text:String) {
             "Expected checkbox to be checked"
         else "Expected checkbox to be unchecked"
         checkBoxElement.actOnTheElement {
-            val input = it.findElement(By.xpath("./input"))
+            val input = it.findElement<WebElement>(By.xpath("./input"))
             val isSelected = input.isSelected
             Assert.assertEquals(errorMessage, expectedChecked, isSelected)
         }

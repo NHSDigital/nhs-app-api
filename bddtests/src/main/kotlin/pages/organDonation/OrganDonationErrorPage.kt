@@ -2,6 +2,7 @@ package pages.organDonation
 
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.ErrorPage
 
 class OrganDonationErrorPage: ErrorPage() {
@@ -19,7 +20,7 @@ class OrganDonationErrorPage: ErrorPage() {
 
     fun assertContactDetails() {
         contactDetailsLocation.actOnTheElement {
-            val actualText = it.findElements(By.xpath(".//p"))
+            val actualText = it.findElements<WebElement>(By.xpath(".//p"))
                     .map { element -> element.text }.toTypedArray()
 
 

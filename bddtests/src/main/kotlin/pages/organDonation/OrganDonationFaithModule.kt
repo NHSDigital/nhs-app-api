@@ -3,6 +3,7 @@ package pages.organDonation
 import mocking.organDonation.models.FaithDeclaration
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
@@ -29,14 +30,14 @@ class OrganDonationFaithModule(page: HybridPageObject) {
 
     fun assertChoice(choice: String) {
         container.actOnTheElement {
-            val actualText = it.findElement(By.xpath("./p/b")).text
+            val actualText = it.findElement<WebElement>(By.xpath("./p/b")).text
 
             Assert.assertEquals("Faith and Beliefs",
                     "I would like NHS staff to speak to my family and anyone else appropriate about how organ " +
                             "donation can go ahead in line with my faith / beliefs",
                     actualText)
 
-            val actualChoice = it.findElement(By.xpath("./span")).text
+            val actualChoice = it.findElement<WebElement>(By.xpath("./span")).text
 
             Assert.assertEquals("Faith and Beliefs Choice",
                     choice,

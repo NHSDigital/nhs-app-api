@@ -16,11 +16,16 @@ docker ps
 info "Cleaning up hanging containers"
 docker kill $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}') 2>/dev/null
 
+# create run time version of docker-compose and environment variables so we can amend values for throttling/cosmos tests
+cp docker-compose_ci.yml docker-compose_ci_run.yml
+cp vars_ci.env vars_ci_run.env
+sed -i '' -e 's/vars_ci.env/vars_ci_run.env/g' docker-compose_ci_run.yml
+
 # Check if DOCKER_TAG exists in envvar
 [ -z $APP_DOCKER_TAG ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
 
 [ -z $AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY ] && die "AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY is not specified, this is required to run notifications BDD tests"
-sed -i '' -e "s/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY/g" vars_ci.env
+sed -i '' -e "s/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=/AZURE\_NOTIFICATION\_HUB\_SHARED\_ACCESS\_KEY=$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY/g" vars_ci_run.env
 
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
@@ -53,13 +58,6 @@ fi
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
 DOCKER_IMAGE_BROWSERSTACK=$DOCKER_REGISTRY/browserstack:latest
-
-#### 3. Change browser variable to one webdriver mentioned in ./serenity.properties
-
-# create run time version of docker-compose and environment variables so we can amend values for throttling/cosmos tests
-cp docker-compose_ci.yml docker-compose_ci_run.yml
-cp vars_ci.env vars_ci_run.env
-sed -i '' -e 's/vars_ci.env/vars_ci_run.env/g' docker-compose_ci_run.yml
 
 # List all docker images in the docker compose setup
 DOCKER_SERVICES=`docker-compose -f docker-compose_ci_run.yml config --services`
@@ -103,7 +101,7 @@ else
         then
           TAGS=()
           val=1
-          for filename in $(find .. | grep -F .feature | grep -v throttling.feature); do
+          for filename in $(find .. | grep -F .feature | grep -v throttling.feature | sort); do
 
             info "Tagging $filename as tranche$val"
 
@@ -227,7 +225,7 @@ fi
 
 for s in $DOCKER_SERVICES; do
   #Don't pull local images we've built as part of the pipeline
-  if [[ "$s" != "pfs.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "nhsonline-backendservicejourneyrulesapi" && "$s" != "nhsonline-backendcidapi" ]]; then
+  if [[ "$s" != "pfs.local.bitraft.io" && "$s" != "api.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "servicejourneyrulesapi.config" && "$s" != "servicejourneyrulesapi.local.bitraft.io" && "$s" != "users.local.bitraft.io" && "$s" != "cid.local.bitraft.io" ]]; then
     docker-compose -f docker-compose_ci_run.yml pull $s
   fi
 done
@@ -324,7 +322,7 @@ info "Running $TAG tests"
       --memory $TC_RAM \
       -v $workingDir/../../testRunFolder/$TAG/:/repo \
       $DOCKER_IMAGE bash -c " \
-        echo $(DATE) - $TAG Starting
+        echo $(date) - $TAG Starting
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
         BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
@@ -333,7 +331,7 @@ info "Running $TAG tests"
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
           -Dwebdriver.provided.type=$BROWSER \
           $APPIUM_TYPE \
-          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=') ; echo $(DATE) - $TAG Completed" &
+          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=') ; echo $(date) - $TAG Completed" &
   else
     docker run \
       --name $TAG \
@@ -379,7 +377,7 @@ info "Running $TAG tests"
     done
   else
     wait $PID
-    info "$(PID) is finished"
+    info "$PID is finished"
   fi
 
   PIDS+=($PID)
@@ -392,12 +390,50 @@ for PID in ${PIDS[*]}; do
     wait $PID
 done
 
+info "Collecting failed test reports"
+touch $workingDir/../build/failures.txt
+for TAG in ${TAGS[*]}; do
+  info "Collecting failed test reports for $TAG"
+  cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
+  if [ -f $workingDir/../../testRunFolder/$TAG/build/failures.txt ]; then
+    cat $workingDir/../../testRunFolder/$TAG/build/failures.txt >> $workingDir/../build/failures.txt
+  fi
+done
+
+info "All failed tests for rerun"
+cat $workingDir/../build/failures.txt
+
+if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -ge 1 ] && [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -le 30 ]
+then
+    TAGS+=(RERUN)
+
+    cp -r $workingDir/../ $workingDir/../../testRunFolder/RERUN
+
+    docker run \
+      --name RERUN \
+      --rm \
+      --network $NETWORK \
+      --env-file vars_ci_run.env \
+      -v $workingDir/../../testRunFolder/RERUN/:/repo \
+      $DOCKER_IMAGE bash -c " \
+        cd /repo ; \
+        $BROWSERSTACK_LOCAL_STRING \
+        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
+        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
+        ./gradlew rerun --stacktrace \
+          -Dcucumber.options=\"--strict \" \
+          -Dwebdriver.provided.type=$BROWSER \
+          $APPIUM_TYPE \
+          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')"
+fi
+
 # Aggregate test results
 info "Aggregating test results"
 info "Collecting reports"
 for TAG in ${TAGS[*]}; do
   info "Collecting serenity reports for $TAG"
   cp -r $workingDir/../../testRunFolder/$TAG/target/site/serenity $workingDir/../target/site/.
+  cp -r $workingDir/../../testRunFolder/$TAG/target/site/Gherkin-Report.html $workingDir/../target/site/
   cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
   cp -r $workingDir/../../testRunFolder/$TAG/$ACCESSIBILITY_OUTPUT $workingDir/../.
 done
@@ -438,7 +474,7 @@ done
 #cleanup
 rm -rf $workingDir/../../testRunFolder/*
 rm -rf docker-compose_ci_run.yml
-rm -rf fars_ci_run.env
+rm -rf vars_ci_run.env
 
 docker rm -f $(docker ps -aq)
 

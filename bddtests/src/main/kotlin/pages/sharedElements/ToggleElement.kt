@@ -3,6 +3,7 @@ package pages.sharedElements
 import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.StaleElementReferenceException
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.MILLISECONDS_IN_A_SECOND
@@ -29,7 +30,7 @@ class ToggleElement(val page : HybridPageObject, text:String, id:String) {
     }
 
     fun click() {
-        toggleElement.actOnTheElement { it.findElement(By.xpath("./label")).click() }
+        toggleElement.actOnTheElement { it.findElement<WebElement>(By.xpath("./label")).click() }
     }
 
     fun assertEnabled() {
@@ -48,7 +49,7 @@ class ToggleElement(val page : HybridPageObject, text:String, id:String) {
         waitForLoadingToComplete()
         val errorMessage = "Expected toggle 'checked':"
         toggleElement.actOnTheElement {
-            val input = it.findElement(By.xpath("./$xPathFromContainerToToggleInput"))
+            val input = it.findElement<WebElement>(By.xpath("./$xPathFromContainerToToggleInput"))
             val isSelected = input.isSelected
             Assert.assertEquals(errorMessage, expectedChecked, isSelected)
         }

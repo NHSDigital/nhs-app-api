@@ -46,6 +46,7 @@ class Config private constructor() {
     val showPageSourceForXPathQuery: String
     val gpLookupApiKey: String
     val postcodeLookupSearchRadiusKm: String
+    var isDockerised: Boolean
 
     val mongoDbHost: String
     val mongoDbPort: Long
@@ -65,6 +66,7 @@ class Config private constructor() {
         apiBackendUrl = envOrDefault("apiBackendUrl", "http://api.local.bitraft.io:8089")
         nodeEnv = envOrDefault("NODE_ENV", "production")
         port = envOrDefault("PORT", "3000")
+        isDockerised = envOrDefault("DOCKER","false") == "true"
 
         val browserstackUsername = envOrDefault("BROWSERSTACK_USERNAME", "NOT_PROVIDED")
         browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESSKEY", "NOT_PROVIDED")

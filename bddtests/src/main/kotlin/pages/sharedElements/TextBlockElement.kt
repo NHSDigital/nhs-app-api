@@ -3,6 +3,7 @@ package pages.sharedElements
 import mocking.organDonation.models.KeyValuePair
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
@@ -35,11 +36,11 @@ class TextBlockElement {
     fun assertPair(expectedValues: Array<KeyValuePair<String, String>>): TextBlockElement {
 
         container.actOnTheElement {
-            val fields = it.findElements(By.xpath(".//h4"))
+            val fields = it.findElements<WebElement>(By.xpath(".//h4"))
 
             val actualValues = fields.map { field ->
                 KeyValuePair(field.text,
-                        field!!.findElement(By.ByXPath("./following-sibling::p")).text)
+                        field!!.findElement<WebElement>(By.ByXPath("./following-sibling::p")).text)
             }
 
             Assert.assertEquals(
@@ -64,7 +65,7 @@ class TextBlockElement {
 
     private fun assertInternal(locator: String, expectedText: Array<out String>): TextBlockElement {
         container.actOnTheElement {
-            val actualText = it.findElements(By.xpath(locator))
+            val actualText = it.findElements<WebElement>(By.xpath(locator))
                     .map { element -> element.text }.toTypedArray()
 
             expectedText.forEach { expected ->

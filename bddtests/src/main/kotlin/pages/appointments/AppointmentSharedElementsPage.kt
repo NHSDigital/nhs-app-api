@@ -5,6 +5,7 @@ import constants.DateTimeFormats.Companion.frontendTimeFormat
 import models.Slot
 import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.isPresent
@@ -154,7 +155,7 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     }
 
     private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String) {
-        val cliniciansPresent = driver.findElements(
+        val cliniciansPresent = driver.findElements<WebElement>(
                 By.xpath("$xPathRoot//span$appointmentCliniciansXPath")).isNotEmpty()
         if (!cliniciansPresent) return
         val clinicians = parentContainer.thenFindAll(

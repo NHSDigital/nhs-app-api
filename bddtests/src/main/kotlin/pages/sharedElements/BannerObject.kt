@@ -2,6 +2,7 @@ package pages.sharedElements
 
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
@@ -30,10 +31,10 @@ class BannerObject private constructor(page : HybridPageObject,
 
         container.actOnTheElement {
 
-            val bannerTitle = it.findElement(By.xpath("./div[1]")).text
+            val bannerTitle = it.findElement<WebElement>(By.xpath("./div[1]")).text
             Assert.assertEquals("Expected banner title", title, bannerTitle)
 
-            val bannerText = it.findElements(By.xpath("./$innerXPath/*"))
+            val bannerText = it.findElements<WebElement>(By.xpath("./$innerXPath/*"))
                     .map { element -> element.text }
 
             val message = "Expected banner text. " +

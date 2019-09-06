@@ -3,6 +3,7 @@ package pages.sharedElements
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 
@@ -80,9 +81,9 @@ class RadioButtons private constructor(private val page: HybridPageObject, priva
 
 class RadioButton(private val element : WebElementFacade) {
 
-    private val allTextElements = element.findElements(
+    private val allTextElements = element.findElements<WebElement>(
             By.xpath("./descendant::*[text()]")).map{e->e.text}
-    private val input = element.findElement(By.tagName("input"))
+    private val input = element.findElement<WebElement>(By.tagName("input"))
 
     val title: String by lazy { allTextElements[0] }
     val description: String by lazy { allTextElements[1] }

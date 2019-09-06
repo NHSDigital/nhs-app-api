@@ -19,7 +19,7 @@ class EmisCoursesBuilder(configuration: EmisConfiguration,
                 .andHeader(mocking.emis.HEADER_API_SESSION_ID, apiSessionId)
 
         if (!linkToken.isNullOrEmpty()) {
-            requestBuilder.andQueryParameter(mocking.emis.QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken!!, "equalTo")
+            requestBuilder.andQueryParameter(mocking.emis.QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken, "equalTo")
         }
     }
 

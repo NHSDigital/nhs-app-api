@@ -3,6 +3,7 @@ package pages.sharedElements
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.assertIsVisible
@@ -65,7 +66,7 @@ class DropdownElement(val label: String, val helpfulName: String, pageObject: Hy
         val optionsAsStrings = arrayListOf<String>()
 
         dropDown.actOnTheElement {
-            val optionElements = it.findElements(By.xpath("./*"))
+            val optionElements = it.findElements<WebElement>(By.xpath("./*"))
 
             for (option in optionElements) {
                 optionsAsStrings.add(option.text.trim())

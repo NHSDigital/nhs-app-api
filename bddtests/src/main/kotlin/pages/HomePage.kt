@@ -4,6 +4,7 @@ import models.Patient
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
+import org.openqa.selenium.WebElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/")
 open class HomePage : HybridPageObject() {
@@ -99,7 +100,7 @@ open class HomePage : HybridPageObject() {
         val actualDetails = arrayListOf<String>()
         greeting.actOnTheElement {
             actualDetails.addAll(
-                    it.findElements(
+                    it.findElements<WebElement>(
                             By.xpath("./following-sibling::div[1]/p"))
                             .map { element -> element.text })
         }

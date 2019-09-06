@@ -3,6 +3,7 @@ package pages.organDonation
 import mocking.data.organDonation.OrganDecisions
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
@@ -69,7 +70,7 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
         organSection(expectedKey).assertIsVisible()
         organSection.actOnTheElement {
             val actualValues =
-                    it.findElements(By.xpath("./following-sibling::ul/li"))
+                    it.findElements<WebElement>(By.xpath("./following-sibling::ul/li"))
                     .map { element -> element.text }
 
             val message = "Expected list of options. " +

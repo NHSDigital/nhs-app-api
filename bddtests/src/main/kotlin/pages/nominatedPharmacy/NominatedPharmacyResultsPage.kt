@@ -3,6 +3,7 @@ package pages.nominatedPharmacy
 import models.nominatedPharmacy.PharmacySearchResult
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
+import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.isVisible
@@ -23,7 +24,7 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
         val results = findAll(By.cssSelector("#searchResults li"))
         val listOfPharmacies = mutableListOf<PharmacySearchResult>()
         for (result in results) {
-            val pharmacyData = result.findElements(By.tagName("p"))
+            val pharmacyData = result.findElements<WebElement>(By.tagName("p"))
             listOfPharmacies.add(
                     PharmacySearchResult(
                         pharmacyName = pharmacyData[0].text,
