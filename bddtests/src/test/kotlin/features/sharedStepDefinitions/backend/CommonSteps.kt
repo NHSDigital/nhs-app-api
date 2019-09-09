@@ -34,7 +34,8 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
         arrayOf("favicon.ico"
                 ,"redirectToCitizenId"
                 ,"Failed to load resource"
-                ,"Request failed with status code 50")
+                ,"Request failed with status code 50"
+                ,"https://assets.nhs.uk/fonts")
 
 class CommonSteps : AbstractSteps() {
 

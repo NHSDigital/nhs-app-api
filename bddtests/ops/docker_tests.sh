@@ -267,6 +267,7 @@ info "Running $TAG tests"
   then
     sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=5/g' vars_ci_run.env
     sed -i '' -e 's/expireAfterSeconds:60/expireAfterSeconds:300/g' docker-compose_ci_run.yml
+    sed -i '' -e 's/ONLINE\_CONSULTATIONS\_ENABLED\=true/ONLINE\_CONSULTATIONS\_ENABLED\=false/g' vars_ci_run.env
   else
     sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=5/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/g' vars_ci_run.env
     sed -i '' -e 's/expireAfterSeconds:300/expireAfterSeconds:60/g' docker-compose_ci_run.yml
