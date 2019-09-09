@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var location = CreateLocation(23, "Leeds");
             var session = CreateSession(location.LocationId, 1, "General Appointment Session", "Timed");
 
-            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsGetResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages()
             };
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Act
             var actualResponse =
-                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, demographicsWithTelephone, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsGetResponse, demographicsWithTelephone, _userSession);
 
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var location = CreateLocation(23, "Leeds");
             var session = CreateSession(location.LocationId, 1, "General Appointment Session", "Timed");
 
-            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsGetResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages()
             };
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Act
             var actualResponse = 
-                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsGetResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var location = CreateLocation(23, "Leeds");
             var session = CreateSession(location.LocationId, 1, "General Appointment Session", "Timed");
 
-            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsGetResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages()
             };
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Act
             var actualResponse = 
-                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsGetResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -183,7 +183,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var location = CreateLocation(14, "Leeds");
             var sessionHolder = CreateSessionHolder(34, "Dr Who");
 
-            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsGetResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages()
             };
@@ -208,9 +208,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Slots = Array.Empty<Slot>(),
                 BookingReasonNecessity = Necessity.Optional
             };
+            
             // Act
             var actualResponse = 
-                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsGetResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -230,7 +231,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 SessionHolders = new[] { sessionHolder }
             };
 
-            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsGetResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages
                 {
@@ -254,7 +255,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsGetResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -282,16 +283,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var appointmentSlotSession =
                 CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
 
-            
             var slotTimes = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
-            
-            
+
             var slotsResponse = new AppointmentSlotsGetResponse
             {
                 Sessions = new[] { appointmentSlotSession }
             };
 
-            var practiceSettingsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsGetResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not book appointments if you have a sore throat." }
             };
@@ -315,7 +314,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsResponse, _demographics, _userSession);
+            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsGetResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -350,7 +349,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Sessions = new[] { appointmentSlotSession }
             };
 
-            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsGetResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not book appointments if you have a sore throat." }
             };
@@ -374,7 +373,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsGetResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);

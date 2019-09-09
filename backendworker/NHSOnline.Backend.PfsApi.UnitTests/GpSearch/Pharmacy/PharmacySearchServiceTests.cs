@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
@@ -28,7 +29,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
         private IFixture _fixture;
 
         private const int EPSEnabledMetricID = 10051;
-   
         
         [TestInitialize]
         public void TestInitialize()
@@ -123,14 +123,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacySearchResponse>().Subject;
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.PostcodeCoordinate.Latitude.Should().Be(1);
-            response.PostcodeCoordinate.Longitude.Should().Be(2);
-            response.Pharmacies.Count.Should().Be(1);
-            response.Pharmacies[0].OrganisationName.Should().Be("organisation_name_from_checker");
-        }    
-        
-        
+            using (new AssertionScope())
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+                response.PostcodeCoordinate.Latitude.Should().Be(1);
+                response.PostcodeCoordinate.Longitude.Should().Be(2);
+                response.Pharmacies.Count.Should().Be(1);
+                response.Pharmacies[0].OrganisationName.Should().Be("organisation_name_from_checker");
+            }
+        }
+
         [TestMethod]
         public async Task
             Search_WhenCalledWithValidFreeText_ReturnsListOfPharmacies()
@@ -181,12 +183,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             // Assert
             _gpLookupClient.Verify();
             var response = result.Should().BeAssignableTo<PharmacySearchResponse>().Subject;
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.Pharmacies.Count.Should().Be(2);
-            response.Pharmacies[0].OrganisationName.Should().Be("organisation_name_from_checker_1");  
-        }    
+            using (new AssertionScope())
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+                response.Pharmacies.Count.Should().Be(2);
+                response.Pharmacies[0].OrganisationName.Should().Be("organisation_name_from_checker_1");
+            }
+        }
 
-               
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
@@ -197,8 +201,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             var result = await _pharmacySearchService.Search(postcode);
 
             // Assert
-            var response = result.Should().BeAssignableTo<PharmacySearchResponse>().Subject;
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            result.Should().BeAssignableTo<PharmacySearchResponse>()
+                .Subject.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }      
         
         [TestMethod]
@@ -219,15 +223,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             _gpLookupClient
                 .Setup(x => x.PostcodeSearch(It.IsAny<PostcodeSearchData>()))
                 .Returns(Task.FromResult(postcodeSearchResult));
-          
-            
+
             // Act
             var result = await _pharmacySearchService.Search(postcode);
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacySearchResponse>().Subject;
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.Pharmacies.Count.Should().Be(0);
+            using (new AssertionScope())
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+                response.Pharmacies.Count.Should().Be(0);
+            }
         }
     }
 }

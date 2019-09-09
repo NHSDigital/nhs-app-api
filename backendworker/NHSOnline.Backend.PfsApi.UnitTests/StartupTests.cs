@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Support.Settings;
 using UnitTestHelper;
@@ -24,6 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         [TestMethod]
         public void Startup_Test_ConfigurationShouldThrowException_MissingConfigSetting()
         {
+            // Arrange
             var isSuccess = false;
             
             _fixture = new Fixture()
@@ -41,6 +43,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             
             _systemUnderTest = new Startup(configurationRoot, _mockIHostingEnvironment.Object, _mockILoggerFactory.Object);
 
+            // Act
             try
             {
                 _systemUnderTest.ConfigureServices(_mockIServiceCollection.Object);
@@ -54,7 +57,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
                 isSuccess = true;
             }
 
-            Assert.IsTrue(isSuccess);
+            // Assert
+            isSuccess.Should().BeTrue();
         }
     }
 }

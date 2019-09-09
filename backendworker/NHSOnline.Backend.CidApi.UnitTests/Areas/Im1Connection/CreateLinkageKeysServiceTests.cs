@@ -72,8 +72,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                                                    req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal) &&
                                                    req.EmailAddress.Equals(DefaultEmailAddress, StringComparison.Ordinal))), Times.Once);
             
-            result.Should().BeAssignableTo<LinkageResult>();
-            result.Should().BeOfType(typeof(LinkageResult.SuccessfullyCreated));
+            result.Should().BeOfType<LinkageResult.SuccessfullyCreated>();
         }
 
         [TestMethod]
@@ -91,10 +90,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.CreateLinkageKey(request, gpSystemMock.Object);
 
             // Assert
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<LinkageResult>().Subject;
-            resultAsStatusCodeResult.Should().BeOfType(typeof(LinkageResult.ErrorCase));
-            ((LinkageResult.ErrorCase)resultAsStatusCodeResult).ErrorCode.Should()
-                .Be(InternalCode.UnderMinimumAgeOrNonCompetent);
+            result.Should().BeOfType<LinkageResult.ErrorCase>().Subject
+                .ErrorCode.Should().Be(InternalCode.UnderMinimumAgeOrNonCompetent);
         }
 
         [TestMethod]
@@ -111,10 +108,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.CreateLinkageKey(request, gpSystemMock.Object);
 
             // Assert
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<LinkageResult>().Subject;
-            resultAsStatusCodeResult.Should().BeOfType(typeof(LinkageResult.ErrorCase));
-            ((LinkageResult.ErrorCase)resultAsStatusCodeResult).ErrorCode.Should()
-                .Be(InternalCode.UnderMinimumAgeOrNonCompetent);
+            result.Should().BeOfType<LinkageResult.ErrorCase>().Subject
+                .ErrorCode.Should().Be(InternalCode.UnderMinimumAgeOrNonCompetent);
         }
 
         [DataTestMethod]
@@ -131,9 +126,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Act
             var result = await _systemUnderTest.CreateLinkageKey(request, gpSystemMock.Object);
 
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<LinkageResult>().Subject;
-            resultAsStatusCodeResult.Should().BeOfType(typeof(LinkageResult.ErrorCase));
-            ((LinkageResult.ErrorCase)resultAsStatusCodeResult).ErrorCode.Should().Be(errorCode);
+            // Assert
+            result.Should().BeOfType<LinkageResult.ErrorCase>().Subject
+                .ErrorCode.Should().Be(errorCode);
         }
 
         [TestMethod]
@@ -148,9 +143,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Act
             var result = await _systemUnderTest.CreateLinkageKey(request, gpSystemMock.Object);
 
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<LinkageResult>().Subject;
-            resultAsStatusCodeResult.Should().BeOfType(typeof(LinkageResult.NotFound));
-            ((LinkageResult.NotFound)resultAsStatusCodeResult).ErrorCode.Should().Be(InternalCode.UnknownError);
+            // Assert
+            result.Should().BeOfType<LinkageResult.NotFound>().Subject
+                .ErrorCode.Should().Be(InternalCode.UnknownError);
         }
 
         private static CreateLinkageRequest CreateLinkageRequest()

@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public void Build_HappyPath_ReturnsTokenValidationParameters()
         {
+            // Arrange
             var issuer = _fixture.Create<string>();
             var clientId = _fixture.Create<string>();
             
@@ -42,14 +43,15 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             
             var systemUnderTest = _fixture.Create<TokenValidationParameterBuilder>();
 
+            // Act
             var result = systemUnderTest.Build(signingKeys);
 
+            // Assert
             result.ValidIssuer.Should().Be(issuer);
             result.ValidAudience.Should().Be(clientId);
             result.IssuerSigningKeys.Should().BeEquivalentTo(validSigningKeys);
             result.ValidateAudience.Should().BeTrue();
             result.ValidateIssuer.Should().BeTrue();
-
         }
         
         [DataRow("")]
@@ -57,6 +59,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public void Build_EmptyIssuerString_ReturnsTokenValidationParameters(string issuer)
         {
+            // Arrange
             var clientId = _fixture.Create<string>();
             
             _config
@@ -71,14 +74,15 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             
             var systemUnderTest = _fixture.Create<TokenValidationParameterBuilder>();
 
+            // Act
             var result = systemUnderTest.Build(signingKeys);
 
+            // Assert
             result.ValidIssuer.Should().Be(issuer);
             result.ValidAudience.Should().Be(clientId);
             result.IssuerSigningKeys.Should().BeEquivalentTo(validSigningKeys);
             result.ValidateAudience.Should().BeTrue();
             result.ValidateIssuer.Should().BeTrue();
-
         }
         
         [DataRow("")]
@@ -86,6 +90,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public void Build_EmptyClientIdString_ReturnsTokenValidationParameters(string clientId)
         {
+            // Arrange
             var issuer = _fixture.Create<string>();
             
             _config
@@ -100,19 +105,21 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             
             var systemUnderTest = _fixture.Create<TokenValidationParameterBuilder>();
 
+            // Act
             var result = systemUnderTest.Build(signingKeys);
 
+            // Assert
             result.ValidIssuer.Should().Be(issuer);
             result.ValidAudience.Should().Be(clientId);
             result.IssuerSigningKeys.Should().BeEquivalentTo(validSigningKeys);
             result.ValidateAudience.Should().BeTrue();
             result.ValidateIssuer.Should().BeTrue();
-
         }
         
         [TestMethod]
         public void Build_NullSigningKeys_ReturnsTokenValidationParameters()
         {
+            // Arrange
             var issuer = _fixture.Create<string>();
             var clientId = _fixture.Create<string>();
             
@@ -125,10 +132,11 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             
             var systemUnderTest = _fixture.Create<TokenValidationParameterBuilder>();
             
+            // Act
             Action act = () => systemUnderTest.Build(null);
 
+            // Assert
             act.Should().Throw<NullReferenceException>();
-
         }
     }
 }

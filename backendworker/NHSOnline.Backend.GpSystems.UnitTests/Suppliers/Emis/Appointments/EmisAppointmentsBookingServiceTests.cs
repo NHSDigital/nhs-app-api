@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task Book_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGatewaye()
+        public async Task Book_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
             _mockEmisClient.Setup(x => x.AppointmentsPost(It.IsAny<EmisHeaderParameters>(),
@@ -217,7 +217,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenEmisReturnsForbidden_ReturnsForbidden()
         {
-            //Arrange
+            // Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .Forbidden);
             
@@ -234,10 +234,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsSlotNotAvailable()
         {
+            // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
-
-
-            //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                     .Forbidden)
                 { StandardErrorResponse = errorResponse };
@@ -255,11 +253,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenPatientDoesNotHaveNecessaryPermissionsException_ReturnsSlotNotAvailable()
         {
+            // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
-
-            //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .InternalServerError)
             { ExceptionErrorResponse = errorResponse };
@@ -277,10 +274,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenPatientHasReachedAppointmentLimit_ReturnsAppointmentLimitReached()
         {
+            // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
             errorResponse.InternalResponseCode = OnlineUserMaxAppointmentBookCount;
 
-            //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                     .BadRequest)
                 { StandardErrorResponse = errorResponse };
@@ -298,10 +295,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenPatientHasReachedAppointmentLimitException_ReturnsAppointmentLimitReached()
         {
+            // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = $"{EmisApiErrorMessages.EmisService_BookedAppointmentLimit} to 35 by the practice";
 
-            //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .InternalServerError)
             { ExceptionErrorResponse = errorResponse };
@@ -319,10 +316,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_EmisReturnsUnknownError_ReturnsBadGateway()
         {
+            // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: Unhandled Error";
 
-            //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                     .InternalServerError)
                 { ExceptionErrorResponse = errorResponse };
@@ -371,11 +368,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenTelephoneNumberRequiredButNotProvided_ReturnsBadRequestResponse()
         {
+            // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
             errorResponse.InternalResponseCode = RequiredFieldValueMissing;
 
-            //Arrange
-            
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                     .BadRequest)
                 { StandardErrorResponse = errorResponse };
@@ -393,10 +389,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Book_WhenTelephoneNumberRequiredException_ReturnsBadRequestResponse()
         {
+            // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = $"{EmisApiErrorMessages.EmisService_TelephoneNumberRequired}";
 
-            //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                     .BadRequest)
                 { ExceptionErrorResponse = errorResponse };

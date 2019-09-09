@@ -44,7 +44,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         [TestMethod]
         public void Map_ResponseIncludesMappedElements()
         {
-
             // Act
             var response = _systemUnderTest.Map(_bookedAppointmentsResponse);
 

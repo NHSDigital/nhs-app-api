@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Support.Temporal;
 
@@ -12,14 +13,14 @@ namespace NHSOnline.Backend.Support.UnitTests.Temporal
         public void DateTimeToYYYYMMDDString_ValidDateTime_ReturnsFormattedDateTime_Success()
         {
             // Arrange
-            var expectedDateTime = "2018-12-19";
+            const string expectedDateTime = "2018-12-19";
             DateTime? testDate = DateTime.ParseExact("19/12/2018", "dd/MM/yyyy", CultureInfo.CurrentCulture);
             
             // Act
-            var formatedDate = testDate.FormatToYYYYMMDD();
+            var formattedDate = testDate.FormatToYYYYMMDD();
             
             // Assert
-            Assert.IsTrue(expectedDateTime.Equals(formatedDate, StringComparison.Ordinal));
+            formattedDate.Should().Be(expectedDateTime);
         }
         
         [TestMethod]
@@ -29,10 +30,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Temporal
             DateTime? nullDateTime = null;
 
             // Act
-            var formatedDate = nullDateTime.FormatToYYYYMMDD();
+            var formattedDate = nullDateTime.FormatToYYYYMMDD();
             
             // Assert
-            Assert.IsNull(formatedDate);
+            formattedDate.Should().BeNull();
         }
     }
 }

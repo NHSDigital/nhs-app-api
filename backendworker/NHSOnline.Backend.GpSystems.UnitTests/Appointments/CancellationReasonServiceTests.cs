@@ -24,17 +24,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Appointments
         [TestMethod]
         public void GetDefaultCancellationReasons_HappyPath_ReturnsExpectedCancellationReasons()
         {
-            //Arrange
+            // Arrange
             var expectedCancellationReasons = new List<CancellationReason>
             {
                 new CancellationReason { DisplayName = "No longer required", Id = "R1_NoLongerRequired" },
                 new CancellationReason { DisplayName = "Unable to attend", Id = "R2_UnableToAttend" }
             };
             
-            //Act
+            // Act
             var actualCancellationReasons = _systemUnderTest.GetDefaultCancellationReasons();
             
-            //Assert
+            // Assert
             actualCancellationReasons.Should().BeEquivalentTo(expectedCancellationReasons);
         }        
     }

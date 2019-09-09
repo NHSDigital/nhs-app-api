@@ -69,11 +69,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         [DataRow("   ")]
         public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsNullOrEmpty(string odsCode)
         {
+            // Arrange
             var linkageController = CreateLinkageController();
             
+            // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value, odsCode, DefaultIdentityToken);
 
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            // Assert
+            result.Should().BeOfType<BadRequestResult>();
         }
 
         [TestMethod]
@@ -99,13 +102,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value, DefaultOdsCode, DefaultIdentityToken);
 
             // Assert
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
         }
 
         [TestMethod]
         public async Task Get_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
+            // Arrange
             var expectedResponse = _fixture.Create<LinkageResponse>();
             _odsCodeMassager.Setup(x => x.IsEnabled).Returns(true);
 
@@ -145,9 +149,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                  req.OdsCode.Equals(DefaultOdsCode, StringComparison.Ordinal) &&
                                                  req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal))), Times.Once);
             
-            var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
-            var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<LinkageResponse>()
+                .Subject.Should().BeEquivalentTo(expectedResponse);
             _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), GetRequestAuditType, It.IsAny<string>()));
             _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), GetResponseAuditType, It.IsAny<string>()));
         }
@@ -186,7 +190,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 DefaultOdsCode, DefaultIdentityToken);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            result.Should().BeOfType<BadRequestResult>();
         }
 
         [TestMethod]
@@ -212,7 +216,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var result = await linkageController.Post(request);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            result.Should().BeOfType<BadRequestResult>();
         }
         
         [TestMethod]
@@ -245,7 +249,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var result = await linkageController.Post(request);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            result.Should().BeOfType<BadRequestResult>();
         }
 
         [TestMethod]
@@ -271,8 +275,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var result = await linkageController.Post(request);
 
             // Assert
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
         }
 
         [TestMethod]
@@ -324,9 +328,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                    req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal) &&
                                                    req.EmailAddress.Equals(DefaultEmailAddress, StringComparison.Ordinal))), Times.Once);
             
-            var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-            var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            result.Should().BeAssignableTo<CreatedResult>()
+                .Subject.Value.Should().BeAssignableTo<LinkageResponse>()
+                .Subject.Should().BeEquivalentTo(expectedResponse);
             _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostRequestAuditType, It.IsAny<string>()));
             _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostResponseAuditType, It.IsAny<string>()));
         }
@@ -334,6 +338,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         [TestMethod]
         public async Task Post_Returns403FailedAgeCheck_WhenDateOfBirthIsUnderTheMinimumLinkageAge()
         {
+            // Arrange
             var expectedResponse = _fixture.Create<LinkageResponse>();
 
             var mockResult = new LinkageResult.SuccessfullyRetrieved(expectedResponse);
@@ -359,8 +364,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var result = await linkageController.Post(request);
 
             // Assert
-            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
        [DataTestMethod]
@@ -369,6 +374,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
        [DataRow(Im1ConnectionErrorCodes.InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived)]
        public async Task Post_Returns403Forbidden_ForVariousResults(Im1ConnectionErrorCodes.InternalCode errorCode)
        {
+           // Arrange
             var mockResult = new LinkageResult.ErrorCase(errorCode);
             var mockLinkageService = new Mock<ILinkageService>();
 
@@ -406,8 +412,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
            var actionResult = await linkageController.Post(request);
        
            // Assert                 
-           var resultAsStatusCodeResult = actionResult.Should().BeAssignableTo<StatusCodeResult>().Subject;
-           resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+           actionResult.Should().BeAssignableTo<StatusCodeResult>()
+               .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
        }
 
         private LinkageController CreateLinkageController(

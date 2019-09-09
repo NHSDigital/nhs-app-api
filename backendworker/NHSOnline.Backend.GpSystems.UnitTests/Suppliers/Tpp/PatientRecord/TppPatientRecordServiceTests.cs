@@ -125,8 +125,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             _patientDcrEventsChecker.Verify();
             _patientOverviewTaskChecker.Verify();
             _patientTestResultsChecker.Verify();
-            result.Should().BeAssignableTo<GetMyRecordResult.Success>();
-            ((GetMyRecordResult.Success)result).Response.Should().NotBeNull();
+
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
         
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
@@ -162,7 +163,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         Details =_fixture.Create<string>(),
                         Type = _fixture.Create<string>()
                     }
-                    
                 }
             };
         }
@@ -176,6 +176,5 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 Description = _fixture.Create<string>()
             };
         }
-        
     }
 }

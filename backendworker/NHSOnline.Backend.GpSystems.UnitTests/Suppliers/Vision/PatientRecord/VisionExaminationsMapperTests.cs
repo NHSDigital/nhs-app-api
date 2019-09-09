@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -30,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
         [TestMethod]
         public async Task Vision_Examinations_Mapper_Returns_Cleaned_Html_When_Results_Present()
         {
-            //Arrange
+            // Arrange
             var examinationsHtml =
                 await EmbeddedResourceFileHelper.ReadEmbeddedResource(
                     "NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord.TestData.Examinations.VariousExaminations.html");
@@ -40,17 +41,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
 
             _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>(), null)).Returns(examinationsHtml);
             
-            //Act
+            // Act
             var mappedResponse = _mapper.Map(new VisionPatientDataResponse()
             {
                 Record = examinationsHtml
             });
 
-            //Assert
-            Assert.IsTrue(mappedResponse != null);
-            Assert.IsTrue(!string.IsNullOrEmpty(mappedResponse.RawHtml));
-
-            Assert.IsTrue(string.CompareOrdinal(mappedResponse.RawHtml, expectedCleanMarkup) == 0);
+            // Assert
+            mappedResponse.Should().NotBeNull();
+            mappedResponse.RawHtml.Should().NotBeNullOrEmpty();
+            mappedResponse.RawHtml.Should().Be(expectedCleanMarkup);
         }
     }
 }

@@ -37,12 +37,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public void Constructor_WhenProduction_DoesNotSetACustomValidationCallback()
         {
+            // Arrange
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
 
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
+            
+            // Act
             _systemUnderTest = CreateTppHttpClientHandler();
+            
+            // Assert
             _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
             _systemUnderTest.ClientCertificates.Should().NotBeEmpty();
         }
@@ -50,36 +55,50 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public void Constructor_WhenNotProduction_SetsACustomValidationCallback()
         {
+            // Arrange
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
 
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Development");
+            
+            // Act
             _systemUnderTest = CreateTppHttpClientHandler();
+            
+            // Assert
             _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
         }
 
         [TestMethod]
-        public void Constructor_WhenCertifcatePathIsValid_AddsTheCertificate()
+        public void Constructor_WhenCertificatePathIsValid_AddsTheCertificate()
         {
+            // Arrange
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
 
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
+            
+            // Act
             _systemUnderTest = CreateTppHttpClientHandler();
+            
+            // Assert
             _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
-            _systemUnderTest.ClientCertificates.Should().NotBeEmpty();
             _systemUnderTest.ClientCertificates.Should().HaveCount(1);
         }
 
         [TestMethod]
         public void NoCertificateFound()
         {
+            // Arrange
             _certificateService.Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((X509Certificate2)null);
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
+            
+            // Act
             _systemUnderTest = CreateTppHttpClientHandler();
+            
+            // Assert
             _systemUnderTest.ClientCertificates.Should().BeEmpty();
         }
 

@@ -74,8 +74,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession.GpUserSession));
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
         
         [TestMethod]
@@ -102,8 +102,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession.GpUserSession));
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
         
         [TestMethod]
@@ -130,8 +130,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession.GpUserSession));
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
     }
 }

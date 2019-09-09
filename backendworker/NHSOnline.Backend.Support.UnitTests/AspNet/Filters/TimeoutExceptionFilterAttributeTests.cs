@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
         [TestMethod]
         public void OnException_TimeoutExceptionCaught_Returns_504GatewayTimeout()
         {
-            //Arrange
+            // Arrange
             _httpActionExecutedContext = new ExceptionContext(_actionContext, _mockFilterMetadata.Object)
             {
                 Exception = new NhsTimeoutException(),
@@ -84,10 +84,10 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
                 ServiceDeskReference = _serviceDeskReference,
             };
 
-            //Act
+            // Act
             _systemUnderTest.OnException(_httpActionExecutedContext);
 
-            //Assert
+            // Assert
             var objectResult = _httpActionExecutedContext.Result.Should().BeAssignableTo<ObjectResult>().Subject;
             objectResult.Value.Should().BeEquivalentTo(expected);
             _mockLogger.VerifyLogger(LogLevel.Error,
@@ -98,17 +98,17 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
         [TestMethod]
         public void OnException_Non_TimeoutException_Returns_Null()
         {
-            //Arrange
+            // Arrange
             _httpActionExecutedContext = new ExceptionContext(_actionContext, _mockFilterMetadata.Object)
             {
                 Exception = new HttpRequestException(),
                 HttpContext = _mockHttpContext.Object
             };
 
-            //Act
+            // Act
             _systemUnderTest.OnException(_httpActionExecutedContext);
 
-            //Assert
+            // Assert
             _httpActionExecutedContext.Result.Should().Be(null);
             _mockLogger.VerifyLogger(LogLevel.Error,
                 $"Operation timed out - exception: {_httpActionExecutedContext.Exception}", Times.Never());

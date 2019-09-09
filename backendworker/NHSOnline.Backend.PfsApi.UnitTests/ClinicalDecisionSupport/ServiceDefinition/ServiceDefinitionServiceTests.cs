@@ -456,6 +456,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             
             // Act
             var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
+            
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
@@ -479,7 +480,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                     It.IsAny<bool>()))
                 .ReturnsAsync(httpResponse);
 
-            var olcDem = new OlcDemographics
+            var olcDemographics = new OlcDemographics
             {
                 NameFull = "Test Test",
                 NhsNumber = "111 111 111",
@@ -487,7 +488,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 DateOfBirth = DateTime.UtcNow
             };
 
-            _mockDemographicsOlcMapper.Setup(d => d.Map(It.IsAny<DemographicsResponse>())).Returns(olcDem);
+            _mockDemographicsOlcMapper.Setup(d => d.Map(It.IsAny<DemographicsResponse>())).Returns(olcDemographics);
 
             _mockCreateFhirParam.Setup(cfp => cfp.CreatePatientFhir(
                 It.IsAny<IMapper<DemographicsResponse, OlcDemographics>>(),
@@ -497,22 +498,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 {
                     new Address
                     {
-                        Text = olcDem.AddressFull
+                        Text = olcDemographics.AddressFull
                     }
                 },
-                BirthDate = olcDem.DateOfBirth.ToString(),
+                BirthDate = olcDemographics.DateOfBirth.ToString(),
                 Name = new List<HumanName>
                 {
                     new HumanName
                     {
-                        Text = olcDem.NameFull
+                        Text = olcDemographics.NameFull
                     }
                 },
                 Identifier = new List<Identifier>
                 {
                     new Identifier
                     {
-                        Value = olcDem.NhsNumber
+                        Value = olcDemographics.NhsNumber
                     }
                 }
             });

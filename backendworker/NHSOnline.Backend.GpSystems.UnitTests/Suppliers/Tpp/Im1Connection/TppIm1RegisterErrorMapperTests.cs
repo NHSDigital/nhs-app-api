@@ -30,8 +30,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         [TestMethod]
         public void Map_WhenPassingNull_ThrowsNullReferenceException()
         {
+            // Act
             Action act = () => TppIm1RegisterErrorMapper.Map(null, _logger.Object);
 
+            // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
         }
 
@@ -46,9 +48,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var result = TppIm1RegisterErrorMapper.Map(response, _logger.Object);
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be((int)Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetailsTpp);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetailsTpp);
         }
 
         [TestMethod]
@@ -59,15 +60,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             // Act
             var result = TppIm1RegisterErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
-            result.GetType().Should().Be(typeof(Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode));
-            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
-        public TppClient.TppApiObjectResponse<LinkAccountReply> CreateResponse(
+        private TppClient.TppApiObjectResponse<LinkAccountReply> CreateResponse(
             HttpStatusCode statusCode,
             string errorCode)
         {

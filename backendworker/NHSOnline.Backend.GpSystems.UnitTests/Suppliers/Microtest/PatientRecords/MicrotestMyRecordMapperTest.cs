@@ -28,8 +28,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_ThrowsArgumentNullExceptionWhenObjectIsNull()
         {
+            // Act
             Action act = () => _mapper.Map(null);
 
+            // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("patientRecordGetResponse");
         }
 
@@ -222,7 +224,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleMedicationPerSection()
         {
-            //Arrange
+            // Arrange
             var currentMedication = BuildCurrentMicrotestMedication(
                 "Amoxycillan oral suspension sugar free",
                 "500 mls",
@@ -281,10 +283,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(1);
@@ -297,7 +299,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapCurrentMedicationsOnly()
         {
-            //Arrange
+            // Arrange
             var microtestRecordResponse = new PatientRecordGetResponse
             {
                 MedicationData = new MedicationData
@@ -334,10 +336,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(0);
@@ -350,7 +352,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapHistoricMedicationsOnly()
         {
-            //Arrange
+            // Arrange
             var microtestRecordResponse = new PatientRecordGetResponse
             {
                 MedicationData = new MedicationData
@@ -386,10 +388,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(0);
@@ -402,7 +404,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapAcuteMedicationsOnly()
         {
-            //Arrange
+            // Arrange
             var microtestRecordResponse = new PatientRecordGetResponse
             {
                 MedicationData = new MedicationData
@@ -438,10 +440,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(1);
@@ -455,7 +457,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMultipleMedicationsForEachSection()
         {
-            //Arrange
+            // Arrange
             var currentMedication = BuildCurrentMicrotestMedication(
                 "Amoxycillan oral suspension sugar free",
                 "500 mls",
@@ -524,10 +526,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeTrue();
             result.Medications.Data.AcuteMedications.Should().HaveCount(4);
@@ -544,7 +546,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [DataRow("")]
         public void MapPatientRecordGetResponse_ShouldNotMapMedicationItemsWithInvalidDates(String prescribedDate)
         {
-            //Arrange
+            // Arrange
             var currentMedication = BuildCurrentMicrotestMedication(
                 "Amoxycillan oral suspension sugar free",
                 "500 mls",
@@ -594,10 +596,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeFalse();
             result.Medications.Data.AcuteMedications.Should().HaveCount(0);
@@ -624,10 +626,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(item);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasSummaryRecordAccess.Should().BeFalse();
             result.Medications.HasUndeterminedAccess.Should().BeTrue();
@@ -639,7 +641,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleImmunisationItem()
         {
-            //Arrange
+            // Arrange
             var item = new PatientRecordGetResponse
             {
                 ImmunisationData = new ImmunisationData
@@ -654,10 +656,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(item);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Immunisations.Data.Should().HaveCount(1);
@@ -683,7 +685,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [DataRow("invalidDate")]
         public void MapPatientRecordGetResponse_ShouldPutImmunisationsWithNoEffectiveDateAfterThoseWithEffectiveDate(string date)
         {
-            //Arrange
+            // Arrange
             var imm1 = BuildMicrotestImmunisation(date, "Mumps", "2022-03-27", "ok");
             var imm2 = BuildMicrotestImmunisation("2000-01-01", "Flu", "2022-03-27", "ok");
         
@@ -701,10 +703,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(item);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Immunisations.Data.Should().HaveCount(2);
@@ -718,7 +720,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [DataRow("no next date available")]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapImmunisationsWithUnparsableNextDate(string date)
         {
-            //Arrange
+            // Arrange
             var imm1 = BuildMicrotestImmunisation("2019-01-01", "Mumps", date, "ok");
         
             var item = new PatientRecordGetResponse
@@ -735,10 +737,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(item);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Immunisations.Data.Should().HaveCount(1);
@@ -751,7 +753,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldOrderImmunisationsByDateDescending()
         {
-            //Arrange
+            // Arrange
             var imm1 = BuildMicrotestImmunisation("2000-01-03", "Mumps", "2022-03-27", "ok");
             var imm2 = BuildMicrotestImmunisation("2000-01-01", "Flu", "2022-03-27", "ok");
             var imm3 = BuildMicrotestImmunisation("2000-01-02", "Measles", "2022-03-27", "ok");
@@ -770,10 +772,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 },
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(item);
             
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Immunisations.Data.Should().HaveCount(3);
@@ -819,7 +821,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_WillMapProblemAndUseRawFinishDateValue_WhenFinishDateCannotBeParsed()
         {
-            //Arrange
+            // Arrange
             var microtestProblem = BuildMicrotestProblem("2019-03-27","Ongoing","Angina");
             
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -848,10 +850,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 }
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Problems.Data.Should().HaveCount(1);
@@ -862,7 +864,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapProblemsWhenFinishDateCanBeParsed()
         {
-            //Arrange
+            // Arrange
             var microtestProblem = BuildMicrotestProblem("2019-03-27","2022-03-27","Angina");
 
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -891,10 +893,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 }
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Problems.Data.Should().HaveCount(1);
@@ -905,7 +907,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldMapProblemItemEvenWhenStartDateCannotBeParsed()
         {
-            //Arrange
+            // Arrange
             var microtestProblem = BuildMicrotestProblem("no date","2022-03-27","Angina");
 
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -934,10 +936,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 }
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Problems.Data.Should().HaveCount(1);
@@ -955,7 +957,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [DataRow("   NO rubric RECOrdED    ")]    //case insensitive check with leading and trailing spaces
         public void MapPatientRecordGetResponse_ShouldNotMapProblemItemWhenRubricValueIsNotValid(string rubric)
         {
-            //Arrange
+            // Arrange
             var microtestProblem = BuildMicrotestProblem("2019-03-27","2022-03-27", rubric);
 
             var microtestRecordResponse = new PatientRecordGetResponse
@@ -981,10 +983,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 }
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeFalse();
             result.Problems.Data.Should().HaveCount(0);
@@ -995,7 +997,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldOrderProblemsByStartDateDescending()
         {
-            //Arrange
+            // Arrange
             var prob1 = BuildMicrotestProblem("no date available","2022-03-27","Angina");          
             var prob2 = BuildMicrotestProblem("2019-03-27",       "2022-03-27","Gout");           
             var prob3 = BuildMicrotestProblem("2019-03-28",       "2022-03-27","Stroke");           
@@ -1032,10 +1034,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 }
             };
 
-            //Act
+            // Act
             var result = _mapper.Map(microtestRecordResponse);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.HasDetailedRecordAccess.Should().BeTrue();
             result.Problems.Data.Should().HaveCount(5);

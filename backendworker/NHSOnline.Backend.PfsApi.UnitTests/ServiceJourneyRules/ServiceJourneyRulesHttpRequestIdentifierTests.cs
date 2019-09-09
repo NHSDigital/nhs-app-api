@@ -24,9 +24,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
         [TestMethod]
         public void HttpRequestIdentifier_ValidGetRequest_ReturnsHttpRequestIdentity()
         {
+            // Arrange
             var request = _fixture.Create<HttpRequestMessage>();
+            
+            // Act
             var result = _systemUnderTest.Identify(request);
 
+            // Assert
             result.Should().BeOfType(typeof(HttpRequestIdentity));
         }
     }

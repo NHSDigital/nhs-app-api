@@ -61,11 +61,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             
             // Assert
             result.Should().NotBeNull();
-            result.Data.Should().HaveCount(testResultsViewReply.Items.Count());
             result.Data.Should().BeEquivalentTo(testResults);
         }
 
-        private TestResultsViewReply GetTppTestResults()
+        private static TestResultsViewReply GetTppTestResults()
         {
             return new TestResultsViewReply
             {     

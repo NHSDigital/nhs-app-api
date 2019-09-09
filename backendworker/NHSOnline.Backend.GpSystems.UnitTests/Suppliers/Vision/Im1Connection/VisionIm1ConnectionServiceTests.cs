@@ -72,6 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                             },
                         },
                     }));
+            
             // Act
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -444,9 +445,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
         }
 
         [TestMethod]
@@ -480,9 +480,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
         }
 
         [TestMethod]
@@ -505,9 +504,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserFoundForLinkageDetails);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserFoundForLinkageDetails);
         }
 
         [TestMethod]
@@ -530,9 +528,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
         }
 
         private Mock<IVisionClient> PostLinkMockError(string errorCode, string errorDescription)

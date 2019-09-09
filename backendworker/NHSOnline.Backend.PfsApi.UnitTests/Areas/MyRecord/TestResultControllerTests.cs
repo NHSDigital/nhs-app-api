@@ -87,8 +87,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             // Assert
             _mockPatientRecordService.Verify();
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetDetailedTestResult.Success>();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<GetDetailedTestResult.Success>();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Test result successfully viewed" ));
@@ -107,8 +107,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var result = await _systemUnderTest.GetTestResult(TestResultId);
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockPatientRecordService.Verify();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));

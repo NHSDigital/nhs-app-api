@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
         [TestMethod]
         public async Task Invoke_WhenHeaderIsNotPresent_DoesNotAddTheLogMessageToLoggerScope()
         {
-            //Arrange
+            // Arrange
             _logger
                 .Setup(x => x.BeginScope(It.IsAny<string>()))
                 .Throws<InvalidOperationException>();
@@ -50,10 +50,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             var context = new DefaultHttpContext();
 
             _systemUnderTest = new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
-            //Act
+            // Act
             await _systemUnderTest.Invoke(context);
 
-            //Assert
+            // Assert
             context.Response.StatusCode.Should()
                 .Be((int)HttpStatusCode.OK);
         }
@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             string logTemplate, string expectedValue)
         {
             var headerName = _fixture.Create<string>();
-            //Arrange
+            // Arrange
             _logger
                 .Setup(x => x.BeginScope(expectedValue))
                 .Returns(_fixture.Create<IDisposable>())
@@ -84,10 +84,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
 
             _systemUnderTest = new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
-            //Act
+            // Act
             await _systemUnderTest.Invoke(context);
 
-            //Assert
+            // Assert
             _logger.Verify();
         }
         
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
         {
             var headerName = _fixture.Create<string>();
             var headerValue = _fixture.Create<string>();
-            //Arrange
+            // Arrange
             _logger
                 .Setup(x => x.BeginScope(expectedValue))
                 .Returns(_fixture.Create<IDisposable>())
@@ -116,10 +116,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             context.Request.Headers.Add(headerName, headerValue);
 
             _systemUnderTest = new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
-            //Act
+            // Act
             await _systemUnderTest.Invoke(context);
 
-            //Assert
+            // Assert
             _logger.Verify();
         }
         
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             var headerValue = _fixture.Create<string>();
 
             var expectedResult = $"{headerName}={headerValue}";
-            //Arrange
+            // Arrange
             _logger
                 .Setup(x => x.BeginScope(expectedResult))
                 .Returns(_fixture.Create<IDisposable>())
@@ -148,17 +148,17 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             context.Request.Headers.Add(headerName, headerValue);
 
             _systemUnderTest = new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
-            //Act
+            // Act
             await _systemUnderTest.Invoke(context);
 
-            //Assert
+            // Assert
             _logger.Verify();
         }
         
         [TestMethod]
         public void Invoke_TheTemplateContainsMultipleValuePlaceHolders_ItThrowsAnArgumentException()
         {
-            //Arrange  
+            // Arrange  
             var options = new OptionsWrapper<LogRequestHeaderOptions>(
                 new LogRequestHeaderOptions
                 {
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             // ReSharper disable once ObjectCreationAsStatement
             Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
-            //Act
+            // Act
             act.Should().Throw<ArgumentException>()
                 .WithMessage("LogTemplate contains more than one instance of {value}");
         }
@@ -177,27 +177,27 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
         [TestMethod]
         public void Invoke_WhenNoOptionsWrapperIsProvided_ItThrowsArgumentException()
         {
-            //Arrange  
+            // Arrange  
             OptionsWrapper<LogRequestHeaderOptions> options = null;
             
             // ReSharper disable once ObjectCreationAsStatement
             Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
-            //Act
+            // Act
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("options");
         }
         
         [TestMethod]
         public void Invoke_WhenNoOptionsAreProvided_ItThrowsArgumentException()
         {
-            //Arrange  
+            // Arrange  
             var options = new OptionsWrapper<LogRequestHeaderOptions>(
                 null);
             
             // ReSharper disable once ObjectCreationAsStatement
             Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
-            //Act
+            // Act
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("options");
         }
     }

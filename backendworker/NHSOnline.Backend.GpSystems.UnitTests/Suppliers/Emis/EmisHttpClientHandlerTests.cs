@@ -28,13 +28,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public static readonly Uri BaseUri = new Uri("http://emis_base_url/");
 
         private const string CertificatePath = "CertificatePath";
-
-        private const string CertificatePassphrase = "CerticiatePassphrase";       
+        private const string CertificatePassphrase = "CertificatePassphrase";       
 
         private const int CoursesMaxCoursesLimit = 100;
-
         private const int EmisExtendedHttpTimeoutSeconds = 6;
-
         private const int DefaultHttpTimeoutSeconds = 2;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const string Path = "Suppliers/Vision/Resources/mycert.pfx";
@@ -79,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         }
 
         [TestMethod]
-        public void Constructor_WhenCertifcatePathIsValid_AddsTheCertificate()
+        public void Constructor_WhenCertificatePathIsValid_AddsTheCertificate()
         {
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
@@ -101,7 +98,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateEmisHttpClientHandler();
             _systemUnderTest.ClientCertificates.Should().BeEmpty();
-
         }
 
         private EmisHttpClientHandler CreateEmisHttpClientHandler()

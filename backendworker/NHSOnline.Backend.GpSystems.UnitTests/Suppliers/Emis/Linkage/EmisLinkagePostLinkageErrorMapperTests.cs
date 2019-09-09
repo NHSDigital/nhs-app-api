@@ -44,11 +44,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             // Act
             var result = EmisLinkagePostErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
-            var conflictResult = (LinkageResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
         }
         
         [TestMethod]
@@ -59,11 +58,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             // Act
             var result = EmisLinkagePostErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>();
-            var linkageResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
-            linkageResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
     }
 }

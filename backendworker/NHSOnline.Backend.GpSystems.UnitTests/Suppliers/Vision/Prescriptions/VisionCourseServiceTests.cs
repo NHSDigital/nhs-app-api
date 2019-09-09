@@ -113,8 +113,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -141,10 +141,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
-            Assert.IsTrue(_visionUserSession.AllowFreeTextPrescriptions); // should be updated
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-
-            ((GetCoursesResult.Success)result).Response.Should().NotBeNull();
+            _visionUserSession.AllowFreeTextPrescriptions.Should().BeTrue();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -201,10 +200,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
-            var getCourseResult = (GetCoursesResult.Success) result;
-            getCourseResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().Be(response);
             capturedItemToMap.Repeats.Should().HaveCount(expectedNumberOfPrescriptions);
         }
 
@@ -254,12 +251,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                         RawResponse = _eligibleRepeatsResponse,
                     }));
 
-
             _visionMapper.Setup(x =>
                     x.Map(It.IsAny<EligibleRepeats>()))
                 .Throws<ArgumentNullException>()
                 .Verifiable();
-
 
             // Act
             var result = await _systemUnderTest.GetCourses(_visionUserSession);

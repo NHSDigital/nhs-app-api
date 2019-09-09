@@ -4,6 +4,7 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -178,13 +179,16 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 serviceDescriptors.FirstOrDefault(x => x.ImplementationInstance is IMongoConfiguration)
                     ?.ImplementationInstance as IMongoConfiguration;
 
-            mongoConfiguration.Should().NotBeNull();
-            mongoConfiguration.DatabaseName.Should().Be(databaseName);
-            mongoConfiguration.UserDeviceCollectionName.Should().Be(userDeviceCollection);
-            mongoConfiguration.Host.Should().Be(host);
-            mongoConfiguration.Port.Should().Be(port);
-            mongoConfiguration.Username.Should().Be(username);
-            mongoConfiguration.Password.Should().Be(password);
+            using (new AssertionScope())
+            {
+                mongoConfiguration.Should().NotBeNull();
+                mongoConfiguration.DatabaseName.Should().Be(databaseName);
+                mongoConfiguration.UserDeviceCollectionName.Should().Be(userDeviceCollection);
+                mongoConfiguration.Host.Should().Be(host);
+                mongoConfiguration.Port.Should().Be(port);
+                mongoConfiguration.Username.Should().Be(username);
+                mongoConfiguration.Password.Should().Be(password);
+            }
         }
 
         [TestMethod]
@@ -302,10 +306,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 serviceDescriptors.FirstOrDefault(x => x.ImplementationInstance is AzureNotificationConfiguration)
                     ?.ImplementationInstance as AzureNotificationConfiguration;
 
-            azureConfiguration.Should().NotBeNull();
-            azureConfiguration.NotificationHubPath.Should().Be(hubPath);
-            azureConfiguration.ConnectionString.Should().Be(hubConnectionString);
-            azureConfiguration.SharedAccessKey.Should().Be(sharedAccessKey);
+            using (new AssertionScope())
+            {
+                azureConfiguration.Should().NotBeNull();
+                azureConfiguration.NotificationHubPath.Should().Be(hubPath);
+                azureConfiguration.ConnectionString.Should().Be(hubConnectionString);
+                azureConfiguration.SharedAccessKey.Should().Be(sharedAccessKey);
+            }
         }
         
         [TestMethod]
@@ -391,6 +398,5 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 .Callback<ServiceDescriptor>(x => serviceDescriptors.Add(x));
             return serviceDescriptors;
         }
-
     }
 }

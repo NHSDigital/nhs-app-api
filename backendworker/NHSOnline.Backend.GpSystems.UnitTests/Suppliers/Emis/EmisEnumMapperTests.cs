@@ -30,39 +30,49 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [DataRow("", Necessity.Optional)]
         public void MapNecessity_KeyIsNullOrEmptyAndDefaultProvided_ReturnsDefault(string key, Necessity defaultNecessity)
         {
-            //Act
+            // Act
             var result = _systemUnderTest.MapNecessity(key, defaultNecessity);
 
-            //Assert
+            // Assert
             result.Should().Be(defaultNecessity);
         }
 
         [TestMethod]
         public void MapNecessity_KeyIsNotMapped_ReturnsDefault()
         {
-            //Act
-            var result = _systemUnderTest.MapNecessity("this does not map", Necessity.Mandatory);
+            // Arrange
+            var unknownNecessity = _fixture.Create<string>();
+            
+            // Act
+            var result = _systemUnderTest.MapNecessity(unknownNecessity, Necessity.Mandatory);
 
-            //Assert
+            // Assert
             result.Should().Be(Necessity.Mandatory);
         }
 
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
-        [ExpectedException(typeof(ArgumentException))]
         public void MapNecessity_KeyIsNullOrEmptyAndDefaultNotProvided_ThrowsException(string key)
         {
-            //Act
-            _systemUnderTest.MapNecessity(key, null);
+            // Act
+            Action act= () => _systemUnderTest.MapNecessity(key, null);
+            
+            // Assert
+            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("emisNecessity");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void MapNecessity_KeyIsNotMappedAndDefaultNotProvided_ThrowsException()
         {
-            //Act
-            _systemUnderTest.MapNecessity("this does not match", null);
+            // Arrange
+            var unknownNecessity = _fixture.Create<string>();
+            
+            // Act
+            Action act = () => _systemUnderTest.MapNecessity(unknownNecessity, null);
+            
+            // Assert
+            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("emisNecessity");
         }
 
         [DataTestMethod]
@@ -71,10 +81,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [DataRow("RequestedMandatory", Necessity.Mandatory)]
         public void MapNecessity_KeyIsMapped_ReturnsEnum(string key, Necessity expected)
         {
-            //Act
+            // Act
             var result = _systemUnderTest.MapNecessity(key, null);
 
-            //Assert
+            // Assert
             result.Should().Be(expected);
         }
 
@@ -84,10 +94,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [DataRow("requestedMandatory", Necessity.Mandatory)]
         public void MapNecessity_KeyIsMappedIgnoringCase_ReturnsEnum(string key, Necessity expected)
         {
-            //Act
+            // Act
             var result = _systemUnderTest.MapNecessity(key, null);
 
-            //Assert
+            // Assert
             result.Should().Be(expected);
         }
         
@@ -99,10 +109,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [DataRow("Video", Channel.Unknown)]
         public void MapSlotTypeStatus_KeyIsMapped_ReturnsEnum(string key, Channel expected)
         {
-            //Act
+            // Act
             var result = _systemUnderTest.MapSlotTypeStatus(key, null);
 
-            //Assert
+            // Assert
             result.Should().Be(expected);
         }
 
@@ -114,10 +124,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [DataRow("video", Channel.Unknown)]
         public void MapSlotTypeStatus_KeyIsMappedIgnoringCase_ReturnsEnum(string key, Channel expected)
         {
-            //Act
+            // Act
             var result = _systemUnderTest.MapSlotTypeStatus(key, null);
 
-            //Assert
+            // Assert
             result.Should().Be(expected);
         }        
     }

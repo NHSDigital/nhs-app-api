@@ -91,8 +91,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Delete_AppointmentsServiceCancelReturnsSuccess_ReturnsNoContent()
         {
-            // Arrange
-
             // Act
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
 
@@ -112,8 +110,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
@@ -129,13 +127,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 
-
             // Act
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status409Conflict);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
@@ -155,8 +152,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status461TooLate);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status461TooLate);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
@@ -196,8 +193,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
@@ -208,8 +205,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Delete_HappyPath_VerifyAllExpectationsOnMocks()
         {
-            // Arrange
-
             // Act
             await _systemUnderTest.Delete(_appointmentCancelRequest);
 

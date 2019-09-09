@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Models
         [TestMethod]
         public void OrganisationModel_GetOpeningTimesArray_ShouldReturnArrayOfOpeningTimes()
         {
+            // Arrange
             var model = new Organisation
             {
                 OpeningTimes =
@@ -20,8 +21,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Models
                     "{\"WeekDay\":\"Tuesday\",\"Times\":\"09:00 - 18:00\",\"OpeningTimeType\":\"General\",\"AdditionalOpeningDate\":\"\",\"IsOpen\":true}]"
             };
 
+            // Act
             var openingTimesArray = model.GetOpeningTimesArray();
 
+            // Assert
             openingTimesArray.Should().HaveCount(2);
             openingTimesArray.ToList()[0].WeekDay.Should().BeEquivalentTo(ResponseEnums.WeekDay.Monday);
         }
@@ -29,6 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Models
         [TestMethod]
         public void OrganisationModel_GetContactsArray_ShouldReturnArrayOfContactInformation()
         {
+            // Arrange
             var model = new Organisation
             {
                 Contacts = "[{\"OrganisationContactType\":\"Primary\",\"OrganisationContactAvailabilityType\":\"Office hours\",\"OrganisationContactMethodType\":\"Telephone\",\"OrganisationContactValue\":\"01752 361 641\"},"
@@ -36,8 +40,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Models
                 "{\"OrganisationContactType\":\"Primary\",\"OrganisationContactAvailabilityType\":\"Office hours\",\"OrganisationContactMethodType\":\"Email\",\"OrganisationContactValue\":\"nhspharmacy.plymouth.wellpharmacyfw039@nhs.net\"}]" 
             };
 
+            // Act
             var contactsArray = model.GetContactsArray();
 
+            // Assert
             contactsArray.Should().HaveCount(2);
             contactsArray.ToList()[0].OrganisationContactValue.Should().BeEquivalentTo("01752 361 641");
         }

@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         }
 
         [TestMethod]
-        public void Constructor_WhenCertifcatePathIsValid_AddsTheCertificate()
+        public void Constructor_WhenCertificatePathIsValid_AddsTheCertificate()
         {
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
@@ -81,7 +81,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateOrganDonationHttpClientHandler();
             _systemUnderTest.ClientCertificates.Should().BeEmpty();
-
         }
 
         private OrganDonationHttpClientHandler CreateOrganDonationHttpClientHandler()

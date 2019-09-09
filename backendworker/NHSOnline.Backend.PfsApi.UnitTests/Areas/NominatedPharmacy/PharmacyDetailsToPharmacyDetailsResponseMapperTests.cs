@@ -17,8 +17,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
     {
         private IPharmacyDetailsToPharmacyDetailsResponseMapper _mapper;
         private ILogger<PharmacyDetailsToPharmacyDetailsResponseMapper> _logger;
-        
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -38,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public void MapPharmacyDetailsToPharmacyDetailsResponse_WithValues_ReturnsResultValues()
         {
             // Arrange
-            var phone = "024345322434";
+            const string phone = "024345322434";
 
             var pharmacy = new Organisation
             {
@@ -68,8 +67,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = _mapper.Map(pharmacy);
 
             // Assert
-            result.Should().NotBeNull();
-
             var expectedResult = new PharmacyDetails
             {
                 PharmacyName = pharmacy.OrganisationName,
@@ -122,8 +119,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public void MapPharmacyDetailsToPharmacyDetailsResponse_WithValuesAndValidGeoCoordinates_ReturnsResultValues()
         {
             // Arrange
-            var phone = "024345322434";
-            var preCalculatedDistanceInMiles = 960.7;
+            const string phone = "024345322434";
+            const double preCalculatedDistanceInMiles = 960.7;
             
             var pharmacy = new Organisation
             {
@@ -152,8 +149,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = _mapper.Map(new List<Organisation> { pharmacy }, postcodeCoordinate);
 
             // Assert
-            result.Should().NotBeNull();
-
             var expectedResult = new List<PharmacyDetails>
             {
                 new PharmacyDetails
@@ -177,7 +172,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public void MapPharmacyDetailsToPharmacyDetailsResponse_WithValuesAndInvalidGeoCoordinates_ReturnsResultValues()
         {
             // Arrange
-            var phone = "024345322434";
+            const string phone = "024345322434";
 
             var pharmacy = new Organisation
             {
@@ -206,8 +201,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = _mapper.Map(new List<Organisation> { pharmacy }, postcodeCoordinate);
 
             // Assert
-            result.Should().NotBeNull();
-
             var expectedResult = new List<PharmacyDetails>
             {
                 new PharmacyDetails
@@ -223,7 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                     Distance =  null,
                 },
             };
-
+            
             result.Should().BeEquivalentTo(expectedResult);
         }
     }

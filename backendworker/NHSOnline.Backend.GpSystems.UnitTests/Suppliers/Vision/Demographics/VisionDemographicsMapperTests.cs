@@ -1,9 +1,11 @@
 ﻿using System;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
 {
@@ -11,11 +13,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
     public class VisionDemographicsMapperTests
     {
         private IVisionDemographicsMapper _mapper;
+        private Fixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mapper = new VisionDemographicsMapper();
+            _fixture = new Fixture();
         }
 
         [TestMethod]
@@ -39,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var item = new VisionDemographics();
-            const string testNhsNumber = "123456789";
+            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
             
             // Act
             var result = _mapper.Map(item, testNhsNumber);
@@ -53,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
-            const string testNhsNumber = "123456789";
+            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
             
             var item = new VisionDemographics
             {
@@ -96,7 +100,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
-            const string testNhsNumber = "123456789";
+            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
             
             var item = new VisionDemographics
             {
@@ -138,7 +142,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
-            const string testNhsNumber = "123456789";
+            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
             
             var item = new VisionDemographics
             {

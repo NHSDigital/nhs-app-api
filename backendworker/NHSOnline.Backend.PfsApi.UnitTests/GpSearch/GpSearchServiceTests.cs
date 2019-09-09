@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -39,6 +40,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 _postcodeParser);     
         }
 
+        [TestMethod]
         public async Task IsGpPracticeEpsEnabled_WhenOdsCodeIsBlank_ReturnsBadRequestEnabledFalse()
         {
             // Act
@@ -47,9 +49,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             // Assert
             _gpLookupClient.Verify(x => x.GpSearch(It.IsAny<OrganisationSearchData>()), Times.Never);
             result.HttpStatusCode.Should().Be(HttpStatusCode.BadRequest);
-            result.IsGpEpsEnabled.Should().Be(false);
+            result.IsGpEpsEnabled.Should().BeFalse();
         }
 
+        [TestMethod]
         public async Task IsGpPracticeEpsEnabled_WhenNoGpPracticeReturned_ReturnsNotFoundAndEnabledFalse()
         {
             // Arrange
@@ -74,10 +77,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             // Assert
             _gpLookupClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.NotFound);
-            result.IsGpEpsEnabled.Should().Be(false);
+            using (new AssertionScope())
+            {
+                result.HttpStatusCode.Should().Be(HttpStatusCode.NotFound);
+                result.IsGpEpsEnabled.Should().BeFalse();
+            }
         }
 
+        [TestMethod]
         public async Task IsGpPracticeEpsEnabled_WhenGpPracticeDoesntHaveAnyMetrics_ReturnsFalse()
         {
             // Arrange
@@ -107,8 +114,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             // Assert
             _gpLookupClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
-            result.IsGpEpsEnabled.Should().Be(false);
+            using (new AssertionScope())
+            {
+                result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+                result.IsGpEpsEnabled.Should().BeFalse();
+            }
         }
 
         [TestMethod]
@@ -142,8 +152,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             // Assert
             _gpLookupClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
-            result.IsGpEpsEnabled.Should().Be(false);
+            using (new AssertionScope())
+            {
+                result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+                result.IsGpEpsEnabled.Should().BeFalse();
+            }
         }
 
         [TestMethod]
@@ -180,8 +193,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             // Assert
             _gpLookupClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
-            result.IsGpEpsEnabled.Should().Be(true);
+            using (new AssertionScope())
+            {
+                result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+                result.IsGpEpsEnabled.Should().BeTrue();
+            }
         }
 
         [TestMethod]
@@ -236,8 +252,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             _gpLookupClient.Verify(x=>x.PostcodeSearch(It.IsAny<PostcodeSearchData>()));
             _gpLookupClient.Verify(x=>x.GpPostcodeSearch(It.IsAny<OrganisationPostcodeSearchData>()));
             var response = result.Should().BeAssignableTo<GpSearchResult.Success>().Subject.Response;
-            response.OrganisationQueryCount.Should().Be(2);
-            response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
+            using (new AssertionScope())
+            {
+                response.OrganisationQueryCount.Should().Be(2);
+                response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
+            }
         }
         
         [TestMethod]
@@ -271,8 +290,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             // Assert
             _gpLookupClient.Verify(x=>x.GpSearch(It.IsAny<OrganisationSearchData>()));
             var response = result.Should().BeAssignableTo<GpSearchResult.Success>().Subject.Response;
-            response.OrganisationQueryCount.Should().Be(2);
-            response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
+            using (new AssertionScope())
+            {
+                response.OrganisationQueryCount.Should().Be(2);
+                response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
+            }
         }
         
         [TestMethod]
@@ -293,7 +315,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             // Act
             var result = await _gpSearchService.Search(validPostcodeSearchTerm);
 
-            //Assert
+            // Assert
             _gpLookupClient.Verify(x=>x.GpSearch(It.IsAny<OrganisationSearchData>()));
             result.Should().BeAssignableTo<GpSearchResult.InternalServerError>();
         }
@@ -303,17 +325,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         [DataRow(null)]
         public async Task Search_WhenCalledWWithInvalidSearchString_ReturnsBadRequest(string searchTerm)
         {
-            //Act
+            // Act
             var result = await _gpSearchService.Search(searchTerm);
             
-            //Assert
+            // Assert
             result.Should().BeAssignableTo<GpSearchResult.BadRequest>();
         }
         
         [TestMethod]
         public async Task Search_WhenCalledAndNhsPostcodeSearchReturnsUnsuccessfulStatusCode_ReturnsInternalServerError()
         {
-            
             // Arrange
             const string searchTerm = "L12DA";
 
@@ -333,7 +354,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         [TestMethod]
         public async Task Search_WhenCalledAndNhsPostcodeSearchReturnsSuccessfulButNoPostcodeData_ReturnsSuccessful()
         {
-            
             // Arrange
             const string searchTerm = "L12DA";
 

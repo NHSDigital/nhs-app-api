@@ -55,10 +55,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var myRequestResponse = new MyRecordResponse();
             var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
 
-            var userSession = _fixture.Build<UserSession>()
-                .With(x => x.GpUserSession, (EmisUserSession)null)
-                .Create();
-            
             // Act
             systemUnderTest.LogMyRecordMetadata(null, getMyRecordResponse);
             
@@ -215,7 +211,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         }
         
         [TestMethod]
-        public void LogTppMyRecordMetadata_EmisRecordDetailMetadataitemsAreNull()
+        public void LogTppMyRecordMetadata_EmisRecordDetailMetadataItemsAreNull()
         {
             // Arrange
             var myRequestResponse = new MyRecordResponse();

@@ -23,26 +23,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [TestMethod]
         public void Parse_ConnectionTokenIsAGuid_ReturnsEitherMatchingString()
         {
-            //Arrange
+            // Arrange
             var connectionToken = _fixture.Create<Guid>().ToString();
 
-            //Act
+            // Act
             var result = EmisConnectionTokenParser.Parse(connectionToken);
 
-            //Assert
+            // Assert
             result.Match(s => true, ct => false).Should().BeTrue();
         }
 
         [TestMethod]
         public void Parse_ConnectionTokenIsAConnectionToken_ReturnsEitherMatchingConnectionToken()
         {
-            //Arrange
+            // Arrange
             var connectionToken = _fixture.Create<EmisConnectionToken>().SerializeJson();
 
-            //Act
+            // Act
             var result = EmisConnectionTokenParser.Parse(connectionToken);
 
-            //Assert
+            // Assert
             result.Match(s => false, ct => true).Should().BeTrue();
         }
     }

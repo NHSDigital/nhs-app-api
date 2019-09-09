@@ -27,12 +27,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 typeof(EmisLinkageService), ServiceLifetime.Transient);
             var emisLinkageMapper = new ServiceDescriptor(typeof(IEmisLinkageMapper), 
                 typeof(EmisLinkageMapper), ServiceLifetime.Transient);
-            var emisLinkageRqstValidationService = new ServiceDescriptor(typeof(EmisLinkageValidationService), 
+            var emisLinkageValidationService = new ServiceDescriptor(typeof(EmisLinkageValidationService), 
                 typeof(EmisLinkageValidationService), ServiceLifetime.Singleton);
 
             registeredServices.Should().ContainEquivalentOf(emisLinkageService);
             registeredServices.Should().ContainEquivalentOf(emisLinkageMapper);
-            registeredServices.Should().ContainEquivalentOf(emisLinkageRqstValidationService);
+            registeredServices.Should().ContainEquivalentOf(emisLinkageValidationService);
         }
     }
 }

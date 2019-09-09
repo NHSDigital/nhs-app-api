@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 {
@@ -12,10 +13,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
     public class MicrotestAppointmentsValidationServiceTests
     {
         private MicrotestAppointmentsValidationService _systemUnderTest;
+        private Fixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture();
+            
             var logger = new Mock<ILogger<MicrotestAppointmentsValidationService>>();
             _systemUnderTest = new MicrotestAppointmentsValidationService(logger.Object);
         }
@@ -25,79 +29,70 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         [DataRow("")]
         public void IsDeleteValid_NoId_ReturnsFalse(string appointmentId)
         {
-            //Arrange
-            var request = new AppointmentCancelRequest()
+            // Arrange
+            var request = new AppointmentCancelRequest
             {
                 AppointmentId = appointmentId,
                 CancellationReasonId = "1234"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsDeleteValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsDeleteValid_ValidId_ReturnsTrue()
         {
-            //Arrange
-            var request = new AppointmentCancelRequest()
+            // Arrange
+            var request = new AppointmentCancelRequest
             {
                 AppointmentId = "1234"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsDeleteValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
         }
 
         [TestMethod]
         public void IsPostValid_LongBookingReason_ReturnsFalse()
         {
-            //Arrange
-            var bookingReason = string.Join(string.Empty, GenerateString(151));
+            // Arrange
+            var bookingReason = _fixture.CreateStringOfLength(151);
 
-            var request = new AppointmentBookRequest()
+            var request = new AppointmentBookRequest
             {
                 SlotId = "1234",
                 BookingReason = bookingReason
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsPostValid_ValidData_ReturnsTrue()
         {
-            //Arrange
-            var request = new AppointmentBookRequest()
+            // Arrange
+            var request = new AppointmentBookRequest
             {
                 SlotId = "1234",
                 BookingReason = "important reason"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
-        }
-
-        private string GenerateString(int length)
-        {
-            var fixture = new Fixture();
-
-            var result = string.Join(string.Empty, fixture.CreateMany<char>(length));
-
-            return result;
         }
     }
 }

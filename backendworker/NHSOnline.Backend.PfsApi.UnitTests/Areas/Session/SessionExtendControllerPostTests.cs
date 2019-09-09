@@ -93,8 +93,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Act
             var result = await _systemUnderTest.Post();
 
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            // Arrange
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockSessionExtendService.Verify();
         }
     }

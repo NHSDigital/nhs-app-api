@@ -41,6 +41,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [TestMethod]
         public void Map_HappyPath_ReturnsMappedUserSession()
         {
+            // Arrange
             var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
             var gpUserSession = _fixture.Create<GpUserSession>();
 
@@ -51,10 +52,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 CitizenIdUserSession = citizenIdUserSession
             };
 
+            // Act
             var result = _systemUnderTest.Map(_mockHttpContext.Object,
                 gpUserSession,
                 citizenIdUserSession);
 
+            // Assert
             result.Should().BeEquivalentTo(
                 expectedResult,
                 options => options.Excluding(x => x.OrganDonationSessionId));

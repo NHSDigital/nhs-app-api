@@ -38,60 +38,76 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
         [TestMethod]
         public void CreateGpSystem_ReturnsAnEmisGpSystem_WhenTheSupplierIsEmis()
         {
-            _gpSystemFactory
-                .CreateGpSystem(Supplier.Emis)
-                .Should()
-                .BeOfType<EmisGpSystem>();
+            // Act
+            var gpSystem = _gpSystemFactory
+                .CreateGpSystem(Supplier.Emis);
+                
+            // Assert
+            gpSystem.Should().BeOfType<EmisGpSystem>();
         }
 
         [TestMethod]
         public void CreateGpSystem_ReturnATppGpSystem_WhenTheSupplierIsTpp()
         {
-            _gpSystemFactory
-                .CreateGpSystem(Supplier.Tpp)
-                .Should()
-                .BeOfType<TppGpSystem>();
+            // Act
+            var gpSystem = _gpSystemFactory
+                .CreateGpSystem(Supplier.Tpp);
+                
+            // Assert
+            gpSystem.Should().BeOfType<TppGpSystem>();
         }
 
         [TestMethod]
         public void CreateGpSystem_ThrowsAnUnknownSystemException_WhenTheSupplierNameIsUnknown()
         {
-            new Action(() => _gpSystemFactory.CreateGpSystem((Supplier) (-1)))
-                .Should()
-                .Throw<UnknownSupplierException>();
+            // Act
+            var act = new Action(() => _gpSystemFactory.CreateGpSystem((Supplier) (-1)));
+                
+            // Assert
+            act.Should().Throw<UnknownSupplierException>();
         }
-
-
 
         [TestMethod]
         public void LookupGpSystem__WhenOdsCodeIsValid_ReturnAGpSystem()
         {
-            var odsCode = "A1234";
+            // Arrange
+            const string odsCode = "A1234";
             _mockOdsLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.Some(Supplier.Tpp)));
 
-            var result = _gpSystemFactory.LookupGpSystem(odsCode).Result;
-            result.HasValue.Should().BeTrue();
-            result.ValueOrFailure().Should().BeOfType<TppGpSystem>();
+            // Act
+            var result = _gpSystemFactory.LookupGpSystem(odsCode);
+            
+            // Assert
+            result.Result.HasValue.Should().BeTrue();
+            result.Result.ValueOrFailure().Should().BeOfType<TppGpSystem>();
         }
-
 
         [TestMethod]
         public void LookupGpSystem__WhenOdsCodeIsUnknown_ReturnAnOptionOfNone()
         {
-            var odsCode = "A1234";
+            // Arrange
+            const string odsCode = "A1234";
             _mockOdsLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.Some(Supplier.Unknown)));
 
-            _gpSystemFactory.LookupGpSystem(odsCode).Result.HasValue.Should().BeFalse();
+            // Act
+            var result = _gpSystemFactory.LookupGpSystem(odsCode);
+                
+            // Assert
+            result.Result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
         public void LookupGpSystem__WhenOdsCodeIsNone_ReturnAnOptionOfNone()
         {
-            var odsCode = "A1234";
+            // Arrange
+            const string odsCode = "A1234";
             _mockOdsLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.None<Supplier>()));
 
-            _gpSystemFactory.LookupGpSystem(odsCode).Result.HasValue.Should().BeFalse();
+            // Act
+            var result = _gpSystemFactory.LookupGpSystem(odsCode);
+                
+            // Assert
+            result.Result.HasValue.Should().BeFalse();
         }
-
     }
 }

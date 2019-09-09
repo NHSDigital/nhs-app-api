@@ -80,9 +80,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.HttpClients
         [TestMethod]
         public void OnlineConsultationsProviderHttpClientPool_WhenCreated_CreatesProviderHttpClientForEachProviderSettings()
         {
-            _pool.GetClientByProviderName(ProviderOneSettings.Provider).Should().NotBe(null);
-            _pool.GetClientByProviderName(ProviderTwoSettings.Provider).Should().NotBe(null);
-            _pool.GetClientByProviderName(ProviderThreeSettings.Provider).Should().NotBe(null);
+            _pool.GetClientByProviderName(ProviderOneSettings.Provider).Should().NotBeNull();
+            _pool.GetClientByProviderName(ProviderTwoSettings.Provider).Should().NotBeNull();
+            _pool.GetClientByProviderName(ProviderThreeSettings.Provider).Should().NotBeNull();
         }
     }
 }

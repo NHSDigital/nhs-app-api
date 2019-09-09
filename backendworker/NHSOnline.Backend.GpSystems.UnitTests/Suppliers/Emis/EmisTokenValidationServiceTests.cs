@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private ILogger<EmisTokenValidationService> _logger;
         private ITokenValidationService _systemUnderTest;
 
-        private const string Guid = "2fc69313-a4c6-4a46-a617-56cdb423c122";
+        private static readonly string Guid = System.Guid.NewGuid().ToString();
 
         [TestInitialize]
         public void TestInitialize()
@@ -26,27 +26,44 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsNotInAGuidFormat()
         {
-            _systemUnderTest.IsValidConnectionTokenFormat("foobar").Should().BeFalse();
+            // Act
+            var result = _systemUnderTest.IsValidConnectionTokenFormat("foobar");
+                
+            // Assert
+            result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsNull()
         {
-            _systemUnderTest.IsValidConnectionTokenFormat(null).Should().BeFalse();
+            // Act
+            var result = _systemUnderTest.IsValidConnectionTokenFormat(null);
+                
+            // Assert
+            result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInAGuidFormat()
         {
-            _systemUnderTest.IsValidConnectionTokenFormat(Guid).Should().BeTrue();
+            // Act
+            var result = _systemUnderTest.IsValidConnectionTokenFormat(Guid);
+                
+            // Assert
+            result.Should().BeTrue();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInExpectedJsonFormat()
         {
+            // Arrange
             var token = new EmisConnectionToken { AccessIdentityGuid = Guid, Im1CacheKey = "foo" }.SerializeJson();
 
-            _systemUnderTest.IsValidConnectionTokenFormat(token).Should().BeTrue();
+            // Act
+            var result = _systemUnderTest.IsValidConnectionTokenFormat(token);
+                
+            // Assert
+            result.Should().BeTrue();
         }
 
         [DataTestMethod]
@@ -57,13 +74,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenHasInvalidProperties(
             string accessIdentityGuid, string retrievalKey )
         {
+            // Arrange
             var token = new EmisConnectionToken
             {
                 AccessIdentityGuid = accessIdentityGuid,
                 Im1CacheKey = retrievalKey
             }.SerializeJson();
 
-            _systemUnderTest.IsValidConnectionTokenFormat(token).Should().BeFalse();
+            // Act
+            var result = _systemUnderTest.IsValidConnectionTokenFormat(token);
+                
+            // Assert
+            result.Should().BeFalse();
         }
     }
 }

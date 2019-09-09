@@ -64,8 +64,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             // Assert
             exceptionContext.Result.Should().NotBeNull();
-            var result = exceptionContext.Result.Should().BeOfType<StatusCodeResult>().Subject;
-            result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+            exceptionContext.Result.Should().BeOfType<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
         [TestMethod]

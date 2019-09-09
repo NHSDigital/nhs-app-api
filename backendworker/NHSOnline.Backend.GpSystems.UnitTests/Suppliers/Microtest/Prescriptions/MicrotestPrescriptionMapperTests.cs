@@ -35,8 +35,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         [TestMethod]
         public void MapPrescriptionHistoryGetResponseToPrescriptionListResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
+            // Act
             Action act = () => _mapper.Map((PrescriptionHistoryGetResponse)null);
 
+            // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("prescriptionHistoryGetResponse");
         }
 
@@ -176,8 +178,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         [TestMethod]
         public void MapCoursesGetResponseToCourseListResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
+            // Act
             Action act = () => _mapper.Map((CoursesGetResponse)null);
 
+            // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("courseGetResponse");
         }
 

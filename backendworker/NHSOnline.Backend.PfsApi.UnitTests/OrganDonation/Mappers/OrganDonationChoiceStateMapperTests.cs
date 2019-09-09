@@ -31,7 +31,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             // Act and Assert
             var result = _organDonationChoiceStateMapper.To(value);
 
-
             result.Should().Be(default(ChoiceState));
         }
 
@@ -44,8 +43,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         {
             // Act and Assert
             var result = _organDonationChoiceStateMapper.To(value);
-
-
+            
             result.Should().Be(expected);
         }
     }

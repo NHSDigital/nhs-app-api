@@ -45,11 +45,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             // Act
             var result = VisionLinkageGetErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
-            var conflictResult = (LinkageResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.PatientRecordNotFound);
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.PatientRecordNotFound);
         }
 
         [TestMethod]
@@ -62,11 +61,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             // Act
             var result = VisionLinkageGetErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
-            var conflictResult = (LinkageResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserAssociatedWithNhsNumber);
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserAssociatedWithNhsNumber);
         }
 
         [TestMethod]
@@ -79,11 +77,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             // Act
             var result = VisionLinkageGetErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
-            var errorCase = (LinkageResult.UnmappedErrorWithStatusCode)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -95,11 +92,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             // Act
             var result = VisionLinkageGetErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
-            var conflictResult = (LinkageResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.InvalidNhsNumber);
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.InvalidNhsNumber);
         }
 
         [TestMethod]
@@ -110,11 +106,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             // Act
             var result = VisionLinkageGetErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>();
-            var errorResult = (LinkageResult.UnmappedErrorWithStatusCode) result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
     }
 }

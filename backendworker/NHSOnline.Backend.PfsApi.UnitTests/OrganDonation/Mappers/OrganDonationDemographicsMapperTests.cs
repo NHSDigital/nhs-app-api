@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         [TestMethod]
         public void MapStringAndDemographicsNameToOrganDonationName_WithNameParts_MapsCorrectly()
         {
-            //Arrange
+            // Arrange
             var title = _fixture.Create<string>();
             var firstName = _fixture.Create<string>();
             var lastName = _fixture.Create<string>();
@@ -53,10 +53,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             
             var systemUnderTest = _fixture.Create<OrganDonationDemographicsNameMapper>();
 
-            //Act
+            // Act
             var result = systemUnderTest.Map(patientName, nameParts);
             
-            //Assert
+            // Assert
             _mockDataMaps.Verify();
             result.Should().BeEquivalentTo(expectedResult);
         }
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         [TestMethod]
         public void MapStringAndDemographicsNameToOrganDonationName_WithNamePartsAndStringName_MapsCorrectly()
         {
-            //Arrange
+            // Arrange
             var title = _fixture.Create<string>();
             var firstName = _fixture.Create<string>();
             var lastName = _fixture.Create<string>();
@@ -89,10 +89,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             
             var systemUnderTest = _fixture.Create<OrganDonationDemographicsNameMapper>();
 
-            //Act
+            // Act
             var result = systemUnderTest.Map(patientName, nameParts);
             
-            //Assert
+            // Assert
             _mockDataMaps.Verify();
             result.Should().BeEquivalentTo(expectedResult);
         }
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         [TestMethod]
         public void MapStringAndDemographicsNameToOrganDonationName_WithNoNamePartsAndStringName_MapsCorrectly()
         {
-            //Arrange
+            // Arrange
             var title = _fixture.Create<string>();
             var firstName = _fixture.Create<string>();
             var lastName = _fixture.Create<string>();
@@ -120,10 +120,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             
             var systemUnderTest = _fixture.Create<OrganDonationDemographicsNameMapper>();
 
-            //Act
+            // Act
             var result = systemUnderTest.Map(patientName, null);
             
-            //Assert
+            // Assert
             _mockDataMaps.Verify();
             result.Should().BeEquivalentTo(expectedResult);
         }
@@ -131,14 +131,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         [TestMethod]
         public void MapStringAndDemographicsNameToOrganDonationName_WithNoDemographicsNameAndNoStringName_ThrowsArgumentNullException()
         {
-            
+            // Arrange
             var systemUnderTest = _fixture.Create<OrganDonationDemographicsNameMapper>();
+            
             // Act and Assert
             Action act = () => systemUnderTest.Map(null, null);
 
             act.Should().Throw<ArgumentException>().And.Message.Should().Contain("firstSource");
             act.Should().Throw<ArgumentException>().And.Message.Should().Contain("secondSource");
-            
         }
 
         private void ConfigureTitleDataMaps(string title, string expectedTitle)

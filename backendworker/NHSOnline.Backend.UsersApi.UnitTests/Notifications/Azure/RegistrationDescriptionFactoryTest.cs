@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public void Create_WithValidAndroidRequest_ReturnsFcmRegistrationDescription()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>()
                 .With(x => x.DeviceType, DeviceType.Android).Create();
 
@@ -38,17 +38,17 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 Tags = new HashSet<string> { $"nhsLoginId:{request.NhsLoginId}" }
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.Create(request);
             
-            //Assert
+            // Assert
             result.Should().BeEquivalentTo(expectedResponse);
         }
         
         [TestMethod]
         public void Create_WithValidiOSRequest_ReturnsAppleRegistrationDescription()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>()
                 .With(x => x.DeviceType, DeviceType.Ios).Create();
 
@@ -57,24 +57,24 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 Tags = new HashSet<string> { $"nhsLoginId:{request.NhsLoginId}" }
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.Create(request);
             
-            //Assert
+            // Assert
             result.Should().BeEquivalentTo(expectedResponse);
         }
 
         [TestMethod]
         public void Create_WithNoDeviceType_ThrowsAnException()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>()
                 .With(x => x.DeviceType, (DeviceType?)null).Create();
 
-            //Act
+            // Act
             Action act = () => _systemUnderTest.Create(request);
 
-            //Assert
+            // Assert
             act.Should()
                 .Throw<ArgumentOutOfRangeException>()
                 .And.ParamName.Should().Be("notificationRegistrationRequest");
@@ -83,15 +83,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public void Create_WithNoNhsLoginId_ThrowsAnException()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>()
                 .Without(x => x.NhsLoginId)
                 .Create();
 
-            //Act
+            // Act
             Action act = () => _systemUnderTest.Create(request);
 
-            //Assert
+            // Assert
             act.Should()
                 .Throw<ArgumentException>()
                 .And.ParamName.Should().Be("notificationRegistrationRequest");

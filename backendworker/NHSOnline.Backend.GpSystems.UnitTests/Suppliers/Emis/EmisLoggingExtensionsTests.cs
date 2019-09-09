@@ -33,33 +33,42 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [TestMethod]
         public void CensorResponse_PatientSensitiveData_attributes()
         {
+            // Arrange
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
             var demoResponse = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Conflict)
             {
                 Body = demographicsResponse
             };
+            
+            // Act
             var response = EmisLoggingExtensions.CensorResponse(_logger.Object, demoResponse);
-            var hasSensitiveFields = response
+            
+            // Assert
+            response
                 .Descendants()
                 .OfType<JProperty>()
-                .Any(attr => PatientFields.PatientSensitiveFields.Contains(attr.Name));
-            hasSensitiveFields.Should().BeFalse();
+                .Where(attr => PatientFields.PatientSensitiveFields.Contains(attr.Name))
+                .Should().BeEmpty();
         }
         
         [TestMethod]
         public void CensorResponse_PatientSensitiveData_attributeValue()
         {
+            // Arrange
             const string userIdentityGuid = "User Identity 'efa22060-9221-43a6-a0f0-6c0350b8f44d'";
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = userIdentityGuid;
             var sampleResponse = new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
                         .InternalServerError) {ExceptionErrorResponse = errorResponse};
+            
+            // Act
             var response = EmisLoggingExtensions.CensorResponse(_logger.Object, sampleResponse);
-            var hasGuids = response.Descendants()
+            
+            // Assert
+            response.Descendants()
                 .OfType<JProperty>()
                 .Where(ContainsGuid)
-                .Any();
-            hasGuids.Should().BeFalse();
+                .Should().BeEmpty();
         }
         
         private static bool ContainsGuid(JProperty attribute)

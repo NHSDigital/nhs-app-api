@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.PfsApi.GpSearch;
 
@@ -21,21 +22,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         [DataRow("L1", "")] 
         public void ParseSearchTermForPostcodeMatch_WhenCalledWithValidPostCode_ReturnsPostcodeMatchedData(string postcode, string expectedInward)
         {   
+            // Act
             var result = _postcodeParser.ParseSearchTermForPostcodeMatch(postcode);
 
-            Assert.IsTrue(result.IsPostcode);
-            Assert.AreEqual(postcode, result.Postcode);
-            Assert.AreEqual(expectedInward, result.Inward);
+            // Assert
+            result.IsPostcode.Should().BeTrue();
+            result.Postcode.Should().Be(postcode);
+            result.Inward.Should().Be(expectedInward);
         }
         
         [TestMethod]
         public void ParseSearchTermForPostcodeMatch_WhenCalledWithInvalidPostcode_ReturnsIsPostcodeFalse()
         {
-            const string validPostCode = "Liverpool";
+            // Arrange
+            const string invalidPostcode = "Liverpool";
             
-            var result = _postcodeParser.ParseSearchTermForPostcodeMatch(validPostCode);
+            // Act
+            var result = _postcodeParser.ParseSearchTermForPostcodeMatch(invalidPostcode);
 
-            Assert.IsTrue(!result.IsPostcode);
+            // Assert
+            result.IsPostcode.Should().BeFalse();
         }
     }
 }

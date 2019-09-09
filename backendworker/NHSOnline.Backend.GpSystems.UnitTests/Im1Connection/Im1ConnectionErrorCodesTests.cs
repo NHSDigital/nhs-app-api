@@ -29,14 +29,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
             var systemUnderTest = new Im1ConnectionErrorCodes();
             var errorResponses = systemUnderTest.InternalErrorResponses;
 
-            Assert.IsNotNull(errorResponses);
-            Assert.AreEqual(35, errorResponses.Count, "Number of responses");
+            errorResponses.Should().NotBeNull();
+            errorResponses.Count.Should().Be(35);
 
-            var singleCode = (int)Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails;
+            const int singleCode = (int)Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails;
 
             var specificResponse = errorResponses[singleCode];
-            Assert.AreEqual(singleCode, specificResponse.ErrorCode);
-            Assert.AreEqual("Invalid linkage details", specificResponse.ErrorMessage);
+            specificResponse.ErrorCode.Should().Be(singleCode);
+            specificResponse.ErrorMessage.Should().Be("Invalid linkage details");
         }
 
         [TestMethod]
@@ -45,14 +45,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
             var systemUnderTest = new Im1ConnectionErrorCodes();
             var errorResponses = systemUnderTest.ExternalErrorResponses;
 
-            Assert.IsNotNull(errorResponses);
-            Assert.AreEqual(14, errorResponses.Count, "Number of responses");
+            errorResponses.Should().NotBeNull();
+            errorResponses.Count.Should().Be(14);
 
-            var singleCode = (int)Im1ConnectionErrorCodes.ExternalCode.InvalidDetails;
+            const int singleCode = (int)Im1ConnectionErrorCodes.ExternalCode.InvalidDetails;
 
             var specificResponse = errorResponses[singleCode];
-            Assert.AreEqual(singleCode, specificResponse.ErrorCode);
-            Assert.AreEqual("Invalid Details", specificResponse.ErrorMessage);
+            specificResponse.ErrorCode.Should().Be(singleCode);
+            specificResponse.ErrorMessage.Should().Be("Invalid Details");
         }
 
         [TestMethod]
@@ -73,6 +73,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
         [TestMethod]
         public void GetExternalCode_AllResponses_Successful()
         {
+            // Arrange
             var systemUnderTest = new Im1ConnectionErrorCodes();
             var allInternalCodes = EnumHelper.GetValues<Im1ConnectionErrorCodes.InternalCode>().ToList();
 
@@ -84,7 +85,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
                 externalCode.Should().NotBeNull();
             }
 
+            // Act
             Action act = () => systemUnderTest.GetExternalCode(Im1ConnectionErrorCodes.InternalCode.InvalidOption);
+            
+            // Assert
             act.Should().Throw<ArgumentException>()
                 .WithMessage("InvalidOption is not a valid option");
         }

@@ -144,7 +144,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
                 {
                     Body = _fixture.Create<DemographicsGetResponse>()
                 };
-
         }
     }
 }

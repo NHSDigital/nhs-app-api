@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -13,7 +14,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
+namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 {
     [TestClass]
     public sealed class GpLookupClientTests : IDisposable
@@ -64,8 +65,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var response = await _systemUnderTest.PharmaciesSearch(request);
 
             // Assert
-            response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            using (new AssertionScope())
+            {
+                response.Body.Should().BeEquivalentTo(expectedResponse);
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+            }
+
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
         

@@ -22,5 +22,10 @@ namespace UnitTestHelper
         {
             return (string)new SpecimenContext(fixture).Resolve(new RegularExpressionRequest(pattern));
         }
+
+        public static string CreateStringOfLength(this IFixture fixture, int length)
+        {
+            return (string) new SpecimenContext(fixture).Resolve(new RegularExpressionRequest($"[a-z0-9]{{{length}}}"));
+        }
     }
 }

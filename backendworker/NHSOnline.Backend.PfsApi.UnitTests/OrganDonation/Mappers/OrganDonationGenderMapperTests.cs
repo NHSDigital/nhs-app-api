@@ -12,7 +12,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
     [TestClass]
     public class OrganDonationGenderMapperTests
     {
-
         private IOrganDonationGenderMapper _organDonationGenderMapper;
         private Mock<IOrganDonationDataMaps> _dataMaps;
         

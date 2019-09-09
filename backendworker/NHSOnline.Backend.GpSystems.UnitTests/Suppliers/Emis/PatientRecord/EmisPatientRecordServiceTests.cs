@@ -99,8 +99,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             // Assert
             _emisClient.Verify(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies));
-            result.Should().BeAssignableTo<GetMyRecordResult.Success>();
-            ((GetMyRecordResult.Success)result).Response.Should().NotBeNull();
+
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
     }
 }

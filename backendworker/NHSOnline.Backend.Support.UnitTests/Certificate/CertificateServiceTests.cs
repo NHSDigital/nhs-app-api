@@ -48,10 +48,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
         [DataRow(Path, null, "Could not add client certificate due to missing certificate passphrase.")]
         [DataRow(null, null, "Could not add client certificate due to missing certificate path.")]
         // Cannot join empty string and null tests, as test report conflates null and empty
-        // paramters into one test. We could miss failing tests if one fails and the other passes.
-        public void InvalidCertificate_NullParameters(string path, string passphase, string error)
+        // parameters into one test. We could miss failing tests if one fails and the other passes.
+        public void InvalidCertificate_NullParameters(string path, string passphrase, string error)
         {
-            AssertInvalidCertificateMissingPath(path, passphase, error);
+            AssertInvalidCertificateMissingPath(path, passphrase, error);
         }
 
         [TestMethod]
@@ -63,10 +63,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
                 "Could not add client certificate due to file not existing in certificate path.");
         }
 
-        private void AssertInvalidCertificateMissingPath(string path, string passphase, string error)
+        private void AssertInvalidCertificateMissingPath(string path, string passphrase, string error)
         {
             var certificateService = new CertificateService(_mockCertificateServiceLogger.Object);
-            var certificate = certificateService.GetCertificate(path, passphase);
+            var certificate = certificateService.GetCertificate(path, passphrase);
             certificate.Should().BeNull();
             _mockCertificateServiceLogger.Verify(x => x.Log(
                 LogLevel.Error, 0,

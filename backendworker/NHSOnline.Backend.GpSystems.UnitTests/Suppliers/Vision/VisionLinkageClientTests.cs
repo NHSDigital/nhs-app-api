@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.HasSuccessResponse.Should().Be(true);
+            response.HasSuccessResponse.Should().BeTrue();
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var linkageResponse = _fixture.Create<LinkageKeyPostResponse>();
 
             var linkagePostUri = new Uri(ApiUri,
-                String.Format(CultureInfo.CurrentCulture, LinkageBasePath, createLinkageKey.OdsCode));
+                string.Format(CultureInfo.CurrentCulture, LinkageBasePath, createLinkageKey.OdsCode));
 
             _mockHttpHandler.WhenVision(HttpMethod.Post, linkagePostUri)
                 .WithContent(JsonConvert.SerializeObject(createLinkageKey.LinkageKeyPostRequest,
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var errorResponseWrapper = _fixture.Create<VisionLinkageClient.ErrorResponseWrapper>();
 
             var linkagePostUri = new Uri(ApiUri,
-                String.Format(CultureInfo.CurrentCulture, LinkageBasePath, createLinkageKey.OdsCode));
+                string.Format(CultureInfo.CurrentCulture, LinkageBasePath, createLinkageKey.OdsCode));
 
             _mockHttpHandler.WhenVision(HttpMethod.Post, linkagePostUri)
                 .WithContent(JsonConvert.SerializeObject(createLinkageKey.LinkageKeyPostRequest,

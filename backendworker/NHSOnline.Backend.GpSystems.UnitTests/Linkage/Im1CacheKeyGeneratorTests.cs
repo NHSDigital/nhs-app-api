@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Linkage
         [TestMethod]
         public void GenerateCacheKey_AllParametersPassed_ReturnsCacheKey()
         {
+            // Arrange
             const string accountId = "1234";
             const string odsCode = "boom";
             const string linkageKey = "Bap";
@@ -40,9 +41,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Linkage
                 .Returns((string s) => s)
                 .Verifiable();
 
+            // Act
             var result = _systemUnderTest.GenerateCacheKey(
                 accountId, odsCode, linkageKey);
 
+            // Assert
             result.Should().Be(odsCode + accountId + linkageKey);
             _hashingService.Verify();
         }
@@ -53,21 +56,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Linkage
         [DataRow("1234", "boom", null)]
         public void GenerateCacheKey_SomeParametersMissing_ReturnsCacheKey( string accountId, string odsCode, string linkageKey)
         {
+            // Act
             var result = _systemUnderTest.GenerateCacheKey(
                 accountId, odsCode, linkageKey);
 
+            // Assert
             result.Should().Be(odsCode + accountId + linkageKey);
         }
         
         [TestMethod]
         public void GenerateCacheKey_NoParametersPassed_ThrowsArgumentException()
         {
+            // Arrange
             const string accountId = null;
             const string odsCode = "";
             const string linkageKey = null;
 
+            // Act
             Action act = () => _systemUnderTest.GenerateCacheKey(accountId, odsCode, linkageKey);
 
+            // Assert
             act.Should().Throw<ArgumentException>()
                 .WithMessage("need to provide values to create key");
         }

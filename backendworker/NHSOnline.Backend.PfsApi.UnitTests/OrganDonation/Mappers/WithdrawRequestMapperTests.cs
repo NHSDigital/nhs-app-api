@@ -40,7 +40,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             _withdrawRequestMapper = _fixture.Create<WithdrawRequestMapper>();
         }
 
-
         [TestMethod]
         public void MapToWithdrawRequest_WithValidRequest_MapsCorrectly()
         {

@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         [TestMethod]
         public void HttpStatusCode_200_ReturnsTrue()
         {
-            HttpStatusCode code = HttpStatusCode.OK;
+            const HttpStatusCode code = HttpStatusCode.OK;
 
             var result = code.IsSuccessStatusCode();
 
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         [TestMethod]
         public void HttpStatusCode_299_ReturnsTrue()
         {
-            HttpStatusCode code = HttpStatusCode.OK;
+            const HttpStatusCode code = HttpStatusCode.OK;
 
             var result = code.IsSuccessStatusCode();
 
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         [TestMethod]
         public void HttpStatusCode_502_ReturnsFalse()
         {
-            HttpStatusCode code = HttpStatusCode.BadGateway;
+            const HttpStatusCode code = HttpStatusCode.BadGateway;
 
             var result = code.IsSuccessStatusCode();
 
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         [TestMethod]
         public void HttpStatusCode_400_ReturnsFalse()
         {
-            HttpStatusCode code = HttpStatusCode.BadRequest;
+            const HttpStatusCode code = HttpStatusCode.BadRequest;
 
             var result = code.IsSuccessStatusCode();
 

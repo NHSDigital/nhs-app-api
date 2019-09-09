@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void GetGpInfo_WhenCalledWithValidFileName_MapAllFieldsForGivenOdsCode()
         {
             // Arrange
-            var expected = new GpInfo()
+            var expected = new GpInfo
             {
                 Ods = "A81001",
                 CcgCode = "00K",
@@ -92,14 +92,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
-        public void GetGpInfo_WhenCalledWithUnkownFile_LogsErrorAndReturnNull()
+        public void GetGpInfo_WhenCalledWithUnknownFile_LogsErrorAndReturnNull()
         {
             // Arrange
             _mockFileHandler.Setup(f => f.GetTextReader(It.IsAny<string>()))
                 .Throws<FileNotFoundException>();
 
             // Act
-            var result = _gpInfoReader.GetGpInfo("UnkownFile.csv");
+            var result = _gpInfoReader.GetGpInfo("UnknownFile.csv");
 
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());

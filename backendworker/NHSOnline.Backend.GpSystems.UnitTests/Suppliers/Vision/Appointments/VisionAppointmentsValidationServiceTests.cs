@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 {
@@ -12,11 +13,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
     public class VisionAppointmentsValidationServiceTests
     {
         private VisionAppointmentsValidationService _systemUnderTest;
+        private Fixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            Mock<ILogger<VisionAppointmentsValidationService>> logger = new Mock<ILogger<VisionAppointmentsValidationService>>();
+            _fixture = new Fixture();
+            
+            var logger = new Mock<ILogger<VisionAppointmentsValidationService>>();
             _systemUnderTest = new VisionAppointmentsValidationService(logger.Object);
         }
 
@@ -25,33 +29,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         [DataRow("")]
         public void IsDeleteValid_NoId_ReturnsFalse(string appointmentId)
         {
-            //Arrange
-            AppointmentCancelRequest request = new AppointmentCancelRequest()
+            // Arrange
+            var request = new AppointmentCancelRequest
             {
                 AppointmentId = appointmentId,
                 CancellationReasonId = "1234"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsDeleteValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsDeleteValid_ValidId_ReturnsTrue()
         {
-            //Arrange
-            AppointmentCancelRequest request = new AppointmentCancelRequest()
+            // Arrange
+            var request = new AppointmentCancelRequest
             {
                 AppointmentId = "1234"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsDeleteValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
         }
 
@@ -61,65 +65,54 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         [DataRow("1234", "<script a='1'>malicious attack</script>")]
         public void IsPostValid_InvalidData_ReturnsFalse(string slotId, string bookingReason)
         {
-            //Arrange
-            AppointmentBookRequest request = new AppointmentBookRequest()
+            // Arrange
+            var request = new AppointmentBookRequest
             {
                 SlotId = slotId,
                 BookingReason = bookingReason
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsPostValid_LongBookingReason_ReturnsFalse()
         {
-            //Arrange
-            string bookingReason = string.Join(string.Empty, generateString(151));
+            // Arrange
+            var bookingReason = _fixture.CreateStringOfLength(151);
 
-            AppointmentBookRequest request = new AppointmentBookRequest()
+            var request = new AppointmentBookRequest
             {
                 SlotId = "1234",
                 BookingReason = bookingReason
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsPostValid_ValidData_ReturnsData()
         {
-            //Arrange
-            AppointmentBookRequest request = new AppointmentBookRequest()
+            // Arrange
+            var request = new AppointmentBookRequest
             {
                 SlotId = "1234",
                 BookingReason = "important reason"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
-        }
-
-
-
-        private string generateString(int length)
-        {
-            Fixture fixture = new Fixture();
-
-            string result = string.Join(string.Empty, fixture.CreateMany<char>(length));
-
-            return result;
         }
     }
 }

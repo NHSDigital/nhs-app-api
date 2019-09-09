@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -10,8 +11,6 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Im1Connection;
 using NHSOnline.Backend.Support;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
@@ -36,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             _systemUnderTest = _fixture.Create<MicrotestIm1ConnectionService>();
             
             _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();

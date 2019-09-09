@@ -30,9 +30,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 typeof(EmisAppointmentSlotsService), ServiceLifetime.Transient);
             var emisAppointmentRetrievalService = new ServiceDescriptor(typeof(EmisAppointmentsRetrievalService), 
                 typeof(EmisAppointmentsRetrievalService), ServiceLifetime.Transient);
-            var emisAppointmentBookinglService = new ServiceDescriptor(typeof(EmisAppointmentsBookingService), 
+            var emisAppointmentBookingService = new ServiceDescriptor(typeof(EmisAppointmentsBookingService), 
                 typeof(EmisAppointmentsBookingService), ServiceLifetime.Transient);
-            var emisAppointmentCancellationlService = new ServiceDescriptor(typeof(EmisAppointmentsCancellationService), 
+            var emisAppointmentCancellationService = new ServiceDescriptor(typeof(EmisAppointmentsCancellationService), 
                 typeof(EmisAppointmentsCancellationService), ServiceLifetime.Transient);
             var appointmentSlotsResponseMapper = new ServiceDescriptor(typeof(IAppointmentSlotsResponseMapper), 
                 typeof(AppointmentSlotsResponseMapper), ServiceLifetime.Transient);
@@ -42,13 +42,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 typeof(AppointmentsResponseMapper), ServiceLifetime.Transient);
             var appointmentMapper = new ServiceDescriptor(typeof(IAppointmentsMapper), 
                 typeof(AppointmentsMapper), ServiceLifetime.Transient);
-           
-
+            
             registeredServices.Should().ContainEquivalentOf(emisAppointmentService);
             registeredServices.Should().ContainEquivalentOf(emisAppointmentSlotService);
             registeredServices.Should().ContainEquivalentOf(emisAppointmentRetrievalService);
-            registeredServices.Should().ContainEquivalentOf(emisAppointmentBookinglService);
-            registeredServices.Should().ContainEquivalentOf(emisAppointmentCancellationlService);
+            registeredServices.Should().ContainEquivalentOf(emisAppointmentBookingService);
+            registeredServices.Should().ContainEquivalentOf(emisAppointmentCancellationService);
             registeredServices.Should().ContainEquivalentOf(appointmentSlotsResponseMapper);
             registeredServices.Should().ContainEquivalentOf(appointmentSlotsMapper);
             registeredServices.Should().ContainEquivalentOf(appointmentResponseMapper);

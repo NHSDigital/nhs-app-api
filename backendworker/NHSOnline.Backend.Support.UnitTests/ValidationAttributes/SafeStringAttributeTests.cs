@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -47,7 +48,7 @@ namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
             var result = _attribute.GetValidationResult(null, _validationContext);
 
             // Assert
-            Assert.AreEqual(ValidationResult.Success, result);
+            result.Should().Be(ValidationResult.Success);
         }
         
         [TestMethod]
@@ -57,7 +58,7 @@ namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
             var result = _attribute.GetValidationResult(1, _validationContext);
 
             // Assert
-            Assert.AreEqual("The value was not deemed safe", result.ErrorMessage);
+            result.ErrorMessage.Should().Be("The value was not deemed safe");
         }
 
         [DataTestMethod]
@@ -70,7 +71,7 @@ namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
             var result = _attribute.GetValidationResult(valueToTest, _validationContext);
 
             // Assert
-            Assert.AreEqual("The value was not deemed safe", result.ErrorMessage);
+            result.ErrorMessage.Should().Be("The value was not deemed safe");
         }
 
         private ValidationContext CreateValidationContext(object instance)

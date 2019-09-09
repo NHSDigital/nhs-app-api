@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             return Log(logProvider);
         }
 
-        private StreamReader Log(HttpContexedLoggerProvider logProvider)
+        private StreamReader Log(ILoggerProvider logProvider)
         {
             var logger = logProvider.CreateLogger("LogLevelTests");
             logger.LogTrace(LogFormat, LogLevel.Trace);
@@ -48,7 +48,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             _stream.Position = 0;
             return new StreamReader(_stream);
         }
-
 
         [TestMethod]
         public void LogRange()

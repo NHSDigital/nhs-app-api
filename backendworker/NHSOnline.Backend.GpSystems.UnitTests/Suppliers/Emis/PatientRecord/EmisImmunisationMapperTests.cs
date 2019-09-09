@@ -53,12 +53,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         [TestMethod]
         public void MapImmunisationRequestsGetResponseToImmunisationListResponse_WithNullEffectiveDate_GivesResponseWithOnlyTerm()
         {
-            var immunisations = new List<Immunisation>();
-            immunisations.Add(new Immunisation
+            // Arrange
+            var immunisations = new List<Immunisation>
             {
-                Term = "testImmunisation",
-                EffectiveDate = null
-            });
+                new Immunisation { Term = "testImmunisation", EffectiveDate = null }
+            };
+
+            // Act
             var mappedImmunisationList = _systemUnderTest.Map(new MedicationRootObject
             {
                 MedicalRecord = new MedicalRecord
@@ -66,9 +67,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     Immunisations = immunisations
                 }
             });
-            mappedImmunisationList.Data.FirstOrDefault().Term.Should().Be("testImmunisation");
-            mappedImmunisationList.Data.FirstOrDefault().EffectiveDate.DatePart.Should().BeNull();
-            mappedImmunisationList.Data.FirstOrDefault().EffectiveDate.Value.Should().BeNull();
+            
+            // Assert
+            var firstMappedImmunisation = mappedImmunisationList.Data.First();
+            firstMappedImmunisation.Term.Should().Be("testImmunisation");
+            firstMappedImmunisation.EffectiveDate.DatePart.Should().BeNull();
+            firstMappedImmunisation.EffectiveDate.Value.Should().BeNull();
         }
     }
 }

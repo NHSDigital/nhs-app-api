@@ -105,8 +105,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var result = await _systemUnderTest.Delete();
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestMethod]
@@ -120,13 +120,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .ReturnsAsync(sessionLogoffResult)
                 .Verifiable();
 
-            //Act
+            // Act
             var result = await _systemUnderTest.Delete();
 
             // Assert
             _mockSessionService.Verify();
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status204NoContent);
             _mockSessionService.Verify(x => x.Logoff(_userSession.GpUserSession));
             _mockSessionCacheService.Verify(x => x.DeleteUserSession(_userSession.Key));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
@@ -154,8 +154,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             _mockSessionService.Verify();
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status204NoContent);
             _mockSessionService.Verify(x => x.Logoff(_userSession.GpUserSession));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.AuditSessionEvent(

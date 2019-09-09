@@ -36,8 +36,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             var item = new ViewPatientOverviewReply();
 
             // Act
-            var patientOverview = new TppPatientOverviewMapper(_logger).Map(item);
-            var result = _mapper.Map(patientOverview.Item1, patientOverview.Item2, new TppDcrEvents(), new TestResults());
+            var (item1, item2) = new TppPatientOverviewMapper(_logger).Map(item);
+            var result = _mapper.Map(item1, item2, new TppDcrEvents(), new TestResults());
 
             // Assert
             result.Should().NotBeNull();
@@ -66,8 +66,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 PastRepeats = tppPastRepeatMedications,
             };
                     
-            var expectedAllegies = CreateListAllergyItem(patientOverview.Allergies);
-            expectedAllegies.AddRange(CreateListAllergyItem(patientOverview.DrugSensitivities));
+            var expectedAllergies = CreateListAllergyItem(patientOverview.Allergies);
+            expectedAllergies.AddRange(CreateListAllergyItem(patientOverview.DrugSensitivities));
             var expectedAcuteMedications = CreateListMedicationItem(patientOverview.Drugs);
             var expectedCurrentRepeatMedications = CreateListMedicationItem(patientOverview.CurrentRepeats);
             var expectedPastRepeatMedications = CreateListMedicationItem(patientOverview.PastRepeats);
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             // Assert
             result.Should().NotBeNull();
             mappedAllergies.Data.Should().HaveCount(patientOverview.Allergies.Count + patientOverview.DrugSensitivities.Count);
-            mappedAllergies.Data.Should().BeEquivalentTo(expectedAllegies);
+            mappedAllergies.Data.Should().BeEquivalentTo(expectedAllergies);
             mappedMedications.Data.AcuteMedications.Should().HaveCount(patientOverview.Drugs.Count);
             mappedMedications.Data.AcuteMedications.Should().BeEquivalentTo(expectedAcuteMedications);
             mappedMedications.Data.CurrentRepeatMedications.Should().HaveCount(patientOverview.CurrentRepeats.Count);
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
         {
             var result = new List<ViewPatientOverViewItem>();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 result.Add(CreatePatientOverviewItem());
             }
@@ -108,17 +108,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             };
         }
 
-        private List<AllergyItem> CreateListAllergyItem(List<ViewPatientOverViewItem> items)
+        private static List<AllergyItem> CreateListAllergyItem(IEnumerable<ViewPatientOverViewItem> items)
         {
-            return items.Select(x => CreateAllergyItem(x)).ToList();
+            return items.Select(CreateAllergyItem).ToList();
         }
 
-        private List<MedicationItem> CreateListMedicationItem(List<ViewPatientOverViewItem> items)
+        private static IEnumerable<MedicationItem> CreateListMedicationItem(IEnumerable<ViewPatientOverViewItem> items)
         {
-            return items.Select(x => CreateMedicationItem(x)).ToList();
+            return items.Select(CreateMedicationItem).ToList();
         }
 
-        private AllergyItem CreateAllergyItem(ViewPatientOverViewItem item)
+        private static AllergyItem CreateAllergyItem(ViewPatientOverViewItem item)
         {
             return new AllergyItem
             {
@@ -130,15 +130,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             };
         }
 
-        private MedicationItem CreateMedicationItem(ViewPatientOverViewItem item)
+        private static MedicationItem CreateMedicationItem(ViewPatientOverViewItem item)
         {
             var result = new MedicationItem
             {
                 Date = DateTimeOffset.Parse(item.Date, CultureInfo.InvariantCulture)
             };
-            
-            var medicationLineItems = new List<MedicationLineItem>();
-            medicationLineItems.Add(new MedicationLineItem {Text = item.Value});
+
+            var medicationLineItems = new List<MedicationLineItem> { new MedicationLineItem { Text = item.Value } };
             result.LineItems = medicationLineItems;
             return result;
         }

@@ -329,7 +329,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             result.Should().BeFalse();
         }
 
-        private JourneysBuilder ValidJourneys()
+        private static JourneysBuilder ValidJourneys()
         {
             return new JourneysBuilder()
                 .AppointmentProvider(AppointmentsProvider.im1)

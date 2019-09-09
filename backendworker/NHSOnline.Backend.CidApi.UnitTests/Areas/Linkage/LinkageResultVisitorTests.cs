@@ -58,9 +58,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var visited = await errorCase.Accept(_visitorUnderTest);
 
             // Assert
-            visited.Should().NotBeNull();
-            var result = visited.Should().BeOfType<StatusCodeResult>().Subject;
-            result.StatusCode.Should().Be(expectedStatusCode);
+            visited.Should().BeOfType<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [TestMethod]
@@ -75,9 +74,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var visited = await errorCase.Accept(_visitorUnderTest);
 
             // Assert
-            visited.Should().NotBeNull();
-            var result = visited.Should().BeOfType<StatusCodeResult>().Subject;
-            result.StatusCode.Should().Be(expectedStatusCode);
+            visited.Should().BeOfType<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(expectedStatusCode);
         }
     }
 }

@@ -45,9 +45,11 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void GenerateString_AllowableCharactersSpecified_GeneratedStringOnlyContainsSpecifiedCharacters()
         {
+            // Act
             var randomString = _randomStringGenerator.GenerateString(4, CharactersForGenerator);
 
-            Assert.IsFalse(Regex.IsMatch(randomString,$"[^{CharactersForGenerator}]"));
+            // Assert
+            randomString.Should().NotMatchRegex($"[^{CharactersForGenerator}]");
         }
 
         [TestMethod]
@@ -62,7 +64,6 @@ namespace NHSOnline.Backend.Support.UnitTests
         [TestMethod]
         public void GenerateString_Invoked_FirstTimeStringEqualsExpectedValue()
         {
-            
             var randomString1 = _randomStringGenerator.GenerateString(4, CharactersForGenerator);
            
             randomString1.Should().Match(ExpectedString);

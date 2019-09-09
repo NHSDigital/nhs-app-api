@@ -72,8 +72,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            var actualResult = result.Should().BeOfType<GetConfigurationResult.Success>().Subject;
-            Assert.AreEqual(expectedToBeValid, actualResult.Response.IsDeviceSupported);
+            result.Should().BeOfType<GetConfigurationResult.Success>()
+                .Subject.Response.IsDeviceSupported.Should().Be(expectedToBeValid);
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(GetConfigurationResult.BadRequest));
+            result.Should().BeOfType<GetConfigurationResult.BadRequest>();
         }
 
         [DataTestMethod]
@@ -113,8 +113,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            var actualResult = result.Should().BeOfType<GetConfigurationResult.Success>().Subject;
-            Assert.AreEqual(true, actualResult.Response.IsDeviceSupported);
+            result.Should().BeOfType<GetConfigurationResult.Success>()
+                .Subject.Response.IsDeviceSupported.Should().BeTrue();
         }
 
         [TestMethod]

@@ -83,10 +83,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                 req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
             _emisLinkageMapper.Verify(x => x.Map(addVerificationResponse));
-            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>();
-            var successResult = (LinkageResult.SuccessfullyRetrieved)result;
-            successResult.Response.Should().NotBeNull();
-            successResult.Response.OdsCode.Should().Be(odsCode);
+
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>()
+                .Subject.Response.OdsCode.Should().Be(odsCode);
         }
 
         [TestMethod]
@@ -129,12 +128,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                        req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                        req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
             _emisLinkageMapper.Verify(x => x.Map(addVerificationResponse));
-            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrievedAlreadyExists>();
-            var successResult = (LinkageResult.SuccessfullyRetrievedAlreadyExists) result;
-            successResult.Response.Should().NotBeNull();
-            successResult.Response.OdsCode.Should().Be(odsCode);
-        }
 
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrievedAlreadyExists>()
+                .Subject.Response.OdsCode.Should().Be(odsCode);
+        }
 
         [TestMethod]
         [DataRow(-1551, HttpStatusCode.NotFound,
@@ -154,11 +151,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var result = await GetLinkageKey(emisApiErrorCode, httpStatusCodeResponse);
 
             // Assert
-            result.GetType().Should().Be(typeof(LinkageResult.ErrorCase));
-            var errorResult = (LinkageResult.ErrorCase) result;
-            errorResult.ErrorCode.Should().Be(code);
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(code);
         }
-
 
         [TestMethod]
         public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithBadRequestErrorCode()
@@ -167,9 +162,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var result = await GetLinkageKey(null, HttpStatusCode.BadRequest);
 
             // Assert
-            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
-            var errorResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -179,9 +173,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var result = await GetLinkageKey(null, HttpStatusCode.NotFound);
 
             // Assert
-            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
-            var errorCase = (LinkageResult.UnmappedErrorWithStatusCode)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         private async Task<LinkageResult> GetLinkageKey(int? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse)
@@ -201,13 +194,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
-            var mockResponse = new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCodeResponse);
-
-            mockResponse.StandardErrorResponse = new StandardErrorResponse
+            var mockResponse = new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCodeResponse)
             {
-                InternalResponseCode = emisApiErrorCode ?? 0,
+                StandardErrorResponse = new StandardErrorResponse { InternalResponseCode = emisApiErrorCode ?? 0, }
             };
-
 
             _emisClient.Setup(x => x.VerificationPost(
                     It.Is<EmisHeaderParameters>(
@@ -329,31 +319,29 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             // Assert
             _emisClient.Verify();
             _emisLinkageMapper.Verify(x => x.Map(addVerificationResponse));
-            result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>();
-            var successResult = (LinkageResult.SuccessfullyCreated)result;
-            successResult.Response.Should().NotBeNull();
-            successResult.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
+
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>()
+                .Subject.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
+            
             _mockIm1CacheKeyGenerator.Verify();
             _mockIm1CacheService.Verify();
         }
 
+        [TestMethod]
+        [DataRow(1551, HttpStatusCode.NotFound, Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice)]
+        [DataRow(1553, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent)]
+        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(int emisApiErrorCode,
+            HttpStatusCode httpStatusCodeResponse,
+            Im1ConnectionErrorCodes.InternalCode expectedCode)
+        {
+            // Act
+            var result = await CreateLinkageKey(emisApiErrorCode, httpStatusCodeResponse);
 
-
-       [TestMethod]
-       [DataRow(1551, HttpStatusCode.NotFound, Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice)]
-       [DataRow(1553, HttpStatusCode.BadRequest, Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent)]
-       public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(int emisApiErrorCode,
-           HttpStatusCode httpStatusCodeResponse,
-           Im1ConnectionErrorCodes.InternalCode expectedCode)
-       {
-           // Act
-           var result = await CreateLinkageKey(emisApiErrorCode, httpStatusCodeResponse);
-
-           // Assert
+            // Assert
             _emisClient.Verify();
-           result.GetType().Should().Be(typeof(LinkageResult.ErrorCase));
-           var errorCase = (LinkageResult.ErrorCase) result;
-           errorCase.ErrorCode.Should().Be(expectedCode);
+
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(expectedCode);
         }
 
         [TestMethod]
@@ -364,9 +352,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify();
-            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
-            var errorCase = (LinkageResult.UnmappedErrorWithStatusCode)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -377,12 +365,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify();
-            result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
-            var errorResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
-        public async Task<LinkageResult> CreateLinkageKey(int emisApiErrorCode,HttpStatusCode httpStatusCodeResponse)
+        private async Task<LinkageResult> CreateLinkageKey(int emisApiErrorCode,HttpStatusCode httpStatusCodeResponse)
         {
             // Arrange
             var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
@@ -395,12 +383,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
-            var mockResponse = new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(httpStatusCodeResponse);
-
             // Add EMIS specific error code if unit test requires it.
-            mockResponse.StandardErrorResponse = new StandardErrorResponse
+            var mockResponse = new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(httpStatusCodeResponse)
             {
-                InternalResponseCode = emisApiErrorCode,
+                StandardErrorResponse = new StandardErrorResponse { InternalResponseCode = emisApiErrorCode, }
             };
 
             _emisClient.Setup(x => x.NhsUserPost(
@@ -444,9 +430,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
    
            // Assert
            _emisClient.Verify();
-           result.GetType().Should().Be(typeof(LinkageResult.UnmappedErrorWithStatusCode));
-           var errorResult = (LinkageResult.UnmappedErrorWithStatusCode)result;
-           errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+
+           result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+               .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -480,7 +466,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             _emisClient.Verify();
         }
 
-        private GetLinkageRequest CreateGetLinkageRequest(string nhsNumber, string surname, DateTime dateOfBirth,
+        private static GetLinkageRequest CreateGetLinkageRequest(string nhsNumber, string surname, DateTime dateOfBirth,
             string odsCode, string identityToken)
         {
             var getLinkageRequest = new GetLinkageRequest()

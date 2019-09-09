@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             
             // Assert
             _htmlSanitizer.Verify(mock => mock.SanitizeHtml(testResultsHtml, null));
-            Assert.IsTrue(!string.IsNullOrEmpty(result.TestResult));
+            result.TestResult.Should().NotBeNullOrEmpty();
         }
         
         [TestMethod]
@@ -66,6 +66,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         {
             // Arrange
             var item = new TestResultsViewReply();
+            
             // Act
             var result = _mapper.Map(item);
 

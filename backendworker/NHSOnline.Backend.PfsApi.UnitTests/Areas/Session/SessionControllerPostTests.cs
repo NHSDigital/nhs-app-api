@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Equivalency;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -252,15 +254,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 ServiceDeskReference = _serviceDeskReference
             };
+            
             // Act
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
             _mockCitizenIdSessionService.Verify();
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should()
-                .Be(StatusCodes.Status400BadRequest);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
+
             _mockAuditor.VerifyNoOtherCalls();
         }
 
@@ -288,9 +294,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             _mockCitizenIdSessionService.Verify();
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should()
-                .Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<ObjectResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAuditor.VerifyNoOtherCalls();
         }
 
@@ -319,9 +324,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Assert
             _mockOdsCodeLookup.Verify();
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should()
-                .Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should()
+                    .Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
 
             _mockAuditor.VerifyNoOtherCalls();
             _mockLogger.Verify();
@@ -349,6 +357,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
+            
             _mockAuditor.Setup(x => x.AuditSessionEvent(
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber,
@@ -370,8 +379,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Assert
             _mockTokenValidationService.Verify();
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
 
             _mockAuditor.Verify();
             _mockLogger.Verify();
@@ -419,8 +431,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Assert
             _mockSessionService.Verify();
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
 
             _mockAuditor.Verify();
             _mockLogger.Verify();
@@ -471,8 +486,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Assert
             _mockSessionService.Verify();
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
 
             _mockAuditor.Verify();
             _mockLogger.Verify();
@@ -514,8 +532,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
 
             _mockServiceJourneyRulesService.Verify();
             _mockAuditor.Verify();
@@ -559,8 +580,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
 
             _mockServiceJourneyRulesService.Verify();
             _mockAuditor.Verify();
@@ -570,15 +594,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [TestMethod]
         public async Task Post_HappyPath_ReturnsUsersSessionResponse()
         {
-            // Arrange
-
             // Act
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
-            var createdResultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-            var actualUserSessionResponse = createdResultValue.Should().BeAssignableTo<UserSessionResponse>().Subject;
-
             var expectedUserSessionResponse = new UserSessionResponse
             {
                 Name = _name,
@@ -591,15 +610,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 ServiceJourneyRules = _serviceJourneyRulesResponse
             };
 
-            actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
-            actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
-            actualUserSessionResponse.Token.Should().Be(CsrfRequestToken);
-            actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
-            actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
-            actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
-            actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
-            actualUserSessionResponse.ServiceJourneyRules.Should()
-                .BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
+            using (new AssertionScope())
+            {
+                var createdResultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
+                var actualUserSessionResponse =
+                    createdResultValue.Should().BeAssignableTo<UserSessionResponse>().Subject;
+                actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
+                actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
+                actualUserSessionResponse.Token.Should().Be(CsrfRequestToken);
+                actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
+                actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
+                actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
+                actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
+                actualUserSessionResponse.ServiceJourneyRules.Should()
+                    .BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
+            }
         }
 
         [TestMethod]

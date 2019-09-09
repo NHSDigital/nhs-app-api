@@ -112,9 +112,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
 
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.Success>().Subject.Response;
-
-            response.Slots.Count().Should().Be(_visionClientSlotsResponse.ServiceContent.Appointments.Slots.Count);
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>()
+                .Subject.Response.Slots.Count().Should().Be(_visionClientSlotsResponse.ServiceContent.Appointments.Slots.Count);
             _mockVisionClient.VerifyAll();
         }
 
@@ -147,9 +146,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
             
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.Success>().Subject.Response;
-
-            response.Slots.Count().Should().Be(3);
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>()
+                .Subject.Response.Slots.Count().Should().Be(3);
             _mockVisionClient.VerifyAll();
             _mockLogger.VerifyLogger(LogLevel.Warning, "Appointment slots retrieved for Vision patient is equal to the maximum requested", Times.Never());
         }

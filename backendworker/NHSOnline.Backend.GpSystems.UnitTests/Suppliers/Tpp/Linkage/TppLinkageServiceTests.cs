@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         private const int MinimumAppAge = 16;
         private const int MinimumLinkageAge = 16;
 
-        private DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
+        private readonly DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
 
         [TestInitialize]
         public void TestInitialize()
@@ -65,25 +65,30 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         [TestMethod]
         public async Task GetLinkageKey_ReturnsNotFound_ForValidRequest()
         {
+            // Arrange
             var request = _fixture.Create<GetLinkageRequest>();
 
+            // Act
             var response = await _systemUnderTest.GetLinkageKey(request);
 
+            // Assert
             response.Should().BeAssignableTo<LinkageResult.NotFound>();
         }
         
         [TestMethod]
         public async Task GetLinkageKey_ReturnsNotFound_ForNullRequest()
         {
+            // Act
             var response = await _systemUnderTest.GetLinkageKey(null);
 
+            // Assert
             response.Should().BeAssignableTo<LinkageResult.NotFound>();
         }
 
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsSuccessfulResponse_ForValidRequest()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Create<CreateLinkageRequest>();
             var nhsUserResponse = _fixture.Create<AddNhsUserResponse>();
 
@@ -101,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
                 .ReturnsAsync(userResponse);
 
-            string key = "CACHEKEY";
+            const string key = "CACHEKEY";
             _mockIm1CacheKeyGenerator
                 .Setup(x => x.GenerateCacheKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(key)
@@ -117,16 +122,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 .Returns(linkageResponse)
                 .Verifiable();
 
-            //Act
+            // Act
             var result = await _systemUnderTest.CreateLinkageKey(request);
 
-            //Assert
-            result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>();
-            var successResult = (LinkageResult.SuccessfullyCreated) result;
-            successResult.Response.Should().NotBeNull();
-            successResult.Response.OdsCode.Should().Be(request.OdsCode);
-            successResult.Response.AccountId.Should().Be(nhsUserResponse.AccountId);
-            successResult.Response.LinkageKey.Should().Be(linkageResponse.LinkageKey);
+            // Assert
+            var response = result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>().Subject.Response;
+            response.OdsCode.Should().Be(request.OdsCode);
+            response.AccountId.Should().Be(nhsUserResponse.AccountId);
+            response.LinkageKey.Should().Be(linkageResponse.LinkageKey);
             _mockIm1CacheKeyGenerator.Verify();
             _mockIm1CacheService.Verify();
             _mockLinkageMapper.Verify();
@@ -135,24 +138,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsSupplierUnavailable_WhenHttpExceptionOccursCallingTpp()
         {
-            //Arrange
+            // Arrange
             var request = ValidCreateLinkageRequest();
 
             _tppClient
                 .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
                 .Throws<HttpRequestException>();
 
-            //Act
+            // Act
             var result = await _systemUnderTest.CreateLinkageKey(request);
 
-            //Assert
+            // Assert
             result.Should().BeAssignableTo<LinkageResult.SupplierSystemUnavailable>();
         }
 
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsInternalServerError_WhenNoBodyOnNhsResponse()
         {
-            //Arrange
+            // Arrange
             var request = ValidCreateLinkageRequest();
             var userResponse = new TppApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK);
 
@@ -160,10 +163,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
                 .ReturnsAsync(userResponse);
 
-            //Act
+            // Act
             var result = await _systemUnderTest.CreateLinkageKey(request);
 
-            //Assert
+            // Assert
             result.Should().BeAssignableTo<LinkageResult.InternalServerError>();
         }
 
@@ -187,39 +190,48 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsUnknownError_WhenNotAuthenticated()
         {
+            // Arrange, Act, Assert (via private helper)
             var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.NotAuthenticated,
                 typeof(LinkageResult.UnmappedErrorWithStatusCode));
-            var errorCase = (LinkageResult.UnmappedErrorWithStatusCode)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            
+            // Assert
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsNotFoundErrorCreatingNhsUser_WhenInvalidLinkageCredentials()
         {
+            // Arrange, Act, Assert (via private helper)
             _settings.MinimumLinkageAge = 16;
             var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
                 "8",
                 typeof(LinkageResult.ErrorCase));
-            var errorCase = (LinkageResult.ErrorCase)result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
+            
+            // Assert
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
         }
 
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsError_WhenUserUnder16()
         {
+            // Arrange, Act, Assert (via private helper)
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(false);
 
            var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
                "8",
                 typeof(LinkageResult.ErrorCase));
-            var conflictResult = (LinkageResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
+           
+           // Assert
+           result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+               .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
             _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), _settings.MinimumLinkageAge));
         }
 
         private async Task<LinkageResult> CreateLinkageKey_ReturnsError_WhenNotAuthenticated(string errorCode, Type expectedError)
         {
-            //Arrange
+            // Arrange
             var request = ValidCreateLinkageRequest();
             var userResponse = new TppApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK)
             {
@@ -230,19 +242,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
                 .ReturnsAsync(userResponse);
 
-            //Act
+            // Act
             var result = await _systemUnderTest.CreateLinkageKey(request);
 
-            //Assert
+            // Assert
             result.GetType().Should().Be(expectedError);
             return result;
         }
 
         private CreateLinkageRequest ValidCreateLinkageRequest()
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
-            request.DateOfBirth = _dateOfBirth;
-            return request;
+            return _fixture.Build<CreateLinkageRequest>()
+                .With(x => x.DateOfBirth, _dateOfBirth)
+                .Create();
         }
     }
 }

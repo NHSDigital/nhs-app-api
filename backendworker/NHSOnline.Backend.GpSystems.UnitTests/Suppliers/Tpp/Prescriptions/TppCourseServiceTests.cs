@@ -78,12 +78,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
         
         [TestMethod]
-        public async Task Get_ReturnsSuccessResponseForHappyPath_CanBeRequested_Captial_Y()
+        public async Task Get_ReturnsSuccessResponseForHappyPath_CanBeRequested_Capital_Y()
         {
             // Arrange
             _fixture.Customize<Medication>(c => c.With(s => s.Requestable, "Y"));
@@ -102,8 +102,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
         
         [TestMethod]
@@ -126,8 +126,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [DataTestMethod]
@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             // Arrange
             var medications = new List<Medication>();
 
-            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            for (var i = 0; i < numberOfCoursesToCreate; i++)
             {
                 medications.Add(new Medication
                 {
@@ -174,17 +174,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
-
-            var getCourseResult = (GetCoursesResult.Success) result;
-            getCourseResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.Should().HaveCount(expectedNumberOfPrescriptions);
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavilable_WhenErrorReceivedFromEmis()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromEmis()
         {
             // Arrange
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
@@ -268,20 +265,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
-            Assert.AreEqual(expectedNumberOfPrescriptions, capturedItemToMap.Count);
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
+            capturedItemToMap.Count.Should().Be(expectedNumberOfPrescriptions);
         }
         
         [TestMethod]
         public async Task Get_ReturnsForbidden_WhenErrorReceivedNoAccessFromTpp()
         {
-            var expectedError = _fixture.Create<Error>();
-
-            // Tpp forbidden error code 
-            expectedError.ErrorCode = TppApiErrorCodes.NoAccess;
-            
             // Arrange
+            var expectedError = _fixture.Build<Error>()
+                .With(x => x.ErrorCode, TppApiErrorCodes.NoAccess)
+                .Create();
+            
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(
                     Task.FromResult(

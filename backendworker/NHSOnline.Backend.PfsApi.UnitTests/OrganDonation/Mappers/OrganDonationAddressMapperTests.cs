@@ -13,7 +13,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
     [TestClass]
     public class OrganDonationAddressMapperTests
     {
-
         private IFixture _fixture;
         private IMapper<string,NHSOnline.Backend.PfsApi.OrganDonation.Models.Address, Address>
             _organDonationAddressMapper;
@@ -35,7 +34,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 
             act.Should().Throw<ArgumentException>();
         }
-
 
         [TestMethod]
         [DataRow("")]
@@ -120,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             // Act 
             var result = _organDonationAddressMapper.Map(fullAddress, null);
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.Line.Should().ContainInOrder(expected);
             result.City.Should().Be(city);
@@ -154,7 +152,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.PostalCode.Should().Be(address.PostCode);
         }
 
-        
         [TestMethod]
         [DataRow("house name", "street", "village", "town", "county", "W1A 0AX", "house name", "street, village", "town", "county")]
         [DataRow(null, "15 street", "village", "town", "county", "W1A 0AX", "15 street", "village", "town", "county")]
@@ -189,7 +186,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
                     PostCode = postcode
                 });
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
             result.Line.Should().ContainInOrder(expected);
             result.City.Should().Be(city);

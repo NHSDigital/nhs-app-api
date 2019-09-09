@@ -51,12 +51,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _mockMicrotestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _mockResponseMapper = _fixture.Freeze<Mock<IAppointmentSlotsResponseMapper>>();
 
-            _microtestUserSession = new MicrotestUserSession
-            {
-                OdsCode = "TestOdsCode",
-                NhsNumber = "TestNhsNumber"
-            };
-            
+            _microtestUserSession = _fixture.Create<MicrotestUserSession>();
+
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
 

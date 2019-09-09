@@ -194,7 +194,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
                     JsonConvert.SerializeObject(expectedResponse));
 
-            var updateRequest = new RegistrationRequest()
+            var updateRequest = new RegistrationRequest
             {
                 Id = "id"
             };
@@ -216,7 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 .Respond(System.Net.Mime.MediaTypeNames.Application.Json,
                     JsonConvert.SerializeObject(expectedResponse));
 
-            var request = new WithdrawRequest()
+            var request = new WithdrawRequest
             {
                 Id = "id"
             };
@@ -239,7 +239,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
                     JsonConvert.SerializeObject(expectedResponse));
 
-            var request = new WithdrawRequest()
+            var request = new WithdrawRequest
             {
                 Id = "id"
             };

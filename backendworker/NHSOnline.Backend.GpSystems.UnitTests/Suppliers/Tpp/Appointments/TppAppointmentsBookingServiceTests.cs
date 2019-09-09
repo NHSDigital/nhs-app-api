@@ -191,7 +191,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         [TestMethod]
         public async Task Book_TppReturnsUnknownError_ReturnsBadGateway()
         {
-            //Arrange
+            // Arrange
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode
                     .InternalServerError);
 
@@ -204,6 +204,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _mockTppClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
+        
         [TestMethod]
         public async Task Booking_StartDateIsNull_ReturnsBadRequest()
         {

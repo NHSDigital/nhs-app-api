@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             // Act
             await _systemUnderTest.Create(CreateConnectionTokenJson(), expected, _nhsNumber);
 
-            //Assert
+            // Assert
             _actual.UnitId.Should().Be(expected);
         }
 
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         {
             // Arrange
             const string expectedName = "Montel";
-            var odsCode = "1234";
+            const string odsCode = "1234";
             var reply = CreateReply(expectedName);
         
             _mockTppClient
@@ -256,7 +256,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public async Task Create_WhenCalledWithMappingError_ReturnsSupplierSystemBadResponse()
         {
             // Arrange 
-            var odsCode = "1234";
+            const string odsCode = "1234";
             var reply = CreateReply();
             reply.StatusCode = HttpStatusCode.BadGateway;
 
@@ -384,7 +384,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             return response;
         }
 
-        private TppUserSession CreateUserSession( string odsCode, string sessionId = "dimsum", string onlineUserId = "123", 
+        private static TppUserSession CreateUserSession( string odsCode, string sessionId = "dimsum", string onlineUserId = "123", 
             string patientId = "123", string nhsNumber = "123456789")
         {
             return new TppUserSession()
@@ -397,7 +397,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             };
         }
 
-        private TppClient.TppApiObjectResponse<LogoffReply> LogoffReply()
+        private static TppClient.TppApiObjectResponse<LogoffReply> LogoffReply()
         {
             var response = new TppClient.TppApiObjectResponse<LogoffReply>(HttpStatusCode.OK)
             {

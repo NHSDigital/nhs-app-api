@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId;
@@ -56,6 +57,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         [TestMethod]
         public async Task Create_HappyPath_ReturnsValidGetUserProfileResult()
         {
+            // Arrange
             _mockMinimumAgeValidator
                 .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
                 .Returns(true)
@@ -97,8 +99,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 StatusCode = 200
             };
 
+            // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
             
+            // Assert
             result.Should().BeEquivalentTo(expectedResult);
             _mockMinimumAgeValidator.Verify();
             _mockCitizenIdService.Verify();
@@ -109,6 +113,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         [DataRow(HttpStatusCode.GatewayTimeout)]
         public async Task Create_CitizenIdServiceReturnsNoUserProfile_ReturnsResultWithSameStatusCode(HttpStatusCode statusCode)
         {
+            // Arrange
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new GetUserProfileResult
@@ -117,17 +122,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     UserProfile = Option.None<UserProfile>()
                 });
 
-            var expectedStatusCode = (int) statusCode;
-
+            // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
 
-            result.StatusCode.Should().Be((expectedStatusCode));
-            result.Session.Should().BeNull();
+            // Assert
+            using (new AssertionScope())
+            {
+                result.StatusCode.Should().Be((int) statusCode);
+                result.Session.Should().BeNull();
+            }
         }
         
         [TestMethod]
         public async Task Create_MinimumAgeValidationFails_ReturnsStatus465FailedAgeRequirement()
         {
+            // Arrange
             _mockMinimumAgeValidator
                 .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
                 .Returns(false)
@@ -135,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             var dateTimeNow = DateTime.Now;
             
-            var userProfile = new UserProfile()
+            var userProfile = new UserProfile
             {
                 AccessToken = _accessToken,
                 DateOfBirth = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
@@ -158,8 +167,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 StatusCode = Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement
             };
 
+            // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
             
+            // Assert
             result.StatusCode.Should().Be(expectedResult.StatusCode);
             _mockMinimumAgeValidator.Verify();
             _mockCitizenIdService.Verify();
@@ -168,7 +179,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         [TestMethod]
         public async Task Create_UserProfileHasNoDateOfBirth_ReturnsStatus465FailedAgeRequirement()
         {
-            var userProfile = new UserProfile()
+            // Arrange
+            var userProfile = new UserProfile
             {
                 AccessToken = _accessToken,
                 DateOfBirth = null,
@@ -191,8 +203,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 StatusCode = Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement
             };
 
+            // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
             
+            // Assert
             result.StatusCode.Should().Be(expectedResult.StatusCode);
             _mockCitizenIdService.Verify();
         }
@@ -200,6 +214,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         [TestMethod]
         public async Task Create_InvalidNhsNumber_ReturnsStatus464OdsCodeNotSupportedOrNoNhsNumber()
         {
+            // Arrange
             _mockMinimumAgeValidator
                 .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
                 .Returns(true)
@@ -230,8 +245,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 StatusCode = Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber
             };
 
+            // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
             
+            // Assert
             result.StatusCode.Should().Be(expectedResult.StatusCode);
             _mockMinimumAgeValidator.Verify();
             _mockCitizenIdService.Verify();

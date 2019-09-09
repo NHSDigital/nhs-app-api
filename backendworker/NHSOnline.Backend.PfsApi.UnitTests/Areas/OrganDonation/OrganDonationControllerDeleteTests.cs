@@ -11,7 +11,6 @@ using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet.Filters;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
@@ -71,8 +70,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status200OK);
             _mockOrganDonationService.Verify(x => x.Withdraw(It.IsAny<OrganDonationWithdrawRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
@@ -92,8 +91,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
 
             _mockOrganDonationService.Verify(x => x.Withdraw(It.IsAny<OrganDonationWithdrawRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
@@ -139,8 +138,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockOrganDonationService.Verify(x => x.Withdraw(It.IsAny<OrganDonationWithdrawRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));

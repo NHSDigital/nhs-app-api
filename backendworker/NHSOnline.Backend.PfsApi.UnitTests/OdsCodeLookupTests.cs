@@ -35,16 +35,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         [DataRow("  ")]
         public async Task LookupSupplier_NullOrEmptyOdsCode_ReturnsOptionNone(string odsCode)
         {
+            // Arrange
             var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
             var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
+            
+            // Act
             var result = await systemUnderTest.LookupSupplier(odsCode);
 
+            // Assert
             result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
         public async Task LookupSupplier_RedisCacheReturnsNull_ReturnsOptionNone()
         {
+            // Arrange
             const string odsCode = "ABC123";
             var redisValue = default(RedisValue);
 
@@ -60,13 +65,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
 
             var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
+            // Act
             var result = await systemUnderTest.LookupSupplier(odsCode);
+            
+            // Assert
             result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
         public async Task LookupSupplier_RedisCacheReturnsUnknownSupplier_Throws()
         {
+            // Arrange
             const string odsCode = "ABC123";
             RedisValue redisValue = "UnknownSupplier";
 
@@ -82,7 +91,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
 
             var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
+            // Act
             var result = await systemUnderTest.LookupSupplier(odsCode);
+            
+            // Assert
             result.HasValue.Should().BeFalse();
         }
 
@@ -91,6 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         [DataRow(Supplier.Tpp)]
         public async Task LookupSupplier_RedisCacheReturnsValidSupplier_ReturnsValue(Supplier supplier)
         {
+            // Arrange
             const string odsCode = "ABC123";
             RedisValue redisValue = supplier.ToString();
 
@@ -105,8 +118,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
                 .Returns(connectionMultiplexer.Object);
 
             var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
+            
+            // Act
             var actual = await systemUnderTest.LookupSupplier(odsCode);
 
+            // Assert
             actual.HasValue.Should().BeTrue();
             actual.ValueOrFailure().Should().Be(supplier);
         }
@@ -117,6 +133,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         public async Task LookupSupplier_RedisCacheReturnsValidSupplierButWithUnusualCasing_ReturnsEnum(string redisString,
             Supplier supplier)
         {
+            // Arrange
             const string odsCode = "ABC123";
             RedisValue redisValue = redisString;
 
@@ -133,7 +150,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
             var actual = await systemUnderTest.LookupSupplier(odsCode);
+            
+            // Act
             actual.HasValue.Should().BeTrue();
+            
+            // Assert
             actual.ValueOrFailure().Should().Be(supplier);
         }
     }

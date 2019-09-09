@@ -24,26 +24,32 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public void HttpRequestIdentifier_ValidRequestWithHeader_ReturnsValidIdentifier()
         {
+            // Arrange
             var headerString = _fixture.Create<string>();
             var request = _fixture.Create<HttpRequestMessage>();
             request.Headers.Add(Constants.TppConstants.RequestIdentifierHeader, headerString);
             
             var stringResponse = $"Provider=Tpp UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier={headerString}";
 
+            // Act
             var result = _systemUnderTest.Identify(request);
             
+            // Assert
             result.ToString().Should().Be(stringResponse);
         }
         
         [TestMethod]
         public void HttpRequestIdentifier_ValidRequestWithoutHeader_ReturnsValidIdentifier()
         {
+            // Arrange
             var request = _fixture.Create<HttpRequestMessage>();
             
             var stringResponse = $"Provider=Tpp UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier=";
 
+            // Act
             var result = _systemUnderTest.Identify(request);
             
+            // Assert
             result.ToString().Should().Be(stringResponse);
         }
     }

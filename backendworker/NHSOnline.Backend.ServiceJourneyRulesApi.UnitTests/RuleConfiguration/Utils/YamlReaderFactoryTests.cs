@@ -7,7 +7,6 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.Utils
 {
-    
     [TestClass]
     public class YamlReaderFactoryTests
     {

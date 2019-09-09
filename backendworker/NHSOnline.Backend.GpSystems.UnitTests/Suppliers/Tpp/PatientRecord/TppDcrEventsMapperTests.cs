@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
@@ -102,9 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         Location = "Kainos GP Demo Unit (General Practice)"
                     }
                 }
-                
             };
-
 
             var tppDcrEvents = new List<TppDcrEvent>
             {
@@ -137,12 +134,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                     }
                 }  
             };
+            
             // Act
             var result = new TppDcrEventsMapper(_eventItemsMapper).Map(requestPatientRecordReply);
             
             // Assert
             result.Should().NotBeNull();
-            result.Data.Should().HaveCount(requestPatientRecordReply.Events.Count());
             result.Data.Should().BeEquivalentTo(tppDcrEvents);
         }
 

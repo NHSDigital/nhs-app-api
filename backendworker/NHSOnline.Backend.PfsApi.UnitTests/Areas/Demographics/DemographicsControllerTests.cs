@@ -89,8 +89,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
 
             // Assert
             _mockDemographicsService.Verify();
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<SuccessfulDemographicsResult>();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<SuccessfulDemographicsResult>();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Demographics successfully viewed" ));
@@ -108,8 +108,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             var result = await _systemUnderTest.Get();
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockDemographicsService.Verify();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
@@ -127,8 +127,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             var result = await _systemUnderTest.Get();
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockDemographicsService.Verify();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
@@ -147,8 +147,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             var result = await _systemUnderTest.Get();
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
             _mockDemographicsService.Verify();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));

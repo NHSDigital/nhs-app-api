@@ -96,8 +96,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get();
 
             // Assert
-            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
-            value.Should().BeEquivalentTo(appointmentsResponse);
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(appointmentsResponse);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             var expectedResponseAuditMessage = string.Format(CultureInfo.InvariantCulture, ResponseAuditMessageFormat,
@@ -139,8 +139,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get();
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
@@ -178,8 +178,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get();
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
@@ -189,8 +189,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Get_HappyPath_VerifyAllExpectationsOnMocks()
         {
-            // Arrange
-
             // Act
             await _systemUnderTest.Get();
 

@@ -31,8 +31,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         [TestMethod]
         public void Map_WhenPassingNull_ThrowsNullReferenceException()
         {
+            // Act
             Action act = () => TppLinkagePostErrorMapper.Map(null, _logger.Object);
 
+            // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
         }
 
@@ -46,11 +48,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 
             // Act
             var result = TppLinkagePostErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.ErrorCase>();
-            var conflictResult = (LinkageResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
+            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
         }
         
         [TestMethod]
@@ -61,15 +62,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 
             // Act
             var result = TppLinkagePostErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>();
-            var conflictResult = (LinkageResult.UnmappedErrorWithStatusCode) result;
-            conflictResult.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
-
-
-        public TppClient.TppApiObjectResponse<AddNhsUserResponse> CreateResponse(
+        
+        private TppClient.TppApiObjectResponse<AddNhsUserResponse> CreateResponse(
             HttpStatusCode statusCode,
             string errorCode)
         {

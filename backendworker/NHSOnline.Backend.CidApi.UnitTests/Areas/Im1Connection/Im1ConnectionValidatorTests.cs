@@ -39,26 +39,24 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         [DataRow("Fake Ods Code", "1234567890")]
         public void IsGetValid_InvalidData_ReturnsFalse(string odsCode, string connectionToken)
         {
-            //Arrange
-
-            //Act
+            // Act
             var result = _systemUnderTest.IsGetValid(connectionToken, odsCode);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsGetValid_ValidData_ReturnsTrue()
         {
-            //Arrange
-            string odsCode = "A1B2C3";
-            string connectionToken = "1234567890";
+            // Arrange
+            const string odsCode = "A1B2C3";
+            const string connectionToken = "1234567890";
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsGetValid(connectionToken, odsCode);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
         }
 
@@ -71,8 +69,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         [DataRow("1234567890", "1234567890", "Fake Ods Code", "Smith", new[] { "OdsCode" })]
         public void IsPostValid_InvalidData_ReturnsFalse(string accountId, string linkageKey, string odsCode, string surname, IEnumerable<string> expectedInvalidParams)
         {
-            //Arrange
-            PatientIm1ConnectionRequest request = new PatientIm1ConnectionRequest
+            // Arrange
+            var request = new PatientIm1ConnectionRequest
             {
                 AccountId = accountId,
                 LinkageKey = linkageKey,
@@ -81,10 +79,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 DateOfBirth = DateTime.Now
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request, out var invalidParams);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
             invalidParams.Should().BeEquivalentTo(expectedInvalidParams);
         }
@@ -92,8 +90,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         [TestMethod]
         public void IsPostValid_ValidData_ReturnsTrue()
         {
-            //Arrange
-            PatientIm1ConnectionRequest request = new PatientIm1ConnectionRequest
+            // Arrange
+            var request = new PatientIm1ConnectionRequest
             {
                 AccountId = "1234567890",
                 LinkageKey = "1234567890",
@@ -102,10 +100,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 DateOfBirth = DateTime.Now
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request, out var invalidParams);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
             invalidParams.Should().BeEquivalentTo(Enumerable.Empty<string>());
         }
@@ -121,8 +119,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public void IsCreateLinkageRequestValid_InvalidData_ReturnsFalse(
             string odsCode, string surname, string nhsNumber, string emailAddress, string identityToken, IEnumerable<string> expectedInvalidParams)
         {
-            //Arrange
-            Im1RegistrationRequest request = new Im1RegistrationRequest
+            // Arrange
+            var request = new Im1RegistrationRequest
             {
                 OdsCode = odsCode,
                 Surname = surname,
@@ -132,10 +130,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 IdentityToken = identityToken
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsCreateLinkageRequestValid(request, out var invalidParams);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
             invalidParams.Should().BeEquivalentTo(expectedInvalidParams);
         }
@@ -143,8 +141,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         [TestMethod]
         public void IsCreateLinkageRequestValid_ValidData_ReturnsTrue()
         {
-            //Arrange
-            Im1RegistrationRequest request = new Im1RegistrationRequest
+            // Arrange
+            var request = new Im1RegistrationRequest
             {
                 OdsCode = "A1B2C3",
                 Surname = "Smith",
@@ -154,10 +152,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 IdentityToken = "IDToken"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsCreateLinkageRequestValid(request, out var invalidParams);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
             invalidParams.Should().BeEquivalentTo(Enumerable.Empty<string>());
         }
@@ -172,8 +170,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public void IsPatientIm1ConnectionRequestValid_InvalidData_ReturnsFalse(
             string accountId, string linkageKey, string odsCode, string surname, IEnumerable<string> expectedInvalidParams)
         {
-            //Arrange
-            Im1RegistrationRequest request = new Im1RegistrationRequest
+            // Arrange
+            var request = new Im1RegistrationRequest
             {
                 AccountId = accountId,
                 LinkageKey = linkageKey,
@@ -182,10 +180,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 DateOfBirth = DateTime.Now
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPatientIm1ConnectionRequestValid(request, out var invalidParams);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
             invalidParams.Should().BeEquivalentTo(expectedInvalidParams);
         }
@@ -193,8 +191,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         [TestMethod]
         public void IsPatientIm1ConnectionRequestValid_ValidData_ReturnsTrue()
         {
-            //Arrange
-            Im1RegistrationRequest request = new Im1RegistrationRequest
+            // Arrange
+            var request = new Im1RegistrationRequest
             {      
                 AccountId = "AccountID",
                 LinkageKey = "1234",
@@ -203,10 +201,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 DateOfBirth = DateTime.Now
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPatientIm1ConnectionRequestValid(request, out var invalidParams);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
             invalidParams.Should().BeEquivalentTo(Enumerable.Empty<string>());
         }

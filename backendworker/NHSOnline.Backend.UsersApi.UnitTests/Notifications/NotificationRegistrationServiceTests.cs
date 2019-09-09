@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         [TestMethod]
         public async Task Register_WhenRegistrationSuccessful_ReturnsSuccessResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Create<RegisterDeviceRequest>();
             var expectedResponse = new RegistrationResult.Success(_fixture.Create<NotificationRegistrationResult>());
             
@@ -54,10 +54,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .ReturnsAsync(expectedResponse)
                 .Verifiable();
 
-            //Act
+            // Act
             var result = await _systemUnderTests.Register(request, _accessToken);
 
-            //Assert
+            // Assert
             _mockNotificationsService.Verify();
             result.Should().Be(expectedResponse);
         }
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         [TestMethod]
         public async Task Register_WhenRegistrationReturnsBadGateway_ReturnsBadGatewayResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Create<RegisterDeviceRequest>();
             var expectedResponse = new RegistrationResult.BadGateway();
             
@@ -74,10 +74,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .ReturnsAsync(expectedResponse)
                 .Verifiable();
 
-            //Act
+            // Act
             var result = await _systemUnderTests.Register(request, _accessToken);
 
-            //Assert
+            // Assert
             _mockNotificationsService.Verify();
             result.Should().Be(expectedResponse);
         }

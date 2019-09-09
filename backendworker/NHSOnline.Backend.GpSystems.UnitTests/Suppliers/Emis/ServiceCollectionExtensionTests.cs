@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             CheckAllEmisCidRegisteredServices(services);
         }
 
-        private void CheckEmisBaseServices(ServiceCollection services)
+        private static void CheckEmisBaseServices(ServiceCollection services)
         {
             var registeredServices = services.ToList();
 
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             Prescriptions.ServiceCollectionExtensionsTests.CheckRegisteredEmisPrescriptionServices(services);
             Appointments.ServiceCollectionExtensionTests.CheckRegisteredEmisAppointmentServices(services);
             Demographics.ServiceCollectionExtensionTests.CheckRegisteredEmisDemographicsService(services);
-            PatientRecord.ServiceCollectionExtensionTests.CheckRegisteredPatienRecordService(services);
+            PatientRecord.ServiceCollectionExtensionTests.CheckRegisteredPatientRecordService(services);
             Session.ServiceCollectionExtensionTests.CheckRegisteredEmisPfsSessionService(services);
         }
         

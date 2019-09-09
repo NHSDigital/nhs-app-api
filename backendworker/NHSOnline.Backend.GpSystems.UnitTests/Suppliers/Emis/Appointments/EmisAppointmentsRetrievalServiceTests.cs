@@ -53,8 +53,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
-            // Arrange
-
             // Act
             var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
@@ -131,7 +129,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
-
         }
 
         [TestMethod]
@@ -153,7 +150,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
-
         }
 
         [TestMethod]

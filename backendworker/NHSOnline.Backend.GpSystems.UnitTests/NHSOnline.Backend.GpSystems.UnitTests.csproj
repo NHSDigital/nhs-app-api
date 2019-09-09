@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Suppliers\TestData\HtmlDataToSanitize.html" />
     <None Remove="Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
     <None Remove="Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
     <None Remove="Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />
@@ -49,7 +48,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Suppliers\TestData\HtmlDataToSanitize.html" />
     <EmbeddedResource Include="Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
     <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
     <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />

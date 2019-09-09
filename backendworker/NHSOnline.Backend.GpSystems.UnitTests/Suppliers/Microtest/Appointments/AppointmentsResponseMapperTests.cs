@@ -40,9 +40,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 .With(x => x.Appointments, _getResponseAppointments)
                 .Create();
 
-            _getAppointments = new List<NHSOnline.Backend.GpSystems.Appointments.Models.Appointment>();
-            _getAppointments.Add(_fixture.Create<UpcomingAppointment>());
-            _getAppointments.Add(_fixture.Create<PastAppointment>());
+            _getAppointments = new List<NHSOnline.Backend.GpSystems.Appointments.Models.Appointment>
+            {
+                _fixture.Create<UpcomingAppointment>(), 
+                _fixture.Create<PastAppointment>()
+            };
+            
             _mockAppointmentsMapper = _fixture.Freeze<Mock<IAppointmentsMapper>>();
             _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<IEnumerable<Appointment>>()))
                 .Returns(_getAppointments);

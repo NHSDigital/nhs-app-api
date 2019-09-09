@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
-            Mock<ILogger<EmisPrescriptionValidationService>> logger = new Mock<ILogger<EmisPrescriptionValidationService>>();
+            var logger = new Mock<ILogger<EmisPrescriptionValidationService>>();
             _prescriptionRequestValidationService = new EmisPrescriptionValidationService(logger.Object);
         }
 

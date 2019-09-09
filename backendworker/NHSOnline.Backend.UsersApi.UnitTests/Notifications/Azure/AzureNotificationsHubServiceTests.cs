@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenNoExistingRegistrations_ReturnsSuccess()
         {
-            //Arrange
+            // Arrange
             var registrationId = _fixture.Create<string>();
             var registrationExpiryTime = _fixture.Create<DateTime>();
             
@@ -100,10 +100,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .ReturnsAsync(registrationCreatedUpdatedResponse)
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenHasExistingRegistrations_ReturnsSuccess()
         {
-            //Arrange
+            // Arrange
             var registrationId = _fixture.Create<string>();
             var registrationExpiryTime = _fixture.Create<DateTime>();
             
@@ -168,10 +168,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .ReturnsAsync(registrationCreatedUpdatedResponse)
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -181,9 +181,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenCreateOrUpdateRegistrationAsyncReturnsNoData_ReturnsInternalServerError()
         {
-            //Arrange
+            // Arrange
             var registrationId = _fixture.Create<string>();
-            var registrationExpiryTime = _fixture.Create<DateTime>();
             
             var request = _fixture.Create<NotificationRegistrationRequest>();
             
@@ -229,10 +228,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .ReturnsAsync(registrationCreatedUpdatedResponse)
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
 
@@ -242,7 +241,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public void Register_WhenRequestFactoryThrowsArgumentException_ThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>()
                 .Without(x => x.NhsLoginId)
                 .Create();
@@ -251,17 +250,17 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Setup(x => x.Create(request))
                 .Throws<ArgumentException>();
             
-            //Act
+            // Act
             Func<Task> act = () => _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             act.Should().Throw<ArgumentException>();
         }
         
         [TestMethod]
         public async Task Register_WhenGetRegistrationsByChannelAsyncThrowsAHttpException_ReturnsBadGatewayResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>()
                 .Create();
             
@@ -279,10 +278,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Setup(x => x.GetRegistrationsByChannelAsync(request.DevicePns))
                 .Throws<HttpRequestException>();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             result.Should().BeOfType<RegistrationResult.BadGateway>();
         }
@@ -290,7 +289,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenGetRegistrationsByChannelAsyncThrowsAException_ReturnsInternalServerErrorResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>()
                 .Create();
             
@@ -308,10 +307,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Setup(x => x.GetRegistrationsByChannelAsync(request.DevicePns))
                 .Throws<Exception>();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             result.Should().BeOfType<RegistrationResult.InternalServerError>();
         }
@@ -319,7 +318,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenDeleteRegistrationAsyncThrowsAHttpException_ReturnsBadGatewayResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>().Create();
             
             var registrationDescription = _fixture.Build<AppleRegistrationDescriptionTestWrapper>()
@@ -346,10 +345,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Throws<HttpRequestException>()
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -359,7 +358,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenDeleteRegistrationAsyncThrowsAException_ReturnsInternalServerErrorResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>().Create();
             
             var registrationDescription = _fixture.Build<AppleRegistrationDescriptionTestWrapper>()
@@ -386,10 +385,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Throws<Exception>()
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -399,7 +398,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenCreateRegistrationIdThrowsAHttpException_ReturnsBadGatewayResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>().Create();
             
             var registrationDescription = _fixture.Build<AppleRegistrationDescriptionTestWrapper>()
@@ -421,10 +420,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Setup(x => x.CreateRegistrationIdAsync())
                 .Throws<HttpRequestException>();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -434,7 +433,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenCreateRegistrationIdThrowsAException_ReturnsInternalServerErrorResult()
         {
-            //Arrange
+            // Arrange
             var request = _fixture.Build<NotificationRegistrationRequest>().Create();
             
             var registrationDescription = _fixture.Build<AppleRegistrationDescriptionTestWrapper>()
@@ -456,10 +455,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Setup(x => x.CreateRegistrationIdAsync())
                 .Throws<Exception>();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -469,7 +468,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenCreateOrUpdateRegistrationAsyncThrowsAHttpException_ReturnsBadGatewayResult()
         {
-            //Arrange
+            // Arrange
             var registrationId = _fixture.Create<string>();
             
             var request = _fixture.Build<NotificationRegistrationRequest>().Create();
@@ -499,10 +498,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Throws<HttpRequestException>()
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -512,7 +511,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         [TestMethod]
         public async Task Register_WhenCreateOrUpdateRegistrationAsyncThrowsAnException_ReturnsInternalServerErrorResult()
         {
-            //Arrange
+            // Arrange
             var registrationId = _fixture.Create<string>();
             
             var request = _fixture.Build<NotificationRegistrationRequest>().Create();
@@ -542,10 +541,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                 .Throws<Exception>()
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             
@@ -560,7 +559,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
         public async Task Register_WhenCreateOrUpdateRegistrationAsyncThrowsAMessageException_ReturnsBadGatewayResult(
             WebExceptionStatus webExceptionStatus, HttpStatusCode statusCode)
         {
-            //Arrange
+            // Arrange
             var registrationId = _fixture.Create<string>();
             
             var request = _fixture.Build<NotificationRegistrationRequest>().Create();
@@ -595,10 +594,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
                             MockHttpWebResponseWithStatusCode(statusCode))))
                 .Verifiable();
             
-            //Act
+            // Act
             var result = await _systemUnderTest.Register(request);
             
-            //Assert
+            // Assert
             _mockRegistrationDescriptionFactory.Verify();
             _mockAzureNotificationsHubClient.Verify();
             

@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Service
 
             var journeyRepository = new JourneyRepository(new Dictionary<string, Journeys>
             {
-                {TestOdsCode, _expectedJourneys }
+                { TestOdsCode, _expectedJourneys }
             });
             _systemUnderTest = new ServiceJourneyRulesService(loggerFactory.Object, journeyRepository);
         }
@@ -39,14 +39,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Service
         [TestMethod]
         public void GetServiceJourneyRulesForOdsCode_Success()
         {
+            // Act
             var getResponse = _systemUnderTest.GetServiceJourneyRulesForOdsCode(TestOdsCode);
+            
+            // Assert
             getResponse.Journeys.Should().BeEquivalentTo(_expectedJourneys);
         }
 
         [TestMethod]
         public void GetServiceJourneyRulesForOdsCode_NoJourneys()
         {
+            // Act
             var getResponse = _systemUnderTest.GetServiceJourneyRulesForOdsCode("123");
+            
+            // Assert
             getResponse.Journeys.Should().BeNull();
         }
     }

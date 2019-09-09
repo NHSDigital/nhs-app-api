@@ -7,7 +7,6 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.Utils
 {
-
     [TestClass]
     public class YamlWriterTests
     {
@@ -31,7 +30,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void Write_WhenGivenAFilePathAndContent_WriteFile()
         {
             // Arrange
-            var filePath = "c:/test.yaml";
+            const string filePath = "c:/test.yaml";
             var model = new object();
 
             // Act

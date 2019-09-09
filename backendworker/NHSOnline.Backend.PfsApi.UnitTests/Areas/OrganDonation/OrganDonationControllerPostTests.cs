@@ -2,6 +2,7 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -72,11 +73,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Post(new OrganDonationRegistrationRequest());
 
             // Assert
-            var subject = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            subject.StatusCode.Should().Be(StatusCodes.Status201Created);
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status201Created);
+                objectResult.Value.Should().BeEquivalentTo(organDonationRegistrationResponse);
+            }
 
-            var value = subject.Value;
-            value.Should().BeEquivalentTo(organDonationRegistrationResponse);
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
@@ -97,8 +100,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Post(new OrganDonationRegistrationRequest());
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
@@ -121,8 +124,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-            statusCodeResult.Value.Should().Be(response);
+            using (new AssertionScope())
+            {
+                statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+                statusCodeResult.Value.Should().Be(response);
+            }
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
@@ -144,8 +150,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Post(new OrganDonationRegistrationRequest());
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));

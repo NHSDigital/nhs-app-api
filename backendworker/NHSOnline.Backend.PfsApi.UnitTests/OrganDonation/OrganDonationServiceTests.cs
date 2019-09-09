@@ -48,7 +48,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         private Mock<IMapper<HttpStatusCode, OrganDonationWithdrawResult>>
             _mockWithdrawResultErrorMapper;
         
-
         // needed for Callback
         private delegate void TryGetValueCallback(object key, out object value);
 
@@ -110,7 +109,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
             result.Result.Should().BeOfType<OrganDonationResult.ExistingRegistration>();
         }
-
 
         [TestMethod]
         public void GetOrganDonation_WhenCalledAndWithExistingRegistrationInConflict_ReturnsExistingRegistrationResponseInConflict()

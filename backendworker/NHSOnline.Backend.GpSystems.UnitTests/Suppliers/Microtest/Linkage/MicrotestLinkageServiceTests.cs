@@ -115,7 +115,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
                 {
                     Body = _fixture.Create<DemographicsGetResponse>()
                 };
-
         }
     }
 }

@@ -23,12 +23,15 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public void HttpRequestIdentifier_ValidRequest_ReturnsValidIdentifier()
         {
+            // Arrange
             var request = _fixture.Create<HttpRequestMessage>();
 
             var stringResponse = $"Provider=CitizenId UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri}";
 
+            // Act
             var result = _systemUnderTest.Identify(request);
 
+            // Assert
             result.ToString().Should().Be(stringResponse);
         }
     }

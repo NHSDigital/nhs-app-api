@@ -194,7 +194,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         {
             // Arrange
             var bearerToken = _fixture.Create<string>();
-
             var expectedTokenResponse = _fixture.Create<UserInfo>();
 
             _mockHttpHandler
@@ -215,7 +214,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         {
             // Arrange
             var bearerToken = _fixture.Create<string>();
-
             var expectedErrorResponse = _fixture.Create<ErrorResponse>();
 
             _mockHttpHandler

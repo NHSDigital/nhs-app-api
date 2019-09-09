@@ -30,8 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         {
             // Act and Assert
             var result = _organDonationFaithDeclarationMapper.To(value);
-
-
+            
             result.Should().Be(default(FaithDeclaration));
         }
 
@@ -44,8 +43,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         {
             // Act and Assert
             var result = _organDonationFaithDeclarationMapper.To(value);
-
-
+            
             result.Should().Be(expected);
         }
     }

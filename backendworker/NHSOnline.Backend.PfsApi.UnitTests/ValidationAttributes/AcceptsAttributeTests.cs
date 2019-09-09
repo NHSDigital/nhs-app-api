@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ValidationAttributes
             return context;
         }
 
-        private string ConstructErrorMessage(object value, string acceptedValuesText) =>
+        private static string ConstructErrorMessage(object value, string acceptedValuesText) =>
             $"'{value}' is not one of the accepted values ({acceptedValuesText})";
 
         public enum TestPosition

@@ -124,14 +124,9 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             var mappedStatusCode = actualResult.StatusCode;
 
-            if (statusCode == HttpStatusCode.BadRequest)
-            {
-                mappedStatusCode.Should().Be(HttpStatusCode.BadRequest);
-            }
-            else
-            {
-                mappedStatusCode.Should().Be(HttpStatusCode.BadGateway);
-            }
+            mappedStatusCode.Should().Be(statusCode == HttpStatusCode.BadRequest
+                ? HttpStatusCode.BadRequest
+                : HttpStatusCode.BadGateway);
         }
 
         [TestMethod]

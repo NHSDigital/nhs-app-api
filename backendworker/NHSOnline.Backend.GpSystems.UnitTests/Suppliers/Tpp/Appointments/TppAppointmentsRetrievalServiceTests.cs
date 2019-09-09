@@ -149,14 +149,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     _mockTppClient.Object, dateTimeOffsetProvider),
                 new TppAppointmentsCancellationService(Mock.Of<ILogger<TppAppointmentsCancellationService>>(),
                     _mockTppClient.Object));
-
         }
 
         [TestMethod]
         public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
-            // Arrange
-
             // Act
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 

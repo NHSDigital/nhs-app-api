@@ -261,13 +261,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
             
             // Assert
-            result
-                .Should()
-                .BeAssignableTo<GpSessionCreateResult.Success>()
-                .Subject
-                .UserSession
-                .Should()
-                .NotBeNull();
+            result.Should().BeAssignableTo<GpSessionCreateResult.Success>()
+                .Subject.UserSession.Should().NotBeNull();
         }
 
         [TestMethod] 
@@ -277,14 +272,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
             
             // Assert
-            result
-                .Should()
-                .BeAssignableTo<GpSessionCreateResult.Success>()
-                .Subject
-                .UserSession
-                .Supplier
-                .Should()
-                .Be(Supplier.Emis);
+            result.Should().BeAssignableTo<GpSessionCreateResult.Success>()
+                .Subject.UserSession.Supplier.Should().Be(Supplier.Emis);
         }
         
         [TestMethod]
@@ -295,12 +284,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             
             // Assert
             result
-                .Should()
-                .BeAssignableTo<GpSessionCreateResult.Success>()
-                .Subject
-                .UserSession
-                .Should()
-                .BeAssignableTo<EmisUserSession>();
+                .Should().BeAssignableTo<GpSessionCreateResult.Success>()
+                .Subject.UserSession.Should().BeAssignableTo<EmisUserSession>();
         }
     }
 }

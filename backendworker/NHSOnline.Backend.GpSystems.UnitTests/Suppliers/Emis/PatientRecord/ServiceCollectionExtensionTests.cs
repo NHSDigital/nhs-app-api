@@ -15,10 +15,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             var services = new ServiceCollection();
 
             services.RegisterEmisPatientRecordServices();
-            CheckRegisteredPatienRecordService(services);                      
+            CheckRegisteredPatientRecordService(services);                      
         }
 
-        public static void CheckRegisteredPatienRecordService(ServiceCollection serviceCollection)
+        public static void CheckRegisteredPatientRecordService(ServiceCollection serviceCollection)
         {
             serviceCollection.Should().NotBeNull();
 
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 typeof(EmisAllergyMapper), ServiceLifetime.Transient);
             var emisMedicationMapper = new ServiceDescriptor(typeof(IEmisMedicationMapper),
                 typeof(EmisMedicationMapper), ServiceLifetime.Transient);
-            var emisImmunisationnMapper = new ServiceDescriptor(typeof(EmisImmunisationMapper),
+            var emisImmunisationMapper = new ServiceDescriptor(typeof(EmisImmunisationMapper),
                 typeof(EmisImmunisationMapper), ServiceLifetime.Transient);
             var emisProblemMapper = new ServiceDescriptor(typeof(EmisProblemMapper),
                 typeof(EmisProblemMapper), ServiceLifetime.Transient);
@@ -51,11 +51,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 typeof(EmisPatientRecordService), ServiceLifetime.Transient);
             var emisMyRecordMapper = new ServiceDescriptor(typeof(IEmisMyRecordMapper),
                 typeof(EmisMyRecordMapper), ServiceLifetime.Transient);
-
-
+            
             registeredServices.Should().ContainEquivalentOf(emisAllergyMapper);
             registeredServices.Should().ContainEquivalentOf(emisMedicationMapper);
-            registeredServices.Should().ContainEquivalentOf(emisImmunisationnMapper);
+            registeredServices.Should().ContainEquivalentOf(emisImmunisationMapper);
             registeredServices.Should().ContainEquivalentOf(emisProblemMapper);
             registeredServices.Should().ContainEquivalentOf(emisTestResultMapper);
             registeredServices.Should().ContainEquivalentOf(emisConsultationMapper);

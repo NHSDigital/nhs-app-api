@@ -31,10 +31,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         [TestMethod]
         public void MapProblemRequestsGetResponseToProblemListResponse_WithNullResponse_ThrowsArgumentNullException()
         {
+            // Act
             Action act = () => new EmisProblemMapper().Map(null);
 
+            // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("problemsGetResponse");
-
         }
 
         [TestMethod]

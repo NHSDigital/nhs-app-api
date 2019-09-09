@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.WithdrawReasons.Should().NotBeNull().And.HaveCount(0);
         }
 
-        private Entry<ReferenceData> CreateEntry(string key, Dictionary<string, string> options)
+        private static Entry<ReferenceData> CreateEntry(string key, Dictionary<string, string> options)
         {
             return new Entry<ReferenceData>
             {

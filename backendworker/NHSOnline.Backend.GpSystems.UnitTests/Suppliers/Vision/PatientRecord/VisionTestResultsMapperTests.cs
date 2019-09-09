@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
             });
 
             // Assert
-            Assert.IsTrue(mappedResponse != null);
+            mappedResponse.Should().NotBeNull();
             _htmlSanitizer.Verify(mock => mock.SanitizeHtml(testResultsHtml, null));
         }
         
@@ -63,12 +64,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
             });
 
             // Assert
-            Assert.IsTrue(mappedResponse != null);
-            Assert.IsTrue(!string.IsNullOrEmpty(mappedResponse.RawHtml));
-            Assert.IsTrue(mappedResponse.RawHtml.Contains("tbody tr { line-height: 1.5em !important;",
-                    StringComparison.OrdinalIgnoreCase),
-                "tbody tr line height not adjusted");
-           
+            mappedResponse.Should().NotBeNull();
+            mappedResponse.RawHtml.Should().NotBeNullOrEmpty();
+            mappedResponse.RawHtml.Should().Contain("tbody tr { line-height: 1.5em !important;");
         }
         
         [TestMethod]
@@ -81,14 +79,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
             _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>(), null)).Returns(noTestResultsHtml);
         
             // Act
-            var mappedResponse = _mapper.Map(new VisionPatientDataResponse()
+            var mappedResponse = _mapper.Map(new VisionPatientDataResponse
             {
                 Record = noTestResultsHtml
             });
         
             // Assert
-            Assert.IsTrue(mappedResponse != null);
-            Assert.IsTrue(string.IsNullOrEmpty(mappedResponse.RawHtml));
+            mappedResponse.Should().NotBeNull();
+            mappedResponse.RawHtml.Should().BeNullOrEmpty();
         }
     }
 }

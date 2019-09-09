@@ -221,7 +221,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             result.Should().BeEquivalentTo(expectedResult);
         }
 
-        private List<Medication> GetSampleMedicationResponse(DateTimeOffset now)
+        private static List<Medication> GetSampleMedicationResponse(DateTimeOffset now)
         {
             // List consists of
             // 3 acute medications, 2 in the last year

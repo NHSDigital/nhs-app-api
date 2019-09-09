@@ -58,6 +58,5 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Assert
             response.PastAppointmentsEnabled.Should().BeTrue();
         }
-
     }
 }

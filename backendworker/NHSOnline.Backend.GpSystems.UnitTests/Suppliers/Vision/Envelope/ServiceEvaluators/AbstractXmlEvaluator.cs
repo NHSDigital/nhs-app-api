@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope.Servic
 
         protected AbstractXmlEvaluator(string envelope)
         {
-            XmlDocument d = new XmlDocument();
+            var d = new XmlDocument();
             d.LoadXml(envelope);
             Nav = d.CreateNavigator();
             Manager = new XmlNamespaceManager(d.NameTable);

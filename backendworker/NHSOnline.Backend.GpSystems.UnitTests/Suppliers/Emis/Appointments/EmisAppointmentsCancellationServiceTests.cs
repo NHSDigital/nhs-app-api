@@ -46,12 +46,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             _cancellationReasonText = "No longer required";
             
-            CancellationReason cancellationReason = new CancellationReason
+            var cancellationReason = new CancellationReason
             {
                 Id = _request.CancellationReasonId,
                 DisplayName = _cancellationReasonText
             };
-            // Arrange
+            
             _cancellationReasonService.Setup(x=>x.TryGetCancellationReason(_request.CancellationReasonId,out cancellationReason))
                 .Returns(true)
                 .Verifiable();
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         [TestMethod]
         public async Task Cancel_HappyPath_ReturnsSuccessResponse()
         {
-           //Arrange
+           // Arrange
             var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode.Created)
             {
                 Body = new CancelAppointmentDeleteResponse { IsCancelled = true },

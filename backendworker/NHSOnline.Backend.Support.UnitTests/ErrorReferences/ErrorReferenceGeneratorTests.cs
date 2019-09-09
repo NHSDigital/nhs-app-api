@@ -45,8 +45,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         {
             var errorType = (ErrorTypes) Activator.CreateInstance(type);
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorType);
-
-
+            
             errorCode.Should().StartWith(expectedPrefix);
         }
         
@@ -156,6 +155,5 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             _disposed = true;
         }
-
     }
 }

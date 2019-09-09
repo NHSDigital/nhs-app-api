@@ -51,4 +51,9 @@
     <Folder Include="Temporal" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Sanitization\HtmlDataToSanitize.html" />
+    <EmbeddedResource Include="Sanitization\HtmlDataToSanitize.html" />
+  </ItemGroup>
+
 </Project>

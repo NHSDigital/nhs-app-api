@@ -13,9 +13,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private SessionValidator _systemUnderTest;
 
         [TestInitialize]
-        public void TestInitalize()
+        public void TestInitialize()
         {
-            Mock<ILogger<SessionValidator>> logger = new Mock<ILogger<SessionValidator>>();
+            var logger = new Mock<ILogger<SessionValidator>>();
             _systemUnderTest = new SessionValidator(logger.Object);
         }
 
@@ -24,38 +24,38 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [DataRow(null, "1234567890", "1234567890")]
         [DataRow("1234567890", null, "1234567890")]
         [DataRow("1234567890", "1234567890", null)]
-        public void IsPostValid_InvaliData_ReturnsFalse(string authCode, string codeVerifier, string redirectUrl)
+        public void IsPostValid_InvalidData_ReturnsFalse(string authCode, string codeVerifier, string redirectUrl)
         {
-            //Arrange
-            UserSessionRequest request = new UserSessionRequest()
+            // Arrange
+            var request = new UserSessionRequest
             {
                 AuthCode = authCode,
                 CodeVerifier = codeVerifier,
                 RedirectUrl = redirectUrl
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeFalse();
         }
 
         [TestMethod]
         public void IsPostValid_ValidData_ReturnsTrue()
         {
-            //Arrange
-            UserSessionRequest request = new UserSessionRequest()
+            // Arrange
+            var request = new UserSessionRequest
             {
                 AuthCode = "1234567890",
                 CodeVerifier = "1234567890",
                 RedirectUrl = "12334567890"
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.IsPostValid(request);
 
-            //Assert
+            // Assert
             result.Should().BeTrue();
         }
     }

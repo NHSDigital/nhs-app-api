@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
             CheckRegisteredMicrotestDemographicsService(services);
         }
 
-        public static void CheckRegisteredMicrotestDemographicsService(ServiceCollection serviceCollection)
+        private static void CheckRegisteredMicrotestDemographicsService(ServiceCollection serviceCollection)
         {
             serviceCollection.Should().NotBeNull();
 

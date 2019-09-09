@@ -40,8 +40,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         private const string MediaType = "application/xml";
         private const string Suid = "session_id";
 
-        private readonly int? PrescriptionsMaxCoursesSoftLimit = 100;
-        private readonly int? CoursesMaxCoursesLimit = 100;
+        private readonly int? _prescriptionsMaxCoursesSoftLimit = 100;
+        private readonly int? _coursesMaxCoursesLimit = 100;
 
         private ITppClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             _tppConfig = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, 
                 ApplicationProviderId, ApplicationDeviceType, CertificatePassphrase, CertificatePath, 
-                PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, Environment);
+                _prescriptionsMaxCoursesSoftLimit, _coursesMaxCoursesLimit, Environment);
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new TppHttpClient(new HttpClient(_mockHttpHandler), _tppConfig);
 
@@ -81,6 +81,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public async Task AuthenticatePostRequest_ReturnsAuthenticateReply_WhenValidlyRequested()
         {
+            // Arrange
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
             authenticateRequestModel.Uuid = Uuid;
@@ -113,8 +114,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(authenticateRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
+            // Act
             var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
 
+            // Assert
             response.Body.Should().BeEquivalentTo(expectedAuthenticateResponse);
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -125,6 +128,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public async Task AuthenticatePostRequest_ReturnsErrorWithInternalServerErrorCode_WhenResponseIsIncomplete()
         {
+            // Arrange
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
             authenticateRequestModel.Uuid = Uuid;
@@ -161,8 +165,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(authenticateRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
+            // Act
             var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
             
+            // Assert
             response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             VerifyLogging(authenticateRequestModel);
         }
@@ -170,6 +176,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public async Task AuthenticatePostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
         {
+            // Arrange
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
             authenticateRequestModel.Uuid = Uuid;
@@ -195,8 +202,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(authenticateRequestModel.SerializeXml())
                 .Respond(MediaType, expectedErrorResponse.SerializeXml());
 
+            // Act
             var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
-
+            
+            // Assert
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
@@ -213,6 +222,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task AuthenticatePostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
             HttpStatusCode value)
         {
+            // Arrange
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
             authenticateRequestModel.Uuid = Uuid;
@@ -235,19 +245,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithTppHeaders(tppRequestHeaders)
                 .Respond(value);
 
+            // Act
             var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
 
+            // Assert
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
 
             VerifyLogging(authenticateRequestModel);
         }
 
-
         [TestMethod]
         public async Task
             OrderPrescriptionPostRequest_MakesHttpRequestToCorrectUrlWithCorrectHeaders_AndRespondsWithDeserializedXml()
         {
+            // Arrange
             var requestMedicationRequestModel = _fixture.Create<RequestMedication>();
             requestMedicationRequestModel.UnitId = UnitId;
             requestMedicationRequestModel.Uuid = Uuid;
@@ -275,8 +287,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(requestMedicationRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
+            // Act
             var response = await _systemUnderTest.OrderPrescriptionsPost(tppUserSession, requestMedicationRequestModel);
 
+            // Assert
             response.Body.Should().BeEquivalentTo(expectedMedicationResponse);
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -288,6 +302,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public async Task LinkAccountPostRequest_ReturnsLinkAccountReply_WhenValidlyRequested()
         {
+            // Arrange
             var linkRequestModel = _fixture.Create<LinkAccount>();
             linkRequestModel.OrganisationCode = UnitId;
             linkRequestModel.Uuid = Uuid;
@@ -315,8 +330,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(linkRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
 
+            // Act
             var response = await _systemUnderTest.LinkAccountPost(linkRequestModel);
 
+            // Assert
             response.Body.Should().BeEquivalentTo(expectedLinkAccountResponse);
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -327,7 +344,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         
         [TestMethod]
         public async Task LinkAccountPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
-        {            
+        {   
+            // Arrange
             var linkAccountRequestModel = _fixture.Create<LinkAccount>();
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
@@ -347,8 +365,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(linkAccountRequestModel.SerializeXml())
                 .Respond(MediaType, expectedErrorResponse.SerializeXml());
 
+            // Act
             var response = await _systemUnderTest.LinkAccountPost(linkAccountRequestModel);
 
+            // Assert
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
@@ -365,6 +385,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task LinkAccountPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
             HttpStatusCode value)
         {
+            // Arrange
             var linkAccountRequestModel = _fixture.Create<LinkAccount>();
             linkAccountRequestModel.OrganisationCode = UnitId;
             linkAccountRequestModel.Uuid = Uuid;
@@ -381,8 +402,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithTppHeaders(tppRequestHeaders)
                 .Respond(value);
 
+            // Act
             var response = await _systemUnderTest.LinkAccountPost(linkAccountRequestModel);
 
+            // Assert
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
 
@@ -431,7 +454,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         
         [TestMethod]
         public async Task NhsUserPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
-        {            
+        {   
+            // Arrange
             var nhsAddUserRequestModel = _fixture.Create<AddNhsUserRequest>();
             nhsAddUserRequestModel.OrganisationCode = UnitId;
             nhsAddUserRequestModel.Uuid = Uuid;
@@ -451,8 +475,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(nhsAddUserRequestModel.SerializeXml())
                 .Respond(MediaType, expectedErrorResponse.SerializeXml());
 
+            // Act
             var response = await _systemUnderTest.NhsUserPost(nhsAddUserRequestModel);
 
+            // Assert
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
@@ -585,20 +611,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(linkAccountRequestModel.SerializeXml())
                 .Respond(MediaType, expectedErrorResponse.SerializeXml());
 
-            UnauthorisedGpSystemHttpRequestException caughtException = null;
-
             // Act
-            try
-            {
-                await _systemUnderTest.LinkAccountPost(linkAccountRequestModel);
-            }
-            catch (UnauthorisedGpSystemHttpRequestException e)
-            {
-                caughtException = e;
-            }
+            Func<Task> act = async () => { await _systemUnderTest.LinkAccountPost(linkAccountRequestModel); };
 
             // Assert
-            Assert.IsNotNull(caughtException);
+            await act.Should().ThrowAsync<UnauthorisedGpSystemHttpRequestException>();
 
             VerifyLogging(linkAccountRequestModel);
         }
@@ -669,6 +686,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             
             // Act
             var response = await _systemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
+            
+            // Assert
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
@@ -685,6 +704,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task RequestSystmOnlineMessagesPost_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
             HttpStatusCode value)
         {
+            // Act
             var requestModel = _fixture.Create<RequestSystmOnlineMessages>();
             requestModel.UnitId = UnitId;
             requestModel.Uuid = Uuid;
@@ -701,8 +721,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithTppHeaders(tppRequestHeaders)
                 .Respond(value);
 
+            // Act
             var response = await _systemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
 
+            // Assert
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
 

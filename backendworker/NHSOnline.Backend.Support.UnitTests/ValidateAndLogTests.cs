@@ -32,7 +32,6 @@ namespace NHSOnline.Backend.Support.UnitTests
                 .IsNotNullOrWhitespace("StringTest", "StringTest")
                 .IsNotNull(DateTime.Now, "DateTime");
 
-
             validator.IsValid().Should().BeTrue();
         }
 

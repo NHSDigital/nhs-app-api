@@ -471,6 +471,5 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             result.Should().NotBeNull();
             result.SpecialRequestNecessity.Should().Be(Necessity.Optional);
         }
-
     }
 }

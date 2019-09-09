@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -89,8 +90,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
 
             // Assert
             _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
         }
 
         [TestMethod]
@@ -108,8 +109,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
 
             // Assert
             _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
         }
 
         [TestMethod]
@@ -125,12 +126,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
 
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            var value = okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.Success>()
+            var value = result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.Success>()
                 .Subject;
-            value.Response.ConsentGiven.Should().Be(consentRecord.ConsentGiven);
-            value.Response.UpdatedConsentRequired.Should().Be(consentRecord.UpdatedConsentRequired);
-            value.Response.AnalyticsCookieAccepted.Should().Be(consentRecord.AnalyticsCookieAccepted);
+            using (new AssertionScope())
+            {
+                value.Response.ConsentGiven.Should().Be(consentRecord.ConsentGiven);
+                value.Response.UpdatedConsentRequired.Should().Be(consentRecord.UpdatedConsentRequired);
+                value.Response.AnalyticsCookieAccepted.Should().Be(consentRecord.AnalyticsCookieAccepted);
+            }
         }
 
         [TestMethod]
@@ -148,9 +152,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             var value = okObjectResult.Value.Should()
                 .BeAssignableTo<TermsAndConditionsFetchConsentResult.NoConsentFound>().Subject;
-            value.Response.ConsentGiven.Should().Be(false);
-            value.Response.UpdatedConsentRequired.Should().Be(false);
-            value.Response.AnalyticsCookieAccepted.Should().Be(false);
+            using (new AssertionScope())
+            {
+                value.Response.ConsentGiven.Should().BeFalse();
+                value.Response.UpdatedConsentRequired.Should().BeFalse();
+                value.Response.AnalyticsCookieAccepted.Should().BeFalse();
+            }
         }
 
         [TestMethod]
@@ -165,8 +172,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
 
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status463FailedToFetchConsent);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status463FailedToFetchConsent);
         }
     }
 }

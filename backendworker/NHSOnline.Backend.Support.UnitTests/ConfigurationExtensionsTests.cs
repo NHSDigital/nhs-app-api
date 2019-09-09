@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Support.UnitTests
     [TestClass]
     public class ConfigurationExtensionsTests
     {
-        const string ConfigurationKeyName = "configuration_key";
+        private const string ConfigurationKeyName = "configuration_key";
         private IConfigurationBuilder _configurationBuilder;
         private Mock<ILogger<ConfigurationExtensionsTests>> _logger;
 
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Support.UnitTests
             var result = configuration.GetIntOrDefault(ConfigurationKeyName, _logger.Object);
 
             // Assert
-            Assert.AreEqual(1, result);
+            result.Should().Be(1);
         }
 
         [DataTestMethod]
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Support.UnitTests
             var result = configuration.GetIntOrDefault(ConfigurationKeyName, _logger.Object);
 
             // Assert
-            Assert.AreEqual(0, result);
+            result.Should().Be(0);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Support.UnitTests
             var result = configuration.GetIntOrDefault(ConfigurationKeyName, _logger.Object);
 
             // Assert
-            Assert.AreEqual(0, result);
+            result.Should().Be(0);
         }
 
         [TestMethod]

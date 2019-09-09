@@ -20,25 +20,40 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [TestMethod]
         public void IsValid_ReturnsFalse_WhenBirthDateIsUnder16()
         {
-            var todaysDateMinusOneDay = DateTime.Now.AddYears(-16).AddDays(1);
+            // Arrange
+            var todayMinusOneDay = DateTime.Now.AddYears(-16).AddDays(1);
             
-            _minimumAgeValidator.IsValid(todaysDateMinusOneDay, MinimumLinkageAge).Should().BeFalse();
+            // Act
+            var result = _minimumAgeValidator.IsValid(todayMinusOneDay, MinimumLinkageAge);
+                
+            // Assert
+            result.Should().BeFalse();
         }
         
         [TestMethod]
         public void IsValid_ReturnsTrue_WhenBirthDateIsExactly16()
         {
-            var todaysDateMinus16Years = DateTime.Now.AddYears(-16);
+            // Arrange
+            var todayMinus16Years = DateTime.Now.AddYears(-16);
             
-            _minimumAgeValidator.IsValid(todaysDateMinus16Years, MinimumLinkageAge).Should().BeTrue();
+            // Act
+            var result = _minimumAgeValidator.IsValid(todayMinus16Years, MinimumLinkageAge);
+                
+            // Assert
+            result.Should().BeTrue();
         }
         
         [TestMethod]
         public void IsValid_ReturnsTrue_WhenBirthDateIsOver16()
         {
-            var todaysDateMinus17Years = DateTime.Now.AddYears(-16).AddDays(-1);
+            // Arrange
+            var todayMinus17Years = DateTime.Now.AddYears(-16).AddDays(-1);
             
-            _minimumAgeValidator.IsValid(todaysDateMinus17Years, MinimumLinkageAge).Should().BeTrue();
+            // Act
+            var result = _minimumAgeValidator.IsValid(todayMinus17Years, MinimumLinkageAge);
+                
+            // Assert
+            result.Should().BeTrue();
         }
     }
 }

@@ -113,10 +113,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             // Assert
             _mockVisionClient.VerifyAll();
             
-            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
-            
-            createdResult.Should().BeEquivalentTo(expectedResult);
-
+            result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject
+                .Should().BeEquivalentTo(expectedResult);
         }
 
         [TestMethod]

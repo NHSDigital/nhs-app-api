@@ -18,9 +18,8 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         private IFixture _fixture;
         private CitizenIdSigningKeysService _systemUnderTest;
         private Mock<ICitizenIdClient> _citizenIdClientMock;
-        private string _signingKey =
-            "{\"keys\": [{\"kty\": \"RSA\", \"e\": \"AQAB\", \"n\": \"vYKSjXOcKZI5eNvKT0BuMUAy-N7-f1-88H-Lgz5UOlyAT3wmKNHwwuz11qmovmZaKSTHk94bLIigwGIoc-nsQOahLxS1T-g0R5xN5PRvZUfK6B5W7ONX5EaXDXimKnxQLvIFXJpqzYyStkhYROTuELv70aKQNfYBrb2yZxdPNbjMzSL881awt6wiTIk76kDpzGJ0TcBBrhNKOxPU_L00FT-ASf2mKENTx2QLW8Srgw2SYo3xWhhccz1cEgjllnsX21EYNM95_hcQOBFeDfU7lYEfYGj4bX2mHE4m5up0uLAf5hOIXnfvpmtOKmUizyA9_3yPye1zJpIfZKNgtUo6-Q\"}]}";
-        
+        private const string SigningKey = "{\"keys\": [{\"kty\": \"RSA\", \"e\": \"AQAB\", \"n\": \"vYKSjXOcKZI5eNvKT0BuMUAy-N7-f1-88H-Lgz5UOlyAT3wmKNHwwuz11qmovmZaKSTHk94bLIigwGIoc-nsQOahLxS1T-g0R5xN5PRvZUfK6B5W7ONX5EaXDXimKnxQLvIFXJpqzYyStkhYROTuELv70aKQNfYBrb2yZxdPNbjMzSL881awt6wiTIk76kDpzGJ0TcBBrhNKOxPU_L00FT-ASf2mKENTx2QLW8Srgw2SYo3xWhhccz1cEgjllnsX21EYNM95_hcQOBFeDfU7lYEfYGj4bX2mHE4m5up0uLAf5hOIXnfvpmtOKmUizyA9_3yPye1zJpIfZKNgtUo6-Q\"}]}";
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -31,10 +30,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         }
 
         [TestMethod]
-        public async Task GetSigningKeys_GetSigningKeysSuccesfull_ReturnsValidSigningKeys()
+        public async Task GetSigningKeys_GetSigningKeysSuccessful_ReturnsValidSigningKeys()
         {
-            //Arrange
-            var signingKeys = new JsonWebKeySet(_signingKey);
+            // Arrange
+            var signingKeys = new JsonWebKeySet(SigningKey);
             var expectedResponse = Option.Some(signingKeys);
             
             var signingKeysResponse = new CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.OK)
@@ -47,10 +46,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.GetSigningKeys())
                 .ReturnsAsync(signingKeysResponse);
             
-            //Act
+            // Act
             var result = await _systemUnderTest.GetSigningKeys();
             
-            //Assert
+            // Assert
             _citizenIdClientMock.VerifyAll();
             result.Should().Be(expectedResponse);
         }
@@ -58,7 +57,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public async Task GetSigningKeys_GetSigningKeysFails_ReturnsNone()
         {
-            //Arrange
+            // Arrange
             var expectedResult = Option.None<JsonWebKeySet>();
             
             var signingKeysResponse = new CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.BadRequest)
@@ -71,10 +70,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.GetSigningKeys())
                 .ReturnsAsync(signingKeysResponse);
 
-            //Act
+            // Act
             var result = await _systemUnderTest.GetSigningKeys();
             
-            //Assert
+            // Assert
             _citizenIdClientMock.VerifyAll();
             result.Should().Be(expectedResult);
         }
@@ -82,7 +81,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public async Task GetSigningKeys_GetSigningKeysSucceedsWithInvalid_ReturnsNone()
         {
-            //Arrange
+            // Arrange
             var expectedResult = Option.None<JsonWebKeySet>();
             
             var signingKeysResponse = new CitizenIdApiObjectResponse<JsonWebKeySet>(HttpStatusCode.BadRequest)
@@ -95,10 +94,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.GetSigningKeys())
                 .ReturnsAsync(signingKeysResponse);
 
-            //Act
+            // Act
             var result = await _systemUnderTest.GetSigningKeys();
             
-            //Assert
+            // Assert
             _citizenIdClientMock.VerifyAll();
             result.Should().Be(expectedResult);
         }

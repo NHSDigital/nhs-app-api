@@ -46,6 +46,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public void ReadToken_HappyPath_ReturnsIdToken()
         {
+            // Arrange
             var jwtToken = _fixture.Create<string>();
 
             _mockJwtTokenValidator
@@ -76,8 +77,11 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var signingKeys = Mock.Of<JsonWebKeySet>();
 
             _systemUnderTest = _fixture.Create<IdTokenService>();
+            
+            // Act
             var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
 
+            // Assert
             _mockParameterBuilder.VerifyAll();
             _mockJwtTokenValidator.VerifyAll();
             mockPrincipal.VerifyAll();
@@ -89,19 +93,24 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public void ReadToken_FailWithEmptyToken_ReturnsNone()
         {
+            // Arrange
             const string jwtToken = "";
 
             var signingKeys = Mock.Of<JsonWebKeySet>();
 
             _systemUnderTest = _fixture.Create<IdTokenService>();
+            
+            // Act
             var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
 
-            result.HasValue.Should().Be(false);
+            // Assert
+            result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
         public void ReadToken_FailWhenCannotReadToken_ReturnsNone()
         {
+            // Arrange
             var jwtToken = _fixture.Create<string>();
 
             _mockJwtTokenValidator
@@ -111,16 +120,20 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var signingKeys = Mock.Of<JsonWebKeySet>();
 
             _systemUnderTest = _fixture.Create<IdTokenService>();
+            
+            // Act
             var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
 
+            // Assert
             _mockJwtTokenValidator.VerifyAll();
 
-            result.HasValue.Should().Be(false);
+            result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
         public void ReadToken_FailWhenTokenCannotBeValidated_ReturnsNone()
         {
+            // Arrange
             var jwtToken = _fixture.Create<string>();
 
             _mockJwtTokenValidator
@@ -133,16 +146,20 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var signingKeys = Mock.Of<JsonWebKeySet>();
 
             _systemUnderTest = _fixture.Create<IdTokenService>();
+            
+            // Act
             var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
 
+            // Assert
             _mockJwtTokenValidator.VerifyAll();
 
-            result.HasValue.Should().Be(false);
+            result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
         public void ReadToken_FailsWhenCidTokenNotFound_ReturnsNone()
         {
+            // Arrange
             var jwtToken = _fixture.Create<string>();
 
             _mockJwtTokenValidator
@@ -173,13 +190,16 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var signingKeys = Mock.Of<JsonWebKeySet>();
 
             _systemUnderTest = _fixture.Create<IdTokenService>();
+            
+            // Act
             var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
 
+            // Assert
             _mockParameterBuilder.VerifyAll();
             _mockJwtTokenValidator.VerifyAll();
             mockPrincipal.VerifyAll();
 
-            result.HasValue.Should().Be(false);
+            result.HasValue.Should().BeFalse();
         }
     }
 }

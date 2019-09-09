@@ -193,6 +193,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         [TestMethod]
         public void Map_ReturnsAppropriateSlotDisplayName()
         {
+            // Arrange
             var appointmentSlot1 =
                 CreateSlot("2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
 
@@ -216,8 +217,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var time1 = MockDateTimeOffset("2018-05-09T10:59:19");
             var time2 = MockDateTimeOffset("2018-07-12T10:59:19");
 
+            // Act
             var actualResponse = _systemUnderTest.Map(sessions);
 
+            // Assert
             var slot1 = new Backend.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",

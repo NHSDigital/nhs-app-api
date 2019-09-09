@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
             result.PharmacyOdsCode.Should().Be(null);
-            result.HaveAllChecksPassed.Should().Be(true);
+            result.HaveAllChecksPassed.Should().BeTrue();
         }
 
         [DataTestMethod]
@@ -544,7 +544,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
             result.PharmacyOdsCode.Should().Be(null);
-            result.HaveAllChecksPassed.Should().Be(false);
+            result.HaveAllChecksPassed.Should().BeFalse();
         }
         
         [DataRow("SS")]
@@ -632,7 +632,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
             result.PharmacyOdsCode.Should().Be(null);
-            result.HaveAllChecksPassed.Should().Be(false);
+            result.HaveAllChecksPassed.Should().BeFalse();
         }
          
         [TestMethod]
@@ -753,27 +753,27 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(httpStatusCode);
             result.PharmacyOdsCode.Should().Be(ExpectedPharmacyOdsCodeInResult);
-            result.HaveAllChecksPassed.Should().Be(false);
+            result.HaveAllChecksPassed.Should().BeFalse();
         }
         
         [DataTestMethod]
         public async Task
             NominatedPharmacyGet_ReturnsUnsuccessfulResponseWhenPharmacySearchFailsDueToClientFailure()
         {
-            //Arrange
+            // Arrange
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.IsAny<QUPAIN000008UK02>()
                 )).Returns(Task.FromResult(GetUnsuccessfulNominatedPharmacyApiObjectResponse()))               
                 .Verifiable();
 
-            //Act
+            // Act
             var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession);
             
-            //Assert
+            // Assert
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-            result.HaveAllChecksPassed.Should().Be(false);        
+            result.HaveAllChecksPassed.Should().BeFalse();        
         }
         
         [TestMethod]

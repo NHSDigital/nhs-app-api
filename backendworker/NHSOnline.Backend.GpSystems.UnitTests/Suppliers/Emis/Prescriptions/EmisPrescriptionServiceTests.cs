@@ -89,8 +89,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -175,11 +175,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
-
-            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
-            getPrescriptionsResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(1);
             capturedItemToMap.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.Should().HaveCount(1);
@@ -280,11 +277,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
-            getPrescriptionsResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(3);
 
@@ -315,7 +310,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var prescriptionRequests = new List<PrescriptionRequest>();
             var medicationCourses = new List<MedicationCourse>();
 
-            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            for (var i = 0; i < numberOfCoursesToCreate; i++)
             {
                 var courseGuid = Guid.NewGuid().ToString();
 
@@ -365,17 +360,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
-            getPrescriptionsResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(expectedNumberOfPrescriptions);
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavilable_WhenErrorReceivedFromEmis()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromEmis()
         {
             // Arrange
             var date = DateTimeOffset.Now;
@@ -489,8 +482,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsPost(_emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()));
-            result.Should().BeAssignableTo<OrderPrescriptionResult.Success>();
-            ((OrderPrescriptionResult.Success) result).Should().NotBeNull();
+
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Success>()
+                .Subject.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -563,7 +557,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         public async Task Post_ReturnsBadGateway_WhenErrorReceivedFromEmis()
         {
             // Arrange
-            var generalError = "general error";
+            const string generalError = "general error";
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = generalError;
 

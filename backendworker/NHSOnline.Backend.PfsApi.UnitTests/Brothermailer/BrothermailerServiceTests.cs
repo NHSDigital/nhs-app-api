@@ -53,14 +53,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
         [DataRow("")]
         [DataRow(null)]
         public async Task
-            SendEmailAddress_WhenCalledWithMissingOdscode_ReturnsBadRequest(string odscode)
+            SendEmailAddress_WhenCalledWithMissingOdsCode_ReturnsBadRequest(string odsCode)
         {
             // Arrange
-            var missingOdscodeRequest = 
-                new BrothermailerRequest { OdsCode = odscode };
+            var missingOdsCodeRequest = 
+                new BrothermailerRequest { OdsCode = odsCode };
             
             // Act
-            var result = await _brothermailerService.SendEmailAddress(missingOdscodeRequest);
+            var result = await _brothermailerService.SendEmailAddress(missingOdsCodeRequest);
             
             // Assert
             result.Should().BeAssignableTo<BrothermailerResult.BadRequest>();
@@ -70,15 +70,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
         public async Task
             SendEmailAddress_WhenCalledWithValidEmail_ReturnsSuccessfulResponse()
         {
-
             // Arrange
-            const string validOdscode = "N12345";
+            const string validOdsCode = "N12345";
             const string validEmailAddress = "test@test.com";
             
             var validBrothermailerRequest = 
                 new BrothermailerRequest
                 {
-                    OdsCode = validOdscode,
+                    OdsCode = validOdsCode,
                     EmailAddress = validEmailAddress
                 };
 
@@ -103,15 +102,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
         public async Task
             SendEmailAddress_WhenCalledWithInvalidEmail_ReturnsBadRequest()
         {
-
             // Arrange
-            const string validOdscode = "N12345";
+            const string validOdsCode = "N12345";
             const string invalidEmail = "test.com";
             
             var invalidEmailRequest = 
                 new BrothermailerRequest
                 {
-                    OdsCode = validOdscode,
+                    OdsCode = validOdsCode,
                     EmailAddress = invalidEmail
                 };
 
@@ -121,7 +119,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
                     IsSuccess = false, 
                     IsInvalidEmail = true
                 };
-
 
             _brothermailerClient.Setup(x => x.SendEmailAddress(invalidEmailRequest))
                 .Returns(Task.FromResult(invalidEmailBrothermailerResponse));
@@ -136,15 +133,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
         [TestMethod] public async Task
             SendEmailAddress_WhenCalledWithValidEmailButBrothermailerRespondsWithUnsuccessfulStatus_ReturnsInternalServerError()
         {
-
             // Arrange
-            const string validOdscode = "N12345";
+            const string validOdsCode = "N12345";
             const string validEmail = "test@test.com";
             
             var validEmailRequest = 
                 new BrothermailerRequest
                 {
-                    OdsCode = validOdscode,
+                    OdsCode = validOdsCode,
                     EmailAddress = validEmail
                 };
 

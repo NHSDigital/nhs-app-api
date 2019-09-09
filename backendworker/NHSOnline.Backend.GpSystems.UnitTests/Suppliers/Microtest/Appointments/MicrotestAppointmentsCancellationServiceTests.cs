@@ -57,14 +57,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 .Returns(true)
                 .Verifiable();
 
-            //Arrange
+            // Arrange
             var response = new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.NoContent);
             MockMicrotestClientAppointmentDeleteMethod(response);
 
-            //Act
+            // Act
             var cancelRequest = await _systemUnderTest.Cancel(_microtestUserSession, _appointmentCancelRequest);
 
-            //Assert
+            // Assert
             _cancellationReasonService.VerifyAll();
             _mockMicrotestClient.Verify();
             cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.Success>();
@@ -84,14 +84,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 .Returns(true)
                 .Verifiable();
 
-            //Arrange
+            // Arrange
             var response = new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Forbidden);
             MockMicrotestClientAppointmentDeleteMethod(response);
 
-            //Act
+            // Act
             var cancelRequest = await _systemUnderTest.Cancel(_microtestUserSession, _appointmentCancelRequest);
 
-            //Assert
+            // Assert
             _cancellationReasonService.VerifyAll();
             _mockMicrotestClient.Verify();
             cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
@@ -111,14 +111,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 .Returns(true)
                 .Verifiable();
 
-            //Arrange
+            // Arrange
             var response = new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Conflict);
             MockMicrotestClientAppointmentDeleteMethod(response);
 
-            //Act
+            // Act
             var cancelRequest = await _systemUnderTest.Cancel(_microtestUserSession, _appointmentCancelRequest);
 
-            //Assert
+            // Assert
             _cancellationReasonService.VerifyAll();
             _mockMicrotestClient.Verify();
             cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();

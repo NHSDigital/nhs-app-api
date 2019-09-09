@@ -149,8 +149,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(_validRegisterDeviceRequest);
 
             // Assert
-            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestMethod]
@@ -170,8 +170,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(_validRegisterDeviceRequest);
 
             // Assert
-            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
         }
 
         [TestMethod]
@@ -191,8 +191,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(_validRegisterDeviceRequest);
 
             // Assert
-            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestCleanup]

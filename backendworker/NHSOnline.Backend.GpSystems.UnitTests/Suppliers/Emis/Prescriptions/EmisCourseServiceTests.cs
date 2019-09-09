@@ -81,8 +81,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             Get_CoursesInResponseAreFilteredSoOnlyRepeatCoursesWhichCanBeRequestedAreReturned_WhenSuccessfulResponseFromEmis()
         {
             // Arrange
-            string expectedMedicationCourseGuid = Guid.NewGuid().ToString();
+            var expectedMedicationCourseGuid = Guid.NewGuid().ToString();
             var coursesResponse = new CoursesGetResponse
             {
                 Courses = new List<MedicationCourse>
@@ -143,8 +144,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
 
             var getCoursesResult = (GetCoursesResult.Success) result;
             getCoursesResult.Response.Should().Be(response);
@@ -163,7 +164,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Arrange
             var medicationCourses = new List<MedicationCourse>();
 
-            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            for (var i = 0; i < numberOfCoursesToCreate; i++)
             {
                 medicationCourses.Add(
                     new MedicationCourse
@@ -173,8 +174,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         MedicationCourseGuid = Guid.NewGuid().ToString(),
                     });
             }
-
-
+            
             var coursesResponse = new CoursesGetResponse
             {
                 Courses = medicationCourses,
@@ -201,8 +201,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
 
             var getCoursesResult = (GetCoursesResult.Success) result;
             getCoursesResult.Response.Should().Be(response);

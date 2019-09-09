@@ -49,8 +49,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         {
             // Act and Assert
             Action act = () => _demographicsToRegistrationMapper.Map(null);
-
-
+            
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("source");
         }
 
@@ -189,7 +188,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             // Act and Assert
             Action act = () => _lookupToRegistrationMapper.Map(registration, response);
 
-
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("existingRegistration");
         }
 
@@ -246,7 +244,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.Identifier.Should().Be(resource.Id);
             result.Decision.Should().Be(Decision.OptIn);
             result.DecisionDetails.Should().NotBeNull();
-            result.DecisionDetails.All.Should().Be(true);
+            result.DecisionDetails.All.Should().BeTrue();
             result.DecisionDetails.Choices.Should().HaveCount(3);
             result.DecisionDetails.Choices.Should().Contain("pancreas", ChoiceState.No);
             result.DecisionDetails.Choices.Should().Contain("heart", ChoiceState.NotStated);

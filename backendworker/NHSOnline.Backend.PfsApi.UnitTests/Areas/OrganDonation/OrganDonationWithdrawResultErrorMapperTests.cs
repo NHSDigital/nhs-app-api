@@ -58,8 +58,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = _organDonationResultErrorMapper.Map(httpStatus);
             
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<OrganDonationWithdrawResult.SystemError>();
+            result.Should().BeOfType<OrganDonationWithdrawResult.SystemError>()
+                .Subject.Should().NotBeNull();
         }
         
         [TestMethod]
@@ -69,8 +69,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = _organDonationResultErrorMapper.Map(HttpStatusCode.RequestTimeout);
             
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<OrganDonationWithdrawResult.Timeout>();
+            result.Should().BeOfType<OrganDonationWithdrawResult.Timeout>()
+                .Subject.Should().NotBeNull();
         }
         
         [TestMethod]

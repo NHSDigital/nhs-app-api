@@ -141,8 +141,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.GetPrescriptions(_userSession.GpUserSession, date, It.IsAny<DateTimeOffset>()));
-            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
-            value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
 
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, "Attempting to view prescriptions", It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved - 3 courses", It.IsAny<object[]>()));
@@ -204,13 +204,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.GetPrescriptions(_userSession.GpUserSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
-            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
-            value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
-            Assert.IsNotNull(value);
-            Assert.IsTrue(fromDateGenerated.HasValue);
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
+            fromDateGenerated.HasValue.Should().BeTrue();
 
             var xMonthsAgo = DateTimeOffset.Now.AddMonths(-PrescriptionsDefaultLastNumberMonthsToDisplay);
-            Assert.AreEqual(xMonthsAgo.Date, fromDateGenerated.Value.Date);
+            fromDateGenerated.Value.Date.Should().Be(xMonthsAgo.Date);
             
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, "Attempting to view prescriptions", It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved - 3 courses", It.IsAny<object[]>()));
@@ -304,8 +303,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Post(requestModel);
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             
             _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, "Attempting to create a prescription request with course ids: {0}", $"{firstGuid},{secondGuid}"));
             _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Error creating prescription request: Bad Request with course ids: {0}", $"{firstGuid},{secondGuid}"));

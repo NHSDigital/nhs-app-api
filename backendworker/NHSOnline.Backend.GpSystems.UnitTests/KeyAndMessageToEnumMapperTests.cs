@@ -41,8 +41,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
                 .AddKeyToEnum("4001552", InternalCode.PatientArchived)
                 .AddKeyToEnum("4001108", InternalCode.UserAlreadyLinked);
 
-
-
         [TestMethod]
         [DataRow("4031030", "Patient Facing Services API v2 is not enabled at this practice",
             InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice)]
@@ -55,11 +53,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
         [DataRow("4001552", "", InternalCode.PatientArchived)]
         public void Map_Successful(string key, string message, InternalCode expectedOutcome)
         {
+            // Act
             var result = _mapperUnderTest.Map(_logger, key, message);
 
+            // Assert
             result.Should().Be(expectedOutcome);
         }
-
 
         [TestMethod]
         [DataRow("4031031", "Patient Facing Services API v2 is not enabled at this practice")]
@@ -68,23 +67,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
         [DataRow("400", "")]
         public void Map_Unsuccessful(string key, string message)
         {
+            // Act
             var result = _mapperUnderTest.Map(_logger, key, message);
 
+            // Assert
             result.Should().Be(null);
         }
-
 
         [TestMethod]
         public void Map_MultipleMessages_Successful()
         {
-            var key = "4031030";
-            var message1 = "Patient Facing Services API v2 is not enabled at this practice";
-            var message2 = "Non matching";
-            var expectedOutcome = InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice;
+            // Arrange
+            const string key = "4031030";
+            const string message1 = "Patient Facing Services API v2 is not enabled at this practice";
+            const string message2 = "Non matching";
+            const InternalCode expectedOutcome = InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice;
 
+            // Act
             var result1 = _mapperUnderTest.Map(_logger, key, message1, message2);
             var result2 = _mapperUnderTest.Map(_logger, key, message2, message1);
 
+            // Assert
             result1.Should().Be(expectedOutcome);
             result2.Should().Be(expectedOutcome);
         }
@@ -92,9 +95,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
         [TestMethod]
         public void Map_NullKey_ThrowsException()
         {
-            new Action(() => _mapperUnderTest.Map(_logger, null, "Something"))
-                .Should()
-                .Throw<ArgumentNullException>().And.ParamName.Should().Be("key");
+            // Act
+            var act =  new Action(() => _mapperUnderTest.Map(_logger, null, "Something"));
+                
+            // Assert
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("key");
         }
     }
 }

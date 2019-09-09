@@ -83,8 +83,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
                 _microtestUserSession.OdsCode, _microtestUserSession.NhsNumber, fromDate)
             );
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -140,12 +140,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
                 _microtestUserSession.OdsCode, _microtestUserSession.NhsNumber, fromDate)
             );
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
 
-            var getPrescriptionsResult = (GetPrescriptionsResult.Success)result;
-            getPrescriptionsResult.Response.Should().Be(response);
-            
             capturedItemToMap.Courses.Should().HaveCount(1);
             capturedItemToMap.Courses.ElementAt(0).Id.Should().Be(repeatCourseGuid);
         }
@@ -206,11 +203,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
                 _microtestUserSession.OdsCode, _microtestUserSession.NhsNumber, fromDate)
             );
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success)result).Response.Should().NotBeNull();
-
-            var getPrescriptionsResult = (GetPrescriptionsResult.Success)result;
-            getPrescriptionsResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(3);
 
@@ -232,7 +226,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             var medicationCourses = new List<PrescriptionCourse>();
 
-            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            for (var i = 0; i < numberOfCoursesToCreate; i++)
             {
                 var courseGuid = Guid.NewGuid().ToString();
 
@@ -268,17 +262,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
                 _microtestUserSession.OdsCode, _microtestUserSession.NhsNumber, fromDate)
             );
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success)result).Response.Should().NotBeNull();
-
-            var getPrescriptionsResult = (GetPrescriptionsResult.Success)result;
-            getPrescriptionsResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(expectedNumberOfPrescriptions);
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavilable_WhenErrorReceivedFromMicrotest()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromMicrotest()
         {
             // Arrange
             DateTimeOffset? fromDate = DateTimeOffset.Now;
@@ -510,8 +501,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             // Assert
             _microtestClient.Verify(x => x.PrescriptionsPost(_microtestUserSession.OdsCode,
                 _microtestUserSession.NhsNumber, It.IsAny<PrescriptionRequestsPost>()));
-            var successResult = result.Should().BeAssignableTo<OrderPrescriptionResult.PartialSuccess>().Subject;
-            successResult.Should().NotBeNull();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.PartialSuccess>().Subject
+                .Should().NotBeNull();
             expectedRequest.Should().BeEquivalentTo(capturedPostRequest);
         }
     }

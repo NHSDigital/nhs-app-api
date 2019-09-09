@@ -71,8 +71,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Cipher
             decryptedData.Should().NotBeNullOrEmpty();
             decryptedData.Should().BeEquivalentTo("some_data_to_encrypt");
         }
-        
-        
+
         [TestMethod]
         public void CheckEncyptIsNotConsistant()
         {

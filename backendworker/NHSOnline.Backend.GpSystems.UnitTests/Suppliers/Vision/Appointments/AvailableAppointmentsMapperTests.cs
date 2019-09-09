@@ -442,7 +442,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             return dateTime.AddHours(int.Parse(parts[0], Thread.CurrentThread.CurrentCulture))
                 .AddMinutes(int.Parse(parts[1], Thread.CurrentThread.CurrentCulture));
         }
-       
 
         private static AvailableAppointmentsResponse CreateAvailableAppointmentsResponse(
             List<FreeSlot> slots,

@@ -71,8 +71,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             Get_CoursesInResponseAreFilteredSoOnlyRepeatCoursesWhichCanBeRequestedAreReturned_WhenSuccessfulResponseFromMicrotest()
         {
             // Arrange
-            string expectedMedicationCourseGuid = Guid.NewGuid().ToString();
+            var expectedMedicationCourseGuid = Guid.NewGuid().ToString();
             var coursesResponse = new CoursesGetResponse
             {
                 Courses = new List<Course>
@@ -137,11 +137,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success)result).Response.Should().NotBeNull();
-
-            var getCoursesResult = (GetCoursesResult.Success)result;
-            getCoursesResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(1);
             capturedItemToMap.Courses.ElementAt(0).Id.Should().Be(expectedMedicationCourseGuid);
@@ -157,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             // Arrange
             var courses = new List<Course>();
 
-            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            for (var i = 0; i < numberOfCoursesToCreate; i++)
             {
                 courses.Add(
                     new Course
@@ -193,11 +190,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success)result).Response.Should().NotBeNull();
-
-            var getCoursesResult = (GetCoursesResult.Success)result;
-            getCoursesResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().Be(response);
+            
             capturedItemToMap.Courses.Should().HaveCount(expectedNumberOfCourses);
         }
 
@@ -261,11 +256,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
-            result.Should().BeAssignableTo<GetCoursesResult.Success>();
-            ((GetCoursesResult.Success)result).Response.Should().NotBeNull();
-
-            var getCoursesResult = (GetCoursesResult.Success)result;
-            getCoursesResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(4);
             capturedItemToMap.Courses.ElementAt(0).Name.Should().Be("a");

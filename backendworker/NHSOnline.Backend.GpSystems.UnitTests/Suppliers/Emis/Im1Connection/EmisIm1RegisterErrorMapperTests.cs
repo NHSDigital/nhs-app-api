@@ -44,11 +44,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Act
             var result = EmisIm1RegisterErrorMapper.Map(response, _logger.Object);
+            
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
             var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be((int)Im1ConnectionErrorCodes.InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice);
+            conflictResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice);
         }
 
         [TestMethod]
@@ -59,11 +60,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Act
             var result = EmisIm1RegisterErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase) result;
-            conflictResult.ErrorCode.Should().Be((int)Im1ConnectionErrorCodes.InternalCode.NoUserFoundForLinkageDetails);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserFoundForLinkageDetails);
         }
 
         [TestMethod]
@@ -74,11 +74,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Act
             var result = EmisIm1RegisterErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be((int)Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
         }
 
         [TestMethod]
@@ -89,11 +88,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Act
             var result = EmisIm1RegisterErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var conflictResult = (Im1ConnectionRegisterResult.ErrorCase)result;
-            conflictResult.ErrorCode.Should().Be((int)Im1ConnectionErrorCodes.InternalCode.LinkageKeyLengthOutsideOfValidRange);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.LinkageKeyLengthOutsideOfValidRange);
         }
 
         [TestMethod]
@@ -104,12 +102,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Act
             var result = EmisIm1RegisterErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
-            var errorResult = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
-
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -120,10 +116,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Act
             var result = EmisIm1RegisterErrorMapper.Map(response, _logger.Object);
+            
             // Assert
-            result.Should().NotBeNull();
-            var errorResult = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
-            errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
     }
 }

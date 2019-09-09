@@ -14,7 +14,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using AppointmentsGetResponse = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments.AppointmentsGetResponse;
 using IAppointmentsResponseMapper = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments.IAppointmentsResponseMapper;
 
-
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 {
     [TestClass]

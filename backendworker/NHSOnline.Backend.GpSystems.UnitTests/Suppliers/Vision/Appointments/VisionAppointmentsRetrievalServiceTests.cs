@@ -54,8 +54,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         [TestMethod]
         public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
-            // Arrange
-
             // Act
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
 

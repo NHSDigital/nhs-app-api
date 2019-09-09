@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             return response;
         }
 
-        private StandardErrorResponse CreateStandardErrorResponse(int? errorCode, string message)
+        private static StandardErrorResponse CreateStandardErrorResponse(int? errorCode, string message)
         {
             return errorCode == null ? null : new StandardErrorResponse
             {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             };
         }
 
-        private ExceptionErrorResponse CreateExceptionErrorResponse(int? errorCode, string message)
+        private static ExceptionErrorResponse CreateExceptionErrorResponse(int? errorCode, string message)
         {
             return new ExceptionErrorResponse
             {

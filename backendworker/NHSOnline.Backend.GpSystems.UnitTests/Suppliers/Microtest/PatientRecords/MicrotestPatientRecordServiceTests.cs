@@ -45,9 +45,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             
             // Act
             var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
-            
-            result.Should().BeAssignableTo<GetMyRecordResult.Success>();
-            ((GetMyRecordResult.Success) result).Response.Should().NotBeNull();
+
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>()
+                .Subject.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -57,12 +57,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 .Returns(Task.FromResult(
                     new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(HttpStatusCode.Forbidden)));
             
-            //Act
+            // Act
             var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
             
-            //Assert
-            result.Should().BeAssignableTo<GetMyRecordResult.Success>();
-            ((GetMyRecordResult.Success) result).Response.Should().BeEquivalentTo(new MyRecordResponse());
+            // Assert
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>()
+                .Subject.Response.Should().BeEquivalentTo(new MyRecordResponse());
         }
 
         [DataTestMethod]
@@ -77,12 +77,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 .Returns(Task.FromResult(
                     new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(statusCode)));
             
-            //Act
+            // Act
             var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
             
-            //Assert
+            // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.BadGateway>();
         }
     }
-    
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.GpSearch;
@@ -55,15 +56,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             _gpLookupClient
                 .Setup(x => x.PharmacySearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-
-
+            
             // Act
             var result = await _pharmacyService.GetPharmacyDetail(validOdsCode);
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
-            response.StatusCode.Should().Be(200);
-            response.Pharmacy.Should().BeEquivalentTo(organisationReturnResults[0]);
+            using (new AssertionScope())
+            {
+                response.StatusCode.Should().Be(200);
+                response.Pharmacy.Should().BeEquivalentTo(organisationReturnResults[0]);
+            }
         }
 
         [TestMethod]
@@ -71,15 +74,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             GetPharmacyDetail_WhenCalledWithInvalidODSCode_ReturnsArgumentException()
         {
             // Arrange
-            var validOdsCode = " ";
+            const string validOdsCode = " ";
 
             // Act
             var result = await _pharmacyService.GetPharmacyDetail(validOdsCode);
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
-            response.StatusCode.Should().Be(500);
-            response.Pharmacy.Should().BeNull();
+            using (new AssertionScope())
+            {
+                response.StatusCode.Should().Be(500);
+                response.Pharmacy.Should().BeNull();
+            }
         }
 
         [TestMethod]
@@ -95,15 +101,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             _gpLookupClient
                 .Setup(x => x.PharmacySearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-
-
+            
             // Act
             var result = await _pharmacyService.GetPharmacyDetail(validOdsCode);
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
-            response.StatusCode.Should().Be(400);
-            response.Pharmacy.Should().BeNull();
+            using (new AssertionScope())
+            {
+                response.StatusCode.Should().Be(400);
+                response.Pharmacy.Should().BeNull();
+            }
         }
 
         [TestMethod]
@@ -122,15 +130,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             _gpLookupClient
                 .Setup(x => x.PharmacySearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-
-
+            
             // Act
             var result = await _pharmacyService.GetPharmacyDetail(validOdsCode);
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
-            response.StatusCode.Should().Be(404);
-            response.Pharmacy.Should().BeNull();
+            using (new AssertionScope())
+            {
+                response.StatusCode.Should().Be(404);
+                response.Pharmacy.Should().BeNull();
+            }
         }
 
         [TestMethod]
@@ -151,8 +161,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             // Assert
             _gpLookupClient.Verify();
             result.Should().BeAssignableTo<PharmacyDetailResponse>();
-            result.StatusCode.Should().Be(503);
-            result.Pharmacy.Should().BeNull();
+            using (new AssertionScope())
+            {
+                result.StatusCode.Should().Be(503);
+                result.Pharmacy.Should().BeNull();
+            }
         }
         
         [TestMethod]

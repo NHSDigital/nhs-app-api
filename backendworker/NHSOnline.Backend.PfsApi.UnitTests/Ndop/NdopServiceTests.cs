@@ -38,16 +38,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
             // Arrange
             _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => null);
             const string testNhsNumber = "123456789"; 
-            // Act
             
+            // Act
             var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
             
             // Assert
             _ndopSigning.Verify(x => x.GetSigningCredentials());
             ndopResponse.Should().BeOfType<GetNdopResult.InternalServerError>();
         }
-        
-         
+
         [TestMethod]
         public void GetToken_WhenCalledAndExceptionOccursCreatingSigningCredentials_ReturnsInternalServerErrorResponse()
         {
@@ -124,7 +123,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
             // Assert
             _ndopSigning.Verify(x => x.GetSigningCredentials());
             ndopResponse.Should().BeOfType<GetNdopResult.InternalServerError>();
-
         }
     }
 }

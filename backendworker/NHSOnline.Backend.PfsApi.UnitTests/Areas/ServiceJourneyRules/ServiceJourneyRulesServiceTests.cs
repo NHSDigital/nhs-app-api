@@ -76,7 +76,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.NotFound>();
        }
 
-       [TestMethod] public async Task GetServiceJourneyRulesForOdsCode_InvalidRequest_ReturnsInternalServerError()
+       [TestMethod] 
+       public async Task GetServiceJourneyRulesForOdsCode_InvalidRequest_ReturnsInternalServerError()
        {
            // Arrange
            _serviceJourneyRulesClient.Setup(x => x.GetServiceJourneyRules(DefaultOdsCode))

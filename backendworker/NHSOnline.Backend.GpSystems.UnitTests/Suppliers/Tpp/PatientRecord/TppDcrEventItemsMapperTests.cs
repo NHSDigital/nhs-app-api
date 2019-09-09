@@ -20,17 +20,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         [TestMethod]
         public void Map_WithNullItemList_ReturnsEmptyList()
         {
+            // Arrange
             List<RequestPatientRecordItem> itemList = null;
 
+            // Act
             var result = _systemUnderTest.Map(itemList);
-
-            result.Should().NotBeNull();
+            
+            // Assert
             result.Should().BeEmpty();
         }
 
         [TestMethod]
         public void Map_WithListOfItems_ReturnsListOfMappedStrings()
         {
+            // Arrange
             var itemList = new List<RequestPatientRecordItem>
             {
                 new RequestPatientRecordItem
@@ -51,22 +54,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 }
             };
 
-            List<string> expectedResult = new List<string>()
+            var expectedResult = new List<string>
             {
                 "Medication template - Alimemazine 10mg tablets - 1 pack of 28 tablet(s) - [08:00-1][12:00-1][16:00-1][22:00-1]",
                 "Medication template - Benzoin tincture - 500 ml - use as directed",
                 "Medication - (R) Benzoin tincture - 500 ml - use as directed"
             };
 
+            // Act
             var result = _systemUnderTest.Map(itemList);
-
-            result.Should().NotBeNull();
+            
+            // Assert
             result.Should().BeEquivalentTo(expectedResult);
         }
         
         [TestMethod]
         public void Map_WithListOfEncodedItems_ReturnsListOfDecodedStrings()
         {
+            // Arrange
             var itemList = new List<RequestPatientRecordItem>
             {
                 new RequestPatientRecordItem
@@ -87,22 +92,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 }
             };
 
-            List<string> expectedResult = new List<string>()
+            var expectedResult = new List<string>
             {
                 "Medication template - Alimemazine 10mg tablets - 1 pack of 28 tablet(s) - [08:00-1][12:00-1][16:00-1][22:00-1]",
                 "Medication template - Benzoin tincture - 500 ml - use as directed",
                 "Medication - (R) Benzoin tincture - 500 ml - ; use as directed"
             };
 
+            // Act
             var result = _systemUnderTest.Map(itemList);
-
-            result.Should().NotBeNull();
+            
+            // Assert
             result.Should().BeEquivalentTo(expectedResult);
         }
         
         [TestMethod]
         public void Map_WithListOfItemsWithNullProperties_ReturnsListOfStrings()
         {
+            // Arrange
             var itemList = new List<RequestPatientRecordItem>
             {
                 new RequestPatientRecordItem
@@ -123,22 +130,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 }
             };
 
-            List<string> expectedResult = new List<string>()
+            var expectedResult = new List<string>
             {
                 " - Alimemazine 10mg tablets - 1 pack of 28 tablet(s) - [08:00-1][12:00-1][16:00-1][22:00-1]",
                 "Medication template - ",
                 " - "
             };
 
+            // Act
             var result = _systemUnderTest.Map(itemList);
-
-            result.Should().NotBeNull();
+            
+            // Assert
             result.Should().BeEquivalentTo(expectedResult);
         }
         
         [TestMethod]
         public void Map_WithListWithNullItems_ReturnsListOfStrings()
         {
+            // Arrange
             var itemList = new List<RequestPatientRecordItem>
             {
                 null,
@@ -150,14 +159,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 null
             };
 
-            List<string> expectedResult = new List<string>()
+            var expectedResult = new List<string>
             {
                 "Medication template - Benzoin tincture - 500 ml - use as directed"
             };
 
+            // Act
             var result = _systemUnderTest.Map(itemList);
-
-            result.Should().NotBeNull();
+            
+            // Assert
             result.Should().BeEquivalentTo(expectedResult);
         }
     }

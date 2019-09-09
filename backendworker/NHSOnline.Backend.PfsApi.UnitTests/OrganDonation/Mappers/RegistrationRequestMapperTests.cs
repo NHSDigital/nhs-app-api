@@ -128,8 +128,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
                 .Be(response.AdditionalDetails.ReligionId);
             result.Identifier.Should().ContainSingle().Which.Value.Should().Be(response.Registration.NhsNumber);
         }
-        
-        
+
         [TestMethod]
         public void MapToRegistrationRequest_MapsAdditionalDetails_Correctly()
         {

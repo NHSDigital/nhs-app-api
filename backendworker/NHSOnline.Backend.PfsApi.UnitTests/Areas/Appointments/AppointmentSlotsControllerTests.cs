@@ -106,8 +106,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             // Assert
             _mockAppointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
-            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<AppointmentSlotsResponse>();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {slotsResponse.Slots.Count()} slots"));
         }
@@ -168,13 +168,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get();
 
             // Assert
-
             _mockAppointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
-            result.Should().BeAssignableTo(typeof(StatusCodeResult));
-
-            var statusCodeResult = (StatusCodeResult) result;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Available appointment slots view unsuccessful due to supplier unavailable"));

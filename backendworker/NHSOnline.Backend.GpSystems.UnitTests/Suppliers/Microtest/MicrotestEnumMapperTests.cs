@@ -30,20 +30,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         [DataRow("Visit", Channel.Unknown)]
         public void MapChannel_ChannelIsMapped_ReturnsEnum(string channel, Channel expected)
         {
-            //Act
+            // Act
             var result = _systemUnderTest.MapChannel(channel, null);
 
-            //Assert
+            // Assert
             result.Should().Be(expected);
         }
 
         [TestMethod]
         public void MapChannel_ChannelIsNotMapped_ReturnsRequestedDefault()
         {
-            //Act
+            // Act
             var result = _systemUnderTest.MapChannel("not mapped", Channel.Telephone);
 
-            //Assert
+            // Assert
             result.Should().Be(Channel.Telephone);
         }
     }

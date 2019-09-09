@@ -77,8 +77,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().NotBeNull();
         }
 
         [DataTestMethod]
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             // Arrange
             var medications = new List<Medication>();
 
-            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            for (var i = 0; i < numberOfCoursesToCreate; i++)
             {
                 medications.Add(new Medication
                 {
@@ -125,17 +125,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
-            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
-
-            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
-            getPrescriptionsResult.Response.Should().Be(response);
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
 
             capturedItemToMap.Should().HaveCount(expectedNumberOfPrescriptions);
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavilable_WhenErrorReceivedFromEmis()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromEmis()
         {
             // Arrange
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
@@ -172,12 +169,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         [TestMethod]
         public async Task Get_ReturnsForbidden_WhenErrorReceivedNoAccessFromTpp()
         {
-            var expectedError = _fixture.Create<Error>();
-
-            // Tpp forbidden error code 
-            expectedError.ErrorCode = TppApiErrorCodes.NoAccess;
-            
             // Arrange
+            var expectedError = _fixture.Build<Error>()
+                .With(x => x.ErrorCode, TppApiErrorCodes.NoAccess)
+                .Create();
+
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(
                     Task.FromResult(
@@ -203,8 +199,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             // Arrange
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
-            var error = _fixture.Create<Error>();
-            error.UserFriendlyMessage = TppApiErrorMessages.Prescriptions_CourseAlreadyOrdered_IsUnavailable;
+            var error = _fixture.Build<Error>()
+                .With(x => x.UserFriendlyMessage, TppApiErrorMessages.Prescriptions_CourseAlreadyOrdered_IsUnavailable)
+                .Create();
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
@@ -227,8 +224,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             // Arrange
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
-            var error = _fixture.Create<Error>();
-            error.ErrorCode = TppApiErrorCodes.NoAccess;
+            var error = _fixture.Build<Error>()
+                .With(x => x.ErrorCode, TppApiErrorCodes.NoAccess)
+                .Create();
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
@@ -254,9 +252,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             // Arrange
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
-            var error = _fixture.Create<Error>();
-            error.UserFriendlyMessage = TppApiErrorMessages.ResourceManager
-                .GetString(errorKey, CultureInfo.InvariantCulture);
+            var error = _fixture.Build<Error>()
+                .With(x => x.UserFriendlyMessage, TppApiErrorMessages.ResourceManager
+                    .GetString(errorKey, CultureInfo.InvariantCulture))
+                .Create();
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
@@ -279,8 +278,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             // Arrange
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
-            var error = _fixture.Create<Error>();
-            error.UserFriendlyMessage = "General error";
+            var error = _fixture.Build<Error>()
+                .With(x => x.UserFriendlyMessage, "General error")
+                .Create();
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
@@ -358,6 +358,5 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
             result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
         }
-
     }
 }

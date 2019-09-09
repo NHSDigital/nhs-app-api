@@ -72,8 +72,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                     req.IdentityToken.Equals(createIm1ConnectionRequest.IdentityToken, StringComparison.Ordinal))
                 , gpSystemMock.Object), Times.Once);
 
-            result.Should().BeAssignableTo<LinkageResult>();
-            result.Should().BeOfType(typeof(LinkageResult.SuccessfullyRetrieved));
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>();
         }
 
         [TestMethod]
@@ -106,7 +105,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 _createLinkageKeysService.Object);
 
             // Act
-
             var result =
                 await _systemUnderTest.RetrieveLinkageKey(createIm1ConnectionRequest, gpSystemMock.Object);
 
@@ -120,8 +118,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                     req.IdentityToken.Equals(createIm1ConnectionRequest.IdentityToken, StringComparison.Ordinal))
                 , gpSystemMock.Object), Times.Once);
 
-            result.Should().BeAssignableTo<LinkageResult>();
-            result.Should().BeOfType(typeof(LinkageResult.SuccessfullyCreated));
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>();
         }
 
         private static RetrieveLinkageKeysRequest CreateIm1ConnectionRequest()

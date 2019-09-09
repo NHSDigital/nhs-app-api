@@ -34,22 +34,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         public void MapTestResultsRequestsGetResponseToTestResultsListResponse_WithNullDateValue_GivesATestResultWithEmptyDate()
         {
             // Arrange
-            var testResults = new List<TestResult>();
-            testResults.Add(new TestResult
+            var testResults = new List<TestResult>
             {
-                Value = new Value
+                new TestResult
                 {
-                    Term = "testTerm",
-                    TextValue = "testTextVal",
-                    NumericUnits = "cc",
-                    EffectiveDate = new EffectiveDate
+                    Value = new Value
                     {
-                        Value = null,
-                        DatePart = "mm-dd-yyyy",
-                    },
+                        Term = "testTerm",
+                        TextValue = "testTextVal",
+                        NumericUnits = "cc",
+                        EffectiveDate = new EffectiveDate { Value = null, DatePart = "mm-dd-yyyy", },
+                    }
                 }
-            });
-            
+            };
+
             // Act
             var mappedTestResultsList = _systemUnderTest.Map(new MedicationRootObject
             {

@@ -68,8 +68,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                                                 req.OdsCode.Equals(getLinkageRequest.OdsCode, StringComparison.Ordinal) &&
                                                 req.IdentityToken.Equals(getLinkageRequest.IdentityToken, StringComparison.Ordinal))), Times.Once);
 
-            result.Should().BeAssignableTo<LinkageResult>();
-            result.Should().BeOfType(typeof(LinkageResult.SuccessfullyRetrieved));
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>();
         }
         
         private static Mock<IGpSystem> MockGpSystem(

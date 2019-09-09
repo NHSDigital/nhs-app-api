@@ -11,17 +11,21 @@ namespace NHSOnline.Backend.Support.UnitTests.ResponseParsers
     public class XmlResponseParserTests
     {
         [TestMethod]
-        public void ParseBody_SuccessfulResponse_ReturnsDeserialzedObject()
+        public void ParseBody_SuccessfulResponse_ReturnsDeserializedObject()
         {
+            // Arrange
             var parser = new XmlResponseParser();
             var expected = new Application { DeviceType = "coco pops" };
             
             var httpResponse = new HttpResponseMessage(HttpStatusCode.OK);
+            
+            // Act
             var result = parser.ParseBody<Application>(
                 "<Application deviceType=\"coco pops\"></Application>", 
                 httpResponse
             );
 
+            // Assert
             result.Should().BeOfType<Application>();
             result?.DeviceType.Should().Be(expected.DeviceType);
         }

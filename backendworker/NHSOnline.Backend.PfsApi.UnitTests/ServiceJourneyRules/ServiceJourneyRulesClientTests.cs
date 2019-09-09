@@ -66,8 +66,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
             var response = await _systemUnderTest.GetServiceJourneyRules("Test");
             
             // Assert
-            response.Should().BeOfType(typeof(ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>));
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.Should().BeOfType<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>>()
+                .Subject.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         
         [TestMethod]

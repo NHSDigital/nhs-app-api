@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
-            Mock<ILogger<TppPrescriptionValidationService>> logger = new Mock<ILogger<TppPrescriptionValidationService>>();
+            var logger = new Mock<ILogger<TppPrescriptionValidationService>>();
             _prescriptionRequestValidationService = new TppPrescriptionValidationService(logger.Object);
         }
 
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 {
                     Guid.NewGuid().ToString(),
                 },
-                SpecialRequest = new String('x', specialRequestLength),
+                SpecialRequest = new string('x', specialRequestLength),
             };
 
             // Act

@@ -72,9 +72,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockServiceJourneyRulesService.Verify();
             _mockLogger.Verify();
             
-            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
-            var actualResponse = value.Should().BeAssignableTo<ServiceJourneyRulesResponse>().Subject;
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<ServiceJourneyRulesResponse>()
+                .Subject.Should().BeEquivalentTo(expectedResponse);
         }
         
         [TestMethod]
@@ -91,8 +91,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockServiceJourneyRulesService.Verify();
             _mockLogger.Verify();
             
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
         
         [TestMethod]
@@ -109,8 +109,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockServiceJourneyRulesService.Verify();
             _mockLogger.Verify();
             
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
     }
 }

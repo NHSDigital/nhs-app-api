@@ -37,12 +37,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
         [TestMethod]
         public void Get_Success()
         {
+            // Arrange
             var expectedResponseBody = _fixture.Create<ServiceJourneyRulesResponse>();
 
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))
                 .Returns(expectedResponseBody);
 
+            // Act
             var getResponse = _systemUnderTest.Get(TestOdsCode);
+            
+            // Assert
             var statusCodeResult = getResponse.Should().BeAssignableTo<OkObjectResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status200OK);
 
@@ -50,35 +54,44 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
             journeysResponse.Should().BeEquivalentTo(expectedResponseBody);
         }
 
-
         [TestMethod]
         public void Get_withNullOdsCode_ReturnsBadRequest()
         {
+            // Act
             var getResponse = _systemUnderTest.Get(null);
-            var statusCodeResult = getResponse.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            
+            // Assert
+            getResponse.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [TestMethod]
         public void Get_withEmptyOdsCode_ReturnsBadRequest()
         {
+            // Act
             var getResponse = _systemUnderTest.Get(" ");
-            var statusCodeResult = getResponse.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            
+            // Assert
+            getResponse.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [TestMethod]
         public void Get_withMissingOdsCode_ReturnsNotFound()
         {
-            var getResponse = _systemUnderTest.Get(TestOdsCode);
+            // Arrange
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))
                 .Returns(new ServiceJourneyRulesResponse()
                 {
                     Journeys = null
                 });
+            
+            // Act
+            var getResponse = _systemUnderTest.Get(TestOdsCode);
 
-            var statusCodeResult = getResponse.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            // Assert
+            getResponse.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
     }
 }

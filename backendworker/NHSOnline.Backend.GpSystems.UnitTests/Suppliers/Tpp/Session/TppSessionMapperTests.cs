@@ -34,11 +34,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         public void Map_WhenValidResponseObjectInput_ReturnsOptionTppUserSession()
         {
+            // Arrange
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
             response.Headers.Add("suid", _suid);
 
             var expectedResponse = 
-                new TppUserSession()
+                new TppUserSession
                 {
                     Suid = _suid,
                     OnlineUserId = response.Body.OnlineUserId,
@@ -47,8 +48,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                     NhsNumber = _nhsNumber
                 };
 
+            // Act
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             
+            // Assert
             result.ValueOrFailure().Should().BeEquivalentTo(expectedResponse);
             result.HasValue.Should().BeTrue();
         }
@@ -56,9 +59,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         public void Map_WhenResponseObjectIsNull_ReturnsOptionNoResult()
         {
+            // Arrange
             TppApiObjectResponse<AuthenticateReply> response = null;
 
+            // Act
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
+            
+            // Assert
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -68,9 +75,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         public void Map_WhenResponseObjectInputHasNoHeader_ReturnsOptionNoResult()
         {
+            // Arrange
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
 
+            // Act
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
+            
+            // Assert
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -80,11 +91,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         public void Map_WhenResponseObjectHasNullBody_ReturnsOptionNoResult()
         {
+            // Arrange
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
             response.Headers.Add("suid", _suid);
             response.Body = null;
-
+            
+            // Act
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
+            
+            // Assert
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -96,11 +111,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [DataTestMethod]
         public void Map_WhenResponseObjectBodyIsMissingPatientId_ReturnsOptionNoResult(string patientId)
         {
+            // Arrange
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
             response.Headers.Add("suid", _suid);
             response.Body.User.Person.PatientId = patientId;
 
+            // Act
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
+            
+            // Assert
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -112,16 +131,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [DataTestMethod]
         public void Map_WhenResponseObjectBodyIsMissingOnlineUserId_ReturnsOptionNoResult(string onlineUserId)
         {
+            // Arrange
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
             response.Headers.Add("suid", _suid);
             response.Body.OnlineUserId = onlineUserId;
 
+            // Act
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
+            
+            // Assert
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
             result.HasValue.Should().BeFalse();
         }
-        
     }
 }

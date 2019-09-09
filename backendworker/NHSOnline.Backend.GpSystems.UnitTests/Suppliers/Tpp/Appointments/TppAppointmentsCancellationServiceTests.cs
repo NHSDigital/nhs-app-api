@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         
         [DataTestMethod]
         [DataRow(TppApiErrorCodes.NoAccess)]
-        public async Task Cancel_TppClientReturnsInsuffientPermissionsErrorCode_ReturnsForbidden(string tppErrorCode)
+        public async Task Cancel_TppClientReturnsInsufficientPermissionsErrorCode_ReturnsForbidden(string tppErrorCode)
         {
             // Arrange
             var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)

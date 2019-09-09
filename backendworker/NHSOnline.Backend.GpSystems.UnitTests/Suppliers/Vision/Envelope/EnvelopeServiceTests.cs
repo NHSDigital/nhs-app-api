@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml.Serialization;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -47,8 +48,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope
                 visionRequest,
                 requestUsername);
 
-            result.Should().BeAssignableTo<String>();
-            result.Should().Contain("<vision:serviceContent />");
+            result.Should().BeAssignableTo<string>()
+                .Subject.Should().Contain("<vision:serviceContent />");
 
             var getConfiguration = new GetConfigurationEvaluator(result);
 
@@ -95,5 +96,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope
         {
             _certificate.Dispose();
         }
+    }
+    
+    public class TestClass
+    {
+        [XmlElement(ElementName = "hello", Namespace = "urn:vision")]
+        public string TestProp { get; set; }        
     }
 }
