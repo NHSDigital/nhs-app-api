@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
@@ -36,12 +35,4 @@ namespace NHSOnline.Backend.Support.AspNet
             await _next(context);
         }
     }
-    
-    public static class MiddlewareExtensions
-    {
-        public static IApplicationBuilder UseResponseHeadersMiddleware(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<ResponseHeaderMiddleware>();
-        }
-    } 
 }

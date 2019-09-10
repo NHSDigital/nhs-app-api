@@ -13,6 +13,7 @@ services:
     depends_on:
       - pfs.local.bitraft.io
       - users.local.bitraft.io
+      - log.local.bitraft.io
   pfs.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     build:
@@ -138,6 +139,19 @@ services:
       - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
       - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
       - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
+  log.local.bitraft.io:
+    image: nhsonline.backend.loggerapi
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.LoggerApi/Dockerfile
+    ports:
+      - "8090:8090"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8090
+      - PORT=8090
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=log_docker_main
   nhsonline.stubs:
     image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
     command: --local-response-templating --verbose

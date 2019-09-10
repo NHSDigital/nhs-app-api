@@ -181,6 +181,14 @@
                           profile: 
                             type: "string"
                             description: "link to the profile of the data requirement."
+          403: 
+            description: "Forbidden access when trying to obtain demographic details."
+          404: 
+            description: "This is either that the demographic details could not be found or service definition ID could not be found with the provided details."
+          500: 
+            description: "An unexpected error occurred processing the request to get the service ID, or to obtain paitent demographics."
+          502: 
+            description: "Bad response received from system."
     /fhir/ServiceDefinition/{provider}/{serviceDefinitionId}/$evaluate: 
       post: 
         summary: "Gets the first question in admin help."
@@ -235,13 +243,6 @@
             description: "token sent with the request"
             schema: 
               type: "string"
-          -
-            in: "query"
-            name: "demographicsConsentGiven"
-            required: false
-            description: "Indicates consent has been given to add demographic information to the requestBody parameters"
-            schema:
-              type: "boolean"
         requestBody: 
           x-name: "parameters"
           required: true
@@ -523,6 +524,14 @@
                           profile: 
                             type: "string"
                             description: "link to the profile of the data requirement."
+          403: 
+            description: "Forbidden access when trying to obtain demographic details."
+          404: 
+            description: "This is either that the demographic details could not be found or evaluate could not be carried out with the provided details."
+          500: 
+            description: "An unexpected error occurred processing the request to evaluate the answer, or to obtain paitent demographics."
+          502: 
+            description: "Bad response received from system."
     /fhir/ServiceDefinition/{provider}: 
       get: 
         summary: "get service definition for provider"
@@ -579,6 +588,12 @@
                           title: 
                             type: "string"
                             description: "title of the service definition"
+          404: 
+            description: "Service definition list could not be found for the provider specified."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from system."
   components: 
     requestBodies: 
       olcEvaluate: 
@@ -1024,3 +1039,4 @@
                 title: 
                   type: "string"
                   description: "title of the service definition"
+

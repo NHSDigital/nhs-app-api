@@ -13,6 +13,7 @@ services:
     depends_on:
       - pfs.local.bitraft.io
       - users.local.bitraft.io
+      - log.local.bitraft.io
   web.local.bitraft.io:
     image: nhsonline.web
     ports:
@@ -199,6 +200,19 @@ services:
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
       - CITIZEN_ID_CLIENT_ID=nhs-online
       - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
+  log.local.bitraft.io:
+    image: nhsonline.backend.loggerapi
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.LoggerApi/Dockerfile
+    ports:
+      - "8090:8090"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8090
+      - PORT=8090
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=log_docker_main
   stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
     command: --local-response-templating

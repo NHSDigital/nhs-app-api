@@ -57,11 +57,9 @@ paths:
         "403":
           description: Forbidden access when trying to obtain demographic details.
         "404":
-          description: This is either that the demographic details could not be found or 
-          service definition ID could not be found with the provided details.
+          description: This is either that the demographic details could not be found or service definition ID could not be found with the provided details.
         "500":
-          description: An unexpected error occurred processing the request to get the service ID, or to obtain paitent
-          demographics.
+          description: An unexpected error occurred processing the request to get the service ID, or to obtain paitent demographics.
         "502":
           description: Bad response received from system.
   /fhir/ServiceDefinition/{provider}/{serviceDefinitionId}/$evaluate:
@@ -125,11 +123,9 @@ paths:
         "403":
           description: Forbidden access when trying to obtain demographic details.
         "404":
-          description: This is either that the demographic details could not be found or
-          evaluate could not be carried out with the provided details.
+          description: This is either that the demographic details could not be found or evaluate could not be carried out with the provided details.
         "500":
-          description: An unexpected error occurred processing the request to evaluate the
-          answer, or to obtain paitent demographics.
+          description: An unexpected error occurred processing the request to evaluate the answer, or to obtain paitent demographics.
         "502":
           description: Bad response received from system.
   /fhir/ServiceDefinition/{provider}:

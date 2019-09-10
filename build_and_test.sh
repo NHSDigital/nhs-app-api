@@ -88,6 +88,7 @@ SJR_BACKEND_NAME=nhsonline-backendservicejourneyrulesapi
 SJR_CONFIG_NAME=nhsonline-service-journey-dev-config
 CDS_BACKEND_NAME=nhsonline-backendclinicaldecisionsupportapi
 USERS_BACKEND_NAME=nhsonline-backendusersapi
+LOGGER_BACKEND_NAME=nhsonline-clientloggerapi
 TAG=$(git rev-parse HEAD)
 
 if [ ! -f bddtests/docker-compose.override.yml ]
@@ -130,6 +131,9 @@ docker tag $DOCKER_REGISTRY/$SJR_CONFIG_NAME:$TAG $DOCKER_REGISTRY/$SJR_CONFIG_N
 
 docker build . -t $DOCKER_REGISTRY/$USERS_BACKEND_NAME:$TAG -f NHSOnline.Backend.UsersApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$USERS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$USERS_BACKEND_NAME:latest
+
+docker build . -t $DOCKER_REGISTRY/$LOGGER_BACKEND_NAME:$TAG -f NHSOnline.Backend.LoggerApi/Dockerfile
+docker tag $DOCKER_REGISTRY/$LOGGER_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$LOGGER_BACKEND_NAME:latest
 
 
 cd ../bddtests/ops

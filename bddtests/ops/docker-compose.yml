@@ -128,6 +128,16 @@ services:
       - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive-bdd
       - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive-bdd.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
       - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
+  log.local.bitraft.io:
+    image: nhsapp.azurecr.io/nhsonline-clientloggerapi:${BACKEND_TAG}
+    ports:
+      - "8090:8090"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8090
+      - PORT=8090
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=log_docker_main
   stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:${WIREMOCK_TAG}
     command: --local-response-templating

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.Support.Logging
 {
@@ -52,6 +54,29 @@ namespace NHSOnline.Backend.Support.Logging
             var items = kvp.Select(x => $"{x.Key}={x.Value}");
             var message = $"{title}: {string.Join(" ", items)}";
             logger.LogInformation(message);
+        }
+
+        public static void LogVersion(this ILogger logger, HttpContext context, string apiAppName, string apiAppVersion)
+        {
+            string webAppVersion = context.Request.Headers[Constants.HttpHeaders.WebAppVersion];
+            string nativeAppVersion = context.Request.Headers[Constants.HttpHeaders.NativeAppVersion];
+
+            if (string.IsNullOrEmpty(webAppVersion))
+            {
+                return;
+            }
+
+            var logMessageStringBuilder = new StringBuilder();
+
+            logMessageStringBuilder.Append(
+                $"Beginning HTTP Request. {apiAppName} version: {apiAppVersion}. Web App Version: {webAppVersion}.");
+
+            if (!string.IsNullOrEmpty(nativeAppVersion))
+            {
+                logMessageStringBuilder.Append($" Native App Version: {nativeAppVersion}.");
+            }
+
+            logger.LogInformation(logMessageStringBuilder.ToString());
         }
 
         private static void LogInnerException<T>(this ILogger<T> logger, Exception exception, int level = 0)

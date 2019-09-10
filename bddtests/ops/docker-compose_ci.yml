@@ -9,6 +9,7 @@ services:
     depends_on:
       - pfs.local.bitraft.io
       - users.local.bitraft.io
+      - log.local.bitraft.io
   web.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-web:${WEB_TAG}
     env_file:
@@ -118,6 +119,14 @@ services:
       - USERS_MONGO_DATABASE_PASSWORD=
       - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive-bdd
       - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive-bdd.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  log.local.bitraft.io:
+    image: nhsapp.azurecr.io/nhsonline-clientloggerapi:${BACKEND_TAG}
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8090
+      - PORT=8090
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=log_docker_main
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
     environment:

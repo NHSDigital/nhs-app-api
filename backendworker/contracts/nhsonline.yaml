@@ -49,4 +49,5 @@ paths:
     $ref: ./nhsonline.journey.yaml#/paths/~1journey-configuration
   /v1/api/users/devices:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1devices
-    
+  /v1/api/log:
+    $ref: ./nhsonline.log.yaml#/paths/~1log

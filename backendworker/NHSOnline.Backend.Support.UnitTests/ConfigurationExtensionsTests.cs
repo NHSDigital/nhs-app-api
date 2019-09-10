@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -64,6 +65,33 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             // Assert
             Assert.AreEqual(0, result);
+        }
+
+        [TestMethod]
+        public void GetApiVersion_ReturnsConcatenatedVersionAndCommit()
+        {
+            // Arrange
+            const string version = "configuration_version_1";
+            const string commitId = "commit_id_132321";
+
+            _configurationBuilder.AddInMemoryCollection(
+               new Dictionary<string, string>()
+               {
+                   {
+                       Constants.EnvironmentalVariables.VersionTag, version
+                   },
+                   {
+                       Constants.AppConfig.GitCommitId, commitId
+                   }
+               });
+
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            var result = configuration.GetApiAppVersion();
+
+            // Arrange
+            result.Should().Be($"{version} (commit:{commitId})");
         }
     }
 }

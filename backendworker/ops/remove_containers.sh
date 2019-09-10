@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-APIS=(pfsapi cidapi servicejourneyrulesapi clinicaldecisionsupportapi cdsswiremock)
+APIS=(backendpfsapi backendcidapi backendservicejourneyrulesapi backendclinicaldecisionsupportapi backendcdsswiremock clientloggerapi)
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 
 for api in "${APIS[@]}"
 do
-    docker rmi ${DOCKER_REGISTRY}/nhsonline-backend$api:$(git rev-parse HEAD)
+    docker rmi ${DOCKER_REGISTRY}/nhsonline-$api:$(git rev-parse HEAD)
 done

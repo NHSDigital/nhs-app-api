@@ -27,4 +27,3 @@ Vue.filter('datePart',
       }
   }
 );
-

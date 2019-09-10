@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Settings;
@@ -80,6 +81,17 @@ namespace NHSOnline.Backend.Support
         public static IConfigurationSection ConfigurationSettings(this IConfiguration configuration)
         {
             return configuration.GetSection("ConfigurationSettings");
+        }
+
+        public static string GetApiAppVersion(this IConfiguration configuration)
+        {
+            var apiVersionStringBuilder = new StringBuilder();
+            apiVersionStringBuilder.Append(configuration[Constants.EnvironmentalVariables.VersionTag]);
+            apiVersionStringBuilder.Append(" (commit:");
+            apiVersionStringBuilder.Append(configuration[Constants.AppConfig.GitCommitId]);
+            apiVersionStringBuilder.Append(")");
+
+            return apiVersionStringBuilder.ToString();
         }
     }
 }

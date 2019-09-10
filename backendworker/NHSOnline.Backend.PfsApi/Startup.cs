@@ -1,7 +1,6 @@
 using CorrelationId;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Globalization;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -75,23 +74,12 @@ namespace NHSOnline.Backend.PfsApi
                 loggerFactory.AddConsole(LogLevel.Debug);
             }
             
-            _apiAppVersion = GetApiAppVersion();
+            _apiAppVersion = Configuration.GetApiAppVersion();
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
             _supplierStartup = new SupplierStartup(configuration, loggerFactory, new GpSystemRegistrationService());
 
             _logger = loggerFactory.CreateLogger<Startup>();
-        }
-
-        private string GetApiAppVersion()
-        {
-            var apiVersionStringBuilder = new StringBuilder();
-            apiVersionStringBuilder.Append(Configuration[Constants.EnvironmentalVariables.VersionTag]);
-            apiVersionStringBuilder.Append(" (commit:");
-            apiVersionStringBuilder.Append(Configuration[Constants.AppConfig.GitCommitId]);
-            apiVersionStringBuilder.Append(")");
-
-            return apiVersionStringBuilder.ToString();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -280,7 +268,14 @@ namespace NHSOnline.Backend.PfsApi
                 app.UseDeveloperExceptionPage();
             }
 
-            UseSecurityHeaders(app, _apiAppVersion, loggerFactory.CreateLogger<Startup>());
+            app.Use(async (context, next) =>
+            {
+                var logger = loggerFactory.CreateLogger<Startup>();
+                logger.LogVersion(context, "PfsApi", _apiAppVersion);
+                await next();
+            });
+
+            app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
 
             app.UsePathBase(new PathString("/v1"));
@@ -515,45 +510,5 @@ namespace NHSOnline.Backend.PfsApi
 
             return config;
         }
-
-        private static void UseSecurityHeaders(IApplicationBuilder app, string apiAppVersion, ILogger<Startup> startupLogger)
-        {
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-                context.Response.Headers.Add("X-Frame-Options", "DENY");
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                context.Response.Headers.Add("Referrer-Policy", "no-referrer");
-                context.Response.Headers.Add("Content-Security-Policy", "default-src https:");
-                context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-
-                LogVersion(context, apiAppVersion, startupLogger);
-                
-                await next();
-            });
-        }
-
-        private static void LogVersion(HttpContext context, string apiAppVersion, ILogger<Startup> startupLogger)
-        {
-            string webAppVersion = context.Request.Headers[Constants.HttpHeaders.WebAppVersion];
-            string nativeAppVersion = context.Request.Headers[Constants.HttpHeaders.NativeAppVersion];
-
-            if (string.IsNullOrEmpty(webAppVersion))
-            {
-                return;
-            }
-            
-            var logMessageStringBuilder = new StringBuilder();
-                    
-            logMessageStringBuilder.Append(
-                $"Beginning HTTP Request. PfsApi version: {apiAppVersion}. Web App Version: {webAppVersion}.");
-                    
-            if (!string.IsNullOrEmpty(nativeAppVersion))
-            {
-                logMessageStringBuilder.Append($" Native App Version: {nativeAppVersion}.");
-            }
-
-            startupLogger.LogInformation(logMessageStringBuilder.ToString());
-        } 
     }
 }

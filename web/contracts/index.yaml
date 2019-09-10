@@ -1880,6 +1880,37 @@
         responses: 
           201: 
             description: "Successful operation. Repeat Prescription Created."
+          202: 
+            description: "Partial success"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    successfulOrders: 
+                      type: "array"
+                      description: "successful orders array"
+                      items: 
+                        type: "object"
+                        properties: 
+                          courseId: 
+                            type: "string"
+                            description: "course id"
+                          name: 
+                            type: "string"
+                            description: "name of the drug"
+                    unsuccessfulOrders: 
+                      type: "array"
+                      description: "unsuccessful orders array"
+                      items: 
+                        type: "object"
+                        properties: 
+                          courseId: 
+                            type: "string"
+                            description: "course id"
+                          name: 
+                            type: "string"
+                            description: "name of the drug"
           400: 
             description: "Bad request. Supplied connection details or request data is incomplete or invalid."
           401: 
@@ -2919,5 +2950,51 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
+            description: "An unexpected error occurred processing the request."
+    /v1/api/log: 
+      post: 
+        tags: 
+          - "Log"
+        summary: "Post client-side message for logging purposes."
+        description: "Post client-side message for logging purposes."
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, NHS Login should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+        requestBody: 
+          x-name: "createLogRequest"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "timeStamp"
+                  - "level"
+                  - "message"
+                properties: 
+                  timeStamp: 
+                    type: "string"
+                    format: "date-time"
+                    description: "Time stamp of the the log event."
+                  level: 
+                    type: "string"
+                    enum: 
+                      - "Error"
+                      - "Debug"
+                      - "Information"
+                    description: "Logging level of the event."
+                  message: 
+                    type: "string"
+                    description: "logging message."
+        responses: 
+          200: 
+            description: "Message sucessfully logged."
+          400: 
+            description: "Required property missing or expired."
+          500: 
             description: "An unexpected error occurred processing the request."
 

@@ -1,0 +1,55 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Sub-API - log
+  description: NHS App Sub-API - endpoints pertaining to logging into splunk.
+paths:
+  /log:
+    post:
+      tags:
+        - Log
+      summary: Post client-side message for logging purposes.
+      description: Post client-side message for logging purposes.
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, NHS Login should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+      requestBody:
+        x-name: createLogRequest
+        content:
+           application/json:
+            schema:
+                $ref: "#/components/schemas/createLogRequest"
+      responses:
+        200:
+          description: Message sucessfully logged.
+        400:
+          description: Required property missing or expired.
+        500:
+          description: An unexpected error occurred processing the request.
+components:
+  schemas:
+    createLogRequest:
+      type: object
+      required:
+        - timeStamp
+        - level
+        - message
+      properties:
+        timeStamp:
+          type: string
+          format: date-time
+          description: Time stamp of the the log event.
+        level:
+          type: string
+          enum:
+            - Error
+            - Debug
+            - Information
+          description: Logging level of the event.
+        message:
+          type: string
+          description: logging message.
