@@ -18,12 +18,12 @@
                                     getCollapsedState(isProblemsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="PROBLEMS"
-                           :text="$t('my_record.problems.sectionHeader')"
+                           :text="$t('my_record.healthConditions.sectionHeader')"
                            :aria-expanded="!isProblemsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.problems.sectionHeader') }}
+      {{ $t('my_record.healthConditions.sectionHeader') }}
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 

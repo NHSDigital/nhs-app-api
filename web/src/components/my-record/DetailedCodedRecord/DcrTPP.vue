@@ -4,12 +4,12 @@
                                     getCollapsedState(isEventsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="EVENTS"
-                           :text="$t('my_record.events.sectionHeader')"
+                           :text="$t('my_record.consultationsAndEvents.sectionHeader')"
                            :aria-expanded="!isEventsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.events.sectionHeader') }}
+      {{ $t('my_record.consultationsAndEvents.sectionHeader') }}
     </analytics-tracked-tag>
     <events :is-collapsed="isEventsCollapsed" :events="record.tppDcrEvents" />
 

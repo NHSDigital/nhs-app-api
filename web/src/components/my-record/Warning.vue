@@ -4,7 +4,10 @@
        :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]">
     <message-dialog message-type="warning" icon-text="Important">
       <message-text :class="$style.warningText">
-        {{ $t('my_record.personalRecordText.warningText') }}
+        {{ $t('my_record.personalRecordText.warningText.wt1') }}
+      </message-text>
+      <message-text :class="$style.warningText">
+        {{ $t('my_record.personalRecordText.warningText.wt2') }}
       </message-text>
     </message-dialog>
     <div :class="$style.info" data-purpose="info">

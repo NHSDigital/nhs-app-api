@@ -77,7 +77,7 @@ class MyRecordInfoPage : HybridPageObject() {
 
     val immunisations by lazy { getSection("Immunisations") }
 
-    val problems by lazy { getSection("Problems") }
+    val healthConditions by lazy { getSection("Health conditions") }
 
     val examinations by lazy { getSection("Examinations") }
 

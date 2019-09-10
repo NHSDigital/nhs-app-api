@@ -42,16 +42,15 @@ Feature: View My Medical Record Information - No Javascript Frontend
       | TPP     |
       | VISION  |
 
-  Scenario Outline: A <Service> user can view immunisations and problems
+  Scenario Outline: A <Service> user can view immunisations and health conditons
     Given I have disabled javascript
     And the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist
     And the GP Practice has enabled problems functionality
     And I am on my record information page
-
     Then I see immunisation records displayed
-    And I see Problems records displayed
+    And I see health condition records displayed
 
     Examples:
       | Service |

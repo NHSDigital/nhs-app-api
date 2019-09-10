@@ -621,8 +621,8 @@ export default {
       contentTag: 'book appointments',
     },
     myRecord: {
-      headerTag: 'access your medical record',
-      contentTag: 'view your medical record',
+      headerTag: 'access your GP medical record',
+      contentTag: 'view your GP medical record',
     },
     prescriptions: {
       headerTag: 'order prescriptions',
@@ -823,7 +823,10 @@ export default {
     gpPractice: 'GP Practice',
     patient: 'Patient',
     personalRecordText: {
-      warningText: 'Your record may contain sensitive information. If someone is pressuring you for this information, contact your GP surgery immediately.',
+      warningText: {
+        wt1: 'Your record may contain sensitive information. If someone is pressuring you for this information, contact your GP surgery immediately.',
+        wt2: 'You have a legal right to access the information in your record.',
+      },
       body: 'Your record shows personal data, such as your details, allergies and medications.',
       bulletPointHeader: 'Depending on what your GP surgery shares, you may also see:',
       bulletPoints: {
@@ -873,14 +876,11 @@ export default {
       },
       visionDetailsLink: 'View your Test Results',
     },
-    problems: {
-      sectionHeader: 'Problems',
+    healthConditions: {
+      sectionHeader: 'Health conditions',
     },
-    consultations: {
-      sectionHeader: 'Consultations',
-    },
-    events: {
-      sectionHeader: 'Consultations',
+    consultationsAndEvents: {
+      sectionHeader: 'Consultations and events',
     },
     testresultdetail: {
       backButton: 'Back',
@@ -981,7 +981,7 @@ export default {
     appointmentBooking: 'Book an appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
-    myRecord: 'My medical record',
+    myRecord: 'My GP medical record',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
@@ -1042,8 +1042,8 @@ export default {
     appointmentsBooking: 'Booking',
     appointmentsConfirmation: 'Confirm',
     checkYourSymptoms: 'Symptoms',
-    myRecord: 'My medical record',
-    myRecordNoAccess: 'My medical record',
+    myRecord: 'My GP medical record',
+    myRecordNoAccess: 'My GP medical record',
     myRecordTestResult: 'My medical results',
     myRecordDiagnosisDetail: 'My medical results',
     myRecordExaminationsDetail: 'My medical results',
@@ -1104,7 +1104,7 @@ export default {
     menuLabel: 'Menu',
     appointmentsLabel: 'Appointments',
     moreLabel: 'More',
-    myRecordLabel: 'My medical record',
+    myRecordLabel: 'My GP medical record',
     prescriptionsLabel: 'Repeat prescriptions',
     symptomsLabel: 'Symptoms',
     accountLabel: 'Account',
@@ -1115,7 +1115,7 @@ export default {
     symptoms: 'Check my symptoms',
     appointments: 'Book and manage appointments',
     prescriptions: 'Order a repeat prescription',
-    myRecord: 'View my medical record',
+    myRecord: 'View my GP medical record',
     organDonation: 'Manage organ donation decision',
   },
   organ_donation: {

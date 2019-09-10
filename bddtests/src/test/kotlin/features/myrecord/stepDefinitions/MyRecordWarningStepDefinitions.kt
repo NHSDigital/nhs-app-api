@@ -49,7 +49,7 @@ open class MyRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions(
 
     @Then("^I see record warning page opened$")
     fun thenISeeRecordWarningPageOpened() {
-        myRecordStepDefinitions.thenISeeHeaderTextIsMyMedicalRecord()
+        myRecordStepDefinitions.thenISeeHeaderTextIsMyGPMedicalRecord()
         thenISeeContinue()
         thenISeeBackToHome()
     }
@@ -57,7 +57,7 @@ open class MyRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions(
     @Then("^I see the my record warning page")
     fun iSeeTheMyRecordWarningPage() {
         thenISeeRecordWarningPageOpened()
-        myRecordStepDefinitions.thenISeeHeaderTextIsMyMedicalRecord()
+        myRecordStepDefinitions.thenISeeHeaderTextIsMyGPMedicalRecord()
         thenISeeWhatMedicalInformationWillBeShown()
         theISeeYourRecordMayContainSensitiveInformationMessage()
         thenISeeListOfSensitiveDataInformation()
@@ -68,8 +68,10 @@ open class MyRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions(
 
     @Then("^I see your record may contain sensitive information message$")
     fun theISeeYourRecordMayContainSensitiveInformationMessage() {
+        print(myRecordWarningPage.warningText())
         assertEquals("Your record may contain sensitive information. If someone is pressuring you for this" +
-                " information, contact your GP surgery immediately.", myRecordWarningPage.warningText())
+                " information, contact your GP surgery immediately.\nYou have a legal right to access the information" +
+                " in your record.", myRecordWarningPage.warningText())
     }
 
     @Then("^I see what medical information will be shown$")

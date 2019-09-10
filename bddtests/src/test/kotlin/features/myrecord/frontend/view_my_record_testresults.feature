@@ -111,7 +111,7 @@ Feature: View My Medical Record Information - Test Results Frontend
     And the GP Practice has test result details
     And I am on my record information page
     When I select a test result
-    Then I see header text is My medical record
+    Then I see header text is My GP medical record
     And I see the test result content
 
   @tech-debt @bug @NHSO-6233
@@ -122,7 +122,7 @@ Feature: View My Medical Record Information - Test Results Frontend
     And the GP Practice has test result details
     And I am on my record information page
     When I select a test result
-    Then I see header text is My medical record
+    Then I see header text is My GP medical record
     And I click the test result detail back
     Then I see the my record page scrolled to the test result section
 

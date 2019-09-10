@@ -64,18 +64,18 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
         assertEquals(count, result.response.problems.data.count())
     }
 
-    @Then("^I see Problems records displayed$")
+    @Then("^I see health condition records displayed$")
     fun thenISeeProblemsRecordsDisplayed() {
-        assertEquals(NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED, myRecordInfoPage.problems.allRecordItems().count())
+        assertEquals(NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED, myRecordInfoPage.healthConditions.allRecordItems().count())
     }
 
-    @Then("^I see the expected problems displayed$")
+    @Then("^I see the expected health conditions displayed$")
     fun thenISeeTheExpectedProblemsDisplayed() {
         val expectedProblems = ProblemsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .getExpectedProblems()
 
-        val onScreenProblems = myRecordInfoPage.problems.allRecordItems()
+        val onScreenProblems = myRecordInfoPage.healthConditions.allRecordItems()
 
         Assert.assertEquals(expectedProblems.count(), onScreenProblems.count())
 

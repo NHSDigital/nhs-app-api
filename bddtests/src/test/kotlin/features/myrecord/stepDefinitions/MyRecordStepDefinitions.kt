@@ -153,15 +153,15 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see the my medical record page$")
     fun iSeeTheMyMedicalRecordPage() {
-        thenISeeHeaderTextIsMyMedicalRecord()
+        thenISeeHeaderTextIsMyGPMedicalRecord()
         iSeeTheHeadingOnMyRecord("My details")
         iSeePatientInformationDetails()
         thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
     }
 
-    @Then("^I see header text is My medical record$")
-    fun thenISeeHeaderTextIsMyMedicalRecord() {
-        headerNative.waitForPageHeaderText("My medical record")
+    @Then("^I see header text is My GP medical record$")
+    fun thenISeeHeaderTextIsMyGPMedicalRecord() {
+        headerNative.waitForPageHeaderText("My GP medical record")
     }
 
     @Then("^I see my record button on the nav bar is highlighted$")

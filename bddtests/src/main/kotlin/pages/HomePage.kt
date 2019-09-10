@@ -75,7 +75,7 @@ open class HomePage : HybridPageObject() {
 
     val orderRepeatPrescriptionLink = link("Order a repeat prescription")
 
-    val viewMedicalRecordLink = link("View my medical record")
+    val viewMedicalRecordLink = link("View my GP medical record")
 
     val organDonationLink = link("Manage organ donation decision")
 
