@@ -105,19 +105,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                 {
                     var connectionToken = cachedConnectionToken.ValueOrFailure();
                     _logger.LogDebug("IM1 connection token found in cache.");
-                    
-                    var response = await Task.FromResult(new PatientIm1ConnectionResponse
+
+                    var response = new PatientIm1ConnectionResponse
                     {
                         ConnectionToken = connectionToken.SerializeJson(),
-                        NhsNumbers = new List<PatientNhsNumber> {
-                            new PatientNhsNumber {
+                        NhsNumbers = new List<PatientNhsNumber>
+                        {
+                            new PatientNhsNumber
+                            {
                                 NhsNumber = connectionToken.NhsNumber
                             }
                         },
                         OdsCode = request.OdsCode,
                         AccountId = request.AccountId,
                         LinkageKey = request.LinkageKey,
-                    });
+                    };
     
                     _logger.LogExit();
                     return new Im1ConnectionRegisterResult.Success(response);
