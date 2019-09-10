@@ -140,6 +140,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                 _logger.LogExit();
             }
         }
-        }
     }
+    
 }
