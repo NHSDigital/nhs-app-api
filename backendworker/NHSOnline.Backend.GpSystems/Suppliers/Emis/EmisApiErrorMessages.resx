@@ -129,6 +129,9 @@
   <data name="MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect" xml:space="preserve">
     <value>No match found for given demographics</value>
   </data>
+    <data name="SessionPost_UserNotRegistered" xml:space="preserve">
+    <value>Actual account status is 'NotRegistered'</value>
+  </data>
   <data name="AppointmentsPost_NotFound" xml:space="preserve">
     <value>Appointment not found</value>
   </data>

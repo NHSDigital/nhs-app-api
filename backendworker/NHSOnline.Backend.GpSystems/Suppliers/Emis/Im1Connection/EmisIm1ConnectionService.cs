@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly IIm1CacheService _im1CacheService;
 
-        public EmisIm1ConnectionService(IEmisClient emisClient, 
+        public EmisIm1ConnectionService(IEmisClient emisClient,
             ILogger<EmisIm1ConnectionService> logger,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
             IIm1CacheService im1CacheService)
@@ -54,6 +54,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 };
 
                 var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
+
+                if (UserIsNotRegisteredAtPractice(sessionsResponse))
+                {
+                    LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
+                    _logger.LogEmisErrorResponse(sessionsResponse);
+                    return new Im1ConnectionVerifyResult.BadRequest();
+                }
+
                 if (!sessionsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
@@ -108,7 +116,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             try
             {
                 _logger.LogEnter();
-                
+
                 var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
                 if (!endUserSessionResponse.HasSuccessResponse)
                 {
@@ -126,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     await _im1CacheService.GetIm1ConnectionToken<EmisConnectionToken>(key);
 
                 EmisConnectionToken connectionToken;
-            
+
                 if (cachedConnectionToken.HasValue)
                 {
                     connectionToken = cachedConnectionToken.ValueOrFailure();
@@ -153,7 +161,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
                     await CacheConnectionToken(connectionToken);
                 }
-                
+
                 var sessionPostRequestModel = new SessionsPostRequest
                 {
                     AccessIdentityGuid = connectionToken.AccessIdentityGuid,
@@ -214,7 +222,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
         private MeApplicationsPostRequest CreateMeApplicationsPostRequest(PatientIm1ConnectionRequest request)
         {
-            return  new MeApplicationsPostRequest
+            return new MeApplicationsPostRequest
             {
                 DateOfBirth = request.DateOfBirth,
                 Surname = request.Surname,
@@ -234,5 +242,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
         private async Task CacheConnectionToken(EmisConnectionToken connectionToken) =>
             await _im1CacheService.SaveIm1ConnectionToken(connectionToken.Im1CacheKey,
                 connectionToken);
+
+        private static bool UserIsNotRegisteredAtPractice(EmisClient.EmisApiResponse sessionsResponse)
+        {
+            return sessionsResponse.HasForbiddenResponse() &&
+                   sessionsResponse
+                       .HasExceptionWithMessageContaining(EmisApiErrorMessages.SessionPost_UserNotRegistered);
+        }
     }
 }

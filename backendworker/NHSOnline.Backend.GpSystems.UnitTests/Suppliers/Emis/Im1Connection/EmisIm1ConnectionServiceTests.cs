@@ -206,6 +206,46 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         }
 
         [TestMethod]
+        public async Task Verify_ReturnsBadRequest_WhenUserIsNotRegisteredAtPractice()
+        {
+            // Arrange
+            const string notRegisteredErrorMessage = "Actual account status is 'NotRegistered'";
+
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
+            errorResponse.Exceptions.First().Message = notRegisteredErrorMessage;
+
+            var emisClientMock = new Mock<IEmisClient>();
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
+
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = DefaultEndUserSessionId
+            };
+
+            emisClientMock
+                .Setup(x => x.SessionsEndUserSessionPost())
+                .ReturnsAsync(
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    {
+                        Body = endUserSessionResponse
+                    });
+
+            emisClientMock
+                .Setup(x => x.SessionsPost(DefaultEndUserSessionId, It.IsAny<SessionsPostRequest>()))
+                .ReturnsAsync(
+                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.Forbidden)
+                    {
+                        ExceptionErrorResponse = errorResponse
+                    });
+
+            // Act
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadRequest>();
+        }
+
+        [TestMethod]
         public async Task Verify_ReturnsBadGateway_WhenEmisClientThrowsHttpRequestException()
         {
             var emisClientMock = new Mock<IEmisClient>();
