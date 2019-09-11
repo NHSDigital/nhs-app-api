@@ -1,4 +1,3 @@
-using System;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
@@ -23,6 +22,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public Supplier Supplier { get; set; }
 
+        public bool HasLinkedAccounts { get; set; }
+
         public Journeys Clone() => new Journeys
         {
             Appointments = Appointments?.Clone(),
@@ -32,7 +33,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Prescriptions = Prescriptions?.Clone(),
             NominatedPharmacy = NominatedPharmacy,
             Notifications = Notifications,
-            Messaging = Messaging
+            Messaging = Messaging,
+            HasLinkedAccounts = HasLinkedAccounts,
         };
 
         public Journeys AddSupplier(Supplier supplier)

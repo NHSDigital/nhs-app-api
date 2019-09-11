@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.SharedModels;
@@ -123,7 +122,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                         "SendSessionsRequest").Check(sessionRequestTask);
 
                     session.SessionId = sessionResponse.Body.SessionId;
-                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();
+                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();  
+                    session.HasLinkedAccounts = sessionResponse.Body.HasLinkedPatients();
                     patientName = FormatName(sessionResponse.Body);
 
                     if (sessionResponse.Body.HasLinkedPatients())

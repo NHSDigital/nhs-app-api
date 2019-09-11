@@ -57,12 +57,37 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         }
 
         [TestMethod]
-        public async Task Get_WhenServiceReturnsSuccessfully_ReturnsSuccessfulResult()
+        public async Task Get_WhenServiceReturnsSuccessfully_ReturnsSuccessfulResult_LinkedAccountsIsFalse()
         {
             // Arrange
             var expectedResponse = new ServiceJourneyRulesResponse();
+            expectedResponse.Journeys = new Journeys();
+            
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode, false))
+                .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode))
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _mockServiceJourneyRulesService.Verify();
+            _mockLogger.Verify();
+            
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            var actualResponse = value.Should().BeAssignableTo<ServiceJourneyRulesResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+        
+        
+        [TestMethod]
+        public async Task Get_WhenServiceReturnsSuccessfully_ReturnsSuccessfulResult_LinkedAccountsToTrue()
+        {
+            // Arrange
+            var expectedResponse = new ServiceJourneyRulesResponse();
+            expectedResponse.Journeys = new Journeys();
+            expectedResponse.Journeys.HasLinkedAccounts = true;
+            
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode, false))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
             // Act
@@ -81,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         public async Task Get_WhenServiceDoesNotFindConfiguration_ReturnsNotFound()
         {
             // Arrange
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode))
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode, false))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.NotFound());
 
             // Act
@@ -99,7 +124,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         public async Task Get_WhenServiceThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode))
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode, false))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.InternalServerError());
 
             // Act

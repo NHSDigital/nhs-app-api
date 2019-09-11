@@ -4,6 +4,9 @@ import mocking.MockingClient
 import models.Patient
 
 class MicrotestSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
+    override fun createForWithLinkedAccounts(patient: Patient) {
+        throw UnsupportedOperationException()
+    }
 
     override fun createFor(patient: Patient) {
         client.forMicrotest {

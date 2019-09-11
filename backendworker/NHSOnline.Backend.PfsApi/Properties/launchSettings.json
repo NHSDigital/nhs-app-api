@@ -50,7 +50,8 @@
         "PDS_QUERY_TO": "https://192.168.128.11/syncservice-pds/pds",
         "SPINE_URL": "https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/",
         "DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS": "500",
-        "NOMINATED_PHARMACY_ENABLED": "false"
+        "NOMINATED_PHARMACY_ENABLED": "false",
+        "PROXY_ACCESS_ENABLED": "false"
       }
     },
     "NHSOnline.Backend.PfsApi": {
@@ -130,6 +131,7 @@
         "SPINE_URL": "https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/",
         "DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS": "500",
         "NOMINATED_PHARMACY_ENABLED": "false",
+        "PROXY_ACCESS_ENABLED": "false",
         "GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE": "B83054",
         "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086",
         "SPINE_LDAP_HOST": "40.120.51.179",

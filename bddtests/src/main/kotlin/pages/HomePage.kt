@@ -85,6 +85,8 @@ open class HomePage : HybridPageObject() {
 
     val organDonationLink = link("Manage organ donation decision")
 
+    val linkedProfilesLink = link("Linked profiles")
+
     val expectedLinks = arrayListOf(checkSymptomsLink,
             bookAndManageAppointmentsLink,
             orderRepeatPrescriptionLink,
@@ -128,6 +130,10 @@ open class HomePage : HybridPageObject() {
                 expectedLinks.count(),
                 links.count())
         expectedLinks.forEach { link -> link.assertSingleElementPresent() }
+    }
+
+    fun isLinkedProfileVisible(): Boolean {
+        return linkedProfilesLink.isVisible
     }
 
     fun assertVersionNumberVisible() {

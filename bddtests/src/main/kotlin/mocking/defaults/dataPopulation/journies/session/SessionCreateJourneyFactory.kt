@@ -7,6 +7,7 @@ import org.junit.Assert
 abstract class SessionCreateJourneyFactory {
 
     abstract fun createFor(patient: Patient)
+    abstract fun createForWithLinkedAccounts(patient: Patient)
 
     companion object {
 

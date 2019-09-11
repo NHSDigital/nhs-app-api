@@ -2463,6 +2463,9 @@
                               type: "bool"
                             messaging: 
                               type: "bool"
+                            hasLinkedAccounts: 
+                              type: "boolean"
+                              description: "boolean to indicate if user has any linked accounts"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
             content: 

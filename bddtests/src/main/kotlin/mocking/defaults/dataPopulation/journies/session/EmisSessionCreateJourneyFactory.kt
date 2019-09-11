@@ -6,17 +6,25 @@ import models.Patient
 
 class EmisSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
 
-    override fun createFor(patient: Patient) {
-        client
-                .forEmis {
-                    authentication.endUserSessionRequest()
-                            .respondWithSuccess(patient.endUserSessionId)
-                }
+    override fun createForWithLinkedAccounts(patient: Patient) {
+        createEndUserSessionRequest(patient)
 
-        client
-                .forEmis {
-                    authentication.sessionRequest(patient)
-                            .respondWithSuccess(patient, AssociationType.Self)
-                }
+        client.forEmis {
+            authentication.sessionRequest(patient).respondWithSuccessForLinkedPatients(patient, AssociationType.Self)
+        }
+    }
+
+    override fun createFor(patient: Patient) {
+        createEndUserSessionRequest(patient)
+
+        client.forEmis {
+            authentication.sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self)
+        }
+    }
+
+    private fun createEndUserSessionRequest(patient: Patient) {
+        client.forEmis {
+            authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId)
+        }
     }
 }

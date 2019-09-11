@@ -34,6 +34,15 @@
 
     <organ-donation-link id="organ-donation-link"
                          data-sid="organ-donation-menu-item" />
+
+    <menu-item v-if="hasLinkedProfiles()"
+               id="menu-item-linkedProfiles"
+               data-sid="linkedProfile-menu-item"
+               :href="linkedProfilePath"
+               :text="$t('navigationMenuList.linkedProfiles')"
+               :aria-label="$t('navigationMenuList.linkedProfiles')"
+               :click-func="goToUrl"
+               :click-param="linkedProfilePath"/>
   </menu-item-list>
 </template>
 
@@ -68,6 +77,11 @@ export default {
     },
     myRecordPath() {
       return MYRECORD.path;
+    },
+  },
+  methods: {
+    hasLinkedProfiles() {
+      return this.$store.getters['serviceJourneyRules/hasLinkedAccountsEnabled'];
     },
   },
 };

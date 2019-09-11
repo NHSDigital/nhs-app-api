@@ -254,7 +254,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         [DataRow("Mr", "Fred", "", "Mr Fred")]
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData(string title, string firstname, string surname, string expected)
         {
-
             // Arrange
             _sessionsResponse.Title = title;
             _sessionsResponse.FirstName = firstname;
@@ -273,11 +272,66 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
 
-            var expectedResult = new GpSessionCreateResult.Success(expected, new EmisUserSession { NhsNumber = _nhsNumber, OdsCode = _odsCode});
+            var expectedResult = new GpSessionCreateResult.Success(expected, new EmisUserSession { NhsNumber = _nhsNumber, OdsCode = _odsCode, HasLinkedAccounts = true});
 
             createdResult.Should().BeEquivalentTo(expectedResult);
         }
 
+        [TestMethod]
+        public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData_IsProxySetToFalseWhenProxyPatientsIsEmpty()
+        {
+            // Arrange 
+            var expectedName =  $"{_sessionsResponse.Title} {_sessionsResponse.FirstName} {_sessionsResponse.Surname}";
+            
+            var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
+            var enumMapper = new EmisEnumMapper(enumMapperLogger);
+            
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
+
+            _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.None;
+            _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
+            _sessionsResponse.UserPatientLinks.ToList()[2].AssociationType = AssociationType.None;
+    
+            // Act
+            var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+
+            // Assert
+            _mockEmisClient.VerifyAll();
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
+
+            var expectedResult = new GpSessionCreateResult.Success(expectedName, new EmisUserSession { NhsNumber = _nhsNumber, OdsCode = _odsCode});
+
+            createdResult.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [TestMethod]
+        public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData_IsProxySetToTrueWhenProxyPatientsIsPopulated()
+        {
+            // Arrange 
+            var expectedName =  $"{_sessionsResponse.Title} {_sessionsResponse.FirstName} {_sessionsResponse.Surname}";
+            
+            var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
+            var enumMapper = new EmisEnumMapper(enumMapperLogger);
+            
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
+
+            _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.Proxy;
+            _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
+            _sessionsResponse.UserPatientLinks.ToList()[2].AssociationType = AssociationType.Proxy;
+    
+            // Act
+            var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+
+            // Assert
+            _mockEmisClient.VerifyAll();
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
+
+            var expectedResult = new GpSessionCreateResult.Success(expectedName, new EmisUserSession { NhsNumber = _nhsNumber, OdsCode = _odsCode, HasLinkedAccounts = true});
+
+            createdResult.Should().BeEquivalentTo(expectedResult);
+        }
+        
+        
         [TestMethod]
         public async Task Create_HappyPath_ReturnsAUserSessionInTheResult()
         {

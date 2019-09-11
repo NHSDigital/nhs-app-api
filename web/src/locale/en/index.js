@@ -1392,6 +1392,7 @@ export default {
     prescriptions: 'Order a repeat prescription',
     myRecord: 'View my GP medical record',
     organDonation: 'Manage organ donation decision',
+    linkedProfiles: 'Linked profiles',
   },
   organ_donation: {
     errors: {

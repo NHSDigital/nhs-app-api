@@ -38,10 +38,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
                 var userSession = HttpContext.GetUserSession();
                 var odsCode = userSession.GpUserSession.OdsCode;
+                var hasLinkedAccounts = userSession.GpUserSession.HasLinkedAccounts;
 
                 _logger.LogInformation($"Fetching Service Journey Rules for {userSession.GpUserSession.OdsCode}");
                 
-                var result = await _serviceJourneyRulesService.GetServiceJourneyRulesForOdsCode(odsCode);
+                var result = await _serviceJourneyRulesService.GetServiceJourneyRulesForOdsCode(odsCode, hasLinkedAccounts);
 
                 return result.Accept(new ServiceJourneyRulesGetResultVisitor());
             }

@@ -6,8 +6,10 @@ import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.AssociationType
+import mocking.emis.models.UserPatientLink
 import mocking.models.Mapping
 import models.Patient
+import models.patients.EmisPatients
 import org.apache.http.HttpStatus
 
 
@@ -31,6 +33,35 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
                 userPatientLinkToken = patient.userPatientLinkToken,
                 odsCode = patient.odsCode,
                 associationType = associationType)
+
+        return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(responseBody, GsonFactory.asPascal)
+                    .build()
+        }
+    }
+
+    fun respondWithSuccessForLinkedPatients(patient: Patient, associationType: AssociationType): Mapping {
+        val responseBody = CreateSessionResponseModel(
+                title = patient.title,
+                firstName = patient.firstName,
+                surname = patient.surname,
+                sessionId = patient.sessionId,
+                userPatientLinkToken = patient.userPatientLinkToken,
+                odsCode = patient.odsCode,
+                associationType = associationType)
+
+        val linkedPatient = EmisPatients.johnSmith
+
+        val userPatientLink = UserPatientLink(
+                title = linkedPatient.title,
+                firstName = linkedPatient.firstName,
+                surname = linkedPatient.surname,
+                userPatientLinkToken = linkedPatient.userPatientLinkToken,
+                odsCode = linkedPatient.odsCode,
+                associationType =  AssociationType.Proxy
+        )
+
+        responseBody.userPatientLinks.add(userPatientLink)
 
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(responseBody, GsonFactory.asPascal)

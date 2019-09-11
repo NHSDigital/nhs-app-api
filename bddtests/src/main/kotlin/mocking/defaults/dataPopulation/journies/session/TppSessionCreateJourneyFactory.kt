@@ -14,6 +14,10 @@ import models.Patient
 
 class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
 
+    override fun createForWithLinkedAccounts(patient: Patient) {
+        throw UnsupportedOperationException()
+    }
+
     private fun authenticateRequest(patient: Patient): Authenticate {
         return Authenticate(
                 apiVersion = TppMockDefaults.TPP_API_VERSION,

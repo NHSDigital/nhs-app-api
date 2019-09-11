@@ -77,6 +77,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private const int MinimumLinkageAge = 16;
         private readonly DateTimeOffset? _currentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         private string _serviceDeskReference;
+        private SessionConfigurationSettings _sessionConfigSettings;
 
         [TestInitialize]
         public void TestInitialize()
@@ -125,15 +126,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _serviceJourneyRulesResponse = _fixture.Create<ServiceJourneyRulesResponse>();
 
+            _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
+            
             _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
 
             _serviceJourneyRulesConfigResult =
                 new ServiceJourneyRulesConfigResult.Success(_serviceJourneyRulesResponse);
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode));
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true));
 
             _mockServiceJourneyRulesService
                 .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult));
 
             _userSession = new UserSession
@@ -500,6 +503,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_GetServiceJourneyRulesForOdsReturnsNotFound_Returns500InternalServerError()
         {
             // Arrange
+            _sessionConfigSettings.ProxyEnabled = true;
+            _userSession.GpUserSession.HasLinkedAccounts = true;
+            
             _mockServiceDeskErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound>()))
                 .Returns(_serviceDeskReference)
@@ -513,7 +519,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockServiceJourneyRulesService
                 .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
 
@@ -547,6 +553,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_GetServiceJourneyRulesForOdsReturnsInternalServerError_Returns500InternalServerError()
         {
             // Arrange
+            _sessionConfigSettings.ProxyEnabled = true;
+            _userSession.GpUserSession.HasLinkedAccounts = true;
+            
             _mockServiceDeskErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginServiceJourneyRulesOtherError>()))
                 .Returns(_serviceDeskReference)
@@ -561,7 +570,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockServiceJourneyRulesService
                 .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
 
@@ -594,6 +603,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [TestMethod]
         public async Task Post_HappyPath_ReturnsUsersSessionResponse()
         {
+            _sessionConfigSettings.ProxyEnabled = true;
+            _userSession.GpUserSession.HasLinkedAccounts = true;
+            
             // Act
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
@@ -631,6 +643,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Arrange
+            _sessionConfigSettings.ProxyEnabled = true;
+            _userSession.GpUserSession.HasLinkedAccounts = true;
+            
             _mockAuditor.Setup(x => x.AuditSessionEvent(
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber,
@@ -660,9 +675,37 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockServiceJourneyRulesService.VerifyAll();
         }
 
+        [DataRow(true, true, true)]
+        [DataRow(true, false, false)]
+        [DataRow(false, true, false)]
+        [DataRow(false, false, false)]
+        [DataTestMethod]
+        public async Task Post_VerifyCorrectLinkedAccountsValuePassedToServiceJourneyRulesService
+            (bool proxyEnabledFeatureToggle, bool hasLinkedAccounts, bool expectedValue)
+        {
+            // Arrange
+            _sessionConfigSettings.ProxyEnabled = proxyEnabledFeatureToggle;
+            _userSession.GpUserSession.HasLinkedAccounts = hasLinkedAccounts;
+            
+            _mockServiceJourneyRulesService
+                .Setup(x =>
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, expectedValue))
+                .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
+                .Verifiable();
+            
+            // Act
+            await _systemUnderTest.Post(_userSessionRequest);
+
+            // Assert
+            _mockServiceJourneyRulesService.Verify();
+        }
+        
         [TestMethod]
         public async Task Post_Im1ConnectionTokenHasCacheKey_AttemptsToDeleteFromCache()
-        {
+        {   // Arrange
+            _sessionConfigSettings.ProxyEnabled = true;
+            _userSession.GpUserSession.HasLinkedAccounts = true;
+            
             // Act
             await _systemUnderTest.Post(_userSessionRequest);
 

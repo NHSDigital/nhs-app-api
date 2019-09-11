@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 {
     public interface IServiceJourneyRulesService
     {
-        Task<ServiceJourneyRulesConfigResult> GetServiceJourneyRulesForOdsCode(string odsCode);
+        Task<ServiceJourneyRulesConfigResult> GetServiceJourneyRulesForOdsCode(string odsCode, bool hasLinkedAccounts);
     }
 }

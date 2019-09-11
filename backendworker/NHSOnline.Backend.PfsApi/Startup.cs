@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
@@ -222,6 +223,9 @@ namespace NHSOnline.Backend.PfsApi
             var visionConfig = CreateAndValidateVisionEnvironmentVariables(environment);
             services.AddSingleton(visionConfig);
 
+            var proxyConfig = CreateAndValidateProxyEnvironmentVariables();
+            services.AddSingleton(proxyConfig);
+
             var isSpineLdapLookupEnabled = bool.TrueString.Equals(Configuration.GetOrWarn("SPINE_LDAP_LOOKUP_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
 
             var spineLdapConfigurationSettings = CreateAndValidateSpineLdapConfig(isSpineLdapLookupEnabled);
@@ -262,6 +266,12 @@ namespace NHSOnline.Backend.PfsApi
 
             var nominatedPharmacyConfig = CreateAndValidateSpineEnvironmentVariables(nhsAppSpinePdsTraceProperties, nhsAppSpinePdsUpdateProperties);
             services.AddSingleton<INominatedPharmacyConfigurationSettings>(nominatedPharmacyConfig);
+        }
+
+        private SessionConfigurationSettings CreateAndValidateProxyEnvironmentVariables()
+        {
+            var proxyEnabled = bool.TrueString.Equals(Configuration.GetOrThrow("PROXY_ACCESS_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
+            return new SessionConfigurationSettings(proxyEnabled);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

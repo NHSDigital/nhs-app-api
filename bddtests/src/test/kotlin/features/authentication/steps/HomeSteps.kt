@@ -40,6 +40,12 @@ open class HomeSteps {
     }
 
     @Step
+    fun assertLinkedProfileLinkVisible() {
+        headerNative.waitForPageHeaderText("Home")
+        Assert.assertTrue(homePage.isLinkedProfileVisible())
+    }
+
+    @Step
     fun waitForLoginToCompleteSuccessfully() {
         homePage.locatorMethods.assertNativeElementsLoaded(homePage.greeting)
         if (homePage.onMobile()) {

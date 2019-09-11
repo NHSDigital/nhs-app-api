@@ -106,6 +106,7 @@ services:
       - TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE=xxx
       - NOMINATED_PHARMACY_ENABLED=true
       - SPINE_LDAP_CERT_PASSWORD=xxx
+      - PROXY_ACCESS_ENABLED=true
     depends_on:
       - nhsonline.redis.sds
     ports:

@@ -10,6 +10,7 @@ import {
   NOMINATED_PHARMACY,
   NOTIFICATIONS,
   ONLINE_CONSULTATIONS,
+  LINKED_ACCOUNTS,
 } from './mutation-types';
 
 export default {
@@ -69,5 +70,8 @@ export default {
   },
   [`${NOTIFICATIONS}Enabled`](state) {
     return get('rules.notifications')(state);
+  },
+  [`${LINKED_ACCOUNTS}Enabled`](state) {
+    return get('rules.hasLinkedAccounts')(state);
   },
 };
