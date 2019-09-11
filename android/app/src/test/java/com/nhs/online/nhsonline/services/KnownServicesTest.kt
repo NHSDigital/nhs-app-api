@@ -241,7 +241,7 @@ class KnownServicesTest : ResourceMockingClass() {
         val result =
                 testKnownServices.getPostRequestReloadUrl("https://ndopapp-int1.thunderbird.service.nhs.uk/")
 
-        Assert.assertEquals(result, getResourceString(R.string.dataSharingPath))
+        Assert.assertEquals(result, getResourceString(R.string.dataSharingURL))
     }
 
     private fun getResourceString(resourceId: Int): String {

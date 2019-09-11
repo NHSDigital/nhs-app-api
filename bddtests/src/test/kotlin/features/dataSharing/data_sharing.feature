@@ -34,8 +34,6 @@ Feature: Data Sharing Frontend
   |Overview    |Make your choice                               |Make your choice                               |
 
   @android
-  @nativepending
-  @nhso-6689
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
     Given I am on the Data Sharing Overview page
     When I click the link called 'Visit the NHS.UK website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'

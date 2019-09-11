@@ -127,20 +127,21 @@ class KnownServices {
         let accessibilityStatementURLOld: URL = URL(string: config.AccessibilityStatementURLOld)!
         
         let biometricsHelpURl: URL = URL(string: config.BiometricHelpURL)!
+        let conditionsUrl: URL = URL(string: config.ConditionsUrlPath)!
+        let dataSharingUrl: URL = URL(string: config.DataSharingUrlPath)!
+        
         externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL, biometricsHelpURl,
-                        helpURLOld, termsAndConditionsURLOld, privacyPolicyURLOld, cookiesPolicyURLOld, openSourceLicensesURLOld, medicalRecordAbbreviationsURLOld, accessibilityStatementURLOld]
+                        helpURLOld, termsAndConditionsURLOld, privacyPolicyURLOld, cookiesPolicyURLOld, openSourceLicensesURLOld, medicalRecordAbbreviationsURLOld, accessibilityStatementURLOld, conditionsUrl, dataSharingUrl]
     }
     
     private func buildKnownServices() {
         let nhsoService = buildNhsoService()
-        let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
         let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111,title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
         let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111,  title: nhs111Title, validateSession: false, allowNativeInteraction: false)
 
         let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
         
         self.serviceList.append(nhsoService)
-        self.serviceList.append(conditionService)
         self.serviceList.append(nhs111Service)
         self.serviceList.append(nhs111LocationService)
         self.serviceList.append(dataPrefService)
@@ -161,12 +162,11 @@ class KnownServices {
         nhsoService.addPathInfo(path: config.MoreUrlPath, service: .MORE, validateSession: true, allowNativeInteraction: true, title: moreTitle)
         nhsoService.addPathInfo(path: config.MyAccountUrlPath, service: .ACCOUNT, validateSession: true, allowNativeInteraction: true, title: myAccountTitle)
         nhsoService.addPathInfo(path: config.OrganDonationUrlPath, service: .ORGAN_DONATION, validateSession: true, allowNativeInteraction: true, title: organDonationTitle)
-        nhsoService.addPathInfo(path: config.DataSharingUrlPath, service: .DATA_SHARING, validateSession: true, allowNativeInteraction: true, title: dataSharingTitle)
         return nhsoService
     }
     
     enum Service {
-        case NHS_111, CONDITIONS, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, ADMIN_HELP, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION, DATA_SHARING;
+        case NHS_111, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, ADMIN_HELP, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION;
     }
 }
 

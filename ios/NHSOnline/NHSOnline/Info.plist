@@ -115,8 +115,6 @@
 	<string>https://$(NHS_111_LOCATION_URL)</string>
 	<key>OrganDonationUrlPath</key>
 	<string>$(ORGAN_DONATION_URL_PATH)</string>
-	<key>ConditionsUrlPath</key>
-	<string>https://$(CONDITIONS_URL_PATH)</string>
 	<key>MoreUrlPath</key>
 	<string>$(MORE_URL)</string>
 	<key>MyRecordUrlPath</key>
@@ -174,11 +172,13 @@
 	<key>OpenSourceLicencesURLOld</key>
 	<string>https://$(OPEN_SOURCE_LICENCE_URL_OLD)</string>
 	<key>DataSharingUrlPath</key>
-	<string>$(DATA_SHARING_URL)</string>
+	<string>https://$(DATA_SHARING_URL)</string>
 	<key>AccessibilityStatementURL</key>
 	<string>https://$(ACCESSIBILITY_STATEMENT_URL)</string>
 	<key>AccessibilityStatementURLOld</key>
 	<string>https://$(ACCESSIBILITY_STATEMENT_URL_OLD)</string>
+	<key>ConditionsUrlPath</key>
+	<string>https://$(CONDITIONS_URL_PATH)</string>
 	<key>ResponseWaitingTime</key>
 	<integer>20</integer>
 	<key>SessionTimeout</key>

@@ -80,15 +80,6 @@ class KnownServices(private val context: Context) {
         val services = arrayListOf<KnownService>()
         val nhsAppService = buildNHSInternalAppService()
 
-        val nhsUK = KnownService(fetchStringResource(R.string.nhsUK))
-        nhsUK.addPathInfo(URL(fetchStringResource(R.string.dataSharing)).path,
-            false,
-            fetchStringResource(R.string.data_preferences_header))
-
-        nhsUK.addPathInfo(URL(fetchStringResource(R.string.conditions)).path,
-            false,
-            fetchStringResource(R.string.conditions_header))
-
         val nhs111 = KnownService(fetchStringResource(
             R.string.nhs111),
             fetchStringResource(R.string.nhs_111_header),
@@ -100,7 +91,6 @@ class KnownServices(private val context: Context) {
             false)
 
         services.add(nhsAppService)
-        services.add(nhsUK)
         services.add(nhs111)
         services.add(dataPref)
 
@@ -169,9 +159,6 @@ class KnownServices(private val context: Context) {
         internalService.addPathInfo(fetchStringResource(R.string.organDonationPath),
             true,
             fetchStringResource(R.string.organ_donation_header))
-        internalService.addPathInfo(fetchStringResource(R.string.dataSharingPath),
-            true,
-            fetchStringResource(R.string.data_sharing_header))
         internalService.addPathInfo(fetchStringResource(R.string.adminHelpPath),
             true,
             fetchStringResource(R.string.admin_help_header))
@@ -197,7 +184,7 @@ class KnownServices(private val context: Context) {
     fun getPostRequestReloadUrl(url: String): String? {
         return when {
             url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(
-                R.string.dataSharingPath)
+                R.string.dataSharingURL)
             else -> null
         }
     }

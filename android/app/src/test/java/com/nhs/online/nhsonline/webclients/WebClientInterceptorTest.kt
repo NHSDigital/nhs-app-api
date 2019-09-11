@@ -315,7 +315,7 @@ class WebClientInterceptorTest {
     }
 
     @Test
-    fun pageFinishUnknownURL() {
+    fun pageFinishWithUnknownURLFollowedByKnownURLToBeOpenedInWebview() {
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -327,14 +327,12 @@ class WebClientInterceptorTest {
         webInterceptor.onPageFinished(webViewMock, "https://google.com")
         verify(uiInteractorMock, never()).dismissProgressDialog()
 
-        webInterceptor.onPageFinished(webViewMock, "https://www.nhs.uk")
-
+        webInterceptor.onPageFinished(webViewMock, "https://111.nhs.uk")
         verify(uiInteractorMock).dismissProgressDialog()
     }
 
     @Test
-    fun pageFinishKnownURL() {
-
+    fun pageFinishKnownURLToBeOpenedInWebview() {
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -343,7 +341,7 @@ class WebClientInterceptorTest {
                 schemeHandlersMock
         )
 
-        webInterceptor.onPageFinished(webViewMock, "https://www.nhs.uk")
+        webInterceptor.onPageFinished(webViewMock, "https://111.nhs.uk")
 
         verify(uiInteractorMock, times(1)).dismissProgressDialog()
     }
@@ -368,7 +366,7 @@ class WebClientInterceptorTest {
     }
 
     @Test
-    fun receivedErrorKnownURL() {
+    fun receivedErrorKnownURLToBeOpenedInWebview() {
 
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
@@ -378,8 +376,8 @@ class WebClientInterceptorTest {
                 schemeHandlersMock
         )
 
-        val url = "https://www.nhs.uk"
-        whenever(contextMock.getString(R.string.baseHost)).thenReturn("www.nhs.uk")
+        val url = "https://111.nhs.uk"
+        whenever(contextMock.getString(R.string.baseHost)).thenReturn("111.nhs.uk")
         whenever(webViewMock?.url).thenReturn(url)
 
         webInterceptor.onReceivedError(webViewMock, 404, "Error", url)

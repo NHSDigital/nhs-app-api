@@ -2,11 +2,11 @@ import Foundation
 
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
-        case HomeUrl, Nhs111Url, Nhs111LocationUrl, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost
-        case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
+        case HomeUrl, Nhs111Url, Nhs111LocationUrl, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost
+        case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout, ApiCallTimeoutSeconds
-        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld
+        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld, ConditionsUrlPath, DataSharingUrlPath
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
         case BiometricHelpURL, FidoLoginErrorPath, BiometricRedirectURL, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
         case MenuTimeoutSeconds
@@ -24,7 +24,6 @@ struct Config: Decodable {
     let MyRecordUrlPath: String
     let MyRecordGpAtHandUrlPath: String
     let MoreUrlPath: String
-    let ConditionsUrlPath: String
     let AppointmentsUrlPath: String
     let AppontmentsGpAtHandUrlPath: String
     let InformaticaUrlPath: String
@@ -34,7 +33,6 @@ struct Config: Decodable {
     let PrescriptionsUrlPath: String
     let PrescriptionsGpAtHandUrlPath: String
     let MyAccountUrlPath: String
-    let DataSharingUrlPath: String
     let SessionUrlPath: String
     let AuthRedirectPath: String
     let NhsOnlineRequiredQueryString:String
@@ -55,6 +53,8 @@ struct Config: Decodable {
     let OpenSourceLicencesURLOld: String
     let MedicalRecordAbbreviationsURLOld: String
     let AccessibilityStatementURLOld: String
+    let ConditionsUrlPath: String
+    let DataSharingUrlPath: String
     
     let BaseApiUrl: String
     let ConfigurationApiPath: String

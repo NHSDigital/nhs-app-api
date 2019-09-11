@@ -27,7 +27,7 @@ open class ResourceMockingClass {
             on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
             on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
             on { getString(R.string.nhs111Location) } doReturn "https://111.service.nhs.uk/"
-            on { getString(R.string.dataSharing) } doReturn "https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing"
+            on { getString(R.string.dataSharingURL) } doReturn "https://www.nhs.uk/your-nhs-data-matters/"
             on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
             on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again." +
                     "\n\nIf the problem continues and you need to book an appointment or get a prescription now, " +
@@ -48,8 +48,10 @@ open class ResourceMockingClass {
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/"
-            )
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/",
+                    "https://www.nhs.uk/your-nhs-data-matters/",
+                    "https://www.nhs.uk/conditions/"
+                    )
             on { getString(R.string.nhs_111_header_description) } doReturn "one one one Online"
 
             on { getString(R.string.loginPath) } doReturn "login"
@@ -88,8 +90,6 @@ open class ResourceMockingClass {
             on { getStringArray(R.array.nativeAppHosts) } doReturn arrayOf(
                 "https://111.nhs.uk/",
                 "https://111.service.nhs.uk/",
-                "https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/",
-                "https://www.nhs.uk/conditions/",
                 "https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/"
             )
             on { getStringArray(R.array.nhsLoginPrefixList) } doReturn arrayOf(
