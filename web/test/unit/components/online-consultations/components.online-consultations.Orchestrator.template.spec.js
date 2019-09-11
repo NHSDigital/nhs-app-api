@@ -75,7 +75,7 @@ describe('orchestrator', () => {
       describe('validation error dialog', () => {
         it('will display validationErrorMessage when isValidationError is true', () => {
           // Arrange
-          const validationHeader = 'appointments.admin_help.errors.validation.header';
+          const validationHeader = 'onlineConsultations.validationErrors.header';
           const validationErrorMessage = 'test.validation.error.message';
           const expectedValidationHeader = `translate_${validationHeader}`;
           const expectedValidationErrorMessage = `translate_${validationErrorMessage}`;
@@ -378,7 +378,7 @@ describe('orchestrator', () => {
           // Assert
           const continueButton = orchestrator.find('generic-button-stub');
           expect(continueButton.exists()).toBe(true);
-          expect(continueButton.text()).toEqual('translate_appointments.admin_help.orchestrator.continueButton');
+          expect(continueButton.text()).toEqual('translate_onlineConsultations.orchestrator.continueButton');
         });
 
         describe('when clicked', () => {
@@ -423,7 +423,7 @@ describe('orchestrator', () => {
           // Assert
           const backButton = orchestrator.find('generic-button-stub[buttonclasses="nhsuk-button,nhsuk-button--secondary"]');
           expect(backButton.exists()).toBe(true);
-          expect(backButton.text()).toEqual('translate_appointments.admin_help.orchestrator.endMyConsultationButton');
+          expect(backButton.text()).toEqual('translate_onlineConsultations.orchestrator.endMyConsultationButton');
         });
       });
 

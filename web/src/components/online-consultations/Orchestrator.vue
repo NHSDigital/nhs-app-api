@@ -7,7 +7,7 @@
                       message-type="error"
                       role="alert">
         <message-text>
-          {{ $t('appointments.admin_help.errors.validation.header') }}
+          {{ $t('onlineConsultations.validationErrors.header') }}
         </message-text>
         <message-list>
           <li>{{ validationErrorMessage }}</li>
@@ -52,7 +52,7 @@
         <generic-button :button-classes="['nhsuk-button']"
                         click-delay="short"
                         @click.prevent="continueClicked">
-          {{ $t('appointments.admin_help.orchestrator.continueButton') }}
+          {{ $t('onlineConsultations.orchestrator.continueButton') }}
         </generic-button>
       </no-js-form>
     </div>
@@ -82,7 +82,7 @@
       <generic-button :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
                       click-delay="short"
                       @click.prevent="backClicked">
-        {{ $t('appointments.admin_help.orchestrator.backButton') }}
+        {{ $t('onlineConsultations.orchestrator.backButton') }}
       </generic-button>
     </no-js-form>
     <form v-else :action="indexPath">
@@ -252,8 +252,8 @@ export default {
     },
     backButtonText() {
       return this.isSuccess
-        ? 'appointments.admin_help.orchestrator.backToHomeButton'
-        : 'appointments.admin_help.orchestrator.endMyConsultationButton';
+        ? 'onlineConsultations.orchestrator.backToHomeButton'
+        : 'onlineConsultations.orchestrator.endMyConsultationButton';
     },
     nothingToDisplay() {
       if (this.isSuccess) {

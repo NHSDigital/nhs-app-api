@@ -1,6 +1,18 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <ul :class="$style['list-menu']">
+      <sjr-if journey="cdssAdmin" tag="li">
+        <analytics-tracked-tag :text="$t('sc04.requestGpHelp.subheader')"
+                               data-purpose="text_link">
+          <a id="btn_gp_help"
+             :href="requestAdminHelpPath"
+             :class="$style['no-decoration']"
+             @click="navigate($event)">
+            <h2>{{ $t('sc04.requestGpHelp.subheader') }}</h2>
+            <p>{{ $t('sc04.requestGpHelp.body') }}</p>
+          </a>
+        </analytics-tracked-tag>
+      </sjr-if>
       <li>
         <organ-donation-link id="btn_organ_donation" :class-name="[$style['no-decoration']]">
           <h2>{{ $t('sc04.organDonation.subheader') }}</h2>
@@ -21,18 +33,6 @@
           </a>
         </analytics-tracked-tag>
       </li>
-      <sjr-if journey="cdssAdmin" tag="li">
-        <analytics-tracked-tag :text="$t('sc04.requestGpHelp.subheader')"
-                               data-purpose="text_link">
-          <a id="btn_gp_help"
-             :href="requestAdminHelpPath"
-             :class="$style['no-decoration']"
-             @click="navigate($event)">
-            <h2>{{ $t('sc04.requestGpHelp.subheader') }}</h2>
-            <p>{{ $t('sc04.requestGpHelp.body') }}</p>
-          </a>
-        </analytics-tracked-tag>
-      </sjr-if>
     </ul>
   </div>
 </template>

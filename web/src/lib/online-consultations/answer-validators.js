@@ -3,7 +3,7 @@ import moment from 'moment';
 
 const integerRegExp = /^-?\d+$/;
 const decimalRegExp = /^-?\d+(\.\d+)?$/;
-const baseMessagePath = 'appointments.admin_help.errors.validation.message.';
+const baseMessagePath = 'onlineConsultations.validationErrors.message.';
 const booleanOptions = ['true', 'false'];
 
 export function questionAttachmentAnswerValid(answer = {}, required, accept = [], maxSize) {

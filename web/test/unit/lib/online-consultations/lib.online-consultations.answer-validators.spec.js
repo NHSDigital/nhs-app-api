@@ -17,7 +17,7 @@ import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import each from 'jest-each';
 
 describe('online consultations answer validators', () => {
-  const baseMessage = 'appointments.admin_help.errors.validation.message.';
+  const baseMessage = 'onlineConsultations.validationErrors.message.';
   let validator;
   let message;
   let additionalValue;

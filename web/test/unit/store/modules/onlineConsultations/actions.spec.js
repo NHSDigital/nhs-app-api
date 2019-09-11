@@ -1,7 +1,6 @@
 import actions from '@/store/modules/onlineConsultations/actions';
 import {
   CLEAR,
-  UPDATE_REQUEST_ID,
   SET_STATUS,
   SET_DATA_REQUIREMENTS,
   SET_SESSION_ID,
@@ -71,10 +70,6 @@ describe('online consultations store actions', () => {
         serviceDefinitionId,
         provider,
       };
-    });
-
-    afterEach(() => {
-      expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_ID);
     });
 
     describe('attempted get service definition is rejected', () => {
@@ -269,10 +264,6 @@ describe('online consultations store actions', () => {
 
         getParameters.mockClear();
         getParameters.mockReturnValue(parameters);
-      });
-
-      afterEach(() => {
-        expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_ID);
       });
 
       describe('action called with addJavascriptDisabledHeader set to true', () => {

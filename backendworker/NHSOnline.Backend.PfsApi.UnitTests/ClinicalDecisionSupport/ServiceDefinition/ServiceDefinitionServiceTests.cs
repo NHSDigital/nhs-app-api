@@ -16,7 +16,6 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Mappers;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
@@ -52,12 +51,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\" }";
         private const string ServiceDefinitionJsonContent = "{ \"resourceType\" : \"ServiceDefinition\", \"contained\": [ { \"resourceType\": \"Questionnaire\" } ], \"publisher\" : \"eConsultHealthLtd\"  }";
         private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
-        private readonly DemographicsResult.Success _successResponse = new DemographicsResult.Success(new DemographicsResponse());
-        private readonly Parameters _parameters = new Parameters();
-        private readonly Patient _patient = new Patient();
         private const string paramString =
             "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
-        
+
         private ServiceDefinitionService _service;
         private DemographicsResult _demographicsResult;
         
@@ -76,18 +72,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockCreateFhirParam = new Mock<ICreateFhirParameter>();
             
             _demographicsResult = new DemographicsResult.Success(_fixture.Create<DemographicsResponse>());
-            _successResponse.Response.Address = "Test";
-            _successResponse.Response.NhsNumber = "111 111 111";
-            _successResponse.Response.DateOfBirth = DateTime.UtcNow;
-            _successResponse.Response.Sex = "Male";
             
-            var fhirAddress = new Address { Text = "TEST" };
-
-            var addressList = new List<Address> { fhirAddress };
-
-            _patient.Address = addressList;
-
-            _parameters.Add("answer", _patient);
             _mockServiceDefinitionListBuilder = new Mock<IServiceDefinitionListBuilder>();
             
             _fixture.Customize<UserSession>(c => c
@@ -127,7 +112,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 _mockDemographicsOlcMapper.Object,
                 _mockAuditor.Object,
                 _mockGpSystemFactory.Object,
-                providersSettings,
                 _mockCreateFhirParam.Object
                 );
         }
@@ -356,7 +340,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         public async Task EvaluateServiceDefinition_WhenNullParametersProvided_ReturnsBadRequest()
         {
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, null, false, _userSession);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, null, false, false, _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -374,7 +358,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .Throws<HttpRequestException>();
 
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, _userSession);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -394,7 +378,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, _userSession);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -418,7 +402,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, _userSession);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -445,7 +429,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, _userSession);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -471,7 +455,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, _userSession);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
@@ -491,11 +475,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockProviderHttpClient
                 .Setup(pc => pc.EvaluateServiceDefinition(
                     It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
+                    It.Is<string>(body => body.Contains("\"resourceType\":\"Patient\"", StringComparison.Ordinal)),
                     It.IsAny<bool>()))
                 .ReturnsAsync(httpResponse);
 
-            var olcdem = new OlcDemographics
+            var olcDem = new OlcDemographics
             {
                 NameFull = "Test Test",
                 NhsNumber = "111 111 111",
@@ -503,7 +487,35 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 DateOfBirth = DateTime.UtcNow
             };
 
-            _mockDemographicsOlcMapper.Setup(d => d.Map(It.IsAny<DemographicsResponse>())).Returns(olcdem);
+            _mockDemographicsOlcMapper.Setup(d => d.Map(It.IsAny<DemographicsResponse>())).Returns(olcDem);
+
+            _mockCreateFhirParam.Setup(cfp => cfp.CreatePatientFhir(
+                It.IsAny<IMapper<DemographicsResponse, OlcDemographics>>(),
+                It.IsAny<DemographicsResult.Success>())).Returns(new Patient
+            {
+                Address = new List<Address>
+                {
+                    new Address
+                    {
+                        Text = olcDem.AddressFull
+                    }
+                },
+                BirthDate = olcDem.DateOfBirth.ToString(),
+                Name = new List<HumanName>
+                {
+                    new HumanName
+                    {
+                        Text = olcDem.NameFull
+                    }
+                },
+                Identifier = new List<Identifier>
+                {
+                    new Identifier
+                    {
+                        Value = olcDem.NhsNumber
+                    }
+                }
+            });
 
             var fhirParser = new FhirJsonParser();
             var paramsParsed = fhirParser.Parse(paramString);
@@ -511,7 +523,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             var bodyParameters = (Parameters) paramsParsed;
             
             // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, bodyParameters, false, _userSession);
+            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, bodyParameters, false, true ,_userSession);
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -539,7 +551,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .ReturnsAsync(httpResponse);
             
             // Act
-            await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), addJsDisabledHeader, _userSession);
+            await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), addJsDisabledHeader, false, _userSession);
 
             // Assert
             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(

@@ -168,7 +168,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
                 item.Option.ForEach(option =>
                 {
-
                     var optionValue = (Coding) option.Value;
                     optionValue.Display = htmlSanitizer.SanitizeHtml(optionValue.Display, Whitelist);
                     option.Value = optionValue;

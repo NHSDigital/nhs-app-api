@@ -4,7 +4,7 @@ import CheckboxGroup from '@/components/CheckboxGroup';
 import { mount } from '../../helpers';
 import each from 'jest-each';
 
-const multiChoiceValidationMessage = 'appointments.admin_help.errors.validation.message.multiple_choiceAtLeastOneRequired';
+const multiChoiceValidationMessage = 'onlineConsultations.validationErrors.message.multiple_choiceAtLeastOneRequired';
 let wrapper;
 
 const getCheckboxGroup = (useComponent = true) => wrapper.find(useComponent ? CheckboxGroup : 'checkbox-group');

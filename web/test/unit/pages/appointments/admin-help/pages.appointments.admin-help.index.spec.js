@@ -1,7 +1,6 @@
 import { mount } from '../../../helpers';
 import each from 'jest-each';
 import AdminHelpPage from '@/pages/appointments/admin-help/index';
-import { INDEX } from '@/lib/routes';
 import { noJsParameterName } from '@/lib/noJs';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
@@ -15,6 +14,9 @@ describe('Admin Help page', () => {
   const redirect = jest.fn();
 
   const $store = {
+    app: {
+      $env: {},
+    },
     state: {
       device: {
         isNativeApp: true,
@@ -40,7 +42,16 @@ describe('Admin Help page', () => {
     desktopWeb: 'desktopWeb',
   };
 
-  const mountPage = () => {
+  const mountPage = ({ stubDemographicsQuestion = true } = {}) => {
+    const stubs = {
+      orchestrator: '<div class="orchestrator"></div>',
+      'page-title': '<div></div>',
+    };
+
+    if (stubDemographicsQuestion) {
+      stubs['demographics-question'] = '<div class="demographicsQuestion"></div>';
+    }
+
     page = mount(AdminHelpPage, {
       data: () => ({
         provider: 'stubs',
@@ -49,10 +60,7 @@ describe('Admin Help page', () => {
       $store,
       $style,
       showTemplate: () => true,
-      stubs: {
-        orchestrator: '<div class="orchestrator"></div>',
-        'page-title': '<div></div>',
-      },
+      stubs,
     });
   };
 
@@ -105,22 +113,6 @@ describe('Admin Help page', () => {
 
   describe('asyncData', () => {
     let req = {};
-
-    describe('with online consultations disabled', () => {
-      each([
-        'none',
-      ]).it('should redirect to logged in home page', async (provider) => {
-        $store.state.serviceJourneyRules.rules.cdssAdmin.provider = provider;
-        // Arrange
-        mountPage();
-
-        // Act
-        await page.vm.$options.asyncData({ store: $store, redirect });
-
-        // Assert
-        expect(redirect).toHaveBeenCalledWith(302, INDEX.path, null);
-      });
-    });
     describe('with online consultations enabled', () => {
       each([
         'stubs',
@@ -222,10 +214,17 @@ describe('Admin Help page', () => {
       });
     });
     describe('service definition evaluation', () => {
-      describe('with question missing from the store', () => {
+      describe('with question missing from the store and demographics answered', () => {
+        beforeEach(() => {
+          $store.state.onlineConsultations.question = undefined;
+          $store.state.onlineConsultations.demographicsQuestionAnswered = true;
+        });
+        afterAll(() => {
+          $store.state.onlineConsultations.demographicsQuestionAnswered = false;
+        });
+
         it('should not dispatch evaluate action', async () => {
           // Arrange
-          $store.state.onlineConsultations.question = undefined;
           mountPage();
 
           // Act
@@ -240,7 +239,6 @@ describe('Admin Help page', () => {
         });
         it('should dispatch get action', async () => {
           // Arrange
-          $store.state.onlineConsultations.question = undefined;
           mountPage();
 
           // Act
@@ -292,6 +290,9 @@ describe('Admin Help page', () => {
   });
   describe('template', () => {
     describe('error dialog', () => {
+      afterAll(() => {
+        $store.state.onlineConsultations.error = false;
+      });
       it('should not appear if onlineConsultations error state is false', () => {
         // Arrange
         $store.state.onlineConsultations.error = false;
@@ -328,10 +329,52 @@ describe('Admin Help page', () => {
         expect(errorReason.text()).toBe('translate_appointments.admin_help.errors.message.text');
       });
     });
+    describe('demographicsQuestion', () => {
+      each([
+        true,
+        false,
+      ]).it('will be shown if demographics question is answered', (demographicsQuestionAnswered) => {
+        // Arrange
+        $store.state.onlineConsultations.demographicsQuestionAnswered =
+          demographicsQuestionAnswered;
+        mountPage();
+
+        // Act
+        const demographicsQuestion = page.find('div.demographicsQuestion');
+
+        // Assert
+        expect(demographicsQuestion).toBeDefined();
+      });
+      it('will have appropriate attributes set for provider, serviceDefinitionId and checkboxLabel', () => {
+        // Arrange
+        mountPage();
+
+        // Act
+        const { provider, serviceDefinitionId, checkboxLabel } = page.find('div.demographicsQuestion').vm;
+
+        // Assert
+        expect(provider).toEqual('stubs');
+        expect(serviceDefinitionId).toEqual('NHS_ADMIN');
+        expect(checkboxLabel).toEqual('translate_appointments.admin_help.demographicsQuestion.checkboxLabel');
+      });
+      it('will display the three demographics question paragraphs passed via slot', () => {
+        // Arrange
+        mountPage({ stubDemographicsQuestion: false });
+
+        // Act
+        const demographicsQuestionParagraphs = page.find('div.demographicsQuestion').findAll('p').wrappers;
+
+        // Assert
+        expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
+        expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
+        expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
+      });
+    });
     describe('orchestrator', () => {
-      it('should appear if onlineConsultations error state is false', () => {
+      it('should appear if onlineConsultations error state is false and demographics question answered', () => {
         // Arrange
         $store.state.onlineConsultations.error = false;
+        $store.state.onlineConsultations.demographicsQuestionAnswered = true;
 
         // Act
         mountPage();

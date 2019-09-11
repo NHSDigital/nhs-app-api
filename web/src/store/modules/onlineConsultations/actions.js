@@ -13,7 +13,6 @@ import {
   SET_REFERRAL_REQUESTS,
   SET_ERROR,
   SET_ANSWER_IS_EMPTY,
-  UPDATE_REQUEST_ID,
   FILE_LOADING,
   FILE_LOAD_COMPLETE,
   SET_VALIDATION_ERROR_FROM_RESPONSE,
@@ -22,6 +21,8 @@ import {
   CLEAR_CLIENT_ERRORS,
   SET_SERVICE_DEFINITIONS,
   SET_GP_ADVICE_SERVICE_DEFINITION_ID,
+  SET_DEMOGRAPHICS_CONSENT_GIVEN,
+  SET_DEMOGRAPHICS_QUESTION_ANSWERED,
 } from './mutation-types';
 import {
   getDataRequirements,
@@ -41,8 +42,8 @@ const showError = (store) => {
 };
 
 export default {
-  clear({ commit }, resetRequestId) {
-    commit(CLEAR, resetRequestId);
+  clear({ commit }, clearDemographicsConsent) {
+    commit(CLEAR, clearDemographicsConsent);
   },
   getServiceDefinitions({ commit }, params) {
     const store = this;
@@ -96,14 +97,13 @@ export default {
 
         commit(SET_STATUS, DATA_REQUIRED);
         commit(SET_QUESTION, question);
+        commit(SET_DEMOGRAPHICS_QUESTION_ANSWERED);
         return;
       }
 
       showError(store);
     }).catch(() => {
       showError(store);
-    }).finally(() => {
-      commit(UPDATE_REQUEST_ID);
     });
   },
   evaluateServiceDefinition({ commit, state, rootState }, params) {
@@ -116,13 +116,22 @@ export default {
       return undefined;
     }
 
-
-    return store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate({
+    const requestParams = {
       serviceDefinitionId,
       provider,
       addJavascriptDisabledHeader,
       parameters,
-    }).then((response) => {
+    };
+
+    if (state.dataRequirements &&
+        state.dataRequirements.patient &&
+        state.demographicsConsentGiven) {
+      requestParams.demographicsConsentGiven = state.demographicsConsentGiven;
+    }
+
+    return store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate(
+      requestParams,
+    ).then((response) => {
       commit(CLEAR);
       if (response === undefined) {
         showError(store);
@@ -173,8 +182,6 @@ export default {
       showError(store);
     }).catch(() => {
       showError(store);
-    }).finally(() => {
-      commit(UPDATE_REQUEST_ID);
     });
   },
   setAnswer({ commit }, answer) {
@@ -213,5 +220,11 @@ export default {
   },
   clearClientErrors({ commit }) {
     commit(CLEAR_CLIENT_ERRORS);
+  },
+  setDemographicsConsentGiven({ commit }, consent) {
+    commit(SET_DEMOGRAPHICS_CONSENT_GIVEN, consent);
+  },
+  setDemographicsQuestionAnswered({ commit }) {
+    commit(SET_DEMOGRAPHICS_QUESTION_ANSWERED);
   },
 };

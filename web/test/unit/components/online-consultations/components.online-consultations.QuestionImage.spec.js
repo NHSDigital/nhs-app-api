@@ -3,7 +3,7 @@ import QuestionImage from '@/components/online-consultations/QuestionImage';
 import GenericImageInput from '@/components/widgets/GenericImageInput';
 import { mount } from '../../helpers';
 
-const imageValidationMessage = 'appointments.admin_help.errors.validation.message.image';
+const imageValidationMessage = 'onlineConsultations.validationErrors.message.image';
 let wrapper;
 
 const getImageWrapper = (useComponent = true) => wrapper.find(useComponent ? GenericImageInput : 'img');

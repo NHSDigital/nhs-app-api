@@ -304,6 +304,18 @@ class CDSApi {
   {{/ifEquals}}
 
     {{#each ../parameters}}
+      {{#ifEquals this.in "query"}}
+        if (parameters['{{this.name}}'] !== undefined) {
+          queryParameters['{{this.name}}'] = parameters['{{this.name}}'];
+        }
+
+        {{#ifEquals this.required true}}
+        if (parameters['{{this.name}}'] === undefined) {
+          deferred.reject(new Error('Missing required parameter: {{this.name}}'));
+          return deferred.promise;
+        }
+        {{/ifEquals}}
+      {{/ifEquals}}
       {{#ifEquals this.in "path"}}
         if (parameters['{{this.name}}'] !== undefined) {
           queryParameters['{{this.name}}'] = parameters['{{this.name}}'];

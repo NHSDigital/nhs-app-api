@@ -3,11 +3,11 @@
     <message-dialog v-if="isError" role="alert">
       <message-text data-purpose="error-heading"
                     :is-header="true">
-        {{ $t('appointments.admin_help.errors.header') }}
+        {{ $t('appointments.gp_advice.errors.header') }}
       </message-text>
       <message-text data-purpose="reason-error"
-                    :aria-label="$t('appointments.admin_help.errors.message.label')">
-        {{ $t('appointments.admin_help.errors.message.text') }}
+                    :aria-label="$t('appointments.gp_advice.errors.message.label')">
+        {{ $t('appointments.gp_advice.errors.message.text') }}
       </message-text>
     </message-dialog>
     <div v-else>
@@ -50,7 +50,7 @@
                     :button-classes="['button', 'grey']"
                     click-delay="short"
                     @click.prevent="backClicked">
-      {{ $t('appointments.admin_help.orchestrator.backButton') }}
+      {{ $t('onlineConsultations.orchestrator.backButton') }}
     </generic-button>
   </div>
 </template>

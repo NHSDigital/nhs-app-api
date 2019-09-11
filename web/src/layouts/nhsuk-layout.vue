@@ -58,7 +58,7 @@ import HotJar from '@/components/widgets/HotJar';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import Modal from '@/components/modal/Modal';
 import Sources from '@/lib/sources';
-
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
   components: {
@@ -208,9 +208,11 @@ export default {
   },
   mounted() {
     if (process.client) {
+      EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
+
       this.$store.subscribe((mutation) => {
         if (mutation.type === 'myRecord/ACCEPT_TERMS') {
-          this.$refs.nhsAppRoot.focus();
+          this.focusNhsAppRoot();
         }
       });
 
@@ -233,10 +235,13 @@ export default {
   },
   updated() {
     if (this.pathChanged) {
-      this.$refs.nhsAppRoot.focus();
+      this.focusNhsAppRoot();
       this.pathChanged = false;
       NativeCallbacks.pageLoadComplete();
     }
+  },
+  beforeDestroy() {
+    EventBus.$off(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
   },
   methods: {
     isLoginPage() {
@@ -250,6 +255,9 @@ export default {
     },
     isAnalyticsCookieAccepted() {
       return this.$store.state.termsAndConditions.analyticsCookieAccepted;
+    },
+    focusNhsAppRoot() {
+      this.$refs.nhsAppRoot.focus();
     },
   },
 };

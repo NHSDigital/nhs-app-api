@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
@@ -12,7 +10,6 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -32,7 +29,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly IMapper<DemographicsResponse, OlcDemographics> _demographicsOlcMapper;
         private readonly IAuditor _auditor;
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly OnlineConsultationsProvidersSettings _olcProvidersSettings;
         private readonly ICreateFhirParameter _createFhirParameter;
 
         public ServiceDefinitionService(
@@ -43,7 +39,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
             IAuditor auditor, 
             IGpSystemFactory gpSystemFactory,
-            OnlineConsultationsProvidersSettings olcProvidersSettings,
             ICreateFhirParameter createFhirParameter)
         {
             _logger = logger;
@@ -59,8 +54,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _auditor = auditor;
             
             _gpSystemFactory = gpSystemFactory;
-
-            _olcProvidersSettings = olcProvidersSettings;
             _createFhirParameter = createFhirParameter;
         }
 
@@ -77,8 +70,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 var bodyString = "{ \"resourceType\":\"Parameters\", \"meta\":{ \"profile\":[ " +
                                  "\"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\" ] }, " +
                                  "\"parameter\": [ { \"name\": \"organization\", \"resource\": { \"resourceType\": " +
-                                 "\"Organization\", \"identifier\": { \"value\": \"" + 
-                                 userSession.GpUserSession.OdsCode+ "\" }}}]}";
+                                 "\"Organization\", \"identifier\": { \"value\": \"" +
+                                 userSession.GpUserSession.OdsCode + "\" }}}]}";
 
                 try
                 {
@@ -129,43 +122,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}");
                 }
 
-                
-                var providerSettings = _olcProvidersSettings.getProvider(provider);
-                foreach (var child in guidanceResponse.Children)
-                {
-
-                    if (child.TypeName.Equals("Questionnaire",
-                        StringComparison.OrdinalIgnoreCase))
-                    {
-                        foreach (var questionnaireElement in ((Questionnaire) child).Children)
-                        {
-                            if (questionnaireElement.TypeName.Equals(new Questionnaire.ItemComponent().TypeName,
-                                StringComparison.OrdinalIgnoreCase))
-                            {
-                                var linkIdElement = new FhirString { Value = Support.Constants.OnlineConsultationsConstants.DemographicsOptionCode };
-                                var textElement = new FhirString
-                                {
-                                    Value = string.Format(CultureInfo.InvariantCulture, Support.Constants.OnlineConsultationsConstants.DemographicsLabel, providerSettings.ProviderName)
-                                };
-                                var typeElement = new Code<Questionnaire.QuestionnaireItemType>
-                                {
-                                    Value = Questionnaire.QuestionnaireItemType.Boolean
-                                };
-                                var required = new FhirBoolean { Value = false };
-                                var newAnswer = new Questionnaire.ItemComponent
-                                {
-                                    LinkIdElement = linkIdElement,
-                                    TextElement = textElement,
-                                    TypeElement = typeElement,
-                                    RequiredElement = required
-                                };
-                                ((Questionnaire.ItemComponent) questionnaireElement).Item.Add(newAnswer);
-                            }
-                        }
-                    }
-                }
                 return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
-
             }
             finally
             {
@@ -240,6 +197,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string serviceDefinitionId,
             Parameters parameters,
             bool addJavascriptDisabledHeader,
+            bool demographicsConsentGiven,
             UserSession userSession)
         {
             try
@@ -255,42 +213,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                     return new ServiceDefinitionResult.BadRequest();
                 }
-
-                var addPatient = false;
-                foreach (var param in parameters.Parameter)
-                {
-                    if (param.Resource?.Children != null)
-                    {
-                        foreach (var resource in (param.Resource).Children)
-                        {
-                            if (resource.TypeName.Equals(new QuestionnaireResponse.ItemComponent().TypeName,
-                                StringComparison.OrdinalIgnoreCase))
-                            {
-                                QuestionnaireResponse.AnswerComponent answerToRemove = null ;
-                                foreach (var answer in ((QuestionnaireResponse.ItemComponent) resource).Answer)
-                                {
-                                    if (answer.Value.TypeName.Equals(new Coding().TypeName,
-                                            StringComparison.OrdinalIgnoreCase) && ((Coding) answer.Value).CodeElement.Value.Equals(
-                                            Support.Constants.OnlineConsultationsConstants
-                                                .DemographicsOptionCode,
-                                            StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        addPatient = true;
-                                        answerToRemove = answer;
-                                    }
-                                }
-
-                                if (answerToRemove != null)
-                                {
-                                    ((QuestionnaireResponse.ItemComponent) resource).Answer.Remove(answerToRemove);
-                                }
-                            }
-                        }
-                            
-                    }
-                }
                 
-                if (addPatient)
+                if (demographicsConsentGiven)
                 {
                     _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier.ToString()}");
 
@@ -304,7 +228,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     {
                         return GetDemographicsErrorResult(demographics);
                     }
-                    
+
                     parameters.Add("patient", _createFhirParameter.CreatePatientFhir(_demographicsOlcMapper, demographicsResult));
                     await _auditor.Audit(
                         AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,

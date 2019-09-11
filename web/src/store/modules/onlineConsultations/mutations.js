@@ -14,7 +14,6 @@ import {
   SET_ERROR,
   SET_ANSWER_IS_EMPTY,
   SET_SERVICE_DEFINITIONS,
-  UPDATE_REQUEST_ID,
   FILE_LOADING,
   FILE_LOAD_COMPLETE,
   SET_VALIDATION_ERROR_FROM_RESPONSE,
@@ -22,10 +21,12 @@ import {
   PREVIOUS_SELECTED,
   CLEAR_CLIENT_ERRORS,
   SET_GP_ADVICE_SERVICE_DEFINITION_ID,
+  SET_DEMOGRAPHICS_CONSENT_GIVEN,
+  SET_DEMOGRAPHICS_QUESTION_ANSWERED,
 } from './mutation-types';
 
 export default {
-  [CLEAR](state, resetRequestId) {
+  [CLEAR](state, clearDemographicsConsent) {
     state.sessionId = undefined;
     state.status = undefined;
     state.dataRequirements = undefined;
@@ -48,8 +49,9 @@ export default {
     state.validationErrorMessageFromResponse = undefined;
     state.additionalValue = undefined;
     state.latestAdditionalValue = undefined;
-    if (resetRequestId) {
-      state.requestId = 0;
+    if (clearDemographicsConsent) {
+      state.demographicsConsentGiven = false;
+      state.demographicsQuestionAnswered = false;
     }
   },
   [SET_SESSION_ID](state, sessionId) {
@@ -109,9 +111,6 @@ export default {
   [SET_GP_ADVICE_SERVICE_DEFINITION_ID](state, id) {
     state.gpAdviceServiceDefinitionId = id;
   },
-  [UPDATE_REQUEST_ID](state) {
-    state.requestId += 1;
-  },
   [FILE_LOADING](state) {
     state.isLoadingFile = true;
   },
@@ -125,5 +124,11 @@ export default {
   [CLEAR_CLIENT_ERRORS](state) {
     state.validationError = false;
     state.validationErrorMessageFromResponse = undefined;
+  },
+  [SET_DEMOGRAPHICS_CONSENT_GIVEN](state, consent) {
+    state.demographicsConsentGiven = consent;
+  },
+  [SET_DEMOGRAPHICS_QUESTION_ANSWERED](state) {
+    state.demographicsQuestionAnswered = true;
   },
 };

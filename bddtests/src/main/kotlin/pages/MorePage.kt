@@ -16,8 +16,8 @@ open class MorePage : HybridPageObject() {
                     "information and choose whether or not it can be used for research and planning."
 
     // online consultations menu item
-    private val requestGpHelpTitle = "Request GP help without an appointment"
-    private val requestGpHelpDescription = "Get fit notes and GP letters or ask about recent tests."
+    private val requestGpHelpTitle = "Additional GP services"
+    private val requestGpHelpDescription = "Get sick notes and GP letters or ask about recent tests."
 
     private val pageTitle = HybridPageElement(
             webDesktopLocator = "//h1[contains(text(),\"More\")]",

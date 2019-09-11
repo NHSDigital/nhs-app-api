@@ -281,6 +281,48 @@ export default {
     checkBoxText2: 'I agree to the use of \'strictly necessary\' cookies as described in the updated',
     btnAccept: 'Continue',
   },
+  onlineConsultations: {
+    validationErrors: {
+      header: 'There\'s a problem',
+      message: {
+        attachment: 'Select a file',
+        boolean: 'Select an option',
+        choice: 'Select an option',
+        date: 'Date must include a day, month and year',
+        dateEmpty: 'Enter a date',
+        dateTime: 'Enter the full date and time',
+        dateTimeEmpty: 'Enter a date and time',
+        decimal: 'Enter a number',
+        image: 'Select the area on the image',
+        integer: 'Enter a number',
+        multiple_choiceAtLeastOneRequired: 'Select one or more options',
+        multiple_choiceAllRequired: 'All options are required',
+        quantity: 'Enter a number',
+        quantityUnit: 'Select an option',
+        quantityTooHigh: 'Enter {value} or less',
+        quantityTooLow: 'Enter {value} or more',
+        string: 'Answer the question',
+        stringTooLong: 'Answer must be {value} characters or less',
+        text: 'Answer the question',
+        textTooLong: 'Answer must be {value} characters or less',
+        time: 'Enter a valid time',
+        // eslint-disable-next-line no-template-curly-in-string
+        overMaxValueNumber: 'Enter {value} or less',
+        // eslint-disable-next-line no-template-curly-in-string
+        underMinValueNumber: 'Enter {value} or more',
+        default: 'Answer all required questions',
+      },
+    },
+    question: {
+      optionalLabel: 'optional',
+    },
+    orchestrator: {
+      continueButton: 'Continue',
+      endMyConsultationButton: 'End my consultation',
+      backToHomeButton: 'Back to home',
+      backButton: 'Back',
+    },
+  },
   appointments: {
     index: {
       successText: 'Your appointment has been booked. You can view details or cancel it here.',
@@ -354,7 +396,7 @@ export default {
         text: 'Find information about specific conditions',
       },
       menuItem2: {
-        header: 'Request GP help without an appointment',
+        header: 'Additional GP services',
         text: 'Get sick notes and GP letters or ask about recent tests',
       },
       menuItem3: {
@@ -557,12 +599,11 @@ export default {
       },
     },
     gp_advice: {
-      conditions: {
-        paragraph: 'To ensure we ask you relevant questions, choose your condition.',
-        link: 'I cannot find my condition',
+      demographicsQuestion: {
+        p1: 'It takes around 5 minutes to answer a few questions about your condition.',
+        p2: 'If you agree to share your personal information with {providerName}, it can save you having to type it in.',
+        checkboxLabel: 'I consent to the NHS App sharing my name, date of birth, NHS number and postal address with {providerName}.',
       },
-    },
-    admin_help: {
       errors: {
         pageTitle: 'Server error',
         pageHeader: 'Server error',
@@ -572,46 +613,28 @@ export default {
           text: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
           label: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
         },
-        validation: {
-          header: 'There\'s a problem',
-          message: {
-            attachment: 'Select a file',
-            boolean: 'Select an option',
-            choice: 'Select an option',
-            date: 'Date must include a day, month and year',
-            dateEmpty: 'Enter a date',
-            dateTime: 'Enter the full date and time',
-            dateTimeEmpty: 'Enter a date and time',
-            decimal: 'Enter a number',
-            image: 'Select the area on the image',
-            integer: 'Enter a number',
-            multiple_choiceAtLeastOneRequired: 'Select one or more options',
-            multiple_choiceAllRequired: 'All options are required',
-            quantity: 'Enter a number',
-            quantityUnit: 'Select an option',
-            quantityTooHigh: 'Enter {value} or less',
-            quantityTooLow: 'Enter {value} or more',
-            string: 'Answer the question',
-            stringTooLong: 'Answer must be {value} characters or less',
-            text: 'Answer the question',
-            textTooLong: 'Answer must be {value} characters or less',
-            time: 'Enter a valid time',
-            // eslint-disable-next-line no-template-curly-in-string
-            overMaxValueNumber: 'Enter {value} or less',
-            // eslint-disable-next-line no-template-curly-in-string
-            underMinValueNumber: 'Enter {value} or more',
-            default: 'Answer all required questions',
-          },
+      },
+      conditions: {
+        paragraph: 'To ensure we ask you relevant questions, choose your condition.',
+        link: 'I cannot find my condition',
+      },
+    },
+    admin_help: {
+      demographicsQuestion: {
+        p1: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
+        p2: 'It takes around 5 minutes to answer a few questions.',
+        p3: 'If you agree to share your personal information with {providerName}, it can save you having to type it in.',
+        checkboxLabel: 'I consent to the NHS App sharing my name, date of birth, NHS number and postal address with {providerName}.',
+      },
+      errors: {
+        pageTitle: 'Server error',
+        pageHeader: 'Server error',
+        header: 'Sorry, we\'re experiencing technical difficulties',
+        subheader: 'Please try again later.',
+        message: {
+          text: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
         },
-      },
-      question: {
-        optional_label: 'optional',
-      },
-      orchestrator: {
-        continueButton: 'Continue',
-        endMyConsultationButton: 'End my consultation',
-        backToHomeButton: 'Back to home',
-        backButton: 'Back',
       },
     },
   },
@@ -975,7 +998,7 @@ export default {
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
     appointments: 'My appointments',
-    appointmentAdminHelp: 'GP help without an appointment',
+    appointmentAdminHelp: 'Additional GP services',
     appointmentGpAdvice: 'Ask your GP for advice',
     appointmentGuidance: 'Things to try before you book an appointment',
     appointmentBooking: 'Book an appointment',
@@ -1009,7 +1032,7 @@ export default {
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
     account: 'My account',
     appointments: 'My appointments',
-    appointmentAdminHelp: 'GP help without an appointment',
+    appointmentAdminHelp: 'Additional GP services',
     appointmentGpAdvice: 'Ask your GP for advice',
     appointmentGuidance: 'Things to try before you book an appointment',
     appointmentBooking: 'Book an appointment',
@@ -1082,8 +1105,8 @@ export default {
       body: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning.',
     },
     requestGpHelp: {
-      subheader: 'Request GP help without an appointment',
-      body: 'Get fit notes and GP letters or ask about recent tests.',
+      subheader: 'Additional GP services',
+      body: 'Get sick notes and GP letters or ask about recent tests.',
     },
   },
   webHeader: {

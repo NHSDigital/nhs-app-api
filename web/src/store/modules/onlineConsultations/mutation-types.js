@@ -3,7 +3,6 @@ export const CLEAR_VALIDATION = 'CLEAR_VALIDATION';
 export const CLEAR_CLIENT_ERRORS = 'CLEAR_CLIENT_ERRORS';
 export const SET_SESSION_ID = 'SET_SESSION_ID';
 export const SET_GP_ADVICE_SERVICE_DEFINITION_ID = 'SET_GP_ADVICE_SERVICE_DEFINITION_ID';
-export const UPDATE_REQUEST_ID = 'UPDATE_REQUEST_ID';
 export const SET_STATUS = 'SET_STATUS';
 export const SET_DATA_REQUIREMENTS = 'SET_DATA_REQUIREMENTS';
 export const SET_QUESTION = 'SET_QUESTION';
@@ -21,8 +20,12 @@ export const FILE_LOAD_COMPLETE = 'FILE_LOAD_COMPLETE';
 export const PREVIOUS_SELECTED = 'PREVIOUS_SELECTED';
 export const SET_SERVICE_DEFINITIONS = 'SET_SERVICE_DEFINITIONS';
 export const SET_PREVIOUS_ROUTE = 'SET_PREVIOUS_ROUTE';
+export const SET_DEMOGRAPHICS_CONSENT_GIVEN = 'SET_DEMOGRAPHICS_CONSENT_GIVEN';
+export const SET_DEMOGRAPHICS_QUESTION_ANSWERED = 'SET_DEMOGRAPHICS_QUESTION_ANSWERED';
 
 export const initialState = () => ({
+  demographicsQuestionAnswered: false,
+  demographicsConsentGiven: false,
   sessionId: undefined,
   status: undefined,
   dataRequirements: undefined,
@@ -41,7 +44,6 @@ export const initialState = () => ({
   carePlans: undefined,
   referralRequests: undefined,
   error: false,
-  requestId: 0,
   isLoadingFile: false,
   issues: undefined,
   validationErrorMessageFromResponse: undefined,

@@ -405,10 +405,10 @@ describe('orchestrator', () => {
     describe('backButtonText', () => {
       each([{
         status: 'success',
-        expectedText: 'appointments.admin_help.orchestrator.backToHomeButton',
+        expectedText: 'onlineConsultations.orchestrator.backToHomeButton',
       }, {
         status: 'data-required',
-        expectedText: 'appointments.admin_help.orchestrator.endMyConsultationButton',
+        expectedText: 'onlineConsultations.orchestrator.endMyConsultationButton',
       }]).it('will appropriate text for status', ({ status, expectedText }) => {
         // Arrange
         store.state.onlineConsultations.status = status;

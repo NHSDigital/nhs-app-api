@@ -25,8 +25,8 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
         public void SanitizeHtmlBlacklistSuccess()
         {
             // Arrange
-            var testHtml = "Test <span>1111</span><script>onLoad='test'</script>";
-            var expectedHtml = "Test <span>1111</span>";
+            const string testHtml = "Test <span>1111</span><script>onLoad='test'</script>";
+            const string expectedHtml = "Test <span>1111</span>";
 
             // Act
             _htmlSanitize = new HtmlSanitizer();
@@ -40,8 +40,8 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
         public void SanitizeHtmlWhitelistSuccess()
         {
             // Arrange
-            var testHtml = "Test <span>1111</span><script>onLoad='test'</script>";
-            var expectedHtml = "Test <span>1111</span>";
+            const string testHtml = "Test <span>1111</span><script>onLoad='test'</script>";
+            const string expectedHtml = "Test <span>1111</span>";
 
             // Act
             _htmlSanitize = new HtmlSanitizer();

@@ -126,14 +126,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(true);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, id, _evaluateParameters, false);
             
             // Assert
             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
             value.Subject.StatusCode.Should().Be(400);
             _mockServiceDefinitionService.Verify(
                 s => s.EvaluateServiceDefinition(It.IsAny<IOnlineConsultationsProviderHttpClient>(), It.IsAny<string>(),
-                    It.IsAny<Parameters>(), It.IsAny<bool>(), _userSession), Times.Never);
+                    It.IsAny<Parameters>(), It.IsAny<bool>(), It.IsAny<bool>(), _userSession), Times.Never);
         }
 
         [TestMethod]
@@ -144,14 +144,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(true);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, evaluateParameters, false);
             
             // Assert
             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
             value.Subject.StatusCode.Should().Be(400);
             _mockServiceDefinitionService.Verify(
                 s => s.EvaluateServiceDefinition(It.IsAny<IOnlineConsultationsProviderHttpClient>(), It.IsAny<string>(),
-                    It.IsAny<Parameters>(), It.IsAny<bool>(), _userSession), Times.Never);
+                    It.IsAny<Parameters>(), It.IsAny<bool>(), It.IsAny<bool>(),_userSession), Times.Never);
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             SetupHttpClientPool(false);
             
             // Act
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters, false);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -181,6 +181,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                     It.IsAny<bool>(),
+                    It.IsAny<bool>(),
                     It.IsAny<UserSession>()))
                 .Returns(Task.FromResult(_successResult));
 
@@ -191,7 +192,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             {
                 HttpContext = httpContext
             };
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters, false);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -202,6 +203,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                         c => c == _mockProviderHttpClient.Object),
                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
+                    It.IsAny<bool>(),
                     It.IsAny<bool>(),
                     It.IsAny<UserSession>()),
                 Times.Once);
@@ -218,6 +220,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                     It.IsAny<bool>(),
+                    It.IsAny<bool>(),
                     It.IsAny<UserSession>()))
                 .Returns(Task.FromResult(_successResult));
             
@@ -228,7 +231,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
             {
                 HttpContext = httpContext
             };
-            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters);
+            var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters, false);
 
             // Assert
             VerifyGetFromClientPoolCalledWithProvider(_provider);
@@ -240,6 +243,45 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                     It.IsAny<bool>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<UserSession>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public async Task EvaluateServiceDefinition_WhenDemographicsConsentQueryStringPresent_ValueIsPassedToService(bool demographicsConsentGiven)
+        {
+            // Arrange
+            SetupHttpClientPool(true);
+            _mockServiceDefinitionService
+                .Setup(s => s.EvaluateServiceDefinition(It.Is<IOnlineConsultationsProviderHttpClient>(
+                        c => c == _mockProviderHttpClient.Object),
+                    It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
+                    It.Is<Parameters>(parameters => _evaluateParameters == parameters),
+                    It.IsAny<bool>(),
+                    It.Is<bool>(consent => consent == demographicsConsentGiven),
+                    It.IsAny<UserSession>()))
+                .Returns(Task.FromResult(_successResult));
+            
+            // Act
+            var httpContext = new DefaultHttpContext();
+            _serviceDefinitionController.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+            await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters, demographicsConsentGiven);
+
+            // Assert
+            VerifyGetFromClientPoolCalledWithProvider(_provider);
+            _mockServiceDefinitionService.Verify(
+                s => s.EvaluateServiceDefinition(It.Is<IOnlineConsultationsProviderHttpClient>(
+                        c => c == _mockProviderHttpClient.Object),
+                    It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
+                    It.Is<Parameters>(parameters => _evaluateParameters == parameters),
+                    It.IsAny<bool>(),
+                    It.Is<bool>(consent => consent == demographicsConsentGiven),
                     It.IsAny<UserSession>()),
                 Times.Once);
         }

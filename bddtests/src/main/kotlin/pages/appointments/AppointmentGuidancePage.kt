@@ -16,10 +16,10 @@ class AppointmentGuidancePage : HybridPageObject() {
     private val checkSymptomsTitle = "Get help with symptoms"
     private val checkSymptomsDescription = "Find information about specific conditions"
 
-    private val gpAdminTitle = "Request GP help without an appointment"
+    private val gpAdminTitle = "Additional GP services"
     private val gpAdminDescription = "Get sick notes and GP letters or ask about recent tests"
 
-    private val gpAdviceTitle = "Request GP help without an appointment"
+    private val gpAdviceTitle = "Ask your GP for advice"
     private val gpAdviceDescription = "Consult your GP through an online form. " +
             "Your GP surgery will reply by phone or email."
 

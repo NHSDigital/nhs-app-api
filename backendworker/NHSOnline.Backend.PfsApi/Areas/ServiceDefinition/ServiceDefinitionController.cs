@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
@@ -118,8 +116,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
         [HttpPost]
         [Route("fhir/ServiceDefinition/{provider}/{id}/$evaluate")]
-        public async Task<IActionResult> EvaluateServiceDefinition([FromRoute(Name = "provider")] string provider, 
-          [FromRoute(Name = "id")] string serviceDefinitionId, [FromBody] Parameters parameters)
+        public async Task<IActionResult> EvaluateServiceDefinition(
+            [FromRoute(Name = "provider")] string provider,
+            [FromRoute(Name = "id")] string serviceDefinitionId,
+            [FromBody] Parameters parameters,
+            [FromQuery] bool demographicsConsentGiven
+        )
         {
             try
             {
@@ -167,6 +169,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                         parameters,
                         "true".Equals(Request.Headers[Constants.HttpHeaders.JavascriptDisabled],
                             StringComparison.Ordinal),
+                        demographicsConsentGiven,
                         userSession))
                     .Accept(visitor);
             }

@@ -56,11 +56,10 @@ describe('online consultations store mutations', () => {
   });
 
   describe('CLEAR', () => {
-    describe('reset request id parameter is true', () => {
+    describe('clearDemographicsConsent parameter is true', () => {
       it('will reset state to initialState', () => {
         // Arrange
         const expectedState = initialState();
-        expectedState.serviceDefinitions = undefined;
 
         state = {
           sessionId: 1,
@@ -77,8 +76,8 @@ describe('online consultations store mutations', () => {
           carePlans: [],
           referralRequests: [],
           isLoadingFile: true,
-          requestId: 2,
-          serviceDefinitions: undefined,
+          demographicsConsentGiven: true,
+          demographicsQuestionAnswered: true,
         };
 
         // Act
@@ -89,12 +88,12 @@ describe('online consultations store mutations', () => {
       });
     });
 
-    describe('reset request id parameter is false', () => {
-      it('will reset state to initialState except requestId', () => {
+    describe('clearDemographicsConsent parameter is false', () => {
+      it('will reset state to initialState except demographics properties', () => {
         // Arrange
         const expectedState = initialState();
-        expectedState.requestId = 2;
-        expectedState.serviceDefinitions = undefined;
+        expectedState.demographicsConsentGiven = true;
+        expectedState.demographicsQuestionAnswered = true;
 
         state = {
           sessionId: 1,
@@ -111,8 +110,8 @@ describe('online consultations store mutations', () => {
           carePlans: [],
           referralRequests: [],
           isLoadingFile: true,
-          requestId: 2,
-          serviceDefinitions: undefined,
+          demographicsConsentGiven: true,
+          demographicsQuestionAnswered: true,
         };
 
         // Act
@@ -159,20 +158,6 @@ describe('online consultations store mutations', () => {
       // Assert
       expect(state.validationError).toEqual(expectedValidationError);
       expect(state.validationErrorMessage).toEqual(expectedValidationErrorMessage);
-    });
-  });
-
-  describe('UPDATE_REQUEST_ID', () => {
-    it('will increment existing requestId state', () => {
-      // Arrange
-      state.requestId = 34;
-      const expectedRequestId = 35;
-
-      // Act
-      mutations.UPDATE_REQUEST_ID(state);
-
-      // Assert
-      expect(state.requestId).toEqual(expectedRequestId);
     });
   });
 

@@ -2,13 +2,20 @@
 <template>
   <div :class="formGroupClasses">
     <component :is="questionTag"
+               v-if="text"
                :id="id"
                :class="[questionClass, 'question', required && 'required']"
                :for="isLabel && labelFor"
                v-html="text"/>
+    <div v-else
+         :id="id"
+         :class="[questionClass, 'question', required && 'required']"
+         :for="isLabel && labelFor">
+      <slot name="question-slot" />
+    </div>
     <p v-if="showOptional"
        class="nhsuk-hint optionalLabel marginBottom">
-      ({{ this.$t('appointments.admin_help.question.optional_label') }})
+      ({{ this.$t('onlineConsultations.question.optionalLabel') }})
     </p>
     <slot />
   </div>
@@ -35,7 +42,7 @@ export default {
     },
     text: {
       type: String,
-      required: true,
+      default: undefined,
     },
     error: {
       type: Boolean,
