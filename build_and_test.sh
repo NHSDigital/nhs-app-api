@@ -86,7 +86,6 @@ CID_BACKEND_NAME=nhsonline-backendcidapi
 PFS_BACKEND_NAME=nhsonline-backendpfsapi
 SJR_BACKEND_NAME=nhsonline-backendservicejourneyrulesapi
 SJR_CONFIG_NAME=nhsonline-service-journey-dev-config
-CDS_BACKEND_NAME=nhsonline-backendclinicaldecisionsupportapi
 USERS_BACKEND_NAME=nhsonline-backendusersapi
 MESSAGES_BACKEND_NAME=nhsonline-backendmessagesapi
 LOGGER_BACKEND_NAME=nhsonline-clientloggerapi
