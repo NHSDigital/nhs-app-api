@@ -42,13 +42,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
                     _logger.LogExit();
                     return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError);
                 }
-                if (demographicsResponse.HasInternalServerError)
-                {
-                    _logger.LogError(
-                        $"Internal server error when retrieving demographics as part of linkage. Status code: {(int) demographicsResponse.StatusCode}");
-                    _logger.LogExit();
-                    return new LinkageResult.InternalServerError();
-                }
                 _logger.LogError($"Unsuccessful request retrieving demographics as part of linkage. Status code: {(int)demographicsResponse.StatusCode}");
                 return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.LinkageKeysNotSupportedBySupplier);
             }

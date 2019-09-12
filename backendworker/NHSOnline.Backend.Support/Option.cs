@@ -47,5 +47,15 @@ namespace NHSOnline.Backend.Support
         {
             return HasValue ? next.Invoke(Value) : this;
         }
+        
+        public override string ToString()
+        {
+            return HasValue ? $"{Value}" : "None";
+        }
+    
+        public Option<TResult> Select<TResult>(Func<T, TResult> next)
+        {
+            return HasValue ? Option.Some(next.Invoke(Value)) : Option.None<TResult>();
+        }
     }
 }

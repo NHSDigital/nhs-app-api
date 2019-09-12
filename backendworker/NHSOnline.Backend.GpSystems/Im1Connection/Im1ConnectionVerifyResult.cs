@@ -64,5 +64,20 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
                 return visitor.Visit(this);
             }
         }
+        
+        public class ErrorCase : Im1ConnectionVerifyResult
+        {
+            public Im1ConnectionErrorCodes.InternalCode ErrorCode { get; }
+
+            public ErrorCase(Im1ConnectionErrorCodes.InternalCode errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

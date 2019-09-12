@@ -12,5 +12,6 @@
 
         T Visit(Im1ConnectionVerifyResult.BadRequest result);
         T Visit(Im1ConnectionVerifyResult.Forbidden result);
+        T Visit(Im1ConnectionVerifyResult.ErrorCase result);
     }
 }

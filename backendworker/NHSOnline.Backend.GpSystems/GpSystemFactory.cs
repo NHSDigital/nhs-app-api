@@ -41,15 +41,13 @@ namespace NHSOnline.Backend.GpSystems
             try
             {
                 _logger.LogInformation($"Fetch GP System: '{supplier}'.");
-                return supplier.HasValue
-                    ? Option.Some(CreateGpSystem(supplier.ValueOrFailure()))
-                    : Option.None<IGpSystem>();
+                return supplier.Select(CreateGpSystem);
             }
             catch (Exception exception)
             {
-                _logger.LogWarning(exception, $"Failed to create GP System for supplier: {supplier.ValueOrFailure()}.");
+                _logger.LogWarning(exception, $"Failed to create GP System for supplier: {supplier}.");
                 return Option.None<IGpSystem>();
-            }
+            } 
         }
     }
 }

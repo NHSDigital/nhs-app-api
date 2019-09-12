@@ -56,7 +56,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                     {
                         _logger.LogError(
                             $"Internal server error when retrieving demographics as part of linkage. Status code: {(int) demographicsResponse.StatusCode}");
-                        return new Im1ConnectionVerifyResult.InternalServerError();
+                        return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
+                            .LinkageKeysNotSupportedBySupplier);
                     }
                     _logger.LogError($"Unsuccessful request retrieving demographics as part of linkage. Status code: {(int)demographicsResponse.StatusCode}");
                     return new Im1ConnectionVerifyResult.Forbidden();

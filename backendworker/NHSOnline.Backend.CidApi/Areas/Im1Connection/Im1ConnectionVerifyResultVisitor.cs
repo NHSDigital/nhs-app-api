@@ -37,6 +37,12 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
+        public IActionResult Visit(Im1ConnectionVerifyResult.ErrorCase result)
+        {
+            var statusCodeResult = Im1ConnectionV1ErrorCodeMapper.Map(result.ErrorCode);
+            return new StatusCodeResult(statusCodeResult);
+        }
+
         private static PatientIm1ConnectionResponse CreateResponse(GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse response)
             => new PatientIm1ConnectionResponse
             {

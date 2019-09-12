@@ -127,7 +127,7 @@ Feature: Linkage Get Key
     Given I have valid MICROTEST linkage details
     And the demographics endpoint responds with an "internal server error" error
     When I call the Linkage GET endpoint
-    Then I receive a "internal server error" error
+    Then I receive a "linkage not supported" error
 
   Scenario: Linkage request GET for Microtest returns a forbidden error when demographics call fails
     Given I have valid MICROTEST linkage details
