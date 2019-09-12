@@ -18,20 +18,6 @@ describe('online consultations mappers html tags', () => {
     });
   });
 
-  describe('html contains span elements and span text', () => {
-    it('will replace only span tags with p tags and a class of nhsuk-body', () => {
-      // Arrange
-      const html = '<span>I am a span that contains span text.</span>';
-      const expectedHtml = '<p class="nhsuk-body">I am a span that contains span text.</p>';
-
-      // Act
-      const parsedHtml = mapHtmlTags(html);
-
-      // Assert
-      expect(parsedHtml).toEqual(expectedHtml);
-    });
-  });
-
   describe('html contains ul elements and ul text', () => {
     it('will append nhsuk-list and nhsuk-list--bullet classes to ul tags', () => {
       // Arrange

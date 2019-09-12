@@ -75,6 +75,7 @@ export default {
 </script>
 
 <style lang="scss">
+  @import "../../style/colours";
   .nhsuk-form-group a {
     vertical-align: baseline;
     display: inline !important;
@@ -93,6 +94,66 @@ export default {
     a {
       display: inline;
       vertical-align: baseline;
+    }
+  }
+  .nhsuk-care-card {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .nhsuk-care-card--non-urgent {
+    .nhsuk-care-card__heading-container {
+      .nhsuk-care-card__heading {
+        span {
+          color: white;
+        }
+      }
+    }
+
+    .nhsuk-care-card__content {
+      p {
+        color: $black;
+      }
+      .nhsuk-care-card__content--callout {
+        color: $black;
+      }
+    }
+  }
+
+  .nhsuk-care-card--urgent {
+    .nhsuk-care-card__heading-container {
+      .nhsuk-care-card__heading {
+        span {
+          color: white;
+        }
+      }
+    }
+
+    .nhsuk-care-card__content {
+      p {
+        color: $black;
+      }
+      .nhsuk-care-card__content--callout {
+        color: $black;
+      }
+    }
+  }
+
+  .nhsuk-care-card--immediate {
+    .nhsuk-care-card__heading-container {
+      .nhsuk-care-card__heading {
+        span {
+          color: white;
+        }
+      }
+    }
+
+    .nhsuk-care-card__content {
+      p {
+        color: white;
+      }
+      .nhsuk-care-card__content--callout {
+        color: white;
+      }
     }
   }
 </style>

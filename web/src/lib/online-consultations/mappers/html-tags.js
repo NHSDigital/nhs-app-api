@@ -7,9 +7,6 @@ function mapHtmlTags(html) {
 
   let result = html;
 
-  result = result.replace(/<span/gi, '<p class="nhsuk-body"');
-  result = result.replace(/<\/span>/gi, '</p>');
-
   result = result.replace(/<ul/gi, '<ul class="nhsuk-list nhsuk-list--bullet"');
 
   result = result.replace(/<small/gi, '<span class="nhsuk-hint"');
