@@ -345,6 +345,7 @@ export default {
 
 
 <style module lang="scss" scoped>
+  @import "../../style/desktopWeb/accessibility";
   .errorDialog {
     margin-bottom: 2em;
   }
@@ -359,5 +360,16 @@ export default {
       max-width: 960px;
       width: auto;
     }
+  }
+
+  /deep/a {
+    &:focus {
+      @include linkFocusStyle;
+    }
+
+    &:hover {
+      @include linkHoverStyle;
+    }
+
   }
 </style>
