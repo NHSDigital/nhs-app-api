@@ -4,7 +4,8 @@ data class MyRecordResponseModel(
         var allergies: Allergies,
         var drugs: Medications,
         var vaccinations: Immunisations,
-        var medicalProblems: Problems
+        var medicalProblems: Problems,
+        var medicalHistory: MedicalHistories
 )
 
 data class Allergies(
@@ -66,4 +67,17 @@ data class Problem(
         var start_date: String,
         var finish_date: String,
         var rubric: String
+)
+
+data class MedicalHistories(
+        var hasAccess: String,
+        var hasErrored: String,
+        var count: Int,
+        var data: MutableList<MedicalHistory> = arrayListOf()
+)
+
+data class MedicalHistory(
+        var start_date: String,
+        var rubric: String,
+        var description: String
 )

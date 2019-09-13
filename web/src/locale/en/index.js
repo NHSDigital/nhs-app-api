@@ -892,6 +892,9 @@ export default {
       nextDate: 'Next Date: ',
       status: 'Status: ',
     },
+    medicalHistory: {
+      sectionHeader: 'Medical History',
+    },
     testResults: {
       sectionHeader: {
         tpp: 'Test results (past 6 months)',

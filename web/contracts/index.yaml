@@ -883,6 +883,46 @@
                                           description: "An array of line items"
                                           items: 
                                             type: "string"
+                    medicalHistory: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
+                        data: 
+                          type: "array"
+                          description: "An array of medical history information objects."
+                          items: 
+                            type: "object"
+                            properties: 
+                              startDate: 
+                                type: "object"
+                                properties: 
+                                  value: 
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart: 
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum: 
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              rubric: 
+                                type: "string"
+                                description: "The title of the medical history."
+                              description: 
+                                type: "string"
+                                description: "The description of the medical history."
                     tppDcrEvents: 
                       type: "object"
                       properties: 

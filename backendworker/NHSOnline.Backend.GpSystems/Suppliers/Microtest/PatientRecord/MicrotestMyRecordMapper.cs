@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             MapMedications(myRecordResponse, patientRecordGetResponse.MedicationData);
             MapImmunisations(myRecordResponse, patientRecordGetResponse.ImmunisationData);
             MapProblems(myRecordResponse, patientRecordGetResponse.ProblemData);
+            MapMedicalHistory(myRecordResponse, patientRecordGetResponse.MedicalHistoryData);
 
             SetHasSummaryRecordAccess(myRecordResponse);
             SetHasDetailedRecordAccess(myRecordResponse);
@@ -184,6 +185,53 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
         }
         
+        private void MapMedicalHistory(MyRecordResponse myRecordResponse, MedicalHistoryData medicalHistoryData)
+        {
+            if (medicalHistoryData != null)
+            {
+                var medHistoryItems = new List<MedicalHistoryItem>();
+
+                foreach (var medicalHistory in medicalHistoryData.MedicalHistories)
+                {
+                    AddMedicalHistoryItemIfValid(medHistoryItems, medicalHistory);  
+                }
+                
+                myRecordResponse.MedicalHistories.Data 
+                    = medHistoryItems.OrderByDescending(p => p.StartDate?.Value.GetValueOrDefault());
+                
+                myRecordResponse.MedicalHistories.HasUndeterminedAccess = !medicalHistoryData.MedicalHistories.Any();
+            }
+        }
+        
+        private void AddMedicalHistoryItemIfValid(List<MedicalHistoryItem> medicalHistoryItems, MedicalHistory medicalHistory)
+        {            
+            if(!string.IsNullOrWhiteSpace(medicalHistory.Rubric))
+            {
+                MyRecordDate medHistoryStartDate = null;
+                var validStartDate = DateTime.TryParse(medicalHistory.StartDate, out var parsedStartDate);
+
+                if (validStartDate)
+                {
+                    medHistoryStartDate = new MyRecordDate
+                    {
+                        Value = parsedStartDate,
+                        DatePart = "Unknown"
+                    };
+                }
+
+                medicalHistoryItems.Add(new MedicalHistoryItem
+                {
+                    StartDate = medHistoryStartDate,
+                    Rubric = medicalHistory.Rubric,
+                    Description = medicalHistory.Description
+                });
+            }
+            else
+            {
+                _logger.LogInformation("This item will not be mapped as no valid rubric found in MyRecord Medical History from Microtest.");            
+            }
+        }
+        
         /**
          * Adds a medication item if a valid date is present.
          */
@@ -263,7 +311,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                 _logger.LogInformation("No valid rubric found in MyRecord Problem from Microtest. " +
                                        "This item will not be mapped");            
             }
-        }
+        }       
 
         private static bool IsRubricValid(string rubric)
         {
@@ -294,7 +342,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         {
             myRecordResponse.HasDetailedRecordAccess = 
                 IsAny(myRecordResponse.Immunisations.Data) ||
-                IsAny(myRecordResponse.Problems.Data);
+                IsAny(myRecordResponse.Problems.Data) ||
+                IsAny(myRecordResponse.MedicalHistories.Data);
         }
 
         private static bool IsAny<T>(IEnumerable<T> data)

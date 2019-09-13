@@ -1042,6 +1042,166 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Problems.HasUndeterminedAccess.Should().BeFalse();
             result.Problems.Should().BeEquivalentTo(expectedResult.Problems);
         }
+        
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_MapOrderedMedicalHistoryWhenReturnsSuccessfully()
+        {
+            // Arrange
+            var item = new PatientRecordGetResponse
+            {
+                MedicalHistoryData = new MedicalHistoryData
+                {
+                    Count = 3,
+                    HasAccess = true,
+                    HasErrored = false,
+                    MedicalHistories = new List<MedicalHistory>
+                    {
+                        BuildMicrotestMedicalHistory(
+                            "2019-08-07", "test vaccination A", "test desc A"),
+                        BuildMicrotestMedicalHistory(
+                            "2017-08-07", "test vaccination C", "test desc C"),
+                        BuildMicrotestMedicalHistory(
+                            "2018-08-07", "test vaccination B", "test desc B"),
+                    }
+                }
+            };
+
+            var expectedResult = new MyRecordResponse
+            {
+                MedicalHistories = new MedicalHistories
+                {
+                    Data = new List<MedicalHistoryItem>
+                    {
+                        BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(0)),
+                        BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(2)),
+                        BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(1))
+                    }
+                }
+            };
+            
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.MedicalHistories.Data.Should().HaveCount(3);
+            result.MedicalHistories.Should().BeEquivalentTo(expectedResult.MedicalHistories, m => m.WithStrictOrdering());
+            result.MedicalHistories.HasUndeterminedAccess.Should().BeFalse();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_DoesntMapMedicalHistoryWhenRubricIsEmpty()
+        {
+            // Arrange
+            var item = new PatientRecordGetResponse
+            {
+                MedicalHistoryData = new MedicalHistoryData
+                {
+                    Count = 3,
+                    HasAccess = true,
+                    HasErrored = false,
+                    MedicalHistories = new List<MedicalHistory>
+                    {
+                        BuildMicrotestMedicalHistory(
+                            "2019-08-07", "", "test desc with no rubric"),
+                        BuildMicrotestMedicalHistory(
+                            "2017-08-07", "test vaccination A", "test desc A"),
+                        BuildMicrotestMedicalHistory(
+                            "2018-08-07", "test vaccination B", "test desc B"),
+                    }
+                }
+            };
+
+            var expectedResult = new MyRecordResponse
+            {
+                MedicalHistories = new MedicalHistories
+                {
+                    Data = new List<MedicalHistoryItem>
+                    {
+                        BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(2)),
+                        BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(1))                    
+                    }
+                }
+            };
+            
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.MedicalHistories.Data.Should().HaveCount(2);
+            result.MedicalHistories.Should().BeEquivalentTo(expectedResult.MedicalHistories, m => m.WithStrictOrdering());
+            result.MedicalHistories.HasUndeterminedAccess.Should().BeFalse();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_DoesntMapMedicalHistoryWhenAllRubricAreEmpty()
+        {
+            // Arrange
+            var item = new PatientRecordGetResponse
+            {
+                MedicalHistoryData = new MedicalHistoryData
+                {
+                    Count = 2,
+                    HasAccess = true,
+                    HasErrored = false,
+                    MedicalHistories = new List<MedicalHistory>
+                    {
+                        BuildMicrotestMedicalHistory(
+                            "2019-08-07", "", "test desc with no rubric"),
+                        BuildMicrotestMedicalHistory(
+                            "2017-08-07", "", "test desc with no rubric")
+                    }
+                }
+            };
+            
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.MedicalHistories.Data.Should().HaveCount(0);
+            result.MedicalHistories.HasUndeterminedAccess.Should().BeFalse();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+        }
+        
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_MapMedicalHistoryWhenNoDataIsReturned()
+        {
+            // Arrange
+            var item = new PatientRecordGetResponse
+            {
+                MedicalHistoryData = new MedicalHistoryData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    MedicalHistories = new List<MedicalHistory>()
+                },
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.MedicalHistories.HasUndeterminedAccess.Should().BeTrue();
+        }
+        
+        private static MedicalHistoryItem BuildMedicalHistoryItem(MedicalHistory medicalHistory)
+        {
+            return new MedicalHistoryItem
+            {
+                StartDate = GetMyRecordDate(medicalHistory.StartDate),
+                Rubric = medicalHistory.Rubric,
+                Description = medicalHistory.Description
+            };
+        }       
   
         private static AllergyItem BuildAllergyItem(Allergy allergy)
         {
@@ -1144,6 +1304,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Description = desc,
                 StartDate = startDate,
                 Type = "Allergy"
+            };
+        }
+        
+        private static MedicalHistory BuildMicrotestMedicalHistory(string startDate, string rubric, string desc)
+        {
+            return new MedicalHistory()
+            {
+                Description = desc,
+                StartDate = startDate,
+                Rubric = rubric
             };
         }
 

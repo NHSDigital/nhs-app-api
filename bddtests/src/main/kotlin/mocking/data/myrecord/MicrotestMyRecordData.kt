@@ -10,6 +10,8 @@ import mocking.microtest.myRecord.Immunisation
 import mocking.microtest.myRecord.Immunisations
 import mocking.microtest.myRecord.Problem
 import mocking.microtest.myRecord.Problems
+import mocking.microtest.myRecord.MedicalHistory
+import mocking.microtest.myRecord.MedicalHistories
 import utils.set
 
 object MicrotestMyRecordData {
@@ -20,7 +22,8 @@ object MicrotestMyRecordData {
         val medications = Medications("true", "false", 0, mutableListOf<Medication>())
         val immunisations = Immunisations("true", "false", 0, mutableListOf<Immunisation>())
         val problems = Problems("true", "false", 0, mutableListOf<Problem>())
-        return MyRecordResponseModel(allergies, medications, immunisations, problems)
+        val medicalHistories = MedicalHistories("true", "false",0, mutableListOf<MedicalHistory>())
+        return MyRecordResponseModel(allergies, medications, immunisations, problems, medicalHistories)
     }
 
     fun getPopulatedMicrotestMyRecord(myRecordModuleCounts: MyRecordModuleCounts): MyRecordResponseModel {
@@ -88,11 +91,30 @@ object MicrotestMyRecordData {
         val medications = Medications("true", "false", medicationList.size, medicationList)
         val immunisations = Immunisations("true", "false", immunisationList.size, immunisationList)
         val problems = Problems("true", "false", problemList.size, problemList)
-        val myRecordResponseModel =  MyRecordResponseModel(allergies, medications, immunisations, problems)
+
+        val medicalHistoryList = buildMedicalHistoryList(myRecordModuleCounts.medicalHistoryCount)
+        val medicalHistories = MedicalHistories(
+                "true", "false", medicalHistoryList.size, medicalHistoryList)
+        val myRecordResponseModel =  MyRecordResponseModel(
+                allergies, medications, immunisations, problems, medicalHistories)
 
         MyRecordSerenityHelpers.MY_RECORD_DATA.set(myRecordResponseModel)
 
         return myRecordResponseModel
+    }
+
+    private fun buildMedicalHistoryList(medicalHistoryCount: Int) : MutableList<MedicalHistory> {
+        val medicalHistoryList = mutableListOf<MedicalHistory>()
+        for (i in 1..medicalHistoryCount) {
+            medicalHistoryList.add(
+                    MedicalHistory(
+                            start_date = "2019-07-03",
+                            rubric = "Rubric $i",
+                            description = "Description $i"
+                    )
+            )
+        }
+        return medicalHistoryList
     }
 
 }

@@ -96,6 +96,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordModuleCounts.vaccinationsCount = count
     }
 
+    @Given("^I have (.*) MedicalHistories$")
+    fun givenIHaveCountOfMedicalHistories(count: Int) {
+        myRecordModuleCounts.medicalHistoryCount = count
+    }
+
     @Then("^I see a message telling me to contact my GP for (.*) information on My Record$")
     fun thenISeeAMessageTellingMeToContactMyGP(heading: String) {
         assertTextInSection(heading,

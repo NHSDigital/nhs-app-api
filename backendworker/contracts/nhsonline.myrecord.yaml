@@ -150,6 +150,8 @@ components:
           $ref: "#/components/schemas/Examinations"
         procedures:
           $ref: "#/components/schemas/Procedures"
+        medicalhistory:
+          $ref: "#/components/schemas/MedicalHistory"
     MyRecordSectionResponse:
       type: object
       properties:
@@ -478,6 +480,34 @@ components:
         rawHtml:
           type: string
           description: When working with Vision, raw HTML is returned instead of XML data
+    MedicalHistory:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+          hasErrored:
+            type: boolean
+            description: Some error occurred when attempting to retrieve this error.
+          hasUndeterminedAccess:
+            type: boolean
+            description: Set to true if no data is returned and we cant determine why
+          data:
+            type: array
+            description: An array of medical history information objects.
+            items:
+              $ref: "#/components/schemas/MedicalHistoryItem"
+    MedicalHistoryItem:
+      type: object
+      properties:
+        date:
+          $ref: "#/components/schemas/Date"
+        rubric:
+          type: string
+          description: The title of the medical history.
+        description:
+          type: string
+          description: Description of the medical history.
     Date:
       type: object
       properties:
