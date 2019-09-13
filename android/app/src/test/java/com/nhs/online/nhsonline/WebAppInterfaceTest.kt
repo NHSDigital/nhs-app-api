@@ -71,6 +71,16 @@ class WebAppInterfaceTest {
     }
 
     @Test
+    fun requestPnsToken() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
+        webAppInterface.requestPnsToken()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(nhsWebMock).requestPnsToken()
+    }
+
+    @Test
     fun changeHeader() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val testText = "Test"

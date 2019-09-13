@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.webkit.CookieManager
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
+import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
@@ -26,10 +27,10 @@ class NhsWebTest {
     private lateinit var spyActivity: Activity
     private lateinit var interactorMock: IInteractor
     private lateinit var webViewMock: WebView
+    private lateinit var notificationsServiceMock: NotificationsService
     private lateinit var nhsWeb: NhsWeb
     private lateinit var urlLoader: UrlLoader
     private lateinit var spyWeb: NhsWeb
-
 
     @Before
     fun setUp() {
@@ -38,7 +39,8 @@ class NhsWebTest {
         webViewMock = mock()
         urlLoader = mock()
         interactorMock = mock()
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock)
+        notificationsServiceMock = mock()
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock)
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
@@ -289,5 +291,12 @@ class NhsWebTest {
         spyWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
 
         verify(webViewMock).goBack()
+    }
+
+    @Test
+    fun requestPnsToken_CallsNotificationsServiceRegisterForPushNotifications() {
+        nhsWeb.requestPnsToken()
+
+        verify(notificationsServiceMock).registerForPushNotifications()
     }
 }

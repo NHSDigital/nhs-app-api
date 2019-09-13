@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
+import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
@@ -13,7 +14,6 @@ import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConne
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.ApplicationState
-import com.nhs.online.nhsonline.support.Optional
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
@@ -29,7 +29,8 @@ private const val NATIVE_APP = "nativeApp"
 class NhsWeb(
         private val activity: Activity,
         private val uiInteractor: IInteractor,
-        private val webView: WebView
+        private val webView: WebView,
+        private val notificationsService: NotificationsService
 ) {
     private val knownServices = KnownServices(activity)
     private val openBrowserActivity =
@@ -269,6 +270,10 @@ class NhsWeb(
     fun reloadHomepageOnBackReturn() {
         loadWelcomePage()
         uiInteractor.showBlankScreen()
+    }
+
+    fun requestPnsToken() {
+        notificationsService.registerForPushNotifications()
     }
 
     private fun clearCookie(cookieName: String, domain: String) {

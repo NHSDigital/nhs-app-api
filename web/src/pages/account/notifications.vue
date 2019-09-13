@@ -14,7 +14,7 @@
     />
     <div>
       <p>
-        <a href="#" :class="$style.iconLink">
+        <a :class="$style.iconLink">
           <external-link-arrow-right-icon />
           <span>{{ $t('notifications.settingsLinkText') }}</span>
         </a>

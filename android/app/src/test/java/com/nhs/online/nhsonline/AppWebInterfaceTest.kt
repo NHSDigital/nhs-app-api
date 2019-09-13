@@ -5,13 +5,21 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.webinterfaces.WebJavascript
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class AppWebInterfaceTest {
-    private val webviewMock: WebView = mock()
+    private lateinit var webviewMock: WebView
+    private lateinit var appWebInterface: AppWebInterface
+
+    @Before
+    fun setUp() {
+        webviewMock = mock()
+        appWebInterface = AppWebInterface(webviewMock)
+    }
 
     @Test
     fun loadSPATest() {
@@ -21,19 +29,10 @@ class AppWebInterfaceTest {
     }
 
     @Test
-    fun loadDispatchEventTest() {
-        val appWebInterface = AppWebInterface(webviewMock)
-        appWebInterface.loadDispatchEvent("auth/logout")
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('auth/logout')",
-            null)
-    }
-
-    @Test
     fun logoutTest() {
-        val appWebInterface = AppWebInterface(webviewMock)
         appWebInterface.logout()
         verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('auth/logout')",
-            null)
+                null)
     }
 
     @Test
@@ -41,6 +40,21 @@ class AppWebInterfaceTest {
         val appWebInterface = AppWebInterface(webviewMock)
         appWebInterface.extendSession()
         verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('session/extend')",
-            null)
+                null)
+    }
+
+    @Test
+    fun notificationsAuthorised() {
+        appWebInterface.notificationsAuthorised("1234")
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/authorised', " +
+                "'{\"devicePns\":\"1234\",\"deviceType\":\"android\"}')",
+                null)
+    }
+
+    @Test
+    fun notificationsUnauthorised() {
+        appWebInterface.notificationsUnauthorised()
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/unAuthorised')",
+                null)
     }
 }

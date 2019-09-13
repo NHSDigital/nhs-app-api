@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "270436149416",
+    "firebase_url": "https://nhsapp-prod.firebaseio.com",
+    "project_id": "nhsapp-prod",
+    "storage_bucket": "nhsapp-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270436149416:android:c8303ed395da2c554d3a9d",
+        "android_client_info": {
+          "package_name": "com.nhs.online.nhsonline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270436149416-7j8pamrq9djvuehnnmcnnkla0a85juuv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLo-kahoj_YllgJGXy0iWydbuvSadmuGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270436149416-7j8pamrq9djvuehnnmcnnkla0a85juuv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

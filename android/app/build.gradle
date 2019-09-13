@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -187,6 +188,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
     implementation 'com.nhs.online.fidoclient:fidoclient:1.0.3'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
 

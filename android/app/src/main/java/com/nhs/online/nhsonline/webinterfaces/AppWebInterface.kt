@@ -20,16 +20,26 @@ class AppWebInterface(private val webview: WebView) {
         evaluateWebviewJavascript("window.\$nuxt.\$router.push({path:'$spaPath', query: { reset: true } })")
     }
 
-    fun loadDispatchEvent(event: String) {
-        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event')")
-    }
-
     fun logout() {
         loadDispatchEvent("auth/logout")
     }
 
     fun extendSession() {
         loadDispatchEvent("session/extend")
+    }
+
+    fun notificationsAuthorised(devicePns: String) {
+        val response = "{\"devicePns\":\"$devicePns\",\"deviceType\":\"android\"}"
+        loadDispatchEvent("notifications/authorised", response)
+    }
+
+    fun notificationsUnauthorised() {
+        loadDispatchEvent("notifications/unAuthorised")
+    }
+
+    private fun loadDispatchEvent(event: String, args: String = "") {
+        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event'" +
+                "${ if (args != "") ", '$args'" else "" })")
     }
 
     private fun evaluateWebviewJavascript(javascriptText: String) {

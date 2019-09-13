@@ -21,6 +21,8 @@ import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
 import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.clients.FirebaseClient
+import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -80,8 +82,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         appDialogs = AppDialogs(this)
 
         configureWebView()
-        nhsWeb = NhsWeb(this, this, webview)
         appWebInterface = AppWebInterface(webview)
+        val notificationsService = NotificationsService(appWebInterface, FirebaseClient())
+        nhsWeb = NhsWeb(this, this, webview, notificationsService)
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         menuBar.nhsWeb = nhsWeb

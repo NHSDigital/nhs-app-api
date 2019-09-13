@@ -7,7 +7,6 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
-import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.web.NhsWeb
 
 class WebAppInterface(
@@ -15,6 +14,47 @@ class WebAppInterface(
     private val uiInteractor: IInteractor,
     private val nhsWeb: NhsWeb
 ) {
+
+    @JavascriptInterface
+    fun clearMenuBarItem() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering clearMenuBarItem")
+        activity.runOnUiThread { uiInteractor.clearMenuBarItem() }
+    }
+
+    @JavascriptInterface
+    fun fetchNativeAppVersion(): String {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchNativeAppVersion")
+        return BuildConfig.VERSION_NAME
+    }
+
+    @JavascriptInterface
+    fun goToLoginOptions() {
+        activity.runOnUiThread { uiInteractor.showNativeBiometricOptions() }
+    }
+
+    @JavascriptInterface
+    fun hideHeader() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
+        activity.runOnUiThread { uiInteractor.hideHeader() }
+    }
+
+    @JavascriptInterface
+    fun hideHeaderSlim() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeaderSlim")
+        activity.runOnUiThread { uiInteractor.hideHeaderSlim() }
+    }
+
+    @JavascriptInterface
+    fun hideMenuBar() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideMenuBar")
+        activity.runOnUiThread { uiInteractor.hideMenuBar() }
+    }
+
+    @JavascriptInterface
+    fun hideWhiteScreen() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideWhiteScreen")
+        activity.runOnUiThread { uiInteractor.hideBlankScreen() }
+    }
 
     @JavascriptInterface
     fun onLogin() {
@@ -31,33 +71,33 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun updateHeaderText(text: String) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateHeaderText")
-        activity.runOnUiThread {
-            if (!isConnectedToNetwork) {
-                nhsWeb.showNoConnectionError()
-            } else {
-                uiInteractor.setHeaderText(text)
-            }
-        }
+    fun onSessionExpiring(sessionDuration: Int) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
+        activity.runOnUiThread { uiInteractor.showExtendSessionDialogue(sessionDuration) }
     }
 
     @JavascriptInterface
-    fun clearMenuBarItem() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering clearMenuBarItem")
-        activity.runOnUiThread { uiInteractor.clearMenuBarItem() }
+    fun pageLoadComplete() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering pageLoadComplete")
+        nhsWeb.applicationState.unBlock()
     }
 
     @JavascriptInterface
-    fun hideHeader() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
-        activity.runOnUiThread { uiInteractor.hideHeader() }
+    fun requestPnsToken() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering requestPnsToken")
+        activity.runOnUiThread { nhsWeb.requestPnsToken() }
     }
 
     @JavascriptInterface
-    fun hideHeaderSlim() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeaderSlim")
-        activity.runOnUiThread { uiInteractor.hideHeaderSlim() }
+    fun resetPageFocus() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering resetPageFocus")
+        activity.runOnUiThread { uiInteractor.resetFocusToNhsLogoForAccessibility() }
+    }
+
+    @JavascriptInterface
+    fun setMenuBarItem(index: Int) {
+        Log.d(Application.TAG, "${this::class.java.simpleName} Entering setMenuBarItem")
+        activity.runOnUiThread { uiInteractor.setMenuBarItem(index) }
     }
 
     @JavascriptInterface
@@ -73,55 +113,20 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun hideMenuBar() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideMenuBar")
-        activity.runOnUiThread { uiInteractor.hideMenuBar() }
-    }
-
-    @JavascriptInterface
-    fun setMenuBarItem(index: Int) {
-        Log.d(Application.TAG, "${this::class.java.simpleName} Entering setMenuBarItem")
-        activity.runOnUiThread { uiInteractor.setMenuBarItem(index) }
-    }
-
-    @JavascriptInterface
-    fun resetPageFocus() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering resetPageFocus")
-        activity.runOnUiThread { uiInteractor.resetFocusToNhsLogoForAccessibility() }
-    }
-
-    @JavascriptInterface
-    fun hideWhiteScreen() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideWhiteScreen")
-        activity.runOnUiThread { uiInteractor.hideBlankScreen() }
-    }
-
-    @JavascriptInterface
-    fun goToLoginOptions() {
-        activity.runOnUiThread { uiInteractor.showNativeBiometricOptions() }
-    }
-
-    @JavascriptInterface
     fun storeBetaCookie() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering storeBetaCookie")
         activity.runOnUiThread { nhsWeb.onBetaCookieStoreRequest() }
     }
 
     @JavascriptInterface
-    fun onSessionExpiring(sessionDuration: Int) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
-        activity.runOnUiThread { uiInteractor.showExtendSessionDialogue(sessionDuration) }
-    }
-
-    @JavascriptInterface
-    fun fetchNativeAppVersion(): String {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchNativeAppVersion")
-        return BuildConfig.VERSION_NAME
-    }
-
-    @JavascriptInterface
-    fun pageLoadComplete() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering pageLoadComplete")
-        nhsWeb.applicationState.unBlock()
+    fun updateHeaderText(text: String) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateHeaderText")
+        activity.runOnUiThread {
+            if (!isConnectedToNetwork) {
+                nhsWeb.showNoConnectionError()
+            } else {
+                uiInteractor.setHeaderText(text)
+            }
+        }
     }
 }
