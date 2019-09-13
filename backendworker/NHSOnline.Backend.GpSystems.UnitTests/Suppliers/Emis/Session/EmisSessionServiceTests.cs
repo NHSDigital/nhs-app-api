@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -224,6 +226,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         }
 
         [DataTestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        public async Task Create_EmptyUserPatientLinkToken_ReturnsForbidden(string userPatientLinkToken)
+        {
+            //Arrange
+            var sessionPostResponse = CreateSessionsPostResponse(userPatientLinkToken);
+
+            _mockEmisClient.Setup(
+                ec => ec.SessionsPost(
+                    It.IsAny<string>(), 
+                    It.IsAny<SessionsPostRequest>()))
+                .Returns(sessionPostResponse);
+
+            //Act
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+
+            //Assert
+            result.Should().BeAssignableTo<GpSessionCreateResult.Forbidden>();
+        }
+        
+
+        [DataTestMethod]
         [DataRow("Mr", "Fred", "Blogs", "Mr Fred Blogs")]
         [DataRow("", "Fred", "Blogs", "Fred Blogs")]
         [DataRow("Mr", "", "Blogs", "Mr Blogs")]
@@ -286,6 +310,30 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             result
                 .Should().BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject.UserSession.Should().BeAssignableTo<EmisUserSession>();
+        }
+
+        private Task<EmisClient.EmisApiObjectResponse<SessionsPostResponse>> CreateSessionsPostResponse(string userPatientLinkToken)
+        {
+            return Task.FromResult(
+                new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
+                {
+                    Body = new SessionsPostResponse
+                    {
+                        SessionId = "1234567890",
+                        UserPatientLinks = new List<UserPatientLink>
+                        {
+                            new UserPatientLink
+                            {
+                                UserPatientLinkToken = userPatientLinkToken
+                            }
+                        },
+                        FirstName = "Kanye",
+                        Surname = "West"
+                    },
+                    ExceptionErrorResponse = null,
+                    ErrorResponseBadRequest = null,
+                    StatusCode = HttpStatusCode.OK
+                });
         }
     }
 }

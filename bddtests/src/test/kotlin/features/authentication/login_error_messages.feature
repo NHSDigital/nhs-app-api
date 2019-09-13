@@ -68,3 +68,7 @@ Feature: Login error messages
     Examples:
       | GP System |
       | EMIS      |
+
+  Scenario: Cannot log in as an EMIS user with no userPatientLinkToken
+    Given I attempt to log in as an EMIS user with no userPatientLinkToken
+    Then I see the appropriate error message for a login error

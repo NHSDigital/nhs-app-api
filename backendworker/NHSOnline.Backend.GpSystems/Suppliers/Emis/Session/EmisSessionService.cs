@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             return responseBody;
         }
 
-        public async Task<SessionsPostResponse> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
+        public async Task<EmisClient.EmisApiObjectResponse<SessionsPostResponse>> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
         {
             var sessionPostRequestModel = new SessionsPostRequest
             {
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway());
             }
 
-            return sessionsResponse.Body;
+            return sessionsResponse;
         }
 
         public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
@@ -117,15 +117,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 try
                 {
-                    var sessionResponse = new EmisRequestTaskChecker<SessionsPostResponse>(_logger, "SendSessionsRequest").Check(sessionRequestTask);
-                    session.SessionId = sessionResponse.SessionId;
-                    session.UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken();  
-                    patientName = FormatName(sessionResponse);
+                    var sessionResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>(_logger, 
+                        "SendSessionsRequest").Check(sessionRequestTask);
+
+                    session.SessionId = sessionResponse.Body.SessionId;
+                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();  
+                    patientName = FormatName(sessionResponse.Body);
 
                     if (string.IsNullOrWhiteSpace(patientName))
                     {
                         _logger.LogError("No patient name found");
                         return new GpSessionCreateResult.BadGateway();
+                    }
+
+                    if (string.IsNullOrWhiteSpace(session.UserPatientLinkToken))
+                    {
+                        _logger.LogError("No EMIS userPatientLinkToken found");
+                        _logger.LogEmisErrorResponse(sessionResponse);
+                        return new GpSessionCreateResult.Forbidden();
                     }
                 }
                 catch (EmisSessionResponseErrorException responseError)

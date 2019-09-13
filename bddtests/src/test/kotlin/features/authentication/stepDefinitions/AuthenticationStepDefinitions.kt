@@ -106,6 +106,12 @@ class AuthenticationStepDefinitions {
         setupAndLogIn(patient, gpSystem)
     }
 
+    @Given("I attempt to log in as an EMIS user with no userPatientLinkToken$")
+    fun iAttemptToLogInAsEmisWithNoUserPatientLinkToken() {
+        val patient = Patient.getDefault("EMIS").copy(userPatientLinkToken = "")
+        setupAndLogIn(patient, "EMIS")
+    }
+
     private fun setupAndLogIn(patient: Patient, gpSystem: String) {
         SerenityHelpers.setPatient(patient)
 
