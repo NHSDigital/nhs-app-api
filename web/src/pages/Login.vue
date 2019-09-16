@@ -140,6 +140,7 @@ export default {
     };
   },
   mounted() {
+    sessionStorage.removeItem('hasAgreedToMedicalWarning');
     if (this.shouldShowBiometrics && this.$route.query.fidoAuthResponse) {
       const { authoriseUrl, loginUrl } = this.generateRedirectData();
       this.authoriseUrl = authoriseUrl;

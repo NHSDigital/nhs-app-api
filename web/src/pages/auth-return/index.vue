@@ -16,7 +16,6 @@ export default {
       if (appVersion) {
         context.store.dispatch('appVersion/updateWebVersion', appVersion);
       }
-
       await context.store.dispatch('auth/handleAuthResponse', context.route.query.code);
       if (isEmpty(context.store.state.errors.apiErrors)) {
         return context.redirect(TERMSANDCONDITIONS.path);

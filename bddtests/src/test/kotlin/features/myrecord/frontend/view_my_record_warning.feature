@@ -45,3 +45,15 @@ Feature: View My Medical Record Information - Warning Frontend
     Then I return to my medical record page
     Then I see the my medical record page
     And I see the top of my medical record page
+
+  Scenario: An EMIS user accepts record and then logs out and back in and is shown the warning page
+    Given the my record wiremocks are initialised for EMIS
+    And the GP Practice has enabled demographics functionality
+    When I am on the record warning page
+    Then I see the my record warning page
+    When I click continue
+    Then I see the my medical record page
+    When I use the header link to log out of the website
+    Then I see the login page
+    When I am on the record warning page
+    Then I see the my record warning page
