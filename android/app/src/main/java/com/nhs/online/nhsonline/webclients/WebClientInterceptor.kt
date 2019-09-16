@@ -148,7 +148,7 @@ class WebClientInterceptor(
         Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedSslError")
 
-        if (isNHSAppPage(view)) {
+        if (canHandleUnavailability(view)) {
             handleUnavailability(view?.url, WebViewClient.ERROR_CONNECT)
         }
     }
@@ -156,7 +156,7 @@ class WebClientInterceptor(
     override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
         Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedHttpError")
-        if (isNHSAppPage(view) && !isNHSApi(request)) {
+        if (canHandleUnavailability(view) && !isNHSApi(request)) {
             cancelTrackingWebRequestResponse()
             handleUnavailability(view?.url, WebViewClient.ERROR_CONNECT)
         }
@@ -165,7 +165,7 @@ class WebClientInterceptor(
     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
         Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedError")
-        if (isNHSAppPage(view) && shouldHandleUnavailability(view?.url)) {
+        if (canHandleUnavailability(view) && shouldHandleUnavailability(view?.url)) {
             cancelTrackingWebRequestResponse()
             if (error != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -187,7 +187,7 @@ class WebClientInterceptor(
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedError > failingUrl $failingUrl > Error Description: $description")
             cancelTrackingWebRequestResponse()
-            if (isNHSAppPage(view)) {
+            if (canHandleUnavailability(view)) {
                 handleUnavailability(failingUrl, errorCode)
             }
         }
@@ -282,6 +282,10 @@ class WebClientInterceptor(
             "${this::class.java.simpleName}: Entering shouldHandleUnavailability > url $urlString > ${matchingKnownService != null}")
 
         return matchingKnownService != null
+    }
+
+    private fun canHandleUnavailability(view: WebView?): Boolean {
+        return view?.url === null || isNHSAppPage(view)
     }
 
     private fun isNHSAppPage(view: WebView?): Boolean {
