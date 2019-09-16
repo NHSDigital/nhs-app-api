@@ -17,6 +17,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
+import utils.SerenityHelpers
 import java.net.URL
 
 private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
@@ -43,6 +44,8 @@ class HomePageStepDefinitions : AbstractSteps() {
     private lateinit var prescriptions: PrescriptionsSteps
     @Steps
     private lateinit var recordWarning: MyRecordWarningStepDefinitions
+    @Steps
+    lateinit var home: HomeSteps
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -61,6 +64,11 @@ class HomePageStepDefinitions : AbstractSteps() {
         loginSteps.loginPage.clickHelpIcon()
     }
 
+    @Then("^I see the home page$")
+    fun iSeeTheHomePage() {
+        home.assertHeaderVisible()
+    }
+
     @Then("^I see the current app version")
     fun iSeeTheCurrentAppVersion() {
         homeSteps.homePage.assertVersionNumberVisible()
@@ -77,6 +85,26 @@ class HomePageStepDefinitions : AbstractSteps() {
         browser.shouldHaveUrl(SURVEY_URL)
     }
 
+    @Then("I see the patient details of name, date of birth and NHS number$")
+    fun iSeePatientDetails() {
+        val patient = SerenityHelpers.getPatient()
+        val regex = """${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
+        Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number " +
+                "to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
+                regex.containsMatchIn(patient.nhsNumbers.first()))
+        home.assertPatientDetailsShownFor(patient)
+    }
+
+    @Then("^I see a welcome message$")
+    fun iSeeAWelcomeMessageFor() {
+        val patient = SerenityHelpers.getPatient()
+        home.assertWelcomeMessageShownFor(patient)
+    }
+
+    @Then("^I see the home page header$")
+    fun iSeeHeader() {
+        home.assertHeaderVisible()
+    }
 
     @Then("I see and can follow links within the home page body$")
     fun iSeeAndCanFollowLinksWithinTheHomePageBody() {

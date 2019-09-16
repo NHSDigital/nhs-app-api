@@ -26,6 +26,11 @@ class ResponseStatusCodeSteps {
         assertEquals("Incorrect status code returned. ", converted, errorResponse!!.statusCode)
     }
 
+    @Then("^I get (?:a|an) \"(.*)\" error")
+    fun thenIGetAnError(expectedStatusCode: String) {
+        thenIReceiveAnError(expectedStatusCode)
+    }
+
     @Then("^I receive (?:a|an) \"(.*)\" error with service desk reference prefixed \"(.*)\"$")
     fun thenIReceiveAnErrorWithServiceDeskReferencePrefixed(expectedStatusCodeName: String,
                                                             expectedServiceDeskReferencePrefix: String) {
