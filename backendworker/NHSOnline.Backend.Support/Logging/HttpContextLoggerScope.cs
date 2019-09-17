@@ -15,7 +15,9 @@ namespace NHSOnline.Backend.Support.Logging
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "SessionId:{0}",
-                _httpContext.Items.Keys.Contains("UserSession") ? ((UserSession)_httpContext.Items["UserSession"]).Key : "{No Session yet}");
+                _httpContext != null && _httpContext.Items.Keys.Contains("UserSession")
+                    ? ((UserSession) _httpContext.Items["UserSession"]).Key
+                    : "{No Session yet}");
         }
     }
 }
