@@ -157,13 +157,11 @@ test {
     testLogging.showStandardStreams = true
     /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
     systemProperties System.getProperties()
-
     afterTest { desc, result ->
         if ("FAILURE" == result.resultType as String) {
             failures.withWriterAppend {
                 it.write("${desc.className}.${desc.name}\n")
             }
         }
-    }
-}
+}}
 gradle.startParameter.continueOnFailure = false

@@ -440,7 +440,15 @@ for TAG in ${TAGS[*]}; do
   info "Collecting serenity reports for $TAG"
   cp -r $workingDir/../../testRunFolder/$TAG/target/site/serenity $workingDir/../target/site/.
   cp -r $workingDir/../../testRunFolder/$TAG/target/site/Gherkin-Report.html $workingDir/../target/site/
-  cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
+    if [ -d $workingDir/../../testRunFolder/$TAG/build/test-results ]
+    then
+      cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
+    else
+       mkdir -p $workingDir/../build/test-results/test
+       cp $workingDir/../TEST-TrancheFailed.xml $workingDir/../build/test-results/test/TEST-$TAG.xml
+       sed -i '' -e s/name=\"\"/name=\"$TAG\"/ $workingDir/../build/test-results/test/TEST-$TAG.xml
+       sed -i '' -e s/classname=\"\"/classname=\"$TAG\"/ $workingDir/../build/test-results/test/TEST-$TAG.xml
+    fi
   cp -r $workingDir/../../testRunFolder/$TAG/$ACCESSIBILITY_OUTPUT $workingDir/../.
 done
 
