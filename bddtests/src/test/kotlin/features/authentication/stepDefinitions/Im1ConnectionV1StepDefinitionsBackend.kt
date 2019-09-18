@@ -14,7 +14,6 @@ import mocking.emis.me.LinkageDetailsModel
 import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
 import models.patients.EmisPatients
-import mongodb.MongoDBConnection
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
@@ -207,11 +206,6 @@ class Im1ConnectionV1StepDefinitionsBackend {
         ))
     }
 
-    @Given("^no IM1 Connection Token is currently cached$")
-    fun im1ConnectionTokensClearedFromTheCache() {
-        MongoDBConnection.Im1CacheCollection.clearCache()
-    }
-
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAUsersIMCredentials() {
         try {
@@ -305,15 +299,5 @@ class Im1ConnectionV1StepDefinitionsBackend {
         val responseNhsNumbers = response!!.nhsNumbers!!.map { it.nhsNumber.replace(" ", "") }
         val patient = SerenityHelpers.getPatient()
         Assert.assertEquals(patient.nhsNumbers, responseNhsNumbers)
-    }
-
-    @Then("^the IM1 Connection Token is in the cache$")
-    fun theIm1ConnectionTokenIsInTheCache() {
-        MongoDBConnection.Im1CacheCollection.assertNumberOfDocuments(1)
-    }
-
-    @Then("^the IM1 Connection Token is no longer in the cache$")
-    fun theIm1ConnectionTokenIsNoLongerInTheCache() {
-        MongoDBConnection.Im1CacheCollection.assertNumberOfDocuments(0)
     }
 }

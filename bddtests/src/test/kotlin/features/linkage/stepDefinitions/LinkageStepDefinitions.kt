@@ -1,7 +1,6 @@
 package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -11,27 +10,19 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
-import mongodb.MongoDBConnection
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
 import org.junit.Assert
 import utils.SerenityHelpers
-import worker.NhsoHttpException
-import worker.WorkerClient
-import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
-import worker.models.patient.Im1ConnectionRequest
 
 const val DELAY: Long = 4
 const val DEFAULT_TIMEOUT_MILLISECONDS: Int = 500
 const val FOUR_SECOND_SLEEP: Long = 4000
 
-@Suppress("LargeClass")
 open class LinkageStepDefinitions {
 
     val mockingClient = MockingClient.instance
-    private var im1ConnectionRequest: Im1ConnectionRequest? = null
-    private lateinit var patient: Patient
 
     @Given("I have valid (.*) linkage details$")
     fun iHaveValidLinkageDetailsFor(gpSystem: String) {
@@ -45,7 +36,7 @@ open class LinkageStepDefinitions {
         setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 
-    @Given("^[Aa]nother user has valid (.*) linkage details$")
+    @Given("^another user has valid (.*) linkage details$")
     fun anotherUserHasValidLinkageDetailsFor(gpSystem: String) {
         val linkage = validOtherLinkage(gpSystem)
         setLinkageInformation(linkage, LinkageResult.SuccessfullyRetrieved)
@@ -53,55 +44,48 @@ open class LinkageStepDefinitions {
 
     @Given("I have valid (.*) linkage details apart from an empty OdsCode$")
     fun iHaveValidLinkageDetailsExceptEmptyOds(gpSystem: String) {
-        val linkage = validLinkage(gpSystem)
-        linkage.odsCode = ""
-        setLinkageInformation(linkage)
+        val linkage = validLinkage(gpSystem).copy(odsCode = "")
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("I have valid (.*) linkage details apart from a not found OdsCode$")
     fun iHaveValidLinkageDetailsExceptNotFoundOds(gpSystem: String) {
-        val linkage = validLinkage(gpSystem)
-        linkage.odsCode = "A04889999"
-        setLinkageInformation(linkage)
+        val linkage = validLinkage(gpSystem).copy(odsCode = "A04889999")
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("I have valid (.*) linkage details apart from an empty NhsNumber$")
     fun iHaveValidLinkageDetailsExceptEmptyNhsNumber(gpSystem: String) {
-        val linkage = validLinkage(gpSystem)
-        linkage.nhsNumber = ""
-        setLinkageInformation(linkage)
+        val linkage = validLinkage(gpSystem).copy(nhsNumber = "")
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("I have valid (.*) linkage details apart from an empty identity token$")
     fun iHaveValidLinkageDetailsExceptEmptyIdentityToken(gpSystem: String) {
-        val linkage = validLinkage(gpSystem)
-        linkage.identityToken = ""
-        setLinkageInformation(linkage)
+        val linkage = validLinkage(gpSystem).copy(identityToken = "")
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("I have valid (.*) linkage details apart from an empty email address$")
     fun iHaveValidLinkageDetailsExceptEmptyEmail(gpSystem: String) {
-        val linkage = validLinkage(gpSystem)
-        linkage.emailAddress = ""
-        setLinkageInformation(linkage)
+        val linkage = validLinkage(gpSystem).copy(emailAddress = "")
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("I have valid (.*) linkage details apart from an empty surname$")
     fun iHaveValidLinkageDetailsExceptEmptySurname(gpSystem: String) {
-        val linkage = validLinkage(gpSystem)
-        linkage.surname = ""
-        setLinkageInformation(linkage)
+        val linkage = validLinkage(gpSystem).copy(surname = "")
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("I have valid (.*) linkage details apart from an empty date of birth$")
     fun iHaveValidLinkageDetailsExceptEmptyDateOfBirth(gpSystem: String) {
-        val linkage = validLinkage(gpSystem)
-        linkage.dateOfBirth = ""
-        setLinkageInformation(linkage)
+        val linkage = validLinkage(gpSystem).copy(dateOfBirth = "")
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("^I have valid (.*) linkage details but the practice is not live$")
-    fun thePraticeIsNotLive(gpSystem: String) {
+    fun thePracticeIsNotLive(gpSystem: String) {
         val linkage = validLinkage(gpSystem)
         setLinkageInformation(linkage, LinkageResult.PracticeNotLive)
     }
@@ -114,31 +98,30 @@ open class LinkageStepDefinitions {
 
     @Given("^I have valid (.*) linkage details for GET but I am under (\\d+)$")
     fun iAmUnderAgeForGet(gpSystem: String, age: Int) {
-        val linkage = validLinkage(gpSystem)
         val now = DateTime.now()
         val dateOfBirth = now.minusYears(age).plusDays(1).withTime(0, 0, 0, 0)
-        linkage.dateOfBirth = dateOfBirth.toString(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+        val linkage = validLinkage(gpSystem)
+                .copy(dateOfBirth = dateOfBirth.toString(DateTimeFormats.backendDateTimeFormatWithoutTimezone))
         setLinkageInformation(linkage, LinkageResult.PatientNonCompetentOrUnderMinimumAge)
     }
 
     @Given("^I have valid (.*) linkage details for POST but I am under (\\d+)$")
     fun iAmUnderAgeForPost(gpSystem: String, age: Int) {
-        val linkage = validLinkage(gpSystem)
         val now = DateTime.now()
         val dateOfBirth = now.minusYears(age).plusDays(1).withTime(0, 0, 0, 0)
-        linkage.dateOfBirth = dateOfBirth.toString(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
-
+        val linkage = validLinkage(gpSystem)
+                .copy(dateOfBirth = dateOfBirth.toString(DateTimeFormats.backendDateTimeFormatWithoutTimezone))
         // don't need a gp supplier linkage result setup for the POST we do the age validation
-        setLinkageInformation(linkage)
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkage)
     }
 
     @Given("^I have valid (.*) linkage details and try to create a linkage key as (\\d+) years old$")
     fun iAmXYearsOld(gpSystem: String, age: Int) {
-        val linkage = validLinkage(gpSystem)
         val now = DateTime.now()
         val dateOfBirth = now.minusYears(age).withTime(0, 0, 0, 0)
         val linkageDateOfBirthFormat = LinkageFactory.getForSupplier(gpSystem).linkageDateOfBirthFormat
-        linkage.dateOfBirth = dateOfBirth.toString(linkageDateOfBirthFormat)
+        val linkage = validLinkage(gpSystem)
+                .copy(dateOfBirth = dateOfBirth.toString(linkageDateOfBirthFormat))
         setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 
@@ -201,7 +184,7 @@ open class LinkageStepDefinitions {
         setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 
-    @Given("^[Aa]nother (.*) user has a new linkage key created for them$")
+    @Given("^another (.*) user has a new linkage key created for them$")
     fun anotherUserHasValidLinkageDetails(gpSystem: String) {
         val linkage = validOtherLinkage(gpSystem)
         setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
@@ -240,110 +223,35 @@ open class LinkageStepDefinitions {
     @When("^I call the Linkage GET endpoint$")
     fun iCallTheLinkageGETEndpoint() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-
         val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
-
         // Only setup mock for gp supplier if we need to.
         // Some requests testing validation don't get as far as calling a gp supplier.
         if (linkage != null && linkageResult != null) {
             LinkageFactory.getForSupplier(gpSystem).mockLinkageGetResult(linkage, linkageResult)
         }
-
-        try {
-            val linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.getLinkageKey(linkage)
-
-            Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
-
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        LinkageApi.get(linkage)
     }
 
-    @When("^(?:I|(?:[Tt]hey)) call the Linkage POST endpoint$")
+    @When("^I call the Linkage POST endpoint$")
     fun iCallTheLinkagePOSTEndpoint() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-
-        val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
-        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
-
-        // Only setup mock for gp supplier if we need to.
-        // Some requests testing validation don't get as far as calling a gp supplier.
-        if (linkage != null && linkageResult != null) {
-            LinkageFactory.getForSupplier(gpSystem).mockLinkagePostResult(linkage, linkageResult, null)
-        }
-
-        try {
-            val linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.postLinkageKey(CreateLinkageRequest(
-                    linkage.odsCode,
-                    linkage.nhsNumber,
-                    linkage.identityToken,
-                    linkage.emailAddress,
-                    linkage.dateOfBirth,
-                    linkage.surname))
-
-            Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
-
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val linkage = LinkageFactory.setUpPostMocks()
+        LinkageApi.post(linkage)
     }
 
-    @When("^(?:I|(?:[Tt]hey)) call the Linkage POST endpoint which responds after (\\d+) seconds$")
+    @When("^I call the Linkage POST endpoint which responds after (\\d+) seconds$")
     fun iCallTheLinkagePOSTEndpoint(delay: Long) {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-
-        val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
-        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
-
-        // Only setup mock for gp supplier if we need to.
-        // Some requests testing validation don't get as far as calling a gp supplier.
-        if (linkage != null && linkageResult != null) {
-            LinkageFactory.getForSupplier(gpSystem).mockLinkagePostResult(linkage, linkageResult, delay)
-        }
-
-        try {
-            val linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.postLinkageKey(CreateLinkageRequest(
-                    linkage.odsCode,
-                    linkage.nhsNumber,
-                    linkage.identityToken,
-                    linkage.emailAddress,
-                    linkage.dateOfBirth,
-                    linkage.surname))
-
-            Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
-
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val linkage = LinkageFactory.setUpPostMocks(delay)
+        LinkageApi.post(linkage)
     }
 
-    @When("^(?:I|(?:[Tt]hey)) call the Linkage POST endpoint CID connection times out$")
+    @When("^I call the Linkage POST endpoint CID connection times out$")
     fun iCallTheLinkagePOSTEndpointCIDConnectionTimesOut() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
-        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
-
-        // Only setup mock for gp supplier if we need to.
-        // Some requests testing validation don't get as far as calling a gp supplier.
-        if (linkage != null && linkageResult != null) {
-            LinkageFactory.getForSupplier(gpSystem).mockLinkagePostResult(linkage, linkageResult, DELAY)
-        }
-
-        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .authentication.postLinkageKey(CreateLinkageRequest(
-                linkage.odsCode,
-                linkage.nhsNumber,
-                linkage.identityToken,
-                linkage.emailAddress,
-                linkage.dateOfBirth,
-                linkage.surname), DEFAULT_TIMEOUT_MILLISECONDS)
+        val linkage = LinkageFactory.setUpPostMocks(DELAY)
+        LinkageApi.post(linkage, DEFAULT_TIMEOUT_MILLISECONDS)
     }
 
-    @When("^I receive a valid linkage response$")
+    @Then("^I receive a valid linkage response$")
     fun iReceiveAValidResponse() {
         val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
@@ -354,31 +262,16 @@ open class LinkageStepDefinitions {
         Assert.assertEquals(linkage.linkageKey, linkageResponse.linkageKey)
     }
 
-    @When("^I receive a valid microtest linkage response$")
+    @Then("^I receive a valid microtest linkage response$")
     fun iReceiveAValidMicrotestResponse() {
         val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
-
         Assert.assertNotNull(linkageResponse)
         Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
-
-        this.patient = Patient.getMicrotestPostLinkage(linkageResponse.accountId, linkageResponse.linkageKey)
-        DemographicsFactory.getForSupplier("MICROTEST").enabled(Patient.getDefault("MICROTEST"))
-        SerenityHelpers.resetPatient(this.patient)
-
-        SuccessfulRegistrationJourney(mockingClient).create(this.patient, "MICROTEST")
-
-        setIm1Request()
-    }
-
-    @Then("^Wait for the request to complete$")
-    fun waitForRequestToComplete() {
-        Thread.sleep(FOUR_SECOND_SLEEP)
-    }
-
-    @And("^there are no details in the cache$")
-    fun noDetailsInCache() {
-        MongoDBConnection.Im1CacheCollection.clearCache()
+        val patient = Patient.getMicrotestPostLinkage(linkageResponse.accountId, linkageResponse.linkageKey)
+        DemographicsFactory.getForSupplier("MICROTEST").enabled(patient)
+        SerenityHelpers.resetPatient(patient)
+        SuccessfulRegistrationJourney(mockingClient).create(patient, "MICROTEST")
     }
 
     private fun validLinkage(gpSystem: String): LinkageInformationFacade {
@@ -397,19 +290,4 @@ open class LinkageStepDefinitions {
         Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkageInformationFacade)
         Serenity.setSessionVariable(LinkageResult::class).to(linkageResult)
     }
-
-    private fun setLinkageInformation(linkageInformationFacade: LinkageInformationFacade) {
-        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkageInformationFacade)
-    }
-
-    private fun setIm1Request() {
-        this.im1ConnectionRequest = Im1ConnectionRequest(
-                AccountId = patient.accountId,
-                LinkageKey = patient.linkageKey,
-                OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth)
-    }
 }
-
-

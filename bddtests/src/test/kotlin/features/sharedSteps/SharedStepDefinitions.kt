@@ -25,7 +25,7 @@ import webdrivers.options.nojs.NoJsOption
 
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
 private const val WAIT_IN_SECONDS = 190L
-
+private const val FOUR_SECOND_SLEEP: Long = 4000
 open class SharedStepDefinitions {
 
     @Steps
@@ -99,6 +99,11 @@ open class SharedStepDefinitions {
     @When("^I navigate to (\\w+)$")
     open fun iNavigateTo(tab: String) {
         navBar.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
+    }
+
+    @Then("^Wait for the request to complete$")
+    fun waitForRequestToComplete() {
+        Thread.sleep(FOUR_SECOND_SLEEP)
     }
 
     @Then("^I see the (.*) menu button on mobile")

@@ -149,7 +149,7 @@ Feature: Linkage Get Key
   Scenario Outline: Microtest patient can get linkage details, and successfully register with the returned details.
     Given I have valid <GP System> linkage details
     And the GP Practice has enabled demographics functionality
-    And there are no details in the cache
+    And no IM1 Connection Token is currently cached
     When I call the Linkage GET endpoint
     Then I receive a valid microtest linkage response
     And the IM1 Connection Token is in the cache
