@@ -126,20 +126,20 @@ class AppDialogs(private val activity: Activity) {
         val dialog: AlertDialog = builder.create()
         extendSession.setOnClickListener {
             onExtendClicked.invoke()
-            dialog.dismiss()
+            dismissDialogSafely(dialog)
         }
         logOut.setOnClickListener {
             onLogoutClicked.invoke()
-            dialog.dismiss()
+            dismissDialogSafely(dialog)
         }
         dialog.setCanceledOnTouchOutside(false)
 
         return dialog
     }
 
-    fun dismissVersionUpgradeDialog() = upgradeDialog?.dismiss()
+    fun dismissVersionUpgradeDialog() = dismissDialogSafely(upgradeDialog)
 
-    fun dismissExtendSessionDialog() = extendSessionDialogue?.dismiss()
+    fun dismissExtendSessionDialog() = dismissDialogSafely(extendSessionDialogue)
 
     fun isUpgradeDialogActive() = isDialogActive(upgradeDialog)
 
@@ -149,6 +149,12 @@ class AppDialogs(private val activity: Activity) {
             dialog.show(); true
         } else {
             false
+        }
+    }
+
+    private fun dismissDialogSafely(alertDialog: AlertDialog?){
+        if(isDialogActive(alertDialog) && !activity.isFinishing){
+            alertDialog?.dismiss()
         }
     }
 

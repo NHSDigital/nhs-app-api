@@ -50,6 +50,17 @@ class AppDialogsTest {
     }
 
     @Test
+    fun dismissVersionDialog_NoAction_IfActivityIsFinishing() {
+        val spyActivity = spy(activity)
+        appDialogs = AppDialogs(spyActivity)
+        appDialogs.showVersionUpgradeDialog()
+        whenever(spyActivity.isFinishing).thenReturn(true)
+        val dialog = ShadowDialog.getLatestDialog()
+        appDialogs.dismissVersionUpgradeDialog()
+        Assert.assertTrue(dialog.isShowing)
+    }
+
+    @Test
     fun showExitDialog() {
         val expectedMessageText = "Are you sure you want to log out?"
         appDialogs.showExitDialog {}
@@ -113,6 +124,17 @@ class AppDialogsTest {
         Assert.assertNotNull(extendButton)
         extendButton?.callOnClick()
         verify(clickTester).clicked()
+    }
+
+    @Test
+    fun dismissExtendSessionDialog_NoAction_IfActivityIsFinishing() {
+        val spyActivity = spy(activity)
+        appDialogs = AppDialogs(spyActivity)
+        appDialogs.showExtendSessionDialogue(10, {}, {})
+        whenever(spyActivity.isFinishing).thenReturn(true)
+        val dialog = ShadowDialog.getLatestDialog()
+        appDialogs.dismissExtendSessionDialog()
+        Assert.assertTrue(dialog.isShowing)
     }
 
     private fun extractAlertDialogMessage(alertDialog: AlertDialog): String? {
