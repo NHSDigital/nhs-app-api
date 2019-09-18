@@ -52,7 +52,6 @@ Feature: Book Appointments Frontend
       | TPP       |
       | MICROTEST |
 
-  @smoketest
   Scenario Outline: A <GP System> user can book an appointment describing symptoms
     Given there are <GP System> appointments available to book with a reason
     And a booked appointment can be cancelled
@@ -67,9 +66,12 @@ Feature: Book Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | TPP       |
       | VISION    |
       | MICROTEST |
+    @smoketest
+    Examples:
+      | GP System |
+      | TPP       |
 
   Scenario: A Vision user gets an alternative success message when booking and there's no ability to cancel
     Given there are VISION appointments available to book

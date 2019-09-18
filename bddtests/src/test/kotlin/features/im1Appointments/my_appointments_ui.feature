@@ -82,8 +82,6 @@ Feature: My Appointments Frontend
       | TPP       |
       | MICROTEST |
 
-  @smoketest
-  @nativesmoketest
   Scenario Outline: A <GP System> user sees both their upcoming and historical appointments
     Given I have historical and upcoming appointments for <GP System>
     And I am logged in
@@ -93,9 +91,13 @@ Feature: My Appointments Frontend
     And each appointment can be cancelled
     And I am given the list of historical appointments
     And I can book an appointment
+    @nativesmoketest
+    @smoketest
     Examples:
       | GP System |
       | EMIS      |
+    Examples:
+      | GP System |
       | TPP       |
       | MICROTEST |
 

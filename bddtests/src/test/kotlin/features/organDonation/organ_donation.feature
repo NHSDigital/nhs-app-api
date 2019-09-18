@@ -88,7 +88,6 @@ Feature: Organ Donation Frontend
       | TPP       |
       | MICROTEST |
 
-  @smoketest
   Scenario Outline: A <GP System> user can opt to donate some of their organs
     Given I am a <GP System> user not registered with organ donation, who wishes to register and donate some organs
     And I am logged in
