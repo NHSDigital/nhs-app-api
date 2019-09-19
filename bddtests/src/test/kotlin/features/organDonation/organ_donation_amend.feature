@@ -238,7 +238,7 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
-    When I follow the opt-out journey to the 'Confirmation' page
+    When I follow the opt-out journey to the 'Confirmation' page and see 'Decision Submitted'
     Then the organ donation decision has been submitted and is to be processed
 
   Scenario: A user can find out more about organ donation when amending their decision

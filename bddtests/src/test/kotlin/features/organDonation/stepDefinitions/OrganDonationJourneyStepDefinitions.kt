@@ -34,10 +34,16 @@ open class OrganDonationJourneyStepDefinitions {
         navigateToFaithAndBeliefsPage(pageTitle)
     }
 
-    @When("I follow the opt-out journey to the '(.*)' page")
+    @When("^I follow the opt-out journey to the '(.*)' page$")
     fun iFollowTheOrganDonationOptOutJourney(pageTitle: String) {
         organDonationChoicePage.noButton.assertIsVisible().click()
         navigateToAdditionalDetailsPageForOptOutJourney(pageTitle)
+    }
+
+    @When("^I follow the opt-out journey to the '(.*)' page and see 'Decision Submitted'$")
+    fun iFollowTheOrganDonationOptOutJourneyAndSeeDecisionDubmitted(pageTitle: String) {
+        organDonationChoicePage.noButton.assertIsVisible().click()
+        navigateToAdditionalDetailsPageForOptOutJourney(pageTitle, true)
     }
 
     private fun navigateToFaithAndBeliefsPage(pageTitle: String){
@@ -60,28 +66,31 @@ open class OrganDonationJourneyStepDefinitions {
         navigateToCheckDetailsPage(pageTitle)
     }
 
-    private fun navigateToAdditionalDetailsPageForOptOutJourney(pageTitle: String){
+    private fun navigateToAdditionalDetailsPageForOptOutJourney(pageTitle: String, decisionSubmitted: Boolean = false){
         organDonationAdditionalDetailsPage.assertDisplayed()
         if(pageTitle == "Additional Details"){
             return
         }
-        navigateToCheckDetailsPage(pageTitle)
+        navigateToCheckDetailsPage(pageTitle, decisionSubmitted)
     }
 
-    private fun navigateToCheckDetailsPage(pageTitle: String){
+    private fun navigateToCheckDetailsPage(pageTitle: String, decisionSubmitted: Boolean = false){
         organDonationAdditionalDetailsPage.clickContinue()
         organDonationCheckDetailsPage.assertDisplayed()
         if(pageTitle == "Check Details"){
             return
         }
-        navigateToConfirmationPage()
+        navigateToConfirmationPage(decisionSubmitted)
     }
 
-    private fun navigateToConfirmationPage(){
+    private fun navigateToConfirmationPage(decisionSubmitted: Boolean){
         organDonationCheckDetailsPage.accuracyCheckBox.click()
         organDonationCheckDetailsPage.privacyStatementCheckBox.click()
         organDonationCheckDetailsPage.clickSubmit()
-        organDonationViewRegistrationPage.assertDisplayed()
+        if(decisionSubmitted)
+            organDonationViewRegistrationPage.assertDecisionSubmitted()
+        else
+            organDonationViewRegistrationPage.assertDisplayed()
     }
 }
 

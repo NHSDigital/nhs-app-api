@@ -69,6 +69,6 @@ class RecordItem(recordItem: WebElementFacade) {
     val label = recordItem.find<WebElementFacade>(By.tagName("span")).text
 
     val bodyElements = recordItem.thenFindAll(By.tagName("p")).map { element ->
-        element.textValue
+        element.text
     }
 }

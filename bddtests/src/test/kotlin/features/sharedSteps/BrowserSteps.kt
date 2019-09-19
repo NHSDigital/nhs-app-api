@@ -34,6 +34,10 @@ open class BrowserSteps {
                openLoginPage()
                 break
             }
+            catch(e: net.thucydides.core.webdriver.DriverConfigurationError){
+                println("Error opening Chrome on attempt ${++tryCount} - Error was $e")
+                Thread.sleep(CHROME_RECOVERY_TIME)
+            }
             catch(e: org.openqa.selenium.WebDriverException) {
                 println("Error opening Chrome on attempt ${++tryCount} - Error was $e")
                 Thread.sleep(CHROME_RECOVERY_TIME)
