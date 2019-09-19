@@ -202,9 +202,6 @@ services:
       - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
   log.local.bitraft.io:
     image: nhsonline.backend.loggerapi
-    build:
-      context: .
-      dockerfile: NHSOnline.Backend.LoggerApi/Dockerfile
     ports:
       - "8090:8090"
     environment:
