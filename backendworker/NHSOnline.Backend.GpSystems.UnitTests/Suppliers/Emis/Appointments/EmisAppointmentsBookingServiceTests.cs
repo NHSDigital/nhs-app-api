@@ -27,8 +27,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         
         private const int ProvidedAppointmentSlotInPast = -1152;
         private const int RequiredFieldValueMissing = -1014;
-        private const int AppointmentSlotIsBeforePracticeDefinedDays = -1153;
-        private const int AppointmentSlotIsAfterPracticeDefinedDays = -1154;
         private const int OnlineUserMaxAppointmentBookCount = -1156;
 
         private IFixture _fixture;
@@ -192,8 +190,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [DataTestMethod]
-        [DataRow(AppointmentSlotIsAfterPracticeDefinedDays)]
-        [DataRow(AppointmentSlotIsBeforePracticeDefinedDays)]
+        [DataRow(-1154)]
+        [DataRow(-1153)]
         public async Task Book_WhenEmisReturnsSlotOutsidePracticeDefinedDays_ReturnsSlotNotAvailable(int emisErrorCode)
         {
             // Arrange

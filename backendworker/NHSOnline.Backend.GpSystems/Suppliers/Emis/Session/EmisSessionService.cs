@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.SharedModels;
@@ -117,12 +119,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 try
                 {
-                    var sessionResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>(_logger, 
+                    var sessionResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>(_logger,
                         "SendSessionsRequest").Check(sessionRequestTask);
 
                     session.SessionId = sessionResponse.Body.SessionId;
-                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();  
+                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();
                     patientName = FormatName(sessionResponse.Body);
+
+                    if (sessionResponse.Body.HasLinkedPatients())
+                    {
+                        LogProxyInformation(sessionResponse.Body);
+                    }
 
                     if (string.IsNullOrWhiteSpace(patientName))
                     {
@@ -181,6 +188,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             {
                 _logger.LogExit();
             }
+        }
+
+        private void LogProxyInformation(SessionsPostResponse sessionsPostResponse)
+        {
+            var userPatientLinks = sessionsPostResponse.ExtractLinkedPatients().ToList();
+            var selfPatient = sessionsPostResponse.ExtractSelfPatient();
+            var userOdsCode = selfPatient != null ? selfPatient.NationalPracticeCode : "";
+            var differentOdsCode = userPatientLinks.Count(x => !x.NationalPracticeCode.Equals(userOdsCode, StringComparison.Ordinal));
+
+            _logger.LogInformation(
+                $"User has linked_accounts={userPatientLinks.Count()}, with different_ods_codes_to_user={differentOdsCode}");
         }
 
         private static string FormatName(SessionsPostResponse sessionResponse)

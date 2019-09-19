@@ -49,7 +49,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         
         private const string ServiceDefinitionId = "testId";
         private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\" }";
-        private const string ServiceDefinitionJsonContent = "{ \"resourceType\" : \"ServiceDefinition\", \"contained\": [ { \"resourceType\": \"Questionnaire\" } ], \"publisher\" : \"eConsultHealthLtd\"  }";
         private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
         private const string paramString =
             "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
@@ -290,7 +289,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         [TestMethod]
         [DataRow("")]
         [DataRow("  ")]
-        [DataRow(ServiceDefinitionJsonContent)]
+        [DataRow("{ \"resourceType\" : \"ServiceDefinition\", \"contained\": [ { \"resourceType\": \"Questionnaire\" } ], \"publisher\" : \"eConsultHealthLtd\"  }")]
         public async Task GetServiceDefinitions_WhenProviderClientReturnsNonBundleContent_ReturnsBadGateway(string content)
         {
             // Arrange

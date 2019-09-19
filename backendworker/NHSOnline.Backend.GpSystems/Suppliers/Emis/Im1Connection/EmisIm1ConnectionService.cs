@@ -180,7 +180,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
                     _logger.LogError(
-                        $"Emis could not extract {nameof(userPatientLinkToken)}");
+                        $"Emis could not extract {nameof(userPatientLinkToken)}. registration_linked_accounts={sessionsResponse.Body?.ExtractLinkedPatients().Count()}");
                     _logger.LogEmisErrorResponse(sessionsResponse);
                     return new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
                 }

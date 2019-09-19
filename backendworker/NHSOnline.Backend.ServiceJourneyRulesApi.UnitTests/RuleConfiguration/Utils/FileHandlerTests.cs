@@ -13,7 +13,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
     [TestClass]
     public class FileHandlerTests
     {
-        private const string DuplicateFileName = "duplicate_file.json";
         private const string UniqueFileName = "unique_file.json";
         private IFileHandler _fileHandler;
         private Mock<IDirectory> _directory;
@@ -45,7 +44,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
-        [DataRow(DuplicateFileName)]
+        [DataRow("duplicate_file.json")]
         public void ReadEmbeddedResourceFromFileName_WhenCalledWithInvalidFileName_ReturnsFileDataWithError(
             string fileName)
         {

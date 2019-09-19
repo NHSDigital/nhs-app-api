@@ -4,5 +4,6 @@
     {
         public string UserPatientLinkToken { get; set; }
         public AssociationType AssociationType { get; set; }
+        public string NationalPracticeCode { get; set; }
     }
 }
