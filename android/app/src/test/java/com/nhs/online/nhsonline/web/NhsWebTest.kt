@@ -47,6 +47,12 @@ class NhsWebTest {
     }
 
     @Test
+    fun stopLoading_callsNativeAndroidWebViewStopLoadingFunction() {
+        spyWeb.stopLoading()
+        verify(webViewMock, times(1)).stopLoading()
+    }
+
+    @Test
     fun loadUrl_LoadsRequestUrl_AndPassesValueOf_RequiresFullPageLoad_True() {
         val url = "http://unit-test.com"
         nhsWeb.requiresFullPageLoad = true

@@ -277,6 +277,10 @@ class NhsWeb(
         return appPersistData.getHelpUrl().toString()
     }
 
+    fun stopLoading() {
+        webView.stopLoading()
+    }
+
     fun reloadHomepageOnBackReturn() {
         loadWelcomePage()
         uiInteractor.showBlankScreen()

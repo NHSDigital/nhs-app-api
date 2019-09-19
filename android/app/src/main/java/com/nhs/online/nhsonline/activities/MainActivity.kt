@@ -278,6 +278,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
                 path = resources.getString(R.string.baseURL)
             }
         }
+        nhsWeb.stopLoading()
         nhsWeb.loadUrl(path)
     }
 
