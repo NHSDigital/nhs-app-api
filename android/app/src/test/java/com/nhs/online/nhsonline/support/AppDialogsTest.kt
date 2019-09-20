@@ -137,6 +137,16 @@ class AppDialogsTest {
         Assert.assertTrue(dialog.isShowing)
     }
 
+    @Test
+    fun showExtendSessionDialogue_NoAlertDialog_IfActivityIsFinishing() {
+        val sessionDuration = 10
+        val spyActivity = spy(activity)
+        whenever(spyActivity.isFinishing).thenReturn(true)
+        appDialogs = AppDialogs(spyActivity)
+        appDialogs.showExtendSessionDialogue(sessionDuration, {}, {})
+        Assert.assertNull(ShadowDialog.getLatestDialog())
+    }
+
     private fun extractAlertDialogMessage(alertDialog: AlertDialog): String? {
         val messageTextView: TextView? = alertDialog.findViewById(android.R.id.message)
         Assert.assertNotNull(messageTextView)

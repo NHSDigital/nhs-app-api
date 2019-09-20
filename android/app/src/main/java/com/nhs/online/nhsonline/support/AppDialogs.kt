@@ -91,14 +91,19 @@ class AppDialogs(private val activity: Activity) {
         onExtendClicked: () -> Unit,
         onLogoutClicked: () -> Unit
     ) {
-        Log.d("AppDialogs", "Entering showExtendSessionDialogue")
-        val showing = showDialogIfAvailable(extendSessionDialogue)
-        if (showing) return
+        if (!activity.isFinishing) {
+            Log.d("AppDialogs", "Entering showExtendSessionDialogue")
+            val showing = showDialogIfAvailable(extendSessionDialogue)
+            if (showing) return
 
-        val dialog =
-            initialiseExtendSessionDialogue(sessionDuration, onExtendClicked, onLogoutClicked)
-        extendSessionDialogue = dialog
-        dialog.show()
+            val dialog = initialiseExtendSessionDialogue(
+                    sessionDuration,
+                    onExtendClicked,
+                    onLogoutClicked
+            )
+            extendSessionDialogue = dialog
+            dialog.show()
+        }
     }
 
     @SuppressLint("InflateParams")
