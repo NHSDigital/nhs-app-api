@@ -10,12 +10,7 @@ namespace NHSOnline.Backend.LoggerApi.Areas.Logging.Models
         
         public string Message { get; set; }
 
-        public string FormattedLogMessage
-        {
-            get
-            {
-                return $"client_error_message={Message} client_timestamp={TimeStamp:yyyy-MM-dd HH:mm:ss}";
-            }
-        }
+        public string FormattedLogMessage =>
+            $@"client_error_message=""{Message}"" client_timestamp=""{TimeStamp:yyyy-MM-dd HH:mm:ss}""";
     }
 }

@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging.Models
             var message = systemUnderTest.FormattedLogMessage;
             
             // Assert
-            message.Should().Be("client_error_message=test log message client_timestamp=2000-06-01 13:30:01");
+            message.Should().Be(@"client_error_message=""test log message"" client_timestamp=""2000-06-01 13:30:01""");
         }
     }
 }

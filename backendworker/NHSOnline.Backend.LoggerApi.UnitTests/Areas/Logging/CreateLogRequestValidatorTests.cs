@@ -66,7 +66,8 @@ namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
 
         [DataTestMethod]
         [DataRow("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789().;:/", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789().;:/")]
-        [DataRow("m*e&s^s%a@g!e w-i+t=h b?a#d c|h{a}r>a<cters", "message with bad characters")]
+        [DataRow("m*e&s^s%a@g!e wi+t=h b?a#d c|h{a}r>a<cters", "message with bad characters")]
+        [DataRow("There\r\nshould be spaces\r\nafter\r\nnew lines", "There\r\n should be spaces\r\n after\r\n new lines")]
         public void IsPostValid_KeepsWhiteListedCharacters_AndStripsOthers(string input, string expectedAfterValidation)
         {
             // Arrange

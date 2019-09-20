@@ -7,8 +7,10 @@ export default {
       Message: `${errorMessage}`,
     };
 
+    this.dispatch('spinner/prevent', false);
     this.app.$http.postV1ApiLog(
-      { createLogRequest },
+      { createLogRequest, ignoreError: true },
     );
+    this.dispatch('spinner/prevent', true);
   },
 };

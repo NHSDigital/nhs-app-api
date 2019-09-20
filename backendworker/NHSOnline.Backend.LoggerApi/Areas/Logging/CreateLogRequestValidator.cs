@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
@@ -32,7 +33,8 @@ namespace NHSOnline.Backend.LoggerApi.Areas.Logging
 
         private static string SanitizeMessage(string errorMessage)
         {
-            return Regex.Replace(errorMessage, Constants.Regex.ClientSideLogMessageWhitelist, string.Empty);
+            var sanitizedMessage = Regex.Replace(errorMessage, Constants.Regex.ClientSideLogMessageWhitelist, string.Empty);
+            return sanitizedMessage.Replace(Constants.Regex.ClientSideLogMessageNewLine, Constants.Regex.ClientSideLogMessageNewLine + " ", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

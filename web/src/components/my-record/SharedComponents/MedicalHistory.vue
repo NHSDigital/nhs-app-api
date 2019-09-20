@@ -9,16 +9,16 @@
   <div v-else-if="!isCollapsed" :class="[$style['record-content'], getCollapseState,
                                          !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">
-    <div v-for="(medicalHistory, medicalHistoryIndex) in orderedMedicalHistory"
-         :key="`medicalHistory-${ medicalHistoryIndex }`" :class="$style['record-item']"
+    <div v-for="(history, historyIndex) in orderedMedicalHistory"
+         :key="`history-${ historyIndex }`" :class="$style['record-item']"
          data-purpose="record-item">
-      <span v-if="medicalHistory.startDate && medicalHistory.startDate.value"
+      <span v-if="history.startDate && history.startDate.value"
             :class="$style.fieldName">
-        {{ medicalHistory.startDate.value | datePart(medicalHistory.startDate.datePart) }}
+        {{ history.startDate.value | datePart(history.startDate.datePart) }}
       </span>
       <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
-      <p> {{ medicalHistory.rubric }} </p>
-      <p> {{ medicalHistory.description }} </p>
+      <p> {{ history.rubric }} </p>
+      <p> {{ history.description }} </p>
       <hr aria-hidden="true">
     </div>
   </div>
