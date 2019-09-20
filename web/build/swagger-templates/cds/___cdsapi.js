@@ -317,16 +317,17 @@ class CDSApi {
         {{/ifEquals}}
       {{/ifEquals}}
       {{#ifEquals this.in "path"}}
-        if (parameters['{{this.name}}'] !== undefined) {
-          queryParameters['{{this.name}}'] = parameters['{{this.name}}'];
-        }
-
         {{#ifEquals this.required true}}
         if (parameters['{{this.name}}'] === undefined) {
-          deferred.reject(new Error('Missing required  parameter: {{this.name}}'));
+          deferred.reject(new Error('Missing required parameter: {{this.name}}'));
           return deferred.promise;
         }
         {{/ifEquals}}
+
+        if (parameters['{{this.name}}'] !== undefined) {
+          path = path.replace(':{{this.name}}', parameters['{{this.name}}']);
+        }
+
       {{/ifEquals}}
     {{/each}}
 
@@ -334,14 +335,10 @@ class CDSApi {
         headers['NHSO-Javascript-Disabled'] = 'true';
       }
 
-      path = path.replace(':provider', parameters['provider']);
-      path = path.replace(':serviceDefinitionId', parameters['serviceDefinitionId']);
-
-
       {{#with ../requestBody}}
       {{#ifEquals this.required true}}
       if (parameters['{{camelCase this.x-name}}'] === undefined) {
-        deferred.reject(new Error('Missing required  parameter: {{camelCase this.x-name}}'));
+        deferred.reject(new Error('Missing required parameter: {{camelCase this.x-name}}'));
         return deferred.promise;
       }
       {{/ifEquals}}
