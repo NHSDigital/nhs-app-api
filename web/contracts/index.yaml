@@ -883,46 +883,6 @@
                                           description: "An array of line items"
                                           items: 
                                             type: "string"
-                    medicalHistory: 
-                      type: "object"
-                      properties: 
-                        hasAccess: 
-                          type: "boolean"
-                          description: "Does the patient have access to this data."
-                        hasErrored: 
-                          type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
-                        hasUndeterminedAccess: 
-                          type: "boolean"
-                          description: "Set to true if no data is returned and we cant determine why"
-                        data: 
-                          type: "array"
-                          description: "An array of medical history information objects."
-                          items: 
-                            type: "object"
-                            properties: 
-                              startDate: 
-                                type: "object"
-                                properties: 
-                                  value: 
-                                    type: "string"
-                                    format: "date-time"
-                                    description: "date/time value."
-                                  datePart: 
-                                    type: "string"
-                                    description: "date part to display."
-                                    enum: 
-                                      - "Unknown"
-                                      - "Year"
-                                      - "YearMonth"
-                                      - "YearMonthDay"
-                                      - "YearMonthDayTime"
-                              rubric: 
-                                type: "string"
-                                description: "The title of the medical history."
-                              description: 
-                                type: "string"
-                                description: "The description of the medical history."
                     tppDcrEvents: 
                       type: "object"
                       properties: 
@@ -1042,6 +1002,103 @@
                         rawHtml: 
                           type: "string"
                           description: "When working with Vision, raw HTML is returned instead of XML data"
+                    medicalhistory: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                          hasErrored: 
+                            type: "boolean"
+                            description: "Some error occurred when attempting to retrieve this error."
+                          hasUndeterminedAccess: 
+                            type: "boolean"
+                            description: "Set to true if no data is returned and we cant determine why"
+                          data: 
+                            type: "array"
+                            description: "An array of medical history information objects."
+                            items: 
+                              type: "object"
+                              properties: 
+                                date: 
+                                  type: "object"
+                                  properties: 
+                                    value: 
+                                      type: "string"
+                                      format: "date-time"
+                                      description: "date/time value."
+                                    datePart: 
+                                      type: "string"
+                                      description: "date part to display."
+                                      enum: 
+                                        - "Unknown"
+                                        - "Year"
+                                        - "YearMonth"
+                                        - "YearMonthDay"
+                                        - "YearMonthDayTime"
+                                rubric: 
+                                  type: "string"
+                                  description: "The title of the medical history."
+                                description: 
+                                  type: "string"
+                                  description: "Description of the medical history."
+                    documents: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        data: 
+                          type: "array"
+                          items: 
+                            properties: 
+                              documents: 
+                                type: "array"
+                                description: "Array of documents"
+                                items: 
+                                  type: "object"
+                                  properties: 
+                                    date: 
+                                      type: "object"
+                                      properties: 
+                                        value: 
+                                          type: "string"
+                                          format: "date-time"
+                                          description: "date/time value."
+                                        datePart: 
+                                          type: "string"
+                                          description: "date part to display."
+                                          enum: 
+                                            - "Unknown"
+                                            - "Year"
+                                            - "YearMonth"
+                                            - "YearMonthDay"
+                                            - "YearMonthDayTime"
+                                    documentGuid: 
+                                      type: "string"
+                                      description: "Unique identifier of the document"
+                                    term: 
+                                      type: "string"
+                                      description: "Title of the document"
+                                    size: 
+                                      type: "integer"
+                                      description: "The size of the document in kilobytes"
+                                    extension: 
+                                      type: "string"
+                                      description: "The format of the document"
+                                    isAvailable: 
+                                      type: "boolean"
+                                      description: "Whether the document is available for the user to view"
+                                    notes: 
+                                      type: "array"
+                                      items: 
+                                        properties: 
+                                          string: 
+                                            type: "array"
+                                            description: "Array of notes provided with the document"
           401: 
             description: "User session has expired."
           500: 
@@ -2997,4 +3054,55 @@
             description: "Required property missing or expired."
           500: 
             description: "An unexpected error occurred processing the request."
+    /v1/document/: 
+      get: 
+        tags: 
+          - "patient document"
+        summary: "Gets a specific document from the user's documents for the logged on user."
+        description: "Returns only the specified document from the users document list for the logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        parameters: 
+          - 
+            in: "path"
+            name: "documentGuid"
+            required: true
+            description: "document Guid of specific document to return"
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Returns specified document for the logged in user."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    hasErrored: 
+                      type: "boolean"
+                      description: "Shows if error occurred getting document from EMIS"
+                    content: 
+                      type: "string"
+                      description: "base64 encoded string of document"
+          401: 
+            description: "User session has expired."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "The GP system is currently unavailable."
+          504: 
+            description: "The GP system did not respond in a timely fashion."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
 

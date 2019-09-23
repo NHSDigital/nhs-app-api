@@ -15,6 +15,7 @@
             Examinations = new Examinations();
             Procedures = new Procedures();
             MedicalHistories = new MedicalHistories();
+            Documents = new PatientDocuments();
         }
         
         public bool HasSummaryRecordAccess { get; set; }
@@ -31,5 +32,6 @@
         public Examinations Examinations { get; set; }
         public Procedures Procedures { get; set; }        
         public MedicalHistories MedicalHistories { get; set; }
+        public PatientDocuments Documents { get; set; }
     }
 }

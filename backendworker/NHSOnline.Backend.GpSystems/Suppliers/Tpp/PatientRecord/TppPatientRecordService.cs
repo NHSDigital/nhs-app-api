@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
@@ -79,6 +80,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             {
                 _logger.LogExit();
             }
+        }
+
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)

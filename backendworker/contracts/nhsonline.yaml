@@ -51,3 +51,5 @@ paths:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1devices
   /v1/api/log:
     $ref: ./nhsonline.log.yaml#/paths/~1log
+  /v1/documents/:
+    $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentGuid}

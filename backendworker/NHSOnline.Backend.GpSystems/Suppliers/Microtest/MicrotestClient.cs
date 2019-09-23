@@ -289,6 +289,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             public string ErrorResponseMessage { get; set; }
 
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
+            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
 
             internal bool HasUnauthorisedResponse => StatusCode == HttpStatusCode.Unauthorized;
 

@@ -55,6 +55,32 @@ namespace NHSOnline.Backend.Support.Sanitization
             }
         }
 
+
+        public string GetBodyContent(string html)
+        {
+            if (string.IsNullOrEmpty(html))
+            {
+                return string.Empty;
+            }
+
+            var doc = new HtmlDocument
+            {
+                OptionWriteEmptyNodes = true,
+            };
+
+            html = RemoveEmptyAnchorTags(html);
+            
+            doc.LoadHtml(html);
+
+            var bodyNode = doc.DocumentNode.SelectSingleNode(".//body");
+
+            SanitizeHtmlNode(bodyNode);
+
+            var bodyContent = bodyNode.InnerHtml;
+
+            return bodyContent;
+        }
+
         private static string RemoveEmptyAnchorTags(string html)
         {
             return Regex.Replace(html, @"<a[^>]*>\s*<\/[^>]*a>", string.Empty);

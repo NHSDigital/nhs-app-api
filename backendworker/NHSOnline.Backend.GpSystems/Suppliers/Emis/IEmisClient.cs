@@ -4,6 +4,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
@@ -29,6 +30,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
             string userPatientLinkToken, string responseSessionId, string endUserSessionId,
             DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime);
+
+        Task<EmisApiObjectResponse<IndividualDocument>> MedicalDocumentGet(string userPatientLinkToken,
+            string responseSessionId, string documentGuid, string endUserSessionId);
 
         Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);

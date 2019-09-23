@@ -8,6 +8,11 @@ namespace NHSOnline.Backend.Support.Http
         {
             return IsSuccessStatusCode((int) statusCode);
         }
+
+        public static bool IsBadRequestCode(this HttpStatusCode statusCode)
+        {
+            return (int) statusCode >= 400 && (int) statusCode <= 499 ;
+        }
         
         public static bool IsSuccessStatusCode(this int statusCode)
         {

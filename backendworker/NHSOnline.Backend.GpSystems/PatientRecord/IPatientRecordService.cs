@@ -1,5 +1,6 @@
 ﻿using NHSOnline.Backend.Support;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.PatientRecord
 {
@@ -8,5 +9,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
         Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession);  
         
         Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId);
+
+        Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid);
     }
 }

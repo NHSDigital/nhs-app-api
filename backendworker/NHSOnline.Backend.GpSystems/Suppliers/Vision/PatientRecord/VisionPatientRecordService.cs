@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 {
@@ -235,7 +236,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
         {
             throw new NotImplementedException();
         }
-        
+
+      public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
+      {
+          throw new NotImplementedException();
+      }
+
         private static class ResponseFormats {
             public const string HTML = "HTML";
             public const string XML = "XML";

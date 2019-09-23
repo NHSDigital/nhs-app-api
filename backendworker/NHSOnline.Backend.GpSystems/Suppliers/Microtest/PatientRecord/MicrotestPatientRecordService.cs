@@ -8,6 +8,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 {
@@ -87,6 +88,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         }
 
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
         {
             throw new NotImplementedException();
         }

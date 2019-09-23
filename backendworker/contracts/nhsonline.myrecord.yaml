@@ -102,6 +102,32 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+  /documents:
+    get:
+      tags:
+        - documents
+      summary: Gets the list of documents for the logged on user.
+      description: Returns the users medical documents for the logged in user (EMIS only). Requires
+        NHSO-Session-Id cookie (obtained from session endpoint).
+      responses:
+        "200":
+          description: Returns a list of medical documents data for the logged in user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyRecordResponse"
+        "401":
+          description: User session has expired.
+        "500":
+          description: An unexpected error occurred processing the request.
+        "502":
+          description: The GP system is currently unavailable.
+        "504":
+          description: The GP system did not respond in a timely fashion.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     TestResultResponse:
@@ -152,6 +178,8 @@ components:
           $ref: "#/components/schemas/Procedures"
         medicalhistory:
           $ref: "#/components/schemas/MedicalHistory"
+        documents:
+          $ref: "#/components/schemas/PatientDocuments"
     MyRecordSectionResponse:
       type: object
       properties:
@@ -524,3 +552,49 @@ components:
             - YearMonth
             - YearMonthDay
             - YearMonthDayTime
+    PatientDocuments:
+        type: object
+        properties:
+          hasAccess:
+            type: boolean
+            description: Does the patient have access to this data.
+          hasErrored:
+            type: boolean
+            description: Some error occurred when attempting to retrieve this error.
+          data:
+            type: array
+            items:
+              properties:
+                documents:
+                  type: array
+                  description: Array of documents
+                  items:
+                    $ref: "#/components/schemas/DocumentItem"
+    DocumentItem:
+        type: object
+        properties:
+            date:
+              $ref: "#/components/schemas/Date"
+            documentGuid:
+              type: string
+              description: Unique identifier of the document
+            term:
+              type: string
+              description: Title of the document
+            size:
+              type: integer
+              description: The size of the document in kilobytes
+            extension:
+              type: string
+              description: The format of the document
+            isAvailable:
+              type: boolean
+              description: Whether the document is available for the user to view
+            notes:
+              type: array
+              items:
+                properties:
+                  string:
+                    type: array
+                    description: Array of notes provided with the document
+          

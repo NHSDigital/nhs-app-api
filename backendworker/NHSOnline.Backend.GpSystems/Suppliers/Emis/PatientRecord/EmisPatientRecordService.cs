@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -21,6 +22,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         private readonly GetTestResultsTaskChecker _testResultsTaskChecker;
         private readonly GetProblemsTaskChecker _problemsTaskChecker;
         private readonly GetConsultationsTaskChecker _consultationsTaskChecker;
+        private readonly GetDocumentsTaskChecker _documentsTaskChecker;
+        private readonly GetPatientDocumentTaskChecker _patientDocumentTaskChecker;
 
         public EmisPatientRecordService(
             ILogger<EmisPatientRecordService> logger,
@@ -30,7 +33,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             GetImmunisationsTaskChecker immunisationsTaskChecker,
             GetTestResultsTaskChecker testResultsTaskChecker, 
             GetProblemsTaskChecker problemsTaskChecker,
-            GetConsultationsTaskChecker consultationsTaskChecker
+            GetConsultationsTaskChecker consultationsTaskChecker,
+            GetDocumentsTaskChecker documentsTaskChecker,
+            GetPatientDocumentTaskChecker patientDocumentTaskChecker
         )
         {
             _emisClient = emisClient;
@@ -43,6 +48,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             _testResultsTaskChecker = testResultsTaskChecker;
             _problemsTaskChecker = problemsTaskChecker;
             _consultationsTaskChecker = consultationsTaskChecker;
+            _documentsTaskChecker = documentsTaskChecker;
+            _patientDocumentTaskChecker = patientDocumentTaskChecker;
         }
 
         public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
@@ -72,7 +79,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 var consultationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Consultations);
 
-                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask);
+                var documentsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken, 
+                  emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Documents);
+
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask, documentsTask);
                 _logger.LogInformation("Patient record tasks completed");
 
                 _logger.LogInformation("Checking status of all patient record tasks");
@@ -82,9 +92,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 var testResults = _testResultsTaskChecker.Check(testResultsTask);
                 var problems = _problemsTaskChecker.Check(problemsTask);
                 var consultations = _consultationsTaskChecker.Check(consultationsTask);
+                var documents = _documentsTaskChecker.Check(documentsTask);
 
                 _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
-                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations);
+                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations, documents);
 
                 myRecordResponse.Supplier = emisUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
@@ -99,6 +110,45 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             {
                 _logger.LogError(e, "My record retrieval return null body");
                 return new GetMyRecordResult.BadGateway();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
+        {
+            _logger.LogEnter();
+
+            var emisUserSession = (EmisUserSession)gpUserSession;
+
+            try
+            {
+                var getDocumentsTask = _emisClient.MedicalDocumentGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, documentGuid, emisUserSession.EndUserSessionId);
+
+                await Task.WhenAll(getDocumentsTask);
+
+                var documentResponse =  _patientDocumentTaskChecker.Check(getDocumentsTask);
+
+                if (documentResponse.HasErrored)
+                {
+                    _logger.LogExitWith($"{nameof(documentResponse.HasErrored)}=true");
+                    return new GetPatientDocumentResult.BadGateway();
+                }
+
+                return new GetPatientDocumentResult.Success(documentResponse);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request retrieving document");
+                return new GetPatientDocumentResult.BadGateway();
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Record document retrieval return null body");
+                return new GetPatientDocumentResult.BadGateway();
             }
             finally
             {

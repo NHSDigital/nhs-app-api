@@ -321,6 +321,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
             public override bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
 
+            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
+
             internal bool IsUnauthorisedResponse =>
                 ErrorResponse != null &&
                 TppApiErrorCodes.NotAuthenticated.Equals(ErrorResponse.ErrorCode, StringComparison.Ordinal);

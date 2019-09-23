@@ -12,6 +12,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             services.AddTransient<EmisProblemMapper>();
             services.AddTransient<EmisTestResultMapper>();
             services.AddTransient<EmisConsultationMapper>();
+            services.AddTransient<EmisDocumentsMapper>();
+            services.AddTransient<EmisPatientDocumentMapper>();
 
             services.AddTransient<GetAllergiesTaskChecker>();
             services.AddTransient<GetMedicationsTaskChecker>();
@@ -19,6 +21,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             services.AddTransient<GetProblemsTaskChecker>();
             services.AddTransient<GetTestResultsTaskChecker>();
             services.AddTransient<GetConsultationsTaskChecker>();
+            services.AddTransient<GetDocumentsTaskChecker>();
+            services.AddTransient<GetPatientDocumentTaskChecker>();
 
             services.AddTransient<EmisPatientRecordService>();
 

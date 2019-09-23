@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             var item = new MedicationRootObject();
 
             // Act
-            var result = _mapper.Map(new EmisAllergyMapper().Map(item), new Medications(), new Immunisations(), new TestResults(), new Problems(), new Consultations());
+            var result = _mapper.Map(new EmisAllergyMapper().Map(item), new Medications(), new Immunisations(), new TestResults(), new Problems(), new Consultations(), new PatientDocuments());
 
             // Assert
             result.Should().NotBeNull();

@@ -20,6 +20,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         public DateTimeOffset? Expires { get; set; }
 
         public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
+
+        public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
         public OrganDonationErrorResponse ErrorResponse { get; private set; }
 
         public TBody Body { get; set; }

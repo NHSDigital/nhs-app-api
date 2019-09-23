@@ -12,6 +12,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Temporal;
@@ -42,6 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
         private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
+        private const string DocumentPath = "documents/{0}?UserPatientLinkToken={1}";
         private const string AppointmentsPath = "appointments";
         private const string MeVerificationsPath = "me/verifications";
         private const string UsersNhsPath = "users/nhs";
@@ -98,6 +100,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             var path = string.Format(CultureInfo.InvariantCulture, PatientRecordPath, userPatientLinkToken, recordType.ToString());
 
             return await Get<MedicationRootObject>(path, endUserSessionId, responseSessionId);
+        }
+
+        public async Task<EmisApiObjectResponse<IndividualDocument>> MedicalDocumentGet(string userPatientLinkToken,
+            string responseSessionId, string documentGuid, string endUserSessionId)
+        {
+
+            _logger.LogInformation("EMIS: Fetching patient document - {0}", documentGuid);
+              var path = string.Format(CultureInfo.InvariantCulture, 
+                DocumentPath,
+                documentGuid,
+                userPatientLinkToken);
+
+            return await Get<IndividualDocument>(path, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,
@@ -324,6 +339,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             public ExceptionErrorResponse ExceptionErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
+
+            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
 
             internal bool IsUnauthorisedResponse =>
                 StatusCode == HttpStatusCode.Unauthorized ||

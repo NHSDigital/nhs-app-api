@@ -6,6 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         Medication,
         TestResults,
         Problems,
-        Consultations
+        Consultations,
+        Documents
     }
 }

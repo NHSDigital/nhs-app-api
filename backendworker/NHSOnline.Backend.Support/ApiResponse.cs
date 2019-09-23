@@ -16,6 +16,8 @@ namespace NHSOnline.Backend.Support
 
         public abstract bool HasSuccessResponse { get; }
 
+        public abstract bool HasBadRequestResponse { get; }
+
         public abstract string ErrorForLogging { get; }
 
         protected abstract bool FormatResponseIfUnsuccessful { get; }

@@ -1,0 +1,52 @@
+openapi: 3.0.2
+info:
+  version: 0.0.5
+  title: NHS App Sub-API - Document
+  description: NHS App Sub-API - endpoints pertaining to documents. All require an
+    NHSO-Session-Id cookie (obtained from Session endpoint).
+paths:
+  /documents/{documentGuid}:
+    get:
+      tags:
+        - patient document
+      summary: Gets a specific document from the user's documents for the logged on user.
+      description: Returns only the specified document from the users document list for the
+        logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained
+        from session endpoint).
+      parameters:
+        - in: path
+          name: documentGuid
+          required: true
+          description: document Guid of specific document to return
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns specified document for the logged in user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPatientDocumentResult"
+        "401":
+          description: User session has expired.
+        "500":
+          description: An unexpected error occurred processing the request.
+        "502":
+          description: The GP system is currently unavailable.
+        "504":
+          description: The GP system did not respond in a timely fashion.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+components:
+  schemas:
+    GetPatientDocumentResult:
+      type: object
+      properties:
+        hasErrored:
+          type: boolean
+          description: Shows if error occurred getting document from EMIS
+        content:
+          type: string
+          description: base64 encoded string of document
