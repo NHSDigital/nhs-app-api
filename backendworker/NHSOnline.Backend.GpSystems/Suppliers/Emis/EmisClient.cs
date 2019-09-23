@@ -28,6 +28,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public const string HeaderSessionId = "X-API-SessionId";
 
         private const string MeApplicationsPath = "me/applications";
+        private const string MeSettingsPath = "me/settings?userPatientLinkToken={0}";
+
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
         private const string SessionsPath = "sessions";
         private const string DemographicsPath = "demographics?userPatientLinkToken={0}";
@@ -240,6 +242,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 headerParameters.EndUserSessionId,
                 headerParameters.SessionId,
                 _settings.EmisExtendedHttpTimeoutSeconds);
+        }
+        
+        public async Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(string userPatientLinkToken, EmisHeaderParameters headerParameters)
+        {
+            _logger.LogInformation("EMIS: Fetching patient settings");
+            var path = string.Format(CultureInfo.InvariantCulture, MeSettingsPath, userPatientLinkToken);
+
+            return await Get<MeSettingsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest)

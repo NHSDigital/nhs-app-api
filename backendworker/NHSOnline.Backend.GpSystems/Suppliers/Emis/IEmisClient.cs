@@ -20,6 +20,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,
             MeApplicationsPostRequest model);
 
+        Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(string userPatientLinkToken, EmisHeaderParameters headerParameters);
+
         // Sessions
         Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost();
 
@@ -82,8 +84,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             CancelAppointmentDeleteRequest deleteRequest);
 
         // Linkage
-        Task<EmisApiObjectResponse<AddVerificationResponse>> VerificationPost(EmisHeaderParameters headerParameters, AddVerificationRequest addVerificationRequest);
+        Task<EmisApiObjectResponse<AddVerificationResponse>> VerificationPost(
+            EmisHeaderParameters headerParameters, AddVerificationRequest addVerificationRequest);
 
-        Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest);
+        Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(
+            EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest);
     }
 }

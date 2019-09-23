@@ -183,6 +183,38 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         }
 
         [TestMethod]
+        public async Task MeSettingsGet_ReturnsUserSettingsGetResponse_WhenValidlyRequested()
+        {
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+            var expectedResponse = _fixture.Create<MeSettingsGetResponse>();
+
+            var emisUserSession = new EmisUserSession
+            {
+                EndUserSessionId = endUserSessionId,
+                SessionId = sessionId,
+            };
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Get, "me/settings")
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _systemUnderTest.MeSettingsGet(endUserSessionId, new EmisHeaderParameters(emisUserSession));
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ExceptionErrorResponse.Should().Be(null);
+        }
+
+        [TestMethod]
         public async Task DemographicsGet_ReturnsADemographicsResponse_WhenValidlyRequested()
         {
             // Arrange
