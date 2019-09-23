@@ -4,11 +4,8 @@ import com.github.tomakehurst.wiremock.stubbing.Scenario
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
-import features.im1Appointments.steps.AvailableAppointmentFilterSteps
-import features.im1Appointments.steps.AvailableAppointmentFilterSteps.Companion.TODAY_OPTION
-import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
+import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
@@ -16,6 +13,7 @@ import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.data.appointments.AppointmentsSlotsExampleForFiltering
 import mocking.data.appointments.FilterSlotDetails
+import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -38,14 +36,10 @@ import javax.servlet.http.Cookie
 
 private const val TIMEOUT_IN_SECONDS = 90L
 
-@Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
-        "if possible, break down steps into functional areas")
 class AvailableAppointmentsSlotsStepDefinitions {
 
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
-    @Steps
-    lateinit var availableAppointmentsFilter: AvailableAppointmentFilterSteps
     @Steps
     lateinit var login: LoginSteps
     @Steps
@@ -69,26 +63,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
-    }
-
-    @Given("^there are available appointment slots with different criteria for (.*) " +
-            "when (.*) appointment slot guidance is provided$")
-    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaWithCustomGuidance(
-            gpSystem: String, guidanceMessageDescription: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-
-        val guidanceMessage = when (guidanceMessageDescription) {
-            "empty" -> ""
-            "whitespace string" -> "   "
-            else -> guidanceMessageDescription
-        }
-        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = guidanceMessage)
-    }
-
-    @Given("^there are available appointment slots with different criteria for (.*) when guidance cannot be retrieved$")
-    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWhenGuidanceCannotBeRetrieved(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage()
     }
 
     @Given("^there are no available appointment slots for (.*)$")
@@ -240,11 +214,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         }
     }
 
-    @Given("^I have filtered such that there is one time displayed that represents multiple slots$")
-    fun iSelectAOptionsFromTheFiltersThatIncludeTimesWhenMultipleSlotsExist() {
-        availableAppointmentsFilter.selectOptionsToRevealSlots()
-    }
-
     @Given("^I have selected a time when multiple slots are available$")
     fun iSelectATimeWhenMultipleSlotsAreAvailable() {
         val targetSlotDetails = sessionVariableCalled<FilterSlotDetails>(
@@ -283,34 +252,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.clickOnBackLink()
     }
 
-    @When("^I expand the appointment slot guidance$")
-    fun iExpandTheAppointmentSlotGuidance() {
-        availableAppointments.availableAppointmentsPage.guidance.assertLabel("Which type of appointment do I need?")
-        availableAppointments.availableAppointmentsPage.guidance.expand()
-    }
-
-    @When("^I select a type and location that have available slots$")
-    fun iFilterTypeAndLocation() {
-        availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
-    }
-
-    @When("^I select a particular slot type and location$")
-    fun iFilterType() {
-        availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
-    }
-
-    @When("^I select time period for '(.*)'$")
-    fun iFilterTimePeriod(timePeriod: String) {
-        availableAppointments.availableAppointmentsPage.timePeriodFilter.selectByText(timePeriod)
-    }
-
-    @When("^I select options from the filters that don't yield any results$")
-    fun iSelectAnOptionsFromTheFiltersThatDoNotYieldAnyResults() {
-        availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
-        availableAppointments.availableAppointmentsPage.timePeriodFilter.selectByText(
-                TODAY_OPTION)
-    }
-
     @Then("^available slots are returned for the full date range$")
     fun availableSlotsAreReturned() {
         val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(
@@ -341,58 +282,9 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
-    @Then("^there is a filter for the appointment types$")
-    fun thereIsAFilterForAppointmentTypes() {
-        availableAppointmentsFilter.verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated()
-    }
-
-    @Then("^there is a filter for the appointment locations$")
-    fun thereIsAFilterForLocations() {
-        availableAppointmentsFilter.verifyThatLocationsFilterExistsAndIsCorrectlyPopulated()
-    }
-
-    @Then("^there is a filter for the appointment doctors/nurses$")
-    fun thereIsAFilterForDoctorsNurses() {
-        availableAppointmentsFilter.verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated()
-    }
-
-    @Then("^there is a filter for the appointment time period$")
-    fun thereIsAFilterForTimePeriod() {
-        availableAppointmentsFilter.verifyThatTimePeriodFilterExistsAndIsCorrectlyPopulated()
-    }
-
     @Then("^no available slots are displayed$")
     fun noAvailableSlotsAreDisplayed() {
         availableAppointments.verifyThatNoSlotsAreDisplayed()
-    }
-
-    @Then("^I am able to filter on available slots$")
-    fun iAmAbleToFilterOnSlots() {
-        thereIsAFilterForAppointmentTypes()
-        thereIsAFilterForLocations()
-        thereIsAFilterForDoctorsNurses()
-        thereIsAFilterForTimePeriod()
-        noAvailableSlotsAreDisplayed()
-    }
-
-    @Then("^I don't see filters for available slots$")
-    fun iDoNotSeeFiltersForAvailableSlots() {
-        availableAppointmentsFilter.verifyThatTheFiltersAreNotDisplayed()
-    }
-
-    @Then("^appointment type is not selected$")
-    fun appointmentTypeIsNotSelected() {
-        availableAppointmentsFilter.verifyThatNoAppointmentTypesIsSelected()
-    }
-
-    @Then("^the only location is selected$")
-    fun theOnlyLocationIsSelected() {
-        availableAppointmentsFilter.verifyThatLocationIsSelected()
-    }
-
-    @Then("^options for doctors/nurses remains as \"no preference\"$")
-    fun optionForClinicianRemainsAsNoPreference() {
-        availableAppointmentsFilter.verifyThatNoSpecificClinicianIsSelected()
     }
 
     @Then("^a message is displayed indicating there are no slots available$")
@@ -444,25 +336,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
             }
         }
         availableAppointments.assertNumberOfSlotsPresent(expectedNumberOfSlots)
-    }
-
-    @Then("^the appointment slot guidance content is displayed$")
-    fun appointmentSlotGuidanceContentIsDisplayed() {
-        val expectedGuidanceContent =
-                sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
-
-        availableAppointments.availableAppointmentsPage.guidance.assertContent(expectedGuidanceContent)
-    }
-
-    @Then("^the appointment slot guidance is collapsible$")
-    fun appointmentSlotGuidanceIsCollapsible() {
-        availableAppointments.availableAppointmentsPage.guidance.collapse()
-        iExpandTheAppointmentSlotGuidance()
-    }
-
-    @Then("^I cannot see any appointment slot guidance$")
-    fun iCannotSeeAnyAppointmentSlotGuidance() {
-        availableAppointments.availableAppointmentsPage.guidance.assertNotPresent()
     }
 
     companion object {
