@@ -333,6 +333,11 @@ info "Running $TAG tests"
           -Dwebdriver.provided.type=$BROWSER \
           $APPIUM_TYPE \
           -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=') ; echo $(date) - $TAG Completed" &
+        
+    # give the test container time to startup
+    echo "Sleeping for 10 seconds to allow the test container to start"
+    sleep 10
+
   else
     docker run \
       --name $TAG \
