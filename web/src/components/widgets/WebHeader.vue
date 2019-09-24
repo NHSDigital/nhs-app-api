@@ -5,7 +5,7 @@
     <header class="nhsuk-header" role="banner">
       <div class="nhsuk-width-container nhsuk-header__container">
         <NhsHeaderLogo :index-path="indexPath"/>
-        <div id="content-header" class="nhsuk-header__content">
+        <div id="web-content-header" class="nhsuk-header__content">
           <div v-if="showMenuButton" class="nhsuk-header__menu">
             <button id="toggle-menu"
                     class="nhsuk-header__menu-toggle"
