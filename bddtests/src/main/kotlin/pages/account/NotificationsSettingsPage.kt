@@ -11,6 +11,7 @@ class NotificationsSettingsPage : HybridPageObject() {
     val notificationsToggle = ToggleElement(this, "Allow notifications", "allow_notifications")
 
     fun assertDisplayed() {
+        notificationsToggle.assertIsVisible()
         TextBlockElement.withoutHeader(this)
                 .assert(
                         "You can choose whether to allow notifications on your device.",

@@ -15,7 +15,7 @@ import worker.NhsoHttpExceptionErrorBody
 const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 678
 class ResponseStatusCodeSteps {
 
-    @Then("^I receive (?:a|an) \"(.*)\" error$")
+    @Then("^I receive (?:a|an) \"(.*)\" (?:error|response)$")
     fun thenIReceiveAnError(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val errorResponse = SerenityHelpers.getHttpException()
@@ -125,7 +125,8 @@ class ResponseStatusCodeSteps {
             "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE,
             "unauthorized" to HttpStatus.SC_UNAUTHORIZED,
             "not implemented" to HttpStatus.SC_NOT_IMPLEMENTED,
-            "linkage not supported" to LINKAGE_NOT_SUPPORTED_RESPONSE_CODE
+            "linkage not supported" to LINKAGE_NOT_SUPPORTED_RESPONSE_CODE,
+            "no content" to HttpStatus.SC_NO_CONTENT
     )
 
     private fun httpStatusCodeTransform(statusName: String): Int? {

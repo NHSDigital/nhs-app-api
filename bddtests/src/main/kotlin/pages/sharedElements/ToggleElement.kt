@@ -7,9 +7,8 @@ import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.MILLISECONDS_IN_A_SECOND
-import pages.assertIsVisible
-import pages.assertSingleElementPresent
 import pages.isCurrentlyVisible
+import pages.waitUntilPresent
 
 const val NUMBER_OF_RETRIES = 10
 class ToggleElement(val page : HybridPageObject, text:String, id:String) {
@@ -26,28 +25,28 @@ class ToggleElement(val page : HybridPageObject, text:String, id:String) {
 
 
     fun assertIsVisible() {
-        toggleElement.assertSingleElementPresent().assertIsVisible()
+        toggleElement.waitUntilPresent()
     }
 
     fun click() {
         toggleElement.actOnTheElement { it.findElement<WebElement>(By.xpath("./label")).click() }
     }
 
-    fun assertEnabled() {
-        assertEnabled(true)
+    fun assertOn() {
+        assertState(true)
     }
 
-    fun assertDisabled() {
-        assertEnabled(false)
+    fun assertOff() {
+        assertState(false)
     }
 
     private fun isLoading(): Boolean {
         return toggleSpinner.isCurrentlyVisible
     }
 
-    private fun assertEnabled(expectedChecked: Boolean) {
+    private fun assertState(expectedChecked: Boolean) {
         waitForLoadingToComplete()
-        val errorMessage = "Expected toggle 'checked':"
+        val errorMessage = "Expected toggle state:"
         toggleElement.actOnTheElement {
             val input = it.findElement<WebElement>(By.xpath("./$xPathFromContainerToToggleInput"))
             val isSelected = input.isSelected

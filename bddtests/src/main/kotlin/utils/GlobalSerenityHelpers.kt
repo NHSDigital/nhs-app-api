@@ -1,7 +1,6 @@
 package utils
 
 enum class GlobalSerenityHelpers : ISerenityHelperEnums{
-    ACCESS_TOKEN,
     GP_SYSTEM,
-    JAVASCRIPT_TO_EXECUTE_ON_WINDOW
+    FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT
 }

@@ -14,31 +14,53 @@ class PushNotificationsStepDefinitions {
 
     private lateinit var notificationsSettingsPage: NotificationsSettingsPage
 
-    @Given("^I am a (\\w+) user wishing to register for push notifications$")
-    fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem,
-                listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
+    @Given("^I am a user wishing to enable push notifications$")
+    fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications() {
         val factory = NotificationsFactory()
-        factory.setUpUser(gpSystem, patient)
-        factory.setUpRegistration()
-        factory.mockPNS(true)
+        factory.setUpUser()
+        factory.setUpDeviceValues()
+        factory.mockNativeNotificationFunctions()
     }
 
-    @When ("I change the notifications toggle to enabled")
-    fun iChangeTheNotificationsToggleToEnabled(){
+    @Given("^I am a user wishing to disable push notifications$")
+    fun iAmAUserWishingToUnRegisterTheirDeviceForPushNotifications() {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null,
+                listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
+        val factory = NotificationsFactory()
+        factory.setUpUser(patient = patient)
+        factory.setUpDeviceValues()
+        factory.setUpExistingRegistration()
+        factory.mockNativeNotificationFunctions()
+    }
+
+    @When("I change the notifications toggle to on")
+    fun iChangeTheNotificationsToggleToOn() {
         notificationsSettingsPage.notificationsToggle.assertIsVisible()
-        notificationsSettingsPage.notificationsToggle.assertDisabled()
+        notificationsSettingsPage.notificationsToggle.assertOff()
         notificationsSettingsPage.notificationsToggle.click()
-        notificationsSettingsPage.notificationsToggle.assertEnabled()
+        notificationsSettingsPage.notificationsToggle.assertOn()
+    }
+
+    @When("I change the notifications toggle to off")
+    fun iChangeTheNotificationsToggleToOff() {
+        notificationsSettingsPage.notificationsToggle.assertIsVisible()
+        notificationsSettingsPage.notificationsToggle.assertOn()
+        notificationsSettingsPage.notificationsToggle.click()
+        notificationsSettingsPage.notificationsToggle.assertOff()
     }
 
     @Then("the Notifications Settings page is displayed")
-    fun theNotificationsSettingsPageIsDisplayed(){
+    fun theNotificationsSettingsPageIsDisplayed() {
         notificationsSettingsPage.assertDisplayed()
     }
 
-    @Then ("the notifications toggle is displayed as enabled")
-    fun theNotificationsToggleIsDisplayedAsEnabled(){
-        notificationsSettingsPage.notificationsToggle.assertEnabled()
+    @Then("the notifications toggle is displayed as on")
+    fun theNotificationsToggleIsDisplayedAsOn() {
+        notificationsSettingsPage.notificationsToggle.assertOn()
+    }
+
+    @Then("the notifications toggle is displayed as off")
+    fun theNotificationsToggleIsDisplayedAsOff() {
+        notificationsSettingsPage.notificationsToggle.assertOff()
     }
 }

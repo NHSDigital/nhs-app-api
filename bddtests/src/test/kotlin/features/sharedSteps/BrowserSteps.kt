@@ -66,8 +66,10 @@ open class BrowserSteps {
     }
 
     private fun executeScripts() {
-        val scripts = GlobalSerenityHelpers.JAVASCRIPT_TO_EXECUTE_ON_WINDOW.getOrNull<ArrayList<String>>()
-        scripts?.forEach { script -> loginPage.executeJavascript(script) }
+        val scripts = GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.getOrNull<ArrayList<String>>()
+        if (scripts != null) {
+            loginPage.attachJavascriptFunctionsToNativeAppWindow(scripts)
+        }
     }
 
     @Step

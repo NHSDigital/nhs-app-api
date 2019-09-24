@@ -46,7 +46,7 @@ data class Patient(
                         "-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
                 redirectUrl = Config.instance.cidRedirectUri),
-        val subject: String = "3ad631b4-7a7a-434d-8a7b-1c8ac3c56132",
+        var subject: String = "3ad631b4-7a7a-434d-8a7b-1c8ac3c56132",
         val tppUserSession: TppUserSession? = null,
         val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157"

@@ -41,7 +41,7 @@ class ServiceJourneyRulesMapper {
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED)
         )
 
-        fun findPatientForConfiguration(gpSystem: String, configurations: List<ServiceJourneyRulesConfiguration>):
+        fun findPatientForConfiguration(gpSystem: String?, configurations: List<ServiceJourneyRulesConfiguration>):
                 Patient {
             val journeyTypes =
                     configurations.map { configuration -> configuration.toJourneyType() }
@@ -59,8 +59,13 @@ class ServiceJourneyRulesMapper {
             return patient
         }
 
-        private fun findGpInformation(gpSystem: String, journeyTypes: Collection<JourneyType>): GpInformation? {
-            journeysToGpInformationMap.filter { map -> map.key.gpSupplier == gpSystem }
+        private fun findGpInformation(gpSystem: String?, journeyTypes: Collection<JourneyType>): GpInformation? {
+            val filteredMappings =
+                    if (gpSystem != null)
+                        journeysToGpInformationMap.filter { map -> map.key.gpSupplier == gpSystem }
+                    else journeysToGpInformationMap
+
+            filteredMappings
                     .forEach { (gpInformation, journeyTypesConfig) ->
                         if (journeyTypesConfig.size >= journeyTypes.size &&
                                 journeyTypesConfig.containsAll(journeyTypes)) {

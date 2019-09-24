@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                                  $"\tPrescriptions: {journeys.Prescriptions?.Provider}\n" +
                                  $"\tNominatedPharmacy: {journeys.NominatedPharmacy}\n" +
                                  $"\tNotifications: {journeys.Notifications}\n" +
-                                 $"\tSuppluer: {journeys.Supplier}");
+                                 $"\tSupplier: {journeys.Supplier}");
                 isValid = false;
             }
 

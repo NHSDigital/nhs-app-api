@@ -43,6 +43,7 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 }
             }
         }
+        mongoClient.close()
     }
 
     fun <T> getValues(type: Type): List<T> {

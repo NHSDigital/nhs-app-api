@@ -17,6 +17,7 @@ import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
 import java.time.Duration
+import java.util.*
 
 const val DEFAULT_SPINNER_WAIT: Long = 4000
 const val DEFAULT_MOBILE_WAIT: Long = 5000
@@ -162,8 +163,9 @@ open class HybridPageObject : PageObject() {
         namedLinkWthGivenUrl(linkTitle,url).click()
     }
 
-    fun executeJavascript(script:String){
+    fun attachJavascriptFunctionsToNativeAppWindow(scripts: ArrayList<String>){
+        val attachToNativeAppWindow = "window.nativeApp = {${scripts.joinToString( ",")}}"
         val jsExecutor = this.driver as JavascriptExecutor
-        jsExecutor.executeScript(script)
+        jsExecutor.executeScript(attachToNativeAppWindow)
     }
 }
