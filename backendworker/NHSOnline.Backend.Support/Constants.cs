@@ -21,6 +21,7 @@ namespace NHSOnline.Backend.Support
             public const int Status464OdsCodeNotSupportedOrNoNhsNumber = 464;
             public const int Status465FailedAgeRequirement = 465;
             public const int Status466MedicationAlreadyOrderedWithinLast30Days = 466;
+            public const int Status550SupplierDoesNotSupportLinkageKeys = 550;
         }
 
         public static class AppConfig

@@ -46,21 +46,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                 
                 if (!demographicsResponse.HasSuccessResponse)
                 {
-                    // add in the other ones from demographic service.
-                    if (demographicsResponse.HasForbiddenResponse)
+                    _logger.LogError($"Error response when retrieving Microtest demographics as part of im1 verification. Status code: {(int)demographicsResponse.StatusCode}");
+                    if (demographicsResponse.HasInternalServerError || demographicsResponse.HasForbiddenResponse)
                     {
-                        _logger.LogError($"User does not have the necessary permissions within the GP system.");
                         return new Im1ConnectionVerifyResult.Forbidden();
                     }
-                    if (demographicsResponse.HasInternalServerError)
-                    {
-                        _logger.LogError(
-                            $"Internal server error when retrieving demographics as part of linkage. Status code: {(int) demographicsResponse.StatusCode}");
-                        return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
-                            .LinkageKeysNotSupportedBySupplier);
-                    }
-                    _logger.LogError($"Unsuccessful request retrieving demographics as part of linkage. Status code: {(int)demographicsResponse.StatusCode}");
-                    return new Im1ConnectionVerifyResult.Forbidden();
+
+                    return new Im1ConnectionVerifyResult.BadGateway();
                 }
 
                 var response = new PatientIm1ConnectionResponse
@@ -131,12 +123,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                 return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
                     .LinkageKeysNotSupportedBySupplier);
                 
-            }
-            catch (HttpRequestException e)
-            {
-                _logger.LogError(e,
-                    "Failed request to verify Microtest Im1ConnectionToken, HttpRequestException has been thrown.");
-                return new Im1ConnectionRegisterResult.BadGateway();
             }
             finally
             {

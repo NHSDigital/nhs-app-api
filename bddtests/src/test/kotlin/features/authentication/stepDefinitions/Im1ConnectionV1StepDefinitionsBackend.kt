@@ -37,9 +37,9 @@ class Im1ConnectionV1StepDefinitionsBackend {
     fun iHaveValidPatientDataToRegisterNewAccount(gpSystem: String, nhsNumbers: String) {
         val nhsNumbersList = nhsNumbers.split(",").filter { it.isNotEmpty() }
         val patient = Patient.getDefault(gpSystem).copy(nhsNumbers = nhsNumbersList)
-        DemographicsFactory.getForSupplier(gpSystem).enabled(Patient.getDefault(gpSystem))
-        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
         SerenityHelpers.setPatient(patient)
+        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
         setIm1Request(patient)
     }
 

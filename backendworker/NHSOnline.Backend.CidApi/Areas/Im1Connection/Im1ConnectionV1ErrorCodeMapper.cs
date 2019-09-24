@@ -6,6 +6,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 {
     internal static class Im1ConnectionV1ErrorCodeMapper
     {
+        private const int Status550LinkageNotSupported = 550;
+
         private static readonly Dictionary<InternalCode, int> ErrorCodeToStatusCode =
             new Dictionary<InternalCode, int>
             {
@@ -49,7 +51,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     StatusCodes.Status403Forbidden
                 },
                 { InternalCode.LinkageKeyAlreadyExists, StatusCodes.Status409Conflict },
-                { InternalCode.LinkageKeysNotSupportedBySupplier, 678 }
+                { InternalCode.LinkageKeysNotSupportedBySupplier, Status550LinkageNotSupported }
             };
 
         public static int Map(InternalCode errorCode)

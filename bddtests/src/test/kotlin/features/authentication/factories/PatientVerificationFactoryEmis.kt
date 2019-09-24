@@ -1,12 +1,13 @@
 package features.authentication.factories
 
+import features.authentication.stepDefinitions.PatientVerificationSerenityHelpers
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import models.Patient
-import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
+import utils.set
 import java.time.Duration
 
 private const val REQUEST_DELAY = 1000_000L
@@ -45,8 +46,9 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
                                     identifierType = IdentifierType.NhsNumber,
                                     identifierValue = EmisMockDefaults.patientEmis.nhsNumbers.first())))
         }
-        Serenity.setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(nonExistingConnectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
     }
 
 
@@ -73,9 +75,9 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
         mockingClient.forEmis { myRecord.demographicsRequest(patient)
                 .respondWithSuccess(patient, nhsNumbers) }
 
-        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumbers").to(nhsNumbers)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumbers.set(nhsNumbers)
 
     }
 
@@ -121,5 +123,20 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
                 }
             }
         }
+    }
+
+    override fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
+    override fun gpSystemNotAvailable() {
+        val patient = EmisMockDefaults.patientEmis
+        mockingClient.forEmis {
+            authentication.endUserSessionRequest()
+                    .respondWithServiceUnavailable()
+        }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
     }
 }

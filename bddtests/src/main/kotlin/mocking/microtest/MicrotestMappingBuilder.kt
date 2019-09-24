@@ -2,7 +2,6 @@ package mocking.microtest
 
 import mocking.MappingBuilder
 import mocking.models.Mapping
-import models.Patient
 import org.apache.http.HttpStatus
 import utils.SerenityHelpers
 
@@ -13,9 +12,6 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
     : MappingBuilder(method, "/microtest/patient$relativePath") {
 
     init {
-        if(SerenityHelpers.getPatientOrNull() == null) {
-            SerenityHelpers.setPatient(Patient.getDefault("MICROTEST"))
-        }
         val patient = SerenityHelpers.getPatient()
         requestBuilder
                 .andHeader(HEADER_API_ODS_CODE, patient.odsCode)

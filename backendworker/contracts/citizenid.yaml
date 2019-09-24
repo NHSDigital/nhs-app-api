@@ -87,7 +87,7 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
-        "678":
+        "550":
           description: GP system does not support POL registration.
   /v1/patient/linkage:
     get:
@@ -150,7 +150,7 @@ paths:
           description: Bad response received from upstream system.
         "504":
           description: Timeout when calling upstream system.
-        "678":
+        "550":
           description: NHS Number not found, the patient has changed surgery or the surgery has changed supplier, 
           but the GP system does not support POL registration.
     post:

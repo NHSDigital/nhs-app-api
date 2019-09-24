@@ -13,6 +13,9 @@ Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from
    - backendworker folder
    - web folder
 
+Copy nhsonline/BDD/docker-compose.override.yml from keybase into:
+   - bdd folder
+
 Start the app
 
 ```

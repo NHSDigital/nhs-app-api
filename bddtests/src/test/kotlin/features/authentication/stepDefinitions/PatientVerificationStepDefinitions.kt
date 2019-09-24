@@ -14,6 +14,9 @@ import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
+import utils.SerenityHelpers
+import utils.getOrFail
+import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionResponse
@@ -27,37 +30,25 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
 
     @Given("I have an (.*) IM1 Connection Token that is in an invalid format")
     fun givenIHaveAnIm1ConnectionTokenThatIsInAnInvalidFormat(gpSystem: String) {
-        setSessionVariable("ConnectionToken").to("token")
+        PatientVerificationSerenityHelpers.ConnectionToken.set("token")
         setDefaultNationalPracticeCodeSessionVariable(gpSystem)
     }
 
-    @Given("I have an EMIS IM1 Connection Token and i try to verify as a microtest user")
+    @Given("I have an EMIS IM1 Connection Token and I try to verify as a microtest user")
     fun givenIHaveAnIm1ConnectionTokenForEmisAndIAmMicrotest() {
-        setSessionVariable("ConnectionToken").to(EmisMockDefaults.DEFAULT_CONNECTION_TOKEN)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(EmisMockDefaults.DEFAULT_CONNECTION_TOKEN)
         setDefaultNationalPracticeCodeSessionVariable("MICROTEST")
-    }
-
-    @Given("I have an (.*) IM1 Connection Token that has an incorrect NHS Number")
-    fun givenIHaveAnIm1ConnectionTokenThatHasAnIncorrectNHSNumber(gpSystem: String) {
-        setSessionVariable("ConnectionToken").to("{\"Im1CacheKey\" : \" test\", \"NhsNumber\" : \"5785445832\"}")
-        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
-    }
-
-    @Given("I have no IM1 Connection Token for (.*)")
-    fun givenIHaveNoIm1ConnectionToken(gpSystem: String) {
-        setSessionVariable("ConnectionToken").to(null)
-        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
     }
 
     private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String) {
         val odsCode = PatientVerificationFactory.getForSupplier(gpSystem).odsCode
-        setSessionVariable("NationalPracticeCode").to(odsCode)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(odsCode)
     }
 
     @Given("Vision responds with a security header error")
     fun visionRespondsWithASecurityHeaderError() {
-        setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(VisionMockDefaults.patientVision.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
         mockingClient
                 .forVision {
                     authentication.getConfigurationRequest(
@@ -68,8 +59,8 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
 
     @Given("Vision responds with an invalid request error")
     fun visionRespondsWithAInvalidRequestError() {
-        setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(VisionMockDefaults.patientVision.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
 
         mockingClient
                 .forVision {
@@ -82,8 +73,8 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
     @Given("Vision responds with an unknown error")
     fun visionRespondsWithAnUnknownError() {
         val patient =  Patient.getDefault("VISION")
-        setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
         mockingClient
                 .forVision {
                     authentication.getConfigurationRequest(
@@ -94,21 +85,16 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
 
     @Given("I have an (.*) ODS Code not in expected format")
     fun givenIHaveAnOdsCodeNotInExpectedFormat(gpSystem: String) {
-        setSessionVariable("NationalPracticeCode").to("£$*&")
-        setSessionVariable("ConnectionToken").to(Patient.getDefault(gpSystem).connectionToken)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(Patient.getDefault(gpSystem).connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set("£$*&")
     }
 
-    @Given("I have an (.*) ODS Code that does not exists")
+    @Given("I have an (.*) ODS Code that does not exist")
     fun givenIHaveAnOdsCodeThatDoesNotExists(gpSystem: String) {
-        setSessionVariable("NationalPracticeCode").to("E99999")
-        setSessionVariable("ConnectionToken").to(Patient.getDefault(gpSystem).connectionToken)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(Patient.getDefault(gpSystem).connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set("E99999")
     }
 
-    @Given("I have no (.*) ODS Code")
-    fun givenIHaveNoOdsCode(gpSystem: String) {
-        setSessionVariable("NationalPracticeCode").to(null)
-        setSessionVariable("ConnectionToken").to(Patient.getDefault(gpSystem).connectionToken)
-    }
 
     @Given("I have valid credentials for a (.*) patient with one NHS Number")
     fun givenIHaveValidCredentialsForAPatientWithOneNhsNumber(gpSystem: String) {
@@ -122,30 +108,59 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
 
     @Given("I have valid credentials for a (.*) patient with no NHS Number")
     fun givenIHaveValidCredentialsForAPatientWithNoNhsNumber(gpSystem: String) {
-
         PatientVerificationFactory.getForSupplier(gpSystem).validPatientWithNoNhsNumber()
     }
 
-    @When("I verify patient data")
+    @Given("I have an old ODS Code and IM1 Connection Token for a (\\w*) patient that has since moved to a"
+            + " different practice")
+    fun givenIHaveAnOldOdsCodeAndIm1ConnectionTokenForAPatientThatHasSinceMovedToADifferentPractice(gpSystem: String) {
+        PatientVerificationFactory.getForSupplier(gpSystem)
+                                  .oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice()
+    }
+
+    @Given("I have valid a valid IM1 Connection Token for a (\\w+) patient but the GP System is not available$")
+    fun giveIHaveAValidIM1ConnectionTokenForAPatientButTheGpSystemIsNotAvailable(gpSystem: String) {
+        PatientVerificationFactory.getForSupplier(gpSystem).gpSystemNotAvailable()
+    }
+
+    @When("I verify patient data$")
     fun whenIVerifyPatientData() {
-        val connectionToken = sessionVariableCalled<String>("ConnectionToken")
+        val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
+        val odsCode = PatientVerificationSerenityHelpers.NationalPracticeCode.getOrFail<String>()
 
-        val odsCode = sessionVariableCalled<String>("NationalPracticeCode")
+        whenIVerifyPatientData(connectionToken, odsCode)
+    }
 
+    @When("I verify patient data without sending the IM1 Connection Token")
+    fun whenIVerifyPatientDataWithoutSendingTheIm1ConnectionToken() {
+        val odsCode = PatientVerificationSerenityHelpers.NationalPracticeCode.getOrFail<String>()
+
+        whenIVerifyPatientData(null, odsCode)
+    }
+
+    @When("I verify patient data without sending the ODS Code")
+    fun whenIVerifyPatientDataWithoutSendingTheOdsCode() {
+        val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
+
+        whenIVerifyPatientData(connectionToken, null)
+    }
+
+    private fun whenIVerifyPatientData(connectionToken: String?, odsCode: String?) {
         try {
             val result = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .authentication.getIm1Connection(connectionToken, odsCode)
             setSessionVariable(Im1ConnectionResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            setSessionVariable("HttpException").to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
     @Then("I receive the expected NHS Numbers?$")
     fun thenIReceiveTheExpectedNhsNumber() {
         val result = sessionVariableCalled<Im1ConnectionResponse>(Im1ConnectionResponse::class)
-        val nhsNumbers = sessionVariableCalled<Array<PatientIdentifier>>("NhsNumbers")
-        val connectionToken = sessionVariableCalled<String>("ConnectionToken")
+        val nhsNumbers = PatientVerificationSerenityHelpers.NhsNumbers.getOrFail<Array<PatientIdentifier>>()
+        val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
+
         Assert.assertNotNull(result)
         val resultNhsNumbers = result.nhsNumbers!!.map {
             number -> NhsNumberFormatter.format(number.nhsNumber) }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Linkage;
@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Im1Connection;
+using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
 {
@@ -35,7 +36,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
             _systemUnderTest = _fixture.Create<MicrotestLinkageService>();
             _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             
-            _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();        }
+            _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
+        }
 
         [TestMethod]
         public async Task GetLinkageKey_ReturnsSuccessfulResponse_WhenSuccessfullyRetrievedFromMicrotest()
@@ -44,54 +46,71 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
             var request = _fixture.Create<GetLinkageRequest>();
             var response = CreateDemographicsResponse();
 
-            _mockMicrotestClient.Setup(x => x.DemographicsGet(
-                    request.OdsCode,
-                    request.NhsNumber
-                )
-            ).Returns(
-                Task.FromResult(
-                    response
-                )
-            ).Verifiable();
+            _mockMicrotestClient.Setup(x => x.DemographicsGet(request.OdsCode, request.NhsNumber))
+                .Returns(Task.FromResult(response));
             var cacheKey = _fixture.Create<string>();
             
             _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
-                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    It.IsAny<string>(), request.OdsCode, It.IsAny<string>()))
                 .Returns(cacheKey);
             _im1CacheService.Setup(x =>
-                x.SaveIm1ConnectionToken(It.IsAny<string>(), It.IsAny<MicrotestConnectionToken>()));
+                x.SaveIm1ConnectionToken(cacheKey, It.IsAny<MicrotestConnectionToken>()));
 
             // Act
             var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
-            var successResult = result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>().Subject;
+            var successResult = result.Should().BeOfType<LinkageResult.SuccessfullyRetrieved>().Subject;
             successResult.Response.Should().NotBeNull();
             successResult.Response.OdsCode.Should().Be(request.OdsCode);
+            successResult.Response.AccountId.Should().StartWith("microtest_");
+            successResult.Response.LinkageKey.Should().StartWith("microtest_");
         }
 
-        [TestMethod]
-        public async Task GetLinkageKey_ReturnsBadGatewayResponse_WhenErrorFromMicrotest()
+        [DataTestMethod]
+        [DataRow(HttpStatusCode.Forbidden)]
+        [DataRow(HttpStatusCode.InternalServerError)]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.Conflict)]
+        [DataRow(HttpStatusCode.Unauthorized)]
+        public async Task GetLinkageKey_ReturnsLinkageNotSupportedResponse_WhenDemographicsFailsWithAnyErrorStatusCode(HttpStatusCode demographicsStatusCode)
+        {
+            // Arrange
+            var request = _fixture.Create<GetLinkageRequest>();
+            var response = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(demographicsStatusCode);
+
+            _mockMicrotestClient.Setup(x => x.DemographicsGet(request.OdsCode, request.NhsNumber))
+                .Returns(Task.FromResult(response));
+
+            // Act
+            var result = await _systemUnderTest.GetLinkageKey(request);
+
+            // Assert
+            result.Should().BeOfType<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(InternalCode.LinkageKeysNotSupportedBySupplier);
+        }
+
+        [DataTestMethod]
+        [DataRow(typeof(OperationCanceledException))]
+        [DataRow(typeof(TaskCanceledException))]
+        [DataRow(typeof(HttpRequestException))]
+        [DataRow(typeof(Exception))]
+        public async Task GetLinkageKey_ReturnsLinkageNotSupportedResponse_WhenDemographicsFailsWithException(Type demographicsException)
         {
             // Arrange
             var request = _fixture.Create<GetLinkageRequest>();
             var response = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.InternalServerError);
 
-            _mockMicrotestClient.Setup(x => x.DemographicsGet(
-                    request.OdsCode,
-                    request.NhsNumber
-                )
-            ).Returns(
-                Task.FromResult(
-                    response
-                )
-            ).Verifiable();
+            _mockMicrotestClient.Setup(x => x.DemographicsGet(request.OdsCode, request.NhsNumber))
+                .Throws((Exception)Activator.CreateInstance(demographicsException));
 
             // Act
             var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
-            result.Should().BeOfType<LinkageResult.ErrorCase>();
+            result.Should().BeOfType<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(InternalCode.LinkageKeysNotSupportedBySupplier);
         }
 
         [TestMethod]

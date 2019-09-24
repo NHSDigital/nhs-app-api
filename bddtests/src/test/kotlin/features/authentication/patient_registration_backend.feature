@@ -1,4 +1,5 @@
 @authentication
+@registration
 @backend
 Feature: Patient Registration Backend
   A user can create a new NHS account from the login page, allowing them to access the app
@@ -26,13 +27,10 @@ Feature: Patient Registration Backend
     And the response has the expected connection token
     And the response has the expected NHS numbers
 
-  Scenario Outline: Patient provides linkage details which do not exist in the cache
-    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
+  Scenario: Registering with linkage details for a Microtest practice, who don't support linkage keys, results in a Linkage Not Supported response
+    Given I have a new MICROTEST patient with Nhs Numbers of "5785445875"
     When I register the user's IM1 credentials
-    Then I receive a "linkage not supported" code
-    Examples:
-      | GP System | NHS Numbers |
-      | MICROTEST | 5785445875  |
+    Then I receive a "Linkage Not Supported" code
 
   Scenario Outline: <GP System> Account ID doesn't match a user
     Given I have data for a <GP System> patient that does not exist

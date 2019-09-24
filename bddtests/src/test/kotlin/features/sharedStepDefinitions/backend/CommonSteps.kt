@@ -6,10 +6,8 @@ import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import mocking.MockingClient
-import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.tpp.models.Authenticate
 import models.Patient
 import net.serenitybdd.core.Serenity.getCurrentSession
 import net.serenitybdd.core.Serenity.getWebdriverManager
@@ -85,36 +83,6 @@ class CommonSteps : AbstractSteps() {
             }
         }
         return driver
-    }
-
-    @Given("^(EMIS|TPP|VISION) is not available$")
-    fun givenXIsNotAvailable(gpSystem: String) {
-
-        val patient = Patient.getDefault(gpSystem)
-        setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    authentication.endUserSessionRequest()
-                            .respondWithServiceUnavailable()
-                }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    authentication.authenticateRequest(Authenticate())
-                            .respondWithServiceUnavailable()
-                }
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    authentication.getConfigurationRequest(
-                            VisionMockDefaults.getVisionUserSession(patient))
-                            .respondWithServiceUnavailable()
-                }
-            }
-        }
     }
 
     @Given("^I have logged into (.*) and have a valid session cookie$")

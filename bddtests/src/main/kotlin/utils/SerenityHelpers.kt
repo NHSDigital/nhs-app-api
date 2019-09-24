@@ -27,7 +27,7 @@ class SerenityHelpers {
         }
 
         fun getPatient(): Patient {
-            Assert.assertTrue("Test setup incorrect, patient to be set",
+            Assert.assertTrue("Test setup incorrect, patient needs to be set",
                     Serenity.hasASessionVariableCalled(Patient::class))
             return Serenity.sessionVariableCalled<Patient>(Patient::class)
         }

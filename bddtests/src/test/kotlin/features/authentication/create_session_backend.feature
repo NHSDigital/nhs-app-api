@@ -49,8 +49,8 @@ Feature: Create Session Backend
     Given I have valid OAuth details and the EMIS session endpoint fails to create
     When I create a user session
     Then I receive a "Bad Gateway" error with service desk reference prefixed "3e"
-    
-  Scenario Outline: <GP System> is unavailable
+
+  Scenario Outline: <GP System> is unavailable when creating a session
     Given I have valid OAuth details and <GP System> is not available
     When I create a user session
     Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"

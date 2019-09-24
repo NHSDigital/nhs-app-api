@@ -11,8 +11,9 @@ import org.junit.Assert.assertNotNull
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.NhsoHttpExceptionErrorBody
+import java.lang.AssertionError
 
-const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 678
+const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 550
 class ResponseStatusCodeSteps {
 
     @Then("^I receive (?:a|an) \"(.*)\" (?:error|response)$")
@@ -92,9 +93,14 @@ class ResponseStatusCodeSteps {
                                     expectedErrorCode: String? = null,
                                     expectedServiceDeskReferencePrefix: String? = null) {
         val errorResponse = SerenityHelpers.getHttpException()
-        val exception = GsonBuilder().create()
-                .fromJson(errorResponse?.body.toString(),
-                        NhsoHttpExceptionErrorBody::class.java)
+
+        val exception = try {
+            GsonBuilder().create()
+                    .fromJson(errorResponse?.body.toString(),
+                            NhsoHttpExceptionErrorBody::class.java)
+        } catch (ex: java.lang.Exception) {
+            throw AssertionError("Failed to deserialise JSON error response of:\n${errorResponse?.body}")
+        }
 
         Assert.assertNotNull("Expected Response", errorResponse)
         Assert.assertEquals("Expected statusCode", expectedHttpStatusCode, errorResponse!!.statusCode)

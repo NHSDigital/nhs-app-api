@@ -1,18 +1,14 @@
 package features.authentication.factories
 
-import features.myrecord.factories.DemographicsFactory
+import features.authentication.stepDefinitions.PatientVerificationSerenityHelpers
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.IdentifierType
 import mocking.defaults.MicrotestMockDefaults
 import models.Patient
-import net.serenitybdd.core.Serenity
+import utils.SerenityHelpers
+import utils.set
 
 class PatientVerificationFactoryMicrotest: PatientVerificationFactory("MICROTEST"){
-
-    init {
-        DemographicsFactory.getForSupplier(gpSystem).enabled(Patient.getDefault(gpSystem))
-    }
-
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
         // Currently no session mocking required for vision
     }
@@ -21,36 +17,54 @@ class PatientVerificationFactoryMicrotest: PatientVerificationFactory("MICROTEST
 
 
     override fun validPatientWithNoNhsNumber() {
-        val patient =  Patient.getDefault(gpSystem)
-        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumber").to("")
+        throw NotImplementedError("It is not possible for there to be a user with no NHS number for Microtest")
     }
 
     override fun validPatientWithMultipleNumbers() {
-        val patient = Patient.getDefault(gpSystem)
-        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumbers").to(arrayOf(patient.nhsNumbers.first(), "1231231234")
-                .map { number -> PatientIdentifier(number, IdentifierType.NhsNumber) }
-                .toTypedArray())
+        throw NotImplementedError("It is not possible for there to be a user with multiple NHS number for Microtest")
     }
 
     override fun validPatientWithOneNhsNumber() {
         val patient = Patient.getDefault(gpSystem)
-        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumbers").to(arrayOf(patient.nhsNumbers.first())
+        SerenityHelpers.setPatient(patient)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumbers.set(arrayOf(patient.nhsNumbers.first())
                 .map { number -> PatientIdentifier(number, IdentifierType.NhsNumber) }
                 .toTypedArray())
+
+        mockingClient.forMicrotest {
+            demographics.demographicsRequest(patient)
+                    .respondWithSuccess()
+        }
     }
 
     override fun im1ConnectionTokenDoesNotExist() {
-        val patient = MicrotestMockDefaults.patient
-        val nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
+        throw NotImplementedError("For Microtest this is covered by the 'moved to a different practice' scenario")
+    }
 
-        Serenity.setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
+    override fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice() {
+        val patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
+
+        mockingClient.forMicrotest {
+            demographics.demographicsRequest(patient)
+                    .respondWithInternalServerError()
+        }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+    }
+
+    override fun gpSystemNotAvailable() {
+        val patient = MicrotestMockDefaults.patient
+        SerenityHelpers.setPatient(patient)
+
+        mockingClient.forMicrotest {
+            demographics.demographicsRequest(patient).respondWithServiceUnavailable()
+        }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
     }
 }

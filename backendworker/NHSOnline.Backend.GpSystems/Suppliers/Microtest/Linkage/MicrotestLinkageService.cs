@@ -29,44 +29,50 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
         {
-            _logger.LogEnter();
-            var demographicsResponse = await _microtestClient.DemographicsGet(
-                    getLinkageRequest.OdsCode,
-                    getLinkageRequest.NhsNumber);
-            
-            if (!demographicsResponse.HasSuccessResponse)
+            try
             {
-                if (demographicsResponse.HasForbiddenResponse)
+                _logger.LogEnter();
+                var demographicsResponse = await _microtestClient.DemographicsGet(
+                        getLinkageRequest.OdsCode,
+                        getLinkageRequest.NhsNumber);
+                
+                if (!demographicsResponse.HasSuccessResponse)
                 {
-                    _logger.LogError($"User does not have the necessary permissions within the GP system.");
-                    _logger.LogExit();
-                    return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+                    _logger.LogError($"Unsuccessful request retrieving Microtest demographics as part of linkage. Status code: {(int)demographicsResponse.StatusCode}");
+                    return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.LinkageKeysNotSupportedBySupplier);
                 }
-                _logger.LogError($"Unsuccessful request retrieving demographics as part of linkage. Status code: {(int)demographicsResponse.StatusCode}");
+        
+                var linkageKey = Guid.NewGuid();
+                var accountId = Guid.NewGuid();
+                var linkage = new LinkageResponse
+                {
+                    AccountId = "microtest_" + accountId,
+                    LinkageKey = "microtest_" + linkageKey,
+                    OdsCode = getLinkageRequest.OdsCode
+                };
+        
+                var key = _im1CacheKeyGenerator.GenerateCacheKey(
+                    linkage.AccountId, linkage.OdsCode, linkage.LinkageKey);
+
+                var connectionToken = new MicrotestConnectionToken
+                { 
+                    Im1CacheKey = key,
+                    NhsNumber = getLinkageRequest.NhsNumber,
+                };
+
+                await _im1CacheService.SaveIm1ConnectionToken(key, connectionToken);
+                return new LinkageResult.SuccessfullyRetrieved(linkage);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed request retrieving Microtest demographics, Excception has been thrown.");
                 return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.LinkageKeysNotSupportedBySupplier);
             }
-    
-            var linkageKey = Guid.NewGuid();
-            var accountId = Guid.NewGuid();
-            var linkage = new LinkageResponse
+            finally
             {
-                AccountId = "microtest_" + accountId,
-                LinkageKey = "microtest_" + linkageKey,
-                OdsCode = getLinkageRequest.OdsCode
-            };
-    
-            var key = _im1CacheKeyGenerator.GenerateCacheKey(
-                linkage.AccountId, linkage.OdsCode, linkage.LinkageKey);
-
-            var connectionToken = new MicrotestConnectionToken
-            { 
-                Im1CacheKey = key,
-                NhsNumber = getLinkageRequest.NhsNumber,
-            };
-
-            await _im1CacheService.SaveIm1ConnectionToken(key, connectionToken);
-            _logger.LogExit();
-            return new LinkageResult.SuccessfullyRetrieved(linkage);
+                _logger.LogExit();
+            }
         }
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)

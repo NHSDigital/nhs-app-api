@@ -123,23 +123,23 @@ Feature: Linkage Get Key
     When I call the Linkage GET endpoint
     Then I receive a "Forbidden" error
 
-  Scenario: Linkage request GET for Microtest returns an internal server error when demographics call fails
+  Scenario: Linkage request GET for Microtest returns a Linkage Not Supported error when demographics call fails with an Internal Server Error
     Given I have valid MICROTEST linkage details
     And the demographics endpoint responds with an "internal server error" error
     When I call the Linkage GET endpoint
-    Then I receive a "linkage not supported" error
+    Then I receive a "Linkage Not Supported" error
 
-  Scenario: Linkage request GET for Microtest returns a forbidden error when demographics call fails
+  Scenario: Linkage request GET for Microtest returns a Linkage Not Supported error when demographics call fails with a Forbidden error
     Given I have valid MICROTEST linkage details
-    And the demographics endpoint responds with a "forbidden" error
+    And the demographics endpoint responds with a "Forbidden" error
     When I call the Linkage GET endpoint
-    Then I receive a "bad request" error
+    Then I receive a "Linkage Not Supported" error
 
-  Scenario: Linkage request GET for Microtest returns an bad gateway error when demographics call fails
+  Scenario: Linkage request GET for Microtest returns a Linkage Not Supported error when demographics call fails with a Bad Gateway error
     Given I have valid MICROTEST linkage details
-    And the demographics endpoint responds with a "bad gateway" error
+    And the demographics endpoint responds with a "Bad Gateway" error
     When I call the Linkage GET endpoint
-    Then I receive a "bad request" error
+    Then I receive a "Linkage Not Supported" error
 
   Scenario Outline: Microtest patient can get linkage details, and successfully register with the returned details.
     Given I have valid <GP System> linkage details

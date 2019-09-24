@@ -1,4 +1,5 @@
 @authentication
+@verification
 @backend
 Feature: Patient Verification Backend
   The system validates the patient data
@@ -6,6 +7,7 @@ Feature: Patient Verification Backend
   Scenario Outline: <GP System> patient has single NHS Number
     Given I have valid credentials for a <GP System> patient with one NHS Number
     When I verify patient data
+    Then I receive a "OK" success code
     Then I receive the expected NHS Number
 
     Examples:
@@ -18,6 +20,7 @@ Feature: Patient Verification Backend
   Scenario Outline: <GP System> patient has multiple NHS Numbers
     Given I have valid credentials for a <GP System> patient with multiple NHS Numbers
     When I verify patient data
+    Then I receive a "OK" success code
     Then I receive the expected NHS Numbers
 
     Examples:
@@ -59,22 +62,13 @@ Feature: Patient Verification Backend
       | MICROTEST |
 
   Scenario: Microtest patient tries to verify IM1 Connection details with Emis IM1 Connection Token.
-    Given I have an EMIS IM1 Connection Token and i try to verify as a microtest user
+    Given I have an EMIS IM1 Connection Token and I try to verify as a microtest user
     When I verify patient data
     Then I receive a "Bad Request" error
 
-  Scenario Outline: <GP System> IM1 Demographics failure
-    Given I have an <GP System> IM1 Connection Token that has an incorrect NHS Number
-    When I verify patient data
-    Then I receive a "forbidden" error
-
-    Examples:
-      | GP System |
-      | MICROTEST |
-
   Scenario Outline: No IM1 Connection Token for the <GP System>
-    Given I have no IM1 Connection Token for <GP System>
-    When I verify patient data
+    Given I have valid credentials for a <GP System> patient with one NHS Number
+    When I verify patient data without sending the IM1 Connection Token
     Then I receive a "Bad Request" error
 
     Examples:
@@ -85,7 +79,7 @@ Feature: Patient Verification Backend
       | MICROTEST |
 
   Scenario Outline: Non-existent ODS Code for <GP System>
-    Given I have an <GP System> ODS Code that does not exists
+    Given I have an <GP System> ODS Code that does not exist
     When I verify patient data
     Then I receive a "Not Implemented" error
 
@@ -109,8 +103,8 @@ Feature: Patient Verification Backend
       | MICROTEST |
 
   Scenario Outline: No ODS Code for <GP System>
-    Given I have no <GP System> ODS Code
-    When I verify patient data
+    Given I have valid credentials for a <GP System> patient with one NHS Number
+    When I verify patient data without sending the ODS Code
     Then I receive a "Bad Request" error
 
     Examples:
@@ -120,8 +114,8 @@ Feature: Patient Verification Backend
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: <GP System> is not available
-    Given <GP System> is not available
+  Scenario Outline: Verifying the credentials of a <GP System> patient when the GP System is not available returns a bad gateway response
+    Given I have valid a valid IM1 Connection Token for a <GP System> patient but the GP System is not available
     When I verify patient data
     Then I receive a "Bad Gateway" error
     Examples:
@@ -129,6 +123,7 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario: Vision responds with security header error
     Given Vision responds with a security header error
@@ -147,29 +142,11 @@ Feature: Patient Verification Backend
     When I verify patient data
     Then I receive a "Bad Gateway" error
 
-  Scenario Outline: Linkage request GET for Microtest returns an internal server error when demographics call fails
-    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
-    And the demographics endpoint responds with an "internal server error" error
+  Scenario Outline: Verifying the old credentials of a <GP System> patient after they've moved practice returns a forbidden response
+    Given I have an old ODS Code and IM1 Connection Token for a <GP System> patient that has since moved to a different practice
     When I verify patient data
-    Then I receive a "bad request" error
+    Then I receive a "Forbidden" error
     Examples:
-      | GP System | NHS Numbers |
-      | MICROTEST | 5785445875  |
+      | GP System |
+      | MICROTEST |
 
-  Scenario Outline: Linkage request GET for Microtest returns a forbidden error when demographics call fails
-    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
-    And the demographics endpoint responds with a "forbidden" error
-    When I verify patient data
-    Then I receive a "bad request" error
-    Examples:
-      | GP System | NHS Numbers |
-      | MICROTEST | 5785445875  |
-
-  Scenario Outline: Linkage request GET for Microtest returns an bad gateway error when demographics call fails
-    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
-    And the demographics endpoint responds with a "bad gateway" error
-    When I verify patient data
-    Then I receive a "bad request" error
-    Examples:
-      | GP System | NHS Numbers |
-      | MICROTEST | 5785445875  |

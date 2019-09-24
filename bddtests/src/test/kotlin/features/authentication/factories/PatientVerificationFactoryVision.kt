@@ -1,5 +1,6 @@
 package features.authentication.factories
 
+import features.authentication.stepDefinitions.PatientVerificationSerenityHelpers
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.IdentifierType
 import mocking.defaults.VisionMockDefaults
@@ -8,7 +9,7 @@ import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber
 import mocking.vision.models.VisionUserSession
 import models.Patient
-import net.serenitybdd.core.Serenity
+import utils.set
 
 class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
 
@@ -27,9 +28,10 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
                                     patientNumber = null, name = patient.formattedFullName())
                             ))
                 }
-        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumber").to("")
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumber.set(patient.nhsNumbers[0])
     }
 
     override fun validPatientWithMultipleNumbers() {
@@ -58,9 +60,10 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
                                     patient.odsCode, patientId = patient.patientId))
                             .respondWitInvalidUserCredentials()
                 }
-        Serenity.setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(nonExistingConnectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumber.set(patient.nhsNumbers[0])
     }
 
 
@@ -80,9 +83,26 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
                                             name = patient.formattedFullName()
                                     )))
                 }
-        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumbers").to(nhsNumbers.map { number -> PatientIdentifier(number,
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumbers.set(nhsNumbers.map { number -> PatientIdentifier(number,
                 IdentifierType.NhsNumber) }.toTypedArray())
+    }
+
+    override fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
+    override fun gpSystemNotAvailable() {
+        val patient = VisionMockDefaults.patientVision
+        mockingClient.forVision {
+            authentication.getConfigurationRequest(
+                    VisionMockDefaults.getVisionUserSession(patient))
+                    .respondWithServiceUnavailable()
+        }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
     }
 }

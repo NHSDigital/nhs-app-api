@@ -32,7 +32,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
             "EMIS" -> generateEmisMocks(patient)
             "TPP" -> generateTppMocks(patient)
             "VISION" -> generateVisionMocks(patient)
-            "MICROTEST" -> {}
+            "MICROTEST" -> { /* Microtest does not support registration with linkage keys */ }
             else -> throw IllegalArgumentException("$gpSystem not recognised as a supported GP System.")
         }
     }

@@ -14,6 +14,8 @@ abstract class PatientVerificationFactory(protected val gpSystem: String)  {
     abstract fun validPatientWithMultipleNumbers()
     abstract fun validPatientWithNoNhsNumber()
     abstract fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String = "Success")
+    abstract fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice()
+    abstract fun gpSystemNotAvailable()
 
 
     companion object : SupplierSpecificFactory<PatientVerificationFactory>() {

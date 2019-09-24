@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             [Description("No self-associated user exist with this patient")]
             NoSelfAssociatedUserExistWithThisPatient = 199,
             [Description("Linkage keys are currently not supported by the supplier")]
-            LinkageKeysNotSupportedBySupplier = 678
+            LinkageKeysNotSupportedBySupplier = 550
         }
 
         //Any changes to this enum must also be made in the swagger contract

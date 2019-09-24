@@ -1,6 +1,7 @@
 package features.authentication.factories
 
 import constants.ErrorResponseCodeTpp
+import features.authentication.stepDefinitions.PatientVerificationSerenityHelpers
 import mocking.data.myrecord.DemographicsData
 import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.PatientIdentifier
@@ -14,8 +15,8 @@ import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
 import mocking.tpp.models.User
 import models.Patient
-import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import utils.set
 import java.time.Duration
 
 private const val REQUEST_DELAY = 1000_000L
@@ -67,9 +68,10 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
         mockingClient.forTpp { authentication.authenticateRequest(authenticateRequest)
                 .respondWithSuccess(tppAuthenticateReplyResponse) }
 
-        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumbers").to(
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumbers.set(
                 arrayOf(PatientIdentifier(patient.nhsNumbers.first(),
                 IdentifierType.NhsNumber)))
 
@@ -90,8 +92,8 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
         mockingClient.forTpp { authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
                 .respondWithError(tppNonExistingAccountIdErrorResponse) }
 
-        Serenity.setSessionVariable("NationalPracticeCode").to(TppMockDefaults.DEFAULT_ODS_CODE_TPP)
-        Serenity.setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(nonExistingConnectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(TppMockDefaults.DEFAULT_ODS_CODE_TPP)
     }
 
     fun createConnectionToken(accountId: String = TppMockDefaults.DEFAULT_TPP_ACCOUNT_ID,
@@ -135,5 +137,20 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
                 }
             }
         }
+    }
+
+    override fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
+    override fun gpSystemNotAvailable() {
+        val patient = TppMockDefaults.patientTpp
+        mockingClient.forTpp {
+            authentication.authenticateRequest(Authenticate())
+                    .respondWithServiceUnavailable()
+        }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
     }
 }
