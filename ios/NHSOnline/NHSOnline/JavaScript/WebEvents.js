@@ -1,5 +1,9 @@
 window.nativeApp = {};
 
+window.nativeApp.areNotificationsEnabled = function() {
+    window.webkit.messageHandlers.areNotificationsEnabled.postMessage(null);
+};
+
 window.nativeApp.attemptBiometricLogin = function() {
     window.webkit.messageHandlers.attemptBiometricLogin.postMessage(null);
 };
@@ -52,8 +56,8 @@ window.nativeApp.pageLoadComplete = function () {
     window.webkit.messageHandlers.pageLoadComplete.postMessage(null);
 };
 
-window.nativeApp.requestPnsToken = function() {
-    window.webkit.messageHandlers.requestPnsToken.postMessage(null);
+window.nativeApp.requestPnsToken = function(trigger) {
+    window.webkit.messageHandlers.requestPnsToken.postMessage(trigger);
 };
 
 window.nativeApp.resetPageFocus = function() {

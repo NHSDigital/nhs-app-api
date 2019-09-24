@@ -64,7 +64,7 @@ class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupNhsLogo()
         setupBackArrow()
         setupMyAccountIcon()
@@ -277,7 +277,7 @@ class HomeViewController : UIViewController {
     func showNativeViewContainer() {
         if (!appVersionCheckError) {
             self.cycleFromViewController(oldViewController: self.webViewController!,
-                 toViewController: self.currentNativeViewController!)
+                                         toViewController: self.currentNativeViewController!)
         }
     }
     
@@ -297,7 +297,7 @@ class HomeViewController : UIViewController {
         default:
             self.updateHeaderText(headerText: NSLocalizedString("ConnectionErrorHeader", comment: ""))
         }
-       
+        
         showErrorViewContainer()
         applicationState.unBlock()
     }
@@ -354,7 +354,7 @@ class HomeViewController : UIViewController {
         guard Reachability.isConnectedToNetwork() else {
             let error = ErrorMessage(.NoInternetConnection)
             showNativeViewContainer(errorMessage: error)
-
+            
             return true
         }
         return false
@@ -491,16 +491,20 @@ class HomeViewController : UIViewController {
             return absoluteUrl!.contains(config().CidUrlSuffix)
         }
     }
-
-    func registerForPushNotifications() {
-        notificationsService?.registerForPushNotifications()
+    
+    func registerForPushNotifications(trigger: String) {
+        notificationsService?.registerForPushNotifications(trigger: trigger)
     }
-
+    
     func pushNotificationsAuthorised(deviceToken: Data) {
         notificationsService?.authorised(deviceToken: deviceToken)
     }
-
+    
     func failedToRegisterForNotifications() {
         notificationsService?.failedToRegister()
+    }
+    
+    func areNotificationsEnabled() {
+        notificationsService?.areNotificationsEnabled()
     }
 }

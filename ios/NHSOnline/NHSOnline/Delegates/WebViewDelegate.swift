@@ -219,6 +219,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             switch message.name {
+            case "areNotificationsEnabled":
+                viewController.areNotificationsEnabled()
+                break;
             case "attemptBiometricLogin":
                 viewController.delayedBiometricsStart(0.3)
                 break
@@ -270,7 +273,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 viewController.applicationState.unBlock()
                 break
             case "requestPnsToken":
-                viewController.registerForPushNotifications()
+                let trigger: String = message.body as! String
+                viewController.registerForPushNotifications(trigger: trigger)
                 break
             case "resetPageFocus":
                 viewController.headerBar.setFocusToNhsLogoForA11y()

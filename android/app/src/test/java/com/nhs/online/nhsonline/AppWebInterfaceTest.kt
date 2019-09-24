@@ -45,16 +45,16 @@ class AppWebInterfaceTest {
 
     @Test
     fun notificationsAuthorised() {
-        appWebInterface.notificationsAuthorised("1234")
+        appWebInterface.notificationsAuthorised("1234", "load")
         verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/authorised', " +
-                "'{\"devicePns\":\"1234\",\"deviceType\":\"android\"}')",
+                "'{\"devicePns\":\"1234\",\"deviceType\":\"android\",\"trigger\":\"load\"}')",
                 null)
     }
 
     @Test
     fun notificationsUnauthorised() {
         appWebInterface.notificationsUnauthorised()
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/unAuthorised')",
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/unauthorised')",
                 null)
     }
 }

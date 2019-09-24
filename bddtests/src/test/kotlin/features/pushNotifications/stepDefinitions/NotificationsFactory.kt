@@ -36,7 +36,7 @@ class NotificationsFactory{
     fun mockPNS(authorised:Boolean) {
         val pns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
         val deviceType =  PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>().toLowerCase()
-        val unauthorisedResponse = "window.\$nuxt.\$store.dispatch('notifications/unAuthorised');"
+        val unauthorisedResponse = "window.\$nuxt.\$store.dispatch('notifications/unauthorised');"
         val authorisedResponse = "window.\$nuxt.\$store.dispatch(" +
                 "'notifications/authorised', " +
                 "'{\"devicePns\":\"$pns\",\"deviceType\":\"$deviceType\"}');"

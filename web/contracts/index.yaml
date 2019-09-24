@@ -2949,6 +2949,42 @@
           500: 
             description: "An unexpected error occurred processing the request."
     /v1/api/users/devices: 
+      get: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "user-devices"
+        summary: "Retrieves the users device registration"
+        description: "Using the accesstoken, will retrieve the user's current notifications registration on this device"
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+          - 
+            in: "query"
+            name: "devicePns"
+            required: true
+            description: "The device PNS token"
+            schema: 
+              type: "string"
+        responses: 
+          204: 
+            description: "Found registered device for notifications"
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          404: 
+            description: "The device is not registered for notifications"
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
       post: 
         security: 
           - 
@@ -3002,8 +3038,46 @@
                   example: 
                     deviceId: "2f2c28c8-3de9-4ffc-9d0b-23533363d7d3"
                     deviceType: "android"
+          400: 
+            description: "Bad request. Supplied request is invalid."
           401: 
             description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
+      delete: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "user-devices"
+        summary: "Deletes the users device registration"
+        description: "Using the accesstoken, will delete the user's notifications registration on this device"
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+          - 
+            in: "query"
+            name: "devicePns"
+            required: true
+            description: "The device PNS token"
+            schema: 
+              type: "string"
+        responses: 
+          204: 
+            description: "Deleted the registered device for notifications"
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          404: 
+            description: "The device is not registered for notifications"
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
@@ -3054,7 +3128,7 @@
             description: "Required property missing or expired."
           500: 
             description: "An unexpected error occurred processing the request."
-    /v1/document/: 
+    /v1/documents/: 
       get: 
         tags: 
           - "patient document"

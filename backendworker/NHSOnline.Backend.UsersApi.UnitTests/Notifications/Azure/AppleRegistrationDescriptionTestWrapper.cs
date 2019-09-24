@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Microsoft.Azure.NotificationHubs;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
 {
@@ -16,25 +13,25 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
             get => base.RegistrationId;
             set => SetPrivateBaseTypePropertyValue(this, nameof(RegistrationId), value);
         }
-        
+
         public new string DeviceToken
         {
             get => base.DeviceToken;
             set => SetPrivateBaseTypePropertyValue(this, nameof(DeviceToken), value);
         }
-        
+
         public new DateTime? ExpirationTime
         {
             get => base.ExpirationTime;
             set => SetPrivateBaseTypePropertyValue(this, nameof(ExpirationTime), value);
         }
-        
+
         public new ISet<string> Tags
         {
             get => base.Tags;
             set => SetPrivateBaseTypePropertyValue(this, nameof(Tags), value);
         }
-        
+
         private static Dictionary<Type, Dictionary<string, PropertyInfo>> PropertiesCache { get; }
 
         static AppleRegistrationDescriptionTestWrapper()
@@ -62,9 +59,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
             var type = instance.GetType().BaseType;
             if (PropertiesCache.TryGetValue(type, out var propertiesDictionary))
             {
-                if(propertiesDictionary.TryGetValue(propName, out var propertyInfo))
+                if (propertiesDictionary.TryGetValue(propName, out var propertyInfo))
                 {
-                    propertyInfo.SetValue(instance,val,null);
+                    propertyInfo.SetValue(instance, val, null);
                 }
             }
         }

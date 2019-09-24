@@ -49,6 +49,9 @@ export default {
       },
     },
   },
+  async asyncData({ store }) {
+    await store.dispatch('notifications/load');
+  },
 };
 </script>
 
@@ -70,21 +73,26 @@ export default {
   }
 }
 
-.info {
-  font-size: 1em;
-  margin-bottom: 1em;
-  padding-top: 1em;
-  max-width: 540px;
+div {
+  .info {
+    font-size: 1em;
+    margin-bottom: 1em;
+    padding-top: 1em;
 
-  p {
-    font-family: $default-web;
-    font-weight: lighter;
-    max-width: 540px;
+    p {
+      font-family: $default-web;
+      font-weight: normal;
+      max-width: 540px;
+    }
   }
-
-  strong {
-    font-family: $default-web;
-    font-weight: normal;
+  .desktopWeb {
+    .info {
+      p {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
+    }
   }
 }
+
 </style>

@@ -5,6 +5,39 @@ info:
   description: NHS App Users-API - endpoints pertaining to Users, all require an Authorisation-Bearer Token to be included in the header.
 paths:
   /users/devices:
+    get:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - user-devices
+      summary: Retrieves the users device registration
+      description: Using the accesstoken, will retrieve the user's current notifications registration on this device
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+        - in: query
+          name: devicePns
+          required: true
+          description: The device PNS token
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Found registered device for notifications
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "404":
+          description: The device is not registered for notifications
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
     post:
       security:
         - nhsLoginBearerAuth: []
@@ -34,12 +67,47 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "401":
           $ref: '#/components/responses/UnauthorizedError'
         "500":
           $ref: '#/components/responses/UnexpectedError'
         "502":
-          $ref: '#/components/responses/UnexpectedError' 
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - user-devices
+      summary: Deletes the users device registration
+      description: Using the accesstoken, will delete the user's notifications registration on this device
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+        - in: query
+          name: devicePns
+          required: true
+          description: The device PNS token
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted the registered device for notifications
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "404":
+          description: The device is not registered for notifications
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
 components:
   securitySchemes:
     nhsLoginBearerAuth:            
@@ -51,6 +119,8 @@ components:
       description: Access token is missing or invalid.
     UnexpectedError:
       description: An unexpected error occurred processing the request.
+    BadRequest:
+      description: Bad request. Supplied request is invalid.
   schemas:
     DeviceType:
       type: string

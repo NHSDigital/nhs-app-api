@@ -53,7 +53,7 @@ describe('native app', () => {
   callNative('onLogout');
   callNative('onSessionExpiring', 115);
   callNative('pageLoadComplete');
-  callNative('requestPnsToken');
+  callNative('requestPnsToken', 'load');
   callNative('resetPageFocus');
   callNative('setMenuBarItem', 0);
   callNative('showHeader');

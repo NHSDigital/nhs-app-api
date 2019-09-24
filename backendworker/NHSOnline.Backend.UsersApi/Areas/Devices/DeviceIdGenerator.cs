@@ -7,7 +7,12 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     {
         public string Generate(AccessToken accessToken, RegisterDeviceRequest request)
         {
-            return $"{accessToken.Subject}-{request?.DevicePns}";
+            return Generate(accessToken, request?.DevicePns);
+        }
+        
+        public string Generate(AccessToken accessToken, string devicePns)
+        {
+            return $"{accessToken.Subject}-{devicePns}";
         }
     }
 }

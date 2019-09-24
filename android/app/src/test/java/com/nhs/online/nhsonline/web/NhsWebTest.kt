@@ -295,8 +295,8 @@ class NhsWebTest {
 
     @Test
     fun requestPnsToken_CallsNotificationsServiceRegisterForPushNotifications() {
-        nhsWeb.requestPnsToken()
+        nhsWeb.requestPnsToken("load")
 
-        verify(notificationsServiceMock).registerForPushNotifications()
+        verify(notificationsServiceMock).registerForPushNotifications("load")
     }
 }

@@ -13,18 +13,24 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
     {
         private readonly IAzureNotificationHubClient _azureHubClient;
 
-        public CreateOrUpdateRegistrationStep(ILogger<CreateOrUpdateRegistrationStep> logger,
-            IAzureNotificationHubClient azureHubClient) : base(logger)
+        public CreateOrUpdateRegistrationStep
+        (
+            ILogger<CreateOrUpdateRegistrationStep> logger,
+            IAzureNotificationHubClient azureHubClient
+        ) : base(logger)
         {
             _azureHubClient = azureHubClient;
         }
 
-        public override async Task<RegistrationResult> Execute(RegistrationDescription registration,
-            NotificationRegistrationRequest request)
+        public override async Task<RegistrationResult> Execute
+        (
+            RegistrationDescription registration,
+            string devicePns
+        )
         {
             try
             {
-                var registrationResult = await _azureHubClient.CreateOrUpdateRegistrationAsync(registration);
+                var registrationResult = await _azureHubClient.CreateOrUpdateRegistration(registration);
 
                 var isValid = new ValidateAndLog(_logger)
                     .IsNotNullOrWhitespace(registrationResult?.RegistrationId,
@@ -64,8 +70,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
 
         private RegistrationResult ReturnGoneIfHubResponseIsGone(MessagingException ex)
         {
-            var webex = ex.InnerException as WebException;
-            if (webex?.Status == WebExceptionStatus.ProtocolError)
+            if (ex.InnerException is WebException webex && webex.Status == WebExceptionStatus.ProtocolError)
             {
                 var response = (HttpWebResponse) webex.Response;
                 if (response.StatusCode == HttpStatusCode.Gone)

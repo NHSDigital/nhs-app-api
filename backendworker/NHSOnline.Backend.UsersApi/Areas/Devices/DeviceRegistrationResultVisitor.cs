@@ -1,24 +1,21 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
+using NHSOnline.Backend.UsersApi.Repository;
 
-namespace NHSOnline.Backend.UsersApi.Repository
+namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
-    internal class DeviceRepositoryResultVisitor : IDeviceRepositoryResultVisitor<IActionResult>
+    internal class DeviceRegistrationResultVisitor : IDeviceRegistrationResultVisitor<IActionResult>
     {
         private readonly RegisterDeviceRequest _initialRequest;
-        private readonly ILogger _logger;
 
-        public DeviceRepositoryResultVisitor(RegisterDeviceRequest initialRequest, ILogger logger)
+        public DeviceRegistrationResultVisitor(RegisterDeviceRequest initialRequest)
         {
             _initialRequest = initialRequest;
-            _logger = logger;
         }
 
-        public IActionResult Visit(DeviceRepositoryResult.Created result)
+        public IActionResult Visit(DeviceRegistrationResult.Created result)
         {
-            _logger.LogInformation($"Device registered: Id '{result.UserDevice.DeviceId}', Type '{_initialRequest.DeviceType}'");
             var device = new Device
             {
                 DeviceId = result.UserDevice.DeviceId,
@@ -31,10 +28,14 @@ namespace NHSOnline.Backend.UsersApi.Repository
             };
         }
 
-        public IActionResult Visit(DeviceRepositoryResult.Failure result)
+        public IActionResult Visit(DeviceRegistrationResult.BadGateway result)
         {
-            _logger.LogError("Failure to register device.");
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
+        }
+
+        public IActionResult Visit(DeviceRegistrationResult.InternalServerError result)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
 }

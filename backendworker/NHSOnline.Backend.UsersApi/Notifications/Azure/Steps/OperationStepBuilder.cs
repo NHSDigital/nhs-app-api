@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
             return this;
         }
 
-        public Task<RegistrationResult> Execute(RegistrationDescription registration, NotificationRegistrationRequest request)
+        public Task<RegistrationResult> Execute(RegistrationDescription registration, string devicePns)
         {
             var current = _steps.Pop();
 
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
                 current = previous;
             }
 
-            return current.Execute(registration, request);
+            return current.Execute(registration, devicePns);
         }
     }
 }

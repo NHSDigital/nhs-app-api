@@ -1,4 +1,13 @@
 export default {
+  areNotificationsEnabled() {
+    const app = window.nativeApp;
+    if (app && app.areNotificationsEnabled) {
+      app.areNotificationsEnabled();
+      return true;
+    }
+    return false;
+  },
+
   attemptBiometricLogin() {
     const app = window.nativeApp;
     if (app && app.attemptBiometricLogin) {
@@ -115,10 +124,10 @@ export default {
     return false;
   },
 
-  requestPnsToken() {
+  requestPnsToken(trigger) {
     const app = window.nativeApp;
     if (app && app.requestPnsToken) {
-      app.requestPnsToken();
+      app.requestPnsToken(trigger);
       return true;
     }
     return false;

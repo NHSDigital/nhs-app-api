@@ -40,6 +40,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
+        webView.configuration.userContentController.add(delegate, name: "areNotificationsEnabled")
         webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
         webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
         webView.configuration.userContentController.add(delegate, name: "focusElement")

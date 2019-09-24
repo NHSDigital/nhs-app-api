@@ -14,13 +14,8 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
             _logger = logger;
         }
         
-        public IOperationStep NextStep(IOperationStep nextStep)
-        {
-            Next = nextStep;
-            return Next;
-        }
+        public void NextStep(IOperationStep nextStep) => Next = nextStep;
 
-        public abstract Task<RegistrationResult> Execute(RegistrationDescription registration,
-            NotificationRegistrationRequest request);
+        public abstract Task<RegistrationResult> Execute(RegistrationDescription registration, string devicePns);
     }
 }

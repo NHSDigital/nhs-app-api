@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure
 {
     public interface IRegistrationDescriptionFactory
     {
-        RegistrationDescription Create(NotificationRegistrationRequest notificationRegistrationRequest);
+        RegistrationDescription Create(RegisterDeviceRequest registerDeviceRequest, string nhsLoginId);
     }
 }

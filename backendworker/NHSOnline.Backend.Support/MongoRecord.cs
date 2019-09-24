@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.Support
     public abstract class MongoRecord
     {
         [BsonElement("_ts")]
-        public DateTime TimeStamp{ get; set; }
+        public DateTime TimeStamp { get; set; }
     }
 }

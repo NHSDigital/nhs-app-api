@@ -15,11 +15,11 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
             _azureHubClient = azureHubClient;
         }
         
-        public override async Task<RegistrationResult> Execute(RegistrationDescription registration, NotificationRegistrationRequest request)
+        public override async Task<RegistrationResult> Execute(RegistrationDescription registration, string devicePns)
         {
             try
             {
-                registration.RegistrationId = await _azureHubClient.CreateRegistrationIdAsync();
+                registration.RegistrationId = await _azureHubClient.CreateRegistrationId();
             }
             catch (HttpRequestException ex)
             {
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
                 return new RegistrationResult.InternalServerError();
             }
                 
-            return await Next.Execute(registration, request);
+            return await Next.Execute(registration, devicePns);
         }
     }
 }

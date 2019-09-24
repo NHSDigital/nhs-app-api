@@ -7,7 +7,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure.Steps
     {
         IOperationStepBuilder Add<TOperationStep>() where TOperationStep : IOperationStep;
 
-        Task<RegistrationResult> Execute(RegistrationDescription registration,
-            NotificationRegistrationRequest request);
+        Task<RegistrationResult> Execute(RegistrationDescription registration, string devicePns);
     }
 }

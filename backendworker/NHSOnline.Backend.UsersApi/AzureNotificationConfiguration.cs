@@ -1,5 +1,3 @@
-using NHSOnline.Backend.Support.Settings;
-
 namespace NHSOnline.Backend.UsersApi
 {
     public class AzureNotificationConfiguration

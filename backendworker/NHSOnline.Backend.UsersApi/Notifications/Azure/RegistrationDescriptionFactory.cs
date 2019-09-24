@@ -8,28 +8,27 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Azure
 {
     public class RegistrationDescriptionFactory : IRegistrationDescriptionFactory
     {
-        
-        public RegistrationDescription Create(NotificationRegistrationRequest notificationRegistrationRequest)
+        public RegistrationDescription Create(RegisterDeviceRequest registerDeviceRequest, string nhsLoginId)
         {
-            if (string.IsNullOrWhiteSpace(notificationRegistrationRequest.NhsLoginId))
+            if (string.IsNullOrWhiteSpace(nhsLoginId))
             {
-                throw new ArgumentException("NhsLoginId is null", nameof(notificationRegistrationRequest));
+                throw new ArgumentException("NhsLoginId is null", nameof(registerDeviceRequest));
             }
             
-            var tags = new HashSet<string> { $"{NhsLoginIdTagPrefix}{TagSeparator}{notificationRegistrationRequest.NhsLoginId}" };
+            var tags = new HashSet<string> { $"{NhsLoginIdTagPrefix}{TagSeparator}{nhsLoginId}" };
             
             RegistrationDescription registrationDescription;
 
-            switch (notificationRegistrationRequest.DeviceType)
+            switch (registerDeviceRequest.DeviceType)
             {
                 case DeviceType.Android:
-                    registrationDescription = new FcmRegistrationDescription(notificationRegistrationRequest.DevicePns, tags);
+                    registrationDescription = new FcmRegistrationDescription(registerDeviceRequest.DevicePns, tags);
                     break;
                 case DeviceType.Ios:
-                    registrationDescription = new AppleRegistrationDescription(notificationRegistrationRequest.DevicePns, tags);
+                    registrationDescription = new AppleRegistrationDescription(registerDeviceRequest.DevicePns, tags);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(notificationRegistrationRequest));
+                    throw new ArgumentOutOfRangeException(nameof(registerDeviceRequest));
             } 
 
             return registrationDescription;

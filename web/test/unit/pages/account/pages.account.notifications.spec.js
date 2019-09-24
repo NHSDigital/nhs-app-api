@@ -24,12 +24,22 @@ describe('notifications', () => {
 
   it('will dispatch `notifications/toggle` when text label is clicked', () => {
     wrapper.find('label').trigger('click');
-    expect($store.dispatch).toBeCalled();
+    expect($store.dispatch).toBeCalledWith('notifications/toggle');
   });
 
   it('will dispatch `notifications/toggle` when UI label is clicked', () => {
     wrapper.findAll('label').at(1).trigger('click');
-    expect($store.dispatch).toBeCalled();
+    expect($store.dispatch).toBeCalledWith('notifications/toggle');
+  });
+
+  describe('asyncData', () => {
+    beforeEach(async () => {
+      await wrapper.vm.$options.asyncData({ store: $store });
+    });
+
+    it('will dispatch `notifications/load`', () => {
+      expect($store.dispatch).toBeCalledWith('notifications/load');
+    });
   });
 
   describe('toggle', () => {

@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import com.nhs.online.nhsonline.clients.FirebaseClient
+import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import org.junit.Before
 import org.junit.Test
@@ -19,30 +20,61 @@ class NotificationsServiceTest {
     private lateinit var notificationsService: NotificationsService
     private lateinit var firebaseClient: FirebaseClient
     private lateinit var appWebInterface: AppWebInterface
+    private lateinit var notificationManager: NotificationManagerCompat
 
     @Before
     fun setUp() {
         appWebInterface = mock()
         firebaseClient = mock()
-        notificationsService = NotificationsService(appWebInterface, firebaseClient)
+        notificationManager = mock()
+        notificationsService = NotificationsService(appWebInterface, firebaseClient, notificationManager)
     }
 
     @Test
     fun registerForPushNotifications_whenItGetsToken_shouldCallAuthorised() {
         val task: Task<InstanceIdResult> = Tasks.forResult(mock { on { token }.thenReturn("12345") })
         whenever(firebaseClient.instanceId).thenReturn(task)
+        whenever(notificationManager.areNotificationsEnabled()).thenReturn(true)
 
-        notificationsService.registerForPushNotifications()
+        notificationsService.registerForPushNotifications("load")
 
-        verify(appWebInterface).notificationsAuthorised("12345")
+        verify(appWebInterface).notificationsAuthorised("12345", "load")
     }
 
     @Test
     fun registerForPushNotifications_whenGettingTokenThrowsException_shouldCallUnauthorised() {
         whenever(firebaseClient.instanceId).thenThrow(IllegalStateException())
+        whenever(notificationManager.areNotificationsEnabled()).thenReturn(true)
 
-        notificationsService.registerForPushNotifications()
+        notificationsService.registerForPushNotifications("load")
 
         verify(appWebInterface).notificationsUnauthorised()
+    }
+
+    @Test
+    fun registerForPushNotifications_whenNotificationsNotEnabled_shouldCallUnauthorised() {
+        whenever(notificationManager.areNotificationsEnabled()).thenReturn(false)
+
+        notificationsService.registerForPushNotifications("load")
+
+        verify(appWebInterface).notificationsUnauthorised()
+    }
+
+    @Test
+    fun areNotificationsEnabled_whenNotificationsAreEnabled_shouldCallbackWebWithTrue() {
+        whenever(notificationManager.areNotificationsEnabled()).thenReturn(true)
+
+        notificationsService.areNotificationsEnabled()
+
+        verify(appWebInterface).areNotificationsEnabled(true)
+    }
+
+    @Test
+    fun areNotificationsEnabled_whenNotificationsAreNotEnabled_shouldCallbackWebWithFalse() {
+        whenever(notificationManager.areNotificationsEnabled()).thenReturn(false)
+
+        notificationsService.areNotificationsEnabled()
+
+        verify(appWebInterface).areNotificationsEnabled(false)
     }
 }

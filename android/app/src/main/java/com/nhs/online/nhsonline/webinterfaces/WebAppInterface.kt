@@ -16,6 +16,12 @@ class WebAppInterface(
 ) {
 
     @JavascriptInterface
+    fun areNotificationsEnabled() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering areNotificationsEnabled")
+        activity.runOnUiThread { nhsWeb.areNotificationsEnabled() }
+    }
+
+    @JavascriptInterface
     fun clearMenuBarItem() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering clearMenuBarItem")
         activity.runOnUiThread { uiInteractor.clearMenuBarItem() }
@@ -83,9 +89,9 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun requestPnsToken() {
+    fun requestPnsToken(trigger: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering requestPnsToken")
-        activity.runOnUiThread { nhsWeb.requestPnsToken() }
+        activity.runOnUiThread { nhsWeb.requestPnsToken(trigger) }
     }
 
     @JavascriptInterface

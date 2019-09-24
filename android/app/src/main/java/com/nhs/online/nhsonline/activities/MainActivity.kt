@@ -32,6 +32,7 @@ import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.support.*
+import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
@@ -84,7 +85,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
         configureWebView()
         appWebInterface = AppWebInterface(webview)
-        val notificationsService = NotificationsService(appWebInterface, FirebaseClient())
+        val notificationManager = NotificationManagerCompat(this)
+        val notificationsService = NotificationsService(appWebInterface, FirebaseClient(), notificationManager)
         nhsWeb = NhsWeb(this, this, webview, notificationsService)
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }

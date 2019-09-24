@@ -272,8 +272,8 @@ class NhsWeb(
         uiInteractor.showBlankScreen()
     }
 
-    fun requestPnsToken() {
-        notificationsService.registerForPushNotifications()
+    fun requestPnsToken(trigger: String) {
+        notificationsService.registerForPushNotifications(trigger)
     }
 
     private fun clearCookie(cookieName: String, domain: String) {
@@ -281,5 +281,7 @@ class NhsWeb(
                 .setCookie(domain, "$cookieName=; Expires=Sat, 1 Jan 2000 00:00:01 UTC;")
     }
 
-
+    fun areNotificationsEnabled() {
+        notificationsService.areNotificationsEnabled()
+    }
 }

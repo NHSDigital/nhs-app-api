@@ -74,10 +74,10 @@ class WebAppInterfaceTest {
     fun requestPnsToken() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
 
-        webAppInterface.requestPnsToken()
+        webAppInterface.requestPnsToken("load")
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(nhsWebMock).requestPnsToken()
+        verify(nhsWebMock).requestPnsToken("load")
     }
 
     @Test

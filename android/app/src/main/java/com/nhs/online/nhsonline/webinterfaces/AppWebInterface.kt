@@ -28,18 +28,22 @@ class AppWebInterface(private val webview: WebView) {
         loadDispatchEvent("session/extend")
     }
 
-    fun notificationsAuthorised(devicePns: String) {
-        val response = "{\"devicePns\":\"$devicePns\",\"deviceType\":\"android\"}"
+    fun areNotificationsEnabled(areEnabled: Boolean) {
+        loadDispatchEvent("notifications/settingsEnabled", areEnabled.toString())
+    }
+
+    fun notificationsAuthorised(devicePns: String, trigger: String) {
+        val response = "'{\"devicePns\":\"$devicePns\",\"deviceType\":\"android\",\"trigger\":\"$trigger\"}'"
         loadDispatchEvent("notifications/authorised", response)
     }
 
     fun notificationsUnauthorised() {
-        loadDispatchEvent("notifications/unAuthorised")
+        loadDispatchEvent("notifications/unauthorised")
     }
 
     private fun loadDispatchEvent(event: String, args: String = "") {
         evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event'" +
-                "${ if (args != "") ", '$args'" else "" })")
+                "${ if (args != "") ", $args" else "" })")
     }
 
     private fun evaluateWebviewJavascript(javascriptText: String) {

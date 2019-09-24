@@ -18,7 +18,6 @@ namespace NHSOnline.Backend.UsersApi
             services.AddSingleton<IRegistrationDescriptionFactory, RegistrationDescriptionFactory>();
             services.AddSingleton<IAzureNotificationHubClient, AzureNotificationHubClient>();
             services.AddSingleton<INotificationService, AzureNotificationHubService>();
-            services.AddSingleton<INotificationRegistrationService, NotificationRegistrationService>();
             services.AddTransient<CitizenIdHttpRequestIdentifier>();
 
             services.AddHttpClient<CitizenIdHttpClient>()

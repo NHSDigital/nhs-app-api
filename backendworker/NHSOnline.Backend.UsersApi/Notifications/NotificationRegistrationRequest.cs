@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
