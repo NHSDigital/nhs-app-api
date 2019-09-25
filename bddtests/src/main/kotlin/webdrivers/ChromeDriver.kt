@@ -8,7 +8,6 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import webdrivers.options.ChromeOptionManager.Companion.DEBUG_PORT
 
-private const val LATEST_STABLE_CHROME_DRIVER_MAJOR_VERSION_NUMBER = "75"
 private const val CHROME_PROCESS_NAME = "chrome"
 
 open class ChromeDriver : DriverSource {
@@ -33,7 +32,7 @@ open class ChromeDriver : DriverSource {
             }
         }
 
-        WebDriverManager.chromedriver().version(LATEST_STABLE_CHROME_DRIVER_MAJOR_VERSION_NUMBER).setup()
+        WebDriverManager.chromedriver().setup()
 
         /**
         Configure the web socket debug port for communicating with the

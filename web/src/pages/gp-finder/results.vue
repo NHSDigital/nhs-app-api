@@ -85,6 +85,7 @@
 
 <script>
 /* eslint-disable global-require */
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import { setCookie } from '@/lib/cookie-manager';
 import { GP_FINDER, GP_FINDER_PARTICIPATION } from '@/lib/routes';
@@ -93,6 +94,7 @@ import moment from 'moment';
 
 export default {
   components: {
+    AnalyticsTrackedTag,
     MessageDialog,
   },
   data() {
