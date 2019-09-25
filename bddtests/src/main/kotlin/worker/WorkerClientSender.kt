@@ -34,11 +34,11 @@ class WorkerClientSender{
 
     fun sendAsyncAndGetResult(request: HttpUriRequest, context: HttpContext? = null): String? {
         val response = sendAsync(request, context)
-        if(response != null) {
+        if (response != null && response.entity != null) {
             val rd = BufferedReader(InputStreamReader(response.entity.content))
             val result = rd.use { it.readText() }
             return result
-        }else {
+        } else {
             return null
         }
     }

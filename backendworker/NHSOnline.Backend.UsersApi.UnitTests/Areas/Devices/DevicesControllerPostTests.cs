@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -34,15 +32,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            var identity = new ClaimsIdentity(new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, _fixture.Create<string>()),
-                new Claim("nhs_number", _fixture.Create<string>())
-            });
-
-            var mockHttpContext = _fixture.Create<Mock<HttpContext>>();
-            mockHttpContext.Setup(x => x.User)
-                .Returns(new ClaimsPrincipal(identity));
+            var mockHttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
 
             _mockNotificationService = _fixture.Freeze<Mock<INotificationService>>();
             _mockDeviceRepositoryService = _fixture.Freeze<Mock<IDeviceRepositoryService>>();

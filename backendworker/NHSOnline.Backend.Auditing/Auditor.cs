@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing
@@ -58,7 +59,13 @@ namespace NHSOnline.Backend.Auditing
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
             await AuditInternal(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
         }
-        
+
+        public Task AuditSecureTokenEvent(AccessToken accessToken, Supplier supplier, string operation, string details,
+            params object[] parameters)
+        {
+            return AuditInternal(accessToken.Subject, accessToken.NhsNumber, supplier, operation, details, parameters);
+        }
+
         public IDisposable BeginScope(HttpContext httpContext)
         {
             _scopeProvider.Value = new HttpContextAuditorScope(httpContext, _configuration);
@@ -124,7 +131,7 @@ namespace NHSOnline.Backend.Auditing
         {
             try
             {
-                var token = Auth.CitizenId.Models.AccessToken.Parse(_logger, accessToken);
+                var token = AccessToken.Parse(_logger, accessToken);
                 return token.Subject;
             }
             catch (Exception e)

@@ -58,5 +58,7 @@ namespace NHSOnline.Backend.Auditing
         public const string OnlineConsultationsDemographicAuditTypeRequest = "OnlineConsultations_Demographics_Request";
         public const string RegisterUsersDeviceAuditTypeRequest = "Users_Device_Registration_Request";
         public const string RegisterUsersDeviceAuditTypeResponse = "Users_Device_Registration_Response";
+        public const string GetUserMessagesAuditTypeRequest = "Users_Messages_Get_Request";
+        public const string GetUserMessagesAuditTypeResponse = "Users_Messages_Get_Response";
     }
 }

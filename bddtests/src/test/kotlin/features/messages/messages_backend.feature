@@ -1,7 +1,5 @@
 @messages
 Feature: Messages Backend
-
-  @pending @NHSO-6498
   Scenario: An api user can get their messages
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
@@ -9,21 +7,18 @@ Feature: Messages Backend
     Then I receive a "OK" success code
     And I receive my messages
 
-  @pending @NHSO-6498
   Scenario: An api user getting their messages where no messages are stored will receive a 204
     Given I am an api user wishing to get my messages, but I have no messages
     And I have logged in and have a valid session cookie
     When I get my messages from the api
     Then I receive a "No Content" success code
 
-  @pending @NHSO-6498
   Scenario: An api user getting their messages without an access token will receive a 401
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
     When I get my messages from the api without an auth token
     Then I receive an "Unauthorized" error
 
-  @pending @NHSO-6498
   Scenario: An api user getting their messages with an invalid access token will receive a 401
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie

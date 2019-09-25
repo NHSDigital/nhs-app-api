@@ -154,6 +154,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
 
             var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
             var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);
@@ -252,6 +253,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
         }
     }
 }

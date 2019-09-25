@@ -7,7 +7,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import worker.models.messages.MessageRequest
-import worker.models.messages.MessageResponses
+import worker.models.messages.MessageResponse
 
 class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
@@ -24,7 +24,7 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
         return response!!
     }
 
-    fun get(authToken: String?): MessageResponses {
+    fun get(authToken: String?): Array<MessageResponse> {
         val httpGet = HttpGet(uri("me"))
 
         if (authToken != null) {
@@ -33,7 +33,10 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
 
         val response = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
-        return gson.fromJson(response, MessageResponses::class.java)
+        if (response != null) {
+            return gson.fromJson(response, Array<MessageResponse>::class.java)
+        }
+        return arrayOf()
     }
 
     private fun uri(userIdentifier: String): String {

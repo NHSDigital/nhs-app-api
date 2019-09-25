@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -42,5 +45,30 @@ namespace NHSOnline.Backend.MessagesApi.Repository
                 _logger.LogExit();
             }
         }
+
+        [SuppressMessage("Microsoft.Globalization", "CA1309",
+            Justification = "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
+        public async Task<List<UserMessage>> Find(string nhsLoginId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                new ValidateAndLog(_logger)
+                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ValidateAndLog.ValidationOptions.ThrowError)
+                    .IsValid();
+
+                using (_logger.WithTimer("Find messages in Mongo"))
+                {
+                    var messages= await FindMultipleAsync(d => d.NhsLoginId == nhsLoginId);
+                    return messages.ToList();
+                }
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
     }
 }

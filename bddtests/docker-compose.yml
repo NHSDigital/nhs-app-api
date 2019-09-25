@@ -215,6 +215,9 @@ services:
       - MESSAGES_MONGO_DATABASE_PORT=27017
       - MESSAGES_MONGO_DATABASE_USERNAME=
       - MESSAGES_MONGO_DATABASE_PASSWORD=
+      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - CITIZEN_ID_CLIENT_ID=nhs-online
+      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
   log.local.bitraft.io:
     image: nhsonline.backend.loggerapi
     ports:

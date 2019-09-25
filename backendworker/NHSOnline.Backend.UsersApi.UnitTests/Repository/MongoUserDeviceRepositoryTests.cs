@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.UsersApi.Repository;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
 {
@@ -72,9 +73,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         {
             // Arrange
             var userDevice = _fixture.Create<UserDevice>();
-            var cursorMock = _fixture.Create<Mock<IAsyncCursor<UserDevice>>>();
-            cursorMock.Setup(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(true);
-            cursorMock.SetupGet(x => x.Current).Returns(new[] { userDevice });
+            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[]{userDevice});
 
             _mongoCollectionMock
                 .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserDevice>>(),
@@ -94,8 +93,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Find_WhenDeviceIdRecordDoesNotExist_ShouldNotReturnRecord()
         {
             // Arrange
-            var cursorMock = _fixture.Create<Mock<IAsyncCursor<UserDevice>>>();
-            cursorMock.Setup(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(false);
+            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserDevice>(_fixture);
 
             _mongoCollectionMock
                 .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserDevice>>(),
