@@ -62,20 +62,27 @@ class NotificationsService {
         let devicePns = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         
         Logger.logInfo(message: "Notifications permission granted")
-        self.appWebInterface.notificationsAuthorised(devicePns: devicePns, trigger: trigger)
+        appWebInterface.notificationsAuthorised(devicePns: devicePns, trigger: trigger)
+        resetTrigger()
     }
     
     func failedToRegister() {
         Logger.logInfo(message: "Failed to register for notifications")
-        self.appWebInterface.notificationsUnauthorised()
+        appWebInterface.notificationsUnauthorised()
+        resetTrigger()
     }
     
     private func unauthorised() {
         Logger.logInfo(message: "Notifications permission not granted")
-        self.appWebInterface.notificationsUnauthorised()
+        appWebInterface.notificationsUnauthorised()
+        resetTrigger()
     }
     
     private func logNotSupported() {
         Logger.logInfo(message: "Os too old, not supported")
+    }
+    
+    private func resetTrigger() {
+        trigger = "load"
     }
 }
