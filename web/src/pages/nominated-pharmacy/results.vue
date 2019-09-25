@@ -2,18 +2,12 @@
   <div :class="[$style['pull-content'], $style.content,
                 !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div v-if="noResultsFound" :class="$style.resultPanel">
-      <h2>
-        {{ $t('nominatedPharmacySearchResults.errors.noResultsFound.header') }}
-      </h2>
       <p> {{ foundNoResults }} </p>
-      <h2>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.subHeader') }}</h2>
-      <ul :class="$style.bullet">
-        <li>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.message1') }}</li>
-        <li>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.message2') }}</li>
-      </ul>
+      <p>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.message') }}</p>
     </div>
     <div v-if="!noResultsFound" :class="$style.resultPanel">
-      <p>{{ foundResults }}</p>
+      <div>{{ foundResults }}</div>
+      <div>{{ $t('nominatedPharmacySearchResults.resultSummary.distanceInformation') }}</div>
       <ul id="searchResults"
           :class="[$style['list-menu-white'], $style.resultList]">
         <li v-for="pharmacy in pharmacies"

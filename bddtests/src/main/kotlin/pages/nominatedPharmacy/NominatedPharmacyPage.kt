@@ -8,14 +8,19 @@ import pages.sharedElements.BannerObject
 @DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy")
 open class NominatedPharmacyPage : PharmacyDetailComponent() {
 
-    val nominatedPharmacyLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(), 'Nominate a pharmacy')]",
-            page = this
-    )
-
     val changePharmacyLink = HybridPageElement(
                 webDesktopLocator = "//a[contains(text(), 'Change my nominated pharmacy')]",
                 page = this
+    )
+
+    val cannotChangeDispensingPractiseInformationLine1 = HybridPageElement(
+            webDesktopLocator = "//*[@id='warning-text-1']",
+            page = this
+    )
+
+    val cannotChangeDispensingPractiseInformationLine2 = HybridPageElement(
+            webDesktopLocator = "//*[@id='warning-text-2']",
+            page = this
     )
 
     private lateinit var headerNative: HeaderNative
@@ -24,11 +29,19 @@ open class NominatedPharmacyPage : PharmacyDetailComponent() {
         BannerObject.success(this).assertVisible("You changed your nominated pharmacy.")
     }
 
+    fun assertYouHaveChosenYourNominatedPharmacyBannerIsVisible() {
+        BannerObject.success(this).assertVisible("You've chosen your nominated pharmacy.")
+    }
+
     fun isLoadedWithPharmacy() {
         headerNative.waitForPageHeaderText("My nominated pharmacy")
     }
 
+    fun isLoadedWithDispensingPractiseHeader() {
+        headerNative.waitForPageHeaderText("My dispensing practice")
+    }
+
     fun isLoadedWithNoPharmacy() {
-        headerNative.waitForPageHeaderText("You have not nominated a pharmacy")
+        headerNative.waitForPageHeaderText("Nominate my pharmacy")
     }
 }

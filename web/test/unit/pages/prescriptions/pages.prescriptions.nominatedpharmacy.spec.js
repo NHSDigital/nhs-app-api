@@ -1,6 +1,10 @@
 import PrescriptionsPage from '@/pages/prescriptions/index';
 import { createRouter, createStore, mount } from '../../helpers';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_CHECK, PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
+import { NOMINATED_PHARMACY,
+  NOMINATED_PHARMACY_CHECK,
+  NOMINATED_PHARMACY_SEARCH,
+  PRESCRIPTIONS,
+  PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 
 describe('prescriptions/index.vue', () => {
   let wrapper;
@@ -29,7 +33,6 @@ describe('prescriptions/index.vue', () => {
         'serviceJourneyRules/nominatedPharmacyEnabled': isEnabled,
       },
     });
-
     $store.app.$analytics = {
       trackButtonClick: jest.fn(),
     };
@@ -46,7 +49,45 @@ describe('prescriptions/index.vue', () => {
     });
   };
 
-  describe('nominated pharmacy is enabled', () => {
+  const mountPageWithNominatedPharmacy = (isEnabled) => {
+    $router = createRouter();
+    $store = createStore({
+      state: {
+        device: {
+          isNativeApp: true,
+        },
+        prescriptions: {
+          hasLoaded: true,
+          prescriptionCourses: {},
+        },
+        nominatedPharmacy: {
+          pharmacy: {
+            pharmacyName: 'Boots',
+          },
+        },
+      },
+      getters: {
+        'nominatedPharmacy/nominatedPharmacyEnabled': isEnabled,
+        'serviceJourneyRules/nominatedPharmacyEnabled': isEnabled,
+      },
+    });
+
+    $store.app.$analytics = {
+      trackButtonClick: jest.fn(),
+    };
+    return mount(PrescriptionsPage, {
+      $route: {
+        name: PRESCRIPTIONS.name,
+      },
+      $router,
+      $store,
+      stubs: {
+        'page-title': '<div></div>',
+      },
+    });
+  };
+
+  describe('nominated pharmacy is enabled but not assigned', () => {
     beforeEach(() => {
       wrapper = mountPage(true);
     });
@@ -72,13 +113,13 @@ describe('prescriptions/index.vue', () => {
           nominatedPharmacyLink.trigger('click');
         });
 
-        it('will track nominated pharmacy check path', () => {
+        it('will track nominated pharmacy search path when no nominated pharmacy is assigned', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(NOMINATED_PHARMACY.path, true);
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY_SEARCH.path, true);
         });
 
-        it('will redirect to nominated pharmacy check page', () => {
-          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY.path);
+        it('will redirect to nominated pharmacy search page when no nominated pharmacy is assigned', () => {
+          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY_SEARCH.path);
         });
       });
     });
@@ -102,6 +143,44 @@ describe('prescriptions/index.vue', () => {
 
         it('will redirect to nominated pharmacy check page', () => {
           expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY_CHECK.path);
+        });
+      });
+    });
+  });
+
+  describe('nominated pharmacy is enabled and assigned', () => {
+    beforeEach(() => {
+      wrapper = mountPageWithNominatedPharmacy(true);
+    });
+
+    it('will show pharmacy section', () => {
+      expect(wrapper.find('#nominated-pharmacy-section').exists()).toBe(true);
+    });
+
+    describe('pharmacy link', () => {
+      let nominatedPharmacyLink;
+
+      beforeEach(() => {
+        global.digitalData = {};
+        nominatedPharmacyLink = wrapper.find('#nominated-pharmacy');
+      });
+
+      it('will exist', () => {
+        expect(nominatedPharmacyLink.exists()).toEqual(true);
+      });
+
+      describe('clicked', () => {
+        beforeEach(() => {
+          nominatedPharmacyLink.trigger('click');
+        });
+
+        it('will track nominated pharmacy search path when no nominated pharmacy is assigned', () => {
+          expect($store.app.$analytics.trackButtonClick)
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY.path, true);
+        });
+
+        it('will redirect to nominated pharmacy search page when no nominated pharmacy is assigned', () => {
+          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY.path);
         });
       });
     });

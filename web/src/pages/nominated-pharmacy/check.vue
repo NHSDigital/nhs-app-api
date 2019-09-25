@@ -13,7 +13,7 @@
                        :is-my-nominated-pharmacy="true"
                        :previous-path="currentPage"
                        :can-change-pharmacy="showChangePharmacyLink"
-                       :show-instruction="!isInternetPharmacy" />
+                       :show-instruction="false" />
     </div>
 
     <generic-button id="continue-button-found"
@@ -43,7 +43,6 @@ import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -69,9 +68,6 @@ export default {
     },
     showChangePharmacyLink() {
       return (this.pharmacy.pharmacyType !== PharmacyType.P3);
-    },
-    isInternetPharmacy() {
-      return (this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy);
     },
     prescriptionsPath() {
       return PRESCRIPTIONS.path;

@@ -16,6 +16,15 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
                 page = this
     )
 
+    private val noResultsFoundHeader = HybridPageElement(
+            webDesktopLocator = "//h1[contains(text(), 'No results found')]",
+            page = this
+    )
+
+    fun showsNoResultsFoundHeader() {
+        noResultsFoundHeader.isVisible
+    }
+
     fun isLoaded(): Boolean {
         return listOfPharmacies.isVisible
     }

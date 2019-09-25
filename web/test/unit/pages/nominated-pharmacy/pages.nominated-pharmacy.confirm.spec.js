@@ -3,6 +3,7 @@ import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/rou
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
 import { create$T, createStore, mount } from '../../helpers';
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 
 const $t = create$T();
 
@@ -22,6 +23,9 @@ describe('confirm nominated pharmacy', () => {
           day: 'Sunday',
           times: [],
         }],
+        pharmacyType: PharmacyType.P1,
+      },
+      pharmacy: {
       },
     },
   }) => state;
@@ -31,21 +35,35 @@ describe('confirm nominated pharmacy', () => {
   describe('nominated pharmacy details', () => {
     let pharmacyDetails;
 
-    beforeEach(() => {
+    it('will exist', () => {
       $store = createStore({
         dispatch: jest.fn(() => Promise.resolve()), state: createState(),
       });
       wrapper = mountPage();
       pharmacyDetails = wrapper.find(PharmacyDetail);
-    });
-
-    it('will exist', () => {
       expect(pharmacyDetails.exists()).toBe(true);
     });
 
-    it('will translate the line 1 text', () => {
+    it('will translate the line text for pharmacy', () => {
+      const state = createState();
+      state.nominatedPharmacy.selectedNominatedPharmacy.pharmacyType = PharmacyType.P1;
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()), state,
+      });
+      wrapper = mountPage();
+      pharmacyDetails = wrapper.find(PharmacyDetail);
       expect($t).toHaveBeenCalledWith('nominated_pharmacy.confirm.line1');
-      expect($t).toHaveBeenCalledWith('nominated_pharmacy.line1');
+    });
+
+    it('will translate the line text for dispensing practice', () => {
+      const state = createState();
+      state.nominatedPharmacy.selectedNominatedPharmacy.pharmacyType = PharmacyType.P3;
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()), state,
+      });
+      wrapper = mountPage();
+      pharmacyDetails = wrapper.find(PharmacyDetail);
+      expect($t).toHaveBeenCalledWith('nominated_pharmacy.confirm.line1');
     });
   });
 
@@ -78,11 +96,31 @@ describe('confirm nominated pharmacy', () => {
         .toEqual('translate_nominated_pharmacy.confirm.confirmButton');
     });
 
-    it('will submit nominated pharmacy on click and call to redirect', async () => {
+    it('will submit nominated pharmacy on click and call to redirect when pharmacy is being nominated for the first time', async () => {
       dependency.redirectTo = jest.fn();
       await confirmButton.trigger('click');
-      expect($store.dispatch).toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', 'RR123');
-      expect($store.dispatch).toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChanged');
+      expect($store.dispatch)
+        .toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', $store.state.nominatedPharmacy.selectedNominatedPharmacy.odsCode);
+      expect($store.dispatch)
+        .toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChosen');
+      expect($store.dispatch)
+        .toHaveBeenNthCalledWith(3, 'nominatedPharmacy/clearSelectedNominatedPharmacy');
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
+    });
+
+    it('will submit nominated pharmacy on click and call to redirect when changing an existing nominated pharmacy', async () => {
+      dependency.redirectTo = jest.fn();
+      $store.state.nominatedPharmacy.pharmacy.pharmacyName = 'Boots';
+      $store.state.nominatedPharmacy.pharmacy.pharmacyType = 'P1';
+
+      await confirmButton.trigger('click');
+      expect($store.dispatch)
+        .toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', $store.state.nominatedPharmacy.selectedNominatedPharmacy.odsCode);
+      expect($store.dispatch)
+        .toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChanged');
+      expect($store.dispatch)
+        .toHaveBeenNthCalledWith(3, 'nominatedPharmacy/clearSelectedNominatedPharmacy');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
     });
@@ -132,15 +170,6 @@ describe('confirm nominated pharmacy', () => {
     it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {
       expect(confirmButton.text())
         .toEqual('translate_nominated_pharmacy.confirm.confirmButton');
-    });
-
-    it('will submit nominated pharmacy on click and call to redirect', async () => {
-      dependency.redirectTo = jest.fn();
-      await confirmButton.trigger('click');
-      expect($store.dispatch).toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', 'RR123');
-      expect($store.dispatch).toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChanged');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
     });
   });
 

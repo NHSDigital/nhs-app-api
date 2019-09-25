@@ -28,7 +28,7 @@
           <sjr-if journey="nominatedPharmacy">
             <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
               <hr>
-              <b>{{ $t('rp04.nominatedPharmacyHeader') }}</b>
+              <b>{{ pharmacyHeader }}</b>
               <pharmacy-summary id="pharmacy-summary"
                                 :pharmacy="nominatedPharmacy"
                                 :pharmacy-name-as-header="false" />
@@ -37,6 +37,18 @@
         </Card>
       </CardGroupItem>
     </CardGroup>
+    <div>
+      <generic-button v-if="$store.state.device.isNativeApp"
+                      id="back-to-prescriptions"
+                      :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                      @click="backToPrescriptionsClicked">
+        {{ $t('rp04.backButton') }}
+      </generic-button>
+      <desktopGenericBackLink v-else
+                              :path="prescriptionRepeatCoursesPath"
+                              :button-text="'rp04.backButton'"
+                              @clickAndPrevent="backToPrescriptionsClicked"/>
+    </div>
     <div>
       <no-js-form :action="confirmPrescriptionsPath" :value="{}" method="post">
         <input value="true" type="hidden" name="nojs.repeatPrescriptionCourses.submitted">
@@ -55,18 +67,6 @@
         </generic-button>
       </no-js-form>
     </div>
-    <div>
-      <generic-button v-if="$store.state.device.isNativeApp"
-                      id="back-to-prescriptions"
-                      :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                      @click="backToPrescriptionsClicked">
-        {{ $t('rp04.backButton') }}
-      </generic-button>
-      <desktopGenericBackLink v-else
-                              :path="prescriptionRepeatCoursesPath"
-                              :button-text="'rp04.backButton'"
-                              @clickAndPrevent="backToPrescriptionsClicked"/>
-    </div>
   </div>
 </template>
 
@@ -75,6 +75,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import GenericButton from '@/components/widgets/GenericButton';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import SjrIf from '@/components/SjrIf';
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import { redirectTo } from '@/lib/utils';
 import {
   PRESCRIPTIONS,
@@ -128,6 +129,12 @@ export default {
     },
     confirmPrescriptionsPath() {
       return PRESCRIPTION_CONFIRM_COURSES.path;
+    },
+    pharmacyHeader() {
+      if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
+        return this.$t('rp04.dispensingPracticeHeader');
+      }
+      return this.$t('rp04.nominatedPharmacyHeader');
     },
   },
   async fetch({ store, redirect }) {

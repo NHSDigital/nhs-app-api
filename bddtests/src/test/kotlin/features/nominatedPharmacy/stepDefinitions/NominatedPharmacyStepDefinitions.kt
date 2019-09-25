@@ -8,11 +8,11 @@ import features.nominatedPharmacy.steps.NominatedPharmacyDataSetupSteps
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
+import models.nominatedPharmacy.Postcode
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import pages.isVisible
-import pages.nominatedPharmacy.CannotChangeNominatedPharmacyPage
 import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
 import pages.nominatedPharmacy.NominatedPharmacyPage
 import pages.nominatedPharmacy.NominatedPharmacyResultsPage
@@ -34,17 +34,23 @@ class NominatedPharmacyStepDefinitions {
 
     private lateinit var prescriptionsPage: PrescriptionsPage
 
-    private lateinit var cantChangeNominatedPharmacyPage : CannotChangeNominatedPharmacyPage
-
     @Steps
     private lateinit var nominatedPharmacyDataSetupSteps: NominatedPharmacyDataSetupSteps
 
     @Given("^searching for pharmacies with (.*) has (\\d+) results")
-    fun searchTextHasResults(searchText: String, numberOfResults: Int) {
+    fun searchTextHasResults(searchTerm: String, numberOfResults: Int) {
+
+        val postcodeMatchesReply = NhsAzureSearchData.getSuccessfulPostcodeMatch()
+        nominatedPharmacyDataSetupSteps.setupWiremockForPostcodeAndPlacesSearch(searchTerm, postcodeMatchesReply)
+
+        val postcodeCoordinates = Postcode(
+                latitude = postcodeMatchesReply.value[0].Latitude.toString(),
+                longitude = postcodeMatchesReply.value[0].Longitude.toString()
+        )
+
         val data = NhsAzureSearchData.generatePharmacyData(numberOfResults)
         NominatedPharmacySerenityHelpers.SEARCH_RESULTS.set(data)
-
-        nominatedPharmacyDataSetupSteps.setupWiremockForPharmacyTextSearch(searchText, data)
+        nominatedPharmacyDataSetupSteps.setupWiremockForPharmacyPostcodeSearch(postcodeCoordinates, data)
     }
 
     @Given("^my GP Practice is EPS enabled$")
@@ -85,11 +91,6 @@ class NominatedPharmacyStepDefinitions {
     @When("^I click on change my nominated pharmacy link$")
     fun iClickOnChangeMyNominatedPharmacyLink() {
         nominatedPharmacyPage.changePharmacyLink.click()
-    }
-
-    @When("^I click on nominate a pharmacy link$")
-    fun iClickOnNominateAPharmacyLink() {
-        nominatedPharmacyPage.nominatedPharmacyLink.click()
     }
 
     @When("^I click on the nominated pharmacy panel$")
@@ -138,17 +139,22 @@ class NominatedPharmacyStepDefinitions {
 
         assertEquals(
                 "Nominated pharmacy name is not correct",
-                updatedPharmacy.OrganisationName, prescriptionsPage.nominatedPharmacyName.text)
+                updatedPharmacy.OrganisationName, prescriptionsPage.getNominatedPharmacyName())
     }
 
     @Then("^I see that I haven't nominated a pharmacy on the prescriptions page$")
     fun iSeeThatIHaventNominatedAPharmacyOnThePrescriptionsPage() {
-        assertEquals("No nominated pharmacy", prescriptionsPage.nominatedPharmacyName.text)
+        assertEquals("You've not nominated a pharmacy", prescriptionsPage.getNominatedPharmacyName())
     }
 
     @Then("^I see nominated pharmacy page loaded$")
     fun iAmRedirectedToNominatedPharmacyPage() {
         nominatedPharmacyPage.isLoadedWithPharmacy()
+    }
+
+    @Then("^I see nominated pharmacy page loaded with dispensing practise header$")
+    fun iAmRedirectedToNominatedPharmacyPageShowingDispensingPractise() {
+        nominatedPharmacyPage.isLoadedWithDispensingPractiseHeader()
     }
 
     @Then("^I see nominated pharmacy page loaded without a pharmacy$")
@@ -163,16 +169,14 @@ class NominatedPharmacyStepDefinitions {
                 nominatedPharmacyPage.changePharmacyLink.isVisible)
     }
 
-    @Then("^I see the nominate a pharmacy link$")
-    fun iSeeNominatedAPharmacyLink() {
-        assertTrue(
-                "Nominate a pharmacy link is not visible",
-                nominatedPharmacyPage.nominatedPharmacyLink.isVisible)
-    }
-
     @Then("^I see search nominated pharmacy page loaded$")
     fun iSeeSearchNominatedPharmacyLoaded() {
         searchNominatedPharmacyPage.isLoaded()
+    }
+
+    @Then("^I see the no results found page$")
+    fun iSeeNoResultsFound() {
+        nominatedPharmacyResultsPage.showsNoResultsFoundHeader()
     }
 
     @Then("^I see list of pharmacies displayed on the result page$")
@@ -227,6 +231,27 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyPage.isLoadedWithPharmacy()
         nominatedPharmacyPage.assertYouHaveChangedYourPharmacySuccessBannerIsVisible()
 
+        checkPharmacyDetailsAreCorrect()
+    }
+
+    @Then("^I see my nominated pharmacy page with chosen pharmacy details$")
+    fun iSeeNominatedPharmacyPageWithChosenPharmacyDetails() {
+        nominatedPharmacyPage.isLoadedWithPharmacy()
+        nominatedPharmacyPage.assertYouHaveChosenYourNominatedPharmacyBannerIsVisible()
+
+        checkPharmacyDetailsAreCorrect()
+    }
+
+    @Then("^I see how to change dispensing practice instruction$")
+    fun iSeeHowToChangeDispensingPractise() {
+        assertTrue("Instruction 1 to change pharmacy is not visible",
+                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine1.isVisible)
+
+        assertTrue("Instruction 2 to change pharmacy is not visible",
+                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine2.isVisible)
+    }
+
+    private fun checkPharmacyDetailsAreCorrect() {
         val selectedPharmacy = NominatedPharmacySerenityHelpers
                 .MY_NOMINATED_PHARMACY
                 .getOrFail<NhsAzureSearchOrganisationItem>()
@@ -237,17 +262,5 @@ class NominatedPharmacyStepDefinitions {
         assertEquals(
                 "Pharmacy address is not correct",
                 selectedPharmacy.addressFormatted(), nominatedPharmacyPage.pharmacyAddress.text)
-    }
-
-    @Then("^I see cannot change pharmacy page$")
-    fun iSeeCannotChangePharmacyPage() {
-        cantChangeNominatedPharmacyPage.isLoaded()
-    }
-
-    @Then("^I see header with how to change pharmacy instruction$")
-    fun iSeeHeaderWithHowToChangePharmacy() {
-        assertTrue(
-                "Instruction to change pharmacy is not visible",
-                cantChangeNominatedPharmacyPage.changePharmacyInstruction.isVisible)
     }
 }

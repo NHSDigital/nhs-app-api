@@ -82,10 +82,10 @@ export default {
       },
     },
     inputClasses() {
-      return [
+      return this.textAreaClasses.concat([
         this.$style['nhsuk-textarea'],
         this.error && this.$style['nhsuk-textarea--error'],
-      ];
+      ]);
     },
     errorId() {
       return this.id ? `${this.id}-error-message` : 'error-message';

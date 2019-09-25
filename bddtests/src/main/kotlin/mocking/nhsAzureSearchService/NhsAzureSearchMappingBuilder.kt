@@ -36,3 +36,17 @@ open class NhsAzureSearchPostcodesAndPlacesMappingBuilder(method: String)
     var nhsAzureSearch = NhsAzureSearchServiceMappingBuilder()
 
 }
+
+open class NhsAzureSearchPostcodesMappingBuilder(method: String)
+    : MappingBuilder(method, "/nhs-search-indexes/service-search/postcodesandplaces/search?api-version=1") {
+
+    init {
+        requestBuilder
+                .andHeader(HEADER_API_KEY, Config.instance.gpLookupApiKey)
+                .andHeader(HEADER_API_CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+                .andQueryParameter(API_VERSION_QUERY_NAME, API_VERSION_QUERY_VALUE)
+    }
+
+    var nhsAzureSearch = NhsAzureSearchServiceMappingBuilder()
+
+}

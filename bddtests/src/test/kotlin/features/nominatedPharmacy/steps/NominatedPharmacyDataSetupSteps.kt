@@ -7,9 +7,13 @@ import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationRequestBody
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationWithPostcodeRequestBody
+import mocking.nhsAzureSearchService.NHSAzureSearchPostcodesAndPlacesReply
+import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesRequestBody
 import mocking.spine.pds.GetNominatedPharmacyRequestBuilder
 import mocking.spine.pds.PdsNominatedPharmacyBuilder
 import mocking.spine.pds.PersonalCheckDetails
+import models.nominatedPharmacy.Postcode
 import utils.SerenityHelpers
 import utils.set
 
@@ -235,19 +239,33 @@ open class NominatedPharmacyDataSetupSteps {
         }
     }
 
-    fun setupWiremockForPharmacyTextSearch(searchText: String, data: NhsAzureSearchOrganisationReply) {
+    fun setupWiremockForPharmacyPostcodeSearch(postcode: Postcode, data: NhsAzureSearchOrganisationReply) {
         mockingClient.forAzure.forSearchOrganisation {
-            nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
+            nhsAzureSearch.nhsAzureSearchPostcodeOrganisationRequest(NhsAzureSearchOrganisationWithPostcodeRequestBody(
                     top = 10,
-                    search = "Metrics:10051 AND ${searchText}*",
-                    select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode," +
-                            "NACSCode,Geocode,Contacts,OpeningTimes",
-                    searchFields = "OrganisationName,Address2,Address3,City",
-                    filter = "OrganisationSubType eq 'Community Pharmacy'",
+                    select = "OrganisationID,OrganisationName,Address1,Address2,Address3," +
+                            "City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
+                    filter = "OrganisationSubType eq 'Community Pharmacy' ",
+                    search = "Metrics:(10051)",
+                    searchFields = null,
+                    count = true,
+                    orderby = "geo.distance(Geocode, geography'POINT(${postcode.longitude} ${postcode.latitude})')",
                     queryType = "full",
-                    searchMode = "all",
-                    count = true
+                    searchMode = "all"
             )).respondWithSuccess(data)
         }
     }
+
+    fun setupWiremockForPostcodeAndPlacesSearch(searchText: String, data: NHSAzureSearchPostcodesAndPlacesReply) {
+        mockingClient.forAzure.forSearchPostcodes {
+
+            nhsAzureSearch.nhsAzureSearchPostcodesAndPlacesRequest(NhsAzureSearchPostcodesAndPlacesRequestBody(
+                    top = 1,
+                    search = "\"${searchText}\"",
+                    count = true,
+                    filter = "Type eq 'PostcodeOutCode'"
+            )).respondWithSuccess(data)
+        }
+    }
+
 }

@@ -31,10 +31,11 @@ open class PrescriptionsPage : HybridPageObject() {
             page = this
     )
 
-    val nominatedPharmacyName = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-name']",
-            page = this
-    )
+    fun getNominatedPharmacyName(): String {
+        val nomPharmacyComponent = findByXpath("//*[@id='nominated-pharmacy']")
+        val descriptionTextParagraph = nomPharmacyComponent.findElement<WebElement>(org.openqa.selenium.By.tagName("p"))
+        return descriptionTextParagraph.text
+    }
 
     private lateinit var webHeader: WebHeader
 

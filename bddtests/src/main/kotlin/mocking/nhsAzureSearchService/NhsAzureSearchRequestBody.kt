@@ -19,14 +19,14 @@ const val SELECT_ORGANISATIONS_GEOCODE_SEARCH = "OrganisationID,OrganisationName
 
 data class NhsAzureSearchOrganisationWithPostcodeRequestBody(
         val top: Int = NhsAzureSearchData.ORGANISATION_LIMIT,
-        val search: String? = "",
-        val searchFields: String? = "OrganisationName,Address2,Address3,City",
         val select: String = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,County,Postcode," +
                 "NACSCode",
         val filter: String = "OrganisationTypeID eq 'GPB'",
+        val search: String? = "",
+        val searchFields: String? = "OrganisationName,Address2,Address3,City",
+        val count: Boolean = true,
         val orderby: String? = null,
         val queryType: String? = "simple",
-        val count: Boolean = true,
         val searchMode: String? = null
 )
 

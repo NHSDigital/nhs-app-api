@@ -1,11 +1,12 @@
 <template>
   <div>
-    <p v-if="showInstruction" id="instruction">{{ $t('nominated_pharmacy.line1') }}</p>
-    <p v-if="!isMyNominatedPharmacy">{{ $t('nominated_pharmacy.confirm.line1') }}</p>
+    <p v-if="showInstruction" id="instruction">{{ instructionText }}</p>
     <pharmacy-summary id="pharmacy-summary"
                       :pharmacy="pharmacy" />
     <p v-if="isInternetPharmacy" id="statement"
        :class="[$style['spacing-top']]">{{ $t('nominated_pharmacy.internetPharmacy') }}</p>
+    <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
+                            :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
     <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink"
                            id="link-to-change-pharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
@@ -15,8 +16,6 @@
                            tag="a">
       {{ $t('nominated_pharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
-    <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
-                            :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
   </div>
 </template>
 
@@ -70,6 +69,9 @@ export default {
         return true;
       }
       return false;
+    },
+    instructionText() {
+      return this.$t('nominated_pharmacy.confirm.line1');
     },
   },
   methods: {

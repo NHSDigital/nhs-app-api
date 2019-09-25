@@ -4,6 +4,7 @@ import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NHSAzureSearchPostcodesAndPlacesReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesItem
+import mocking.nhsAzureSearchService.Geocode
 
 object NhsAzureSearchData {
 
@@ -61,26 +62,10 @@ object NhsAzureSearchData {
 
         val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
 
-        return NhsAzureSearchOrganisationItem(
-                "$organisationId",
-                "$organisationName",
-                "P1",
-                "Community Pharmacy",
-                "$i Bridge Street",
-                "Clay Cross",
-                "",
-                "Chesterfield",
-                "County",
-                "SW$i ${i % POSTCODE_SEARCH_INDEX + POSTCODES_AND_PLACES_LIMIT}NG",
-                "F$numericNACSCode")
-    }
-
-    private fun createPharmacyResultFromIndex
-            (i: Int, isPharmacySearch: Boolean = false): NhsAzureSearchOrganisationItem {
-        val numericNACSCode = BASE_NACSCODE + i
-        val organisationId = BASE_ORGANISATION_ID + i
-
-        val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
+        val geocode = Geocode(
+                Coordinates = mutableListOf<Double>(
+                        DEFAULT_LATITUDE.toDouble() + i, DEFAULT_LONGITUDE.toDouble() + i
+                ))
 
         return NhsAzureSearchOrganisationItem(
                 "$organisationId",
@@ -94,6 +79,34 @@ object NhsAzureSearchData {
                 "County",
                 "SW$i ${i % POSTCODE_SEARCH_INDEX + POSTCODES_AND_PLACES_LIMIT}NG",
                 "F$numericNACSCode",
+                geocode)
+    }
+
+    private fun createPharmacyResultFromIndex
+            (i: Int, isPharmacySearch: Boolean = false): NhsAzureSearchOrganisationItem {
+        val numericNACSCode = BASE_NACSCODE + i
+        val organisationId = BASE_ORGANISATION_ID + i
+
+        val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
+
+        val geocode = Geocode(
+                Coordinates = mutableListOf<Double>(
+                DEFAULT_LATITUDE.toDouble() + i, DEFAULT_LONGITUDE.toDouble() + i
+        ))
+
+        return NhsAzureSearchOrganisationItem(
+                "$organisationId",
+                "$organisationName",
+                "P1",
+                "Community Pharmacy",
+                "$i Bridge Street",
+                "Clay Cross",
+                "",
+                "Chesterfield",
+                "County",
+                "SW$i ${i % POSTCODE_SEARCH_INDEX + POSTCODES_AND_PLACES_LIMIT}NG",
+                "F$numericNACSCode",
+                 geocode,
                 "[{\"MetricID\":10051,\"MetricName\":\"EPS enabled pharmacy\"," +
                         "\"DisplayName\":\"EPS Enabled\",\"Description\":\"EPS Service is enabled\"," +
                         "\"Value\":\"yes\",\"Text\":\"Has EPS enabled\"," +

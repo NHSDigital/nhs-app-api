@@ -22,6 +22,9 @@ describe('prescriptions page', () => {
       },
       nominatedPharmacy: {
         nominatedPharmacyEnabled: true,
+        pharmacy: {
+          pharmacyType: 'P1',
+        },
       },
     };
     return state;

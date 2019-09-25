@@ -16,6 +16,7 @@
         </message-dialog>
 
         <div v-if="showRepeatCourses">
+          <p class="nhsuk-u-padding-bottom-3">{{ $t('rp03.medicationCourse.line1') }}</p>
           <no-js-form :action="repeatCoursesPath" :value="{}" method="post">
             <div>
               <div>
@@ -44,6 +45,11 @@
               <error-message v-if="error && !specialRequestValid" id="error-type">
                 {{ $t('rp03.specialRequestRequired') }}
               </error-message>
+              <div>
+                <p class="nhsuk-u-padding-bottom-5">
+                  {{ $t('rp03.changePharmacyText') }}
+                </p>
+              </div>
               <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest"
                      class="nhsuk-u-padding-bottom-2">
                 {{ $t('rp03.specialRequestsLabelOptional') }}
@@ -51,21 +57,16 @@
               <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest"
                      class="nhsuk-u-padding-bottom-2">
                 {{ $t('rp03.specialRequestsLabelMandatory') }} </label>
-              <p id="maxSpecialRequest" class="char nhsuk-u-padding-bottom-2">
-                {{ $t('rp03.maxSpecialRequest') }}
-              </p>
               <p id="disclaimer" class="nhsuk-u-padding-bottom-2">{{ $t('rp03.disclaimer') }}</p>
-              <div>
-                <p class="nhsuk-body-s nhsuk-u-padding-bottom-3">
-                  {{ $t('rp03.changePharmacyText') }}
-                </p>
-              </div>
               <generic-text-area id="specialRequest"
                                  v-model="specialRequest"
                                  :required="(specialRequestNecessity === 'Mandatory')"
+                                 :text-area-classes="['nhsuk-u-margin-bottom-0']"
                                  text-area-ref="specialRequest"
                                  name="nojs.repeatPrescriptionCourses.specialRequest"
                                  maxlength="1000"/>
+              <p id="maxSpecialRequest" class="nhsuk-u-padding-bottom-4">
+                {{ $t('rp03.maxSpecialRequest') }}</p>
             </div>
             <button id="btn_order_prescription"
                     class="nhsuk-button"

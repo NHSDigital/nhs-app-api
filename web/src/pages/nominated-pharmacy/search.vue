@@ -2,22 +2,34 @@
   <div v-if="showTemplate" :class="[$style['pull-content'], $style.content,
                                     !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div :class="$style.info">
-      <message-dialog v-if="isInternetPharmacy"
-                      id="warning-dialog"
+      <message-dialog id="warning-dialog-nominated-pharmacy"
                       message-type="warning"
                       icon-text="Important">
-        <message-text id="warning-text"
-                      :class="$style.warningText">
-          {{ warningText }}
-        </message-text>
+        <div v-if="noPharmacyNominated">
+          <message-text>
+            {{ $t('nominated_pharmacy.search.line1') }}
+          </message-text>
+        </div>
+        <div v-else-if="isInternetPharmacy">
+          <message-text>
+            {{ warningText }}
+          </message-text>
+        </div>
+        <div v-else>
+          <message-text>
+            {{ $t('nominated_pharmacy.search.warning.paragraph1') }}
+          </message-text>
+          <message-text>
+            {{ $t('nominated_pharmacy.search.warning.paragraph2') }}
+          </message-text>
+        </div>
       </message-dialog>
-      <p> {{ $t('nominated_pharmacy.search.line1') }} </p>
       <h3> {{ $t('nominated_pharmacy.search.subHeader') }} </h3>
       <p id="pharmacy-search-label"
          :class="[$style['search-label-spacing'], $style['search-label']]">
         {{ $t('nominated_pharmacy.search.line2') }}
       </p>
-      <error-message v-if="showError"
+      <error-message v-if="showEmptySearchError"
                      :id="$style['error-label']"
                      :class="$style['search-label-spacing']"
                      role="alert">
@@ -80,12 +92,12 @@ export default {
   },
   data() {
     return {
-      searchQueryMaxLength: 150,
-      isButtonDisabled: false,
+      searchQueryMaxLength: 10,
       searchQuery: '',
       allPharmaciesURL: NOMINATED_PHARMACY_SEARCH.path,
       allDispensingContractorsURL: NOMINATED_PHARMACY_SEARCH.path,
       submissionError: false,
+      showEmptySearchError: false,
       backButtonPath: this.$store.getters['nominatedPharmacy/previousPage'],
     };
   },
@@ -98,6 +110,12 @@ export default {
     },
     searchQueryMaxLengthAsString() {
       return this.searchQueryMaxLength.toString();
+    },
+    noPharmacyNominated() {
+      return (
+        this.$store.state.nominatedPharmacy.pharmacy.pharmacyName ===
+          undefined
+      );
     },
     isInternetPharmacy() {
       return (
@@ -120,31 +138,24 @@ export default {
       return getDynamicStyle(this, args);
     },
     async searchClicked() {
-      if (this.isButtonDisabled) {
-        return;
-      }
-      this.isButtonDisabled = true;
+      this.showEmptySearchError = false;
 
       const processedQuery = this.processQuery(this.searchQuery);
 
-      if (!this.validateSearchQuery(processedQuery)) {
-        this.submissionError = true;
-        this.isButtonDisabled = false;
+      if (!this.validateSearchQueryLength(processedQuery)) {
+        this.showEmptySearchError = true;
         return;
       }
       const pharmacySearchResponse = await this.searchForPharmacies(processedQuery);
 
       if (pharmacySearchResponse.technicalError) {
-        this.submissionError = true;
-        this.isButtonDisabled = false;
+        this.submissionError = true; // there doesn't seem to be any UI element for this
         return;
       }
 
       this.$store.dispatch('nominatedPharmacy/setSearchQuery', processedQuery);
       this.$store.dispatch('nominatedPharmacy/setSearchResults', pharmacySearchResponse);
       redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
-
-      this.isButtonDisabled = false;
     },
     searchFormSubmitted() {
       this.searchClicked();
@@ -158,7 +169,7 @@ export default {
 
       return processedQuery;
     },
-    validateSearchQuery(searchQuery) {
+    validateSearchQueryLength(searchQuery) {
       return searchQuery &&
              searchQuery.length >= 1 &&
              searchQuery.length <= this.searchQueryMaxLength;

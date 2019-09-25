@@ -57,8 +57,12 @@ export default {
   methods: {
     async submitNominatedPharmacy() {
       try {
+        let successMessage = this.$t('nominated_pharmacy.confirm.pharmacyChanged');
+        if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+          successMessage = this.$t('nominated_pharmacy.confirm.pharmacyChosen');
+        }
         await this.$store.dispatch('nominatedPharmacy/update', this.nominatedPharmacy.odsCode);
-        this.$store.dispatch('flashMessage/addSuccess', this.$t('nominated_pharmacy.confirm.pharmacyChanged'));
+        this.$store.dispatch('flashMessage/addSuccess', successMessage);
         this.$store.dispatch('nominatedPharmacy/clearSelectedNominatedPharmacy');
         redirectTo(this, NOMINATED_PHARMACY.path, null);
       } catch (error) {

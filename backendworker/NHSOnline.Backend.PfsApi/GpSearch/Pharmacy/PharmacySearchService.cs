@@ -55,9 +55,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             if (!postcodeDetail.IsPostcode)
             {
                 _logger.LogInformation($"Didn't recognise as valid postcode: {searchTerm}");
-                searchTerm = OrganisationSearchUtility.PrepareSearch(searchTerm);
-                var data = GetOrganisationSearchData(searchTerm);
-                return await ExecuteOrganisationSearch(data);
+                return new PharmacySearchResponse(HttpStatusCode.OK);
             }
 
             try
@@ -92,7 +90,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                         postcodeDetail.Postcode);
 
 
-
                     pharmacySearchResponse.PostcodeCoordinate = new GeoCoordinate(
                         double.Parse(postcodeCoordinates.Latitude, CultureInfo.InvariantCulture),
                         double.Parse(postcodeCoordinates.Longitude, CultureInfo.InvariantCulture));
@@ -116,26 +113,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             }
         }
 
-        private async Task<PharmacySearchResponse> ExecuteOrganisationSearch(OrganisationSearchData organisationSearchData)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                var searchResults = await _gpLookupClient.GpSearch(organisationSearchData);
-
-                return _nhsSearchResultChecker.CheckPharmacies(searchResults, organisationSearchData.Search);
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, $"Search for Nhs GP Practice Failed: {organisationSearchData.Search} ");
-                return new PharmacySearchResponse(HttpStatusCode.ServiceUnavailable);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
 
         private async Task<PharmacySearchResponse> ExecuteOrganisationPostcodeSearch(OrganisationPostcodeSearchData organisationSearchData, string postcode)
         {
@@ -168,21 +145,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 Filter = $"OrganisationSubType eq '{ Constants.OrganisationSubTypeForCommunityPharmacy }' ",
                 OrderBy = $"geo.distance(Geocode, geography'POINT({postcodeData.Longitude} {postcodeData.Latitude})')",
                 Search = $"Metrics:({ Constants.MetricIdForEPSEnabled })",
-                Count = true,
-                QueryType = "full",
-                SearchMode = "all"
-            };
-        }
-
-        private OrganisationSearchData GetOrganisationSearchData(string searchTerm)
-        {
-            return new OrganisationSearchData
-            {
-                Top = _gpLookupConfig.PharmacySearchApiLimit,
-                Select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
-                SearchFields = "OrganisationName,Address2,Address3,City",
-                Filter = $"OrganisationSubType eq '{ Constants.OrganisationSubTypeForCommunityPharmacy }'",
-                Search = $"Metrics:{ Constants.MetricIdForEPSEnabled } AND { searchTerm }",
                 Count = true,
                 QueryType = "full",
                 SearchMode = "all"

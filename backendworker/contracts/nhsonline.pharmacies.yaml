@@ -15,7 +15,7 @@ paths:
         - in: query
           name: searchTerm
           required: true
-          description: Search term to search for pharmacies by postcode, town or pharmacy
+          description: Search term to search for pharmacies (currently only postcode allowed).
             name.
           schema:
             type: string

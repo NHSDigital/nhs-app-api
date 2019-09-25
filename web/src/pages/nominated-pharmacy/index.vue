@@ -10,9 +10,22 @@
         :pharmacy="nominatedPharmacy"
         :is-my-nominated-pharmacy="true"
         :previous-path="currentPage"
-        :can-change-pharmacy="true"
+        :can-change-pharmacy="!isDispensingPractice"
         :show-instruction="true"/>
     </div>
+    <message-dialog v-if="isDispensingPractice"
+                    id="warning-dialog-dispensing-practice"
+                    message-type="warning"
+                    icon-text="Important">
+      <message-text id="warning-text-1"
+                    :class="$style.warningText">
+        {{ $t('nominated_pharmacy.warning.changeDispensingPractice.line1') }}
+      </message-text>
+      <message-text id="warning-text-2"
+                    :class="$style.warningText">
+        {{ $t('nominated_pharmacy.warning.changeDispensingPractice.line2') }}
+      </message-text>
+    </message-dialog>
     <analytics-tracked-tag :text="$t('generic.backButton.text')"
                            :tabindex="-1">
       <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -29,7 +42,10 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import { PRESCRIPTIONS, NOMINATED_PHARMACY } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -39,6 +55,8 @@ export default {
     PharmacyDetail,
     DesktopGenericBackLink,
     NoNominatedPharmacyWarning,
+    MessageDialog,
+    MessageText,
   },
   data() {
     return {
@@ -47,6 +65,12 @@ export default {
       currentPage: NOMINATED_PHARMACY.path,
       prescriptionsPath: PRESCRIPTIONS.path,
     };
+  },
+  computed: {
+    isDispensingPractice() {
+      return (
+        this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3);
+    },
   },
   async asyncData({ store }) {
     if (store.state.nominatedPharmacy.hasLoaded === false) {

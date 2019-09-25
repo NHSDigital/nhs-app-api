@@ -134,14 +134,6 @@ describe('search pharmacies', () => {
       page.vm.searchQuery = testPostcode;
     });
 
-    it('disables the button', async () => {
-      // act
-      await page.vm.searchClicked();
-
-      // assert
-      expect(page.vm.isButtonDisabled).toBe(false);
-    });
-
     it('dispatches results to the store', async () => {
       // act
       await page.vm.searchClicked();

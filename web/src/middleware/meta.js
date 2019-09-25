@@ -70,6 +70,8 @@ import {
   NOMINATED_PHARMACY_CANNOT_CHANGE,
 } from '@/lib/routes';
 
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+
 function setPageTitle(route, store, app) {
   let header = '';
   let title = '';
@@ -286,10 +288,24 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.immunisations';
       break;
     case NOMINATED_PHARMACY_SEARCH.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+        route.meta.headerKey = 'pageHeaders.nominateMyPharmacy';
+        route.meta.pageTitleKey = 'pageTitles.nominateMyPharmacy';
+      } else {
+        route.meta.headerKey = 'pageHeaders.searchNominatedPharmacy';
+        route.meta.pageTitleKey = 'pageTitles.searchNominatedPharmacy';
+      }
+      break;
     case NOMINATED_PHARMACY_SEARCH_RESULTS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'pageHeaders.changeNominatedPharmacy';
-      route.meta.pageTitleKey = 'pageTitles.changeNominatedPharmacy';
+      if (store.state.nominatedPharmacy.searchResults.noResultsFound === true) {
+        route.meta.headerKey = 'th03.errors.noResultsFound.header';
+        route.meta.pageTitleKey = 'th03.errors.noResultsFound.title';
+      } else {
+        route.meta.headerKey = 'pageHeaders.changeNominatedPharmacy';
+        route.meta.pageTitleKey = 'pageTitles.changeNominatedPharmacy';
+      }
       break;
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);
@@ -297,6 +313,9 @@ export default function ({ route, store, app }) {
           !store.getters['nominatedPharmacy/justUpdated']) {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
+      } else if (store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
+        route.meta.headerKey = 'pageHeaders.dispensingPractice';
+        route.meta.pageTitleKey = 'pageTitles.dispensingPractice';
       } else {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacy';
@@ -307,6 +326,9 @@ export default function ({ route, store, app }) {
       if (store.getters['nominatedPharmacy/hasNoNominatedPharmacy']) {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
+      } else if (store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
+        route.meta.headerKey = 'pageHeaders.dispensingPracticeFound';
+        route.meta.pageTitleKey = 'pageTitles.dispensingPracticeFound';
       } else {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyFound';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyFound';

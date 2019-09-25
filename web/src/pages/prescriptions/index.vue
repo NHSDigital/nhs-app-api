@@ -14,21 +14,17 @@
     </div>
     <sjr-if journey="nominatedPharmacy">
       <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
-        <ul :class="$style['list-menu-white']" role="list">
-          <li :class="$style.link" role="link">
-            <analytics-tracked-tag
-              id="nominated-pharmacy"
-              :click-func="onNominatedPharmacyDetailClicked"
-              :text="$t('rp01.nominatedPharmacy')"
-              :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
-              tag="a">
-              <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
-              <p id="pharmacy-name">
-                {{ pharmacyName }}
-              </p>
-            </analytics-tracked-tag>
-          </li>
-        </ul>
+        <menu-item-list>
+          <menu-item id="nominated-pharmacy"
+                     header-tag="h2"
+                     data-purpose="text_link"
+                     :text="pharmacyWidgetText"
+                     :description="pharmacyName"
+                     :click-func="onNominatedPharmacyDetailClicked"
+                     :aria-label="ariaLabelCaption(
+                       pharmacyWidgetText,
+                       pharmacyWidgetText)"/>
+        </menu-item-list>
       </div>
     </sjr-if>
     <div v-if="showNoPrescriptions"
@@ -64,24 +60,27 @@
 </template>
 
 <script>
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import SjrIf from '@/components/SjrIf';
 import { each, isEmpty, keys, sortBy } from 'lodash/fp';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY } from '@/lib/routes';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    AnalyticsTrackedTag,
     HistoricPrescription,
+    MenuItem,
+    MenuItemList,
     NoJsForm,
     SjrIf,
     Card,
@@ -136,6 +135,12 @@ export default {
     showNominatedPharmacy() {
       return this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
     },
+    pharmacyWidgetText() {
+      if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
+        return this.$t('rp04.dispensingPracticeHeader');
+      }
+      return this.$t('rp04.nominatedPharmacyHeader');
+    },
   },
   async asyncData({ store }) {
     await store.dispatch('prescriptions/clear');
@@ -153,8 +158,13 @@ export default {
   },
   methods: {
     onNominatedPharmacyDetailClicked() {
-      this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
-      redirectTo(this, NOMINATED_PHARMACY.path, null);
+      if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_SEARCH.path, true);
+        redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
+      } else {
+        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
+        redirectTo(this, NOMINATED_PHARMACY.path, null);
+      }
     },
     onOrderRepeatPrescriptionClicked() {
       const path = this.getContinueButtonPath();
@@ -163,6 +173,9 @@ export default {
     },
     getContinueButtonPath() {
       return GetNavigationPathFromPrescriptions(this.$store);
+    },
+    ariaLabelCaption(header, body) {
+      return `${this.$t(header)}. ${this.$t(body)}`;
     },
   },
 };

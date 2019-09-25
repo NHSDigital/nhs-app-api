@@ -8,6 +8,10 @@ data class NhsAzureSearchOrganisationReply(
         @SerializedName("@odata.count") var count: Int = 0
 )
 
+data class Geocode(
+        var Coordinates: MutableList<Double> = arrayListOf()
+)
+
 data class NhsAzureSearchOrganisationItem(
         var OrganisationID: String,
         var OrganisationName: String,
@@ -20,6 +24,7 @@ data class NhsAzureSearchOrganisationItem(
         var County: String,
         var Postcode: String,
         var NACSCode: String,
+        var Geocode: Geocode,
         var Metrics: String? = null,
         var Contacts: String? = null
 ) {

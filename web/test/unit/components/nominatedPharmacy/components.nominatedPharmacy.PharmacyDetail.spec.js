@@ -55,7 +55,7 @@ const createPharmacyDetailComponentForP3 = ({ $store }) => mount(PharmacyDetail,
     isMyNominatedPharmacy: true,
     canChangePharmacy: false,
     pharmacy: {
-      pharmacyName: 'Best pharmacy',
+      pharmacyName: 'Best practice',
       pharmacyType: 'P3',
       openingTimesFormatted: [{
         day: 'Sunday',
@@ -108,8 +108,9 @@ describe('pharmacy detail', () => {
         instruction = wrapper.find('#instruction');
       });
 
-      it('will display the instruction', () => {
+      it('will display nominated pharmacy instruction', () => {
         expect(instruction.exists()).toEqual(true);
+        expect(instruction.text()).toEqual('translate_nominated_pharmacy.confirm.line1');
       });
     });
 
@@ -222,6 +223,19 @@ describe('pharmacy detail', () => {
         },
       });
       wrapper = createPharmacyDetailComponentForP3({ $store });
+    });
+
+    describe('dispensing practice instruction', () => {
+      let instruction;
+
+      beforeEach(() => {
+        instruction = wrapper.find('#instruction');
+      });
+
+      it('will display dispensing practice instruction', () => {
+        expect(instruction.exists()).toEqual(true);
+        expect(instruction.text()).toEqual('translate_nominated_pharmacy.confirm.line1');
+      });
     });
 
     describe('change nominated pharmacy link will not be there', () => {

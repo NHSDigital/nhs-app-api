@@ -352,7 +352,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                         $"did not match expected date of birth {cidUserSession.DateOfBirth}");
 
                     return personalDetailsCheck;
-                }            
+                }          
             }
             else
             {
