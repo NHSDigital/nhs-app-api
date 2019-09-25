@@ -42,7 +42,7 @@ fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
     fragment.cryptoObject = FingerprintManagerCompat.CryptoObject(signingHelper.initSignature())
     fragment.fingerprintContent = fingerprintContent
     fragment.fingerprintAuthProcessor = fingerprintAuthProcessor
-    return fragment;
+    return fragment
 }
 
 /**
@@ -92,7 +92,12 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
     override fun onResume() {
         super.onResume()
-        fingerprintUiHelper?.startListening(cryptoObject!!)
+        if (cryptoObject != null) {
+            fingerprintUiHelper?.startListening(cryptoObject!!)
+        } else {
+            fingerprintAuthProcessor?.cancel()
+            dismissAllowingStateLoss()
+        }
     }
 
     override fun onPause() {
@@ -122,7 +127,9 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
     }
 
     override fun onError() {
-        dismissAllowingStateLoss()
+        if (this.isAdded) {
+            dismissAllowingStateLoss()
+        }
         fingerprintUiHelper?.stopListening()
     }
 }
