@@ -10,7 +10,7 @@ function isStoreVersionAfterVersionToTest(versionInStore, versionToTest) {
   const validVersionToTestNumber = semver.valid(versionToTest) !== null;
 
   if (validVersionInStoreNumber && validVersionToTestNumber) {
-    return semver.gt(versionInStore, versionToTest);
+    return semver.gt(semver.coerce(versionInStore), semver.coerce(versionToTest));
   }
   if (validVersionInStoreNumber) {
     return false;
