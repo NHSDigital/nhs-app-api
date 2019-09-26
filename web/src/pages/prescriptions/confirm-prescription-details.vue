@@ -47,12 +47,12 @@
                type="hidden"
                name="nojs.repeatPrescriptionCourses.specialRequest">
 
-        <button id="btn_confirm_and_order_prescription"
-                class="nhsuk-button"
-                click-delay="medium"
-                @click="onConfirmButtonClicked">
+        <generic-button id="btn_confirm_and_order_prescription"
+                        class="nhsuk-button"
+                        click-delay="medium"
+                        @click="onConfirmButtonClicked">
           {{ $t('rp04.confirmButton') }}
-        </button>
+        </generic-button>
       </no-js-form>
     </div>
     <div>

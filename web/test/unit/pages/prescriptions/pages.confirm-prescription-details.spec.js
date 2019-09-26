@@ -2,7 +2,19 @@ import ConfirmPrescription from '@/pages/prescriptions/confirm-prescription-deta
 import { mount } from '../../helpers';
 import { PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS } from '@/lib/routes';
 
-const createStore = ({ hasNoNominatedPharmacy, pharmacyName = undefined, sjrEnabled = true }) => ({
+const createStore = ({
+  hasNoNominatedPharmacy = false,
+  pharmacyName = undefined,
+  sjrEnabled = true,
+}) => ({
+  dispatch: jest.fn(),
+  app: {
+    $env: {
+      DEBOUNCE_SHORT: 500,
+      DEBOUNCE_MEDIUM: 1000,
+      DEBOUNCE_LONG: 2000,
+    },
+  },
   state: {
     device: {
       source: 'web',
@@ -29,6 +41,11 @@ const createStoreForNoJsTesting = ({ selectedCoursesNoJs, submitted, specialRequ
   app: {
     router: {
       push: jest.fn(),
+    },
+    $env: {
+      DEBOUNCE_SHORT: 500,
+      DEBOUNCE_MEDIUM: 1000,
+      DEBOUNCE_LONG: 2000,
     },
   },
   state: {
@@ -130,6 +147,21 @@ describe('confirm prescriptions', () => {
     expect($redirect).not.toHaveBeenCalled();
     expect($store.app.router.push).toHaveBeenCalledWith(PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path);
     expect($store.state.repeatPrescriptionCourses.submitted).toBe(false);
+  });
+
+  it('should submit the prescription order once even when clicked multiple times', async () => {
+    // arrange
+    const confirmButtonId = '#btn_confirm_and_order_prescription';
+    $store = createStore({});
+    wrapper = mountPage($store);
+
+    // act
+    wrapper.find(confirmButtonId).trigger('click');
+    wrapper.find(confirmButtonId).trigger('click');
+
+    // assert
+    expect($store.dispatch)
+      .toHaveBeenNthCalledWith(1, 'repeatPrescriptionCourses/orderRepeatPrescription', expect.anything());
   });
 
   describe('nominated pharmacy summary', () => {
