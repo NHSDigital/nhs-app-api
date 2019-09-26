@@ -49,7 +49,7 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import ContentHeader from '@/components/widgets/ContentHeader';
-import { INDEX, LOGIN } from '@/lib/routes';
+import { INDEX, LOGIN, findByName } from '@/lib/routes';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import Spinner from '@/components/widgets/Spinner';
@@ -130,6 +130,12 @@ export default {
     };
   },
   computed: {
+    currentHelpUrl() {
+      if (findByName(this.$route.name) === undefined) {
+        return INDEX.helpUrl;
+      }
+      return findByName(this.$route.name).helpUrl;
+    },
     showMenu() {
       return (
         !this.$store.state.device.isNativeApp &&
@@ -193,6 +199,7 @@ export default {
     $route(to, from) {
       if (from !== to) {
         this.pathChanged = true;
+        this.setHelpUrl(this.currentHelpUrl);
       }
     },
   },
@@ -212,6 +219,7 @@ export default {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
 
     NativeVersionSetup(this.$store, this.$route);
+    this.setHelpUrl(this.currentHelpUrl);
     if (this.loggedIn) {
       this.$store.dispatch('session/startValidationChecking');
       window.validateSession =

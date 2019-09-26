@@ -386,7 +386,16 @@ class HomeViewController : UIViewController {
     }
     
     @objc func selectHelp(sender : UITapGestureRecognizer) {
-        self.pageUrl = config().HelpURL
+        if (UserDefaults.standard.string(forKey: "HelpUrl") == nil) {
+            UserDefaults.standard.set(config().HelpURL, forKey: "HelpUrl")
+        }
+
+        if (UserDefaults.standard.string(forKey: "HelpUrl") == config().HelpLoginURL) {
+            self.pageUrl = config().HelpLoginURL
+        } else {
+            self.pageUrl = UserDefaults.standard.string(forKey: "HelpUrl") ?? config().HelpURL
+        }
+        
         webViewController?.webView.loadPage(url: self.pageUrl)
     }
     

@@ -57,6 +57,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "requestPnsToken")
         webView.configuration.userContentController.add(delegate, name: "resetPageFocus")
         webView.configuration.userContentController.add(delegate, name: "setMenuBarItem")
+        webView.configuration.userContentController.add(delegate, name: "setHelpUrl")
         webView.configuration.userContentController.add(delegate, name: "showHeader")
         webView.configuration.userContentController.add(delegate, name: "showHeaderSlim")
         webView.configuration.userContentController.add(delegate, name: "updateHeaderText")

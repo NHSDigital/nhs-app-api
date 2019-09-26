@@ -15,6 +15,7 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import NativeVersionSetup from '../services/nativeVersionSetup';
+import { findByName } from '@/lib/routes';
 
 
 export default {
@@ -65,10 +66,16 @@ export default {
 
     return head;
   },
+  computed: {
+    currentHelpUrl() {
+      return findByName(this.$route.name).helpUrl;
+    },
+  },
   mounted() {
     NativeVersionSetup(this.$store, this.$route);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
+    this.setHelpUrl(this.currentHelpUrl);
   },
   created() {
     if (process.browser) {

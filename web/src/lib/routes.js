@@ -55,6 +55,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/account/',
   },
   ACCOUNT_NOTIFICATIONS: {
     name: 'account-notifications',
@@ -65,6 +66,7 @@ const routes = {
         return this.allRoutes.ACCOUNT;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/account/',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -84,6 +86,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/account/',
   },
   APPOINTMENTS: {
     name: 'appointments',
@@ -94,6 +97,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
     sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
@@ -108,6 +112,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
     sjrRedirectRules: [
       adminHelpDisabledRedirect,
     ],
@@ -121,6 +126,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
     sjrRedirectRules: [
       gpAdviceDisabledRedirect,
     ],
@@ -134,6 +140,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
     sjrRedirectRules: [
       gpAdviceDisabledRedirect,
     ],
@@ -147,6 +154,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
   },
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
@@ -157,6 +165,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
   },
   APPOINTMENT_BOOKING_GUIDANCE: {
     name: 'appointments-booking-guidance',
@@ -168,6 +177,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
     sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
@@ -182,6 +192,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
   },
   APPOINTMENT_CANCELLING: {
     name: 'appointments-cancelling',
@@ -192,6 +203,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
   },
   APPOINTMENT_CONFIRMATIONS: {
     name: 'appointments-confirmation',
@@ -202,6 +214,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
   },
   APPOINTMENT_GP_AT_HAND: {
     name: 'appointments-gp-at-hand',
@@ -213,6 +226,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
     sjrRedirectRules: [
       im1AppointmentRedirect,
       informaticaAppointmentRedirect,
@@ -228,6 +242,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/',
     sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       im1AppointmentRedirect,
@@ -243,6 +258,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/app-login/',
   },
   BEGINLOGIN: {
     name: 'begin-login',
@@ -254,6 +270,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/app-login/',
   },
   CHECKYOURSYMPTOMS: {
     name: 'check-your-symptoms',
@@ -265,6 +282,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   DATA_SHARING_PREFERENCES: {
     name: 'data-sharing',
@@ -274,6 +292,7 @@ const routes = {
         return this.allRoutes.MORE;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/ndop/',
   },
   GP_FINDER: {
     name: 'gp-finder',
@@ -284,6 +303,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   GP_FINDER_RESULTS: {
     name: 'gp-finder-results',
@@ -294,6 +314,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   GP_FINDER_SENDING_EMAIL: {
     name: 'gp-finder-sending-email',
@@ -304,6 +325,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   GP_FINDER_WAITING_LIST_JOINED: {
     name: 'gp-finder-waiting-list-joined',
@@ -314,6 +336,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   GP_FINDER_PARTICIPATION: {
     name: 'gp-finder-participation',
@@ -324,6 +347,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   INDEX: {
     name: 'index',
@@ -334,6 +358,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   LOGIN: {
     name: 'Login',
@@ -344,6 +369,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/app-login/',
   },
   LOGOUT: {
     name: 'logout',
@@ -353,6 +379,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/app-login/',
   },
   MORE: {
     name: 'more',
@@ -363,6 +390,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -378,6 +406,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
     sjrRedirectRules: [
       gpAtHandMyRecordRedirect,
     ],
@@ -392,6 +421,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
     sjrRedirectRules: [
       im1MyRecordRedirect,
     ],
@@ -405,6 +435,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
   },
   MYRECORDTESTRESULT: {
     name: 'my-record-testresultdetail-testResultId',
@@ -415,6 +446,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
   },
   MY_RECORD_VISION_DIAGNOSIS_DETAIL: {
     name: 'my-record-diagnosis-detail',
@@ -425,6 +457,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
   },
   MY_RECORD_VISION_EXAMINATIONS_DETAIL: {
     name: 'my-record-examinations-detail',
@@ -435,6 +468,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
   },
   MY_RECORD_VISION_PROCEDURES_DETAIL: {
     name: 'my-record-procedures-detail',
@@ -445,6 +479,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
   },
   MY_RECORD_VISION_TEST_RESULTS_DETAIL: {
     name: 'my-record-test-results-detail',
@@ -455,6 +490,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
   },
   NOMINATED_PHARMACY: {
     name: 'nominated-pharmacy',
@@ -465,6 +501,7 @@ const routes = {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   NOMINATED_PHARMACY_SEARCH: {
     name: 'nominated-pharmacy-search',
@@ -474,6 +511,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   NOMINATED_PHARMACY_CONFIRM: {
     name: 'nominated-pharmacy-confirm',
@@ -483,6 +521,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
@@ -492,6 +531,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   NOMINATED_PHARMACY_CHECK: {
     name: 'nominated-pharmacy-check',
@@ -501,6 +541,7 @@ const routes = {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   NOMINATED_PHARMACY_CANNOT_CHANGE: {
     name: 'nominated-pharmacy-cannot-change',
@@ -510,6 +551,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   ORGAN_DONATION: {
     name: 'organ-donation',
@@ -520,6 +562,7 @@ const routes = {
         return this.allRoutes.MORE;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_ADDITIONAL_DETAILS: {
     name: 'organ-donation-additional-details',
@@ -530,6 +573,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_AMEND: {
     name: 'organ-donation-amend',
@@ -540,6 +584,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_FAITH: {
     name: 'organ-donation-faith',
@@ -550,6 +595,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_MORE_ABOUT_ORGANS: {
     name: 'organ-donation-more-about-organs',
@@ -560,6 +606,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_SOME_ORGANS: {
     name: 'organ-donation-some-organs',
@@ -570,6 +617,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_REVIEW_YOUR_DECISION: {
     name: 'organ-donation-review-your-decision',
@@ -580,6 +628,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_VIEW_DECISION: {
     name: 'organ-donation-view-decision',
@@ -590,6 +639,7 @@ const routes = {
         return this.allRoutes.MORE;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_WITHDRAW_REASON: {
     name: 'organ-donation-withdraw-reason',
@@ -600,6 +650,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_WITHDRAWN: {
     name: 'organ-donation-withdrawn',
@@ -610,6 +661,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   ORGAN_DONATION_YOUR_CHOICE: {
     name: 'organ-donation-your-choice',
@@ -620,6 +672,7 @@ const routes = {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/organ-donation/',
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',
@@ -630,6 +683,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/prescriptions/',
     sjrRedirectRules: [
       gpAtHandPrescriptionsRedirect,
     ],
@@ -643,6 +697,7 @@ const routes = {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/prescriptions/',
   },
   PRESCRIPTIONS_GP_AT_HAND: {
     name: 'prescriptions-gp-at-hand',
@@ -654,6 +709,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/prescriptions/',
     sjrRedirectRules: [
       im1PrescriptionsRedirect,
     ],
@@ -667,6 +723,7 @@ const routes = {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/prescriptions/',
   },
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS: {
     name: 'prescriptions-repeat-partial-success',
@@ -677,6 +734,7 @@ const routes = {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/prescriptions/',
   },
   SYMPTOMS: {
     name: 'symptoms',
@@ -687,6 +745,7 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   TERMSANDCONDITIONS: {
     name: 'terms-and-conditions',
@@ -697,6 +756,7 @@ const routes = {
         return undefined;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
   },
   // Legacy
   LEGACY_MYRECORDWARNING: {
@@ -708,6 +768,7 @@ const routes = {
         return this.allRoutes.MYRECORD;
       },
     },
+    helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/',
     sjrRedirectRules: [
       gpAtHandMyRecordRedirect,
     ],

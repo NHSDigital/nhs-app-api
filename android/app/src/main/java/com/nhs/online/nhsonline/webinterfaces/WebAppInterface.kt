@@ -107,6 +107,11 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    fun setHelpUrl(url: String) {
+        activity.runOnUiThread { uiInteractor.setHelpUrl(url) }
+    }
+
+    @JavascriptInterface
     fun showHeader() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
         activity.runOnUiThread { uiInteractor.showHeader() }

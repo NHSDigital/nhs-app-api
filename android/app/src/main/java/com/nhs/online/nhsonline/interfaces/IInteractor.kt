@@ -34,6 +34,8 @@ interface IInteractor {
 
     fun showMenuBar()
 
+    fun setHelpUrl(url: String)
+
     fun setMenuBarItem(index: Int)
 
     fun hideHeader()

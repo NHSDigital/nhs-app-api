@@ -91,6 +91,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         menuBar.nhsWeb = nhsWeb
+
+        setHelpUrl(resources.getString(R.string.helpURL))
+
         backToAccountButton.setOnClickListener { onSuccessButton() }
         retryButton.setOnClickListener { onErrorRetryButton() }
         homeLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
@@ -298,7 +301,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     private fun onHelpIconSelected() {
-        nhsWeb.loadUrlInChromeTab(resources.getString(R.string.helpURL))
+        nhsWeb.loadUrlInChromeTab(nhsWeb.getHelpLocation())
     }
 
     private fun onBreadcrumbSelected() {
@@ -310,6 +313,11 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         logger.info("Entering setHeaderText")
 
         nhsWeb.announceForAccessibility(description ?: text)
+    }
+
+    override fun setHelpUrl(url: String) {
+        logger.info("Entering setHelpUrl")
+        nhsWeb.setHelpLocation(url)
     }
 
     override fun onBackPressed() {

@@ -209,7 +209,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        
+
         var shouldAllowNativeInteraction = false;
         
         let url = self.viewController.webViewController?.webView.url;
@@ -279,6 +279,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "resetPageFocus":
                 viewController.headerBar.setFocusToNhsLogoForA11y()
                 break
+            case "setHelpUrl":
+                setHelpUrl(url: message.body as? String ?? config().HelpURL)
+                break
             case "setMenuBarItem":
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break
@@ -312,6 +315,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             tabBar.selectedItem = tabBar.items![index]
             viewController.selectedTab = index
         }
+    }
+    
+    func setHelpUrl(url: String){
+        UserDefaults.standard.set(url, forKey: "HelpUrl" )
     }
     
     func ensureSupportedScheme(_ url: URL) -> URL {

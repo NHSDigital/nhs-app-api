@@ -78,7 +78,7 @@ class LifeCycleObserver(
                 }
 
                 context.configBiometricSetup(configurationResponse.fidoServerUrl)
-
+                nhsWeb.setHelpLocation()
                 nhsWeb.loadWelcomePage()
             }
 

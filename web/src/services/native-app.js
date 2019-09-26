@@ -142,6 +142,15 @@ export default {
     return false;
   },
 
+  setHelpUrl(url) {
+    const app = window.nativeApp;
+    if (app && app.setHelpUrl) {
+      app.setHelpUrl(url);
+      return true;
+    }
+    return false;
+  },
+
   setMenuBarItem(index) {
     const app = window.nativeApp;
     if (app && app.setMenuBarItem) {

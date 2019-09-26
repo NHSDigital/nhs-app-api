@@ -14,6 +14,8 @@ import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConne
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.ApplicationState
+import com.nhs.online.nhsonline.support.AppSharedPref
+import com.nhs.online.nhsonline.support.Optional
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
@@ -265,6 +267,14 @@ class NhsWeb(
             false
         }
 
+    }
+
+    fun setHelpLocation(url: String? = readResourceString(R.string.helpURL)) {
+        appPersistData.storeHelpUrl(url.toString())
+    }
+
+    fun getHelpLocation(): String {
+        return appPersistData.getHelpUrl().toString()
     }
 
     fun reloadHomepageOnBackReturn() {

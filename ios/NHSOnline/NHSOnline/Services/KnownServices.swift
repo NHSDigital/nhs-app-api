@@ -111,6 +111,8 @@ class KnownServices {
     
     private func buildExternalSites() {
         let helpURL: URL = URL(string: config.HelpURL)!
+        let HelpAccountURL: URL = URL(string: config.HelpAccountURL)!
+        let HelpLoginURL: URL = URL(string: config.HelpLoginURL)!
         let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
         let privacyPolicyURL: URL = URL(string: config.PrivacyPolicyURL)!
         let cookiesPolicyURL: URL = URL(string: config.CookiesPolicyURL)!
@@ -130,7 +132,7 @@ class KnownServices {
         let conditionsUrl: URL = URL(string: config.ConditionsUrlPath)!
         let dataSharingUrl: URL = URL(string: config.DataSharingUrlPath)!
         
-        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL, biometricsHelpURl,
+        externalSites = [helpURL, HelpAccountURL, HelpLoginURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL, biometricsHelpURl,
                         helpURLOld, termsAndConditionsURLOld, privacyPolicyURLOld, cookiesPolicyURLOld, openSourceLicensesURLOld, medicalRecordAbbreviationsURLOld, accessibilityStatementURLOld, conditionsUrl, dataSharingUrl]
     }
     

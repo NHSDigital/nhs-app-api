@@ -23,7 +23,7 @@ class BiometricsResultViewController: UIViewController {
     }
     
     @IBAction func backToMyAccount(_ sender: Any) {
-        viewController?.webViewController?.reloadWebView()
+        UserDefaults.standard.set(config().HelpAccountURL, forKey: "HelpUrl")
         viewController?.showWebViewContainer()
         viewController!.updateHeaderText(headerText: NSLocalizedString("MyAccountTitle", comment: ""))
     }

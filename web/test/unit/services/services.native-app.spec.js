@@ -55,6 +55,7 @@ describe('native app', () => {
   callNative('pageLoadComplete');
   callNative('requestPnsToken', 'load');
   callNative('resetPageFocus');
+  callNative('setHelpUrl', 'url');
   callNative('setMenuBarItem', 0);
   callNative('showHeader');
   callNative('showHeaderSlim');

@@ -57,6 +57,7 @@ import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import SymptomBanner from '@/components/SymptomBanner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
+import { findByName } from '@/lib/routes';
 
 export default {
   components: {
@@ -75,6 +76,9 @@ export default {
     },
     isErrorVisible() {
       return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
+    },
+    currentHelpUrl() {
+      return findByName(this.$route.name).helpUrl;
     },
   },
   head() {
@@ -104,6 +108,7 @@ export default {
     NativeVersionSetup(this.$store, this.$route);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
+    this.setHelpUrl(this.currentHelpUrl);
   },
   created() {
     const appVersion = this.$store.app.$env.VERSION_TAG;

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ACCOUNT_NOTIFICATIONS } from '@/lib/routes';
+import { ACCOUNT_NOTIFICATIONS, findByName } from '@/lib/routes';
 import NativeCallbacks from '@/services/native-app';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     goToLoginOptions() {
+      this.setHelpUrl(findByName('Login').helpUrl);
       NativeCallbacks.goToLoginOptions();
     },
     showNotificationsClicked() {

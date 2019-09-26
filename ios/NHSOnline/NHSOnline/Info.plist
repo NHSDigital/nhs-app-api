@@ -155,6 +155,10 @@
 	<string>https://$(HELP_URL)</string>
 	<key>HelpURLOld</key>
 	<string>https://$(HELP_URL_OLD)</string>
+	<key>HelpAccountURL</key>
+	<string>https://$(HELP_ACCOUNT_URL)</string>
+	<key>HelpLoginURL</key>
+	<string>https://$(HELP_LOGIN_URL)</string>
 	<key>TermsAndConditionsURL</key>
 	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
 	<key>TermsAndConditionsURLOld</key>

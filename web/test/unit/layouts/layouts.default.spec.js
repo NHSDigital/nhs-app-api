@@ -22,6 +22,13 @@ const localVue = createLocalVue();
 
 const createDefaultPage = ($store) => {
   localVue.use(Vuex);
+  localVue.mixin({
+    methods: {
+      setHelpUrl(url) {
+        return url;
+      },
+    },
+  });
   DefaultPage.components.HotJar = {
     computed: {},
     staticRenderFns: [],
@@ -159,4 +166,15 @@ describe('default.vue - is native', () => {
     expect(defaultPage.vm.shouldShowFullDesktopHeader).toBe(true);
     expect(defaultPage.find(WebHeader).exists()).toBe(true);
   });
+
+  it('will send correct help URL to setHelpUrl mixin function', () => {
+    const $store = createStore(true);
+    const defaultPage = createDefaultPage($store);
+    const expectedHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
+
+    jest.spyOn($store, 'dispatch');
+
+    expect(defaultPage.vm.currentHelpUrl).toBe(expectedHelpUrl);
+  });
 });
+

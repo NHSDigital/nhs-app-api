@@ -5,6 +5,7 @@ import { LOGIN, ACCOUNT_SIGNOUT, MYRECORD } from '@/lib/routes';
 import Sources from '@/lib/sources';
 import { redirectTo } from '@/lib/utils'
 import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus'
+import NativeCallbacks from '@/services/native-app';
 
 Vue.mixin(ResetPageFocusMixin);
 
@@ -29,7 +30,7 @@ Vue.mixin({
         this.$router.go();
         return;
       }
-      
+
       if (url === MYRECORD.path && statusCode == 504) {
         this.$store.dispatch('myRecord/resetTerms');
       }
@@ -55,6 +56,13 @@ Vue.mixin({
         url = ACCOUNT_SIGNOUT.path;
       }
       return url;
+    },
+    setHelpUrl(currentHelpUrl) {
+      if (this.$store.state.device.isNativeApp) {
+        NativeCallbacks.setHelpUrl(currentHelpUrl);
+      } else {
+        // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)
+      }
     },
   },
 });

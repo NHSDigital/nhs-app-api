@@ -137,6 +137,9 @@ export default {
     currentBreadCrumbs() {
       return getCrumbTrailForRoute(findByName(this.$route.name));
     },
+    currentHelpUrl() {
+      return findByName(this.$route.name).helpUrl;
+    },
     showMenu() {
       return (
         !this.$store.state.device.isNativeApp &&
@@ -198,6 +201,7 @@ export default {
     $route(to, from) {
       if (from !== to) {
         this.pathChanged = true;
+        this.setHelpUrl(this.currentHelpUrl);
       }
     },
   },
@@ -229,6 +233,7 @@ export default {
         NativeCallbacks.resetPageFocus();
       }
     }
+    this.setHelpUrl(this.currentHelpUrl);
   },
   updated() {
     if (this.pathChanged) {
@@ -240,20 +245,20 @@ export default {
     EventBus.$off(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
   },
   methods: {
-    isLoginPage() {
-      return this.$route.name === LOGIN.name;
-    },
-    setSurveyBarStatus(isBarOpen) {
-      this.surveyBarOpen = isBarOpen;
+    isAnalyticsCookieAccepted() {
+      return this.$store.state.termsAndConditions.analyticsCookieAccepted;
     },
     isHotJarSurveyVisible() {
       return this.isAnalyticsCookieAccepted() && `${this.$env.HOTJAR_SURVEY_VISIBLE}` === 'true';
     },
-    isAnalyticsCookieAccepted() {
-      return this.$store.state.termsAndConditions.analyticsCookieAccepted;
+    isLoginPage() {
+      return this.$route.name === LOGIN.name;
     },
     focusNhsAppRoot() {
       this.$refs.nhsAppRoot.focus();
+    },
+    setSurveyBarStatus(isBarOpen) {
+      this.surveyBarOpen = isBarOpen;
     },
   },
 };

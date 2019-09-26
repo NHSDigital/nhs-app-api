@@ -68,6 +68,10 @@ window.nativeApp.setMenuBarItem = function(index) {
     window.webkit.messageHandlers.setMenuBarItem.postMessage(index);
 };
 
+window.nativeApp.setHelpUrl = function(url) {
+    window.webkit.messageHandlers.setHelpUrl.postMessage(url);
+}
+
 window.nativeApp.showHeader = function() {
     window.webkit.messageHandlers.showHeader.postMessage(null);
 };

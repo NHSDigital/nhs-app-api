@@ -70,6 +70,39 @@ describe('routes', () => {
     });
   });
 
+  describe('getHelpUrlByRouteName', () => {
+    it('should return the expected helpUrl for the route name', () => {
+      const appointmentsHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/';
+      const prescriptionsHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/prescriptions/';
+      const recordHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/';
+
+      expect(findByName('appointments').helpUrl).toBe(appointmentsHelpUrl);
+      expect(findByName('prescriptions').helpUrl).toBe(prescriptionsHelpUrl);
+      expect(findByName('my-record').helpUrl).toBe(recordHelpUrl);
+    });
+  });
+
+  describe('checkEachRouteHasValidHelpUrlAttribute', () => {
+    it('should have a valid helpUrl attribute', (done) => {
+      const routeNames = getRouteNames();
+      const expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
+      const regex = new RegExp(expression);
+
+      expect(routeNames.length).toBeTruthy();
+
+      routeNames.map(name => findByName(name))
+        .forEach((route) => {
+          if (route.helpUrl === undefined ||
+            route.helpUrl === null ||
+            route.helpUrl === '' ||
+            !route.helpUrl.match(regex)) {
+            done.fail(`[${route.name}] needs a valid populated helpUrl attribute.`);
+          }
+        });
+      done();
+    });
+  });
+
   describe('Each route name', () => {
     it('should be unique.', (done) => {
       const routeNames = getRouteNames();
@@ -87,7 +120,6 @@ describe('routes', () => {
       done();
     });
   });
-
 
   describe('check the depth of the crumb trail does ' +
     'not breach 3 levels as per the spec - see NHSO-4085', () => {

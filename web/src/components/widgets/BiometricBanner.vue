@@ -36,6 +36,7 @@ import MessageText from '@/components/widgets/MessageText';
 import GenericButton from '@/components/widgets/GenericButton';
 import NativeCallbacks from '@/services/native-app';
 import { setCookie } from '@/lib/cookie-manager';
+import { findByName } from '../../lib/routes';
 import moment from 'moment';
 
 export default {
@@ -70,6 +71,7 @@ export default {
   },
   methods: {
     goToLoginOptions() {
+      this.setHelpUrl(findByName('Login').helpUrl);
       NativeCallbacks.goToLoginOptions();
     },
     dismissBiometricsBannerClicked() {
