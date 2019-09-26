@@ -100,6 +100,12 @@ export default {
     margin-top: 0;
     margin-bottom: 0;
   }
+
+  .nhsuk-hint {
+    b {
+      display: inline-block;
+    }
+  }
   .nhsuk-care-card--non-urgent {
     .nhsuk-care-card__heading-container {
       .nhsuk-care-card__heading {
@@ -117,6 +123,10 @@ export default {
         color: $black;
       }
     }
+  }
+
+  .nhsuk-care-card__heading {
+    color: white;
   }
 
   .nhsuk-care-card--urgent {
