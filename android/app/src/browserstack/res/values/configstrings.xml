@@ -4,6 +4,6 @@
     <string name="baseScheme">http</string>
     <string name="baseHost">web.local.bitraft.io</string>
     <string name="baseURL">http://web.local.bitraft.io:3000/</string>
-    <string name="baseApiURL">http://api.local.bitraft.io:8082/v1/</string>
+    <string name="baseApiURL">http://api.local.bitraft.io:8089/v1/</string>
     <string name="secureFlag">disabled</string>
 </resources>
