@@ -3,10 +3,9 @@ package features.pushNotifications.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.AccessTokenBuilder
+import features.sharedSteps.InvalidAccessTokenTester
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
-import org.apache.http.HttpStatus
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -141,45 +140,23 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^a registration attempt with an invalid access token will return an Unauthorised error$")
     fun aRegistrationAttemptWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
-        assertInvalidTokenThrowsException { accessToken ->
+        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised {  accessToken ->
             NotificationsApi.postRegistration(authToken = accessToken)
         }
     }
 
     @When("^getting a notification registration with an invalid access token will return an Unauthorised error$")
     fun anAttemptToGetTheNotificationRegistrationWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
-        assertInvalidTokenThrowsException { accessToken ->
+        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised {  accessToken ->
             NotificationsApi.getRegistration(authToken = accessToken)
         }
     }
 
     @When("^deleting a notification registration with an invalid access token will return an Unauthorised error$")
     fun anAttemptToDeleteTheNotificationRegistrationWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
-        assertInvalidTokenThrowsException { accessToken ->
+        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised {  accessToken ->
             NotificationsApi.deleteRegistration(authToken = accessToken)
         }
-    }
-
-    private fun assertInvalidTokenThrowsException(action: (String) -> Unit) {
-        val invalidTokens = AccessTokenBuilder().getInvalidTokens(SerenityHelpers.getPatient())
-        invalidTokens.forEach { invalidToken ->
-            SerenityHelpers.clearHttpException()
-            action.invoke(invalidToken.first.serialize())
-            assertUnauthorisedErrorResponse(tokenParameterKey = invalidToken.second)
-        }
-    }
-
-    private fun assertUnauthorisedErrorResponse(tokenParameterKey: String) {
-        val errorResponse = SerenityHelpers.getHttpException()
-        Assert.assertNotNull(
-                "An exception was expected but was not returned within the expected time limit. " +
-                        "Access Token invalid value: '$tokenParameterKey",
-                errorResponse
-        )
-        Assert.assertEquals("Incorrect status code returned. " +
-                "Access Token invalid value: '$tokenParameterKey",
-                HttpStatus.SC_UNAUTHORIZED,
-                errorResponse!!.statusCode)
     }
 
     @Then("^I receive the newly created registered device details$")

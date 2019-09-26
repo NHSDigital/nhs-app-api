@@ -3,7 +3,6 @@ package features.pushNotifications.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.MockingClient
 import pages.account.NotificationsSettingsPage
@@ -24,8 +23,9 @@ class PushNotificationsStepDefinitions {
 
     @Given("^I am a user wishing to disable push notifications$")
     fun iAmAUserWishingToUnRegisterTheirDeviceForPushNotifications() {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null,
-                listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                ServiceJourneyRulesMapper.Companion.JourneyType.NOTIFICATIONS_ENABLED)
         val factory = NotificationsFactory()
         factory.setUpUser(patient = patient)
         factory.setUpDeviceValues()

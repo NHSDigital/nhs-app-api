@@ -2,33 +2,12 @@ package features.myAccount.stepDefintions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.sharedSteps.BrowserSteps
-import features.sharedSteps.PageUrl
-import net.thucydides.core.annotations.Steps
 import pages.account.MyAccountPage
 import utils.SerenityHelpers
 
 class MyAccountStepDefinitions {
 
-    @Steps
-    lateinit var browser: BrowserSteps
-
     lateinit var myAccount: MyAccountPage
-
-    @When("I navigate to the Account page for mobile devices")
-    fun iNavigateToTheAccountPageForMobileDevices() {
-        val url = PageUrl().getPageWithMobileSource("account")
-        browser.browseTo(url)
-        myAccount.assertDisplayedForMobile()
-    }
-
-    @When("I navigate to the Account page for desktop")
-    fun iNavigateToTheAccountPageForDesktop() {
-        val url = PageUrl().getPageWithoutSource("account")
-        browser.browseTo(url)
-        myAccount.assertDisplayed()
-        myAccount.settings.assertNotDisplayed()
-    }
 
     @When("I click the Notifications link on the Account page")
     fun iClickTheNotificationsLinkOnTheAccountPage(){

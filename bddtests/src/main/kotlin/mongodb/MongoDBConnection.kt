@@ -52,7 +52,8 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         val collection = mongoDatabase.getCollection(collectionName)
         val documents = collection.find()
         val values = documents.map { document ->
-            GsonBuilder().create().fromJson<T>(document.toJson(), type)
+            val jsonDocument = document.toJson()
+            GsonBuilder().create().fromJson<T>(jsonDocument, type)
         }.toList()
         mongoClient.close()
         return values
@@ -71,6 +72,7 @@ class MongoDBConnection(private val collectionName: String, private val host: St
     companion object {
         private const val im1CacheCollectionName = "im1cache"
         private const val userDevicesCollectionName = "devices"
+        private const val messagesCollectionName = "messages"
         private const val developmentDatabaseName = "development"
 
         val Im1CacheCollection = MongoDBConnection(
@@ -81,6 +83,10 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 userDevicesCollectionName,
                 Config.instance.usersMongoDbHost,
                 Config.instance.usersMongoDbPort.toInt())
+        val MessagesCollection = MongoDBConnection(
+                messagesCollectionName,
+                Config.instance.messagesMongoDbHost,
+                Config.instance.messagesMongoDbPort.toInt())
     }
 }
 

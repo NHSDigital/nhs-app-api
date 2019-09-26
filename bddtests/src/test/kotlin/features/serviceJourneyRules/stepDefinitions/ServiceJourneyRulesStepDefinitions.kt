@@ -41,7 +41,7 @@ class ServiceJourneyRulesStepDefinitions {
     @Given("^I am a (.*) user where the journey configurations are:$")
     fun iAmAUserWhereTheJourneyConfigurationsAre(gpSystem: String,
                                                  configurations: List<ServiceJourneyRulesConfiguration>) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem, configurations)
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem, ArrayList(configurations))
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
     }

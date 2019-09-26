@@ -41,12 +41,18 @@ class ServiceJourneyRulesMapper {
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED)
         )
 
-        fun findPatientForConfiguration(gpSystem: String?, configurations: List<ServiceJourneyRulesConfiguration>):
-                Patient {
-            val journeyTypes =
-                    configurations.map { configuration -> configuration.toJourneyType() }
-            val gpInformation = findGpInformation(gpSystem, journeyTypes)
+        fun findPatientForConfiguration(gpSystem: String?, journeyType: JourneyType):Patient {
+           return findPatientForConfiguration(gpSystem, listOf(journeyType))
+        }
 
+        fun findPatientForConfiguration(gpSystem: String?,
+                                        configurations: ArrayList<ServiceJourneyRulesConfiguration>): Patient {
+            val journeyTypes = configurations.map { configuration -> configuration.toJourneyType() }.toList()
+            return findPatientForConfiguration(gpSystem, journeyTypes)
+        }
+
+        private fun findPatientForConfiguration(gpSystem: String?, journeyTypes: List<JourneyType>):Patient {
+            val gpInformation = findGpInformation(gpSystem, journeyTypes.toList())
             Assert.assertNotNull("Test setup incorrect: Cannot find a matching ods code for system:"
                     + gpSystem + "and odsCode: " + gpInformation?.odsCode + ", with given configuration in SJR",
                     gpInformation)

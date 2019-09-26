@@ -1,0 +1,85 @@
+package features.messages.stepDefinitions
+
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
+import mongodb.MongoDBConnection
+import mongodb.MongoRepositoryMessage
+import org.apache.http.HttpStatus
+import org.junit.Assert
+import utils.SerenityHelpers
+import utils.getOrFail
+import utils.set
+import worker.models.messages.MessageRequest
+
+class MessagesPostStepDefinitionsBackend {
+
+    @Given("^I am an api user wishing to post a message$")
+    fun iAmAApiUserWishingToPostAMessage() {
+        MongoDBConnection.MessagesCollection.clearCache()
+        val message = MessageRequest(
+                sender = "Sender One",
+                body = "Message One",
+                version = 1)
+        val nhsLoginId = "0123456789ABCDEF"
+        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
+        MessagesSerenityHelpers.EXPECTED_MESSAGE.set(message)
+    }
+
+    @When("^I post a message to the api$")
+    fun iPostAMessageToTheApi() {
+        val request = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MessageRequest>()
+        val nhsLoginId = MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.getOrFail<String>()
+        MessagesApi.post(request, nhsLoginId)
+    }
+
+    @Then("^the message is available in the database$")
+    fun theMessageIsAvailableInTheDatabase() {
+        //Cache has been cleared in data setup.
+        MongoDBConnection.MessagesCollection.assertNumberOfDocuments(1)
+        val messages = MongoDBConnection.MessagesCollection
+                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+        Assert.assertNotNull("Messages", messages)
+        Assert.assertEquals("Number of Messages", 1, messages.count())
+        val message = messages.first()
+        Assert.assertNotNull("Message id", message)
+        val expectedMessage = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MessageRequest>()
+        val expectedNhsLoginId = MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.getOrFail<String>()
+        Assert.assertEquals("Message nhsLoginId", expectedNhsLoginId, message.NhsLoginId)
+        Assert.assertEquals("Message body", expectedMessage.body, message.Body)
+        Assert.assertEquals("Message version", expectedMessage.version, message.Version)
+    }
+
+    @Then("^an attempt to post incomplete messages will return a Bad Request error$")
+    fun anAttemptToPostMessagesWillReturnABadRequestError() {
+        val validRequest = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MessageRequest>()
+        val nhsLoginId = MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.getOrFail<String>()
+
+        assertInvalidMessageThrowsBadRequest(validRequest, nhsLoginId, "body")
+        { messageRequest -> messageRequest.body = "" }
+        assertInvalidMessageThrowsBadRequest(validRequest, nhsLoginId, "sender")
+        { messageRequest -> messageRequest.sender = "" }
+        assertInvalidMessageThrowsBadRequest(validRequest, nhsLoginId, "version")
+        { messageRequest -> messageRequest.version = 0 }
+    }
+
+    private fun assertInvalidMessageThrowsBadRequest(
+            request: MessageRequest,
+            nhsLoginId: String,
+            invalidParam: String,
+            requestChange: (MessageRequest) -> Unit) {
+
+        SerenityHelpers.clearHttpException()
+        requestChange.invoke(request)
+        MessagesApi.post(request, nhsLoginId)
+        val errorResponse = SerenityHelpers.getHttpException()
+        Assert.assertNotNull(
+                "An exception was expected but was not returned within the expected time limit. " +
+                        "Invalid Param: $invalidParam"
+        )
+        Assert.assertEquals("Incorrect status code returned. Invalid Param: $invalidParam",
+                HttpStatus.SC_BAD_REQUEST,
+                errorResponse!!.statusCode)
+    }
+}
+

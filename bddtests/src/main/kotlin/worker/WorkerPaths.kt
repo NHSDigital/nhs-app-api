@@ -1,6 +1,7 @@
 package worker
 
 object WorkerPaths {
+    const val userPlaceholder = "<user>"
     const val patientIm1ConnectionV2 = "/v2/patient/im1connection"
     const val patientIm1ConnectionV1 = "/v1/patient/im1connection"
     const val sessionConnection = "/v1/session"
@@ -17,4 +18,5 @@ object WorkerPaths {
     const val organDonationConnection = "/v1/patient/organdonation"
     const val serviceJourneyRules = "/v1/patient/journey-configuration"
     const val userDevices = "/v1/api/users/devices"
+    const val userMessages = "/v1/api/users/$userPlaceholder/messages"
 }
