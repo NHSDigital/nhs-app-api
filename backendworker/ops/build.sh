@@ -5,7 +5,7 @@ set -e
 echo "Commit hash: $(git rev-parse HEAD)"
 echo "Commit hash: $(git rev-parse HEAD)" > version.txt
 
-APIS=(PfsApi CidApi ServiceJourneyRulesApi UsersApi)
+APIS=(PfsApi CidApi ServiceJourneyRulesApi UsersApi MessagesApi)
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 
 for api in "${APIS[@]}"

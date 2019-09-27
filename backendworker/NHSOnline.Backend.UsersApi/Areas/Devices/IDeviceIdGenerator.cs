@@ -3,7 +3,7 @@ using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
-    public interface IDeviceIdGenerator
+    internal interface IDeviceIdGenerator
     {
         string Generate(AccessToken accessToken, RegisterDeviceRequest request);
         string Generate(AccessToken accessToken, string devicePns);

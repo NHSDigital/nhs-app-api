@@ -1,0 +1,123 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Messages-API
+  description: NHS App Messages-API - endpoints pertaining to Messages.
+paths:
+  /users/me/messages:
+    get:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - messages
+      summary: Retrieve messages
+      description: Retrieves a list of messages pertaining to the authorized user
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. Messages are retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageCollectionResponse"
+        "204":
+          description: Successful operation. Content is empty.
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+  /users/{nhsLoginId}/messages:
+    post:
+      tags:
+        - messages
+      summary: Creates a message
+      description: Creates a message based on a nhsLoginId
+      parameters:
+        - in: path
+          name: nhsLoginId
+          required: true
+          description: Unique identifier of a user
+          schema:
+            type: string
+      requestBody:
+        x-name: AddMessageRequest
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddMessageRequest"
+        description: Details of the message to be created
+        required: true
+      responses:
+        "201":
+          description: Successful operation. Message is created.
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  securitySchemes:
+    nhsLoginBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+    UnexpectedError:
+      description: An unexpected error occurred processing the request.
+    BadRequest:
+      description: Bad request. Supplied request is invalid.
+  schemas:
+    AddMessageRequest:
+      type: object
+      properties:
+        sender:
+          type: string
+        version:
+          type: integer
+        body:
+          type: string
+      example:
+        sender: b1f99cf0-278d-49ca-a325-0a1504799488
+        version: 1
+        body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    MessageResponse:
+      type: object
+      properties:
+        sender:
+          type: string
+        version:
+          type: integer
+        body:
+          type: string
+        sendTime:
+          type: string
+          format: date-time
+          description: Message sent time.
+      example:
+        sender: b1f99cf0-278d-49ca-a325-0a1504799488
+        version: 1
+        body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        sendTime: 2019-09-17T02:15:12.356Z
+    MessageCollectionResponse:
+      type: object
+      properties:
+        Messages:
+          type: array
+          description: Array of messages for an authorized user
+          items:
+            $ref: "#/components/schemas/MessageResponse"

@@ -1,6 +1,6 @@
 namespace NHSOnline.Backend.UsersApi
 {
-    public class AzureNotificationConfiguration
+    internal class AzureNotificationConfiguration
     {
         public string ConnectionString { get; }
         public string NotificationHubPath { get; }

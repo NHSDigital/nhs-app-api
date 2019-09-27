@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.Support
             return this;
         }
 
-        public ValidateAndLog HasValue<T>(T value, string name, ValidationOptions options)
+        public ValidateAndLog HasValue<T>(T value, string name, ValidationOptions options = ValidationOptions.None)
         {
             if (value.Equals(default(T)))
             {

@@ -1,7 +1,7 @@
 using System;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace NHSOnline.Backend.Support
+namespace NHSOnline.Backend.Support.Repository
 {
     public abstract class MongoRecord
     {

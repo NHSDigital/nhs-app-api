@@ -6,7 +6,7 @@ using static NHSOnline.Backend.Support.Constants.UsersConstants;
 
 namespace NHSOnline.Backend.UsersApi.Notifications.Azure
 {
-    public class RegistrationDescriptionFactory : IRegistrationDescriptionFactory
+    internal class RegistrationDescriptionFactory : IRegistrationDescriptionFactory
     {
         public RegistrationDescription Create(RegisterDeviceRequest registerDeviceRequest, string nhsLoginId)
         {

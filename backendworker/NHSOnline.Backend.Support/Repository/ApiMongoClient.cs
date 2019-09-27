@@ -1,12 +1,12 @@
 using System.Security.Authentication;
 using MongoDB.Driver;
 
-namespace NHSOnline.Backend.UsersApi
+namespace NHSOnline.Backend.Support.Repository
 {
-    internal class UsersApiMongoClient : MongoClient
+    public class ApiMongoClient : MongoClient
     {
-        public UsersApiMongoClient(IMongoConfiguration mongoConfiguration)
-         : base(BuildSettings(mongoConfiguration))
+        public ApiMongoClient(IMongoConfiguration mongoConfiguration)
+            : base(BuildSettings(mongoConfiguration))
         {
         }
 

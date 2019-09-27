@@ -4,28 +4,24 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Repository;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.UsersApi.Repository
 {
     internal class MongoUserDeviceRepository : MongoRepository<UserDevice>, IUserDeviceRepository
     {
-        protected override string DatabaseName { get; }
-        protected override string CollectionName { get; }
-
         private readonly ILogger<MongoUserDeviceRepository> _logger;
-        
-        public MongoUserDeviceRepository(
+
+        public MongoUserDeviceRepository
+        (
             ILogger<MongoUserDeviceRepository> logger,
             IMongoClient mongoClient,
-            IMongoConfiguration config
+            IMongoConfiguration mongoConfiguration
         )
-            : base(mongoClient)
+            : base(mongoClient, mongoConfiguration)
         {
             _logger = logger;
-
-            DatabaseName = config.DatabaseName;
-            CollectionName = config.UserDeviceCollectionName;
         }
 
         public async Task Create(UserDevice userDevice)
@@ -49,7 +45,8 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1309", Justification = "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
+        [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
+            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
         public async Task<UserDevice> Find(string nhsLoginId, string deviceId)
         {
             try
@@ -63,7 +60,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
 
                 using (_logger.WithTimer("Find user device on Mongo"))
                 {
-                   return await FindOneAsync(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
+                    return await FindOneAsync(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
                 }
             }
             finally
@@ -71,8 +68,9 @@ namespace NHSOnline.Backend.UsersApi.Repository
                 _logger.LogExit();
             }
         }
-        
-        [SuppressMessage("Microsoft.Globalization", "CA1309", Justification = "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
+
+        [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
+            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
         public async Task Delete(string nhsLoginId, string deviceId)
         {
             try

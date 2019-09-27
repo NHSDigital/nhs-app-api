@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-APIS=(backendpfsapi backendcidapi backendservicejourneyrulesapi backendclinicaldecisionsupportapi backendcdsswiremock backendusersapi clientloggerapi)
+APIS=(backendpfsapi backendcidapi backendservicejourneyrulesapi backendclinicaldecisionsupportapi backendcdsswiremock backendusersapi backendmessagesapi clientloggerapi)
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 
 for api in "${APIS[@]}"

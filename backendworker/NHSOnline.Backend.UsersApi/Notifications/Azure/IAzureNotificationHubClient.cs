@@ -3,7 +3,7 @@ using Microsoft.Azure.NotificationHubs;
 
 namespace NHSOnline.Backend.UsersApi.Notifications.Azure
 {
-    public interface IAzureNotificationHubClient
+    internal interface IAzureNotificationHubClient
     {
         Task<string> CreateRegistrationId();
         Task<RegistrationDescription> CreateOrUpdateRegistration(RegistrationDescription registration);

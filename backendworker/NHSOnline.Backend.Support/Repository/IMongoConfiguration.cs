@@ -1,9 +1,9 @@
-namespace NHSOnline.Backend.UsersApi
+namespace NHSOnline.Backend.Support.Repository
 {
-    internal interface IMongoConfiguration
+    public interface IMongoConfiguration
     {
         string DatabaseName { get; }
-        string UserDeviceCollectionName { get; }
+        string CollectionName { get; }
         string Host { get; }
         int Port { get; }
         string Username { get; }

@@ -3,7 +3,7 @@ using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 
 namespace NHSOnline.Backend.UsersApi.Notifications.Azure
 {
-    public interface IRegistrationDescriptionFactory
+    internal interface IRegistrationDescriptionFactory
     {
         RegistrationDescription Create(RegisterDeviceRequest registerDeviceRequest, string nhsLoginId);
     }

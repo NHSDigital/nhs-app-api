@@ -5,7 +5,7 @@ using Microsoft.Azure.NotificationHubs;
 
 namespace NHSOnline.Backend.UsersApi.Notifications.Azure
 {
-    public class AzureNotificationHubClient : IAzureNotificationHubClient
+    internal class AzureNotificationHubClient : IAzureNotificationHubClient
     {
         private readonly NotificationHubClient _hubClient;
 
