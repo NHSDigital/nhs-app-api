@@ -89,6 +89,8 @@ class MyRecordInfoPage : HybridPageObject() {
 
     val procedures by lazy { getSection("Procedures") }
 
+    val recalls by lazy { getSection("Recalls") }
+
     fun assertSectionHeaderIsVisible(header: String) {
         MyRecordWrapper(header, this).header.assertSingleElementPresent().assertIsVisible()
     }

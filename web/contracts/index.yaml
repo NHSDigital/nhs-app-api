@@ -1008,40 +1008,89 @@
                         hasAccess: 
                           type: "boolean"
                           description: "Does the patient have access to this data."
-                          hasErrored: 
-                            type: "boolean"
-                            description: "Some error occurred when attempting to retrieve this error."
-                          hasUndeterminedAccess: 
-                            type: "boolean"
-                            description: "Set to true if no data is returned and we cant determine why"
-                          data: 
-                            type: "array"
-                            description: "An array of medical history information objects."
-                            items: 
-                              type: "object"
-                              properties: 
-                                date: 
-                                  type: "object"
-                                  properties: 
-                                    value: 
-                                      type: "string"
-                                      format: "date-time"
-                                      description: "date/time value."
-                                    datePart: 
-                                      type: "string"
-                                      description: "date part to display."
-                                      enum: 
-                                        - "Unknown"
-                                        - "Year"
-                                        - "YearMonth"
-                                        - "YearMonthDay"
-                                        - "YearMonthDayTime"
-                                rubric: 
-                                  type: "string"
-                                  description: "The title of the medical history."
-                                description: 
-                                  type: "string"
-                                  description: "Description of the medical history."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
+                        data: 
+                          type: "array"
+                          description: "An array of medical history information objects."
+                          items: 
+                            type: "object"
+                            properties: 
+                              date: 
+                                type: "object"
+                                properties: 
+                                  value: 
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart: 
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum: 
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              rubric: 
+                                type: "string"
+                                description: "The title of the medical history."
+                              description: 
+                                type: "string"
+                                description: "Description of the medical history."
+                    recalls:
+                      type: "object"
+                      properties:
+                        hasAccess:
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored:
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess:
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
+                        data:
+                          type: "array"
+                          description: "An array of recall objects."
+                          items:
+                            type: "object"
+                            properties:
+                              recordDate:
+                                type: "object"
+                                properties:
+                                  value:
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart:
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum:
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              name:
+                                type: "string"
+                                description: "The medication name of the recall."
+                              description:
+                                type: "string"
+                                description: "The purpose of the medication."
+                              result:
+                                type: "string"
+                                description: "The result of the recall."
+                              nextDate:
+                                type: "string"
+                                description: "The date of the next recall."
+                              status:
+                                type: "string"
+                                description: "The status of the recall."
                     documents: 
                       type: "object"
                       properties: 

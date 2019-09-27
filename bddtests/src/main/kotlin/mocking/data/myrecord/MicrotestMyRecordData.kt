@@ -12,6 +12,8 @@ import mocking.microtest.myRecord.Problem
 import mocking.microtest.myRecord.Problems
 import mocking.microtest.myRecord.MedicalHistory
 import mocking.microtest.myRecord.MedicalHistories
+import mocking.microtest.myRecord.Recall
+import mocking.microtest.myRecord.Recalls
 import utils.set
 
 object MicrotestMyRecordData {
@@ -23,7 +25,8 @@ object MicrotestMyRecordData {
         val immunisations = Immunisations("true", "false", 0, mutableListOf<Immunisation>())
         val problems = Problems("true", "false", 0, mutableListOf<Problem>())
         val medicalHistories = MedicalHistories("true", "false",0, mutableListOf<MedicalHistory>())
-        return MyRecordResponseModel(allergies, medications, immunisations, problems, medicalHistories)
+        val recalls = Recalls("true", "false",0, mutableListOf<Recall>())
+        return MyRecordResponseModel(allergies, medications, immunisations, problems, medicalHistories, recalls)
     }
 
     fun getPopulatedMicrotestMyRecord(myRecordModuleCounts: MyRecordModuleCounts): MyRecordResponseModel {
@@ -91,19 +94,18 @@ object MicrotestMyRecordData {
         val medications = Medications("true", "false", medicationList.size, medicationList)
         val immunisations = Immunisations("true", "false", immunisationList.size, immunisationList)
         val problems = Problems("true", "false", problemList.size, problemList)
+        val medicalHistories = buildMedicalHistories(myRecordModuleCounts.medicalHistoryCount)
+        val recalls = buildRecalls(myRecordModuleCounts.recallCount)
 
-        val medicalHistoryList = buildMedicalHistoryList(myRecordModuleCounts.medicalHistoryCount)
-        val medicalHistories = MedicalHistories(
-                "true", "false", medicalHistoryList.size, medicalHistoryList)
         val myRecordResponseModel =  MyRecordResponseModel(
-                allergies, medications, immunisations, problems, medicalHistories)
+                allergies, medications, immunisations, problems, medicalHistories, recalls)
 
         MyRecordSerenityHelpers.MY_RECORD_DATA.set(myRecordResponseModel)
 
         return myRecordResponseModel
     }
 
-    private fun buildMedicalHistoryList(medicalHistoryCount: Int) : MutableList<MedicalHistory> {
+    private fun buildMedicalHistories(medicalHistoryCount: Int) : MedicalHistories {
         val medicalHistoryList = mutableListOf<MedicalHistory>()
         for (i in 1..medicalHistoryCount) {
             medicalHistoryList.add(
@@ -114,7 +116,32 @@ object MicrotestMyRecordData {
                     )
             )
         }
-        return medicalHistoryList
+        return MedicalHistories("true", "false", medicalHistoryList.size,  medicalHistoryList)
+    }
+
+    private fun buildRecalls(recallsCount: Int) : Recalls {
+
+        val recallList = mutableListOf<Recall>()
+        for (i in 1..recallsCount) {
+
+            var recordDate = "2019-0$i-01"
+            if (i == 1) {
+                recordDate = ""
+            }
+
+            recallList.add(
+                    Recall(
+                            recordDate = recordDate,
+                            name = "Name $i",
+                            description = "Desc $i",
+                            result = "Result $i",
+                            nextDate = "NextDate $i",
+                            status = "Status $i"
+                    )
+            )
+        }
+
+        return Recalls("true", "false", recallList.size, recallList)
     }
 
 }

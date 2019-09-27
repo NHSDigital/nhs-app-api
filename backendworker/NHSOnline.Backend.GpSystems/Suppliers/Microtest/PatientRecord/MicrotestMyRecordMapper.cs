@@ -37,6 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             MapImmunisations(myRecordResponse, patientRecordGetResponse.ImmunisationData);
             MapProblems(myRecordResponse, patientRecordGetResponse.ProblemData);
             MapMedicalHistory(myRecordResponse, patientRecordGetResponse.MedicalHistoryData);
+            MapRecalls(myRecordResponse, patientRecordGetResponse.RecallData);
 
             SetHasSummaryRecordAccess(myRecordResponse);
             SetHasDetailedRecordAccess(myRecordResponse);
@@ -203,6 +204,35 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
         }
         
+        private void MapRecalls(MyRecordResponse myRecordResponse, RecallData recallData)
+        {
+            if (recallData != null)
+            {
+                myRecordResponse.Recalls.Data = recallData.Recalls
+                    .Select(x => new RecallItem()
+                    {
+                        RecordDate = x.RecordDate != null
+                            ? new MyRecordDate
+                            {
+                                Value = DateTime.TryParse(x.RecordDate, out var recordDate)
+                                    ? recordDate
+                                    : (DateTimeOffset?) null,
+                                DatePart = "Unknown"
+                            }
+                            : null,
+                        Name = x.Name,
+                        Description = x.Description,
+                        Result = x.Result,
+                        NextDate = x.NextDate,
+                        Status = x.Status
+                    })
+                    .OrderByDescending(o => o.RecordDate?.Value.GetValueOrDefault())
+                    .ToList();
+
+                myRecordResponse.Recalls.HasUndeterminedAccess = !recallData.Recalls.Any();
+            }
+        }
+        
         private void AddMedicalHistoryItemIfValid(List<MedicalHistoryItem> medicalHistoryItems, MedicalHistory medicalHistory)
         {            
             if(!string.IsNullOrWhiteSpace(medicalHistory.Rubric))
@@ -343,7 +373,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             myRecordResponse.HasDetailedRecordAccess = 
                 IsAny(myRecordResponse.Immunisations.Data) ||
                 IsAny(myRecordResponse.Problems.Data) ||
-                IsAny(myRecordResponse.MedicalHistories.Data);
+                IsAny(myRecordResponse.MedicalHistories.Data) ||
+                IsAny(myRecordResponse.Recalls.Data);
         }
 
         private static bool IsAny<T>(IEnumerable<T> data)

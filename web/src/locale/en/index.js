@@ -895,6 +895,12 @@ export default {
     medicalHistory: {
       sectionHeader: 'Medical History',
     },
+    recalls: {
+      sectionHeader: 'Recalls',
+      result: 'Result: ',
+      nextDate: 'Next Date: ',
+      status: 'Status: ',
+    },
     testResults: {
       sectionHeader: {
         tpp: 'Test results (past 6 months)',

@@ -1194,6 +1194,118 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasDetailedRecordAccess.Should().BeFalse();
             result.MedicalHistories.HasUndeterminedAccess.Should().BeTrue();
         }
+
+        [TestMethod]
+        public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenNoRecallsReturned()
+        {
+            // Arrange
+            var item = new PatientRecordGetResponse
+            {
+                RecallData = new RecallData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Recalls = new List<Recall>()
+                }
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Recalls.Data.Should().HaveCount(0);
+            result.Recalls.HasUndeterminedAccess.Should().BeTrue();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+        } 
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_MapSingleRecallCorrectly()
+        {
+            // Arrange
+            var item = new PatientRecordGetResponse
+            {
+                RecallData = new RecallData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Recalls = new List<Recall>
+                    {
+                        BuildMicrotestRecall("2019-03-27", "name", "desc", "Nut Allergy", "2019-03-27", "status"),
+                    }
+                },
+            };
+            
+            var expectedResult = new MyRecordResponse
+            {
+                Recalls = new Recalls
+                {
+                    Data = new List<RecallItem>
+                    {
+                        BuildRecallItem(item.RecallData.Recalls.ElementAt(0))
+                    }
+                }
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Recalls.Data.Should().HaveCount(1);
+            result.Recalls.Should().BeEquivalentTo(expectedResult.Recalls);
+            result.Recalls.HasUndeterminedAccess.Should().BeFalse();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+        }
+        
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_MapMultipleRecordsOrderedCorrectly()
+        {
+            // Arrange
+            var item = new PatientRecordGetResponse
+            {
+                RecallData = new RecallData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Recalls = new List<Recall>
+                    {
+                        BuildMicrotestRecall("2019-02-27", "name 1", "desc 1", "result 1", "2019-03-27", "status 1"),
+                        BuildMicrotestRecall("2019-01-27", "name 2", "desc 2", "result 2", "2019-03-28", "status 2"),
+                        BuildMicrotestRecall("2019-03-27", "name 3", "desc 3", "result 3", "2019-03-29", "status 3")
+                    }
+                },
+            };
+            
+            var expectedResult = new MyRecordResponse
+            {
+                Recalls = new Recalls
+                {
+                    Data = new List<RecallItem>
+                    {
+                        BuildRecallItem(item.RecallData.Recalls.ElementAt(2)),
+                        BuildRecallItem(item.RecallData.Recalls.ElementAt(0)),
+                        BuildRecallItem(item.RecallData.Recalls.ElementAt(1))
+                    }
+                }
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Recalls.Data.Should().HaveCount(3);
+            result.Recalls.Should().BeEquivalentTo(expectedResult.Recalls,r => r.WithStrictOrdering());;
+            result.Recalls.HasUndeterminedAccess.Should().BeFalse();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+        }
+        
+        
         
         private static MedicalHistoryItem BuildMedicalHistoryItem(MedicalHistory medicalHistory)
         {
@@ -1282,7 +1394,29 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     new ProblemLineItem { Text = rubric }
                 }
             };
-        } 
+        }
+
+
+       private static RecallItem BuildRecallItem(Recall recall)
+       {
+           return new RecallItem
+           {
+               RecordDate = recall.RecordDate != null
+                   ? new MyRecordDate
+                   {
+                       Value = DateTime.TryParse(recall.RecordDate, out var recordDate)
+                           ? recordDate
+                           : (DateTimeOffset?) null,
+                       DatePart = "Unknown"
+                   }
+                   : null,
+               Name = recall.Name,
+               Description = recall.Description,
+               Result = recall.Result,
+               NextDate = recall.NextDate,
+               Status = recall.Status
+           };
+       }
 
         private static MyRecordDate GetMyRecordDate(string date)
         {
@@ -1369,6 +1503,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 StartDate = startDate,
                 FinishDate = finishDate,
                 Rubric = rubric,
+            };
+        }
+
+        private static Recall BuildMicrotestRecall
+            (string recordDate, string name, string description, string result, string nextDate, string status)
+        {
+            return new Recall
+            {
+                RecordDate = recordDate,
+                Name = name,
+                Description = description,
+                NextDate = nextDate,
+                Result = result,
+                Status = status
             };
         }
     }

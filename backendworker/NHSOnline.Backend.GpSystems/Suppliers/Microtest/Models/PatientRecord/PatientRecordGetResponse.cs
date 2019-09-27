@@ -18,5 +18,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord
         
         [JsonProperty("medicalHistory")]
         public MedicalHistoryData MedicalHistoryData { get; set; }
+
+        [JsonProperty("recalls")]
+        public RecallData RecallData { get; set; }
     }
 }

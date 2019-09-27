@@ -39,6 +39,19 @@
     </analytics-tracked-tag>
     <medicalHistory :is-collapsed="isMedicalHistoryCollapsed"
                     :medical-history="record.medicalHistories" />
+
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isRecallsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="RECALLS"
+                           :text="$t('my_record.recalls.sectionHeader')"
+                           :aria-expanded="!isRecallsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.recalls.sectionHeader') }}
+    </analytics-tracked-tag>
+    <recalls :is-collapsed="isRecallsCollapsed" :recalls="record.recalls" />
   </div>
 </template>
 
@@ -46,11 +59,13 @@
 import Immunisations from '@/components/my-record/SharedComponents/Immunisations';
 import Problems from '@/components/my-record/SharedComponents/Problems';
 import MedicalHistory from '@/components/my-record/SharedComponents/MedicalHistory';
+import Recalls from '@/components/my-record/SharedComponents/Recalls';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 const IMMUNISATIONS = 'immunisations';
 const PROBLEMS = 'problems';
 const MEDICAL_HISTORY = 'medicalHistory';
+const RECALLS = 'recalls';
 
 export default {
   name: 'DcrMICROTEST',
@@ -59,6 +74,7 @@ export default {
     Immunisations,
     Problems,
     MedicalHistory,
+    Recalls,
   },
   props: {
     record: {
@@ -71,9 +87,11 @@ export default {
       IMMUNISATIONS,
       PROBLEMS,
       MEDICAL_HISTORY,
+      RECALLS,
       isImmunisationsCollapsed: process.client,
       isProblemsCollapsed: process.client,
       isMedicalHistoryCollapsed: process.client,
+      isRecallsCollapsed: process.client,
     };
   },
   methods: {
@@ -93,6 +111,10 @@ export default {
         case MEDICAL_HISTORY:
           this.isMedicalHistoryCollapsed =
             !this.isMedicalHistoryCollapsed;
+          break;
+        case RECALLS:
+          this.isRecallsCollapsed =
+            !this.isRecallsCollapsed;
           break;
         default:
           break;
