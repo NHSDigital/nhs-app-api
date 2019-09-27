@@ -93,6 +93,7 @@ import NativeCallbacks from '@/services/native-app';
 import moment from 'moment';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
     MessageDialog,

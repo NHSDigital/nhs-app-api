@@ -49,7 +49,8 @@ export default {
       return !store.state.device.isNativeApp || isNativeVersionAfter('1.17.0');
     },
     fixBreadCrumb() {
-      return !isEmpty(this.currentBreadCrumbs) && this.$store.state.device.isNativeApp;
+      return this.showBreadCrumb &&
+        !isEmpty(this.currentBreadCrumbs) && this.$store.state.device.isNativeApp;
     },
   },
 };
