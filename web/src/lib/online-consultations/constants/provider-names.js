@@ -1,4 +1,4 @@
 export default {
-  eConsult: 'eConsult',
+  eConsult: 'eConsult Health Ltd',
   stubs: 'OLC Stubs',
 };

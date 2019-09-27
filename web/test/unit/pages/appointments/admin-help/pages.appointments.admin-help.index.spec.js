@@ -10,6 +10,7 @@ jest.mock('@/lib/online-consultations/answer-validators');
 
 describe('Admin Help page', () => {
   let page;
+  let getters;
   const dispatch = jest.fn(() => Promise.resolve());
   const redirect = jest.fn();
 
@@ -21,7 +22,11 @@ describe('Admin Help page', () => {
       device: {
         isNativeApp: true,
       },
-      onlineConsultations: {},
+      onlineConsultations: {
+        providerName: {
+          name: 'eConsult Health Ltd',
+        },
+      },
       serviceJourneyRules: {
         rules: {
           cdssAdmin: {
@@ -34,6 +39,9 @@ describe('Admin Help page', () => {
           },
         },
       },
+    },
+    getters: {
+      getProviderName: 'eConsult Health Ltd',
     },
     dispatch,
   };
@@ -61,6 +69,7 @@ describe('Admin Help page', () => {
       $style,
       showTemplate: () => true,
       stubs,
+      getters,
     });
   };
 
@@ -357,7 +366,7 @@ describe('Admin Help page', () => {
         expect(serviceDefinitionId).toEqual('NHS_ADMIN');
         expect(checkboxLabel).toEqual('translate_appointments.admin_help.demographicsQuestion.checkboxLabel');
       });
-      it('will display the three demographics question paragraphs passed via slot', () => {
+      it('will display the warning followed by three demographics question paragraphs passed via slot', () => {
         // Arrange
         mountPage({ stubDemographicsQuestion: false });
 
@@ -365,9 +374,10 @@ describe('Admin Help page', () => {
         const demographicsQuestionParagraphs = page.find('div.demographicsQuestion').findAll('p').wrappers;
 
         // Assert
-        expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
-        expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
-        expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
+        expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.warning.warningText');
+        expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
+        expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
+        expect(demographicsQuestionParagraphs[3].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
       });
     });
     describe('orchestrator', () => {

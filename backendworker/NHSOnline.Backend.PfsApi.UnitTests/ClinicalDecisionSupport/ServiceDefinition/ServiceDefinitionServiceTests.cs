@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             var providersSettings = new OnlineConsultationsProvidersSettings();
             var providerSetting = new OnlineConsultationsProviderSettings
             {
-                Provider = "eConsult", ProviderName = "eConsult"
+                Provider = "eConsult", ProviderName = "eConsult Health Ltd"
             };
 
             var providerSettingsList = new List<OnlineConsultationsProviderSettings> { providerSetting };
@@ -111,7 +111,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 _mockDemographicsOlcMapper.Object,
                 _mockAuditor.Object,
                 _mockGpSystemFactory.Object,
-                _mockCreateFhirParam.Object
+                _mockCreateFhirParam.Object,
+                providersSettings
                 );
         }
         
@@ -231,6 +232,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
                 It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+        }
+        
+        [TestMethod]
+        public void GetProviderName_ReturnsSuccess()
+        {
+            // Act
+            var response = _service.GetProviderName("eConsult");
+
+            // Assert
+            response.Should().BeAssignableTo<string>();
+            Assert.AreSame(response, "eConsult Health Ltd");
         }
 
         [TestMethod]

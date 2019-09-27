@@ -23,6 +23,12 @@ Feature: Login frontend
       | GP System |
       | EMIS      |
 
+  Scenario: A user does not see the OLC beta banner when on not on an online consultations page
+    Given I am a EMIS patient
+    And I am logged in
+    Then I see a welcome message
+    And I do not see the yellow banner
+
   #Once prescriptions are completed for microtest, this test can be merged with above
   Scenario: A Microtest user sees the home page after logging in
     Given I am a MICROTEST patient

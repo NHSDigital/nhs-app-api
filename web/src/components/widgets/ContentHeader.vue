@@ -1,13 +1,24 @@
 <template>
   <div>
-    <bread-crumb-trail v-if="showBreadCrumb" id="bread-crumb"
-                       :class="$style[fixBreadCrumb ? 'fix-breadcrumb' : '']"
-                       :routes="currentBreadCrumbs" />
-    <div :class="['nhsuk-width-container', $style[fixBreadCrumb ? 'native-padding' : '']]">
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <page-title v-if="showContentHeader"
-                      :should-show-desktop-version="showHeader"/>
+    <div :class="$style[fixBreadCrumb ? 'fix-breadcrumb' : '']">
+      <bread-crumb-trail v-if="showBreadCrumb" id="bread-crumb"
+                         :routes="currentBreadCrumbs"/>
+      <yellow-banner v-if="showBanner"
+                     id="yellow-banner-line"
+                     :class="$style['bannerLine']"/>
+    </div>
+    <div :class="[$style[fixBreadCrumb ? 'native-padding' : '']]">
+      <yellow-banner v-if="showBanner" id="yellow-banner">
+        <p>
+          {{ $t('externalServiceWarning.warningText', {providerName: getProviderName}) }}
+        </p>
+      </yellow-banner>
+      <div :class="['nhsuk-width-container']">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <page-title v-if="showContentHeader"
+                        :should-show-desktop-version="showHeader"/>
+          </div>
         </div>
       </div>
     </div>
@@ -22,10 +33,12 @@ import {
   findByName,
   getCrumbTrailForRoute,
 } from '@/lib/routes';
+import YellowBanner from './YellowBanner';
 
 export default {
   name: 'ContentHeader',
   components: {
+    YellowBanner,
     BreadCrumbTrail,
     PageTitle,
   },
@@ -48,9 +61,32 @@ export default {
       const isNativeVersionAfter = store.getters['appVersion/isNativeVersionAfter'];
       return !store.state.device.isNativeApp || isNativeVersionAfter('1.17.0');
     },
+    demographicsQuestionAnswered() {
+      return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
+    },
     fixBreadCrumb() {
       return this.showBreadCrumb &&
         !isEmpty(this.currentBreadCrumbs) && this.$store.state.device.isNativeApp;
+    },
+    showBanner() {
+      const routeName = findByName(this.$route.name);
+      if (routeName !== undefined) {
+        if (routeName.area === 'online-consultations-admin' || routeName.area === 'online-consultations-advice') {
+          return !!(routeName.warningBanner && this.demographicsQuestionAnswered);
+        }
+        return !!(routeName.warningBanner && true);
+      }
+      return false;
+    },
+    getProviderName() {
+      const routeName = findByName(this.$route.name);
+      if (routeName !== undefined) {
+        if (routeName.area === 'online-consultations-admin') {
+          return this.$store.state.serviceJourneyRules.rules.cdssAdmin.name;
+        }
+        return this.$store.state.serviceJourneyRules.rules.cdssAdvice.name;
+      }
+      return '';
     },
   },
 };
@@ -66,6 +102,10 @@ export default {
     z-index: 4;
     position: fixed;
     width: 100%;
+  }
+
+  .bannerLine {
+   height: 5px;
   }
 
   .native-padding {

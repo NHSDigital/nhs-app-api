@@ -1,9 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.Support.AspNet;
@@ -172,6 +174,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                         demographicsConsentGiven,
                         userSession))
                     .Accept(visitor);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [Route("/fhir/ServiceDefinition/providerName/{provider}")]
+        public string GetProviderName([FromRoute(Name = "provider")] string provider)
+        {
+            _logger.LogEnter();
+            try
+            {
+                return _service.GetProviderName(provider);
             }
             finally
             {

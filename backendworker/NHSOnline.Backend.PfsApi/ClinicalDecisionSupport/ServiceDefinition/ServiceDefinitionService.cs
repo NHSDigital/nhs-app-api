@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly IAuditor _auditor;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ICreateFhirParameter _createFhirParameter;
+        private readonly OnlineConsultationsProvidersSettings _olcProvidersSettings;
 
         public ServiceDefinitionService(
             ILogger<ServiceDefinitionService> logger,
@@ -39,7 +41,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
             IAuditor auditor, 
             IGpSystemFactory gpSystemFactory,
-            ICreateFhirParameter createFhirParameter)
+            ICreateFhirParameter createFhirParameter,
+            OnlineConsultationsProvidersSettings olcProvidersSettings
+            )
         {
             _logger = logger;
             _serviceDefinitionListBuilder = serviceDefinitionListBuilder;
@@ -55,6 +59,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             
             _gpSystemFactory = gpSystemFactory;
             _createFhirParameter = createFhirParameter;
+
+            _olcProvidersSettings = olcProvidersSettings;
         }
 
         public async Task<ServiceDefinitionResult> GetServiceDefinitionById(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, string provider, UserSession userSession)
@@ -190,6 +196,12 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             {
                 _logger.LogExit();
             }
+        }
+
+        public string GetProviderName(string provider)
+        {
+            var providerName = _olcProvidersSettings.getProvider(provider).ProviderName;
+            return providerName;
         }
 
         public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(

@@ -15,10 +15,18 @@
       <demographics-question v-else-if="!demographicsQuestionAnswered"
                              :provider="provider"
                              :service-definition-id="serviceDefinitionId"
-                             :checkbox-label="demographicsCheckboxLabel">
+                             :checkbox-label="getDemographicsCheckboxLabel">
+        <message-dialog message-type="warning" icon-text="Important">
+          <message-text :class="$style.warningText">
+            {{ $t('appointments.admin_help.warning.warningText',
+                  { providerName: getProviderName }) }}
+          </message-text>
+        </message-dialog>
+
         <template>
           <p>{{ $t('appointments.gp_advice.demographicsQuestion.p1') }}</p>
-          <p>{{ $t('appointments.gp_advice.demographicsQuestion.p2', { providerName }) }}</p>
+          <p>{{ $t('appointments.gp_advice.demographicsQuestion.p2',
+                   { providerName: getProviderName }) }}</p>
         </template>
       </demographics-question>
 
@@ -37,7 +45,6 @@ import { noJsParameterName } from '@/lib/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
 import { APPOINTMENT_GP_ADVICE_CONDITIONS } from '@/lib/routes';
-import ProviderNames from '@/lib/online-consultations/constants/provider-names';
 import {
   ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
@@ -52,17 +59,6 @@ export default {
     Orchestrator,
     DemographicsQuestion,
   },
-  data() {
-    const providerName =
-      ProviderNames[this.$store.state.serviceJourneyRules.rules.cdssAdvice.provider];
-    return {
-      providerName,
-      demographicsCheckboxLabel: this.$t(
-        'appointments.gp_advice.demographicsQuestion.checkboxLabel',
-        { providerName },
-      ),
-    };
-  },
   computed: {
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
@@ -72,6 +68,16 @@ export default {
     },
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
+    },
+    getProviderName() {
+      return this.$store.state.serviceJourneyRules.rules.cdssAdvice.name;
+    },
+    getDemographicsCheckboxLabel() {
+      const providerName = this.$store.state.serviceJourneyRules.rules.cdssAdvice.name;
+      return this.$t(
+        'appointments.admin_help.demographicsQuestion.checkboxLabel',
+        { providerName },
+      );
     },
   },
   async asyncData({ store, req, redirect, route }) {
@@ -132,3 +138,11 @@ export default {
   },
 };
 </script>
+
+<style module lang="scss" scoped>
+  @import '../../../style/fonts';
+  .warningText {
+    font-family: $default_web;
+    font-weight: normal;
+  }
+</style>

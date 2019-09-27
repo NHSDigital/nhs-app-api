@@ -230,6 +230,11 @@ class AuthenticationStepDefinitions {
         nav.assertVisible()
     }
 
+    @Then("^I do not see the yellow banner$")
+    fun iDoNotSeeYellowBanner() {
+        home.homePage.assertYellowBannerIsNotPresent()
+    }
+
     @Then("^I do not see the menu bar$")
     fun iDoNotSeeMenuBar() {
         login.loginPage.assertMenuIsNotVisible()

@@ -2,18 +2,30 @@ import actions from '@/store/modules/serviceJourneyRules/actions';
 import { INIT, SET_RULES } from '@/store/modules/serviceJourneyRules/mutation-types';
 
 const createHttp = ({ result = {} } = {}) => ({
-  getV1PatientJourneyConfiguration: jest.fn().mockImplementation(() => Promise.resolve(result)),
+  getV1PatientJourneyConfiguration: jest.fn().mockImplementation(
+    () => Promise.resolve(result),
+  ),
+});
+
+const createCds = result => ({
+  getFhirServiceDefinitionProviderNameByProvider: jest.fn().mockImplementation(
+    () => Promise.resolve(result),
+  ),
 });
 
 describe('service journey rules actions', () => {
   let commit;
   let $http;
+  let $cdsApi;
 
   beforeEach(() => {
     commit = jest.fn();
     actions.app = {
       get $http() {
         return $http;
+      },
+      get $cdsApi() {
+        return $cdsApi;
       },
     };
   });
@@ -29,10 +41,22 @@ describe('service journey rules actions', () => {
   });
 
   describe('load', () => {
-    const rules = { foo: 'test' };
+    const rules = {
+      journeys: {
+        cdssAdmin: {
+          provider: 'none',
+          name: '',
+        },
+        cdssAdvice: {
+          provider: 'none',
+          name: '',
+        },
+      },
+    };
 
     beforeEach(() => {
       $http = createHttp({ result: rules });
+      $cdsApi = createCds('eConsult Health Ltd');
       actions.load({ commit });
     });
 

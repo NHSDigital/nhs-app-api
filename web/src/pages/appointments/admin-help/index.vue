@@ -15,11 +15,20 @@
       <demographics-question v-else-if="!demographicsQuestionAnswered"
                              :provider="provider"
                              :service-definition-id="serviceDefinitionId"
-                             :checkbox-label="demographicsCheckboxLabel">
+                             :checkbox-label="getDemographicsCheckboxLabel">
+
+        <message-dialog message-type="warning" icon-text="Important">
+          <message-text :class="$style.warningText">
+            {{ $t('appointments.admin_help.warning.warningText',
+                  { providerName: getProviderName }) }}
+          </message-text>
+        </message-dialog>
+
         <template>
           <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
           <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
-          <p>{{ $t('appointments.admin_help.demographicsQuestion.p3', { providerName }) }}</p>
+          <p>{{ $t('appointments.admin_help.demographicsQuestion.p3',
+                   { providerName: getProviderName }) }}</p>
         </template>
       </demographics-question>
 
@@ -37,7 +46,6 @@ import DemographicsQuestion from '@/components/online-consultations/Demographics
 import { noJsParameterName } from '@/lib/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
-import ProviderNames from '@/lib/online-consultations/constants/provider-names';
 import {
   ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
@@ -52,17 +60,6 @@ export default {
     Orchestrator,
     DemographicsQuestion,
   },
-  data() {
-    const providerName =
-      ProviderNames[this.$store.state.serviceJourneyRules.rules.cdssAdvice.provider];
-    return {
-      providerName,
-      demographicsCheckboxLabel: this.$t(
-        'appointments.admin_help.demographicsQuestion.checkboxLabel',
-        { providerName },
-      ),
-    };
-  },
   computed: {
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
@@ -72,6 +69,17 @@ export default {
     },
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
+    },
+    getProviderName() {
+      return this.$store.state.serviceJourneyRules.rules.cdssAdmin.name;
+    },
+    getDemographicsCheckboxLabel() {
+      const providerName = this.$store.state.serviceJourneyRules.rules.cdssAdmin.name;
+
+      return this.$t(
+        'appointments.admin_help.demographicsQuestion.checkboxLabel',
+        { providerName },
+      );
     },
   },
   async asyncData({ store, req }) {
@@ -126,3 +134,11 @@ export default {
   },
 };
 </script>
+
+<style module lang="scss" scoped>
+  @import '../../../style/fonts';
+  .warningText {
+    font-family: $default_web;
+    font-weight: normal;
+  }
+</style>

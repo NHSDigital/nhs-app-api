@@ -805,6 +805,9 @@ export default {
       },
     },
     admin_help: {
+      warning: {
+        warningText: 'This service is provided by {providerName}. They are an NHS-approved third-party organisation.',
+      },
       demographicsQuestion: {
         p1: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
         p2: 'It takes around 5 minutes to answer a few questions.',
@@ -1179,6 +1182,9 @@ export default {
   },
   signOutButton: {
     signOut: 'Log out',
+  },
+  externalServiceWarning: {
+    warningText: 'This service is provided by {providerName}',
   },
   pageHeaders: {
     home: 'Home',
