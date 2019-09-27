@@ -170,6 +170,20 @@ describe('getters', () => {
     });
   });
 
+  describe('messagingEnabled', () => {
+    const { messagingEnabled } = getters;
+
+    it('will be true if messaging is true', () => {
+      currentState.rules.messaging = true;
+      expect(messagingEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if messaging is false', () => {
+      currentState.rules.messaging = false;
+      expect(messagingEnabled(currentState)).toBe(false);
+    });
+  });
+
   describe('nominatedPharmacyEnabled', () => {
     const { nominatedPharmacyEnabled } = getters;
 
@@ -192,8 +206,8 @@ describe('getters', () => {
       expect(notificationsEnabled(currentState)).toBe(true);
     });
 
-    it('will be false if nominated pharmacy is false', () => {
-      currentState.rules.nominatedPharmacy = false;
+    it('will be false if notifications is false', () => {
+      currentState.rules.notifications = false;
       expect(notificationsEnabled(currentState)).toBe(false);
     });
   });

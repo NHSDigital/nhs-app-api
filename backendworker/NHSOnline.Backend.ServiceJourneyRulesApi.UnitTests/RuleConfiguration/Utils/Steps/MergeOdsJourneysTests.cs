@@ -65,6 +65,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(true)
+                    .MessagingEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
@@ -77,7 +78,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(false)
                     .NotificationsEnabled(false)
-                    .Build()
+                    .MessagingEnabled(false)
+                    .Build(),
+                new JourneysBuilder().Build()
             );
 
             var anotherFolderJourneys = CreateOdsJourneys(
@@ -92,13 +95,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(true)
+                    .MessagingEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
                     .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                     .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                     .Prescriptions(PrescriptionsProvider.im1)
-                    .Build()
+                    .MessagingEnabled(true)
+                    .Build(),
+                new JourneysBuilder().Build()
             );
 
             var expectedMergedJourneys = CreateOdsJourneys(
@@ -110,6 +116,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(true)
+                    .MessagingEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -119,6 +126,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(false)
                     .NotificationsEnabled(true)
+                    .MessagingEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -127,7 +135,18 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Prescriptions(PrescriptionsProvider.im1)
                     .NominatedPharmacyEnabled(false)
                     .NotificationsEnabled(false)
-                    .Build());
+                    .MessagingEnabled(true)
+                    .Build(),
+                new JourneysBuilder()
+                    .AppointmentProvider(null)
+                    .CdssAdviceProvider(null)
+                    .MedicalRecord(null)
+                    .Prescriptions(null)
+                    .NominatedPharmacyEnabled(null)
+                    .NotificationsEnabled(null)
+                    .MessagingEnabled(null)
+                    .Build()
+                );
 
             var context = new ConfigurationContext
             {
@@ -149,13 +168,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         private static Dictionary<string, Journeys> CreateOdsJourneys(
             Journeys firstJourney,
             Journeys secondJourney,
-            Journeys thirdJourney)
+            Journeys thirdJourney,
+            Journeys fourthJourney)
         {
             return new Dictionary<string, Journeys>
             {
                 { "A1", firstJourney },
                 { "A2", secondJourney },
-                { "A3", thirdJourney }
+                { "A3", thirdJourney },
+                { "A4", fourthJourney }
             };
         }
     }

@@ -1,10 +1,11 @@
 export const CDSS_ADMIN = 'cdssAdmin';
 export const CDSS_ADVICE = 'cdssAdvice';
 export const GP_AT_HAND = 'gpAtHand';
+export const GP_MEDICAL_RECORD = 'gpMedicalRecord';
 export const IM1_PROVIDER = 'im1';
 export const INFORMATICA = 'informatica';
 export const INIT = 'INIT';
-export const GP_MEDICAL_RECORD = 'gpMedicalRecord';
+export const MESSAGING = 'messaging';
 export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const NOTIFICATIONS = 'notifications';
 export const SET_RULES = 'SET_RULES';
@@ -29,6 +30,7 @@ export const initialState = () => ({
     medicalRecord: {
       version: 1,
     },
+    messaging: false,
     nominatedPharmacy: false,
     notifications: false,
     prescriptions: {

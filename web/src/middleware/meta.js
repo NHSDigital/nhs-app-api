@@ -25,6 +25,8 @@ import {
   LOGIN,
   LOGOUT,
   BEGINLOGIN,
+  MESSAGING,
+  MESSAGING_MESSAGES,
   MORE,
   MYRECORD,
   MYRECORDNOACCESS,
@@ -217,6 +219,12 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.repeatPrescriptionsPartialSuccess';
       route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionsPartialSuccess';
+      break;
+    case MESSAGING.name:
+    case MESSAGING_MESSAGES.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.messaging';
+      route.meta.pageTitleKey = 'pageTitles.messaging';
       break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:

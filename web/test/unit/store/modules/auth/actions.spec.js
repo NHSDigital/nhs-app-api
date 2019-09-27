@@ -1,5 +1,6 @@
+import each from 'jest-each';
 import actions from '@/store/modules/auth/actions';
-import { AUTH_RESPONSE, UPDATE_CONFIG } from '@/store/modules/auth/mutation-types';
+import { AUTH_RESPONSE, LOGOUT, UPDATE_CONFIG } from '@/store/modules/auth/mutation-types';
 import NativeCallbacks from '@/services/native-app';
 import { mockCookies } from '../../../helpers';
 import Sources from '../../../../../src/lib/sources';
@@ -17,6 +18,35 @@ describe('actions', () => {
   };
   let commit;
   let state;
+
+  const finalAsserts = () => {
+    it('will commit the value `true` to `LOGOUT`', () => {
+      expect(commit).toBeCalledWith(LOGOUT, true);
+    });
+
+    each([
+      'analytics/init',
+      'appVersion/init',
+      'auth/init',
+      'availableAppointments/init',
+      'device/init',
+      'errors/clearAllApiErrors',
+      'flashMessage/init',
+      'header/init',
+      'http/init',
+      'messaging/init',
+      'myAppointments/init',
+      'myRecord/init',
+      'navigation/init',
+      'organDonation/init',
+      'repeatPrescriptionCourses/init',
+      'serviceJourneyRules/init',
+      'session/setInfo',
+      'termsAndConditions/init',
+    ]).it('will dispach the `%s`', (action) => {
+      expect(actions.dispatch).toHaveBeenCalledWith(action);
+    });
+  };
 
   beforeEach(() => {
     actions.app = {
@@ -105,9 +135,7 @@ describe('actions', () => {
       expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
     });
 
-    it('will dispatch serviceJourneyRules/init', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
-    });
+    finalAsserts();
   });
 
   describe('logoutWhenExpired', () => {
@@ -178,8 +206,6 @@ describe('actions', () => {
       actions.unauthorised({ commit });
     });
 
-    it('will dispatch serviceJourneyRules/init', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
-    });
+    finalAsserts();
   });
 });

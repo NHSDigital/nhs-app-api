@@ -107,6 +107,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder MessagingEnabled(bool? enabled)
+        {
+            _journeys.Messaging = enabled;
+            return this;
+        }
+
         public JourneysBuilder WithSupplier(Supplier supplier)
         {
             _journeys.Supplier = supplier;

@@ -8,9 +8,9 @@
       <div v-else-if="shouldShowSlimDesktopHeader">
         <web-header :show-menu="false" :show-links="false"/>
       </div>
-      <content-header v-if="!isGpFinderPage()" id="content-header"
+      <content-header v-if="!isGpFinderPage" id="content-header"
                       :show-bread-crumb="shouldShowBreadCrumb"
-                      :show-content-header="!isLoginPage()"/>
+                      :show-content-header="shouldShowContentHeader"/>
 
       <div id="maincontent" ref="mainContent" tabindex="-1">
         <main :class="mainClass">
@@ -44,40 +44,40 @@
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
+import ApiError from '@/components/errors/ApiError';
+import ConnectionError from '@/components/errors/ConnectionError';
+import ContentHeader from '@/components/widgets/ContentHeader';
+import FlashMessage from '@/components/widgets/FlashMessage';
+import HotJar from '@/components/widgets/HotJar';
+import Modal from '@/components/modal/Modal';
+import NativeCallbacks from '@/services/native-app';
+import NativeVersionSetup from '@/services/nativeVersionSetup';
+import Spinner from '@/components/widgets/Spinner';
+import SurveyBar from '@/components/SurveyBar';
+import WebFooter from '@/components/widgets/WebFooter';
+import WebHeader from '@/components/widgets/WebHeader';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import {
-  getCrumbTrailForRoute,
   findByName,
+  getCrumbTrailForRoute,
   GP_FINDER,
   INDEX,
   LOGIN,
+  MESSAGING_MESSAGES,
 } from '@/lib/routes';
-import ContentHeader from '@/components/widgets/ContentHeader';
-import NativeCallbacks from '@/services/native-app';
-import WebHeader from '@/components/widgets/WebHeader';
-import WebFooter from '@/components/widgets/WebFooter';
-import Spinner from '@/components/widgets/Spinner';
-import ApiError from '@/components/errors/ApiError';
-import ConnectionError from '@/components/errors/ConnectionError';
-import FlashMessage from '@/components/widgets/FlashMessage';
-import SurveyBar from '@/components/SurveyBar';
-import HotJar from '@/components/widgets/HotJar';
-import NativeVersionSetup from '../services/nativeVersionSetup';
-import Modal from '@/components/modal/Modal';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
   components: {
-    ContentHeader,
-    WebHeader,
-    WebFooter,
-    Spinner,
     ApiError,
     ConnectionError,
+    ContentHeader,
     FlashMessage,
-    SurveyBar,
     HotJar,
     Modal,
+    Spinner,
+    SurveyBar,
+    WebHeader,
+    WebFooter,
   },
   head() {
     let { platform } = this.$store.state.device.source;
@@ -141,6 +141,12 @@ export default {
     currentHelpUrl() {
       return findByName(this.$route.name).helpUrl;
     },
+    isGpFinderPage() {
+      return this.$route.name === GP_FINDER.name;
+    },
+    loggedIn() {
+      return !!this.$store.state.session.csrfToken;
+    },
     showMenu() {
       return (
         !this.$store.state.device.isNativeApp &&
@@ -159,6 +165,11 @@ export default {
         this.loggedIn &&
         this.$route.name !== 'Login'
       );
+    },
+    shouldShowContentHeader() {
+      return this.loggedIn &&
+        this.$route.name !== LOGIN.name &&
+        this.$route.name !== MESSAGING_MESSAGES.name;
     },
     shouldShowFullDesktopHeader() {
       return (
@@ -192,9 +203,6 @@ export default {
         }
       }
       return clazzes;
-    },
-    loggedIn() {
-      return !!this.$store.state.session.csrfToken;
     },
   },
 
@@ -252,12 +260,6 @@ export default {
     isHotJarSurveyVisible() {
       return this.isAnalyticsCookieAccepted() && `${this.$env.HOTJAR_SURVEY_VISIBLE}` === 'true';
     },
-    isLoginPage() {
-      return this.$route.name === LOGIN.name;
-    },
-    isGpFinderPage() {
-      return this.$route.name === GP_FINDER.name;
-    },
     focusNhsAppRoot() {
       this.$refs.nhsAppRoot.focus();
     },
@@ -267,7 +269,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
   @import "~nhsuk-frontend/packages/nhsuk";

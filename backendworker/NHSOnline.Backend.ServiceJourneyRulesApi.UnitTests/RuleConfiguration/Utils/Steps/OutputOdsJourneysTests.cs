@@ -71,21 +71,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public async Task Execute_WhenWritingFileFails_ReturnsFalse()
         {
             // Arrange
-            var context = new ConfigurationContext
-            {
-                MergedOdsJourneys = new Dictionary<string, Journeys>
-                {
-                    {
-                        "A1",
-                        new JourneysBuilder()
-                            .AppointmentProvider(AppointmentsProvider.im1)
-                            .CdssAdviceProvider(CdssProvider.none)
-                            .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                            .Build()
-                    }
-                }
-            };
-
+            var context = _fixture.Create<ConfigurationContext>();
             var exception = new IOException();
 
             _mockYamlWriter.Setup(s => s.Write(It.IsAny<string>(), It.IsAny<TargetConfiguration>()))
@@ -120,18 +106,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
+                            .MessagingEnabled(true)
                             .Build()
                     },
                     {
                         "A2",
                         new JourneysBuilder()
-                            .AppointmentProvider(AppointmentsProvider.im1)
+                            .AppointmentProvider(AppointmentsProvider.gpAtHand)
                             .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                             .CdssAdminProvider(CdssProvider.none)
                             .MedicalRecord(MedicalRecordProvider.gpAtHand)
-                            .Prescriptions(PrescriptionsProvider.gpAtHand)
+                            .Prescriptions(PrescriptionsProvider.im1)
                             .NominatedPharmacyEnabled(false)
                             .NotificationsEnabled(false)
+                            .MessagingEnabled(false)
                             .Build()
                     },
                     {
@@ -144,6 +132,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
+                            .MessagingEnabled(true)
                             .Build()
                     }
                 }

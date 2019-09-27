@@ -1,8 +1,8 @@
 <template>
   <span :class="$style.pageTitle">
-    <h1 v-if="shouldShowDesktopVersion" :key="$store.state.header.headerText"
+    <h1 v-if="shouldShowDesktopVersion" :key="titleKey"
         :class="$style.homePageTitle" aria-live="polite">
-      {{ $store.state.header.headerText }}
+      <slot/>
     </h1>
   </span>
 </template>
@@ -10,9 +10,13 @@
 export default {
   name: 'PageTitle',
   props: {
+    titleKey: {
+      type: String,
+      default: undefined,
+    },
     shouldShowDesktopVersion: {
       type: Boolean,
-      default: () => true,
+      default: true,
     },
   },
 };

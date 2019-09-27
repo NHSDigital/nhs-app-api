@@ -19,6 +19,7 @@ const final = ({ self, commit }) => {
   self.dispatch('device/init');
   self.dispatch('header/init');
   self.dispatch('http/init');
+  self.dispatch('messaging/init');
   self.dispatch('navigation/init');
   self.dispatch('repeatPrescriptionCourses/init');
   self.dispatch('errors/clearAllApiErrors');

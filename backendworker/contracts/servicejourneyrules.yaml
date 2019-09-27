@@ -61,6 +61,8 @@ components:
               type: bool
             notifications:
               type: bool
+            messaging:
+              type: bool
     defaultProvider:
       type: object
       properties:

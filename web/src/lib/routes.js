@@ -60,6 +60,11 @@ const informaticaAppointmentRedirect = {
   url: '/appointments/informatica',
 };
 
+const messagingDisabledRedirect = {
+  journey_disabled: 'messaging',
+  url: '/',
+};
+
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
 const routes = {
@@ -390,6 +395,43 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}app-login/`,
+  },
+  MESSAGING: {
+    name: 'messaging',
+    path: '/messaging',
+    crumb: {
+      i8nKey: 'messaging',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    sjrRedirectRules: [
+      messagingDisabledRedirect,
+    ],
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
+    helpUrl: baseNhsAppHelpUrl,
+  },
+  MESSAGING_MESSAGES: {
+    name: 'messaging-messages',
+    path: '/messaging/messages',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.MESSAGING;
+      },
+    },
+    sjrRedirectRules: [
+      messagingDisabledRedirect,
+    ],
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
+    helpUrl: baseNhsAppHelpUrl,
   },
   MORE: {
     name: 'more',
@@ -909,6 +951,8 @@ export const {
   LEGACY_MYRECORDWARNING,
   LOGIN,
   LOGOUT,
+  MESSAGING,
+  MESSAGING_MESSAGES,
   MORE,
   MYRECORD,
   MYRECORD_GP_AT_HAND,

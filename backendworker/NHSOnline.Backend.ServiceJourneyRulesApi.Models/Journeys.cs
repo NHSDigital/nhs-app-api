@@ -19,6 +19,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public bool? Notifications { get; set; }
 
+        public bool? Messaging { get; set; }
+
         public Supplier Supplier { get; set; }
 
         public Journeys Clone() => new Journeys
@@ -29,7 +31,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             MedicalRecord = MedicalRecord?.Clone(),
             Prescriptions = Prescriptions?.Clone(),
             NominatedPharmacy = NominatedPharmacy,
-            Notifications = Notifications
+            Notifications = Notifications,
+            Messaging = Messaging
         };
 
         public Journeys AddSupplier(Supplier supplier)

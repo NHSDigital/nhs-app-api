@@ -1,6 +1,19 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <menu-item-list>
+
+      <menu-item v-if="messagingEnabled"
+                 id="btn_messaging"
+                 header-tag="h2"
+                 data-purpose="text_link"
+                 :href="messagingPath"
+                 :text="$t('sc04.messaging.subheader')"
+                 :description="$t('sc04.messaging.body')"
+                 :click-func="navigate"
+                 :aria-label="ariaLabelCaption(
+                   'sc04.messaging.subheader',
+                   'sc04.messaging.body')"/>
+
       <menu-item v-if="isCdssAdmin"
                  id="btn_gp_help"
                  header-tag="h2"
@@ -38,7 +51,7 @@ import srjIf from '@/lib/sjrIf';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENT_ADMIN_HELP, DATA_SHARING_PREFERENCES, MORE } from '@/lib/routes';
+import { APPOINTMENT_ADMIN_HELP, DATA_SHARING_PREFERENCES, MESSAGING, MORE } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 
@@ -59,8 +72,14 @@ export default {
         noJs: { onlineConsultations: { previousRoute: MORE.path } },
       });
     },
+    messagingPath() {
+      return MESSAGING.path;
+    },
     isCdssAdmin() {
       return srjIf({ $store: this.$store, journey: 'cdssAdmin' });
+    },
+    messagingEnabled() {
+      return srjIf({ $store: this.$store, journey: 'messaging' });
     },
   },
   mounted() {

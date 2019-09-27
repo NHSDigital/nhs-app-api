@@ -5,3 +5,4 @@ journeys:
   appointments:
     provider: im1
   notifications: false
+  messaging: false

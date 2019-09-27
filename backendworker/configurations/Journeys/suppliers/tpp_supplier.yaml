@@ -3,3 +3,4 @@ target:
   supplier: "tpp"
 journeys:
   notifications: true
+  messaging: true

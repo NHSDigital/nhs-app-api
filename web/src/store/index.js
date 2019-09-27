@@ -10,6 +10,7 @@ import flashMessage from './modules/flashMessage';
 import header from './modules/header';
 import http from './modules/http';
 import modal from './modules/modal';
+import messaging from './modules/messaging';
 import myAppointments from './modules/myAppointments';
 import myRecord from './modules/myRecord';
 import navigation from './modules/navigation';
@@ -39,6 +40,7 @@ export const modules = {
   flashMessage,
   header,
   http,
+  messaging,
   modal,
   myAppointments,
   myRecord,

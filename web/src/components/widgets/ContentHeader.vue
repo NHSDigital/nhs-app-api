@@ -17,7 +17,10 @@
         <div class="nhsuk-grid-row">
           <div class="nhsuk-grid-column-full">
             <page-title v-if="showContentHeader"
-                        :should-show-desktop-version="showHeader"/>
+                        :title-key="$store.state.header.headerText"
+                        :should-show-desktop-version="showHeader">
+              {{ $store.state.header.headerText }}
+            </page-title>
           </div>
         </div>
       </div>

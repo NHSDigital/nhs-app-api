@@ -1165,6 +1165,12 @@ export default {
     },
     noStartDate: 'Unknown Date',
   },
+  messaging: {
+    messages: {
+      titlePrefix: 'Messages from:',
+      unreadMessages: 'Unread messages',
+    },
+  },
   common: {
     or: 'OR',
   },
@@ -1224,6 +1230,7 @@ export default {
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
     serviceUnavailable: 'Service unavailable',
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
+    messaging: 'Messages',
   },
   pageTitles: {
     home: 'Home',
@@ -1260,6 +1267,7 @@ export default {
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
     serviceUnavailable: 'Service unavailable',
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
+    messaging: 'Messages',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',
@@ -1290,6 +1298,7 @@ export default {
     termsAndConditions: 'Terms',
     legacyMyRecordWarning: 'My Record',
     nominatedPharmacy: 'My nominated pharmacy',
+    messaging: 'Messages',
   },
   myAccount: {
     detailsHeading: 'Details',
@@ -1326,6 +1335,10 @@ export default {
     requestGpHelp: {
       subheader: 'Additional GP services',
       body: 'Get sick notes and GP letters or ask about recent tests.',
+    },
+    messaging: {
+      subheader: 'Your messages',
+      body: 'Get messages from your GP Practice and other NHS services.',
     },
   },
   webHeader: {

@@ -1008,89 +1008,40 @@
                         hasAccess: 
                           type: "boolean"
                           description: "Does the patient have access to this data."
-                        hasErrored: 
-                          type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
-                        hasUndeterminedAccess: 
-                          type: "boolean"
-                          description: "Set to true if no data is returned and we cant determine why"
-                        data: 
-                          type: "array"
-                          description: "An array of medical history information objects."
-                          items: 
-                            type: "object"
-                            properties: 
-                              date: 
-                                type: "object"
-                                properties: 
-                                  value: 
-                                    type: "string"
-                                    format: "date-time"
-                                    description: "date/time value."
-                                  datePart: 
-                                    type: "string"
-                                    description: "date part to display."
-                                    enum: 
-                                      - "Unknown"
-                                      - "Year"
-                                      - "YearMonth"
-                                      - "YearMonthDay"
-                                      - "YearMonthDayTime"
-                              rubric: 
-                                type: "string"
-                                description: "The title of the medical history."
-                              description: 
-                                type: "string"
-                                description: "Description of the medical history."
-                    recalls:
-                      type: "object"
-                      properties:
-                        hasAccess:
-                          type: "boolean"
-                          description: "Does the patient have access to this data."
-                        hasErrored:
-                          type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
-                        hasUndeterminedAccess:
-                          type: "boolean"
-                          description: "Set to true if no data is returned and we cant determine why"
-                        data:
-                          type: "array"
-                          description: "An array of recall objects."
-                          items:
-                            type: "object"
-                            properties:
-                              recordDate:
-                                type: "object"
-                                properties:
-                                  value:
-                                    type: "string"
-                                    format: "date-time"
-                                    description: "date/time value."
-                                  datePart:
-                                    type: "string"
-                                    description: "date part to display."
-                                    enum:
-                                      - "Unknown"
-                                      - "Year"
-                                      - "YearMonth"
-                                      - "YearMonthDay"
-                                      - "YearMonthDayTime"
-                              name:
-                                type: "string"
-                                description: "The medication name of the recall."
-                              description:
-                                type: "string"
-                                description: "The purpose of the medication."
-                              result:
-                                type: "string"
-                                description: "The result of the recall."
-                              nextDate:
-                                type: "string"
-                                description: "The date of the next recall."
-                              status:
-                                type: "string"
-                                description: "The status of the recall."
+                          hasErrored: 
+                            type: "boolean"
+                            description: "Some error occurred when attempting to retrieve this error."
+                          hasUndeterminedAccess: 
+                            type: "boolean"
+                            description: "Set to true if no data is returned and we cant determine why"
+                          data: 
+                            type: "array"
+                            description: "An array of medical history information objects."
+                            items: 
+                              type: "object"
+                              properties: 
+                                date: 
+                                  type: "object"
+                                  properties: 
+                                    value: 
+                                      type: "string"
+                                      format: "date-time"
+                                      description: "date/time value."
+                                    datePart: 
+                                      type: "string"
+                                      description: "date part to display."
+                                      enum: 
+                                        - "Unknown"
+                                        - "Year"
+                                        - "YearMonth"
+                                        - "YearMonthDay"
+                                        - "YearMonthDayTime"
+                                rubric: 
+                                  type: "string"
+                                  description: "The title of the medical history."
+                                description: 
+                                  type: "string"
+                                  description: "Description of the medical history."
                     documents: 
                       type: "object"
                       properties: 
@@ -2488,6 +2439,12 @@
                                       enum: 
                                         - "im1"
                                         - "gpAtHand"
+                                    version: 
+                                      type: "string"
+                                      description: "The version of My Medical Records"
+                                      enum: 
+                                        - 1
+                                        - 2
                             prescriptions: 
                               type: "object"
                               oneOf: 
@@ -2503,6 +2460,8 @@
                             nominatedPharmacy: 
                               type: "bool"
                             notifications: 
+                              type: "bool"
+                            messaging: 
                               type: "bool"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
@@ -2977,6 +2936,12 @@
                                   enum: 
                                     - "im1"
                                     - "gpAtHand"
+                                version: 
+                                  type: "string"
+                                  description: "The version of My Medical Records"
+                                  enum: 
+                                    - 1
+                                    - 2
                         prescriptions: 
                           type: "object"
                           oneOf: 
@@ -2992,6 +2957,8 @@
                         nominatedPharmacy: 
                           type: "bool"
                         notifications: 
+                          type: "bool"
+                        messaging: 
                           type: "bool"
           404: 
             description: "Service Journey Rules Configuration not found."
