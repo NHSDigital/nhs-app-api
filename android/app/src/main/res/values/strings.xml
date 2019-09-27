@@ -178,8 +178,6 @@
     <string name="frutiger75Black">FrutigerLTW01\-75Black.woff2</string>
     <string name="frutiger76BlackItalic">FrutigerLTW01\-76BlackItalic.woff2</string>
     <string name="frutiger95UltraBlack">FrutigerLTW01\-95UltraBlack.woff2</string>
-    <string name="nhsApp">NHS App</string>
-
 
     <string-array name="fonts">
         <item>@string/frutiger45Light</item>

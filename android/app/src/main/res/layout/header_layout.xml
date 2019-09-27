@@ -54,7 +54,6 @@
             android:adjustViewBounds="true"
             android:background="@drawable/icon_drawable_boarder_focusable"
             android:layout_centerInParent="true"
-            android:contentDescription="@string/nhsApp"
             android:focusable="false"
             android:paddingTop="@dimen/_7sdp"
             android:paddingBottom="@dimen/_7sdp"
