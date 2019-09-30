@@ -14,7 +14,7 @@
         <div v-else-if="shouldShowSlimDesktopHeader">
           <web-header :show-menu="false" :show-links="false"/>
         </div>
-        <content-header id="content-header"
+        <content-header v-if="!isGpFinderPage()" id="content-header"
                         :show-bread-crumb="shouldShowBreadCrumb"
                         :show-content-header="!isLoginPage()"/>
       </div>
@@ -49,7 +49,12 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import ContentHeader from '@/components/widgets/ContentHeader';
-import { INDEX, LOGIN, findByName } from '@/lib/routes';
+import {
+  findByName,
+  GP_FINDER,
+  INDEX,
+  LOGIN,
+} from '@/lib/routes';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import Spinner from '@/components/widgets/Spinner';
@@ -245,6 +250,9 @@ export default {
   methods: {
     isLoginPage() {
       return this.$route.name === LOGIN.name;
+    },
+    isGpFinderPage() {
+      return this.$route.name === GP_FINDER.name;
     },
     setSurveyBarStatus(isBarOpen) {
       this.surveyBarOpen = isBarOpen;

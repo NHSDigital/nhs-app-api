@@ -8,7 +8,7 @@
       <div v-else-if="shouldShowSlimDesktopHeader">
         <web-header :show-menu="false" :show-links="false"/>
       </div>
-      <content-header id="content-header"
+      <content-header v-if="!isGpFinderPage()" id="content-header"
                       :show-bread-crumb="shouldShowBreadCrumb"
                       :show-content-header="!isLoginPage()"/>
 
@@ -48,6 +48,7 @@
 import {
   getCrumbTrailForRoute,
   findByName,
+  GP_FINDER,
   INDEX,
   LOGIN,
 } from '@/lib/routes';
@@ -253,6 +254,9 @@ export default {
     },
     isLoginPage() {
       return this.$route.name === LOGIN.name;
+    },
+    isGpFinderPage() {
+      return this.$route.name === GP_FINDER.name;
     },
     focusNhsAppRoot() {
       this.$refs.nhsAppRoot.focus();
