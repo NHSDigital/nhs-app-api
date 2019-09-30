@@ -40,6 +40,7 @@ MAX_TESTTHREADS=${MAX_TESTTHREADS:-8}
 ACCESSIBILITY_OUTPUT=${ACCESSIBILITY_OUTPUT_FOLDER:-accessibilityoutput}
 IOSURLSUFFIX="?source=ios"
 ADROIDURLSUFFIX="?source=android"
+XSLTPROC_DOCKER_IMAGE=hinesteve/xsltproc
 
 # Free up some docker space if on TC
 
@@ -400,7 +401,10 @@ info "Collecting failed test reports"
 touch $workingDir/../build/failures.txt
 for TAG in ${TAGS[*]}; do
   info "Collecting failed test reports for $TAG"
-  cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
+  cp junit.xslt $workingDir/../../testRunFolder/$TAG/build/test-results/test/.
+  docker run --rm -v "$workingDir/../../testRunFolder/$TAG/build/test-results/test:/wrk" $XSLTPROC_DOCKER_IMAGE \
+    bash -c "ls *.xml | xargs -n 1 -I {} xsltproc -o {} junit.xslt {}"
+
   if [ -f $workingDir/../../testRunFolder/$TAG/build/failures.txt ]; then
     cat $workingDir/../../testRunFolder/$TAG/build/failures.txt >> $workingDir/../build/failures.txt
   fi
@@ -424,7 +428,7 @@ then
       $DOCKER_IMAGE bash -c " \
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
-        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
+        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX \
         APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
         ./gradlew rerun --stacktrace \
           -Dcucumber.options=\"--strict \" \
@@ -442,7 +446,8 @@ for TAG in ${TAGS[*]}; do
   cp -r $workingDir/../../testRunFolder/$TAG/target/site/Gherkin-Report.html $workingDir/../target/site/
     if [ -d $workingDir/../../testRunFolder/$TAG/build/test-results ]
     then
-      cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
+      mkdir -p $workingDir/../build/test-results/$TAG
+      cp -r $workingDir/../../testRunFolder/$TAG/build/test-results/* $workingDir/../build/test-results/$TAG/.
     else
        mkdir -p $workingDir/../build/test-results/test
        cp $workingDir/../TEST-TrancheFailed.xml $workingDir/../build/test-results/test/TEST-$TAG.xml

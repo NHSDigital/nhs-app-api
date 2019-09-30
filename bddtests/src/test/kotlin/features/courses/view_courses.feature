@@ -268,11 +268,10 @@ Feature: View Courses Frontend
       | VISION    |
 
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
-    Given I am patient using the EMIS GP System
+    Given I am a EMIS patient
     And I have historic prescriptions
-    And I am logged in
-    And I navigate to prescriptions
     And prescriptions is disabled at a GP Practice level
+    And I am logged in
     When I browse to the page at /prescriptions/confirm-prescription-details
     Then I see a message informing me that I don't currently have access to this service
 

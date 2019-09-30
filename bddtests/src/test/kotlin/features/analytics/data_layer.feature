@@ -7,4 +7,3 @@ Feature: Analytics
     Given I am a EMIS patient
     When I am logged in
     Then the analytics data object is available
-
