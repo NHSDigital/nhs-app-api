@@ -20,6 +20,12 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
         DemographicsFactory.getForSupplier(getService).enabled(SerenityHelpers.getPatient())
     }
 
+    @Given("^the GP Practice has enabled demographics functionality for the current patient$")
+    fun givenTheGPPracticeHasEnabledDemographicsFunctionalityForTheCurrentPatient() {
+        val getService = SerenityHelpers.getGpSupplier()
+        DemographicsFactory.getForSupplier(getService).enabled(SerenityHelpers.getPatient())
+    }
+
     @Given("^the GP Practice has disabled demographics functionality$")
     fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor() {
         val getService = SerenityHelpers.getGpSupplier()

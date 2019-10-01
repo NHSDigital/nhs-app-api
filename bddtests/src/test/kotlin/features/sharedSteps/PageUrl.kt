@@ -20,7 +20,10 @@ open class PageUrl {
                     "account" to "/account",
                     "terms and conditions" to "/terms-and-conditions",
                     "my record" to "/my-record",
-                    "gp at hand my record" to "/my-record/gp-at-hand"
+                    "gp at hand my record" to "/my-record/gp-at-hand",
+                    "my gp medical record" to "/gp-medical-record",
+                    "gp at hand my record" to "/my-record/gp-at-hand",
+                    "notifications settings" to "/account/notifications"
             )
 
     private val mobileOverrides =

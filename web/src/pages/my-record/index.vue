@@ -2,7 +2,7 @@
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()"
        :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-      <glossary-header :extra-classes="[$style.glossary]"/>
+      <glossary :extra-classes="[$style.glossary]"/>
       <analytics-tracked-tag :class="[$style['record-title'],
                                       getCollapsedState(isPatientDetailsCollapsed)]"
                              :click-func="myRecordSectionClick"
@@ -82,17 +82,18 @@ import ScrTpp from '@/components/my-record/SummaryCareRecord/ScrTPP';
 import ScrVision from '@/components/my-record/SummaryCareRecord/ScrVISION';
 import ScrMicrotest from '@/components/my-record/SummaryCareRecord/ScrMICROTEST';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import GlossaryHeader from '@/components/GlossaryHeader';
+import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 const PATIENTDETAILS = 'patientdetails';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     PatientDetails,
     AnalyticsTrackedTag,
-    GlossaryHeader,
+    Glossary,
     DcrEmis,
     DcrTpp,
     DcrVision,

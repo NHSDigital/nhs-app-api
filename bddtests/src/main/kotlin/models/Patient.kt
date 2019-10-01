@@ -4,6 +4,7 @@ import config.Config
 import constants.DateTimeFormats
 import mocking.AccessTokenBuilder
 import mocking.IdTokenBuilder
+import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
 import models.patients.EmisPatients
@@ -47,11 +48,23 @@ data class Patient(
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
                 redirectUrl = Config.instance.cidRedirectUri),
         var subject: String = "3ad631b4-7a7a-434d-8a7b-1c8ac3c56132",
-        val tppUserSession: TppUserSession? = null,
         val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157"
 ) {
-    var accessToken : String = AccessTokenBuilder().getSignedToken(this).serialize()
+    var accessToken: String = AccessTokenBuilder().getSignedToken(this).serialize()
+
+    val tppUserSession : TppUserSession? by lazy {
+        TppUserSession("ZT8wLjK6beFO" +
+                "dXoiNIHbD+TbPrl0Y3Km" +
+                "VXy4GYM253hQlxwp2qMKW" +
+                "7zgbjgTWJzCvTcZxb2BZN" +
+                "W5IdGtaWtahGkv" +
+                "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD" +
+                "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
+                "84df400000000000",
+                if (odsCode == "") TppMockDefaults.DEFAULT_ODS_CODE_TPP else odsCode,
+                "84df400000000000")
+    }
 
     fun formattedDateOfBirth(): String {
         return DateConverter.convertDateToDateTimeFormat(

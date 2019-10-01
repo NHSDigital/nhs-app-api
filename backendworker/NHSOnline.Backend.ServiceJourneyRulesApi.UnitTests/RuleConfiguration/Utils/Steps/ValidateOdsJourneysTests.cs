@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     {
                         "A5",
                         ValidJourneys()
-                            .MedicalRecord(null)
+                            .MedicalRecord(null, 1)
                             .Build()
                     },
                     {
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .AppointmentProvider(AppointmentsProvider.im1)
                             .CdssAdviceProvider(CdssProvider.none)
                             .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .AppointmentProvider(AppointmentsProvider.im1)
                             .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                             .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
                             .CdssAdviceProvider(CdssProvider.none)
                             .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .AppointmentProvider(AppointmentsProvider.im1)
                             .CdssAdviceProvider(CdssProvider.none)
                             .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
@@ -219,7 +219,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .AppointmentProvider(AppointmentsProvider.im1)
                             .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                             .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(false)
                             .NotificationsEnabled(false)
@@ -232,7 +232,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
                             .CdssAdviceProvider(CdssProvider.none)
                             .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                            .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                             .Prescriptions(PrescriptionsProvider.gpAtHand)
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
@@ -282,7 +282,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     {
                         "A5",
                         ValidJourneys()
-                            .MedicalRecord(null)
+                            .MedicalRecord(null, 1)
                             .Build()
                     },
                     {
@@ -335,7 +335,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .AppointmentProvider(AppointmentsProvider.im1)
                 .CdssAdviceProvider(CdssProvider.none)
                 .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                .MedicalRecord(MedicalRecordProvider.gpAtHand)
+                .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                 .Prescriptions(PrescriptionsProvider.gpAtHand)
                 .NominatedPharmacyEnabled(true)
                 .NotificationsEnabled(true)

@@ -52,7 +52,7 @@ components:
             medicalRecord:
               type: object
               oneOf:
-                - $ref: "#/components/schemas/defaultProvider"
+                - $ref: "#/components/schemas/medicalRecord"
             prescriptions:
               type: object
               oneOf:
@@ -101,3 +101,18 @@ components:
         serviceDefinition:
           type: string
           description: The service definition
+    medicalRecord:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: The provider
+          enum:
+          - im1
+          - gpAtHand
+        version:
+          type: string
+          description: The version of My Medical Records
+          enum:
+          - 1
+          - 2

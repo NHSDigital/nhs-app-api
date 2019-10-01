@@ -8,11 +8,15 @@ import java.util.*
 private const val EMIS_GP_SUPPLIER = "EMIS"
 private const val TPP_GP_SUPPLIER = "TPP"
 private const val VISION_GP_SUPPLIER = "VISION"
+private const val MICROTEST_GP_SUPPLIER = "MICROTEST"
 private const val ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED = "A11111"
 private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
 private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
 private const val TPP_ONLINE_CONSULTATIONS_DISABLED = "A55555"
 private const val VISION_ONLINE_CONSULTATIONS_DISABLED = "A66666"
+private const val EMIS_GP_MEDICAL_RECORD_V2 = "A00002"
+private const val MICROTEST_GP_MEDICAL_RECORD_V2 = "B81603"
+private const val TPP_GP_MEDICAL_RECORD_V2 = "KGPD13"
 
 class ServiceJourneyRulesMapper {
 
@@ -34,25 +38,38 @@ class ServiceJourneyRulesMapper {
                         EnumSet.of(JourneyType.APPOINTMENTS_GPATHAND,
                                 JourneyType.MEDICAL_RECORD_GPATHAND,
                                 JourneyType.PRESCRIPTIONS_GPATHAND),
+
+                GpInformation(EMIS_GP_SUPPLIER, EMIS_GP_MEDICAL_RECORD_V2) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
+                GpInformation(EMIS_GP_SUPPLIER, EMIS_GP_MEDICAL_RECORD_V2) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2,
+                                JourneyType.MEDICAL_RECORD_IM1),
+                GpInformation(EMIS_GP_SUPPLIER, EMIS_GP_MEDICAL_RECORD_V2) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2,
+                                JourneyType.MEDICAL_RECORD_GPATHAND),
+
                 GpInformation(TPP_GP_SUPPLIER, TPP_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 JourneyType.NOTIFICATIONS_ENABLED),
+
+                // Medical Record V2
                 GpInformation(VISION_GP_SUPPLIER, VISION_ONLINE_CONSULTATIONS_DISABLED) to
-                        EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED)
+                        EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
+                                JourneyType.MEDICAL_RECORD_VERSION_2),
+
+                GpInformation(MICROTEST_GP_SUPPLIER, MICROTEST_GP_MEDICAL_RECORD_V2) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
+
+                GpInformation(TPP_GP_SUPPLIER, TPP_GP_MEDICAL_RECORD_V2) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2)
         )
 
-        fun findPatientForConfiguration(gpSystem: String?, journeyType: JourneyType):Patient {
-           return findPatientForConfiguration(gpSystem, listOf(journeyType))
-        }
+        fun findPatientForConfiguration(gpSystem: String?, configurations: List<ServiceJourneyRulesConfiguration>):
+                Patient {
+            val journeyTypes =
+                    configurations.map { configuration -> configuration.toJourneyType() }
+            val gpInformation = findGpInformation(gpSystem, journeyTypes)
 
-        fun findPatientForConfiguration(gpSystem: String?,
-                                        configurations: ArrayList<ServiceJourneyRulesConfiguration>): Patient {
-            val journeyTypes = configurations.map { configuration -> configuration.toJourneyType() }.toList()
-            return findPatientForConfiguration(gpSystem, journeyTypes)
-        }
-
-        private fun findPatientForConfiguration(gpSystem: String?, journeyTypes: List<JourneyType>):Patient {
-            val gpInformation = findGpInformation(gpSystem, journeyTypes.toList())
             Assert.assertNotNull("Test setup incorrect: Cannot find a matching ods code for system:"
                     + gpSystem + "and odsCode: " + gpInformation?.odsCode + ", with given configuration in SJR",
                     gpInformation)
@@ -89,6 +106,7 @@ class ServiceJourneyRulesMapper {
             APPOINTMENTS_INFORMATICA,
             MEDICAL_RECORD_GPATHAND,
             MEDICAL_RECORD_IM1,
+            MEDICAL_RECORD_VERSION_2,
             NOTIFICATIONS_DISABLED,
             NOTIFICATIONS_ENABLED,
             NOMINATED_PHARMACY_DISABLED,

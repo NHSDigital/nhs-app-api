@@ -60,12 +60,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
-        public JourneysBuilder MedicalRecord(MedicalRecordProvider? provider)
+        public JourneysBuilder MedicalRecord(MedicalRecordProvider? provider, 
+            int version = 1)
         {
+            
             if (provider != null)
             {
                 _journeys.MedicalRecord = new MedicalRecord
                 {
+                    Version = version,
                     Provider = provider.Value
                 };
             }

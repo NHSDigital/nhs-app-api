@@ -4,6 +4,7 @@ export const GP_AT_HAND = 'gpAtHand';
 export const IM1_PROVIDER = 'im1';
 export const INFORMATICA = 'informatica';
 export const INIT = 'INIT';
+export const GP_MEDICAL_RECORD = 'gpMedicalRecord';
 export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const NOTIFICATIONS = 'notifications';
 export const SET_RULES = 'SET_RULES';
@@ -20,6 +21,9 @@ export const initialState = () => ({
     },
     cdssAdvice: {
       provider: 'none',
+    },
+    medicalRecord: {
+      version: 1,
     },
     nominatedPharmacy: false,
     notifications: false,

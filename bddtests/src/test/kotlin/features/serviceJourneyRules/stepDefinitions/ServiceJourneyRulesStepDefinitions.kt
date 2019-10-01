@@ -1,5 +1,6 @@
 package features.serviceJourneyRules.stepDefinitions
 
+import com.google.gson.internal.LazilyParsedNumber
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -91,6 +92,19 @@ class ServiceJourneyRulesStepDefinitions {
         Assert.assertEquals("Service Journey Rules Medical Record provider",
                 MedicalRecordProvider.valueOf(provider),
                 serviceJourneyRulesResponse.journeys.medicalRecord.provider)
+    }
+
+    @Then("^the service journey rules response will have medical record version set to (\\d+)$")
+    fun theServiceJourneyRulesResponseWillHaveMedicalRecordVersionSetTo(version: String) {
+        val serviceJourneyRulesResponse =
+                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
+                        .getOrFail<ServiceJourneyRulesResponse>()
+        Assert.assertNotNull(
+                "Service Journey Rules response expected, but was null",
+                serviceJourneyRulesResponse)
+        Assert.assertEquals("Service Journey Rules Medical Record version",
+                LazilyParsedNumber(version),
+                serviceJourneyRulesResponse.journeys.medicalRecord.version)
     }
 
     @Then("^the service journey rules response will have prescriptions set to (\\w+)$")

@@ -66,13 +66,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Given("^I am on my record information page$")
-    fun givenIAmOnMyRecordInformationPage() {
+    fun givenIAmOnTheGpMedicalRecordInformationPage() {
         browser.goToApp()
         login.using(SerenityHelpers.getPatient())
         nav.select(NavBarNative.NavBarType.MY_RECORD)
         myRecordWarningPage.clickWarningContinue()
         myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
-        myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
     }
 

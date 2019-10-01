@@ -3,6 +3,7 @@
 import {
   ACCOUNT,
   ACCOUNT_NOTIFICATIONS,
+  ALLERGIESANDREACTIONS,
   APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
@@ -33,6 +34,8 @@ import {
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
   MYRECORD_GP_AT_HAND,
+  GP_MEDICAL_RECORD,
+  GP_MEDICAL_RECORD_GP_AT_HAND,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
@@ -77,7 +80,6 @@ function setPageTitle(route, store, app) {
 export default function ({ route, store, app }) {
   const isNative = $store =>
     ($store.state.device.source === 'android' || $store.state.device.source === 'ios');
-
   switch (route.name) {
     case INDEX.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
@@ -222,14 +224,21 @@ export default function ({ route, store, app }) {
     case MY_RECORD_VISION_PROCEDURES_DETAIL.name:
     case MY_RECORD_VISION_TEST_RESULTS_DETAIL.name:
     case MYRECORDTESTRESULT.name:
+    case GP_MEDICAL_RECORD.name:
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.myRecord';
       route.meta.pageTitleKey = 'pageTitles.myRecord';
       break;
     case MYRECORD_GP_AT_HAND.name:
+    case GP_MEDICAL_RECORD_GP_AT_HAND.name:
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.serviceUnavailable';
       route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
+      break;
+    case ALLERGIESANDREACTIONS.name:
+      // store.dispatch('navigation/setNewMenuItem', 3);
+      route.meta.headerKey = 'pageHeaders.allergiesAndReactions';
+      route.meta.pageTitleKey = 'pageTitles.allergiesAndReactions';
       break;
     case MORE.name:
       store.dispatch('navigation/setNewMenuItem', 4);

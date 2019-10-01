@@ -4,7 +4,6 @@ import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
 import models.Patient
-import worker.models.demographics.TppUserSession
 import worker.models.patient.Im1ConnectionToken
 
 class TppPatients{
@@ -53,16 +52,6 @@ class TppPatients{
                 passphrase = kevinBarryIm1ConnectionToken.passphrase!!,
                 connectionToken = TppMockDefaults.DEFAULT_TPP_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
-                tppUserSession = TppUserSession("ZT8wLjK6beFO" +
-                        "dXoiNIHbD+TbPrl0Y3Km" +
-                        "VXy4GYM253hQlxwp2qMKW" +
-                        "7zgbjgTWJzCvTcZxb2BZN" +
-                        "W5IdGtaWtahGkv" +
-                        "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD" +
-                        "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
-                        "84df400000000000",
-                        TppMockDefaults.DEFAULT_ODS_CODE_TPP,
-                        "84df400000000000"),
                 im1ConnectionToken = kevinBarryIm1ConnectionToken
         )
     }

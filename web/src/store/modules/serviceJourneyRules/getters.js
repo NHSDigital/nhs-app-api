@@ -1,9 +1,11 @@
 import get from 'lodash/fp/get';
-import { CDSS_ADMIN,
+import {
+  CDSS_ADMIN,
   CDSS_ADVICE,
   GP_AT_HAND,
   IM1_PROVIDER,
   INFORMATICA,
+  GP_MEDICAL_RECORD,
   NOMINATED_PHARMACY,
   NOTIFICATIONS,
   ONLINE_CONSULTATIONS,
@@ -51,5 +53,17 @@ export default {
   },
   [`${NOTIFICATIONS}Enabled`](state) {
     return get('rules.notifications')(state);
+  },
+  [`${GP_MEDICAL_RECORD}V1Enabled`](state) {
+    return get('rules.medicalRecord.version')(state) === 1;
+  },
+  [`${GP_MEDICAL_RECORD}V2Enabled`](state) {
+    return get('rules.medicalRecord.version')(state) === 2;
+  },
+  [`${GP_AT_HAND}GpMedicalRecordV2Enabled`](_, getters) {
+    return getters[`${GP_MEDICAL_RECORD}V2Enabled`] && getters[`${GP_AT_HAND}MyRecordEnabled`];
+  },
+  [`${IM1_PROVIDER}GpMedicalRecordV2Enabled`](_, getters) {
+    return getters[`${GP_MEDICAL_RECORD}V2Enabled`] && getters[`${IM1_PROVIDER}MyRecordEnabled`];
   },
 };

@@ -4,6 +4,7 @@ import mocking.MockingClient
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mocking.defaults.VisionMockDefaults
 import mocking.vision.appointments.helpers.GeneralAppointmentsHelper
+import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.Location
 import mocking.vision.models.appointments.Owner
 import mocking.vision.models.appointments.References
@@ -32,7 +33,7 @@ class VisionSessionCreateJourneyFactory(val client: MockingClient) : SessionCrea
         client
                 .forVision {
                     authentication.getConfigurationRequest(
-                            VisionMockDefaults.visionUserSession)
+                            VisionUserSession.fromPatient(patient))
                             .respondWithSuccess(configuration)
                 }
     }

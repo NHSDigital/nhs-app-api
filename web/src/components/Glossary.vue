@@ -9,7 +9,6 @@
       <external-link-arrow-right-icon/>
       {{ $t('rp01.glossary.linkText') }}
     </analytics-tracked-tag>
-    <hr aria-hidden="true">
   </div>
 </template>
 
@@ -19,7 +18,7 @@ import AnalyticsTrackedTag from './widgets/AnalyticsTrackedTag';
 import ExternalLinkArrowRightIcon from './icons/ExternalLinkArrowRightIcon';
 
 export default {
-  name: 'GlossaryHeader',
+  name: 'Glossary',
   components: {
     AnalyticsTrackedTag,
     ExternalLinkArrowRightIcon,

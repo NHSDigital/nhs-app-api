@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A00002"
+journeys:
+  medicalRecord:
+    provider: im1
+    version: 2

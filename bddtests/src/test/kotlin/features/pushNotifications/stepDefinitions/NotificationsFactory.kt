@@ -1,5 +1,6 @@
 package features.pushNotifications.stepDefinitions
 
+import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.AccessTokenBuilder
 import mocking.MockingClient
@@ -21,7 +22,9 @@ class NotificationsFactory {
     val mockingClient = MockingClient.instance
 
     fun setUpUser(gpSystem: String? = null, patient: Patient? = null): Patient {
-        val patientToUse = patient ?: getPatient(gpSystem)
+        val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem,
+                listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
+
         val gpSystemToUse = gpSystem ?: SerenityHelpers.getGpSupplier()
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
@@ -33,7 +36,8 @@ class NotificationsFactory {
     fun setUpAlternativeUser(): Patient {
         // Use SJR generated patient, but then change subject and access token based on that,
         // to create a new nhsLoginId and differentiate from the primary patient
-        val patient = getPatient(SerenityHelpers.getGpSupplier())
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(SerenityHelpers.getGpSupplier(),
+                listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
         patient.subject = UUID.randomUUID().toString()
         patient.accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
@@ -73,16 +77,10 @@ class NotificationsFactory {
                 "'notifications/settingsEnabled', true)}"
     }
 
-    private fun mockNotificationsAuthorised(pns: String, deviceType: String): String {
+    private fun mockNotificationsAuthorised(pns: String, deviceType: String):String {
         return "requestPnsToken : " +
                 "function(trigger){window.\$nuxt.\$store.dispatch(" +
                 "'notifications/authorised', " +
                 "'{\"devicePns\":\"$pns\",\"deviceType\":\"$deviceType\", \"trigger\":\"' + trigger +'\"}')}"
-    }
-
-    private fun getPatient(gpSystem: String? = null): Patient {
-        return ServiceJourneyRulesMapper.findPatientForConfiguration(
-                gpSystem,
-                ServiceJourneyRulesMapper.Companion.JourneyType.NOTIFICATIONS_ENABLED)
     }
 }

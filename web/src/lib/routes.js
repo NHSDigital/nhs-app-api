@@ -20,6 +20,21 @@ const gpAtHandMyRecordRedirect = {
   url: '/my-record/gp-at-hand',
 };
 
+const gpAtHandMedicalRecordRedirectV2 = {
+  journey: 'gpAtHandGpMedicalRecordV2',
+  url: '/gp-medical-record/gp-at-hand',
+};
+
+const gpMedicalRecordRedirectV2 = {
+  journey: 'gpMedicalRecordV2',
+  url: '/gp-medical-record',
+};
+
+const im1GpMedicalRecordRedirectV2 = {
+  journey: 'im1GpMedicalRecordV2',
+  url: '/gp-medical-record',
+};
+
 const gpAtHandPrescriptionsRedirect = {
   journey: 'gpAtHandPrescriptions',
   url: '/prescriptions/gp-at-hand',
@@ -410,8 +425,21 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
     sjrRedirectRules: [
+      gpAtHandMedicalRecordRedirectV2,
       gpAtHandMyRecordRedirect,
+      gpMedicalRecordRedirectV2,
     ],
+  },
+  GP_MEDICAL_RECORD: {
+    name: 'gp-medical-record',
+    path: '/gp-medical-record',
+    crumb: {
+      i8nKey: 'myRecord',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   MYRECORD_GP_AT_HAND: {
     name: 'my-record-gp-at-hand',
@@ -428,11 +456,37 @@ const routes = {
       im1MyRecordRedirect,
     ],
   },
+  GP_MEDICAL_RECORD_GP_AT_HAND: {
+    name: 'gp-medical-record-gp-at-hand',
+    path: '/gp-medical-record/gp-at-hand',
+    crumb: {
+      enabled: true,
+      i8nKey: 'myRecordGpAtHand',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+    sjrRedirectRules: [
+      im1GpMedicalRecordRedirectV2,
+    ],
+  },
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',
     path: '/my-record/noaccess',
     crumb: {
       i8nKey: 'myRecordNoAccess',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  ALLERGIESANDREACTIONS: {
+    name: 'gp-medical-record-allergies-and-reactions',
+    path: '/gp-medical-record/allergies-and-reactions',
+    crumb: {
+      i8nKey: 'allergiesAndReactions',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -826,6 +880,7 @@ export const {
   ACCOUNT,
   ACCOUNT_NOTIFICATIONS,
   ACCOUNT_SIGNOUT,
+  ALLERGIESANDREACTIONS,
   APPOINTMENTS,
   APPOINTMENT_BOOK_NOJS,
   APPOINTMENT_BOOKING,
@@ -854,6 +909,8 @@ export const {
   MORE,
   MYRECORD,
   MYRECORD_GP_AT_HAND,
+  GP_MEDICAL_RECORD,
+  GP_MEDICAL_RECORD_GP_AT_HAND,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,

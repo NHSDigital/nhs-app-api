@@ -3,3 +3,5 @@
 /test/unit/coverage/
 /coverage/
 /src/.transpiled
+/lint/node_modules/
+/build/

@@ -14,6 +14,6 @@ data class AppointmentsJourneyRules(var informaticaUrl:String, var provider:Appo
 
 data class CdssJourneyRules(var serviceDefinition:String, var provider:CdssProvider)
 
-data class MedicalRecordJourneyRules(var provider:MedicalRecordProvider)
+data class MedicalRecordJourneyRules(var provider:MedicalRecordProvider, var version: Number?)
 
 data class PrescriptionsJourneyRules(var provider:PrescriptionsProvider)

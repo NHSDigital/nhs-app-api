@@ -7,6 +7,8 @@ import {
   INDEX,
   MYRECORD,
   MYRECORD_GP_AT_HAND,
+  GP_MEDICAL_RECORD,
+  GP_MEDICAL_RECORD_GP_AT_HAND,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
 } from '@/lib/routes';
@@ -129,6 +131,43 @@ describe('middleware/sjrRedirect', () => {
 
       it('will redirect to appointments gp at hand', () => {
         expect(redirect).toBeCalledWith('302', APPOINTMENT_GP_AT_HAND.path);
+      });
+    });
+  });
+
+  describe('my record version 2 redirect rules', () => {
+    describe('sjr version 2 enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/gpMedicalRecordV2Enabled'] = true;
+        callSjrRedirect(MYRECORD);
+      });
+
+      it('will redirect to my record', () => {
+        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD.path);
+      });
+    });
+
+    describe('sjr gp at hand enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/gpAtHandGpMedicalRecordV2Enabled'] = true;
+
+        callSjrRedirect(MYRECORD);
+      });
+
+      it('will redirect to my record gp at hand', () => {
+        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD_GP_AT_HAND.path);
+      });
+    });
+
+    describe('sjr im1 enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/im1GpMedicalRecordV2Enabled'] = true;
+
+        callSjrRedirect(GP_MEDICAL_RECORD_GP_AT_HAND);
+      });
+
+      it('will redirect to my record gp at hand', () => {
+        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD.path);
       });
     });
   });
