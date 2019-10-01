@@ -188,7 +188,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.NotFound>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>();
+            var errorCase = (Im1ConnectionVerifyResult.ErrorCase) result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidUserPatientLinkToken);
         }
 
         [TestMethod]
@@ -202,7 +204,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.NotFound>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>();
+            var errorCase = (Im1ConnectionVerifyResult.ErrorCase) result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidUserPatientLinkToken);
         }
 
         [TestMethod]
@@ -242,7 +246,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadRequest>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>();
+            var errorCase = (Im1ConnectionVerifyResult.ErrorCase) result;
+            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice);
         }
 
         [TestMethod]

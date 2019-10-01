@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
                     _logger.LogEmisErrorResponse(endUserSessionResponse);
-                    return new Im1ConnectionVerifyResult.BadGateway();
+                    return EmisIm1VerifyErrorMapper.Map(endUserSessionResponse, _logger);
                 }
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionVerifyResult.BadRequest();
+                    return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice);
                 }
 
                 if (!sessionsResponse.HasSuccessResponse)
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     _logger.LogError($"Emis {nameof(userPatientLinkToken)} not found");
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionVerifyResult.NotFound();
+                    return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.InvalidUserPatientLinkToken);
                 }
 
                 var demographicsResponse =

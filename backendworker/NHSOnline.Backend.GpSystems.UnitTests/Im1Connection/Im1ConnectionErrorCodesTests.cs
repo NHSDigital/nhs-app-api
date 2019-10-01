@@ -28,10 +28,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
         {
             var systemUnderTest = new Im1ConnectionErrorCodes();
             var errorResponses = systemUnderTest.InternalErrorResponses;
-
+            
             errorResponses.Should().NotBeNull();
-            errorResponses.Count.Should().Be(35);
-
+            errorResponses.Count.Should().Be(40);
             const int singleCode = (int)Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails;
 
             var specificResponse = errorResponses[singleCode];
@@ -44,9 +43,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
         {
             var systemUnderTest = new Im1ConnectionErrorCodes();
             var errorResponses = systemUnderTest.ExternalErrorResponses;
-
+            
             errorResponses.Should().NotBeNull();
-            errorResponses.Count.Should().Be(14);
+            errorResponses.Count.Should().Be(19);
 
             const int singleCode = (int)Im1ConnectionErrorCodes.ExternalCode.InvalidDetails;
 

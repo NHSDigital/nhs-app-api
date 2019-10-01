@@ -46,6 +46,17 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         return gson.fromJson(result, Im1ConnectionResponse::class.java)
     }
 
+    fun getIm1ConnectionV2(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
+        val httpGet = HttpGet(config.cidBackendUrl + WorkerPaths.patientIm1ConnectionV2)
+        httpGet.setHeader(WorkerHeaders.ConnectionToken, connectionToken)
+        httpGet.setHeader(WorkerHeaders.OdsCode, odsCode)
+
+        val result = sender.sendAsyncAndGetResult(httpGet)
+        httpGet.releaseConnection()
+
+        return gson.fromJson(result, Im1ConnectionResponse::class.java)
+    }
+
     fun postIm1ConnectionV2(im1ConnectionRequest: Im1ConnectionRequest): Im1ConnectionResponse {
     val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1ConnectionV2)
     val httpPost = HttpPost(uri)

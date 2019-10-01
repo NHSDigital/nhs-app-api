@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 if (!authenticateReply.HasSuccessResponse)
                 {
                     _logger.LogError($"Tpp Authentication call failed - {authenticateReply.ErrorForLogging}");
-                    return new Im1ConnectionVerifyResult.BadGateway();
+                    return TppIm1VerifyErrorMapper.Map(authenticateReply, _logger);
                 }
                 
                 var response = CreatePatientIm1ConnectionResponse(authenticateReply, connectionToken, odsCode);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -29,6 +30,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
 
+        private List<PatientNhsNumber> _expectedNhsNumbers = new List<PatientNhsNumber>
+        {
+            new PatientNhsNumber { NhsNumber = "123ABC" },
+            new PatientNhsNumber { NhsNumber = "456DEF" }
+        };
+
         private Im1ConnectionController _systemUnderTest;
         private Mock<ILogger<Im1ConnectionController>> _logger;
         private Mock<IAuditor> _auditor;
@@ -39,6 +46,22 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         private Mock<IGpSystemFactory> _gpSystemFactory;
         private Mock<Im1ConnectionErrorCodes> _im1ErrorCodes;
         private Mock<Im1ConnectionErrorCodes> _errorCodes;
+        private readonly GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse _verifySuccessfulResponse;
+        private readonly PatientIm1ConnectionResponse _expectedSuccessfulVerifyResponse;
+
+        public Im1ConnectionControllerTests()
+        {
+            _verifySuccessfulResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = _expectedNhsNumbers
+            };
+            _expectedSuccessfulVerifyResponse = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = _expectedNhsNumbers
+            };
+        }
 
         [TestInitialize]
         public void TestInitialize()
@@ -133,26 +156,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
 
-            var expectedNhsNumbers = new[]
-            {
-                new PatientNhsNumber { NhsNumber = "123ABC" },
-                new PatientNhsNumber { NhsNumber = "456DEF" }
-            };
-            
-            var verifyResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
-            {
-                ConnectionToken = DefaultConnectionToken,
-                NhsNumbers = expectedNhsNumbers
-            };
-
-            var expectedResponse = new PatientIm1ConnectionResponse
-            {
-                ConnectionToken = DefaultConnectionToken,
-                NhsNumbers = expectedNhsNumbers
-            };
-
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.Success(verifyResponse));
+                new Im1ConnectionVerifyResult.Success(_verifySuccessfulResponse));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             _gpSystemFactory
@@ -165,11 +170,42 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var result = await _systemUnderTest.Get(DefaultConnectionToken, odsCode);
 
             // Assert
-            result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeAssignableTo<PatientIm1ConnectionResponse>()
-                .Subject.Should().BeEquivalentTo(expectedResponse);
+            var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(_expectedSuccessfulVerifyResponse);
 
-            _auditor.Verify(x => x.AuditRegistrationEvent(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
+            _auditor.Verify(x => x.AuditRegistrationEvent(_expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
+                AuditingOperations.Im1ConnectionVerifyResponse, It.IsAny<string>(), It.IsAny<object[]>()));
+        }
+
+        [TestMethod]
+        public async Task GetIm1ConnectionV2_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
+        {
+            // Arrange
+            const string odsCode = DefaultOdsCode;
+            const string patientIdentifier = DefaultConnectionToken;
+
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
+
+            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
+                new Im1ConnectionVerifyResult.Success(_verifySuccessfulResponse));
+            
+            var gpSystemMock = MockGpSystem(im1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(odsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            _systemUnderTest = CreateIm1ConnectionController();
+
+            // Act
+            var result = await _systemUnderTest.GetV2(DefaultConnectionToken, odsCode);
+
+            // Assert
+            var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            var actualResponse = resultValue.Should().BeAssignableTo<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(_expectedSuccessfulVerifyResponse);
+
+            _auditor.Verify(x => x.AuditRegistrationEvent(_expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
                 AuditingOperations.Im1ConnectionVerifyResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
@@ -224,16 +260,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var model = _fixture.Create<PatientIm1ConnectionRequest>();
             model.OdsCode = odsCode;
 
-            var expectedNhsNumbers = new[]
-            {
-                new PatientNhsNumber { NhsNumber = "123ABC" },
-                new PatientNhsNumber { NhsNumber = "456DEF" }
-            };
-
             var registerResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
-                NhsNumbers = expectedNhsNumbers,
+                NhsNumbers = _expectedNhsNumbers,
                 OdsCode = DefaultOdsCode,
                 AccountId = model.AccountId,
                 LinkageKey = model.LinkageKey
@@ -242,7 +272,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var expectedResponse = new PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
-                NhsNumbers = expectedNhsNumbers
+                NhsNumbers = _expectedNhsNumbers
             };
 
             _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
@@ -270,8 +300,82 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 .Subject.Value.Should().BeAssignableTo<PatientIm1ConnectionResponse>()
                 .Subject.Should().BeEquivalentTo(expectedResponse);
 
-            _auditor.Verify(x => x.AuditRegistrationEvent(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
+            _auditor.Verify(x => x.AuditRegistrationEvent(_expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
                 AuditingOperations.Im1ConnectionRegisterResponse, It.IsAny<string>(), It.IsAny<object[]>()));
+        }
+
+        [TestMethod]
+        public async Task GetV2_OdsCodeInvalid_ReturnsBadRequest()
+        {
+            //Arrange
+            _odsCodeMassager
+              .Setup(x => x.CheckOdsCode(DefaultOdsCode))
+              .Returns(DefaultOdsCode);
+              
+            _gpSystemFactory.Setup(x => x.LookupGpSystem(DefaultOdsCode)).ReturnsAsync(Option.None<IGpSystem>());
+
+            _systemUnderTest = CreateIm1ConnectionController();
+
+            // Act
+            var result = await _systemUnderTest.GetV2(DefaultConnectionToken, DefaultOdsCode);
+
+            //Assert
+            AssertErrorWithStatusCode(
+                result, 
+                StatusCodes.Status501NotImplemented,
+                Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                "Invalid Details. Invalid parameters: odsCode");
+        }
+
+        [TestMethod]
+        public async Task GetV2_ConnectionTokenInvalid_ReturnsBadRequest()
+        {
+            //Arrange
+            var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
+
+            _odsCodeMassager
+              .Setup(x => x.CheckOdsCode(DefaultOdsCode))
+              .Returns(DefaultOdsCode);
+
+            _tokenValidationService
+              .Setup(x => x.IsValidConnectionTokenFormat("123"))
+              .Returns(false);
+            
+            var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
+              
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            _systemUnderTest = CreateIm1ConnectionController();
+
+            // Act
+            var result = await _systemUnderTest.GetV2("123", DefaultOdsCode);
+
+            //Assert
+            AssertErrorWithStatusCode(
+                result, 
+                StatusCodes.Status400BadRequest,
+                Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                "Invalid Details. Invalid parameters: connectionToken");
+        }
+
+        [TestMethod]
+        public async Task GetV2_InvalidParameters_ReturnsBadRequest()
+        {
+            //Arrange
+            var connectionToken = "123456";
+            var odsCode = "123456";
+
+            // Act
+            var result = await _systemUnderTest.GetV2(connectionToken, odsCode);
+
+            //Assert
+            AssertErrorWithStatusCode(
+                result, 
+                StatusCodes.Status400BadRequest,
+                Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                "Invalid Details. Invalid parameters: connectionToken, odsCode");
         }
 
         [TestMethod]

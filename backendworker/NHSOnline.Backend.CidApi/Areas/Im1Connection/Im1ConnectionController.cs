@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 
                 await verifyResult.Accept(
                     new Im1ConnectionVerifyAuditingVisitor(_auditor, _logger, gpSystem.Supplier));
-                return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
+                return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor(Request, _logger));
             }
             finally
             {
@@ -144,6 +144,70 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 _logger.LogExit();
             }
         }
+
+        [ApiVersion("2")]
+        [HttpGet, AllowAnonymous]
+        public async Task<IActionResult> GetV2(
+            [FromHeader(Name = Constants.HttpHeaders.ConnectionToken)] 
+            string connectionToken,
+            [FromHeader(Name = Constants.HttpHeaders.OdsCode)] 
+            string odsCode)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var validator = new Im1ConnectionValidator(_logger);
+
+                if (odsCode != null)
+                {
+                    odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
+                }
+
+                if (!validator.IsGetValid(connectionToken, odsCode)) 
+                {
+                    _logger.LogInformation("Im1 verification GET request is invalid");
+                    return IsInvalidResponse(
+                        Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                        StatusCodes.Status400BadRequest,
+                        new[] { nameof(connectionToken), nameof(odsCode) }
+                    );
+                }
+
+                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(odsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {odsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
+                    return IsInvalidResponse(
+                        Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                        StatusCodes.Status501NotImplemented,
+                        new[] { nameof(odsCode) });             
+                }
+
+                var gpSystem = gpSystemOption.ValueOrFailure();
+                if (!gpSystem.GetTokenValidationService().IsValidConnectionTokenFormat(connectionToken))
+                {
+                    _logger.LogError(
+                        $"ConnectionToken provided in header {Constants.HttpHeaders.ConnectionToken} is invalid.");
+                    return IsInvalidResponse(
+                        Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                        StatusCodes.Status400BadRequest,
+                        new[] { nameof(connectionToken)});
+                }
+
+                var im1ConnectionService = gpSystem.GetIm1ConnectionService();
+                var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
+
+                await verifyResult.Accept(
+                    new Im1ConnectionVerifyAuditingVisitor(_auditor, _logger, gpSystem.Supplier));
+                return verifyResult.Accept(new Im1ConnectionV2VerifyResultVisitor(Request, _im1ErrorCodes, gpSystem.Supplier, _logger));
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        } 
 
         [ApiVersion("2")]
         [HttpPost, AllowAnonymous]

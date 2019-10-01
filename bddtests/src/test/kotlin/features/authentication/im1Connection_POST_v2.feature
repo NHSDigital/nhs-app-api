@@ -1,6 +1,7 @@
 @authentication
 @backend
-Feature: Im1 Connection V2
+@im1v2post
+Feature: Im1 Connection V2 POST
   A user can create a new NHS account from the login page, allowing them to access the app
 
   Scenario Outline: A <GP System> user can successfully register with Im1 with full linkage details

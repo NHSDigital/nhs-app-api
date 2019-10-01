@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 if (getConfigurationReply.HasErrorResponse)
                 {
                     _logger.LogError($"Vision system encountered an error: { getConfigurationReply.ErrorForLogging }");
-                    return GetCorrectVerifyErrorResult(getConfigurationReply);
+                    return VisionIm1VerifyErrorMapper.Map(getConfigurationReply, _logger);
                 }
 
                 var formattedNhsNumbers = getConfigurationReply.Body.Configuration.ExtractNhsNumbers();
@@ -161,45 +161,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 AccountId = request.AccountId,
                 LinkageKey = request.LinkageKey
             };
-        }
-
-        private Im1ConnectionVerifyResult GetCorrectVerifyErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
-        {
-            if (response.IsInvalidRequestError)
-            {
-                LogError<T>("Invalid Request");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.BadRequest();
-            }
-
-            if (response.IsInvalidUserCredentialsError)
-            {
-                LogError<T>("Invalid User Credentials");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.BadGateway();
-            }
-
-            if (response.IsInvalidSecurityHeaderError)
-            {
-                LogError<T>("Invalid Security Error");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.InternalServerError();
-            }
-
-            if (response.IsUnknownError)
-            {
-                LogError<T>("Unknown Error");
-                _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.BadGateway();
-            }
-            LogError<T>("Other Error");
-            _logger.LogVisionErrorResponse(response);
-            return new Im1ConnectionVerifyResult.BadGateway();
-        }
-        
-        private void LogError<T>(string errorType)
-        {
-            _logger.LogError("Vision Im1Connection error of type '" + errorType + "'. ");
         }
     }
 }

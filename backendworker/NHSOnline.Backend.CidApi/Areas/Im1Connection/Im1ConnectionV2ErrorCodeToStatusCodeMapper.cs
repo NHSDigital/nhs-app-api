@@ -22,6 +22,11 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 { Im1ConnectionErrorCodes.ExternalCode.InvalidProviderId, StatusCodes.Status400BadRequest },
                 { Im1ConnectionErrorCodes.ExternalCode.InvalidAccountId, StatusCodes.Status400BadRequest },
                 { Im1ConnectionErrorCodes.ExternalCode.InvalidLinkageKey, StatusCodes.Status400BadRequest },
+                { Im1ConnectionErrorCodes.ExternalCode.ProblemLoggingIn, StatusCodes.Status400BadRequest },
+                { Im1ConnectionErrorCodes.ExternalCode.UserRecordUnavailable, StatusCodes.Status400BadRequest },
+                { Im1ConnectionErrorCodes.ExternalCode.InvalidSecurity, StatusCodes.Status400BadRequest },
+                { Im1ConnectionErrorCodes.ExternalCode.InvalidRequest, StatusCodes.Status502BadGateway },
+                { Im1ConnectionErrorCodes.ExternalCode.InvalidUserPatientLinkToken, StatusCodes.Status400BadRequest },
                 // LinkageNotFound prompts a linkage key to be created
                 // It is included here for completeness, but should never reach this stage.
                 { Im1ConnectionErrorCodes.ExternalCode.LinkageNotFound, StatusCodes.Status500InternalServerError }

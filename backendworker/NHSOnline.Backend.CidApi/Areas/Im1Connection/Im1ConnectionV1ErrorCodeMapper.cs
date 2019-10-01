@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 { InternalCode.UserAccountDisabled, StatusCodes.Status403Forbidden },
                 { InternalCode.UnknownError, StatusCodes.Status400BadRequest },
                 { InternalCode.InvalidLinkageDetailsTpp, StatusCodes.Status404NotFound },
+                { InternalCode.ProblemLoggingIn, StatusCodes.Status404NotFound },
                 { InternalCode.UnderMinimumAgeOrNonCompetent, StatusCodes.Status403Forbidden },
                 { InternalCode.MultipleRecordsFoundWithNhsNumber, StatusCodes.Status400BadRequest },
                 { InternalCode.NotValidForOnlineUser, StatusCodes.Status400BadRequest },
@@ -42,6 +43,10 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 { InternalCode.PatientRecordNotFound, StatusCodes.Status404NotFound },
                 { InternalCode.InvalidProviderId, StatusCodes.Status403Forbidden },
                 { InternalCode.ProblemLinkingAccount, StatusCodes.Status404NotFound },
+                { InternalCode.UserRecordUnavailable, StatusCodes.Status403Forbidden },
+                { InternalCode.InvalidSecurity, StatusCodes.Status500InternalServerError },
+                { InternalCode.InvalidRequest, StatusCodes.Status400BadRequest },
+                { InternalCode.InvalidUserPatientLinkToken, StatusCodes.Status400BadRequest },
                 {
                     InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetails,
                     StatusCodes.Status400BadRequest

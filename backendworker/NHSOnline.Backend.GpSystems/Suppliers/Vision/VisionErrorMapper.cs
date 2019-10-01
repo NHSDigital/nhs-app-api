@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
@@ -16,6 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             }
 
             var statusCode = (int)response.StatusCode;
+
             var visionErrorCode = response.ErrorResponse?.Code;
             var visionErrorMessage = response.ErrorResponse?.Text;
             var key = $"{statusCode}{visionErrorCode}";
@@ -32,12 +34,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             {
                 throw new ArgumentNullException(nameof(response));
             }
-
-            var statusCode = (int)response.StatusCode;
-            var visionErrorCode = response.ErrorCode;
+            
             var visionErrorMessage = response.ErrorMessage;
-            var key = $"{statusCode}{visionErrorCode}";
+            var statusCode = (int)response.StatusCode;
 
+            if (response.IsInvalidRequestError)
+            {
+                return keyAndMessageTo.Map(logger, 
+                    $"{statusCode}{VisionApiFaultCodes.InvalidRequest}", 
+                    "Vision Im1Connection error of type 'Invalid Request'.");
+            }
+            
+            if (response.IsInvalidSecurityHeaderError)
+            {
+                return keyAndMessageTo.Map(logger, 
+                    $"{statusCode}{VisionApiFaultCodes.InvalidSecurity}", 
+                    "Vision Im1Connection error of type 'Invalid Security Error'.");
+            }
+            
+            var visionErrorCode = response.ErrorCode;
+            var key = $"{statusCode}{visionErrorCode}";
             return keyAndMessageTo.Map(logger, key, visionErrorMessage);
         }
     }

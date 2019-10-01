@@ -73,6 +73,14 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
         }
     }
 
+    fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
+        return respondWith(httpStatusCode) {
+            andXmlBody(
+                    VisionErrorResponses.getMockedError(serviceDefinition, errorCode,
+                            message ?: "Mocked Error")).build()
+        }
+    }
+
     fun respondWitInvalidUserCredentials(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getInvalidUserCredentialsError(serviceDefinition)).build()

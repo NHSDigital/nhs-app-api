@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         }
 
         [TestMethod]
-        public async Task Verify_ReturnsBadGateway_WhenTppClientReturnsErrorResponse()
+        public async Task Verify_ReturnsUnmappedErrorWithStatusCode_WhenTppClientReturnsErrorResponse()
         {
             // Arrange
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
@@ -116,9 +116,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             // Act
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
-
-            // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
+            
+            //Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.UnmappedErrorWithStatusCode>();
         }
 
         [TestMethod]
@@ -136,9 +136,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             // Act
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
-
-            // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
+            
+            //Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.UnmappedErrorWithStatusCode>();
         }
 
         [TestMethod]

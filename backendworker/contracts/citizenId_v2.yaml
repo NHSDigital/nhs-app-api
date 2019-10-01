@@ -7,6 +7,111 @@ info:
 
 paths:
   /v2/patient/im1connection:
+    get:
+      tags:
+        - im1-connection
+      summary: Gets an IM1 connection token.
+      description: This call returns an IM1 connection token and an array of NHS Numbers,
+        given an IM1 Connection Token and ODS Code.
+      parameters:
+        - in: header
+          name: NHSO-Connection-Token
+          required: true
+          description: IM1 Connection token
+          schema:
+            type: string
+        - in: header
+          name: NHSO-ODS-Code
+          required: true
+          description: ODS code for the Patient's GP.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. IM1 Connection Token and NHS Numbers returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientIm1ConnectionResponse"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Bad Request - Possible errorCodes and errorMessages:
+            * 100 - Unknown Error 
+            * 106 - Invalid details
+            * 108 - Invalid Nhs Number
+            * 109 - Invalid Provider Id
+            * 110 - Invalid Account Id
+            * 111 - Invalid Linkage Key
+            * 112 - Problem Logging In
+            * 113 - User Record Unavailable
+            * 114 - Invalid Security
+            * 115 - Invalid Request
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Forbidden - Possible errorCodes and errorMessages:
+            * 100 - Unknown Error 
+            * 101 - Practice not enabled
+            * 102 - Patient Archived or Disabled
+            * 104 - Patient under minimum age or non competent
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Not Found - Possible errorCodes and errorMessages:
+            * 100 - Unknown Error 
+            * 103 - Patient not found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Conflict - Possible errorCodes and errorMessages:
+            * 100 - Unknown Error 
+            * 105 - User account conflict
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Unexpected Internal server error - Possible errorCodes and errorMessages:
+            * 100 - Unknown Error
+        "501":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            No GP System found for supplied ODS Code. This could mean either they don't exist, or they're not yet onboarded. - Possible errorCodes and errorMessages:
+            * 106 - Invalid details
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Bad response received from GP System. An example would be that a session could not be established
+            * 100 - Unknown Error
+            * 107 - Upstream Error
+        "504":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiErrorResponse'
+          description: |
+            Timeout when calling GP System
+            * 100 - Unknown Error
     post:
       tags:
         - im1-connection
@@ -58,6 +163,10 @@ paths:
             * 109 - Invalid Provider Id
             * 110 - Invalid Account Id
             * 111 - Invalid Linkage Key
+            * 112 - Problem Logging In
+            * 113 - User Record Unavailable
+            * 114 - Invalid Security
+            * 115 - Invalid Request
         "403":
           content:
             application/json:
@@ -175,7 +284,7 @@ components:
               type: string
               description: Patient's email address, this will be used if a new online user is to be created in the GP System.
 
-    Im1ConnectionResponse:
+    PatientIm1ConnectionResponse:
       type: object
       properties:
         connectionToken:
@@ -196,7 +305,7 @@ components:
 
     CreateIm1ConnectionResponse:
       allOf:
-        - $ref: '#/components/schemas/Im1ConnectionResponse'
+        - $ref: '#/components/schemas/PatientIm1ConnectionResponse'
         - type: object
           required:
             - accountId

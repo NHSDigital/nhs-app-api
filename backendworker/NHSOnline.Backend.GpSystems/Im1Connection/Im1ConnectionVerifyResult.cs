@@ -25,8 +25,30 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             }
         }
 
-        public class NotFound : Im1ConnectionVerifyResult
+        public class UnmappedErrorWithStatusCode : Im1ConnectionVerifyResult
         {
+            public Im1ConnectionErrorCodes.InternalCode ErrorCode { get; }
+
+            public UnmappedErrorWithStatusCode()
+            {
+                ErrorCode = Im1ConnectionErrorCodes.InternalCode.UnknownError;
+            }
+
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class ErrorCase : Im1ConnectionVerifyResult
+        {
+            public Im1ConnectionErrorCodes.InternalCode ErrorCode { get; }
+
+            public ErrorCase(Im1ConnectionErrorCodes.InternalCode errorCode)
+            {
+                ErrorCode = errorCode;
+            }
+
             public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -41,6 +63,14 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             }
         }
 
+        public class Forbidden : Im1ConnectionVerifyResult
+        {
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+        
         public class BadRequest : Im1ConnectionVerifyResult
         {
             public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
@@ -57,23 +87,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             }
         }
         
-        public class Forbidden : Im1ConnectionVerifyResult
+        public class NotFound : Im1ConnectionVerifyResult
         {
-            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-        
-        public class ErrorCase : Im1ConnectionVerifyResult
-        {
-            public Im1ConnectionErrorCodes.InternalCode ErrorCode { get; }
-
-            public ErrorCase(Im1ConnectionErrorCodes.InternalCode errorCode)
-            {
-                ErrorCode = errorCode;
-            }
-
             public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

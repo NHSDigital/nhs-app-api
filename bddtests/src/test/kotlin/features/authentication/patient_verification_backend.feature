@@ -6,7 +6,7 @@ Feature: Patient Verification Backend
 
   Scenario Outline: <GP System> patient has single NHS Number
     Given I have valid credentials for a <GP System> patient with one NHS Number
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "OK" success code
     Then I receive the expected NHS Number
 
@@ -19,7 +19,7 @@ Feature: Patient Verification Backend
 
   Scenario Outline: <GP System> patient has multiple NHS Numbers
     Given I have valid credentials for a <GP System> patient with multiple NHS Numbers
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "OK" success code
     Then I receive the expected NHS Numbers
 
@@ -30,7 +30,7 @@ Feature: Patient Verification Backend
 
   Scenario Outline: <GP System> patient has no NHS Number
     Given I have valid credentials for a <GP System> patient with no NHS Number
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive no NHS Number
 
     Examples:
@@ -40,18 +40,21 @@ Feature: Patient Verification Backend
 
   Scenario Outline: Non-existent IM1 Connection Token for the <GP System>
     Given I have an <GP System> IM1 Connection Token that does not exist
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Bad Gateway" error
-
     Examples:
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+
+  Scenario: Non-existent IM1 Connection Token for VISION
+    Given I have an VISION IM1 Connection Token that does not exist
+    When I verify patient data using the v1 endpoint
+    Then I receive a "Bad Request" error
 
   Scenario Outline: <GP System> IM1 Connection Token not in the expected format
     Given I have an <GP System> IM1 Connection Token that is in an invalid format
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Bad Request" error
 
     Examples:
@@ -63,7 +66,7 @@ Feature: Patient Verification Backend
 
   Scenario: Microtest patient tries to verify IM1 Connection details with Emis IM1 Connection Token.
     Given I have an EMIS IM1 Connection Token and I try to verify as a microtest user
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Bad Request" error
 
   Scenario Outline: No IM1 Connection Token for the <GP System>
@@ -80,7 +83,7 @@ Feature: Patient Verification Backend
 
   Scenario Outline: Non-existent ODS Code for <GP System>
     Given I have an <GP System> ODS Code that does not exist
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Not Implemented" error
 
     Examples:
@@ -92,7 +95,7 @@ Feature: Patient Verification Backend
 
   Scenario Outline: ODS Code not in the expected format <GP System>
     Given I have an <GP System> ODS Code not in expected format
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Bad Request" error
 
     Examples:
@@ -116,7 +119,7 @@ Feature: Patient Verification Backend
 
   Scenario Outline: Verifying the credentials of a <GP System> patient when the GP System is not available returns a bad gateway response
     Given I have valid a valid IM1 Connection Token for a <GP System> patient but the GP System is not available
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Bad Gateway" error
     Examples:
       | GP System |
@@ -127,24 +130,24 @@ Feature: Patient Verification Backend
 
   Scenario: Vision responds with security header error
     Given Vision responds with a security header error
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive an "Internal server error" error
 
 
   Scenario: Vision responds with invalid request error
     Given Vision responds with an invalid request error
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Bad Request" error
 
 
   Scenario: Vision responds with an unknown error
     Given Vision responds with an unknown error
-    When I verify patient data
-    Then I receive a "Bad Gateway" error
+    When I verify patient data using the v1 endpoint
+    Then I receive a "Bad Request" error
 
   Scenario Outline: Verifying the old credentials of a <GP System> patient after they've moved practice returns a forbidden response
     Given I have an old ODS Code and IM1 Connection Token for a <GP System> patient that has since moved to a different practice
-    When I verify patient data
+    When I verify patient data using the v1 endpoint
     Then I receive a "Forbidden" error
     Examples:
       | GP System |

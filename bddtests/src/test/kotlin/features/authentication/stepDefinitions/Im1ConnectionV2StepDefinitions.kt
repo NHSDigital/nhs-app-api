@@ -42,6 +42,7 @@ class Im1ConnectionV2StepDefinitions : AbstractSteps() {
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
     }
 
+
     @Given("^I am a (.*) user wishing to register with created linkage details$")
     fun iAmAUserWishingToRegisterWithCreatedLinkageDetails(gpSystem: String) {
         val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
@@ -63,6 +64,33 @@ class Im1ConnectionV2StepDefinitions : AbstractSteps() {
                     .authentication
                     .postIm1ConnectionV2(request)
             Im1ConnectionSerenityHelpers.Im1ConnectionResponse.set(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
+    @When("I verify patient data using the v2 endpoint")
+    fun whenIVerifyPatientData() {
+        val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
+        val odsCode = PatientVerificationSerenityHelpers.NationalPracticeCode.getOrFail<String>()
+
+        try {
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .authentication.getIm1ConnectionV2(connectionToken, odsCode)
+            Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
+    @When("I verify patient data without sending the ODS Code using the v2 endpoint")
+    fun whenIVerifyPatientDataWithoutSendingTheOdsCode() {
+        val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
+
+        try {
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .authentication.getIm1ConnectionV2(connectionToken, null)
+            Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
         }

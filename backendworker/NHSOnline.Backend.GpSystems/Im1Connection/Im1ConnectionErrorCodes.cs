@@ -44,7 +44,6 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
         {
             [Description("Unknown Error")]
             InvalidOption = 0,
-
             [Description("Unknown Error")]
             UnknownError = 100,
             [Description("Invalid linkage details")]
@@ -101,7 +100,16 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             LinkageKeyLengthOutsideOfValidRange = 126,
             [Description("Unidentified value outside valid range")]
             InputValueLengthOutsideOfValidRange = 127,
-
+            [Description("Problem logging in. Please retry")]
+            ProblemLoggingIn = 128,
+            [Description("Record currently unavailable - please try again later or contact your Practice")]
+            UserRecordUnavailable = 129,
+            [Description("Invalid security")]
+            InvalidSecurity = 130,
+            [Description("Invalid request, please try again")]
+            InvalidRequest = 131,
+            [Description("Invalid user patient link token, please try again")]
+            InvalidUserPatientLinkToken = 132,
             [Description("Patient not registered at this practice")]
             PatientNotRegisteredAtThisPractice = 195,
             [Description("No API key associated with the nhs number")]
@@ -121,7 +129,6 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
         {
             [Description("Unknown Error")]
             InvalidOption = 0,
-
             [Description("Unknown Error")]
             UnknownError = 100,
             [Description("Practice not enabled")]
@@ -146,9 +153,18 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             InvalidAccountId = 110,
             [Description("Invalid Linkage Key")]
             InvalidLinkageKey = 111,
-
+            [Description("Problem logging in, please retry")]
+            ProblemLoggingIn = 112,
+            [Description("Record currently unavailable, please retry")]
+            UserRecordUnavailable = 113,
+            [Description("Invalid Security")]
+            InvalidSecurity = 114,
+            [Description("Invalid request, please try again")]
+            InvalidRequest = 115,
+            [Description("Invalid user patient link token")]
+            InvalidUserPatientLinkToken = 116,
             [Description("Linkage not found, prompt to create new linkage key")]
-            LinkageNotFound = 199
+            LinkageNotFound = 199,
         }
 
         private static readonly Dictionary<InternalCode, ExternalCode> ErrorCodeToGenericErrorCode =
@@ -196,6 +212,11 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
                 { InternalCode.UnknownError, ExternalCode.UnknownError },
                 { InternalCode.ProblemLinkingAccount, ExternalCode.UnknownError },
+                { InternalCode.ProblemLoggingIn, ExternalCode.ProblemLoggingIn},
+                { InternalCode.UserRecordUnavailable, ExternalCode.UserRecordUnavailable },
+                { InternalCode.InvalidSecurity, ExternalCode.InvalidSecurity },
+                { InternalCode.InvalidRequest, ExternalCode.InvalidRequest },
+                { InternalCode.InvalidUserPatientLinkToken, ExternalCode.InvalidUserPatientLinkToken },
 
                 // The following error codes are caught earlier in the process.
                 // They are included here for completeness, but should never reach this stage.

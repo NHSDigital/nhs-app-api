@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.authentication.factories.Im1ConnectionV2Factory
+import features.authentication.factories.Im1ConnectionV2GetFactory
 import features.sharedStepDefinitions.backend.AbstractSteps
 import models.Patient
 import org.apache.http.HttpStatus
@@ -163,6 +164,16 @@ class Im1ConnectionV2ErrorStepDefinitions : AbstractSteps() {
         val connectionRequest = factory.validIm1Request
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
         factory.errorIm1Register(gpHttpCode, gpError, message)
+    }
+
+    @Given("^I am a (.*) user and verifying my im1 connection returns '(.*)' '(.*)' '(.*)'$")
+    fun iAmAUserWithProvidedLinkageKeyButVerifyingWillReturnError(gpSystem: String,
+                                                                    gpHttpCode:Int,
+                                                                    gpError:String,
+                                                                    message:String) {
+        val im1ConnectionV2GetFactory = Im1ConnectionV2GetFactory.getForSupplier(gpSystem)
+        SerenityHelpers.setPatient(im1ConnectionV2GetFactory.patient)
+        im1ConnectionV2GetFactory.errorIm1Verify(gpHttpCode, gpError, message)
     }
 
     @Given("^I am a (.*) user registering but creating my linkage key will return a '(.*)' '(.*)' error$")

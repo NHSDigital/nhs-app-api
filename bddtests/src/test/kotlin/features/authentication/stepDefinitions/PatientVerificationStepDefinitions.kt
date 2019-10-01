@@ -123,7 +123,7 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
         PatientVerificationFactory.getForSupplier(gpSystem).gpSystemNotAvailable()
     }
 
-    @When("I verify patient data$")
+    @When("I verify patient data using the v1 endpoint")
     fun whenIVerifyPatientData() {
         val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
         val odsCode = PatientVerificationSerenityHelpers.NationalPracticeCode.getOrFail<String>()
