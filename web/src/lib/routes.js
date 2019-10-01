@@ -166,17 +166,6 @@ const routes = {
       gpAdviceDisabledRedirect,
     ],
   },
-  APPOINTMENT_BOOK_NOJS: {
-    name: 'appointments-book-noJs',
-    path: '/nojs/appointments/book',
-    crumb: {
-      i8nKey: 'appointmentsBooking',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-  },
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
     path: '/appointments/booking',
@@ -897,7 +886,6 @@ export const {
   ACCOUNT_SIGNOUT,
   ALLERGIESANDREACTIONS,
   APPOINTMENTS,
-  APPOINTMENT_BOOK_NOJS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,

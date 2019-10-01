@@ -22,45 +22,6 @@ const initialiseApi = ({ apiFn, req, res }) => {
 export default (apiFn) => {
   const router = Router();
 
-  router.post('/nojs/appointments/book', async (req, res) => {
-    const api = initialiseApi({ apiFn, req, res });
-
-    const { successMessageKey,
-      bookingReason,
-      csrfToken,
-      endTime,
-      slotId,
-      startTime,
-      telephoneNumberField }
-      = get('body')(req) || {};
-
-    const appointmentBookRequest = {
-      BookingReason: bookingReason,
-      EndTime: endTime,
-      SlotId: slotId,
-      StartTime: startTime,
-      TelephoneNumber: telephoneNumberField,
-    };
-
-    await api.postV1PatientAppointments({
-      appointmentBookRequest,
-      cookie: get('headers.cookie')(req),
-      csrfToken,
-    });
-
-    const uri = createUri({
-      path: APPOINTMENTS.path,
-      noJs: {
-        flashMessage: {
-          show: true,
-          key: successMessageKey,
-        },
-      },
-    });
-
-    res.redirect(uri);
-  });
-
   router.post('/nojs/appointments/cancel', async (req, res) => {
     const api = initialiseApi({ apiFn, req, res });
     const { reason, id, csrfToken } = get('body')(req) || {};

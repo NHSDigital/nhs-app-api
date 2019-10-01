@@ -1,11 +1,13 @@
 <template>
   <div v-if="showTemplate">
-    <form-post :action="confirmBookingPath">
-      <input :value="confirmationMessageKey" type="hidden" name="successMessageKey">
-      <input :value="slotEndTime" type="hidden" name="endTime">
-      <input :value="slotId" type="hidden" name="slotId">
-      <input :value="slotStartTime" type="hidden" name="startTime">
-
+    <no-js-form :action="confirmBookingPath" :value="{}" method="post">
+      <input :value="confirmationMessageKey" type="hidden" name="confirmationMessageKey">
+      <input :value="slotEndTime" type="hidden"
+             name="nojs.availableAppointments.selectedSlot.endTime">
+      <input :value="slotId" type="hidden" name="nojs.availableAppointments.selectedSlot.id">
+      <input :value="slotStartTime" type="hidden"
+             name="nojs.availableAppointments.selectedSlot.startTime">
+      <input :value="true" type="hidden" name="isSubmitted">
       <div v-if="showError" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
           <message-dialog message-type="error" role="alert">
@@ -81,7 +83,7 @@
                   <label :for="'otherPhoneNumberRadioInput'"
                          class="nhsuk-label nhsuk-radios__label"
                          @keypress="onKeyDown" @click="selected">
-                    Use other phone number
+                    {{ $t('appointments.confirmation.useOtherPhoneNumberLabel') }}
                   </label>
                 </div>
               </div>
@@ -96,7 +98,7 @@
                                     :text-area-classes="defaultClasses"
                                     :required="true"
                                     :class="showReasonError"
-                                    name="telephoneNumberField"
+                                    name="telephoneNumber"
                                     pattern=".*[^ ].*"
                                     type="tel"/>
               </div>
@@ -146,7 +148,7 @@
           </generic-button>
         </div>
       </div>
-    </form-post>
+    </no-js-form>
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -167,7 +169,8 @@
 
 <script>
 import { redirectTo } from '@/lib/utils';
-import { APPOINTMENT_BOOK_NOJS, APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
+import { createUri } from '@/lib/noJs';
+import { APPOINTMENT_BOOKING, APPOINTMENTS, APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
 import moment from 'moment';
 import get from 'lodash/fp/get';
 import AppointmentSlot from '@/components/appointments/Appointment';
@@ -179,8 +182,9 @@ import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import Necessity from '@/lib/necessity';
-import FormPost from '@/components/FormPost';
+import NoJsForm from '@/components/no-js/NoJsForm';
 import channel from '@/lib/channel';
+import { getMessage } from '@/lib/errors';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
@@ -199,7 +203,7 @@ export default {
     ErrorMessage,
     GenericTextArea,
     GenericButton,
-    FormPost,
+    NoJsForm,
     Card,
     CardGroupItem,
     CardGroup,
@@ -226,7 +230,7 @@ export default {
       return APPOINTMENTS.path;
     },
     confirmBookingPath() {
-      return APPOINTMENT_BOOK_NOJS.path;
+      return APPOINTMENT_CONFIRMATIONS.path;
     },
     reasonBoxAriaLabelledBy() {
       return this.showError ? 'booking-reason-label error-label max-reason-desc' : 'booking-reason-label max-reason-desc';
@@ -269,6 +273,10 @@ export default {
       if (!this.slot) return undefined;
       return this.slot.startTime;
     },
+    noJsTelephoneNumber() {
+      if (!this.telephoneNumber) return undefined;
+      return this.telephoneNumber;
+    },
     formData() {
       return {
         myAppointments: {
@@ -283,6 +291,41 @@ export default {
         this.symptoms = oldValue;
       }
     },
+  },
+  async fetch({ app, store, req, redirect }) {
+    const requestBody = get('body', req);
+    const isSubmitted = get('isSubmitted', requestBody);
+    let uri;
+
+
+    if (isSubmitted) {
+      const appointmentBookRequest = {
+        BookingReason: requestBody.bookingReason,
+        EndTime: store.state.availableAppointments.selectedSlot.endTime,
+        SlotId: store.state.availableAppointments.selectedSlot.id,
+        StartTime: store.state.availableAppointments.selectedSlot.startTime,
+        TelephoneNumber: requestBody.telephoneNumber,
+      };
+      await store.dispatch('availableAppointments/book', appointmentBookRequest);
+
+      if (!store.getters['errors/showApiError']) {
+        uri = createUri({
+          path: APPOINTMENTS.path,
+          noJs: {
+            flashMessage: {
+              show: true,
+              key: requestBody.confirmationMessageKey,
+            },
+          },
+        });
+        redirect(uri);
+      } else {
+        store.dispatch('header/updateHeaderText',
+          getMessage({ $store: store, $i18n: app.i18n }, 'pageHeader'));
+        store.dispatch('pageTitle/updatePageTitle',
+          getMessage({ $store: store, $i18n: app.i18n }, 'pageTitle'));
+      }
+    }
   },
   mounted() {
     if (!this.slot) {

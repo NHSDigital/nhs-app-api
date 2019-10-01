@@ -2,7 +2,13 @@
 import ApiError from '@/components/errors/ApiError';
 import { initialState as initialDevice } from '@/store/modules/device/mutation-types';
 import { initialState as initialErrors } from '@/store/modules/errors/mutation-types';
-import { shallowMount, createStore } from '../../helpers';
+import { createStore, mount } from '../../helpers';
+import { get, has } from 'lodash/fp';
+import locale from '@/locale';
+
+const engLocale = locale.en;
+const $te = key => has(key, engLocale);
+const $t = key => get(key, engLocale);
 
 const createState = () => ({
   device: initialDevice(),
@@ -36,7 +42,7 @@ describe('error message mixin', () => {
       state,
     });
 
-    const mounted = shallowMount(ApiError, { $store });
+    const mounted = mount(ApiError, { $store, $te, $t });
     mounted.vm.showError = jest.fn().mockReturnValue(showError);
     return mounted;
   };
@@ -65,7 +71,11 @@ describe('error message mixin', () => {
 
     describe('domain', () => {
       it('will be "errors" when there are API errors', () => {
-        wrapper = mountErrorMessageMixin({ hasApiError: true });
+        const apiError = {
+          status: 401,
+          error: 'forbidden',
+        };
+        wrapper = mountErrorMessageMixin({ apiError, hasApiError: true });
         expect(wrapper.vm.domain).toEqual('errors');
       });
 
@@ -124,8 +134,8 @@ describe('error message mixin', () => {
         expect(wrapper.vm.getText('mickey.mouse')).toEqual('');
       });
 
-      it('will return the localised value if the key exists in the locale file', () => {
-        expect(wrapper.vm.getText('errors.pageHeader')).toEqual('translate_errors.pageHeader');
+      it('will return the value if the key exists in the locale file', () => {
+        expect(wrapper.vm.getText('errors.pageHeader')).toEqual('Server error');
       });
     });
   });

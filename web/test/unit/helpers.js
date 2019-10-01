@@ -111,6 +111,11 @@ export const mount = (component, {
       $t,
       $tc,
       $te,
+      $i18n: {
+        t: create$T(),
+        tc: create$T(),
+        te: create$Te(),
+      },
       showTemplate: () => true,
     },
     stubs,

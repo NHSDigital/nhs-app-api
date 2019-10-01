@@ -63,6 +63,7 @@ import HeaderSlim from '@/components/HeaderSlim';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import { getDynamicStyle } from '@/lib/desktop-experience';
+import { getMessage, getComponentErrorCodeKey, getComponentKey } from '@/lib/errors';
 import PageTitle from '@/components/widgets/PageTitle';
 import NativeApp from '@/services/native-app';
 
@@ -98,7 +99,7 @@ export default {
   },
   computed: {
     additionalInfo() {
-      return this.getMessage('additionalInfo');
+      return getMessage(this, 'additionalInfo');
     },
     additionalInfoComponentName() {
       return this.$store.state.errors.pageSettings.additionalInfoComponent;
@@ -118,10 +119,10 @@ export default {
       return clazzes;
     },
     hasAdditionalInfo() {
-      return this.getMessage('additionalInfo') !== '';
+      return this.additionalInfo !== '';
     },
     header() {
-      const headerMessage = this.getMessage('header');
+      const headerMessage = getMessage(this, 'header');
       this.trackSystemError(headerMessage);
       return headerMessage;
     },
@@ -132,7 +133,7 @@ export default {
       return this.showError();
     },
     message() {
-      return this.getMessage('message');
+      return getMessage(this, 'message');
     },
     messageLabel() {
       return isObject(this.message) ? this.message.label : undefined;
@@ -144,10 +145,11 @@ export default {
       return this.$store.state.errors.pageSettings.errorOverrideStyles[this.statusCode];
     },
     pageHeader() {
-      return this.getMessage('pageHeader');
+      return getMessage(this, 'pageHeader');
     },
     pageTitle() {
-      return this.getMessage('pageTitle') || this.pageHeader;
+      this.$store.dispatch('errors/setErrorTitle', getMessage(this, 'pageTitle') || this.pageHeader);
+      return getMessage(this, 'pageTitle') || this.pageHeader;
     },
     retryAction() {
       return getMappedValue({
@@ -157,8 +159,9 @@ export default {
       });
     },
     retryButtonText() {
-      return this.getComponentErrorCodeKey('retryButtonText')
-        || this.getComponentKey('retryButtonText', 'errors');
+      return getComponentErrorCodeKey(this, this.showError, this.component,
+        'retryButtonText', this.errorCode, this.statusCode)
+        || getComponentKey(this, this.component, 'retryButtonText', 'errors');
     },
     retryUrl() {
       const url = getMappedValue({
@@ -170,7 +173,7 @@ export default {
       return this.correctUrl(url);
     },
     subheader() {
-      return this.getMessage('subheader');
+      return getMessage(this, 'subheader');
     },
   },
   updated() {
