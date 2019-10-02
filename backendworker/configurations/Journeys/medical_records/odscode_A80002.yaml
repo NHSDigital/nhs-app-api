@@ -1,6 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: "KGPD13"
+  odsCode: "A80002"
 journeys:
   medicalRecord:
     provider: im1

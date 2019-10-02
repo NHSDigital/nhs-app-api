@@ -14,9 +14,10 @@ private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
 private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
 private const val TPP_ONLINE_CONSULTATIONS_DISABLED = "A55555"
 private const val VISION_ONLINE_CONSULTATIONS_DISABLED = "A66666"
-private const val EMIS_GP_MEDICAL_RECORD_V2 = "A00002"
-private const val MICROTEST_GP_MEDICAL_RECORD_V2 = "B81603"
-private const val TPP_GP_MEDICAL_RECORD_V2 = "KGPD13"
+private const val EMIS_GP_MEDICAL_RECORD_V2 = "A80001"
+private const val TPP_GP_MEDICAL_RECORD_V2 = "A80002"
+private const val VISION_GP_MEDICAL_RECORD_V2 = "A80003"
+private const val MICROTEST_GP_MEDICAL_RECORD_V2 = "A80004"
 
 class ServiceJourneyRulesMapper {
 
@@ -39,27 +40,19 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.MEDICAL_RECORD_GPATHAND,
                                 JourneyType.PRESCRIPTIONS_GPATHAND),
 
-                GpInformation(EMIS_GP_SUPPLIER, EMIS_GP_MEDICAL_RECORD_V2) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
-                GpInformation(EMIS_GP_SUPPLIER, EMIS_GP_MEDICAL_RECORD_V2) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2,
-                                JourneyType.MEDICAL_RECORD_IM1),
-                GpInformation(EMIS_GP_SUPPLIER, EMIS_GP_MEDICAL_RECORD_V2) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2,
-                                JourneyType.MEDICAL_RECORD_GPATHAND),
-
                 GpInformation(TPP_GP_SUPPLIER, TPP_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 JourneyType.NOTIFICATIONS_ENABLED),
+                GpInformation(VISION_GP_SUPPLIER, VISION_ONLINE_CONSULTATIONS_DISABLED) to
+                        EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
 
                 // Medical Record V2
-                GpInformation(VISION_GP_SUPPLIER, VISION_ONLINE_CONSULTATIONS_DISABLED) to
-                        EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
-                                JourneyType.MEDICAL_RECORD_VERSION_2),
-
+                GpInformation(EMIS_GP_SUPPLIER, EMIS_GP_MEDICAL_RECORD_V2) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
+                GpInformation(VISION_GP_SUPPLIER, VISION_GP_MEDICAL_RECORD_V2) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
                 GpInformation(MICROTEST_GP_SUPPLIER, MICROTEST_GP_MEDICAL_RECORD_V2) to
                         EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
-
                 GpInformation(TPP_GP_SUPPLIER, TPP_GP_MEDICAL_RECORD_V2) to
                         EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2)
         )

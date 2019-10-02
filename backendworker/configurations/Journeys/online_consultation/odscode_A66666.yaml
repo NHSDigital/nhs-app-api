@@ -10,7 +10,7 @@ journeys:
     provider: none
   medicalRecord:
     provider: im1
-    version: 2
+    version: 1
   prescriptions:
     provider: im1
   nominatedPharmacy: true
