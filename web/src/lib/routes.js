@@ -656,7 +656,7 @@ const routes = {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
   NOMINATED_PHARMACY_SEARCH: {
     name: 'nominated-pharmacy-search',
@@ -666,7 +666,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
   NOMINATED_PHARMACY_CONFIRM: {
     name: 'nominated-pharmacy-confirm',
@@ -676,7 +676,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
@@ -686,7 +686,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
   NOMINATED_PHARMACY_CHECK: {
     name: 'nominated-pharmacy-check',
@@ -696,7 +696,7 @@ const routes = {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
   NOMINATED_PHARMACY_CANNOT_CHANGE: {
     name: 'nominated-pharmacy-cannot-change',
@@ -706,7 +706,7 @@ const routes = {
         return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
   ORGAN_DONATION: {
     name: 'organ-donation',
