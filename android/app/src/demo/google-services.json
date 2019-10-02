@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "994739921013",
-    "firebase_url": "https://nhsapp-demo.firebaseio.com",
-    "project_id": "nhsapp-demo",
-    "storage_bucket": "nhsapp-demo.appspot.com"
+    "project_number": "999563806800",
+    "firebase_url": "https://nhsapp-staging.firebaseio.com",
+    "project_id": "nhsapp-staging",
+    "storage_bucket": "nhsapp-staging.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:994739921013:android:719a5436070da7fc96983c",
+        "mobilesdk_app_id": "1:999563806800:android:4e7f04415a5c218c7e2955",
         "android_client_info": {
           "package_name": "com.nhs.online.nhsonline.demo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "994739921013-4rq4fjjeac130lncaddskgpjcfrsfs0a.apps.googleusercontent.com",
+          "client_id": "999563806800-g15mhbr9gl4fp2i3809tbn50l0a4e8ga.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nhs.online.nhsonline.demo",
+            "certificate_hash": "00039d8311413ed51f59bf1860a62b0ff3add5f9"
+          }
+        },
+        {
+          "client_id": "999563806800-d861jtgqok9ug5r7eogla15dcaeq53cj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCgDKxQ70Nnuz2FnKgqorFZFaLOmimLrD8"
+          "current_key": "AIzaSyByz-gVClrfJYj_TEUlAamwfuS2xxsefJ0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "994739921013-4rq4fjjeac130lncaddskgpjcfrsfs0a.apps.googleusercontent.com",
+              "client_id": "999563806800-d861jtgqok9ug5r7eogla15dcaeq53cj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

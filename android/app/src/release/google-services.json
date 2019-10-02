@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "270436149416-jro5e46knlnu1ftuih0cl14h2hkkngao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nhs.online.nhsonline",
+            "certificate_hash": "37a79c75227ef5c2344d7de54dc8858a0b60cc35"
+          }
+        },
+        {
           "client_id": "270436149416-7j8pamrq9djvuehnnmcnnkla0a85juuv.apps.googleusercontent.com",
           "client_type": 3
         }
