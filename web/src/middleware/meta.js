@@ -54,6 +54,7 @@ import {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
   SYMPTOMS,
   TERMSANDCONDITIONS,
+  TESTRESULTS,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
@@ -236,7 +237,6 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
       break;
     case ALLERGIESANDREACTIONS.name:
-      // store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.allergiesAndReactions';
       route.meta.pageTitleKey = 'pageTitles.allergiesAndReactions';
       break;
@@ -252,6 +252,10 @@ export default function ({ route, store, app }) {
     case TERMSANDCONDITIONS.name:
       route.meta.headerKey = 'pageHeaders.termsAndConditions';
       route.meta.pageTitleKey = 'pageTitles.termsAndConditions';
+      break;
+    case TESTRESULTS.name:
+      route.meta.headerKey = 'pageHeaders.testResults';
+      route.meta.pageTitleKey = 'pageTitles.testResults';
       break;
     case NOMINATED_PHARMACY_SEARCH.name:
     case NOMINATED_PHARMACY_SEARCH_RESULTS.name:

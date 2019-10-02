@@ -77,6 +77,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.allergies.allergies.click()
     }
 
+    @When("I click the test result link on my record - GP Medical Record")
+    fun iClickTheTestResultsLinkOnTheAccountPage(){
+        myRecordInfoPage.testResults.testResults.click()
+    }
+
     @Then("^I see an error occurred message on My Record - GP Medical Record$")
     fun thenISeeAnErrorOccuredMessageForProblems() {
         assertTextOnPage("An error has occurred trying to retrieve this data.")

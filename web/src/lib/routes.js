@@ -493,6 +493,17 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
+  TESTRESULTS: {
+    name: 'gp-medical-record-test-results',
+    path: '/gp-medical-record/test-results',
+    crumb: {
+      i8nKey: 'testResults',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   MYRECORDTESTRESULT: {
     name: 'my-record-testresultdetail-testResultId',
     path: '/my-record/testresultdetail/:testResultId',
@@ -941,4 +952,5 @@ export const {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
   SYMPTOMS,
   TERMSANDCONDITIONS,
+  TESTRESULTS,
 } = routes;

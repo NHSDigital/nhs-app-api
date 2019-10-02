@@ -1,0 +1,52 @@
+@my-record
+@test-results
+Feature: View My GP Medical Record Information - Test Results Frontend
+
+  Scenario: An EMIS user has no access to test result section
+    Given I am a EMIS user setup to use medical record version 2
+    And I do not have access to test results - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see a message indicating that I have no access to view this section on My Record - GP Medical Record
+
+  Scenario: An EMIS user has one test result with one value
+    Given I am a EMIS user setup to use medical record version 2
+    And the GP Practice has a single test result with single child values with no ranges for EMIS - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see one test result with one value - GP Medical Record
+
+  Scenario: An EMIS user has one test result with one value and a range
+    Given I am a EMIS user setup to use medical record version 2
+    And the GP Practice has a single test result with single child value with A range for EMIS - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see one test result with one value and a range - GP Medical Record
+
+  Scenario: An EMIS user has one test result with multiple child values
+    Given I am a EMIS user setup to use medical record version 2
+    And the GP Practice has a single test result with multiple child values with no ranges for EMIS - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see one test result with multiple child values - GP Medical Record
+
+  Scenario: An EMIS user has test results with multiple child values which have ranges
+    Given I am a EMIS user setup to use medical record version 2
+    And the GP Practice has a single test result with multiple child values with ranges for EMIS - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see test results with multiple child values some of which have ranges - GP Medical Record
+
+  Scenario: An EMIS user has a test result with an unknown date
+    Given I am a EMIS user setup to use medical record version 2
+    And the EMIS GP Practice has two test results where the second record has no date
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see 2 test results - GP Medical Record
+    And The second test result record has an unknown date - GP Medical Record

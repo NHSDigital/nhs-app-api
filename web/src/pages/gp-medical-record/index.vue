@@ -34,22 +34,27 @@
 
     <div v-if="hasRecordAccess()" :class="$style.summaryRecordContainer"
          data-purpose="medical-record-menu">
+      <menu-item-list>
+        <template v-if="hasSummaryRecordAccess">
+          <scr-emis-gp-record v-if="supplier === 'EMIS'"/>
 
-      <template v-if="hasSummaryRecordAccess">
-        <scr-emis-gp-record v-if="supplier === 'EMIS'"/>
+          <scr-tpp-gp-record v-if="supplier === 'TPP'"/>
 
-        <scr-tpp-gp-record v-if="supplier === 'TPP'"/>
+          <scr-vision-gp-record v-if="supplier === 'VISION'"/>
 
-        <scr-vision-gp-record v-if="supplier === 'VISION'"/>
+          <scr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
+        </template>
 
-        <scr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
+        <template v-if="hasDetailedRecordAccess">
+          <dcr-emis-gp-record v-if="supplier === 'EMIS'"/>
+        </template>
 
-      </template>
-      <template v-else>
-        <p :class="$style.summaryRecordWarning">
-          {{ $t('my_record.viewRestOfHealthRecordWarning') }}
-        </p>
-      </template>
+        <template v-else>
+          <p :class="$style.summaryRecordWarning">
+            {{ $t('my_record.viewRestOfHealthRecordWarning') }}
+          </p>
+        </template>
+      </menu-item-list>
       <glossary :extra-classes="[$style.glossary]"/>
     </div>
     <div v-else class="pull-content">
@@ -65,7 +70,6 @@
       </div>
     </div>
 
-
   </div>
   <div v-else>
     <Warning />
@@ -74,10 +78,12 @@
 
 <script>
 import get from 'lodash/fp/get';
+import DcrEmisGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrEMISGpRecord';
 import ScrEmisGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrEMISGpRecord';
 import ScrTppGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrTPPGpRecord';
 import ScrVisionGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrVISIONGpRecord';
 import ScrMicrotestGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrMICROTESTGpRecord';
+import MenuItemList from '@/components/MenuItemList';
 import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -88,10 +94,12 @@ export default {
   layout: 'nhsuk-layout',
   components: {
     Glossary,
+    DcrEmisGpRecord,
     ScrEmisGpRecord,
     ScrTppGpRecord,
     ScrVisionGpRecord,
     ScrMicrotestGpRecord,
+    MenuItemList,
     Warning,
   },
   data() {
