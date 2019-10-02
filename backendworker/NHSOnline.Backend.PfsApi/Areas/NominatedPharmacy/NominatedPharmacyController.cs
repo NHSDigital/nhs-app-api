@@ -11,12 +11,14 @@ using System;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using System.Linq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
+    [JourneyFeatureFilterAttribute(JourneyFeature.NominatedPharmacy)]
     [Route("patient")]
     public class NominatedPharmacyController : Controller
     {

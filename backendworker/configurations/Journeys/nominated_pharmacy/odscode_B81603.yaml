@@ -1,0 +1,5 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "B81603"
+journeys:
+  nominatedPharmacy: false
