@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
             var errorResponses = systemUnderTest.ExternalErrorResponses;
             
             errorResponses.Should().NotBeNull();
-            errorResponses.Count.Should().Be(19);
+            errorResponses.Count.Should().Be(20);
 
             const int singleCode = (int)Im1ConnectionErrorCodes.ExternalCode.InvalidDetails;
 

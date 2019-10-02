@@ -29,7 +29,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 { Im1ConnectionErrorCodes.ExternalCode.InvalidUserPatientLinkToken, StatusCodes.Status400BadRequest },
                 // LinkageNotFound prompts a linkage key to be created
                 // It is included here for completeness, but should never reach this stage.
-                { Im1ConnectionErrorCodes.ExternalCode.LinkageNotFound, StatusCodes.Status500InternalServerError }
+                { Im1ConnectionErrorCodes.ExternalCode.LinkageNotFound, StatusCodes.Status500InternalServerError },
+                { Im1ConnectionErrorCodes.ExternalCode.LinkageKeysNotSupportedBySupplier, StatusCodes.Status400BadRequest }
             };
 
         public static int Map(Im1ConnectionErrorCodes.ExternalCode errorCode)

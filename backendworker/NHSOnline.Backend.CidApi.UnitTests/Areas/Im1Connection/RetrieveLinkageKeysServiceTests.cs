@@ -74,6 +74,31 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>();
         }
+        
+        [TestMethod]
+        public async Task GetLinkageKey_Microtest_LinkageNotSupported()
+        {
+            // Arrange
+            const Im1ConnectionErrorCodes.InternalCode expectedErrorCode = Im1ConnectionErrorCodes.InternalCode
+                .LinkageKeysNotSupportedBySupplier;
+            var createIm1ConnectionRequest = CreateIm1ConnectionRequest();
+            var mockResult = new LinkageResult.ErrorCase(expectedErrorCode);
+            var linkageService = MockLinkageService(mockResult);
+            var gpSystemMock = MockGpSystem(linkageService);
+
+            var getLinkageKeysService = MockGetLinkageKeysService(mockResult, gpSystemMock.Object);
+            _systemUnderTest = new RetrieveLinkageKeysService(_logger.Object, getLinkageKeysService.Object,
+                _createLinkageKeysService.Object);
+
+            // Act
+            var result =
+                await _systemUnderTest.RetrieveLinkageKey(createIm1ConnectionRequest, gpSystemMock.Object);
+
+            // Assert
+            result.Should().BeOfType<LinkageResult.ErrorCase>()
+                .Subject.ErrorCode.Should()
+                .Be(expectedErrorCode);
+        }
 
         [TestMethod]
         public async Task CreateLinkageKey_AllParametersPassed_ReturnsLinkageResult()

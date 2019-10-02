@@ -167,6 +167,7 @@ paths:
             * 113 - User Record Unavailable
             * 114 - Invalid Security
             * 115 - Invalid Request
+            * 200 - GP system does not support POL registration.
         "403":
           content:
             application/json:

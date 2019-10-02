@@ -165,6 +165,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             InvalidUserPatientLinkToken = 116,
             [Description("Linkage not found, prompt to create new linkage key")]
             LinkageNotFound = 199,
+            [Description("Linkage keys not supported by supplier")]
+            LinkageKeysNotSupportedBySupplier = 200
         }
 
         private static readonly Dictionary<InternalCode, ExternalCode> ErrorCodeToGenericErrorCode =
@@ -225,7 +227,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
                 { InternalCode.NoApiKeyAssociatedWithNhsNumber,  ExternalCode.LinkageNotFound },
                 { InternalCode.NoUserAssociatedWithNhsNumber,  ExternalCode.LinkageNotFound },
                 { InternalCode.PatientRecordNotFound, ExternalCode.LinkageNotFound },
-                { InternalCode.NoSelfAssociatedUserExistWithThisPatient, ExternalCode.LinkageNotFound }
+                { InternalCode.NoSelfAssociatedUserExistWithThisPatient, ExternalCode.LinkageNotFound },
+                { InternalCode.LinkageKeysNotSupportedBySupplier, ExternalCode.LinkageKeysNotSupportedBySupplier}
             };
     }
 }

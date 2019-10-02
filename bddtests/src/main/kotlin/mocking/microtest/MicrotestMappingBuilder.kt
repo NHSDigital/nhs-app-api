@@ -1,15 +1,17 @@
 package mocking.microtest
 
 import mocking.MappingBuilder
+import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
+import org.junit.Assert
 import utils.SerenityHelpers
 
 const val HEADER_API_ODS_CODE = "NHSO-ODS-Code"
 const val HEADER_API_NHS_NUMBER = "NHSO-Nhs-Number"
 
 open class MicrotestMappingBuilder(method: String, relativePath: String = "")
-    : MappingBuilder(method, "/microtest/patient$relativePath") {
+    : MappingBuilder(method, "/microtest/patient$relativePath"), IErrorMappingBuilder {
 
     init {
         val patient = SerenityHelpers.getPatient()
@@ -68,5 +70,11 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
         return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andJsonBody("")
         }
+    }
+
+    override fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
+        Assert.assertEquals("Test set up is incorrect, Microtest does not support error codes", "", errorCode)
+        Assert.assertEquals("Test set up is incorrect, Microtest does not support error messages", "", message)
+        return respondWith(httpStatusCode) {}
     }
 }

@@ -66,7 +66,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                         }
                     },
                     OdsCode = odsCode
-
                 };
                 
                 return new Im1ConnectionVerifyResult.Success(response);

@@ -109,6 +109,7 @@ class Im1ConnectionV2ErrorStepDefinitions : AbstractSteps() {
                                                                gpError:String,
                                                                message: String) {
         val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        SerenityHelpers.setPatient(factory.patient)
         val connectionRequest = factory.validIm1Request
         connectionRequest.AccountId = null
         val linkage = factory.validLinkageDetails
@@ -228,7 +229,7 @@ class Im1ConnectionV2ErrorStepDefinitions : AbstractSteps() {
                 .fromJson<Im1ErrorResponse>(errorResponseBody,
                         Im1ErrorResponse::class.java)
 
-        Assert.assertNotNull("Expected response", errorResponse)
+        Assert.assertNotNull("Expected error response", errorResponse)
         Assert.assertEquals("Expected statusCode", expectedStatusCode, errorResponse!!.statusCode)
         Assert.assertEquals("Expected errorCode", expectedErrorCode, exception?.errorCode ?: "")
         Assert.assertEquals("Expected gpSystem",
