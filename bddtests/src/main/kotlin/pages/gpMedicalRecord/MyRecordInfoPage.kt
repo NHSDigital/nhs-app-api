@@ -13,6 +13,8 @@ class MyRecordInfoPage : HybridPageObject() {
 
     val allergies = MyRecordAllergiesModule(this)
 
+    val immunisations = MyRecordImmunisationsModule()
+
     val testResults = MyRecordTestResultsModule(this)
 
     fun getBody(message: String): HybridPageElement {

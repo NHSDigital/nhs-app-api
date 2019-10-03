@@ -1,12 +1,5 @@
 <template>
   <div>
-    <menu-item id="test-results"
-               data-purpose="test-results"
-               :href="testResultsPath"
-               :text="$t('my_record.testResults.sectionHeader.default')"
-               :click-func="goToUrl"
-               :click-param="'/gp-medical-record/test-results'"/>
-
     <menu-item id="immunisations"
                data-purpose="immunisations"
                :href="immunisationsPath"
@@ -14,30 +7,19 @@
                :click-func="goToUrl"
                :click-param="immunisationsPath" />
 
-  <!-- put the rest in here -->
   </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { TESTRESULTS, IMMUNISATIONS } from '@/lib/routes';
-
-const TESTRESULTSSTRING = 'testresults';
+import { IMMUNISATIONS } from '@/lib/routes';
 
 export default {
-  name: 'DcrEMISGpRecord',
+  name: 'DcrMICROTESTGpRecord',
   components: {
     MenuItem,
   },
-  data() {
-    return {
-      TESTRESULTSSTRING,
-    };
-  },
   computed: {
-    testResultsPath() {
-      return TESTRESULTS.path;
-    },
     immunisationsPath() {
       return IMMUNISATIONS.path;
     },

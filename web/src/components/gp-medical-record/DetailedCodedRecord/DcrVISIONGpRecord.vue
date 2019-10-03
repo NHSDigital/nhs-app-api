@@ -1,16 +1,24 @@
 <template>
-  <menu-item id="test-results"
-             data-purpose="test-results"
-             :href="testResultsPath"
-             :text="$t('my_record.testResults.sectionHeader.default')"
-             :click-func="viewVisionTestResults"
-             :click-param="testResultsPath"/>
-  <!-- put the rest in here -->
+  <div>
+    <menu-item id="test-results"
+               data-purpose="test-results"
+               :href="testResultsPath"
+               :text="$t('my_record.testResults.sectionHeader.default')"
+               :click-func="viewVisionTestResults"
+               :click-param="testResultsPath"/>
+
+    <menu-item id="immunisations"
+               data-purpose="immunisations"
+               :href="immunisationsPath"
+               :text="$t('my_record.immunisations.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="immunisationsPath" />
+  </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { TESTRESULTSDETAIL } from '@/lib/routes';
+import { TESTRESULTSDETAIL, IMMUNISATIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -22,6 +30,11 @@ export default {
     return {
       testResultsPath: TESTRESULTSDETAIL.path,
     };
+  },
+  computed: {
+    immunisationsPath() {
+      return IMMUNISATIONS.path;
+    },
   },
   methods: {
     viewVisionTestResults() {

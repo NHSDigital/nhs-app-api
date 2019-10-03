@@ -13,7 +13,7 @@ import pages.gpMedicalRecord.TestResultsPage
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
 
-open class MyRecordTestResultsStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefinitions() {
+open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
     lateinit var browser: BrowserSteps

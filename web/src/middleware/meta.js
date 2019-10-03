@@ -61,6 +61,7 @@ import {
   TERMSANDCONDITIONS,
   TESTRESULTS,
   TESTRESULTSDETAIL,
+  IMMUNISATIONS,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
@@ -279,6 +280,10 @@ export default function ({ route, store, app }) {
     case TESTRESULTSDETAIL.name:
       route.meta.headerKey = 'pageHeaders.testResults';
       route.meta.pageTitleKey = 'pageTitles.testResults';
+      break;
+    case IMMUNISATIONS.name:
+      route.meta.headerKey = 'pageHeaders.immunisations';
+      route.meta.pageTitleKey = 'pageTitles.immunisations';
       break;
     case NOMINATED_PHARMACY_SEARCH.name:
     case NOMINATED_PHARMACY_SEARCH_RESULTS.name:

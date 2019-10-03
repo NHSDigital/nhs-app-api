@@ -17,7 +17,7 @@ import utils.SerenityHelpers
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-open class MyRecordAllergiesStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefinitions() {
+open class GpMedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
     lateinit var allergiesAndReactionsPage: AllergiesAndReactionsPage

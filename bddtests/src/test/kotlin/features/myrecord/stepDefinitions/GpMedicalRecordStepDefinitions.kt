@@ -17,13 +17,14 @@ import mocking.microtest.myRecord.TestResultOptions
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
+import pages.gpMedicalRecord.MyRecordImmunisationsModule
 import pages.gpMedicalRecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.NavBarNative
 import pages.text
 import utils.SerenityHelpers
 
-open class MyRecordStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefinitions() {
+open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -31,6 +32,8 @@ open class MyRecordStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefi
     lateinit var login: LoginSteps
     @Steps
     lateinit var nav: NavigationSteps
+    @Steps
+    lateinit var immunisationModule: MyRecordImmunisationsModule
 
     private lateinit var myRecordWarningPage: MyRecordWarningPage
 
@@ -92,6 +95,11 @@ open class MyRecordStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefi
         myRecordInfoPage.allergies.allergies.click()
     }
 
+    @When("I click the Immunisations link on my record - GP Medical Record")
+    fun iClickTheImmunisationsLinkOnTheAccountPage(){
+        immunisationModule.link.click()
+    }
+
     @When("I click the test result link on my record - GP Medical Record")
     fun iClickTheTestResultsLinkOnTheAccountPage(){
         myRecordInfoPage.testResults.testResults.click()
@@ -107,7 +115,14 @@ open class MyRecordStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefi
         assertTextOnPage( "No information recorded")
     }
 
-    @Then("^I see a message indicating that I have no access to view this section on My Record - GP Medical Record$")
+    @Then("^I see a message that this information isn't available through the NHS App - GP Medical Record$")
+    fun thenISeeAMessageIndicatingThatInformationIsntAvailable() {
+        assertTextOnPage("Sorry, this information isn't available through the NHS App. To access it, "+
+        "contact your GP surgery.")
+    }
+
+    @Then("^I see a message indicating that I have no access to view this section on My Record" +
+            " - GP Medical Record$")
     fun thenISeeAMessageIndicatingThatIHaveNoAccessToViewSection() {
         assertTextOnPage("You do not currently have access to this section")
     }
