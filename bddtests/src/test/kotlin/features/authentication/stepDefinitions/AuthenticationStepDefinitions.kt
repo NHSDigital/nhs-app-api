@@ -1,7 +1,6 @@
 package features.authentication.stepDefinitions
 
 import config.Config
-import constants.DateTimeFormats
 import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -16,15 +15,13 @@ import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
-import org.joda.time.DateTime
 import org.junit.Assert
-import pages.assertIsVisible
 import pages.ServiceUnavailablePage
 import pages.account.MyAccountPage
+import pages.assertIsVisible
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
@@ -61,68 +58,6 @@ class AuthenticationStepDefinitions {
         myAccount.signOutButton.click()
     }
 
-    @Given("^I am logged in as a (.*) user$")
-    fun iAmLoggedInTo(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
-        setupAndLogIn(patient, gpSystem)
-    }
-
-    @Given("^I am logged in as a (.*) user created before Im1 Cache Keys existed$")
-    fun iAmLoggedInWithoutIm1CacheKey(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(im1ConnectionToken = null)
-        setupAndLogIn(patient, gpSystem)
-    }
-
-    @Given("^I attempt to log in as a (.*) user without an NHS Number$")
-    fun iAmLoggedInToWithoutNHSNumber(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(nhsNumbers = emptyList())
-        setupAndLogIn(patient, gpSystem)
-    }
-
-    @Given("^I attempt to log in as a (.*) user without a date of birth$")
-    fun iAmLoggedInToWithoutDOB(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(dateOfBirth = "")
-        setupAndLogIn(patient, gpSystem)
-    }
-
-    @Given("^I attempt to log in as a (.*) user with an age under (\\d+)$")
-    fun iAmLoggedInToWithAgeUnderMinAge(gpSystem: String, age: Int) {
-        val birthdayToday = DateTime.now().minusYears(age);
-        val birthdayTomorrow = birthdayToday.plusDays(1)
-        val dateOfBirth = birthdayTomorrow.toString(DateTimeFormats.dateWithoutTimeFormat)
-        val patient = Patient.getDefault(gpSystem).copy(dateOfBirth = dateOfBirth)
-        setupAndLogIn(patient, gpSystem)
-    }
-
-    @Given("^I attempt to log in as a (.*) user that is (\\d+)$")
-    fun iAmLoggedInToWithUserOfAge(gpSystem: String, age: Int) {
-        val dateOfBirth = DateTime.now().minusYears(age)
-                .toString(DateTimeFormats.dateWithoutTimeFormat)
-        val patient = Patient.getDefault(gpSystem).copy(dateOfBirth = dateOfBirth)
-        setupAndLogIn(patient, gpSystem)
-    }
-
-    @Given("I attempt to log in as a (.*) user with invalid ODS Code$")
-    fun iAttemptToLogInWithInvalidOdsCode(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(odsCode = "A33224")
-        setupAndLogIn(patient, gpSystem)
-    }
-
-    @Given("I attempt to log in as an EMIS user with no userPatientLinkToken$")
-    fun iAttemptToLogInAsEmisWithNoUserPatientLinkToken() {
-        val patient = Patient.getDefault("EMIS").copy(userPatientLinkToken = "")
-        setupAndLogIn(patient, "EMIS")
-    }
-
-    private fun setupAndLogIn(patient: Patient, gpSystem: String) {
-        SerenityHelpers.setPatient(patient)
-
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-
-        browser.goToApp()
-        login.using(patient)
-    }
 
     @Given("^I am logged in as a (.*) user where the session will fail to clear on signout$")
     fun iAmLoggedInToWhereSessionFailsToClear(gpSystem: String) {
@@ -277,15 +212,13 @@ class AuthenticationStepDefinitions {
         serviceUnavailablePage.assertIsPresent("You are too young to use the NHS App",
                 "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
                         "You can still call or visit your GP surgery to access your NHS services. " +
-                        "For urgent medical advice, call 111.")
+                        "For urgent medical advice, visit 111.nhs.uk or call 111.")
     }
 
-    @Then("^I see an error message informing me I cannot log in$")
-    fun iSeeAnErrorMessageInformingMeICannotLogIn() {
-        serviceUnavailablePage.assertIsPresent("You cannot currently use this service",
-                "You can still call or visit your GP surgery to access your " +
-                        "NHS services. For urgent medical advice, call 111.")
-    }
+    @Then("^In the error message I see the service reference number prefix with \"([^\"]*)\"$")
+        fun iSeeTheServiceReferenceNumberPrefix(prefix: String) {
+            serviceUnavailablePage.assertErrorCodeIsPresent(prefix)
+        }
 
     @Then("^I see the login page$")
     fun iSeeTheLoginPage() {

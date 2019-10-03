@@ -22,6 +22,11 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
 
         public override void OnException(ExceptionContext context)
         {
+            if (context.ExceptionHandled)
+            {
+                return;
+            }
+            
             if (context.Exception is TimeoutException)
             {
                 var sourceApi = SourceApi.None;
@@ -33,7 +38,7 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
 
                 var serviceDeskReference = ErrorReferenceGenerator.GenerateAndLogErrorReference(ErrorCategory.Timeout,
                     StatusCodes.Status504GatewayTimeout, sourceApi);
-
+                
                 Logger.LogError($"Operation timed out - exception: {context.Exception}");
 
                 context.Result = new ObjectResult(new PfsErrorResponse
@@ -43,6 +48,8 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
                 {
                     StatusCode = StatusCodes.Status504GatewayTimeout
                 };
+
+                context.ExceptionHandled = true;
             }
         }
     }

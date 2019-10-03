@@ -76,9 +76,9 @@ namespace NHSOnline.Backend.Support
 
         public string GenerateAndLogErrorReference(ErrorTypes errorTypes)
         {
-            var prefix = errorTypes == null ? "xx" : errorTypes.Prefix;
+            errorTypes = errorTypes ?? new ErrorTypes.UnhandledError();
 
-            var reference = string.Concat(prefix, _randomStringGenerator.GenerateString(4, CharactersForGenerator));
+            var reference = string.Concat(errorTypes.Prefix, _randomStringGenerator.GenerateString(4, CharactersForGenerator));
 
             _logger.LogInformation($"service_desk_error_reference={reference}");
 
@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.Support
             catch (InvalidOperationException)
             {
                 _logger.LogWarning("LookupErrorTypeException=Cannot find a single ErrorType matching the provided parameters");
-                return null;
+                return new ErrorTypes.UnhandledError();
             }
         }
     }

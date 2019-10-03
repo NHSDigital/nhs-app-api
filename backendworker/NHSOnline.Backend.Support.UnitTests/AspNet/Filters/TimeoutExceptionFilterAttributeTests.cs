@@ -72,7 +72,9 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
             _httpActionExecutedContext = new ExceptionContext(_actionContext, _mockFilterMetadata.Object)
             {
                 Exception = new NhsTimeoutException(),
-                HttpContext = _mockHttpContext.Object
+                HttpContext = _mockHttpContext.Object,
+                ExceptionHandled = false,
+                Result = null
             };
             
             _mockServiceDeskErrorReferenceGenerator.Setup(x =>
@@ -90,19 +92,22 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
             // Assert
             var objectResult = _httpActionExecutedContext.Result.Should().BeAssignableTo<ObjectResult>().Subject;
             objectResult.Value.Should().BeEquivalentTo(expected);
+            _httpActionExecutedContext.ExceptionHandled.Should().BeTrue();
             _mockLogger.VerifyLogger(LogLevel.Error,
                 $"Operation timed out - exception: {_httpActionExecutedContext.Exception}", Times.Once());
             _mockLogger.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public void OnException_Non_TimeoutException_Returns_Null()
+        public void OnException_NotATimeoutException_ResultUnchanged()
         {
             // Arrange
             _httpActionExecutedContext = new ExceptionContext(_actionContext, _mockFilterMetadata.Object)
             {
                 Exception = new HttpRequestException(),
-                HttpContext = _mockHttpContext.Object
+                HttpContext = _mockHttpContext.Object,
+                ExceptionHandled = false,
+                Result = null
             };
 
             // Act
@@ -110,8 +115,29 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
 
             // Assert
             _httpActionExecutedContext.Result.Should().Be(null);
+            _httpActionExecutedContext.ExceptionHandled.Should().BeFalse();
             _mockLogger.VerifyLogger(LogLevel.Error,
                 $"Operation timed out - exception: {_httpActionExecutedContext.Exception}", Times.Never());
+        }
+
+        [TestMethod]
+        public void OnException_ExceptionAlreadyHandled_ResultUnchanged()
+        {
+            // Arrange
+            _httpActionExecutedContext = new ExceptionContext(_actionContext, _mockFilterMetadata.Object)
+            {
+                Exception = new NhsTimeoutException(),
+                ExceptionHandled = true,
+                Result = new StatusCodeResult(StatusCodes.Status418ImATeapot)
+            };
+            
+            // Act
+            _systemUnderTest.OnException(_httpActionExecutedContext);
+            
+            // Assert
+            _httpActionExecutedContext.Result.Should().BeOfType<StatusCodeResult>().Subject
+                .StatusCode.Should().Be(StatusCodes.Status418ImATeapot);
+            _httpActionExecutedContext.ExceptionHandled.Should().BeTrue();
         }
     }
 }

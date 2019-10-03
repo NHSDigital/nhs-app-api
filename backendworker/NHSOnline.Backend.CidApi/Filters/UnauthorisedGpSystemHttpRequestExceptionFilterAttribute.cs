@@ -22,11 +22,17 @@ namespace NHSOnline.Backend.CidApi.Filters
 
         public override void OnException(ExceptionContext context)
         {
+            if (context.ExceptionHandled)
+            {
+                return;
+            }
+            
             if (context.Exception is UnauthorisedGpSystemHttpRequestException)
             {
                 _logger.LogWarning($"{ nameof(UnauthorisedGpSystemHttpRequestException) } was caught - returning { nameof(StatusCodes.Status401Unauthorized) }");
                 _logger.LogDebug($"{ context.Exception }");
                 context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                context.ExceptionHandled = true;
             }
         }
     }

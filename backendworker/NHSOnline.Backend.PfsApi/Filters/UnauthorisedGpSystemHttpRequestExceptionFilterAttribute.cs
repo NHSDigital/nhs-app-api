@@ -28,12 +28,18 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
         public override async Task OnExceptionAsync(ExceptionContext context)
         {
+            if (context.ExceptionHandled)
+            {
+                return;
+            }
+            
             if (context.Exception is UnauthorisedGpSystemHttpRequestException)
             {
                 _logger.LogWarning($"{ nameof(UnauthorisedGpSystemHttpRequestException) } was caught - returning { nameof(StatusCodes.Status401Unauthorized) }");
                 _logger.LogDebug($"{ context.Exception }");
                 await _userSessionManager.SignOutAsync(context.HttpContext);
                 context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                context.ExceptionHandled = true;
             }
         }
     }

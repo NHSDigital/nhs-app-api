@@ -161,8 +161,15 @@ namespace NHSOnline.Backend.PfsApi
             options.Filters.Add(new AuthorizeFilter(
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );
+            
+            /* NB - order of adding these filters is important. LIFO stack is used, and the optional
+             *      'Order' parameter appears to be ignored.
+             *      Therefore please ensure UnhandledExceptionFilterAttribute is added first, so that
+             *      it is invoked as a last resort. */
+            options.Filters.Add(typeof(UnhandledExceptionFilterAttribute));
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
             options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
+
             options.InputFormatters.Insert(0, new FhirParametersInputFormatter());
         }
 

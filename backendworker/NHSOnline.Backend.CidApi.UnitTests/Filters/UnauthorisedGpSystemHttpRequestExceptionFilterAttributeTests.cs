@@ -60,9 +60,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Filters
             _systemUnderTest.OnException(exceptionContext);
 
             // Assert
-            exceptionContext.Result.Should().NotBeNull();
-            var result = exceptionContext.Result.Should().BeOfType<StatusCodeResult>().Subject;
-            result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+            exceptionContext.ExceptionHandled.Should().BeTrue();
+            exceptionContext.Result.Should().BeOfType<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
         [TestMethod]
@@ -79,6 +79,27 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Filters
 
             // Assert
             exceptionContext.Result.Should().BeNull();
+            exceptionContext.ExceptionHandled.Should().BeFalse();
+        }
+        
+        [TestMethod]
+        public void OnException_ExceptionAlreadyHandled_ResultUnchanged()
+        {
+            // Arrange
+            var exceptionContext = new ExceptionContext(_actionContext, new List<IFilterMetadata>())
+            {
+                Exception = new UnauthorisedGpSystemHttpRequestException(),
+                ExceptionHandled = true,
+                Result = new StatusCodeResult(StatusCodes.Status418ImATeapot)
+            };
+            
+            // Act
+            _systemUnderTest.OnException(exceptionContext);
+            
+            // Assert
+            exceptionContext.Result.Should().BeOfType<StatusCodeResult>().Subject
+                .StatusCode.Should().Be(StatusCodes.Status418ImATeapot);
+            exceptionContext.ExceptionHandled.Should().BeTrue();
         }
     }
 }

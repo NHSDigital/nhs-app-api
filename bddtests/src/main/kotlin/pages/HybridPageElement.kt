@@ -190,6 +190,28 @@ open class HybridPageElement(
         }
     }
 
+    fun withTextContent(text: String, exact: Boolean = true): HybridPageElement {
+
+        return when (exact) {
+            true -> {
+                HybridPageElement(
+                        webDesktopLocator = this.webDesktopLocator.plus("[contains(text(),\"$text\")]"),
+                        androidLocator = this.androidLocator?.plus("[@text=\"$text\"]"),
+                        iOSLocator = this.iOSLocator?.plus("[@text=\"$text\"]"),
+                        helpfulName = this.helpfulNameToUse,
+                        page = this.page)
+            }
+            false -> {
+                HybridPageElement(
+                        webDesktopLocator = this.webDesktopLocator.plus("[contains(text(),\"$text\")]"),
+                        androidLocator = this.androidLocator?.plus("[contains(@text,\"$text\")]"),
+                        iOSLocator = this.iOSLocator?.plus("[contains(@text,\"$text\")]"),
+                        helpfulName = this.helpfulNameToUse,
+                        page = this.page)
+            }
+        }
+    }
+
     override fun toString(): String {
         return StringBuilder(HybridPageElement::class.simpleName)
                 .append(" { ")

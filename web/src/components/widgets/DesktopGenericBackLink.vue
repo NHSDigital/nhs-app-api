@@ -1,6 +1,7 @@
 <template>
   <a :class="[$style['nhsuk-back-link__link'], $style['desktopBackLink']]"
      :href="path"
+     :target="target"
      data-purpose="main-back-button"
      @click.prevent="$emit('clickAndPrevent', $event)">
     {{ $t(getBackButtonText) }}</a>
@@ -16,6 +17,10 @@ export default {
     buttonText: {
       type: String,
       default: 'generic.backButton.text',
+    },
+    target: {
+      type: String,
+      default: '',
     },
   },
   computed: {

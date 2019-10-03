@@ -93,22 +93,207 @@ export default {
         label: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
       },
       retryButtonText: 'Back to home',
+      400: {
+        header: 'Login failed',
+        title: 'Login failed - NHS App',
+        line1: {
+          text: 'Go back to the home screen and try logging in again.',
+          label: 'Go back to the home screen and try logging in again.',
+        },
+        line2: {
+          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+        },
+        contactUs: {
+          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+        },
+        backButtonText: {
+          text: 'Back to home',
+          label: 'back to home',
+        },
+        contactUsButtonText: {
+          text: 'Contact us',
+          label: 'Contact us',
+        },
+      },
+      403: {
+        header: 'Login failed',
+        title: 'Login failed - NHS App',
+        line1: {
+          text: 'We cannot get your details from your GP surgery.',
+          label: 'We cannot get your details from your GP surgery.',
+        },
+        line2: {
+          text: 'Go back to the home screen and try logging in again.',
+          label: 'Go back to the home screen and try logging in again.',
+        },
+
+        line3: {
+
+          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+        },
+        line4: {
+          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+        },
+        contactUsButtonText: {
+          text: 'Contact us',
+          label: 'Contact us',
+        },
+        backButtonText: {
+          text: 'Back to home',
+          label: 'back to home',
+        },
+      },
       464: {
-        pageHeader: 'Service unavailable',
-        header: 'Service unavailable',
-        subheader: 'You cannot currently use this service',
+        header: 'Login failed',
+        title: 'Login failed - NHS App',
+        line2: {
+          text: 'This can be one of two problems:',
+          label: 'This can be one of two problems:',
+        },
+        uList: {
+          item1: {
+            id: '1',
+            text: 'we cannot find your GP surgery',
+            label: 'we cannot find your GP surgery',
+          },
+          item2: {
+            id: '2',
+            text: 'we cannot find your NHS number',
+            label: 'we cannot find your NHS number',
+          },
+        },
+        contactUs: {
+          text: 'Contact us and quote the error code {errorCode}.',
+          label: 'Contact us and quote the error code {errorCode}.',
+        },
         message: {
-          text: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
-          label: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call one one one.',
+          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one',
+        },
+        contactUsButtonText: {
+          text: 'contact us',
+          label: 'contact us',
         },
       },
       465: {
-        pageHeader: 'Service unavailable',
-        header: 'Service unavailable',
-        subheader: 'You are too young to use the NHS App',
+        pageHeader: 'You are too young to use the NHS App',
+        header: 'You are too young to use the NHS App',
         message: {
-          text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
-          label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call one one one.',
+          text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+        },
+      },
+      500: {
+        header: 'Login failed',
+        title: 'Login failed - NHS App',
+        line1: {
+          text: 'We cannot log you in to the NHS App.',
+          label: 'We cannot log you in to the NHS App.',
+        },
+        line3: {
+          text: 'Go back to the home screen and try logging in again.',
+          label: 'Go back to the home screen and try logging in again.',
+        },
+        line4: {
+          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+        },
+        line5: {
+          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+        },
+        contactUsButtonText: {
+          text: 'Contact us',
+          label: 'Contact us',
+        },
+        backButtonText: {
+          text: 'Back to home',
+          label: 'back to home',
+        },
+      },
+      502: {
+        title: 'Login failed - NHS App',
+        header: 'Login failed',
+        listTitle: {
+          text: 'This can be one of two problems:',
+          label: 'This can be one of two problems:',
+        },
+        uList: {
+          item1: {
+            id: '1',
+            text: 'we cannot get your NHS login details',
+            label: 'we cannot get your NHS login details',
+          },
+          item2: {
+            id: '2',
+            text: 'we cannot connect to your GP surgery',
+            label: 'we cannot connect to your GP surgery',
+          },
+        },
+        line3: {
+          text: 'Go back to the home screen and try logging in again.',
+          label: 'Go back to the home screen and try logging in again.',
+        },
+        line4: {
+          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+        },
+        message: {
+          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+        },
+        backButtonText: {
+          text: 'Back to home',
+          label: 'back to home',
+        },
+        contactUsButtonText: {
+          text: 'Contact us',
+          label: 'Contact us',
+        },
+      },
+      504: {
+        title: 'Login failed - NHS App',
+        header: 'Login failed',
+        listTitle: {
+          text: 'This can be one of two problems:',
+          label: 'This can be one of two problems:',
+        },
+        uList: {
+          item1: {
+            id: '1',
+            text: 'we cannot get your NHS login details',
+            label: 'we cannot get your NHS login details',
+          },
+          item2: {
+            id: '2',
+            text: 'we cannot connect to your GP surgery',
+            label: 'we cannot connect to your GP surgery',
+          },
+        },
+
+        line3: {
+          text: 'Go back to the home screen and try logging in again.',
+          label: 'Go back to the home screen and try logging in again.',
+        },
+        line4: {
+          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+        },
+        message: {
+          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+        },
+        backButtonText: {
+          text: 'Back to home',
+          label: 'back to home',
+        },
+        contactUsButtonText: {
+          text: 'Contact us',
+          label: 'Contact us',
         },
       },
     },
@@ -984,8 +1169,7 @@ export default {
   },
   homeLoggedIn: {
     welcome: 'Welcome',
-    description:
-      'Get medical advice, book GP appointments and order repeat prescriptions any time.',
+    description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
   },
   loginButton: {
     login: 'Log in or create account',
@@ -1405,14 +1589,14 @@ export default {
         dialogText: 'Decision found',
         registrationHeader: 'We are still processing your registration',
         registrationText: 'Please check back in 2 working days. You’ll then be able to view and amend your ' +
-          'decision via the NHS App.',
+                              'decision via the NHS App.',
       },
       decisionSubmitted: {
         messageText: 'We have successfully received your organ donation decision.',
         dialogText: 'Decision submitted',
         registrationHeader: 'What happens next',
         registrationText: 'We will process your registration and you will then be able to view and ' +
-          'amend this via the NHS App. This may take up to 2 working days.',
+                              'amend this via the NHS App. This may take up to 2 working days.',
       },
       successMessageText: 'Your decision has been recorded',
       successMessageDialogText: 'Success',
@@ -1852,8 +2036,8 @@ export default {
     },
     sessionExpiry: {
       warningDurationInformation:
-        'For security reasons, you\'ll be logged out in 1 minute. ' +
-        '| For security reasons, you\'ll be logged out in {time} minutes.',
+                        'For security reasons, you\'ll be logged out in 1 minute. ' +
+                        '| For security reasons, you\'ll be logged out in {time} minutes.',
       warningGetMoreTime: 'Stay logged in',
       warningLogOut: 'Log out',
     },

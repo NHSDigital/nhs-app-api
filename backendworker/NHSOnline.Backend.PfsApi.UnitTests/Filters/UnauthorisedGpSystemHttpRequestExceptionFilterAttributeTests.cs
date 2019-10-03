@@ -99,5 +99,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // Assert
             exceptionContext.Result.Should().BeNull();
         }
+        
+        [TestMethod]
+        public async Task OnException_ExceptionAlreadyHandled_ResultUnchanged()
+        {
+            // Arrange
+            var exceptionContext = new ExceptionContext(_actionContext, new List<IFilterMetadata>())
+            {
+                Exception = new UnauthorisedGpSystemHttpRequestException(),
+                ExceptionHandled = true,
+                Result = new StatusCodeResult(StatusCodes.Status418ImATeapot)
+            };
+            
+            // Act
+            await _systemUnderTest.OnExceptionAsync(exceptionContext);
+            
+            // Assert
+            exceptionContext.Result.Should().BeOfType<StatusCodeResult>().Subject
+                .StatusCode.Should().Be(StatusCodes.Status418ImATeapot);
+            exceptionContext.ExceptionHandled.Should().BeTrue();
+        }
     }
 }

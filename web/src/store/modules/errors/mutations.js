@@ -14,23 +14,28 @@ export default {
   [ADD_API_ERROR](state, error) {
     let statusCode;
     let errorCode;
+    let serviceDeskReference;
 
     if (error == null) {
       return;
     }
-
     if (error.response) {
       const { status, data } = error.response;
       statusCode = status;
+      if (error.response.data && error.response.data.serviceDeskReference) {
+        this.serviceDeskReference = error.response.data.serviceDeskReference;
+      }
       ({ errorCode } = data || {});
     } else {
       statusCode = 500;
       state.hasConnectionProblem = true;
     }
+
     const apiError = {
       status: statusCode,
       error: errorCode,
       message: error.message,
+      serviceDeskReference: this.serviceDeskReference || '',
     };
 
     state.apiErrors.push(apiError);

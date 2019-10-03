@@ -10,12 +10,12 @@ import models.patients.EmisPatients
 import models.Patient
 import models.patients.TppPatients
 import net.thucydides.core.annotations.Steps
-import pages.loggedOut.AuthReturnPage
 import pages.ErrorPage
+import pages.HybridPageObject
 import pages.clickOnActionContainingText
 
 class AuthReturnStepDefinitions : AbstractSteps() {
-
+    val backToHomeText = "Back to home"
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
@@ -23,7 +23,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
 
     private lateinit var patient: Patient
 
-    lateinit var authReturnPage: AuthReturnPage
+    lateinit var pageActions: HybridPageObject
     lateinit var errorPage: ErrorPage
 
     @Given("^I am logged into Citizen ID but am receiving invalid data$")
@@ -40,13 +40,13 @@ class AuthReturnStepDefinitions : AbstractSteps() {
     fun loggedInInCitizenIdGpAuthenticationFails() {
         this.patient = TppPatients.kevinBarry
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createInvalidAuthenticationTokenfor(patient)
 
         browser.goToApp()
         login.using(this.patient)
     }
 
-    @Given("^I am logged into Citizen ID but GP System session cannot be established$")
+    @Given("^I am logged into Citizen ID but EMIS session cannot be established$")
     fun loggedInInCitizenIdSessionNotEstablished() {
         this.patient = EmisPatients.montelFrye
 
@@ -56,32 +56,15 @@ class AuthReturnStepDefinitions : AbstractSteps() {
         login.using(this.patient)
     }
 
-    @Then("I see the appropriate error message for a login error")
-    fun thenISeeTheAppropriateErrorMessageForALoginError() {
-
-        val header = authReturnPage.errorH1
-        val subHeader = authReturnPage.errorH2
-        val message = authReturnPage.errorParagraph1
-        val errorDetail = authReturnPage.errorParagraph2
-        val retryButtonText = authReturnPage.errorCtaText
-
-        errorPage.assertHeaderText(header)
-                .assertSubHeaderText(subHeader)
-                .assertMessageText(message)
-                .assertRetryButtonText(retryButtonText)
-                .assertErrorDetailText(errorDetail)
-
-    }
-
     @Then("I click on the navigation button")
     fun thenICLickOnTheNavigationButton() {
-        val retryButtonText = authReturnPage.errorCtaText
-        authReturnPage.clickOnButtonContainingText(retryButtonText)
+        val retryButtonText = backToHomeText
+        pageActions.clickOnButtonContainingText(retryButtonText)
     }
 
     @Then("I click on the navigation action")
     fun thenICLickOnTheNavigationAction() {
-        val retryText = authReturnPage.errorCtaText
-        authReturnPage.clickOnActionContainingText(retryText)
+        val retryText = backToHomeText
+        pageActions.clickOnActionContainingText(retryText)
     }
 }

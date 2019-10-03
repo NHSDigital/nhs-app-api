@@ -20,6 +20,7 @@ Feature: Cancel Appointments Backend
     Then I receive a "Bad request" error
     And the response contains an empty body
 
+  @smoketest
   Scenario Outline: Cancel a previously booked appointment the <GP System> times out and returns "Gateway Timeout" error
     Given  <GP System> will time out when trying to cancel a previously booked appointment
     When I send a cancellation request to the API with a valid cancellation reason

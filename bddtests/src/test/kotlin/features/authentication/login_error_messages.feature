@@ -3,28 +3,36 @@
 Feature: Login error messages
 
   The user is shown appropriate error messages if something goes wrong during login
-
+#400
   @nativesmoketest
   Scenario: CitizenID provides invalid data after successful login
     Given I am logged into Citizen ID but am receiving invalid data
-    Then I see the appropriate error message for a login error
+    Then In the error message I see the service reference number prefix with "3a"
     When I click on the navigation action
     Then I see the login page
 
+#403
   @nativesmoketest
-  Scenario: CitizenID login is successful but GP System authentication fails
+  Scenario: CitizenID login is successful but TPP GP System authentication fails
     Given I am logged into Citizen ID but GP System authentication fails
-    Then I see the appropriate error message for a login error
+    Then In the error message I see the service reference number prefix with "3c"
     When I click on the navigation action
     Then I see the login page
 
+#403
+  Scenario: Cannot log in as an EMIS user with no userPatientLinkToken
+    Given I attempt to log in as an EMIS user with no userPatientLinkToken
+    Then In the error message I see the service reference number prefix with "3c"
+
+#502
   @nativesmoketest
-  Scenario: CitizenID login is successful but GP System session cannot be established
-    Given I am logged into Citizen ID but GP System session cannot be established
-    Then I see the appropriate error message for a login error
+  Scenario: CitizenID login is successful but EMIS session cannot be established
+    Given I am logged into Citizen ID but EMIS session cannot be established
+    Then In the error message I see the service reference number prefix with "3e"
     When I click on the navigation action
     Then I see the login page
 
+  #465
   Scenario Outline: Cannot log in as a <GP System> user with no Date of Birth
     Given I attempt to log in as a <GP System> user without a date of birth
     Then I see an error message informing me I cannot log in as I am under the minimum age
@@ -37,6 +45,7 @@ Feature: Login error messages
       | GP System |
       | EMIS      |
 
+    #465
   Scenario Outline: Cannot log in as a <GP System> user with an age under 13
     Given I attempt to log in as a <GP System> user with an age under 13
     Then I see an error message informing me I cannot log in as I am under the minimum age
@@ -44,14 +53,10 @@ Feature: Login error messages
       | GP System |
       | TPP       |
 
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
+    #464
   Scenario Outline: Cannot log in as a <GP System> user with no NHS Number
     Given I attempt to log in as a <GP System> user without an NHS Number
-    Then I see an error message informing me I cannot log in
+    Then In the error message I see the service reference number prefix with "3f"
     Examples:
       | GP System |
       | TPP       |
@@ -61,14 +66,16 @@ Feature: Login error messages
       | GP System |
       | EMIS      |
 
+  #464
   @nativesmoketest
   Scenario Outline: Cannot log in as a <GP System> user with invalid ODS Code
     Given I attempt to log in as a <GP System> user with invalid ODS Code
-    Then I see an error message informing me I cannot log in
+    Then In the error message I see the service reference number prefix with "3f"
     Examples:
       | GP System |
       | EMIS      |
 
-  Scenario: Cannot log in as an EMIS user with no userPatientLinkToken
-    Given I attempt to log in as an EMIS user with no userPatientLinkToken
-    Then I see the appropriate error message for a login error
+#504 timeout
+  Scenario: Cannot log in as a <GP System> when the request timeout I see error code with "zn" prefix
+    Given I attempt to log in as an EMIS and the CID request timeout
+    Then In the error message I see the service reference number prefix with "zn"
