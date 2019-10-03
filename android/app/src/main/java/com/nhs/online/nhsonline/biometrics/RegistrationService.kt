@@ -96,9 +96,9 @@ class RegistrationService(
             fingerprintDialog.showFingerprintAuthDialog(registerCallback, fingerprintContent)
         }
         catch(e: Exception) {
-            biometricState.registrationStateChangeInProgress = false
             removeAndShowDeviceError()
         }
+        biometricState.registrationStateChangeInProgress = false
     }
 
     private fun completeFidoRegistration(
@@ -115,7 +115,6 @@ class RegistrationService(
 
         biometricsInteractor.showProgressDialog()
         biometricAsyncHandler.sendClientRegistrationMsg(processedRegMessage) { response: BiometricCallResult ->
-            biometricState.registrationStateChangeInProgress = false
             biometricsInteractor.dismissProgressDialog()
             if (response.statusCode != BiometricAsyncHandler.OK) {
                 removeAndShowRegistrationError()

@@ -33,10 +33,11 @@ class DeRegistrationService(
                 biometricsInteractor.dismissProgressDialog()
                 biometricsInteractor.showBiometricsOnDeRegistrationSuccessMessage()
 
-                biometricState.registrationStateChangeInProgress = false
             }
         } catch (e: GenericFidoException) {
             Log.d(TAG, "De-registration call failed", e)
         }
+
+        biometricState.registrationStateChangeInProgress = false
     }
 }
