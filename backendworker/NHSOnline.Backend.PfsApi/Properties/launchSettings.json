@@ -132,7 +132,7 @@
         "NOMINATED_PHARMACY_ENABLED": "false",
         "GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE": "B83054",
         "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086",
-        "SPINE_LDAP_HOST": "40.120.39.2",
+        "SPINE_LDAP_HOST": "40.120.51.179",
         "SPINE_LDAP_PORT": "443",
         "SPINE_LDAP_LOGIN_DN": "ou=services, o=nhs",
         "SPINE_LDAP_CERT_PATH": "../certs/spine.pfx",

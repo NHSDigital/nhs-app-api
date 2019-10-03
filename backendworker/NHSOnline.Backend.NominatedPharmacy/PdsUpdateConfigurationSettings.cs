@@ -1,6 +1,4 @@
-﻿using NHSOnline.Backend.Support.Settings;
-
-namespace NHSOnline.Backend.NominatedPharmacy
+﻿namespace NHSOnline.Backend.NominatedPharmacy
 {
     public class PdsUpdateConfigurationSettings
     {
@@ -14,32 +12,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         public string ToPartyId { get; set; }
 
-        public void Validate()
+        public bool Validate()
         {
-            if (string.IsNullOrEmpty(FromAsid))
-            {
-                throw new ConfigurationNotFoundException(nameof(FromAsid));
-            }
-
-            if (string.IsNullOrEmpty(ToAsid))
-            {
-                throw new ConfigurationNotFoundException(nameof(ToAsid));
-            }
-
-            if (string.IsNullOrEmpty(CpaId))
-            {
-                throw new ConfigurationNotFoundException(nameof(CpaId));
-            }
-
-            if (string.IsNullOrEmpty(FromPartyId))
-            {
-                throw new ConfigurationNotFoundException(nameof(FromPartyId));
-            }
-
-            if (string.IsNullOrEmpty(ToPartyId))
-            {
-                throw new ConfigurationNotFoundException(nameof(ToPartyId));
-            }
+            return !string.IsNullOrEmpty(FromAsid) &&
+                   !string.IsNullOrEmpty(ToAsid) &&
+                   !string.IsNullOrEmpty(CpaId) &&
+                   !string.IsNullOrEmpty(FromPartyId) &&
+                   !string.IsNullOrEmpty(ToPartyId);
         }
     }
 }

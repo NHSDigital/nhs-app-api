@@ -34,8 +34,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             _mockIHostingEnvironment = _fixture.Freeze<Mock<IHostingEnvironment>>();
             _mockILoggerFactory = _fixture.Freeze<Mock<ILoggerFactory>>();
             _mockIServiceCollection = _fixture.Freeze<Mock<IServiceCollection>>();
-
-            _systemUnderTest = _fixture.Create<Startup>();
             
             var configurationRoot = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.test.json")

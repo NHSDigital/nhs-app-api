@@ -47,6 +47,7 @@ services:
       - ORGAN_DONATION_CERT_PASSPHRASE=
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
       - ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS=86400
+      - SPINE_LDAP_HOST=40.120.51.179
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
       - VERSION_TAG=backendworker_docker_main
@@ -63,6 +64,8 @@ services:
       - BROTHER_MAILER_ADDRESSBOOK_ID=
       - BROTHER_MAILER_SIG=
       - BROTHER_MAILER_USER_ID=
+      - NOMINATED_PHARMACY_ENABLED=true
+      - SPINE_LDAP_LOOKUP_ENABLED=true
   cid.local.bitraft.io:
     image: nhsonline.backend.cidapi
     build:

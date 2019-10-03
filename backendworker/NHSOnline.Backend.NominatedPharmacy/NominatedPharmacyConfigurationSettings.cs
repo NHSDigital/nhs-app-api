@@ -20,17 +20,17 @@ namespace NHSOnline.Backend.NominatedPharmacy
             PdsUpdateConfigurationSettings = pdsUpdateConfigurationSettings;
         }
 
-        public bool IsNominatedPharmacyEnabled { get; }
+        public bool IsNominatedPharmacyEnabled { get; set; }
 
         public Uri BaseUrl { get; }
-        
+
         public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
 
         public PdsTraceConfigurationSettings PdsTraceConfigurationSettings { get; }
 
         public PdsUpdateConfigurationSettings PdsUpdateConfigurationSettings { get; }
 
-        public void Validate()
+        public bool Validate()
         {
             if (BaseUrl == null)
             {
@@ -41,14 +41,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
             {
                 throw new ConfigurationNotFoundException(nameof(PdsTraceConfigurationSettings));
             }
-            
+
             if (PdsUpdateConfigurationSettings == null)
             {
                 throw new ConfigurationNotFoundException(nameof(PdsUpdateConfigurationSettings));
             }
 
-            PdsTraceConfigurationSettings.Validate();
-            PdsUpdateConfigurationSettings.Validate();
+            return PdsTraceConfigurationSettings.Validate() && PdsUpdateConfigurationSettings.Validate();
         }
     }
 }

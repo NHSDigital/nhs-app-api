@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.SpineSearch
             // Arrange
             var toAsid = _fixture.Create<string>();
             var fromAsid = _fixture.Create<string>();
-            
+
             var toServiceAttributes = new LdapAttributeSet();
             toServiceAttributes.Add(new LdapAttribute("uniqueIdentifier", toAsid));
 
@@ -81,10 +81,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.SpineSearch
             result.FromAsid.Should().Be(fromAsid);
             result.ToAsid.Should().Be(toAsid);
 
-            ldapConnection.Verify(x => x.Connect(_settings.LdapHost, _settings.LdapPort));
-            ldapConnection.Verify(x => x.Bind(_settings.LoginDN, string.Empty));
-            ldapConnection.Verify(x => x.Disconnect());
+            _ldapConnectionService.Verify(x => x.ConnectAndBind(ldapConnection.Object));
             _ldapConnectionService.Verify();
+            ldapConnection.Verify(x => x.Disconnect());
         }
 
         [TestMethod]
@@ -120,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.SpineSearch
 
             var cpaDetailAttributes = new LdapAttributeSet();
             cpaDetailAttributes.Add(new LdapAttribute("nhsMhsCPAId", cpaId));
-            
+
             _ldapConnectionService
                 .Setup(x => x.Search(
                     ldapConnection.Object,
@@ -145,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.SpineSearch
                 ))
                 .Returns(fromSystemAttributes)
                 .Verifiable();
-            
+
             // Act
             var result = _systemUnderTest.RetrieveSpinePropertiesForPdsUpdate();
 
@@ -154,11 +153,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.SpineSearch
             result.ToAsid.Should().Be(toAsid);
             result.CpaId.Should().Be(cpaId);
             result.ToPartyId.Should().Be(toPartyId);
-            
-            ldapConnection.Verify(x => x.Connect(_settings.LdapHost, _settings.LdapPort));
-            ldapConnection.Verify(x => x.Bind(_settings.LoginDN, string.Empty));
-            ldapConnection.Verify(x => x.Disconnect());
+
+            _ldapConnectionService.Verify(x => x.ConnectAndBind(ldapConnection.Object));
             _ldapConnectionService.Verify();
+            ldapConnection.Verify(x => x.Disconnect());
         }
     }
 }

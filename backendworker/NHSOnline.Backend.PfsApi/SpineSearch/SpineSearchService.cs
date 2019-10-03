@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Support.Settings;
 using Novell.Directory.Ldap;
 
@@ -9,9 +10,9 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 {
     public class SpineSearchService
     {
-        ILogger<SpineSearchService> _logger;
-        SpineLdapConfigurationSettings _configurationSettings;
-        ILdapConnectionService _ldapConnectionService;
+        readonly ILogger<SpineSearchService> _logger;
+        readonly SpineLdapConfigurationSettings _configurationSettings;
+        readonly ILdapConnectionService _ldapConnectionService;
 
         public SpineSearchService(ILogger<SpineSearchService> logger, SpineLdapConfigurationSettings spineLdapConfigurationSettings, ILdapConnectionService ldapConnectionService)
         {
@@ -22,13 +23,14 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
         public NhsAppSpinePdsTraceProperties RetrieveSpinePropertiesForPdsTrace()
         {
+            _logger.LogInformation("Retrieving spine properties for PDS trace");
+
             var pdsTraceProperties = new NhsAppSpinePdsTraceProperties();
-            var ldapConnection = _ldapConnectionService.CreateLdapConnection();
+            var ldapConnection = CreateLdapConnection();
 
             try
             {
-                ldapConnection.Connect(_configurationSettings.LdapHost, _configurationSettings.LdapPort);
-                ldapConnection.Bind(_configurationSettings.LoginDN, string.Empty);
+                _ldapConnectionService.ConnectAndBind(ldapConnection);
 
                 DoLdapSearch(
                     ldapConnection,
@@ -50,29 +52,31 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
             }
             catch (LdapException e)
             {
-                _logger.LogError(e.LdapErrorMessage);
+                _logger.LogError(e, "LdapException occurred doing ldap lookup");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error making ldap lookup");
+                _logger.LogError(e, "Error doing ldap lookup");
             }
             finally
             {
                 ldapConnection.Disconnect();
             }
 
+            _logger.LogInformation($"Spine properties for PDS trace: {JsonConvert.SerializeObject(pdsTraceProperties)}");
             return pdsTraceProperties;
         }
 
         public NhsAppSpinePdsUpdateProperties RetrieveSpinePropertiesForPdsUpdate()
         {
+            _logger.LogInformation("Retrieving spine properties for PDS update");
+
             var pdsUpdateProperties = new NhsAppSpinePdsUpdateProperties();
-            var ldapConnection = _ldapConnectionService.CreateLdapConnection();
+            var ldapConnection = CreateLdapConnection();
 
             try
             {
-                ldapConnection.Connect(_configurationSettings.LdapHost, _configurationSettings.LdapPort);
-                ldapConnection.Bind(_configurationSettings.LoginDN, string.Empty);
+                _ldapConnectionService.ConnectAndBind(ldapConnection);
 
                 DoLdapSearch(
                     ldapConnection,
@@ -104,17 +108,18 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
             }
             catch (LdapException e)
             {
-                _logger.LogError(e.LdapErrorMessage);
+                _logger.LogError(e, "LdapException occurred doing ldap lookup");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error making ldap lookup");
+                _logger.LogError(e, "Error doing ldap lookup");
             }
             finally
             {
                 ldapConnection.Disconnect();
             }
 
+            _logger.LogInformation($"Spine properties for PDS update: {JsonConvert.SerializeObject(pdsUpdateProperties)}");
             return pdsUpdateProperties;
         }
 
@@ -139,6 +144,16 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
                     }
                 }
             }
+        }
+
+        private ILdapConnection CreateLdapConnection()
+        {
+            _logger.LogInformation("Creating LDAP connection");
+            var ldapConnection = _ldapConnectionService.CreateLdapConnection();
+
+            _logger.LogInformation("LDAP connection created");
+
+            return ldapConnection;
         }
     }
 }

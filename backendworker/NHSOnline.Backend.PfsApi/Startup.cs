@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi
     public class Startup
     {
         private readonly IHostingEnvironment _env;
-        
+
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<Startup> _logger;
 
@@ -60,8 +60,6 @@ namespace NHSOnline.Backend.PfsApi
         private readonly string _apiAppVersion;
 
         private ConfigurationSettings configurationSettings;
-        private SpineLdapConfigurationSettings _spineLdapConfigurationSettings;
-
 
         public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -69,11 +67,15 @@ namespace NHSOnline.Backend.PfsApi
             _env = env;
             _loggerFactory = loggerFactory;
 
+            var logSettings = LoggingSettings.GetSettings(Configuration);
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
+
             if (env.IsDevelopment())
             {
                 loggerFactory.AddConsole(LogLevel.Debug);
             }
-            
+
             _apiAppVersion = Configuration.GetApiAppVersion();
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
@@ -87,6 +89,7 @@ namespace NHSOnline.Backend.PfsApi
         public void ConfigureServices(IServiceCollection services)
         {
             var environment = Configuration.GetOrWarn("ASPNETCORE_ENVIRONMENT", _logger);
+
             SetupConfigurationSettings(services, environment);
 
             services
@@ -94,9 +97,9 @@ namespace NHSOnline.Backend.PfsApi
                 .AddCookie(ConfigureServiceCookies);
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
-            
+
             services.AddCorrelationId();
-        
+
             services.AddCors();
 
             services.AddMemoryCache();
@@ -130,14 +133,14 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
             services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));    
-            
+            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+
             services.Configure<OnlineConsultationsProvidersSettings>(Configuration.GetSection("OnlineConsultationsProvidersSettings"));
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
             services.AddSingleton(resolver =>
                 resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);
-            services.AddSingleton<IValidatable>(resolver => 
-                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);        
+            services.AddSingleton<IValidatable>(resolver =>
+                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);
 
             services.AddSingleton<IFhirSanitizationHelper, FhirSanitizationHelper>();
             services.AddSingleton<IOnlineConsultationsProviderHttpClientPool, OnlineConsultationsProviderHttpClientPool>();
@@ -161,7 +164,7 @@ namespace NHSOnline.Backend.PfsApi
             options.Filters.Add(new AuthorizeFilter(
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );
-            
+
             /* NB - order of adding these filters is important. LIFO stack is used, and the optional
              *      'Order' parameter appears to be ignored.
              *      Therefore please ensure UnhandledExceptionFilterAttribute is added first, so that
@@ -200,6 +203,7 @@ namespace NHSOnline.Backend.PfsApi
         private void SetupConfigurationSettings(IServiceCollection services, string environment)
         {
             configurationSettings = CreateAndValidateEnvironmentVariables();
+
             services.AddSingleton(configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
 
@@ -217,12 +221,12 @@ namespace NHSOnline.Backend.PfsApi
 
             var visionConfig = CreateAndValidateVisionEnvironmentVariables(environment);
             services.AddSingleton(visionConfig);
-            
+
             var isSpineLdapLookupEnabled = bool.TrueString.Equals(Configuration.GetOrWarn("SPINE_LDAP_LOOKUP_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
-            
-            _spineLdapConfigurationSettings = CreateAndValidateSpineLdapConfig(isSpineLdapLookupEnabled);
-            services.AddSingleton(_spineLdapConfigurationSettings);
-           
+
+            var spineLdapConfigurationSettings = CreateAndValidateSpineLdapConfig(isSpineLdapLookupEnabled);
+            services.AddSingleton(spineLdapConfigurationSettings);
+
             NhsAppSpinePdsTraceProperties nhsAppSpinePdsTraceProperties = null;
             NhsAppSpinePdsUpdateProperties nhsAppSpinePdsUpdateProperties = null;
 
@@ -230,11 +234,12 @@ namespace NHSOnline.Backend.PfsApi
             {
                 var spineSearchService = new SpineSearchService(
                     _loggerFactory.CreateLogger<SpineSearchService>(),
-                    _spineLdapConfigurationSettings,
+                    spineLdapConfigurationSettings,
                     new LdapConnectionService(
                         _loggerFactory.CreateLogger<LdapConnectionService>(),
-                        _spineLdapConfigurationSettings));
-                
+                        spineLdapConfigurationSettings,
+                        configurationSettings));
+
                 nhsAppSpinePdsTraceProperties = spineSearchService.RetrieveSpinePropertiesForPdsTrace();
                 nhsAppSpinePdsUpdateProperties = spineSearchService.RetrieveSpinePropertiesForPdsUpdate();
             }
@@ -263,11 +268,6 @@ namespace NHSOnline.Backend.PfsApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseAuthentication();
-
-            // Read in optional log configuration...
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
 
             if (env.IsDevelopment())
             {
@@ -331,7 +331,7 @@ namespace NHSOnline.Backend.PfsApi
                 Configuration.GetOrWarn("ConfigurationSettings:CurrentTermsConditionsEffectiveDate", _logger),
                 CultureInfo.InvariantCulture
             );
-            
+
             var config =  new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
             defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds,  minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
 
@@ -351,13 +351,13 @@ namespace NHSOnline.Backend.PfsApi
                 var loginDn = Configuration.GetOrThrow("SPINE_LDAP_LOGIN_DN", _logger);
                 var certPath = Configuration.GetOrThrow("SPINE_LDAP_CERT_PATH", _logger);
                 var certPassword = Configuration.GetOrThrow("SPINE_LDAP_CERT_PASSWORD", _logger);
-                config = new SpineLdapConfigurationSettings(ldapHost, ldapPort, loginDn, certPath, certPassword, nhsAppPartyId);                
+                config = new SpineLdapConfigurationSettings(ldapHost, ldapPort, loginDn, certPath, certPassword, nhsAppPartyId);
             }
             else
             {
                 config = new SpineLdapConfigurationSettings(nhsAppPartyId);
             }
-                        
+
             config.Validate(isLDAPEnabled);
 
             return config;
@@ -402,7 +402,7 @@ namespace NHSOnline.Backend.PfsApi
             var minimumSupportediOSVersion = Configuration["ConfigurationSettings:MinimumSupportediOSVersion"];
             var fidoServerUrl = new Uri(Configuration["ConfigurationSettings:FidoServerUrl"], UriKind.Absolute);
             var throttlingEnabled = Configuration["ConfigurationSettings:ThrottlingEnabled"];
-            
+
             var config = new DeviceConfigurationSettings(minimumSupportedAndroidVersion, minimumSupportediOSVersion, fidoServerUrl, throttlingEnabled);
             config.Validate();
 
@@ -426,15 +426,15 @@ namespace NHSOnline.Backend.PfsApi
             var config = new TppConfigurationSettings(
                 new Uri(tppBaseUrl, UriKind.Absolute),
                 apiVersion,
-                applicationName, 
+                applicationName,
                 applicationVersion,
                 applicationProviderId,
                 applicationDeviceType,
-                certificatePath, 
+                certificatePath,
                 certificatePassphrase,
                 prescriptionsMaxCoursesSoftLimit,
                 coursesMaxCoursesLimit,
-                environment      
+                environment
                 );
 
                 config.Validate();
@@ -512,7 +512,12 @@ namespace NHSOnline.Backend.PfsApi
 
             if (isNominatedPharmacyEnabled)
             {
-                config.Validate();            
+                var nominatedPharmacyConfigIsValid = config.Validate();
+                if (!nominatedPharmacyConfigIsValid)
+                {
+                    _logger.LogWarning($"Not all nominated pharmacy config is populated, disabling nominated pharmacy feature (initial value was {isNominatedPharmacyEnabled})");
+                    config.IsNominatedPharmacyEnabled = false;
+                }
             }
 
             return config;

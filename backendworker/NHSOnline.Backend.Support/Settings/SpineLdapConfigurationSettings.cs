@@ -1,7 +1,5 @@
-﻿using System;
-
-namespace NHSOnline.Backend.Support.Settings
-{   
+﻿namespace NHSOnline.Backend.Support.Settings
+{
     public class SpineLdapConfigurationSettings
     {
         public string LdapHost { get; set; }
@@ -13,11 +11,11 @@ namespace NHSOnline.Backend.Support.Settings
         public string CertPath { get; set; }
 
         public string CertPassword { get; set; }
-        
+
         public string NhsAppPartyId { get; set; }
 
         public SpineLdapConfigurationSettings() {}
-        
+
         public SpineLdapConfigurationSettings(string ldapHost, int ldapPort, string loginDN, string certPath, string certPassword, string nhsAppPartyId)
         {
             LdapHost = ldapHost;
