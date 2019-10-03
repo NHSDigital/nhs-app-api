@@ -1,5 +1,5 @@
 #include "Defaults.xcconfig"
 #include "Pods/Target Support Files/Pods-NHSOnline/Pods-NHSOnline.demo.xcconfig"
 
-HOME_URL = www-demo.nhsapp.service.nhs.uk/
-BASE_API_URL = api-demo.nhsapp.service.nhs.uk/v1/
+HOME_URL = www.staging.nhsapp.service.nhs.uk/
+BASE_API_URL = api.staging.nhsapp.service.nhs.uk/v1/
