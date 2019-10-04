@@ -1,6 +1,9 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
@@ -11,12 +14,13 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
     public class AccessToken
     {
         private const string NhsNumberClaimType = "nhs_number";
+        private readonly string _rawAccessToken;
 
         public string Subject { get; }
 
         public string NhsNumber { get; }
 
-        private AccessToken(ILogger logger, string subject, string nhsNumber)
+        private AccessToken(ILogger logger, string subject, string nhsNumber, string rawToken)
         {
             new ValidateAndLog(logger)
                 .IsNotNullOrWhitespace(subject, nameof(subject), ThrowError)
@@ -25,6 +29,7 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
 
             Subject = subject;
             NhsNumber = nhsNumber;
+            _rawAccessToken = rawToken;
         }
 
         public static AccessToken Parse(ILogger logger, string accessToken)
@@ -34,14 +39,24 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
             var nhsNumber = token.Claims.Where(c => string.CompareOrdinal(c.Type, NhsNumberClaimType) == 0)
                 .Select(c => c.Value).FirstOrDefault();
 
-            return new AccessToken(logger, token.Subject, nhsNumber);
+            return new AccessToken(logger, token.Subject, nhsNumber, accessToken);
         }
         
         public static AccessToken Parse(ILogger logger, HttpContext httpContext)
         {
+            //.NET Core 2.1 issue see Jira NHSO-7062
+            var headerValue = httpContext.Request.Headers["Authorization"].ToString();
+            var accessToken = headerValue.Replace("Bearer",string.Empty, StringComparison.InvariantCulture).Trim();
+            
             return new AccessToken(logger, 
                 httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), 
-                httpContext.User.FindFirstValue(NhsNumberClaimType));
+                httpContext.User.FindFirstValue(NhsNumberClaimType),
+                accessToken);
+        }
+
+        public override string ToString()
+        {
+            return _rawAccessToken;
         }
     }
 }

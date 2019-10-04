@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

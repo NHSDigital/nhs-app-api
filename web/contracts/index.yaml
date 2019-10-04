@@ -3660,6 +3660,98 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/users/me/info: 
+      post: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "user-info"
+        summary: "Stores the current users info"
+        description: "Using the access token, will store the current users info"
+        responses: 
+          201: 
+            description: "Successful operation. User info is stored."
+          401: 
+            description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
+      get: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "user-info"
+        summary: "Gets the current users info"
+        description: "Finds the user info, based on the access token"
+        responses: 
+          200: 
+            description: "Successful operation. User info is found."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    nhsLoginId: 
+                      type: "string"
+                    info: 
+                      type: "object"
+                      properties: 
+                        nhsNumber: 
+                          type: "string"
+                        odsCode: 
+                          type: "string"
+                        betaTester: 
+                          type: "boolean"
+          401: 
+            description: "Access token is missing or invalid."
+          404: 
+            description: "Not found."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
+    /v1/api/users/info: 
+      get: 
+        tags: 
+          - "user-info"
+        summary: "Gets user info based on NHS Number or ODS Code"
+        description: "Finds the user info, based on the parameters. Either nhsNumber or odsCode must be provided"
+        parameters: 
+          - 
+            in: "query"
+            name: "odsCode"
+            required: false
+            description: "The ods code relating to the target practice"
+            schema: 
+              type: "string"
+          - 
+            in: "query"
+            name: "nhsNumber"
+            required: false
+            description: "The nhs number relating to the target patient"
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Successful operation. User info is found."
+            content: 
+              application/json: 
+                schema: 
+                  type: "array"
+                  description: "Array of nhsloginIds"
+                  items: 
+                    type: "string"
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Invalid certificate."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/log: 
       post: 
         tags: 

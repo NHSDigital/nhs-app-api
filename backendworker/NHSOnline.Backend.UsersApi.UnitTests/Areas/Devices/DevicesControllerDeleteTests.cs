@@ -32,23 +32,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            var identity = new ClaimsIdentity(new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, _fixture.Create<string>()),
-                new Claim("nhs_number", _fixture.Create<string>())
-            });
-
-            var mockHttpContext = _fixture.Create<Mock<HttpContext>>();
-            mockHttpContext.Setup(x => x.User)
-                .Returns(new ClaimsPrincipal(identity));
-
             _mockNotificationService = _fixture.Freeze<Mock<INotificationService>>();
             _mockDeviceRepositoryService = _fixture.Freeze<Mock<IDeviceRepositoryService>>();
 
             _systemUnderTest = _fixture.Create<DevicesController>();
             _systemUnderTest.ControllerContext = new ControllerContext
             {
-                HttpContext = mockHttpContext.Object
+                HttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture).Object
             };
         }
 

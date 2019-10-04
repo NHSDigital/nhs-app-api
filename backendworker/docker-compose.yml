@@ -11,10 +11,11 @@ services:
     ports:
       - "8089:8089"
     depends_on:
-      - pfs.local.bitraft.io
-      - users.local.bitraft.io
-      - messages.local.bitraft.io
       - log.local.bitraft.io
+      - messages.local.bitraft.io
+      - pfs.local.bitraft.io
+      - userinfo.local.bitraft.io
+      - users.local.bitraft.io
   pfs.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     build:
@@ -143,6 +144,23 @@ services:
       - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
       - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
       - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
+  userinfo.local.bitraft.io:
+    image: nhsonline.backend.userinfoapi
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.UserInfoApi/Dockerfile
+    ports:
+      - "8091:8091"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8091
+      - PORT=8091
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=userinfo_docker_main
+      - USERINFO_MONGO_DATABASE_HOST=nhsonline.mongodb
+      - USERINFO_MONGO_DATABASE_PORT=27017
+      - USERINFO_MONGO_DATABASE_USERNAME=
+      - USERINFO_MONGO_DATABASE_PASSWORD=
   messages.local.bitraft.io:
     image: nhsonline.backend.messagesapi
     build:
@@ -159,7 +177,7 @@ services:
       - MESSAGES_MONGO_DATABASE_HOST=nhsonline.mongodb
       - MESSAGES_MONGO_DATABASE_PORT=27017
       - MESSAGES_MONGO_DATABASE_USERNAME=
-      - MESSAGES_MONGO_DATABASE_PASSWORD=     
+      - MESSAGES_MONGO_DATABASE_PASSWORD=
   log.local.bitraft.io:
     image: nhsonline.backend.loggerapi
     build:

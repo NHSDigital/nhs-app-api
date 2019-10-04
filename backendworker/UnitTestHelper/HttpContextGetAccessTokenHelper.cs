@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using AutoFixture;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using Moq;
 
 namespace UnitTestHelper
@@ -17,8 +19,28 @@ namespace UnitTestHelper
             });
 
             var mockHttpContext = fixture.Create<Mock<HttpContext>>();
+            var claimsPrincipal = new ClaimsPrincipal(identity);
             mockHttpContext.Setup(x => x.User)
-                .Returns(new ClaimsPrincipal(identity));
+                .Returns(claimsPrincipal);
+            
+            var mockHttpRequest = fixture.Create<Mock<HttpRequest>>();
+            mockHttpRequest
+                .Setup(x => x.Headers)
+                .Returns(new HeaderDictionary { { "Authorization", fixture.Create<StringValues>() } });
+
+            mockHttpContext
+                .Setup(x => x.Request)
+                .Returns(mockHttpRequest.Object);
+            
+            var mockHttpRequest = fixture.Create<Mock<HttpRequest>>();
+            mockHttpRequest
+                .Setup(x => x.Headers)
+                .Returns(new HeaderDictionary { { "Authorization", fixture.Create<StringValues>() } });
+
+            mockHttpContext
+                .Setup(x => x.Request)
+                .Returns(mockHttpRequest.Object);
+            
             return mockHttpContext;
         }
     }

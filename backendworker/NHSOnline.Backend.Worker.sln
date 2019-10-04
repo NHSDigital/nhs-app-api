@@ -36,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
 		contracts\nhsonline.log.yaml = contracts\nhsonline.log.yaml
 		contracts\nhsonline.messages.yaml = contracts\nhsonline.messages.yaml
+		contracts\nhsonline.userinfo.yaml = contracts\nhsonline.userinfo.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"
@@ -76,8 +77,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auth", "N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auth.UnitTests", "NHSOnline.Backend.Auth.UnitTests\NHSOnline.Backend.Auth.UnitTests.csproj", "{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UsersApi", "NHSOnline.Backend.UsersApi\NHSOnline.Backend.UsersApi.csproj", "{9FBF6412-B72C-44CE-9B76-CE7F1003DAAD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UsersApi.UnitTests", "NHSOnline.Backend.UsersApi.UnitTests\NHSOnline.Backend.UsersApi.UnitTests.csproj", "{3E119DBD-FB24-4960-82B8-8858832393F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GpSupplierSpecific", "GpSupplierSpecific", "{736E9543-7D67-4D77-822A-79BFD65E80CB}"
@@ -86,13 +85,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GpSupplierSpecific", "GpSup
 		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
 	EndProjectSection
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "NHSOnline.Backend.MessagesApi.UnitTests", "NHSOnline.Backend.MessagesApi.UnitTests\NHSOnline.Backend.MessagesApi.UnitTests.csproj", "{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.MessagesApi.UnitTests", "NHSOnline.Backend.MessagesApi.UnitTests\NHSOnline.Backend.MessagesApi.UnitTests.csproj", "{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.MessagesApi", "NHSOnline.Backend.MessagesApi\NHSOnline.Backend.MessagesApi.csproj", "{2AEDCC47-819E-4229-B46A-A52D6C6FD612}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.LoggerApi", "NHSOnline.Backend.LoggerApi\NHSOnline.Backend.LoggerApi.csproj", "{37A118C6-606C-4803-B785-235E6A54DC0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.LoggerApi.UnitTests", "NHSOnline.Backend.LoggerApi.UnitTests\NHSOnline.Backend.LoggerApi.UnitTests.csproj", "{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UserInfoApi", "NHSOnline.Backend.UserInfoApi\NHSOnline.Backend.UserInfoApi.csproj", "{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}"
+EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "NHSOnline.Backend.UsersApi", "NHSOnline.Backend.UsersApi\NHSOnline.Backend.UsersApi.csproj", "{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UserInfoApi.UnitTests", "NHSOnline.Backend.UserInfoApi.UnitTests\NHSOnline.Backend.UserInfoApi.UnitTests.csproj", "{F84EB744-22DE-4067-B76A-C211C678A2AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -172,10 +177,6 @@ Global
 		{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FBF6412-B72C-44CE-9B76-CE7F1003DAAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FBF6412-B72C-44CE-9B76-CE7F1003DAAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FBF6412-B72C-44CE-9B76-CE7F1003DAAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FBF6412-B72C-44CE-9B76-CE7F1003DAAD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E119DBD-FB24-4960-82B8-8858832393F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E119DBD-FB24-4960-82B8-8858832393F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E119DBD-FB24-4960-82B8-8858832393F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -196,6 +197,18 @@ Global
 		{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

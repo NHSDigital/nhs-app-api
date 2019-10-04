@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             {
                 _logger.LogEnter();
 
-                var accessToken = GetAccessToken();
+                var accessToken = HttpContext.GetAccessToken(_logger);
                 
                 await _auditor.AuditSecureTokenEvent(accessToken, Supplier.Microsoft,
                     AuditingOperations.GetUserMessagesAuditTypeRequest, "Attempting to get users messages");
@@ -95,11 +95,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 .IsNotNullOrWhitespace(addMessageRequest?.Body, nameof(addMessageRequest.Body))
                 .IsNotNullOrWhitespace(nhsLoginId, nameof(nhsLoginId))
                 .IsValid();
-        }
-
-        private AccessToken GetAccessToken()
-        {
-            return HttpContext.GetAccessToken(_logger);
         }
     }
 }

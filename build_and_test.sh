@@ -87,6 +87,7 @@ PFS_BACKEND_NAME=nhsonline-backendpfsapi
 SJR_BACKEND_NAME=nhsonline-backendservicejourneyrulesapi
 SJR_CONFIG_NAME=nhsonline-service-journey-dev-config
 USERS_BACKEND_NAME=nhsonline-backendusersapi
+USERINFO_BACKEND_NAME=nhsonline-backenduserinfoapi
 MESSAGES_BACKEND_NAME=nhsonline-backendmessagesapi
 LOGGER_BACKEND_NAME=nhsonline-clientloggerapi
 TAG=$(git rev-parse HEAD)
@@ -131,6 +132,9 @@ docker tag $DOCKER_REGISTRY/$SJR_CONFIG_NAME:$TAG $DOCKER_REGISTRY/$SJR_CONFIG_N
 
 docker build . -t $DOCKER_REGISTRY/$USERS_BACKEND_NAME:$TAG -f NHSOnline.Backend.UsersApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$USERS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$USERS_BACKEND_NAME:latest
+
+docker build . -t $DOCKER_REGISTRY/$USERINFO_BACKEND_NAME:$TAG -f NHSOnline.Backend.UserInfoApi/Dockerfile
+docker tag $DOCKER_REGISTRY/$USERINFO_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$USERINFO_BACKEND_NAME:latest
 
 docker build . -t $DOCKER_REGISTRY/$MESSAGES_BACKEND_NAME:$TAG -f NHSOnline.Backend.MessagesApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$MESSAGES_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$MESSAGES_BACKEND_NAME:latest

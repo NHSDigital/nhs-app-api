@@ -1,0 +1,40 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:58972",
+      "sslPort": 44388
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "NHSOnline.Backend.UserInfoApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://*:8091",
+        "AUDIT_SINK_TYPE": "FILE",
+        "CITIZEN_ID_JWT_ISSUER": "https://auth.ext.signin.nhs.uk",
+        "CITIZEN_ID_BASE_URL": "https://auth.ext.signin.nhs.uk/",
+        "CITIZEN_ID_CLIENT_ID": "nhs-online",
+        "CITIZEN_ID_CLIENT_SECRET": "secret",
+        "CORS_AUTHORITY": "*",
+        "USERINFO_MONGO_DATABASE_USERNAME": "",
+        "USERINFO_MONGO_DATABASE_NAME": "users",
+        "USERINFO_MONGO_DATABASE_COLLECTION": "info",
+        "USERINFO_MONGO_DATABASE_PASSWORD": "",
+        "USERINFO_MONGO_DATABASE_HOST": "localhost",
+        "USERINFO_MONGO_DATABASE_PORT": "27017",
+      },
+      "applicationUrl": "http://localhost:5000/"
+    }
+  }
+}

@@ -1,0 +1,118 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App User Info-API
+  description: NHS App User Info-API - endpoints pertaining to User Info.
+paths:
+  /users/me/info:
+    post:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - user-info
+      summary: Stores the current users info 
+      description: Using the access token, will store the current users info
+      responses:
+        "201":
+          description: Successful operation. User info is stored.
+        "401":
+          $ref: '#/components/responses/UnauthorizedErrorAccessToken'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+    get:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - user-info
+      summary: Gets the current users info 
+      description: Finds the user info, based on the access token
+      responses:
+        "200":
+          description: Successful operation. User info is found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAndInfoResponse"
+        "401":
+          $ref: '#/components/responses/UnauthorizedErrorAccessToken'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+  /users/info:
+    get:
+      tags:
+        - user-info
+      summary: Gets user info based on NHS Number or ODS Code 
+      description: Finds the user info, based on the parameters. Either nhsNumber or odsCode must be provided
+      parameters:
+        - in: query
+          name: odsCode
+          required: false
+          description: The ods code relating to the target practice
+          schema:
+            type: string
+        - in: query
+          name: nhsNumber
+          required: false
+          description: The nhs number relating to the target patient
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. User info is found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NhsLoginIdCollectionResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedErrorMutualAuth'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  securitySchemes:
+    nhsLoginBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    BadRequest:
+      description: Bad request. Supplied request is invalid.
+    UnauthorizedErrorAccessToken:
+      description: Access token is missing or invalid.
+    UnauthorizedErrorMutualAuth:
+      description: Invalid certificate.
+    NotFound:
+      description: Not found.
+    UnexpectedError:
+      description: An unexpected error occurred processing the request.
+  schemas:
+    UserAndInfoResponse:
+      type: object
+      properties:
+        nhsLoginId:
+          type: string
+        info:
+          $ref: '#/components/schemas/InfoResponse'
+    InfoResponse:
+      type: object
+      properties:
+        nhsNumber:
+          type: string
+        odsCode:
+          type: string
+        betaTester:
+          type: boolean
+    NhsLoginIdCollectionResponse:
+      type: array
+      description: Array of nhsloginIds
+      items:
+        type: string

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace NHSOnline.Backend.Support.Repository
@@ -25,6 +26,12 @@ namespace NHSOnline.Backend.Support.Repository
         {
             record.TimeStamp = DateTime.UtcNow;
             await GetCollection().InsertOneAsync(record);
+        }
+
+        protected async Task CreateOrUpdateOneAsync(Expression<Func<TRecord, bool>> filter, TRecord record)
+        {
+            record.TimeStamp = DateTime.UtcNow;
+            await GetCollection().ReplaceOneAsync(filter, record, new UpdateOptions { IsUpsert = true });
         }
 
         protected async Task<TRecord> FindOneAsync(Expression<Func<TRecord, bool>> filter)
