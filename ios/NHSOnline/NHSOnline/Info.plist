@@ -2,40 +2,48 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>DataPreferencesURL</key>
-	<string>https://$(DATA_PREFERENCES_URL)</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>So you can record your video</string>
-	<key>CidUrlSuffix</key>
-	<string>$(CID_URL_SUFFIX)</string>
-	<key>NSCameraUsageDescription</key>
-	<string>So you can take a photo of your I.D.</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>AAID</key>
+	<string>EBA0#0001</string>
+	<key>AccessibilityStatementURL</key>
+	<string>https://$(ACCESSIBILITY_STATEMENT_URL)</string>
+	<key>AccessibilityStatementURLOld</key>
+	<string>https://$(ACCESSIBILITY_STATEMENT_URL_OLD)</string>
+	<key>AdminHelpUrlPath</key>
+	<string>$(ADMIN_HELP_URL_PATH)</string>
+	<key>ApiCallTimeoutSeconds</key>
+	<integer>10</integer>
+	<key>AppScheme</key>
+	<string>$(APP_SCHEME)</string>
+	<key>AppStoreUrl</key>
+	<string>$(APP_STORE_SCHEME)://$(APP_STORE_URL)$(APP_STORE_ID)?mt=8</string>
+	<key>AppointmentsUrlPath</key>
+	<string>$(APPOINTMENTS_URL_PATH)</string>
+	<key>AppontmentsGpAtHandUrlPath</key>
+	<string>$(APPOINTMENTS_GP_AT_HAND_URL_PATH)</string>
+	<key>AuthRedirectPath</key>
+	<string>$(AUTH_REDIRECT_PATH)</string>
+	<key>BaseApiUrl</key>
+	<string>$(BASE_SCHEME)://$(BASE_API_URL)</string>
+	<key>BaseScheme</key>
+	<string>$(BASE_SCHEME)</string>
+	<key>BiometricHelpURL</key>
+	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/apple-touch-and-face-ID-help/</string>
+	<key>BiometricRedirectURL</key>
+	<string>login?device=ios&amp;fidoAuthResponse=</string>
 	<key>BiometricsAssertionScheme</key>
 	<string>UAFV1TLV</string>
+	<key>BiometricsAuthenticationRequestEndpoint</key>
+	<string>/authRequest</string>
 	<key>BiometricsDeregistrationRequestEndpoint</key>
 	<string>/deregRequest</string>
 	<key>BiometricsRegistrationRequestEndpoint</key>
 	<string>/regRequest</string>
-	<key>BiometricsAuthenticationRequestEndpoint</key>
-	<string>/authRequest</string>
 	<key>BiometricsRegistrationResponseEndpoint</key>
 	<string>/regResponse</string>
-	<key>FidoLoginErrorPath</key>
-	<string>auth-return?error=server_data_expired&amp;state=A</string>
-	<key>BiometricRedirectURL</key>
-	<string>login?device=ios&amp;fidoAuthResponse=</string>
-	<key>BiometricHelpURL</key>
-	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/apple-touch-and-face-ID-help/</string>
-	<key>PrivateKeyLabel</key>
-	<string>nhs-biometrics-key</string>
-	<key>AAID</key>
-	<string>EBA0#0001</string>
-	<key>SessionCookieName</key>
-	<string>nhso.session</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Use this instead of a password and security code to log in.</string>
-	<key>AuthRedirectPath</key>
-	<string>$(AUTH_REDIRECT_PATH)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -67,21 +75,113 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CheckSymptomsUrlPath</key>
+	<string>$(CHECK_SYMPTOMS_URL_PATH)</string>
+	<key>CidUrlSuffix</key>
+	<string>$(CID_URL_SUFFIX)</string>
+	<key>ConditionsUrlPath</key>
+	<string>https://$(CONDITIONS_URL_PATH)</string>
+	<key>ConfigurationApiPath</key>
+	<string>$(CONFIGURATION_API_PATH)</string>
+	<key>CookiesPolicyURL</key>
+	<string>https://$(COOKIES_POLICY_URL)</string>
+	<key>CookiesPolicyURLOld</key>
+	<string>https://$(COOKIES_POLICY_URL_OLD)</string>
+	<key>DataPreferencesURL</key>
+	<string>https://$(DATA_PREFERENCES_URL)</string>
+	<key>DataSharingUrlPath</key>
+	<string>https://$(DATA_SHARING_URL)</string>
+	<key>FidoLoginErrorPath</key>
+	<string>auth-return?error=server_data_expired&amp;state=A</string>
+	<key>HelpAccountURL</key>
+	<string>https://$(HELP_ACCOUNT_URL)</string>
+	<key>HelpLoginURL</key>
+	<string>https://$(HELP_LOGIN_URL)</string>
+	<key>HelpURL</key>
+	<string>https://$(HELP_URL)</string>
+	<key>HelpURLOld</key>
+	<string>https://$(HELP_URL_OLD)</string>
+	<key>HomeHost</key>
+	<string>$(HOME_URL)</string>
+	<key>HomeUrl</key>
+	<string>$(BASE_SCHEME)://$(HOME_URL)</string>
+	<key>HotJarLinkUrl</key>
+	<string>https://$(HOT_JAR_LINK_URL)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>InformaticaUrlPath</key>
+	<string>$(INFORMATICA_URL_PATH)</string>
+	<key>IsFirstTimeOpened</key>
+	<string>$(IS_FIRST_TIME_OPENED)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MedicalRecordAbbreviationsURL</key>
+	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL)</string>
+	<key>MedicalRecordAbbreviationsURLOld</key>
+	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL_OLD)</string>
+	<key>MenuTimeoutSeconds</key>
+	<integer>10</integer>
+	<key>MoreUrlPath</key>
+	<string>$(MORE_URL)</string>
+	<key>MyAccountUrlPath</key>
+	<string>$(MY_ACCOUNT_URL_PATH)</string>
+	<key>MyRecordGpAtHandUrlPath</key>
+	<string>$(MY_RECORD_GP_AT_HAND_URL_PATH)</string>
+	<key>MyRecordUrlPath</key>
+	<string>$(MY_RECORD_URL_PATH)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>So you can take a photo of your I.D.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use this instead of a password and security code to log in.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>So you can record your video</string>
+	<key>Nhs111LocationUrl</key>
+	<string>https://$(NHS_111_LOCATION_URL)</string>
+	<key>Nhs111Url</key>
+	<string>https://$(NHS_111_URL)</string>
+	<key>NhsOnlineRequiredQueryString</key>
+	<string>$(NHS_ONLINE_REQUIRED_QUERY_STRING)</string>
+	<key>OpenSourceLicencesURL</key>
+	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
+	<key>OpenSourceLicencesURLOld</key>
+	<string>https://$(OPEN_SOURCE_LICENCE_URL_OLD)</string>
 	<key>OpenSourceLicensesURL</key>
 	<string>https://$(OPEN_SOURCE_LICENSE_URL)</string>
+	<key>OrganDonationUrlPath</key>
+	<string>$(ORGAN_DONATION_URL_PATH)</string>
+	<key>PrescriptionsGpAtHandUrlPath</key>
+	<string>$(PRESCRIPTIONS_GP_AT_HAND_URL_PATH)</string>
+	<key>PrescriptionsUrlPath</key>
+	<string>$(PRESCRIPTIONS_URL_PATH)</string>
+	<key>PrivacyPolicyURL</key>
+	<string>https://$(PRIVACY_POLICY)</string>
+	<key>PrivacyPolicyURLOld</key>
+	<string>https://$(PRIVACY_POLICY_OLD)</string>
+	<key>PrivateKeyLabel</key>
+	<string>nhs-biometrics-key</string>
+	<key>ResponseWaitingTime</key>
+	<integer>20</integer>
+	<key>SessionCookieName</key>
+	<string>nhso.session</string>
+	<key>SessionTimeout</key>
+	<integer>20</integer>
+	<key>SessionUrlPath</key>
+	<string>$(SESSION_URL_PATH)</string>
+	<key>SymptomsUrlPath</key>
+	<string>$(SYMPTOMS_URL_PATH)</string>
+	<key>TermsAndConditionsURL</key>
+	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
+	<key>TermsAndConditionsURLOld</key>
+	<string>https://$(TERMS_AND_CONDITIONS_URL_OLD)</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -90,6 +190,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -101,101 +203,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>IsFirstTimeOpened</key>
-	<string>$(IS_FIRST_TIME_OPENED)</string>
-	<key>HomeUrl</key>
-	<string>$(BASE_SCHEME)://$(HOME_URL)</string>
-	<key>HomeHost</key>
-	<string>$(HOME_URL)</string>
-	<key>HotJarLinkUrl</key>
-	<string>https://$(HOT_JAR_LINK_URL)</string>
-	<key>Nhs111Url</key>
-	<string>https://$(NHS_111_URL)</string>
-	<key>Nhs111LocationUrl</key>
-	<string>https://$(NHS_111_LOCATION_URL)</string>
-	<key>OrganDonationUrlPath</key>
-	<string>$(ORGAN_DONATION_URL_PATH)</string>
-	<key>MoreUrlPath</key>
-	<string>$(MORE_URL)</string>
-	<key>MyRecordUrlPath</key>
-	<string>$(MY_RECORD_URL_PATH)</string>
-	<key>AppointmentsUrlPath</key>
-	<string>$(APPOINTMENTS_URL_PATH)</string>
-	<key>AdminHelpUrlPath</key>
-	<string>$(ADMIN_HELP_URL_PATH)</string>
-	<key>SymptomsUrlPath</key>
-	<string>$(SYMPTOMS_URL_PATH)</string>
-	<key>PrescriptionsUrlPath</key>
-	<string>$(PRESCRIPTIONS_URL_PATH)</string>
-	<key>PrescriptionsGpAtHandUrlPath</key>
-	<string>$(PRESCRIPTIONS_GP_AT_HAND_URL_PATH)</string>
-	<key>AppontmentsGpAtHandUrlPath</key>
-	<string>$(APPOINTMENTS_GP_AT_HAND_URL_PATH)</string>
-	<key>MyRecordGpAtHandUrlPath</key>
-	<string>$(MY_RECORD_GP_AT_HAND_URL_PATH)</string>
-	<key>InformaticaUrlPath</key>
-	<string>$(INFORMATICA_URL_PATH)</string>
-	<key>MyAccountUrlPath</key>
-	<string>$(MY_ACCOUNT_URL_PATH)</string>
-	<key>SessionUrlPath</key>
-	<string>$(SESSION_URL_PATH)</string>
-	<key>BaseScheme</key>
-	<string>$(BASE_SCHEME)</string>
-	<key>NhsOnlineRequiredQueryString</key>
-	<string>$(NHS_ONLINE_REQUIRED_QUERY_STRING)</string>
-	<key>CheckSymptomsUrlPath</key>
-	<string>$(CHECK_SYMPTOMS_URL_PATH)</string>
-	<key>AppScheme</key>
-	<string>$(APP_SCHEME)</string>
-	<key>MedicalRecordAbbreviationsURL</key>
-	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL)</string>
-	<key>MedicalRecordAbbreviationsURLOld</key>
-	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL_OLD)</string>
-	<key>HelpURL</key>
-	<string>https://$(HELP_URL)</string>
-	<key>HelpURLOld</key>
-	<string>https://$(HELP_URL_OLD)</string>
-	<key>HelpAccountURL</key>
-	<string>https://$(HELP_ACCOUNT_URL)</string>
-	<key>HelpLoginURL</key>
-	<string>https://$(HELP_LOGIN_URL)</string>
-	<key>TermsAndConditionsURL</key>
-	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
-	<key>TermsAndConditionsURLOld</key>
-	<string>https://$(TERMS_AND_CONDITIONS_URL_OLD)</string>
-	<key>PrivacyPolicyURL</key>
-	<string>https://$(PRIVACY_POLICY)</string>
-	<key>PrivacyPolicyURLOld</key>
-	<string>https://$(PRIVACY_POLICY_OLD)</string>
-	<key>CookiesPolicyURL</key>
-	<string>https://$(COOKIES_POLICY_URL)</string>
-	<key>CookiesPolicyURLOld</key>
-	<string>https://$(COOKIES_POLICY_URL_OLD)</string>
-	<key>OpenSourceLicencesURL</key>
-	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
-	<key>OpenSourceLicencesURLOld</key>
-	<string>https://$(OPEN_SOURCE_LICENCE_URL_OLD)</string>
-	<key>DataSharingUrlPath</key>
-	<string>https://$(DATA_SHARING_URL)</string>
-	<key>AccessibilityStatementURL</key>
-	<string>https://$(ACCESSIBILITY_STATEMENT_URL)</string>
-	<key>AccessibilityStatementURLOld</key>
-	<string>https://$(ACCESSIBILITY_STATEMENT_URL_OLD)</string>
-	<key>ConditionsUrlPath</key>
-	<string>https://$(CONDITIONS_URL_PATH)</string>
-	<key>ResponseWaitingTime</key>
-	<integer>20</integer>
-	<key>SessionTimeout</key>
-	<integer>20</integer>
-	<key>ConfigurationApiPath</key>
-	<string>$(CONFIGURATION_API_PATH)</string>
-	<key>BaseApiUrl</key>
-	<string>$(BASE_SCHEME)://$(BASE_API_URL)</string>
-	<key>AppStoreUrl</key>
-	<string>$(APP_STORE_SCHEME)://$(APP_STORE_URL)$(APP_STORE_ID)?mt=8</string>
-	<key>MenuTimeoutSeconds</key>
-	<integer>10</integer>
-	<key>ApiCallTimeoutSeconds</key>
-	<integer>10</integer>
 </dict>
 </plist>

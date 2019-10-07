@@ -13,6 +13,15 @@ class BiometricsResultViewController: UIViewController {
         setupViewController()
     }
     
+    override func viewDidLoad() {
+        self.setNeedsStatusBarAppearanceUpdate()
+        super.viewDidLoad()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     func setupViewController(){
         let stringsObject = BiometricStringHandler().getResultStrings(isRegistration: registration)
         viewController!.updateHeaderText(headerText: stringsObject.HeaderTextText)

@@ -57,12 +57,17 @@ class HomeViewController : UIViewController {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         isPresented = false
     }
     
     override func viewDidLoad() {
+        self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
         
         setupNhsLogo()

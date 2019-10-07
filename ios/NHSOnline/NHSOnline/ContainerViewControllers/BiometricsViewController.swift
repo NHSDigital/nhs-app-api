@@ -32,13 +32,17 @@ class BiometricsViewController: UIViewController {
             attemptDeregistration()
         }
     }
-    
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         setupViewController()
     }
     
     override func viewDidLoad() {
+        self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
         setupBreadcrumbLink()
     }

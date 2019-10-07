@@ -34,6 +34,7 @@
 		14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */; };
 		14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21821E8D711008A65E0 /* BiometricService.swift */; };
 		14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */; };
+		14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */; };
 		14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */; };
 		14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FD70C22282E02B0072B280 /* ApplicationState.swift */; };
 		2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */; };
@@ -153,6 +154,7 @@
 		14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackTC.xcconfig; sourceTree = "<group>"; };
 		14D4D21821E8D711008A65E0 /* BiometricService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
 		14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewControllerTests.swift; sourceTree = "<group>"; };
+		14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationControllerExtensions.swift; sourceTree = "<group>"; };
 		14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDelegateTests.swift; sourceTree = "<group>"; };
 		14FD70C22282E02B0072B280 /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
 		19AB5F83EAB8FEAAC9B43F9C /* Pods-NHSOnlineTests.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.preview.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.preview.xcconfig"; sourceTree = "<group>"; };
@@ -248,13 +250,13 @@
 		D6A0B15FD76D69A0D2903909 /* Pods-NHSOnline.scratch10.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch10.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch10.xcconfig"; sourceTree = "<group>"; };
 		D951DD71E68B6779AC303B2C /* Pods-NHSOnlineTests.scratch10.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch10.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch10.xcconfig"; sourceTree = "<group>"; };
 		D98271DFF053EF4BE2AB2451 /* Pods-NHSOnlineTests.browserstacklocal.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.browserstacklocal.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.browserstacklocal.xcconfig"; sourceTree = "<group>"; };
+		DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BiometricBreadcrumb.xib; sourceTree = "<group>"; };
+		DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumb.swift; sourceTree = "<group>"; };
+		DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
+		DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumbTests.swift; sourceTree = "<group>"; };
 		E49C2A4CC93A9A1D7993225E /* Pods-NHSOnline.scratch11.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch11.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch11.xcconfig"; sourceTree = "<group>"; };
 		E9DA6764D81081DCB709C7C8 /* Pods-NHSOnline.scratch9.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch9.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch9.xcconfig"; sourceTree = "<group>"; };
 		EBF1471FC84716B6FD4EBDC4 /* Pods-NHSOnlineTests.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.demo.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.demo.xcconfig"; sourceTree = "<group>"; };
-		DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BiometricBreadcrumb.xib; sourceTree = "<group>"; };
-        DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumb.swift; sourceTree = "<group>"; };
-        DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
-        DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumbTests.swift; sourceTree = "<group>"; };
 		F01745A6207B700700877E4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewUrlTests.swift; sourceTree = "<group>"; };
 		F026199A2050AFE100EDDFE0 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -648,6 +650,7 @@
 				13F588AD21BA863D002857EA /* BiometricsViewController.swift */,
 				139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */,
 				F026199A2050AFE100EDDFE0 /* WebViewController.swift */,
+				14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */,
 			);
 			path = ContainerViewControllers;
 			sourceTree = "<group>";
@@ -889,7 +892,6 @@
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
 				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
-				1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */,
 				DB4B658722FADDB300C8EE99 /* BiometricBreadcrumb.swift in Sources */,
 				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
 				3E60CCBA2317C222000AFA17 /* Logger.swift in Sources */,
@@ -909,6 +911,7 @@
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
 				139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
+				14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
@@ -931,7 +934,6 @@
 				609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */,
 				1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */,
 				DB4B658D22FB1A3E00C8EE99 /* UnderlinedLabel.swift in Sources */,
-				1381D48B21BFFFD300B54300 /* ChannelBindings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

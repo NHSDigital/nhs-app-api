@@ -27,6 +27,15 @@ class WebViewController: UIViewController, WKUIDelegate {
         view = webView
     }
     
+    override func viewDidLoad() {
+        self.setNeedsStatusBarAppearanceUpdate()
+        super.viewDidLoad()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     let knownServices = KnownServices(config: config())
     
     struct Properties {

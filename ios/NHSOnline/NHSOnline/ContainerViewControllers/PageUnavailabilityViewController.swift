@@ -19,9 +19,19 @@ class PageUnavailabilityViewController: UIViewController {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         errorTextView.layer.addTopBorder(color: UIColor(red:0.85, green:0.16, blue:0.11, alpha:1.0), thickness: 3)
         errorTextView.resizeErrorTextView()
+    }
+    
+    override func viewDidLoad() {
+        self.setNeedsStatusBarAppearanceUpdate()
+        super.viewDidLoad()
+        
     }
     
     func setUnavailabilityError(errorMessage:ErrorMessage) {
