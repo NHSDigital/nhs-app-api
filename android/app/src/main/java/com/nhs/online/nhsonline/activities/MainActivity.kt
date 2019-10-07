@@ -71,7 +71,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (resources.getString(R.string.secureFlag) != "disabled") {
+        if (resources.getString(R.string.secureFlag) != "disabled" &&
+              android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O){
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE)
         }
@@ -340,8 +341,19 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
     }
 
+    override fun onPause() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+        super.onPause()
+    }
+
     override fun onResume() {
         super.onResume()
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
 
         if (isSuccessfulConfigCheck)
             nhsWeb.reloadLoginUrl()

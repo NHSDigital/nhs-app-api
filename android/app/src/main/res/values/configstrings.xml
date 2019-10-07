@@ -41,7 +41,6 @@
     <string name="fidoUsername">fidoUsername</string>
     <string name="logoutPath">logout</string>
     <string name="loginPath">login</string>
-    <string name="secureFlag">enabled</string>
     <string name="dataSharingURL">https://www.nhs.uk/your-nhs-data-matters/</string>
     <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
     <string name="helpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/</string>
@@ -58,6 +57,7 @@
     <string name="isThrottlingEnabled">isThrottlingEnabled</string>
     <string name="fidoServerUrlConfigurationKey">fidoServerUrl</string>
     <string name="menuTimeoutSeconds">10</string>
+    <string name="secureFlag">enabled</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 
