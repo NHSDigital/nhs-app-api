@@ -36,7 +36,7 @@ export default {
     },
     preventDefault: {
       type: Boolean,
-      default: undefined,
+      default: true,
     },
     clickFunc: {
       type: Function,

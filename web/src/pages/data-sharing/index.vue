@@ -29,7 +29,6 @@
                              :text="$t('ds01.startNowButton')"
                              data-purpose="startNowButton"
                              tag="button"
-                             :prevent-default="true"
                              :click-func="startNow">
         {{ $t('ds01.startNowButton') }}
       </analytics-tracked-tag>
