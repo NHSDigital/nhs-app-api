@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     {
         public IActionResult Visit(MessagesResult.Some result)
         {
-            return new OkObjectResult(result.Messages);
+            return new OkObjectResult(result.Response);
         }
 
         public IActionResult Visit(MessagesResult.None result)

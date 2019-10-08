@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
 
                 using (_logger.WithTimer("Add user device to Mongo"))
                 {
-                    await InsertOneAsync(userDevice);
+                    await InsertOne(userDevice);
                 }
             }
             finally
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
 
                 using (_logger.WithTimer("Find user device on Mongo"))
                 {
-                    return await FindOneAsync(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
+                    return await FindOne(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
                 }
             }
             finally
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
 
                 using (_logger.WithTimer("Delete user device on Mongo"))
                 {
-                    await DeleteOneAsync(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
+                    await DeleteOne(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
                 }
             }
             finally

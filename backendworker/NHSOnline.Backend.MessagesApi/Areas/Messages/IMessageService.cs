@@ -6,8 +6,10 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
     public interface IMessageService
     {
-        Task<MessageResult> Send(AddMessageRequest addMessageRequest, string nhsLoginId); 
+        Task<MessageResult> Send(AddMessageRequest addMessageRequest, string nhsLoginId);
 
-        Task<MessagesResult> GetMessages(AccessToken accessToken);
+        Task<MessagesResult> GetMessages(AccessToken accessToken, string sender);
+
+        Task<MessagesResult> GetSummaryMessages(AccessToken accessToken);
     }
 }

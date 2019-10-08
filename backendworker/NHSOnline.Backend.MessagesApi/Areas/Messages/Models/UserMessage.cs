@@ -24,6 +24,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
         public string Body { get; set; }
 
         [BsonElement]
+        public DateTime? Read { get; set; }
+
+        [BsonElement]
         public DateTime SentTime { get; set; }
     }
 }

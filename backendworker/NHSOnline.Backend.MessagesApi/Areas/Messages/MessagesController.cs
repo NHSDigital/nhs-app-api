@@ -19,10 +19,12 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly ILogger<MessagesController> _logger;
         private readonly IAuditor _auditor;
 
-        public MessagesController(
+        public MessagesController
+        (
             IMessageService messageService,
             ILogger<MessagesController> logger,
-            IAuditor auditor)
+            IAuditor auditor
+        )
         {
             _messageService = messageService;
             _logger = logger;
@@ -32,7 +34,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         [HttpPost]
         [AllowAnonymous]
         [Route("api/{nhsLoginId}/messages")]
-        public async Task<IActionResult> Post([FromBody] AddMessageRequest addMessageRequest, [FromRoute(Name = "nhsLoginId")] string nhsLoginId)
+        public async Task<IActionResult> Post
+        (
+            [FromBody] AddMessageRequest addMessageRequest,
+            [FromRoute(Name = "nhsLoginId")] string nhsLoginId
+        )
         {
             try
             {
@@ -61,18 +67,27 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         [HttpGet]
         [Route("api/me/messages")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] string sender = null, [FromQuery] bool summary = false)
         {
             try
             {
                 _logger.LogEnter();
+
+                var hasSender = !string.IsNullOrWhiteSpace(sender);
+                if (!hasSender && !summary || hasSender && summary)
+                {
+                    _logger.LogError("Either `sender` or `summary` is required, but cannot be both");
+                    return BadRequest();
+                }
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
                 
                 await _auditor.AuditSecureTokenEvent(accessToken, Supplier.Microsoft,
                     AuditingOperations.GetUserMessagesAuditTypeRequest, "Attempting to get users messages");
 
-                var messageResult = await _messageService.GetMessages(accessToken);
+                var messageResult = hasSender
+                    ? await GetMessages(accessToken, sender)
+                    : await GetSummaryMessages(accessToken);
 
                 await messageResult.Accept(new MessagesAuditingVisitor(_logger, _auditor, accessToken));
                 return messageResult.Accept(new MessagesResultVisitor());
@@ -87,6 +102,24 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 _logger.LogExit();
             }
         }
+
+        private async Task<MessagesResult> GetSummaryMessages(AccessToken accessToken)
+        {
+            await AuditGetMessages(accessToken, "Attempting to get users summary messages");
+
+            return await _messageService.GetSummaryMessages(accessToken);
+        }
+
+        private async Task<MessagesResult> GetMessages(AccessToken accessToken, string sender)
+        {
+            await AuditGetMessages(accessToken, $"Attempting to get users messages from '{sender}'");
+
+            return await _messageService.GetMessages(accessToken, sender);
+        }
+
+        private async Task AuditGetMessages(AccessToken accessToken, string details)
+            => await _auditor.AuditSecureTokenEvent(accessToken, Supplier.Microsoft,
+                AuditingOperations.GetUserMessagesAuditTypeRequest, details);
 
         private bool IsMessageRequestValid(AddMessageRequest addMessageRequest, string nhsLoginId)
         {

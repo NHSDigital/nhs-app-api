@@ -58,13 +58,15 @@ components:
               oneOf:
                 - $ref: "#/components/schemas/defaultProvider"
             nominatedPharmacy:
-              type: bool
+              type: boolean
             notifications:
-              type: bool
+              type: boolean
             messaging:
-              type: bool
+              type: boolean
             userInfo:
-              type: bool
+              type: boolean
+            hasLinkedAccounts:
+              type: boolean
     defaultProvider:
       type: object
       properties:

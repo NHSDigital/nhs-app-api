@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
                     .IsNotNull(userAndInfo, nameof(userAndInfo), ValidateAndLog.ValidationOptions.ThrowError)
                     .IsValid();
 
-                await CreateOrUpdateOneAsync(d => d.NhsLoginId == userAndInfo.NhsLoginId, userAndInfo);
+                await CreateOrUpdateOne(d => d.NhsLoginId == userAndInfo.NhsLoginId, userAndInfo);
                 return new PostInfoResult.Created();
             }
             finally
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
 
                 using (_logger.WithTimer("Find user info in Mongo"))
                 {
-                    return await FindOneAsync(d => d.NhsLoginId == nhsLoginId);
+                    return await FindOne(d => d.NhsLoginId == nhsLoginId);
                 }
             }
             finally
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
 
                 using (_logger.WithTimer("Find user info in Mongo"))
                 {
-                    return await FindMultipleAsync(d => d.Info.OdsCode == odsCode);
+                    return await Find(d => d.Info.OdsCode == odsCode);
                 }
             }
             finally
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
 
                 using (_logger.WithTimer("Find user info in Mongo"))
                 {
-                    return await FindMultipleAsync(d => d.Info.NhsNumber == nhsNumber);
+                    return await Find(d => d.Info.NhsNumber == nhsNumber);
                 }
             }
             finally

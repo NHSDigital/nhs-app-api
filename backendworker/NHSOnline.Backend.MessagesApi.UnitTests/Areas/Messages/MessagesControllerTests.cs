@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -30,11 +29,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new ApiControllerAutoFixtureCustomization())
+                .Customize(new MessagesApiCustomization());
 
-            var mockHttpContext =  HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
+            var mockHttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
 
-            _nhsLoginId =  _fixture.Create<string>();
+            _nhsLoginId = _fixture.Create<string>();
 
             _mockMessageService = _fixture.Freeze<Mock<IMessageService>>();
             _validAddMessageRequest = _fixture.Create<AddMessageRequest>();
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, _nhsLoginId);
-            
+
             // Assert
             _mockMessageService.VerifyAll();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
@@ -71,13 +71,13 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, _nhsLoginId);
-            
+
             // Assert
             _mockMessageService.VerifyAll();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
             statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
         }
-        
+
         [TestMethod]
         public async Task Post_SendMessageException_ReturnsInternalServerError()
         {
@@ -87,23 +87,23 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, _nhsLoginId);
-            
+
             // Assert
             _mockMessageService.VerifyAll();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
             statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
-        
+
         [TestMethod]
         public async Task Post_MessageIsNull_ReturnsBadRequest()
         {
             // Act
             var result = await _systemUnderTest.Post(null, _nhsLoginId);
-            
+
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("            ")]
@@ -112,13 +112,13 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, nhsLoginId);
-            
+
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
         }
 
         [DataTestMethod]
-        [DataRow( "    ", "    ")]
+        [DataRow("    ", "    ")]
         [DataRow(null, "body")]
         [DataRow("sender", null)]
         public async Task Post_MessageBodyIsInvalid_ReturnsBadRequest(string sender, string body)
@@ -129,42 +129,55 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 Sender = sender,
                 Body = body
             };
-            
+
             // Act
             var result = await _systemUnderTest.Post(invalidMessage, _nhsLoginId);
-            
+
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
         }
 
         [TestMethod]
-        public async Task Get_SuccessSome()
+        [DataRow(null, false)]
+        [DataRow("sender", true)]
+        public async Task Get_ArgumentsAreNotValid_ReturnsBadRequest(string sender, bool summary)
+        {
+            // Act
+            var result = await _systemUnderTest.Get(sender, summary);
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [TestMethod]
+        public async Task Get_WithSender_SuccessSome()
         {
             // Arrange
-            var message = MessageHelpers.MockUserMessage(_fixture);
-            var messages = new[] { message }.ToList();
-            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>()))
-                .ReturnsAsync(new MessagesResult.Some(messages));
+            var response = _fixture.Create<MessagesResponse>();
+
+            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>(), It.IsAny<string>()))
+                .ReturnsAsync(new MessagesResult.Some(response));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_fixture.Create<string>());
 
             // Assert
             _mockMessageService.VerifyAll();
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeAssignableTo<IEnumerable<UserMessage>>()
-                .Subject.Should().BeEquivalentTo(messages);
+                .Subject.Value.Should().BeAssignableTo<IEnumerable<SenderMessages>>()
+                .Subject.Should().BeEquivalentTo(response);
         }
 
         [TestMethod]
-        public async Task Get_SuccessNone()
+        public async Task Get_WithSender_SuccessNone()
         {
             // Arrange
-            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>()))
+            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagesResult.None());
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_fixture.Create<string>());
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -172,14 +185,14 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Get_MessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
+        public async Task Get_WithSender_MessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
         {
             // Arrange
-            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>()))
+            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagesResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_fixture.Create<string>());
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -188,14 +201,14 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Get_MessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
+        public async Task Get_WithSender_MessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
         {
             // Arrange
-            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>()))
+            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagesResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_fixture.Create<string>());
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -204,14 +217,95 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Get_MessageServiceThrowsException_ReturnsInternalServerError()
+        public async Task Get_WithSender_MessageServiceThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>()))
+            _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_fixture.Create<string>());
+
+            // Assert
+            _mockMessageService.VerifyAll();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [TestMethod]
+        public async Task Get_WithSummary_SuccessSome()
+        {
+            // Arrange
+            var response = _fixture.Create<MessagesResponse>();
+            _mockMessageService.Setup(x => x.GetSummaryMessages(It.IsAny<AccessToken>()))
+                .ReturnsAsync(new MessagesResult.Some(response));
+
+            // Act
+            var result = await _systemUnderTest.Get(summary: true);
+
+            // Assert
+            _mockMessageService.VerifyAll();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<IEnumerable<SenderMessages>>()
+                .Subject.Should().BeEquivalentTo(response);
+        }
+
+        [TestMethod]
+        public async Task Get_WithSummary_SuccessNone()
+        {
+            // Arrange
+            _mockMessageService.Setup(x => x.GetSummaryMessages(It.IsAny<AccessToken>()))
+                .ReturnsAsync(new MessagesResult.None());
+
+            // Act
+            var result = await _systemUnderTest.Get(summary: true);
+
+            // Assert
+            _mockMessageService.VerifyAll();
+            result.Should().BeAssignableTo<NoContentResult>();
+        }
+
+        [TestMethod]
+        public async Task Get_WithSummary_MessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
+        {
+            // Arrange
+            _mockMessageService.Setup(x => x.GetSummaryMessages(It.IsAny<AccessToken>()))
+                .ReturnsAsync(new MessagesResult.BadGateway());
+
+            // Act
+            var result = await _systemUnderTest.Get(summary: true);
+
+            // Assert
+            _mockMessageService.VerifyAll();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+        }
+
+        [TestMethod]
+        public async Task Get_WithSummary_MessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockMessageService.Setup(x => x.GetSummaryMessages(It.IsAny<AccessToken>()))
+                .ReturnsAsync(new MessagesResult.InternalServerError());
+
+            // Act
+            var result = await _systemUnderTest.Get(summary: true);
+
+            // Assert
+            _mockMessageService.VerifyAll();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [TestMethod]
+        public async Task Get_WithSummary_MessageServiceThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockMessageService.Setup(x => x.GetSummaryMessages(It.IsAny<AccessToken>()))
+                .Throws<ArgumentException>();
+
+            // Act
+            var result = await _systemUnderTest.Get(summary: true);
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -226,3 +320,4 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
     }
 }
+

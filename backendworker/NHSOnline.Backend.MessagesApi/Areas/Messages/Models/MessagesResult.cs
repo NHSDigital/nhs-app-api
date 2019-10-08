@@ -8,11 +8,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 
         public class Some : MessagesResult
         {
-            public IEnumerable<UserMessage> Messages { get; }
+            public MessagesResponse Response { get; }
 
-            public Some(IEnumerable<UserMessage> messages)
+            public Some(MessagesResponse response)
             {
-                Messages = messages;
+                Response = response;
             }
 
             public override T Accept<T>(IMessagesResultVisitor<T> visitor)

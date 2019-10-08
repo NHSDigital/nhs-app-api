@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.MessagesApi.Repository
     public interface IMessageRepository
     {
         Task Create(UserMessage userMessage);
-        Task<List<UserMessage>> Find(string nhsLoginId);
+        Task<List<UserMessage>> Find(string nhsLoginId, string sender);
+        Task<List<SummaryMessage>> Summary(string nhsLoginId);
     }
 }

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace NHSOnline.Backend.Support.Repository
 {
@@ -23,32 +24,34 @@ namespace NHSOnline.Backend.Support.Repository
             _collectionName = mongoConfiguration.CollectionName;
         }
 
-        protected async Task InsertOneAsync(TRecord record)
+        protected async Task InsertOne(TRecord record)
         {
             record.Timestamp = DateTime.UtcNow;
             await GetCollection().InsertOneAsync(record);
         }
 
-        protected async Task CreateOrUpdateOneAsync(Expression<Func<TRecord, bool>> filter, TRecord record)
+        protected async Task CreateOrUpdateOne(Expression<Func<TRecord, bool>> filter, TRecord record)
         {
             record.Timestamp = DateTime.UtcNow;
             await GetCollection().ReplaceOneAsync(filter, record, new UpdateOptions { IsUpsert = true });
         }
 
-        protected async Task<TRecord> FindOneAsync(Expression<Func<TRecord, bool>> filter)
+        protected async Task<TRecord> FindOne(Expression<Func<TRecord, bool>> filter)
         {
-            var records = await FindMultipleAsync(filter);
+            var records = await Find(filter);
             return records.FirstOrDefault();
         }
 
-        protected async Task DeleteOneAsync(Expression<Func<TRecord, bool>> filter)
+        protected async Task DeleteOne(Expression<Func<TRecord, bool>> filter)
             => await GetCollection().DeleteOneAsync(filter);
 
-        protected async Task<IEnumerable<TRecord>> FindMultipleAsync(Expression<Func<TRecord, bool>> filter)
+        protected async Task<IEnumerable<TRecord>> Find(Expression<Func<TRecord, bool>> filter)
         {
             var records = await GetCollection().FindAsync(filter);
             return records.ToEnumerable();
         }
+
+        protected IAggregateFluent<TRecord> Aggregate() => GetCollection().Aggregate();
 
         private IMongoCollection<TRecord> GetCollection()
             => _mongoClient.GetDatabase(_databaseName).GetCollection<TRecord>(_collectionName);

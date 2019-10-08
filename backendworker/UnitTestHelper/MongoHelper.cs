@@ -12,6 +12,7 @@ namespace UnitTestHelper
         {
             var cursorMock = fixture.Create<Mock<IAsyncCursor<T>>>();
             cursorMock.Setup(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(false);
+            cursorMock.Setup(x => x.MoveNextAsync(It.IsAny<CancellationToken>())).ReturnsAsync(false);
             return cursorMock;
         }
 
@@ -19,8 +20,13 @@ namespace UnitTestHelper
         {
             var cursorMock = fixture.Create<Mock<IAsyncCursor<T>>>();
             var mockReturn = true;
+
             cursorMock.Setup(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(() => mockReturn)
                 .Callback<CancellationToken>(t => mockReturn = false);
+
+            cursorMock.Setup(x => x.MoveNextAsync(It.IsAny<CancellationToken>())).ReturnsAsync(() => mockReturn)
+                .Callback<CancellationToken>(t => mockReturn = false);
+
             cursorMock.SetupGet(x => x.Current).Returns(values);
             return cursorMock;
         }

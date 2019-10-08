@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         {
             try
             {
-                var auditMessage = $"{result.Messages.Count()} user messages retrieved";
+                var auditMessage = $"{result.Response.Sum(x => x.Messages.Count())} user messages retrieved";
                 await _auditor.AuditSecureTokenEvent(_accessToken, Supplier,AuditType, auditMessage);
             }
             catch (Exception e)

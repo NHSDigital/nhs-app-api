@@ -2880,13 +2880,15 @@
                                         - "im1"
                                         - "gpAtHand"
                             nominatedPharmacy: 
-                              type: "bool"
+                              type: "boolean"
                             notifications: 
-                              type: "bool"
+                              type: "boolean"
                             messaging: 
-                              type: "bool"
+                              type: "boolean"
                             userInfo: 
-                              type: "bool"
+                              type: "boolean"
+                            hasLinkedAccounts: 
+                              type: "boolean"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
             content: 
@@ -3379,13 +3381,15 @@
                                     - "im1"
                                     - "gpAtHand"
                         nominatedPharmacy: 
-                          type: "bool"
+                          type: "boolean"
                         notifications: 
-                          type: "bool"
+                          type: "boolean"
                         messaging: 
-                          type: "bool"
+                          type: "boolean"
                         userInfo: 
-                          type: "bool"
+                          type: "boolean"
+                        hasLinkedAccounts: 
+                          type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 
@@ -3647,7 +3651,7 @@
         tags: 
           - "messages"
         summary: "Retrieve messages"
-        description: "Retrieves a list of messages pertaining to the authorized user"
+        description: "Retrieves a list of messages pertaining to the authorized user."
         parameters: 
           - 
             in: "header"
@@ -3656,39 +3660,69 @@
             description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
             schema: 
               type: "string"
+          - 
+            in: "query"
+            name: "sender"
+            required: false
+            description: "The name of sender to filter by. This parameter is incompatible with `summary`."
+            schema: 
+              type: "string"
+          - 
+            in: "query"
+            name: "summary"
+            required: false
+            description: "Indicates to return only the latest message per sender. This parameter is incompatible with `sender`."
+            schema: 
+              type: "boolean"
         responses: 
           200: 
             description: "Successful operation. Messages are retrieved."
             content: 
               application/json: 
                 schema: 
-                  type: "object"
-                  properties: 
-                    Messages: 
-                      type: "array"
-                      description: "Array of messages for an authorized user"
-                      items: 
-                        type: "object"
-                        properties: 
-                          sender: 
-                            type: "string"
-                          version: 
-                            type: "integer"
-                          body: 
-                            type: "string"
-                          sendTime: 
-                            type: "string"
-                            format: "date-time"
-                            description: "Message sent time."
-                        example: 
-                          sender: "b1f99cf0-278d-49ca-a325-0a1504799488"
-                          version: 1
-                          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                          sendTime: "2019-09-17T02:15:12.356Z"
+                  type: "array"
+                  items: 
+                    type: "object"
+                    properties: 
+                      sender: 
+                        type: "string"
+                        description: "The sender's name."
+                      unreadCount: 
+                        type: "integer"
+                        description: "The number of unread messages."
+                      messages: 
+                        type: "array"
+                        description: "Array of messages per sender for an authorized user."
+                        items: 
+                          type: "object"
+                          properties: 
+                            id: 
+                              type: "string"
+                            sender: 
+                              type: "string"
+                            version: 
+                              type: "integer"
+                            body: 
+                              type: "string"
+                            sendTime: 
+                              type: "string"
+                              format: "date-time"
+                              description: "Message sent time."
+                            read: 
+                              type: "string"
+                              format: "date-time"
+                              description: "Message read time."
+                          example: 
+                            id: "9fbd0bea-5a63-4fd4-b4be-4bcd9c063227"
+                            sender: "b1f99cf0-278d-49ca-a325-0a1504799488"
+                            version: 1
+                            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                            sendTime: "2019-09-17T02:15:12.350Z"
+                            read: "2019-09-19T02:15:12.350Z"
           204: 
             description: "Successful operation. Content is empty."
           400: 
-            description: "Bad request. Supplied request is invalid."
+            description: "Either `sender` or `summary` is required."
           401: 
             description: "Access token is missing or invalid."
           500: 

@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.MessagesApi.Repository;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
@@ -15,15 +17,21 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     {
         private readonly IMessageRepository _messageRepository;
         private readonly ILogger<MessagesController> _logger;
+        private readonly IMapper<List<UserMessage>, MessagesResponse> _userMessagesToResponseMapper;
+        private readonly IMapper<List<SummaryMessage>, MessagesResponse> _summaryMessagesToResponseMapper;
 
         public MessageService
         (
             IMessageRepository messageRepository,
-            ILogger<MessagesController> logger
+            ILogger<MessagesController> logger,
+            IMapper<List<UserMessage>, MessagesResponse> userMessagesToResponseMapper,
+            IMapper<List<SummaryMessage>, MessagesResponse> summaryMessagesToResponseMapper
         )
         {
             _messageRepository = messageRepository;
             _logger = logger;
+            _userMessagesToResponseMapper = userMessagesToResponseMapper;
+            _summaryMessagesToResponseMapper = summaryMessagesToResponseMapper;
         }
 
         public async Task<MessageResult> Send(AddMessageRequest addMessageRequest, string nhsLoginId)
@@ -36,11 +44,15 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     NhsLoginId = nhsLoginId,
                     Sender = addMessageRequest.Sender,
                     Version = addMessageRequest.Version,
-                    Body = addMessageRequest.Body, 
+                    Body = addMessageRequest.Body,
                     SentTime = DateTime.Now
                 };
 
+                // TODO: only for testing purposes, to be removed
+                _logger.LogInformation($"Message to be created:\n{JsonConvert.SerializeObject(userMessage)}");
+
                 await _messageRepository.Create(userMessage);
+               
                 return new MessageResult.Success();
             }
             catch (MongoException e)
@@ -59,34 +71,68 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
         }
 
-        public async Task<MessagesResult> GetMessages(AccessToken accessToken)
+        public async Task<MessagesResult> GetMessages(AccessToken accessToken, string sender)
         {
             _logger.LogEnter();
 
             try
             {
-                var messages = await _messageRepository.Find(accessToken.Subject);
-                if (messages.Any())
-                {
-                    return new MessagesResult.Some(messages);
-                }
+                var messages = await _messageRepository.Find(accessToken.Subject, sender);
 
-                return new MessagesResult.None();
+                return MapResult(_userMessagesToResponseMapper, messages);
             }
             catch (MongoException e)
             {
-                _logger.LogError($"Message Get has failed with exception: {e}");
+                _logger.LogError($"Sender Messages Get has failed with exception: {e}");
                 return new MessagesResult.BadGateway();
             }
             catch (Exception e)
             {
-                _logger.LogError($"Message Get has failed with exception: {e}");
+                _logger.LogError($"Sender Messages Get has failed with exception: {e}");
                 return new MessagesResult.InternalServerError();
             }
             finally
             {
                 _logger.LogExit();
             }
+        }
+
+        public async Task<MessagesResult> GetSummaryMessages(AccessToken accessToken)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var summaryMessages = await _messageRepository.Summary(accessToken.Subject);
+
+                return MapResult(_summaryMessagesToResponseMapper, summaryMessages);
+            }
+            catch (MongoException e)
+            {
+                _logger.LogError($"Summary Messages Get has failed with exception: {e}");
+                return new MessagesResult.BadGateway();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Summary Messages Get has failed with exception: {e}");
+                return new MessagesResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private static MessagesResult MapResult<TSource>(IMapper<TSource, MessagesResponse> mapper, TSource source)
+        {
+            var response = mapper.Map(source);
+
+            if (response.Any())
+            {
+                return new MessagesResult.Some(response);
+            }
+
+            return new MessagesResult.None();
         }
     }
 }
