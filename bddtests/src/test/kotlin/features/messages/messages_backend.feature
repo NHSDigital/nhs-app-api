@@ -1,4 +1,5 @@
 @messages
+@backend
 Feature: Messages Backend
   Scenario: An api user can get their messages
     Given I am an api user wishing to get my messages

@@ -7,6 +7,7 @@ import models.Patient
 import mongodb.MongoDBConnection
 import utils.SerenityHelpers
 import utils.set
+import worker.models.messages.MessageFacade
 import worker.models.messages.MessageRequest
 
 class MessagesFactory {
@@ -30,7 +31,9 @@ class MessagesFactory {
                 messageRequest("Message Two", "Sender One"),
                 messageRequest("Message Three", "Sender Two"))
         expectedMessages.forEach { message -> MessagesApi.post(message, nhsLoginId) }
-        MessagesSerenityHelpers.EXPECTED_MESSAGES.set(expectedMessages)
+        MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(expectedMessages.map { message ->
+            requestToFacade(message)})
+        MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf<MessageFacade>())
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
         MongoDBConnection.MessagesCollection.assertNumberOfDocuments(expectedMessages.count())
     }
@@ -40,5 +43,9 @@ class MessagesFactory {
                 sender = sender,
                 body = message,
                 version = 1)
+    }
+
+    private fun requestToFacade(request: MessageRequest): MessageFacade{
+        return MessageFacade(request.body, request.sender)
     }
 }

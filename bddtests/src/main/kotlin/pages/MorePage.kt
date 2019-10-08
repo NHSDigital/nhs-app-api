@@ -14,6 +14,7 @@ open class MorePage : HybridPageObject() {
     private val dataSharingDescription =
             "Find out how the NHS uses your confidential patient " +
                     "information and choose whether or not it can be used for research and planning."
+    val messagesTitle = "Your messages"
 
     // online consultations menu item
     private val requestGpHelpTitle = "Additional GP services"
@@ -37,14 +38,11 @@ open class MorePage : HybridPageObject() {
     val links by lazy { LinksElement(this, content) }
 
     val btnOrganDonation by lazy { links.link(organDonationTitle) }
+    val btnMessages by lazy { links.link(messagesTitle) }
     val btnDataSharing by lazy { links.link(dataSharingTitle) }
     val btnRequestGpHelp by lazy { links.link(requestGpHelpTitle) }
 
     fun assertLinksPresent() {
         links.assertLinksPresent()
-    }
-
-    fun assertTitleIsVisible() {
-        pageTitle.assertIsVisible()
     }
 }

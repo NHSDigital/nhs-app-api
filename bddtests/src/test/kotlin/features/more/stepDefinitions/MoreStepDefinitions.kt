@@ -9,7 +9,6 @@ import features.sharedSteps.PageUrl
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.HomePage
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
@@ -28,22 +27,18 @@ class MoreStepDefinitions {
 
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
-
     lateinit var morePage: MorePage
-
-    lateinit var homePage: HomePage
 
     val mockingClient = MockingClient.instance
 
+    @When("^I click the Messages link on the More page")
+    fun iClickTheMessagesLinkOnTheMorePage() {
+        morePage.btnMessages.click()
+    }
 
     @When("^I choose to set my organ donation preferences")
     fun setOrganDonationPreferences() {
         morePage.btnOrganDonation.click()
-    }
-
-    @When("^I follow the organ donation link on the home page")
-    fun followOrganDonationLinkOnHomePage() {
-        homePage.organDonationLink.click()
     }
 
     @When("^I choose to set my data sharing preferences")
@@ -71,6 +66,11 @@ class MoreStepDefinitions {
     @Then("^I see the more page header$")
     fun pageHeaderVisible() {
         webHeader.getPageTitle().withText("More")
+    }
+
+    @Then("the link to Messages is not available on the More page")
+    fun theLinkToMessagesIsNotAvailableOnTheMorePage() {
+        Assert.assertTrue("Expected page to not be displayed", morePage.btnMessages.elements.isEmpty())
     }
 
     @Then("I see and can follow links within the more page body$")

@@ -7,7 +7,7 @@ import features.sharedSteps.InvalidAccessTokenTester
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
-import worker.models.messages.MessageRequest
+import worker.models.messages.MessageFacade
 import worker.models.messages.MessageResponse
 
 class MessagesGetStepDefinitionsBackend {
@@ -48,7 +48,7 @@ class MessagesGetStepDefinitionsBackend {
         val responseMessages =
                 MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<Array<MessageResponse>>()
         val expectedMessages =
-                MessagesSerenityHelpers.EXPECTED_MESSAGES.getOrFail<ArrayList<MessageRequest>>()
+                MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.getOrFail<ArrayList<MessageFacade>>()
         Assert.assertEquals("Number Of Messages",
                 expectedMessages.count(),
                 responseMessages.count())

@@ -6,9 +6,7 @@
           <span :class="$style['messages-title']">
             <span :class="$style['messages-title-prefix']">
               {{ $t('messaging.messages.titlePrefix') }}
-            </span>
-            Everyone
-          </span>
+            </span>Everyone</span>
         </page-title>
       </div>
     </div>

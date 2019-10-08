@@ -29,7 +29,8 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.PRESCRIPTIONS_IM1,
                                 JourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 JourneyType.NOMINATED_PHARMACY_ENABLED,
-                                JourneyType.NOTIFICATIONS_DISABLED),
+                                JourneyType.NOTIFICATIONS_DISABLED,
+                                JourneyType.MESSAGES_DISABLED),
                 GpInformation(EMIS_GP_SUPPLIER, ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED) to
                         EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
                                 JourneyType.MEDICAL_RECORD_IM1,
@@ -42,7 +43,10 @@ class ServiceJourneyRulesMapper {
 
                 GpInformation(TPP_GP_SUPPLIER, TPP_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
-                                JourneyType.NOTIFICATIONS_ENABLED),
+                                JourneyType.NOTIFICATIONS_ENABLED,
+                                JourneyType.MESSAGES_ENABLED),
+
+                // Medical Record V2
                 GpInformation(VISION_GP_SUPPLIER, VISION_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
 
@@ -57,21 +61,24 @@ class ServiceJourneyRulesMapper {
                         EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2)
         )
 
+        fun findPatientForConfiguration(gpSystem: String?, journeyType:JourneyType): Patient {
+            return findPatientForConfiguration(gpSystem, arrayListOf(journeyType))
+        }
+
         fun findPatientForConfiguration(gpSystem: String?, configurations: List<ServiceJourneyRulesConfiguration>):
                 Patient {
-            val journeyTypes =
-                    configurations.map { configuration -> configuration.toJourneyType() }
-            val gpInformation = findGpInformation(gpSystem, journeyTypes)
+            val journeyTypes = configurations.map { configuration -> configuration.toJourneyType() }
+            return findPatientForConfiguration(gpSystem, journeyTypes)
+        }
 
+        private fun findPatientForConfiguration(gpSystem: String?, journeyTypes: Collection<JourneyType>): Patient {
+            val gpInformation = findGpInformation(gpSystem, journeyTypes)
             Assert.assertNotNull("Test setup incorrect: Cannot find a matching ods code for system:"
                     + gpSystem + "and odsCode: " + gpInformation?.odsCode + ", with given configuration in SJR",
                     gpInformation)
-
             val patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
-
             SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
             SerenityHelpers.setPatient(patient)
-
             return patient
         }
 
@@ -100,6 +107,8 @@ class ServiceJourneyRulesMapper {
             MEDICAL_RECORD_GPATHAND,
             MEDICAL_RECORD_IM1,
             MEDICAL_RECORD_VERSION_2,
+            MESSAGES_DISABLED,
+            MESSAGES_ENABLED,
             NOTIFICATIONS_DISABLED,
             NOTIFICATIONS_ENABLED,
             NOMINATED_PHARMACY_DISABLED,

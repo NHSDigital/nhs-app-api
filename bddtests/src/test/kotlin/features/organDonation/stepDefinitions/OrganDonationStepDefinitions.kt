@@ -10,6 +10,7 @@ import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.organDonation.models.OrganDonationDemographics
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
+import pages.HomePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.organDonation.OrganDonationBasePage
@@ -30,6 +31,8 @@ open class OrganDonationStepDefinitions {
     lateinit var organDonationChoicePage: OrganDonationChoicePage
     @Steps
     lateinit var page: OrganDonationBasePage
+
+    lateinit var homePage: HomePage
 
     @Given("I am a (\\w+) user registered with organ donation to not donate my organs")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
@@ -138,6 +141,11 @@ open class OrganDonationStepDefinitions {
     @When("^I click the '(.*)' button on an Organ Donation page$")
     fun iClickTheButtonOnThePage(buttonText: String) {
         page.clickButton(buttonText)
+    }
+
+    @When("^I follow the organ donation link on the home page")
+    fun followOrganDonationLinkOnHomePage() {
+        homePage.organDonationLink.click()
     }
 
     @Then("^the external Organ Donation page is displayed$")
