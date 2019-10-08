@@ -1,5 +1,3 @@
-ARG PROJECT_NAME=NHSOnline.Backend.PfsApi
-ARG PORT=8082
 ARG RUNTIME_IMAGE=mcr.microsoft.com/dotnet/core/runtime:2.1
 ARG SDK_IMAGE=mcr.microsoft.com/dotnet/core/sdk:2.1
 ARG PROJECT_PLATFORM=linux-x64
@@ -32,32 +30,31 @@ RUN apt-get update && \
       /var/tmp/*
 
 FROM build as dependencies
-ARG PROJECT_NAME
 ARG PROJECT_PLATFORM
 WORKDIR /src
-COPY *.sln ./
-WORKDIR /src/${PROJECT_NAME}
-COPY ${PROJECT_NAME}/${PROJECT_NAME}.csproj ./
+COPY ./*.sln ./
+COPY */*.csproj ./
+RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv $file ${file%.*}/; done
 RUN dotnet restore  -r ${PROJECT_PLATFORM}
+COPY . .
 
 FROM dependencies as built
-ARG PROJECT_NAME
+ARG PROJECT_NAME=NHSOnline.Backend.PfsApi
 ARG PROJECT_PLATFORM
 ARG COMMIT_ID
 WORKDIR /src
-COPY . .
 WORKDIR /src/${PROJECT_NAME}
 RUN sed -i "s/.*\"CommitId\":.*/    \"CommitId\": \"$COMMIT_ID\"/" appsettings.json
-RUN dotnet build -c Release -o /app  -r ${PROJECT_PLATFORM}
+RUN dotnet build --no-restore -c Release -o /app  -r ${PROJECT_PLATFORM}
 
 FROM built AS publish
 ARG PROJECT_PLATFORM
-RUN dotnet publish -c Release -o /app -r ${PROJECT_PLATFORM}
+RUN dotnet publish --no-restore -c Release -o /app -r ${PROJECT_PLATFORM}
 COPY /certs/* /app/certs/
 
 FROM runtime AS final
-ARG PROJECT_NAME
-ARG PORT
+ARG PROJECT_NAME=NHSOnline.Backend.PfsApi
+ARG PORT=8082
 
 ENV PROJECT_NAME=$PROJECT_NAME
 ENV PORT=$PORT

@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
+        <RuntimeFrameworkVersion>2.1.13</RuntimeFrameworkVersion>
         <IsPackable>false</IsPackable>
         <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
