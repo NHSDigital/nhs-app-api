@@ -161,6 +161,10 @@ export default {
       }
     }
 
+   p {
+    word-break: break-word;
+   }
+
     p.person,
     p.location,
     p.telephone,
