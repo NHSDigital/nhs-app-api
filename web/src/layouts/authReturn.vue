@@ -207,9 +207,27 @@
                         />
                       </div>
                     </api-error-container>
-                    <template v-else>
-                      <api-error />
-                    </template>
+
+                    <api-error-container v-else>
+                      <api-error-title
+                        title="auth_return.errors.default.pageTitle"
+                        header="auth_return.errors.default.pageHeader"
+                      />
+                      <api-error-paragraph from="auth_return.errors.default.subheader" />
+
+                      <api-error-paragraph from="auth_return.errors.default.message" />
+
+                      <api-error-paragraph from="auth_return.errors.default.additionalInfo" />
+                      <div :class="$style['api-error-button-container']">
+
+                        <api-error-button
+                          from="auth_return.errors.default.defaultRetryButtonText"
+                          :action="backToHomeUrl"
+                          :class="$style['api-error-button']"
+                        />
+                      </div>
+                    </api-error-container>
+
                   </message-dialog>
                 </session-error-api-error>
               </div>

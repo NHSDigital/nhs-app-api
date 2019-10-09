@@ -83,9 +83,9 @@ export default {
   },
   auth_return: {
     errors: {
-      pageTitle: 'Session error',
-      pageHeader: 'Session error',
-      header: 'Session error',
+      pageTitle: 'Login failed',
+      pageHeader: 'Lgin failed',
+      header: 'Login failed',
       subheader: 'There\'s been a problem loading this page.',
       message: 'Go back to the home screen and log in again.',
       additionalInfo: {
@@ -93,6 +93,26 @@ export default {
         label: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
       },
       retryButtonText: 'Back to home',
+      default: {
+        pageTitle: 'Login failed',
+        pageHeader: 'Login failed',
+        subheader: {
+          text: 'There\'s been a problem loading this page.',
+          label: 'There\'s been a problem loading this page.',
+        },
+        message: {
+          text: 'Go back to the home screen and log in again.',
+          label: 'Go back to the home screen and log in again.',
+        },
+        additionalInfo: {
+          text: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
+        defaultRetryButtonText: {
+          text: 'Back to home',
+          label: 'Back to home',
+        },
+      },
       400: {
         header: 'Login failed',
         title: 'Login failed - NHS App',
