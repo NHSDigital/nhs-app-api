@@ -1110,6 +1110,17 @@ export default {
       nextDate: 'Next Date: ',
       status: 'Status: ',
     },
+    encounters: {
+      sectionHeader: 'Encounters',
+      value: 'Value: ',
+      unit: 'Units: ',
+    },
+    referrals: {
+      sectionHeader: 'Referrals',
+      description: 'Reason: ',
+      speciality: 'Speciality: ',
+      ubrn: 'UBRN: ',
+    },
     testResults: {
       sectionHeader: {
         tpp: 'Test results (past 6 months)',

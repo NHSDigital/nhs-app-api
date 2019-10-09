@@ -103,6 +103,16 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordModuleCounts.recallCount = count
     }
 
+    @Given("^I have (.*) Encounters$")
+    fun givenIHaveCountOfEncounters(count: Int) {
+        myRecordModuleCounts.encounterCount = count
+    }
+
+    @Given("^I have (.*) Referrals$")
+    fun givenIHaveCountOfReferrals(count: Int) {
+        myRecordModuleCounts.referralCount = count
+    }
+
     @Given("^I have (.*) INR TestResults and (.*) Path TestResults$")
     fun givenIHaveCountOfTestResults(inrCount: Int, pathCount: Int) {
         myRecordModuleCounts.inrResultCount = inrCount

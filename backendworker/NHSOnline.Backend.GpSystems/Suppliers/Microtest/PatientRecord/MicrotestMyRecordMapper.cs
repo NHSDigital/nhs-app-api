@@ -30,26 +30,114 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 
             var myRecordResponse = new MyRecordResponse();
 
-            MapAllergies(myRecordResponse, patientRecordGetResponse.AllergyData);
-            MapMedications(myRecordResponse, patientRecordGetResponse.MedicationData);
-            MapImmunisations(myRecordResponse, patientRecordGetResponse.ImmunisationData);
-            MapProblems(myRecordResponse, patientRecordGetResponse.ProblemData);
-            MapTestResults(myRecordResponse, patientRecordGetResponse.TestResultData);
-            MapMedicalHistory(myRecordResponse, patientRecordGetResponse.MedicalHistoryData);
-            MapRecalls(myRecordResponse, patientRecordGetResponse.RecallData);
-
+            MapSummaryRecordData(myRecordResponse, patientRecordGetResponse);
+            MapDetailedRecordData(myRecordResponse, patientRecordGetResponse);
             SetHasSummaryRecordAccess(myRecordResponse);
             SetHasDetailedRecordAccess(myRecordResponse);
 
             return myRecordResponse;
         }
 
-        private static void MapAllergies(MyRecordResponse myRecordResponse, AllergyData allergyData)
+        private void MapSummaryRecordData(MyRecordResponse myRecordResponse, PatientRecordGetResponse patientRecordGetResponse)
+        {
+            MapAllergies(myRecordResponse, patientRecordGetResponse.AllergyData);
+            MapMedications(myRecordResponse, patientRecordGetResponse.MedicationData);
+            
+        }
+        
+        private void MapDetailedRecordData(MyRecordResponse myRecordResponse, PatientRecordGetResponse patientRecordGetResponse)
+        {
+            MapImmunisations(myRecordResponse, patientRecordGetResponse.ImmunisationData);
+            MapProblems(myRecordResponse, patientRecordGetResponse.ProblemData);
+            MapTestResults(myRecordResponse, patientRecordGetResponse.TestResultData);
+            MapMedicalHistory(myRecordResponse, patientRecordGetResponse.MedicalHistoryData);
+            MapRecalls(myRecordResponse, patientRecordGetResponse.RecallData);
+            MapEncounters(myRecordResponse, patientRecordGetResponse.EncounterData);
+            MapReferrals(myRecordResponse, patientRecordGetResponse.ReferralData);
+        }
+        private void MapReferrals(MyRecordResponse myRecordResponse, ReferralData referralsData)
+        {
+            if (referralsData != null)
+            {
+                var referrals = referralsData.Referrals.Where(o => !string.IsNullOrEmpty(o.Description));
+                
+                var removedCount = referralsData.Count - referrals.Count();
+                if (removedCount != 0)
+                {
+                    _logger.LogInformation(
+                        $"{removedCount} items filtered out of Referrals due to value stored in Description field.");
+                }
+                
+                myRecordResponse.Referrals.Data = referrals
+                    .Select(x => new ReferralItem
+                    {
+                        Description = x.Description,
+                        Speciality = x.Speciality,
+                        Ubrn = x.Ubrn,
+                        RecordDate = x.RecordDate != null ? new MyRecordDate
+                            {
+                                Value = DateTime.TryParse(x.RecordDate, out var referralDate)
+                                    ? referralDate
+                                    : (DateTimeOffset?) null,
+                                DatePart = "Unknown"
+                            } 
+                            : null
+                    })
+                    .OrderByDescending(o => o.RecordDate?.Value.GetValueOrDefault())
+                    .ToList();
+
+                myRecordResponse.Referrals.HasUndeterminedAccess = !referralsData.Referrals.Any();
+            }
+        }
+
+        private void MapEncounters(MyRecordResponse myRecordResponse, EncounterData encountersData)
+        {
+            if (encountersData != null)
+            {
+                var encounters = encountersData.Encounters.Where(o => !string.IsNullOrEmpty(o.Description));
+
+                var removedCount = encountersData.Count - encounters.Count();
+                if (removedCount != 0)
+                {
+                    _logger.LogInformation(
+                        $"{removedCount} items filtered out of encounters due to value stored in Description field.");
+                }
+                
+                myRecordResponse.Encounters.Data = encounters
+                    .Select(x => new EncounterItem
+                    {
+                        Description = x.Description,
+                        Value = x.Value,
+                        Unit = x.Unit,
+                        RecordedOn = x.RecordedOn != null ? new MyRecordDate
+                            {
+                                Value = DateTime.TryParse(x.RecordedOn, out var encounterDate)
+                                ? encounterDate
+                                : (DateTimeOffset?) null,
+                                DatePart = "Unknown"
+                            } 
+                            : null
+                    })
+                    .OrderByDescending(o => o.RecordedOn?.Value.GetValueOrDefault())
+                    .ToList();
+
+                myRecordResponse.Encounters.HasUndeterminedAccess = !encountersData.Encounters.Any();
+            }
+        }
+
+        private void MapAllergies(MyRecordResponse myRecordResponse, AllergyData allergyData)
         {
             if (allergyData != null)
             {
                 var allergies = allergyData.Allergies.Where(o => !string.IsNullOrEmpty(o.Severity));
 
+                var removedCount = allergyData.Count - allergies.Count();
+                if (removedCount != 0)
+                {
+                    _logger.LogInformation(
+                        $"{removedCount} items filtered out of Allergies due to value stored in Severity field.");
+                }
+                
                 myRecordResponse.Allergies.Data = allergies
                     .Select(x => new AllergyItem
                     {
@@ -469,7 +557,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                 IsAny(myRecordResponse.Problems.Data) ||
                 IsAny(myRecordResponse.TestResults.Data) ||
                 IsAny(myRecordResponse.MedicalHistories.Data) ||
-                IsAny(myRecordResponse.Recalls.Data);
+                IsAny(myRecordResponse.Recalls.Data) ||
+                IsAny(myRecordResponse.Encounters.Data) ||
+                IsAny(myRecordResponse.Referrals.Data);
         }
 
         private static bool IsAny<T>(IEnumerable<T> data)

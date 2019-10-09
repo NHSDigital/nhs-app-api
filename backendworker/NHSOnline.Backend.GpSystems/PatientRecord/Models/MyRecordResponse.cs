@@ -17,6 +17,8 @@
             MedicalHistories = new MedicalHistories();
             Documents = new PatientDocuments();
             Recalls = new Recalls();
+            Encounters = new Encounters();
+            Referrals = new Referrals();
         }
         
         public bool HasSummaryRecordAccess { get; set; }
@@ -35,5 +37,7 @@
         public MedicalHistories MedicalHistories { get; set; }
         public PatientDocuments Documents { get; set; }
         public Recalls Recalls { get; set; }
+        public Encounters Encounters { get; set; }
+        public Referrals Referrals { get; set; }
     }
 }

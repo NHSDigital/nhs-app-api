@@ -7,7 +7,9 @@ data class MyRecordResponseModel(
         var medicalProblems: Problems,
         var testResults: TestResults,
         var medicalHistory: MedicalHistories,
-        var recalls: Recalls
+        var recalls: Recalls,
+        var encounters: Encounters,
+        var referral: Referrals
 )
 
 data class Allergies(
@@ -23,6 +25,20 @@ data class Allergy(
         var start_date: String,
         var description: String,
         var severity: String
+)
+
+data class Encounter(
+        var recordedOn: String,
+        var description: String,
+        var value: String,
+        var unit: String
+)
+
+data class Encounters(
+        var hasAccess: String,
+        var hasErrored: String,
+        var count: Int,
+        var data: MutableList<Encounter> = arrayListOf()
 )
 
 data class Medications(
@@ -69,6 +85,20 @@ data class Problem(
         var start_date: String,
         var finish_date: String,
         var rubric: String
+)
+
+data class Referral(
+        var recordDate: String,
+        var description: String,
+        var speciality: String,
+        var ubrn: String
+)
+
+data class Referrals(
+        var hasAccess: String,
+        var hasErrored: String,
+        var count: Int,
+        var data: MutableList<Referral> = arrayListOf()
 )
 
 data class TestResults(

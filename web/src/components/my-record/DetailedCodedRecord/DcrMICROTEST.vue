@@ -67,6 +67,33 @@
       {{ $t('my_record.recalls.sectionHeader') }}
     </analytics-tracked-tag>
     <recalls :is-collapsed="isRecallsCollapsed" :recalls="record.recalls" />
+
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isEncountersCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="ENCOUNTERS"
+                           :text="$t('my_record.encounters.sectionHeader')"
+                           :aria-expanded="!isEncountersCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.encounters.sectionHeader') }}
+    </analytics-tracked-tag>
+    <encounters :is-collapsed="isEncountersCollapsed" :encounters="record.encounters" />
+
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isReferralsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="REFERRALS"
+                           :text="$t('my_record.referral.sectionHeader')"
+                           :aria-expanded="!isReferralsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.referrals.sectionHeader') }}
+    </analytics-tracked-tag>
+    <referrals :is-collapsed="isReferralsCollapsed" :referrals="record.referrals" />
+
   </div>
 </template>
 
@@ -77,12 +104,16 @@ import TestResults from '@/components/my-record/SharedComponents/TestResults';
 import MedicalHistory from '@/components/my-record/SharedComponents/MedicalHistory';
 import Recalls from '@/components/my-record/SharedComponents/Recalls';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import Encounters from '@/components/my-record/SharedComponents/Encounters';
+import Referrals from '@/components/my-record/SharedComponents/Referrals';
 
 const IMMUNISATIONS = 'immunisations';
 const TESTRESULTS = 'testresults';
 const PROBLEMS = 'problems';
 const MEDICAL_HISTORY = 'medicalHistory';
 const RECALLS = 'recalls';
+const ENCOUNTERS = 'encounters';
+const REFERRALS = 'referrals';
 
 export default {
   name: 'DcrMICROTEST',
@@ -93,6 +124,8 @@ export default {
     TestResults,
     MedicalHistory,
     Recalls,
+    Encounters,
+    Referrals,
   },
   props: {
     record: {
@@ -107,11 +140,15 @@ export default {
       PROBLEMS,
       MEDICAL_HISTORY,
       RECALLS,
+      ENCOUNTERS,
+      REFERRALS,
       isImmunisationsCollapsed: process.client,
       isTestResultsCollapsed: process.client,
       isProblemsCollapsed: process.client,
       isMedicalHistoryCollapsed: process.client,
       isRecallsCollapsed: process.client,
+      isEncountersCollapsed: process.client,
+      isReferralsCollapsed: process.client,
     };
   },
   methods: {
@@ -139,6 +176,14 @@ export default {
         case RECALLS:
           this.isRecallsCollapsed =
             !this.isRecallsCollapsed;
+          break;
+        case ENCOUNTERS:
+          this.isEncountersCollapsed =
+            !this.isEncountersCollapsed;
+          break;
+        case REFERRALS:
+          this.isReferralsCollapsed =
+            !this.isReferralsCollapsed;
           break;
         default:
           break;

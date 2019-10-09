@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord
 {
     public class PatientRecordGetResponse
@@ -24,5 +23,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord
 
         [JsonProperty("recalls")]
         public RecallData RecallData { get; set; }
+        
+        [JsonProperty("encounters")]
+        public EncounterData EncounterData { get; set; }
+        
+        [JsonProperty("referral")]
+        public ReferralData ReferralData { get; set; }
     }
 }

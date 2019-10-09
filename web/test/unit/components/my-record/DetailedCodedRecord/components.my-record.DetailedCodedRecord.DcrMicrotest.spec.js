@@ -46,6 +46,9 @@ describe('DcrMicrotest', () => {
 
     it('will have an isRecallsCollapsed value of false', () =>
       expect(component.vm.isRecallsCollapsed).toBe(false));
+
+    it('will have an isEncountersCollapsed value of false', () =>
+      expect(component.vm.isEncountersCollapsed).toBe(false));
   });
 
   describe('running on client', () => {
@@ -72,5 +75,8 @@ describe('DcrMicrotest', () => {
 
     it('will have an isRecallsCollapsed value of true', () =>
       expect(component.vm.isRecallsCollapsed).toBe(true));
+
+    it('will have an isEncountersCollapsed value of true', () =>
+      expect(component.vm.isEncountersCollapsed).toBe(true));
   });
 });

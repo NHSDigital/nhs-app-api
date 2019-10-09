@@ -91,6 +91,10 @@ class MyRecordInfoPage : HybridPageObject() {
 
     val recalls by lazy { getSection("Recalls") }
 
+    val encounters by lazy { getSection("Encounters") }
+
+    val referrals by lazy { getSection("Referrals") }
+
     fun assertSectionHeaderIsVisible(header: String) {
         MyRecordWrapper(header, this).header.assertSingleElementPresent().assertIsVisible()
     }

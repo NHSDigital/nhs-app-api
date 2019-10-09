@@ -12,8 +12,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecords
 {
-    [TestClass]
-    public class MicrotestMyRecordMapperTest
+    [TestClass] public class MicrotestMyRecordMapperTest
     {
         private IMicrotestMyRecordMapper _mapper;
         private IFixture _fixture;
@@ -34,10 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("patientRecordGetResponse");
         }
-
-        /**
-         * Map Allergy Tests
-         */
+        
         [TestMethod]
         public void MapPatientRecordGetResponse_MapAllergySuccessfully()
         {
@@ -186,7 +182,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [TestMethod]
-        public void MapPatientRecordGetResponse_ShouldOrderAllergiesInDecendingOrder()
+        public void MapPatientRecordGetResponse_ShouldOrderAllergiesInDescendingOrder()
         {
             var allergy1 = BuildMicrotestAllergy(0, "Medium", "Allergy A", "2019-03-27");
             var allergy2 = BuildMicrotestAllergy(1, "Severe", "Allergy B", "2019-04-27");
@@ -217,10 +213,415 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Allergies.Data.ElementAt(1).Should().BeEquivalentTo(BuildAllergyItem(allergy3));
             result.Allergies.Data.ElementAt(2).Should().BeEquivalentTo(BuildAllergyItem(allergy1));
         }
+        
+        [TestMethod] 
+        public void MapPatientRecordGetResponse_MapEncounterSuccessfully()
+        {
+            //Arrange
+            var item = new PatientRecordGetResponse
+            {
+                EncounterData = new EncounterData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Encounters = new List<Encounter>
+                    {
+                        BuildMicrotestEncounter(
+                            "O/E – Systolic BP reading",
+                            "2019-05-02", 
+                            "No Units Recorded", 
+                            "120" )
+                    }
+                },
+            };
+            
+            var expectedResult = new MyRecordResponse
+            {
+                Encounters = new Encounters
+                {
+                    Data = new List<EncounterItem>
+                    { 
+                        BuildEncounterItem(item.EncounterData.Encounters.ElementAt(0))
+                    }
+                }
+            };
 
-        /**
-         * Medication Tests
-         */
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Encounters.Data.Should().HaveCount(1);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Encounters.Should().BeEquivalentTo(expectedResult.Encounters);
+            result.Encounters.HasUndeterminedAccess.Should().BeFalse();
+        }
+        
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public void MapPatientRecordGetResponse_ShouldNotMapEncounterWhenDescriptionIsNullOrEmpty(string description)
+        {
+            //Arrange
+            var encounter1 = BuildMicrotestEncounter(description, "2019-05-02", "120", "No unit recorded");
+            var encounter2 = BuildMicrotestEncounter("O/E - Systolic BP reading", "2019-05-02", "120", "No unit recorded");
+                
+            var item = new PatientRecordGetResponse
+            {
+                EncounterData = new EncounterData()
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Encounters = new List<Encounter>
+                    {
+                        encounter1, encounter2
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Encounters.Data.Should().HaveCount(1);
+            result.Encounters.Data.ElementAt(0).Should().BeEquivalentTo(BuildEncounterItem(encounter2));
+            result.Encounters.HasUndeterminedAccess.Should().BeFalse();
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenNoEncountersReturned()
+        {
+            //Arrange
+            var item = new PatientRecordGetResponse
+            {
+                EncounterData = new EncounterData()
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Encounters = new List<Encounter>()
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.Encounters.HasUndeterminedAccess.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenEncountersAreAllFilteredOut()
+        {
+            //Arrange
+            var encounter1 = BuildMicrotestEncounter("", "2019-05-02", "120", "No unit recorded");
+            var encounter2 = BuildMicrotestEncounter(null,  "2019-05-02", "120", "No unit recorded");
+            
+            var item = new PatientRecordGetResponse
+            {
+                EncounterData = new EncounterData()
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Encounters = new List<Encounter>
+                    {
+                        encounter1, encounter2
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.Encounters.Data.Should().HaveCount(0);
+            result.Encounters.HasUndeterminedAccess.Should().BeFalse();
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldOrderEncountersInDescendingOrder()
+        {
+            //Arrange
+            var encounter1 = BuildMicrotestEncounter("O/E - Systolic BP reading","2017-01-02", "120", "No unit recorded");
+            var encounter2 = BuildMicrotestEncounter("O/E - Systolic BP reading","2019-05-20", "110", "No unit recorded");
+            var encounter3 = BuildMicrotestEncounter("O/E - Systolic BP reading","2018-10-28", "100", "No unit recorded");
+            
+            var item = new PatientRecordGetResponse
+            {
+                EncounterData = new EncounterData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Encounters = new List<Encounter>
+                    {
+                        encounter1, encounter2, encounter3,
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Encounters.Data.Should().HaveCount(3);
+            result.Encounters.HasUndeterminedAccess.Should().BeFalse();
+            result.Encounters.Data.ElementAt(0).Should().BeEquivalentTo(BuildEncounterItem(encounter2));
+            result.Encounters.Data.ElementAt(1).Should().BeEquivalentTo(BuildEncounterItem(encounter3));
+            result.Encounters.Data.ElementAt(2).Should().BeEquivalentTo(BuildEncounterItem(encounter1));
+        }
+        
+        [DataTestMethod]
+        [DataRow("")]
+        [DataRow("word")]
+        public void MapPatientRecordGetResponse_ShouldDisplayUnknownIfEncountersRecordedOnDateIsInvalidFormat(string recordedOnDate)
+        {
+            //Arrange
+            var encounter1 = BuildMicrotestEncounter("O/E - Systolic BP reading",recordedOnDate, "120", "No unit recorded");
+            var encounter2 = BuildMicrotestEncounter("O/E - Systolic BP reading","2019-05-20", "110", "No unit recorded");
+
+            var item = new PatientRecordGetResponse
+            {
+                EncounterData = new EncounterData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Encounters = new List<Encounter>
+                    {
+                        encounter1, encounter2
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Encounters.Data.Should().HaveCount(2);
+            result.Encounters.HasUndeterminedAccess.Should().BeFalse();
+            result.Encounters.Data.ElementAt(0).RecordedOn.DatePart.Should().BeEquivalentTo("Unknown");
+            result.Encounters.Data.ElementAt(1).RecordedOn.DatePart.Should().BeEquivalentTo(BuildEncounterItem(encounter2).RecordedOn.DatePart);
+        }
+        
+        [TestMethod] 
+        public void MapPatientRecordGetResponse_MapReferralSuccessfully()
+        {
+            //Arrange
+            var item = new PatientRecordGetResponse
+            {
+                ReferralData = new ReferralData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Referrals = new List<Referral>
+                    {
+                        BuildMicrotestReferral(
+                            "2019-10-10",
+                            "Blood chemistry", 
+                            "Refer to chiropodist", 
+                            "None" )
+                    }
+                },
+            };
+            
+            //Expected Result
+            var expectedResult = new MyRecordResponse
+            {
+                Referrals = new Referrals
+                {
+                    Data = new List<ReferralItem>
+                    {
+                        BuildReferralItem(item.ReferralData.Referrals.ElementAt(0))
+                    }
+                }
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Referrals.Data.Should().HaveCount(1);
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Referrals.Should().BeEquivalentTo(expectedResult.Referrals);
+            result.Referrals.HasUndeterminedAccess.Should().BeFalse();
+        }
+        
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public void MapPatientRecordGetResponse_ShouldNotMapReferralWhenDescriptionIsNullOrEmpty(string description)
+        {
+            //Arrange
+            var referral1 = BuildMicrotestReferral("2019-10-10", description, "Refer to chiropodist", "None");
+            var referral2 = BuildMicrotestReferral("2019-08-20", "Occupations", "Referred to vascular surgeon", "None");
+                
+            var item = new PatientRecordGetResponse
+            {
+                ReferralData = new ReferralData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Referrals = new List<Referral>
+                    {
+                        referral1, referral2
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Referrals.Data.Should().HaveCount(1);
+            result.Referrals.Data.ElementAt(0).Should().BeEquivalentTo(BuildReferralItem(referral2));
+            result.Referrals.HasUndeterminedAccess.Should().BeFalse();
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenNoReferralsReturned()
+        {
+            //Arrange
+            var item = new PatientRecordGetResponse
+            {
+                ReferralData = new ReferralData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Referrals = new List<Referral>()
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.Referrals.HasUndeterminedAccess.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenReferralsAreAllFilteredOut()
+        {
+            //Arrange
+            var referral1 = BuildMicrotestReferral("2019-05-02", "", "Chiropody", "None");
+            var referral2 = BuildMicrotestReferral("2019-05-02",  null, "Occupations", "None");
+            
+            var item = new PatientRecordGetResponse
+            {
+                ReferralData = new ReferralData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Referrals = new List<Referral>
+                    {
+                        referral1, referral2
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeFalse();
+            result.Referrals.Data.Should().HaveCount(0);
+            result.Referrals.HasUndeterminedAccess.Should().BeFalse();
+        }
+        
+           
+        [TestMethod]
+        public void MapPatientRecordGetResponse_ShouldOrderReferralsInDescendingOrder()
+        {
+            //Arrange
+            var referral1 = BuildMicrotestReferral("2017-01-02","Blood chemistry 1", "Refer to chiropodist", "None");
+            var referral2 = BuildMicrotestReferral("2019-05-20","Occupations", "Refer to vascular surgeon", "None");
+            var referral3 = BuildMicrotestReferral("2018-10-28","Blood chemistry 2", "Refer to chiropodist", "None");
+            
+            var item = new PatientRecordGetResponse
+            {
+                ReferralData = new ReferralData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Referrals = new List<Referral>
+                    {
+                        referral1, referral2, referral3,
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Referrals.Data.Should().HaveCount(3);
+            result.Referrals.HasUndeterminedAccess.Should().BeFalse();
+            result.Referrals.Data.ElementAt(0).Should().BeEquivalentTo(BuildReferralItem(referral2));
+            result.Referrals.Data.ElementAt(1).Should().BeEquivalentTo(BuildReferralItem(referral3));
+            result.Referrals.Data.ElementAt(2).Should().BeEquivalentTo(BuildReferralItem(referral1));
+        }
+        
+        [DataTestMethod]
+        [DataRow("")]
+        [DataRow("word")]
+        public void MapPatientRecordGetResponse_ShouldDisplayUnknownIfReferralsDateIsInvalidFormat(string recordDate)
+        {
+            //Arrange
+            var referral1 = BuildMicrotestReferral(recordDate,"Occupations", "Refer to vascular surgeon", "None");
+            var referral2 = BuildMicrotestReferral("2018-10-28","Blood chemistry 2", "Refer to chiropodist", "None");
+            
+            var item = new PatientRecordGetResponse
+            {
+                ReferralData = new ReferralData
+                {
+                    Count = 0,
+                    HasAccess = true,
+                    HasErrored = false,
+                    Referrals = new List<Referral>
+                    {
+                        referral1, referral2
+                    }
+                },
+            };
+
+            //Act
+            var result = _mapper.Map(item);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.HasDetailedRecordAccess.Should().BeTrue();
+            result.Referrals.Data.Should().HaveCount(2);
+            result.Referrals.HasUndeterminedAccess.Should().BeFalse();
+            result.Referrals.Data.ElementAt(0).RecordDate.DatePart.Should().BeEquivalentTo(BuildReferralItem(referral2).RecordDate.DatePart);
+            result.Referrals.Data.ElementAt(1).RecordDate.DatePart.Should().BeEquivalentTo("Unknown");
+        }
+        
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleMedicationPerSection()
         {
@@ -633,10 +1034,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasSummaryRecordAccess.Should().BeFalse();
             result.Medications.HasUndeterminedAccess.Should().BeTrue();
         }
-
-        /*
-         Map Immunisation Tests
-         */
+        
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleImmunisationItem()
         {
@@ -1574,6 +1972,40 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             };
         }
 
+        private static EncounterItem BuildEncounterItem(Encounter encounter)
+        {
+            return new EncounterItem
+            {
+                Description = encounter.Description,
+                Unit = encounter.Unit,
+                Value = encounter.Value,
+                RecordedOn = new MyRecordDate
+                {
+                    Value = DateTime.TryParse(encounter.RecordedOn, out var encounterDate)
+                        ? encounterDate
+                        : (DateTimeOffset?) null,
+                    DatePart = "Unknown"  
+                }
+            };
+        }
+
+        private static ReferralItem BuildReferralItem(Referral referral)
+        {
+            return new ReferralItem
+            {
+                Description = referral.Description,
+                Speciality = referral.Speciality,
+                Ubrn = referral.Ubrn,
+                RecordDate = new MyRecordDate
+                {
+                    Value = DateTime.TryParse(referral.RecordDate, out var referralDate)
+                        ? referralDate
+                        : (DateTimeOffset?) null,
+                    DatePart = "Unknown"  
+                }
+            };
+        }
+        
         private static MedicationItem BuildMedicationItem(Medication item)
         {
             var medicationLineItems = new List<MedicationLineItem>();
@@ -1726,6 +2158,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Description = desc,
                 StartDate = startDate,
                 Type = "Allergy"
+            };
+        }
+
+        private static Encounter BuildMicrotestEncounter(string description, string recordedOn, string unit, string value)
+        {
+            return new Encounter
+            {
+                Description = description,
+                RecordedOn = recordedOn,
+                Unit = unit,
+                Value = value
+            };
+        }
+        
+        private static Referral BuildMicrotestReferral(string recordDate, string description, string speciality, string ubrn)
+        {
+            return new Referral
+            {
+                RecordDate = recordDate,
+                Description = description,
+                Speciality = speciality,
+                Ubrn = ubrn
             };
         }
         

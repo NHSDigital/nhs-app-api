@@ -8,5 +8,7 @@ data class MyRecordModuleCounts (
     var inrResultCount: Int=3,
     var pathResultCount: Int=3,
     var medicalHistoryCount: Int=3,
-    var recallCount: Int=3
+    var recallCount: Int=3,
+    var encounterCount: Int=3,
+    var referralCount: Int=3
 )

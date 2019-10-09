@@ -180,6 +180,12 @@ components:
           $ref: "#/components/schemas/MedicalHistory"
         documents:
           $ref: "#/components/schemas/PatientDocuments"
+        recalls:
+          $ref: '#/components/schemas/Recalls'
+        encounters:
+          $ref: '#/components/schemas/Encounters'
+        referrals:
+          $ref: '#/components/schemas/Referrals'
     MyRecordSectionResponse:
       type: object
       properties:
@@ -597,4 +603,102 @@ components:
                   string:
                     type: array
                     description: Array of notes provided with the document
-          
+    Recalls:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
+        data:
+          type: array
+          description: An array of recall information objects.
+          items:
+            $ref: "#/components/schemas/RecallItem"
+    RecallItem:
+      type: object
+      properties:
+        recordDate:
+          $ref: "#/components/schemas/Date"
+        name:
+          type: string
+          description: The name of the recall.
+        description:
+          type: string
+          description: A description of the recall.
+        result:
+          type: string
+          description: The result of the recall  
+        nextDate:
+          type: string
+          description: Date for the next recall   
+        status:
+          type: string
+          description: Whether or not the recall is complete
+    Encounters:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
+        data:
+          type: array
+          description: An array of encounter item information objects.
+          items:
+            $ref: "#/components/schemas/EncounterItem"
+      EncounterItem:
+        type: object
+        properties:
+          recordedOn:
+            $ref: "#/components/schemas/Date"
+          description:
+            type: string
+            description: The description of the encounter.
+          value:
+            type: string
+            description: The value of the encounter
+          unit:
+            type: string
+            description: The unit recorded for the value for the encounter
+    Referrals:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
+        data:
+          type: array
+          description: An array of referral item information objects.
+          items:
+            $ref: "#/components/schemas/RecallItem"
+      ReferralItem:
+        type: object
+        properties:
+          recordDate:
+            $ref: "#/components/schemas/Date"
+          description:
+            type: string
+            description: A description of the referral.
+          speciality:
+            type: string
+            description: The speciaility of the referral
+          ubrn:
+            type: string
+            description: The UBRN (Unique Booking Reference Number) for the referral
