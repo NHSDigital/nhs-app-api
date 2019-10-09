@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 if (immunisationsResponse.HasForbiddenResponse() ||
                     immunisationsResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
                 {
-                    _logger.LogWarning("User does not have access to their patient record");
+                    _logger.LogWarning("User does not have access to their immunisations in their patient record");
                     immunisations = new Immunisations
                     {
                         HasAccess = false

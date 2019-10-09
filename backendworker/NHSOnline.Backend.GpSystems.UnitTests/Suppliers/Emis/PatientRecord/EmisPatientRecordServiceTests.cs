@@ -113,5 +113,91 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             result.Should().BeAssignableTo<GetMyRecordResult.Success>()
                 .Subject.Response.Should().NotBeNull();
         }
+        
+        [TestMethod]
+        public async Task GetMyRecord_ReturnsHasErrors_WhenUnSuccessfulDocumentsResponseFromEmis()
+        {
+            var allergiesResponse = _fixture.Create<MedicationRootObject>();
+            var medicationsResponse = _fixture.Create<MedicationRootObject>();
+            var immunisationsResponse = _fixture.Create<MedicationRootObject>();
+            var testResultsResponse = _fixture.Create<MedicationRootObject>();
+            var problemsResponse = _fixture.Create<MedicationRootObject>();
+            var consultationsResponse = _fixture.Create<MedicationRootObject>();
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Medication))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = medicationsResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = allergiesResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Immunisations))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = immunisationsResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.TestResults))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = testResultsResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Problems))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = problemsResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Consultations))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = consultationsResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Documents))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = null,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.GetMyRecord(_emisUserSession);
+
+            // Assert
+            _emisClient.Verify(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies));
+
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>().Subject.Response.Documents.HasAccess.Should()
+                .BeTrue();
+            
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>()
+                .Subject.Response.Should().NotBeNull();
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 if (allergiesResponse.HasForbiddenResponse() ||
                     allergiesResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
                 {
-                    _logger.LogWarning("User does not have access to their patient record");
+                    _logger.LogWarning("User does not have access to their allergies in their patient record");
                     allergies = new Allergies
                     {
                         HasAccess = false

@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     consultationsResponse.HasExceptionWithMessageContaining(
                         "Requested record access is disabled by the practice"))
                 {
-                    _logger.LogWarning("User does not have access to their patient record");
+                    _logger.LogWarning("User does not have access to their consultations in their patient record");
                     consultations = new Consultations
                     {
                         HasAccess = false
