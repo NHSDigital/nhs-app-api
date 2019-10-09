@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
             var serviceDeskReference =
                     ErrorReferenceGenerator.GenerateAndLogErrorReference(new ErrorTypes.UnhandledError());
 
-            Logger.LogError("Unhandled Exception", context.Exception);
+            Logger.LogError(context.Exception, "Unhandled Exception");
 
             context.Result = new ObjectResult(new PfsErrorResponse
             {

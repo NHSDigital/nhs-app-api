@@ -86,9 +86,7 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
                 objectResult.Value.Should().BeEquivalentTo(expectedResponse);
                 objectResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
                 exceptionContext.ExceptionHandled.Should().BeTrue();
-                _mockLogger.VerifyLogger(LogLevel.Error, "Unhandled Exception", 
-                    It.Is<DivideByZeroException>(x => x.Message.Equals(exception.Message, StringComparison.OrdinalIgnoreCase)), 
-                    Times.Once());
+                _mockLogger.VerifyLogger(LogLevel.Error, "Unhandled Exception", exception, Times.Once());
             }
         }
 
