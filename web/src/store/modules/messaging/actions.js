@@ -12,6 +12,9 @@ export default {
       .getV1ApiUsersMeMessages()
       .then((data) => {
         commit(LOADED, data);
+      })
+      .finally(() => {
+        this.dispatch('device/unlockNavBar');
       });
   },
 };

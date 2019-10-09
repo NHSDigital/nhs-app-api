@@ -5,9 +5,11 @@ describe('messaging actions', () => {
   const getResponse = 'get test response';
   let $http;
   let commit;
+  let dispatch;
 
   beforeEach(() => {
     commit = jest.fn();
+    dispatch = jest.fn();
     $http = {
       getV1ApiUsersMeMessages: jest.fn().mockImplementation(() => Promise.resolve(getResponse)),
     };
@@ -16,6 +18,7 @@ describe('messaging actions', () => {
         return $http;
       },
     };
+    actions.dispatch = dispatch;
   });
 
   describe('init', () => {
@@ -35,10 +38,12 @@ describe('messaging actions', () => {
 
     it('will call the `getV1ApiUsersMeMessages` endpoint', () => {
       expect($http.getV1ApiUsersMeMessages).toBeCalled();
+      expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
     });
 
     it('will commit endpoint response to `LOADED`', () => {
       expect(commit).toBeCalledWith(LOADED, getResponse);
+      expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
     });
   });
 });
