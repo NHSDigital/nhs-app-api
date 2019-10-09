@@ -165,13 +165,19 @@ class WebClientInterceptor(
     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
         Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedError")
-        if (canHandleUnavailability(view) && shouldHandleUnavailability(view?.url)) {
+        if (isNHSAppDomain(request?.url?.host) &&
+                canHandleUnavailability(view) &&
+                shouldHandleUnavailability(view?.url)) {
+
             cancelTrackingWebRequestResponse()
             if (error != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     handleUnavailability(view?.url, error.errorCode)
                 }
             }
+        } else {
+            Log.d(Application.TAG,
+                    "${this::class.java.simpleName}: In onReceivedError > Skipping unavailability handling > failed url ${request?.url}")
         }
     }
 
@@ -288,9 +294,13 @@ class WebClientInterceptor(
         return view?.url === null || isNHSAppPage(view)
     }
 
+    private fun isNHSAppDomain(value: String?): Boolean {
+        return value == context.getString(R.string.baseHost)
+    }
+
     private fun isNHSAppPage(view: WebView?): Boolean {
         val url = URL(view?.url)
-        return url.host == context.getString(R.string.baseHost)
+        return isNHSAppDomain(url.host)
     }
 
     private fun isNHSApi(request: WebResourceRequest?): Boolean {
