@@ -10,6 +10,7 @@ import pages.ELEMENT_RETRY_TIME
 import pages.MILLISECONDS_IN_A_SECOND
 import pages.TIME_TO_WAIT_FOR_ELEMENT
 import java.lang.reflect.Type
+import java.time.format.DateTimeFormatter
 
 class MongoDBConnection(private val collectionName: String, private val host: String, private val port: Int) {
 
@@ -38,10 +39,12 @@ class MongoDBConnection(private val collectionName: String, private val host: St
 
     fun <T> clearAndInsertValues(values: List<T>) {
         val gsonBuilder = GsonBuilder().create()
-        val documentsToInsert = values.map { value ->
-            val valueAsJson = gsonBuilder.toJson(value)
-            Document.parse(valueAsJson)
-        }
+        val jsonToInsert = values.map { value -> gsonBuilder.toJson(value) }
+        clearAndInsertJson(jsonToInsert)
+    }
+
+    fun clearAndInsertJson(values: List<String>) {
+        val documentsToInsert = values.map { value -> Document.parse(value) }
         onCollection { collection ->
             collection.drop()
             assertNumberOfDocuments(0, collection)
@@ -94,6 +97,7 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         private const val userInfoCollectionName = "info"
         private const val messagesCollectionName = "messages"
         private const val developmentDatabaseName = "development"
+        val mongoDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssz")
 
         val Im1CacheCollection = MongoDBConnection(
                 im1CacheCollectionName,
@@ -113,4 +117,3 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 Config.instance.usersMongoDbPort.toInt())
     }
 }
-

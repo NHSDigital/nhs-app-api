@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebElement
+import webdrivers.getLocatorStrategy
 import webdrivers.isIOS
 import java.lang.AssertionError
 
@@ -27,37 +28,36 @@ class NativePageElement(
 
     private fun selectNativeElement() : MobileElement {
             return when (nativeLocatorStrategy()) {
-                LOCATOR_STRATEGY_IOS -> page.findNativeByXpath(iOSLocator!!).also {
+                LocatorStrategy.IOS -> page.findNativeByXpath(iOSLocator!!).also {
                     it.getWrappedElementWithRetry()
                 }
-                LOCATOR_STRATEGY_IOS_ACCESSIBILITY -> page.findByAccessibilityId(iOSAccessID!!).also {
+                LocatorStrategy.IOS_ACCESSIBILITY -> page.findByAccessibilityId(iOSAccessID!!).also {
                     it.getWrappedElementWithRetry()
                 }
-                LOCATOR_STRATEGY_ANDROID -> page.findNativeByXpath(androidLocator!!).also {
+                LocatorStrategy.ANDROID -> page.findNativeByXpath(androidLocator!!).also {
                     it.getWrappedElementWithRetry()
                 }
-                LOCATOR_STRATEGY_WEBVIEW,
-                LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findNativeByXpath(webMobileLocator).also {
+                LocatorStrategy.WEBVIEW,
+                LocatorStrategy.BROWSER_MOBILE -> page.findNativeByXpath(webMobileLocator).also {
                     if ((!it.isDisplayed).or(it.isUnderneathFixedElements())) {
                         it.scroll()
                     }
                     val executor = (page.driver) as JavascriptExecutor
                     executor.executeScript("// TODO Invoke hidden mobile view navigation buttons when in native.")
                 }
-                LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findNativeByXpath(webDesktopLocator).also {
+                LocatorStrategy.BROWSER_DESKTOP -> page.findNativeByXpath(webDesktopLocator).also {
                     if ((!it.isDisplayed).or(it.isUnderneathFixedElements())) {
                         it.scroll()
                     }
                 }
-                else -> throw IllegalArgumentException("Unknown element locator strategy.")
             }
         }
 
-    private fun nativeLocatorStrategy(): String {
+    private fun nativeLocatorStrategy(): LocatorStrategy {
         return if (page.driver.isIOS() && iOSAccessID != null) {
-            LOCATOR_STRATEGY_IOS_ACCESSIBILITY
+            LocatorStrategy.IOS_ACCESSIBILITY
         } else {
-            locatorStrategy()
+            page.driver.getLocatorStrategy(this)
         }
     }
 

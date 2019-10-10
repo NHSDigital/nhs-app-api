@@ -10,11 +10,19 @@ import worker.models.messages.MessageRequest
 class MessagesApi {
     companion object {
 
-        fun get(authToken: String?) {
+        fun getSummary(authToken: String?) {
+            get(authToken, true)
+        }
+
+        fun getFromSender(authToken: String?, targetSender:String) {
+            get(authToken, false, targetSender)
+        }
+
+        fun get(authToken: String?, summary:Boolean, targetSender:String? =null) {
             try {
                 val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                         .messages
-                        .get(authToken)
+                        .get(authToken, summary, targetSender)
                 MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.set(response)
             } catch (httpException: NhsoHttpException) {
                 SerenityHelpers.setHttpException(httpException)

@@ -7,7 +7,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
-import worker.models.messages.MessageFacade
+import worker.models.messages.SingleMessageFacade
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -18,24 +18,28 @@ class MessageBlockElements(private val page:HybridPageObject) {
         return "//ul[$followingOrPrecedingUnread-sibling::div/span[normalize-space(text())='Unread messages']]/li/div"
     }
 
-    fun assertUnreadMessages(expectedMessages: ArrayList<MessageFacade>) {
+    fun assertUnreadMessages(expectedMessages: ArrayList<SingleMessageFacade>, expectedSender: String) {
         val actualUnreadMessages = getMessages(page, messagesXpathAboveUnreadLine(false))
-        assertMessages(expectedMessages, actualUnreadMessages, "unread")
+        assertMessages(expectedMessages, actualUnreadMessages, "unread", expectedSender)
     }
 
-    fun assertReadMessages(expectedMessages: ArrayList<MessageFacade>) {
+    fun assertReadMessages(expectedMessages: ArrayList<SingleMessageFacade>, expectedSender: String) {
         val actualReadMessages = getMessages(page, messagesXpathAboveUnreadLine(true))
-        assertMessages(expectedMessages, actualReadMessages, "read")
+        assertMessages(expectedMessages, actualReadMessages, "read", expectedSender)
     }
 
-    private fun assertMessages(expectedMessages: ArrayList<MessageFacade>,
+    private fun assertMessages(expectedMessages: ArrayList<SingleMessageFacade>,
                                actualMessages: List<MessageBlockElement>,
-                               messageType: String) {
+                               messageType: String,
+                               expectedSender: String) {
         Assert.assertEquals("Expected $messageType messages", expectedMessages.count(), actualMessages.count())
-        actualMessages.forEach { actualMessage -> assertDateFormat(actualMessage) }
+        actualMessages.forEach { actualMessage ->
+            assertDateFormat(actualMessage)
+            Assert.assertEquals("Sender", expectedSender, actualMessage.sender)
+        }
 
-        val actualMessagesToAssert = actualMessages.map { message -> message.toFacade() }
-        expectedMessages.forEach { expectedMessage ->
+        val actualMessagesToAssert = actualMessages.map { message -> message.messageBody }
+        expectedMessages.map { message -> message.body }.forEach { expectedMessage ->
             Assert.assertTrue(
                     "Expected $messageType message missing: $expectedMessage. " +
                             "Actual $messageType messages: $actualMessages",
@@ -64,9 +68,5 @@ class MessageBlockElements(private val page:HybridPageObject) {
         val sender: String = element.findElement<WebElement>(By.xpath("./h3")).text
         val messageBody: String = element.findElement<WebElement>(By.xpath("./div/p")).text
         val sentTime: String = element.findElement<WebElement>(By.xpath("./time")).text
-
-        fun toFacade(): MessageFacade {
-            return MessageFacade(messageBody, sender)
-        }
     }
 }

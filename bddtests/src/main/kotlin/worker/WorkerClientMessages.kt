@@ -5,9 +5,10 @@ import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
+import org.apache.http.client.utils.URIBuilder
 import org.apache.http.entity.StringEntity
 import worker.models.messages.MessageRequest
-import worker.models.messages.MessageResponse
+import worker.models.messages.MessagesResponse
 
 class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
@@ -24,17 +25,20 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
         return response!!
     }
 
-    fun get(authToken: String?): Array<MessageResponse> {
-        val httpGet = HttpGet(uri("me"))
-
+    fun get(authToken: String?, summary:Boolean, targetSender:String? =null): Array<MessagesResponse> {
+        val uriBuilder = URIBuilder(uri("me"))
+        uriBuilder.setParameter("summary", summary.toString())
+        if(targetSender!=null){
+            uriBuilder.setParameter("sender", targetSender)
+        }
+        val httpGet = HttpGet(uriBuilder.build())
         if (authToken != null) {
             httpGet.addHeader("Authorization", "Bearer $authToken")
         }
-
         val response = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
         if (response != null) {
-            return gson.fromJson(response, Array<MessageResponse>::class.java)
+            return gson.fromJson(response, Array<MessagesResponse>::class.java)
         }
         return arrayOf()
     }

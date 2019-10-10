@@ -1,29 +1,66 @@
 @messages
 @backend
 Feature: Messages Backend
-  Scenario: An api user can get their messages
+
+  Scenario: An api user can get a summary of their messages
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    When I get my messages from the api
+    When I get a summary of my messages from the api
     Then I receive a "OK" success code
-    And I receive my messages
+    And I receive a summary of my messages
 
-  Scenario: An api user getting their messages where no messages are stored will receive a 204
+  Scenario: An api user getting a summary of their messages where no messages are stored will receive a 204
     Given I am an api user wishing to get my messages, but I have no messages
     And I have logged in and have a valid session cookie
-    When I get my messages from the api
+    When I get a summary of my messages from the api
     Then I receive a "No Content" success code
 
-  Scenario: An api user getting their messages without an access token will receive a 401
+  Scenario: An api user getting a summary of their messages without an access token will receive a 401
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    When I get my messages from the api without an auth token
+    When I get a summary of my messages from the api without an access token
     Then I receive an "Unauthorized" error
 
-  Scenario: An api user getting their messages with an invalid access token will receive a 401
+  Scenario: An api user getting a summary of their messages with an invalid access token will receive a 401
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    Then an attempt to get messages with an invalid access token will return an Unauthorised error
+    Then an attempt to get a summary of my messages with an invalid access token will return an Unauthorised error
+
+  Scenario: An api user can get all their messages from a sender
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When I get my messages from a sender from the api
+    Then I receive a "OK" success code
+    And I receive my messages from a sender
+
+  Scenario: An api user getting their messages from a sender where no messages are stored will receive a 204
+    Given I am an api user wishing to get my messages, but I have no messages
+    And I have logged in and have a valid session cookie
+    When I get my messages from a sender from the api
+    Then I receive a "No Content" success code
+
+  Scenario: An api user getting their messages from a sender without an access token will receive a 401
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When I get my messages from a sender from the api without an access token
+    Then I receive an "Unauthorized" error
+
+  Scenario: An api user getting their messages from a sender with an invalid access token will receive a 401
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    Then an attempt to get messages from a sender with an invalid access token will return an Unauthorised error
+
+  Scenario: An api user getting a summary of their messages from a single sender will receive a 502
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When I get my messages with a summary flag and a target sender
+    Then I receive an "Bad Request" error
+
+  Scenario: An api user getting neither a summary of their messages or messages from a single sender will receive a 502
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When I get my messages without a summary flag and without a target sender
+    Then I receive an "Bad Request" error
 
   Scenario: An api user can post messages
     Given I am an api user wishing to post a message

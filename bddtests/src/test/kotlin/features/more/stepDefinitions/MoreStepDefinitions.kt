@@ -13,6 +13,7 @@ import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
+import pages.assertElementNotPresent
 
 class MoreStepDefinitions {
 
@@ -70,7 +71,7 @@ class MoreStepDefinitions {
 
     @Then("the link to Messages is not available on the More page")
     fun theLinkToMessagesIsNotAvailableOnTheMorePage() {
-        Assert.assertTrue("Expected page to not be displayed", morePage.btnMessages.elements.isEmpty())
+        morePage.btnMessages.assertElementNotPresent()
     }
 
     @Then("I see and can follow links within the more page body$")

@@ -69,6 +69,11 @@ class HomePageStepDefinitions : AbstractSteps() {
         home.assertHeaderVisible()
     }
 
+    @Then("^I see the home page header$")
+    fun iSeeTheHomePageHeader() {
+        home.assertHeaderVisible()
+    }
+
     @Then("^I see the current app version")
     fun iSeeTheCurrentAppVersion() {
         homeSteps.homePage.assertVersionNumberVisible()
@@ -99,11 +104,6 @@ class HomePageStepDefinitions : AbstractSteps() {
     fun iSeeAWelcomeMessageFor() {
         val patient = SerenityHelpers.getPatient()
         home.assertWelcomeMessageShownFor(patient)
-    }
-
-    @Then("^I see the home page header$")
-    fun iSeeHeader() {
-        home.assertHeaderVisible()
     }
 
     @Then("I see and can follow links within the home page body$")

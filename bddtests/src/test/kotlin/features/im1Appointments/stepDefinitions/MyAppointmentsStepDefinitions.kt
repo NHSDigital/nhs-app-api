@@ -42,11 +42,6 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
-    @When("^I click on the breadcrumb$")
-    fun iSelectABreadcrumb() {
-        cancelAppointmentSteps.clickOnBreadcrumb()
-    }
-
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
         webHeader.getPageTitle().withText("Confirm appointment")

@@ -11,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
+import pages.navigation.BreadcrumbHeader
 import pages.navigation.WebHeader
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -24,12 +25,12 @@ open class AvailableAppointmentsSteps {
     private val pageHeader = "Book an appointment"
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
-    lateinit var webHedaer: WebHeader
-
+    lateinit var webHeader: WebHeader
+    lateinit var breadcrumbs: BreadcrumbHeader
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
-        webHedaer.getPageTitle().withText(pageHeader)
+        webHeader.getPageTitle().withText(pageHeader)
     }
 
     @Step
@@ -71,7 +72,7 @@ open class AvailableAppointmentsSteps {
     @Step
     fun clickOnBackLink() {
         if (availableAppointmentsPage.onMobile()) {
-            webHedaer.getBreadCrumbToGoBackOneLevel().click()
+            breadcrumbs.selectBreadcrumbLink("My appointments")
         }
         else
             availableAppointmentsPage.clickDesktopBackButton()

@@ -1,11 +1,11 @@
 package features.im1Appointments.steps
 
-import mocking.stubs.appointments.factories.AppointmentsCancellingFactory
-import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
+import mocking.stubs.appointments.factories.AppointmentsCancellingFactory
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
 import models.Slot
@@ -121,10 +121,5 @@ open class CancelAppointmentSteps {
     @Step
     fun retrieveSlotIdOfAppointmentToCancel(): Int {
         return retrieveSlotOfAppointmentToCancel().id!!
-    }
-
-    @Step
-    fun clickOnBreadcrumb() {
-        webHeader.getBreadCrumbToGoBackOneLevel().click()
     }
 }

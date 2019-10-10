@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.MessagesApi.Repository
         private readonly ILogger<MongoMessageRepository> _logger;
 
         public MongoMessageRepository
-        (
+        (   
             ILogger<MongoMessageRepository> logger,
             IApiMongoClient<IMongoConfiguration> mongoClient,
             IMongoConfiguration mongoConfiguration

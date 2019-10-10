@@ -53,13 +53,13 @@ class CommonSteps : AbstractSteps() {
     fun afterEachScenario() {
         var driver = getWebdriverManager().currentDriver
 
-        if(driver!=null && (driver.isAndroid() || driver.isIOS())) {
+        if (driver != null && (driver.isAndroid() || driver.isIOS())) {
             driver = switchWebview(driver)
         }
 
-        if(driver!=null) {
+        if (driver != null) {
             val logs = driver.manage().logs().get("browser")
-                    .filter{ it.level == Level.SEVERE }
+                    .filter { it.level == Level.SEVERE }
                     .filterNot { it.message.contains(CONSOLE_LOG_STRINGS_TO_IGNORE) }
 
             Assert.assertTrue("There should not be any console logs but found: \r\n $logs",

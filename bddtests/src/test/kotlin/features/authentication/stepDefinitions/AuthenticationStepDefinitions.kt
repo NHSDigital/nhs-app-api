@@ -21,7 +21,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.ServiceUnavailablePage
 import pages.account.MyAccountPage
-import pages.assertIsVisible
+import pages.navigation.BreadcrumbHeader
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
@@ -44,6 +44,7 @@ class AuthenticationStepDefinitions {
     lateinit var navHeader: NavHeaderSteps
     @Steps
     lateinit var webHeader: WebHeader
+    lateinit var breadcrumbs: BreadcrumbHeader
     lateinit var myAccount: MyAccountPage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
     lateinit var currentUrl: String
@@ -186,25 +187,25 @@ class AuthenticationStepDefinitions {
     private fun followAppointmentNativeHeaderLink() {
         nav.select(NavBarNative.NavBarType.APPOINTMENTS)
         webHeader.isPageTitleCorrect("Appointments")
-        webHeader.getAllBreadCrumb().assertIsVisible()
+        breadcrumbs.assertVisible()
     }
 
     private fun followPrescriptionsNativeHeaderLink() {
         nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
         webHeader.isPageTitleCorrect("Repeat prescriptions")
-        webHeader.getAllBreadCrumb().assertIsVisible()
+        breadcrumbs.assertVisible()
     }
 
     private fun followMyRecordNativeHeaderLink() {
         nav.select(NavBarNative.NavBarType.MY_RECORD)
         webHeader.isPageTitleCorrect("My medical record")
-        webHeader.getAllBreadCrumb().assertIsVisible()
+        breadcrumbs.assertVisible()
     }
 
     private fun followSymptomsNativeHeaderLink() {
         nav.select(NavBarNative.NavBarType.SYMPTOMS)
         webHeader.isPageTitleCorrect("Symptoms")
-        webHeader.getAllBreadCrumb().assertIsVisible()
+        breadcrumbs.assertVisible()
     }
 
     @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
