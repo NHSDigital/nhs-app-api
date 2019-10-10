@@ -33,9 +33,30 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         }
 
         [TestMethod]
+        public void ToString_UserSessionNull_ReturnsNoSessionMessage()
+        {
+            var httpContext = new DefaultHttpContext();
+            httpContext.Items.Add("UserSession", null);
+
+            var systemUnderTest = new HttpContextLoggerScope(httpContext);
+            var result = systemUnderTest.ToString();
+
+            result.Should().Be(NoSessionMessage);
+        }
+
+        [TestMethod]
         public void ToString_HttpContextNull_ReturnsNoSessionMessage()
         {
             var systemUnderTest = new HttpContextLoggerScope(null);
+            var result = systemUnderTest.ToString();
+
+            result.Should().Be(NoSessionMessage);
+        }
+
+        [TestMethod]
+        public void ToString_HttpContextItemsNull_ReturnsNoSessionMessage()
+        {
+            var systemUnderTest = new HttpContextLoggerScope(new DefaultHttpContext {Items = null});
             var result = systemUnderTest.ToString();
 
             result.Should().Be(NoSessionMessage);

@@ -1,4 +1,3 @@
-using System.Globalization;
 using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.Support.Logging
@@ -14,10 +13,13 @@ namespace NHSOnline.Backend.Support.Logging
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "SessionId:{0}",
-                _httpContext != null && _httpContext.Items.Keys.Contains("UserSession")
-                    ? ((UserSession) _httpContext.Items["UserSession"]).Key
-                    : "{No Session yet}");
+            var items = _httpContext?.Items;
+            object value = null;
+            items?.TryGetValue(Constants.HttpContextItems.UserSession, out value);
+
+            var userSession = value as UserSession ?? new UserSession { Key = "{No Session yet}" };
+
+            return $"SessionId:{userSession.Key}";
         }
     }
 }
