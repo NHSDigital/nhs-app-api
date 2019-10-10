@@ -13,8 +13,8 @@ import pages.isVisible
 class LoginPage : HybridPageObject() {
 
     private val symptomsButtonHeading = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), 'How are you feeling today?')]",
-            webMobileLocator = "//h2[contains(text(), 'How are you feeling today?')]",
+            webDesktopLocator = "//h3[contains(text(), 'How are you feeling today?')]",
+            webMobileLocator = "//h3[contains(text(), 'How are you feeling today?')]",
             androidLocator = null,
             page = this
     )

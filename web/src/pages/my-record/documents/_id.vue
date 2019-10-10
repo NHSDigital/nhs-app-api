@@ -195,10 +195,5 @@ export default {
     font-size: 1em;
     margin-bottom: 1em;
     margin-top: -1em;
-
-    p {
-      font-family: $default_web;
-      font-weight: normal;
-    }
 }
 </style>

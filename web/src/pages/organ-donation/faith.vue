@@ -36,7 +36,7 @@
                  :error-message="$t('organDonation.faith.inlineErrorMessage')"
                  @select="radioButtonSelected"/>
     <generic-button id="continue-to-additional-details"
-                    :class="[$style.button, $style.green]"
+                    :class="['nhsuk-button']"
                     @click.stop.prevent="continueClicked">
       {{ $t('organDonation.faith.continueButtonText') }}
     </generic-button>

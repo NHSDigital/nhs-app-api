@@ -11,7 +11,7 @@ class AccountSettingsModule(page : HybridPageObject) : LinksElement(page, conten
         private const val notificationsLink = "Notifications"
         private var content = LinksContent(
                 linkBlockTitle = "",
-                containerXPath = "//div[@data-purpose='setting-section']")
+                containerXPath = "//div[@data-purpose='setting-section']//ul//li")
                 .addLink(notificationsLink)
     }
 }

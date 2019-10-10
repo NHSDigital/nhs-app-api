@@ -2,7 +2,7 @@
   <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
     <div>
       <div v-if="noResultsFound">
-        <div :class="$style.searchResult">
+        <div>
           <p> {{ gpPractices.length + $t('th03.resultsFound') + '\'' + searchQuery + '\'' }}</p>
           <p v-if="!$store.state.device.isNativeApp">
             <a tabindex="0" :class="$style.throtlingLink" role="link"
@@ -41,51 +41,45 @@
         <p :id="$style.errorContent" :key="'tooManyResultsErrorContent'">
           {{ $t('th03.errors.tooManyResults.foundTooManyResults') }}
         </p>
-        <h3 :key="'tooManyResultsSuggestionHeader'">
+        <h3 :key="'tooManyResultsSuggestionHeader'" class="nhsuk-u-margin-bottom-0">
           {{ $t('th03.errors.tooManyResults.suggestionHeader') }}
         </h3>
-        <ul :class="$style.suggestions">
+        <ul class="list-menu">
           <li v-for="(suggestion, index) in $t('th03.errors.tooManyResults.suggestions')"
               :key="`tmrs-${index}`">
             {{ suggestion }}
           </li>
         </ul>
-        <hr aria-hidden="true">
       </div>
-
-      <ul v-if="!technicalError && !noResultsFound" id="searchResults" :class="$style['list-menu']">
-        <div :class="$style.searchResult">
-          <p> {{ gpPractices.length + $t('th03.resultsFound') + '\'' + searchQuery + '\'' }}</p>
-          <p v-if="!$store.state.device.isNativeApp">
-            <a tabindex="0" :class="$style.throtlingLink" role="link"
-               @click="backButtonClicked">
-              {{ $t('th03.searchAgain') }}
-            </a>
-          </p>
-        </div>
-        <li v-for="gpPractice in gpPractices"
-            :key="`gpPractice-${gpPractice.nacsCode}`">
-          <analytics-tracked-tag :id="`btnGpPractice-${gpPractice.nacsCode}`"
-                                 :class="$style['no-decoration']"
-                                 text="GP practice"
-                                 tag="a"
-                                 href="#"
-                                 @click.native="gpPracticeClicked(gpPractice)">
-            <span :class="$style.fieldName">
-              {{ gpPractice.organisationName }}
-            </span>
-            <p> {{ gpPractice.formattedAddress = formatAddress(gpPractice) }} </p>
-          </analytics-tracked-tag>
-        </li>
-      </ul>
-
+      <div v-if="!technicalError && !noResultsFound" id="searchResults">
+        <h2>{{ getHeaderText }}</h2>
+        <p> {{ gpPractices.length + $t('th03.resultsFound') + '\'' + searchQuery + '\'' }}</p>
+        <p v-if="!$store.state.device.isNativeApp">
+          <a tabindex="0" :class="$style.throtlingLink" role="link"
+             @click="backButtonClicked">
+            {{ $t('th03.searchAgain') }}
+          </a>
+        </p>
+        <menu-item-list>
+          <menu-item v-for="gpPractice in gpPractices"
+                     :id="`btnGpPractice-${gpPractice.nacsCode}`"
+                     :key="`gpPractice-${gpPractice.nacsCode}`"
+                     header-tag="h2"
+                     role="link"
+                     data-purpose="text_link"
+                     :description="gpPractice.formattedAddress = formatAddress(gpPractice) "
+                     :text="gpPractice.organisationName"
+                     @click.native="gpPracticeClicked(gpPractice)"/>
+        </menu-item-list>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable global-require */
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import { setCookie } from '@/lib/cookie-manager';
 import { GP_FINDER, GP_FINDER_PARTICIPATION } from '@/lib/routes';
@@ -95,8 +89,9 @@ import moment from 'moment';
 export default {
   layout: 'nhsuk-layout',
   components: {
-    AnalyticsTrackedTag,
     MessageDialog,
+    MenuItemList,
+    MenuItem,
   },
   data() {
     return {
@@ -237,14 +232,15 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/listmenu';
-@import '../../style/throttling/throttling';
-@import '../../style/throttling/gpfinderresults';
 .webHeader {
   &.web {
     margin-top: -3.625em;
   }
 }
-
+a {
+  cursor:pointer;
+  display: inline-block;
+}
 .nativeHeader {
   padding: 0 0 3.125em 2.0px;
 }

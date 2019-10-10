@@ -18,13 +18,11 @@
             </p>
           </div>
         </div>
-        <div>
-          <desktopGenericBackLink
-            v-if="!$store.state.device.isNativeApp"
-            :path="noJsPath"
-            :button-text="'my_record.diagnosisDetails.backButton'"
-            @clickAndPrevent="onBackButtonClicked"/>
-        </div>
+        <desktopGenericBackLink
+          v-if="!$store.state.device.isNativeApp"
+          :path="noJsPath"
+          :button-text="'my_record.diagnosisDetails.backButton'"
+          @clickAndPrevent="onBackButtonClicked"/>
       </div>
     </div>
   </div>
@@ -63,16 +61,8 @@ export default {
 @import '../../style/spacings';
 @import '../../style/_textstyles';
 
-h3 {
-  @include h4;
-}
-
 .vision-diagnosis {
   min-width: 50em;
-
-  p {
-      padding-right: 1em;
-  }
 }
 
 .content {
@@ -86,9 +76,7 @@ h3 {
 .diagnosis-content {
     box-sizing: border-box;
     padding: 1em;
-    padding-top: 0.5em;
     padding-bottom: 0.5em;
-    margin-top: 0.5em;
     background-color: #ffffff;
     @include space(margin, bottom, $three);
     overflow-x: scroll;
@@ -97,28 +85,9 @@ h3 {
     min-width: 100%;
 }
 
-.info h2 {
-    color: #005EB8;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-    font-weight: 700;
-    font-size: 1.375em;
-    line-height: 1.375em;
-}
-
 div {
  &.desktopWeb {
   max-width: 540px;
-
-  .info h2 {
-   font-family: $default-web;
-   color: black;
-  }
-
-  p {
-   font-family: $default-web;
-   font-weight: normal;
-  }
 
   .diagnosis-content {
    max-width: 540px;
@@ -138,38 +107,6 @@ div {
 
   .content {
    padding-left: 0;
-  }
-
-  .backButton {
-   font-family: $default-web;
-   color: $nhs_blue;
-   font-size: 1.125em;
-   line-height: 1.125em;
-   font-weight: normal;
-   vertical-align: middle;
-   cursor: pointer;
-   display: inline-block;
-   border: none;
-   background: none;
-   outline: none;
-   text-decoration: underline;
-   margin-top: 1em;
-   margin-bottom: 2em;
-  }
-
-  .backButton:focus {
-   box-sizing: content-box;
-   outline-color: $focus_highlight;
-   box-shadow: 0 0 0 4px $focus_highlight;
-   outline-width: 2em;
-  }
-
-  .backButton:hover {
-   background: #ffcd60;
-   outline: none;
-   box-sizing: border-box;
-   text-decoration: underline;
-   background-clip: content-box;
   }
  }
 }

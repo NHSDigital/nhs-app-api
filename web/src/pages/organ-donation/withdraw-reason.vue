@@ -34,13 +34,13 @@
         </select-dropdown>
       </error-group>
       <generic-button id="continue-button"
-                      :class="[$style.button, $style.green]"
+                      :class="['nhsuk-button']"
                       @click.stop.prevent="continueClicked">
         {{ $t('organDonation.withdrawReason.continueButton') }}
       </generic-button>
       <generic-button v-if="!$store.state.device.isNativeApp"
                       id="back-button"
-                      :class="[$style.button, $style.grey]"
+                      :class="['nhsuk-button', 'nhsuk-button--secondary']"
                       @click.stop.prevent="goBack" >
         {{ $t('generic.backButton.text') }}
       </generic-button>

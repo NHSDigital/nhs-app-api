@@ -41,7 +41,7 @@ class MyRecordInfoPage : HybridPageObject() {
     fun assertLabelAndValue(expectedLabel: String, expectedValue: String) {
         val labelElement =
                 HybridPageElement(
-                        webDesktopLocator = "//span",
+                        webDesktopLocator = "//p[@data-purpose='record-item-header']",
                         androidLocator = null,
                         page = this,
                         helpfulName = "Label for '$expectedLabel'")
@@ -57,7 +57,7 @@ class MyRecordInfoPage : HybridPageObject() {
 
     private fun getValueFromField(label: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//span${String.format(containsTextXpathSubstring, label)}/following-sibling::p[1]",
+                webDesktopLocator = "//p${String.format(containsTextXpathSubstring, label)}/following-sibling::p[1]",
                 androidLocator = null,
                 page = this,
                 helpfulName = "Label for '$label'")

@@ -3,15 +3,14 @@
     <message-dialog id="demographicsWarning"
                     message-type="warning"
                     :icon-text="$t('messageIconText.important')">
-      <span :class="$style.warningText">
+      <p class="nhsuk-u-margin-3 nhsuk-u-padding-left-2 nhsuk-u-margin-bottom-0">
         {{ $t('onlineConsultations.warning.warningText',
               { providerName: providerName }) }}
-        <span>
-          <a id="online_consultations_help_link"
-             :href="onlineConsultationsUrl"
-             target="_blank">{{ $t('onlineConsultations.warning.warningLink') }}</a>
+        <span><a id="online_consultations_help_link"
+                 :href="onlineConsultationsUrl"
+                 target="_blank">{{ $t('onlineConsultations.warning.warningLink') }}</a>
         </span>
-      </span>
+      </p>
     </message-dialog>
     <question>
       <div slot="question-slot" class="demographicsQuestion">
@@ -141,27 +140,4 @@ export default {
   #demographicsContinueButton {
     margin-top: 1em;
   }
-</style>
-
-<style module lang="scss" scoped>
-@import '../../style/fonts';
-@import "../../style/desktopWeb/accessibility";
-@import "../../style/textstyles";
-
-.warningText {
-  @include message;
-  padding: 1em 1em 0.150em 1em;
-  font-family: $default_web;
-  font-weight: normal;
-}
-
-/deep/a {
-  &:focus {
-    @include linkFocusStyle;
-  }
-
-  &:hover {
-    @include linkHoverStyle;
-  }
-}
 </style>

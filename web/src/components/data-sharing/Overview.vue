@@ -42,7 +42,6 @@
     <p :aria-label="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') +
       $t('ds01.pages.p1.moreOptions.paragraph.part2')">
       <analytics-tracked-tag :href="yourDataMattersUrl"
-                             :class="$style['paragraph-link']"
                              :text="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink')"
                              tag="a" target="_blank">
         {{ $t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') }}
@@ -75,4 +74,8 @@ export default {
 
 <style module scoped lang='scss'>
 @import '../../style/datasharingpage';
+  a {
+    display:inline-block;
+    margin-top: -3px;
+  }
 </style>

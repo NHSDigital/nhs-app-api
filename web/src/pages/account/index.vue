@@ -1,7 +1,7 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate">
     <div v-if="!$store.state.device.isNativeApp">
-      <h2>{{ $t('myAccount.detailsHeading') }}</h2>
+      <h2 class="nhsuk-u-margin-bottom-0">{{ $t('myAccount.detailsHeading') }}</h2>
       <div>
         <welcome-section :name="$store.state.session.user"
                          :date-of-birth="$store.state.session.dateOfBirth"

@@ -38,12 +38,6 @@
       </CardGroupItem>
     </CardGroup>
     <div>
-      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                              :path="prescriptionRepeatCoursesPath"
-                              :button-text="'rp04.backButton'"
-                              @clickAndPrevent="backToPrescriptionsClicked"/>
-    </div>
-    <div>
       <no-js-form :action="confirmPrescriptionsPath" :value="{}" method="post">
         <input value="true" type="hidden" name="nojs.repeatPrescriptionCourses.submitted">
         <input :value="JSON.stringify($store.state.repeatPrescriptionCourses.selectedCoursesNoJs)"
@@ -60,6 +54,12 @@
           {{ $t('rp04.confirmButton') }}
         </generic-button>
       </no-js-form>
+    </div>
+    <div class="nhsuk-body-m">
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              :path="prescriptionRepeatCoursesPath"
+                              :button-text="'rp04.backButton'"
+                              @clickAndPrevent="backToPrescriptionsClicked"/>
     </div>
   </div>
 </template>

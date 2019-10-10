@@ -1,7 +1,9 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <glossary :extra-classes="[$style.glossary]"/>
+      <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
+                        :link-url="glossaryLinkURL"
+                        :is-analytics-tracked="true"/>
       <card-group v-for="(documentChunk, chunkIndex) in documentChunks"
                   :key="`document-chunk-${chunkIndex}`"
                   class="nhsuk-grid-row">
@@ -27,7 +29,7 @@ import chunk from 'lodash/fp/chunk';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import DocumentItem from '@/components/my-record/documents/DocumentItem';
-import Glossary from '@/components/Glossary';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import { MYRECORD } from '@/lib/routes';
 import { isFalsy } from '@/lib/utils';
 
@@ -37,7 +39,12 @@ export default {
     CardGroup,
     CardGroupItem,
     DocumentItem,
-    Glossary,
+    NhsArrowBanner,
+  },
+  data() {
+    return {
+      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
+    };
   },
   asyncData({ store, redirect }) {
     const documents = get('state.myRecord.record.documents.data', store) || [];

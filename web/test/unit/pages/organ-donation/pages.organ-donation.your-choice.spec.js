@@ -19,14 +19,12 @@ const createState = (choice = '') => {
 describe('organ donation your choice page', () => {
   let $router;
   let $store;
-  let $style;
   let state;
   let wrapper;
 
   const mountWrapper = () => mount(YourChoice, {
     $router,
     $store,
-    $style,
   });
 
   beforeEach(() => {
@@ -45,15 +43,10 @@ describe('organ donation your choice page', () => {
       let continueButton;
 
       beforeEach(() => {
-        $style = {
-          button: 'button',
-          green: 'green',
-        };
         $store.state.organDonation.registration.decisionDetails.all = true;
         wrapper = mount(YourChoice, {
           $router,
           $store,
-          $style,
         });
         continueButton = wrapper.find('#continue-button');
       });
@@ -67,10 +60,9 @@ describe('organ donation your choice page', () => {
         expect(continueButton.text()).toBe(`translate_${key}`);
       });
 
-      it('will be set as a green button', () => {
+      it('will be a button with nhsuk-button style', () => {
         const classes = continueButton.classes();
-        expect(classes).toContain($style.button);
-        expect(classes).toContain($style.green);
+        expect(classes).toContain('nhsuk-button');
       });
 
       describe('when clicked', () => {

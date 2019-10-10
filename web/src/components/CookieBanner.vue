@@ -1,12 +1,13 @@
 <template>
-  <div v-if="showCookieBanner" :class="$style['cookie-banner']">
-    <div :class="$style['cookie-banner-panel']" data-purpose="cookie-banner">
-      <div :class="$style['cookie-caption']">
-        <p><span>{{ $t('cookieBanner.caption.line1') }} </span>
-          <a :class="$style['nhsuk-action-link__link']" :href="cookieBannerUrl" target="_blank">
+  <div v-if="showCookieBanner" :class="$style['nhsuk-cookie-banner']">
+    <div data-purpose='cookie-banner'
+         :class="$style['cookie-banner-panel']" style="display: block;">
+      <div class="nhsuk-width-container">
+        <p :class="$style['cookie-banner__message']">
+          <span>{{ $t('cookieBanner.caption.line1') }} </span>
+          <a :href="cookieBannerUrl" target="_blank">
             {{ $t('cookieBanner.caption.linkText') }}
-          </a>
-        </p>
+          </a></p>
       </div>
       <div :class="$style['cookie-close']">
         <no-js-form :value="formData">
@@ -62,77 +63,9 @@ export default {
   @import '../style/screensizes';
 
   @import '~nhsuk-frontend/packages/core/all.scss';
-  @import '~nhsuk-frontend/packages/components/action-link/action-link';
 
-  .cookie-banner {
+  .nhsuk-cookie-banner {
     background: $nhs_blue_med;
-    word-wrap: break-word;
-
-    .cookie-caption {
-      width: 90%;
-      padding: 1.2em;
-      display: inline-block;
-      a, p {
-        color: #fff;
-        //padding: 1.2em 0 0 20px;
-        font-size: 0.813em;
-        font-weight: 600;
-        text-align: left;
-        font-family: $default;
-      }
-
-      a {
-        padding-left: 0;
-        text-decoration: underline;
-      }
-
-      a:hover {
-        text-decoration: none;
-      }
-    }
-
-    .cookie-close {
-      width: 10%;
-      display: inline-block;
-      button {
-        position: absolute;
-        padding: 0 20px 40px 20px;
-        top: 5px;
-        right: 20px;
-        cursor: pointer;
-        background: $nhs_blue_med url(~assets/icon-close-das.gif) center no-repeat;
-        width: 11px;
-        height: 11px;
-        border: none;
-
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        box-shadow: none;
-        outline: none;
-
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-
-        &:focus, &:hover {
-          box-shadow: 0 0 0 4px $focus_highlight;
-          outline: none;
-        }
-      }
-    }
-
-    .cookie-banner-panel {
-      @include main-container-width;
-      position: relative;
-    }
-
-    .close-caption {
-      display: none;
-    }
-
 
     @include fromTablet {
       .cookie-banner-panel {
@@ -145,5 +78,61 @@ export default {
         margin: 0 auto;
       }
     }
+  }
+
+  .cookie-close {
+    width: 10%;
+    display: inline-block;
+    button {
+      position: absolute;
+      padding: 0 20px 40px 20px;
+      top: 5px;
+      right: 20px;
+      cursor: pointer;
+      background: $nhs_blue_med url(~assets/icon-close-das.gif) center no-repeat;
+      width: 11px;
+      height: 11px;
+      border: none;
+
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      outline: none;
+
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      &:focus, &:hover {
+        box-shadow: 0 0 0 4px $focus_highlight;
+        outline: none;
+      }
+    }
+  }
+  .close-caption {
+    display: none;
+  }
+  a {
+    display: inline-block;
+    margin-top: -1px;
+    color: $white;
+  }
+  .nhsuk-cookie-banner .cookie-banner-panel, .cookie-banner__message a {
+    color: $white;
+    position: relative;
+  }
+
+  .cookie-banner-panel {
+    max-width: 960px;
+    position: relative;
+  }
+
+  .cookie-banner__message {
+    width: 90%;
+    margin-bottom:-12px;
+    padding-top:10px;
   }
 </style>

@@ -12,12 +12,9 @@ export default {
 
 <style module lang="scss" scoped>
   @import '~nhsuk-frontend/packages/core/tools/mixins';
-  @import '~nhsuk-frontend/packages/core/tools/spacing';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
   @import '~nhsuk-frontend/packages/core/tools/sass-mq';
 
 .list-menu {
-  font-size: 1em;
   list-style: none;
   padding-left: 0;
   margin: 5px -16px 1em;

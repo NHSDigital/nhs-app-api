@@ -4,6 +4,7 @@ import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, shallowMount } from '../../../helpers';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import NativeCallbacks from '@/services/native-app';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 
 jest.mock('@/lib/sessionStorage');
 jest.mock('@/services/native-app');
@@ -146,7 +147,7 @@ describe('my-record documents', () => {
     describe('glossary', () => {
       it('will display an abbreviations glossary', () => {
         mountPage();
-        const glossaryExists = page.find('glossary-stub').exists();
+        const glossaryExists = page.find(NhsArrowBanner).exists();
         expect(glossaryExists).toBe(true);
       });
     });

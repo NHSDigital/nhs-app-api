@@ -87,17 +87,6 @@ export default {
       background-position: right 1em center;
     }
 
-    .document__date-and-type {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .document__name,
-    .document__term {
-      font-size: 16px;
-      font-weight: normal;
-    }
-
     .document__name,
     .document__term {
       margin-top: 5px;

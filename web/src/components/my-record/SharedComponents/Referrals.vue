@@ -12,15 +12,25 @@
     <div v-for="(referral, referralIndex) in orderedReferrals"
          :key="`referral-${ referralIndex }`" :class="$style['record-item']"
          data-purpose="record-item">
-      <span v-if="referral.recordDate && referral.recordDate.value"
-            :class="$style.fieldName">
+      <p v-if="referral.recordDate && referral.recordDate.value"
+         data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">
         {{ referral.recordDate.value | datePart(referral.recordDate.datePart) }}
-      </span>
-      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
+      </p>
+      <p v-else data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">{{ $t('my_record.noStartDate') }}</p>
 
-      <p> {{ $t('my_record.referrals.description') }}{{ referral.description }} </p>
-      <p> {{ $t('my_record.referrals.speciality') }}{{ referral.speciality }} </p>
-      <p> {{ $t('my_record.referrals.ubrn') }}{{ referral.ubrn }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ $t('my_record.referrals.description') }}{{ referral.description }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ $t('my_record.referrals.speciality') }}{{ referral.speciality }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ $t('my_record.referrals.ubrn') }}{{ referral.ubrn }} </p>
       <hr aria-hidden="true">
     </div>
   </div>
@@ -71,32 +81,4 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
-  @import '../../../style/medrecordtitle';
-  @import "../../../style/colours";
-
-  .fieldName {
-    padding-left: 1.3em;
-    padding-right: 1.3em;
-    padding-bottom: 0.250rem;
-    color: $dark_grey;
-    font-size: 0.813em;
-    font-weight: 700;
-  }
-
-  div {
-    &.desktopWeb {
-      max-width: 540px;
-      cursor: default;
-
-      span {
-        font-family: $default_web;
-        font-weight: normal;
-      }
-      p {
-        font-family: $default_web;
-        font-weight: normal;
-      }
-    }
-  }
-
 </style>

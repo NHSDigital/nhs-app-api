@@ -36,7 +36,7 @@
         </option>
       </select-dropdown>
       <generic-button id="continue-button"
-                      :class="[$style.button, $style.green]"
+                      :class="['nhsuk-button']"
                       @click.prevent="continueClicked">
         {{ $t('organDonation.additionalDetails.continueButton') }}
       </generic-button>

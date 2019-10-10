@@ -8,20 +8,29 @@
       <div :class="$style.spacer" />
       <nhs-logo/>
       <div :class="$style.spacer" />
-      <symptom-banner/>
+      <div :class="$style.symptomBanner">
+        <h2>{{ $t('symptomBanner.howAreYouFeeling') }}</h2>
+        <generic-button id="btn_home_symptoms"
+                        :button-classes="['nhsuk-body', 'nhsuk-button',
+                                          $store.state.device.isNativeApp
+                                            ?'button':'', 'white']"
+                        @click.prevent="checkSymptomsButtonClicked()">
+          {{ $t('symptomBanner.checker') }}
+        </generic-button>
+      </div>
     </header>
   </div>
 </template>
 
 <script>
-import SymptomBanner from '@/components/SymptomBanner';
+import GenericButton from '@/components/widgets/GenericButton';
 import NhsLogo from '@/components/icons/NhsLogo';
 import HelpIcon from '../components/icons/HelpIcon';
 
 export default {
   name: 'HomeHeader',
   components: {
-    SymptomBanner,
+    GenericButton,
     NhsLogo,
     HelpIcon,
   },
@@ -29,6 +38,19 @@ export default {
     return {
       helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
     };
+  },
+  computed: {
+    symptomsUrl() {
+      return '/check-your-symptoms';
+    },
+  },
+  methods: {
+    checkSymptomsButtonClicked() {
+      this.$store.dispatch('device/goToCheckSymptoms');
+      // this method will be refactored to the following:
+      // const sourceValue = this.$store.state.device.source;
+      // redirectTo('this, /check-your-symptoms', { source: sourceValue })
+    },
   },
 };
 </script>
@@ -43,5 +65,15 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
+  }
+  .symptomBanner {
+    border-top:solid 1px #F0F4F5;
+    width:100%;
+    padding-right: 20px;
+    padding-left:17px;
+
+    h2 {
+      color:$white;
+    }
   }
 </style>

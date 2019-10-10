@@ -9,8 +9,12 @@
        :aria-hidden="isCollapsed">
     <div v-for="(event, eventIndex) in orderedEvents" :key="`event-${eventIndex}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <span v-if="event.date" :class="$style.fieldName"> {{ event.date | datePart }} </span>
-      <p> {{ event.locationAndDoneBy }}</p>
+      <p v-if="event.date" data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s"> {{ event.date | datePart }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ event.locationAndDoneBy }}</p>
       <ul :class="$style.eventLine">
         <li v-for="(eventItem, eventItemIndex) in event.eventItems"
             :key="`event-${eventItemIndex}`">
@@ -61,15 +65,4 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../../style/medrecordcontent';
-@import '../../../style/medrecordtitle';
-
-.fieldName {
-  padding-left: 1.3em;
-  padding-right: 1.3em;
-  padding-bottom: 0.250rem;
-  color: #425563;
-  font-size: 0.813em;
-  font-weight: 700;
-}
-
 </style>

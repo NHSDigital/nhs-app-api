@@ -35,11 +35,11 @@
 
     <form-post :action="appointmentCancelPath">
       <input :value="appointment.id" type="hidden" name="id">
-      <div v-if="isReasonRequired">
+      <div v-if="isReasonRequired" :class="reasonRequiredErrorStyle">
         <div class="nhsuk-grid-row">
           <div class="nhsuk-grid-column-full">
-            <label for="txt_reason" class="nhsuk-u-padding-bottom-2">
-              {{ $t('appointments.cancelling.form_label') }}
+            <label for="txt_reason" class="nhsuk-body-m nhsuk-u-margin-bottom-2">
+              <strong>{{ $t('appointments.cancelling.form_label') }}</strong>
             </label>
           </div>
         </div>
@@ -93,11 +93,11 @@
 <script>
 import Appointment from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS } from '@/lib/routes';
 import FormPost from '@/components/FormPost';
 import { redirectTo } from '@/lib/utils';
@@ -111,12 +111,12 @@ export default {
 
   components: {
     DesktopGenericBackLink,
-    GenericButton,
     Appointment,
+    ErrorMessage,
+    GenericButton,
     MessageDialog,
     MessageText,
     MessageList,
-    ErrorMessage,
     SelectDropdown,
     FormPost,
     CardGroup,
@@ -136,6 +136,9 @@ export default {
   computed: {
     showError() {
       return this.submissionError && !this.selectedReason;
+    },
+    reasonRequiredErrorStyle() {
+      return this.showError ? 'nhsuk-form-group--error' : '';
     },
     appointmentPath() {
       return APPOINTMENTS.path;

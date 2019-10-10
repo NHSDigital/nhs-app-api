@@ -25,7 +25,7 @@
       <form ref="retryFormRef" :action="retryUrl" method="get" tabindex="-1">
         <generic-button v-if="retryButtonText && ($store.state.device.isNativeApp || retryAction)"
                         :class="[
-                          ...dynamicStyle('button'),
+                          ...dynamicStyle('nhs-button'),
                           $style.retryButton,
                           buttonClasses
                         ]"
@@ -113,10 +113,10 @@ export default {
       return isObject(this.additionalInfo) ? this.additionalInfo.text : this.additionalInfo;
     },
     buttonClasses() {
-      const clazzes = [this.$style.button];
+      let clazzes = 'nhsuk-button';
       const url = this.retryUrl;
       if (url && url.length > 0) {
-        clazzes.push(this.$style.grey);
+        clazzes = 'nhsuk-button nhsuk-button--secondary';
       }
       return clazzes;
     },

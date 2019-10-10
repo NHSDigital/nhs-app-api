@@ -276,6 +276,7 @@ export default {
   @import "../style/main";
   @import "../style/pulltorefresh";
   @import "../style/elements";
+  @import "~nhsuk-frontend/packages/nhsuk";
 </style>
 
 <style module lang="scss" scoped>

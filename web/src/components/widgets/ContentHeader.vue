@@ -10,7 +10,7 @@
     <div :class="[$style[fixBreadCrumb ? 'native-padding' : '']]">
       <yellow-banner v-if="showYellowBanner" id="yellow-banner">
         <div v-if="showExternalServiceWarning" id="external-service-warning">
-          <p>
+          <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-1 nhsuk-u-margin-bottom-0">
             <b>
               {{ $t('externalServiceWarning.warningText') }}
             </b>
@@ -20,7 +20,7 @@
              :class="$style['banner']" tabindex="0"
              @keypress.enter="proxyBannerClicked"
              @click="proxyBannerClicked">
-          <p>
+          <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-1 nhsuk-u-margin-bottom-0">
             {{ $t('linkedProfiles.actingAsOtherUserBannerWarningText') }}
             <b class="nhsuk-u-margin-top-2">
               {{ actingAsPersonName }}
@@ -150,7 +150,7 @@ export default {
   }
 
   .native-padding {
-    padding-top: 48px;
+    padding-top: 46px;
   }
 
   .banner {

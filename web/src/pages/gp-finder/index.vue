@@ -1,64 +1,66 @@
 <template>
-  <div :class="[getHeaderState(),
-                $store.state.device.isNativeApp? $style.flexContainer : '',
-                'pull-content',
-                $store.state.device.isNativeApp && $style.web]">
-    <analytics-tracked-tag v-if="$store.state.device.isNativeApp"
-                           id="help_icon"
-                           :class="$style['help-icon']"
-                           :href="helpAndSupportURL"
-                           tag="a"
-                           text="help"
-                           target="_blank"
-                           tabindex="-1">
-      <help-icon/>
-    </analytics-tracked-tag>
-    <div v-if="$store.state.device.isNativeApp"
-         :class="[$style.throttlingHeader, $style['header-container']]">
-      <header>
-        <div :class="$style.spacer" />
-        <nhs-logo :class="$style.nhsoLogo"/>
-        <div :class="$style.spacer" />
-      </header>
-    </div>
-    <div :class="[$style.webHeader,
-                  $style.throttlingContent,
-                  'pull-content',
-                  getDesktopStyle()]">
-      <h1 v-if="$store.state.device.isNativeApp">{{ $t('th02.heading1') }}</h1>
-      <h2>{{ $t('th02.heading2') }}</h2>
-
-      <p id="search-label">{{ $t('th02.hintText') }}</p>
-      <error-message v-if="showError"
-                     :id="$style['error-label']"
-                     role="alert">
-        {{ $t('th02.emptySearchError') }}
-      </error-message>
-      <form @submit.prevent="searchFormSubmitted">
-        <generic-text-input id="searchTextInput"
-                            v-model="searchQuery"
-                            :class="$style.inputSpacing"
-                            type="text"
-                            a-labelled-by="search-label"
-                            name="searchQuery"
-                            maxlength="150"/>
-        <analytics-tracked-tag :text="$t('th02.callToAction')">
-          <generic-button :button-classes="[$store.state.device.isNativeApp
-                            ?'button':'button-desktop', 'green']"
-                          @click.prevent="searchFormSubmitted">
-            {{ $t('th02.callToAction') }}
-          </generic-button>
-        </analytics-tracked-tag>
-      </form>
-      <login-banner v-if="!$store.state.device.isNativeApp"/>
+  <div>
+    <div :class="[getHeaderState(),
+                  $store.state.device.isNativeApp? $style.flexContainer : '',
+                  $store.state.device.isNativeApp && $style.web]">
       <analytics-tracked-tag v-if="$store.state.device.isNativeApp"
-                             :click-func="hasAnAccountLinkClicked"
-                             :class="$style.throtlingLink"
-                             :text="$t('th02.hasAnAccountLink')"
+                             id="help_icon"
+                             :class="$style['help-icon']"
+                             :href="helpAndSupportURL"
                              tag="a"
-                             tabindex="0">
-        {{ $t('th02.hasAnAccountLink') }}
+                             text="help"
+                             target="_blank"
+                             tabindex="-1">
+        <help-icon/>
       </analytics-tracked-tag>
+      <div v-if="$store.state.device.isNativeApp"
+           :class="[$style.throttlingHeader, $style['header-container']]">
+        <header>
+          <div :class="$style.spacer" />
+          <nhs-logo :class="$style.nhsoLogo"/>
+          <div :class="$style.spacer" />
+        </header>
+      </div>
+      <div :class="[$style.webHeader,
+                    $style.throttlingContent,
+                    'pull-content',
+                    getDesktopStyle()]">
+        <h1 v-if="$store.state.device.isNativeApp">{{ $t('th02.heading1') }}</h1>
+        <h2>{{ $t('th02.heading2') }}</h2>
+
+        <p id="search-label">{{ $t('th02.hintText') }}</p>
+        <error-message v-if="showError"
+                       :id="$style['error-label']"
+                       role="alert">
+          {{ $t('th02.emptySearchError') }}
+        </error-message>
+        <form @submit.prevent="searchFormSubmitted">
+          <generic-text-input id="searchTextInput"
+                              v-model="searchQuery"
+                              :class="$style.inputSpacing"
+                              type="text"
+                              a-labelled-by="search-label"
+                              name="searchQuery"
+                              maxlength="150"/>
+          <analytics-tracked-tag :text="$t('th02.callToAction')">
+            <generic-button :button-classes="['nhsuk-button']"
+                            @click.prevent="searchFormSubmitted">
+              {{ $t('th02.callToAction') }}
+            </generic-button>
+          </analytics-tracked-tag>
+        </form>
+        <login-banner v-if="!$store.state.device.isNativeApp"/>
+
+        <p><analytics-tracked-tag v-if="$store.state.device.isNativeApp"
+                                  :click-func="hasAnAccountLinkClicked"
+                                  :class="$style.throtlingLink"
+                                  :text="$t('th02.hasAnAccountLink')"
+                                  tag="a"
+                                  tabindex="0">
+          {{ $t('th02.hasAnAccountLink') }}
+        </analytics-tracked-tag>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -270,6 +272,7 @@ export default {
   @import '../../style/throttling/throttling';
   @import '../../style/throttling/gpfindersearch';
   @import '../../style/screensizes';
+  @import "~nhsuk-frontend/packages/nhsuk";
 
   .inputSpacing{
     margin-bottom: 1em;
@@ -288,13 +291,6 @@ export default {
   .desktopContent {
     padding-top:0;
     padding-left:0;
-    h2 {
-      font-size: 1.375em;
-    }
-    p {
-      color:#212B32;
-      font-size: 1.1em;
-    }
   }
 </style>
 

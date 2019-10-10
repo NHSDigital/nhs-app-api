@@ -8,9 +8,9 @@
          @click="toggle"
          @keypress.13="toggle">
       <plus-minus-icon :icon-plus="!showContent" />
-      <h2 :class="$style['info-message-title']">
+      <p :class="$style['info-message-title']">
         <slot name="header" />
-      </h2>
+      </p>
     </div>
     <div v-if="showContent" :class="$style['info-content']"
          data-purpose="info-content">
@@ -70,10 +70,6 @@ div.info-message {
     &:hover{
       @include outlineStyleLight;
     }
-   h2 {
-    font-family: $default-web;
-    font-weight: normal;
-   }
   }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.form">
+  <div :class="[$style.form, $style['nhsuk-body']]">
     <label class="nhsuk-label" for="type">
       {{ $t('appointments.booking.filters.type.label') }}
     </label>
@@ -8,7 +8,7 @@
         <template slot="header">
           {{ $t('appointments.booking.gpMessage.header') }}
         </template>
-        <p>{{ guidanceMsg }}</p>
+        <p class="nhsuk-u-margin-0">{{ guidanceMsg }}</p>
       </collapsible-dialog>
     </div>
 
@@ -57,7 +57,7 @@
         {{ displayName(option) }}
       </option>
     </select-dropdown>
-    <h2>{{ $t('appointments.booking.filters.date.header') }}</h2>
+    <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.booking.filters.date.header') }}</h2>
   </div>
 </template>
 

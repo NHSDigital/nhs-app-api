@@ -26,8 +26,6 @@ export default {
   @import '~nhsuk-frontend/packages/core/tools/spacing';
   @import '~nhsuk-frontend/packages/core/settings/spacing';
   @import '~nhsuk-frontend/packages/core/tools/sass-mq';
-  @import '~nhsuk-frontend/packages/core/tools/typography';
-  @import '~nhsuk-frontend/packages/core/settings/typography';
 
   /* ==========================================================================
    COMPONENTS / #card

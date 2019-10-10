@@ -71,9 +71,9 @@ class RecordItem(recordItem: WebElementFacade) {
 
     val element = recordItem
 
-    val label = recordItem.find<WebElementFacade>(By.tagName("span")).text
+    val label = recordItem.find<WebElementFacade>(By.cssSelector("[data-purpose='record-item-header']")).text
 
-    val bodyElements = recordItem.thenFindAll(By.tagName("p")).map { element ->
+    val bodyElements = recordItem.thenFindAll(By.cssSelector("[data-purpose='record-item-detail']")).map { element ->
         element.text
     }
 }

@@ -11,22 +11,16 @@ describe('additional-details', () => {
   const findOptionById = id => find(x => x.value == id);
   let $router;
   let $store;
-  let $style;
   let state;
   let wrapper;
 
   const mountWrapper = () => {
     const store = $store || createStore({ state });
-    return mount(AdditionalDetails, { $router, $store: store, $style });
+    return mount(AdditionalDetails, { $router, $store: store });
   };
 
   beforeEach(() => {
     $router = [];
-    $style = {
-      button: 'button',
-      green: 'green',
-      grey: 'grey',
-    };
     state = {
       organDonation: initialState(),
       device: {
@@ -155,9 +149,9 @@ describe('additional-details', () => {
           expect(continueButton.exists()).toBe(true);
         });
 
-        it('will be set as a green button', () => {
-          expect(continueButton.classes()).toContain($style.button);
-          expect(continueButton.classes()).toContain($style.green);
+        it('will be a button with nhsuk-button style', () => {
+          const classes = continueButton.classes();
+          expect(classes).toContain('nhsuk-button');
         });
 
         describe('when clicked', () => {

@@ -178,7 +178,6 @@ export default {
           font-weight: 700;
           line-height: 2em;
           color: $white;
-          @include kerneliOS;
           font-size: 1.125em;
           border: 1px $white solid;
           border-radius: 0.5em;

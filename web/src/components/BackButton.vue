@@ -1,5 +1,5 @@
 <template>
-  <generic-button :class="[$style.button, $style.grey]"
+  <generic-button :class="['nhsuk-button', 'nhsuk-button--secondary']"
                   @click.stop.prevent="goBack">
     {{ buttonText }}
   </generic-button>

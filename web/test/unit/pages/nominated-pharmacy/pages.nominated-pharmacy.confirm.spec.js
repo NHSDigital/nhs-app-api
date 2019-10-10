@@ -9,7 +9,6 @@ const $t = create$T();
 
 describe('confirm nominated pharmacy', () => {
   let $store;
-  let $style;
   let wrapper;
 
   const createState = (state = {
@@ -30,7 +29,7 @@ describe('confirm nominated pharmacy', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(ConfirmNominatedPharmacy, { $store, $style, $t });
+  const mountPage = () => mount(ConfirmNominatedPharmacy, { $store, $t });
 
   describe('nominated pharmacy details', () => {
     let pharmacyDetails;
@@ -77,18 +76,15 @@ describe('confirm nominated pharmacy', () => {
       });
       wrapper = mountPage();
       confirmButton = wrapper.find('#confirm-button');
-      $style = {
-        button: 'button-desktop',
-        green: 'green',
-      };
     });
 
     it('will exist', () => {
       expect(confirmButton.exists()).toBe(true);
     });
 
-    it('will be a green button', () => {
-      expect(confirmButton.classes()).toContain($style.green);
+    it('will be a button with nhsuk-button style', () => {
+      const classes = confirmButton.classes();
+      expect(classes).toContain('nhsuk-button');
     });
 
     it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {
@@ -144,7 +140,7 @@ describe('confirm nominated pharmacy', () => {
       },
     }) => state;
 
-    const mountPageForApp = () => mount(ConfirmNominatedPharmacy, { $store, $style, $t });
+    const mountPageForApp = () => mount(ConfirmNominatedPharmacy, { $store, $t });
 
     beforeEach(() => {
       $store = createStore({
@@ -153,18 +149,15 @@ describe('confirm nominated pharmacy', () => {
       });
       wrapper = mountPageForApp();
       confirmButton = wrapper.find('#confirm-button');
-      $style = {
-        button: 'button',
-        green: 'green',
-      };
     });
 
     it('will exist', () => {
       expect(confirmButton.exists()).toBe(true);
     });
 
-    it('will be a green button', () => {
-      expect(confirmButton.classes()).toContain($style.green);
+    it('will be a button with nhsuk-button style', () => {
+      const classes = confirmButton.classes();
+      expect(classes).toContain('nhsuk-button');
     });
 
     it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {

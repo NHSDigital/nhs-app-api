@@ -32,7 +32,7 @@
                   :organ-name="choice"
                   :show-errors="showInlineErrors"/>
     <generic-button id="continue-button"
-                    :class="[$style.button, $style.green]"
+                    :class="['nhsuk-button']"
                     @click.prevent="continueClicked">
       {{ $t('organDonation.someOrgans.continueButtonText') }}
     </generic-button>

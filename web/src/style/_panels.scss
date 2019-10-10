@@ -12,31 +12,17 @@
   background-color: $white;
 
   &.desktopWeb {
-    font-family: $default-web;
-    font-weight: normal;
     max-width: 540px;
     margin-right: 1em;
 
     h3 {
-      font-family: $default-web;
       display: block;
-      font-size: 1em;
-      line-height: 1.5em;
     }
 
-    b, label {
-      font-family: $default-web;
-    }
-
-    a.cancel-link {
-      font-family: $default-web;
-      font-weight: bold;
-    }
   }
 
   h2 {
     @include default_label;
-    font-weight: 700;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
   }

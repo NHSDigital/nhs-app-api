@@ -2,9 +2,12 @@
   <form :class="[$style.appointmentTime]">
     <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
       <div v-if="hasAppointments(daySlots)" data-purpose="appointment-day">
-        <h2 data-purpose="appointment-day-heading">{{ formatDate(daySlots[0]) }}</h2>
+        <h3 data-purpose="appointment-day-heading"
+            class="nhsuk-u-margin-bottom-1">
+          {{ formatDate(daySlots[0]) }}
+        </h3>
         <ul
-          :class="[$style['selector-list'], $style.appointmentTimeSelector]">
+          :class="[$style['selector-list'], 'nhsuk-u-padding-left-0']">
           <time-slot v-for="slot in daySlots[1]"
                      :key="slot.ref"
                      :ref="slot.ref"
@@ -52,29 +55,4 @@ export default {
 @import "../../../style/selectors";
 @import "../../../style/errorvalidation";
 @import "../../../style/appointmentsnew";
-
-  form {
-    &.desktopWeb {
-      max-width: 560px;
-      padding-right: 1em;
-
-      h2 {
-        font-family: $default-web;
-        font-weight: lighter;
-      }
-
-      .noAppointments {
-        font-family: $default-web;
-        font-weight: lighter;
-      }
-    }
-
-    .appointmentTimeSelector {
-      padding-left: 0;
-    }
-  }
-
-  .noAppointments {
-    margin-bottom: 1.2em;
-  }
 </style>

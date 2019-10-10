@@ -1,6 +1,8 @@
 <template>
   <div v-if="showTemplate">
-    <h2 data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
+    <h2 data-purpose="greeting" data-hj-suppress class="nhsuk-u-margin-bottom-0">
+      {{ greetingMessage }}
+    </h2>
     <welcome-section :date-of-birth="currentProfile.dateOfBirth"
                      :nhs-number="currentProfile.nhsNumber" />
     <biometric-banner v-if="!isProxying" />
@@ -41,9 +43,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../style/fonts";
-  @import "../style/textstyles";
-  @import '../style/screensizes';
-</style>

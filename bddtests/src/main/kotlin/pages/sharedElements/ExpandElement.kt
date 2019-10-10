@@ -28,7 +28,7 @@ class ExpandElement(pageObject: HybridPageObject){
     )
 
     private val label = HybridPageElement(
-            webDesktopLocator = "$parentXpath//h2",
+            webDesktopLocator = "$parentXpath//p",
             androidLocator = null,
             page = pageObject,
             helpfulName = "Section label. "

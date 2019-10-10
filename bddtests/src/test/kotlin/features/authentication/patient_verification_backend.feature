@@ -141,15 +141,10 @@ Feature: Patient Verification Backend
     Then I receive a "Bad Request" error
 
 
-  Scenario: Vision responds with an unknown error from the Gateway
+  Scenario: Vision responds with an unknown error
     Given Vision responds with an unknown error
     When I verify patient data using the v1 endpoint
-    Then I receive a "Bad Gateway" error
-
-  Scenario: Vision responds with a record currently unavailable error
-    Given Vision responds with a record currently unavailable error
-    When I verify patient data using the v1 endpoint
-    Then I receive a "Bad Gateway" error
+    Then I receive a "Bad Request" error
 
   Scenario Outline: Verifying the old credentials of a <GP System> patient after they've moved practice returns a forbidden response
     Given I have an old ODS Code and IM1 Connection Token for a <GP System> patient that has since moved to a different practice

@@ -1,10 +1,13 @@
 <template>
   <div>
-    <generic-button v-if="showNext" id="next-button" :class="[$style.button]" click-delay="none"
-                    @click="nextClicked">
-      {{ $t('ds01.nextButton') }}
-    </generic-button>
-    <generic-button v-if="showPrevious" id="previous-button" :class="[$style.button, $style.grey]"
+    <div>
+      <generic-button v-if="showNext" id="next-button" :class="['nhsuk-button']" click-delay="none"
+                      @click="nextClicked">
+        {{ $t('ds01.nextButton') }}
+      </generic-button>
+    </div>
+    <generic-button v-if="showPrevious" id="previous-button"
+                    :class="['nhsuk-button', 'nhsuk-button--secondary']"
                     click-delay="none" @click="previousClicked">
       {{ $t('ds01.previousButton') }}
     </generic-button>

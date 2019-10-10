@@ -1,5 +1,6 @@
 <template>
   <p :class="[$style.msgText,
+              'nhsuk-u-margin-left-2',
               extendedStyle,
               !$store.state.device.isNativeApp && $style.desktopWeb]"
      :aria-label="ariaLabel"
@@ -47,7 +48,7 @@ export default {
       if (this.isBeforeFooter) {
         style = this.$style.footerMargin;
       }
-      return style;
+      return `${style} nhsuk-u-margin-bottom-2`;
     },
   },
 };
@@ -56,15 +57,13 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/textstyles";
 .msgText {
-  padding: 1em 1em 0.150em 1em;
+  padding: 1em 1em 0 1em;
   @include message;
   &.header {
     @include default_label;
-    font-size: 1.125em;
     }
   &.plainHeader {
     @include default_label;
-    font-size: 1.125em;
     }
   &.footerMargin {
    margin-bottom: 1em;

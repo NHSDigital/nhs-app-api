@@ -26,3 +26,37 @@ svg {
 		stroke-width: 0.4em;
 	}
 }
+
+.nhsuk-icon__arrow-right-circle-desktop {
+  fill: #007f3b;
+  height: 40px;
+  left: -3px;
+  position: absolute;
+  top: -4px;
+  width: 40px;
+}
+
+.nhsuk-icon, .nhsuk-icon__arrow-right-circle {
+  fill: #007f3b;
+  height: 35px;
+  left: -3px;
+  position: absolute;
+  top: -4px;
+  width: 35px;
+}
+
+@media only screen and (max-width:640px) {
+  .nhsuk-icon__arrow-right-circle-desktop {
+    height: 34px;
+    margin-bottom: -9px;
+    top: -3px;
+    width: 34px;
+  }
+}
+
+@media only screen and  (max-width: 40.0525em){
+  .nhsuk-action-link__link {
+    padding-left: 36px;
+  }
+}
+

@@ -1,4 +1,5 @@
 @my-record
+@pending @NHSO-7509
 Feature: View My Referrals Information
 
   Scenario: A MICROTEST user can view referrals - GP Medical Record

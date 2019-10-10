@@ -44,17 +44,13 @@ const createState = ({
 };
 
 describe('review your decision', () => {
-  const $style = {
-    button: 'button',
-    green: 'green',
-  };
   let $store;
   let wrapper;
   let scrollTo;
 
   const mountPage = ({ state, getters }) => {
     $store = createStore({ state, getters });
-    return mount(ReviewYourDecision, { $store, $style });
+    return mount(ReviewYourDecision, { $store });
   };
 
   beforeEach(() => {
@@ -126,10 +122,9 @@ describe('review your decision', () => {
       expect(submitButton.exists()).toBe(true);
     });
 
-    it('will be a green button', () => {
+    it('will be a button with nhsuk-button style', () => {
       const classes = submitButton.classes();
-      expect(classes).toContain($style.green);
-      expect(classes).toContain($style.button);
+      expect(classes).toContain('nhsuk-button');
     });
 
     it('will use "organDonation.reviewYourDecision.submitButton" for text', () => {

@@ -12,6 +12,7 @@ a.record-title {
 	@include icon-arrow-left;
 	transition: background ease 0.5s;
 	margin: 0.5em 0 0 0;
+  cursor: pointer;
 
 	&.opened {
 		@include icon-arrow-down;

@@ -29,20 +29,7 @@ export default {
 
 <style lang="scss" module scoped>
 @import "../../style/colours";
-@import "../../style/navmenuicons";
-/** Links */
-.nhsuk-icon__arrow-right-circle-desktop {
-  display: inline-block;
-  vertical-align: middle;
-  fill: #007f3b;
-  height: 1.2em;
-  left: -3px;
-  top: -6px;
-  width: 1.2em;
-}
-
-.nhsuk-icon, .nhsuk-icon__arrow-right-circle {
-  display: none;
-}
+@import "../../style/icons";
+@import "~nhsuk-frontend/packages/nhsuk";
 
 </style>

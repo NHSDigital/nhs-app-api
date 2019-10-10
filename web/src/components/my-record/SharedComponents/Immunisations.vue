@@ -11,15 +11,23 @@
        :aria-hidden="isCollapsed">
     <div v-for="(item, index) in orderedImmunisations" :key="`item-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <span v-if="item.effectiveDate && item.effectiveDate.value" :class="$style.fieldName">
+      <p v-if="item.effectiveDate && item.effectiveDate.value"
+         data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">
         {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
-      </span>
-      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
-      <p>{{ item.term }}</p>
-      <p v-if="item.nextDate != null">
+      </p>
+      <p v-else data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">{{ $t('my_record.noStartDate') }}</p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">{{ item.term }}</p>
+      <p v-if="item.nextDate != null" data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
         {{ $t('my_record.immunisations.nextDate') }}{{ getNextDateFormatted(item.nextDate) }}
       </p>
-      <p v-if="item.status != null">
+      <p v-if="item.status != null" data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
         {{ $t('my_record.immunisations.status') }}{{ item.status }}
       </p>
       <hr aria-hidden="true">
@@ -73,31 +81,4 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../../style/medrecordcontent';
-@import '../../../style/medrecordtitle';
-
-.fieldName {
-  padding-left: 1.3em;
-  padding-right: 1.3em;
-  padding-bottom: 0.250rem;
-  color: #425563;
-  font-size: 0.813em;
-  font-weight: 700;
-}
-
-div {
- &.desktopWeb {
-  max-width: 540px;
-  cursor: default;
-
-  span {
-   font-family: $default_web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-  }
- }
-}
-
 </style>

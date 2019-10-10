@@ -9,7 +9,6 @@
   padding-left: 1em;
   background-color: $footer_bg;
   border-top: 4px solid $nhs_blue;
-  font-family: $default-web;
 
   &:after {
     clear: both;
@@ -41,19 +40,12 @@
       padding-left: 0;
 
       li {
-        font-weight: 400;
-        font-size: 14px;
-        font-size: 0.875rem;
-        line-height: 1.71429;
         margin-bottom: 0.5rem;
       }
     }
 
     a {
-      line-height: inherit;
       color: $dark_grey;
-      text-decoration: underline;
-      font-weight: normal;
 
       &:visited {
         color: $dark_grey;
@@ -69,10 +61,6 @@
     }
 
     .footer-copyright {
-      font-weight: 400;
-      font-size: 14px;
-      font-size: 0.875rem;
-      line-height: 1.71429;
       color: $dark_grey;
       margin-bottom: 0;
     }
@@ -84,19 +72,8 @@
     .footer-content {
       ul {
         padding-bottom: 1.5em;
-
-        li {
-          font-size: 16px;
-          font-size: 1rem;
-          line-height: 1.5;
-        }
       }
 
-      .footer-copyright {
-        font-size: 16px;
-        font-size: 1rem;
-        line-height: 1.5;
-      }
     }
   }
 }

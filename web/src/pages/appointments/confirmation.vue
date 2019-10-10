@@ -49,10 +49,10 @@
 
       <div v-if="showPhoneNumber()" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <div role="form" data-purpose="phone-number">
+          <div role="form" data-purpose="phone-number" :class="telephoneErrorStyle">
             <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
               <legend id="telephone-input-label" class="nhsuk-fieldset__legend">
-                {{ $t('appointments.confirmation.telephoneNumberLabel') }}
+                <strong>{{ $t('appointments.confirmation.telephoneNumberLabel') }}</strong>
               </legend>
               <error-message v-if="showTelephoneError"
                              id="telephone-error-label">
@@ -109,16 +109,19 @@
 
       <div v-if="showBookingReason()" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
-          <div role="form" data-purpose="booking-reason">
+          <div role="form" data-purpose="booking-reason" :class="reasonTextErrorStyle">
             <label id="booking-reason-label" class="nhsuk-fieldset__legend"
                    for="reasonText">
-              {{ $t('appointments.confirmation.headerLabel') }}
-              {{ bookingReasonOptional() ? $t('appointments.confirmation.headerLabelSuffix') : '' }}
+              <strong>
+                {{ $t('appointments.confirmation.headerLabel') }}
+                {{ bookingReasonOptional() ?
+                  $t('appointments.confirmation.headerLabelSuffix') : '' }}
+              </strong>
             </label>
-            <p id="max-reason-desc" class="nhsuk-u-padding-bottom-2">
+            <p id="max-reason-desc">
               {{ $t('appointments.confirmation.reasonDesc.line1') }}
             </p>
-            <p class="nhsuk-u-padding-bottom-2">
+            <p>
               {{ $t('appointments.confirmation.reasonDesc.line2') }}
               {{ $t('appointments.confirmation.reasonDesc.line3') }}
             </p>
@@ -245,8 +248,14 @@ export default {
     showTelephoneError() {
       return this.telephoneNumberError && !this.telephoneNumber;
     },
+    telephoneErrorStyle() {
+      return this.showTelephoneError ? 'nhsuk-form-group--error' : '';
+    },
     showError() {
       return this.showReasonError || this.showTelephoneError;
+    },
+    reasonTextErrorStyle() {
+      return this.showReasonError ? 'nhsuk-form-group--error' : '';
     },
     confirmationMessageKey() {
       return this.$store.state.myAppointments.disableCancellation

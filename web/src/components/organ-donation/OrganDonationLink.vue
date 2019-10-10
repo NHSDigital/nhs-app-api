@@ -50,7 +50,7 @@ export default {
     },
     headerTag: {
       type: String,
-      default: 'span',
+      default: 'h2',
     },
     backLinkOverride: {
       type: String,
@@ -91,6 +91,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss">
-</style>

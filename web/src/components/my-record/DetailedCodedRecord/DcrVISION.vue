@@ -1,6 +1,8 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isImmunisationsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="IMMUNISATIONS"
@@ -14,7 +16,9 @@
 
     <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isProblemsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="PROBLEMS"
@@ -28,7 +32,9 @@
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 
     <analytics-tracked-tag :id="`${TESTRESULTS}Header`"
-                           :class="[$style['record-title'],
+                           :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isTestResultsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="TESTRESULTS"
@@ -43,7 +49,9 @@
                   :supplier="record.supplier" />
 
     <analytics-tracked-tag :id="`${DIAGNOSIS}Header`"
-                           :class="[$style['record-title'],
+                           :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isDiagnosisCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="DIAGNOSIS"
@@ -59,7 +67,9 @@
                :supplier="record.supplier" />
 
     <analytics-tracked-tag :id="`${EXAMINATIONS}Header`"
-                           :class="[$style['record-title'],
+                           :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isExaminationCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="EXAMINATIONS"
@@ -76,7 +86,9 @@
                   :supplier="record.supplier" />
 
     <analytics-tracked-tag :id="`${PROCEDURES}Header`"
-                           :class="[$style['record-title'],
+                           :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isProceduresCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="PROCEDURES"

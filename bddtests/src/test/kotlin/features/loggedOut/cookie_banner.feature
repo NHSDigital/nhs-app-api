@@ -29,7 +29,7 @@ Feature: Cookie Banner
       | login               |
       | check your symptoms |
       | gp finder           |
-    
+
   Scenario Outline: When the Cookie Banner is acknowledged on the <target page> web page with Javascript <js enabled?>, the cookie is created and the banner no longer appears
     Given I have <js enabled?> javascript
     And I am on the <target page> logged-out page

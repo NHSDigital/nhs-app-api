@@ -24,10 +24,8 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import '../../style/textstyles';
 
   #mainDiv {
     padding: 0;
-    @include default_text;
   }
 </style>

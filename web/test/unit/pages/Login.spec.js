@@ -1,6 +1,5 @@
 import AuthorisationService from '@/services/authorisation-service';
 import Login from '@/pages/Login';
-import LoginButton from '@/components/LoginButton';
 import { createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
@@ -73,14 +72,14 @@ describe('login page', () => {
   });
 
   it('has a login button', () => {
-    expect(wrapper.find(LoginButton).exists()).toBe(true);
+    expect(wrapper.find('#login-button').exists()).toBe(true);
   });
 
   it('will call generateLoginValues only once when login button clicked', () => {
     expect(AuthorisationService).not.toHaveBeenCalled();
-    wrapper.find(LoginButton).trigger('submit');
-    wrapper.find(LoginButton).trigger('submit');
-    wrapper.find(LoginButton).trigger('submit');
+    wrapper.find('#login-button').trigger('submit');
+    wrapper.find('#login-button').trigger('submit');
+    wrapper.find('#login-button').trigger('submit');
     expect(AuthorisationService.mock.instances[0].generateLoginUrl).toHaveBeenCalledTimes(1);
   });
 

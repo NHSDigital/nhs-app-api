@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <generic-button id="signout-button"
-                    :class="[$style.button, $style.grey]" @click="signoutClicked">
+                    :class="['nhsuk-button', 'nhsuk-button--secondary']" @click="signoutClicked">
       {{ $t('signOutButton.signOut') }}
     </generic-button>
   </div>

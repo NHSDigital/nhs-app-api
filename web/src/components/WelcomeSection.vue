@@ -1,24 +1,27 @@
 <template>
   <div :class="[$style.welcomeInfo, !$store.state.device.isNativeApp && $style.desktopWeb]"
        data-sid="welcome-info">
-    <p v-if="name">
+    <p v-if="name" class="nhsuk-u-margin-bottom-0">
       <strong>Name:</strong>
       <span data-sid="user-name" data-hj-suppress>
         {{ name }}
       </span>
+      <br>
     </p>
-    <p v-if="dateOfBirth">
+    <p v-if="dateOfBirth" class="nhsuk-u-margin-bottom-0">
       <strong>Date of birth:</strong>
       <span data-sid="user-date-of-birth">
         {{ dateOfBirth | longDate }}
       </span>
+      <br>
     </p>
-    <p v-if="nhsNumber">
+    <p v-if="nhsNumber" class="nhsuk-u-margin-bottom-0">
       <strong >NHS number:</strong>
       <generic-voice-over-text-split :class="$style.fieldValue"
                                      :text="nhsNumber"
                                      :data-sid="'user-nhs-number'"/>
     </p>
+
   </div>
 </template>
 
@@ -46,7 +49,6 @@ export default {
 </script>
 
 <style module lang="scss">
-  @import "../style/fonts";
 
  .welcomeInfo {
   padding-bottom: 1em;

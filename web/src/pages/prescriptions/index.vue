@@ -1,14 +1,14 @@
 <template>
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
+      <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
         <no-js-form :action="getContinueButtonPath()" method="get" :value="{}">
-          <button v-if="hasLoaded"
-                  id="order-prescription-button"
-                  class="nhsuk-button"
-                  @click.stop.prevent="onOrderRepeatPrescriptionClicked">
+          <generic-button
+            id="order-prescription-button"
+            :button-classes="['nhsuk-button']"
+            @click.stop.prevent="onOrderRepeatPrescriptionClicked">
             {{ $t('rp01.orderPrescriptionButton') }}
-          </button>
+          </generic-button>
         </no-js-form>
       </div>
     </div>
@@ -42,7 +42,9 @@
       <div v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
            :key="key">
         <div v-if="getMedicationCourseStatus(key) != null">
-          <h2>{{ getMedicationCourseStatus(key) }}</h2>
+          <h2 class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-2">
+            {{ getMedicationCourseStatus(key) }}
+          </h2>
         </div>
 
         <CardGroup v-for="(prescriptionCourse, index) in statusGroup"
@@ -74,6 +76,7 @@ import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
   layout: 'nhsuk-layout',
@@ -86,6 +89,7 @@ export default {
     Card,
     CardGroupItem,
     CardGroup,
+    GenericButton,
   },
   data() {
     return {
@@ -183,7 +187,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import '../../style/listmenu';
-</style>

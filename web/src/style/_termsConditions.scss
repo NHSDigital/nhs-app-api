@@ -8,14 +8,8 @@ p {
   padding-bottom: 0.5em;
   padding-top: 0.5em;
   display: block;
-  font-weight: normal;
-  line-height: 1.5em;
 }
 a {
-  color: #005EB8;
-  font-size: 1em;
-  line-height: 1em;
-  font-weight: bold;
   text-decoration: none;
   vertical-align: baseline;
 }
@@ -24,20 +18,11 @@ a:hover {
 }
 strong {
   display: inline-block;
-  font-weight: 700;
-  font-size: 1em;
-  line-height: 1.5em;
   color: #425563;
 }
 
 .info {
-  font-size: 1em;
   margin-bottom: 0.5em;
-  ul li {
-    margin-left: 2em;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-  }
   p a {
     display: inherit;
     text-decoration: underline;
@@ -73,9 +58,6 @@ button {
   padding-bottom: 0.150em;
   width: 100%;
   display: block;
-  font-weight: normal;
-  font-size: 1.125em;
-  line-height: 1.125em;
   color: #212B32;
 }
 
@@ -90,9 +72,6 @@ button {
   ul li {
     padding-top: 0.25em;
     display: block;
-    font-weight: normal;
-    font-size: 1.125em;
-    line-height: 1.125em;
     color: $error;
 
   }

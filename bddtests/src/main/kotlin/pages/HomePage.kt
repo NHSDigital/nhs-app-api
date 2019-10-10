@@ -51,7 +51,7 @@ open class HomePage : HybridPageObject() {
             helpfulName = "Survey Link"
     )
 
-    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/span"
+    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/h2"
 
     val banner = HybridPageElement(
             webDesktopLocator = "//*[@id='yellow-banner']",

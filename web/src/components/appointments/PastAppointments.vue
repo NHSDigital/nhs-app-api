@@ -1,6 +1,6 @@
 <template>
   <span>
-    <h2>
+    <h2 class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-0">
       {{ $t('appointments.index.past.header') }}
     </h2>
     <CardGroup v-for="(chunk, index) in chunked" :key="index" role="list" class="nhsuk-grid-row">

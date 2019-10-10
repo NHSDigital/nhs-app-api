@@ -83,23 +83,10 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
 
   .viewProcedures {
     padding: 1em;
-    font-size: 0.875em;
-  }
-
-  div {
-   &.desktopWeb {
-    .viewProcedures {
-     cursor: pointer;
-     &:focus {
-      @include outlineStyle
-     }
-    }
-   }
+    display: inline-block;
   }
 
 </style>

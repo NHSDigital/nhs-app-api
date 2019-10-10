@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import MyRecord from '@/pages/my-record/';
 import Warning from '@/components/my-record/Warning';
-import Glossary from '@/components/Glossary';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, mount } from '../../helpers';
 
@@ -74,7 +74,7 @@ describe('my-record', () => {
     });
 
     it('will display the clinical feedback updates', () => {
-      expect(page.find(Glossary).exists()).toBe(true);
+      expect(page.find(NhsArrowBanner).exists()).toBe(true);
     });
 
     describe('myRecordSectionClick', () => {

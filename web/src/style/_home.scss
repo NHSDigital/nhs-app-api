@@ -19,16 +19,9 @@ body {
 	min-height: 31.250em;
     background: $white;
     @include default_text;
-    font-family: $default;
-  @include mobileAndBelow {
-    font-size: 1em;
-  }
-  @include tabletOnly {
-    font-size: 1.225em;
-  }
-  @include fromDesktop {
-    font-size: 1em;
-  }
+  @include mobileAndBelow;
+  @include tabletOnly;
+  @include fromDesktop;
 }
 
 .nhsoLogo {
@@ -65,7 +58,6 @@ header.logged {
     h2 {
         @include h2;
         margin-bottom: 0.750em;
-        font-size: 1.2em;
         text-align: center;
         padding-left: 0.3em;
         padding-right: 0.3em;
@@ -101,12 +93,13 @@ header.logged {
         @include default_text;
         color: $nhs_blue;
         width: 100%;
+        display: inline;
+        cursor: pointer
     }
 
     .organDonationLink {
         text-align: left;
         cursor: pointer;
-        font-weight: bold;
         display: inline;
     }
 
@@ -123,7 +116,6 @@ header.logged {
     text-decoration: underline;
   &.desktopWeb {
     display: inline;
-    font-family: $default-web;
   }
 }
 
@@ -146,11 +138,12 @@ header.logged {
     @include loginMain-core;
     h2 {
         text-align: center;
-        font-size: 1.2em;
     }
 
     a {
         text-align: center;
+        display: inline;
+        cursor: pointer;
     }
 }
 

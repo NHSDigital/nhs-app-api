@@ -33,8 +33,6 @@ export default {
   @import "../../style/screensizes";
 
   .header-links {
-    font-family: $default-web;
-    font-weight: 100;
     float: right;
     display: none;
     margin-top: 1.5em;
@@ -49,10 +47,7 @@ export default {
 
       a {
         @include account;
-        font-family: $default-web;
-        font-weight: 100;
-        font-size: 1em;
-        text-decoration: underline;
+        text-decoration: none;
         display: inline-block;
         color: $white;
         padding: 0.5em;
@@ -71,7 +66,6 @@ export default {
 
       b {
         @include account;
-        font-size: 1em;
         display: inline-block;
         color: $white;
       }

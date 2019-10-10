@@ -4,19 +4,16 @@
 
 /** COMMON ELEMENTS */
 h2 {
-  @include h2;
   padding-bottom: 0.5em;
   padding-top: 0.5em;
 }
 
 h3 {
-  @include h3;
   padding-bottom: 0.5em;
   padding-top: 0.5em;
 }
 
 h4 {
-  @include h4;
   padding-bottom: 0.25em;
   padding-top: 0.25em;
 }
@@ -24,10 +21,6 @@ h4 {
 a {
   @include default_text;
   color: $nhs_blue;
-  font-size: 1em;
-  line-height: 1em;
-  font-weight: bold;
-  text-decoration: none;
   vertical-align: middle;
 
   h2 {

@@ -10,32 +10,15 @@ div.record-content {
   p,
   li {
     @include small_text;
-    line-height: 2em;
-    li,
-    p {
-      font-size: 1em;
-    }
-  }
-  p {
-    padding-left: 1.2em;
-    padding-right: 1.2em;
-    padding-bottom: 1em;
-    &:first-child {
-      padding-top: 1em;
-    }
-    &:last-child {
-      padding-bottom: 1em;
-    }
   }
   li {
     list-style-type: none;
     margin-top: 0.5em;
-    line-height: 1.5em;
   }
   ul {
     list-style-type: disc;
     list-style-position: outside;
-    margin-left: 3em;
+    margin-left: 1em;
   }
   label,
   b {
@@ -110,11 +93,8 @@ div.record-content {
     }
   }
   .consultationHeader {
-    margin-left:1.2em;
-    font-size: 0.875em;
     .consultationTerm {
       li {
-        font-size: 0.75em;
         display: list-item;
         list-style-type: disc;
         margin-left: -1em;
@@ -123,7 +103,6 @@ div.record-content {
             height:1px;
         }
         .observationText {
-          font-size: 0.875em;
           margin-left:-1.5em;
           li {
             list-style-type: none;

@@ -12,16 +12,30 @@
     <div v-for="(recall, recallIndex) in orderedRecalls"
          :key="`recall-${ recallIndex }`" :class="$style['record-item']"
          data-purpose="record-item">
-      <span v-if="recall.recordDate && recall.recordDate.value"
-            :class="$style.fieldName">
+      <p v-if="recall.recordDate && recall.recordDate.value"
+         data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">
         {{ recall.recordDate.value | datePart(recall.recordDate.datePart) }}
-      </span>
-      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
-      <p> {{ recall.name }} </p>
-      <p> {{ recall.description }} </p>
-      <p> {{ $t('my_record.recalls.result') }}{{ recall.result }} </p>
-      <p> {{ $t('my_record.recalls.nextDate') }}{{ recall.nextDate }} </p>
-      <p> {{ $t('my_record.recalls.status') }}{{ recall.status }} </p>
+      </p>
+      <p v-else data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">{{ $t('my_record.noStartDate') }}</p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ recall.name }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ recall.description }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ $t('my_record.recalls.result') }}{{ recall.result }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ $t('my_record.recalls.nextDate') }}{{ recall.nextDate }} </p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ $t('my_record.recalls.status') }}{{ recall.status }} </p>
       <hr aria-hidden="true">
     </div>
   </div>
@@ -72,32 +86,4 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../../style/medrecordcontent';
-@import '../../../style/medrecordtitle';
-@import "../../../style/colours";
-
-.fieldName {
-  padding-left: 1.3em;
-  padding-right: 1.3em;
-  padding-bottom: 0.250rem;
-  color: $dark_grey;
-  font-size: 0.813em;
-  font-weight: 700;
-}
-
-div {
- &.desktopWeb {
-  max-width: 540px;
-  cursor: default;
-
-  span {
-   font-family: $default_web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-  }
- }
-}
-
 </style>

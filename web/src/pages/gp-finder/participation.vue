@@ -2,13 +2,14 @@
   <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
     <div>
       <h2>{{ `${$t('th04.featuresHeader')} ${practiceName}` }}</h2>
-      <analytics-tracked-tag :text="$t('th04.ctaNotMySurgery')"
-                             :click-func="backButtonClicked"
-                             :class="$style.throtlingLink"
-                             tag="a">
-        {{ $t('th04.ctaNotMySurgery') }}
-      </analytics-tracked-tag>
-
+      <p class="nhsuk-u-margin-bottom-0">
+        <analytics-tracked-tag :text="$t('th04.ctaNotMySurgery')"
+                               :click-func="backButtonClicked"
+                               :class="$style.throtlingLink"
+                               tag="a">
+          {{ $t('th04.ctaNotMySurgery') }}
+        </analytics-tracked-tag>
+      </p>
       <hr>
 
       <div>
@@ -43,16 +44,14 @@
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
         <analytics-tracked-tag :text="this.$t('th04.ctaContinue')" :tabindex="-1">
-          <generic-button :class="$style.continue" :button-classes="[$store.state.device.isNativeApp
-            ?'button':'button-desktop', 'green']">
+          <generic-button :class="$style.continue" :button-classes="['nhsuk-button']">
             {{ this.$t('th04.ctaContinue') }}
           </generic-button>
         </analytics-tracked-tag>
       </form>
 
       <analytics-tracked-tag v-else :text="this.$t('th04.ctaContinue')">
-        <generic-button :button-classes="[$store.state.device.isNativeApp
-                          ?'button':'button-desktop', 'green',]" :class="$style.continue"
+        <generic-button :button-classes="['nhsuk-button',]" :class="$style.continue"
                         @click="notParticipatingCTAClicked">
           {{ this.$t('th04.ctaContinue') }}
         </generic-button>

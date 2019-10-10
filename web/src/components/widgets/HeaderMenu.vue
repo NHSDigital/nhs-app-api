@@ -2,7 +2,7 @@
   <nav class="nhsuk-header__navigation" :class="[miniMenuExpanded && 'js-show',
                                                  'nojs-mini-menu-expanded']">
     <p class="nhsuk-header__navigation-title">
-      <span id="label-navigation">Menu</span>
+      <span id="label-navigation" style="color:#212b32;">Menu</span>
       <button id="close-menu" class="nhsuk-header__navigation-close"
               @click.prevent="closeMiniMenu"
               @keyup.13="closeMiniMenu">
@@ -152,12 +152,8 @@ export default {
   @mixin mini-menu-option {
     padding: 1em 0.8em 1em 1em;
     display: block;
-    font-size: 1em;
-    line-height: 1.5em;
-    font-family: $frutiger-bold;
     border-bottom: 1px $background solid;
     color: $black;
-    font-weight: 400;
     cursor: pointer;
   }
 
@@ -166,7 +162,6 @@ export default {
     height: auto;
     display: none;
     :focus {
-      outline-color: $focus_highlight;
       box-shadow: inset 0 0 0 4px $focus_highlight;
     }
 
@@ -202,10 +197,6 @@ export default {
 
       a {
        @include default_text_web;
-       font-weight: normal;
-       font-size: 1em;
-       line-height: 1.5em;
-       font-family: $default-web;
        color: $white;
        padding: 1em;
 

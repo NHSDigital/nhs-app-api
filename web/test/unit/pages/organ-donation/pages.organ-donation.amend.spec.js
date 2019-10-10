@@ -17,29 +17,21 @@ const createState = ({ isAmending = false, isNativeApp = false } = {}) => ({
   },
 });
 
-const createStyle = () => ({
-  button: 'button',
-  grey: 'grey',
-});
-
 describe('organ donation amend page', () => {
   let $router;
   let $store;
-  let $style;
   let state;
   let wrapper;
 
   const mountWrapper = () => mount(Amend, {
     $router,
     $store,
-    $style,
   });
 
   beforeEach(() => {
     $router = createRouter();
     state = createState({ isAmending: true });
     $store = createStore({ state });
-    $style = createStyle();
     wrapper = mountWrapper();
   });
 
@@ -121,10 +113,10 @@ describe('organ donation amend page', () => {
         expect(backButton.exists()).toEqual(true);
       });
 
-      it('will be a grey button', () => {
+      it('will be a button with a grey nhsuk-button style', () => {
         const classes = backButton.classes();
-        expect(classes).toContain($style.grey);
-        expect(classes).toContain($style.button);
+        expect(classes).toContain('nhsuk-button');
+        expect(classes).toContain('nhsuk-button--secondary');
       });
 
       it('will translate the generic back button text', () => {

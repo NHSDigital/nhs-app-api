@@ -1,35 +1,42 @@
 <template>
-  <div>
+  <div class="nhsuk-u-padding-top-0">
     <component :is="dateHeader"
                v-if="prescriptionCourse.orderDate != null"
-               :class="$style['date-header']">
+               class="nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-0">
       <div>
-        <div :class="$style.dateHeaderTitle"
-             data-label="dateHeader">{{ $t('rp02.orderDate') }}
-        </div>
-        <div :class="$style.date" data-label="order-date">
-          {{ prescriptionCourse.orderDate | longDate }}
-        </div>
-      </div>
-
-      <div v-if="prescriptionCourse.status != null">
-        <div :class="getStatusStyle()">
-          <b>
-            <component :is="getIcon()"
-                       data-label="status-icon"
-                       :data-status="getStatusText()"
-                       focusable="false"/>
-            <span data-label="status-description">
-              {{ getStatusDescription() }}
-            </span>
-          </b>
-        </div>
+        <p data-label="dateHeader" class="nhsuk-u-margin-bottom-0">
+          <strong>{{ $t('rp02.orderDate') }}</strong>
+        </p>
+        <p class="nhsuk-body-l nhsuk-u-margin-bottom-0" data-label="order-date">
+          <strong>{{ prescriptionCourse.orderDate | longDate }}</strong>
+        </p>
       </div>
     </component>
 
-    <hr v-if="prescriptionCourse.orderDate != null" aria-hidden="true">
-    <b data-label="course-name">{{ prescriptionCourse.name }}</b>
-    <p data-label="detail">{{ prescriptionCourse.details }}</p>
+    <div v-if="prescriptionCourse.status != null &&
+      prescriptionCourse.orderDate != null">
+      <p :class="getStatusStyle()">
+        <strong>
+          <component :is="getIcon()"
+                     data-label="status-icon"
+                     :data-status="getStatusText()"
+                     focusable="false"/>
+          <span data-label="status-description">
+            {{ getStatusDescription() }}
+          </span>
+        </strong>
+      </p>
+    </div>
+
+    <hr v-if="prescriptionCourse.orderDate != null"
+        class="nhsuk-u-margin-bottom-3 nhsuk-u-margin-top-2"
+        aria-hidden="true">
+    <p class="nhsuk-u-margin-bottom-0">
+      <b data-label="course-name">{{ prescriptionCourse.name }}</b>
+    </p>
+    <p data-label="detail" class="nhsuk-u-margin-bottom-0">
+      {{ prescriptionCourse.details }}
+    </p>
   </div>
 </template>
 
@@ -53,7 +60,7 @@ export default {
     },
     dateHeader: {
       type: String,
-      default: 'h3',
+      default: 'h2',
       validator: value => ['h2', 'h3'].indexOf(value) !== -1,
     },
   },
@@ -81,7 +88,7 @@ export default {
   },
   methods: {
     getStatusStyle() {
-      return this.$style[this.statusStyling[this.prescriptionCourse.status].style];
+      return `${this.$style[this.statusStyling[this.prescriptionCourse.status].style]} nhsuk-u-margin-bottom-3`;
     },
     getStatusText() {
       return this.statusStyling[this.prescriptionCourse.status].text;
@@ -100,36 +107,20 @@ export default {
 <style module lang="scss" scoped>
 @import "../style/colours";
 
-.dateHeaderTitle {
- font-weight: bold;
- font-size: 18px;
-}
-
-.date {
- font-weight: normal;
- font-size: 25px;
- line-height: 1.5em;
- margin-bottom: 1em
-}
-
- hr {
-  margin-bottom: 0.5em
- }
-
 .requested {
- b {
+ strong {
   color: $awaiting !important;
  }
 }
 
 .issued {
- b {
+ strong {
   color: $approved !important;
  }
 }
 
 .rejected {
- b {
+ strong {
   color: $error !important;
  }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
+  <div :class="[$store.state.device.isNativeApp && $style.web]">
     <div>
       <h2>{{ this.$t('th06.whatHappensNextHeading') }}</h2>
       <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph1') }}</p>
@@ -10,8 +10,7 @@
       <p>{{ this.$t('th06.untilThenOrganDonationParagraph') }}</p>
       <analytics-tracked-tag :text="this.$t('th06.homeButton')" :tabindex="-1">
         <generic-button :class="$style.goToHomeScreenButton"
-                        :button-classes="[$store.state.device.isNativeApp
-                          ?'button':'button-desktop', 'grey']"
+                        :button-classes="['nhsuk-button nhsuk-button--secondary']"
                         @click="onReturnHomeClicked">
           {{ this.$t('th06.homeButton') }}
         </generic-button>
@@ -90,18 +89,13 @@ export default {
   @import '../../style/buttons';
   @import '../../style/throttling/throttling';
   @import '../../style/throttling/gpfindersendemail';
-  .webHeader {
-    &.web {
-      margin-top: -3.625em;
-    }
-  }
 
-  .nativeHeader {
-    padding: 0 0 3.125em 2.0px;
+  .main.content > div {
+    padding:0;
+    padding-left:2em;
   }
   .throttlingContent {
     padding-top:0;
-    padding-left:0;
   }
 
 </style>

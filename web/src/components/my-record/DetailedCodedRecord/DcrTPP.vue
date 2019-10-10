@@ -1,6 +1,8 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isEventsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="EVENTS"
@@ -14,7 +16,9 @@
     <events :is-collapsed="isEventsCollapsed" :events="record.tppDcrEvents" />
 
     <analytics-tracked-tag :id="'testResultsHeader'"
-                           :class="[$style['record-title'],
+                           :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isTestResultsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="TESTRESULTS"

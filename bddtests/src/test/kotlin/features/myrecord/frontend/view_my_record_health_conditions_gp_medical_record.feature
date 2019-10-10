@@ -1,4 +1,5 @@
 @my-record
+@pending @NHSO-7509
 Feature: View My Health Conditions - Medical Record V2
 
   Scenario Outline: A <GP System> user has multiple health conditions on their record - GP Medical Record

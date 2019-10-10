@@ -2,52 +2,70 @@
   <div id="maincontent" :class="dynamicStyle('loginMain')">
     <div v-if="!isThrottlingEnabled || (isPracticeParticipating
       && isThrottlingEnabled)">
-      <h2>{{ $t('login.desc') }}</h2>
+      <h2 class="nhsuk-u-margin-bottom-2">{{ $t('login.desc') }}</h2>
       <form ref="loginForm"
             :action="authoriseUrl"
             method="get"
             @submit.prevent="redirectToCitizenId">
         <input :value="source" type="hidden" name="source">
-        <LoginButton :disabled="isButtonDisabled" />
+        <generic-button
+          id="login-button"
+          :button-classes="['nhsuk-login', 'nhsuk-body', 'nhsuk-button',
+                            $store.state.device.isNativeApp
+                              ?'button':'']"
+          type="submit"
+          data-id="login-button">
+          {{ $t('loginButton.login') }}
+        </generic-button>
       </form>
     </div>
     <no-ssr placeholder="">
       <div :class="$style.throttlingContent">
-        <analytics-tracked-tag
-          v-if="!hasCookie && isPracticeParticipating && isThrottlingEnabled"
-          :class="[$style.checkFeaturesLink, !$store.state.device.isNativeApp && $style.desktopWeb]"
-          :text="$t('login.checkWhatFeaturesYouCanUse')"
-          :click-func="resetAndGoToGPFinder"
-          tag="a">
-          {{ $t('login.checkWhatFeaturesYouCanUse') }}
-        </analytics-tracked-tag>
-        <div v-if="!isPracticeParticipating && isThrottlingEnabled">
-          <br>
-          <analytics-tracked-tag id="btn_organDonation"
-                                 :href="organDonationUrl"
-                                 :class="$style.organDonationLink"
-                                 :text="$t('shared.organDonation.recordDecision')"
-                                 tag="a"
-                                 target="_blank">
-            <NHS-Arrow-Circle />
-            {{ $t('shared.organDonation.recordDecision') }}
+        <p :class="$store.state.device.isNativeApp? $style['center'] : ''">
+          <analytics-tracked-tag
+            v-if="!hasCookie && isPracticeParticipating && isThrottlingEnabled"
+            :class="[!$store.state.device.isNativeApp && $style.desktopWeb]"
+            :text="$t('login.checkWhatFeaturesYouCanUse')"
+            :click-func="resetAndGoToGPFinder"
+            tag="a">
+            {{ $t('login.checkWhatFeaturesYouCanUse') }}
           </analytics-tracked-tag>
-          <div v-if="!isPracticeParticipating && isThrottlingEnabled">
-            <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
-            <h5>{{ notParticipatingSurgeryName }}</h5>
-            <p>{{ notParticipatingSurgeryAddress }}</p>
-            <analytics-tracked-tag :text="$t('login.notMyGpSurgery')"
-                                   :class="[$style.checkFeaturesLink,
-                                            !$store.state.device.isNativeApp && $style.desktopWeb]"
-                                   :click-func="resetAndGoToGPFinder"
-                                   href="#"
-                                   tag="a">
-              {{ $t('login.notMyGpSurgery') }}
-            </analytics-tracked-tag>
+        </p>
+        <div v-if="!isPracticeParticipating && isThrottlingEnabled">
+          <nhs-arrow-banner id="btn_organDonation"
+                            :banner-text="$t('shared.organDonation.recordDecision')"
+                            :link-url="organDonationUrl"
+                            :is-analytics-tracked="true"
+                            :class="$store.state.device.isNativeApp?
+                              'nhsuk-u-margin-bottom-0' : '' "/>
+          <div v-if="!isPracticeParticipating && isThrottlingEnabled"
+               :class="$store.state.device.isNativeApp?
+                 'nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0' : ''">
+            <h2 :class="$store.state.device.isNativeApp?
+                  'nhsuk-u-margin-bottom-0 nhsuk-heading-xxs' : 'nhsuk-heading-s'"
+                style="text-align: left;">
+              {{ $t('login.moreFeaturesComingSoon') }}</h2>
+            <h3 :class="[$store.state.device.isNativeApp?
+              'nhsuk-u-margin-bottom-0' : '', 'nhsuk-heading-xxs']" >
+              {{ notParticipatingSurgeryName }}</h3>
+            <p :class="$store.state.device.isNativeApp?
+              'nhsuk-u-margin-top-0' : ''">{{ notParticipatingSurgeryAddress }}</p>
+            <p :class="$store.state.device.isNativeApp? $style['center'] : ''">
+              <analytics-tracked-tag :text="$t('login.notMyGpSurgery')"
+                                     :class="[$style.checkFeaturesLink,
+                                              !$store.state.device.isNativeApp
+                                                && $style.desktopWeb]"
+                                     :click-func="resetAndGoToGPFinder"
+                                     href="#"
+                                     tag="a">
+                {{ $t('login.notMyGpSurgery') }}
+              </analytics-tracked-tag>
+            </p>
           </div>
         </div>
       </div></no-ssr>
-    <div v-if="this.$store.state.device.isNativeApp" :class="$style.appVersion">
+    <div v-if="this.$store.state.device.isNativeApp"
+         :class="[$style['nhsuk-body-s'], $style['appVersion']]">
       Version {{ this.$store.state.appVersion.webVersion }}
       <span v-if="this.$store.state.appVersion.nativeVersion">
         ({{ this.$store.state.appVersion.nativeVersion }})
@@ -57,8 +75,8 @@
 </template>
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import NHSArrowCircle from '@/components/icons/NHSArrowCircle';
-import LoginButton from '@/components/LoginButton';
+import GenericButton from '@/components/widgets/GenericButton';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
@@ -70,8 +88,8 @@ export default {
   layout: 'login',
   components: {
     AnalyticsTrackedTag,
-    LoginButton,
-    NHSArrowCircle,
+    NhsArrowBanner,
+    GenericButton,
   },
   data() {
     return {
@@ -228,11 +246,11 @@ export default {
     }
   }
 }
-
+.center {
+  text-align: center;
+}
 .appVersion {
   text-align: center;
-  color: #637683;
-  font-size: small;
 }
 .throttlingContent+.appVersion {
   margin-top: 0.5em;

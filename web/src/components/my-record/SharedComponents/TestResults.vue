@@ -14,21 +14,28 @@
       <div v-for="(testResult, testIndex) in orderedTestResults"
            :key="`testResult-${testIndex}`" :class="$style['record-item']"
            data-purpose="record-item">
-        <span v-if="testResult.date.value" :class="$style.fieldName">
+        <p v-if="testResult.date.value"
+           data-purpose="record-item-header"
+           class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+           nhsuk-body-s">
           {{ testResult.date.value | datePart(testResult.date.datePart) }}
-        </span>
-        <span v-else :class="$style.fieldName">
+        </p>
+        <p v-else data-purpose="record-item-header"
+           class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+           nhsuk-body-s">
           {{ $t('my_record.noStartDate') }}
-        </span>
-        <p v-if="supplier === 'TPP'">
+        </p>
+        <p v-if="supplier === 'TPP'"
+           class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
           <a :href="getTestResultPath(testResult.id)"
-             :class="$style.viewTestResult"
+             style="display:inline-block;"
              tabindex="0"
              @click="activateTestResult(testResult.id, $event)"
              @keypress="onKeyDown(testResult.id, $event)">{{ testResult.description }}
           </a>
         </p>
-        <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
+        <p v-if="supplier === 'EMIS'" data-purpose="record-item-detail"
+           class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
           {{ testResult.description }}
         </p>
         <ul :class="$style.testResultNoChild">
@@ -57,22 +64,27 @@
       <div v-for="(testResult, testIndex) in results.data"
            :key="`testResult-${testIndex}`" :class="$style['record-item']"
            data-purpose="record-item">
-        <span v-if="testResult.date.value" :class="$style.fieldName">
+        <p v-if="testResult.date.value"
+           data-purpose="record-item-header"
+           class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+           nhsuk-body-s">
           {{ testResult.date.value | datePart(testResult.date.datePart) }}
-        </span>
-        <span v-else :class="$style.fieldName">
+        </p>
+        <p v-else data-purpose="record-item-header"
+           class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+           nhsuk-body-s">
           {{ $t('my_record.noStartDate') }}
-        </span>
+        </p>
         <p v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
-           :key="`associatedText-${associatedTextItemIndex}`">
+           :key="`associatedText-${associatedTextItemIndex}`"
+           data-purpose="record-item-detail">
           {{ associatedText }}
         </p>
         <hr aria-hidden="true">
       </div>
     </div>
     <div v-else-if="supplier === 'VISION'">
-      <a :class="$style.viewTestResult"
-         :href="testResultsPath + nojsQuery"
+      <a :href="testResultsPath + nojsQuery"
          tabindex="0"
          @click.prevent="viewVisionTestResults"
          @keypress="onKeyDownVision($event)">
@@ -163,40 +175,4 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
-
-  .viewTestResult {
-    padding: 1em;
-    font-size: 0.875em;
-  }
-
-  .fieldName {
-    padding-left: 1.3em;
-    padding-right: 1.3em;
-    padding-bottom: 0.250rem;
-    color: #425563;
-    font-size: 0.813em;
-    font-weight: 700;
-  }
-
-  div {
-   &.desktopWeb {
-    a {
-     cursor: pointer;
-     &:focus {
-      @include outlineStyle
-     }
-    }
-    span {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-    p {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-   }
-  }
-
 </style>

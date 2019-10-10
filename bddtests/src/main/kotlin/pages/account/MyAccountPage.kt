@@ -28,13 +28,13 @@ class MyAccountPage : HybridPageObject() {
     val settings = AccountSettingsModule(this)
 
     fun assertDisplayed() {
-        aboutUs.assertLinksPresent()
+        aboutUs.assertLinksPresent(true)
         signOutButton.assertIsVisible()
     }
 
     fun assertDisplayedForMobile() {
         signOutButtonMobile.assertIsVisible()
-        aboutUs.assertLinksPresent()
+        aboutUs.assertLinksPresent(true)
     }
 }
 

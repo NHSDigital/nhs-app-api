@@ -1,11 +1,12 @@
 <template>
   <div v-if="showTemplate">
-    <h2>{{ $t('myAccount.aboutUsHeading') }}</h2>
+    <h2 class="nhsuk-u-margin-bottom-0">{{ $t('myAccount.aboutUsHeading') }}</h2>
 
     <menu-item-list>
       <menu-item v-for="(link, index) in links"
                  :id="'account-menu-item' + index"
                  :key="index"
+                 :header-tag="headerTag"
                  :target="'_blank'"
                  :href="link.url"
                  :text="$t(link.localeLabel)"
@@ -26,6 +27,12 @@ export default {
     MenuItem,
     MenuItemList,
   },
+  props: {
+    headerTag: {
+      type: String,
+      default: 'h2',
+    },
+  },
   data() {
     return {
       links: accountLinks(this.$env),
@@ -33,11 +40,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/accessibility";
-  @import '../../style/colours';
-  @import '../../style/textstyles';
-  @import '../../style/fonts';
-  @import "../../style/webshared";
-</style>

@@ -1,6 +1,6 @@
 <template>
   <div :class="!isNativeApp && $style.desktopWeb">
-    <div id="conditionInfo" :class="$style.info" data-purpose="info">
+    <div id="conditionInfo" data-purpose="info">
       <p>{{ $t('appointments.gp_advice.conditions.paragraph') }}</p>
       <form method="post">
         <input type="hidden"
@@ -10,11 +10,10 @@
                type="hidden"
                :name="demographicsConsentName"
                :value="demographicsConsentGiven">
-        <button role="link"
-                :class="$style.link"
-                @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
-          {{ $t('appointments.gp_advice.conditions.link') }}
-        </button>
+        <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+          <a role="link" @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
+            {{ $t('appointments.gp_advice.conditions.link') }}</a>
+        </p>
       </form>
     </div>
     <div v-for="serviceDefinition in serviceDefinitions"
@@ -34,6 +33,7 @@
                  :name="demographicsConsentName"
                  :value="demographicsConsentGiven">
           <menu-item :id="serviceDefinitionItem.id"
+                     :header-tag="headerTag"
                      :text="serviceDefinitionItem.title"
                      tag="button"
                      :click-func="onConditionClicked"
@@ -49,11 +49,11 @@
              type="hidden"
              :name="demographicsConsentName"
              :value="demographicsConsentGiven">
-      <button role="link"
-              :class="$style.link"
-              @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
-        {{ $t('appointments.gp_advice.conditions.link') }}
-      </button>
+      <p id="endConditionInfo" class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+        <a role="link" @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
+          {{ $t('appointments.gp_advice.conditions.link') }}
+        </a>
+      </p>
     </form>
     <form :action="indexPath">
       <generic-button id="endMyConsultationButton"
@@ -90,6 +90,10 @@ export default {
       type: Array,
       required: true,
     },
+    headerTag: {
+      type: String,
+      default: 'h2',
+    },
   },
   data() {
     return {
@@ -124,16 +128,15 @@ export default {
   },
 };
 </script>
-
+<style>
+  a {
+    display: inline-block;
+    cursor: pointer;
+  }
+</style>
 <style module lang="scss" scoped>
-  @import '../../style/accessibility';
-  @import '../../style/listmenu';
-  @import '../../style/webshared';
-  @import '../../style/info';
   @import '../../style/textstyles';
-  @import '../../style/fonts';
   @import '../../style/nhsukoverrides';
-  @import '../../style/fonts';
   @import '../../style/buttons';
 
   div.desktopWeb {
@@ -142,23 +145,8 @@ export default {
     }
   }
 
-  .warningText {
-    font-family: $default_web;
-    font-weight: normal;
-  }
-
   button {
     margin-top: 1.5em;
   }
 
-  .info {
-    font-size: 1em;
-    margin-bottom: 1em;
-    padding-top: 1em;
-
-    p {
-      font-family: $default_web;
-      font-weight: normal;
-    }
-  }
 </style>

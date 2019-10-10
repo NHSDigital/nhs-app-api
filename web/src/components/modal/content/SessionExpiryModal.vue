@@ -7,7 +7,7 @@
       </p>
     </div>
     <generic-button id="modalExtendSession"
-                    :class="[$style.button, $style.green]"
+                    :button-classes="['nhsuk-button', $style['nhsuk-button-full-width']]"
                     @click.prevent="extendSession">
       {{ $t('web.sessionExpiry.warningGetMoreTime') }}
     </generic-button>
@@ -62,19 +62,19 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../../style/buttons";
   @import "../../../style/fonts";
   @import '~nhsuk-frontend/packages/core/all.scss';
   @import '~nhsuk-frontend/packages/components/action-link/action-link';
+
+  .nhsuk-button-full-width {
+    width: 100%;
+  }
 
   .logoutPanel {
     text-align: center;
   }
 
   .logoutLink {
-    font-size: 1.125em;
-    line-height: 1.125em;
-    font-weight: $nhsuk-font-bold;
     vertical-align: middle;
     padding-left: 0;
     text-align: center;
@@ -83,17 +83,5 @@ export default {
     &:visited {
       color: $color_nhsuk-blue;
     }
-  }
-
-  .modalBody {
-    font-family: $default;
-  }
-
-  .warningHeader {
-    font-weight: $nhsuk-font-bold;
-  }
-
-  p {
-    margin-bottom: 1em;
   }
 </style>

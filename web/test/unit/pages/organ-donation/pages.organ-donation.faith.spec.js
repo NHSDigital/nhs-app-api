@@ -1,12 +1,12 @@
 import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
+import MessageDialog from '@/components/widgets/MessageDialog';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
 import { createRouter, createScrollTo, createStore, mount } from '../../helpers';
 
 describe('organ donation faith page', () => {
   let $store;
-  let $style;
   let wrapper;
   let $router;
   let state;
@@ -29,7 +29,6 @@ describe('organ donation faith page', () => {
     wrapper = mount(Faith, {
       $router,
       $store,
-      $style,
     });
   });
 
@@ -39,10 +38,6 @@ describe('organ donation faith page', () => {
 
       beforeEach(() => {
         backButton = wrapper.find(BackButton);
-        $style = {
-          button: 'button',
-          grey: 'grey',
-        };
       });
 
       it('will exist', () => {
@@ -57,11 +52,6 @@ describe('organ donation faith page', () => {
 
       beforeEach(() => {
         continueButton = wrapper.find('#continue-to-additional-details');
-        $style = {
-          button: 'button',
-          green: 'green',
-          error: 'error',
-        };
       });
 
       it('will exist', () => {
@@ -72,9 +62,9 @@ describe('organ donation faith page', () => {
         expect(continueButton.text()).toEqual('translate_organDonation.faith.continueButtonText');
       });
 
-      it('will be set as a green button', () => {
-        expect(continueButton.classes()).toContain($style.button);
-        expect(continueButton.classes()).toContain($style.green);
+      it('will be a button with nhsuk-button style', () => {
+        const classes = continueButton.classes();
+        expect(classes).toContain('nhsuk-button');
       });
 
       describe('with no selected choice', () => {
@@ -87,7 +77,7 @@ describe('organ donation faith page', () => {
           });
 
           it('will show an error', () => {
-            expect(wrapper.find('.error').exists()).toBe(true);
+            expect(wrapper.find(MessageDialog).exists()).toBe(true);
           });
 
           it('will not push the organ donation additional details page on the router', () => {

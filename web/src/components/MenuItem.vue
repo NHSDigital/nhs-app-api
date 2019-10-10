@@ -11,8 +11,8 @@
                            :prevent-default="preventDefault"
                            :click-func="clickFunc">
       <span :class="$style.listMenuItemContainer">
-        <component :is="headerTag">{{ text }}</component>
-        <p v-if="description">{{ description }}</p>
+        <component :is="headerTag" class="nhsuk-heading-s">{{ text }}</component>
+        <p v-if="description" class="nhsuk-u-margin-bottom-3">{{ description }}</p>
         <slot/>
       </span>
     </analytics-tracked-tag>
@@ -81,6 +81,8 @@ export default {
 @import '../style/fonts';
 @import '../style/colours';
 @import '../style/arrow';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
 
 .listMenuItemLink {
   @include icon-arrow-left-white-background;
@@ -90,8 +92,6 @@ export default {
 
   border-top: 1px $border_grey solid;
   border-bottom: 1px $border_grey solid;
-
-  font-size: 1em;
 
   &:hover {
     @include outlineStyleLightMenuItem;
@@ -124,8 +124,6 @@ button.listMenuItemLink {
 }
 
 .listMenuItem {
-  font-family: $default-web;
-  font-weight: lighter;
   display: block;
   margin-bottom: 5px;
 
@@ -134,8 +132,14 @@ button.listMenuItemLink {
   }
 
   .listMenuItemContainer {
-    padding: 1em;
+    padding: 0.2em 0.5em;
     display: block;
+    cursor: pointer;
+
+    h2, p {
+      padding-left:10px;
+      width: 90%;
+    }
 
     h2 {
       margin: 0;
@@ -143,7 +147,6 @@ button.listMenuItemLink {
 
     h3 {
       @include h3;
-      padding-top: 1em;
     }
 
     h4 {
@@ -153,10 +156,7 @@ button.listMenuItemLink {
     }
 
     p {
-      padding-bottom: 0.5em;
-      padding-top: 0.5em;
-      margin-bottom: 0;
-      width: 90%;
+      color: #000;
     }
   }
 }

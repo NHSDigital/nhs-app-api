@@ -1,9 +1,6 @@
 @import './colours';
 
 .statusLabel {
-  font-weight: 700;
-  font-size: 1em;
-  line-height: 1.5em;
   display: inline;
   color: $white;
   padding: 0.4em 0.8em;
@@ -11,7 +8,7 @@
   &.success {
     background-color: $nhs_blue;
   }
-  
+
   &.warning {
     background-color: $nhs_orange;
     color: $dark_grey;

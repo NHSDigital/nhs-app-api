@@ -36,8 +36,8 @@ describe('condition list', () => {
     });
 
     each([
-      '#conditionInfo button',
-      '.conditionCategory:last-of-type+form>button',
+      '#conditionInfo a',
+      '#endConditionInfo a',
     ]).it('will have a button for general advice before and after the condition categories that when clicked evaluates general advice', (selector) => {
       // Arrange
       const onConditionClicked = jest.fn();

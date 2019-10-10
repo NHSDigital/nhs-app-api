@@ -27,7 +27,7 @@ export default {
   height: 1.160em;
   border-radius: 0.938em;
   text-align: center;
-  line-height: 1.160em;
+  line-height: 1em;
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;

@@ -1,6 +1,8 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isImmunisationsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="IMMUNISATIONS"
@@ -13,7 +15,9 @@
     </analytics-tracked-tag>
     <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isProblemsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="PROBLEMS"
@@ -26,7 +30,9 @@
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isConsultationsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="CONSULTATIONS"
@@ -40,7 +46,9 @@
     <consultations :is-collapsed="isConsultationsCollapsed"
                    :consultations="record.consultations" />
     <analytics-tracked-tag id="testResultsHeader"
-                           :class="[$style['record-title'],
+                           :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isTestResultsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="TESTRESULTS"
@@ -55,7 +63,9 @@
                   :supplier="record.supplier" />
     <template v-if="myRecordDocumentsEnabled">
       <analytics-tracked-tag id="documentsHeader"
-                             :class="[$style['record-title'],
+                             :class="['nhsuk-heading-s',
+                                      'nhsuk-u-padding-3',
+                                      $style['record-title'],
                                       getCollapsedState(isDocumentsCollapsed)]"
                              :click-func="myRecordSectionClick"
                              :click-param="DOCUMENTS"

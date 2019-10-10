@@ -19,19 +19,24 @@
         </div>
         <div v-else id="mainContent" ref="mainContent" tabindex="-1"
              :class="$style['main-container-desktop']">
-          <section :class="$style['pull-content']">
-            <h1 :class="$style['web-page-title']">{{ $t('web.home.title') }}</h1>
-            <ul :class="$style['intro-bullets']">
-              <li>{{ $t('web.home.bullets.one') }}</li>
-              <li>{{ $t('web.home.bullets.two') }}</li>
-              <li>{{ $t('web.home.bullets.three') }}</li>
-              <li>{{ $t('web.home.bullets.four') }}</li>
+          <section>
+            <h1 class="nhsuk-u-margin-top-4">{{ $t('web.home.title') }}</h1>
+            <ul>
+              <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.one') }}</li>
+              <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.two') }}</li>
+              <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.three') }}</li>
+              <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.four') }}</li>
             </ul>
 
             <main :class="[this.$style['homeMain-desktop'], this.$style['pull-content']]">
               <flash-message/>
               <nuxt/>
-              <symptom-banner/>
+              <h3 class="nhsuk-u-margin-bottom-2">{{ $t('symptomBanner.howAreYouFeeling') }}</h3>
+              <nhs-arrow-banner :id="symptomButtonId"
+                                :banner-text="$t('symptomBanner.checker')"
+                                :link-url="symptomsUrl"
+                                :is-analytics-tracked="false"
+                                :open-new-window="false"/>
             </main>
           </section>
         </div>
@@ -55,20 +60,25 @@ import NativeCallbacks from '@/services/native-app';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
-import SymptomBanner from '@/components/SymptomBanner';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import { findByName } from '@/lib/routes';
 
 export default {
   components: {
     HomeHeader,
-    SymptomBanner,
+    NhsArrowBanner,
     WebHeader,
     WebFooter,
     ApiError,
     ConnectionError,
     FlashMessage,
     SessionExpiredBanner,
+  },
+  data() {
+    return {
+      symptomButtonId: 'btn_home_symptoms',
+    };
   },
   computed: {
     showSessionExpiredBanner() {
@@ -79,6 +89,9 @@ export default {
     },
     currentHelpUrl() {
       return findByName(this.$route.name).helpUrl;
+    },
+    symptomsUrl() {
+      return '/check-your-symptoms';
     },
   },
   head() {
@@ -119,6 +132,7 @@ export default {
 @import "../style/main";
 @import "../style/pulltorefresh";
 @import "../style/elements";
+@import "~nhsuk-frontend/packages/nhsuk";
 </style>
 
 <style module lang="scss" scoped>
@@ -133,7 +147,11 @@ export default {
 .login-app-header-flex-container {
   display:flex;
   flex-direction:column;
-  height:100vh;
+  height:105vh;
+}
+
+.login-app-header-full-container {
+  height: 100%;
 }
 
 .login-app-header-flex-container-desktop {
@@ -153,15 +171,8 @@ export default {
   @include space(padding, all, 1em);
 }
 
-.intro-bullets {
-  margin: 0 2em;
-  line-height: 250%;
-}
-
 .appVersion {
   text-align: center;
-  color: #637683;
-  font-size: small;
 }
 
 .sub-header {
@@ -171,17 +182,6 @@ export default {
 .rule {
   height: 0.063em;
   border: none;
-  background-color: #D8DDE0;
-}
-
-.nhsuk-icon__arrow-right-circle-desktop {
-  display: inline-block;
-  vertical-align: middle;
-  fill: #007f3b;
-  height: 1.2em;
-  left: -3px;
-  top: -6px;
-  width: 1.2em;
 }
 
 section {

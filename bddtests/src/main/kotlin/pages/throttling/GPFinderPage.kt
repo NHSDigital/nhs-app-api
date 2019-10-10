@@ -21,7 +21,7 @@ class GPFinderPage : HybridPageObject() {
     )
 
     private val loginButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), \"Login to NHS App\")]",
+            webDesktopLocator = "//a[contains(text(), \"Login to NHS App\")]",
             webMobileLocator = "//button[contains(text(), \"Login to NHS App\")]",
             androidLocator = null,
             page = this

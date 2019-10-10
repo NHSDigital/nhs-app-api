@@ -90,19 +90,6 @@ class PatientVerificationStepDefinitions {
                 }
     }
 
-    @Given("Vision responds with a record currently unavailable error")
-    fun visionRespondsWithARecordCurrentlyUnavailableError() {
-        val patient =  Patient.getDefault("VISION")
-        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
-        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
-        mockingClient
-                .forVision {
-                    authentication.getConfigurationRequest(
-                            VisionMockDefaults.getVisionUserSession(patient))
-                            .respondWithRecordCurrentlyUnavailableError()
-                }
-    }
-
     @Given("I have an (.*) ODS Code not in expected format")
     fun givenIHaveAnOdsCodeNotInExpectedFormat(gpSystem: String) {
         PatientVerificationSerenityHelpers.ConnectionToken.set(Patient.getDefault(gpSystem).connectionToken)

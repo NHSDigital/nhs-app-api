@@ -20,7 +20,7 @@
                  :error-message="$t('organDonation.yourChoice.errorMessageText')"
                  @select="selected"/>
     <generic-button id="continue-button"
-                    :class="[$style.button, $style.green]"
+                    :class="['nhsuk-button']"
                     @click.prevent="continueClicked">
       {{ $t('organDonation.yourChoice.continueButtonText') }}
     </generic-button>

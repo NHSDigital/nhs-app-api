@@ -10,8 +10,8 @@
       </div>
       <content-header v-if="!isGpFinderPage" id="content-header"
                       :show-bread-crumb="shouldShowBreadCrumb"
-                      :show-content-header="shouldShowContentHeader"/>
-
+                      :show-content-header="shouldShowContentHeader"
+                      style="margin-top: -7px;"/>
       <div id="maincontent" ref="mainContent" tabindex="-1">
         <main :class="mainClass">
           <spinner/>
@@ -272,6 +272,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
 </style>

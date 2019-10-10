@@ -1,6 +1,6 @@
 <template>
   <header v-if="showHeader" :class="[$style.slim]">
-    <h1 :class="[$style.h1]"><slot/></h1>
+    <h1 :class="[$style.h1, 'nhsuk-u-margin-top-1']"><slot/></h1>
     <form :action="backUrl" method="get">
       <button tabindex="0" @click="backClick($event)" @keypress="keyPress($event)">
         <back-icon/>
@@ -61,5 +61,4 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../style/headerslim";
-
 </style>

@@ -75,17 +75,7 @@ export default {
 
   .viewDocuments {
     padding: 1em;
-  }
-
-  div {
-   &.desktopWeb {
-    a {
-     cursor: pointer;
-     &:focus {
-      @include outlineStyle
-     }
-    }
-   }
+    display: inline-block;
   }
 
 </style>

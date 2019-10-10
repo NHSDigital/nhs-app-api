@@ -1,63 +1,64 @@
 <template>
-  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
-    <div>
-      <h3 :class="[$style.h1]">
-        {{ this.$t('th05.emailFeatureText') }}
-      </h3>
+  <div>
+    <div :class="[getHeaderState(),
+                  $store.state.device.isNativeApp && $style.web]">
+      <div>
+        <h3 :class="[$style.h1]">
+          {{ this.$t('th05.emailFeatureText') }}
+        </h3>
 
-      <form :class="$style.signup" @submit.prevent="signupFormSubmitted">
-        <error-message v-if="choiceError" id="choice-error-label" role="alert"
-                       aria-live="assertive">
-          {{ this.$t('th05.choiceError') }}
-        </error-message>
-        <generic-radio-button :class="$style.choiceRadioButton"
-                              :label="$t('th05.yesRadioButtonText')"
-                              :selected-value="$store.state.throttling.waitingListChoice"
-                              value="yes"
-                              name="choice"
-                              @select="radioButtonSelected"/>
-
-        <div :class="$style['radio-adjusted']">
-          <h4 id="email-label">{{ this.$t('th05.emailText') }}</h4>
-
-          <error-message v-if="showError" id="error-label" role="alert" aria-live="assertive">
-            {{ errorText }}
+        <form :class="$style.signup" @submit.prevent="signupFormSubmitted">
+          <error-message v-if="choiceError" id="choice-error-label" role="alert"
+                         aria-live="assertive">
+            {{ this.$t('th05.choiceError') }}
           </error-message>
+          <generic-radio-button :class="$style.choiceRadioButton"
+                                :label="$t('th05.yesRadioButtonText')"
+                                :selected-value="$store.state.throttling.waitingListChoice"
+                                value="yes"
+                                name="choice"
+                                @select="radioButtonSelected"/>
 
-          <generic-text-input id="emailInput"
-                              v-model="emailAddress"
-                              :type="'text'"
-                              :a-labelled-by="emailInputLabelledBy"
-                              name="email"
-                              maxlength="255"/>
+          <div :class="[$style['radio-adjusted'], enterEmailErrorStyle]">
+            <h4 id="email-label">{{ this.$t('th05.emailText') }}</h4>
 
-          <p :class="$style.privacyStatement"
-             :aria-label="$t('th05.privacyStatement') + $t('th05.privacyPolicyLinkText')">
-            {{ $t('th05.privacyStatement') }}
-            <analytics-tracked-tag :href="privacyPolicyURL"
-                                   :class="$style.throtlingLink"
-                                   :text="$t('th05.privacyPolicyLinkText')"
-                                   tag="a" target="_blank">
-              {{ $t('th05.privacyPolicyLinkText') }}
-            </analytics-tracked-tag>
-          </p>
-        </div>
+            <error-message v-if="showError" id="error-label" role="alert" aria-live="assertive">
+              {{ errorText }}
+            </error-message>
 
-        <generic-radio-button :class="[$style.choiceRadioButton, $style.last]"
-                              :label="$t('th05.noRadioButtonText')"
-                              :selected-value="$store.state.throttling.waitingListChoice"
-                              value="no"
-                              name="choice"
-                              @select="radioButtonSelected"/>
+            <generic-text-input id="emailInput"
+                                v-model="emailAddress"
+                                :type="'text'"
+                                :a-labelled-by="emailInputLabelledBy"
+                                name="email"
+                                maxlength="255"/>
 
-        <analytics-tracked-tag :text="this.$t('th05.callToAction')" :tabindex="-1">
-          <generic-button :button-classes="[$store.state.device.isNativeApp
-                                              ?'button':'button-desktop',
-                                            'green']" @click.prevent="signupFormSubmitted">
-            {{ this.$t('th05.callToAction') }}
-          </generic-button>
-        </analytics-tracked-tag>
-      </form>
+            <p :class="$style.privacyStatement"
+               :aria-label="$t('th05.privacyStatement') + $t('th05.privacyPolicyLinkText')">
+              {{ $t('th05.privacyStatement') }}
+              <analytics-tracked-tag :href="privacyPolicyURL"
+                                     :class="$style.throtlingLink"
+                                     :text="$t('th05.privacyPolicyLinkText')"
+                                     tag="a" target="_blank">
+                {{ $t('th05.privacyPolicyLinkText') }}
+              </analytics-tracked-tag>
+            </p>
+          </div>
+
+          <generic-radio-button :class="[$style.choiceRadioButton, $style.last]"
+                                :label="$t('th05.noRadioButtonText')"
+                                :selected-value="$store.state.throttling.waitingListChoice"
+                                value="no"
+                                name="choice"
+                                @select="radioButtonSelected"/>
+
+          <analytics-tracked-tag :text="this.$t('th05.callToAction')" :tabindex="-1">
+            <generic-button :button-classes="['nhsuk-button']" @click.prevent="signupFormSubmitted">
+              {{ this.$t('th05.callToAction') }}
+            </generic-button>
+          </analytics-tracked-tag>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -97,6 +98,9 @@ export default {
     showError() {
       return this.submissionError || this.connectionError ||
           this.invalidEmailError || this.notEnteredEmailError;
+    },
+    enterEmailErrorStyle() {
+      return this.showError ? 'nhsuk-form-group--error' : '';
     },
     getHeaderText() {
       return this.$store.state.header.headerText;

@@ -2,7 +2,9 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <glossary :extra-classes="[$style.glossary]"/>
+      <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
+                        :link-url="glossaryLinkURL"
+                        :is-analytics-tracked="true"/>
       <div class="documentContainer" v-html="document"/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                  @clickAndPrevent="backToDocumentsClicked"/>
@@ -13,7 +15,7 @@
 <script>
 import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import Glossary from '@/components/Glossary';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import { MYRECORD, MY_RECORD_DOCUMENTS, LOGIN, LOGOUT } from '@/lib/routes';
 import { isFalsy, redirectTo } from '@/lib/utils';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
@@ -23,11 +25,12 @@ export default {
   layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
-    Glossary,
+    NhsArrowBanner,
   },
   data() {
     return {
       documentsPath: `${MY_RECORD_DOCUMENTS.path}#document-${this.$route.params.id}`,
+      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
   computed: {

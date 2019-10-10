@@ -17,15 +17,14 @@
     </div>
 
     <generic-button id="continue-button-found"
-                    :button-classes="[$store.state.device.isNativeApp
-                      ?'button' : 'button-desktop', 'green']"
+                    :button-classes="['nhsuk-button']"
                     @click.prevent="onContinueButtonClicked">
       {{ getContinueButtonText }}
     </generic-button>
 
     <generic-button v-if="$store.state.device.isNativeApp"
                     id="back-button"
-                    :button-classes="['grey', 'button']" :class="$style.back"
+                    :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
                     tabindex="0" @click.prevent="onBackButtonClicked">
       {{ $t('nominatedPharmacyNotFound.backButton') }}
     </generic-button>

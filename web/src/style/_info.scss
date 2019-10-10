@@ -2,7 +2,6 @@
 @import './textstyles';
 
 .info {
-    font-size: 1em;
 	margin-bottom: 1em;
 	p {
 		padding-bottom: 0.5em;
@@ -23,8 +22,6 @@
 	}
 	a.info-link {
 		display: inline-block;
-		font-size: 1em;
-		font-style: normal;
     }
 
     ul {

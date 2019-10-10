@@ -1,4 +1,5 @@
 @my-record
+@pending @NHSO-7509
 Feature: View My Recalls Information
 
   Scenario: A MICROTEST user can view recalls - GP Medical Record

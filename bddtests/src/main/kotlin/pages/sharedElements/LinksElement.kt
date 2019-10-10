@@ -9,7 +9,8 @@ import pages.text
 
 open class LinksElement(private val page : HybridPageObject, val content : ILinksContent) {
 
-    private val sections = "${content.containerXPath}//ul/li//a"
+    private val sections = "${content.containerXPath}"
+    private val sectionsWithList = "${content.containerXPath}//ul/li//a"
 
     private val container by lazy {
         HybridPageElement(
@@ -29,8 +30,17 @@ open class LinksElement(private val page : HybridPageObject, val content : ILink
         )
     }
 
-    fun assertLinksPresent() {
-        assertPresentWithLinks(content.links)
+    private fun listOfUlLinks(): HybridPageElement {
+        return HybridPageElement(
+                webDesktopLocator = sectionsWithList,
+                androidLocator = null,
+                page = page,
+                helpfulName = "ListOfLinks"
+        )
+    }
+
+    fun assertLinksPresent(withUlLinks: Boolean = false) {
+        assertPresentWithLinks(content.links, withUlLinks)
     }
 
     fun assertReducedSetOfLinksPresent(vararg titles: String) {
@@ -84,8 +94,12 @@ open class LinksElement(private val page : HybridPageObject, val content : ILink
         }
     }
 
-    private fun assertPresentWithLinks(expectedLinks: List<LinkContent>) {
-        val links = listOfLinks().elements
+    private fun assertPresentWithLinks(expectedLinks: List<LinkContent>, withUlLinks: Boolean = false) {
+        var links = listOfLinks().elements;
+        if (withUlLinks == true) {
+           links = listOfUlLinks().elements;
+        }
+
         Assert.assertEquals("Number of expected LinksElement",
                 expectedLinks.count(),
                 links.count())

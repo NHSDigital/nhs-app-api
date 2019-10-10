@@ -1,6 +1,6 @@
 @my-record
 @test-results
-
+@pending @NHSO-7509
 Feature: View My GP Medical Record Information - Test Results Frontend GP Medical Record
 
   Scenario: A VISION user has no access to test result section

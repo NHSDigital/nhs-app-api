@@ -88,28 +88,9 @@ export default {
     @include space(margin, bottom, $three);
   }
 
-  .info h2 {
-    color: #005EB8;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-    font-weight: 700;
-    font-size: 1.375em;
-    line-height: 1.375em;
-  }
-
   div {
    &.desktopWeb {
     max-width: 540px;
-
-    .info h2 {
-     font-family: $default-web;
-     color: black;
-    }
-
-    p {
-     font-family: $default-web;
-     font-weight: normal;
-    }
 
     .test-result-content {
      max-width: 540px;
@@ -120,38 +101,6 @@ export default {
 
     .content {
      padding-left: 0;
-    }
-
-    .backButton {
-     font-family: $default-web;
-     color: $nhs_blue;
-     font-size: 1.125em;
-     line-height: 1.125em;
-     font-weight: normal;
-     vertical-align: middle;
-     cursor: pointer;
-     display: inline-block;
-     border: none;
-     background: none;
-     outline: none;
-     text-decoration: underline;
-     margin-top: 1em;
-     margin-bottom: 2em;
-    }
-
-    .backButton:focus {
-     box-sizing: content-box;
-     outline-color: $focus_highlight;
-     box-shadow: 0 0 0 4px $focus_highlight;
-     outline-width: 2em;
-    }
-
-    .backButton:hover {
-     background: #ffcd60;
-     outline: none;
-     box-sizing: border-box;
-     text-decoration: underline;
-     background-clip: content-box;
     }
    }
   }

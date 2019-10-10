@@ -56,7 +56,7 @@ describe('TestResults', () => {
 
     it('will display results in decending order', () => {
       const dates = component
-        .findAll('[data-purpose="record-item"] > span')
+        .findAll('[data-purpose="record-item-header"]')
         .wrappers
         .map(x => x.text());
 

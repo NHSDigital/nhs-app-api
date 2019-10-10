@@ -1,15 +1,19 @@
 <template>
   <div :class="[$style['record-content']]">
-    <p v-if="hasErrored">
+    <p v-if="hasErrored"
+       class="nhsuk-u-padding-3 nhsuk-u-margin-0">
       {{ $t('my_record.genericErrorMessage') }}
     </p>
-    <p v-else-if="!hasAccess">
+    <p v-else-if="!hasAccess"
+       class="nhsuk-u-padding-3 nhsuk-u-margin-0">
       {{ $t('my_record.genericNoAccessMessage') }}
     </p>
-    <p v-else-if="hasUndeterminedAccess">
+    <p v-else-if="hasUndeterminedAccess"
+       class="nhsuk-u-padding-3 nhsuk-u-margin-0">
       {{ $t('my_record.noRecordsOrNoAccess.warningHeader') }}
     </p>
-    <p v-else>
+    <p v-else
+       class="nhsuk-u-padding-3 nhsuk-u-margin-0">
       {{ $t('my_record.genericNoDataMessage') }}
     </p>
   </div>

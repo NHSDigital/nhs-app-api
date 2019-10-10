@@ -1,7 +1,8 @@
 <template>
   <span :class="$style.pageTitle">
     <h1 v-if="shouldShowDesktopVersion" :key="titleKey"
-        :class="$style.homePageTitle" aria-live="polite">
+        aria-live="polite"
+        class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-3">
       <slot/>
     </h1>
   </span>
@@ -31,10 +32,6 @@ export default {
    .homePageTitle {
      color: #212B32;
      text-align: left;
-     font-family: $frutiger-roman;
-     font-size: 2em;
-     font-weight: 600;
-     line-height: 1.250em;
      padding-top: 16px;
      padding-bottom: 16px;
    }

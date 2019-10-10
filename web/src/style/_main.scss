@@ -19,16 +19,9 @@ body {
 	margin: 0;
 	background: $background;
 	@include default_text;
-	font-family: $default;
-	@include mobileAndBelow {
-		font-size: 1em;
-	}
-	@include tabletOnly {
-		font-size: 1.225em;
-	}
-	@include fromDesktop {
-		font-size: 1em;
-	}
+	@include mobileAndBelow;
+	@include tabletOnly;
+	@include fromDesktop;
 
 	.web {
 		min-height: 100vh;
@@ -90,6 +83,21 @@ main.content {
 	}
 }
 
+.nhsuk-login {
+  background-color: $nhs_blue !important;
+}
+.nhsuk-login:hover, nhsuk-login:focus {
+  background-color: $nhs_blue_med !important;
+}
+.nhsuk-button:hover {
+  box-shadow: 0 0 0 4px $hover_highlight;
+  outline: none;
+}
+
+.nhsuk-button:focus {
+  box-shadow: 0 0 0 4px $focus_highlight;
+  outline: none;
+}
 
 @include fromTablet {
 	main.content {

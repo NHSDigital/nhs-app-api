@@ -1,4 +1,5 @@
 @my-record
+@pending @NHSO-7509
 Feature: View My Medical History - Medical Record V2
 
   Scenario: A MICROTEST user can view medical history - GP Medical Record

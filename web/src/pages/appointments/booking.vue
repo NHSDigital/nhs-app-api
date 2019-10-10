@@ -38,7 +38,7 @@
       </div>
 
       <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
+        <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
           <noscript inline-template>
             <button class="nhsuk-button">
             {{ $t('appointments.booking.nojs.findButton') }}

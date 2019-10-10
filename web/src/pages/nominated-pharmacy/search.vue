@@ -45,14 +45,13 @@
                             name="searchQuery"
                             :maxlength="searchQueryMaxLengthAsString"/>
         <generic-button id="search-button"
-                        :button-classes="[$store.state.device.isNativeApp
-                          ?'button':'button-desktop', 'green']">
+                        :button-classes="['nhsuk-button']">
           {{ $t('nominated_pharmacy.search.searchButton') }}
         </generic-button>
         <analytics-tracked-tag :text="$t('generic.backButton.text')" :tabindex="-1">
           <generic-button v-if="$store.state.device.isNativeApp"
                           id="back-button"
-                          :button-classes="['grey', 'button']" :class="$style['back']"
+                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
                           tabindex="0" @click.prevent="cancelButtonClicked">
             {{ $t('generic.backButton.text') }}
           </generic-button>

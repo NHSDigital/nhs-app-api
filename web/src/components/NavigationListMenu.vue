@@ -1,6 +1,7 @@
 <template>
   <menu-item-list data-sid="navigation-list-menu">
     <menu-item id="menu-item-symptoms"
+               :header-tag="headerTag"
                data-sid="symptoms-list-item"
                :href="symptomsPath"
                :text="$t('navigationMenuList.symptoms')"
@@ -9,6 +10,7 @@
                :click-param="symptomsPath"/>
 
     <menu-item id="menu-item-appointments"
+               :header-tag="headerTag"
                data-sid="appointments-menu-item"
                :href="appointmentsPath"
                :text="$t('navigationMenuList.appointments')"
@@ -17,6 +19,7 @@
                :click-param="appointmentsPath"/>
 
     <menu-item id="menu-item-prescriptions"
+               :header-tag="headerTag"
                data-sid="prescriptions-menu-item"
                :href="prescriptionsPath"
                :text="$t('navigationMenuList.prescriptions')"
@@ -25,6 +28,7 @@
                :click-param="prescriptionsPath"/>
 
     <menu-item id="menu-item-myRecord"
+               :header-tag="headerTag"
                data-sid="myrecord-menu-item"
                :href="myRecordPath"
                :text="$t('navigationMenuList.myRecord')"
@@ -38,8 +42,9 @@
 
     <menu-item v-if="hasLinkedProfiles()"
                id="menu-item-linkedProfiles"
-               data-sid="linkedProfiles-menu-item"
-               :href="linkedProfilesPath"
+               :header-tag="headerTag"
+               data-sid="linkedProfile-menu-item"
+               :href="linkedProfilePath"
                :text="$t('navigationMenuList.linkedProfiles')"
                :aria-label="$t('navigationMenuList.linkedProfiles')"
                :click-func="goToUrl"
@@ -60,6 +65,12 @@ export default {
     MenuItem,
     MenuItemList,
     OrganDonationLink,
+  },
+  props: {
+    headerTag: {
+      type: String,
+      default: 'h2',
+    },
   },
   data() {
     return {
@@ -96,6 +107,8 @@ export default {
 
 <style module lang="scss">
   @import '../style/colours';
-  @import '../style/textstyles';
-  @import '../style/fonts';
+
+  a:visited {
+    color: $nhs_blue;
+  }
 </style>

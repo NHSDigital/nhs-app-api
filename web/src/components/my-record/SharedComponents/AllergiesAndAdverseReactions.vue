@@ -10,14 +10,23 @@
        :aria-hidden="isCollapsed">
     <div v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <span v-if="allergy.date && allergy.date.value" :class="$style.fieldName">
+      <p v-if="allergy.date && allergy.date.value" data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">
         {{ allergy.date.value | datePart(allergy.date.datePart) }}
-      </span>
-      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
+      </p>
+      <p v-else data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">{{ $t('my_record.noStartDate') }}</p>
 
-      <p>{{ allergy.name }}</p>
-      <p v-if="allergy.drug">{{ allergy.drug }}</p>
-      <p v-if="allergy.reaction">{{ allergy.reaction }}</p>
+      <p data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">{{ allergy.name }}</p>
+      <p v-if="allergy.drug" data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ allergy.drug }}</p>
+      <p v-if="allergy.reaction" data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+        {{ allergy.reaction }}</p>
       <hr aria-hidden="true">
     </div>
   </div>
@@ -60,30 +69,4 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
-  @import '../../../style/medrecordtitle';
-
-  .fieldName {
-    padding-left: 1.3em;
-    padding-right: 1.3em;
-    padding-bottom: 0.250rem;
-    color: #425563;
-    font-size: 0.813em;
-    font-weight: 700;
-  }
-
-  div {
-   &.desktopWeb {
-    max-width: 540px;
-
-    span {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-    p {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-   }
-  }
-
 </style>

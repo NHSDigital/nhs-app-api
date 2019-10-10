@@ -11,18 +11,22 @@
                     !$store.state.device.isNativeApp && $style.desktopWeb]">
         <analytics-tracked-tag :text="$t('biometricBanner.message.settingsButton')">
           <generic-button
-            :button-classes="['button' , 'grey']"
+            :button-classes="['nhsuk-button',
+                              'nhsuk-button--secondary',
+                              $style['nhsuk-button-full-width']]"
             tabindex="0"
             @click="goToLoginOptions">
             {{ $t('biometricBanner.message.settingsButton') }}
           </generic-button>
         </analytics-tracked-tag>
-        <analytics-tracked-tag id="btn_biometricBannerDismiss"
-                               :text="$t('biometricBanner.message.dismissLink')"
-                               tag="a"
-                               :click-func="dismissBiometricsBannerClicked">
-          {{ $t('biometricBanner.message.dismissLink') }}
-        </analytics-tracked-tag>
+        <p :class="['nhsuk-u-margin-bottom-0', $style['center']]">
+          <analytics-tracked-tag id="btn_biometricBannerDismiss"
+                                 :text="$t('biometricBanner.message.dismissLink')"
+                                 tag="a"
+                                 :click-func="dismissBiometricsBannerClicked">
+            {{ $t('biometricBanner.message.dismissLink') }}
+          </analytics-tracked-tag>
+        </p>
       </div>
     </message-dialog>
   </div>
@@ -96,10 +100,17 @@ export default {
   },
 };
 </script>
-
 <style module lang="scss" scoped>
-  @import '../../style/buttons';
-  @import "../../style/textstyles";
+  .nhsuk-button-full-width {
+    width: 100%;
+  }
+  a {
+    display: inline;
+    cursor: pointer;
+  }
+  .center {
+    text-align: center;
+  }
   .msgText {
     padding: 1em 1em 1em 1em;
     margin-top:0;

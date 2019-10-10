@@ -43,6 +43,6 @@ open class MorePage : HybridPageObject() {
     val btnRequestGpHelp by lazy { links.link(requestGpHelpTitle) }
 
     fun assertLinksPresent() {
-        links.assertLinksPresent()
+        links.assertLinksPresent(true)
     }
 }

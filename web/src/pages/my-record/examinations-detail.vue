@@ -62,16 +62,8 @@ export default {
 @import '../../style/spacings';
 @import '../../style/_textstyles';
 
-h3 {
-  @include h4;
-}
-
 .vision-examination {
   min-width: 50em;
-
-  p {
-      padding-right: 1em;
-  }
 }
 
 .content {
@@ -85,9 +77,7 @@ h3 {
 .examination-content {
     box-sizing: border-box;
     padding: 1em;
-    padding-top: 0.5em;
     padding-bottom: 0.5em;
-    margin-top: 0.5em;
     background-color: #ffffff;
     @include space(margin, bottom, $three);
     overflow-x: scroll;
@@ -96,28 +86,9 @@ h3 {
     min-width: 100%;
 }
 
-.info h2 {
-    color: #005EB8;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-    font-weight: 700;
-    font-size: 1.375em;
-    line-height: 1.375em;
-}
-
 div {
  &.desktopWeb {
   max-width: 540px;
-
-  .info h2 {
-   font-family: $default-web;
-   color: black;
-  }
-
-  p {
-   font-family: $default-web;
-   font-weight: normal;
-  }
 
   .examination-content {
    max-width: 540px;

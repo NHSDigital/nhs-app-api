@@ -7,7 +7,6 @@ import mocking.vision.VisionErrorResponses.getInvalidRequestError
 import mocking.vision.VisionErrorResponses.getInvalidUserCredentialsError
 import mocking.vision.VisionErrorResponses.getUnknownError
 import mocking.vision.VisionErrorResponses.getConnectionToExternalServiceFailedError
-import mocking.vision.VisionErrorResponses.getPatientLockedError
 import mocking.vision.VisionErrorResponses.securityHeaderErrorResponse
 import mocking.vision.models.Configuration
 import mocking.vision.models.ServiceDefinition
@@ -72,12 +71,6 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
     fun respondWithUnknownError(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getUnknownError(serviceDefinition)).build()
-        }
-    }
-
-    fun respondWithRecordCurrentlyUnavailableError(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getPatientLockedError(serviceDefinition)).build()
         }
     }
 

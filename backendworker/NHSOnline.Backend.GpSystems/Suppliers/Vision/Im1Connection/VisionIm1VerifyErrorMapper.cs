@@ -9,7 +9,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
     {
         private static readonly KeyAndMessageToEnumMapper<InternalCode> KeyAndMessageToError =
             new KeyAndMessageToEnumMapper<InternalCode>()
-                .AddKeyToEnum("200-100", InternalCode.ConnectionToServiceFailed)
+                .Add("200-100", "Connection to external service failed", 
+                    InternalCode.ConnectionToServiceFailed)
+                .Add("200-100", "Unknown Error", InternalCode.UnknownError)
                 .AddKeyToEnum("200-15", InternalCode.UserRecordUnavailable)
                 .AddKeyToEnum("200-30", InternalCode.InvalidLinkageDetails)
                 // THESE RESPONSES DO NOT HAVE ERROR CODES JUST A FAULT CODE 

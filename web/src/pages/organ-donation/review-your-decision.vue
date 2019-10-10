@@ -37,7 +37,7 @@
     </div>
     <confirmation :submit-attempted="submitAttempted"/>
     <generic-button id="submit-button"
-                    :class="[$style.button, $style.green]"
+                    class="nhsuk-button"
                     :disabled="isDisabled"
                     click-delay="medium"
                     @click="clickSubmit">

@@ -1,4 +1,5 @@
 @my-record
+@pending @NHSO-7509
 Feature: View My Immunisation Information
 
   Scenario Outline: A <GP System> user has multiple immunisations on their record - GP Medical Record
@@ -56,7 +57,7 @@ Feature: View My Immunisation Information
     And I am on my record information page and glossary is visible - GP Medical Record
     When I click the Immunisations link on my record - GP Medical Record
     Then I see a message that this information isn't available through the NHS App - GP Medical Record
-    
+
   Scenario: An EMIS user has a immunisation result with an unknown date - GP Medical Record
     Given I am a EMIS user setup to use medical record version 2
     And the EMIS GP Practice has two immunisation results where the first record has no date - GP Medical Record

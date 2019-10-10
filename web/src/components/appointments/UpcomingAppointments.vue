@@ -1,12 +1,11 @@
 <template>
   <div>
-    <h2>{{ $t('appointments.index.upcoming.header') }}</h2>
+    <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.upcoming.header') }}</h2>
     <CardGroup v-for="(chunk, index) in chunked" :key="index" role="list" class="nhsuk-grid-row">
       <CardGroupItem v-for="appointment in chunk"
                      :key="appointment.id" class="nhsuk-grid-column-one-half">
         <Card>
-          <appointment :class="$style.upcoming"
-                       :appointment="appointment"
+          <appointment :appointment="appointment"
                        :cancellation-disabled="cancellationDisabled"
                        :telephone-message="$t('appointments.index.upcoming.telephoneMessage')"
                        data-purpose="upcoming-appointments"
@@ -49,11 +48,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-
-.upcoming {
-  display: table !important;
-}
-
-</style>

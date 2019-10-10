@@ -3,12 +3,14 @@
     <menu-item-list>
       <menu-item v-if="showBiometrics"
                  id="btn_passwordOptions"
+                 :header-tag="headerTag"
                  :text="$t('myAccount.accountSettings.passwordOptions')"
                  :aria-label="$t('myAccount.accountSettings.passwordOptions')"
                  :click-func="goToLoginOptions"/>
 
       <menu-item v-if="showNotifications"
                  id="btn_notificationOptions"
+                 :header-tag="headerTag"
                  :text="$t('myAccount.accountSettings.notificationOptions')"
                  :aria-label="$t('myAccount.accountSettings.notificationOptions')"
                  :click-func="showNotificationsClicked"/>
@@ -29,6 +31,10 @@ export default {
     MenuItemList,
   },
   props: {
+    headerTag: {
+      type: String,
+      default: 'h2',
+    },
     showBiometrics: {
       type: Boolean,
       required: true,
@@ -49,11 +55,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/accessibility";
-  @import '../../style/colours';
-  @import '../../style/textstyles';
-  @import '../../style/fonts';
-  @import "../../style/webshared";
-</style>

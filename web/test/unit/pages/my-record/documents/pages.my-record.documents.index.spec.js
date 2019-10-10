@@ -5,7 +5,7 @@ import DocumentsPage from '@/pages/my-record/documents/index';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, shallowMount } from '../../../helpers';
-import Glossary from '@/components/Glossary';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 
 jest.mock('lodash/fp/chunk');
 let chunkCallback;
@@ -69,7 +69,7 @@ describe('my-record documents', () => {
       it('will display an abbreviations glossary', () => {
         mountPage();
 
-        const glossaryExists = page.find(Glossary).exists();
+        const glossaryExists = page.find(NhsArrowBanner).exists();
         expect(glossaryExists).toBe(true);
       });
     });

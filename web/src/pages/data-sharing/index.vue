@@ -25,12 +25,13 @@
           method="POST" name="ndopTokenForm">
       <input v-model="ndopToken" type="hidden" name="token">
       <analytics-tracked-tag id="startNowButton"
-                             :class="[$style.button, $style.green]"
-                             :text="$t('ds01.startNowButton')"
                              data-purpose="startNowButton"
-                             tag="button"
-                             :click-func="startNow">
-        {{ $t('ds01.startNowButton') }}
+                             :text="this.$t('ds01.startNowButton')"
+                             :tabindex="-1"
+                             class="nhsuk-u-margin-padding-0">
+        <generic-button :class="['nhsuk-button']" @click.prevent="startNow">
+          {{ this.$t('ds01.startNowButton') }}
+        </generic-button>
       </analytics-tracked-tag>
     </form>
 
@@ -41,6 +42,7 @@
 
 <script>
 /* eslint-disable import/extensions */
+import GenericButton from '@/components/widgets/GenericButton';
 import BottomNav from '@/components/data-sharing/BottomNav';
 import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
@@ -52,6 +54,7 @@ import keys from 'lodash/fp/keys';
 
 export default {
   components: {
+    GenericButton,
     BottomNav,
     Overview,
     WhereConfidentialPatientInformationIsUsed,
@@ -116,4 +119,13 @@ export default {
 @import '../../style/buttons';
 @import '../../style/datasharing';
 @import '../../style/desktopcomponentsizes';
+@import '../../style/accessibility';
+  li a:hover, li a:focus {
+    background-color: transparent;
+  }
+  a:hover, a:focus {
+    border: none;
+  }
+
 </style>
+

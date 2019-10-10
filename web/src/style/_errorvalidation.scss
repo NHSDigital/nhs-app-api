@@ -26,14 +26,12 @@
 }
 .validation-text {
 	padding-bottom: 0em !important;
-  	font-weight: 700 !important;
 	color: $error_dark !important;
 	&> span {
 		margin-left: 0.25em;
 	}
 	&.desktopWeb {
 		color: $error !important;
-      font-weight: 700 !important;
       color: $error_dark !important;
 	}
 }

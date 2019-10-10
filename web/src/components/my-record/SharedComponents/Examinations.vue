@@ -83,23 +83,9 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
 
   .viewExaminations {
     padding: 1em;
-    font-size: 0.875em;
+    display: inline-block;
   }
-
-  div {
-   &.desktopWeb {
-    a {
-     cursor: pointer;
-     &:focus {
-      @include outlineStyle
-     }
-    }
-   }
-  }
-
 </style>

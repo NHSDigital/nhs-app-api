@@ -6,7 +6,8 @@
             :aria-labelledby="aLabelledBy"
             :class="[$style['custom-dropdown__select'],
                      $style['custom-dropdown__select_element'],
-                     $style['custom-dropdown__select--white']
+                     $style['custom-dropdown__select--white'],
+                     $style['nhsuk-select']
             ]"
             :required="required"
             tabindex="0">
@@ -54,7 +55,7 @@ export default {
       },
     },
     defaultClasses() {
-      const dropdownClass = [this.$style.form, this.$style['custom-dropdown']];
+      const dropdownClass = [this.$style.form, this.$style['custom-dropdown'], this.$style['nhsuk-body']];
       if (this.errorBorder) {
         dropdownClass.push(this.$style['validation-select-border']);
       }

@@ -1,4 +1,5 @@
 @my-record
+@pending @NHSO-7509
 Feature: View My Consultations Information
 
   Scenario Outline: A <GP System> user has multiple consultations on their record - GP Medical Record

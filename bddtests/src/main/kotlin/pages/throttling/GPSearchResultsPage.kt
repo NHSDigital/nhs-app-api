@@ -15,29 +15,29 @@ class GPSearchResultsPage : HybridPageObject() {
     private val errorBanner = BannerObject.error(this)
 
     private val searchResults = HybridPageElement(
-            webDesktopLocator = "//ul[@id='searchResults']/li",
-            webMobileLocator = "//ul[@id='searchResults']/li",
+            webDesktopLocator = "//div[@id='searchResults']//ul//li",
+            webMobileLocator = "//div[@id='searchResults']//ul//li",
             androidLocator = null,
             page = this
     )
 
     val participatingGPPractice = HybridPageElement(
-            webDesktopLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
-            webMobileLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
+            webDesktopLocator = "//div[@id='searchResults']//ul/li/a[@id='btnGpPractice-F81090']",
+            webMobileLocator = "//div[@id='searchResults']//ul/li/a[@id='btnGpPractice-F81090']",
             androidLocator = null,
             page = this
     )
 
     val notParticipatingGPPractice = HybridPageElement(
-            webDesktopLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
-            webMobileLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
+            webDesktopLocator = "//div[@id='searchResults']//ul/li/a[@id='btnGpPractice-F81091']",
+            webMobileLocator = "//div[@id='searchResults']//ul/li/a[@id='btnGpPractice-F81091']",
             androidLocator = null,
             page = this
     )
 
     val foundGPPracticeByPostcode = HybridPageElement(
-            webDesktopLocator = "//ul[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
-            webMobileLocator = "//ul[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
+            webDesktopLocator = "//div[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
+            webMobileLocator = "//div[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
             androidLocator = null,
             page = this
     )

@@ -1,23 +1,48 @@
 <template>
   <div v-if="!isCollapsed" :class="[$style['record-content'],
+                                    'nhsuk-u-padding-bottom-3',
                                     getCollapseState,
                                     !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">
-    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelName') }}</span>
-    <p v-if="patientDetails" data-hj-suppress>{{ patientDetails.patientName }}</p>
-    <hr aria-hidden="true">
-    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelDOB') }}</span>
-    <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>
-    <hr aria-hidden="true">
-    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelSex') }}</span>
-    <p v-if="patientDetails" data-hj-suppress>{{ patientDetails.sex }}</p>
-    <hr aria-hidden="true">
-    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelAddress') }}</span>
-    <p v-if="patientDetails" data-hj-suppress>
+    <p data-purpose="record-item-header"
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+       nhsuk-body-s">
+      {{ $t('my_record.patientInfo.fieldLabelName') }}</p>
+    <p v-if="patientDetails" data-purpose="record-item-detail" data-hj-suppress
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+      {{ patientDetails.patientName }}</p>
+    <hr aria-hidden="true" class="nhsuk-u-margin-top-3">
+    <p data-purpose="record-item-header"
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3
+       nhsuk-body-s">
+      {{ $t('my_record.patientInfo.fieldLabelDOB') }}</p>
+    <p v-if="patientDetails" data-purpose="record-item-detail"
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+      {{ patientDetails.dateOfBirth | longDate }}</p>
+    <hr aria-hidden="true" class="nhsuk-u-margin-top-3">
+    <p data-purpose="record-item-header"
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3
+       nhsuk-body-s">
+      {{ $t('my_record.patientInfo.fieldLabelSex') }}</p>
+    <p v-if="patientDetails" data-purpose="record-item-detail" data-hj-suppress
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+      {{ patientDetails.sex }}</p>
+    <hr aria-hidden="true" class="nhsuk-u-margin-top-3">
+    <p data-purpose="record-item-header"
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3
+       nhsuk-body-s">
+      {{ $t('my_record.patientInfo.fieldLabelAddress') }}</p>
+    <p v-if="patientDetails" data-purpose="record-item-detail" data-hj-suppress
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
       {{ patientDetails.address }}</p>
-    <hr aria-hidden="true">
-    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelNHS') }}</span>
-    <p v-if="patientDetails">{{ patientDetails.nhsNumber }}</p>
+    <hr aria-hidden="true" class="nhsuk-u-margin-top-3">
+    <p data-purpose="record-item-header"
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3
+       nhsuk-body-s">
+      {{ $t('my_record.patientInfo.fieldLabelNHS') }}</p>
+    <p v-if="patientDetails" data-purpose="record-item-detail"
+       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+      {{ patientDetails.nhsNumber }}</p>
     <hr aria-hidden="true">
   </div>
 </template>
@@ -51,31 +76,4 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../../style/medrecordcontent';
-@import '../../../style/medrecordtitle';
-
-  .fieldName {
-    padding-left: 1.3em;
-    padding-right: 1.3em;
-    padding-bottom: 0.250rem;
-    color: #425563;
-    font-size: 0.813em;
-    font-weight: 700;
-  }
-
-div {
- &.desktopWeb {
-  max-width: 540px;
-  cursor: default;
-
-  span {
-   font-family: $default_web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-  }
- }
-}
-
 </style>

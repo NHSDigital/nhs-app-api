@@ -1,6 +1,8 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isImmunisationsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="IMMUNISATIONS"
@@ -13,7 +15,9 @@
     </analytics-tracked-tag>
     <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isProblemsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="PROBLEMS"
@@ -27,7 +31,9 @@
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 
     <analytics-tracked-tag id="testResultsHeader"
-                           :class="[$style['record-title'],
+                           :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isTestResultsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="TESTRESULTS"
@@ -41,7 +47,9 @@
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
                   :supplier="record.supplier" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isMedicalHistoryCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="MEDICAL_HISTORY"
@@ -55,7 +63,9 @@
     <medicalHistory :is-collapsed="isMedicalHistoryCollapsed"
                     :medical-history="record.medicalHistories" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isRecallsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="RECALLS"
@@ -68,7 +78,9 @@
     </analytics-tracked-tag>
     <recalls :is-collapsed="isRecallsCollapsed" :recalls="record.recalls" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isEncountersCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="ENCOUNTERS"
@@ -81,7 +93,9 @@
     </analytics-tracked-tag>
     <encounters :is-collapsed="isEncountersCollapsed" :encounters="record.encounters" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isReferralsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="REFERRALS"
@@ -195,17 +209,4 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
-
-  div {
-   &.desktopWeb {
-    .record-title {
-     cursor: pointer;
-     &:focus {
-      @include outlineStyle
-     }
-    }
-   }
-  }
-
 </style>

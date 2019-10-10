@@ -127,6 +127,10 @@ export default {
 @import "../style/elements";
 </style>
 
+<style lang="scss">
+  @import "~nhsuk-frontend/packages/nhsuk";
+</style>
+
 <style module lang="scss" scoped>
 @import "../style/home";
 

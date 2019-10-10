@@ -39,7 +39,7 @@
       <no-js-form :action="prescriptionsHomeUrl" :value="{}" method="get">
         <generic-button
           id="btn_back_to_prescriptions"
-          :button-classes="['grey', 'button']"
+          :button-classes="['nhsuk-button', 'nhs-uk-button--secondary']"
           :class="$style.back"
           tabindex="0"
           @click="backToPrescriptionsClicked">

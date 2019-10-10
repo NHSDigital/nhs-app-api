@@ -11,10 +11,15 @@
     <div v-for="(medication, medIndex) in orderedMedications"
          :key="`medication-${medIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <span v-if="medication.date" :class="$style.fieldName">{{ medication.date | datePart }}</span>
-      <span v-else :class="$style.fieldName">{{ $t('my_record.noStartDate') }}</span>
+      <p v-if="medication.date" data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">{{ medication.date | datePart }}</p>
+      <p v-else data-purpose="record-item-header"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
+         nhsuk-body-s">{{ $t('my_record.noStartDate') }}</p>
       <p v-for="(lineItem, lineItemIndex) in medication.lineItems"
-         :key="`line-${lineItemIndex}`">
+         :key="`line-${lineItemIndex}`" data-purpose="record-item-detail"
+         class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
         {{ lineItem.text }}
         <ul>
           <li v-for="(innerLineItem, innerLineItemIndex) in lineItem.lineItems"
@@ -74,31 +79,4 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../../style/medrecordcontent';
-@import '../../../style/medrecordtitle';
-
-.fieldName {
-  padding-left: 1.3em;
-  padding-right: 1.3em;
-  padding-bottom: 0.250rem;
-  color: #425563;
-  font-size: 0.813em;
-  font-weight: 700;
-}
-
-div {
- &.desktopWeb {
-  max-width: 540px;
-  cursor: default;
-
-  span {
-   font-family: $default_web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-  }
- }
-}
-
 </style>

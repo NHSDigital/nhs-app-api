@@ -7,11 +7,9 @@
           <message-text>
             {{ $t('rp12.reasonMissing.summarySubHeader') }}
           </message-text>
-          <message-list v-if="!courseSelectionValid">
-            <li>{{ $t('rp03.noMedicinesSelected') }}</li>
-          </message-list>
-          <message-list v-if="!specialRequestValid">
-            <li>{{ $t('rp03.specialRequestRequired') }}</li>
+          <message-list class="nhsuk-u-margin-bottom-3">
+            <li v-if="!courseSelectionValid">{{ $t('rp03.noMedicinesSelected') }}</li>
+            <li v-if="!specialRequestValid">{{ $t('rp03.specialRequestRequired') }}</li>
           </message-list>
         </message-dialog>
 
@@ -19,7 +17,7 @@
           <p class="nhsuk-u-padding-bottom-3">{{ $t('rp03.medicationCourse.line1') }}</p>
           <no-js-form :action="repeatCoursesPath" :value="{}" method="post">
             <div>
-              <div>
+              <div :class="selectMedicationErrorStyle">
                 <error-message v-if="error && !courseSelectionValid" id="error-type">
                   {{ $t('rp03.noMedicinesSelected') }}
                 </error-message>
@@ -41,26 +39,29 @@
                    type="hidden"
                    name="nojs.repeatPrescriptionCourses.specialRequestNecessity">
             <div v-if="specialRequestNecessity !== 'NotAllowed'"
-                 role="form">
-              <error-message v-if="error && !specialRequestValid" id="error-type">
-                {{ $t('rp03.specialRequestRequired') }}
-              </error-message>
+                 role="form"
+                 :class="mandatoryReasonErrorStyle">
               <div>
-                <p class="nhsuk-u-padding-bottom-5">
+                <p>
                   {{ $t('rp03.changePharmacyText') }}
                 </p>
               </div>
               <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest"
-                     class="nhsuk-u-padding-bottom-2">
-                {{ $t('rp03.specialRequestsLabelOptional') }}
+                     class="nhsuk-body-m">
+                <strong>{{ $t('rp03.specialRequestsLabelOptional') }}</strong>
               </label>
               <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest"
-                     class="nhsuk-u-padding-bottom-2">
-                {{ $t('rp03.specialRequestsLabelMandatory') }} </label>
-              <p id="disclaimer" class="nhsuk-u-padding-bottom-2">{{ $t('rp03.disclaimer') }}</p>
+                     class="nhsuk-body-m">
+                <strong>{{ $t('rp03.specialRequestsLabelMandatory') }} </strong>
+              </label>
+              <p id="disclaimer" class="nhsuk-body-m">{{ $t('rp03.disclaimer') }}</p>
+              <error-message v-if="showMandatoryReasonError" id="error-type">
+                {{ $t('rp03.specialRequestRequired') }}
+              </error-message>
               <generic-text-area id="specialRequest"
                                  v-model="specialRequest"
                                  :required="(specialRequestNecessity === 'Mandatory')"
+                                 :error.sync="showMandatoryReasonError"
                                  :text-area-classes="['nhsuk-u-margin-bottom-0']"
                                  text-area-ref="specialRequest"
                                  name="nojs.repeatPrescriptionCourses.specialRequest"
@@ -68,11 +69,11 @@
               <p id="maxSpecialRequest" class="nhsuk-u-padding-bottom-4">
                 {{ $t('rp03.maxSpecialRequest') }}</p>
             </div>
-            <button id="btn_order_prescription"
-                    class="nhsuk-button"
-                    @click.prevent="validate">
+            <generic-button id="btn_order_prescription"
+                            :button-classes="['nhsuk-button']"
+                            @click.prevent="validate">
               {{ $t('rp03.continueButton') }}
-            </button>
+            </generic-button>
           </no-js-form>
         </div>
 
@@ -95,6 +96,7 @@
 /* eslint-disable import/extensions */
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
@@ -123,6 +125,7 @@ export default {
     MessageList,
     NoJsForm,
     ErrorMessage,
+    GenericButton,
     GenericTextArea,
     DesktopGenericBackLink,
     Card,
@@ -170,6 +173,9 @@ export default {
       const { repeatPrescriptionCourses, hasLoaded } = this.$store.state.repeatPrescriptionCourses;
       return hasLoaded && repeatPrescriptionCourses.length > 0;
     },
+    showMandatoryReasonError() {
+      return this.error && !this.specialRequestValid;
+    },
     hasLoaded() {
       return this.$store.state.repeatPrescriptionCourses.hasLoaded;
     },
@@ -197,6 +203,16 @@ export default {
     },
     repeatCoursesPath() {
       return PRESCRIPTION_REPEAT_COURSES.path;
+    },
+    mandatoryReasonErrorStyle() {
+      if (this.specialRequestNecessity === 'Mandatory' &&
+        this.error && !this.specialRequestValid) {
+        return 'nhsuk-form-group--error';
+      }
+      return '';
+    },
+    selectMedicationErrorStyle() {
+      return (this.error && !this.courseSelectionValid) ? 'nhsuk-form-group--error' : '';
     },
   },
   async fetch({ store }) {

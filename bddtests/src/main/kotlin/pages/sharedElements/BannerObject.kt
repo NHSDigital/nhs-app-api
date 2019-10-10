@@ -31,7 +31,7 @@ class BannerObject private constructor(page : HybridPageObject,
 
         container.actOnTheElement {
 
-            val bannerTitle = it.findElement<WebElement>(By.xpath("./div[1]")).text
+            val bannerTitle = it.findElement<WebElement>(By.xpath("./h2[1]")).text
             Assert.assertEquals("Expected banner title", title, bannerTitle)
 
             val bannerText = it.findElements<WebElement>(By.xpath("./$innerXPath/*"))

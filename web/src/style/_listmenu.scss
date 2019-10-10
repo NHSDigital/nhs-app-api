@@ -11,10 +11,6 @@
     padding-bottom: 0.5em;
     padding-top: 0.250em;
 
-    &.desktopWeb {
-      font-family: $default-web;
-      font-weight: 300;
-    }
   }
 
   li {
@@ -49,8 +45,6 @@
 
     a.info-link {
       display: inline-block;
-      font-size: 1em;
-      font-style: normal;
     }
 
     a.active {
@@ -76,7 +70,6 @@
 
     a {
       padding-right: 3em;
-      font-size: 1em;
 
       h2 {
         margin: 0;

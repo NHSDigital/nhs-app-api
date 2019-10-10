@@ -15,7 +15,7 @@
     </div>
 
     <generic-button v-if="$store.state.device.isNativeApp" id="back-button"
-                    :button-classes="['grey', 'button']" :class="$style.back"
+                    :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
                     tabindex="0" @click.prevent="onBackButtonClicked">
       {{ $t('nominatedPharmacyCannotChange.backButton') }}
     </generic-button>

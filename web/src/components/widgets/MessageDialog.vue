@@ -5,9 +5,9 @@
                 'nhsuk-width-container--full',
                 {[$style.desktopWeb] : !$store.state.device.isNativeApp},
                 plainStyle]">
-    <div v-if="showIcon" :class="$style.icon">
+    <h2 v-if="showIcon" :class="[nhsHeaderStyle, $style.icon]">
       {{ iText }}
-    </div>
+    </h2>
     <div :id="messageId" :class="$style['msg-content']"
          :data-purpose="messageType">
       <slot/>
@@ -63,6 +63,9 @@ export default {
     plainStyle() {
       // return this.overrideStyle === 'plain' ? this.$style.plain : '';
       return this.overrideStyle === 'plain' ? this.$style.plain : '';
+    },
+    nhsHeaderStyle() {
+      return 'nhsuk-heading-m';
     },
     showIcon() {
       return this.overrideStyle !== 'plain';

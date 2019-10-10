@@ -28,10 +28,7 @@ export default {
 
   .validation-text {
    &.desktopWeb{
-    font-family: $default-web;
-    font-weight: normal;
     color: $error;
-    margin-bottom: 1em;
    }
   }
 </style>

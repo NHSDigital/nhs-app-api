@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 { InternalCode.PatientRecordNotFound, StatusCodes.Status404NotFound },
                 { InternalCode.InvalidProviderId, StatusCodes.Status403Forbidden },
                 { InternalCode.ProblemLinkingAccount, StatusCodes.Status404NotFound },
-                { InternalCode.UserRecordUnavailable, StatusCodes.Status502BadGateway },
+                { InternalCode.UserRecordUnavailable, StatusCodes.Status403Forbidden },
                 { InternalCode.InvalidSecurity, StatusCodes.Status500InternalServerError },
                 { InternalCode.InvalidRequest, StatusCodes.Status400BadRequest },
                 { InternalCode.InvalidUserPatientLinkToken, StatusCodes.Status400BadRequest },

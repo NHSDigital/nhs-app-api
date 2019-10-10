@@ -89,7 +89,7 @@ Feature: View My Medical Record Information - All records enabled
     Then I see test result information
 
 
-  Scenario: A TPP usercan view allergies, medications, test results and consultations
+  Scenario: A TPP user can view allergies, medications, test results and consultations
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled all medical records for the patient

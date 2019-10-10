@@ -10,7 +10,9 @@
               :aria-label="formatTime(timeSlot.startTime)">
           {{ formatTime(timeSlot.startTime) }}
         </span>
-        <p v-if="timeSlot.sessionName" data-label="session name">
+        <p v-if="timeSlot.sessionName"
+           class="nhsuk-u-margin-bottom-0"
+           data-label="session name">
           {{ timeSlot.sessionName }}
         </p>
       </span>
@@ -96,10 +98,12 @@ export default {
      font-weight: lighter;
     }
     &:focus {
+      background-color: white;
       border-radius: 0.313em;
     }
 
     &:hover {
+      background-color: white;
       border-radius: 0.313em;
         @include outlineStyleLight;
     }

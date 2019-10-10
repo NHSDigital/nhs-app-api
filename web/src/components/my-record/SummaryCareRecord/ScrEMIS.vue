@@ -1,6 +1,8 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isAllergiesAndAdverseReactionsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="ALLERGIESANDADVERSEREACTIONS"
@@ -15,7 +17,9 @@
     <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
                                      :allergies="record.allergies" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isAcuteMedicationsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="ACUTEMEDICATIONS"
@@ -30,7 +34,9 @@
                  :medications="record.medications.data.acuteMedications"
                  :has-error="record.medications.hasErrored"/>
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isCurrentRepeatMedicationsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="CURRENTREPEATMEDICATIONS"
@@ -45,7 +51,9 @@
                  :medications="record.medications.data.currentRepeatMedications"
                  :has-error="record.medications.data.hasErrored" />
 
-    <analytics-tracked-tag :class="[$style['record-title'],
+    <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                    'nhsuk-u-padding-3',
+                                    $style['record-title'],
                                     getCollapsedState(isDiscontinuedRepeatMedicationsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="DISCONTINUEDREPEATMEDICATIONS"
@@ -131,16 +139,4 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
-
-  div {
-   &.desktopWeb {
-    .record-title {
-    cursor: pointer;
-    &:focus {
-      @include outlineStyle
-     }
-    }
-   }
-  }
 </style>

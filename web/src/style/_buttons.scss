@@ -106,7 +106,7 @@ button.link {
   margin: 0.5em 0;
   color: $nhs_blue;
   font-weight: bold;
-  
+
   &:focus {
     @include linkFocusStyle;
   }

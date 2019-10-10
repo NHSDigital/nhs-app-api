@@ -8,7 +8,7 @@
     </ul>
     <generic-button v-if="!$store.state.device.isNativeApp"
                     id="back-button"
-                    :class="[$style.button, $style.grey]"
+                    :class="['nhsuk-button', 'nhsuk-button--secondary']"
                     @click="goBack" >
       {{ $t('generic.backButton.text') }}
     </generic-button>

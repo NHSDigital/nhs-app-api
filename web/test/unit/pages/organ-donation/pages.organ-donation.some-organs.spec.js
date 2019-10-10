@@ -1,5 +1,6 @@
 import BackButton from '@/components/BackButton';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
+import MessageDialog from '@/components/widgets/MessageDialog';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
 import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_FAITH, ORGAN_DONATION_MORE_ABOUT_ORGANS } from '@/lib/routes';
@@ -64,8 +65,6 @@ const createState = ({ choices = undefined } = {}) => {
 // Test for choices
 describe('organ donation some organs page', () => {
   const $style = {
-    button: 'button',
-    green: 'green',
     error: 'error',
   };
   let $store;
@@ -169,9 +168,9 @@ describe('organ donation some organs page', () => {
         expect(continueButton.text()).toEqual(`translate_${key}`);
       });
 
-      it('will be set as a green button', () => {
-        expect(continueButton.classes()).toContain($style.button);
-        expect(continueButton.classes()).toContain($style.green);
+      it('will be a button with nhsuk-button style', () => {
+        const classes = continueButton.classes();
+        expect(classes).toContain('nhsuk-button');
       });
 
       describe('click', () => {
@@ -222,7 +221,7 @@ describe('organ donation some organs page', () => {
           });
 
           it('will show error dialog', () => {
-            expect(wrapper.find('.error').exists()).toBe(true);
+            expect(wrapper.find(MessageDialog).exists()).toBe(true);
           });
 
           it('will not push the organ donation additional details page on the router', () => {

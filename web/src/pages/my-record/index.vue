@@ -1,9 +1,14 @@
 <template>
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()"
-       :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-      <glossary :extra-classes="[$style.glossary]"/>
-      <analytics-tracked-tag :class="[$style['record-title'],
+       :class="!$store.state.device.isNativeApp">
+    <div v-if="showTemplate" id="mainDiv">
+      <p>{{ $t('rp01.glossary.headerText') }}</p>
+      <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
+                        :link-url="glossaryLinkURL"
+                        :is-analytics-tracked="true"/>
+      <analytics-tracked-tag :class="['nhsuk-heading-s',
+                                      'nhsuk-u-padding-3',
+                                      'record-title',
                                       getCollapsedState(isPatientDetailsCollapsed)]"
                              :click-func="myRecordSectionClick"
                              :click-param="PATIENTDETAILS"
@@ -14,7 +19,7 @@
                              tag="a">
         {{ $t('my_record.patientInfo.sectionHeader') }}
       </analytics-tracked-tag>
-      <div :class="$style.patientDetailsContainer">
+      <div :class="[$style.patientDetailsContainer, $style['nhsuk-u-padding-bottom-3']]">
         <patient-details :is-collapsed="isPatientDetailsCollapsed"
                          :patient-details="$store.state.myRecord.patientDetails"/>
       </div>
@@ -46,7 +51,7 @@
         </div>
 
         <div v-else>
-          <p :class="$style.summaryRecordWarning">
+          <p class="nhsuk-u-padding-top-3">
             {{ $t('my_record.viewRestOfHealthRecordWarning') }}
           </p>
         </div>
@@ -85,7 +90,7 @@ import ScrTpp from '@/components/my-record/SummaryCareRecord/ScrTPP';
 import ScrVision from '@/components/my-record/SummaryCareRecord/ScrVISION';
 import ScrMicrotest from '@/components/my-record/SummaryCareRecord/ScrMICROTEST';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import Glossary from '@/components/Glossary';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -98,7 +103,7 @@ export default {
   components: {
     PatientDetails,
     AnalyticsTrackedTag,
-    Glossary,
+    NhsArrowBanner,
     DcrEmis,
     DcrTpp,
     DcrVision,
@@ -162,7 +167,7 @@ export default {
   },
   methods: {
     getCollapsedState(collapsed) {
-      return collapsed ? this.$style.closed : this.$style.opened;
+      return collapsed ? 'closed' : 'opened';
     },
     myRecordSectionClick(section) {
       switch (section) {
@@ -184,34 +189,12 @@ export default {
 };
 
 </script>
-
-<style module lang="scss" scoped>
+<style lang="scss">
   @import '../../style/medrecordtitle';
+</style>
+<style module lang="scss" scoped>
+
   @import '../../style/desktopWeb/accessibility';
-
-  .no-padding {
-    margin-left: -1em;
-    margin-right: -1em;
-  }
-
-  .info {
-    padding: 0.5em 1em 0em 1em;
-    margin-bottom: 0.5em;
-    font-size: 1em;
-
-    p {
-      padding-bottom: 0.5em;
-      padding-top: 0.5em;
-    }
-  }
-
-  p {
-    display: block;
-    font-weight: normal;
-    font-size: 1em;
-    line-height: 1.5em;
-    color: #212B32;
-  }
 
   .summaryRecordWarning {
     padding-left: 1em;
@@ -229,11 +212,6 @@ export default {
         max-width: 540px;
       }
 
-      p {
-        font-family: $default_web;
-        font-weight: lighter;
-      }
-
       .record-content {
         margin-left: 1em;
       }
@@ -249,10 +227,6 @@ export default {
         margin-left: 1em;
         margin-right: 1em;
         cursor: pointer;
-      }
-
-      .record-title:focus {
-        @include outlineStyle
       }
 
       .patientDetailsContainer {
