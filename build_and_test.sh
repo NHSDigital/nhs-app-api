@@ -120,7 +120,7 @@ docker tag $DOCKER_REGISTRY/$WEB_NAME:$TAG $DOCKER_REGISTRY/$WEB_NAME:latest
 cd ../backendworker
 docker build . -t $DOCKER_REGISTRY/$CID_BACKEND_NAME:$TAG -f NHSOnline.Backend.CidApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$CID_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$CID_BACKEND_NAME:latest
-
+  
 docker build . -t $DOCKER_REGISTRY/$PFS_BACKEND_NAME:$TAG -f NHSOnline.Backend.PfsApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$PFS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$PFS_BACKEND_NAME:latest
 
