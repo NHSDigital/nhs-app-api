@@ -62,7 +62,7 @@
         "GP_PROVIDER_ENABLED_TPP": "true",
         "GP_PROVIDER_ENABLED_VISION": "true",
         "IM1CACHE_MONGO_DATABASE_COLLECTION": "im1Cache",
-        "MICROTEST_BASE_URL": "https://nhsapp.microtest.co.uk/v1/",
+        "MICROTEST_BASE_URL": "https://nhsapp-test.microtest.co.uk/v1/",
         "MICROTEST_CERT_PATH": "../certs/microtest-dev.pfx",
         "MICROTEST_CERT_PASSPHRASE": "",
         "REDIS_ODSLOOKUP_CONFIG": "api.local.bitraft.io:6379",

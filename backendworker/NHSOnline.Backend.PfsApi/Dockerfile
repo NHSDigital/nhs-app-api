@@ -97,7 +97,7 @@ ENV EMIS_CERTIFICATE_PATH=
 ENV EMIS_CERTIFICATE_PASSWORD=
 ENV TIMEZONE Europe/London
 ENV SESSION_ENCRYPTION_KEY_FILE DevelopmentSessionEncryptionKey.txt
-ENV MICROTEST_BASE_URL https://nhsapp.microtest.co.uk/v1/
+ENV MICROTEST_BASE_URL https://nhsapp-test.microtest.co.uk/v1/
 ENV MICROTEST_CERT_PATH ./certs/microtest-dev.pfx
 ENV AUDIT_SINK_TYPE FILE
 ENV AUDIT_FILE audit.txt
