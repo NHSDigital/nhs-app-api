@@ -51,6 +51,8 @@ class OpenUrlInBrowserActivity(private val nativeAppHosts: Array<String>) : Acti
                 .setToolbarColor(Color.BLUE)
                 .build()
 
+            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             if (supportedCustomTabsPackages.any { it.activityInfo.packageName == CHROME_PACKAGE_NAME }) {
                 customTabsIntent.intent.setPackage(CHROME_PACKAGE_NAME)
             } else {
