@@ -72,9 +72,12 @@ class LifeCycleObserver(
             override fun onSuccess(configurationResponse: ConfigurationResponse) {
                 context.dismissProgressDialog()
 
-                context.isSuccessfulConfigCheck = true
-                if (!configurationResponse.isValidConfiguration) {
+                if (configurationResponse.isValidConfiguration) {
+                    context.isSuccessfulConfigCheck = true
+                }
+                else {
                     appDialogs.showVersionUpgradeDialog()
+                    context.isSuccessfulConfigCheck = false
                 }
 
                 context.configBiometricSetup(configurationResponse.fidoServerUrl)

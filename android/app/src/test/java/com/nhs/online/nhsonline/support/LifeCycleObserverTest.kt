@@ -2,9 +2,7 @@ package com.nhs.online.nhsonline.support
 
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
-import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activities.MainActivity
-import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
@@ -251,6 +249,33 @@ class LifeCycleObserverTest {
         verify(contextSpy, times(1)).configBiometricSetup(fidoServerUrl)
         verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
         assertEquals(true, contextSpy.isSuccessfulConfigCheck)
+    }
+
+    @Test
+    fun onMoveToForeground_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withInvalidConfiguration_showVersionUpgradeDialog() {
+        val url = "Bazz"
+        val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
+
+        contextSpy.webview.loadUrl(url)
+        doNothing().whenever(contextSpy).hideBlankScreen()
+
+        val fidoServerUrl = "https://test@test.com"
+        val cr = ConfigurationResponse()
+        cr.isValidConfiguration = false
+        cr.isThrottlingEnabled = true
+        cr.fidoServerUrl = fidoServerUrl
+        doAnswer {
+            val callback = it.arguments[0] as IVolleyCallback
+            callback.onSuccess(cr)
+        }.whenever(configurationServiceMock).getConfiguration(any())
+
+        lifeCycleObserver.onMoveToForeground()
+
+        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
+        verify(contextSpy, times(1)).hideBlankScreen()
+        verify(contextSpy, times(1)).configBiometricSetup(fidoServerUrl)
+        verify(appDialogsMock, times(1)).showVersionUpgradeDialog()
+        assertEquals(false, contextSpy.isSuccessfulConfigCheck)
     }
 
     private fun overrideKnownServicesField(

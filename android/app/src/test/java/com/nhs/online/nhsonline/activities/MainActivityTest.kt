@@ -279,5 +279,39 @@ class MainActivityTest {
         }
     }
 
+    @Test
+    fun showBiometricLoginIfEnabled_SuccessfulConfig_ReturnsTrue() {
+        spyActivity.isSuccessfulConfigCheck = true
+
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(true)
+        }
+        FieldSetter.setField(spyActivity,
+            spyActivity::class.java.getDeclaredField("biometricsInterface"),
+            biometricsInterfaceMock)
+
+        val result = spyActivity.showBiometricLoginIfEnabled()
+
+        Assert.assertTrue(result)
+        verify(biometricsInterfaceMock, times(1)).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun showBiometricLoginIfEnabled_UnsuccessfulConfig_ReturnsFalse() {
+        spyActivity.isSuccessfulConfigCheck = false
+
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(false)
+        }
+        FieldSetter.setField(spyActivity,
+            spyActivity::class.java.getDeclaredField("biometricsInterface"),
+            biometricsInterfaceMock)
+
+        val result = spyActivity.showBiometricLoginIfEnabled()
+
+        Assert.assertFalse(result)
+        verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+    }
+
     private fun getStringById(resId: Int): String = mainActivity.resources.getString(resId)
 }

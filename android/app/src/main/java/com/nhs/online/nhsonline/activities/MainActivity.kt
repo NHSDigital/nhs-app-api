@@ -574,7 +574,14 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         appDialogs.dismissExtendSessionDialog()
     }
 
-    override fun showBiometricLoginIfEnabled(forceStart: Boolean) = biometricsInterface.showBiometricLoginIfEnabled(forceStart)
+
+    override fun showBiometricLoginIfEnabled(forceStart: Boolean): Boolean {
+        if (!isSuccessfulConfigCheck){
+            return false
+        }
+
+        return biometricsInterface.showBiometricLoginIfEnabled(forceStart)
+    }
 
     override fun displayBiometricLoginErrorOccurrence() {
         biometricsInterface.notifyLoginErrorOccurrence()
