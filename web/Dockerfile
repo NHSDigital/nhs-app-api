@@ -1,24 +1,4 @@
-FROM node:8-stretch-slim AS base
-
-ENV HOST 0.0.0.0
-ENV PORT 3000
-ENV NODE_TLS_REJECT_UNAUTHORIZED 0
-
-WORKDIR /opt/app
-RUN chown node:node /opt/app && \
-    apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y sudo && \
-    echo "node ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers.d/default && \
-    chmod 400 /etc/sudoers.d/default && \
-    rm -rf \
-      /var/cache/debconf/* \
-      /var/lib/apt/lists/* \
-      /var/log/* \
-      /tmp/* \
-      /var/tmp/*
-
-USER node
+FROM nhsapp.azurecr.io/nhsonline-web-base AS base
 
 COPY --chown=node:node package.json .
 COPY --chown=node:node package-lock.json .

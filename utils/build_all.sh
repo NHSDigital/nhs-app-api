@@ -5,6 +5,7 @@ docker volume list | awk '{print $2}' | grep -v VOLUME | xargs docker volume rm 
 docker pull nhsapp.azurecr.io/nhsonline-redis-data:latest
 docker pull nhsapp.azurecr.io/nhsonline-dotnetcore-runtime
 docker pull nhsapp.azurecr.io/nhsonline-dotnetcore-build
+docker pull nhsapp.azurecr.io/nhsonline-web-base
 cd bddtests
 docker-compose build
 cd ../backendworker
