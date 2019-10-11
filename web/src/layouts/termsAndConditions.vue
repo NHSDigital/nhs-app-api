@@ -1,11 +1,31 @@
 <template>
   <div id="app">
+    <div>
+      <web-header :show-menu="false"
+                  :show-links="false"
+                  :show-header-buttons="false"/>
+    </div>
+    <content-header id="content-header"
+                    :show-bread-crumb="false"
+                    :show-content-header="true"/>
     <main :class="[this.$style.homeMain, !$store.state.device.isNativeApp && $style.desktopWeb]">
-      <connection-error />
-      <api-error />
-      <flash-message />
-      <nuxt />
+      <div class="nhsuk-width-container">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds
+              nhsuk-u-padding-top-3
+               nhsuk-u-padding-bottom-6">
+            <connection-error />
+            <api-error />
+            <flash-message />
+            <nuxt />
+          </div>
+        </div>
+      </div>
     </main>
+    <div v-if="shouldShowFooter"
+         :class="$style['footer-container-desktop']">
+      <web-footer/>
+    </div>
   </div>
 </template>
 
@@ -16,6 +36,9 @@ import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import { findByName } from '@/lib/routes';
+import ContentHeader from '@/components/widgets/ContentHeader';
+import WebHeader from '@/components/widgets/WebHeader';
+import WebFooter from '@/components/widgets/WebFooter';
 
 
 export default {
@@ -23,6 +46,9 @@ export default {
     ApiError,
     ConnectionError,
     FlashMessage,
+    ContentHeader,
+    WebHeader,
+    WebFooter,
   },
   head() {
     let head = {};
@@ -69,6 +95,11 @@ export default {
   computed: {
     currentHelpUrl() {
       return findByName(this.$route.name).helpUrl;
+    },
+    shouldShowFooter() {
+      return (
+        !this.$store.state.device.isNativeApp
+      );
     },
   },
   mounted() {
