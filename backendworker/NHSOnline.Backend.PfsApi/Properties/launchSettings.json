@@ -139,7 +139,8 @@
         "SPINE_LDAP_LOGIN_DN": "ou=services, o=nhs",
         "SPINE_CERT_PATH": "../certs/spine.pfx",
         "SPINE_CERT_PASSWORD": "",
-        "NHS_APP_PARTY_ID_FOR_SPINE": "E87021-820463"
+        "NHS_APP_PARTY_ID_FOR_SPINE": "E87021-820463",
+        "API_BASE_URL": "http://api.local.bitraft.io:8089/v1/api/"
       }
     },
     "NHSOnline.Backend.PfsApi.Bdd": {

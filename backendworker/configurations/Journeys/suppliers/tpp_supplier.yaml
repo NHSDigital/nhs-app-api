@@ -4,3 +4,4 @@ target:
 journeys:
   notifications: true
   messaging: true
+  userInfo: true

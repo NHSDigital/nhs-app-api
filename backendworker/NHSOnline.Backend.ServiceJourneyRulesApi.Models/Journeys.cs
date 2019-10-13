@@ -21,6 +21,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         public bool? Messaging { get; set; }
 
         public Supplier Supplier { get; set; }
+        
+        public bool? UserInfo { get; set; }
 
         public bool HasLinkedAccounts { get; set; }
 
@@ -34,7 +36,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             NominatedPharmacy = NominatedPharmacy,
             Notifications = Notifications,
             Messaging = Messaging,
-            HasLinkedAccounts = HasLinkedAccounts,
+            UserInfo = UserInfo,
+            HasLinkedAccounts = HasLinkedAccounts
         };
 
         public Journeys AddSupplier(Supplier supplier)

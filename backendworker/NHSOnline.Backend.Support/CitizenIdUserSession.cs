@@ -7,8 +7,6 @@ namespace NHSOnline.Backend.Support
     {
         public string AccessToken { get; set; }
         public string FamilyName { get; set; }
-        
         public DateTime DateOfBirth { get; set; }
-
     }
 }

@@ -6,3 +6,4 @@ journeys:
     provider: im1
   notifications: false
   messaging: false
+  userInfo: false

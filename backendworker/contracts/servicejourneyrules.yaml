@@ -63,6 +63,8 @@ components:
               type: bool
             messaging:
               type: bool
+            userInfo:
+              type: bool
             hasLinkedAccounts:
               type: bool
     defaultProvider:

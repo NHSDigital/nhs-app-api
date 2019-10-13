@@ -151,7 +151,8 @@
         "nominatedPharmacy": { "enum": ["true", "false"]  },
         "notifications": { "enum": ["true", "false"]  },
         "messaging": { "enum": ["true", "false"]  },
-        "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] }
+        "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] },
+        "userInfo": { "enum": ["true", "false"]  }
       },
       "anyOf": [
         {
@@ -180,6 +181,9 @@
         },
         {
           "required": [ "supplier" ]
+        },
+        {
+          "required": [ "userInfo" ]
         }
       ]
     }

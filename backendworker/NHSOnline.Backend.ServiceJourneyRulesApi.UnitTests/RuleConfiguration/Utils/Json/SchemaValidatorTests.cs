@@ -316,6 +316,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("\"nominatedPharmacy\": \"false\"")]
         [DataRow("\"notifications\": \"true\"")]
         [DataRow("\"notifications\": \"false\"")]
+        [DataRow("\"messaging\": \"true\"")]
+        [DataRow("\"messaging\": \"false\"")]
+        [DataRow("\"userInfo\": \"true\"")]
+        [DataRow("\"userInfo\": \"false\"")]
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
             string journeys)
         {
@@ -356,6 +360,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("nominatedPharmacy", "\"test\"", "NotInEnumeration: #/journeys.nominatedPharmacy", false)]
         [DataRow("notifications", "\"\"", "NotInEnumeration: #/journeys.notifications", false)]
         [DataRow("notifications", "\"test\"", "NotInEnumeration: #/journeys.notifications", false)]
+        [DataRow("messaging", "\"\"", "NotInEnumeration: #/journeys.messaging", false)]
+        [DataRow("messaging", "\"test\"", "NotInEnumeration: #/journeys.messaging", false)]
+        [DataRow("userInfo", "\"\"", "NotInEnumeration: #/journeys.userInfo", false)]
+        [DataRow("userInfo", "\"test\"", "NotInEnumeration: #/journeys.userInfo", false)]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
                 string journeyType, string value, string expectedError, bool oneOfMultipleOptions)

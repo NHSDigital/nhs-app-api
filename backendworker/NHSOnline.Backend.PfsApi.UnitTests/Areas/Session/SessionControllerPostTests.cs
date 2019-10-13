@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using FluentAssertions.Equivalency;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;

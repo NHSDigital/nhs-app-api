@@ -16,3 +16,4 @@ journeys:
   nominatedPharmacy: true
   notifications: true
   messaging: true
+  userInfo: true

@@ -26,7 +26,8 @@ namespace NHSOnline.Backend.Support
         Microtest = 4,
         NhsLogin = 5,
         ServiceJourneyRules = 6,
-        OrganDonation = 7
+        OrganDonation = 7,
+        UserInfo = 8
     }
 
     public interface IErrorReferenceGenerator

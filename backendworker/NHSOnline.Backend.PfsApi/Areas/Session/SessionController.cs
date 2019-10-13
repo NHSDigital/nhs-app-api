@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -39,6 +40,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IOdsCodeMassager _odsCodeMassager;
         private readonly IServiceJourneyRulesService _serviceJourneyRules;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
+        private readonly IUserInfoService _userInfoService;
         private readonly SessionConfigurationSettings _sessionSettings;
 
         public SessionController(
@@ -54,7 +56,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IOdsCodeMassager odsCodeMassager,
             IServiceJourneyRulesService serviceJourneyRules,
             IErrorReferenceGenerator errorReferenceGenerator,
-            SessionConfigurationSettings sessionSettings
+            SessionConfigurationSettings sessionSettings,
+            IUserInfoService userInfoService
         )
         {
             _citizenIdSessionService = citizenIdSessionService;
@@ -70,6 +73,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _serviceJourneyRules = serviceJourneyRules;
             _errorReferenceGenerator = errorReferenceGenerator;
             _sessionSettings = sessionSettings;
+            _userInfoService = userInfoService;
         }
 
         [HttpPost, AllowAnonymous]
@@ -237,6 +241,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         {
             // Build and save session token in our session cache
             var sessionFetchTask = FetchSessionIdAndSaveInCookie(userSession);
+
+            // Post to the UserInfo service
+            if (serviceJourneyRulesVisitorOutput.Response.Journeys.UserInfo == true)
+            {
+                await _userInfoService.Update(userSession.CitizenIdUserSession.AccessToken);
+            }
 
             // Delete connection token from cache
             var tokenDeletionTask = DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);

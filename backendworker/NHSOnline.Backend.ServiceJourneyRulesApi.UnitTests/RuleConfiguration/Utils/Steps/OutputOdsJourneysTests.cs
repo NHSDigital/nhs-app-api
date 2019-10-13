@@ -107,6 +107,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
+                            .UserInfoEnabled(true)
                             .Build()
                     },
                     {
@@ -120,6 +121,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NominatedPharmacyEnabled(false)
                             .NotificationsEnabled(false)
                             .MessagingEnabled(false)
+                            .UserInfoEnabled(false)
                             .Build()
                     },
                     {
@@ -133,6 +135,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NominatedPharmacyEnabled(true)
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
+                            .UserInfoEnabled(true)
                             .Build()
                     }
                 }

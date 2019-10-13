@@ -95,6 +95,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 if (journeys.Messaging.HasValue)
                 {
                     currentJourneys.Messaging = journeys.Messaging;
+                } 
+                
+                if (journeys.UserInfo.HasValue)
+                {
+                    currentJourneys.UserInfo = journeys.UserInfo;
                 }
             }
         }

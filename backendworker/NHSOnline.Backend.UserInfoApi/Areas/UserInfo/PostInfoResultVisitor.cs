@@ -9,10 +9,12 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         {
             return new StatusCodeResult(StatusCodes.Status201Created);
         }
+        
         public IActionResult Visit(PostInfoResult.BadGateway result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+        
         public IActionResult Visit(PostInfoResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);

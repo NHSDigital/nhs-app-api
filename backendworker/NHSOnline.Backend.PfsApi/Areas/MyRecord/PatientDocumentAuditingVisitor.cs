@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.PatientRecord;
-using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {

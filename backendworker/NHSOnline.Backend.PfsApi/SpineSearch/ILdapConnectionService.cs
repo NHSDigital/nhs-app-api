@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Novell.Directory.Ldap;
+﻿using Novell.Directory.Ldap;
 
 namespace NHSOnline.Backend.PfsApi.SpineSearch
 {

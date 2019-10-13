@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet.Filters;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 {

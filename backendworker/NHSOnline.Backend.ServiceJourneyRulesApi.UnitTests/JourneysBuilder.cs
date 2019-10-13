@@ -119,6 +119,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder UserInfoEnabled(bool? enabled)
+        {
+            _journeys.UserInfo = enabled;
+            return this;
+        }
+        
         public Journeys Build()
         {
             return _journeys;

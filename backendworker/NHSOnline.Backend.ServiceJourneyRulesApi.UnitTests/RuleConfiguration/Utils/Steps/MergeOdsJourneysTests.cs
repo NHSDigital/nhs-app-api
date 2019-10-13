@@ -66,6 +66,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(true)
                     .MessagingEnabled(false)
+                    .UserInfoEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
@@ -79,6 +80,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NominatedPharmacyEnabled(false)
                     .NotificationsEnabled(false)
                     .MessagingEnabled(false)
+                    .UserInfoEnabled(false)
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -96,13 +98,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(true)
                     .MessagingEnabled(true)
+                    .UserInfoEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
                     .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                     .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                     .Prescriptions(PrescriptionsProvider.im1)
-                    .MessagingEnabled(true)
+                    .MessagingEnabled(true) 
+                    .UserInfoEnabled(true)
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -117,6 +121,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(true)
                     .MessagingEnabled(false)
+                    .UserInfoEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -127,6 +132,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(false)
                     .NotificationsEnabled(true)
                     .MessagingEnabled(true)
+                    .UserInfoEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -136,6 +142,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NominatedPharmacyEnabled(false)
                     .NotificationsEnabled(false)
                     .MessagingEnabled(true)
+                    .UserInfoEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(null)
@@ -145,6 +152,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NominatedPharmacyEnabled(null)
                     .NotificationsEnabled(null)
                     .MessagingEnabled(null)
+                    .UserInfoEnabled(null)
                     .Build()
                 );
 
@@ -165,11 +173,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             context.MergedOdsJourneys.Should().BeEquivalentTo(expectedMergedJourneys);
         }
 
-        private static Dictionary<string, Journeys> CreateOdsJourneys(
-            Journeys firstJourney,
+        private static Dictionary<string, Journeys> CreateOdsJourneys(Journeys firstJourney,
             Journeys secondJourney,
             Journeys thirdJourney,
-            Journeys fourthJourney)
+            Journeys fourthJourney
+            )
         {
             return new Dictionary<string, Journeys>
             {

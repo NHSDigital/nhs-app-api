@@ -31,16 +31,7 @@ namespace UnitTestHelper
             mockHttpContext
                 .Setup(x => x.Request)
                 .Returns(mockHttpRequest.Object);
-            
-            var mockHttpRequest = fixture.Create<Mock<HttpRequest>>();
-            mockHttpRequest
-                .Setup(x => x.Headers)
-                .Returns(new HeaderDictionary { { "Authorization", fixture.Create<StringValues>() } });
 
-            mockHttpContext
-                .Setup(x => x.Request)
-                .Returns(mockHttpRequest.Object);
-            
             return mockHttpContext;
         }
     }

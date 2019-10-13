@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet.Filters;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
