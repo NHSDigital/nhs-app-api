@@ -48,7 +48,7 @@ interface IInteractor {
 
     fun showExtendSessionDialogue(sessionDuration: Int)
 
-    fun showBiometricLoginIfEnabled(): Boolean
+    fun showBiometricLoginIfEnabled(forceStart:Boolean = false): Boolean
 
     fun showNativeBiometricOptions()
 

@@ -98,17 +98,32 @@ class AuthenticationServiceTest {
         authenticationService.isFingerprintLoginStarted = false
         whenever(mockBiometricState.registered).thenReturn(true)
 
-        val result = authenticationService.showBiometricLoginIfEnabled()
+        val result = authenticationService.showBiometricLoginIfEnabled(false)
 
         Assert.assertTrue(result)
     }
+
+    @Test
+    fun isFingerprintLoginStarted_isFalse_WhenForceStartIsTrue() {
+        authenticationService.isFingerprintLoginStarted = true
+        authenticationService.showBiometricLoginIfEnabled(true)
+        Assert.assertFalse(authenticationService.isFingerprintLoginStarted)
+    }
+
+    @Test
+    fun isFingerprintLoginStarted_remainsTrue_WhenForceStartIsFalse() {
+        authenticationService.isFingerprintLoginStarted = true
+        authenticationService.showBiometricLoginIfEnabled(false)
+        Assert.assertTrue(authenticationService.isFingerprintLoginStarted)
+    }
+
 
     @Test
     fun startFidoSignIn_ReturnsFalseWhenAlreadyStarted() {
         authenticationService.isFingerprintLoginStarted = true
         whenever(mockBiometricState.registered).thenReturn(true)
 
-        val result = authenticationService.showBiometricLoginIfEnabled()
+        val result = authenticationService.showBiometricLoginIfEnabled(false)
 
         Assert.assertFalse(result)
     }

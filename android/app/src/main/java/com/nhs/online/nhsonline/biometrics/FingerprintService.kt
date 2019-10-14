@@ -86,7 +86,8 @@ class FingerprintService(
 
     fun startFidoRegistration() = registrationService.startFidoRegistration()
 
-    fun showBiometricLoginIfEnabled() = authenticationService.showBiometricLoginIfEnabled()
+    fun showBiometricLoginIfEnabled(forceStart: Boolean = false) = authenticationService.showBiometricLoginIfEnabled(forceStart)
+
 
     fun notifyLoginErrorOccurrence() {
         biometricState.hasLoginError = true

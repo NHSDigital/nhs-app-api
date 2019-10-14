@@ -41,7 +41,6 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
 import kotlinx.android.synthetic.main.breadcrumb_layout.*
-import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import kotlinx.android.synthetic.main.success_layout.*
@@ -55,7 +54,7 @@ private val TAG = MainActivity::class.java.simpleName
 
 class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private val logger = Logger.getLogger(TAG)
-    private val biometricsInterface = BiometricsInterface(this)
+    private val biometricsInterface: BiometricsInterface = BiometricsInterface(this)
     private lateinit var connectionStateMonitor: ConnectionStateMonitor
     private lateinit var nhsWeb: NhsWeb
     private lateinit var appDialogs: AppDialogs
@@ -355,8 +354,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        if (isSuccessfulConfigCheck)
+        if (isSuccessfulConfigCheck) {
+            if (nhsWeb.isLoginPath()) {
+                showBiometricLoginIfEnabled(true)
+            }
             nhsWeb.reloadLoginUrl()
+        }
     }
 
     private fun showExitDialog() {
@@ -571,7 +574,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         appDialogs.dismissExtendSessionDialog()
     }
 
-    override fun showBiometricLoginIfEnabled() = biometricsInterface.showBiometricLoginIfEnabled()
+    override fun showBiometricLoginIfEnabled(forceStart: Boolean) = biometricsInterface.showBiometricLoginIfEnabled(forceStart)
 
     override fun displayBiometricLoginErrorOccurrence() {
         biometricsInterface.notifyLoginErrorOccurrence()
@@ -612,4 +615,5 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             setDisplayHomeAsUpEnabled(isHomeEnabled)
         }
     }
+
 }

@@ -51,7 +51,7 @@ class BiometricsInterface(private val biometricsInteractor: IBiometricsInteracto
 
     fun cancelAllProgressingTasks() = fingerprintService?.cancelAllProgressingTasks()
 
-    fun showBiometricLoginIfEnabled() = fingerprintService?.showBiometricLoginIfEnabled() ?: false
+    fun showBiometricLoginIfEnabled(forceStart: Boolean = false) = fingerprintService?.showBiometricLoginIfEnabled(forceStart) ?: false
 
     fun notifyLoginErrorOccurrence() = fingerprintService?.notifyLoginErrorOccurrence()
 }

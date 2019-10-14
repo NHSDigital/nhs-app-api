@@ -121,6 +121,13 @@ class NhsWeb(
         return false
     }
 
+    fun isLoginPath(): Boolean{
+        if(webView.url == null){
+            return false
+        }
+        return (webView.url.contains(readResourceString(R.string.loginPath)))
+    }
+
     fun reloadLoginUrl() {
         val loginUrl =
                 readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)

@@ -6,9 +6,11 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import android.app.onResume
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.widget.TextView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.biometrics.BiometricsInterface
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.support.AppDialogs
@@ -47,6 +49,36 @@ class MainActivityTest {
         val loginUrl =
             getStringById(R.string.baseURL) + getStringById(R.string.loginPath) + getStringById(R.string.nhsOnlineRequiredQueries)
         Assert.assertEquals(mainActivity.webview.url, loginUrl)
+    }
+
+    @Test
+    fun onResume_LoginPath_StartBiometrics() {
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
+            R.string.loginPath))
+        spyActivity.isSuccessfulConfigCheck = true
+
+        try{
+            spyActivity.onResume()
+        } catch(e: Exception) {
+            assert(false)
+        }
+
+        verify(spyActivity, times(1)).showBiometricLoginIfEnabled(true)
+    }
+
+    @Test
+    fun onResume_NotLoginPath_DoNotStartBiometrics() {
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
+            R.string.gpFinderPath))
+        spyActivity.isSuccessfulConfigCheck = true
+
+        try{
+            spyActivity.onResume()
+        } catch(e: Exception) {
+            assert(false)
+        }
+
+        verify(spyActivity, times(0)).showBiometricLoginIfEnabled(true)
     }
 
     @Test

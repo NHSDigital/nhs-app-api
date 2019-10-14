@@ -235,7 +235,7 @@ class NhsWebTest {
         nhsWeb.onWebLoggedOut()
         Assert.assertFalse(nhsWeb.isUserLoggedIn)
         verify(interactorMock).dismissSessionExtensionDialog()
-        verify(interactorMock).showBiometricLoginIfEnabled()
+        verify(interactorMock).showBiometricLoginIfEnabled(false)
     }
 
     @Test

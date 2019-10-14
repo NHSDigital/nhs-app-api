@@ -37,7 +37,10 @@ class AuthenticationService(
 
     var isFingerprintLoginStarted = false
 
-    fun showBiometricLoginIfEnabled(): Boolean {
+    fun showBiometricLoginIfEnabled(forceStart: Boolean = false): Boolean {
+        if (forceStart)
+            isFingerprintLoginStarted = false
+
         if (!biometricState.registered || isFingerprintLoginStarted)
             return false
 
