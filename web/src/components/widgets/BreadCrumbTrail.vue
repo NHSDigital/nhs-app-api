@@ -13,7 +13,11 @@
             </li>
           </ol>
           <p class="nhsuk-breadcrumb__back">
-            <nuxt-link class="nhsuk-breadcrumb__backlink" :to="lastCrumb.path" tabindex="0" >
+            <nuxt-link class="nhsuk-breadcrumb__backlink"
+                       :to="lastCrumb.path"
+                       tabindex="0"
+                       :aria-label="$t('crumbName.backTo',
+                                       { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)})">
               {{ $t('crumbName.backTo', { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)}) }}
             </nuxt-link>
           </p>
