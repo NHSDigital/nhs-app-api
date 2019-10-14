@@ -66,6 +66,10 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
                 LinkageResult.InternalServerError to { get ->
                     get
                             .respondWithInternalServerError()
+                },
+                LinkageResult.MultipleRecordsFound to { get ->
+                    get
+                            .respondWithMultipleRecordsFound()
                 }
         )
 
@@ -134,6 +138,10 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
                 LinkageResult.InternalServerError to { get ->
                     get
                             .respondWithInternalServerError()
+                },
+                LinkageResult.MultipleRecordsFound to { get ->
+                    get
+                            .respondWithMultipleRecordsFound()
                 }
         )
 

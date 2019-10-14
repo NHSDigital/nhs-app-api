@@ -372,6 +372,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
        [DataRow(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent)]
        [DataRow(Im1ConnectionErrorCodes.InternalCode.InvalidProviderId)]
        [DataRow(Im1ConnectionErrorCodes.InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived)]
+       [DataRow(Im1ConnectionErrorCodes.InternalCode.MultipleRecordsFoundWithNhsNumber)]
        public async Task Post_Returns403Forbidden_ForVariousResults(Im1ConnectionErrorCodes.InternalCode errorCode)
        {
            // Arrange

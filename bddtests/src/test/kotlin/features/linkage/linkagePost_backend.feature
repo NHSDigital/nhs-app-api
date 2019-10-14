@@ -110,6 +110,11 @@ Feature: Linkage Post Key
     When I call the Linkage POST endpoint
     Then I receive a "Forbidden" error
 
+  Scenario: Linkage request POST for EMIS returns 403 Forbidden, multiple records for NHS number
+    Given I have valid EMIS linkage details but there are multiple records for my NHS number
+    When I call the Linkage POST endpoint
+    Then I receive a "Forbidden" error
+
   Scenario Outline: Linkage request POST for <GP System> returns 403 Forbidden when patient is under 16
     Given I have valid <GP System> linkage details for POST but I am under 16
     When I call the Linkage POST endpoint

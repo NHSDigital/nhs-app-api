@@ -148,6 +148,12 @@ open class LinkageStepDefinitions {
         setLinkageInformation(linkage, LinkageResult.AccountStatusInvalid)
     }
 
+    @Given("^I have valid (.*) linkage details but there are multiple records for my NHS number$")
+    fun thereAreMultipleRecordsForMyNhsNumber(gpSystem: String) {
+        val linkage = validLinkage(gpSystem)
+        setLinkageInformation(linkage, LinkageResult.MultipleRecordsFound)
+    }
+
     @Given("^I have valid (.*) linkage details but I'm not registered at the practice$")
     fun imNotRegisteredAtThePractice(gpSystem: String) {
         val linkage = validLinkage(gpSystem)

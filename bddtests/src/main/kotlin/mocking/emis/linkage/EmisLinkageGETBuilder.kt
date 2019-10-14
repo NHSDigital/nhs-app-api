@@ -82,4 +82,9 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest) :
         val errorResponse = ErrorResponse(ErrorResponseCodeEmis.ACCOUNT_STATUS_INVALID.toInt())
         return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
+
+    fun respondWithMultipleRecordsFound(): Mapping {
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.MULTIPLE_RECORDS_FOUND_WITH_NHS_NUMBER.toInt())
+        return respondWithBodyAndStatus(errorResponse, HttpStatus.SC_BAD_REQUEST)
+    }
 }

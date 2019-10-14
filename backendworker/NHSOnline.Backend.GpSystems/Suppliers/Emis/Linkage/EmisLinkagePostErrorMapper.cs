@@ -14,6 +14,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                     "4001553",
                     Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent)
                 .AddKeyToEnum(
+                    "4001555",
+                    Im1ConnectionErrorCodes.InternalCode.MultipleRecordsFoundWithNhsNumber)
+                .AddKeyToEnum(
                     "4091110",
                     Im1ConnectionErrorCodes.InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetails)
                 .AddKeyToEnum(

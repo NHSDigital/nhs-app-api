@@ -17,4 +17,5 @@ object ErrorResponseCodeEmis {
     const val PATIENT_MARKED_AS_ARCHIVED: Long = -1552
     const val PATIENT_NON_COMPETENT_OR_UNDER_MINIMUM_AGE: Long = -1553
     const val ONLINE_USER_MAX_APPOINTMENT_BOOKED_COUNT: Long = -1156
+    const val MULTIPLE_RECORDS_FOUND_WITH_NHS_NUMBER: Long = -1555
 }

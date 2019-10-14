@@ -67,4 +67,9 @@ class EmisLinkagePOSTBuilder (addNhsUserRequest: AddNhsUserRequest) :
                 "Bad Gateway")
         return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
+
+    fun respondWithMultipleRecordsFound(): Mapping {
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.MULTIPLE_RECORDS_FOUND_WITH_NHS_NUMBER.toInt())
+        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
+    }
 }

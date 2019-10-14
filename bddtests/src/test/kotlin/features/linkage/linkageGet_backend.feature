@@ -88,6 +88,11 @@ Feature: Linkage Get Key
     When I call the Linkage GET endpoint
     Then I receive a "Forbidden" error
 
+  Scenario: Linkage request GET for EMIS returns 403 Forbidden, multiple records for NHS number
+    Given I have valid EMIS linkage details but there are multiple records for my NHS number
+    When I call the Linkage GET endpoint
+    Then I receive a "Forbidden" error
+
   Scenario: Linkage request GET for EMIS returns 404 Not Found, patient not registered at practice
     Given I have valid EMIS linkage details but I'm not registered at the practice
     When I call the Linkage GET endpoint
