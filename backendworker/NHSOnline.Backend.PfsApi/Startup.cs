@@ -269,6 +269,10 @@ namespace NHSOnline.Backend.PfsApi
         {
             app.UseAuthentication();
 
+            var logSettings = LoggingSettings.GetSettings(Configuration);
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
+
             if (env.IsDevelopment())
             {
                 loggerFactory.AddDebug();
