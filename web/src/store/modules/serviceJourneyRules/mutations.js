@@ -1,9 +1,7 @@
 import mapKeys from 'lodash/fp/mapKeys';
 import { initialState,
   INIT,
-  SET_RULES,
-  SET_ADMIN_PROVIDER_NAME,
-  SET_ADVICE_PROVIDER_NAME } from './mutation-types';
+  SET_RULES } from './mutation-types';
 
 export default {
   [INIT](state) {
@@ -16,12 +14,5 @@ export default {
   [SET_RULES](state, rules) {
     state.rules = rules.journeys;
     state.isLoaded = true;
-  },
-
-  [SET_ADMIN_PROVIDER_NAME](state, providerName) {
-    state.rules.cdssAdmin.name = providerName;
-  },
-  [SET_ADVICE_PROVIDER_NAME](state, providerName) {
-    state.rules.cdssAdvice.name = providerName;
   },
 };

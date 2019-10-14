@@ -23,6 +23,8 @@ import {
   SET_GP_ADVICE_SERVICE_DEFINITION_ID,
   SET_DEMOGRAPHICS_CONSENT_GIVEN,
   SET_DEMOGRAPHICS_QUESTION_ANSWERED,
+  SET_ADMIN_PROVIDER_NAME,
+  SET_ADVICE_PROVIDER_NAME,
 } from './mutation-types';
 
 export default {
@@ -130,5 +132,11 @@ export default {
   },
   [SET_DEMOGRAPHICS_QUESTION_ANSWERED](state) {
     state.demographicsQuestionAnswered = true;
+  },
+  [SET_ADMIN_PROVIDER_NAME](state, providerName) {
+    state.adminProviderName = providerName;
+  },
+  [SET_ADVICE_PROVIDER_NAME](state, providerName) {
+    state.adviceProviderName = providerName;
   },
 };

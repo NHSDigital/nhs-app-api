@@ -198,10 +198,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
         }
 
-        public string GetProviderName(string provider)
+        public ServiceDefinitionResult GetProviderName(string provider)
         {
-            var providerName = _olcProvidersSettings.getProvider(provider).ProviderName;
-            return providerName;
+            _logger.LogEnter();
+            
+            var retrievedProvider = _olcProvidersSettings.getProvider(provider);
+            var providerName = retrievedProvider.ProviderName;
+            _logger.LogExit();
+            return new ServiceDefinitionResult.Success(providerName);
         }
 
         public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(

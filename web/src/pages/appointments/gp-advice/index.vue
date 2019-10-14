@@ -70,10 +70,10 @@ export default {
       return this.$store.state.device.isNativeApp;
     },
     getProviderName() {
-      return this.$store.state.serviceJourneyRules.rules.cdssAdvice.name;
+      return this.$store.state.onlineConsultations.adviceProviderName;
     },
     getDemographicsCheckboxLabel() {
-      const providerName = this.$store.state.serviceJourneyRules.rules.cdssAdvice.name;
+      const providerName = this.$store.state.onlineConsultations.adviceProviderName;
       return this.$t(
         'appointments.admin_help.demographicsQuestion.checkboxLabel',
         { providerName },

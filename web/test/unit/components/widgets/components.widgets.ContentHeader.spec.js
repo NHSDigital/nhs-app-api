@@ -20,12 +20,12 @@ describe('ContentHeader.vue', () => {
           },
           onlineConsultations: {
             demographicsQuestionAnswered: true,
+            adviceProviderName: 'eConsult Health Ltd',
           },
           serviceJourneyRules: {
             rules: {
               cdssAdvice: {
                 provider: 'Test',
-                name: 'eConsult Health Ltd',
               },
             },
           },
@@ -87,7 +87,6 @@ describe('ContentHeader.vue', () => {
       });
       $route = {
         name: 'appointments-admin-help',
-        area: 'online-consultations-admin',
         warningBanner: true,
       };
       return mount(ContentHeader, {

@@ -7,6 +7,8 @@ import {
   SET_QUESTION,
   SET_CARE_PLANS,
   SET_REFERRAL_REQUESTS,
+  SET_ADMIN_PROVIDER_NAME,
+  SET_ADVICE_PROVIDER_NAME,
 } from '@/store/modules/onlineConsultations/mutation-types';
 import getParameters from '@/lib/online-consultations/mappers/parameters';
 import { getDataRequirements, getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/response';
@@ -17,7 +19,7 @@ jest.mock('@/lib/online-consultations/mappers/parameters');
 jest.mock('@/lib/online-consultations/mappers/response');
 jest.mock('@/lib/online-consultations/mappers/item');
 
-const { getServiceDefinition, evaluateServiceDefinition } = actions;
+const { getServiceDefinition, evaluateServiceDefinition, setNames } = actions;
 
 const commit = jest.fn();
 const store = {
@@ -25,6 +27,7 @@ const store = {
     $cdsApi: {
       postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate: jest.fn(),
       getFhirServiceDefinitionByProviderByServicedefinitionid: jest.fn(),
+      getFhirServiceDefinitionProviderNameByProvider: jest.fn(),
     },
   },
   dispatch: jest.fn(),
@@ -55,6 +58,7 @@ describe('online consultations store actions', () => {
     commit.mockClear();
     store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate.mockClear();
     store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid.mockClear();
+    store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider.mockClear();
     store.dispatch.mockClear();
   });
 
@@ -499,6 +503,40 @@ describe('online consultations store actions', () => {
             });
           });
         });
+      });
+    });
+  });
+  describe('setName', () => {
+    describe('setsNames correctly', () => {
+      it('will set names when they exist', () => {
+        store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider
+          .mockImplementation(
+            () => Promise.resolve({ response: 'test' }),
+          );
+        setNames.call(store, { commit, state, rootState },
+          { adminProviderName: 'test', adviceProviderName: 'test' })
+          .then(() => {
+            // Assert
+            expect(store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider)
+              .toHaveBeenCalledTimes(2);
+            expect(commit)
+              .toHaveBeenCalledWith(SET_ADMIN_PROVIDER_NAME, 'test');
+            expect(commit)
+              .toHaveBeenCalledWith(SET_ADVICE_PROVIDER_NAME, 'test');
+          });
+      });
+    });
+    describe('setsNames none', () => {
+      it('will not set names when they are none', () => {
+        setNames.call(store, { commit, state, rootState },
+          { adminProviderName: 'none', adviceProviderName: 'none' })
+          .then(() => {
+            // Assert
+            expect(store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider)
+              .toHaveBeenCalledTimes(0);
+            expect(commit)
+              .toHaveBeenCalledTimes(0);
+          });
       });
     });
   });

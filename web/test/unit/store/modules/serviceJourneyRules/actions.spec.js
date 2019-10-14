@@ -45,11 +45,9 @@ describe('service journey rules actions', () => {
       journeys: {
         cdssAdmin: {
           provider: 'none',
-          name: '',
         },
         cdssAdvice: {
           provider: 'none',
-          name: '',
         },
       },
     };

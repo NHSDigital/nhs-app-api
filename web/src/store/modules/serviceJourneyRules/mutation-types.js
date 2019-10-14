@@ -10,8 +10,6 @@ export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const NOTIFICATIONS = 'notifications';
 export const SET_RULES = 'SET_RULES';
 export const ONLINE_CONSULTATIONS = 'onlineConsultations';
-export const SET_ADMIN_PROVIDER_NAME = 'SET_ADMIN_PROVIDER_NAME';
-export const SET_ADVICE_PROVIDER_NAME = 'SET_ADVICE_PROVIDER_NAME';
 export const LINKED_ACCOUNTS = 'hasLinkedAccounts';
 
 export const initialState = () => ({
@@ -22,11 +20,9 @@ export const initialState = () => ({
     },
     cdssAdmin: {
       provider: 'none',
-      name: '',
     },
     cdssAdvice: {
       provider: 'none',
-      name: '',
     },
     medicalRecord: {
       version: 1,

@@ -59,6 +59,7 @@ const config = {
       'termsAndConditions',
       'myRecordAcceptance',
       'urlResolution',
+      'onlineConsultations',
     ],
   },
   link: [

@@ -72,22 +72,22 @@ export default {
         !isEmpty(this.currentBreadCrumbs) && this.$store.state.device.isNativeApp;
     },
     showBanner() {
-      const routeName = findByName(this.$route.name);
-      if (routeName !== undefined) {
-        if (routeName.area === 'online-consultations-admin' || routeName.area === 'online-consultations-advice') {
-          return !!(routeName.warningBanner && this.demographicsQuestionAnswered);
+      const route = findByName(this.$route.name);
+      if (route !== undefined) {
+        if (route.name === 'appointments-admin-help' || route.name === 'appointments-gp-advice') {
+          return !!(route.warningBanner && this.demographicsQuestionAnswered);
         }
-        return !!(routeName.warningBanner && true);
+        return !!(route.warningBanner && true);
       }
       return false;
     },
     getProviderName() {
-      const routeName = findByName(this.$route.name);
-      if (routeName !== undefined) {
-        if (routeName.area === 'online-consultations-admin') {
-          return this.$store.state.serviceJourneyRules.rules.cdssAdmin.name;
+      const route = findByName(this.$route.name);
+      if (route !== undefined) {
+        if (route === 'appointments-admin-help') {
+          return this.$store.state.onlineConsultations.adminProviderName;
         }
-        return this.$store.state.serviceJourneyRules.rules.cdssAdvice.name;
+        return this.$store.state.onlineConsultations.adviceProviderName;
       }
       return '';
     },

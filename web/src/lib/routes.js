@@ -129,7 +129,6 @@ const routes = {
     name: 'appointments-admin-help',
     path: '/appointments/admin-help',
     warningBanner: true,
-    area: 'online-consultations-admin',
     crumb: {
       i8nKey: 'appointmentsAdminHelp',
       get parentRoute() {
@@ -145,7 +144,6 @@ const routes = {
     name: 'appointments-gp-advice',
     path: '/appointments/gp-advice',
     warningBanner: true,
-    area: 'online-consultations-advice',
     crumb: {
       i8nKey: 'appointmentsGpAdvice',
       get parentRoute() {

@@ -22,6 +22,8 @@ export const SET_SERVICE_DEFINITIONS = 'SET_SERVICE_DEFINITIONS';
 export const SET_PREVIOUS_ROUTE = 'SET_PREVIOUS_ROUTE';
 export const SET_DEMOGRAPHICS_CONSENT_GIVEN = 'SET_DEMOGRAPHICS_CONSENT_GIVEN';
 export const SET_DEMOGRAPHICS_QUESTION_ANSWERED = 'SET_DEMOGRAPHICS_QUESTION_ANSWERED';
+export const SET_ADMIN_PROVIDER_NAME = 'SET_ADMIN_PROVIDER_NAME';
+export const SET_ADVICE_PROVIDER_NAME = 'SET_ADVICE_PROVIDER_NAME';
 
 export const initialState = () => ({
   demographicsQuestionAnswered: false,
@@ -50,4 +52,6 @@ export const initialState = () => ({
   additionalValue: undefined,
   latestAdditionalValue: undefined,
   gpAdviceServiceDefinitionId: undefined,
+  adminProviderName: undefined,
+  adviceProviderName: undefined,
 });

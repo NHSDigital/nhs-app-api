@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             {
                 Provider = "eConsult", ProviderName = "eConsult Health Ltd"
             };
-
+            
             var providerSettingsList = new List<OnlineConsultationsProviderSettings> { providerSetting };
             providersSettings.Providers = providerSettingsList;
 
@@ -241,8 +241,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             var response = _service.GetProviderName("eConsult");
 
             // Assert
-            response.Should().BeAssignableTo<string>();
-            Assert.AreSame(response, "eConsult Health Ltd");
+            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
+            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>()
+                .Subject.Response.Equals("eConsult Health Ltd", StringComparison.Ordinal);
         }
 
         [TestMethod]

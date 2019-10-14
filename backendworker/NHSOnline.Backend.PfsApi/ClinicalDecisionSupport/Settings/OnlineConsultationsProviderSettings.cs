@@ -18,6 +18,11 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings
                 throw new ConfigurationNotFoundException("OnlineConsultationsProvider.Provider");
             }
             
+            if (string.IsNullOrWhiteSpace(ProviderName))
+            {
+                throw new ConfigurationNotFoundException("OnlineConsultationsProvider.ProviderName");
+            }
+            
             if (string.IsNullOrWhiteSpace(BearerToken))
             {
                 throw new ConfigurationNotFoundException("OnlineConsultationsProvider.BearerToken");

@@ -18,7 +18,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.Settings
                 {
                     Provider = "eConsult",
                     BaseAddress = "http://test.test/test/",
-                    BearerToken = "testBearerToken"
+                    BearerToken = "testBearerToken",
+                    ProviderName = "econsult Health Ltd"
                 };
         }
 
@@ -70,6 +71,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.Settings
         {
             // Arrange
             _providerSettings.BaseAddress = null;
+            
+            // Act
+            _providerSettings.Validate();
+        }
+        
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("   ")]
+        [ExpectedException(typeof(ConfigurationNotFoundException))]
+        public void Validate_WhenProviderNAmeIsNullOrEmpty_ThrowsConfigurationNotFoundException(string provider)
+        {
+            // Arrange
+            _providerSettings.ProviderName = provider;
             
             // Act
             _providerSettings.Validate();
