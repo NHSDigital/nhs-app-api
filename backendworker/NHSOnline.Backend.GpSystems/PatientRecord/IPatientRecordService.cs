@@ -10,6 +10,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
         
         Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId);
 
-        Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid);
+        Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid, string documentType, string documentName);
     }
 }

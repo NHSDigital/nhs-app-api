@@ -70,6 +70,15 @@ export default {
     return false;
   },
 
+  showMenuBar() {
+    const app = window.nativeApp;
+    if (app && app.showMenuBar) {
+      app.showMenuBar();
+      return true;
+    }
+    return false;
+  },
+
   hideMenuBar() {
     const app = window.nativeApp;
     if (app && app.hideMenuBar) {

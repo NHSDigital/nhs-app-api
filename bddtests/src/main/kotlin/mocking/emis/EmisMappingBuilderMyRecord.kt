@@ -3,6 +3,8 @@ package mocking.emis
 import mocking.emis.allergies.EmisAllergiesBuilder
 import mocking.emis.consultations.EmisConsultationsBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
+import mocking.emis.documents.EmisDocumentBuilder
+import mocking.emis.documents.EmisDocumentsBuilder
 import mocking.emis.immunisations.EmisImmunisationsBuilder
 import mocking.emis.medications.EmisMedicationsBuilder
 import mocking.emis.problems.EmisProblemsBuilder
@@ -43,4 +45,15 @@ class EmisMappingBuilderMyRecord(private var configuration: EmisConfiguration?){
             patient.userPatientLinkToken,
             patient.endUserSessionId,
             patient.sessionId)
+
+    fun documentsRequest(patient: Patient) = EmisDocumentsBuilder(configuration!!,
+            patient.userPatientLinkToken,
+            patient.endUserSessionId,
+            patient.sessionId)
+
+    fun documentRequest(patient: Patient, documentId: String = "document-1") = EmisDocumentBuilder(configuration!!,
+            patient.userPatientLinkToken,
+            patient.endUserSessionId,
+            patient.sessionId,
+            documentId)
 }

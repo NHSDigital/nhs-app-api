@@ -17,7 +17,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             _mapper = mapper;
         }
         
-        public PatientDocument Check(Task<EmisClient.EmisApiObjectResponse<IndividualDocument>> task)
+        public PatientDocument Check(Task<EmisClient.EmisApiObjectResponse<IndividualDocument>> task,
+            string documentType, string documentName)
         {
             _logger.LogEnter();
             
@@ -56,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
 
             _logger.LogExit();
-            return document ?? _mapper.Map(documentResponse.Body);
+            return document ?? _mapper.Map(documentResponse.Body, documentType, documentName);
         }      
     }
 }

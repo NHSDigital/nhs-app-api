@@ -82,7 +82,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+            string documentType, string documentName)
         {
             throw new NotImplementedException();
         }

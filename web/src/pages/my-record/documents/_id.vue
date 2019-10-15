@@ -1,0 +1,96 @@
+<!-- eslint-disable vue/no-v-html -->
+<template>
+  <div v-if="showTemplate" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <glossary :extra-classes="[$style.glossary]"/>
+      <div class="documentContainer" v-html="document"/>
+      <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                 :path="noJsPath"
+                                 @clickAndPrevent="backToDocumentsClicked"/>
+    </div>
+  </div>
+</template>
+
+<script>
+import get from 'lodash/fp/get';
+import NativeAppCallbacks from '@/services/native-app';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import Glossary from '@/components/Glossary';
+import { MYRECORD, MY_RECORD_DOCUMENTS, LOGIN, LOGOUT } from '@/lib/routes';
+import { isFalsy, redirectTo } from '@/lib/utils';
+import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+
+export default {
+  layout: 'nhsuk-layout',
+  components: {
+    DesktopGenericBackLink,
+    Glossary,
+  },
+  data() {
+    const documentsPath = MY_RECORD_DOCUMENTS.path;
+    const documentHeaderLocation = `#document-${this.$route.params.id}`;
+    const noJsData = JSON.stringify({ myRecord: { hasAcceptedTerms: true } });
+    return {
+      documentsPath: documentsPath + documentHeaderLocation,
+      noJsPath: `${documentsPath}?nojs=${encodeURIComponent(noJsData) + documentHeaderLocation}`,
+    };
+  },
+  computed: {
+    document() {
+      return this.$store.state.myRecord.document.data;
+    },
+  },
+  async asyncData({ store, route, redirect }) {
+    if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
+      || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning())
+    ) {
+      redirect(MYRECORD.path);
+      return;
+    }
+
+    await store.dispatch('myRecord/setSelectedDocumentInfo', {
+      type: get('state.myRecord.document.type', store) || route.query.type,
+      name: get('state.myRecord.document.name', store) || route.query.name,
+    });
+    await store.dispatch('myRecord/loadDocument', route.params.id);
+  },
+  created() {
+    if (this.document && process.client) {
+      this.navHidden = true;
+      NativeAppCallbacks.hideHeader();
+      NativeAppCallbacks.hideMenuBar();
+    }
+  },
+  mounted() {
+    EventBus.$emit(FOCUS_NHSAPP_ROOT);
+  },
+  methods: {
+    backToDocumentsClicked() {
+      redirectTo(this, this.documentsPath, null);
+    },
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!(to.path === LOGIN.path || to.path === LOGOUT.path) && this.navHidden) {
+      NativeAppCallbacks.showHeader();
+      NativeAppCallbacks.showMenuBar();
+    }
+    next();
+  },
+};
+</script>
+
+<style lang="scss">
+  .documentContainer {
+    margin-bottom: 40px;
+
+    img {
+      max-width: 100%;
+    }
+  }
+</style>
+<style module lang="scss" scoped>
+  .glossary {
+    padding: 0.5em 1em 0em 1em;
+  }
+</style>

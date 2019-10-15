@@ -55,5 +55,5 @@ paths:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1{nhsLoginId}~1messages
   /v1/api/log:
     $ref: ./nhsonline.log.yaml#/paths/~1log
-  /v1/documents/:
+  /v1/documents/{documentGuid}:
     $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentGuid}

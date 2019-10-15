@@ -6,13 +6,20 @@ info:
     NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
   /documents/{documentGuid}:
-    get:
+    post:
       tags:
         - patient document
       summary: Gets a specific document from the user's documents for the logged on user.
       description: Returns only the specified document from the users document list for the
         logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained
         from session endpoint).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetPatientDocumentRequest"
+        required: true
+        x-name: GetPatientDocumentRequest
       parameters:
         - in: path
           name: documentGuid
@@ -41,6 +48,15 @@ paths:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
+    GetPatientDocumentRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The name of the document, used for img alt text on image document types
+        name:
+          type: string
+          description: The type of the document, to determine whether or not to add the name as alt text
     GetPatientDocumentResult:
       type: object
       properties:

@@ -8,9 +8,11 @@ import {
   LOADED_EXAMINATIONS,
   LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
+  LOADED_DOCUMENT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
+  SET_SELECTED_DOCUMENT_INFO,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
 
@@ -68,6 +70,20 @@ export default {
     const { response: data }
       = await this.app.$http.getV1PatientTestResult({ testResultId }) || {};
     commit(LOADED_DETAILED_TEST_RESULT, { data });
+  },
+  async loadDocument({ commit, state }, documentGuid) {
+    const { response } = await this.app.$http.postV1DocumentsByDocumentguid({
+      documentGuid,
+      getPatientDocumentRequest: {
+        type: state.document.type,
+        name: state.document.name,
+      },
+    }) || {};
+    const { content } = response || {};
+    commit(LOADED_DOCUMENT, content);
+  },
+  setSelectedDocumentInfo({ commit }, selectedDocumentInfo) {
+    commit(SET_SELECTED_DOCUMENT_INFO, selectedDocumentInfo);
   },
   resetTerms({ commit }) {
     commit(RESET_TERMS);

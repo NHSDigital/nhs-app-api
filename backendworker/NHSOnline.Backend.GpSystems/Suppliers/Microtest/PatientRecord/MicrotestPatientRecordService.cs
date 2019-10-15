@@ -92,7 +92,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             throw new NotImplementedException();
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+            string documentType, string documentName)
         {
             throw new NotImplementedException();
         }

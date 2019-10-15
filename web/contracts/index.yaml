@@ -1092,13 +1092,150 @@
                                     isAvailable: 
                                       type: "boolean"
                                       description: "Whether the document is available for the user to view"
-                                    notes: 
-                                      type: "array"
-                                      items: 
-                                        properties: 
-                                          string: 
-                                            type: "array"
-                                            description: "Array of notes provided with the document"
+                                    name: 
+                                      type: "string"
+                                      description: "The name of the document"
+                    recalls: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
+                        data: 
+                          type: "array"
+                          description: "An array of recall information objects."
+                          items: 
+                            type: "object"
+                            properties: 
+                              recordDate: 
+                                type: "object"
+                                properties: 
+                                  value: 
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart: 
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum: 
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              name: 
+                                type: "string"
+                                description: "The name of the recall."
+                              description: 
+                                type: "string"
+                                description: "A description of the recall."
+                              result: 
+                                type: "string"
+                                description: "The result of the recall"
+                              nextDate: 
+                                type: "string"
+                                description: "Date for the next recall"
+                              status: 
+                                type: "string"
+                                description: "Whether or not the recall is complete"
+                    encounters: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
+                        data: 
+                          type: "array"
+                          description: "An array of encounter item information objects."
+                          items: 
+                            type: "object"
+                            properties: 
+                              recordedOn: 
+                                type: "object"
+                                properties: 
+                                  value: 
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart: 
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum: 
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              description: 
+                                type: "string"
+                                description: "The description of the encounter."
+                              value: 
+                                type: "string"
+                                description: "The value of the encounter"
+                              unit: 
+                                type: "string"
+                                description: "The unit recorded for the value for the encounter"
+                    referrals: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
+                        data: 
+                          type: "array"
+                          description: "An array of referral item information objects."
+                          items: 
+                            type: "object"
+                            properties: 
+                              recordDate: 
+                                type: "object"
+                                properties: 
+                                  value: 
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart: 
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum: 
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              name: 
+                                type: "string"
+                                description: "The name of the recall."
+                              description: 
+                                type: "string"
+                                description: "A description of the recall."
+                              result: 
+                                type: "string"
+                                description: "The result of the recall"
+                              nextDate: 
+                                type: "string"
+                                description: "Date for the next recall"
+                              status: 
+                                type: "string"
+                                description: "Whether or not the recall is complete"
           401: 
             description: "User session has expired."
           500: 
@@ -2464,8 +2601,7 @@
                             messaging: 
                               type: "bool"
                             hasLinkedAccounts: 
-                              type: "boolean"
-                              description: "boolean to indicate if user has any linked accounts"
+                              type: "bool"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
             content: 
@@ -2963,6 +3099,8 @@
                           type: "bool"
                         messaging: 
                           type: "bool"
+                        hasLinkedAccounts: 
+                          type: "bool"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 
@@ -3232,12 +3370,26 @@
             description: "Required property missing or expired."
           500: 
             description: "An unexpected error occurred processing the request."
-    /v1/documents/: 
-      get: 
+    /v1/documents/{documentGuid}: 
+      post: 
         tags: 
           - "patient document"
         summary: "Gets a specific document from the user's documents for the logged on user."
         description: "Returns only the specified document from the users document list for the logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        requestBody: 
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  type: 
+                    type: "string"
+                    description: "The name of the document, used for img alt text on image document types"
+                  name: 
+                    type: "string"
+                    description: "The type of the document, to determine whether or not to add the name as alt text"
+          required: true
+          x-name: "GetPatientDocumentRequest"
         parameters: 
           - 
             in: "path"

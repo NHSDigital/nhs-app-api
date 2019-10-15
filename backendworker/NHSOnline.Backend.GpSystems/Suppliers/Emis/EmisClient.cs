@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
         private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
-        private const string DocumentPath = "documents/{0}?UserPatientLinkToken={1}";
+        private const string DocumentPath = "documents/{0}?userPatientLinkToken={1}";
         private const string AppointmentsPath = "appointments";
         private const string MeVerificationsPath = "me/verifications";
         private const string UsersNhsPath = "users/nhs";

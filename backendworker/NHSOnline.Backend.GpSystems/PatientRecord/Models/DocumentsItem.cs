@@ -10,6 +10,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
         public int Size { get; set; }
         public string Extension { get; set; }
         public bool IsAvailable { get; set; }
-        public List<string> Notes { get; set; }   
+        public string Name { get; set; }
     }
 }

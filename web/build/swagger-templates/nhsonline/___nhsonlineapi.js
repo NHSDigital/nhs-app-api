@@ -339,6 +339,17 @@ class NHSOnlineApi {
         }
         {{/ifEquals}}
       {{/ifEquals}}
+      {{#ifEquals this.in "path"}}
+        {{#ifEquals this.required true}}
+        if (parameters['{{this.name}}'] === undefined) {
+          deferred.reject(new Error('Missing required parameter: {{this.name}}'));
+          return deferred.promise;
+        }
+        {{/ifEquals}}
+        if (parameters['{{this.name}}'] !== undefined) {
+          path = path.replace(':{{this.name}}', parameters['{{this.name}}']);
+        }
+      {{/ifEquals}}
     {{/each}}
 
     {{#with ../requestBody}}

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
@@ -25,9 +26,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _auditor = auditor;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("documents/{documentGuid}")]
-        public async Task<IActionResult> GetPatientDocument([FromRoute(Name = "documentGuid")] string documentGuid)
+        public async Task<IActionResult> GetPatientDocument(
+            [FromRoute(Name = "documentGuid")] string documentGuid,
+            [FromBody] DocumentInfo documentInfo)
         {
             try
             {
@@ -44,7 +47,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     .GetPatientRecordService();
 
                 _logger.LogInformation("Fetching patient document");
-                var result = await patientRecordService.GetPatientDocument(userSession.GpUserSession, documentGuid);
+                var result = await patientRecordService.GetPatientDocument(
+                    userSession.GpUserSession,
+                    documentGuid,
+                    documentInfo.Type,
+                    documentInfo.Name);
                 
                 await result.Accept(new PatientDocumentAuditingVisitor(_auditor, _logger));
                 return result.Accept(new PatientDocumentVisitor());

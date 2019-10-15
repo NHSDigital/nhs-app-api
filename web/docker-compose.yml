@@ -39,6 +39,7 @@ services:
       - THROTTLING_ENABLED
       - VERSION_TAG=dev_web_docker_main
       - ORGAN_DONATION_INTEGRATION_ENABLED=false
+      - MY_RECORD_DOCUMENTS_ENABLED=false
   pfs.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:

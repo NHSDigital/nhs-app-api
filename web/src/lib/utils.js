@@ -28,3 +28,26 @@ export const redirectTo = (self, path, query) => {
     self.$router.push({ path, query });
   }
 };
+export const readableBytes = (bytes) => {
+  if (Number.isNaN(Number(bytes)) || bytes < 0) {
+    return bytes;
+  }
+
+  if (bytes < 1000) {
+    const convertedBytes = Math.round(bytes / 1);
+    if (convertedBytes === bytes) {
+      return `${convertedBytes}B`;
+    }
+    return readableBytes(convertedBytes);
+  }
+
+  if (bytes < 1000000) {
+    const convertedBytes = Math.round(bytes / 1000);
+    if (convertedBytes * 1000 === bytes) {
+      return `${convertedBytes}KB`;
+    }
+    return readableBytes(convertedBytes * 1000);
+  }
+
+  return `${Number(parseFloat(bytes / 1000000).toFixed(2))}MB`;
+};

@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import mocking.data.myrecord.AllergiesData
 import mocking.data.myrecord.ConsultationsData
+import mocking.data.myrecord.DocumentsData
 import mocking.data.myrecord.ImmunisationsData
 import mocking.data.myrecord.MedicationsData
 import mocking.data.myrecord.ProblemsData
@@ -49,6 +50,11 @@ class MyRecordFactoryEmis: MyRecordFactory() {
             myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
         }
+
+        mockingClient.forEmis {
+            myRecord.documentsRequest(patient)
+                    .respondWithSuccess(DocumentsData.getDefaultDocumentsData())
+        }
     }
 
     override fun enabledWithData(
@@ -89,6 +95,11 @@ class MyRecordFactoryEmis: MyRecordFactory() {
         mockingClient.forEmis {
             myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
+        }
+
+        mockingClient.forEmis {
+            myRecord.documentsRequest(patient)
+                    .respondWithSuccess(DocumentsData.getMultipleDocuments())
         }
     }
 }

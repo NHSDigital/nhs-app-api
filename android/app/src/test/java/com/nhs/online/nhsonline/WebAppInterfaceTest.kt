@@ -155,6 +155,15 @@ class WebAppInterfaceTest {
     }
 
     @Test
+    fun showMenuBarTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.showMenuBar()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).showMenuBar()
+    }
+
+    @Test
     fun pageFocus() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.resetPageFocus()

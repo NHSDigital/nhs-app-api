@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -13,7 +12,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 {
     [TestClass]
-    public class EmisDocumentMapperTests
+    public class EmisDocumentsMapperTests
     {
         private IFixture _fixture;
         private IEmisMyRecordMapper _mapper;
@@ -143,13 +142,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         Extension = document1.Extension,
                         Size = document1.Size,
                         EffectiveDate = new MyRecordDate { Value = document1.Observation.EffectiveDate.Value, DatePart = document1.Observation.EffectiveDate.DatePart },
-                        Notes = new List<String>
-                        {
-
-                          document1.Observation.AssociatedText[0].Text,
-                          document1.Observation.AssociatedText[1].Text,
-                          document1.Observation.AssociatedText[2].Text,
-                        },
+                        Name = document1.Observation.AssociatedText[0].Text
                     },
                     new DocumentItem
                     {
@@ -159,11 +152,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         Extension = document2.Extension,
                         Size = document2.Size,
                         EffectiveDate = new MyRecordDate { Value = document2.Observation.EffectiveDate.Value, DatePart = document2.Observation.EffectiveDate.DatePart },
-                        Notes = new List<string>
-                        {
-                            document2.Observation.AssociatedText[0].Text,
-                            document2.Observation.AssociatedText[1].Text,
-                        },
+                        Name = document2.Observation.AssociatedText[0].Text
                     },
                 }
             };

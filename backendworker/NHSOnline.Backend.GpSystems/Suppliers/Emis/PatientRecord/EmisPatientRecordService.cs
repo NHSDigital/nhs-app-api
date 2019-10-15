@@ -117,7 +117,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
         }
 
-        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
+        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+            string documentType, string documentName)
         {
             _logger.LogEnter();
 
@@ -130,7 +131,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 await Task.WhenAll(getDocumentsTask);
 
-                var documentResponse =  _patientDocumentTaskChecker.Check(getDocumentsTask);
+                var documentResponse =  _patientDocumentTaskChecker.Check(getDocumentsTask, documentType, documentName);
 
                 if (documentResponse.HasErrored)
                 {

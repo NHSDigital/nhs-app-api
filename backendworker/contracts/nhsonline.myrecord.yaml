@@ -559,50 +559,46 @@ components:
             - YearMonthDay
             - YearMonthDayTime
     PatientDocuments:
-        type: object
-        properties:
-          hasAccess:
-            type: boolean
-            description: Does the patient have access to this data.
-          hasErrored:
-            type: boolean
-            description: Some error occurred when attempting to retrieve this error.
-          data:
-            type: array
-            items:
-              properties:
-                documents:
-                  type: array
-                  description: Array of documents
-                  items:
-                    $ref: "#/components/schemas/DocumentItem"
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: array
+          items:
+            properties:
+              documents:
+                type: array
+                description: Array of documents
+                items:
+                  $ref: "#/components/schemas/DocumentItem"
     DocumentItem:
-        type: object
-        properties:
-            date:
-              $ref: "#/components/schemas/Date"
-            documentGuid:
-              type: string
-              description: Unique identifier of the document
-            term:
-              type: string
-              description: Title of the document
-            size:
-              type: integer
-              description: The size of the document in kilobytes
-            extension:
-              type: string
-              description: The format of the document
-            isAvailable:
-              type: boolean
-              description: Whether the document is available for the user to view
-            notes:
-              type: array
-              items:
-                properties:
-                  string:
-                    type: array
-                    description: Array of notes provided with the document
+      type: object
+      properties:
+        date:
+          $ref: "#/components/schemas/Date"
+        documentGuid:
+          type: string
+          description: Unique identifier of the document
+        term:
+          type: string
+          description: Title of the document
+        size:
+          type: integer
+          description: The size of the document in kilobytes
+        extension:
+          type: string
+          description: The format of the document
+        isAvailable:
+          type: boolean
+          description: Whether the document is available for the user to view
+        name:
+          type: string
+          description: The name of the document
     Recalls:
       type: object
       properties:
@@ -633,10 +629,10 @@ components:
           description: A description of the recall.
         result:
           type: string
-          description: The result of the recall  
+          description: The result of the recall
         nextDate:
           type: string
-          description: Date for the next recall   
+          description: Date for the next recall
         status:
           type: string
           description: Whether or not the recall is complete
@@ -657,20 +653,20 @@ components:
           description: An array of encounter item information objects.
           items:
             $ref: "#/components/schemas/EncounterItem"
-      EncounterItem:
-        type: object
-        properties:
-          recordedOn:
-            $ref: "#/components/schemas/Date"
-          description:
-            type: string
-            description: The description of the encounter.
-          value:
-            type: string
-            description: The value of the encounter
-          unit:
-            type: string
-            description: The unit recorded for the value for the encounter
+    EncounterItem:
+      type: object
+      properties:
+        recordedOn:
+          $ref: "#/components/schemas/Date"
+        description:
+          type: string
+          description: The description of the encounter.
+        value:
+          type: string
+          description: The value of the encounter
+        unit:
+          type: string
+          description: The unit recorded for the value for the encounter
     Referrals:
       type: object
       properties:
@@ -688,17 +684,17 @@ components:
           description: An array of referral item information objects.
           items:
             $ref: "#/components/schemas/RecallItem"
-      ReferralItem:
-        type: object
-        properties:
-          recordDate:
-            $ref: "#/components/schemas/Date"
-          description:
-            type: string
-            description: A description of the referral.
-          speciality:
-            type: string
-            description: The speciaility of the referral
-          ubrn:
-            type: string
-            description: The UBRN (Unique Booking Reference Number) for the referral
+    ReferralItem:
+      type: object
+      properties:
+        recordDate:
+          $ref: "#/components/schemas/Date"
+        description:
+          type: string
+          description: A description of the referral.
+        speciality:
+          type: string
+          description: The speciaility of the referral
+        ubrn:
+          type: string
+          description: The UBRN (Unique Booking Reference Number) for the referral

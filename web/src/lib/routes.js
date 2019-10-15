@@ -605,6 +605,28 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
+  MY_RECORD_DOCUMENTS: {
+    name: 'my-record-documents',
+    path: '/my-record/documents',
+    crumb: {
+      i8nKey: 'myRecordDocuments',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  MY_RECORD_DOCUMENT: {
+    name: 'my-record-documents-id',
+    path: '/my-record/documents/:id',
+    crumb: {
+      i8nKey: 'myRecordDocument',
+      get parentRoute() {
+        return this.allRoutes.MY_RECORD_DOCUMENTS;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   NOMINATED_PHARMACY: {
     name: 'nominated-pharmacy',
     path: '/nominated-pharmacy',
@@ -975,6 +997,8 @@ export const {
   MY_RECORD_VISION_EXAMINATIONS_DETAIL,
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
+  MY_RECORD_DOCUMENTS,
+  MY_RECORD_DOCUMENT,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,

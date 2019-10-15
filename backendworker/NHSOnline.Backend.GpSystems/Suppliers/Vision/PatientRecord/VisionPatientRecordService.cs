@@ -237,10 +237,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             throw new NotImplementedException();
         }
 
-      public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid)
-      {
-          throw new NotImplementedException();
-      }
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+            string documentType, string documentName)
+        {
+            throw new NotImplementedException();
+        }
 
         private static class ResponseFormats {
             public const string HTML = "HTML";

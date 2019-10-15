@@ -30,6 +30,11 @@ class MyRecordWrapper(header: String, pageObject: HybridPageObject) {
             androidLocator = null,
             page = pageObject)
 
+    val documentsLink = HybridPageElement(
+            webDesktopLocator = "//a[contains(text(),'View your documents')]",
+            androidLocator = null,
+            page = pageObject)
+
     private val recordItemElements =
             HybridPageElement(
                     webDesktopLocator = "$bodyPath//div[@data-purpose='record-item']",

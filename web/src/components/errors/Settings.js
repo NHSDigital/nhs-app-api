@@ -11,6 +11,8 @@ import {
   LOGIN,
   BEGINLOGIN,
   MYRECORD,
+  MY_RECORD_DOCUMENT,
+  MY_RECORD_DOCUMENTS,
   MYRECORDTESTRESULT,
   GP_MEDICAL_RECORD,
   ORGAN_DONATION,
@@ -126,6 +128,18 @@ export default {
     },
     {
       route: MYRECORDTESTRESULT.path,
+      redirectUrl: {
+        default: MYRECORD.path,
+      },
+    },
+    {
+      route: MY_RECORD_DOCUMENT.path,
+      redirectUrl: {
+        default: MYRECORD.path,
+      },
+    },
+    {
+      route: MY_RECORD_DOCUMENTS.path,
       redirectUrl: {
         default: MYRECORD.path,
       },

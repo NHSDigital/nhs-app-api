@@ -9,9 +9,11 @@ import {
   LOADED_EXAMINATIONS,
   LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
+  LOADED_DOCUMENT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
+  SET_SELECTED_DOCUMENT_INFO,
   initialState,
 } from './mutation-types';
 
@@ -67,6 +69,17 @@ export default {
   },
   [LOADED_DETAILED_TEST_RESULT](state, { data }) {
     state.detailedTestResult = { data, hasLoaded: true };
+  },
+  [LOADED_DOCUMENT](state, documentData) {
+    state.document.data = documentData;
+  },
+  [SET_SELECTED_DOCUMENT_INFO](state, documentInfo) {
+    if (!state.document) {
+      state.document = documentInfo;
+    } else {
+      state.document.name = documentInfo.name;
+      state.document.type = documentInfo.type;
+    }
   },
   [RESET_TERMS](state) {
     state.hasAcceptedTerms = false;

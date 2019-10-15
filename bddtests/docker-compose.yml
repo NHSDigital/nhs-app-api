@@ -37,6 +37,7 @@ services:
       - HOTJAR_SITE_ID=NOT_SET
       - HOT_JAR_SURVEY_VISIBLE=false
       - ANALYTICS_SCRIPT_URL=NOT_SET
+      - MY_RECORD_DOCUMENTS_ENABLED=true
   pfs.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:

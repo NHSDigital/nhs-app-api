@@ -77,6 +77,12 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    fun showMenuBar() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showMenuBar")
+        activity.runOnUiThread { uiInteractor.showMenuBar() }
+    }
+
+    @JavascriptInterface
     fun onSessionExpiring(sessionDuration: Int) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
         activity.runOnUiThread { uiInteractor.showExtendSessionDialogue(sessionDuration) }

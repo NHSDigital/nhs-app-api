@@ -43,8 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 if (document.Observation.AssociatedText != null)
                 {
-                    documentItem.Notes = new List<String>();
-                    documentItem.Notes = document.Observation.AssociatedText.Select(x => x.Text).ToList();                            
+                    documentItem.Name = document.Observation.AssociatedText.Select(x => x.Text).FirstOrDefault();
                 }
 
                 documentItem.IsAvailable = document.Available;

@@ -91,6 +91,8 @@ class MyRecordInfoPage : HybridPageObject() {
 
     val recalls by lazy { getSection("Recalls") }
 
+    val documents by lazy { getSection("Documents") }
+
     val encounters by lazy { getSection("Encounters") }
 
     val referrals by lazy { getSection("Referrals") }

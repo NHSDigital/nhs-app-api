@@ -1128,6 +1128,22 @@ export default {
     discontinuedRepeatMedications: {
       sectionHeader: 'Repeat medications: discontinued',
     },
+    documents: {
+      errors: {
+        502: {
+          pageTitle: 'Server error',
+          pageHeader: 'Server error',
+          header: 'We\'re experiencing technical difficulties',
+          subheader: '',
+          message: {
+            text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+            label: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          },
+        },
+      },
+      sectionHeader: 'Documents',
+      documentsLink: 'View your documents',
+    },
     immunisations: {
       sectionHeader: 'Immunisations',
       nextDate: 'Next Date: ',
@@ -1277,6 +1293,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My GP medical record',
+    myRecordDocuments: 'Documents',
     notifications: 'Notifications',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
@@ -1315,6 +1332,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'Sensitive information - My record',
+    myRecordDocuments: 'Documents - My GP medical record',
     notifications: 'Notifications',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
@@ -1353,6 +1371,7 @@ export default {
     myRecordExaminationsDetail: 'My medical results',
     myRecordProceduresDetail: 'My medical results',
     myRecordTestResultsDetail: 'My medical results',
+    myRecordDocuments: 'Documents',
     organ_donation: 'Organ Donation',
     prescriptions: 'My repeat prescriptions',
     prescriptionRepeatCourses: 'My repeat prescriptions',

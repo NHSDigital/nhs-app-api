@@ -1,16 +1,26 @@
 <template>
-  <div :class="$style['nhsuk-card']">
+  <component :is="component"
+             :class="$style['nhsuk-card']"
+             @click="$event => $emit('click', $event)">
     <slot/>
-  </div>
+  </component>
 </template>
 
 <script>
 export default {
   name: 'Card',
+  props: {
+    component: {
+      type: String,
+      default: 'div',
+      validator: value => ['div', 'a'].includes(value),
+    },
+  },
 };
 </script>
 
 <style module lang="scss" scoped>
+  @import '../../../style/desktopWeb/accessibility';
   @import '~nhsuk-frontend/packages/core/settings/colours';
   @import '~nhsuk-frontend/packages/core/tools/mixins';
   @import '~nhsuk-frontend/packages/core/tools/spacing';
@@ -46,6 +56,7 @@ export default {
     margin-top: 0;
     padding: 20px;
     border: 1px solid $color_nhsuk-grey-3;
+    box-sizing: border-box;
   }
 
 </style>

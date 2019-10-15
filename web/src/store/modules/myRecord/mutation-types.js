@@ -7,6 +7,8 @@ export const LOADED_DIAGNOSIS = 'LOADED_DIAGNOSIS';
 export const LOADED_EXAMINATIONS = 'LOADED_EXAMINATIONS';
 export const LOADED_PROCEDURES = 'LOADED_PROCEDURES';
 export const LOADED_DETAILED_TEST_RESULT = 'LOADED_DETAILED_TEST_RESULT';
+export const LOADED_DOCUMENT = 'LOADED_DOCUMENT';
+export const SET_SELECTED_DOCUMENT_INFO = 'SET_SELECTED_DOCUMENT_INFO';
 export const RESET_TERMS = 'RESET_TERMS';
 export const TOGGLE_PATIENT_DETAIL = 'TOGGLE_PATIENT_DETAIL';
 export const SET_MEDICAL_RECORD_TYPE = 'SET_MEDICAL_RECORD_TYPE';
@@ -25,4 +27,5 @@ export const initialState = () => ({
   examinations: '',
   procedures: '',
   medicalRecordType: undefined,
+  document: {},
 });

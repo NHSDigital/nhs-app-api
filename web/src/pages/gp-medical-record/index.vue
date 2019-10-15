@@ -89,6 +89,7 @@ import ScrMicrotestGpRecord from '@/components/gp-medical-record/SummaryCareReco
 import MenuItemList from '@/components/MenuItemList';
 import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
+import agreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 const PATIENTDETAILS = 'patientdetails';
@@ -158,11 +159,7 @@ export default {
       return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
     },
     hasAgreedToMedicalWarning() {
-      try {
-        this.hasAgreed = !!sessionStorage.getItem('hasAgreedToMedicalWarning');
-      } catch (e) {
-        this.hasAgreed = false;
-      }
+      this.hasAgreed = agreedToMedicalWarning();
       return this.hasAgreed;
     },
   },
