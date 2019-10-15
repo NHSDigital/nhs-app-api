@@ -25,7 +25,6 @@ Feature: Patient Registration Frontend
       | GP System |
       | TPP       |
       | VISION    |
-  @smoketest
   @nativesmoketest
     Examples:
       | GP System |

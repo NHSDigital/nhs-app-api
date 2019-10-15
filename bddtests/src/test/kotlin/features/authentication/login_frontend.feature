@@ -18,7 +18,6 @@ Feature: Login frontend
       | TPP       |
       | VISION    |
   @android
-  @smoketest
     Examples:
       | GP System |
       | EMIS      |

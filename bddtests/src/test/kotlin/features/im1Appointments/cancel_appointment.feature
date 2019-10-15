@@ -101,7 +101,6 @@ Feature: Cancel Appointments Frontend
     Then the My Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
 
-  @smoketest
   Scenario: A TPP user can cancel an appointment
     Given TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in

@@ -1,6 +1,5 @@
 @ndop
 @backend
-@smoketest
 Feature: Get Ndop Token
          A user can get an Ndop JWT Token
 

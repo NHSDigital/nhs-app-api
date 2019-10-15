@@ -17,9 +17,6 @@ Feature: View Available Appointment Slots Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-  @smoketest
-    Examples:
-      | GP System |
       | MICROTEST |
 
   Scenario Outline: Requesting available <GP System> appointment slots returns an unknown exception, returns a Bad Gateway error

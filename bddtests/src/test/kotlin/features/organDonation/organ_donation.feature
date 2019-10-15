@@ -77,7 +77,6 @@ Feature: Organ Donation Frontend
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
-  @smoketest
   @nativesmoketest
     Examples:
       | GP System |
@@ -111,12 +110,9 @@ Feature: Organ Donation Frontend
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
-  @smoketest
     Examples:
       | GP System |
       | TPP       |
-    Examples:
-      | GP System |
       | EMIS      |
       | VISION    |
       | MICROTEST |

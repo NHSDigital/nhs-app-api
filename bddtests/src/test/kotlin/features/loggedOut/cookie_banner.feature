@@ -97,10 +97,7 @@ Feature: Cookie Banner
     And I see the home page
     When I sign out
     Then I do not see the cookie banner
-  @smoketest
     Examples:
       | js enabled? |
       | enabled     |
-    Examples:
-      | js enabled? |
       | disabled    |
