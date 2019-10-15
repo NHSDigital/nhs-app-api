@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
@@ -24,8 +26,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         private IFixture _fixture;
         private Mock<ILogger<ServiceJourneyRulesController>> _mockLogger;
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
+        private SessionConfigurationSettings _sessionConfigSettings;
         private UserSession _userSession;
-
+        private UserProfile _userProfile;
+        private ServiceJourneyRulesConfigResult _serviceJourneyRulesConfigResult;
+        private ServiceJourneyRulesResponse _serviceJourneyRulesResponse;
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -34,10 +40,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
             _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
-            
+            _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
+            _userProfile = _fixture.Freeze<UserProfile>();
             _userSession = _fixture.Create<UserSession>();
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
+            _serviceJourneyRulesResponse = _fixture.Create<ServiceJourneyRulesResponse>();
+            _serviceJourneyRulesConfigResult =
+                new ServiceJourneyRulesConfigResult.Success(_serviceJourneyRulesResponse);
+            
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }
@@ -62,7 +73,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             // Arrange
             var expectedResponse = new ServiceJourneyRulesResponse();
             expectedResponse.Journeys = new Journeys();
-            
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode, false))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
@@ -78,14 +88,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
         
-        
         [TestMethod]
         public async Task Get_WhenServiceReturnsSuccessfully_ReturnsSuccessfulResult_LinkedAccountsToTrue()
         {
             // Arrange
             var expectedResponse = new ServiceJourneyRulesResponse();
             expectedResponse.Journeys = new Journeys();
-            expectedResponse.Journeys.HasLinkedAccounts = true;
             
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode, false))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
@@ -137,5 +145,32 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
+        
+        [DataRow(true, true, true)]
+        [DataRow(true, false, false)]
+        [DataRow(false, true, false)]
+        [DataRow(false, false, false)]
+        [DataTestMethod]
+        public async Task VerifyCorrectLinkedAccountsValuePassedToServiceJourneyRulesController(bool proxyEnabledFeatureToggle, bool hasLinkedAccounts, bool expectedValue)
+        {
+            // Arrange
+            _sessionConfigSettings.ProxyEnabled = proxyEnabledFeatureToggle;
+            _userSession.GpUserSession.HasLinkedAccounts = hasLinkedAccounts;
+            var expectedResponse = new ServiceJourneyRulesResponse { Journeys = new Journeys() };
+
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode, expectedValue))
+                .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
+            
+            //Act
+            var result = await _systemUnderTest.Get();
+          
+            //Assert
+            _mockServiceJourneyRulesService.Verify();
+            _mockLogger.Verify();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<ServiceJourneyRulesResponse>()
+                .Subject.Should().BeEquivalentTo(expectedResponse);
+        }
+
     }
 }

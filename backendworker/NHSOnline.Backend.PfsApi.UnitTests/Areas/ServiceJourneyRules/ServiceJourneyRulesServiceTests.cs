@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    new ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>(HttpStatusCode.Created));
 
            // Act
-           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode, false);
+           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode);
 
            // Assert
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.NotFound>();
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                .ReturnsAsync(new ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>(HttpStatusCode.NotFound));
 
            // Act
-           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode, false);
+           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode);
 
            // Assert
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.NotFound>();
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                .Verifiable();
 
            // Act
-           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode, false);
+           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode);
 
            // Assert
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.InternalServerError>();
