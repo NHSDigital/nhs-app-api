@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
-    <device id="retina4_7" orientation="portrait" appearance="dark"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,24 +17,31 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lXZ-bo-CEV" customClass="HeaderBar" customModule="NHSOnline" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="20" width="375" height="61"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="61"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="61" id="3SX-vM-Asc"/>
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Bb-dr-urv" userLabel="Header Bar Slim" customClass="HeaderBarSlim" customModule="NHSOnline" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="pgc-1d-9Cx"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0OU-1V-r5y" userLabel="NavMenu">
-                                <rect key="frame" x="0.0" y="607" width="375" height="60"/>
+                                <rect key="frame" x="0.0" y="606" width="375" height="61"/>
                                 <subviews>
+                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HpT-Fq-426" userLabel="TabBarSpacer">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
+                                        <color key="backgroundColor" red="0.68235294117647061" green="0.71764705882352942" blue="0.74117647058823533" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="VBg-oh-ZP5"/>
+                                        </constraints>
+                                    </view>
                                     <tabBar hidden="YES" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaB-IT-U0z">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                                        <rect key="frame" x="0.0" y="1" width="375" height="49"/>
                                         <items>
                                             <tabBarItem title="Symptoms" image="SymptomsIcon" selectedImage="SymptomsActiveIcon" id="BOa-Jr-RcV"/>
                                             <tabBarItem tag="1" title="Appointments" image="AppointmentIcon" selectedImage="AppointmentActiveIcon" id="Iw9-xN-bck"/>
@@ -46,31 +53,43 @@
                                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tabBar>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="lne-R1-6xH"/>
-                                    <constraint firstItem="ZaB-IT-U0z" firstAttribute="top" secondItem="0OU-1V-r5y" secondAttribute="top" id="pE2-6d-SNE"/>
+                                    <constraint firstAttribute="height" constant="61" id="lne-R1-6xH"/>
+                                    <constraint firstItem="HpT-Fq-426" firstAttribute="top" secondItem="0OU-1V-r5y" secondAttribute="top" id="pE2-6d-SNE"/>
+                                    <constraint firstItem="ZaB-IT-U0z" firstAttribute="top" secondItem="HpT-Fq-426" secondAttribute="bottom" id="pE2-6d-SNF"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="leading" secondItem="0OU-1V-r5y" secondAttribute="leading" id="pp9-V8-8hO"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="trailing" secondItem="0OU-1V-r5y" secondAttribute="trailing" id="wrT-J1-CxW"/>
+                                    <constraint firstItem="HpT-Fq-426" firstAttribute="leading" secondItem="0OU-1V-r5y" secondAttribute="leading" id="pt9-V8-8hO"/>
+                                    <constraint firstItem="HpT-Fq-426" firstAttribute="trailing" secondItem="0OU-1V-r5y" secondAttribute="trailing" id="wsT-J1-CxW"/>
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cru-Eq-4ir" userLabel="WebViewContainer">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </containerView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HtT-Fq-426" userLabel="Notch">
+                                <rect key="frame" x="0.0" y="-60" width="375" height="60"/>
+                                <color key="backgroundColor" red="0.0" green="0.36862745099999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="VBa-oh-ZP5"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="0" green="0.36862745099999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="top" secondItem="8Bb-dr-urv" secondAttribute="bottom" priority="850" id="22r-yO-bor"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="bottom" secondItem="0OU-1V-r5y" secondAttribute="top" priority="850" id="CRu-RB-K16"/>
                             <constraint firstItem="0OU-1V-r5y" firstAttribute="leading" secondItem="H5t-M4-dQT" secondAttribute="leading" id="DqC-Vo-tyG"/>
+                            <constraint firstItem="HtT-Fq-426" firstAttribute="width" secondItem="H5t-M4-dQT" secondAttribute="width" id="GMY-Ik-z1d"/>
                             <constraint firstItem="lXZ-bo-CEV" firstAttribute="top" secondItem="H5t-M4-dQT" secondAttribute="top" id="JsB-Mh-Zym"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="top" secondItem="lXZ-bo-CEV" secondAttribute="bottom" priority="850" id="LRQ-pX-8d6"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="bottom" secondItem="H5t-M4-dQT" secondAttribute="bottom" priority="875" id="NXJ-oO-geV"/>
+                            <constraint firstItem="H5t-M4-dQT" firstAttribute="top" secondItem="HtT-Fq-426" secondAttribute="bottom" id="OU8-2p-QfX"/>
                             <constraint firstItem="lXZ-bo-CEV" firstAttribute="leading" secondItem="H5t-M4-dQT" secondAttribute="leading" id="UIP-pb-vgQ"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="trailing" secondItem="H5t-M4-dQT" secondAttribute="trailing" id="UlJ-Ez-V0N"/>
                             <constraint firstItem="H5t-M4-dQT" firstAttribute="trailing" secondItem="8Bb-dr-urv" secondAttribute="trailing" id="VVV-s3-jyS"/>
                             <constraint firstItem="8Bb-dr-urv" firstAttribute="top" secondItem="H5t-M4-dQT" secondAttribute="top" id="X3n-jN-JV7"/>
                             <constraint firstItem="0OU-1V-r5y" firstAttribute="bottom" secondItem="H5t-M4-dQT" secondAttribute="bottom" id="alT-GL-rw1"/>
+                            <constraint firstItem="HtT-Fq-426" firstAttribute="leading" secondItem="H5t-M4-dQT" secondAttribute="leading" id="cr9-vH-QK6"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="leading" secondItem="H5t-M4-dQT" secondAttribute="leading" id="lMe-Oj-L3n"/>
                             <constraint firstItem="0OU-1V-r5y" firstAttribute="trailing" secondItem="H5t-M4-dQT" secondAttribute="trailing" id="lsV-rj-VoI"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="top" secondItem="H5t-M4-dQT" secondAttribute="top" priority="875" id="vcq-ak-JSw"/>
@@ -80,10 +99,12 @@
                         <viewLayoutGuide key="safeArea" id="H5t-M4-dQT"/>
                     </view>
                     <connections>
+                        <outlet property="Notch" destination="HtT-Fq-426" id="COh-BS-MFx"/>
                         <outlet property="containerView" destination="cru-Eq-4ir" id="4qx-6R-gYb"/>
                         <outlet property="headerBar" destination="lXZ-bo-CEV" id="oMF-tD-acd"/>
                         <outlet property="headerBarSlim" destination="8Bb-dr-urv" id="05G-Ft-dqY"/>
                         <outlet property="tabBar" destination="ZaB-IT-U0z" id="uui-jS-F4U"/>
+                        <outlet property="tabBarSpacer" destination="HpT-Fq-426" id="uvi-kL-R2d"/>
                         <outlet property="webviewHeaderSlimTopConstraint" destination="22r-yO-bor" id="n7a-Pe-ad3"/>
                         <outlet property="webviewHeaderTopConstraint" destination="LRQ-pX-8d6" id="t0q-WK-WfT"/>
                         <outlet property="webviewNavMenuBottomConstraint" destination="CRu-RB-K16" id="1KK-yO-vl1"/>
@@ -162,11 +183,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7J3-ga-aZb">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.85882352941176465" green="0.8784313725490196" blue="0.88235294117647056" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="Sorry, service temporarily unavailable" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="31B-C0-G75" customClass="ErrorTextView" customModule="NHSOnline" customModuleProvider="target">
-                                <rect key="frame" x="16" y="68" width="343" height="40"/>
+                                <rect key="frame" x="16" y="48" width="343" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="w14-Cb-2nP"/>
@@ -175,7 +196,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Qz-lq-7kU">
-                                <rect key="frame" x="16" y="124" width="343" height="34"/>
+                                <rect key="frame" x="16" y="104" width="343" height="34"/>
                                 <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="IfL-FP-Acc"/>
@@ -189,7 +210,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Error" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sIw-cn-ITE">
-                                <rect key="frame" x="16" y="52" width="109" height="32"/>
+                                <rect key="frame" x="16" y="32" width="109" height="32"/>
                                 <color key="backgroundColor" red="0.85490196080000003" green="0.16078431369999999" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" notEnabled="YES" header="YES"/>
@@ -243,7 +264,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zDW-ot-rlp">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="4tR-Qj-Ct8">
                                         <rect key="frame" x="310" y="258" width="51" height="31"/>
@@ -363,7 +384,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Toe-X3-feE">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OcY-23-fHj">
                                         <rect key="frame" x="17" y="103" width="343" height="34"/>
@@ -381,17 +402,17 @@
                                 </constraints>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5cb-Db-xD5" customClass="ErrorTextView" customModule="NHSOnline" customModuleProvider="target">
-                                <rect key="frame" x="16" y="68" width="343" height="40"/>
+                                <rect key="frame" x="16" y="48" width="343" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                 <constraints>
-                                     <constraint firstAttribute="height" constant="40" id="Vo8-Ph-xfU"/>
-                                 </constraints>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Vo8-Ph-xfU"/>
+                                </constraints>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" scrollEnabled="NO" editable="NO" text="Success" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YmA-Ej-wOC">
-                                <rect key="frame" x="16" y="52" width="109" height="32"/>
+                                <rect key="frame" x="16" y="32" width="109" height="32"/>
                                 <color key="backgroundColor" red="0.0" green="0.36862745099999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" notEnabled="YES" header="YES"/>

@@ -13,6 +13,8 @@ class HomeViewController : UIViewController {
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var headerBarSlim: HeaderBarSlim!
     
+    @IBOutlet weak var Notch: UIView!
+    @IBOutlet weak var tabBarSpacer: UIView!
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var containerView: UIView!
     
@@ -248,12 +250,13 @@ class HomeViewController : UIViewController {
     func setVisibilityOfHeaderAndMenuBars(visible: Bool, isSlim: Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             let constraintPriority:UILayoutPriority
-            
+
             if visible {
                 constraintPriority = self.showConstraintPriority
             } else {
                 constraintPriority = self.hideConstraintPriority
             }
+            self.Notch.isHidden = false
             
             if isSlim {
                 self.webviewHeaderSlimTopConstraint.priority = constraintPriority
@@ -263,6 +266,7 @@ class HomeViewController : UIViewController {
                 self.webviewNavMenuBottomConstraint.priority = constraintPriority
                 self.headerBar.isHidden = !visible
                 self.tabBar.isHidden = !visible
+                self.tabBarSpacer.isHidden = !visible
             }
         })
         
