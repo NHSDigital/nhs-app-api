@@ -4,90 +4,67 @@
     <div v-if="showTemplate" :class="[$style.content,
                                       'pull-content',
                                       !$store.state.device.isNativeApp && $style.desktopWeb]">
-      <div :class="$style['above-float-button']">
-        <div :class="$style.info" data-purpose="info">
-          <h2>{{ $t('my_record.testresultdetails.testResultTitle') }}</h2>
-        </div>
-        <div :class="$style['test-result-content']">
-          <div v-if="!$store.state.myRecord.testResults.markup">
-            <p> {{ $t('my_record.testresultdetails.noTestResultData') }} </p>
-          </div>
-          <div v-else :class="$style['vision-test-results']">
-            <p>
-              <span v-html="$store.state.myRecord.testResults.markup"/>
-            </p>
-          </div>
-        </div>
-        <form v-if="$store.state.device.isNativeApp" :action="myRecordReturnPath" method="get">
-          <input :value="noJsWarningAcceptance" type="hidden" name="nojs">
-          <floating-button-bottom :button-classes="['grey']" @click.prevent="onBackButtonClicked">
-            {{ $t('my_record.testresultdetails.backButton') }}
-          </floating-button-bottom>
-        </form>
-        <desktopGenericBackLink
-          v-if="!$store.state.device.isNativeApp"
-          :path="noJsPath"
-          :button-text="'my_record.diagnosisDetails.backButton'"
-          @clickAndPrevent="onBackButtonClicked"/>
-      </div>
+      <dcr-error-no-access-gp-record
+        v-if="!myRecord.testResults.markup"
+        :has-errored="myRecord.record.testResults.hasErrored"
+        :has-access="myRecord.record.testResults.hasAccess"
+        :has-undetermined-access="myRecord.record.testResults.hasUndeterminedAccess"/>
+      <Card v-else :class="$style['vision-test-results', 'test-result-content']">
+        <span v-html="myRecord.testResults.markup"/>
+      </Card>
+      <desktopGenericBackLink
+        v-if="!$store.state.device.isNativeApp"
+        class="nhsuk-u-margin-top-3"
+        :path="getBackPath"
+        :button-text="'rp03.backButton'"
+        @clickAndPrevent="backButtonClicked"/>
+      <glossary v-if="myRecord.testResults.markup"/>
     </div>
   </div>
 </template>
 
 <script>
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import Card from '@/components/widgets/card/Card';
+import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import Glossary from '@/components/Glossary';
 import { MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
-    FloatingButtonBottom,
+    Card,
+    DcrErrorNoAccessGpRecord,
     DesktopGenericBackLink,
+    Glossary,
   },
-  data() {
-    const noJsData = JSON.stringify({ myRecord: { hasAcceptedTerms: true } });
-    const location = '#testResultsHeader';
-    return {
-      myRecordReturnPath: MYRECORD.path + location,
-      noJsWarningAcceptance: noJsData,
-      noJsPath: `${MYRECORD.path}?nojs=${encodeURIComponent(noJsData) + location}`,
-    };
+  computed: {
+    getBackPath() {
+      return MYRECORD.path;
+    },
   },
   async asyncData({ store }) {
-    await store.dispatch('myRecord/loadTestResults');
+    if (!store.state.myRecord.testResults) {
+      await store.dispatch('myRecord/loadTestResults');
+    }
+    return {
+      myRecord: store.state.myRecord,
+    };
   },
   methods: {
-    onBackButtonClicked() {
-      redirectTo(this, this.myRecordReturnPath, null);
+    backButtonClicked() {
+      redirectTo(this, this.getBackPath, null);
     },
   },
 };
-
 </script>
 
 <style module lang="scss" scoped>
   @import '../../style/spacings';
   @import '../../style/_textstyles';
-
-  h3 {
-    @include h4;
-  }
-
   .vision-test-results {
     min-width: 50em;
-
-    p {
-      padding-right: 1em;
-    }
-  }
-
-  .content {
-    @include space(padding, all, $three);
-  }
-
-  .above-float-button {
-    margin-bottom: $marginBottomFullScreen;
   }
 
   .test-result-content {
@@ -102,50 +79,5 @@ export default {
     display: inline-block;
     margin-right: 2em;
     min-width: 100%;
-  }
-
-  .info h2 {
-    color: #005EB8;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-    font-weight: 700;
-    font-size: 1.375em;
-    line-height: 1.375em;
-  }
-
-  div {
-   &.desktopWeb {
-    max-width: 540px;
-
-    .info h2 {
-     font-family: $default-web;
-     color: black;
-    }
-
-    p {
-     font-family: $default-web;
-     font-weight: normal;
-    }
-
-    .test-result-content {
-     max-width: 540px;
-     overflow: auto;
-     margin-right: 1em;
-     width: 100%;
-    }
-
-    .vision-test-results {
-     min-width: unset;
-     max-width: 540px;
-    }
-
-    .vision-test-results > > p {
-     max-width: 540px;
-    }
-
-    .content {
-     padding-left: 0;
-    }
-   }
   }
 </style>

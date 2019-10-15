@@ -12,9 +12,6 @@
 import MenuItem from '@/components/MenuItem';
 
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
-const ACUTEMEDICATIONS = 'acutemedications';
-const CURRENTREPEATMEDICATIONS = 'currentrepeatmedications';
-const DISCONTINUEDREPEATMEDICATIONS = 'discontinuedrepeatmedications';
 
 export default {
   name: 'ScrTPPGpRecord',
@@ -24,13 +21,6 @@ export default {
   data() {
     return {
       ALLERGIESANDADVERSEREACTIONS,
-      ACUTEMEDICATIONS,
-      CURRENTREPEATMEDICATIONS,
-      DISCONTINUEDREPEATMEDICATIONS,
-      isAllergiesAndAdverseReactionsCollapsed: process.client,
-      isAcuteMedicationsCollapsed: process.client,
-      isCurrentRepeatMedicationsCollapsed: process.client,
-      isDiscontinuedRepeatMedicationsCollapsed: process.client,
     };
   },
 };

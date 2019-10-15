@@ -2,6 +2,7 @@ import mapKeys from 'lodash/fp/mapKeys';
 import {
   INIT,
   ACCEPT_TERMS,
+  CLEAR,
   LOADED,
   LOADED_TEST_RESULTS,
   LOADED_DIAGNOSIS,
@@ -14,12 +15,33 @@ import {
   initialState,
 } from './mutation-types';
 
+
+const clearState = (state) => {
+  state.hasAcceptedTerms = false;
+  state.nojsData = JSON.stringify({ myRecord: { hasAcceptedTerms: false } });
+  state.hasLoaded = false;
+  state.isPatientDetailsCollapsed = true;
+  state.record = {};
+  state.patientDetails = {};
+  state.detailedTestResult = {
+    data: '',
+  };
+  state.testResults = '';
+  state.diagnosis = '';
+  state.examinations = '';
+  state.procedures = '';
+  state.medicalRecordType = undefined;
+};
+
 export default {
   [INIT](state) {
     const blank = initialState();
     return mapKeys((key) => {
       state[key] = blank[key];
     })(state);
+  },
+  [CLEAR](state) {
+    clearState(state);
   },
   [ACCEPT_TERMS](state) {
     state.hasAcceptedTerms = true;

@@ -67,7 +67,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
-    @Given("the EMIS GP Practice has two allergies results where the first record has no date")
+    @Given("^the EMIS GP Practice has two allergies results where the first record has no date$")
     fun givenTheEMISGPPracticeHasTwoAllergiesResultsWhereTheFirstRecordHasNoDate() {
         setPatientToDefaultFor("EMIS")
         val patient = SerenityHelpers.getPatient()

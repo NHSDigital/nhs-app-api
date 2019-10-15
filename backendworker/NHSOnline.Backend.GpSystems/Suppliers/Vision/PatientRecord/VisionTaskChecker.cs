@@ -5,12 +5,12 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 {
-    public class VisionTaskChecker<T> where T: IPatientDataModel, new()
+    public class VisionTaskChecker<T> where T : IPatientDataModel, new()
     {
         private readonly IVisionMapper<T> _visionMapper;
         private readonly ILogger _logger;
         private readonly VisionMapperType _mapperType;
-        
+
         public VisionTaskChecker(ILogger logger, IVisionMapper<T> visionMapper, VisionMapperType mapperType)
         {
             _logger = logger;
@@ -21,20 +21,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
         public T Check(VisionPFSClient.VisionApiObjectResponse<VisionPatientDataResponse> result)
         {
             _logger.LogInformation($"Checking Vision {(_mapperType)}");
-            
-            if (!result.HasErrorResponse) 
+
+            if (!result.HasErrorResponse)
+            {
+                _logger.LogInformation($"Successfully checked {(_mapperType)}");
                 return _visionMapper.Map(result.Body);
-            
+            }
+
             if (result.IsAccessDeniedError)
             {
-                _logger.LogWarning("User does not have access to their patient record");
+                _logger.LogWarning($"User does not have access to their patient record for {(_mapperType)}");
                 return new T
                 {
                     HasAccess = false
                 };
             }
 
-            _logger.LogError($"Unsuccessful request retrieving {(_mapperType)} information for Vision. Status code: {(int)result.StatusCode}");
+            _logger.LogError(
+                $"Unsuccessful request retrieving {(_mapperType)} information for Vision. Status code: {(int) result.StatusCode}");
             return new T
             {
                 HasErrored = true

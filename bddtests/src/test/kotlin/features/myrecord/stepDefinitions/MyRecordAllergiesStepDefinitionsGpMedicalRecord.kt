@@ -1,31 +1,23 @@
-package features.gpMedicalRecord.stepDefinitions
+package features.myrecord.stepDefinitions
 
 import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
 import features.myrecord.factories.AllergiesFactory
 import features.myrecord.factories.MyRecordVisionMocker
 import mocking.data.myrecord.AllergiesData
-import mocking.data.myrecord.MyRecordSerenityHelpers
-import mocking.data.myrecord.NUMBER_OF_ALLERGY_RECORDS
 import mocking.vision.VisionConstants
 import mocking.vision.VisionConstants.allergiesView
-import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.gpMedicalRecord.AllergiesAndReactionsPage
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
-import utils.getOrFail
-import worker.models.myrecord.MyRecordResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-private const val NUMBER_OF_ALLERGIES = 5
-
-open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class MyRecordAllergiesStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
     lateinit var allergiesAndReactionsPage: AllergiesAndReactionsPage
@@ -58,7 +50,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
-    @Given("the EMIS GP Practice has two allergies results where the first record has no date - GP Medical Record")
+    @Given("^the EMIS GP Practice has two allergies results where the first record has no date - GP Medical Record$")
     fun givenTheEMISGPPracticeHasTwoAllergiesResultsWhereTheFirstRecordHasNoDateGpMedicalRecord() {
         val patient = SerenityHelpers.getPatient()
 
@@ -66,13 +58,6 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
             myRecord.allergiesRequest(patient)
                     .respondWithSuccess(AllergiesData.getEmisAllergyRecordsWhereTheFirstRecordHasNoEffectiveDate())
         }
-    }
-
-    @Given("the GP Practice has disabled allergies functionality - GP Medical Record")
-    fun butTheGPPracticeHasDisabledAllergiesFunctionalityForServiceGpMedicalRecord() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        AllergiesFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an unknown error getting allergies for VISION - GP Medical Record$")
@@ -92,49 +77,6 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     @Then("^I do not see a message informing me to contact my GP for this information - GP Medical Record$")
     fun thenIDoNotSeeAMessageInformingMeToContactMyGPGpMedicalRecord() {
         myRecordInfoPage.noRecordsOrNoAccessParagraph.assertElementNotPresent()
-    }
-
-    @When("^the flag informing that the patient has access to the allergy data is set to \"(.*)\"" +
-            " - GP Medical Record$")
-    fun andHasAccessToAllergiesDataIsSetToGpMedicalRecord(value: Boolean) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.allergies.hasAccess)
-    }
-
-    @When("^the flag informing that there was an error retrieving the allergy data is set to \"(.*)\"" +
-            " - GP Medical Record$")
-    fun andHasErrorsWhenRetrievingAllergiesDataIsSetToGpMedicalRecord(value: Boolean) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.allergies.hasErrored)
-    }
-
-    @Then("^I receive \"(.*)\" allergies as part of the my record object - GP Medical Record$")
-    fun thenIReceiveAnAllergiesObjectGpMedicalRecord(count: Int) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.allergies.data.count())
-    }
-
-    @Then("^I see one or more drug type allergies record displayed - GP Medical Record$")
-    fun thenISeeOneOrMoreDrugTypeAllergiesRecordDisplayedGpMedicalRecord() {
-        val retrievedAllergyRecords = myRecordInfoPage.allergies.allRecordItems().count()
-        Assert.assertEquals("Expected allergy record items",
-                NUMBER_OF_ALLERGY_RECORDS, retrievedAllergyRecords)
-        val expected = MyRecordSerenityHelpers.EXPECTED_ALLERGY_DATA.getOrFail<ArrayList<String>>()
-        val retrievedItemBodies = myRecordInfoPage.allergies.allRecordItemBodies().toTypedArray()
-
-        Assert.assertArrayEquals("Expected allergy record item bodies",
-                expected.toArray(), retrievedItemBodies)
-    }
-
-    @Then("^I see allergies record displayed - GP Medical Record$")
-    fun thenISeeAllergiesRecordDisplayedGpMedicalRecord() {
-        val retrievedAllergyRecords = myRecordInfoPage.allergies.allRecordItems().count()
-        Assert.assertEquals("Expected allergy record items",
-                NUMBER_OF_ALLERGY_RECORDS, retrievedAllergyRecords)
-        val expected = MyRecordSerenityHelpers.EXPECTED_ALLERGY_DATA.getOrFail<ArrayList<String>>()
-        val retrievedItemBodies = myRecordInfoPage.allergies.allRecordItemBodies().toTypedArray()
-        Assert.assertArrayEquals("Expected allergy record item bodies",
-                expected.toArray(), retrievedItemBodies)
     }
 
     @Then("^I see the expected allergies displayed - GP Medical Record$")

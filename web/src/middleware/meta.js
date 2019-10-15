@@ -57,6 +57,7 @@ import {
   SYMPTOMS,
   TERMSANDCONDITIONS,
   TESTRESULTS,
+  TESTRESULTSDETAIL,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
@@ -262,6 +263,7 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.termsAndConditions';
       break;
     case TESTRESULTS.name:
+    case TESTRESULTSDETAIL.name:
       route.meta.headerKey = 'pageHeaders.testResults';
       route.meta.pageTitleKey = 'pageTitles.testResults';
       break;

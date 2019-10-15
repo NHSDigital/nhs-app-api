@@ -1,4 +1,4 @@
-package features.gpMedicalRecord.stepDefinitions
+package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -13,7 +13,7 @@ import pages.gpMedicalRecord.TestResultsPage
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
 
-open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class MyRecordTestResultsStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefinitions() {
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -22,9 +22,15 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     lateinit var testResultsPage: TestResultsPage
 
     @Given("^I do not have access to test results - GP Medical Record$")
-    fun givenIDoNotHaveAccessToTestResultsGpRecordGpRecord() {
+    fun givenIDoNotHaveAccessToTestResultsGpMedicalRecord() {
         val getService = SerenityHelpers.getGpSupplier()
         TestResultsFactory.getForSupplier(getService).noAccess(SerenityHelpers.getPatient())
+    }
+
+    @Given("^I have no test results - GP Medical Record$")
+    fun givenIHaveNoTestResultsGpMedicalRecord() {
+        val getService = SerenityHelpers.getGpSupplier()
+        TestResultsFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has a single test result with single child values with no ranges for" +
@@ -73,7 +79,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     }
 
     @Then("^I see one test result with one value - GP Medical Record$")
-    fun thenISeeOneTestResultWithOneValueGpRecord() {
+    fun thenISeeOneTestResultWithOneValueGpMedicalRecord() {
         val mainElements = testResultsPage.getTestResultsElements()
         val childElements = testResultsPage.getTestResultChildren()
         val childElementsMapped = testResultsPage.getTestResultChildren().map { element ->
@@ -85,7 +91,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     }
 
     @Then("^I see one test result with one value and a range - GP Medical Record$")
-    fun thenISeeOneTestResultWithOneValueAndARangeGpRecord() {
+    fun thenISeeOneTestResultWithOneValueAndARangeGpMedicalRecord() {
         val mainElements = testResultsPage.getTestResultsElements()
         val childElements = testResultsPage.getTestResultChildren()
         val childElementsMapped = testResultsPage.getTestResultChildren().map { element ->
@@ -98,7 +104,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     }
 
     @Then("^I see one test result with multiple child values - GP Medical Record$")
-    fun thenISeeOneTestResultWithMultipleChildValuesGpRecord() {
+    fun thenISeeOneTestResultWithMultipleChildValuesGpMedicalRecord() {
         val mainElements = testResultsPage.getTestResultsElements()
         val childElements = testResultsPage.getTestResultChildren()
         Assert.assertTrue("Expected test result equal to or greater than 1",
@@ -108,7 +114,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     }
 
     @Then("^I see test results with multiple child values some of which have ranges - GP Medical Record$")
-    fun thenISeeTestResultsWithMultipleChildValuesSomeOfWhichHaveRangesGpRecord() {
+    fun thenISeeTestResultsWithMultipleChildValuesSomeOfWhichHaveRangesGpMedicalRecord() {
         val mainElements = testResultsPage.getTestResultsElements()
         val childElements = testResultsPage.getTestResultChildren()
         val childElementsMapped = testResultsPage.getTestResultChildren().map { element ->
@@ -122,12 +128,12 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     }
 
     @Then("^I see (.*) test results - GP Medical Record$")
-    fun thenISeeMultipleTestResultsGpRecord(count: Int) {
+    fun thenISeeMultipleTestResultsGpMedicalRecord(count: Int) {
         assertEquals("Expected test results", count, testResultsPage.getTestResultsElements().count())
     }
 
     @Then("^The second test result record has an unknown date - GP Medical Record$")
-    fun thenTheSecondResultHasAnUnknownDateGpRecord() {
+    fun thenTheSecondResultHasAnUnknownDateGpMedicalRecord() {
         val dateLabel = testResultsPage.getTestResultsElements()[1].label
         assertEquals("Test result date", "Unknown Date", dateLabel)
     }

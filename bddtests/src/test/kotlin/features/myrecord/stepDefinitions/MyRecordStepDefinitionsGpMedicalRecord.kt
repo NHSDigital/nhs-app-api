@@ -1,4 +1,4 @@
-package features.gpMedicalRecord.stepDefinitions
+package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -12,6 +12,8 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.microtest.myRecord.MyRecordModuleCounts
+import mocking.microtest.myRecord.TestResultOptions
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
@@ -21,7 +23,7 @@ import pages.navigation.NavBarNative
 import pages.text
 import utils.SerenityHelpers
 
-open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class MyRecordStepDefinitionsGpMedicalRecord : AbstractDemographicsStepDefinitions() {
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -34,7 +36,9 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
+    var myRecordModuleCounts = MyRecordModuleCounts()
 
+    var testResultOptions = TestResultOptions()
 
     @Given("^I am a (\\w+) user setup to use medical record version 2$")
     fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
@@ -54,6 +58,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         navigateToInformationPage()
     }
 
+    @Given("^I have my medical record available to view for (\\w+) - GP Medical Record$")
+    fun givenIHaveMyMedicalRecordAvailableToView(gpSystem: String) {
+        MyRecordFactory.getForSupplier(gpSystem).
+                enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
+    }
+
     @Given("^I am on my record information page and glossary is visible - GP Medical Record$")
     fun givenIAmOnTheGpMedicalRecordInformationPageAndGlossaryIsVisible() {
         navigateToInformationPage()
@@ -70,6 +80,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun thenISeeAMessageTellingMeToContactMyGP() {
         assertTextOnPage(
                 "Sorry, this information isn't available through the NHS App. To access it, contact your GP surgery.")
+    }
+
+    @Given("^I have (.*) Allergies - GP Medical Record$")
+    fun givenIHaveCountOfAllergiesGpMedicalRecord(count: Int) {
+        myRecordModuleCounts.allergyCount = count
     }
 
     @When("I click the Allergies and adverse reactions link on my record - GP Medical Record")

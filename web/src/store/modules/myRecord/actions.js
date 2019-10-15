@@ -1,6 +1,7 @@
 import {
   INIT,
   ACCEPT_TERMS,
+  CLEAR,
   LOADED,
   LOADED_TEST_RESULTS,
   LOADED_DIAGNOSIS,
@@ -16,6 +17,9 @@ import AnalyticsValues from '@/lib/analytics-values';
 export default {
   init({ commit }) {
     commit(INIT);
+  },
+  clear({ commit }) {
+    commit(CLEAR);
   },
   acceptTerms({ commit }) {
     commit(ACCEPT_TERMS);

@@ -1,5 +1,6 @@
 export const INIT = 'INIT';
 export const ACCEPT_TERMS = 'ACCEPT_TERMS';
+export const CLEAR = 'CLEAR';
 export const LOADED = 'LOADED';
 export const LOADED_TEST_RESULTS = 'LOADED_TEST_RESULTS';
 export const LOADED_DIAGNOSIS = 'LOADED_DIAGNOSIS';

@@ -16,7 +16,6 @@ Feature: View My Medical Record Information - All records enabled
     And I see the Problems section collapsed on My Record
     And I see the Test results section collapsed on My Record
 
-
   Scenario: A VISION user can see that the medical record sections are collapsed when directed to medical records page
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality

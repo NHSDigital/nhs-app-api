@@ -11,9 +11,9 @@ export default {
     if (isEmpty(state.apiErrors)) return false;
 
     const error = state.apiErrors[0];
-    const errorsStatusCollection = standardErrors.concat(handledErrors);
-
     if (error.status >= 500) return true;
+
+    const errorsStatusCollection = standardErrors.concat(handledErrors);
 
     const isExpectedStatus = errorsStatusCollection.indexOf(error.status) !== -1;
     const ignorePageError = state.pageSettings.ignoredErrors.indexOf(error.status) !== -1;

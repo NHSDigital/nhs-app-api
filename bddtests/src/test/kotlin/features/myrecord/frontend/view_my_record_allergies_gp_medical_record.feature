@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information
+Feature: View My Medical Record Information - Allergies Frontend GP Medical Record
 
   Scenario: A VISION user has a drug and non drug allergy record - GP Medical Record
     Given I am a VISION user setup to use medical record version 2
@@ -19,7 +19,8 @@ Feature: View My Medical Record Information
 
   Scenario: A MICROTEST user can view allergies and adverse reactions section when no allergies are returned - GP Medical Record
     Given I am a MICROTEST user setup to use medical record version 2
-    And I have 0 Allergies
+    And I have 0 Allergies - GP Medical Record
+    And I have my medical record available to view for MICROTEST - GP Medical Record
     And I am logged in
     And I am on my record information page - GP Medical Record
     When I click the Allergies and adverse reactions link on my record - GP Medical Record
@@ -35,6 +36,7 @@ Feature: View My Medical Record Information
 
   Scenario: A MICROTEST user can view allergies and adverse reactions section - GP Medical Record
     Given I am a MICROTEST user setup to use medical record version 2
+    And I have my medical record available to view for MICROTEST - GP Medical Record
     And I am logged in
     And I am on my record information page and glossary is visible - GP Medical Record
     And I do not see a message informing me to contact my GP for this information - GP Medical Record
@@ -44,7 +46,7 @@ Feature: View My Medical Record Information
   Scenario: An EMIS user has an allergies and adverse reactions result with an unknown date - GP Medical Record
     Given I am a EMIS user setup to use medical record version 2
     And I am logged in
-    And the EMIS GP Practice has two allergies results where the first record has no date
+    And the EMIS GP Practice has two allergies results where the first record has no date - GP Medical Record
     And I am on my record information page and glossary is visible - GP Medical Record
     When I click the Allergies and adverse reactions link on my record - GP Medical Record
     Then I see the expected allergies displayed with unknown date for the first result - GP Medical Record

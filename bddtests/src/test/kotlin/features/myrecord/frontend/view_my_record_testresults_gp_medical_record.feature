@@ -1,14 +1,23 @@
 @my-record
 @test-results
-Feature: View My GP Medical Record Information - Test Results Frontend
 
-  Scenario: An EMIS user has no access to test result section
-    Given I am a EMIS user setup to use medical record version 2
+Feature: View My GP Medical Record Information - Test Results Frontend GP Medical Record
+
+  Scenario: A VISION user has no access to test result section
+    Given I am a VISION user setup to use medical record version 2
     And I do not have access to test results - GP Medical Record
     And I am logged in
     And I am on my record information page - GP Medical Record
     When I click the test result link on my record - GP Medical Record
     Then I see a message indicating that I have no access to view this section on My Record - GP Medical Record
+
+  Scenario: A VISION user has no test results
+    Given I am a VISION user setup to use medical record version 2
+    And I have no test results - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see a message that I have no information recorded for a specific record - GP Medical Record
 
   Scenario: An EMIS user has one test result with one value
     Given I am a EMIS user setup to use medical record version 2
@@ -44,7 +53,7 @@ Feature: View My GP Medical Record Information - Test Results Frontend
 
   Scenario: An EMIS user has a test result with an unknown date
     Given I am a EMIS user setup to use medical record version 2
-    And the EMIS GP Practice has two test results where the second record has no date
+    And the EMIS GP Practice has two test results where the second record has no date - GP Medical Record
     And I am logged in
     And I am on my record information page - GP Medical Record
     When I click the test result link on my record - GP Medical Record

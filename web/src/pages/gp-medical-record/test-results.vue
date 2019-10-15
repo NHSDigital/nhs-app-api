@@ -4,6 +4,7 @@
       v-if="showError"
       :has-errored="results.hasErrored"
       :has-access="results.hasAccess"
+      :has-undetermined-access="results.hasUndeterminedAccess"
     />
     <div
       v-else-if="supplier === 'TPP' || supplier === 'EMIS'"
@@ -100,11 +101,6 @@ export default {
         [result => this.getEffectiveDate(result.date, '')],
         ['desc'],
       );
-    },
-    resultsExpansionText() {
-      return this.resultsCollapsed
-        ? 'View all records of Test results'
-        : 'View less records of Test results';
     },
     showError() {
       return (

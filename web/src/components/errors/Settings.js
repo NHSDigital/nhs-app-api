@@ -2,6 +2,7 @@
 /* eslint-disable import/extensions */
 import { assign, has } from 'lodash/fp';
 import {
+  ALLERGIESANDREACTIONS,
   APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_CANCELLING,
@@ -11,6 +12,7 @@ import {
   BEGINLOGIN,
   MYRECORD,
   MYRECORDTESTRESULT,
+  GP_MEDICAL_RECORD,
   ORGAN_DONATION,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
   PRESCRIPTIONS,
@@ -18,6 +20,8 @@ import {
   PRESCRIPTION_REPEAT_COURSES,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_SEARCH,
+  TESTRESULTS,
+  TESTRESULTSDETAIL,
 } from '@/lib/routes';
 
 export default {
@@ -94,6 +98,30 @@ export default {
       route: MYRECORD.path,
       redirectUrl: {
         default: MYRECORD.path,
+      },
+    },
+    {
+      route: GP_MEDICAL_RECORD.path,
+      redirectUrl: {
+        default: GP_MEDICAL_RECORD.path,
+      },
+    },
+    {
+      route: TESTRESULTS.path,
+      redirectUrl: {
+        default: TESTRESULTS.path,
+      },
+    },
+    {
+      route: TESTRESULTSDETAIL.path,
+      redirectUrl: {
+        default: TESTRESULTSDETAIL.path,
+      },
+    },
+    {
+      route: ALLERGIESANDREACTIONS.path,
+      redirectUrl: {
+        default: ALLERGIESANDREACTIONS.path,
       },
     },
     {

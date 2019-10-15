@@ -47,6 +47,8 @@
 
         <template v-if="hasDetailedRecordAccess">
           <dcr-emis-gp-record v-if="supplier === 'EMIS'"/>
+
+          <dcr-vision-gp-record v-if="supplier === 'VISION'"/>
         </template>
 
         <template v-else>
@@ -79,6 +81,7 @@
 <script>
 import get from 'lodash/fp/get';
 import DcrEmisGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrEMISGpRecord';
+import DcrVisionGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrVISIONGpRecord';
 import ScrEmisGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrEMISGpRecord';
 import ScrTppGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrTPPGpRecord';
 import ScrVisionGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrVISIONGpRecord';
@@ -95,6 +98,7 @@ export default {
   components: {
     Glossary,
     DcrEmisGpRecord,
+    DcrVisionGpRecord,
     ScrEmisGpRecord,
     ScrTppGpRecord,
     ScrVisionGpRecord,
@@ -128,6 +132,7 @@ export default {
   },
   async asyncData({ store }) {
     if (store.state.myRecord.hasAcceptedTerms) {
+      await store.dispatch('myRecord/clear');
       await store.dispatch('myRecord/acceptTerms');
       await store.dispatch('myRecord/load');
     }
@@ -142,6 +147,7 @@ export default {
   },
   async mounted() {
     if (this.hasAgreed) {
+      await this.$store.dispatch('myRecord/clear');
       await this.$store.dispatch('myRecord/acceptTerms');
       await this.$store.dispatch('myRecord/load');
       EventBus.$emit(FOCUS_NHSAPP_ROOT);
