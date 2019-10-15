@@ -4,28 +4,27 @@ import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.prescriptions.factories.PrescriptionsFactory
-import features.prescriptions.steps.PrescriptionsSteps
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.Error
-import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
+import org.junit.Assert
 import pages.ErrorPage
+import pages.navigation.WebHeader
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
+import pages.text
 import utils.SerenityHelpers
 
 class PrescriptionsErrorStepDefinitions {
 
-    @Steps
-    lateinit var prescriptions: PrescriptionsSteps
-
     val mockingClient = MockingClient.instance
 
-    lateinit var prescriptionsPage: PrescriptionsPage
-    lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
-    lateinit var errorPage: ErrorPage
+    private lateinit var prescriptionsPage: PrescriptionsPage
+    private lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
+    private lateinit var errorPage: ErrorPage
+    private lateinit var webHeader: WebHeader
 
 
     @Given("The prescriptions endpoint is timing out")
@@ -124,5 +123,13 @@ class PrescriptionsErrorStepDefinitions {
                 .assertMessageText(message)
                 .assertRetryButtonText(retryButtonText)
                 .assertPageHeader(pageHeader)
+    }
+
+    @Then("I see a message informing me that I don't currently have access to this service")
+    fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
+        webHeader.getPageTitle().withText("Repeat prescriptions unavailable")
+        Assert.assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.text)
+        Assert.assertEquals("Contact your GP surgery for more information. " +
+                "For urgent medical help, call 111.", errorPage.errorText1.text)
     }
 }

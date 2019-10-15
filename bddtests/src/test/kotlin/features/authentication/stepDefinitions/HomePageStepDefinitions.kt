@@ -9,7 +9,6 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.stepDefinitions.MyRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
-import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedSteps.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -17,6 +16,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
+import pages.prescription.PrescriptionsPage
 import utils.SerenityHelpers
 import java.net.URL
 
@@ -41,11 +41,11 @@ class HomePageStepDefinitions : AbstractSteps() {
     @Steps
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
     @Steps
-    private lateinit var prescriptions: PrescriptionsSteps
-    @Steps
     private lateinit var recordWarning: MyRecordWarningStepDefinitions
     @Steps
     lateinit var home: HomeSteps
+
+    private lateinit var prescriptions: PrescriptionsPage
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {

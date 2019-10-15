@@ -8,7 +8,6 @@ import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
 import features.prescriptions.stepDefinitions.ProviderTypes
-import features.prescriptions.steps.PrescriptionsSteps
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 import mocking.emis.practices.NecessityOption
@@ -21,6 +20,7 @@ import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
 import pages.nominatedPharmacy.NominatedPharmacyCheckPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
+import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
 import utils.getOrNull
@@ -34,11 +34,10 @@ open class CoursesStepDefinitions {
 
     @Steps
     lateinit var login: LoginSteps
-    @Steps
-    lateinit var prescriptionsSteps: PrescriptionsSteps
 
     val mockingClient = MockingClient.instance
 
+    private lateinit var prescriptions : PrescriptionsPage
     private lateinit var repeatPrescriptions : RepeatPrescriptionsPage
     private lateinit var nominatedPharmacyCheckPage : NominatedPharmacyCheckPage
     private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
@@ -178,7 +177,7 @@ open class CoursesStepDefinitions {
 
     @When("I click 'Order a new repeat prescription'")
     fun iClickOrderARepeatPrescription() {
-        prescriptionsSteps.prescriptions.clickOrderARepeatPrescriptionButton()
+        prescriptions.clickOrderARepeatPrescriptionButton()
     }
 
     @When("I click Continue on the Order a repeat prescription page")

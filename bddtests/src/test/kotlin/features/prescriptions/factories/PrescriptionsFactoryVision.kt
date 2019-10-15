@@ -3,9 +3,8 @@ package features.prescriptions.factories
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.data.prescriptions.courses.VisionCoursesLoader
-import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.defaults.VisionMockDefaults
-import mocking.stubs.prescriptions.ViewPrescriptionsStubs
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.NewPrescriptionRepeat
 import mocking.vision.models.OrderNewPrescriptionRequest
@@ -15,11 +14,29 @@ import mocking.vision.models.VisionUserSession
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import org.apache.http.HttpStatus
+import utils.SerenityHelpers
+import java.time.Duration
+import java.time.OffsetDateTime
 
 class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
 
     override val getCoursesLoader: ICoursesLoader<*> = VisionCoursesLoader
     override val getPrescriptionsLoader: IPrescriptionLoader<*> = VisionPrescriptionLoader
+
+    override fun setupWiremockAndDataWithDelay(delay: Long?,
+                                               prescriptionLoader: IPrescriptionLoader<*>,
+                                               fromdate: OffsetDateTime,
+                                               toDate: OffsetDateTime) {
+        val duration = if (delay != null) Duration.ofSeconds(delay) else null
+        val currentPatient = SerenityHelpers.getPatient()
+        mockingClient
+                .forVision {
+                    prescriptions.getPrescriptionHistoryRequest(
+                            VisionMockDefaults.getVisionUserSession(currentPatient))
+                            .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
+                            .delayedBy(duration)
+                }
+    }
 
     override fun setupWireMockAndDataSetup(scenarioTitle: String,
                                            initialScenarioState: String,
@@ -108,11 +125,6 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
-
-    override fun generateSpineStubs() {
-        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
-    }
-
     override fun orderPrescriptionReturnsConflictResponse() {
         throw UnsupportedOperationException()
     }

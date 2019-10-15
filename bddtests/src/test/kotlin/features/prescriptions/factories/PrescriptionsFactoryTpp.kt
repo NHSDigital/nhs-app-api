@@ -4,18 +4,34 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.courses.TppCoursesLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
-import mocking.stubs.prescriptions.ViewPrescriptionsStubs
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_FORBIDDEN
+import utils.SerenityHelpers
+import java.time.Duration
+import java.time.OffsetDateTime
 
 class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
 
     override val getCoursesLoader: ICoursesLoader<*> = TppCoursesLoader
     override val getPrescriptionsLoader: IPrescriptionLoader<*> = TppPrescriptionLoader
+
+    override fun setupWiremockAndDataWithDelay(delay: Long?,
+                                               prescriptionLoader: IPrescriptionLoader<*>,
+                                               fromdate: OffsetDateTime,
+                                               toDate: OffsetDateTime) {
+        val currentPatient = SerenityHelpers.getPatient()
+        val duration = if (delay != null) Duration.ofSeconds(delay) else null
+        mockingClient
+                .forTpp {
+                    prescriptions.listRepeatMedication(currentPatient)
+                            .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
+                            .delayedBy(duration)
+                }
+    }
 
     override fun setupWireMockAndDataSetup(scenarioTitle: String,
                                            initialScenarioState: String,
@@ -98,10 +114,6 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
                     prescriptions.listRepeatMedication(patient)
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
-    }
-
-    override fun generateSpineStubs() {
-        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
 
     override fun orderPrescriptionReturnsConflictResponse() {

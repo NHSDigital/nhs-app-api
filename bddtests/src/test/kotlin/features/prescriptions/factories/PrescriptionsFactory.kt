@@ -5,8 +5,10 @@ import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
+import mocking.stubs.prescriptions.ViewPrescriptionsStubs
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
+import java.time.OffsetDateTime
 
 const val TIME_TO_SLEEP_IN_MILLIS = 1000L
 abstract class PrescriptionsFactory(gpSupplier:String) {
@@ -29,6 +31,15 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
         setupWireMockAndCreateDataGpSpecific()
     }
 
+    fun generateSpineStubs() {
+        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
+    }
+
+    abstract fun setupWiremockAndDataWithDelay(delay: Long?,
+                                               prescriptionLoader: IPrescriptionLoader<*>,
+                                               fromdate: OffsetDateTime,
+                                               toDate: OffsetDateTime)
+
     abstract fun setupWireMockAndDataSetup(scenarioTitle: String,
                                            initialScenarioState: String,
                                            statusSubmitted: String,
@@ -41,7 +52,6 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
     abstract fun coursesEndpointTimeout(patient : Patient)
     abstract fun coursesEndpointThrowingServerError(patient : Patient)
     abstract fun gpSessionHasExpired()
-    abstract fun generateSpineStubs()
     abstract fun orderPrescriptionReturnsConflictResponse()
     abstract fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade)
 

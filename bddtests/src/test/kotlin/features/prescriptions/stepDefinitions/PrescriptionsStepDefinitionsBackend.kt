@@ -1,0 +1,98 @@
+package features.prescriptions.stepDefinitions
+
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
+import net.serenitybdd.core.Serenity
+import org.junit.Assert
+import utils.SerenityHelpers
+import utils.getOrFail
+import utils.getOrNull
+import utils.set
+import worker.NhsoHttpException
+import worker.WorkerClient
+import worker.models.prescriptions.PrescriptionsListResponse
+import java.time.OffsetDateTime
+import java.time.ZonedDateTime
+
+class PrescriptionsStepDefinitionsBackend {
+
+    private val fromDateKey = "FromDate"
+
+    @When("I get the users prescriptions with a valid cookie")
+    fun whenIGetTheUsersPrescriptionsWithAValidCookie() {
+        val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(fromDateKey)
+
+        try {
+            val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+            val response = sessionVariable.prescriptions.getPrescriptionsConnection(
+                    if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
+            PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
+    @When("^I request prescriptions for the last 6 months$")
+    fun iRequestPrescriptionsForTheLastSixMonths() {
+        try {
+            val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .prescriptions.getPrescriptionsConnection(fromDate)
+            PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
+    @When("^I request prescriptions for the last 6 months with an invalid cookie$")
+    fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
+        try {
+            val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+            PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
+    @Then("I receive a list of (\\d+) prescriptions")
+    fun thenIReceiveAListOfXPrescriptions(count: Int) {
+
+        val prescriptionsListResponse = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE
+                .getOrFail<PrescriptionsListResponse>()
+        Assert.assertNotNull(prescriptionsListResponse)
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+
+        when (currentProvider) {
+            ProviderTypes.EMIS -> {
+                Assert.assertEquals(count, prescriptionsListResponse.prescriptions.count())
+                val prescriptions = prescriptionsListResponse.prescriptions
+
+                // We had to use a string here and then parse the screen as
+                // kotlin did not like the date time format sent from the worker
+                for (int in 0 until prescriptions.count() - 2) {
+                    Assert.assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >=
+                            ZonedDateTime.parse(prescriptions[int + 1].orderDate))
+                }
+            }
+            ProviderTypes.TPP,
+            ProviderTypes.VISION,
+            ProviderTypes.MICROTEST -> {
+                Assert.assertEquals(count, prescriptionsListResponse.courses.count())
+            }
+            else -> {
+                throw NotImplementedError("Invalid GP System")
+            }
+        }
+    }
+
+    @Then("^I get a response with a list of prescriptions for the last 6 months$")
+    fun iGetAResponseWithAListOfPrescriptionForTheLastSixMonths() {
+        val prescriptionsListResponse = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE
+                .getOrFail<PrescriptionsListResponse>()
+        Assert.assertNotNull(prescriptionsListResponse)
+        Assert.assertTrue(prescriptionsListResponse.prescriptions.isNotEmpty())
+        Assert.assertTrue(prescriptionsListResponse.courses.isNotEmpty())
+    }
+}

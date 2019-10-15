@@ -1,26 +1,16 @@
 package features.prescriptions.stepDefinitions
 
-import constants.ErrorResponseCodeTpp
 import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.authentication.steps.HomeSteps
-import features.authentication.steps.LoginSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
-import features.prescriptions.steps.PrescriptionsSteps
-import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
-import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
-import mocking.data.prescriptions.MicrotestPrescriptionLoader
-import mocking.data.prescriptions.TppPrescriptionLoader
-import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -28,84 +18,41 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
-import mocking.tpp.models.Error
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import models.prescriptions.HistoricPrescription
-import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import pages.ErrorPage
-import pages.navigation.HeaderNative
-import pages.navigation.WebHeader
-import pages.text
-import utils.getOrNull
-import utils.set
+import pages.prescription.PrescriptionsPage
+import pages.prescription.RepeatPrescriptionsPage
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
-import worker.WorkerClient
-import worker.models.prescriptions.PrescriptionsListResponse
-import java.time.Duration
+import utils.getOrNull
+import utils.set
 import java.time.OffsetDateTime
-import java.time.ZonedDateTime
 
 private const val PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY = 6L
 private const val DATE_GREATER_THAN_SIX_MONTHS = 7L
-private const val DELAY_IN_SECONDS = 31L
 private const val NUM_OF_PRESCRIPTIONS = 10
 
-@Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
-        "if possible, break down steps into functional areas")
 open class PrescriptionsStepDefinitions {
 
-    @Steps
-    lateinit var browser: BrowserSteps
-    @Steps
-    lateinit var home: HomeSteps
-    @Steps
-    lateinit var login: LoginSteps
-    @Steps
-    lateinit var navigation: NavigationSteps
-    @Steps
-    lateinit var prescriptions: PrescriptionsSteps
-
-    private lateinit var headerNative: HeaderNative
-    private lateinit var webHeader: WebHeader
+    private lateinit var prescriptions : PrescriptionsPage
+    private lateinit var repeatPrescriptions: RepeatPrescriptionsPage
 
     val mockingClient = MockingClient.instance
 
-    private val fromDateKey = "FromDate"
     private val toDate = OffsetDateTime.now()
     private var numberOfPrescriptions: Int = 0
     private var numOfCourses: Int = 0
     private var numOfRepeats: Int = 0
-    private var fromDate: String? = null
-
-    lateinit var prescriptionLoader: IPrescriptionLoader<*>
-
-    lateinit var prescriptionsListResponse: PrescriptionsListResponse
-    lateinit var errorPage: ErrorPage
 
     @Given("^I have no repeat prescriptions$")
     fun givenIHaveNoRepeatPrescriptions() {
-        initialize(SerenityHelpers.getGpSupplier())
+        PrescriptionsDataSetup.initialize(SerenityHelpers.getGpSupplier())
         givenIHaveXPastRepeatPrescriptions(0)
         givenEachRepeatPrescriptionContainsXCoursesOfWhichXAreRepeats(0, 0)
-    }
-
-    @Then("^I see prescriptions page loaded$")
-    fun iSeePrescriptionsPageLoaded() {
-        prescriptions.isLoaded()
-    }
-
-    @Then("^I see no prescriptions$")
-    fun iSeeNoPrescriptions() {
-        prescriptions.assertNoRepeatPrescriptionsMessageShown()
     }
 
     @Given("^each repeat prescription contains (\\d+) courses of which (\\d+) are repeats$")
@@ -114,9 +61,11 @@ open class PrescriptionsStepDefinitions {
         this.numOfCourses = numOfCourses
         this.numOfRepeats = numOfRepeats
 
-        setupWiremockAndData(expectedDefaultFromDate,
+        PrescriptionsDataSetup.setupWiremockAndData(expectedDefaultFromDate,
+                toDate,
                 numOfCourses * numberOfPrescriptions,
-                numOfRepeats * numberOfPrescriptions)
+                numOfRepeats * numberOfPrescriptions,
+                numberOfPrescriptions)
     }
 
     @Given("^each repeat prescription shares the same course")
@@ -125,18 +74,12 @@ open class PrescriptionsStepDefinitions {
         numOfCourses = 1
         numOfRepeats = 1
 
-        setupWiremockAndData(expectedDefaultFromDate)
-    }
-
-    @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
-    fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
-        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
-
-        numberOfPrescriptions = NUM_OF_PRESCRIPTIONS
-        numOfRepeats = NUM_OF_PRESCRIPTIONS
-        numOfCourses = NUM_OF_PRESCRIPTIONS
-
-        setupWiremockAndData(expectedDefaultFromDate)
+        PrescriptionsDataSetup.setupWiremockAndData(
+                expectedDefaultFromDate,
+                toDate,
+                numOfCourses,
+                numOfRepeats,
+                numberOfPrescriptions)
     }
 
     @Given("^I am patient using the (.*) GP System$")
@@ -147,7 +90,22 @@ open class PrescriptionsStepDefinitions {
         SerenityHelpers.setPatient(currentPatient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
-        initialize(gpSystem)
+        PrescriptionsDataSetup.initialize(gpSystem)
+    }
+
+    @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
+    fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
+
+        numberOfPrescriptions = NUM_OF_PRESCRIPTIONS
+        numOfRepeats = NUM_OF_PRESCRIPTIONS
+        numOfCourses = NUM_OF_PRESCRIPTIONS
+
+        PrescriptionsDataSetup.setupWiremockAndData(expectedDefaultFromDate,
+                toDate,
+                numOfCourses,
+                numOfRepeats,
+                numberOfPrescriptions)
     }
 
     @Given("^I have (\\d+) past repeat prescriptions$")
@@ -157,21 +115,21 @@ open class PrescriptionsStepDefinitions {
 
     @Given("^a fromDate in an unexpected format$")
     fun aFromDateInAnUnexpectedFormat() {
-        fromDate = "13/66/99999999T"
+        PrescriptionsSerenityHelpers.FROM_DATE.set("13/66/99999999T")
 
         givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     }
 
     @Given("^a fromDate in the future$")
     fun aFromDateInTheFuture() {
-        fromDate = toDate.plusMonths(1).toString()
+        PrescriptionsSerenityHelpers.FROM_DATE.set( toDate.plusMonths(1).toString())
 
         givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     }
 
     @Given("^a fromDate greater than 6 months ago$")
     fun aFromDateGreaterThanSixMonths() {
-        fromDate = toDate.minusMonths(DATE_GREATER_THAN_SIX_MONTHS).toString()
+        PrescriptionsSerenityHelpers.FROM_DATE.set( toDate.minusMonths(DATE_GREATER_THAN_SIX_MONTHS).toString())
 
         givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     }
@@ -180,7 +138,7 @@ open class PrescriptionsStepDefinitions {
     fun theGPSystemHasDisabledPrescriptions() {
         var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
-            initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
+            PrescriptionsDataSetup.initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
             currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         }
         PrescriptionsFactory.getForSupplier(currentProvider.toString()).disableAtGPLevel()
@@ -190,7 +148,7 @@ open class PrescriptionsStepDefinitions {
     fun theGPSystemSessionHasExpired() {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         if (currentProvider == null) {
-            initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
+            PrescriptionsDataSetup.initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
         }
         PrescriptionsFactory.getForSupplier(currentProvider.toString()).gpSessionHasExpired()
     }
@@ -199,41 +157,7 @@ open class PrescriptionsStepDefinitions {
     fun prescriptionsIsDisabledAtAGPLevel() {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         val currentPatient = SerenityHelpers.getPatient()
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                mockingClient
-                        .forEmis {
-                            prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                        }
-
-                mockingClient
-                        .forEmis {
-                            prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                        }
-            }
-            ProviderTypes.TPP -> {
-                mockingClient
-                        .forTpp {
-                            prescriptions.listRepeatMedication(currentPatient)
-                                    .respondWithError(
-                                            Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                                    "Error Occurred",
-                                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                        }
-            }
-            ProviderTypes.VISION -> {
-                mockingClient
-                        .forVision {
-                            authentication.getConfigurationRequest(
-                                    VisionMockDefaults.visionUserSessionPrescriptionDisabled)
-                                    .respondWithSuccess(VisionMockDefaults
-                                            .visionConfigurationResponsePrescriptionsDisabled)
-                        }
-            }
-            else -> {
-                throw NotImplementedError("Invalid GP System")
-            }
-        }
+        PrescriptionsDataSetup.disabled(currentPatient, currentProvider)
     }
 
     @Given("each course has (.*)")
@@ -245,6 +169,7 @@ open class PrescriptionsStepDefinitions {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
+        val prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER.getOrFail<IPrescriptionLoader<*>>()
         prescriptionLoader.loadData(
                 numberOfPrescriptions,
                 numOfRepeats,
@@ -288,8 +213,6 @@ open class PrescriptionsStepDefinitions {
                         }
             }
         }
-
-
     }
 
     @Given("^courses have status$")
@@ -300,6 +223,7 @@ open class PrescriptionsStepDefinitions {
         var statusIndex = 0
         val data = statuses.raw()
 
+        val prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER.getOrFail<IPrescriptionLoader<*>>()
         val prgr = prescriptionLoader.data as PrescriptionRequestsGetResponse
 
         for (prescription in prgr.prescriptionRequests) {
@@ -319,22 +243,9 @@ open class PrescriptionsStepDefinitions {
                 }
     }
 
-    @When("I get the users prescriptions with a valid cookie")
-    fun whenIGetTheUsersPrescriptionsWithAValidCookie() {
-        val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(fromDateKey)
-
-        try {
-            val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            prescriptionsListResponse = sessionVariable.prescriptions.getPrescriptionsConnection(
-                    if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
-    }
-
     @When("^I do not request a fromDate$")
     fun iDoNotRequestAFromDate() {
-        fromDate = null
+        PrescriptionsSerenityHelpers.FROM_DATE.set(null)
     }
 
     @When("^the GP System is too slow$")
@@ -344,71 +255,34 @@ open class PrescriptionsStepDefinitions {
         numOfRepeats = 1
         numOfCourses = 1
 
-        setupWiremockAndDataWithDelay(expectedDefaultFromDate)
-    }
-
-    @When("^I request prescriptions for the last 6 months$")
-    fun iRequestPrescriptionsForTheLastSixMonths() {
-        try {
-            prescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getPrescriptionsConnection(fromDate)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
-    }
-
-    @When("^I request prescriptions for the last 6 months with an invalid cookie$")
-    fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
-        try {
-            prescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        PrescriptionsDataSetup.setupWiremockAndDataWithDelay(fromdate = expectedDefaultFromDate,
+                toDate = toDate,
+                numberOfPrescriptions = numberOfPrescriptions,
+                numOfRepeats = numOfRepeats )
     }
 
     @Then("^I see a message indicating that I have no repeat prescriptions$")
     fun thenISeeAMessageIndicatingThatIHaveNoRepeatPrescriptions() {
-        prescriptions.assertNoRepeatPrescriptionsMessageShown()
-    }
-
-    @Then("I receive a list of (\\d+) prescriptions")
-    fun thenIReceiveAListOfXPrescriptions(count: Int) {
-
-        assertNotNull(prescriptionsListResponse)
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
-
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                assertEquals(count, prescriptionsListResponse.prescriptions.count())
-                val prescriptions = prescriptionsListResponse.prescriptions
-
-                // We had to use a string here and then parse the screen as
-                // kotlin did not like the date time format sent from the worker
-                for (int in 0 until prescriptions.count() - 2) {
-                    assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >=
-                            ZonedDateTime.parse(prescriptions[int + 1].orderDate))
-                }
-            }
-            ProviderTypes.TPP,
-            ProviderTypes.VISION,
-            ProviderTypes.MICROTEST -> {
-                assertEquals(count, prescriptionsListResponse.courses.count())
-            }
-            else -> {
-                throw NotImplementedError("Invalid GP System")
-            }
-        }
+        assertTrue(prescriptions.isNoPrescriptionsMessageVisible())
     }
 
     @Then("^I see (\\d+) prescriptions$")
     fun thenISeeXPrescriptions(numPrescriptions: Int) {
-
         prescriptions
                 .assertPrescriptionsMatch(
                         getResponseToExpectedPrescriptionFormat(),
                         numPrescriptions,
                         providerHasAllPrescriptionFields())
+    }
+
+    @Then("^I see prescriptions page loaded$")
+    fun iSeePrescriptionsPageLoaded() {
+        prescriptions.isLoaded()
+    }
+
+    @Then("^I see no prescriptions$")
+    fun iSeeNoPrescriptions() {
+        assertTrue(prescriptions.isNoPrescriptionsMessageVisible())
     }
 
     private fun providerHasAllPrescriptionFields(): Boolean {
@@ -418,80 +292,16 @@ open class PrescriptionsStepDefinitions {
                 currentProvider == ProviderTypes.MICROTEST
     }
 
-    @Then("^I get a response with a list of prescriptions for the last 6 months$")
-    fun iGetAResponseWithAListOfPrescriptionForTheLastSixMonths() {
-        assertNotNull(prescriptionsListResponse)
-        assertTrue(prescriptionsListResponse.prescriptions.isNotEmpty())
-        assertTrue(prescriptionsListResponse.courses.isNotEmpty())
-    }
-
-    @Then("I see a message informing me that I don't currently have access to this service")
-    fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
-        webHeader.getPageTitle().withText("Repeat prescriptions unavailable")
-        assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.text)
-        assertEquals("Contact your GP surgery for more information. " +
-                "For urgent medical help, call 111.", errorPage.errorText1.text)
-    }
-
     @Then("I select (\\d+) prescription to order")
     fun iSelectXPrescriptionsToOrder(prescriptionToOrder: Int) {
-        prescriptions.selectSubscriptionsToOrder(prescriptionToOrder)
-        prescriptions.clickContinue()
-        prescriptions.clickConfirmAndOrderRepeat()
-    }
-
-    private fun setupWiremockAndData(fromdate: OffsetDateTime,
-                                     numOfCourses: Int = this.numOfCourses,
-                                     numOfRepeats: Int = this.numOfRepeats) {
-
-        val currentPatient = SerenityHelpers.getPatient()
-        if (!::prescriptionLoader.isInitialized) {
-            val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
-            initialize(gpSystem)
-        }
-
-        prescriptionLoader.loadData(
-                numberOfPrescriptions,
-                numOfCourses,
-                numOfRepeats)
-
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                mockingClient
-                        .forEmis {
-                            prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
-                        }
-            }
-            ProviderTypes.TPP -> {
-                mockingClient
-                        .forTpp {
-                            prescriptions.listRepeatMedication(currentPatient)
-                                    .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
-                        }
-
-            }
-            ProviderTypes.VISION -> {
-                mockingClient
-                        .forVision {
-                            prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults
-                                    .getVisionUserSession(VisionMockDefaults.patientVision))
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
-                        }
-            }
-            ProviderTypes.MICROTEST -> {
-                mockingClient
-                        .forMicrotest {
-                            prescriptions.getPrescriptionHistoryRequest(currentPatient, fromdate)
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
-                        }
-            }
-        }
+        repeatPrescriptions.selectXPrescriptionsToOrder(prescriptionToOrder)
+        repeatPrescriptions.orderRepeatPrescriptionButton.click()
+        repeatPrescriptions.clickConfirmAndOrderRepeatSubscriptionButton()
     }
 
     private fun getResponseToExpectedPrescriptionFormat(): List<HistoricPrescription> {
 
+        val prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER.getOrFail<IPrescriptionLoader<*>>()
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
         return when (currentProvider) {
             ProviderTypes.EMIS ->
@@ -506,83 +316,7 @@ open class PrescriptionsStepDefinitions {
         }
     }
 
-    private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime) {
-
-        if (!::prescriptionLoader.isInitialized) {
-            val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
-            initialize(gpSystem)
-        }
-
-        prescriptionLoader.loadData(
-                numberOfPrescriptions,
-                numOfRepeats,
-                numOfRepeats)
-
-        val currentPatient = SerenityHelpers.getPatient()
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-
-                mockingClient
-                        .forEmis {
-                            prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
-                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
-                        }
-            }
-            ProviderTypes.TPP -> {
-
-                mockingClient
-                        .forTpp {
-                            prescriptions.listRepeatMedication(currentPatient)
-                                    .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
-                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
-                        }
-            }
-            ProviderTypes.VISION -> {
-
-                mockingClient
-                        .forVision {
-                            prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults
-                                    .getVisionUserSession(VisionMockDefaults.patientVision))
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
-                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
-                        }
-            }
-            ProviderTypes.MICROTEST -> {
-                mockingClient
-                        .forMicrotest {
-                            prescriptions.getPrescriptionHistoryRequest(currentPatient, fromdate)
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
-                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
-                        }
-            }
-        }
-    }
-
     private fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
-    }
-
-    private fun initialize(gpSystem: String) {
-        PrescriptionsSerenityHelpers.PROVIDER.set(ProviderTypes.valueOf(gpSystem))
-        val existingPatient = SerenityHelpers.getPatientOrNull()
-        if (existingPatient == null) {
-            SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
-        }
-        when (ProviderTypes.valueOf(gpSystem)) {
-            ProviderTypes.EMIS -> {
-                prescriptionLoader = EmisPrescriptionLoader
-            }
-            ProviderTypes.TPP -> {
-                prescriptionLoader = TppPrescriptionLoader
-            }
-            ProviderTypes.VISION -> {
-                prescriptionLoader = VisionPrescriptionLoader
-            }
-            ProviderTypes.MICROTEST -> {
-                prescriptionLoader = MicrotestPrescriptionLoader
-            }
-        }
     }
 }

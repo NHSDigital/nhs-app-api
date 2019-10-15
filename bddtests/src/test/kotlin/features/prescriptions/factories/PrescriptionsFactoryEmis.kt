@@ -8,12 +8,14 @@ import mocking.emis.models.CourseRequestsGetResponse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.stubs.pds.ViewSpinePdsStubs
-import mocking.stubs.prescriptions.ViewPrescriptionsStubs
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
+import utils.SerenityHelpers
+import java.time.Duration
+import java.time.OffsetDateTime
 
 class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
 
@@ -32,6 +34,20 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
                     "see https://kotlinlang.org/docs/reference/typecasts.html")
     private fun coursesData(): List<MedicationCourse> {
         return getCoursesLoader.data as List<MedicationCourse>
+    }
+
+    override fun setupWiremockAndDataWithDelay(delay: Long?,
+                                               prescriptionLoader: IPrescriptionLoader<*>,
+                                               fromdate: OffsetDateTime,
+                                               toDate: OffsetDateTime) {
+        val currentPatient = SerenityHelpers.getPatient()
+        val duration = if (delay != null) Duration.ofSeconds(delay) else null
+        mockingClient
+                .forEmis {
+                    prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
+                            .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
+                            .delayedBy(duration)
+                }
     }
 
     override fun setupWireMockAndDataSetup(scenarioTitle: String,
@@ -120,10 +136,6 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
             prescriptions.coursesRequest(patient)
                     .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
         }
-    }
-
-    override fun generateSpineStubs() {
-        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
 
     override fun orderPrescriptionReturnsConflictResponse() {

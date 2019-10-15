@@ -8,11 +8,13 @@ import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.microtest.prescriptions.Course
 import mocking.microtest.prescriptions.CoursesGetResponse
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
-import mocking.stubs.prescriptions.ViewPrescriptionsStubs
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
+import utils.SerenityHelpers
+import java.time.Duration
+import java.time.OffsetDateTime
 
 class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
 
@@ -31,6 +33,21 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
                     "see https://kotlinlang.org/docs/reference/typecasts.html")
     private fun coursesData(): List<Course> {
         return getCoursesLoader.data as List<Course>
+    }
+
+    override fun setupWiremockAndDataWithDelay(delay: Long?,
+                                               prescriptionLoader: IPrescriptionLoader<*>,
+                                               fromdate: OffsetDateTime,
+                                               toDate: OffsetDateTime) {
+
+        val currentPatient = SerenityHelpers.getPatient()
+        val duration = if (delay != null) Duration.ofSeconds(delay) else null
+        mockingClient
+                .forMicrotest {
+                    prescriptions.getPrescriptionHistoryRequest(currentPatient, fromdate)
+                            .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
+                            .delayedBy(duration)
+                }
     }
 
     override fun setupWireMockAndDataSetup(scenarioTitle: String,
@@ -116,10 +133,6 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
                     prescriptions.getPrescriptionHistoryRequest(patient)
                             .respondWithForbiddenError()
                 }
-    }
-
-    override fun generateSpineStubs() {
-        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
 
     override fun orderPrescriptionReturnsConflictResponse() {

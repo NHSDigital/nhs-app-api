@@ -1,5 +1,6 @@
 package mocking.data.prescriptions
 
+import org.junit.Assert
 import java.util.*
 
 interface IPrescriptionLoader<T> {
@@ -60,5 +61,29 @@ interface IPrescriptionLoader<T> {
         }
 
         return random.nextInt(localMaxNum - minNum) + minNum
+    }
+
+    companion object {
+
+        fun getPrescriptionsLoader(gpSystem: String): IPrescriptionLoader<*> {
+            return when (gpSystem.toUpperCase()) {
+                "EMIS" -> {
+                    EmisPrescriptionLoader
+                }
+                "TPP" -> {
+                    TppPrescriptionLoader
+                }
+                "VISION" -> {
+                    VisionPrescriptionLoader
+                }
+                "MICROTEST" -> {
+                    MicrotestPrescriptionLoader
+                }
+                else -> {
+                    Assert.fail("GP System '$gpSystem' not set")
+                    return EmisPrescriptionLoader
+                }
+            }
+        }
     }
 }

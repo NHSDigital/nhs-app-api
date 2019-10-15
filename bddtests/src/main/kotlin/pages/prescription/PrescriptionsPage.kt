@@ -1,8 +1,10 @@
 package pages.prescription
 
+import com.google.gson.GsonBuilder
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
+import org.junit.Assert
 import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.HybridPageElement
@@ -86,5 +88,19 @@ open class PrescriptionsPage : HybridPageObject() {
 
     fun clickOrderARepeatPrescriptionButton() {
         clickOnButtonContainingText("Order new repeat prescription")
+    }
+
+    fun assertPrescriptionsMatch(list: List<HistoricPrescription>,
+                                 expectedPrescriptions: Int,
+                                 providerHasAllPrescriptionFields: Boolean = true) {
+
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val p = getAllPrescriptions(providerHasAllPrescriptionFields)
+
+        val actualJson = gson.toJson(p).toString()
+        val expectedJson = gson.toJson(list).toString()
+
+        Assert.assertEquals(expectedJson, actualJson)
+        Assert.assertEquals(expectedPrescriptions, p.count())
     }
 }
