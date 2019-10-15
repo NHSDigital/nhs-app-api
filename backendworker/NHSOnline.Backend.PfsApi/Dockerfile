@@ -105,7 +105,7 @@ ENV VISION_ODS_REMAP_ENABLED false
 ENV SERVICE_JOURNEY_RULES_BASE_URL http://servicejourneyrulesapi.local.bitraft.io:8086
 ENV PDS_QUERY_FROM_ADDRESS 10.0.255.22
 ENV PDS_QUERY_TO https://192.168.128.11/syncservice-pds/pds
-ENV SPINE_URL https://n3devproxy.dev.nonlive.nhsapp.service.nhs.uk/
+ENV SPINE_PDS_URL https://40.120.51.179:80/
 ENV DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS 500
 ENV NOMINATED_PHARMACY_ENABLED true
 ENV PROXY_ACCESS_ENABLED false
@@ -114,8 +114,8 @@ ENV SPINE_LDAP_LOOKUP_ENABLED true
 ENV SPINE_LDAP_HOST=40.120.51.179
 ENV SPINE_LDAP_PORT=443
 ENV SPINE_LDAP_LOGIN_DN="ou=services, o=nhs"
-ENV SPINE_LDAP_CERT_PATH=./certs/spine.pfx
-ENV SPINE_LDAP_CERT_PASSWORD=
+ENV SPINE_CERT_PATH=./certs/spine.pfx
+ENV SPINE_CERT_PASSWORD=
 ENV NHS_APP_PARTY_ID_FOR_SPINE=E87021-820463
 
 WORKDIR /app
@@ -126,7 +126,8 @@ COPY --chown=aspnetcore:aspnetcore --from=publish /app .
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppDev.crt /usr/local/share/ca-certificates/TppDev.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppProd.crt /usr/local/share/ca-certificates/TppProd.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt /usr/local/share/ca-certificates/vision-test-env.crt
-COPY NHSOnline.Backend.PfsApi/SpineSearch/spine_ldap_search_test_env.crt /usr/local/share/ca-certificates/spine_ldap_search_test_env.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/spine_ldap_search_test_env.crt /usr/local/share/ca-certificates/spine_ldap_search_test_env.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/queue-staging.nhsapp.service.nhs.uk.crt /usr/local/share/ca-certificates/queue-staging.nhsapp.service.nhs.uk.crt
 RUN chmod 644 /usr/local/share/ca-certificates/*
 RUN update-ca-certificates
 

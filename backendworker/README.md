@@ -34,7 +34,7 @@ In order to use the nominated pharmacy feature locally, you will need to enable 
 The certificate and password can be found in keybase under path /team/nhsonline/spine.
 
 1. Copy /spine.pfx certificate to /nhsonline-backendworker/NHSOnline.Backend.Worker/certs
-2. Copy docker-compose.override.yml (sets SPINE_LDAP_CERT_PASSWORD env variable under pfs api) from keybase root folder into:
+2. Copy docker-compose.override.yml (sets SPINE_CERT_PASSWORD env variable under pfs api) from keybase root folder into:
    - backendworker folder
    - web folder
 

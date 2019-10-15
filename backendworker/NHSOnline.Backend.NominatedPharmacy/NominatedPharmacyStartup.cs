@@ -9,7 +9,10 @@ namespace NHSOnline.Backend.NominatedPharmacy
     {
         public static void RegisterServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddHttpClient<NominatedPharmacyHttpClient>();
+            serviceCollection.AddSingleton<SpineHttpClientHandler>();
+            serviceCollection.AddHttpClient<NominatedPharmacyHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<SpineHttpClientHandler>();
+            
             serviceCollection.AddTransient<INominatedPharmacyService, NominatedPharmacyService>();
             serviceCollection.AddSingleton<INominatedPharmacyClient, NominatedPharmacyClient>();
             serviceCollection.AddSingleton<INominatedPharmacyPDSClient, NominatedPharmacyPDSClient>();

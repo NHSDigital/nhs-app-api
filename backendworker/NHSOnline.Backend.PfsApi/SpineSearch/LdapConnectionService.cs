@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support.Certificate;
 using NHSOnline.Backend.Support.Settings;
 using Novell.Directory.Ldap;
 using Task = System.Threading.Tasks.Task;
@@ -13,15 +15,18 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
         private readonly ILogger<LdapConnectionService> _logger;
         private readonly SpineLdapConfigurationSettings _spineConfigurationSettings;
         private readonly ConfigurationSettings _configurationSettings;
+        private readonly ICertificateService _certificateService;
 
         public LdapConnectionService(
             ILogger<LdapConnectionService> logger,
             SpineLdapConfigurationSettings spineConfigurationSettings,
-            ConfigurationSettings configurationSettings)
+            ConfigurationSettings configurationSettings,
+            ICertificateService certificateService)
         {
             _logger = logger;
             _spineConfigurationSettings = spineConfigurationSettings;
             _configurationSettings = configurationSettings;
+            _certificateService = certificateService;
         }
 
         public ILdapConnection CreateLdapConnection()
@@ -33,8 +38,9 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
             };
 
             ldapConnection.UserDefinedClientCertSelectionDelegate += ClientCertificateSelectionHandler;
-            ldapConnection.UserDefinedServerCertValidationDelegate += ServerCertificateValidationHandler;
-
+            ldapConnection.UserDefinedServerCertValidationDelegate +=
+                    _certificateService.ServerCertificateValidationHandler;
+           
             return ldapConnection;
         }
 
@@ -83,59 +89,15 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
             return null;
         }
-
-        private bool ServerCertificateValidationHandler(object sender, X509Certificate certificate, X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
-        {
-            // Overriding the default server certificate validation from:
-            //   https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard/blob/master/src/Novell.Directory.Ldap.NETStandard/Connection.cs#L475
-            // The code is the same but we have added logs to help get to the bottom of certificate problems, if we encounter them.
-
-            var success = false;
-
-            _logger.LogInformation($"ServerCertificateValidationHandler - SslPolicyErrors: {sslPolicyErrors}");
-
-            if (sslPolicyErrors != System.Net.Security.SslPolicyErrors.None)
-            {
-                if (sslPolicyErrors == System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch)
-                {
-                    _logger.LogError($"SSL policy errors={sslPolicyErrors.ToString()}, continuing");
-                    success = true;
-                }
-                else
-                {
-                    foreach (var item in chain.ChainStatus)
-                    {
-                        _logger.LogError($"Certificate validation was not successful. " +
-                            $"SSL policy errors={sslPolicyErrors.ToString()}, Status={item.Status}, StatusInformation={item.StatusInformation}");
-                    }
-                }
-            }
-            else
-            {
-                success = true;
-            }
-
-            return success;
-        }
-
-        private static byte[] ReadFile(string fileName)
-        {
-            FileStream f = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            int size = (int)f.Length;
-            byte[] data = new byte[size];
-            size = f.Read(data, 0, size);
-            f.Close();
-            return data;
-        }
-
-        private X509Certificate ClientCertificateSelectionHandler(object sender, string targethost, X509CertificateCollection localcertificates, X509Certificate remotecertificate, string[] acceptableissuers)
+        
+        private X509Certificate ClientCertificateSelectionHandler(object sender, string targetHost, X509CertificateCollection localCertificates, X509Certificate remoteCertificate, string[] acceptableIssuers)
         {
             X509Certificate2 cert = null;
             try
             {
-                var rawData = ReadFile(_spineConfigurationSettings.CertPath);
-                cert = new X509Certificate2(rawData, _spineConfigurationSettings.CertPassword);
-                localcertificates.Add(cert);
+                cert = _certificateService.GetCertificate(_spineConfigurationSettings.CertPath,
+                _spineConfigurationSettings.CertPassword);
+                localCertificates.Add(cert);
             }
             catch (Exception ex)
             {

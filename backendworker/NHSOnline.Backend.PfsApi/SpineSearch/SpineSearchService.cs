@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Support.Settings;
@@ -11,13 +12,13 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
     public class SpineSearchService
     {
         readonly ILogger<SpineSearchService> _logger;
-        readonly SpineLdapConfigurationSettings _configurationSettings;
+        readonly SpineLdapConfigurationSettings _ldapConfigurationSettings;
         readonly ILdapConnectionService _ldapConnectionService;
 
         public SpineSearchService(ILogger<SpineSearchService> logger, SpineLdapConfigurationSettings spineLdapConfigurationSettings, ILdapConnectionService ldapConnectionService)
         {
             _logger = logger;
-            _configurationSettings = spineLdapConfigurationSettings;
+            _ldapConfigurationSettings = spineLdapConfigurationSettings;
             _ldapConnectionService = ldapConnectionService;
         }
 
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
                 DoLdapSearch(
                     ldapConnection,
-                    $"(&(nhsMhsPartyKey={_configurationSettings.NhsAppPartyId})(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pdsquery:QUPA_IN000008UK02))",
+                    $"(&(nhsMhsPartyKey={_ldapConfigurationSettings.NhsAppPartyId})(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pdsquery:QUPA_IN000008UK02))",
                     new Dictionary<string, Action<NhsAppSpinePdsTraceProperties, string>>(StringComparer.InvariantCultureIgnoreCase)
                     {
                         { "uniqueIdentifier", (config, value) => config.FromAsid = value },
@@ -99,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
                 DoLdapSearch(
                     ldapConnection,
-                    $"(&(nhsMhsPartyKey={_configurationSettings.NhsAppPartyId})(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pds:PRPA_IN000203UK03))",
+                    $"(&(nhsMhsPartyKey={_ldapConfigurationSettings.NhsAppPartyId})(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pds:PRPA_IN000203UK03))",
                     new Dictionary<string, Action<NhsAppSpinePdsUpdateProperties, string>>(StringComparer.InvariantCultureIgnoreCase)
                     {
                         { "uniqueIdentifier", (config, value) => config.FromAsid = value },
@@ -125,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
         private void DoLdapSearch<T>(ILdapConnection conn, string searchFilter, Dictionary<string, Action<T, string>> spineNhsAppValueSetters, T spineNhsAppProperties)
         {
-            var attributeSet = _ldapConnectionService.Search(conn, _configurationSettings.LoginDN, LdapConnection.ScopeOne, searchFilter);
+            var attributeSet = _ldapConnectionService.Search(conn, _ldapConfigurationSettings.LoginDN, LdapConnection.ScopeOne, searchFilter);
 
             _logger.LogDebug($"DoLdapSearch - attribute count: {attributeSet?.Count}");
 

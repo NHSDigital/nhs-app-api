@@ -1,9 +1,13 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace NHSOnline.Backend.Support.Certificate
 {
     public interface ICertificateService
     {
         X509Certificate2 GetCertificate(string certificatePath, string certificatePassphrase);
+        
+        bool ServerCertificateValidationHandler(object sender, X509Certificate certificate, X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors);
     }
 }
