@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -39,9 +40,35 @@ namespace NHSOnline.Backend.Support.UnitTests
 
         [DataTestMethod]
         [DataRow(typeof(ErrorTypes.LoginBadRequest), "3a")]
+        [DataRow(typeof(ErrorTypes.LoginForbidden), "3c")]
+        [DataRow(typeof(ErrorTypes.LoginOdsCodeNotFoundOrNotSupported), "3f")]
+        [DataRow(typeof(ErrorTypes.LoginMinimumAgeNotMet), "3g")]
+        [DataRow(typeof(ErrorTypes.LoginUnexpectedError), "3h")]
+        [DataRow(typeof(ErrorTypes.LoginBadGatewayEmis), "3e")]
+        [DataRow(typeof(ErrorTypes.LoginBadGatewayTpp), "3t")]
+        [DataRow(typeof(ErrorTypes.LoginBadGatewayMicrotest), "3m")]
+        [DataRow(typeof(ErrorTypes.LoginBadGatewayVision), "3s")]
+        [DataRow(typeof(ErrorTypes.LoginBadGatewayNhsLogin), "3n")]
         [DataRow(typeof(ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound), "3j")]
         [DataRow(typeof(ErrorTypes.LoginServiceJourneyRulesOtherError), "3k")]
-        public void Generate_ErrorReferenceCode_Login_UsingErrorType_ReturnsCorrectCode(Type type, string expectedPrefix)
+        [DataRow(typeof(ErrorTypes.AppointmentsBadRequest), "4a")]
+        [DataRow(typeof(ErrorTypes.AppointmentsForbidden), "4c")]
+        [DataRow(typeof(ErrorTypes.AppointmentsConflict), "4f")]
+        [DataRow(typeof(ErrorTypes.AppointmentsLimitReached), "4g")]
+        [DataRow(typeof(ErrorTypes.AppointmentsTooLateToCancel), "4h")]
+        [DataRow(typeof(ErrorTypes.AppointmentsUnexpectedError), "4k")]
+        [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayEmis), "4e")]
+        [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayMicrotest), "4m")]
+        [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayTpp), "4t")]
+        [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayVision), "4s")]
+        [DataRow(typeof(ErrorTypes.TimeoutEmis), "ze")]
+        [DataRow(typeof(ErrorTypes.TimeoutMicrotest), "zm")]
+        [DataRow(typeof(ErrorTypes.TimeoutNhsLogin), "zn")]
+        [DataRow(typeof(ErrorTypes.TimeoutOrganDonation), "zo")]
+        [DataRow(typeof(ErrorTypes.TimeoutServiceJourneyRules), "zj")]
+        [DataRow(typeof(ErrorTypes.TimeoutTpp), "zt")]
+        [DataRow(typeof(ErrorTypes.TimeoutVision), "zs")]
+        public void GenerateAndLogErrorReference_UsingErrorType_ReturnsCorrectCode(Type type, string expectedPrefix)
         {
             var errorType = (ErrorTypes) Activator.CreateInstance(type);
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorType);
@@ -55,19 +82,58 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Login, 464, "3f")]
         [DataRow(ErrorCategory.Login, 465, "3g")]
         [DataRow(ErrorCategory.Login, 500, "3h")]
-        public void Generate_ErrorReferenceCode_Login_UsingErrorCategoryAndStatusCode_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, string expectedPrefix)
+        [DataRow(ErrorCategory.Appointments, 400, "4a")]
+        [DataRow(ErrorCategory.Appointments, 403, "4c")]
+        [DataRow(ErrorCategory.Appointments, 409, "4f")]
+        [DataRow(ErrorCategory.Appointments, 460, "4g")]
+        [DataRow(ErrorCategory.Appointments, 461, "4h")]
+        [DataRow(ErrorCategory.Appointments, 500, "4k")]
+        public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCode_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, string expectedPrefix)
         {
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode);
 
             errorCode.Should().StartWith(expectedPrefix);
         }
-        
+
+        [DataTestMethod]
+        [DataRow(ErrorCategory.Login, 400, "3a")]
+        [DataRow(ErrorCategory.Login, 403, "3c")]
+        [DataRow(ErrorCategory.Login, 464, "3f")]
+        [DataRow(ErrorCategory.Login, 465, "3g")]
+        [DataRow(ErrorCategory.Appointments, 400, "4a")]
+        [DataRow(ErrorCategory.Appointments, 403, "4c")]
+        [DataRow(ErrorCategory.Appointments, 409, "4f")]
+        [DataRow(ErrorCategory.Appointments, 460, "4g")]
+        [DataRow(ErrorCategory.Appointments, 461, "4h")]
+        [DataRow(ErrorCategory.Appointments, 500, "4k")]
+        public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCodeAndOptionalSupplier_ReturnsCorrectCode(
+            ErrorCategory errorCategory, int statusCode, string expectedPrefix)
+        {
+            // This test checks that we can optionally pass in a specific Source API for error codes that do not differ by supplier,
+            //   to make life easier for the consuming code.
+            var sourceApis = Enum.GetValues(typeof(SourceApi)).Cast<SourceApi>();
+            foreach (var sourceApi in sourceApis)
+            {
+                var errorCode2 =
+                    _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode, sourceApi);
+                errorCode2.Should().StartWith(expectedPrefix);
+            }
+        }
+
         [DataTestMethod]
         [DataRow(ErrorCategory.Login, 502, Supplier.Emis, "3e")]
         [DataRow(ErrorCategory.Login, 502, Supplier.Microtest, "3m")]
         [DataRow(ErrorCategory.Login, 502, Supplier.Tpp, "3t")]
         [DataRow(ErrorCategory.Login, 502, Supplier.Vision, "3s")]
-        public void Generate_ErrorReferenceCode_Login_UsingErrorCategoryAndStatusCodeAndSupplier_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, Supplier supplier, string expectedCode)
+        [DataRow(ErrorCategory.Appointments, 502, Supplier.Emis, "4e")]
+        [DataRow(ErrorCategory.Appointments, 502, Supplier.Microtest, "4m")]
+        [DataRow(ErrorCategory.Appointments, 502, Supplier.Tpp, "4t")]
+        [DataRow(ErrorCategory.Appointments, 502, Supplier.Vision, "4s")]
+        [DataRow(ErrorCategory.Timeout, 504, Supplier.Emis, "ze")]
+        [DataRow(ErrorCategory.Timeout, 504, Supplier.Microtest, "zm")]
+        [DataRow(ErrorCategory.Timeout, 504, Supplier.Tpp, "zt")]
+        [DataRow(ErrorCategory.Timeout, 504, Supplier.Vision, "zs")]
+        public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCodeAndSupplier_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, Supplier supplier, string expectedCode)
         {
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode, supplier);
 
@@ -80,14 +146,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Login, 502, SourceApi.NhsLogin, "3n")]
         [DataRow(ErrorCategory.Login, 502, SourceApi.Tpp, "3t")]
         [DataRow(ErrorCategory.Login, 502, SourceApi.Vision, "3s")]
-        public void Generate_ErrorReferenceCode_Login_UsingErrorCategoryAndStatusCodeAndSourceApi_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, SourceApi sourceApi, string expectedPrefix)
-        {
-            var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode, sourceApi);
-
-            errorCode.Should().StartWith(expectedPrefix);
-        }
-        
-        [DataTestMethod]
+        [DataRow(ErrorCategory.Appointments, 502, SourceApi.Emis, "4e")]
+        [DataRow(ErrorCategory.Appointments, 502, SourceApi.Microtest, "4m")]
+        [DataRow(ErrorCategory.Appointments, 502, SourceApi.Tpp, "4t")]
+        [DataRow(ErrorCategory.Appointments, 502, SourceApi.Vision, "4s")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Emis, "ze")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Microtest, "zm")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Tpp, "zt")]
@@ -95,27 +157,15 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.NhsLogin, "zn")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.OrganDonation, "zo")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.ServiceJourneyRules, "zj")]
-        public void Generate_ErrorReferenceCode_Timeout_UsingErrorCategoryAndStatusCodeAndSourceApi_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, SourceApi sourceApi, string expectedPrefix)
+        public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCodeAndSourceApi_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, SourceApi sourceApi, string expectedPrefix)
         {
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode, sourceApi);
 
             errorCode.Should().StartWith(expectedPrefix);
         }
-        
-        [DataTestMethod]
-        [DataRow(ErrorCategory.Timeout, 504, Supplier.Emis, "ze")]
-        [DataRow(ErrorCategory.Timeout, 504, Supplier.Microtest, "zm")]
-        [DataRow(ErrorCategory.Timeout, 504, Supplier.Tpp, "zt")]
-        [DataRow(ErrorCategory.Timeout, 504, Supplier.Vision, "zs")]
-        public void Generate_ErrorReferenceCode_Timeout_UsingErrorCategoryAndStatusCodeAndSupplier_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, Supplier supplier, string expectedPrefix)
-        {
-            var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode, supplier);
-
-            errorCode.Should().StartWith(expectedPrefix);
-        }
 
         [TestMethod]
-        public void Generate_ErrorReferenceCodeForInvalidData_Login_UsingErrorCategoryStatusCodeSourceApi_ReturnsCorrectCode()
+        public void GenerateAndLogErrorReference__UsingErrorCategoryStatusCodeSourceApi_ReturnsCorrectCode()
         {
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(ErrorCategory.None,999, SourceApi.None);
 
@@ -123,7 +173,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         }
         
         [TestMethod]
-        public void Generate_ErrorReferenceCode_Login_UsingErrorCategoryAndStatusCodeThatReturnsMoreThanOneObject_ReturnsXxCode()
+        public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCodeThatReturnsMoreThanOneObject_ReturnsXxCode()
         {
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(ErrorCategory.Login, 500, SourceApi.ServiceJourneyRules);
 

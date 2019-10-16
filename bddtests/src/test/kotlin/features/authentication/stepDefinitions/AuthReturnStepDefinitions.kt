@@ -3,7 +3,7 @@ package features.authentication.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.authentication.steps.LoginSteps
-import features.sharedStepDefinitions.backend.AbstractSteps
+import features.sharedSteps.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import models.patients.EmisPatients

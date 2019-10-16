@@ -1,9 +1,11 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,6 +34,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AppointmentsController>> _mockLogger;
+        private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private string _serviceDeskReference;
 
         private const string RequestAuditType = "Appointments_ViewBooked_Request";
         private const string ResponseAuditType = "Appointments_ViewBooked_Response";
@@ -71,6 +75,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
+            
+            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
+            _serviceDeskReference = _fixture.Create<string>();
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
@@ -85,107 +92,77 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfulResult()
         {
-            // Arrange
-            var appointmentsResponse = _fixture.Create<AppointmentsResponse>();
-            var successResponse = new AppointmentsResult.Success(appointmentsResponse);
-
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
-                .Returns(Task.FromResult((AppointmentsResult) successResponse));
-
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(appointmentsResponse);
+                .Subject.Value.Should().BeEquivalentTo(_appointmentsResponse);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             var expectedResponseAuditMessage = string.Format(CultureInfo.InvariantCulture, ResponseAuditMessageFormat,
-                appointmentsResponse.UpcomingAppointments.Count(),
-                appointmentsResponse.PastAppointments.Count());
+                _appointmentsResponse.UpcomingAppointments.Count(),
+                _appointmentsResponse.PastAppointments.Count());
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedResponseAuditMessage));
         }
         
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentCount()
         {
-            // Arrange
-            var appointmentsResponse = _fixture.Create<AppointmentsResponse>();
-            var successResponse = new AppointmentsResult.Success(appointmentsResponse);
-
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
-                .Returns(Task.FromResult((AppointmentsResult) successResponse));
-
             // Act
             await _systemUnderTest.Get();
 
             // Assert
             var expectedLogMessage =
                 $"Appointment Count: Supplier=Emis OdsCode={_userSession.GpUserSession.OdsCode} " + 
-                $"Count={appointmentsResponse.UpcomingAppointments.Count()+appointmentsResponse.PastAppointments.Count()} " +
-                $"UpcomingCount={appointmentsResponse.UpcomingAppointments.Count()} " + 
-                $"HistoricalCount={appointmentsResponse.PastAppointments.Count()}";
+                $"Count={_appointmentsResponse.UpcomingAppointments.Count()+_appointmentsResponse.PastAppointments.Count()} " +
+                $"UpcomingCount={_appointmentsResponse.UpcomingAppointments.Count()} " + 
+                $"HistoricalCount={_appointmentsResponse.PastAppointments.Count()}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
-        [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenServiceReturnsBadGateway()
+        [DataTestMethod]
+        [DataRow(typeof(AppointmentsResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Booked appointments view unsuccessful due to bad request")]
+        [DataRow(typeof(AppointmentsResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Booked appointments view unsuccessful due to supplier being unavailable")]
+        [DataRow(typeof(AppointmentsResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Booked appointments view unsuccessful due to internal server error")]
+        [DataRow(typeof(AppointmentsResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Booked appointments view unsuccessful due to insufficient permissions")]
+        public async Task Get_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessageFormat)
         {
             // Arrange
+            var serviceResult = (AppointmentsResult) Activator.CreateInstance(serviceResultType);
             _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
-                .Returns(Task.FromResult((AppointmentsResult) new AppointmentsResult.BadGateway()));
+                .Returns(Task.FromResult(serviceResult));
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+                    expectedStatusCode, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference);
+            
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
 
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(expectedStatusCode);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Booked appointments view unsuccessful due to supplier being unavailable"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat));
         }
-
-        [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenServiceReturnsBadRequest()
-        {
-            // Arrange
-            var badResult = new AppointmentsResult.BadRequest();
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
-                .Returns(Task.FromResult((AppointmentsResult)badResult));
-
-            // Act
-            var result = await _systemUnderTest.Get();
-
-            // Assert
-            result.Should().BeAssignableTo<BadRequestResult>();
-            _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Booked appointments view unsuccessful due to bad request"));
-        }
-
-        [TestMethod]
-        public async Task Get_ReturnsInternalServerError_WhenServiceReturnsInternalServerError()
-        {
-            // Arrange
-            var badResult = new AppointmentsResult.InternalServerError();
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
-                .Returns(Task.FromResult((AppointmentsResult)badResult));
-
-            // Act
-            var result = await _systemUnderTest.Get();
-
-            // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Booked appointments view unsuccessful due to internal server error"));
-        }
-
+        
         [TestMethod]
         public async Task Get_HappyPath_VerifyAllExpectationsOnMocks()
         {

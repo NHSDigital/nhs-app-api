@@ -1,4 +1,4 @@
-package features.sharedStepDefinitions.backend
+package features.sharedSteps.backend
 
 import config.Config
 import cucumber.api.java.After

@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.Support
 {
     public abstract partial class ErrorTypes
     {
-         public class LoginBadRequest : ErrorTypes
+        public class LoginBadRequest : ErrorTypes
         {
             public override string Prefix => "3a";
             

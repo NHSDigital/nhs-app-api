@@ -1,4 +1,4 @@
-package features.sharedStepDefinitions
+package features.sharedSteps
 
 import cucumber.api.java.After
 import cucumber.api.java.en.And
@@ -7,8 +7,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.defaults.EmisMockDefaults

@@ -4,7 +4,7 @@ import com.google.gson.internal.LazilyParsedNumber
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.sharedStepDefinitions.backend.CommonSteps
+import features.sharedSteps.backend.CommonSteps
 import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
 import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration

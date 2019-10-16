@@ -11,7 +11,8 @@ namespace NHSOnline.Backend.Support
     {
         None,
         Login,
-        Timeout
+        Timeout,
+        Appointments
     }
     
     //Disabling CA1717 (no plurals) as detects the i as a plural when not in this case
@@ -108,7 +109,7 @@ namespace NHSOnline.Backend.Support
                 return ErrorTypes.Single(x =>
                     x.Category == category &&
                     x.StatusCode == statusCode &&
-                    x.SourceApi == sourceApi);
+                    (x.SourceApi == sourceApi || x.SourceApi == SourceApi.None));
             }
             catch (InvalidOperationException)
             {

@@ -1,4 +1,4 @@
-package features.sharedStepDefinitions.backend
+package features.sharedSteps.backend
 
 import mocking.MockingClient
 import net.serenitybdd.core.Serenity

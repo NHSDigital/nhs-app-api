@@ -1,9 +1,7 @@
-package features.sharedStepDefinitions
+package features.sharedSteps
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.sharedSteps.BrowserSteps
-import features.sharedSteps.PageUrl
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.openqa.selenium.Keys

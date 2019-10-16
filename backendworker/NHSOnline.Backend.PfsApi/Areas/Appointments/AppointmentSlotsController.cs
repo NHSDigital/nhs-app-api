@@ -38,20 +38,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAuditor _auditor;
         private readonly IAppointmentSlotMetadataLogger _appointmentSlotMetadataLogger;
+        private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
         public AppointmentSlotsController(
             IGpSystemFactory gpSystemFactory,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             ILogger<AppointmentSlotsController> logger,
             IAuditor auditor,
-            IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger
-        )
+            IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger, 
+            IErrorReferenceGenerator errorReferenceGenerator)
         {
             _gpSystemFactory = gpSystemFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = logger;
             _auditor = auditor;
             _appointmentSlotMetadataLogger = appointmentSlotMetadataLogger;
+            _errorReferenceGenerator = errorReferenceGenerator;
         }
 
         [HttpGet]
@@ -75,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 LogAppointmentSlotInformation(userSession.GpUserSession, result);
 
                 await result.Accept(new AppointmentSlotsAuditingVisitor(_auditor, _logger));
-                return result.Accept(new AppointmentSlotsResultVisitor());
+                return result.Accept(new AppointmentSlotsResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally
             {

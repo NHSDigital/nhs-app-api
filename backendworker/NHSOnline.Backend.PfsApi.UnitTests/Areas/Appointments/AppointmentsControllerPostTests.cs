@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,6 +31,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private AppointmentBookRequest _appointmentBookRequest;
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private string _serviceDeskReference;
 
         private const string RequestAuditType = "Appointments_Book_Request";
         private const string ResponseAuditType = "Appointments_Book_Response";
@@ -75,6 +79,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
+            
+            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
+            _serviceDeskReference = _fixture.Create<string>();
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
@@ -98,85 +105,86 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public async Task Post_AppointmentsServiceBookReturnsInsufficientPermissions_ReturnsForbidden()
+        public async Task Post_RequestIsInvalid_ReturnsObjectResultWith400StatusCode()
         {
             // Arrange
-            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.Forbidden()));
+            _mockAppointmentsValidationService.Setup(x => x.IsPostValid(_appointmentBookRequest))
+                .Returns(false);
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+                    StatusCodes.Status400BadRequest, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);
 
             // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
+
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to book appointment due to insufficient permissions for appointment with id: {0} and startDateTime: {1:O}",
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, 
+                "Unable to book appointment due to bad request for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
 
-        [TestMethod]
-        public async Task Post_AppointmentsServiceBookReturnsLimitReached_ReturnsLimitReachedStatus()
+        [DataTestMethod]
+        [DataRow(typeof(AppointmentBookResult.Forbidden),StatusCodes.Status403Forbidden,
+            "Unable to book appointment due to insufficient permissions for appointment with id: {0} and startDateTime: {1:O}")]
+        [DataRow(typeof(AppointmentBookResult.SlotNotAvailable),StatusCodes.Status409Conflict,
+            "Unable to book appointment due to appointment being unavailable for appointment with id: {0} and startDateTime: {1:O}")]
+        [DataRow(typeof(AppointmentBookResult.BadGateway),StatusCodes.Status502BadGateway,
+            "Unable to book appointment due to unavailable supplier for appointment with id: {0} and startDateTime: {1:O}")]
+        [DataRow(typeof(AppointmentBookResult.BadRequest),StatusCodes.Status400BadRequest,
+            "Unable to book appointment due to bad request for appointment with id: {0} and startDateTime: {1:O}")]
+        [DataRow(typeof(AppointmentBookResult.AppointmentLimitReached),Constants.CustomHttpStatusCodes.Status460LimitReached,
+            "Unable to book appointment due to appointment limit reached for appointment with id: {0} and startDateTime: {1:O}")]
+        [DataRow(typeof(AppointmentBookResult.InternalServerError),StatusCodes.Status500InternalServerError,
+            "Unable to book appointment due to internal server error for appointment with id: {0} and startDateTime: {1:O}")]
+        public async Task Post_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessageFormat)
         {
             // Arrange
+            var serviceResult = (AppointmentBookResult) Activator.CreateInstance(serviceResultType);
             _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.AppointmentLimitReached()));
+                .Returns(Task.FromResult(serviceResult));
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+                    expectedStatusCode, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference);
+            
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);
 
             // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status460LimitReached);
             _mockAppointmentsService.Verify();
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(expectedStatusCode);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
+
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to book appointment due appointment limit reached for appointment with id: {0} and startDateTime: {1:O}",
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat,
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
-
-        [TestMethod]
-        public async Task Post_AppointmentsServiceBookReturnsSlotNotAvailable_ReturnsConflict()
-        {
-            // Arrange
-            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SlotNotAvailable()));
-
-            // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest);
-
-            // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status409Conflict);
-            _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to book appointment due to appointment being unavailable for appointment with id: {0} and startDateTime: {1:O}",
-                _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
-        }
-
-        [TestMethod]
-        public async Task Post_AppointmentsServiceBookReturnsBadGateway_ReturnsBadGateway()
-        {
-            // Arrange
-            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.BadGateway()));
-
-            // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest);
-
-            // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-            _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to book appointment due to unavailable supplier for appointment with id: {0} and startDateTime: {1:O}",
-                _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
-        }
-
+        
         [TestMethod]
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {

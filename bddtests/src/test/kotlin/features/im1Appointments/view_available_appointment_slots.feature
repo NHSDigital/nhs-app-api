@@ -197,6 +197,7 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
+    #504
   Scenario Outline: <GP System> user tries again after a timeout and it times-out again
     Given the <GP System> doesn't respond in a timely fashion for available appointment slots
     And I am logged in
@@ -212,6 +213,7 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
+    #504
   Scenario Outline: <GP System> user tries again after a timeout and it is now successful
     Given the <GP System> doesn't respond in a timely fashion for available appointment slots, on the first attempt
     But will respond in a timely fashion on the second attempt
@@ -227,6 +229,7 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
+    #500
   Scenario Outline: <GP System> user sees appropriate information message when returns corrupt data
     Given <GP System> returns corrupt data for appointment slots
     And I am logged in
@@ -271,6 +274,7 @@ Feature: View Available Appointment Slots Frontend
     And I select time period for 'Next four weeks'
     Then I only see results for days that have available slots
 
+    #502
   Scenario Outline: <GP System>  user sees appropriate information message when GP system is unavailable
     Given <GP System> is unavailable for available appointment slots
     And I am logged in
@@ -283,7 +287,7 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
-  @nativesmoketest
+    @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |

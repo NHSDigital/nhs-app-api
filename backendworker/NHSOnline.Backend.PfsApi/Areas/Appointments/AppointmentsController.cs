@@ -22,18 +22,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IAuditor _auditor;
         private readonly ISessionCacheService _sessionCacheService;
+        private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
         public AppointmentsController(
             ILogger<AppointmentsController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
-            ISessionCacheService sessionCacheService
+            ISessionCacheService sessionCacheService,
+            IErrorReferenceGenerator errorReferenceGenerator
             )
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
             _sessionCacheService = sessionCacheService;
+            _errorReferenceGenerator = errorReferenceGenerator;
         }
 
         [HttpDelete]
@@ -43,25 +46,26 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogEnter();
                 
-
+                await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {model.AppointmentId}");
+                
                 var userSession = HttpContext.GetUserSession();
-
+                
+                AppointmentCancelResult cancelResult;
+                
                 var appointmentValidator = GetAppointmentsValidationService(userSession);
-
                 if (!appointmentValidator.IsDeleteValid(model))
                 {
                     _logger.LogError("Invalid request body supplied to delete request");
-                    return BadRequest();
+                    cancelResult = new AppointmentCancelResult.BadRequest();
                 }
-
-                await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {model.AppointmentId}");
-
-                var appointmentsService = GetAppointmentsService(userSession);
-                var cancelResult = await appointmentsService.Cancel(userSession.GpUserSession, model);
-
-                await cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, model.AppointmentId));
-                return cancelResult.Accept(new AppointmentCancelResultVisitor());
+                else
+                {
+                    var appointmentsService = GetAppointmentsService(userSession);
+                    cancelResult = await appointmentsService.Cancel(userSession.GpUserSession, model);
+                }
                 
+                await cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, model.AppointmentId));
+                return cancelResult.Accept(new AppointmentCancelResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally
             {
@@ -85,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 LogAppointmentsInformation(userSession.GpUserSession, result);
                 
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger));
-                return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, userSession));
+                return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, _errorReferenceGenerator, userSession));
             }
             finally
             {
@@ -105,18 +109,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 var userSession = HttpContext.GetUserSession();
 
+                AppointmentBookResult bookResult;
+
                 var appointmentValidator = GetAppointmentsValidationService(userSession);
                 if (!appointmentValidator.IsPostValid(model))
                 {
                     _logger.LogError("Invalid request body supplied to post request");
-                    return BadRequest();
+                    bookResult = new AppointmentBookResult.BadRequest();
+                }
+                else
+                {
+                    var appointmentsService = GetAppointmentsService(userSession);
+                    bookResult = await appointmentsService.Book(userSession.GpUserSession, model);   
                 }
 
-                var appointmentsService = GetAppointmentsService(userSession);
-                var bookResult = await appointmentsService.Book(userSession.GpUserSession, model);
-
                 await bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, model.SlotId, model.StartTime));
-                return bookResult.Accept(new AppointmentBookResultVisitor());
+                return bookResult.Accept(new AppointmentBookResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally
             {

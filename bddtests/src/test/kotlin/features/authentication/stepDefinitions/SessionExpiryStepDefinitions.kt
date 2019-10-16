@@ -4,7 +4,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.authentication.steps.LoginSteps
-import features.sharedStepDefinitions.backend.AbstractSteps
+import features.sharedSteps.backend.AbstractSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient

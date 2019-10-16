@@ -1,11 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    public class AppointmentSlotsResultVisitor : IAppointmentSlotsResultVisitor<IActionResult>
+    public class AppointmentSlotsResultVisitor : ResultVisitorBase, IAppointmentSlotsResultVisitor<IActionResult>
     {
+        public AppointmentSlotsResultVisitor(
+            IErrorReferenceGenerator errorReferenceGenerator,
+            UserSession userSession) : 
+            base(errorReferenceGenerator, userSession)
+        {
+        }
+        
         public IActionResult Visit(AppointmentSlotsResult.Success result)
         {
             return new OkObjectResult(result.Response);
@@ -13,17 +21,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         public IActionResult Visit(AppointmentSlotsResult.BadGateway result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return BuildErrorResult(StatusCodes.Status502BadGateway);
         }
 
         public IActionResult Visit(AppointmentSlotsResult.InternalServerError result)
         {
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return BuildErrorResult(StatusCodes.Status500InternalServerError);
         }
 
         public IActionResult Visit(AppointmentSlotsResult.Forbidden result)
         {
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+            return BuildErrorResult(StatusCodes.Status403Forbidden);
         }
     }
 }

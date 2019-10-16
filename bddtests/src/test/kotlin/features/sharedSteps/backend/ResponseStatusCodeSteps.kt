@@ -1,4 +1,4 @@
-package features.sharedStepDefinitions.backend
+package features.sharedSteps.backend
 
 import com.google.gson.GsonBuilder
 import cucumber.api.java.en.Then

@@ -69,7 +69,6 @@ Feature: Cancel Appointments Frontend
     And I select "Cancel appointment" button
     Then I will receive a cancellation validation error
 
-
   Scenario Outline: <GP System> user can cancel an appointment with selected reason of <Reason>
     Given <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in
@@ -113,7 +112,6 @@ Feature: Cancel Appointments Frontend
     Then the My Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
 
-
   Scenario Outline: <GP System> user navigates back to the "My appointments" screen
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
@@ -131,6 +129,7 @@ Feature: Cancel Appointments Frontend
       | GP System |
       | EMIS      |
 
+    #502
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given <GP System> is unavailable to cancel a previously booked appointment because <Reason>
     And I am logged in

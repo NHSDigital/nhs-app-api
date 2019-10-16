@@ -4,7 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.CancelAppointmentSteps
-import features.sharedStepDefinitions.backend.CommonSteps
+import features.sharedSteps.backend.CommonSteps
 import mocking.MockingClient
 import mocking.stubs.StubbedEnvironment
 import mocking.vision.appointments.CancelAppointmentBuilderVision

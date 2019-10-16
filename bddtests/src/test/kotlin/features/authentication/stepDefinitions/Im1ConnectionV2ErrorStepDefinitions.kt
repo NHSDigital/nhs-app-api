@@ -5,7 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.authentication.factories.Im1ConnectionV2Factory
 import features.authentication.factories.Im1ConnectionV2GetFactory
-import features.sharedStepDefinitions.backend.AbstractSteps
+import features.sharedSteps.backend.AbstractSteps
 import models.Patient
 import org.apache.http.HttpStatus
 import org.joda.time.DateTime

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AppointmentSlotsController>> _mockLogger;
+        private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private string _serviceDeskReference;
+        private AppointmentSlotsResponse _slotsResponse;
 
         private const string RequestAuditType = "Appointments_GetSlots_Request";
         private const string ResponseAuditType = "Appointments_GetSlots_Response";
@@ -57,6 +61,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentSlotsController>>>();
+            
+            _slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
+            var successResponse = new AppointmentSlotsResult.Success(_slotsResponse);
+
+            _mockAppointmentSlotsService
+                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
+                .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
 
             var mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
@@ -78,6 +89,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
+
+            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
+            _serviceDeskReference = _fixture.Create<string>();
             
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
@@ -92,14 +106,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
-            // Arrange
-            var slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
-            var successResponse = new AppointmentSlotsResult.Success(slotsResponse);
-
-            _mockAppointmentSlotsService
-                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
-                .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
-
             // Act
             var result = await _systemUnderTest.Get();
 
@@ -109,60 +115,62 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<AppointmentSlotsResponse>();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {slotsResponse.Slots.Count()} slots"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {_slotsResponse.Slots.Count()} slots"));
         }
         
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotCount()
         {
-            // Arrange
-            var slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
-            var successResponse = new AppointmentSlotsResult.Success(slotsResponse);
-
-            _mockAppointmentSlotsService
-                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
-                .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
-
             // Act
             await _systemUnderTest.Get();
 
             // Assert
             var expectedLogMessage =
                 $"Appointment Slot Count: Supplier=Emis OdsCode={_userSession.GpUserSession.OdsCode} " + 
-                $"Count={slotsResponse.Slots.Count()}";
+                $"Count={_slotsResponse.Slots.Count()}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
         
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotMetadata()
         {
-            // Arrange
-            var slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
-            var successResponse = new AppointmentSlotsResult.Success(slotsResponse);
-
-            _mockAppointmentSlotsService
-                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
-                .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
-
             // Act
             await _systemUnderTest.Get();
 
             // Assert
-            var locations = string.Join(",", slotsResponse.Slots.Select(x => "\"" + x.Location + "\""));
-            var slotTypes = string.Join(",", slotsResponse.Slots.Select(x => "\"" + x.Type + "\""));
+            var locations = string.Join(",", _slotsResponse.Slots.Select(x => "\"" + x.Location + "\""));
+            var slotTypes = string.Join(",", _slotsResponse.Slots.Select(x => "\"" + x.Type + "\""));
             var expectedLogMessage =
                 "appointment_slot_data={\"SlotTypes\":["+slotTypes+"],"+
                 "\"Locations\":["+locations+"]," +
-                "\"SlotCount\":"+slotsResponse.Slots.Count()+"}";
+                "\"SlotCount\":"+_slotsResponse.Slots.Count()+"}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
-
-        [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenServiceReturnsBadGateway()
+        
+        [DataTestMethod]
+        [DataRow(typeof(AppointmentSlotsResult.Forbidden), StatusCodes.Status403Forbidden, 
+            "Available appointment slots view unsuccessful due to not having permissions to book appointments")]
+        [DataRow(typeof(AppointmentSlotsResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Available appointment slots view unsuccessful due to internal server error")]
+        [DataRow(typeof(AppointmentSlotsResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Available appointment slots view unsuccessful due to supplier unavailable")]
+        public async Task Get_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType, 
+            int expectedStatusCode,
+            string expectedAuditResponseMessage)
         {
             // Arrange
+            var serviceResult = (AppointmentSlotsResult)Activator.CreateInstance(serviceResultType);
             _mockAppointmentSlotsService.Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
-                .Returns(Task.FromResult((AppointmentSlotsResult) new AppointmentSlotsResult.BadGateway()));
+                .Returns(Task.FromResult(serviceResult));
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+                    expectedStatusCode, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -170,13 +178,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             // Assert
             _mockAppointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(expectedStatusCode);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Available appointment slots view unsuccessful due to supplier unavailable"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessage));
         }
-
+        
         public void Dispose()
         {
             _systemUnderTest.Dispose();

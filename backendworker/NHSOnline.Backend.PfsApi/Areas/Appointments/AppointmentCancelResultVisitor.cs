@@ -5,8 +5,13 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    public class AppointmentCancelResultVisitor : IAppointmentCancelResultVisitor<IActionResult>
+    public class AppointmentCancelResultVisitor : ResultVisitorBase, IAppointmentCancelResultVisitor<IActionResult>
     {
+        public AppointmentCancelResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, UserSession userSession) 
+            : base(errorReferenceGenerator, userSession)
+        {
+        }
+
         public IActionResult Visit(AppointmentCancelResult.Success result)
         {
             return new NoContentResult();
@@ -14,32 +19,32 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         public IActionResult Visit(AppointmentCancelResult.BadRequest result)
         {
-            return new BadRequestResult();
+            return BuildErrorResult(StatusCodes.Status400BadRequest);
         }
 
         public IActionResult Visit(AppointmentCancelResult.AppointmentNotCancellable result)
         {
-            return new StatusCodeResult(StatusCodes.Status409Conflict);
+            return BuildErrorResult(StatusCodes.Status409Conflict);
         }
 
         public IActionResult Visit(AppointmentCancelResult.TooLateToCancel result)
         {
-            return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status461TooLate);
+            return BuildErrorResult(Constants.CustomHttpStatusCodes.Status461TooLate);
         }
 
         public IActionResult Visit(AppointmentCancelResult.Forbidden result)
         {
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+            return BuildErrorResult(StatusCodes.Status403Forbidden);
         }
 
         public IActionResult Visit(AppointmentCancelResult.BadGateway result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return BuildErrorResult(StatusCodes.Status502BadGateway);
         }
 
         public IActionResult Visit(AppointmentCancelResult.InternalServerError result)
         {
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return BuildErrorResult(StatusCodes.Status500InternalServerError);
         }
     }
 }

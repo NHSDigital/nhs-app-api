@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             try
             {
                 await _auditor.Audit(AuditType, "Unable to book appointment due to bad request for appointment with id: {0}" +
-                                          "and startDateTime: {1:O}", _slotId, _slotStartTime);
+                                          " and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due appointment limit reached for appointment " +
+                await _auditor.Audit(AuditType, "Unable to book appointment due to appointment limit reached for appointment " +
                                           "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due appointment limit reached for appointment " +
+                await _auditor.Audit(AuditType, "Unable to book appointment due to internal server error for appointment " +
                                                 "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)

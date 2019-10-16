@@ -55,7 +55,7 @@ Feature: Appointments Service With Javascript Disabled
   # Only EMIS has appointment slot guidance available
   # The guidance should always be visible with no javascript, in comparison to an expandable/collapsible box
   # with javascript
-  @bug @NSHO-3650
+  @bug @NHSO-3650
   Scenario: An EMIS user can view appointment slot guidance with javascript disabled
     Given there are available appointment slots with different criteria for EMIS
     And I am logged in

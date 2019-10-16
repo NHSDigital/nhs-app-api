@@ -4,7 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
-import features.sharedStepDefinitions.backend.AbstractSteps
+import features.sharedSteps.backend.AbstractSteps
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.defaults.VisionMockDefaults

@@ -22,19 +22,17 @@ Feature: View Available Appointment Slots Backend
       | GP System |
       | MICROTEST |
 
-
   Scenario Outline: Requesting available <GP System> appointment slots returns an unknown exception, returns a Bad Gateway error
     Given an unknown exception will occur when wanting to view <GP System> appointment slots
     And I have logged in and have a valid session cookie
     When the available appointment slots are retrieved
-    Then I receive a "Bad Gateway" error
-    And the response contains an empty body
+    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | 4e     |
+      | TPP       | 4t     |
+      | VISION    | 4s     |
+      | MICROTEST | 4m     |
 
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots by patient whose session expired returns "Unauthorized" error
@@ -52,21 +50,19 @@ Feature: View Available Appointment Slots Backend
   Scenario Outline: Requesting available appointment slots when <GP System> is unavailable returns "Bad gateway" error
     Given I have logged into <GP System> and have a valid session cookie
     When the available appointment slots are retrieved
-    Then I receive a "Bad Gateway" error
-    And the response contains an empty body
+    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | 4e     |
+      | TPP       | 4t     |
+      | VISION    | 4s     |
+      | MICROTEST | 4m     |
 
   Scenario Outline: Requesting available appointment slots when <GP System> is not accessible returns "Forbidden" error
     Given the system will respond with forbidden when trying to retrieve <GP System> appointment slots
     And I have logged into <GP System> and have a valid session cookie
     And the available appointment slots are retrieved
-    Then I receive a "Forbidden" error
-    And the response contains an empty body
+    Then I receive a "Forbidden" error with service desk reference prefixed "4c"
     Examples:
       | GP System |
       | EMIS      |

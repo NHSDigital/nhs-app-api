@@ -14,11 +14,10 @@ Feature: Cancel Appointments Backend
       | VISION    |
       | MICROTEST |
 
-  Scenario: EMIS API will not cancel the appointment if reason an invalid reason is provided
+  Scenario: EMIS API will not cancel the appointment if an invalid reason is provided
     Given EMIS is available to cancel a previously booked appointment before cutoff time
     When I send a cancellation request to the API with an invalid cancellation reason
-    Then I receive a "Bad request" error
-    And the response contains an empty body
+    Then I receive a "Bad request" error with service desk reference prefixed "4a"
 
   @smoketest
   Scenario Outline: Cancel a previously booked appointment the <GP System> times out and returns "Gateway Timeout" error
@@ -36,8 +35,7 @@ Feature: Cancel Appointments Backend
     Given <GP System> returns corrupted response when trying to cancel a previously booked appointment
     And I have logged in and have a valid session cookie
     When I send a cancellation request to the API with a valid cancellation reason
-    Then I receive a "Internal Server Error" error
-    And the response contains an empty body
+    Then I receive a "Internal Server Error" error with service desk reference prefixed "4k"
   @bug @NHSO-3039
     Examples:
       | GP System |
@@ -53,11 +51,9 @@ Feature: Cancel Appointments Backend
   Scenario: VISION API will return a Conflict when cancelling an appointment booked by someone else
     Given as a VISION user I want to cancel an appointment booked by someone else
     When I send a cancellation request to the API with a valid cancellation reason
-    Then I receive a "Conflict" error
-    And the response contains an empty body
+    Then I receive a "Conflict" error with service desk reference prefixed "4f"
 
   Scenario: VISION API will return a Conflict when cancelling an appointment that doesn't exist
     Given as a VISION user I want to cancel an appointment that doesn't exist
     When I send a cancellation request to the API with a valid cancellation reason
-    Then I receive a "Conflict" error
-    And the response contains an empty body
+    Then I receive a "Conflict" error with service desk reference prefixed "4f"

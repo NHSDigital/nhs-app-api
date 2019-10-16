@@ -21,8 +21,7 @@ Feature: Book Appointments  Backend
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no slot identifier is provided
     Given I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted with no slot identifier
-    Then I receive a "Bad Request" error
-    And the response contains an empty body
+    Then I receive a "Bad Request" error with service desk reference prefixed "4a"
     Examples:
       | GP System |
       | EMIS      |
@@ -33,8 +32,7 @@ Feature: Book Appointments  Backend
     Given an appointment booking for <GP System> can be successful
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted with slot identifier of 0 characters
-    Then I receive a "Bad Request" error
-    And the response contains an empty body
+    Then I receive a "Bad Request" error with service desk reference prefixed "4a"
     Examples:
       | GP System |
       | EMIS      |
@@ -56,8 +54,7 @@ Feature: Book Appointments  Backend
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no booking reason is provided
     Given I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted with no booking reason
-    Then I receive a "Bad Request" error
-    And the response contains an empty body
+    Then I receive a "Bad Request" error with service desk reference prefixed "4a"
     Examples:
       | GP System |
       | EMIS      |
@@ -68,8 +65,7 @@ Feature: Book Appointments  Backend
     Given an appointment booking for <GP System> can be successful
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted with booking reason of 0 characters
-    Then I receive a "Bad Request" error
-    And the response contains an empty body
+    Then I receive a "Bad Request" error with service desk reference prefixed "4a"
     Examples:
       | GP System |
       | EMIS      |
@@ -104,8 +100,7 @@ Feature: Book Appointments  Backend
     Given an appointment booking for <GP System> can be successful
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted with booking reason of 151 characters
-    Then I receive a "Bad Request" error
-    And the response contains an empty body
+    Then I receive a "Bad Request" error with service desk reference prefixed "4a"
     Examples:
       | GP System |
       | EMIS      |
@@ -139,8 +134,7 @@ Feature: Book Appointments  Backend
     Given online appointment booking is not available to the <GP System> patient, when wanting to book an appointment
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Forbidden" error
-    And the response contains an empty body
+    Then I receive a "Forbidden" error with service desk reference prefixed "4c"
     Examples:
       | GP System |
       | EMIS      |
@@ -152,8 +146,7 @@ Feature: Book Appointments  Backend
     Given an appointment booking for <GP System> cannot be successful because the slot is not available
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Conflict" error
-    And the response contains an empty body
+    Then I receive a "Conflict" error with service desk reference prefixed "4f"
     Examples:
       | GP System |
       | EMIS      |
@@ -166,8 +159,7 @@ Feature: Book Appointments  Backend
     Given an appointment booking for <GP System> cannot be successful because the slot is in the past
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Conflict" error
-    And the response contains an empty body
+    Then I receive a "Conflict" error with service desk reference prefixed "4f"
     Examples:
       | GP System |
       | EMIS      |
@@ -178,22 +170,19 @@ Feature: Book Appointments  Backend
     Given an appointment booking for EMIS cannot be successful because the slot is before practice defined days
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Conflict" error
-    And the response contains an empty body
+    Then I receive a "Conflict" error with service desk reference prefixed "4f"
 
   Scenario: Booking an appointment with EMIS returns "Conflict" response if the chosen appointment slot is after the practice-defined date range.
     Given an appointment booking for EMIS cannot be successful because the slot is after practice defined days
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Conflict" error
-    And the response contains an empty body
+    Then I receive a "Conflict" error with service desk reference prefixed "4f"
 
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot has been booked by someone else
     Given an appointment booking for <GP System> cannot be successful because the slot has been booked by someone else
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Conflict" error
-    And the response contains an empty body
+    Then I receive a "Conflict" error with service desk reference prefixed "4f"
     Examples:
       | GP System |
       | EMIS      |
@@ -205,27 +194,25 @@ Feature: Book Appointments  Backend
     Given an appointment booking for <GP System> generates an unknown exception
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Bad Gateway" error
-    And the response contains an empty body
+    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | 4e     |
+      | TPP       | 4t     |
+      | VISION    | 4s     |
+      | MICROTEST | 4m     |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Gateway" response if the GP system is currently unavailable
     Given an appointment booking for <GP System> cannot be successful because the GP system is unavailable
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Bad Gateway" error
-    And the response contains an empty body
+    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | 4e     |
+      | TPP       | 4t     |
+      | VISION    | 4s     |
+      | MICROTEST | 4m     |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Gateway Timeout" response if the GP system did not respond in a timely fashion
     Given an appointment booking for <GP System> cannot be successful because the GP system will time out
@@ -243,8 +230,7 @@ Feature: Book Appointments  Backend
     Given <GP System> returns corrupted response for booking request
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Internal Server Error" error
-    And the response contains an empty body
+    Then I receive a "Internal Server Error" error with service desk reference prefixed "4k"
   @bug @NHSO-3039
     Examples:
       | GP System |
@@ -271,4 +257,4 @@ Feature: Book Appointments  Backend
     Given a telephone appointment booking for EMIS cannot be successful without phone number
     And I have logged into EMIS and have a valid session cookie
     When an appointment booking is submitted without phone number
-    Then I receive a "Bad Request" error
+    Then I receive a "Bad Request" error with service desk reference prefixed "4a"

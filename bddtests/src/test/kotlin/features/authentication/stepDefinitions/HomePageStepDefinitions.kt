@@ -10,7 +10,7 @@ import features.myrecord.stepDefinitions.MyRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.prescriptions.steps.PrescriptionsSteps
-import features.sharedStepDefinitions.backend.AbstractSteps
+import features.sharedSteps.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps

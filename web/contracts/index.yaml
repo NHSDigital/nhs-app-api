@@ -108,18 +108,108 @@
             description: "Successfully cancelled the specified appointment."
           400: 
             description: "Bad request. Supplied request is incomplete or invalid."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           401: 
             description: "User session has expired."
           403: 
             description: "The patient does not have the necessary permissions within the GP system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           409: 
             description: "The specified appointment does not exist or is not in a suitable state to be cancelled."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           461: 
             description: "It is too late to cancel this appointment."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           500: 
             description: "An unexpected error occurred during the processing of the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           502: 
             description: "Bad response received from upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
             content: 
@@ -253,14 +343,74 @@
                       description: "Indicates whether past appointments are enabled."
           400: 
             description: "Bad request. A querystring parameter is not in the expected format."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           401: 
             description: "User session has expired."
           403: 
             description: "The patient does not have the necessary permissions within the GP system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           500: 
             description: "An unexpected error occurred processing the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           502: 
             description: "Bad response received from upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
             content: 
@@ -320,18 +470,108 @@
             description: "Appointment successfully created."
           400: 
             description: "Bad request. Supplied request is incomplete or invalid."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           401: 
             description: "User session has expired."
           403: 
             description: "The patient does not have the necessary permissions within the GP system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           409: 
             description: "Conflict. The chosen appointment slot is not available for booking."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           460: 
             description: "The patient has reached the limit of pending appointments that may be booked."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           500: 
             description: "An unexpected error occurred processing the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           502: 
             description: "Bad response received from upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
             content: 
@@ -423,10 +663,55 @@
             description: "User session has expired."
           403: 
             description: "The patient does not have the necessary permissions within the GP system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           500: 
             description: "An unexpected error occurred processing the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           502: 
             description: "Bad response received from upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
           504: 
             description: "Timeout when calling upstream system."
             content: 

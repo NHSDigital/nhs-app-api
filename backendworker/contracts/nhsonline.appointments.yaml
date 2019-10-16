@@ -27,10 +27,22 @@ paths:
         "403":
           description: The patient does not have the necessary permissions within the GP
             system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
           content:
@@ -58,20 +70,44 @@ paths:
           description: Successfully cancelled the specified appointment.
         "400":
           description: Bad request. Supplied request is incomplete or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "401":
           description: User session has expired.
         "403":
           description: The patient does not have the necessary permissions within the GP
             system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "409":
           description: The specified appointment does not exist or is not in a suitable
             state to be cancelled.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "461":
           description: It is too late to cancel this appointment.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred during the processing of the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
           content:
@@ -97,15 +133,31 @@ paths:
                 $ref: "#/components/schemas/AppointmentsResponse"
         "400":
           description: Bad request. A querystring parameter is not in the expected format.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "401":
           description: User session has expired.
         "403":
           description: The patient does not have the necessary permissions within the GP
             system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
           content:
@@ -134,20 +186,44 @@ paths:
           description: Appointment successfully created.
         "400":
           description: Bad request. Supplied request is incomplete or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "401":
           description: User session has expired.
         "403":
           description: The patient does not have the necessary permissions within the GP
             system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "409":
           description: Conflict. The chosen appointment slot is not available for booking.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "460":
           description: The patient has reached the limit of pending appointments that may
             be booked.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
           content:

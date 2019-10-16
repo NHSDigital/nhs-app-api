@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,6 +31,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private AppointmentsController _systemUnderTest;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private string _serviceDeskReference;
 
         private const string RequestAuditType = "Appointments_Cancel_Request";
         private const string ResponseAuditType = "Appointments_Cancel_Response";
@@ -74,6 +78,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
+            
+            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
+            _serviceDeskReference = _fixture.Create<string>();
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
@@ -99,109 +106,83 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public async Task Delete_AppointmentsServiceCancelReturnsInsufficientPermissions_ReturnsForbidden()
+        public async Task Delete_RequestIsInvalid_ReturnsObjectResultWith400StatusCode()
         {
             // Arrange
-            var serviceResult = new AppointmentCancelResult.Forbidden();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)serviceResult));
+            _mockAppointmentsValidationService.Setup(x => x.IsDeleteValid(_appointmentCancelRequest))
+                .Returns(false);
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+                    StatusCodes.Status400BadRequest, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
 
             // Act
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
 
             // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to cancel appointment due to insufficient permissions for appointment with id: {0}",
-                _appointmentCancelRequest.AppointmentId));
-        }
-
-        [TestMethod]
-        public async Task Delete_AppointmentsServiceCancelReturnsAppointmentNotCancellable_ReturnsConflict()
-        {
-            // Arrange
-            var badResult = new AppointmentCancelResult.AppointmentNotCancellable();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
-
-            // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
-
-            // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status409Conflict);
-            _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to cancel appointment due to it not being cancellable appointment with id: {0}",
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Unable to cancel appointment due to a bad request for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
         }
         
-        [TestMethod]
-        public async Task Delete_AppointmentsServiceCancelReturnsTooLateToCancel_ReturnsTooLateStatus()
+        [DataTestMethod]
+        [DataRow(typeof(AppointmentCancelResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Unable to cancel appointment due to a bad request for appointment with id: {0}")]
+        [DataRow(typeof(AppointmentCancelResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Unable to cancel appointment due to insufficient permissions for appointment with id: {0}")]
+        [DataRow(typeof(AppointmentCancelResult.AppointmentNotCancellable), StatusCodes.Status409Conflict,
+            "Unable to cancel appointment due to it not being cancellable appointment with id: {0}")]
+        [DataRow(typeof(AppointmentCancelResult.TooLateToCancel), Constants.CustomHttpStatusCodes.Status461TooLate,
+            "Unable to cancel appointment due to it being too late to cancel with id: {0}")]
+        [DataRow(typeof(AppointmentCancelResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Unable to cancel appointment due to unavailable supplier for appointment with id: {0}")]
+        [DataRow(typeof(AppointmentCancelResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Unable to cancel appointment due to internal server error for appointment with id: {0}")]
+        public async Task Delete_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessageFormat)
         {
             // Arrange
-            var badResult = new AppointmentCancelResult.TooLateToCancel();
+            var serviceResult = (AppointmentCancelResult) Activator.CreateInstance(serviceResultType);
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
+                .Returns(Task.FromResult(serviceResult));
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+                    expectedStatusCode, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
 
             // Act
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
 
             // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status461TooLate);
             _mockAppointmentsService.Verify();
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(expectedStatusCode);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to cancel appointment due to it being too late to cancel with id: {0}",
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat,
                 _appointmentCancelRequest.AppointmentId));
         }
-
-        [TestMethod]
-        public async Task Delete_AppointmentsServiceCancelReturnsBadRequest_ReturnsBadRequest()
-        {
-            // Arrange
-            var badResult = new AppointmentCancelResult.BadRequest();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
-
-            // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
-
-            // Assert
-            result.Should().BeAssignableTo<BadRequestResult>();
-            _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to cancel appointment due to a bad request for appointment with id: {0}",
-                _appointmentCancelRequest.AppointmentId));
-        }
-
-        [TestMethod]
-        public async Task Delete_AppointmentsServiceCancelReturnsBadGateway_ReturnsBadGateway()
-        {
-            // Arrange
-            var badResult = new AppointmentCancelResult.BadGateway();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
-
-            // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
-
-            // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-            _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to cancel appointment due to unavailable supplier for appointment with id: {0}",
-                _appointmentCancelRequest.AppointmentId));
-        }
-
+        
         [TestMethod]
         public async Task Delete_HappyPath_VerifyAllExpectationsOnMocks()
         {

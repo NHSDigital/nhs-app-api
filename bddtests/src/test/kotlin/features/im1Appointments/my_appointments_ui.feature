@@ -5,6 +5,7 @@ Feature: My Appointments Frontend
 
   #This test covers navigation via buttons/links
 
+  #502
   Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
     Given the <GP System> GP appointment system is unavailable
     And I am logged in
@@ -134,6 +135,7 @@ Feature: My Appointments Frontend
       | EMIS      |
       | MICROTEST |
 
+    #403
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
       # VISION Specific test
     Given Appointments are disabled for VISION at a GP Practice level

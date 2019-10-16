@@ -85,6 +85,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Booking success message is displayed without reference to being able to cancel
     And the booked appointment is correctly displayed without ability to cancel
 
+  #400
   Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason
     Given there are <GP System> appointments available to book and user attempts to enter a dangerous booking reason
     And I am logged in
@@ -101,7 +102,7 @@ Feature: Book Appointments Frontend
       | VISION    |
       | MICROTEST |
 
-
+  #504
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
     And I am logged in
@@ -119,6 +120,7 @@ Feature: Book Appointments Frontend
       | VISION    |
       | MICROTEST |
 
+  #502
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given there are <GP System> appointments available to book, but the GP system is unavailable
     And I am logged in
@@ -140,6 +142,7 @@ Feature: Book Appointments Frontend
       | GP System |
       | EMIS      |
 
+  #409
   Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
     And I am logged in
@@ -181,6 +184,7 @@ Feature: Book Appointments Frontend
       | GP System |
       | EMIS      |
 
+  #460
   Scenario Outline: A <GP System> user reached maximum appointment booking limit
     Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
     And I am logged in
@@ -246,6 +250,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
+  #460
   Scenario: An EMIS user on Old EMIS System reached maximum appointment booking limit
     Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit
     And I am logged in
@@ -462,7 +467,6 @@ Feature: Book Appointments Frontend
       | EMIS      |
       | MICROTEST |
 
-
   Scenario Outline: An <GP System> user receives errors if a phone number and booking reason are not provided for telephone appointments
     Given I have no telephone number(s) stored for <GP System>
     And there are appointments available to book which are of telephone type for <GP System>
@@ -478,7 +482,6 @@ Feature: Book Appointments Frontend
       | EMIS      |
       | MICROTEST |
 
-
   Scenario Outline: An <GP System> user receives an error if a phone number is not provided for telephone appointments with optional booking reason
     Given I have no telephone number(s) stored for <GP System>
     And there are appointments available to book which are of telephone type with optional booking reason for <GP System>
@@ -492,7 +495,6 @@ Feature: Book Appointments Frontend
       | GP System |
       | EMIS      |
       | MICROTEST |
-
 
   Scenario Outline: An <GP System> user receives an error if a phone number is not selected for telephone appointments, but symptoms have been entered
     Given I have both first and second telephone number(s) stored for <GP System>

@@ -6,22 +6,24 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    public class AppointmentsResultVisitor : IAppointmentsResultVisitor<Task<IActionResult>>
+    public class AppointmentsResultVisitor : ResultVisitorBase, IAppointmentsResultVisitor<Task<IActionResult>>
     {
-        readonly ISessionCacheService _sessionCacheService;
-        readonly UserSession _userSession;
+        private readonly ISessionCacheService _sessionCacheService;
 
-        public AppointmentsResultVisitor(ISessionCacheService sessionCacheService, UserSession userSession)
+        public AppointmentsResultVisitor(
+            ISessionCacheService sessionCacheService, 
+            IErrorReferenceGenerator errorReferenceGenerator,
+            UserSession userSession)
+        : base (errorReferenceGenerator, userSession)
         {
             _sessionCacheService = sessionCacheService;
-            _userSession = userSession;
         }
 
         public async Task<IActionResult> Visit(AppointmentsResult.Success result)
         {
             if (result.BookingReasonNecessity != null)
             {
-                await _sessionCacheService.UpdateUserSession(_userSession);
+                await _sessionCacheService.UpdateUserSession(UserSession);
             }
             
             return new OkObjectResult(result.Response);
@@ -29,22 +31,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         public async Task<IActionResult> Visit(AppointmentsResult.BadRequest result)
         {
-            return await Task.FromResult(new BadRequestResult());
+            return await Task.FromResult(BuildErrorResult(StatusCodes.Status400BadRequest));
         }
 
         public async Task<IActionResult> Visit(AppointmentsResult.BadGateway result)
         {
-            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status502BadGateway));
+            return await Task.FromResult(BuildErrorResult(StatusCodes.Status502BadGateway));
         }
 
         public async Task<IActionResult> Visit(AppointmentsResult.InternalServerError result)
         {
-            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status500InternalServerError));
+            return await Task.FromResult(BuildErrorResult(StatusCodes.Status500InternalServerError));
         }
 
         public async Task<IActionResult> Visit(AppointmentsResult.Forbidden result)
         {
-            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status403Forbidden));
+            return await Task.FromResult(BuildErrorResult(StatusCodes.Status403Forbidden));
         }
     }
 }

@@ -75,8 +75,7 @@ Feature: My Appointments Backend
     Given <GP System> does not offer online booking to my patient
     And I have logged in and have a valid session cookie
     When my appointments are requested
-    Then I receive a "Forbidden" error
-    And the response contains an empty body
+    Then I receive a "Forbidden" error with service desk reference prefixed "4c"
     Examples:
       | GP System |
       | EMIS      |
@@ -88,8 +87,7 @@ Feature: My Appointments Backend
     Given <GP System> returns corrupted response for my appointments
     And I have logged in and have a valid session cookie
     When my appointments are requested
-    Then I receive a "Internal Server Error" error
-    And the response contains an empty body
+    Then I receive a "Internal Server Error" error with service desk reference prefixed "4k"
   @bug @NHSO-4923
     Examples:
       | GP System |
@@ -116,21 +114,19 @@ Feature: My Appointments Backend
     Given an unknown exception occurs when I want to view my <GP System> appointments
     And I have logged in and have a valid session cookie
     When my appointments are requested
-    Then I receive a "Bad Gateway" error
-    And the response contains an empty body
+    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | 4e     |
+      | TPP       | 4t     |
+      | VISION    | 4s     |
+      | MICROTEST | 4m     |
 
   Scenario Outline: Receive a "Bad Gateway" error when TPP is unavailable for <Appointment Type> appointments
     Given TPP is unavailable for <Appointment Type> appointments
     And I have logged in and have a valid session cookie
     When my appointments are requested
-    Then I receive a "Bad Gateway" error
-    And the response contains an empty body
+    Then I receive a "Bad Gateway" error with service desk reference prefixed "4t"
     Examples:
       | Appointment Type       |
       | past                   |

@@ -215,11 +215,6 @@ class AuthenticationStepDefinitions {
                         "For urgent medical advice, visit 111.nhs.uk or call 111.")
     }
 
-    @Then("^In the error message I see the service reference number prefix with \"([^\"]*)\"$")
-        fun iSeeTheServiceReferenceNumberPrefix(prefix: String) {
-            serviceUnavailablePage.assertErrorCodeIsPresent(prefix)
-        }
-
     @Then("^I see the login page$")
     fun iSeeTheLoginPage() {
         login.loginPage.shouldBeDisplayed()
