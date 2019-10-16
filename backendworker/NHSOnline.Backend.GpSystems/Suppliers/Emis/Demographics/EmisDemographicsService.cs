@@ -7,7 +7,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
 {
-    public class EmisDemographicsService : IDemographicsService
+    public class EmisDemographicsService : IDemographicsService, IEmisDemographicsService
     {
         private readonly ILogger<EmisDemographicsService> _logger;
         private readonly IEmisClient _emisClient;
@@ -31,7 +31,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
 
             try
             {
-                var demographicsResponse = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, emisUserSession.EndUserSessionId);
+                var demographicsResponse = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken, 
+                    emisUserSession.SessionId, 
+                    emisUserSession.EndUserSessionId);
 
                 if (!demographicsResponse.HasSuccessResponse)
                 {

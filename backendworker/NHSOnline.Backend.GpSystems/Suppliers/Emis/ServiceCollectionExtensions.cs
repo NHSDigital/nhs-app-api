@@ -3,6 +3,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
@@ -20,6 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             services.RegisterEmisPatientRecordServices();
             services.RegisterEmisDemographicsServices();
             services.RegisterEmisPfsSessionServices();
+            services.RegisterEmisLinkedAccountsServices();
 
             return services;
         }

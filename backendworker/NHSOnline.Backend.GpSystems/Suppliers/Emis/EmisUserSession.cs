@@ -1,4 +1,5 @@
-﻿using NHSOnline.Backend.GpSystems.SharedModels;
+﻿using System.Collections.Generic;
+using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
@@ -11,5 +12,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public string UserPatientLinkToken { get; set; }
         public Necessity AppointmentBookingReasonNecessity { get; set; }
         public Necessity PrescriptionSpecialRequestNecessity { get; set; }
+        public ICollection<EmisProxyUserSession> ProxyPatients { get; set; }
     }
 }

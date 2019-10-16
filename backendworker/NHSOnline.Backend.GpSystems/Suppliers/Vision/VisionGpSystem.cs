@@ -16,11 +16,13 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.LinkedAccounts;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
     [SuppressMessage("NDepend", "ND1400:AvoidNamespacesMutuallyDependent",
         Justification = "GpSystem responsibility is pointing to concrete classes in child namespaces.")]
+    [SuppressMessage("Microsoft.Naming", "CA1024", Justification = "Methods are needed to match interface definition.")]
     public class VisionGpSystem : IGpSystem
     {
         private readonly IServiceProvider _serviceProvider;
@@ -100,6 +102,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public IPrescriptionValidationService GetPrescriptionRequestValidationService()
         {
             return _serviceProvider.GetService<VisionPrescriptionValidationService>();
+        }
+
+        public ILinkedAccountsService GetLinkedAccountsService()
+        {
+            throw new NotImplementedException();
         }
     }
 }

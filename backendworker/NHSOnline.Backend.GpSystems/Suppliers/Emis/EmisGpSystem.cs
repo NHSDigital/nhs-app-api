@@ -16,6 +16,8 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
@@ -100,6 +102,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public ILinkageValidationService GetLinkageValidationService()
         {
             return _serviceProvider.GetService<EmisLinkageValidationService>();
+        }
+
+        public ILinkedAccountsService GetLinkedAccountsService()
+        {
+            return _serviceProvider.GetService<EmisLinkedAccountsService>();
         }
     }
 }

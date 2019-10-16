@@ -13,6 +13,7 @@
       <span :class="$style.listMenuItemContainer">
         <component :is="headerTag">{{ text }}</component>
         <p v-if="description">{{ description }}</p>
+        <slot/>
       </span>
     </analytics-tracked-tag>
   </li>

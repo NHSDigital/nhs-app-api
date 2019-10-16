@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions;
+using NHSOnline.Backend.GpSystems.LinkedAccounts;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 {
@@ -102,6 +103,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         public ITokenValidationService GetTokenValidationService()
         {
             return _serviceProvider.GetService<MicrotestTokenValidationService>();
+        }
+
+        public ILinkedAccountsService GetLinkedAccountsService()
+        {
+            throw new NotImplementedException();
         }
     }
 }

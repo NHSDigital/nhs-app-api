@@ -9,6 +9,7 @@ import errors from './modules/errors';
 import flashMessage from './modules/flashMessage';
 import header from './modules/header';
 import http from './modules/http';
+import linkedAccounts from './modules/linkedAccounts';
 import modal from './modules/modal';
 import messaging from './modules/messaging';
 import myAppointments from './modules/myAppointments';
@@ -40,6 +41,7 @@ export const modules = {
   flashMessage,
   header,
   http,
+  linkedAccounts,
   messaging,
   modal,
   myAppointments,

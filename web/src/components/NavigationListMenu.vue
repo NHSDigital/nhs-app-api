@@ -37,12 +37,12 @@
 
     <menu-item v-if="hasLinkedProfiles()"
                id="menu-item-linkedProfiles"
-               data-sid="linkedProfile-menu-item"
-               :href="linkedProfilePath"
+               data-sid="linkedProfiles-menu-item"
+               :href="linkedProfilesPath"
                :text="$t('navigationMenuList.linkedProfiles')"
                :aria-label="$t('navigationMenuList.linkedProfiles')"
                :click-func="goToUrl"
-               :click-param="linkedProfilePath"/>
+               :click-param="linkedProfilesPath"/>
   </menu-item-list>
 </template>
 
@@ -51,7 +51,7 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS } from '@/lib/routes';
+import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES } from '@/lib/routes';
 
 export default {
   name: 'NavigationListMenu',
@@ -77,6 +77,9 @@ export default {
     },
     myRecordPath() {
       return MYRECORD.path;
+    },
+    linkedProfilesPath() {
+      return LINKED_PROFILES.path;
     },
   },
   methods: {

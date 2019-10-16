@@ -22,6 +22,7 @@ import {
   GP_FINDER_WAITING_LIST_JOINED,
   DATA_SHARING_PREFERENCES,
   INDEX,
+  LINKED_PROFILES,
   LOGIN,
   LOGOUT,
   BEGINLOGIN,
@@ -182,6 +183,10 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.serviceUnavailable';
       route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
+      break;
+    case LINKED_PROFILES.name:
+      route.meta.headerKey = 'pageHeaders.linkedProfiles';
+      route.meta.pageTitleKey = 'pageTitles.linkedProfiles';
       break;
     case ORGAN_DONATION.name:
     case ORGAN_DONATION_ADDITIONAL_DETAILS.name:

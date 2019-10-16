@@ -1300,6 +1300,7 @@ export default {
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
     dataSharing: 'Find out why your data matters',
     more: 'More',
+    linkedProfiles: 'Linked profiles',
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
@@ -1339,6 +1340,7 @@ export default {
     dataSharing: 'Find out why your data matters',
     more: 'More',
     login: 'Login',
+    linkedProfiles: 'Linked profiles',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
     changeNominatedPharmacy: 'Change my nominated pharmacy',
@@ -1380,6 +1382,7 @@ export default {
     termsAndConditions: 'Terms',
     legacyMyRecordWarning: 'My Record',
     nominatedPharmacy: 'My nominated pharmacy',
+    linkedProfiles: 'Linked profiles',
     messaging: 'Messages',
   },
   myAccount: {
@@ -1396,6 +1399,10 @@ export default {
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
     accessibilityStatement: 'Accessibility statement',
+  },
+  linkedProfiles: {
+    linkedInformation: 'You have proxy access for the following people.',
+    dob: 'Date of birth:',
   },
   notifications: {
     paragraphs: [

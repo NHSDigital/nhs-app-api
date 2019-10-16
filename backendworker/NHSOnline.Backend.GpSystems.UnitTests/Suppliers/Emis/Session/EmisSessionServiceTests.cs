@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         private string _connectionToken;
         private string _odsCode;
         private string _nhsNumber;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _connectionToken = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
             _nhsNumber = _fixture.Create<string>();
-            
+
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             _mockEmisClient.Setup(
                 ec => ec.SessionsPost(
-                    It.IsAny<string>(), 
+                    It.IsAny<string>(),
                     It.IsAny<SessionsPostRequest>()))
                 .Returns(sessionPostResponse);
 
@@ -245,7 +245,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             //Assert
             result.Should().BeAssignableTo<GpSessionCreateResult.Forbidden>();
         }
-        
+
 
         [DataTestMethod]
         [DataRow("Mr", "Fred", "Blogs", "Mr Fred Blogs")]
@@ -254,17 +254,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         [DataRow("Mr", "Fred", "", "Mr Fred")]
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData(string title, string firstname, string surname, string expected)
         {
+
             // Arrange
             _sessionsResponse.Title = title;
             _sessionsResponse.FirstName = firstname;
             _sessionsResponse.Surname = surname;
-            
+
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            
             var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
-            
+
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
 
@@ -280,18 +280,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         [TestMethod]
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData_IsProxySetToFalseWhenProxyPatientsIsEmpty()
         {
-            // Arrange 
+            // Arrange
             var expectedName =  $"{_sessionsResponse.Title} {_sessionsResponse.FirstName} {_sessionsResponse.Surname}";
-            
+
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
-            
+
             var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
 
             _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.None;
             _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
             _sessionsResponse.UserPatientLinks.ToList()[2].AssociationType = AssociationType.None;
-    
+
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
 
@@ -307,18 +307,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         [TestMethod]
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData_IsProxySetToTrueWhenProxyPatientsIsPopulated()
         {
-            // Arrange 
+            // Arrange
             var expectedName =  $"{_sessionsResponse.Title} {_sessionsResponse.FirstName} {_sessionsResponse.Surname}";
-            
+
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
-            
+
             var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
 
             _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.Proxy;
             _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
             _sessionsResponse.UserPatientLinks.ToList()[2].AssociationType = AssociationType.Proxy;
-    
+
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
 
@@ -330,36 +330,36 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             createdResult.Should().BeEquivalentTo(expectedResult);
         }
-        
-        
+
+
         [TestMethod]
         public async Task Create_HappyPath_ReturnsAUserSessionInTheResult()
         {
             // Act
             var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
-            
+
             // Assert
             result.Should().BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject.UserSession.Should().NotBeNull();
         }
 
-        [TestMethod] 
+        [TestMethod]
         public async Task Create_HappyPath_ReturnsAUserSessionWithTheEmisSupplier()
         {
             // Act
             var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
-            
+
             // Assert
             result.Should().BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject.UserSession.Supplier.Should().Be(Supplier.Emis);
         }
-        
+
         [TestMethod]
         public async Task Create_HappyPath_ReturnsAEmisUserSession()
         {
             // Act
             var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
-            
+
             // Assert
             result
                 .Should().BeAssignableTo<GpSessionCreateResult.Success>()

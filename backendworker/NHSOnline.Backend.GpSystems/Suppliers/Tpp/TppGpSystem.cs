@@ -5,6 +5,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Session;
@@ -21,6 +22,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 {
     [SuppressMessage("NDepend", "ND1400:AvoidNamespacesMutuallyDependent",
         Justification = "GpSystem responsibility is pointing to concrete classes in child namespaces.")]
+    [SuppressMessage("Microsoft.Naming", "CA1024", Justification = "Methods are needed to match interface definition.")]
     public class TppGpSystem : IGpSystem
     {
         private readonly IServiceProvider _serviceProvider;
@@ -100,6 +102,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public ILinkageValidationService GetLinkageValidationService()
         {
             return _serviceProvider.GetService<TppLinkageValidationService>();
+        }
+
+        public ILinkedAccountsService GetLinkedAccountsService()
+        {
+            throw new NotImplementedException();
         }
     }
 }

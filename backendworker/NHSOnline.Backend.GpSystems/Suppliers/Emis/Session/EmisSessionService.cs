@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 var endUserSessionResponse = await SendSessionsEndUserSessionPost();
 
                 string patientName;
-                
+
                 var session = new EmisUserSession
                 {
                     EndUserSessionId = endUserSessionResponse.EndUserSessionId,
@@ -122,8 +122,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                         "SendSessionsRequest").Check(sessionRequestTask);
 
                     session.SessionId = sessionResponse.Body.SessionId;
-                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();  
+                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();
                     session.HasLinkedAccounts = sessionResponse.Body.HasLinkedPatients();
+                    session.ProxyPatients = sessionResponse.Body.ExtractLinkedPatients()
+                        .Select(x => new EmisProxyUserSession
+                        {
+                            Id = Guid.NewGuid(),
+                            OdsCode = x.NationalPracticeCode,
+                            UserPatientLinkToken = x.UserPatientLinkToken,
+                        })
+                        .ToList();
+
                     patientName = FormatName(sessionResponse.Body);
 
                     if (sessionResponse.Body.HasLinkedPatients())
@@ -155,14 +164,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                     _logger.LogError(e, $"{StandardErrorMessage}, HttpRequestException has been thrown.");
                     return new GpSessionCreateResult.BadGateway();
                 }
-                
+
                 try
                 {
                     var practiceResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>>(_logger, "GetPracticeDetails").Check(practiceSettingsTask);
-             
+
                     session.AppointmentBookingReasonNecessity =
                         _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.AppointmentBookingReason, Necessity.Mandatory);
-                    
+
                     session.PrescriptionSpecialRequestNecessity =
                         _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.PrescribingComment, Necessity.Optional);
                 }
@@ -170,7 +179,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 {
                     _logger.LogError(e, "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
                 }
-                
+
                 return new GpSessionCreateResult.Success(patientName, session);
             }
             catch (EmisSessionResponseErrorException responseError)

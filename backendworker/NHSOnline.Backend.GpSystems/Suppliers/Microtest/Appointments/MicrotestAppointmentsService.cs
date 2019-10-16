@@ -1,4 +1,3 @@
-
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
@@ -20,7 +19,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             _getter = getter;
             _booker = booker;
             _canceller = canceller;
-            _getter = getter;
         }
         
         public async Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request)

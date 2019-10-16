@@ -891,6 +891,17 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
   },
+  LINKED_PROFILES: {
+    name: 'linked-profiles',
+    path: '/linked-profiles',
+    crumb: {
+      i8nKey: 'linkedProfiles',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}proxy/`,
+  },
   // Legacy
   LEGACY_MYRECORDWARNING: {
     name: 'my-record-warning',
@@ -980,6 +991,7 @@ export const {
   GP_FINDER_WAITING_LIST_JOINED,
   INDEX,
   LEGACY_MYRECORDWARNING,
+  LINKED_PROFILES,
   LOGIN,
   LOGOUT,
   MESSAGING,

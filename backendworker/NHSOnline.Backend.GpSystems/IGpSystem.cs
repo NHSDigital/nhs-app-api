@@ -6,6 +6,7 @@ using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.LinkedAccounts;
 
 namespace NHSOnline.Backend.GpSystems
 {
@@ -40,5 +41,7 @@ namespace NHSOnline.Backend.GpSystems
         ILinkageService GetLinkageService();
 
         ILinkageValidationService GetLinkageValidationService();
+
+        ILinkedAccountsService GetLinkedAccountsService();
     }
 }

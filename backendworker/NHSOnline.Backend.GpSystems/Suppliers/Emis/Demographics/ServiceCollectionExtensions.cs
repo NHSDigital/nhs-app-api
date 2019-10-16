@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
         public static IServiceCollection RegisterEmisDemographicsServices(this IServiceCollection services)
         {
             services.AddTransient<EmisDemographicsService>();
+            services.AddTransient<IEmisDemographicsService, EmisDemographicsService>();
             services.AddTransient<IEmisDemographicsMapper, EmisDemographicsMapper>();
 
             return services;
