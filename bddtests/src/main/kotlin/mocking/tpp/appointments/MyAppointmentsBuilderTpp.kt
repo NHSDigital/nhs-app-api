@@ -90,6 +90,13 @@ class MyAppointmentsBuilderTpp(
     }
 
     private fun convertDateToTppTime(time: String): String {
+        val timeZone = "[Europe/London]"
+        val timeZoneWithOffset = "+01:00[Europe/London]"
+        if(time.contains(timeZone)) {
+            return time
+                    .replace(timeZoneWithOffset, "Z")
+                    .replace(timeZone,"")
+        }
         val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
         val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
         ("Europe/London"))

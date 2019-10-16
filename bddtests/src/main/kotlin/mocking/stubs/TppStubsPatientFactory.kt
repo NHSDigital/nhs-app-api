@@ -22,7 +22,6 @@ class TppStubsPatientFactory {
             val patient = TppPatients.kevinBarry.copy(
                     firstName = "You are logged in as",
                     surname = loginID,
-                    accountId = "a$pad",
                     connectionToken = "00000000-0000-0000-0000-$pad"
             )
             patient.accessToken = accessToken

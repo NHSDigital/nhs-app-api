@@ -9,11 +9,24 @@ import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.EmisStubsPatientFactory.Companion.goodPatientEMIS
 import mocking.stubs.EmisStubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
 import mocking.stubs.EmisStubsPatientFactory.Companion.timeoutPatientEMIS
+import mocking.stubs.TppStubsPatientFactory
+import mocking.tpp.data.TppAppointmentData
 import models.Patient
+import utils.set
 import java.time.Duration
 
-class ViewAppointmentsStubsEMIS(private val mockingClient: MockingClient) {
-    fun generateEMISStubs() {
+const val CANCEL_APPOINTMENT_SLOT_ID = 100
+
+class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
+
+    fun generateStubs(supplier: String){
+        when (supplier) {
+            "EMIS" -> generateEMISStubs()
+            "TPP" -> generateTPPStubs()
+        }
+    }
+
+    private fun generateEMISStubs() {
         val appointmentsBody = JSonXmlConverter.toJsonWithUpperCamelCase(
                 EmisAppointmentData.instance.createGetAppointmentsResponse())
 
@@ -32,5 +45,23 @@ class ViewAppointmentsStubsEMIS(private val mockingClient: MockingClient) {
         mapViewAppointmentStubs.listResponse().forEach { scenario ->
             mockingClient.forEmis{ scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher)) }
         }
+    }
+
+    private fun generateTPPStubs() {
+        val appointmentsBody = TppAppointmentData.instance.createGetAppointmentsResponse()
+
+        val mapViewAppointmentStubs =
+                InputResponse<Patient, IMyAppointmentsBuilder>()
+                        .addResponse(TppStubsPatientFactory.goodPatientTPP) { builder
+                            ->
+                            builder.respondWithSuccess(appointmentsBody) }
+
+        mapViewAppointmentStubs.listResponse().forEach { scenario ->
+            mockingClient.forTpp { scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher,
+                    IMyAppointmentsBuilder.AppointmentType.UPCOMING_ONLY)) }
+            mockingClient.forTpp { scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher,
+                    IMyAppointmentsBuilder.AppointmentType.PAST_ONLY))}
+        }
+        SerenitySessionSlotId.APPOINTMENTONE.set(CANCEL_APPOINTMENT_SLOT_ID)
     }
 }
