@@ -12,6 +12,10 @@ class EmisPatients {
             return montelFrye
         }
 
+        fun getPatientWithLinkedProfiles(): Patient {
+            return montelFrye
+        }
+
         val paulSmith = Patient(
                 title = "Mr",
                 firstName = "Paul",
@@ -30,6 +34,7 @@ class EmisPatients {
                 surname = "Jackson",
                 dateOfBirth = "1972-04-12",
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                userPatientLinkToken = "nd83jdHg72UeEEjnd3hjU7",
                 sessionId = "gY39SJJMEEg7rNbcsfF8",
                 connectionToken = "efa22020-9221-46a6-a0f0-6c0340b8f44d",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -42,6 +47,7 @@ class EmisPatients {
                 surname = "Cook",
                 dateOfBirth = "1972-04-12",
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                userPatientLinkToken = "id83hdydGyo6kKl0gaRdRb",
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
                 connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -87,7 +93,8 @@ class EmisPatients {
                 accountId = "4140044939",
                 linkageKey = "vVGO8bgV6fvPb",
                 userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
-                im1ConnectionToken = montelFryeIm1ConnectionToken
+                im1ConnectionToken = montelFryeIm1ConnectionToken,
+                linkedAccounts = setOf(paulSmith, alanCook)
         )
 
         val picaJones = Patient(

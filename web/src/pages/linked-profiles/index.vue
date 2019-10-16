@@ -12,12 +12,14 @@
             :key="index"
             :text="item.name"
             :click-func="onLinkedProfileClicked"
-            :click-param="item.id">
+            :click-param="item.id"
+            data-sid="linked-account">
             <div :class="[$style.dateOfBirth, 'nhsuk-u-margin-top-2']">
-              {{ $t('linkedProfiles.dob') }}
+              {{ $t('linkedProfiles.informationHeaders.dob') }}
             </div>
             <div :id="'linked-account-dob-' + index"
-                 class="nhsuk-u-margin-top-1">
+                 class="nhsuk-u-margin-top-1"
+                 data-sid="date-of-birth">
               {{ item.dateOfBirth | longDate }}
             </div>
           </menu-item>
@@ -30,6 +32,9 @@
 <script>
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import { LINKED_PROFILES_SUMMARY } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
+import { find } from 'lodash/fp';
 
 export default {
   layout: 'nhsuk-layout',
@@ -38,20 +43,11 @@ export default {
     MenuItem,
   },
   computed: {
-    hasConnectionProblem() {
-      return this.$store.state.errors.hasConnectionProblem;
-    },
-    showApiError() {
-      return this.$store.getters['errors/showApiError'];
-    },
-    showLinkedAccounts() {
-      return (
-        this.$store.state.linkedAccounts.hasLoaded &&
-        this.$store.state.linkedAccounts.items.length === 0
-      );
-    },
     linkedAccounts() {
       return this.$store.state.linkedAccounts.items;
+    },
+    linkedProfileSummaryPath() {
+      return LINKED_PROFILES_SUMMARY.path;
     },
   },
   asyncData({ store }) {
@@ -62,7 +58,12 @@ export default {
     this.$store.dispatch('linkedAccounts/clearLinkedAccounts');
   },
   methods: {
-    onLinkedProfileClicked() {
+    onLinkedProfileClicked(id) {
+      const selectedLinkedAccount = find(item => item.id === id)(this.linkedAccounts);
+      this.$store.dispatch('linkedAccounts/select', selectedLinkedAccount);
+
+      this.$store.app.$analytics.trackButtonClick(this.linkedProfileSummaryPath, true);
+      redirectTo(this, this.linkedProfileSummaryPath, null);
     },
   },
 };
@@ -75,5 +76,4 @@ export default {
   font-weight: 400;
   font-size: 15px;
 }
-
 </style>

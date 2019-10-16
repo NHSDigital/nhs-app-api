@@ -30,6 +30,10 @@ class DemographicsFactoryVision: DemographicsFactory() {
         }
     }
 
+    override fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
+        throw NotImplementedError()
+    }
+
     override fun enabledButTimesOut(patient: Patient) {
         mockingClient.forVision {
             myRecord.demographicsRequest(visionUserSession =

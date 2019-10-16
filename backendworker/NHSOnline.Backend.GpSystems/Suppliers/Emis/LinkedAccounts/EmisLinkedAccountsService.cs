@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Demographics;
@@ -8,6 +9,7 @@ using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 {
@@ -15,11 +17,78 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
     {
         private readonly ILogger<EmisLinkedAccountsService> _logger;
         private readonly IEmisDemographicsService _demographicsService;
+        private readonly IEmisClient _emisClient;
 
-        public EmisLinkedAccountsService(ILogger<EmisLinkedAccountsService> logger, IEmisDemographicsService demographicsService)
+        public EmisLinkedAccountsService(
+            ILogger<EmisLinkedAccountsService> logger,
+            IEmisDemographicsService demographicsService,
+            IEmisClient emisClient)
         {
             _logger = logger;
             _demographicsService = demographicsService;
+            _emisClient = emisClient;
+        }
+
+        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
+        {
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+
+            return proxy?.OdsCode;
+        }
+
+        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
+        {
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+
+            if (proxy == null)
+            {
+                _logger.LogError($"Proxy patient with id {id} not found in {nameof(emisUserSession.ProxyPatients)}");
+                return await Task.FromResult(new LinkedAccountAccessSummaryResult.NotFound());
+            }
+
+            var tempProxyUserSession = new EmisUserSession
+            {
+                SessionId = emisUserSession.SessionId,
+                EndUserSessionId = emisUserSession.EndUserSessionId,
+                UserPatientLinkToken = proxy.UserPatientLinkToken,
+            };
+
+            _logger.LogInformation("Creating tasks to get linked account summary");
+
+            try
+            {
+                var settings = await _emisClient.MeSettingsGet(
+                    tempProxyUserSession.UserPatientLinkToken,
+                    new EmisHeaderParameters(tempProxyUserSession));
+
+                _logger.LogInformation($"Finished call to {nameof(_emisClient.MeSettingsGet)}");
+
+                if (settings.HasSuccessResponse)
+                {
+                    var response = new GetLinkedAccountAccessSummaryResponse
+                    {
+                        CanBookAppointment = settings.Body.AssignedServices.AppointmentsEnabled,
+                        CanOrderRepeatPrescription = settings.Body.AssignedServices.PrescribingEnabled,
+                        CanViewMedicalRecord = settings.Body.AssignedServices.MedicalRecordEnabled,
+                    };
+
+                    return new LinkedAccountAccessSummaryResult.Success(response);
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request doing linked account summary requests");
+                return new LinkedAccountAccessSummaryResult.BadGateway();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+
+            _logger.LogError("Linked account summary requests not all successful");
+            return new LinkedAccountAccessSummaryResult.BadGateway();
         }
 
         public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
@@ -52,7 +121,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                 var successResults = tasks
                     .Where(x => x.Value.Result is DemographicsResult.Success)
                     .ToList();
-                
+
                 response.LinkedAccounts = successResults.Select(x => {
                     var demographics = (DemographicsResult.Success)x.Value.Result;
 
@@ -61,6 +130,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                         Id = x.Key,
                         Name = demographics.Response.PatientName,
                         DateOfBirth = demographics.Response.DateOfBirth,
+                        NhsNumber = demographics.Response.NhsNumber,
                     };
                 });
             }

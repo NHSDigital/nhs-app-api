@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.OdsCode}");
 
             var enableLinkedAccounts = _sessionSettings.ProxyEnabled && userSession.GpUserSession.HasLinkedAccounts;
-            
+
             var serviceJourneyRulesResultVisited =
                 await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.OdsCode, enableLinkedAccounts);
 
@@ -223,8 +223,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     errorMessage);
 
                 // Specific error reference for a 404 from SJR.
-                var objectResult = serviceJourneyRulesResultVisited.StatusCode == StatusCodes.Status404NotFound ? 
-                    BuildErrorResult(new ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound()) : 
+                var objectResult = serviceJourneyRulesResultVisited.StatusCode == StatusCodes.Status404NotFound ?
+                    BuildErrorResult(new ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound()) :
                     BuildErrorResult(new ErrorTypes.LoginServiceJourneyRulesOtherError());
 
                 return objectResult;
@@ -271,7 +271,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _logger.LogEnter();
                 await _auditor.Audit(AuditingOperations.SessionDeleteRequest, "Session delete called.");
 
-                // Delete GP supplier session                
+                // Delete GP supplier session
                 var userSession = HttpContext.GetUserSession();
                 var gpUserSession = userSession.GpUserSession;
                 var citizenIdUserSession = userSession.CitizenIdUserSession;
@@ -345,8 +345,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private CreatedResult CreateCreatedResult(GpSessionCreateResultVisitorOutput sessionCreatedResultVisited,
             UserSession userSession, ServiceJourneyRulesResponse serviceJourneyRules, DateTime dateOfBirth)
         {
-            
-            
+
+
             var responseBody = new UserSessionResponse
             {
                 Name = sessionCreatedResultVisited.Name,
@@ -401,7 +401,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             return BuildErrorResult(serviceDeskReference, errorTypes.StatusCode);
         }
-        
+
         private ObjectResult BuildErrorResult(ErrorCategory errorCategory, int statusCode, SourceApi sourceApi = SourceApi.None)
         {
             var serviceDeskReference =

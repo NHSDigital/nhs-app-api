@@ -48,10 +48,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
            // Assert
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.Success>();
            var serviceJourneyRulesResponse = ((ServiceJourneyRulesConfigResult.Success) result).Response;
-           
+
            Assert.AreEqual(hasLinkedAccounts, serviceJourneyRulesResponse.Journeys.HasLinkedAccounts);
        }
-       
+
        [TestMethod]
        public async Task GetServiceJourneyRulesForOdsCode_ValidRequest_ReturnsNotFoundIfBodyNull()
        {
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.NotFound>();
        }
 
-       [TestMethod] 
+       [TestMethod]
        public async Task GetServiceJourneyRulesForOdsCode_InvalidRequest_ReturnsInternalServerError()
        {
            // Arrange

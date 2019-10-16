@@ -10,6 +10,7 @@ abstract class DemographicsFactory {
 
     abstract fun disabled(patient: Patient)
     abstract fun enabled(patient: Patient)
+    abstract fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient)
     abstract fun enabledButTimesOut(patient: Patient)
     abstract fun throwInternalError(patient: Patient)
     abstract fun throwForbiddenError(patient: Patient)

@@ -6,17 +6,17 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 {
-    public class ServiceJourneyRulesService: IServiceJourneyRulesService 
+    public class ServiceJourneyRulesService: IServiceJourneyRulesService
     {
         private readonly IServiceJourneyRulesClient _serviceJourneyRulesClient;
         private readonly ILogger<ServiceJourneyRulesService> _logger;
-        
+
         public ServiceJourneyRulesService(IServiceJourneyRulesClient serviceJourneyRulesClient,  ILogger<ServiceJourneyRulesService> logger)
         {
             _serviceJourneyRulesClient = serviceJourneyRulesClient;
             _logger = logger;
         }
-        
+
         public async Task<ServiceJourneyRulesConfigResult> GetServiceJourneyRulesForOdsCode(string odsCode, bool hasLinkedAccounts = false)
         {
             _logger.LogEnter();

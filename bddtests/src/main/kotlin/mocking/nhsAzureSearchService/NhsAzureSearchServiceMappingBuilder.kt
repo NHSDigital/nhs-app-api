@@ -10,5 +10,4 @@ class NhsAzureSearchServiceMappingBuilder{
 
     fun nhsAzureSearchPostcodesAndPlacesRequest(requestBody: NhsAzureSearchPostcodesAndPlacesRequestBody) =
             NhsAzurePostcodesAndPlacesResultsBuilder(requestBody)
-
 }

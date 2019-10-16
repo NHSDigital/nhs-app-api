@@ -376,5 +376,46 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             var response = result.Should().BeAssignableTo<GpSearchResult.Success>().Subject.Response;
             response.OrganisationQueryCount.Should().Be(0);
         }
+
+        [TestMethod]
+        public async Task GetGpPracticeByOdsCode_WhenFound_ReturnsGpPractice()
+        {
+            // Arrange
+            const string odsCode = "AB234";
+            const string orgName = "Test GP Practice";
+
+            var organisationReturnResults = new List<Organisation>
+            {
+                new Organisation { OrganisationName = orgName },
+            };
+
+            var organisationReturnResult =
+                new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+                {
+                    Body = new NhsOrganisationSearchResponse
+                    {
+                        Organisations = organisationReturnResults,
+                        OrganisationCount = 1,
+                    }
+                };
+
+            _gpLookupClient.Setup(x => x.GpSearch(It.Is<OrganisationSearchData>(
+                    o => o.Top == 1 &&
+                         string.Equals(o.Select, "OrganisationID,OrganisationName,NACSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
+                         string.Equals(o.Filter, $"OrganisationTypeID eq 'GPB' and NACSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))
+                ))
+                .Returns(Task.FromResult(organisationReturnResult))
+                .Verifiable();
+
+            // Act
+            var result = await _gpSearchService.GetGpPracticeByOdsCode(odsCode);
+
+            // Assert
+            _gpLookupClient.Verify();
+            var successResult = result.Should().BeOfType<GpSearchResult.Success>().Subject;
+            successResult.Response.OrganisationQueryCount.Should().Be(1);
+            successResult.Response.Organisations.Count.Should().Be(1);
+            successResult.Response.Organisations[0].OrganisationName.Should().Be(orgName);
+        }
     }
 }

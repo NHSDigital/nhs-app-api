@@ -4,6 +4,7 @@ import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
 import mocking.emis.me.EmisMeApplicationsBuilder
+import mocking.emis.me.EmisMeSettingsBuilder
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.models.AddNhsUserRequest
 import mocking.emis.models.AddVerificationRequest
@@ -12,9 +13,6 @@ import mocking.emis.session.EmisSessionBuilder
 import models.Patient
 
 class EmisMappingBuilderAuthentication(private var configuration: EmisConfiguration?){
-
-    fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(
-            configuration!!, patient.endUserSessionId, model)
 
     fun endUserSessionRequest() = EmisEndUserSessionBuilder(configuration!!)
 
@@ -29,4 +27,17 @@ class EmisMappingBuilderAuthentication(private var configuration: EmisConfigurat
     fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration!!,
             patient.userPatientLinkToken,
             patient.endUserSessionId, patient.sessionId)
+
+    fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(
+            configuration!!, patient.endUserSessionId, model)
+
+    fun meSettingsRequest(
+            patient: Patient,
+            sessionId: String = patient.sessionId,
+            endUserSessionId: String = patient.endUserSessionId) =
+            EmisMeSettingsBuilder(
+                    configuration = configuration!!,
+                    userPatientLinkToken =  patient.userPatientLinkToken,
+                    endUserSessionId = endUserSessionId,
+                    sessionId = sessionId)
 }

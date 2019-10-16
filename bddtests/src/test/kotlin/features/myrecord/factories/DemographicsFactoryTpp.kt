@@ -11,7 +11,6 @@ import worker.NhsoHttpException
 import java.time.Duration
 
 class DemographicsFactoryTpp: DemographicsFactory() {
-
     override fun disabled(patient: Patient) {
         try {
             mockingClient.forTpp {
@@ -28,6 +27,10 @@ class DemographicsFactoryTpp: DemographicsFactory() {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWithSuccess(DemographicsData.getTppDemographicsData(patient))
         }
+    }
+
+    override fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
+        throw NotImplementedError()
     }
 
     override fun enabledButTimesOut(patient: Patient) {

@@ -5,6 +5,7 @@ import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.WebElement
+import utils.SerenityHelpers
 
 @DefaultUrl("http://web.local.bitraft.io:3000/")
 open class HomePage : HybridPageObject() {
@@ -94,6 +95,8 @@ open class HomePage : HybridPageObject() {
             organDonationLink
     )
 
+    val expectedLinksIncludingLinkedProfiles = expectedLinks.union(listOf(linkedProfilesLink))
+
     fun assertHasWelcomeMessageFor(patient: Patient) {
         val name = "${patient.title} ${patient.firstName} ${patient.surname}".trim()
         val expected = "Welcome, $name"
@@ -126,10 +129,19 @@ open class HomePage : HybridPageObject() {
 
     fun assertLinksPresentWithinHomePageBody() {
         val links = listOfLinks().elements
+
+        val patient = SerenityHelpers.getPatient()
+        val linksToCheck = if (patient.linkedAccounts.count() > 0) {
+            expectedLinksIncludingLinkedProfiles
+        }
+        else {
+            expectedLinks
+        }
+
         Assert.assertEquals("Number of expected Links",
-                expectedLinks.count(),
+                linksToCheck.count(),
                 links.count())
-        expectedLinks.forEach { link -> link.assertSingleElementPresent() }
+        linksToCheck.forEach { link -> link.assertSingleElementPresent() }
     }
 
     fun isLinkedProfileVisible(): Boolean {

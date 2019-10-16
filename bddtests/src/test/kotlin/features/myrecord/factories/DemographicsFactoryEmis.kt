@@ -27,6 +27,17 @@ class DemographicsFactoryEmis: DemographicsFactory() {
         }
     }
 
+    override fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
+        mockingClient.forEmis {
+            myRecord.demographicsRequest(
+                    actingOnBehalfOf,
+                    sessionId = callingPatient.sessionId,
+                    endUserSessionId = callingPatient.endUserSessionId
+            )
+                    .respondWithSuccess(DemographicsData.getEmisDemographicData(actingOnBehalfOf))
+        }
+    }
+
     override fun enabledButTimesOut(patient: Patient) {
         mockingClient.forEmis {
             myRecord.demographicsRequest(patient)

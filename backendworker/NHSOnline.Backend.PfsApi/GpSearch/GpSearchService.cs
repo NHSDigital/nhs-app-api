@@ -161,6 +161,23 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             return new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
         }
 
+        public async Task<GpSearchResult> GetGpPracticeByOdsCode(string odsCode)
+        {
+            _logger.LogEnter();
+
+            var isValid = new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(odsCode, nameof(odsCode))
+                .IsValid();
+
+            if (!isValid)
+            {
+                return new GpSearchResult.BadRequest();
+            }
+
+            var data = GetSearchByOdsCodeOrganisationSearchData(odsCode);
+            return await ExecuteOrganisationSearch(data);
+        }
+
         private async Task<GpSearchResult> ExecuteOrganisationSearch(OrganisationSearchData organisationSearchData)
         {
             try
@@ -169,7 +186,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
                 var searchResults = await _gpLookupClient.GpSearch(organisationSearchData);
 
-                return _nhsSearchResultChecker.Check(searchResults, organisationSearchData.Search);
+                return _nhsSearchResultChecker.CheckOdsCodeSearchResult(searchResults, organisationSearchData.Search);
             }
             catch (HttpRequestException ex)
             {

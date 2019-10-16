@@ -49,7 +49,8 @@ data class Patient(
                 redirectUrl = Config.instance.cidRedirectUri),
         var subject: String = "3ad631b4-7a7a-434d-8a7b-1c8ac3c56132",
         val im1ConnectionToken: Im1ConnectionToken? = null,
-        val organDonationRegistrationId: String = "AD02745157"
+        val organDonationRegistrationId: String = "AD02745157",
+        val linkedAccounts: Set<Patient> = setOf()
 ) {
     var accessToken: String = AccessTokenBuilder().getSignedToken(this).serialize()
 
@@ -111,6 +112,13 @@ data class Patient(
                 "TPP" -> TppPatients.getDefault()
                 "VISION" -> VisionPatients.getDefault()
                 "MICROTEST" -> MicrotestPatients.getDefault()
+                else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
+            }
+        }
+
+        fun getPatientWithLinkedProfiles(gpSystem: String): Patient {
+            return when (gpSystem.toUpperCase()) {
+                "EMIS" -> EmisPatients.getPatientWithLinkedProfiles()
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }

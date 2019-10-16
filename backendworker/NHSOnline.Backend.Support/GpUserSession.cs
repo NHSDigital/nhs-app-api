@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Support
         public string OdsCode { get; set; }
 
         public abstract Supplier Supplier { get; }
-        
+
         public bool HasLinkedAccounts { get; set; }
     }
 }

@@ -9,5 +9,7 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts.Models
         public string Name { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
+
+        public string NhsNumber { get; set; }
     }
 }

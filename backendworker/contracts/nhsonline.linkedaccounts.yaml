@@ -29,6 +29,38 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+  /linked-accounts/access-summary:
+    get:
+      tags:
+        - linked-accounts
+      summary: Gets a linked account by id.
+      parameters:
+        - name: id
+          in: query
+          description: user account id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns an object with details of the linked account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LinkedAccountAccessSummaryResponse"
+        "401":
+          description: User session missing or expired.
+        "500":
+          description: An unexpected error occurred processing the request.
+        "502":
+          description: Bad response received from upstream system.
+        "504":
+          description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     LinkedAccount:
@@ -43,6 +75,9 @@ components:
         dateOfBirth:
           type: string
           format: date-time
+        nhsNumber:
+          type: string
+          description: Person's NHS number
     LinkedAccountsResponse:
       type: object
       properties:
@@ -51,3 +86,18 @@ components:
           description: Array of accounts you can act on behalf of.
           items:
             $ref: "#/components/schemas/LinkedAccount"
+    LinkedAccountAccessSummaryResponse:
+      type: object
+      properties:
+        gpPracticeName:
+          type: string
+          description: gp pratice name (defaults to practice ods code if gp practice name cannot be found)
+        canBookAppointment:
+          type: boolean
+          description: can book appointment for linked account
+        canOrderRepeatPrescription:
+          type: boolean
+          description: can order a repeat prescription for linked account
+        canViewMedicalRecord:
+          type: boolean
+          description: can view medical record for linked account

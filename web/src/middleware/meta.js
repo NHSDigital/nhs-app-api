@@ -23,6 +23,7 @@ import {
   DATA_SHARING_PREFERENCES,
   INDEX,
   LINKED_PROFILES,
+  LINKED_PROFILES_SUMMARY,
   LOGIN,
   LOGOUT,
   BEGINLOGIN,
@@ -192,6 +193,10 @@ export default function ({ route, store, app }) {
     case LINKED_PROFILES.name:
       route.meta.headerKey = 'pageHeaders.linkedProfiles';
       route.meta.pageTitleKey = 'pageTitles.linkedProfiles';
+      break;
+    case LINKED_PROFILES_SUMMARY.name:
+      route.meta.headerKey = '';
+      route.meta.pageTitleKey = '';
       break;
     case ORGAN_DONATION.name:
     case ORGAN_DONATION_ADDITIONAL_DETAILS.name:

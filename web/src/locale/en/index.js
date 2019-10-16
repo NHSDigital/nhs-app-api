@@ -1499,7 +1499,18 @@ export default {
   },
   linkedProfiles: {
     linkedInformation: 'You have proxy access for the following people.',
-    dob: 'Date of birth:',
+    informationHeaders: {
+      dob: 'Date of birth',
+      nhsNumber: 'NHS number',
+      gpPractice: 'GP practice',
+    },
+    switchProfileButton: 'Switch to this profile',
+    thingsYouCanDoOnBehalfOf: {
+      text: 'Things you can do on behalf of',
+      bookAnAppointment: 'Book an appointment',
+      orderRepeatPrescription: 'Order repeat prescription',
+      viewMedicalRecord: 'View medical record',
+    },
   },
   notifications: {
     paragraphs: [

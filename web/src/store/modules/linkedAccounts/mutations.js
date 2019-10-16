@@ -6,6 +6,7 @@ import {
   SELECT,
   CLEAR_SELECTED_LINKED_ACCOUNT,
   CLEAR_LINKED_ACCOUNTS,
+  LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
   initialState,
 } from './mutation-types';
 
@@ -16,7 +17,6 @@ const clearLinkedAccounts = (state) => {
 };
 const clearSelectedLinkedAccount = (state) => {
   state.selectedLinkedAccount = null;
-  state.loadedLinkedAccount = null;
 };
 export default {
   [LOADED](state, data) {
@@ -41,5 +41,8 @@ export default {
   },
   [CLEAR_LINKED_ACCOUNTS](state) {
     clearLinkedAccounts(state);
+  },
+  [LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY](state, data) {
+    Object.assign(state.selectedLinkedAccount, data);
   },
 };

@@ -12,9 +12,15 @@ import mocking.emis.testResults.EmisTestResultsBuilder
 import models.Patient
 
 class EmisMappingBuilderMyRecord(private var configuration: EmisConfiguration?){
-    fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration!!,
-            patient.userPatientLinkToken,
-            patient.endUserSessionId, patient.sessionId)
+    fun demographicsRequest(
+            patient: Patient,
+            sessionId: String = patient.sessionId,
+            endUserSessionId: String = patient.endUserSessionId) =
+            EmisDemographicsBuilder(
+                    configuration!!,
+                    patient.userPatientLinkToken,
+                    endUserSessionId,
+                    sessionId)
 
     fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration!!,
             patient.userPatientLinkToken,

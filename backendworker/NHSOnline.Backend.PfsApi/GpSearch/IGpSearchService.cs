@@ -8,6 +8,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
     {
         Task<GpSearchResult> Search(string searchTerm);
 
+        Task<GpSearchResult> GetGpPracticeByOdsCode(string odsCode);
+
         Task<IsGpPracticeEpsEnabledResponse> IsGpPracticeEPSEnabled(string odsCode);
     }
 }

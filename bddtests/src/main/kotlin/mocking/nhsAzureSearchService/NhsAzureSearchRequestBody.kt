@@ -48,3 +48,16 @@ data class NhsAzureSearchPostcodesAndPlacesRequestBody(
         val filter: String = FILTER_LOCAL_TYPE_POSTCODE,
         val count: Boolean = true
 )
+
+fun nhsAzureSearchOrganisationByOdsCodeRequestBody(odsCode: String): NhsAzureSearchOrganisationRequestBody {
+    return NhsAzureSearchOrganisationRequestBody(
+            top = 1,
+            filter = "OrganisationTypeID eq 'GPB' and NACSCode eq '$odsCode'",
+            select = "OrganisationID,OrganisationName,NACSCode,Metrics",
+            search = null,
+            count = false,
+            searchFields = null,
+            searchMode = null,
+            queryType = null
+    )
+}
