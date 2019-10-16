@@ -55,6 +55,7 @@
 		47D88A4621998CBD004771B5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D88A4521998CBD004771B5 /* Configuration.swift */; };
 		4A4F8E292201D59B00D6D224 /* BiometricErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */; };
 		4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */; };
+		4AAEDF1F235744BE00439EC7 /* BiometricBreadcrumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		64909CF83EEBD7876CEC4A9E /* Pods_NHSOnlineTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A57034DF92A742FFEFBF35D2 /* Pods_NHSOnlineTests.framework */; };
 		8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */; };
@@ -941,6 +942,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AAEDF1F235744BE00439EC7 /* BiometricBreadcrumb.swift in Sources */,
 				C2357EBC216575460033B98F /* KnownServicesTests.swift in Sources */,
 				DB75990E22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift in Sources */,
 				2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */,
