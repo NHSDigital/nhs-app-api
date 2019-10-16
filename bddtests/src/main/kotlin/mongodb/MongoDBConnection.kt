@@ -14,21 +14,58 @@ import java.lang.reflect.Type
 class MongoDBConnection(private val collectionName: String, private val host: String, private val port: Int) {
 
     fun clearCache() {
-        val mongoClient = getMongoClient()
-        mongoClient.getDatabase(developmentDatabaseName).getCollection(collectionName).drop()
-        mongoClient.close()
-        assertNumberOfDocuments(0)
+        onCollection { collection ->
+            collection.drop()
+            assertNumberOfDocuments(0, collection)
+        }
     }
 
-    fun assertNumberOfDocuments(expected: Int){
-        val mongoClient = getMongoClient()
+    fun assertNumberOfDocuments(expected: Int) {
+        onCollection { collection -> assertNumberOfDocuments(expected, collection) }
+    }
+
+    fun <T> getValues(type: Type): List<T> {
+        val gsonBuilder = GsonBuilder().create()
+        return onCollection { collection ->
+            val documents = collection.find()
+            documents.map {
+                document ->
+                val jsonDocument = document.toJson()
+                gsonBuilder.fromJson<T>(jsonDocument, type)
+            }.toList()
+        }
+    }
+
+    fun <T> clearAndInsertValues(values: List<T>) {
+        val gsonBuilder = GsonBuilder().create()
+        val documentsToInsert = values.map { value ->
+            val valueAsJson = gsonBuilder.toJson(value)
+            Document.parse(valueAsJson)
+        }
+        onCollection { collection ->
+            collection.drop()
+            assertNumberOfDocuments(0, collection)
+            collection.insertMany(documentsToInsert)
+            assertNumberOfDocuments(values.count(), collection)
+        }
+    }
+
+    private fun <TReturn> onCollection(action: (MongoCollection<Document>) -> TReturn): TReturn {
+        val mongoClient = MongoClient(host, port)
         val mongoDatabase = mongoClient.getDatabase(developmentDatabaseName)
+        val collection = mongoDatabase.getCollection(collectionName)
+        val actionResult = action.invoke(collection)
+        mongoClient.close()
+        return actionResult
+    }
+
+    private fun assertNumberOfDocuments(expected: Int, collection: MongoCollection<Document>) {
         var retryCount = (TIME_TO_WAIT_FOR_ELEMENT / ELEMENT_RETRY_TIME).toInt()
-        while(retryCount>=0) {
-            val collection = mongoDatabase.getCollection(collectionName)
+        while (retryCount >= 0) {
             val numberOfDocuments = collection.countDocuments().toInt()
-            if(numberOfDocuments == expected){break;}
-            else {
+            if (numberOfDocuments == expected) {
+                break
+            } else {
                 when (retryCount) {
                     0 -> Assert.fail(
                             "Number of documents in $collectionName. " +
@@ -43,20 +80,6 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 }
             }
         }
-        mongoClient.close()
-    }
-
-    fun <T> getValues(type: Type): List<T> {
-        val mongoClient = getMongoClient()
-        val mongoDatabase = mongoClient.getDatabase(developmentDatabaseName)
-        val collection = mongoDatabase.getCollection(collectionName)
-        val documents = collection.find()
-        val values = documents.map { document ->
-            val jsonDocument = document.toJson()
-            GsonBuilder().create().fromJson<T>(jsonDocument, type)
-        }.toList()
-        mongoClient.close()
-        return values
     }
 
     private fun formatContents(collection: MongoCollection<Document>): String {
@@ -65,13 +88,10 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         return "\n\t\t$collectionName\n\t$contents\n"
     }
 
-    private fun getMongoClient(): MongoClient {
-        return MongoClient(host, port)
-    }
-
     companion object {
         private const val im1CacheCollectionName = "im1cache"
         private const val userDevicesCollectionName = "devices"
+        private const val userInfoCollectionName = "info"
         private const val messagesCollectionName = "messages"
         private const val developmentDatabaseName = "development"
 
@@ -87,6 +107,10 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 messagesCollectionName,
                 Config.instance.messagesMongoDbHost,
                 Config.instance.messagesMongoDbPort.toInt())
+        val UserInfoCollection = MongoDBConnection(
+                userInfoCollectionName,
+                Config.instance.usersMongoDbHost,
+                Config.instance.usersMongoDbPort.toInt())
     }
 }
 

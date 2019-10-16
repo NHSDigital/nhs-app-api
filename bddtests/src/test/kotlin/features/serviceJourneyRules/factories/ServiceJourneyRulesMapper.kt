@@ -30,7 +30,8 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 JourneyType.NOMINATED_PHARMACY_ENABLED,
                                 JourneyType.NOTIFICATIONS_DISABLED,
-                                JourneyType.MESSAGES_DISABLED),
+                                JourneyType.MESSAGES_DISABLED,
+                                JourneyType.USER_INFO_DISABLED),
                 GpInformation(EMIS_GP_SUPPLIER, ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED) to
                         EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
                                 JourneyType.MEDICAL_RECORD_IM1,
@@ -44,7 +45,8 @@ class ServiceJourneyRulesMapper {
                 GpInformation(TPP_GP_SUPPLIER, TPP_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 JourneyType.NOTIFICATIONS_ENABLED,
-                                JourneyType.MESSAGES_ENABLED),
+                                JourneyType.MESSAGES_ENABLED,
+                                JourneyType.USER_INFO_ENABLED),
 
                 // Medical Record V2
                 GpInformation(VISION_GP_SUPPLIER, VISION_ONLINE_CONSULTATIONS_DISABLED) to
@@ -116,6 +118,8 @@ class ServiceJourneyRulesMapper {
             ONLINE_CONSULTATIONS_DISABLED,
             PRESCRIPTIONS_GPATHAND,
             PRESCRIPTIONS_IM1,
+            USER_INFO_ENABLED,
+            USER_INFO_DISABLED
         }
     }
 }

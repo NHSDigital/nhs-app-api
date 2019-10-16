@@ -38,13 +38,24 @@ class ServiceJourneyRulesStepDefinitions {
         SerenityHelpers.setPatient(patient)
     }
 
-
     @Given("^I am a (.*) user where the journey configurations are:$")
-    fun iAmAUserWhereTheJourneyConfigurationsAre(gpSystem: String,
+    fun iAmAGPSystemUserWhereTheJourneyConfigurationsAre(gpSystem: String,
                                                  configurations: List<ServiceJourneyRulesConfiguration>) {
+        createUser(gpSystem, configurations)
+    }
+
+    @Given("^I am a user where the journey configurations are:$")
+    fun iAmAUserWhereTheJourneyConfigurationsAre(configurations: List<ServiceJourneyRulesConfiguration>) {
+        createUser(null, configurations)
+    }
+
+    private fun createUser(gpSystem: String?,
+                           configurations: List<ServiceJourneyRulesConfiguration>) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem, ArrayList(configurations))
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(
+                gpSystem ?: SerenityHelpers.getGpSupplier(),
+                mockingClient).createFor(patient)
     }
 
     @When("^I request the service journey rules for my ODS Code$")
