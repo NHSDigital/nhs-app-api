@@ -334,7 +334,7 @@ info "Running $TAG tests"
           -Dwebdriver.provided.type=$BROWSER \
           $APPIUM_TYPE \
           -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=') ; echo $(date) - $TAG Completed" &
-        
+
     # give the test container time to startup
     echo "Sleeping for 10 seconds to allow the test container to start"
     sleep 10
@@ -413,28 +413,31 @@ done
 info "All failed tests for rerun"
 cat $workingDir/../build/failures.txt
 
-if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -ge 1 ] && [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -le 30 ]
+if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -ge 1 ]
 then
     TAGS+=(RERUN)
 
-    cp -r $workingDir/../ $workingDir/../../testRunFolder/RERUN
+    if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -le 30 ]
+    then
+      cp -r $workingDir/../ $workingDir/../../testRunFolder/RERUN
 
-    docker run \
-      --name RERUN \
-      --rm \
-      --network $NETWORK \
-      --env-file vars_ci_run.env \
-      -v $workingDir/../../testRunFolder/RERUN/:/repo \
-      $DOCKER_IMAGE bash -c " \
-        cd /repo ; \
-        $BROWSERSTACK_LOCAL_STRING \
-        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX \
-        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
-        ./gradlew rerun --stacktrace \
-          -Dcucumber.options=\"--strict \" \
-          -Dwebdriver.provided.type=$BROWSER \
-          $APPIUM_TYPE \
-          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')"
+      docker run \
+        --name RERUN \
+        --rm \
+        --network $NETWORK \
+        --env-file vars_ci_run.env \
+        -v $workingDir/../../testRunFolder/RERUN/:/repo \
+        $DOCKER_IMAGE bash -c " \
+          cd /repo ; \
+          $BROWSERSTACK_LOCAL_STRING \
+          BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX \
+          APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
+          ./gradlew rerun --stacktrace \
+            -Dcucumber.options=\"--strict \" \
+            -Dwebdriver.provided.type=$BROWSER \
+            $APPIUM_TYPE \
+            -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')"
+    fi
 fi
 
 # Aggregate test results
