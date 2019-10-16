@@ -52,8 +52,15 @@ export default {
   [LOADED](state, { record, patientDetails }) {
     state.record = record;
     state.patientDetails = patientDetails;
-    state.hasLoaded = true;
     state.isPatientDetailsCollapsed = false;
+
+    // NHSO-7073
+    // temporarily removing TGA documents until Download functionality is implemented
+    const filteredDocuments = (record.documents.data || []).filter(d => `${d.extension}`.toLowerCase() !== 'tga');
+    state.record.documents.data = filteredDocuments;
+    state.record.documents.recordCount = filteredDocuments.length;
+
+    state.hasLoaded = true;
   },
   [LOADED_TEST_RESULTS](state, { record }) {
     state.testResults = record;
@@ -79,6 +86,7 @@ export default {
     } else {
       state.document.name = documentInfo.name;
       state.document.type = documentInfo.type;
+      state.document.date = documentInfo.date;
     }
   },
   [RESET_TERMS](state) {

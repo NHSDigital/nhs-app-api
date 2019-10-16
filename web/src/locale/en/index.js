@@ -1181,20 +1181,26 @@ export default {
       sectionHeader: 'Repeat medications: discontinued',
     },
     documents: {
-      errors: {
-        502: {
-          pageTitle: 'Server error',
-          pageHeader: 'Server error',
-          header: 'We\'re experiencing technical difficulties',
-          subheader: '',
-          message: {
-            text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-            label: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      detail: {
+        errors: {
+          502: {
+            pageTitle: 'Server error',
+            pageHeader: 'Server error',
+            header: 'We\'re experiencing technical difficulties',
+            subheader: '',
+            message: {
+              text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+              label: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+            },
           },
         },
       },
       sectionHeader: 'Documents',
       documentsLink: 'View your documents',
+      documentPageSubtext: 'Document added on',
+      actions: {
+        view: 'View',
+      },
     },
     immunisations: {
       sectionHeader: 'Immunisations',
@@ -1419,7 +1425,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'Sensitive information - My record',
-    myRecordDocuments: 'Documents - My GP medical record',
+    myRecordDocuments: 'Documents - Your GP medical record',
     notifications: 'Notifications',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',

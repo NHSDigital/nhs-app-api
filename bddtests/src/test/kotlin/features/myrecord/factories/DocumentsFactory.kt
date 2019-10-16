@@ -8,8 +8,8 @@ abstract class DocumentsFactory {
 
     abstract fun disabled(patient: Patient)
     abstract fun enabledWithNoDocuments(patient: Patient)
-    abstract fun enabledWithDocuments(patient: Patient)
-    abstract fun withOneInvalidDocument(patient: Patient)
+    abstract fun enabledWithDocuments(patient: Patient, mockUnavailableDocument: Boolean = false)
+    abstract fun enabledWithDocumentsWithNoName(patient: Patient)
 
     val mockingClient = MockingClient.instance
 

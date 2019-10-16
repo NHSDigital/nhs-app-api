@@ -1,96 +1,92 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <glossary :extra-classes="[$style.glossary]"/>
-      <div class="documentContainer" v-html="document"/>
-      <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
-                                 :path="noJsPath"
-                                 @clickAndPrevent="backToDocumentsClicked"/>
+      <div v-if="showTemplate" :class="[$style.content,
+                                        'pull-content',
+                                        !$store.state.device.isNativeApp && $style.desktopWeb]">
+        <div id="documentInfo" :class="$style.info" data-purpose="info">
+          <p v-if="name">{{ dateString }}</p>
+        </div>
+        <menu-item-list data-sid="action-list-menu">
+          <menu-item id="btn_viewDocument"
+                     :text="$t('my_record.documents.actions.view')"
+                     :aria-label="$t('my_record.documents.actions.view')"
+                     :click-func="navigateToView"/>
+        </menu-item-list>
+      </div>
     </div>
   </div>
 </template>
-
 <script>
 import get from 'lodash/fp/get';
-import NativeAppCallbacks from '@/services/native-app';
-import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import Glossary from '@/components/Glossary';
-import { MYRECORD, MY_RECORD_DOCUMENTS, LOGIN, LOGOUT } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
+import { MY_RECORD_DOCUMENT_DETAIL, MYRECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { isFalsy, datePart } from '@/lib/utils';
+import NativeApp from '@/services/native-app';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    DesktopGenericBackLink,
-    Glossary,
-  },
-  data() {
-    const documentsPath = MY_RECORD_DOCUMENTS.path;
-    const documentHeaderLocation = `#document-${this.$route.params.id}`;
-    const noJsData = JSON.stringify({ myRecord: { hasAcceptedTerms: true } });
-    return {
-      documentsPath: documentsPath + documentHeaderLocation,
-      noJsPath: `${documentsPath}?nojs=${encodeURIComponent(noJsData) + documentHeaderLocation}`,
-    };
+    MenuItem,
+    MenuItemList,
   },
   computed: {
-    document() {
-      return this.$store.state.myRecord.document.data;
+    isNativeApp() {
+      return this.$store.state.device.isNativeApp;
     },
   },
-  async asyncData({ store, route, redirect }) {
+  asyncData({ store, redirect }) {
+    const date = get('state.myRecord.document.date.value', store);
+
     if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
-      || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning())
+      || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) || !date
     ) {
       redirect(MYRECORD.path);
-      return;
+      return {};
     }
 
-    await store.dispatch('myRecord/setSelectedDocumentInfo', {
-      type: get('state.myRecord.document.type', store) || route.query.type,
-      name: get('state.myRecord.document.name', store) || route.query.name,
-    });
-    await store.dispatch('myRecord/loadDocument', route.params.id);
-  },
-  created() {
-    if (this.document && process.client) {
-      this.navHidden = true;
-      NativeAppCallbacks.hideHeader();
-      NativeAppCallbacks.hideMenuBar();
+    const name = get('state.myRecord.document.name', store);
+    const dateString = `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePart(date, 'YearMonthDay')}`;
+
+    if (name) {
+      store.dispatch('header/updateHeaderText', name);
+    } else {
+      store.dispatch('header/updateHeaderText', dateString);
     }
+
+    return {
+      document: store.state.myRecord.document,
+      dateString,
+      name,
+    };
   },
   mounted() {
-    EventBus.$emit(FOCUS_NHSAPP_ROOT);
+    if (this.isNativeApp) {
+      NativeApp.resetPageFocus();
+    }
   },
   methods: {
-    backToDocumentsClicked() {
-      redirectTo(this, this.documentsPath, null);
+    navigateToView() {
+      this.$router.push({ name: MY_RECORD_DOCUMENT_DETAIL.name,
+        params: { id: this.$route.params.id } });
     },
-  },
-  beforeRouteLeave(to, from, next) {
-    if (!(to.path === LOGIN.path || to.path === LOGOUT.path) && this.navHidden) {
-      NativeAppCallbacks.showHeader();
-      NativeAppCallbacks.showMenuBar();
-    }
-    next();
   },
 };
 </script>
-
-<style lang="scss">
-  .documentContainer {
-    margin-bottom: 40px;
-
-    img {
-      max-width: 100%;
-    }
-  }
-</style>
 <style module lang="scss" scoped>
-  .glossary {
-    padding: 0.5em 1em 0em 1em;
-  }
+  @import '../../../style/spacings';
+  @import '../../../style/textstyles';
+
+  .info {
+    font-size: 1em;
+    margin-bottom: 1em;
+    margin-top: -1em;
+
+    p {
+      font-family: $default_web;
+      font-weight: normal;
+    }
+}
 </style>

@@ -38,6 +38,7 @@ import {
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
   MY_RECORD_DOCUMENTS,
   MY_RECORD_DOCUMENT,
+  MY_RECORD_DOCUMENT_DETAIL,
   MYRECORD_GP_AT_HAND,
   GP_MEDICAL_RECORD,
   GP_MEDICAL_RECORD_GP_AT_HAND,
@@ -255,6 +256,10 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.myRecordDocuments';
       route.meta.pageTitleKey = 'pageTitles.myRecordDocuments';
+      break;
+    case MY_RECORD_DOCUMENT_DETAIL.name:
+      route.meta.pageTitleKey = 'pageTitles.myRecordDocuments';
+      store.dispatch('navigation/setNewMenuItem', 3);
       break;
     case MYRECORD_GP_AT_HAND.name:
     case GP_MEDICAL_RECORD_GP_AT_HAND.name:

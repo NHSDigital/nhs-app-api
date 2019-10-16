@@ -1,20 +1,25 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // import Vue from 'vue';
-import each from 'jest-each';
 import chunk from 'lodash/fp/chunk';
 import DocumentsPage from '@/pages/my-record/documents/index';
+import CardGroup from '@/components/widgets/card/CardGroup';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, shallowMount } from '../../../helpers';
+import Glossary from '@/components/Glossary';
 
 jest.mock('lodash/fp/chunk');
 let chunkCallback;
 
 let page;
 let $store;
+const defaultDocuments = ['data', 'to', 'be', 'chunked'];
+const expectedChunkedData = [['data', 'to'], ['be', 'chunked']];
+const expectedPageData = { documentChunks: expectedChunkedData };
 
-const mountPage = () => {
+const mountPage = ({ data } = {}) => {
   page = shallowMount(DocumentsPage, {
     $store,
+    data,
   });
 };
 
@@ -22,10 +27,10 @@ describe('my-record documents', () => {
   beforeEach(() => {
     $store = createStore({
       $env: { MY_RECORD_DOCUMENTS_ENABLED: true },
-      state: { myRecord: initialState() },
+      state: { myRecord: initialState(), device: { isNativeApp: false } },
     });
 
-    chunkCallback = jest.fn().mockReturnValue([]);
+    chunkCallback = jest.fn().mockReturnValue(expectedChunkedData);
     chunk.mockClear();
     chunk.mockReturnValue(chunkCallback);
   });
@@ -42,28 +47,6 @@ describe('my-record documents', () => {
 
       expect(redirect).toHaveBeenCalledWith('/my-record');
     });
-    it('will load record if not loaded and my record terms are accepted', async () => {
-      $store.state.myRecord.hasAcceptedTerms = true;
-
-      await DocumentsPage.asyncData({ redirect, store: $store });
-
-      expect($store.dispatch).toHaveBeenCalledWith('myRecord/load');
-    });
-    each([
-      { acceptedTerms: false, loaded: false },
-      { acceptedTerms: false, loaded: true },
-      { acceptedTerms: true, loaded: true },
-    ]).it('will not load record if loaded or terms are not accepted', async ({
-      acceptedTerms,
-      loaded,
-    }) => {
-      $store.state.myRecord.hasAcceptedTerms = acceptedTerms;
-      $store.state.myRecord.hasLoaded = loaded;
-
-      mountPage();
-
-      expect($store.dispatch).not.toHaveBeenCalledWith('myRecord/load');
-    });
     it('will redirect to my-record if no documents found in record', async () => {
       $store.state.myRecord.hasAcceptedTerms = true;
 
@@ -71,17 +54,14 @@ describe('my-record documents', () => {
 
       expect(redirect).toHaveBeenCalledWith('/my-record');
     });
-  });
-  describe('data', () => {
-    it('will chunk my-record documents into chunks of 2', () => {
-      const data = ['data', 'to', 'be', 'chunked'];
-      $store.state.myRecord.record.documents = { data };
+    it('will chunk my-record documents into chunks of 2', async () => {
+      $store.state.myRecord.record.documents = { data: defaultDocuments };
 
-      mountPage();
+      const pageData = await DocumentsPage.asyncData({ store: $store });
 
       expect(chunk).toHaveBeenCalledWith(2);
-      expect(chunkCallback).toHaveBeenCalledWith(data);
-      expect(page.vm.documentChunks).toEqual([]);
+      expect(chunkCallback).toHaveBeenCalledWith(defaultDocuments);
+      expect(pageData).toEqual(expectedPageData);
     });
   });
   describe('template', () => {
@@ -89,24 +69,24 @@ describe('my-record documents', () => {
       it('will display an abbreviations glossary', () => {
         mountPage();
 
-        const glossaryExists = page.find('glossary-stub').exists();
+        const glossaryExists = page.find(Glossary).exists();
         expect(glossaryExists).toBe(true);
       });
     });
     describe('document items', () => {
       it('will render a card group for every chunk', () => {
-        chunkCallback.mockReturnValue([[], []]);
-        mountPage();
+        const documentChunks = [[], []];
+        mountPage({ data: () => ({ documentChunks }) });
 
-        const cardGroups = page.findAll('card-group-stub');
+        const cardGroups = page.findAll(CardGroup);
         expect(cardGroups.length).toEqual(2);
       });
       it('will render a document item in a card group item for each chunk item', () => {
-        chunkCallback.mockReturnValue([
+        const documentChunks = [
           [{ documentGuid: '1', extension: 'pdf', effectiveDate: {}, size: 10 }],
           [{ documentGuid: '3', extension: 'pdf', effectiveDate: {}, size: 10 }],
-        ]);
-        mountPage();
+        ];
+        mountPage({ data: () => ({ documentChunks }) });
 
         const cardGroupItems = page.findAll('card-group-stub card-group-item-stub');
         const firstDocumentItems = cardGroupItems.wrappers[0].find('document-item-stub[id="1"]');
@@ -125,8 +105,7 @@ describe('my-record documents', () => {
           name: 'Document name',
           isAvailable: true,
         };
-        chunkCallback.mockReturnValue([[document]]);
-        mountPage();
+        mountPage({ data: () => ({ documentChunks: [[document]] }) });
 
         const documentItem = page.find('document-item-stub[id="1"]');
         expect(documentItem.vm.id).toEqual(document.documentGuid);

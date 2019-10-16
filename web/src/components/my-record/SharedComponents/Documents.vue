@@ -12,9 +12,8 @@
        :aria-hidden="isCollapsed">
     <p v-if="supplier === 'EMIS'">
       <a :class="$style.viewDocuments"
-         :href="documentsPath + nojsQuery"
          tabindex="0"
-         @click.prevent="viewDocuments"
+         @click="viewDocuments"
          @keypress="onKeyDown($event)">
         {{ $t('my_record.documents.documentsLink') }}
       </a>
@@ -46,25 +45,19 @@ export default {
       default: '',
     },
   },
-  data() {
-    return {
-      documentsPath: MY_RECORD_DOCUMENTS.path,
-      nojsQuery: `?nojs=${encodeURIComponent(this.$store.state.myRecord.nojsData)}`,
-    };
-  },
   computed: {
     getCollapsedState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     showError() {
       return this.documents.hasErrored ||
-                this.documents.data.length === 0 ||
-                !this.documents.hasAccess;
+             this.documents.data.length === 0 ||
+             !this.documents.hasAccess;
     },
   },
   methods: {
     viewDocuments() {
-      redirectTo(this, this.documentsPath, null);
+      redirectTo(this, MY_RECORD_DOCUMENTS.path, null);
     },
     onKeyDown(e) {
       if (e.keyCode === 13) {

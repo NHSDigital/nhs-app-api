@@ -53,12 +53,18 @@ export const createStore = ({
   getters = {},
   context = {},
   state = {},
+  i18n = {
+    t: create$T(),
+    tc: create$T(),
+    te: create$Te(),
+  },
 } = {}) => ({
   app: {
     $cookies,
     $env,
     $http,
     context,
+    i18n,
   },
   dispatch: jest.fn(),
   getters,

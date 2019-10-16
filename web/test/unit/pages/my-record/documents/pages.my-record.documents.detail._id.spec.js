@@ -1,5 +1,5 @@
 import each from 'jest-each';
-import DocumentPage from '@/pages/my-record/documents/_id';
+import DocumentPage from '@/pages/my-record/documents/detail/_id';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, shallowMount } from '../../../helpers';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
@@ -56,20 +56,6 @@ describe('my-record documents', () => {
         await DocumentPage.asyncData({ redirect, route, store: $store });
         expect(redirect).not.toHaveBeenCalled();
         expect($store.dispatch).toHaveBeenCalledWith('myRecord/loadDocument', route.params.id);
-      });
-      it('will set document type in store from query when not already set', async () => {
-        await DocumentPage.asyncData({ redirect, route, store: $store });
-        expect($store.dispatch).toHaveBeenCalledWith('myRecord/setSelectedDocumentInfo', {
-          type: 'img',
-          name: 'query file',
-        });
-      });
-      it('will dispatch setSelectedDocumentInfo with existing values', async () => {
-        const existingDocument = { type: 'pdf', name: 'store file' };
-        $store.state.myRecord.document = existingDocument;
-        await DocumentPage.asyncData({ redirect, route, store: $store });
-        expect($store.dispatch).toHaveBeenCalledWith('myRecord/setSelectedDocumentInfo', existingDocument);
-        expect($store.state.myRecord.document).toEqual(existingDocument);
       });
     });
   });

@@ -2,7 +2,6 @@
   <card :id="`document-${id}`"
         :component="documentTag"
         :class="['document', documentAvailable && 'available']"
-        :href="documentPath + documentQuery"
         @click.prevent="documentClicked">
     <p class="document__date-and-type">
       {{ date.value | datePart('YearMonthDay') }}
@@ -58,14 +57,9 @@ export default {
   },
   data() {
     const documentAvailable = this.available && this.id;
-    const noJsData = JSON.stringify({ myRecord: { hasAcceptedTerms: true } });
     return {
-      documentQuery: `?nojs=${encodeURIComponent(noJsData)}` +
-        `&type=${encodeURIComponent(this.type)}` +
-        `&name=${encodeURIComponent(this.name)}`,
       documentAvailable,
       documentTag: documentAvailable ? 'a' : 'div',
-      documentPath: MY_RECORD_DOCUMENT.path.replace(':id', this.id),
     };
   },
   methods: {
@@ -74,6 +68,7 @@ export default {
         this.$store.dispatch('myRecord/setSelectedDocumentInfo', {
           type: this.type,
           name: this.name,
+          date: this.date,
         });
         this.$router.push({ name: MY_RECORD_DOCUMENT.name, params: { id: this.id } });
       }

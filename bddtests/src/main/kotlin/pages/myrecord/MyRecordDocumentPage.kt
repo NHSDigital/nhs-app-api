@@ -4,6 +4,7 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 
 class MyRecordDocumentPage : HybridPageObject() {
+
     val document =
             HybridPageElement(
                     webDesktopLocator = "//div[@class='documentContainer']" +

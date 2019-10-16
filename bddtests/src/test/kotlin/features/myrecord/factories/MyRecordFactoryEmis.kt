@@ -53,7 +53,7 @@ class MyRecordFactoryEmis: MyRecordFactory() {
 
         mockingClient.forEmis {
             myRecord.documentsRequest(patient)
-                    .respondWithSuccess(DocumentsData.getDefaultDocumentsData())
+                    .respondWithSuccess(DocumentsData.getNoDocumentData())
         }
     }
 
@@ -99,7 +99,7 @@ class MyRecordFactoryEmis: MyRecordFactory() {
 
         mockingClient.forEmis {
             myRecord.documentsRequest(patient)
-                    .respondWithSuccess(DocumentsData.getMultipleDocuments())
+                    .respondWithSuccess(DocumentsData.getDefaultDocumentsData())
         }
     }
 }

@@ -51,7 +51,7 @@ class EmisMappingBuilderMyRecord(private var configuration: EmisConfiguration?){
             patient.endUserSessionId,
             patient.sessionId)
 
-    fun documentRequest(patient: Patient, documentId: String = "document-1") = EmisDocumentBuilder(configuration!!,
+    fun documentRequest(patient: Patient, documentId: String) = EmisDocumentBuilder(configuration!!,
             patient.userPatientLinkToken,
             patient.endUserSessionId,
             patient.sessionId,

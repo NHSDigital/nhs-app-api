@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import chunk from 'lodash/fp/chunk';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
@@ -38,22 +39,16 @@ export default {
     DocumentItem,
     Glossary,
   },
-  data() {
+  asyncData({ store, redirect }) {
+    const documents = get('state.myRecord.record.documents.data', store) || [];
+    if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) ||
+        documents.length === 0) {
+      redirect(MYRECORD.path);
+    }
+
     return {
-      documentChunks: chunk(2)((this.$store.state.myRecord.record.documents || {}).data || []),
+      documentChunks: chunk(2)(documents),
     };
-  },
-  async asyncData({ store, redirect }) {
-    if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)) {
-      redirect(MYRECORD.path);
-      return;
-    }
-    if (store.state.myRecord.hasAcceptedTerms && !store.state.myRecord.hasLoaded) {
-      await store.dispatch('myRecord/load');
-    }
-    if (!((store.state.myRecord.record || {}).documents)) {
-      redirect(MYRECORD.path);
-    }
   },
 };
 </script>

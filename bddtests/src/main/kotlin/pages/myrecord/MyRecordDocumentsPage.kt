@@ -1,5 +1,6 @@
 package pages.myrecord
 
+import models.ExpectedDocument
 import org.junit.Assert.assertEquals
 import pages.HybridPageObject
 import pages.HybridPageElement
@@ -41,24 +42,25 @@ class MyRecordDocumentsPage : HybridPageObject() {
                 page = this)
     }
 
-    fun assertDocumentItemsVisible(numDocuments: Int) {
-        for(documentNumber in 1..numDocuments){
-            setBaseDocumentItemPath("document-$documentNumber")
-
+    fun assertDocumentItemsVisible(expectedDocuments: List<ExpectedDocument>) {
+        for(expectedDocument in expectedDocuments){
+            setBaseDocumentItemPath(expectedDocument.id)
             assertEquals("Document date or type incorrect",
-                    "18 February 2018 (PDF, 1MB)",
-                    getDocumentDateAndType().text)
-            assertEquals("Document term incorrect", "History $documentNumber", getDocumentTerm().text)
-            assertEquals("Document name incorrect", "Name $documentNumber", getDocumentName().text)
+                expectedDocument.dateTypeAndSize,
+                getDocumentDateAndType().text)
+            assertEquals("Document term incorrect",
+                expectedDocument.documentTerm,
+                getDocumentTerm().text)
+            if (expectedDocument.name != null) {
+                assertEquals("Document name incorrect",
+                    expectedDocument.name,
+                    getDocumentName().text)
+            }
         }
     }
 
-    fun clickAvailableDocument() {
-        clickDocumentById("document-1")
-    }
-
-    fun clickDocumentById(documentId: String) {
-        setBaseDocumentItemPath(documentId)
+    fun clickDocument(document: ExpectedDocument) {
+        setBaseDocumentItemPath(document.id)
         getIndividualDocumentItem().click()
     }
 }

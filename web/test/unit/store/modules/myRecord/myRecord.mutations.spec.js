@@ -14,11 +14,20 @@ describe('my record mutations', () => {
 
   beforeEach(() => {
     data = {
-      record: 'record',
+      record: {
+        documents: {
+          data: [
+            { name: 'Document1', extension: 'tga' },
+            { name: 'Document2', extension: 'jpg' },
+          ],
+        },
+      },
       patientDetails: 'details',
     };
 
-    state = initialState();
+    state = {
+      record: initialState(),
+    };
   });
 
   describe('ACCEPT_TERMS', () => {
@@ -46,6 +55,14 @@ describe('my record mutations', () => {
 
     it('will set has loaded to true', () => {
       expect(state.hasLoaded).toEqual(true);
+    });
+
+    // this test should be removed when the
+    // download story (NHSO-7073)
+    // is complete
+    it('will filter the documents', () => {
+      expect(state.record.documents.data[0].name).toEqual('Document2');
+      expect(state.record.documents.data.length).toBe(1);
     });
 
     it('will set is patient details collapsed loaded to false', () => {

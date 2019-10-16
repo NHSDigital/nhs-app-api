@@ -1,4 +1,5 @@
 import { isUndefined, isEqual } from 'lodash/fp';
+import moment from 'moment-timezone';
 
 export const isFalsy = value => !(value && value !== 'false');
 export const isTruthy = value => !isFalsy(value);
@@ -50,4 +51,20 @@ export const readableBytes = (bytes) => {
   }
 
   return `${Number(parseFloat(bytes / 1000000).toFixed(2))}MB`;
+};
+
+export const datePart = (value, dateFormat) => {
+  switch (dateFormat) {
+    case 'Unknown':
+    case 'YearMonthDay':
+      return value ? moment.utc(value).format('D MMMM YYYY') : '';
+    case 'Year':
+      return value ? moment.utc(value).format('YYYY') : '';
+    case 'YearMonth':
+      return value ? moment.utc(value).format('MMMM YYYY') : '';
+    case 'YearMonthDayTime':
+      return value ? moment.utc(value).format('D MMMM YYYY h:mm a') : '';
+    default:
+      return value ? moment.utc(value).format('D MMMM YYYY') : '';
+  }
 };

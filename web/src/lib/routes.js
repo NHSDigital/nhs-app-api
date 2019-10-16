@@ -640,7 +640,17 @@ const routes = {
     name: 'my-record-documents-id',
     path: '/my-record/documents/:id',
     crumb: {
-      i8nKey: 'myRecordDocument',
+      get parentRoute() {
+        return this.allRoutes.MY_RECORD_DOCUMENTS;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  MY_RECORD_DOCUMENT_DETAIL: {
+    name: 'my-record-documents-detail-id',
+    isAnonymous: true,
+    path: '/my-record/documents/detail/:id',
+    crumb: {
       get parentRoute() {
         return this.allRoutes.MY_RECORD_DOCUMENTS;
       },
@@ -1031,6 +1041,7 @@ export const {
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   MY_RECORD_DOCUMENTS,
   MY_RECORD_DOCUMENT,
+  MY_RECORD_DOCUMENT_DETAIL,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,

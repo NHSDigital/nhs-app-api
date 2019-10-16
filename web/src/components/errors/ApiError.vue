@@ -148,7 +148,6 @@ export default {
       return getMessage(this, 'pageHeader');
     },
     pageTitle() {
-      this.$store.dispatch('errors/setErrorTitle', getMessage(this, 'pageTitle') || this.pageHeader);
       return getMessage(this, 'pageTitle') || this.pageHeader;
     },
     retryAction() {
