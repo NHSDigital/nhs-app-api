@@ -74,7 +74,7 @@ export default {
     showBanner() {
       const route = findByName(this.$route.name);
       if (route !== undefined) {
-        if (route.name === 'appointments-admin-help' || route.name === 'appointments-gp-advice') {
+        if (route.name === 'appointments-admin-help') {
           return !!(route.warningBanner && this.demographicsQuestionAnswered);
         }
         return !!(route.warningBanner && true);

@@ -11,28 +11,36 @@
           {{ $t('appointments.admin_help.errors.message.text') }}
         </message-text>
       </message-dialog>
-
-      <demographics-question v-else-if="!demographicsQuestionAnswered"
-                             :provider="provider"
-                             :service-definition-id="serviceDefinitionId"
-                             :checkbox-label="getDemographicsCheckboxLabel">
-
-        <message-dialog message-type="warning" icon-text="Important">
+      <div v-else>
+        <message-dialog v-if="!demographicsQuestionAnswered"
+                        id="conditionWarning"
+                        message-type="warning" icon-text="Important">
           <message-text :class="$style.warningText">
             {{ $t('appointments.admin_help.warning.warningText',
                   { providerName: getProviderName }) }}
           </message-text>
+          <message-text role="link">
+            <a id="online_consultations_help_link"
+               :href="onlineConsultationsURL"
+               target="_blank">
+              {{ $t('appointments.admin_help.warning.warningLink') }}
+            </a>
+          </message-text>
         </message-dialog>
 
-        <template>
-          <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
-          <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
-          <p>{{ $t('appointments.admin_help.demographicsQuestion.p3',
-                   { providerName: getProviderName }) }}</p>
-        </template>
-      </demographics-question>
+        <demographics-question v-if="!demographicsQuestionAnswered"
+                               :provider="provider"
+                               :service-definition-id="serviceDefinitionId"
+                               :checkbox-label="getDemographicsCheckboxLabel">
+          <template>
+            <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
+            <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
+            <p>{{ $t('appointments.admin_help.demographicsQuestion.p3') }}</p>
+          </template>
+        </demographics-question>
 
-      <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
+        <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
+      </div>
     </div>
   </div>
 </template>
@@ -64,6 +72,9 @@ export default {
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
     },
+    onlineConsultationsURL() {
+      return this.$store.app.$env.ONLINE_CONSULTATIONS_URL;
+    },
     isError() {
       return this.$store.state.onlineConsultations.error;
     },
@@ -74,11 +85,8 @@ export default {
       return this.$store.state.onlineConsultations.adminProviderName;
     },
     getDemographicsCheckboxLabel() {
-      const providerName = this.$store.state.onlineConsultations.adminProviderName;
-
       return this.$t(
         'appointments.admin_help.demographicsQuestion.checkboxLabel',
-        { providerName },
       );
     },
   },

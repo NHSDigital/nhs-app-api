@@ -11,6 +11,19 @@
       </message-text>
     </message-dialog>
     <div v-else>
+      <message-dialog id="conditionWarning" message-type="warning" icon-text="Important">
+        <message-text :class="$style.warningText">
+          {{ $t('appointments.admin_help.warning.warningText',
+                { providerName: getProviderName }) }}
+        </message-text>
+        <message-text role="link">
+          <a id="online_consultations_help_link"
+             :href="onlineConsultationsURL"
+             target="_blank">
+            {{ $t('appointments.admin_help.warning.warningLink') }}
+          </a>
+        </message-text>
+      </message-dialog>
       <div id="conditionInfo" :class="$style.info" data-purpose="info">
         <p>{{ $t('appointments.gp_advice.conditions.paragraph') }}</p>
         <a :href="generalAdvicePath"
@@ -77,6 +90,9 @@ export default {
     serviceDefinitions() {
       return this.$store.state.onlineConsultations.serviceDefinitions;
     },
+    onlineConsultationsURL() {
+      return this.$store.app.$env.ONLINE_CONSULTATIONS_URL;
+    },
     isError() {
       return this.$store.state.onlineConsultations.error;
     },
@@ -88,6 +104,9 @@ export default {
     },
     generalAdvicePath() {
       return `${APPOINTMENT_GP_ADVICE.path}?serviceDefinitionId=${this.generalAdviceServiceDefinitionId}`;
+    },
+    getProviderName() {
+      return this.$store.state.onlineConsultations.adviceProviderName;
     },
     backPath() {
       return this.$store.state.onlineConsultations.previousRoute ||
@@ -128,12 +147,17 @@ export default {
   @import '../../../style/textstyles';
   @import '../../../style/fonts';
   @import "../../../style/nhsukoverrides";
+  @import '../../../style/fonts';
 
   div.desktopWeb {
-
     .cannotFindConditionLink {
       margin-bottom: 1.5em !important;
     }
+  }
+
+  .warningText {
+    font-family: $default_web;
+    font-weight: normal;
   }
 
   button {

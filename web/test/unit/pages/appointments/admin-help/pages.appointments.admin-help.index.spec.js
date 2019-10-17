@@ -16,7 +16,9 @@ describe('Admin Help page', () => {
 
   const $store = {
     app: {
-      $env: {},
+      $env: {
+        ONLINE_CONSULTATIONS_URL: 'www.google.co.uk',
+      },
     },
     state: {
       device: {
@@ -310,7 +312,8 @@ describe('Admin Help page', () => {
         mountPage();
 
         // Assert
-        expect(page.find('[data-purpose=error-container]').exists()).toBe(false);
+        expect(page.find('[data-purpose=error-heading]').exists()).toBe(false);
+        expect(page.find('[data-purpose=reason-error]').exists()).toBe(false);
       });
       it('should appear if onlineConsultations error state is true', () => {
         // Arrange
@@ -374,10 +377,20 @@ describe('Admin Help page', () => {
         const demographicsQuestionParagraphs = page.find('div.demographicsQuestion').findAll('p').wrappers;
 
         // Assert
-        expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.warning.warningText');
-        expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
-        expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
-        expect(demographicsQuestionParagraphs[3].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
+        expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
+        expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
+        expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
+      });
+      it('will contain a link to the online consultations help page', () => {
+        // Arrange
+        mountPage({ stubDemographicsQuestion: false });
+        // Act
+        const helpLink = page.find('#conditionWarning');
+        const warning = page.find('#online_consultations_help_link');
+        expect(helpLink.find('p').text()).toEqual('translate_appointments.admin_help.warning.warningText');
+        expect(warning.find('a').text()).toEqual('translate_appointments.admin_help.warning.warningLink');
+        // Assert
+        expect(warning.attributes().href).toEqual('www.google.co.uk');
       });
     });
     describe('orchestrator', () => {

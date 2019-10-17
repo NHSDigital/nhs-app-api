@@ -16,17 +16,9 @@
                              :provider="provider"
                              :service-definition-id="serviceDefinitionId"
                              :checkbox-label="getDemographicsCheckboxLabel">
-        <message-dialog message-type="warning" icon-text="Important">
-          <message-text :class="$style.warningText">
-            {{ $t('appointments.admin_help.warning.warningText',
-                  { providerName: getProviderName }) }}
-          </message-text>
-        </message-dialog>
-
         <template>
           <p>{{ $t('appointments.gp_advice.demographicsQuestion.p1') }}</p>
-          <p>{{ $t('appointments.gp_advice.demographicsQuestion.p2',
-                   { providerName: getProviderName }) }}</p>
+          <p>{{ $t('appointments.gp_advice.demographicsQuestion.p2') }}</p>
         </template>
       </demographics-question>
 
@@ -69,14 +61,9 @@ export default {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
-    getProviderName() {
-      return this.$store.state.onlineConsultations.adviceProviderName;
-    },
     getDemographicsCheckboxLabel() {
-      const providerName = this.$store.state.onlineConsultations.adviceProviderName;
       return this.$t(
         'appointments.admin_help.demographicsQuestion.checkboxLabel',
-        { providerName },
       );
     },
   },

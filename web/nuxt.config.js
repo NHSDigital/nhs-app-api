@@ -119,6 +119,7 @@ const config = {
     YOUR_NHS_DATA_MATTERS_URL: 'https://www.nhs.uk/your-nhs-data-matters/',
     // Appointments
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
+    ONLINE_CONSULTATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
     // App Version
     VERSION_TAG: 'dev_web_npm',
     // Throttling

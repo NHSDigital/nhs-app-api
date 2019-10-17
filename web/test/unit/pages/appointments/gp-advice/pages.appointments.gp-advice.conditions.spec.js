@@ -11,12 +11,16 @@ describe('Conditions page', () => {
     $router = createRouter();
     $store = createStore({
       dispatch: jest.fn(),
+      $env: {
+        ONLINE_CONSULTATIONS_URL: 'www.google.co.uk',
+      },
       state: {
         device: {
           isNativeApp: true,
         },
         onlineConsultations: {
           error: false,
+          adviceProviderName: 'An OLC Provider',
           serviceDefinitions: [{
             category: 'Test Category',
             items: [
@@ -63,6 +67,17 @@ describe('Conditions page', () => {
       expect(page.find('#conditionInfo a').text()).toEqual('translate_appointments.gp_advice.conditions.link');
     });
 
+    it('will contain a warning about the provider', () => {
+      page = createWrapper();
+      expect(page.find('#conditionWarning').exists()).toBe(true);
+    });
+
+    it('will contain a link to the online consultations help page', () => {
+      page = createWrapper();
+      expect(page.find('#online_consultations_help_link').exists()).toBe(true);
+      expect(page.find('#online_consultations_help_link').attributes().href).toEqual('www.google.co.uk');
+    });
+
     it('will contain the correct conditions', () => {
       page = createWrapper();
       const tagArray = page.findAll(AnalyticsTrackedTag);
@@ -100,6 +115,13 @@ describe('Conditions page', () => {
         // Assert
         expect(result).toEqual(expectedResult);
       });
+    });
+  });
+
+  describe('computed', () => {
+    it('will return the correct provider name', () => {
+      page = createWrapper();
+      expect(page.vm.getProviderName).toEqual('An OLC Provider');
     });
   });
 });
