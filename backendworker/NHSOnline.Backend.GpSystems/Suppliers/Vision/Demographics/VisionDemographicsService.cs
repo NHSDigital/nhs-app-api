@@ -26,10 +26,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
             _visionDemographicsMapper = visionDemographicsMapper;
         }
 
-        public async Task<DemographicsResult> GetDemographics(GpUserSession gpUserSession)
+        public async Task<DemographicsResult> GetDemographics(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession)gpUserSession;
+            var visionUserSession = (VisionUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {

@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.UserInfoApi
                 .AddJsonOptions(
                     options => options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver()
-                );
+                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddOptions();
             services.AddCorrelationId();

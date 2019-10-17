@@ -23,17 +23,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
             _emisDemographicsMapper = emisDemographicsMapper;
         }
 
-        public async Task<DemographicsResult> GetDemographics(GpUserSession gpUserSession)
+        public async Task<DemographicsResult> GetDemographics(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession) gpUserSession;
-
             try
             {
-                var demographicsResponse = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken, 
-                    emisUserSession.SessionId, 
-                    emisUserSession.EndUserSessionId);
+                _logger.LogInformation($"Trying to find UserPatientLinkToken using Id {gpLinkedAccountModel.PatientId}");        
+                var emisHttpRequestData = gpLinkedAccountModel.BuildHttpRequestData(_logger);
+                
+                var demographicsResponse = await _emisClient.DemographicsGet(emisHttpRequestData);
 
                 if (!demographicsResponse.HasSuccessResponse)
                 {

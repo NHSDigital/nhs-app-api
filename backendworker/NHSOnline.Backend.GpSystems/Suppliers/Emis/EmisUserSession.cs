@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.Support;
 

@@ -1,11 +1,14 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Demographics
 {
@@ -30,11 +33,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
         }
 
         [HttpGet("demographics")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId)
         {
             try
             {
-                _logger.LogEnter();
+                _logger.LogEnter();   
+                _logger.LogInformation($"{nameof(Get)} with patientId {patientId}");
 
                 await _auditor.Audit(AuditingOperations.GetDemographicsAuditTypeRequest,
                     "Attempting to view Demographics");
@@ -46,8 +50,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetDemographicsService();
 
+                var gpLinkedAccountUserSession = new GpLinkedAccountModel(
+                    userSession.GpUserSession, patientId
+                );
+                
                 _logger.LogDebug("Fetching Demographics");
-                var result = await demographicsService.GetDemographics(userSession.GpUserSession);
+                var result = await demographicsService.GetDemographics(gpLinkedAccountUserSession);
 
                 await result.Accept(new DemographicsAuditingVisitor(_auditor, _logger));
                 

@@ -1,4 +1,4 @@
-import { INIT, SET_RULES } from './mutation-types';
+import { INIT, SET_RULES, SET_PATIENT_GUID } from './mutation-types';
 
 export default {
   init({ commit }) {
@@ -9,6 +9,10 @@ export default {
     if (response) {
       commit(SET_RULES, response);
     }
-  },
 
+    const patientConfigResponse = await this.app.$http.getV1PatientConfiguration();
+    if (patientConfigResponse) {
+      commit(SET_PATIENT_GUID, patientConfigResponse.response.id);
+    }
+  },
 };

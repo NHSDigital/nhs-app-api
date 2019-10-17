@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -33,10 +34,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
         private const string ResponseAuditType = "Demographics_Get_Response";
 
         private const string RequestAuditMessage = "Attempting to view Demographics";
+
+        private  Guid _patientGuid;
+
         
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientGuid = Guid.NewGuid();
+            
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
@@ -81,11 +87,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             var demographicsResponse = _fixture.Create<DemographicsResponse>();
             var demographicsResult = new DemographicsResult.Success(demographicsResponse);
 
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession))
+            _mockDemographicsService.Setup(x => x.GetDemographics(
+                    It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             _mockDemographicsService.Verify();
@@ -102,10 +110,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             // Arrange
             var demographicsResult = new DemographicsResult.Forbidden();
 
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+            _mockDemographicsService
+                .Setup(x => x.GetDemographics(
+                    It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -121,10 +133,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
         {
             // Arrange
             var demographicsResult = new DemographicsResult.BadGateway();
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+            _mockDemographicsService.Setup(x => x.GetDemographics(
+                It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -141,10 +156,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             // Arrange
             var demographicsResult = new DemographicsResult.InternalServerError();
 
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+            _mockDemographicsService.Setup(x => x.GetDemographics(
+                It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

@@ -12,5 +12,7 @@ namespace NHSOnline.Backend.Support
         public abstract Supplier Supplier { get; }
 
         public bool HasLinkedAccounts { get; set; }
+        
+        public Guid Id { get; set; }
     }
 }

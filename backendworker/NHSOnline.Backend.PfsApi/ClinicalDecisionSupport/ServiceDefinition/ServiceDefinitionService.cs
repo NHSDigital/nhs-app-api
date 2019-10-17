@@ -238,8 +238,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                         .GetDemographicsService();
 
                     _logger.LogDebug("Fetching Demographics");
-                    var demographics = await demographicsService.GetDemographics(userSession.GpUserSession);
-            
+                    var demographics = await demographicsService.GetDemographics(
+                        new GpLinkedAccountModel(userSession.GpUserSession));
+                            
                     if (!(demographics is DemographicsResult.Success demographicsResult))
                     {
                         return GetDemographicsErrorResult(demographics);

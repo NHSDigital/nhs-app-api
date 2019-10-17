@@ -83,14 +83,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return await Post<SessionsPostRequest, SessionsPostResponse>(model, SessionsPath, endUserSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(string userPatientLinkToken,
-            string responseSessionId,
-            string endUserSessionId)
+        public async Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(EmisHttpRequestData emisHttpRequestData)
+
         {
             _logger.LogInformation("EMIS: Fetching patient demographics");
-            var path = string.Format(CultureInfo.InvariantCulture, DemographicsPath, userPatientLinkToken);
+            var path = string.Format(CultureInfo.InvariantCulture, DemographicsPath, emisHttpRequestData.UserPatientLinkToken);
 
-            return await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
+            return await Get<DemographicsGetResponse>
+                (path, emisHttpRequestData.HeaderParameters.EndUserSessionId, emisHttpRequestData.HeaderParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken,

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -36,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Session
         [TestMethod]
         public async Task Create_ValidRequest_ReturnsSuccessResult()
         {
-            _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpUserSession>()))
+            _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpLinkedAccountModel>()))
                 .ReturnsAsync(new DemographicsResult.Success(new DemographicsResponse()));
 
             var result = await _systemUnderTest.Create("connectionToken", "odsCode", "nhsNumber");
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Session
         [TestMethod]
         public async Task Create_InvalidDemographicsResult_ReturnsBadGateway()
         {
-            _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpUserSession>()))
+            _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpLinkedAccountModel>()))
                 .ReturnsAsync(new DemographicsResult.BadGateway());
 
             var result = await _systemUnderTest.Create("connectionToken", "odsCode", "nhsNumber");

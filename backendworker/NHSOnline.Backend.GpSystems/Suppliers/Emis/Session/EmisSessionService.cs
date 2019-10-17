@@ -100,6 +100,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 var session = new EmisUserSession
                 {
+                    Id = Guid.NewGuid(),
                     EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                     NhsNumber = nhsNumber,
                     OdsCode = odsCode,

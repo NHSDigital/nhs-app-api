@@ -1,7 +1,8 @@
 import mapKeys from 'lodash/fp/mapKeys';
 import { initialState,
   INIT,
-  SET_RULES } from './mutation-types';
+  SET_RULES,
+  SET_PATIENT_GUID } from './mutation-types';
 
 export default {
   [INIT](state) {
@@ -14,5 +15,8 @@ export default {
   [SET_RULES](state, rules) {
     state.rules = rules.journeys;
     state.isLoaded = true;
+  },
+  [SET_PATIENT_GUID](state, id) {
+    state.patientGuid = id;
   },
 };

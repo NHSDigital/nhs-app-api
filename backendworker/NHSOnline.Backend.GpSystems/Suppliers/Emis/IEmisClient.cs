@@ -12,9 +12,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
     public interface IEmisClient
     {
         // Demographics
-        Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(string userPatientLinkToken,
-            string responseSessionId,
-            string endUserSessionId);
+        Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(EmisHttpRequestData emisHttpRequestData);
 
         // Me
         Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,

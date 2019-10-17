@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -53,7 +54,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
             _mockDemographicsService
-                .Setup(x => x.GetDemographics(_userSession.GpUserSession))
+                .Setup(x => x.GetDemographics(
+                    It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == Guid.Empty)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();

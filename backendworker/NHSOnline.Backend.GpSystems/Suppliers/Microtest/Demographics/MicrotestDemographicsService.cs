@@ -24,10 +24,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
             _microtestDemographicsMapper = microtestDemographicsMapper;
         }
 
-        public async Task<DemographicsResult> GetDemographics(GpUserSession gpUserSession)
+        public async Task<DemographicsResult> GetDemographics(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
-            var microtestUserSession = (MicrotestUserSession) gpUserSession;
+            var microtestUserSession = (MicrotestUserSession) gpLinkedAccountModel.GpUserSession;
 
             try
             {

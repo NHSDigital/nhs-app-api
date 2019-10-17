@@ -483,7 +483,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private void MockEmisDemographicsGetMethod(EmisClient.EmisApiObjectResponse<DemographicsGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.DemographicsGet(
-                    _emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId))
+                    It.Is<EmisHttpRequestData>(
+                        e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                             e.HeaderParameters.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                             e.HeaderParameters.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal))))
                 .ReturnsAsync(response).Verifiable();
         }
     }

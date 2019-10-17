@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Demographics;
@@ -23,9 +24,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics
             _tppDemographicsMapper = tppDemographicsMapper;
         }
 
-        public async Task<DemographicsResult> GetDemographics(GpUserSession gpUserSession)
+        public async Task<DemographicsResult> GetDemographics(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var tppUserSession = (TppUserSession)gpUserSession;
+            var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
 
             try
             {

@@ -156,6 +156,10 @@ class NHSOnlineApi {
           }
         }
 
+        if (this.store.state && this.store.state.serviceJourneyRules) {
+          headers['NHSO-Patient-Id'] = this.store.state.serviceJourneyRules.patientGuid;
+        }
+
         const resolve = ({
             store,
             deferred,

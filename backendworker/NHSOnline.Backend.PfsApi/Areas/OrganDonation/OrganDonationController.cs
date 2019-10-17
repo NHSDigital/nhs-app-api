@@ -5,6 +5,7 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
@@ -52,7 +53,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                     .GetDemographicsService();
 
                 _logger.LogDebug("Fetching Demographics");
-                var demographicsResult = await demographicsService.GetDemographics(userSession.GpUserSession);
+                var demographicsResult = await demographicsService.GetDemographics(
+                    new GpLinkedAccountModel(userSession.GpUserSession));
 
                 var result = await _organDonationService.GetOrganDonation(demographicsResult, userSession);
 

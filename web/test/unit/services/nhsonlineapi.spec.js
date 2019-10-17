@@ -52,11 +52,34 @@ describe('services/nhsonlineapi', () => {
     beforeEach(() => {
       store = {
         dispatch: jest.fn(),
-        state: {},
+        state: {
+          serviceJourneyRules: {
+            patientGuid: '1234-abcd-5678',
+          },
+        },
       };
       res = {
         setHeader: jest.fn(),
       };
+    });
+
+    describe('will send a header NHSO-Patient-Id for a http rquest', () => {
+      let headers;
+      beforeEach(() => {
+        headers = {};
+      });
+
+      it('will add the NHSO-Patient-Id header', () => {
+        // act
+        const api = createRequestApi();
+        request({ api, headers });
+
+        // assert
+        const headersSentInRequest = axios.mock.calls[0][0].headers;
+        expect(headersSentInRequest).not.toBeNull();
+        const patientGuidHeader = headersSentInRequest['NHSO-Patient-Id'];
+        expect(patientGuidHeader).toBe(store.state.serviceJourneyRules.patientGuid);
+      });
     });
 
     describe('will send a header NHSO-Request-ID for an http request', () => {
@@ -202,6 +225,9 @@ describe('services/nhsonlineapi', () => {
           store.state = {
             session: {
               csrfToken: 'boo',
+            },
+            serviceJourneyRules: {
+              patientGuid: '1234-abcd-5678',
             },
           };
         });

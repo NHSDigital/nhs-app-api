@@ -22,14 +22,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session
 
         public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
-            var session = await Task.FromResult(new MicrotestUserSession
+            var session = new MicrotestUserSession
             {
                 NhsNumber = nhsNumber,
                 OdsCode = odsCode
-            });
-            
-            var demographicsResult = await _demographicsService.GetDemographics(session);
-            
+            };
+
+            var demographicsResult = await _demographicsService.GetDemographics(
+                new GpLinkedAccountModel(session));
+
             if (!(demographicsResult is DemographicsResult.Success successfulDemographicsResult))
             {
                 _logger.LogError("Error retrieving demographics when creating session");

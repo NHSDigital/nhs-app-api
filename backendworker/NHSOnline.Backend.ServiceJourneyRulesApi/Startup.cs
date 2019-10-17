@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 .AddJsonOptions(
                     options => options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver()
-                );
+                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
             services.AddHttpsRedirection(options =>
             {

@@ -122,3 +122,9 @@ components:
           enum:
           - 1
           - 2
+    PatientIdResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The guid of the current user

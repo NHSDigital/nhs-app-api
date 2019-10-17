@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 {
@@ -66,11 +67,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             {
                 DemographicsResult demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
-                _demographicsService
-                    .Setup(x => x.GetDemographics(
-                        It.Is<EmisUserSession>(e => string.Equals(e.SessionId, _emisUserSession.SessionId, StringComparison.Ordinal)
-                        && string.Equals(e.EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal)
-                        && string.Equals(e.UserPatientLinkToken, user.UserPatientLinkToken, StringComparison.Ordinal))))
+                _demographicsService.Setup(x => x.GetDemographics(It.Is<GpLinkedAccountModel>(
+                        y => y.PatientId == user.Id &&
+                             y.GpUserSession is EmisUserSession && 
+                             ((EmisUserSession)y.GpUserSession).SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                             ((EmisUserSession)y.GpUserSession).EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                             ((EmisUserSession)y.GpUserSession).UserPatientLinkToken.Equals(user.UserPatientLinkToken, StringComparison.Ordinal) 
+                        )))
                     .Returns(Task.FromResult(demographicsResult))
                     .Verifiable();
             }

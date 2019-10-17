@@ -81,7 +81,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
 
             _mockDemographicsService
-                .Setup(x => x.GetDemographics(_userSession.GpUserSession))
+                .Setup(x => x.GetDemographics(
+                    It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession 
+                             && d.PatientId == _userSession.GpUserSession.Id)))
                 .Returns(Task.FromResult(_demographicsResult));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();

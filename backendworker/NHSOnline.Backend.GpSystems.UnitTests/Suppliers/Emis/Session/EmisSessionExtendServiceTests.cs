@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK);
 
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisHttpRequestData>()))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.BadRequest);
 
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisHttpRequestData>()))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisHttpRequestData>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 

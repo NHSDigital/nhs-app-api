@@ -21,3 +21,16 @@ paths:
           description: Service Journey Rules Configuration not found.
         "500":
           description: An unexpected error occurred processing the request.
+  /configuration:
+    get:
+      tags:
+        - linked-accounts
+      summary: Gets the users guid which is used to determine which linked account is active
+      description: This call returns the users guid which is used to determine which linked account is activ
+      responses:
+        "200":
+          description: Successful operation. Guid returned
+          content:
+            application/json:
+              schema:
+                $ref: "servicejourneyrules.yaml#/components/schemas/PatientIdResponse"

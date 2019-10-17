@@ -10,6 +10,7 @@ import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
+import java.util.UUID
 
 open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -58,7 +59,9 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
     @When("^I get the users demographic data$")
     fun whenIGetTheUsersDemographicsDataFor() {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getDemographics()
+            val patientId = UUID.randomUUID().toString()
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .myRecord.getDemographics(patientId)
 
             Serenity.setSessionVariable(Demographics::class).to(result)
         } catch (httpException: NhsoHttpException) {

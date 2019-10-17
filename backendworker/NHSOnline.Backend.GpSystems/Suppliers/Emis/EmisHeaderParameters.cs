@@ -8,7 +8,12 @@
             SessionId = emisUserSession.SessionId;
         }
 
+        public EmisHeaderParameters()
+        {
+        }
+
         public string EndUserSessionId { get; set; }
         public string SessionId { get; set; }
+        
     }
 }

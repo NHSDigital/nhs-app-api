@@ -236,7 +236,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.DemographicsGet(userPatientLinkToken, sessionId, endUserSessionId);
+            var response = await _systemUnderTest.DemographicsGet(new EmisHttpRequestData
+            {
+                UserPatientLinkToken = userPatientLinkToken,
+                HeaderParameters = new EmisHeaderParameters 
+                {
+                    SessionId = sessionId,
+                    EndUserSessionId = endUserSessionId
+                }
+            });
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);

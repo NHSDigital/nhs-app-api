@@ -77,9 +77,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.InvalidUserPatientLinkToken);
                 }
 
-                var demographicsResponse =
-                    await _emisClient.DemographicsGet(userPatientLinkToken, sessionsResponse.Body.SessionId,
-                        endUserSessionId);
+                var demographicsResponse = await _emisClient.DemographicsGet(
+                    new EmisHttpRequestData
+                    {
+                        UserPatientLinkToken = userPatientLinkToken,
+                        HeaderParameters = new EmisHeaderParameters
+                        {
+                            SessionId = sessionsResponse.Body.SessionId,
+                            EndUserSessionId = endUserSessionId
+                        }
+                    });
+
                 if (!demographicsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
@@ -186,8 +194,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 }
 
                 var demographicsResponse =
-                    await _emisClient.DemographicsGet(userPatientLinkToken, sessionsResponse.Body.SessionId,
-                        endUserSessionId);
+                    await _emisClient.DemographicsGet(
+                        new EmisHttpRequestData
+                        {
+                            UserPatientLinkToken = userPatientLinkToken,
+                            HeaderParameters = new EmisHeaderParameters
+                            {
+                                SessionId = sessionsResponse.Body.SessionId,
+                                EndUserSessionId = endUserSessionId
+                            }
+                        });
+
                 if (!demographicsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);

@@ -48,10 +48,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 _logger.LogInformation("Appointment slot requests completed");
 
                 var practiceTask = _emisClient.PracticeSettingsGet(headerParams, emisUserSession.OdsCode);
-                var demographicsTask = _emisClient.DemographicsGet(
-                    emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, 
-                    emisUserSession.EndUserSessionId);
+                var demographicsTask = _emisClient.DemographicsGet(new EmisHttpRequestData
+                    {
+                        HeaderParameters = headerParams,
+                        UserPatientLinkToken = patientLinkToken    
+                    });
                 
                 // Wait for practice and demographics tasks to complete, but unlike the other tasks suppress any errors such as timeout.
                 try

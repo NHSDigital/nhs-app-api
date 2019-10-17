@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
 {
     public interface IEmisDemographicsService
     {
-        Task<DemographicsResult> GetDemographics(GpUserSession gpUserSession);
+        Task<DemographicsResult> GetDemographics(GpLinkedAccountModel gpLinkedAccountModel);
     }
 }

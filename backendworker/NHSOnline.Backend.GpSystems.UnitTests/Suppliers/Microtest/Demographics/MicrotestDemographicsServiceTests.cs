@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
 {
@@ -117,7 +118,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
 
         private Task<DemographicsResult> GetDemographics()
         {
-            return _systemUnderTest.GetDemographics(_microtestUserSession);
+            var linkedAccountGpUserSessionWrapper = new GpLinkedAccountModel(_microtestUserSession);
+            return _systemUnderTest.GetDemographics(linkedAccountGpUserSessionWrapper);
         }
 
         private void SetupDemographicsMapper(

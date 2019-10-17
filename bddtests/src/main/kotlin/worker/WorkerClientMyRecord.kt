@@ -8,8 +8,9 @@ import worker.models.myrecord.MyRecordResponse
 
 class WorkerClientMyRecord(val config: Config, val sender: WorkerClientSender, val gson: Gson){
 
-    fun getDemographics(): Demographics {
+    fun getDemographics(patientId: String): Demographics {
         val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getDemographicsConnection)
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
 

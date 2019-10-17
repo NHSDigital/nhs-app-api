@@ -1,7 +1,11 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
+using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.Support.AspNet;
@@ -9,7 +13,6 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 {
-    [Route("patient/journey-configuration")]
     public class ServiceJourneyRulesController : Controller
     {
         private readonly ILogger<ServiceJourneyRulesController> _logger;
@@ -31,6 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         }
 
         [HttpGet]
+        [Route("patient/journey-configuration")]
         public async Task<IActionResult> Get()
         {
             try
@@ -55,5 +59,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 _logger.LogExit();
             }
         }
+
+        [HttpGet]
+        [Route("patient/configuration")]
+        public async Task<IActionResult> GetPatientGuid()
+        {
+            await _auditor.Audit(AuditingOperations.GetPatientGuid,"Attempting to get Guid for patient");
+
+            GetPatientGuidResult result = new GetPatientGuidResult.Success(new PatientIdResponse
+            {
+                Id = HttpContext.GetUserSession().GpUserSession.Id      
+            });
+            
+            return result.Accept(new PatientGuidResultVisitor());
+        }
+        
     }
 }

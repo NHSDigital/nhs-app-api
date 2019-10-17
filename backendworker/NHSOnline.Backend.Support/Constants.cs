@@ -52,6 +52,7 @@ namespace NHSOnline.Backend.Support
             public const string CorrelationIdentifier = NhsoPrefix + "Request-ID";
             public const string LoginClient = NhsoPrefix + "NHS-Login-Client";
             public const string JavascriptDisabled = NhsoPrefix + "Javascript-Disabled";
+            public const string PatientId = NhsoPrefix + "Patient-Id";
         }
 
         public static class HttpContextItems

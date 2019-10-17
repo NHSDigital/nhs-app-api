@@ -106,12 +106,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     // Using SessionId and EndUserSessionId of the logged in user
                     // but the UserPatientLinkToken of the user they are acting
                     // on behalf of.
-                    var demographicsTask = _demographicsService.GetDemographics(new EmisUserSession
-                    {
-                        SessionId = emisUserSession.SessionId,
-                        EndUserSessionId = emisUserSession.EndUserSessionId,
-                        UserPatientLinkToken = user.UserPatientLinkToken,
-                    });
+                    var demographicsTask = _demographicsService.GetDemographics(
+                        new GpLinkedAccountModel(
+                            new EmisUserSession
+                            {
+                                SessionId = emisUserSession.SessionId,
+                                EndUserSessionId = emisUserSession.EndUserSessionId,
+                                UserPatientLinkToken = user.UserPatientLinkToken,
+                                Id = user.Id
+                            },
+                            user.Id));
 
                     tasks.Add(user.Id, demographicsTask);
                 }
