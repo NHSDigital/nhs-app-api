@@ -65,7 +65,7 @@
         </span>
       </generic-checkbox>
     </div>
-    <generic-button id="btn_accept" :class="[$style.button, $style.green]"
+    <generic-button id="btn_accept" :button-classes="['nhsuk-button']"
                     @click="onConfirmButtonClicked">
       {{ $t('updatedTermsAndConditions.btnAccept') }}
     </generic-button>

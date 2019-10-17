@@ -1,11 +1,6 @@
 <template>
-  <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <div v-if="$store.state.device.isNativeApp"
-         :class="'pull-content'">
-      <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
-      <terms-conditions v-else/>
-    </div>
-    <div v-else>
+  <div>
+    <div :class="!$store.state.device.isNativeApp && 'pull-content'">
       <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
       <terms-conditions v-else/>
     </div>
@@ -65,10 +60,6 @@ export default {
   section {
     display: block;
     padding: 0 1em 2.5em;
-  }
-
-  .mainContent {
-    outline: none;
   }
 
 </style>

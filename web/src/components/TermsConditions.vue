@@ -78,7 +78,7 @@
                       @input="analyticsSelectionChanged">
       {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
     </generic-checkbox>
-    <generic-button id="btn_accept" :class="[$style.button, $style.green, $style.acceptButton]"
+    <generic-button id="btn_accept" :button-classes="['nhsuk-button']"
                     @click="onConfirmButtonClicked">
       {{ $t('termsAndConditions.btnAccept') }}
     </generic-button>
