@@ -210,7 +210,7 @@ export default {
     $route(to, from) {
       if (from !== to) {
         this.pathChanged = true;
-        this.setHelpUrl(this.currentHelpUrl);
+        this.configureWebContext(this.currentHelpUrl);
       }
     },
   },
@@ -242,7 +242,7 @@ export default {
         NativeCallbacks.resetPageFocus();
       }
     }
-    this.setHelpUrl(this.currentHelpUrl);
+    this.configureWebContext(this.currentHelpUrl);
   },
   updated() {
     if (this.pathChanged) {

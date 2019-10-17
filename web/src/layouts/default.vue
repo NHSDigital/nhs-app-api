@@ -204,7 +204,7 @@ export default {
     $route(to, from) {
       if (from !== to) {
         this.pathChanged = true;
-        this.setHelpUrl(this.currentHelpUrl);
+        this.configureWebContext(this.currentHelpUrl);
       }
     },
   },
@@ -224,7 +224,7 @@ export default {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
 
     NativeVersionSetup(this.$store, this.$route);
-    this.setHelpUrl(this.currentHelpUrl);
+    this.configureWebContext(this.currentHelpUrl);
     if (this.loggedIn) {
       this.$store.dispatch('session/startValidationChecking');
       window.validateSession =

@@ -6,6 +6,7 @@ import Sources from '@/lib/sources';
 import { redirectTo } from '@/lib/utils'
 import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus'
 import NativeCallbacks from '@/services/native-app';
+import INDEX from '@/lib/routes';
 
 Vue.mixin(ResetPageFocusMixin);
 
@@ -57,12 +58,20 @@ Vue.mixin({
       }
       return url;
     },
-    setHelpUrl(currentHelpUrl) {
+    configureWebContext(currentHelpUrl) {
       if (this.$store.state.device.isNativeApp) {
-        NativeCallbacks.setHelpUrl(currentHelpUrl);
+
+        let retryPath = ''
+        if (this.$store.state.errors.pageSettings.redirectUrl &&
+          this.$store.state.errors.pageSettings.redirectUrl.default) {
+          retryPath = this.$store.state.errors.pageSettings.redirectUrl.default
+        }
+
+        NativeCallbacks.configureWebContext(currentHelpUrl, retryPath);
       } else {
         // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)
       }
     },
+    //Deprecated, here for backwards compatability
   },
 });

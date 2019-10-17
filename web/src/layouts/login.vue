@@ -108,7 +108,7 @@ export default {
     NativeVersionSetup(this.$store, this.$route);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
-    this.setHelpUrl(this.currentHelpUrl);
+    this.configureWebContext(this.currentHelpUrl);
   },
   created() {
     const appVersion = this.$store.app.$env.VERSION_TAG;

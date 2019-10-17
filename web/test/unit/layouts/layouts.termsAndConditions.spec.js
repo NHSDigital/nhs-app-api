@@ -18,7 +18,7 @@ const createDefaultPage = ($store) => {
   localVue.use(Vuex);
   localVue.mixin({
     methods: {
-      setHelpUrl(url) {
+      configureWebContext(url) {
         return url;
       },
     },

@@ -68,8 +68,9 @@ window.nativeApp.setMenuBarItem = function(index) {
     window.webkit.messageHandlers.setMenuBarItem.postMessage(index);
 };
 
-window.nativeApp.setHelpUrl = function(url) {
-    window.webkit.messageHandlers.setHelpUrl.postMessage(url);
+window.nativeApp.configureWebContext = function(helpUrl, retryPath) {
+    window.webkit.messageHandlers.setHelpUrl.postMessage(helpUrl)
+    window.webkit.messageHandlers.setRetryPath.postMessage(retryPath)
 }
 
 window.nativeApp.showHeader = function() {

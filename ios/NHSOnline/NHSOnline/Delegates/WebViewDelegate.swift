@@ -282,6 +282,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "setHelpUrl":
                 setHelpUrl(url: message.body as? String ?? config().HelpURL)
                 break
+            case "setRetryPath":
+                setRetryUrl(path: message.body as! String)
+                break;
             case "setMenuBarItem":
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break
@@ -319,6 +322,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func setHelpUrl(url: String){
         UserDefaults.standard.set(url, forKey: "HelpUrl" )
+    }
+    
+    func setRetryUrl(path: String){
+        if(!path.isEmpty){
+            var suffix = path
+            suffix.remove(at: suffix.startIndex)
+            failedUrl = URL(string: config().HomeUrl + suffix)
+        }
     }
     
     func ensureSupportedScheme(_ url: URL) -> URL {

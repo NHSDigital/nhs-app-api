@@ -321,6 +321,13 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         nhsWeb.setHelpLocation(url)
     }
 
+    override fun setRetryPath(path: String) {
+        logger.info("Entering setRetryUrl")
+        nhsWeb.setReloadPath(path)
+
+        logger.info("New retry URL: ${nhsWeb.reloadUrl}")
+    }
+
     override fun onBackPressed() {
         logger.info("${this::class.java.simpleName}: Entering onBackPressed")
 

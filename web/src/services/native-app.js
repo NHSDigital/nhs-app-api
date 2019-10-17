@@ -151,6 +151,19 @@ export default {
     return false;
   },
 
+  configureWebContext(helpUrl, reloadPath) {
+    const app = window.nativeApp;
+    this.setHelpUrl(helpUrl); // For backwards compatability
+
+    if (app && app.configureWebContext) {
+      app.configureWebContext(helpUrl, reloadPath);
+      return true;
+    }
+
+    return false;
+  },
+
+  // Deprecated, here for backwards compatability
   setHelpUrl(url) {
     const app = window.nativeApp;
     if (app && app.setHelpUrl) {

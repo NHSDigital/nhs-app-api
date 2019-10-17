@@ -113,8 +113,11 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun setHelpUrl(url: String) {
-        activity.runOnUiThread { uiInteractor.setHelpUrl(url) }
+    fun configureWebContext(helpUrl: String, retryPath: String) {
+        activity.runOnUiThread {
+            uiInteractor.setHelpUrl(helpUrl)
+            uiInteractor.setRetryPath(retryPath)
+        }
     }
 
     @JavascriptInterface

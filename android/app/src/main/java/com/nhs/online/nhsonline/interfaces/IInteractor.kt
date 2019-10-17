@@ -36,6 +36,8 @@ interface IInteractor {
 
     fun setHelpUrl(url: String)
 
+    fun setRetryPath(url: String)
+
     fun setMenuBarItem(index: Int)
 
     fun hideHeader()

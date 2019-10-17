@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     goToLoginOptions() {
-      this.setHelpUrl(findByName('Login').helpUrl);
+      this.configureWebContext(findByName('Login').helpUrl);
       NativeCallbacks.goToLoginOptions();
     },
     dismissBiometricsBannerClicked() {

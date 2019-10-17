@@ -40,7 +40,7 @@ export default {
   },
   mounted() {
     NativeVersionSetup(this.$store, this.$route);
-    this.setHelpUrl(this.currentHelpUrl);
+    this.configureWebContext(this.currentHelpUrl);
   },
 };
 </script>

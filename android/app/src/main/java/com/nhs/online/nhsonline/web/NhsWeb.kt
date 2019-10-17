@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.web
 import android.app.Activity
 import android.util.Log
 import android.webkit.CookieManager
+import android.webkit.URLUtil
 import android.webkit.WebView
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.R
@@ -104,6 +105,14 @@ class NhsWeb(
             isUserLoggedIn = false
         }
         urlLoader.loadUrl(url, requiresFullPageLoad)
+    }
+
+    fun setReloadPath(path: String) {
+        if(path.isNullOrBlank()){
+            return
+        }
+
+        reloadUrl = readResourceString(R.string.baseURL) + path.removePrefix("/")
     }
 
     fun isCheckSymptomsUnsecureURL(url: String?): Boolean {
