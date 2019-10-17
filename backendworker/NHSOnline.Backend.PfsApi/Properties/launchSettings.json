@@ -140,7 +140,7 @@
         "SPINE_CERT_PATH": "../certs/spine.pfx",
         "SPINE_CERT_PASSWORD": "",
         "NHS_APP_PARTY_ID_FOR_SPINE": "E87021-820463",
-        "API_BASE_URL": "http://api.local.bitraft.io:8089/v1/api/"
+        "USERINFO_API_BASE_URL": "http://api.local.bitraft.io:8091/v1/api/me/info"
       }
     },
     "NHSOnline.Backend.PfsApi.Bdd": {
@@ -200,7 +200,8 @@
         "VISION_SENDER_USERIDENTITY": "65489761321654",
         "VISION_SENDER_USERNAME": "Username123123asdas",
         "VISION_SENDER_USERROLE": "ROSU",
-        "VISION_ODS_REMAP_ENABLED": "false"
+        "VISION_ODS_REMAP_ENABLED": "false",
+        "USERINFO_API_BASE_URL": "http://api.local.bitraft.io:8091/v1/api/me/info"
       }
     }
   }

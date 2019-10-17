@@ -164,7 +164,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task GetInfoByNhsNumber_SuccessFoundMultiple()
         {
             // Arrange
-            var userInfo = _fixture.Create<IEnumerable<UserAndInfo>>();
+            var userInfo = _fixture.CreateMany<UserAndInfo>();;
             var nhsNumber = _fixture.Create<string>();
             var nhsLoginIds = userInfo.Select(info => info.NhsLoginId);
 
@@ -246,7 +246,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task GetInfoByOdsCode_SuccessFoundMultiple()
         {
             // Arrange
-            var userInfo = _fixture.Create<IEnumerable<UserAndInfo>>();
+            var userInfo = _fixture.CreateMany<UserAndInfo>();;
             var odsCode = _fixture.Create<string>();
             var nhsLoginIds = userInfo.Select(info => info.NhsLoginId);
 

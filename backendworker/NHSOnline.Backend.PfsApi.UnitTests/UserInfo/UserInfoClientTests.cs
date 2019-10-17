@@ -8,7 +8,6 @@ using CorrelationId;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.PfsApi.Configs;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using RichardSzalay.MockHttp;
 
@@ -18,11 +17,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
     public sealed class UserInfoClientTests : IDisposable
     {
         public static readonly Uri BaseUri = new Uri("http://base_url/v1/api/");
-        private const string UserInfoApiPath = "users/me/info";
         
         private IUserInfoClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
-        private Mock<IApiConfig> _configMock;
+        private Mock<IUserInfoApiConfig> _configMock;
         private IFixture _fixture; 
         private ICorrelationContextAccessor _correlationContext;
         
@@ -33,8 +31,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
             
             _mockHttpHandler = new MockHttpMessageHandler();
 
-            _configMock = _fixture.Create<Mock<IApiConfig>>();
-            _configMock.SetupGet(x => x.ApiBaseUrl).Returns(BaseUri);
+            _configMock = _fixture.Create<Mock<IUserInfoApiConfig>>();
+            _configMock.SetupGet(x => x.UserInfoApiBaseUrl).Returns(BaseUri);
             
             _correlationContext = new CorrelationContextAccessor();
 
@@ -51,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         {
             // Arrange
             _mockHttpHandler
-                .WhenUserInfo(HttpMethod.Post, UserInfoApiPath)
+                .WhenUserInfo(HttpMethod.Post, string.Empty)
                 .Respond(HttpStatusCode.Created);
             
             // Act
@@ -70,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         {
             // Arrange
             _mockHttpHandler
-                .WhenUserInfo(HttpMethod.Post, UserInfoApiPath)
+                .WhenUserInfo(HttpMethod.Post, string.Empty)
                 .Respond(httpStatusCode);
             
             // Act

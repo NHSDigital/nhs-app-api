@@ -71,7 +71,7 @@ class UserInfoFactory {
 
     private fun createUserInfo(nhsLoginId: String, odsCode: String?, nhsNumber: String?) : MongoRepositoryUserAndInfo {
         return MongoRepositoryUserAndInfo(
-                _id = nhsLoginId,
+                NhsLoginId = nhsLoginId,
                 Info = MongoRepositoryUserInfo(odsCode ?: "OdsCodeX",
                         nhsNumber ?: "1111111111",
                         false))

@@ -63,7 +63,7 @@ class UserInfoPostStepDefinitionsBackend {
 
     private fun assertFoundUserInfoRecord(expectedUserInfo: UserAndInfoResponse,
                                           registeredUserInfo: MongoRepositoryUserAndInfo) {
-        Assert.assertEquals("NHS Login ID.", expectedUserInfo.nhsLoginId, registeredUserInfo._id)
+        Assert.assertEquals("NHS Login ID.", expectedUserInfo.nhsLoginId, registeredUserInfo.NhsLoginId)
         Assert.assertEquals("ODS Code.", expectedUserInfo.info.odsCode, registeredUserInfo.Info.OdsCode)
         Assert.assertEquals("NHS Number.", expectedUserInfo.info.nhsNumber, registeredUserInfo.Info.NhsNumber)
         Assert.assertEquals("Beta Tester.", expectedUserInfo.info.betaTester, registeredUserInfo.Info.BetaTester)

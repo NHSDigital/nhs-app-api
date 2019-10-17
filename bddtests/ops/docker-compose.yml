@@ -53,6 +53,7 @@ services:
       - ConfigurationSettings__CurrentTermsConditionsEffectiveDate=2018-12-12T00:00:00+00:00
       - SPINE_PDS_URL=http://stubs.local.bitraft.io:8080/spine/
       - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
+      - USERINFO_API_BASE_URL=http://userinfo.local.bitraft.io:8091/v1/api/me/info
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.mongodb

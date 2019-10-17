@@ -11,8 +11,6 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
         private readonly UserInfoHttpClient _httpClient;
         private readonly ICorrelationContextAccessor _correlationContext;
         
-        private const string UserInfoPath = "users/me/info";
-        
         public UserInfoClient(
             UserInfoHttpClient httpClient,
             ICorrelationContextAccessor correlationContext)
@@ -23,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
 
         public async Task<UserInfoResponse> Post(string accessToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, UserInfoPath);
+            var request = new HttpRequestMessage(HttpMethod.Post, string.Empty);
 
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             

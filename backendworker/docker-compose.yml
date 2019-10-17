@@ -67,6 +67,7 @@ services:
       - BROTHER_MAILER_USER_ID=
       - NOMINATED_PHARMACY_ENABLED=true
       - SPINE_LDAP_LOOKUP_ENABLED=true
+      - USERINFO_API_BASE_URL=http://userinfo.local.bitraft.io:8091/v1/api/me/info
   cid.local.bitraft.io:
     image: nhsonline.backend.cidapi
     build:

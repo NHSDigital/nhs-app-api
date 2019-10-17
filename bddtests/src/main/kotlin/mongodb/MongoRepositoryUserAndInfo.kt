@@ -1,5 +1,5 @@
 package mongodb
 
-data class MongoRepositoryUserAndInfo(val _id: String,
+data class MongoRepositoryUserAndInfo(val NhsLoginId: String,
                                       val Info: MongoRepositoryUserInfo)
 

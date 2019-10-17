@@ -117,7 +117,7 @@ ENV SPINE_LDAP_LOGIN_DN="ou=services, o=nhs"
 ENV SPINE_CERT_PATH=./certs/spine.pfx
 ENV SPINE_CERT_PASSWORD=
 ENV NHS_APP_PARTY_ID_FOR_SPINE=E87021-820463
-ENV API_BASE_URL http://api.local.bitraft.io:8089/v1/api/
+ENV USERINFO_API_BASE_URL http://api.local.bitraft.io:8091/v1/api/me/info
 
 WORKDIR /app
 RUN chown aspnetcore:aspnetcore /app

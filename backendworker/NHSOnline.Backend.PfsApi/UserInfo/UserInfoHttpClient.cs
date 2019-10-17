@@ -1,5 +1,4 @@
 using System.Net.Http;
-using NHSOnline.Backend.PfsApi.Configs;
 
 namespace NHSOnline.Backend.PfsApi.UserInfo
 {
@@ -7,9 +6,9 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
     {
         public HttpClient Client { get; }
         
-        public UserInfoHttpClient(HttpClient client, IApiConfig config)
+        public UserInfoHttpClient(HttpClient client, IUserInfoApiConfig config)
         {   
-            client.BaseAddress = config.ApiBaseUrl;
+            client.BaseAddress = config.UserInfoApiBaseUrl;
             Client = client;
         }
     }

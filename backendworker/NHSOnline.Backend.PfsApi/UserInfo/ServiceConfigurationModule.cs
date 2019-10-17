@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.PfsApi.Configs;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.UserInfo
@@ -9,7 +8,7 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IApiConfig, ApiConfig>();
+            services.AddSingleton<IUserInfoApiConfig, UserInfoApiConfig>();
             services.AddSingleton<IUserInfoClient, UserInfoClient>();
             services.AddSingleton<IUserInfoService, UserInfoService>();
 
