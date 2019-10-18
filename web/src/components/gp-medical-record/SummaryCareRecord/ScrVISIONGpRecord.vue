@@ -1,6 +1,7 @@
 <template>
   <menu-item id="allergies-and-reactions"
              data-purpose="allergies-and-reactions"
+             :href="allergiesAndReactionsPath"
              :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
              :click-func="goToUrl"
              :click-param="'/gp-medical-record/allergies-and-reactions'"/>
@@ -10,6 +11,7 @@
 
 <script>
 import MenuItem from '@/components/MenuItem';
+import { ALLERGIESANDREACTIONS } from '@/lib/routes';
 
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
 
@@ -22,6 +24,11 @@ export default {
     return {
       ALLERGIESANDADVERSEREACTIONS,
     };
+  },
+  computed: {
+    allergiesAndReactionsPath() {
+      return ALLERGIESANDREACTIONS.path;
+    },
   },
 };
 </script>

@@ -22,6 +22,10 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
         TextBlockElement.withH2Header("Test result", this).assert("Test Result Detail")
     }
 
+    fun assertContentGpMedicalRecord(){
+        TextBlockElement.withoutHeader(this).assert("Test Result Detail")
+    }
+
     fun clickBackToMyRecord() {
         back.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)

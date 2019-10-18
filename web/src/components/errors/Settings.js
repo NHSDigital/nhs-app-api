@@ -24,6 +24,7 @@ import {
   NOMINATED_PHARMACY_SEARCH,
   TESTRESULTS,
   TESTRESULTSDETAIL,
+  TESTRESULTID,
 } from '@/lib/routes';
 
 export default {
@@ -124,6 +125,12 @@ export default {
       route: ALLERGIESANDREACTIONS.path,
       redirectUrl: {
         default: ALLERGIESANDREACTIONS.path,
+      },
+    },
+    {
+      route: TESTRESULTID.path,
+      redirectUrl: {
+        default: TESTRESULTID.path,
       },
     },
     {

@@ -78,6 +78,10 @@ class TextBlockElement {
 
     companion object {
 
+        fun withH1Header(title: String, page: HybridPageObject): TextBlockElement {
+            return TextBlockElement(title, page, "h1")
+        }
+
         fun withH2Header(title: String, page: HybridPageObject): TextBlockElement {
             return TextBlockElement(title, page, "h2")
         }

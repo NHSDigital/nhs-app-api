@@ -48,6 +48,8 @@
         <template v-if="hasDetailedRecordAccess">
           <dcr-emis-gp-record v-if="supplier === 'EMIS'"/>
 
+          <dcr-tpp-gp-record v-if="supplier === 'TPP'"/>
+
           <dcr-vision-gp-record v-if="supplier === 'VISION'"/>
 
           <dcr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
@@ -83,6 +85,7 @@
 <script>
 import get from 'lodash/fp/get';
 import DcrEmisGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrEMISGpRecord';
+import DcrTppGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrTPPGpRecord';
 import DcrVisionGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrVISIONGpRecord';
 import DcrMicrotestGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrMICROTESTGpRecord';
 import ScrEmisGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrEMISGpRecord';
@@ -102,6 +105,7 @@ export default {
   components: {
     Glossary,
     DcrEmisGpRecord,
+    DcrTppGpRecord,
     DcrVisionGpRecord,
     DcrMicrotestGpRecord,
     ScrEmisGpRecord,

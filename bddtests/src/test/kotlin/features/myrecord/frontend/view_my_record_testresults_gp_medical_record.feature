@@ -59,3 +59,31 @@ Feature: View My GP Medical Record Information - Test Results Frontend GP Medica
     When I click the test result link on my record - GP Medical Record
     Then I see 2 test results - GP Medical Record
     And The second test result record has an unknown date - GP Medical Record
+
+  Scenario: A TPP user has multiple test results
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has multiple test results - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    Then I see 6 test results - GP Medical Record
+
+  Scenario: A TPP user will see a error screen when viewing an invalid individual test result
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has multiple test results - GP Medical Record
+    And an error occurs retrieving the test result detail - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    And I click a test result - GP Medical Record
+    Then I see the appropriate error message for retrieving test result detail
+
+  Scenario: A TPP user can navigate to an individual test result
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has multiple test results - GP Medical Record
+    And the GP Practice has test result details - GP Medical Record
+    And I am logged in
+    And I am on my record information page - GP Medical Record
+    When I click the test result link on my record - GP Medical Record
+    And I click a test result - GP Medical Record
+    And I see the test result content - GP Medical Record

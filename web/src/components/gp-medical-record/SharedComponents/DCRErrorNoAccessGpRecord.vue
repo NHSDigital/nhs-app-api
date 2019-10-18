@@ -9,6 +9,9 @@
     <p v-else-if="hasUndeterminedAccess">
       {{ $t('my_record.noRecordsOrNoAccess.warningHeader') }}
     </p>
+    <p v-else-if="noTestData">
+      {{ $t('my_record.testresultdetail.noTestResultData') }}
+    </p>
     <p v-else>
       {{ $t('my_record.genericNoDataMessage') }}
     </p>
@@ -30,6 +33,10 @@ export default {
       default: () => false,
     },
     hasUndeterminedAccess: {
+      type: Boolean,
+      default: () => false,
+    },
+    noTestData: {
       type: Boolean,
       default: () => false,
     },

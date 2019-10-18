@@ -2,6 +2,7 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactory
 import features.sharedSteps.BrowserSteps
 import mocking.data.myrecord.TestResultsData
@@ -11,8 +12,10 @@ import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.gpMedicalRecord.TestResultsPage
 import pages.myrecord.MyRecordInfoPage
+import pages.myrecord.MyRecordTestResultDetailPage
 import utils.SerenityHelpers
 
+private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
 open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
@@ -20,6 +23,7 @@ open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     lateinit var errorPage: ErrorPage
     lateinit var myRecordInfoPage: MyRecordInfoPage
     lateinit var testResultsPage: TestResultsPage
+    lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
 
     @Given("^I do not have access to test results - GP Medical Record$")
     fun givenIDoNotHaveAccessToTestResultsGpMedicalRecord() {
@@ -137,5 +141,50 @@ open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
         val dateLabel = testResultsPage.getTestResultsElements()[1].label
         assertEquals("Test result date", "Unknown Date", dateLabel)
     }
-}
 
+    @Then("^I see the test result content - GP Medical Record$")
+    fun thenISeeTheTestResulsContent() {
+        myRecordDetailedTestResultPage.assertContentGpMedicalRecord()
+    }
+
+    @Given("^the GP Practice has multiple test results - GP Medical Record$")
+    fun givenTheGpPracticeHasSixTestResultsGpMedicalRecord() {
+        val getService = SerenityHelpers.getGpSupplier()
+        TestResultsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
+    }
+
+
+    @When("I click a test result - GP Medical Record$")
+    fun whenIClickATestResultGpMedicalRecord() {
+        testResultsPage.clickTestResult()
+    }
+
+    @Given("^an error occurs retrieving the test result detail - GP Medical Record$")
+    fun givenAnErrorOccursGettingTestResultDetailForTppGpMedicalRecord() {
+        mockingClient.forTpp {
+            myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
+                    TestResultsData.mockTestResultId)
+                    .respondWithServiceNotAvailableException()
+        }
+    }
+
+    @Given("^the GP Practice has test result details - GP Medical Record$")
+    fun givenTestResultDetailIsRetrievedSuccessfullyGpMedicalRecord() {
+
+        mockingClient.forTpp {
+            myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
+                    TestResultsData.mockTestResultId)
+                    .respondWithSuccess(TestResultsData.getTestResultDetail())
+        }
+    }
+
+    @Given("^the test result details are retrieved successfully - GP Medical Record$")
+    fun successGettingTestResultDetailForTppGpMedicalRecord() {
+        mockingClient.forTpp {
+            myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
+                    TestResultsData.mockTestResultId)
+                    .respondWithSuccess(TestResultsData
+                            .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_FOUR))
+        }
+    }
+}

@@ -10,6 +10,7 @@ import pages.myrecord.RecordItem
 class TestResultsPage : HybridPageObject() {
 
     private val testResultsParentXpath = "//div[@data-purpose='record-item']"
+    private val testResultXpath = "//a[contains(text(),'Pathology 1 - Anticoag Control (Warfarin), Read 1')]"
 
     val titleText: String = "Test results"
 
@@ -24,6 +25,10 @@ class TestResultsPage : HybridPageObject() {
     fun getTestResultChildren(): List<WebElementFacade> {
         return getTestResultsElements().first().element.findBy<WebElementFacade>(
                 By.xpath("..")).thenFindAll(By.tagName("li"))
+    }
+
+    fun clickTestResult() {
+        findAllByXpath(testResultXpath).first().click()
     }
 
     fun WebElementFacade.findByXpath(xpath: String): WebElementFacade? {
