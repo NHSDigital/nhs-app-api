@@ -147,6 +147,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             } else {
                 NSLog("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", withError.localizedDescription)
             }
+            stopActivityIndicator()
+            viewController.applicationState.unBlock()
             return
         }
         
@@ -170,6 +172,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 NSLog("Failed to load the page with error: %@", withError.localizedDescription)
             }
         }
+        stopActivityIndicator()
+        viewController.applicationState.unBlock()
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -358,6 +362,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if (url?.host==baseUrl?.host){ self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
             }
         }
+        stopActivityIndicator()
     }
     
     func updateHeaderAndNavigationMenu(url: URL?) {
