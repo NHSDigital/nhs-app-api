@@ -76,6 +76,13 @@ a.button:focus {
   }
 }
 
+.nhs-login {
+  background-color: $nhs_blue;
+}
+
+.nhs-login:hover {
+  background-color: $nhs_blue_med;
+}
 
 /** BUTTONS */
 button.button,

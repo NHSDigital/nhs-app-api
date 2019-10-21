@@ -89,9 +89,9 @@ class LoginPage : HybridPageObject() {
                 symptomsButtonHeaderIsDisplayed())
         assertTrue("Symptoms button is not displayed correctly.",
                 symptomsButtonIsDisplayed())
-        assertTrue("'Log in or create account' button header is not displayed correctly.",
+        assertTrue("'Continue with NHS login' button header is not displayed correctly.",
                 loginOrCreateAccountButtonHeaderIsDisplayed())
-        assertTrue("'Log in or create account' button is not displayed correctly.",
+        assertTrue("'Continue with NHS login' button is not displayed correctly.",
                 loginOrCreateAccountButtonIsDisplayed())
     }
 

@@ -1,6 +1,6 @@
 <template>
   <generic-button
-    :class="[...dynamicStyle('button', 'login-button'), $style.green, buttonStateStyle]"
+    :class="[...dynamicStyle('button', 'login-button'), $style['nhs-login'], buttonStateStyle]"
     type="submit"
     data-id="login-button">
     {{ $t('loginButton.login') }}

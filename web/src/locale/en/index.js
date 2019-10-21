@@ -1339,7 +1339,7 @@ export default {
     description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
   },
   loginButton: {
-    login: 'Log in or create account',
+    login: 'Continue with NHS login',
   },
   loginLink: {
     login: 'Login',
