@@ -1,33 +1,21 @@
-package features.sharedSteps.backend
+package features
 
-import config.Config
 import cucumber.api.java.After
 import cucumber.api.java.Before
-import cucumber.api.java.en.And
-import cucumber.api.java.en.Given
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import models.Patient
 import net.serenitybdd.core.Serenity.getCurrentSession
 import net.serenitybdd.core.Serenity.getWebdriverManager
-import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
 import org.openqa.selenium.WebDriver
 import pages.WEB_CONTEXT
-import utils.GlobalSerenityHelpers
-import utils.SerenityHelpers
 import utils.contains
-import utils.set
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
 import worker.WorkerClient
-import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 
-private const val ADDITIONAL_TIME_TO_DELAY = 10
 val CONSOLE_LOG_STRINGS_TO_IGNORE =
         arrayOf("favicon.ico"
                 ,"redirectToCitizenId"
@@ -35,14 +23,15 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
                 ,"Request failed with status code 50"
                 ,"https://assets.nhs.uk/fonts")
 
-class CommonSteps : AbstractSteps() {
+class SetupAndTeardown {
+
+    private val mockingClient = MockingClient.instance
 
     @Before
     fun beforeEachScenario() {
         getCurrentSession().clear()
 
-        mockingClient = MockingClient.instance
-        workerClient = WorkerClient()
+        val workerClient = WorkerClient()
         mockingClient.clearWiremock()
 
         setSessionVariable(MockingClient::class).to(mockingClient)
@@ -84,31 +73,5 @@ class CommonSteps : AbstractSteps() {
         }
         return driver
     }
-
-    @Given("^I have logged into (.*) and have a valid session cookie$")
-    fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
-
-        GlobalSerenityHelpers.GP_SYSTEM.set(gpSystem)
-        SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(gpSystem)
-
-        givenIHaveLoggedInAndHaveAValidSessionCookie()
-    }
-
-    @Given("^I have logged in and have a valid session cookie$")
-    fun givenIHaveLoggedInAndHaveAValidSessionCookie() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSystem)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-        sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
-                .postSessionConnection(patient.cidUserSession)
-    }
-
-    @And("I allow my session to expire")
-    fun andIDelayMyRequestByTheDefaultTime() {
-        val delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
-        Thread.sleep(delayTime + ADDITIONAL_TIME_TO_DELAY)
-    }
 }
+

@@ -4,7 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
-import features.sharedSteps.backend.AbstractSteps
+import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.defaults.VisionMockDefaults
@@ -21,7 +21,9 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionResponse
 
-class PatientVerificationStepDefinitions : AbstractSteps() {
+class PatientVerificationStepDefinitions {
+
+    private val mockingClient = MockingClient.instance
 
     @Given("I have an (.*) IM1 Connection Token that does not exist")
     fun givenIHaveAnImConnectionTokenThatDoesNotExist(gpSystem: String) {

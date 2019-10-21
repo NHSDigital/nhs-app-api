@@ -4,11 +4,12 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.CancelAppointmentSteps
-import features.sharedSteps.backend.CommonSteps
+import features.sharedSteps.backend.SharedStepDefinitionsBackend
 import mocking.MockingClient
 import mocking.stubs.StubbedEnvironment
 import mocking.vision.appointments.CancelAppointmentBuilderVision
 import net.serenitybdd.core.Serenity
+import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -20,13 +21,15 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     val mockingClient = MockingClient.instance
 
-    private val commonSteps: CommonSteps = CommonSteps()
-    private val cancelAppointmentSteps = CancelAppointmentSteps()
+    @Steps
+    private lateinit var sharedBackendSteps: SharedStepDefinitionsBackend
+    @Steps
+    private lateinit var cancelAppointmentSteps : CancelAppointmentSteps
 
     @Given("^(.*) is available to cancel a previously booked appointment before cutoff time$")
     fun gpSystemIsAvailableToCancelAnAppointment(gpSystem: String) {
 
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
+        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
 
         cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
             cancelRequest -> cancelRequest.respondWithSuccess()
@@ -36,7 +39,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Given("^(.*) will time out when trying to cancel a previously booked appointment")
     fun gpSystemIsAvailableToCancelAnAppointmentButWillTimeout(gpSystem: String) {
 
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
+        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
 
         cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
             cancelRequest -> cancelRequest.respondWithSuccess()
@@ -46,7 +49,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @Given("^as a VISION user I want to cancel an appointment booked by someone else$")
     fun appointmentToBeCancelledIsBookedBySomeoneElseForVision() {
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
+        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
         cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason("VISION"),
                 "VISION") { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
                     .respondWithConflictException()
@@ -55,7 +58,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @Given("^as a VISION user I want to cancel an appointment that doesn't exist$")
     fun appointmentToBeCancelledDoesNotExistForVision() {
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
+        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
         cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason("VISION"),
                 "VISION") { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
                     .respondWithExceptionWhenNotAvailable()
@@ -65,7 +68,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Given("^(.*) returns corrupted response when trying to cancel a previously booked appointment")
     fun gpSystemIsAvailableToCancelAnAppointmentButWillReturnCorruptedResponse(gpSystem: String) {
 
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
+        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
 
         cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
             cancelRequest -> cancelRequest.respondWithCorrupted()

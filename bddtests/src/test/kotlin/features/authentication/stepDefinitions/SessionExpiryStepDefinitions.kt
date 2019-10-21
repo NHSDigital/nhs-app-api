@@ -4,7 +4,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.authentication.steps.LoginSteps
-import features.sharedSteps.backend.AbstractSteps
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -23,7 +23,9 @@ private const val BACKGROUND_DURATION = 100L
 private const val DELAY_FOR_DIALOG = 120_000L
 private const val DESKTOP_EXPIRY_INTERVAL = 180_000L
 
-class SessionExpiryStepDefinitions : AbstractSteps() {
+class SessionExpiryStepDefinitions  {
+
+    private val mockingClient = MockingClient.instance
 
     @Steps
     lateinit var login: LoginSteps

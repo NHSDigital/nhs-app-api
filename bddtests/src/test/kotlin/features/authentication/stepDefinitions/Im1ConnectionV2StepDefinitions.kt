@@ -4,7 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.factories.Im1ConnectionV2Factory
-import features.sharedSteps.backend.AbstractSteps
 import mocking.GsonFactory
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
@@ -18,7 +17,7 @@ import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.Im1ConnectionToken
 
-class Im1ConnectionV2StepDefinitions : AbstractSteps() {
+class Im1ConnectionV2StepDefinitions {
 
     @Given("^I am a (.*) user wishing to register with full linkage details$")
     fun iAmAUserWishingToRegisterWithFullLinkageDetails(gpSystem: String) {

@@ -10,7 +10,6 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.stepDefinitions.MyRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
-import features.sharedSteps.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
@@ -23,7 +22,7 @@ import java.net.URL
 
 private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
 
-class HomePageStepDefinitions : AbstractSteps() {
+class HomePageStepDefinitions {
 
     @Steps
     private lateinit var browser: BrowserSteps

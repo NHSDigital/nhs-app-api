@@ -4,7 +4,7 @@ import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
-import features.sharedSteps.backend.AbstractSteps
+import mocking.MockingClient
 import utils.SerenityHelpers
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -17,8 +17,9 @@ import worker.WorkerClient
 import worker.models.appointments.AppointmentBookRequest
 import worker.models.patient.Im1ConnectionResponse
 
+class EndpointStepDefinitions  {
 
-class EndpointStepDefinitions : AbstractSteps() {
+    private val mockingClient = MockingClient.instance
 
     private val _pfsResponse = "PFSResponse"
     private val _pfsException = "PFSException"
@@ -51,7 +52,7 @@ class EndpointStepDefinitions : AbstractSteps() {
     }
 
     private fun targetPort(config: Config) {
-        workerClient = WorkerClient(config)
+        val workerClient = WorkerClient(config)
         Serenity.setSessionVariable(WorkerClient::class).to(workerClient)
     }
 

@@ -4,11 +4,11 @@ import com.google.gson.internal.LazilyParsedNumber
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.sharedSteps.backend.CommonSteps
 import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
 import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import features.sharedSteps.backend.SharedStepDefinitionsBackend
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -74,7 +74,7 @@ class ServiceJourneyRulesStepDefinitions {
     @When("^I login but service journey rules has no configuration for my GP practice")
     fun whenILoginButServiceJourneyRulesHasNoConfigurationForMyGPPractice() {
         try {
-            CommonSteps().givenIHaveLoggedInAndHaveAValidSessionCookie()
+            SharedStepDefinitionsBackend().givenIHaveLoggedInAndHaveAValidSessionCookie()
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
         }

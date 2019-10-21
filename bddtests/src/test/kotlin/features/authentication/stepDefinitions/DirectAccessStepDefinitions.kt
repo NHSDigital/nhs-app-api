@@ -2,14 +2,16 @@ package features.authentication.stepDefinitions
 
 import cucumber.api.java.en.Given
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
-import features.sharedSteps.backend.AbstractSteps
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
 import utils.SerenityHelpers
 
 
-class DirectAccessStepDefinitions : AbstractSteps() {
+class DirectAccessStepDefinitions {
+
+    private val mockingClient = MockingClient.instance
 
     @Given("^I am about to directly access every page$")
     fun iAmAboutToDirectlyAccessEveryPage() {

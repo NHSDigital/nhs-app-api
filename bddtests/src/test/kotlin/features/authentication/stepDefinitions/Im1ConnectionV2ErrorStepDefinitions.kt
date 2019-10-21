@@ -5,7 +5,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.authentication.factories.Im1ConnectionV2Factory
 import features.authentication.factories.Im1ConnectionV2GetFactory
-import features.sharedSteps.backend.AbstractSteps
 import models.Patient
 import org.apache.http.HttpStatus
 import org.joda.time.DateTime
@@ -20,7 +19,7 @@ import java.time.Duration
 
 private const val MINIMUM_AGE : Int = 16
 private const val TIMEOUT_IN_SECONDS = 90L
-class Im1ConnectionV2ErrorStepDefinitions : AbstractSteps() {
+class Im1ConnectionV2ErrorStepDefinitions {
 
     @Given("^I am a (.*) user registering with created linkage after a get linkage returns '(.*)' '(.*)' '(.*)'")
     fun iAmAUserWishingToRegisterWithCreatedLinkageDetailsAfterGetLinkageReturns(gpSystem: String,

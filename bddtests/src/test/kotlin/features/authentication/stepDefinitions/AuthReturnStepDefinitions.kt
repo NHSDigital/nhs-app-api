@@ -3,8 +3,8 @@ package features.authentication.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.authentication.steps.LoginSteps
-import features.sharedSteps.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import models.patients.EmisPatients
 import models.Patient
@@ -14,7 +14,7 @@ import pages.ErrorPage
 import pages.HybridPageObject
 import pages.clickOnActionContainingText
 
-class AuthReturnStepDefinitions : AbstractSteps() {
+class AuthReturnStepDefinitions {
     val backToHomeText = "Back to home"
     @Steps
     lateinit var browser: BrowserSteps
@@ -25,6 +25,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
 
     lateinit var pageActions: HybridPageObject
     lateinit var errorPage: ErrorPage
+    private val mockingClient = MockingClient.instance
 
     @Given("^I am logged into Citizen ID but am receiving invalid data$")
     fun loggedInInCitizenIdInvalidData() {
