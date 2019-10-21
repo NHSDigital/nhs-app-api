@@ -1,8 +1,8 @@
 @my-record
 Feature: View My Medical Record Information - Medications Frontend
 
-  Scenario Outline: A <Service> user has no acute medications
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user has no acute medications
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled medication functionality and the patient has no medications
     And I am on my record information page
@@ -16,13 +16,13 @@ Feature: View My Medical Record Information - Medications Frontend
     Then I see a message indicating that I have no information recorded for Repeat medications: discontinued on My Record
 
     Examples:
-      | Service |
+      | GP System |
       | EMIS    |
       | TPP     |
       | VISION  |
 
-  Scenario Outline: A <Service> user cannot view medications when they cannot access their Summary Care Record
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user cannot view medications when they cannot access their Summary Care Record
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has disabled summary care record functionality
     And I am on my record information page
@@ -32,7 +32,7 @@ Feature: View My Medical Record Information - Medications Frontend
     But I see the test result heading
 
     Examples:
-      | Service |
+      | GP System |
       | EMIS    |
       | TPP     |
       | VISION  |

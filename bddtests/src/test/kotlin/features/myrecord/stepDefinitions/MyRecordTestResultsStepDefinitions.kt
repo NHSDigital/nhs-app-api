@@ -63,9 +63,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has six test results$")
     fun givenTheGpPracticeHasSixTestResults() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        TestResultsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        TestResultsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has a single test result with multiple child values with no ranges for EMIS$")
@@ -135,30 +135,30 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^I do not have access to test results$")
     fun givenIDoNotHaveAccessToTestResults() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        TestResultsFactory.getForSupplier(getService).noAccess(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        TestResultsFactory.getForSupplier(gpSystem).noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^I have no test results$")
     fun givenIHaveNoTestResults() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        TestResultsFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        TestResultsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^an error occurred retrieving the test results$")
     fun givenAnErrorOccurredRetrievingTestResults() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        TestResultsFactory.getForSupplier(getService).errorRetrieving(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        TestResultsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled test results functionality$")
     fun butTheGPPracticeHasDisabledTestResultsFunctionality() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        TestResultsFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        TestResultsFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
 
     @When("I click a test result$")
@@ -282,9 +282,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("^I see the expected test results displayed$")
     fun thenISeeTheExpectedTestResultsDisplayed() {
 
-        val getService = SerenityHelpers.getGpSupplier()
+        val gpSystem = SerenityHelpers.getGpSupplier()
         val expectedTestResults = TestResultsFactory
-                .getForSupplier(getService)
+                .getForSupplier(gpSystem)
                 .getExpectedTestResults()
 
         val onScreenTestResults = myRecordInfoPage.testResults.allRecordItems()

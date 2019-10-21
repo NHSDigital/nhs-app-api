@@ -23,30 +23,30 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^the GP Practice has enabled immunisations functionality and multiple immunisation records exist$")
     fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleRecordsExist() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ImmunisationsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^no immunisation records exist for the patient$")
     fun givenNoImmunisationRecordsExistForThePatient() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ImmunisationsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the user does not have access to view immunisations$")
     fun givenUserDoesNotHaveAccessToViewImmunisations() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).noAccess(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ImmunisationsFactory.getForSupplier(gpSystem).noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an error retrieving immunisations data$")
     fun givenThereIsAnErrorRetrievingImmunisationsData() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ImmunisationsFactory.getForSupplier(getService).errorRetrieving(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ImmunisationsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @When("^I get the users immunisations$")

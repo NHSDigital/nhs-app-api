@@ -2,8 +2,8 @@
 
 Feature: View My Medical Record Information - Combined Frontend
 
-  Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user can view allergies, consultations, demographics and test results
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled allergies functionality and the patient has "2" allergies
     And the GP Practice has multiple consultations
@@ -20,15 +20,15 @@ Feature: View My Medical Record Information - Combined Frontend
     Then I see test result information
 
     Examples:
-      | Service |
-      | EMIS    |
+      | GP System |
+      | EMIS      |
   @smoketest
     Examples:
-      | Service |
-      | TPP     |
+      | GP System |
+      | TPP       |
 
-  Scenario Outline: A <Service> user can view acute, current and discontinued medications
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user can view acute, current and discontinued medications
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled medications functionality
     And I am on my record information page
@@ -39,16 +39,16 @@ Feature: View My Medical Record Information - Combined Frontend
     When I click the Repeat medications: discontinued section on My Record
     Then I see discontinued repeat medication information
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
+      | GP System |
+      | EMIS      |
+      | TPP       |
   @smoketest
     Examples:
-      | Service |
-      | VISION  |
+      | GP System |
+      | VISION    |
 
-  Scenario Outline: A <Service> user can view immunisations and problems
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user can view immunisations and problems
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist
     And the GP Practice has enabled problems functionality
@@ -58,12 +58,12 @@ Feature: View My Medical Record Information - Combined Frontend
     When I click the Health conditions section on My Record
     Then I see health condition records displayed
     Examples:
-      | Service |
-      | EMIS    |
+      | GP System |
+      | EMIS      |
   @smoketest
     Examples:
-      | Service |
-      | VISION  |
+      | GP System |
+      | VISION    |
 
   @smoketest
   Scenario: A VISION user can view allergies and demographics

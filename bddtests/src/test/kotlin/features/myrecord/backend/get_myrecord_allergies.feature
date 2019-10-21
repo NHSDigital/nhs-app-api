@@ -3,8 +3,8 @@
 Feature: Get Allergies data Backend
   A user can get their patient allergy information
 
-  Scenario Outline: GP practice for <Service> has enabled allergies functionality
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: GP practice for <GP System> has enabled allergies functionality
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled allergies functionality and the patient has "3" allergies
     And I have logged in and have a valid session cookie
     When I get the users my record data
@@ -14,13 +14,13 @@ Feature: Get Allergies data Backend
     And the field indicating supplier is set
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
-      |VISION|
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
-  Scenario Outline: GP practice for <Service> has disabled allergies functionality
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: GP practice for <GP System> has disabled allergies functionality
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has disabled allergies functionality
     And I have logged in and have a valid session cookie
     When I get the users my record data
@@ -30,7 +30,7 @@ Feature: Get Allergies data Backend
     And the field indicating supplier is set
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
-      |VISION|
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |

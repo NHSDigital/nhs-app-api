@@ -21,29 +21,29 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
 
     @Given("^the GP Practice has enabled problems functionality$")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityFor() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ProblemsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled problems functionality$")
     fun butTheGPPracticeHasDisabledProblemsFunctionality() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ProblemsFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
     @Given("^no Problems records exist for the patient$")
     fun givenNoProblemsRecordsExistForThePatient() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ProblemsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an error retrieving Problems data$")
     fun givenThereIsAnErrorRetrievingProblemsData() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        ProblemsFactory.getForSupplier(getService).errorRetrieving(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        ProblemsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @When("^the flag informing that the patient has access to the problem data is set to \"(.*)\"$")

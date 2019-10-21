@@ -30,9 +30,9 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
     @Given("^the GP Practice has enabled allergies functionality and the patient has \"(.*)\" allergies$")
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergies(count: Int) {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        AllergiesFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient(), count)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        AllergiesFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient(), count)
     }
 
     @Given("^the GP Practice has enabled allergies functionality and has a drug and non drug allergy " +
@@ -49,10 +49,10 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     @Given("the GP Practice has enabled allergies functionality and has 5 different " +
             "allergies with different date formats")
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormats() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
         val patient = SerenityHelpers.getPatient()
-        when (getService) {
+        when (gpSystem) {
             "EMIS" ->
                 mockingClient.forEmis {
                     myRecord.allergiesRequest(patient)
@@ -80,9 +80,9 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
     @Given("the GP Practice has disabled allergies functionality")
     fun butTheGPPracticeHasDisabledAllergiesFunctionalityForService() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        AllergiesFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        AllergiesFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an unknown error getting allergies for VISION$")
@@ -148,9 +148,9 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
     @Then("^I see the expected allergies displayed$")
     fun thenISeeTheExpectedAllergiesDisplayed() {
-        val getService = SerenityHelpers.getGpSupplier()
+        val gpSystem = SerenityHelpers.getGpSupplier()
         val allergyData = AllergiesFactory
-                .getForSupplier(getService)
+                .getForSupplier(gpSystem)
                 .getExpectedAllergies()
 
         val onScreenAllergies = myRecordInfoPage.allergies.allRecordItems()

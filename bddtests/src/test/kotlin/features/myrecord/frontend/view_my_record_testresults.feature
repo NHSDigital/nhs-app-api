@@ -2,8 +2,8 @@
 @test-results
 Feature: View My Medical Record Information - Test Results Frontend
 
-  Scenario Outline: A <Service> user has no access to test result section
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user has no access to test result section
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And I do not have access to test results
     And I am on my record information page
@@ -11,13 +11,13 @@ Feature: View My Medical Record Information - Test Results Frontend
     Then I see a message indicating that I have no access to view Test results on My Record
 
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
-  Scenario Outline: A <Service> user has no test results
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user has no test results
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And I have no test results
     And I am on my record information page
@@ -25,13 +25,13 @@ Feature: View My Medical Record Information - Test Results Frontend
     Then I see a message indicating that I have no information recorded for Test results on My Record
 
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
-  Scenario Outline: An error occurs when trying to retrieve test result data from <Service>
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: An error occurs when trying to retrieve test result data from <GP System>
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And an error occurred retrieving the test results
     And I am on my record information page
@@ -39,10 +39,10 @@ Feature: View My Medical Record Information - Test Results Frontend
     Then I see an error occurred message with Test results on My Record
 
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario: An EMIS user has one test result with one value
     Given the my record wiremocks are initialised for EMIS

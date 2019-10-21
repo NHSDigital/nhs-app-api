@@ -2,7 +2,7 @@
 Feature: View My Immunisation Information
 
   Scenario Outline: A user has multiple immunisations on their record - GP Medical Record
-    Given I am a <Service> user setup to use medical record version 2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist - GP Medical Record
     And I am logged in
     And I am on my record information page and glossary is visible - GP Medical Record
@@ -10,12 +10,12 @@ Feature: View My Immunisation Information
     Then I see the expected immunisations - GP Medical Record
 
   Examples:
-    |Service|
-    |EMIS   |
-    |VISION |
+    | GP System |
+    | EMIS      |
+    | VISION    |
 
   Scenario Outline: A user has no immunisations on their record - GP Medical Record
-    Given I am a <Service> user setup to use medical record version 2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has enabled immunisations functionality and no immunisation records exist - GP Medical Record
     And I am logged in
     And I am on my record information page and glossary is visible - GP Medical Record
@@ -23,12 +23,12 @@ Feature: View My Immunisation Information
     Then I see a message that I have no information recorded for a specific record - GP Medical Record
 
   Examples:
-    |Service|
-    |EMIS   |
-    |VISION |
+    | GP System |
+    | EMIS      |
+    | VISION    |
 
   Scenario Outline: A user does not have access to their immunisations record - GP Medical Record
-   Given I am a <Service> user setup to use medical record version 2
+   Given I am a <GP System> user setup to use medical record version 2
    And the user does not have access to view immunisations - GP Medical Record
    And I am logged in
    And I am on my record information page and glossary is visible - GP Medical Record
@@ -36,9 +36,9 @@ Feature: View My Immunisation Information
    Then I see a message indicating that I have no access to view this section on My Record - GP Medical Record
 
    Examples:
-     |Service|
-     |EMIS   |
-     |VISION |
+     | GP System |
+     | EMIS      |
+     | VISION    |
 
   Scenario: A MICROTEST user can view immunisations - GP Medical Record
     Given I am a MICROTEST user setup to use medical record version 2

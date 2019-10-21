@@ -15,44 +15,44 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the GP Practice has enabled demographics functionality$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        DemographicsFactory.getForSupplier(getService).enabled(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        DemographicsFactory.getForSupplier(gpSystem).enabled(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has enabled demographics functionality for the current patient$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionalityForTheCurrentPatient() {
-        val getService = SerenityHelpers.getGpSupplier()
-        DemographicsFactory.getForSupplier(getService).enabled(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        DemographicsFactory.getForSupplier(gpSystem).enabled(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled demographics functionality$")
     fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        DemographicsFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        DemographicsFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^the demographics endpoint responds with (?:a|an) \"(.*)\" error$")
     fun theDemographicsEndpointRespondsWitSpecifiedError(expectedError: String) {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
         if (expectedError.equals("internal server error")) {
-            DemographicsFactory.getForSupplier(getService).throwInternalError(SerenityHelpers.getPatient())
+            DemographicsFactory.getForSupplier(gpSystem).throwInternalError(SerenityHelpers.getPatient())
         }
         if (expectedError.equals("forbidden")) {
-            DemographicsFactory.getForSupplier(getService).throwForbiddenError(SerenityHelpers.getPatient())
+            DemographicsFactory.getForSupplier(gpSystem).throwForbiddenError(SerenityHelpers.getPatient())
         }
         if (expectedError.equals("bad gateway")) {
-            DemographicsFactory.getForSupplier(getService).throwForbiddenError(SerenityHelpers.getPatient())
+            DemographicsFactory.getForSupplier(gpSystem).throwForbiddenError(SerenityHelpers.getPatient())
         }
     }
 
     @Given("^the demographics endpoint responds with internal server error$")
     fun theDemographicsEndpointRespondsWithInternalServerError() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        DemographicsFactory.getForSupplier(getService).throwInternalError(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        DemographicsFactory.getForSupplier(gpSystem).throwInternalError(SerenityHelpers.getPatient())
     }
 
     @When("^I get the users demographic data$")

@@ -2,9 +2,9 @@
 @noJs
 Feature: View My Medical Record Information - No Javascript Frontend
 
-  Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
+  Scenario Outline: A <GP System> user can view allergies, consultations, demographics and test results
     Given I have disabled javascript
-    And the my record wiremocks are initialised for <Service>
+    And the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled allergies functionality and the patient has "2" allergies
     And the GP Practice has multiple consultations
@@ -20,14 +20,13 @@ Feature: View My Medical Record Information - No Javascript Frontend
     And I see test result information
 
     Examples:
-      | Service |
+      | GP System |
       | EMIS    |
       | TPP     |
 
-
-  Scenario Outline: A <Service> user can view acute, current and discontinued medications
+  Scenario Outline: A <GP System> user can view acute, current and discontinued medications
     Given I have disabled javascript
-    And the my record wiremocks are initialised for <Service>
+    And the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled medications functionality
     And I am on my record information page
@@ -37,14 +36,14 @@ Feature: View My Medical Record Information - No Javascript Frontend
     And I see discontinued repeat medication information
 
     Examples:
-      | Service |
-      | EMIS    |
-      | TPP     |
-      | VISION  |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
-  Scenario Outline: A <Service> user can view immunisations and health conditons
+  Scenario Outline: A <GP System> user can view immunisations and health conditions
     Given I have disabled javascript
-    And the my record wiremocks are initialised for <Service>
+    And the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist
     And the GP Practice has enabled problems functionality
@@ -53,9 +52,9 @@ Feature: View My Medical Record Information - No Javascript Frontend
     And I see health condition records displayed
 
     Examples:
-      | Service |
-      | EMIS    |
-      | VISION  |
+      | GP System |
+      | EMIS      |
+      | VISION    |
 
   Scenario: A VISION user can view allergies and demographics
     Given I have disabled javascript

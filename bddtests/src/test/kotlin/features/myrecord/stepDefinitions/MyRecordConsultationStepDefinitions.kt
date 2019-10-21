@@ -22,9 +22,9 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^the GP Practice has multiple consultations$")
     fun givenTheGpPracticeHasMultipleConsultationsFor() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        when (getService) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        when (gpSystem) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis)

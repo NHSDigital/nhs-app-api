@@ -1,8 +1,8 @@
 @my-record
 Feature: View My Medical Record Information - Consultations Frontend
 
-  Scenario Outline: An <Service> user has no Consultations on their record
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user has no Consultations on their record
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has no consultations
     And I am on my record information page
@@ -11,9 +11,9 @@ Feature: View My Medical Record Information - Consultations Frontend
     Then I see a message indicating that I have no information recorded for Consultations on My Record
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   Scenario: An EMIS user does not have access to Consultations
     Given the my record wiremocks are initialised for EMIS
@@ -33,8 +33,8 @@ Feature: View My Medical Record Information - Consultations Frontend
     Then I see 2 Consultations records displayed
     Then The second consultation record has an unknown date
 
-  Scenario Outline: An Error occurs retrieving Consultations data <Service>
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: An Error occurs retrieving Consultations data <GP System>
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And an error occurred retrieving the consultations
     And I am on my record information page
@@ -43,6 +43,6 @@ Feature: View My Medical Record Information - Consultations Frontend
     Then I see an error occurred message with Consultations on My Record
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
+      | GP System |
+      | EMIS      |
+      | TPP       |

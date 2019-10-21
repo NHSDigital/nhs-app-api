@@ -25,8 +25,8 @@ open class GpMedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDef
     @Given("^the GP Practice has enabled allergies functionality and the patient has \"(.*)\" allergies " +
             "- GP Medical Record$")
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergiesGpMedicalRecord(count: Int) {
-        val getService = SerenityHelpers.getGpSupplier()
-        AllergiesFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient(), count)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        AllergiesFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient(), count)
     }
 
     @Given("^the GP Practice has enabled allergies functionality and has a drug and non drug allergy " +
@@ -81,9 +81,9 @@ open class GpMedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDef
 
     @Then("^I see the expected allergies displayed - GP Medical Record$")
     fun thenISeeTheExpectedAllergiesDisplayedGpMedicalRecord() {
-        val getService = SerenityHelpers.getGpSupplier()
+        val gpSystem = SerenityHelpers.getGpSupplier()
         val allergyData = AllergiesFactory
-                .getForSupplier(getService)
+                .getForSupplier(gpSystem)
                 .getExpectedAllergies()
 
         val allergyMessages = allergiesAndReactionsPage.allRecordItems()

@@ -1,22 +1,22 @@
 @my-record
 Feature: View My Medical Record Information - Demographics Frontend
 
-  Scenario Outline: A <Service> user with access navigates to the patient record information page
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user with access navigates to the patient record information page
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And I am on the record warning page
     When I click continue
     Then the my record information screen is loaded
 
     Examples:
-      | Service   |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System   |
+      | EMIS        |
+      | TPP         |
+      | VISION      |
+      | MICROTEST   |
 
-  Scenario Outline: A <Service> user navigates to patient information page
-    Given the my record wiremocks are initialised for <Service>
+  Scenario Outline: A <GP System> user navigates to patient information page
+    Given the my record wiremocks are initialised for <GP System>
     And the GP Practice has enabled demographics functionality
     And I am on the record warning page
     Then I click continue
@@ -26,7 +26,7 @@ Feature: View My Medical Record Information - Demographics Frontend
     And I see my record button on the nav bar is highlighted
 
     Examples:
-      | Service   |
+      | GP System |
       | EMIS      |
       | TPP       |
       | VISION    |

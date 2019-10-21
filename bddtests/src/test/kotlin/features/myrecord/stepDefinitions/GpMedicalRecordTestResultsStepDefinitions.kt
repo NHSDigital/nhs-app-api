@@ -27,14 +27,14 @@ open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
 
     @Given("^I do not have access to test results - GP Medical Record$")
     fun givenIDoNotHaveAccessToTestResultsGpMedicalRecord() {
-        val getService = SerenityHelpers.getGpSupplier()
-        TestResultsFactory.getForSupplier(getService).noAccess(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        TestResultsFactory.getForSupplier(gpSystem).noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^I have no test results - GP Medical Record$")
     fun givenIHaveNoTestResultsGpMedicalRecord() {
-        val getService = SerenityHelpers.getGpSupplier()
-        TestResultsFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        TestResultsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has a single test result with single child values with no ranges for" +
@@ -149,10 +149,9 @@ open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
 
     @Given("^the GP Practice has multiple test results - GP Medical Record$")
     fun givenTheGpPracticeHasSixTestResultsGpMedicalRecord() {
-        val getService = SerenityHelpers.getGpSupplier()
-        TestResultsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        TestResultsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
     }
-
 
     @When("I click a test result - GP Medical Record$")
     fun whenIClickATestResultGpMedicalRecord() {

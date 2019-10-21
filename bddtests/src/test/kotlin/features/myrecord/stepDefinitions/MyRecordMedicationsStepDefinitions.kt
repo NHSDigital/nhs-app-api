@@ -27,25 +27,25 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has enabled medications functionality$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionality() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        MedicationsFactory.getForSupplier(getService).enabledWithRecords(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        MedicationsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has enabled medication functionality and the patient has no medications$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedications() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        val factory = MedicationsFactory.getForSupplier(getService)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        val factory = MedicationsFactory.getForSupplier(gpSystem)
         factory.enabledWithBlankRecord(SerenityHelpers.getPatient())
         factory.getResult()
     }
 
     @Given("^the GP Practice has disabled medications functionality$")
     fun butTheGPPracticeHasDisabledMedicationsFunctionality() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        when (getService) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        when (gpSystem) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.medicationsRequest(SerenityHelpers.getPatient())

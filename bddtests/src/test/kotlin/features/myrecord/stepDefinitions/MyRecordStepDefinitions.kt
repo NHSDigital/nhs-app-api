@@ -53,19 +53,19 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     var testResultOptions = TestResultOptions()
 
     @Given("^the my record wiremocks are initialised for (.*)$")
-    fun givenMyRecordWiremocksAreInitialisedFor(getService: String) {
-        SerenityHelpers.setGpSupplier(getService)
-        setPatientToDefaultFor(getService)
+    fun givenMyRecordWiremocksAreInitialisedFor(gpSystem: String) {
+        SerenityHelpers.setGpSupplier(gpSystem)
+        setPatientToDefaultFor(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(getService).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled summary care record functionality$")
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
-        val getService = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(getService)
-        MyRecordFactory.getForSupplier(getService).disabled(SerenityHelpers.getPatient())
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        setPatientToDefaultFor(gpSystem)
+        MyRecordFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^I am on my record information page$")
@@ -141,21 +141,21 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Given("^the my record wiremocks return a 403 for (.*)$")
-    fun givenMyRecordWiremocksReturnA403For(getService: String) {
-        SerenityHelpers.setGpSupplier(getService)
-        setPatientToDefaultFor(getService)
+    fun givenMyRecordWiremocksReturnA403For(gpSystem: String) {
+        SerenityHelpers.setGpSupplier(gpSystem)
+        setPatientToDefaultFor(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(getService).respondWithForbidden(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(gpSystem).respondWithForbidden(SerenityHelpers.getPatient())
     }
 
     @Given("^the my record wiremocks are populated for (.*)$")
-    fun givenMyRecordWiremocksArePopulatedFor(getService: String) {
-        SerenityHelpers.setGpSupplier(getService)
-        setPatientToDefaultFor(getService)
+    fun givenMyRecordWiremocksArePopulatedFor(gpSystem: String) {
+        SerenityHelpers.setGpSupplier(gpSystem)
+        setPatientToDefaultFor(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(getService).
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(gpSystem).
                 enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
     }
 
