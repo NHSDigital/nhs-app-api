@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="!$store.state.device.isNativeApp && 'pull-content'">
+    <div :class="$store.state.device.isNativeApp && 'pull-content'">
       <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
       <terms-conditions v-else/>
     </div>
