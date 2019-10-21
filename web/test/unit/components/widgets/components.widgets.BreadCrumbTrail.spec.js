@@ -7,6 +7,9 @@ describe('BreadCrumbTrail.vue', () => {
     {
       $store = {
         state: {
+          device: {
+            isNativeApp: false,
+          },
           session: {
             csrfToken: 'some token',
           },
@@ -17,6 +20,9 @@ describe('BreadCrumbTrail.vue', () => {
   ) =>
     mount(BreadCrumbTrail, {
       $store,
+      $style: {
+        native: 'native',
+      },
       propsData,
       stubs: { 'nuxt-link': '<a></a>' },
     });
@@ -86,5 +92,35 @@ describe('BreadCrumbTrail.vue', () => {
 
     expect(wrapper.find(`p>a[to='${APPOINTMENT_BOOKING_GUIDANCE.path}']`)
       .exists()).toEqual(true);
+  });
+
+  it('will add native class when source is native', () => {
+    const wrapper = createBreadCrumbTrail({
+      $store: {
+        state: {
+          device: {
+            isNativeApp: true,
+          },
+          session: {
+            csrfToken: 'some token',
+          },
+        },
+      },
+      propsData: {
+        routes: [INDEX],
+      },
+    });
+
+    expect(wrapper.find('a.nhsuk-breadcrumb__backlink.native').exists()).toEqual(true);
+  });
+
+  it('will not add native class when source is not native', () => {
+    const wrapper = createBreadCrumbTrail({
+      propsData: {
+        routes: [INDEX],
+      },
+    });
+
+    expect(wrapper.find('a.nhsuk-breadcrumb__backlink.native').exists()).toEqual(false);
   });
 });

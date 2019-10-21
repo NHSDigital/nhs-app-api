@@ -13,7 +13,9 @@
             </li>
           </ol>
           <p class="nhsuk-breadcrumb__back">
-            <nuxt-link class="nhsuk-breadcrumb__backlink"
+            <nuxt-link :class="['nhsuk-breadcrumb__backlink',
+                                $store.state.device.isNativeApp && $style.native
+                       ]"
                        :to="lastCrumb.path"
                        tabindex="0"
                        :aria-label="$t('crumbName.backTo',
@@ -61,19 +63,21 @@ export default {
     line-height: 1.5em;
     text-decoration: underline;
     display: inline-block;
-  }
 
-  a:hover {
-    text-decoration: none;
-  }
-
-  a {
     &:focus {
       @include linkFocusStyle;
     }
 
     &:hover {
       @include linkHoverStyle;
+    }
+
+    &.native {
+      &:hover {
+      background: none;
+      box-shadow: none;
+      color: $nhs_blue;
+      }
     }
   }
 
