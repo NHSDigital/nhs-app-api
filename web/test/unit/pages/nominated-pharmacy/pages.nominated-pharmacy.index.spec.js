@@ -1,9 +1,10 @@
 import * as dependency from '@/lib/utils';
-import NominatedPharmacyIndex from '@/pages/nominated-pharmacy/index';
-import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import { create$T, createStore, mount } from '../../helpers';
 import { PRESCRIPTIONS } from '../../../../src/lib/routes';
+import NominatedPharmacyIndex from '@/pages/nominated-pharmacy/index';
+import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
+import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 
 const $t = create$T();
 
@@ -46,6 +47,11 @@ describe('nominated pharmacy not found', () => {
       });
     });
 
+    it('change nominated pharmacy link not visible', () => {
+      const linkToChange = wrapper.find('#link-to-change-pharmacy');
+      expect(linkToChange.exists()).toBe(false);
+    });
+
     describe('back-to-prescriptions', () => {
       it('will exist', () => {
         expect(backButton.exists()).toBe(true);
@@ -72,7 +78,7 @@ describe('nominated pharmacy found', () => {
   let $style;
   let wrapper;
 
-  const createState = (state = {
+  const createState = (type = PharmacyType.P1, state = {
     device: {
       source: 'web',
     },
@@ -83,13 +89,14 @@ describe('nominated pharmacy found', () => {
           day: 'Sunday',
           times: [],
         }],
+        pharmacyType: type,
       },
     },
   }) => state;
 
   const mountPage = () => mount(NominatedPharmacyIndex, { $store, $style, $t });
 
-  describe('show pharmacy details', () => {
+  describe('show P1 pharmacy details', () => {
     let pharmacyDetails;
 
     beforeEach(() => {
@@ -101,6 +108,28 @@ describe('nominated pharmacy found', () => {
 
     it('will exist', () => {
       expect(pharmacyDetails.exists()).toBe(true);
+      const linkToChange = wrapper.find('#link-to-change-pharmacy');
+      expect(linkToChange.exists()).toBe(true);
+    });
+  });
+
+  describe('show P3 pharmacy details', () => {
+    let pharmacyDetails;
+
+    beforeEach(() => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createState(PharmacyType.P3),
+      });
+      wrapper = mountPage();
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
+      pharmacyDetails = wrapper.find(PharmacyDetail);
+    });
+
+    it('will exist, with no change pharmacy link', () => {
+      expect(pharmacyDetails.exists()).toBe(true);
+      const linkToChange = wrapper.find('#link-to-change-pharmacy');
+      expect(linkToChange.exists()).toBe(false);
     });
   });
 });

@@ -10,10 +10,10 @@
         :pharmacy="nominatedPharmacy"
         :is-my-nominated-pharmacy="true"
         :previous-path="currentPage"
-        :can-change-pharmacy="!isDispensingPractice"
+        :can-change-pharmacy="isCommunityPharmacy"
         :show-instruction="true"/>
     </div>
-    <message-dialog v-if="isDispensingPractice"
+    <message-dialog v-if="!isCommunityPharmacy"
                     id="warning-dialog-dispensing-practice"
                     message-type="warning"
                     icon-text="Important">
@@ -67,9 +67,9 @@ export default {
     };
   },
   computed: {
-    isDispensingPractice() {
+    isCommunityPharmacy() {
       return (
-        this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3);
+        this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P1);
     },
   },
   async asyncData({ store }) {
