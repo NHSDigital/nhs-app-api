@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Globalization;
+using CorrelationId;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +13,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support.Logging;
-using StackExchange.Redis;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -66,6 +66,8 @@ namespace NHSOnline.Backend.CidApi
             var environment = Configuration.GetOrWarn("ASPNETCORE_ENVIRONMENT", _logger);
             SetupConfigurationSettings(services, environment);
         
+            services.AddCorrelationId();
+            
             services.AddCors();
 
             services.AddMemoryCache();
@@ -100,15 +102,12 @@ namespace NHSOnline.Backend.CidApi
             services.AddSingleton<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();
             services.AddSingleton<IGetLinkageKeysService, GetLinkageKeysService>();
             services.AddSingleton<ICreateLinkageKeysService, CreateLinkageKeysService>();
+            services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
+            services.AddSingleton<IGpSystemResolver, GpSystemResolver>();
 
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
-            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
-
-            services.AddSingleton(x => new NamedConnectionMultiplexer(
-                ConnectionMultiplexerName.OdsCodeLookup,
-                ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
@@ -166,6 +165,13 @@ namespace NHSOnline.Backend.CidApi
                     .AllowCredentials()
                 );
             }
+            
+            app.UseCorrelationId(new CorrelationIdOptions
+            {
+                Header = Constants.HttpHeaders.CorrelationIdentifier,
+                UseGuidForCorrelationId = true,
+                UpdateTraceIdentifier = false
+            });
 
             app.UseLogRequestHeader(new LogRequestHeaderOptions
             {

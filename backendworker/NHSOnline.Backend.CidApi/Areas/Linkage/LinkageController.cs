@@ -20,28 +20,27 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
     [ApiVersionRoute("patient/linkage")]
     public class LinkageController : Controller
     {
-
-        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<LinkageController> _logger;
         private readonly IAuditor _auditor;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ConfigurationSettings _settings;
         private readonly IOdsCodeMassager _odsCodeMassager;
+        private readonly IGpSystemResolver _gpSystemResolver;
 
         public LinkageController(
             ILogger<LinkageController> logger,
-            IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
             IMinimumAgeValidator minimumAgeValidator,
             ConfigurationSettings settings,
-            IOdsCodeMassager odsCodeMassager)
+            IOdsCodeMassager odsCodeMassager,
+            IGpSystemResolver gpSystemResolver)
         {
             _logger = logger;
-            _gpSystemFactory = gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
             _auditor = auditor;
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
             _odsCodeMassager = odsCodeMassager;
+            _gpSystemResolver = gpSystemResolver ?? throw new ArgumentNullException(nameof(gpSystemResolver));
             
             _settings.Validate();
         }
@@ -168,7 +167,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
             odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
 
-            var gpSystemOption = await _gpSystemFactory.LookupGpSystem(odsCode);
+            var gpSystemOption = await _gpSystemResolver.ResolveFromOdsCode(odsCode);
             if (!gpSystemOption.HasValue)
             {
                 _logger.LogError(

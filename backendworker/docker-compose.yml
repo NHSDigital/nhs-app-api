@@ -21,8 +21,6 @@ services:
     build:
       context: .
       dockerfile: NHSOnline.Backend.PfsApi/Dockerfile
-    depends_on:
-      - nhsonline.redis.sds
     ports:
       - "8082:8082"
     environment:
@@ -74,8 +72,6 @@ services:
     build:
       context: .
       dockerfile: NHSOnline.Backend.CidApi/Dockerfile
-    depends_on:
-      - nhsonline.redis.sds
     ports:
       - "8084:8084"
     environment:
@@ -201,22 +197,6 @@ services:
     ports:
       - "8080:8080"
     tty: true
-  nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
-    environment:
-      - MODE=development
-      - REDIS_HOST=nhsonline.redis.sds
-    depends_on:
-      - nhsonline.redis.sds
-  nhsonline.redis.sds:
-    image: bitnami/redis:4.0.8-r7
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - "6379:6379"
-    volumes:
-      - 'redis_data:/bitnami/redis'
   mongo_seed:
     image: mongo:latest
     links:
@@ -225,7 +205,5 @@ services:
     depends_on:
       - nhsonline.mongodb
 volumes:
-  redis_data:
-    driver: local
   servicejourneyrules_data:
     driver: local

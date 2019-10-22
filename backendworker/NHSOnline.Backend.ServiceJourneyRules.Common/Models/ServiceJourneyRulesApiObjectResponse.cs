@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
 
-namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models
+namespace NHSOnline.Backend.ServiceJourneyRules.Common.Models
 {
     public class ServiceJourneyRulesApiObjectResponse<TBody> : ServiceJourneyRulesApiResponse
     {

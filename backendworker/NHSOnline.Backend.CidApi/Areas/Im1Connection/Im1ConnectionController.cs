@@ -23,31 +23,30 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
     [ApiVersionRoute("patient/im1connection")]
     public class Im1ConnectionController : Controller
     {
-        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<Im1ConnectionController> _logger;
         private readonly IAuditor _auditor;
         private readonly IOdsCodeMassager _odsCodeMassager;
         private readonly IRetrieveLinkageKeysService _retrieveLinkageKeysService;
         private readonly IIm1ConnectionErrorCodes _im1ErrorCodes;
         private readonly IIm1ConnectionErrorCodes _errorCodes;
+        private readonly IGpSystemResolver _gpSystemResolver;
 
         public Im1ConnectionController(
-            IGpSystemFactory gpSystemFactory,
             ILogger<Im1ConnectionController> logger,
             IAuditor auditor,
             IOdsCodeMassager odsCodeMassager,
             IRetrieveLinkageKeysService retrieveLinkageKeysService,
             IIm1ConnectionErrorCodes im1ErrorCodes,
-            IIm1ConnectionErrorCodes linkageErrorCodes)
+            IIm1ConnectionErrorCodes linkageErrorCodes,
+            IGpSystemResolver gpSystemResolver)
         {
-
             _logger = logger;
             _auditor = auditor;
             _odsCodeMassager = odsCodeMassager;
             _retrieveLinkageKeysService = retrieveLinkageKeysService;
             _im1ErrorCodes = im1ErrorCodes;
             _errorCodes = linkageErrorCodes;
-            _gpSystemFactory = gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
+            _gpSystemResolver = gpSystemResolver ?? throw new ArgumentNullException(nameof(gpSystemResolver));
         }
 
         [HttpGet, AllowAnonymous]
@@ -72,7 +71,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     return new BadRequestResult();
                 }
 
-                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(odsCode);
+                var gpSystemOption = await _gpSystemResolver.ResolveFromOdsCode(odsCode);
                 if (!gpSystemOption.HasValue)
                 {
                     _logger.LogError(
@@ -122,7 +121,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     return new BadRequestResult();
                 }
 
-                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(model.OdsCode);
+                var gpSystemOption = await _gpSystemResolver.ResolveFromOdsCode(model.OdsCode);
                 if (!gpSystemOption.HasValue)
                 {
                     _logger.LogError(
@@ -174,7 +173,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     );
                 }
 
-                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(odsCode);
+                var gpSystemOption = await _gpSystemResolver.ResolveFromOdsCode(odsCode);
                 if (!gpSystemOption.HasValue)
                 {
                     _logger.LogError(
@@ -239,7 +238,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                         invalidLinkageParameters.Concat(invalidIm1ConnectionParameters).Distinct());
                 }
 
-                var gpSystemOption = await _gpSystemFactory.LookupGpSystem(im1RegistrationRequest.OdsCode);
+                var gpSystemOption = await _gpSystemResolver.ResolveFromOdsCode(im1RegistrationRequest.OdsCode);
                 if (!gpSystemOption.HasValue)
                 {
                     _logger.LogError(

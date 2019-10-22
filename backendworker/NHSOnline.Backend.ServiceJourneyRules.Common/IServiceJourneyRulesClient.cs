@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.ServiceJourneyRules.Common.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 
-namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
+namespace NHSOnline.Backend.ServiceJourneyRules.Common
 {
     public interface IServiceJourneyRulesClient
     {

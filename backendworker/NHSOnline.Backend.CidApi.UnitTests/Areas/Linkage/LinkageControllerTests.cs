@@ -85,18 +85,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             // Arrange
             _odsCodeMassager.Setup(x => x.IsEnabled).Returns(true);
 
-            var gpSystemFactory = _fixture.Create<Mock<IGpSystemFactory>>();
-            gpSystemFactory.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.None<IGpSystem>());
+            var gpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            gpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.None<IGpSystem>());
 
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
 
             var linkageController = new LinkageController(
                 logger.Object,
-                gpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                gpSystemResolver.Object);
 
             // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value, DefaultOdsCode, DefaultIdentityToken);
@@ -125,18 +125,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             mockLinkageValidationService.Setup(x => x.IsGetValid(It.IsAny<GetLinkageRequest>())).Returns(true);
             gpSystem.Setup(x => x.GetLinkageValidationService()).Returns(mockLinkageValidationService.Object);
 
-            var gpSystemFactory = _fixture.Create<Mock<IGpSystemFactory>>();
-            gpSystemFactory.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
+            var gpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            gpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
 
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
 
             var linkageController = new LinkageController(
                 logger.Object,
-                gpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                gpSystemResolver.Object);
 
             // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value, DefaultOdsCode, DefaultIdentityToken);
@@ -172,18 +172,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var mockLinkageValidationService = new Mock<ILinkageValidationService>();
             mockLinkageValidationService.Setup(x => x.IsGetValid(It.IsAny<GetLinkageRequest>())).Returns(false);
 
-            var gpSystemFactory = _fixture.Create<Mock<IGpSystemFactory>>();
-            gpSystemFactory.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
+            var gpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            gpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
 
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
 
             var linkageController = new LinkageController(
                 logger.Object,
-                gpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                gpSystemResolver.Object);
 
             // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value,
@@ -232,18 +232,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             mockLinkageValidationService.Setup(x => x.IsPostValid(It.IsAny<CreateLinkageRequest>())).Returns(false);
             gpSystem.Setup(x => x.GetLinkageValidationService()).Returns(mockLinkageValidationService.Object);
 
-            var mockGpSystemFactory = _fixture.Create<Mock<IGpSystemFactory>>();
-            mockGpSystemFactory.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
+            var mockgpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            mockgpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
             _odsCodeMassager.Setup(x => x.IsEnabled).Returns(true);
 
             var linkageController = new LinkageController(
                 logger.Object,
-                mockGpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                mockgpSystemResolver.Object);
 
             // Act
             var result = await linkageController.Post(request);
@@ -258,18 +258,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             // Arrange
             var request = BuildCreateLinkageRequest();
 
-            var mockGpSystemFactory = _fixture.Create<Mock<IGpSystemFactory>>();
-            mockGpSystemFactory.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.None<IGpSystem>());
+            var mockGpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            mockGpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.None<IGpSystem>());
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
             _odsCodeMassager.Setup(x => x.IsEnabled).Returns(true);
 
             var linkageController = new LinkageController(
                 logger.Object,
-                mockGpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                mockGpSystemResolver.Object);
 
             // Act
             var result = await linkageController.Post(request);
@@ -303,18 +303,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             gpSystem.Setup(x => x.GetLinkageValidationService()).Returns(validationService.Object);
             gpSystem.Setup(x => x.GetLinkageService()).Returns(mockLinkageService.Object);
 
-            var mockGpSystemFactory = _fixture.Create<Mock<IGpSystemFactory>>();
-            mockGpSystemFactory.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
+            var mockGpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            mockGpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
             _odsCodeMassager.Setup(x => x.IsEnabled).Returns(true);
 
             var linkageController = new LinkageController(
                 logger.Object,
-                mockGpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                mockGpSystemResolver.Object);
 
             // Act
             var result = await linkageController.Post(request);
@@ -396,18 +396,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             gpSystem.Setup(x => x.GetLinkageValidationService()).Returns(validationService.Object);
             gpSystem.Setup(x => x.GetLinkageService()).Returns(mockLinkageService.Object);
 
-            var mockGpSystemFactory = _fixture.Create<Mock<IGpSystemFactory>>();
-            mockGpSystemFactory.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
+            var mockGpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            mockGpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
             _odsCodeMassager.Setup(x => x.IsEnabled).Returns(true);
 
             var linkageController = new LinkageController(
                 logger.Object,
-                mockGpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockMinimumAgeValidator.Object,
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                mockGpSystemResolver.Object);
        
            // Act
            var actionResult = await linkageController.Post(request);
@@ -418,26 +418,26 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
        }
 
         private LinkageController CreateLinkageController(
-            Mock<IGpSystemFactory> mockGpSystemFactory = null)
+            Mock<IGpSystemResolver> mockGpSystemResolver = null)
         {
             var gpSystem = _fixture.Create <Mock<IGpSystem>>();
 
             var validationService = MockLinkageValidationService(true);
             gpSystem.Setup(x => x.GetLinkageValidationService()).Returns(validationService.Object);
 
-            var gpSystemFactory1 = _fixture.Create<Mock<IGpSystemFactory>>();
+            var defaultGpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
 
-            gpSystemFactory1.Setup(x => x.LookupGpSystem(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
-            var gpSystemFactory = mockGpSystemFactory ?? gpSystemFactory1;
+            defaultGpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
+            var odsCodeLookup = mockGpSystemResolver ?? defaultGpSystemResolver;
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
 
             return new LinkageController(
                 logger.Object,
-                gpSystemFactory.Object,
                 _mockAuditor.Object, 
                 _mockMinimumAgeValidator.Object, 
                 _settings,
-                _odsCodeMassager.Object);
+                _odsCodeMassager.Object,
+                odsCodeLookup.Object);
         }
         
         private static Mock<ILinkageValidationService> MockLinkageValidationService(bool validationResult = false)

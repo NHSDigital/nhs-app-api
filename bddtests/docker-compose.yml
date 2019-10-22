@@ -111,17 +111,12 @@ services:
       - NHS_APP_PARTY_ID_FOR_SPINE=xxx
       - PROXY_ACCESS_ENABLED=true
       - USERINFO_API_BASE_URL=http://userinfo.local.bitraft.io:8091/v1/api/me/info
-    depends_on:
-      - nhsonline.redis.sds
     ports:
       - "8082:8082"
     volumes:
       - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
   cid.local.bitraft.io:
     image: nhsonline.backend.cidapi
-    depends_on:
-      - nhsonline.redis.sds
-      - nhsonline.redis.session
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8084
@@ -258,29 +253,6 @@ services:
     ports:
       - "8080:8080"
     tty: true
-  nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
-    environment:
-      - MODE=development
-      - REDIS_HOST=nhsonline.redis.sds
-    depends_on:
-      - nhsonline.redis.sds
-  nhsonline.redis.sds:
-    image: nhsapp.azurecr.io/redis:4.0.8-r7
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - "6379:6379"
-    volumes:
-      - 'redis_data:/bitnami/redis'
-  nhsonline.redis.session:
-    image: nhsapp.azurecr.io/redis:4.0.8-r7
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - "6380:6379"
   mongo_seed:
     image: mongo:latest
     links:
@@ -289,7 +261,5 @@ services:
     depends_on:
       - nhsonline.mongodb
 volumes:
-  redis_data:
-    driver: local
   servicejourneyrules_data:
     driver: local

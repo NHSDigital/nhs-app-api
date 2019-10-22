@@ -1,12 +1,5 @@
 version: "3.2"
 services:
-  nhsonline.redis.session:
-    image: nhsapp.azurecr.io/redis:4.0.8-r7
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - "6380:6379"
   mongo_seed:
     image: mongo:latest
     links:
@@ -16,9 +9,6 @@ services:
       - nhsonline.mongodb
   cid.local.bitraft.io:
     image: nhsonline.backend.worker
-    depends_on:
-      - nhsonline.redis.sds
-      - nhsonline.redis.session
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8084
@@ -60,27 +50,31 @@ services:
     image: mongo:latest
     ports:
     - "27017:27017"
+  servicejourneyrulesapi.config:
+    image: nhsonline-service-journey-dev-config
+    build:
+      context: .
+      dockerfile: configurations/Dockerfile
+    volumes:
+      - 'servicejourneyrules_data:/output'
+  servicejourneyrulesapi.local.bitraft.io:
+    image: nhsonline.backend.servicejourneyrulesapi
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.ServiceJourneyRulesApi/Dockerfile
+    environment:
+      - INPUT_FOLDER_PATH=/app/input
+    ports:
+      - "8086:8086"
+    depends_on:
+      - servicejourneyrulesapi.config
+    volumes:
+      - 'servicejourneyrules_data:/app/input'
   stubs.local.bitraft.io:
     image: rodolpheche/wiremock
     command: --local-response-templating
     ports:
       - "8080:8080"
-  nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
-    environment:
-      - MODE=development
-      - REDIS_HOST=nhsonline.redis.sds
-    depends_on:
-      - nhsonline.redis.sds
-  nhsonline.redis.sds:
-    image: bitnami/redis:4.0.8-r7
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - "6379:6379"
-    volumes:
-      - 'redis_data:/bitnami/redis'
   mongo_seed:
     image: mongo:latest
     links:
@@ -89,5 +83,5 @@ services:
     depends_on:
       - nhsonline.mongodb
 volumes:
-  redis_data:
+  servicejourneyrules_data:
     driver: local

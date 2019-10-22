@@ -2,7 +2,7 @@ using System.Net;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 
-namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models
+namespace NHSOnline.Backend.ServiceJourneyRules.Common.Models
 {
     public abstract class ServiceJourneyRulesApiResponse: ApiResponse
     {

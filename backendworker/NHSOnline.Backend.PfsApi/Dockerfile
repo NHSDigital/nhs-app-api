@@ -39,7 +39,6 @@ ENV EMIS_APPLICATION_ID 16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7
 ENV EMIS_BASE_URL https://nhs70apptest.emishealth.com/PFS/
 ENV EMIS_VERSION 2.1.0.0
 ENV WAIT_FOR_TIMEOUT 60
-ENV REDIS_ODSLOOKUP_CONFIG nhsonline.redis.sds:6379
 ENV SESSION_MONGO_DATABASE_HOST=
 ENV SESSION_MONGO_DATABASE_PORT=
 ENV SESSION_MONGO_DATABASE_USERNAME=
@@ -138,4 +137,4 @@ RUN update-ca-certificates
 
 USER aspnetcore
 EXPOSE $PORT
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet ${PROJECT_NAME}.dll
+CMD sudo update-ca-certificates && exec dotnet ${PROJECT_NAME}.dll

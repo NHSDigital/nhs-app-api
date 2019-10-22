@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
@@ -31,7 +30,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly ICitizenIdSessionService _citizenIdSessionService;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionCacheService _sessionCacheService;
-        private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
@@ -41,13 +39,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IServiceJourneyRulesService _serviceJourneyRules;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
         private readonly IUserInfoService _userInfoService;
-        private readonly SessionConfigurationSettings _sessionSettings;
+        
 
         public SessionController(
             ICitizenIdSessionService citizenIdSessionService,
             IGpSystemFactory gpSystemFactory,
             ISessionCacheService sessionCacheService,
-            IOdsCodeLookup odsCodeLookup,
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
@@ -56,14 +53,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IOdsCodeMassager odsCodeMassager,
             IServiceJourneyRulesService serviceJourneyRules,
             IErrorReferenceGenerator errorReferenceGenerator,
-            SessionConfigurationSettings sessionSettings,
             IUserInfoService userInfoService
         )
         {
             _citizenIdSessionService = citizenIdSessionService;
             _gpSystemFactory = gpSystemFactory;
             _sessionCacheService = sessionCacheService;
-            _odsCodeLookup = odsCodeLookup;
             _settings = settings;
             _logger = logger;
             _auditor = auditor;
@@ -72,7 +67,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _odsCodeMassager = odsCodeMassager;
             _serviceJourneyRules = serviceJourneyRules;
             _errorReferenceGenerator = errorReferenceGenerator;
-            _sessionSettings = sessionSettings;
             _userInfoService = userInfoService;
         }
 
@@ -124,13 +118,43 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 
-            return await GetGpSystemAndCreateSession(citizenIdSessionResult);
+            return await GetServiceJourneyRulesAndCreateSession(citizenIdSessionResult);
         }
 
-        private async Task<IActionResult> GetGpSystemAndCreateSession(CitizenIdSessionResult citizenIdSessionResult)
+        private async Task<IActionResult> GetServiceJourneyRulesAndCreateSession(CitizenIdSessionResult citizenIdSessionResult)
+        {
+            // Get Service Journey Rules
+            _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.OdsCode}");
+
+            var serviceJourneyRulesResultVisited =
+                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.OdsCode);
+
+            if (!serviceJourneyRulesResultVisited.ServiceJourneyRulesRetrieved)
+            {
+                var errorMessage =
+                    $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
+                _logger.LogError(errorMessage);
+                await _auditor.AuditSessionEvent(
+                    citizenIdSessionResult.Session.AccessToken,
+                    citizenIdSessionResult.NhsNumber,
+                    Supplier.Unknown,
+                    AuditingOperations.SessionCreateResponse,
+                    errorMessage);
+
+                // Specific error reference for a 404 from SJR.
+                var objectResult = serviceJourneyRulesResultVisited.StatusCode == StatusCodes.Status404NotFound ?
+                    BuildErrorResult(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported()):
+                    BuildErrorResult(new ErrorTypes.LoginServiceJourneyRulesOtherError());
+
+                return objectResult;
+            }
+
+            return await GetGpSystemAndCreateSession(citizenIdSessionResult, serviceJourneyRulesResultVisited);
+        }
+        private async Task<IActionResult> GetGpSystemAndCreateSession(CitizenIdSessionResult citizenIdSessionResult, ServiceJourneyRulesVisitorOutput serviceJourneyRulesResultVisited)
         {
             // Get a suitable GP system, based on the ODS code.
-            var gpSystemOption = await GetGpSystem(citizenIdSessionResult.OdsCode);
+            var gpSystemOption = GetGpSystem(serviceJourneyRulesResultVisited.Response.Journeys.Supplier);
             if (!gpSystemOption.HasValue)
             {
                 _logger.LogError(
@@ -165,11 +189,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 return BuildErrorResult(new ErrorTypes.LoginForbidden());
             }
 
-            return await GetUserSessionAndCreateSession(gpSystem, citizenIdSessionResult);
+            return await GetUserSessionAndCreateSession(gpSystem, citizenIdSessionResult, serviceJourneyRulesResultVisited);
         }
 
         private async Task<IActionResult> GetUserSessionAndCreateSession(IGpSystem gpSystem,
-            CitizenIdSessionResult citizenIdSessionResult)
+            CitizenIdSessionResult citizenIdSessionResult,
+            ServiceJourneyRulesVisitorOutput serviceJourneyRulesResultVisited)
         {
             // Create a session with the GP system, using the IM1 connection token.
             var gpSessionCreatedResultVisited = await GetGpSessionCreateResultVisitorOutput(gpSystem,
@@ -199,44 +224,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             var userSession = _sessionMapper.Map(HttpContext, gpSessionCreatedResultVisited.UserSession,
                 citizenIdSessionResult.Session);
 
-            return await GetServiceJourneyRulesAndCreateSession(userSession, citizenIdSessionResult,
-                gpSessionCreatedResultVisited);
-        }
-
-        private async Task<IActionResult> GetServiceJourneyRulesAndCreateSession(UserSession userSession,
-            CitizenIdSessionResult citizenIdSessionResult,
-            GpSessionCreateResultVisitorOutput gpSessionCreatedResultVisited)
-        {
-            // Get Service Journey Rules
-            _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.OdsCode}");
-
-            var serviceJourneyRulesResultVisited =
-                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.OdsCode);
-
-            if (!serviceJourneyRulesResultVisited.ServiceJourneyRulesRetrieved)
-            {
-                var errorMessage =
-                    $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
-                _logger.LogError(errorMessage);
-                await _auditor.AuditSessionEvent(
-                    citizenIdSessionResult.Session.AccessToken,
-                    citizenIdSessionResult.NhsNumber,
-                    userSession.GpUserSession.Supplier,
-                    AuditingOperations.SessionCreateResponse,
-                    errorMessage);
-
-                // Specific error reference for a 404 from SJR.
-                var objectResult = serviceJourneyRulesResultVisited.StatusCode == StatusCodes.Status404NotFound ?
-                    BuildErrorResult(new ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound()) :
-                    BuildErrorResult(new ErrorTypes.LoginServiceJourneyRulesOtherError());
-
-                return objectResult;
-            }
-
             return await CreateSession(userSession, serviceJourneyRulesResultVisited, citizenIdSessionResult,
                 gpSessionCreatedResultVisited);
         }
-
+       
         private async Task<IActionResult> CreateSession(UserSession userSession,
             ServiceJourneyRulesVisitorOutput serviceJourneyRulesVisitorOutput,
             CitizenIdSessionResult citizenIdSessionResult,
@@ -432,12 +423,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             };
         }
 
-        private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)
+        private Option<IGpSystem> GetGpSystem(Supplier supplier)
         {
-            var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
-            return !supplier.HasValue
-                ? Option.None<IGpSystem>()
-                : Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
+            return supplier == Supplier.Unknown ? Option.None<IGpSystem>() :
+                Option.Some(_gpSystemFactory.CreateGpSystem(supplier));
         }
 
         private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)

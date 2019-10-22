@@ -275,19 +275,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 "with", "parameters");
         }
 
-        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public async Task Audit_SupplierIsDefault_Throws()
-        {
-            var userSession = CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid);
-            userSession.GpUserSession = new UnknownSupplierSession() { NhsNumber = _nhsNumber1 };
-            
-            await _systemUnderTest.Audit(
-                userSession,
-                "Test Audit", 
-                "SomeDetails '{0} {1}'", 
-                "with", "parameters");
-        }
-
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
         [DataRow("")]
@@ -343,18 +330,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 "with", "parameters");
         }
 
-        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public async Task AuditSessionEvent_SupplierIsDefault_Throws()
-        {
-            await _systemUnderTest.AuditSessionEvent(
-                AccessToken,
-                "1684156", 
-                Supplier.Unknown,                 
-                "Test Audit", 
-                "SomeDetails '{0} {1}'", 
-                "with", "parameters");
-        }
-
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
         [DataRow("")]
@@ -402,17 +377,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             await _systemUnderTest.AuditRegistrationEvent(
                 nhsNumber, 
                 Supplier.Vision, 
-                "Test Audit", 
-                "SomeDetails '{0} {1}'", 
-                "with", "parameters");
-        }
-
-        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public async Task AuditRegistrationEvent_SupplierIsDefault_Throws()
-        {
-            await _systemUnderTest.AuditRegistrationEvent(
-                "1684156", 
-                Supplier.Unknown,                 
                 "Test Audit", 
                 "SomeDetails '{0} {1}'", 
                 "with", "parameters");

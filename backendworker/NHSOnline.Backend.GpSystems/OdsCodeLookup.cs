@@ -1,61 +1,62 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.ServiceJourneyRules.Common;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using StackExchange.Redis;
 
 namespace NHSOnline.Backend.GpSystems
 {
-    public interface IOdsCodeLookup
-    {
-        Task<Option<Supplier>> LookupSupplier(string odsCode);
-    }
 
     public class OdsCodeLookup : IOdsCodeLookup
     {
-        private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
+        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<OdsCodeLookup> _logger;
+        private readonly IServiceJourneyRulesClient _serviceJourneyRulesClient;
 
-        public OdsCodeLookup(IConnectionMultiplexerFactory connectionMultiplexerFactory, ILogger<OdsCodeLookup> logger)
+        public OdsCodeLookup(
+            IGpSystemFactory gpSystemFactory,
+            ILogger<OdsCodeLookup> logger,
+            IServiceJourneyRulesClient serviceJourneyRulesClient)
         {
-            _connectionMultiplexerFactory =
-                connectionMultiplexerFactory ?? throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
+            _gpSystemFactory = gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
             _logger = logger;
-        }    
-
+            _serviceJourneyRulesClient = serviceJourneyRulesClient;
+        }  
+        
         public async Task<Option<Supplier>> LookupSupplier(string odsCode)
         {
-            _logger.LogInformation($"Looking up ODS Code {odsCode}");
+            _logger.LogInformation("Looking up ODS Code {odsCode}", odsCode);
 
             if (string.IsNullOrWhiteSpace(odsCode))
             {
                 return Option.None<Supplier>();
             }
 
-            var supplierName = await GetSupplierNameFromRedis(odsCode);
+            var supplier = await GetSupplierFromServiceJourneyRules(odsCode);
 
-            if (!Enum.TryParse(supplierName, true, out Supplier supplierEnum))
+            if (supplier==Supplier.Unknown)
             {
-                _logger.LogError($"Ods code {odsCode} could not be matched to a supported GP System {supplierName}");
+                _logger.LogError($"Ods code {odsCode} could not be matched to a supported GP System {supplier}");
                 return Option.None<Supplier>();
             }
 
-            return Option.Some(supplierEnum);
+            return Option.Some(supplier);
         }
 
-        private async Task<RedisValue> GetSupplierNameFromRedis(string odsCode)
+        private async Task<Supplier> GetSupplierFromServiceJourneyRules(string odsCode)
         {
             try
             {
                 _logger.LogEnter();
-                var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup);
-                var database = multiplexer.GetDatabase();
 
-                using (_logger.WithTimer("Retrieving supplier name from Redis"))
+                var rules = await _serviceJourneyRulesClient.GetServiceJourneyRules(odsCode);
+                if(rules.HasSuccessResponse && rules.Body?.Journeys != null)
                 {
-                    return await database.StringGetAsync(odsCode);
+                    return rules.Body.Journeys.Supplier;
                 }
+
+                return Supplier.Unknown;
             }
             finally
             {

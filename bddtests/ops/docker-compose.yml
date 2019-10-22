@@ -55,7 +55,6 @@ services:
       - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
       - USERINFO_API_BASE_URL=http://userinfo.local.bitraft.io:8091/v1/api/me/info
     depends_on:
-      - nhsonline.redis.sds
       - nhsonline.mongodb
       - mongo_seed
     ports:
@@ -83,7 +82,6 @@ services:
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
     depends_on:
-      - nhsonline.redis.sds
       - nhsonline.mongodb
       - mongo_seed
   servicejourneyrulesapi.config:
@@ -106,7 +104,6 @@ services:
       - SESSION_MONGO_DATABASE_PASSWORD=
       - INPUT_FOLDER_PATH=/app/input
     depends_on:
-      - nhsonline.redis.sds
       - nhsonline.mongodb
       - mongo_seed
       - servicejourneyrulesapi.config
@@ -145,25 +142,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     tty: true
-  nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
-    environment:
-      - MODE=development
-      - REDIS_HOST=nhsonline.redis.sds
-    depends_on:
-      - nhsonline.redis.sds
-  nhsonline.redis.sds:
-    image: nhsapp.azurecr.io/redis:${REDIS_TAG}
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    volumes:
-      - 'redis_data:/bitnami/redis'
-  nhsonline.redis.session:
-    image: nhsapp.azurecr.io/redis:${REDIS_TAG}
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
   mongo_seed:
     image: mongo:latest
     links:
@@ -172,7 +150,5 @@ services:
     depends_on:
       - nhsonline.mongodb
 volumes:
-  redis_data:
-    driver: local
   servicejourneyrules_data:
     driver: local

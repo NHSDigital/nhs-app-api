@@ -49,7 +49,6 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(typeof(ErrorTypes.LoginBadGatewayMicrotest), "3m")]
         [DataRow(typeof(ErrorTypes.LoginBadGatewayVision), "3s")]
         [DataRow(typeof(ErrorTypes.LoginBadGatewayNhsLogin), "3n")]
-        [DataRow(typeof(ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound), "3j")]
         [DataRow(typeof(ErrorTypes.LoginServiceJourneyRulesOtherError), "3k")]
         [DataRow(typeof(ErrorTypes.AppointmentsBadRequest), "4a")]
         [DataRow(typeof(ErrorTypes.AppointmentsForbidden), "4c")]

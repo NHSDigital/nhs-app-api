@@ -124,6 +124,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 }));
 
             _serviceJourneyRulesResponse = _fixture.Create<ServiceJourneyRulesResponse>();
+            _serviceJourneyRulesResponse.Journeys.Supplier = Supplier.Emis;
 
             _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
             
@@ -305,14 +306,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_UnknownOdsCode_Returns464OdsCodeNotSupported()
         {
             // Arrange
-            _mockOdsCodeLookup
-                .Setup(x => x.LookupSupplier(_userProfile.OdsCode))
-                .Returns(Task.FromResult(Option.None<Supplier>()))
-                .Verifiable();
             _mockServiceDeskErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(
                     It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
                 .Returns(_serviceDeskReference)
+                .Verifiable();
+
+            _serviceJourneyRulesConfigResult =
+                new ServiceJourneyRulesConfigResult.Success(new ServiceJourneyRulesResponse
+                {
+                    Journeys = new Journeys { Supplier = Supplier.Unknown }
+                });
+
+            _mockServiceJourneyRulesService
+                .Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
+                .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
 
             var expectedValue = new PfsErrorResponse
@@ -324,7 +332,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
-            _mockOdsCodeLookup.Verify();
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
@@ -499,14 +506,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_GetServiceJourneyRulesForOdsReturnsNotFound_Returns500InternalServerError()
+        public async Task Post_GetServiceJourneyRulesForOdsReturnsNotFound_Returns464InternalServerError()
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
             _userSession.GpUserSession.HasLinkedAccounts = true;
             
             _mockServiceDeskErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginServiceJourneyRulesOdsCodeNotFound>()))
+                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
                 .Returns(_serviceDeskReference)
                 .Verifiable();
             var expectedValue = new PfsErrorResponse
@@ -525,7 +532,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockAuditor.Setup(x => x.AuditSessionEvent(
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber,
-                    Supplier.Emis,
+                    Supplier.Unknown,
                     AuditingOperations.SessionCreateResponse,
                     "Retrieving Service Journey Rules failed with status code: '404'",
                     It.IsAny<object[]>()))
@@ -539,7 +546,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                objectResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
 
@@ -576,7 +583,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockAuditor.Setup(x => x.AuditSessionEvent(
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber,
-                    Supplier.Emis,
+                    Supplier.Unknown,
                     AuditingOperations.SessionCreateResponse,
                     "Retrieving Service Journey Rules failed with status code: '500'",
                     It.IsAny<object[]>()))
@@ -664,8 +671,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockCitizenIdSessionService.VerifyAll();
             _mockGpSystem.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
-            _mockSessionCacheService.VerifyAll();
-            _mockOdsCodeLookup.VerifyAll();
+            _mockSessionCacheService.VerifyAll();            
             _mockSessionService.VerifyAll();
             _authenticationServiceMock.VerifyAll();
             _mockSessionMapper.VerifyAll();

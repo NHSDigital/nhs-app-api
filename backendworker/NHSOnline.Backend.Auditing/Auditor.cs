@@ -85,11 +85,7 @@ namespace NHSOnline.Backend.Auditing
             {
                 throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
             }
-            if (supplier == Supplier.Unknown)
-            {
-                throw new NoAuditKeyException(ExceptionMessages.SupplierNotSpecified);
-            }
-
+            
             var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
 
             await AuditInternal(auditRecord);

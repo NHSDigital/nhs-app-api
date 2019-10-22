@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
+namespace NHSOnline.Backend.ServiceJourneyRules.Common
 {
     public class ServiceJourneyRulesHttpClient
     {

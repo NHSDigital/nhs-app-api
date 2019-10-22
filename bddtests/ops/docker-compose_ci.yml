@@ -20,8 +20,6 @@ services:
   pfs.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendpfsapi:${BACKEND_TAG}
     depends_on:
-      - nhsonline.redis.sds
-      - nhsonline.redis.session
       - nhsonline.mongodb
     env_file:
       - vars_ci.env
@@ -54,8 +52,6 @@ services:
   cid.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendcidapi:${BACKEND_TAG}
     depends_on:
-      - nhsonline.redis.sds
-      - nhsonline.redis.session
       - nhsonline.mongodb
     env_file:
       - vars_ci.env
@@ -158,25 +154,6 @@ services:
       - PORT=8090
       - CORS_AUTHORITY=*
       - VERSION_TAG=log_docker_main
-  nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
-    environment:
-      - MODE=development
-      - REDIS_HOST=nhsonline.redis.sds
-    depends_on:
-      - nhsonline.redis.sds
-  nhsonline.redis.sds:
-    image: nhsapp.azurecr.io/redis:${REDIS_TAG}
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    volumes:
-      - 'redis_data:/bitnami/redis'
-  nhsonline.redis.session:
-    image: nhsapp.azurecr.io/redis:${REDIS_TAG}
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
   mongo_seed3:
     image: mongo:latest
     links:
@@ -185,7 +162,5 @@ services:
     depends_on:
       - nhsonline.mongodb
 volumes:
-  redis_data:
-    driver: local
   servicejourneyrules_data:
     driver: local

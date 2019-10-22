@@ -42,8 +42,7 @@ We haven't been able to stub the response to the LDAP query in the BDD tests, th
 
 ### Running the backend worker on its own
 There are circumstances, however, when you will want to spin up the backend worker on its
-own (for example when running the web locally using `npm run dev`).  To launch the worker, the stubs
-and the Redis instances run the following in the backend worker directory:
+own (for example when running the web locally using `npm run dev`).  To launch the worker, and the stubs run the following in the backend worker directory:
 
 ```
 docker-compose up --build
@@ -69,7 +68,7 @@ docker-compose -f docker-compose.servicejourneyrules.yml build
 ```
 
 ### Debugging the backendworker
-If you need to debug the backend worker and want to run it using Visual Studio, Visual Studio Code or Rider you will need to run Wiremock and Redis on their own.  To do this run the following in the backend worker directory:
+If you need to debug the backend worker and want to run it using Visual Studio, Visual Studio Code or Rider you will need to run Wiremock on its own.  To do this run the following in the backend worker directory:
 
 ```
 docker-compose -f docker-compose.stubs.yml up

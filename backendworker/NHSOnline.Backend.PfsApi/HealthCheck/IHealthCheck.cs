@@ -1,9 +1,0 @@
-﻿using System.Threading.Tasks;
-
-namespace NHSOnline.Backend.PfsApi.HealthCheck
-{
-    public interface IHealthCheck
-    {
-        Task<BaseHealthCheck.Result> Execute();
-    }
-}

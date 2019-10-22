@@ -14,6 +14,7 @@ import worker.NhsoHttpExceptionErrorBody
 import java.lang.AssertionError
 
 const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 550
+const val ODS_CODE_NOT_FOUND_RESPONSE_CODE = 464
 class ResponseStatusCodeSteps {
 
     @Then("^I (?:get|receive) (?:a|an) \"(.*)\" (?:error|response)$")
@@ -133,7 +134,8 @@ class ResponseStatusCodeSteps {
             "unauthorized" to HttpStatus.SC_UNAUTHORIZED,
             "not implemented" to HttpStatus.SC_NOT_IMPLEMENTED,
             "linkage not supported" to LINKAGE_NOT_SUPPORTED_RESPONSE_CODE,
-            "no content" to HttpStatus.SC_NO_CONTENT
+            "no content" to HttpStatus.SC_NO_CONTENT,
+            "ods code not found" to ODS_CODE_NOT_FOUND_RESPONSE_CODE
     )
 
     private fun httpStatusCodeTransform(statusName: String): Int? {

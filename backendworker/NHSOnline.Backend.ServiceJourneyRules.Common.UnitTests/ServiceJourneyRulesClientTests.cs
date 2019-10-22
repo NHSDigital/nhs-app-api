@@ -9,13 +9,12 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.ServiceJourneyRules.Common.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
+namespace NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests
 {
     [TestClass]
     public sealed class ServiceJourneyRulesClientTests : IDisposable

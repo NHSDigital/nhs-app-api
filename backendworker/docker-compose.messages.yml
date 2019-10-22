@@ -19,8 +19,6 @@ services:
     build:
       context: .
       dockerfile: NHSOnline.Backend.PfsApi/Dockerfile
-    depends_on:
-      - nhsonline.redis.sds
     ports:
       - "8082:8082"
     environment:
@@ -92,6 +90,20 @@ services:
       - PORT=8090
       - CORS_AUTHORITY=*
       - VERSION_TAG=log_docker_main
+  servicejourneyrulesapi.config:
+    image: nhsonline-service-journey-dev-config
+    build:
+      context: .
+      dockerfile: configurations/Dockerfile
+    volumes:
+      - 'servicejourneyrules_data:/output'
+  servicejourneyrulesapi.local.bitraft.io:
+    image: nhsonline.backend.servicejourneyrulesapi
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.ServiceJourneyRulesApi/Dockerfile
+    ports:
+      - "8086:8086"
   nhsonline.stubs:
     image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
     command: --local-response-templating --verbose
@@ -100,22 +112,6 @@ services:
     ports:
       - "8080:8080"
     tty: true
-  nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
-    environment:
-      - MODE=development
-      - REDIS_HOST=nhsonline.redis.sds
-    depends_on:
-      - nhsonline.redis.sds
-  nhsonline.redis.sds:
-    image: bitnami/redis:4.0.8-r7
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - "6379:6379"
-    volumes:
-      - 'redis_data:/bitnami/redis'
   mongo_seed:
     image: mongo:latest
     links:
@@ -124,5 +120,5 @@ services:
     depends_on:
       - nhsonline.mongodb
 volumes:
-  redis_data:
+  servicejourneyrules_data:
     driver: local

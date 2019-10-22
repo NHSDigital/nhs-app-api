@@ -145,7 +145,6 @@ info $BDD_CUCUMBER_OPTIONS_PREFIX
 # Pin versions of docker images
 export WEB_TAG=$APP_DOCKER_TAG
 export BACKEND_TAG=$APP_DOCKER_TAG
-[ -z $REDIS_DATA_DOCKER_TAG ] || export REDIS_DATA_TAG=$REDIS_DATA_DOCKER_TAG
 
 # Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
 if [ "$BROWSER" == "browserstack_android" ] || [ "$BROWSER" == "browserstack_ios" ]

@@ -44,9 +44,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         private Mock<IRetrieveLinkageKeysService> _retrieveLinkageKeysService;
         private Mock<IOdsCodeMassager> _odsCodeMassager;
         private IFixture _fixture;
-        private Mock<IGpSystemFactory> _gpSystemFactory;
         private Mock<Im1ConnectionErrorCodes> _im1ErrorCodes;
         private Mock<Im1ConnectionErrorCodes> _errorCodes;
+        private Mock<IGpSystemResolver> _gpSystemResolver;
         private readonly GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse _verifySuccessfulResponse;
         private readonly GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse _verifyPatientIm1ConnectionV2SuccessfulResponse;
         private readonly PatientIm1ConnectionResponse _expectedSuccessfulVerifyV2Response;
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             _logger = new Mock<ILogger<Im1ConnectionController>>();
             _auditor = new Mock<IAuditor>();
-            _gpSystemFactory = new Mock<IGpSystemFactory>();
+            _gpSystemResolver = new Mock<IGpSystemResolver>();
 
             _tokenValidationService = new Mock<ITokenValidationService>();
             _tokenValidationService.Setup(x => x.IsValidConnectionTokenFormat(It.IsAny<string>())).Returns(true);
@@ -108,16 +108,17 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public void Constructor_NullOdsCodeLookup_Throws()
         {
             // Act
-            Action act = () => new Im1ConnectionController(null, 
+            Action act = () => new Im1ConnectionController( 
                 _logger.Object,
                 _auditor.Object,
                 _odsCodeMassager.Object, 
                 _retrieveLinkageKeysService.Object,
                 _im1ErrorCodes.Object, 
-                _errorCodes.Object);
+                _errorCodes.Object,
+                null);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("gpSystemFactory");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("gpSystemResolver");
         }
 
         [TestMethod]
@@ -177,10 +178,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new Im1ConnectionVerifyResult.Success(_verifySuccessfulResponse));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(odsCode))
+            _gpSystemResolver.Setup(x => x.ResolveFromOdsCode(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
-            
+
             _systemUnderTest = CreateIm1ConnectionController();
 
             // Act
@@ -208,8 +208,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new Im1ConnectionVerifyResult.Success(_verifyPatientIm1ConnectionV2SuccessfulResponse));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(odsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             _systemUnderTest = CreateIm1ConnectionController();
@@ -305,9 +305,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new Im1ConnectionVerifyResult.Success(verifyResponse));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
-            
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(odsCode))
+
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
             
             im1ConnectionService
@@ -335,8 +335,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _odsCodeMassager
               .Setup(x => x.CheckOdsCode(DefaultOdsCode))
               .Returns(DefaultOdsCode);
-              
-            _gpSystemFactory.Setup(x => x.LookupGpSystem(DefaultOdsCode)).ReturnsAsync(Option.None<IGpSystem>());
+
+            _gpSystemResolver.Setup(x => x.ResolveFromOdsCode(DefaultOdsCode)).ReturnsAsync(Option.None<IGpSystem>());
 
             _systemUnderTest = CreateIm1ConnectionController();
 
@@ -364,8 +364,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.NoMatchFoundForGivenDemographics));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(odsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             _systemUnderTest = CreateIm1ConnectionController();
@@ -394,8 +394,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(odsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             _systemUnderTest = CreateIm1ConnectionController();
@@ -426,9 +426,9 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
               .Returns(false);
             
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
-              
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             _systemUnderTest = CreateIm1ConnectionController();
@@ -487,8 +487,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
-            
-            _gpSystemFactory.Setup(x => x.LookupGpSystem(DefaultOdsCode)).ReturnsAsync(Option.None<IGpSystem>());
+
+            _gpSystemResolver.Setup(x => x.ResolveFromOdsCode(DefaultOdsCode)).ReturnsAsync(Option.None<IGpSystem>());
 
             // Act
             var result = await _systemUnderTest.Post(model);
@@ -521,8 +521,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 .ReturnsAsync(new Im1ConnectionRegisterResult.Success(expectedResponse));
             
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             // Act
@@ -550,8 +550,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError));
             
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             // Act
@@ -578,8 +578,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             _retrieveLinkageKeysService.Setup(x =>
@@ -616,8 +616,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             var linkageResponse = _fixture.Create<LinkageResponse>();
@@ -655,8 +655,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
-            _gpSystemFactory
-                .Setup(x => x.LookupGpSystem(DefaultOdsCode))
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
 
             var linkageResponse = _fixture.Create<LinkageResponse>();
@@ -707,13 +707,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             var dummyControllerContext = new ControllerContext(new ActionContext(dummyHttpContext, new RouteData(),
                 new ControllerActionDescriptor()));
 
-            return new Im1ConnectionController(_gpSystemFactory.Object,
+            return new Im1ConnectionController(
                 _logger.Object,
                 _auditor.Object, 
                 _odsCodeMassager.Object,
                 _retrieveLinkageKeysService.Object,
                 _im1ErrorCodes.Object,
-                _errorCodes.Object)
+                _errorCodes.Object,
+                _gpSystemResolver.Object)
             {
                 ControllerContext = dummyControllerContext
             };

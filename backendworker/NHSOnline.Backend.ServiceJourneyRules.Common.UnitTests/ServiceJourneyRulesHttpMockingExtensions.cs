@@ -2,7 +2,7 @@
 using System.Net.Http;
 using RichardSzalay.MockHttp;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
+namespace NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests
 {
     public static class ServiceJourneyRulesHttpMockingExtensions
     {

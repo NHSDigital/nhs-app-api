@@ -7,7 +7,7 @@ Scripts
 =======
 
 # build_all.sh
-This script will fully rebuild all your containers; including updating the Service Journey Rules volume and pulling the latest redis data for signon.
+This script will fully rebuild all your containers; including updating the Service Journey Rules volume
 To use it; please run it from the ROOT of the repo (e.g. nhsonline-app)
 `utils/build_all.sh`
 

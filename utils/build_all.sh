@@ -2,7 +2,6 @@
 STARTEDAT=$(date)
 docker ps -a | awk '{print $1}' | grep -v CONTAINER | xargs docker rm -f
 docker volume list | awk '{print $2}' | grep -v VOLUME | xargs docker volume rm -f
-docker pull nhsapp.azurecr.io/nhsonline-redis-data:latest
 docker pull nhsapp.azurecr.io/nhsonline-dotnetcore-runtime
 docker pull nhsapp.azurecr.io/nhsonline-dotnetcore-build
 docker pull nhsapp.azurecr.io/nhsonline-web-base

@@ -49,17 +49,6 @@ namespace NHSOnline.Backend.Support
             public override int StatusCode => StatusCodes.Status500InternalServerError; 
         }
         
-        public class LoginServiceJourneyRulesOdsCodeNotFound : ErrorTypes
-        {
-            public override string Prefix => "3j";
-            
-            public override ErrorCategory Category => ErrorCategory.Login;
-            
-            public override int StatusCode => StatusCodes.Status500InternalServerError;
-
-            public override SourceApi SourceApi => SourceApi.ServiceJourneyRules;    
-        }
-        
         public class LoginServiceJourneyRulesOtherError : ErrorTypes
         {
             public override string Prefix => "3k";

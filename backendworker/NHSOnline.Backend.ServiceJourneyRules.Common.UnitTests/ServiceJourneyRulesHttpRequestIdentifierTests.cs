@@ -3,10 +3,9 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.Support.Http;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.ServiceJourneyRules
+namespace NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests
 {
     [TestClass]
     public class ServiceJourneyRulesHttpRequestIdentifierTests

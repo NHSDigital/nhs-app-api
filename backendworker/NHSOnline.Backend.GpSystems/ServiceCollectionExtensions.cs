@@ -70,7 +70,6 @@ namespace NHSOnline.Backend.GpSystems
         {
             services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
             services.AddTransient<ICancellationReasonService, CancellationReasonService>();
-            services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<IGpSystemFactory, GpSystemFactory>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IIm1CacheKeyGenerator, Im1CacheKeyGenerator>();

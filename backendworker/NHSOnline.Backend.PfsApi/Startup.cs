@@ -15,7 +15,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support.Logging;
-using StackExchange.Redis;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -128,9 +127,9 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IUserSessionManager, UserSessionManager>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
+            services.AddSingleton<IGpSystemResolver, GpSystemResolver>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
-            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
             services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
             services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
@@ -147,9 +146,6 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IFhirSanitizationHelper, FhirSanitizationHelper>();
             services.AddSingleton<IOnlineConsultationsProviderHttpClientPool, OnlineConsultationsProviderHttpClientPool>();
 
-            services.AddSingleton(x => new NamedConnectionMultiplexer(
-                ConnectionMultiplexerName.OdsCodeLookup,
-                ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 
