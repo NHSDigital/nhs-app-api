@@ -110,18 +110,21 @@ div.record-content {
     }
   }
   .consultationHeader {
-    margin-left:-0.75em;
+    margin-left:1.2em;
+    font-size: 0.875em;
     .consultationTerm {
       li {
+        font-size: 0.75em;
         display: list-item;
         list-style-type: disc;
-        margin-left: -2em;
+        margin-left: -1em;
         li::before {
             content: '';
             height:1px;
         }
         .observationText {
-         margin-left:2em;
+          font-size: 0.875em;
+          margin-left:-1.5em;
           li {
             list-style-type: none;
           }

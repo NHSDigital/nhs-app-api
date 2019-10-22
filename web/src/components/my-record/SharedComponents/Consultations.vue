@@ -22,34 +22,32 @@
 
       <p> {{ consultation.consultantLocation }} </p>
 
-      <ul>
-        <li v-for="(consultationHeader, consultationHeaderIndex)
-              in consultation.consultationHeaders"
-            :key="`line-${consultationHeaderIndex}`" :class="$style.consultationHeader">
-          <strong> {{ consultationHeader.header }} </strong>
+      <div v-for="(consultationHeader, consultationHeaderIndex)
+             in consultation.consultationHeaders"
+           :key="`line-${consultationHeaderIndex}`" :class="$style.consultationHeader">
+        <strong> {{ consultationHeader.header }} </strong>
 
-          <ul :class="$style.consultationTerm">
-            <li v-for="(obsWithTerm, obsWithTermIndex)
-                  in consultationHeader.observationsWithTerm"
-                :key="`line-${obsWithTermIndex}`">
-              {{ obsWithTerm.term }}
-              <ul :class="$style.observationText">
-                <li v-for="(obsWithTermText, obsWithTermTextIndex)
-                      in obsWithTerm.associatedTexts"
-                    :key="`line-${obsWithTermTextIndex}`" v-html="obsWithTermText"/>
-              </ul>
-            </li>
-          </ul>
+        <ul :class="$style.consultationTerm">
+          <li v-for="(obsWithTerm, obsWithTermIndex)
+                in consultationHeader.observationsWithTerm"
+              :key="`line-${obsWithTermIndex}`">
+            {{ obsWithTerm.term }}
+            <ul :class="$style.observationText">
+              <li v-for="(obsWithTermText, obsWithTermTextIndex)
+                    in obsWithTerm.associatedTexts"
+                  :key="`line-${obsWithTermTextIndex}`" v-html="obsWithTermText"/>
+            </ul>
+          </li>
+        </ul>
 
-          <ul :class="$style.consultationTerm">
-            <li v-for="(associatedText, associatedTextIndex)
-                  in consultationHeader.associatedTexts"
-                :key="`line-${associatedTextIndex}`">
-              {{ associatedText }}
-            </li>
-          </ul>
-        </li>
-      </ul>
+        <ul :class="$style.consultationTerm">
+          <li v-for="(associatedText, associatedTextIndex)
+                in consultationHeader.associatedTexts"
+              :key="`line-${associatedTextIndex}`">
+            {{ associatedText }}
+          </li>
+        </ul>
+      </div>
       <hr aria-hidden="true">
     </div>
   </div>
