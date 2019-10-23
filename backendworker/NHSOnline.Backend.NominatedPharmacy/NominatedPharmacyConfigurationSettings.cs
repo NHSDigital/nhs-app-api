@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public NominatedPharmacyConfigurationSettings(
             bool isNominatedPharmacyEnabled,
             Uri baseUrl,
+            string pdsPath,
             int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
             PdsTraceConfigurationSettings pdsTraceConfigurationSettings,
             PdsUpdateConfigurationSettings pdsUpdateConfigurationSettings
@@ -15,6 +16,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
         {
             IsNominatedPharmacyEnabled = isNominatedPharmacyEnabled;
             BaseUrl = baseUrl;
+            PdsPath = pdsPath;
             ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds = artificialDelayAfterNominatedPharmacyUpdateInMilliseconds;
             PdsTraceConfigurationSettings = pdsTraceConfigurationSettings;
             PdsUpdateConfigurationSettings = pdsUpdateConfigurationSettings;
@@ -23,6 +25,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public bool IsNominatedPharmacyEnabled { get; set; }
 
         public Uri BaseUrl { get; }
+        
+        public string PdsPath { get; }
 
         public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
 

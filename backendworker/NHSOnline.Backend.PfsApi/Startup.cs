@@ -505,6 +505,7 @@ namespace NHSOnline.Backend.PfsApi
         {
             var isNominatedPharmacyEnabled = bool.TrueString.Equals(Configuration.GetOrWarn("NOMINATED_PHARMACY_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
             var nominatedPharmacyUriString = Configuration.GetOrWarn("SPINE_PDS_URL", _logger);
+            var nominatedPharmacyUriPathString = Configuration.GetOrWarn("SPINE_PDS_URL_PATH", _logger);
             var pdsQueryFromAddress = Configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", _logger);
             var pdsQueryTo = Configuration.GetOrWarn("PDS_QUERY_TO", _logger);
             var artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = Configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", _logger);
@@ -529,6 +530,7 @@ namespace NHSOnline.Backend.PfsApi
             var config = new NominatedPharmacyConfigurationSettings(
                 isNominatedPharmacyEnabled,
                 new Uri(nominatedPharmacyUriString, UriKind.Absolute),
+                nominatedPharmacyUriPathString,
                 artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
                 pdsTraceConfigurationSettings,
                 pdsUpdateConfigurationSettings

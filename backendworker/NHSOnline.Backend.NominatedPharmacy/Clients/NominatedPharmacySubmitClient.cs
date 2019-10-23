@@ -14,18 +14,19 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
     public class NominatedPharmacySubmitClient : INominatedPharmacySubmitClient
     {
         private const string HeaderSoapAction = "SoapAction";
-        private const string PdsPath = "sync-service";
 
         private readonly NominatedPharmacyHttpClient _httpClient;
         private readonly ILogger<NominatedPharmacySubmitClient> _logger;
         private readonly IXmlResponseParser _responseParser;
+        private readonly string _pdsPath;
 
         public NominatedPharmacySubmitClient(NominatedPharmacyHttpClient httpClient,
-            ILogger<NominatedPharmacySubmitClient> logger, IXmlResponseParser responseParser)
+            ILogger<NominatedPharmacySubmitClient> logger, IXmlResponseParser responseParser, INominatedPharmacyConfigurationSettings configSettings)
         {
             _logger = logger;
             _httpClient = httpClient;
             _responseParser = responseParser;
+            _pdsPath = configSettings.PdsPath;
         }
 
         public async Task<UpdateNominatedPharmacyApiObjectResponse> UpdateNominatedPharmacy(
@@ -37,7 +38,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
 
                 var content = BuildContent(nominatedPharmacyUpdateRequest);
 
-                var httpRequest = BuildHttpRequest(PdsPath, content);
+                var httpRequest = BuildHttpRequest(_pdsPath, content);
 
                 return await SendRequestAndParseResponse(httpRequest);
             }

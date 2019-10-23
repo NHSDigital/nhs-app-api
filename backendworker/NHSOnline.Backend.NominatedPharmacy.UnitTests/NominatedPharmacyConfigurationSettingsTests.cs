@@ -34,6 +34,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = _fixture.Create<int>();
             string partyIdFrom = _fixture.Create<string>();
             string partyIdTo = _fixture.Create<string>();
+            string pdsPath = _fixture.Create<string>();
 
             var pdsTraceConfigurationSettings = new PdsTraceConfigurationSettings
             {
@@ -56,6 +57,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             var config = new NominatedPharmacyConfigurationSettings(
                 isNominatedPharmacyEnabled,
                 baseUrl,
+                pdsPath,
                 artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
                 pdsTraceConfigurationSettings,
                 pdsUpdateConfigurationSettings);

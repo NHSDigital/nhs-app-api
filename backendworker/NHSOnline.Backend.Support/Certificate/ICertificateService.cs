@@ -9,5 +9,7 @@ namespace NHSOnline.Backend.Support.Certificate
         
         bool ServerCertificateValidationHandler(object sender, X509Certificate certificate, X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors);
+
+        void LogCertInfo(string intro, X509Certificate certificate);
     }
 }

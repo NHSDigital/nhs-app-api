@@ -39,6 +39,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
             _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(ApiUrl);
+            _configMock.SetupGet(x => x.PdsPath).Returns(PdsPath);
 
             _mockEnvelopeService = _fixture.Freeze<Mock<INominatedPharmacyEnvelopeService>>();
             _mockHttpHandler = new MockHttpMessageHandler();

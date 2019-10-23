@@ -168,7 +168,7 @@ Feature: nominated pharmacy journey
     Then I see prescriptions page loaded
     And I do not see the nominated pharmacy panel
 
-  Scenario Outline: If patient has a P3 typed nominated pharmacy it can not be changed
+  Scenario Outline: If patient has a P3 typed nominated pharmacy then Patient does not see nominated pharmacy
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -177,12 +177,16 @@ Feature: nominated pharmacy journey
     And I am logged in
     When I navigate to prescriptions
     Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    When I click on the nominated pharmacy panel
-    Then I see nominated pharmacy page loaded with dispensing practise header
-    And I see how to change dispensing practice instruction
-    When I click the Back link
-    Then I see prescriptions page loaded
+    And I do not see the nominated pharmacy panel
+  # these steps have been commented out but not deleted as the expectation is that we will be enabling for phase 2
+  # so these steps become relevant at that point
+
+  #  And I see the nominated pharmacy panel on the prescriptions page
+  #  When I click on the nominated pharmacy panel
+  #  Then I see nominated pharmacy page loaded with dispensing practise header
+  #  And I see how to change dispensing practice instruction
+  #  When I click the Back link
+  #  Then I see prescriptions page loaded
 
     Examples:
       | GP System | Pharmacy Type | OdsCode |

@@ -165,7 +165,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         [DataTestMethod]
         [DataRow("P1", HttpStatusCode.OK, CurrentPharmacyOdsCode, "Smith", "20000101", true)]
         [DataRow("P2", HttpStatusCode.OK, null, "Smith", "20000101", false)]
-        [DataRow("P3", HttpStatusCode.OK, CurrentPharmacyOdsCode, "Smith", "20000101", true)]
+        [DataRow("P3", HttpStatusCode.OK, null, "Smith", "20000101", false)]
         [DataRow("1", HttpStatusCode.OK, null, "Smith", "20000101", true)] // we're only looking at p1, p2, p3
         [DataRow("P1", HttpStatusCode.OK, CurrentPharmacyOdsCode, "", "20000101", false)] //no family name found
         [DataRow("P1", HttpStatusCode.OK, CurrentPharmacyOdsCode, null, "20000101", false)] //no family name found

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Net.WebSockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -47,6 +49,7 @@ namespace NHSOnline.Backend.Support.Certificate
                 var success = false;
 
                 _logger.LogInformation($"ServerCertificateValidationHandler - SslPolicyErrors: {sslPolicyErrors}");
+                LogCertInfo("ServerCertificateValidationHandler", certificate);
 
                 if (sslPolicyErrors != System.Net.Security.SslPolicyErrors.None)
                 {
@@ -61,6 +64,7 @@ namespace NHSOnline.Backend.Support.Certificate
                     }
                     else
                     {
+                        
                         foreach (var item in chain.ChainStatus)
                         {
                             _logger.LogError($"Certificate validation was not successful. " +
@@ -74,6 +78,33 @@ namespace NHSOnline.Backend.Support.Certificate
                 }
 
                 return success;
+            }
+        }
+
+        public void LogCertInfo(string intro, X509Certificate certificate)
+        {
+            try
+            {
+                var xh5092 = new X509Certificate2(certificate);
+                var sb = new StringBuilder();
+                sb.AppendLine($"{intro} cert info: ");
+                sb.AppendLine($"Subject: {xh5092.Subject}");
+                sb.AppendLine($"Issuer: {xh5092.Issuer}");
+                sb.AppendLine($"Version: {xh5092.Version}");
+                sb.AppendLine($"Valid Date: {xh5092.NotBefore}");
+                sb.AppendLine($"Expiry Date: {xh5092.NotAfter}");
+                sb.AppendLine($"Thumbprint: {xh5092.Thumbprint}");
+                sb.AppendLine($"Serial Number: {xh5092.SerialNumber}");
+                sb.AppendLine($"Friendly Name: {xh5092.PublicKey.Oid.FriendlyName}");
+                sb.AppendLine($"Public Key Format: {xh5092.PublicKey.EncodedKeyValue.Format(true)}");
+                sb.AppendLine($"Raw Data Length: {xh5092.RawData.Length}");
+                sb.AppendLine($"Certificate to string: {xh5092.ToString(true)}");
+
+                _logger.LogInformation(sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to extract cert info");
             }
         }
 

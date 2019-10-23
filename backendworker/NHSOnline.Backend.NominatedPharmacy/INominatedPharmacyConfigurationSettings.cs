@@ -7,6 +7,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
         bool IsNominatedPharmacyEnabled { get; }
 
         Uri BaseUrl { get; }
+        
+        string PdsPath { get; }
 
         int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
 

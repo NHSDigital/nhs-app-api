@@ -419,24 +419,15 @@ namespace NHSOnline.Backend.NominatedPharmacy
                         PharmacyType = NominatedPharmacyCode,
                     };
                 case MedicalApplianceCode:
+                case DispensingDoctorCode:
                     _logger.LogInformation(
-                        $"Patient has a {MedicalApplianceCode} pharmacy which is not a valid pharmacy type");
+                        $"Patient has a {patientCareSection.Key} pharmacy which is not a valid pharmacy type");
                     await _auditor.Audit(AuditingOperations.GetNominatedPharmacy,
-                        $"Patient has a {MedicalApplianceCode} pharmacy");
+                        $"Patient has a {patientCareSection.Key} pharmacy");
                     return new PharmacyCheck
                     {
                         IsValid = false, 
                         PatientCareProvisionEvent = null,
-                    };
-                case DispensingDoctorCode:
-                    _logger.LogInformation($"Patient has a valid {DispensingDoctorCode} pharmacy");
-                    await _auditor.Audit(AuditingOperations.GetNominatedPharmacy,
-                        $"Successfully retrieved a valid {DispensingDoctorCode} pharmacy");
-                    return new PharmacyCheck
-                    {
-                        IsValid = true, 
-                        PatientCareProvisionEvent = patientCareSection.Value,
-                        PharmacyType = DispensingDoctorCode,
                     };
                 default:
                     _logger.LogError("Unknown error when filtering nominated pharmacy");
