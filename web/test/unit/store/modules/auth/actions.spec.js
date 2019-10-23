@@ -43,9 +43,36 @@ describe('actions', () => {
       'serviceJourneyRules/init',
       'session/setInfo',
       'termsAndConditions/init',
-    ]).it('will dispach the `%s`', (action) => {
+    ]).it('will dispatch the `%s` event', (action) => {
       expect(actions.dispatch).toHaveBeenCalledWith(action);
     });
+  };
+
+  const removeSessionCookiesAsserts = () => {
+    it('will remove the `nhso.session` cookie', () => {
+      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.session');
+    });
+
+    it('will remove the `nhso.terms` cookie', () => {
+      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
+    });
+
+    it('will remove the `NHSO-Session-Id` cookie', () => {
+      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
+    });
+  };
+
+  const logoutCleanUpAsserts = () => {
+    each([
+      'session/clear',
+      'session/endValidationChecking',
+      'errors/disableApiError',
+      'navigation/clearPreviousSelectedMenuItem',
+    ]).it('will dispatch the `%s` event', (action) => {
+      expect(actions.dispatch).toHaveBeenCalledWith(action);
+    });
+
+    removeSessionCookiesAsserts();
   };
 
   beforeEach(() => {
@@ -115,35 +142,35 @@ describe('actions', () => {
       await actions.logout({ commit });
     });
 
-    it('will dispatch the session/clear event', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
-    });
+    logoutCleanUpAsserts();
 
-    it('will dispatch the session/endValidationChecking event', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
-    });
-
-    it('will clear the info token by dispatching the session/setInfo event with no parameters', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo');
-    });
-
-    it('will remove the nhso.session cookie', () => {
-      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.session');
-    });
-
-    it('will remove the nhso.terms cookie', () => {
-      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
-    });
+    removeSessionCookiesAsserts();
 
     finalAsserts();
   });
 
-  describe('logoutWhenExpired', () => {
-    it('will dispatch the session/showExpiryMessage and auth/logout event', () => {
-      actions
-        .logoutWhenExpired();
+  describe('logoutNoJs', () => {
+    beforeEach(async () => {
+      await actions.logoutNoJs();
+    });
 
-      expect(actions.dispatch).toHaveBeenCalledWith('session/showExpiryMessage');
+    removeSessionCookiesAsserts();
+  });
+
+  describe('logoutWhenExpired', () => {
+    beforeEach(() => {
+      actions.logoutWhenExpired();
+    });
+
+    each([
+      'session/showExpiryMessage',
+      'modal/hide',
+
+    ]).it('will dispatch the `%s` event', (action) => {
+      expect(actions.dispatch).toHaveBeenCalledWith(action);
+    });
+
+    it('will dispatch the `auth/logout` event', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', { expired: true });
     });
   });
@@ -205,6 +232,8 @@ describe('actions', () => {
     beforeEach(() => {
       actions.unauthorised({ commit });
     });
+
+    logoutCleanUpAsserts();
 
     finalAsserts();
   });

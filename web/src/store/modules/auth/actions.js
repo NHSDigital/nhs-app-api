@@ -38,16 +38,18 @@ const final = ({ self, commit }) => {
   }
 };
 
+const removeSessionCookies = ({ app }) => removeCookies({
+  cookies: app.$cookies,
+  key: ['nhso.terms', 'nhso.session', 'NHSO-Session-Id'],
+});
+
 const logoutCleanUp = ({ self }) => {
   self.dispatch('session/clear');
   self.dispatch('session/endValidationChecking');
   self.dispatch('errors/disableApiError');
   self.dispatch('navigation/clearPreviousSelectedMenuItem');
 
-  removeCookies({
-    cookies: self.app.$cookies,
-    key: ['nhso.terms', 'nhso.session'],
-  });
+  removeSessionCookies(self);
 };
 
 export default {
@@ -104,11 +106,7 @@ export default {
     this.dispatch('auth/logout', { expired: true });
   },
   logoutNoJs() {
-    const self = this;
-    removeCookies({
-      cookies: self.app.$cookies,
-      key: ['nhso.terms', 'nhso.session'],
-    });
+    removeSessionCookies(this);
   },
   logout({ commit }, { expired } = {}) {
     logoutCleanUp({ self: this });
