@@ -27,15 +27,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         }
 
         [TestMethod]
-        public void MapDocumentsRequestsGetResponseToDocumentListResponse_WithNullResponse_ThrowsArgumentNullException()
-        {
-            Action act = () => new EmisDocumentsMapper().Map(null);
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("documentsGetResponse");
-
-        }
-
-        [TestMethod]
         public void MapDocumentRequestsGetResponseToDocumentListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange

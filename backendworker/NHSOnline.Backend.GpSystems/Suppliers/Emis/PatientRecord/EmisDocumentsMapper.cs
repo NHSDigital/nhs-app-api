@@ -13,12 +13,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
       public PatientDocuments Map(MedicationRootObject documentsGetResponse)
       {
-          if (documentsGetResponse == null)
-          {
-              throw new ArgumentNullException(nameof(documentsGetResponse));
-          }
-
-          var documents = new PatientDocuments();
+        var documents = new PatientDocuments();
 
           if (documentsGetResponse.MedicalRecord != null) 
           {

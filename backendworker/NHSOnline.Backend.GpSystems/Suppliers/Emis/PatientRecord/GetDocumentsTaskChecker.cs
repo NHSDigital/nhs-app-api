@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
@@ -40,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 if (documentResponse.HasForbiddenResponse() ||
                     documentResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
                 {
-                    _logger.LogWarning("User does not have access to their patient record");
+                    _logger.LogWarning("User does not have access to their documents in patient record");
                     documents = new PatientDocuments
                     {
                         HasAccess = false
@@ -56,9 +57,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     };
                 }
             }
+            
+            if (documentResponse.Body == null)
+            {
+                _logger.LogError("Returned document response body is null.");
+                
+                documents = new PatientDocuments
+                {
+                    HasErrored = true
+                };
+            }
 
             _logger.LogExit();
             return documents ?? _mapper.Map(documentResponse.Body);
+            
         }      
     }
 }
