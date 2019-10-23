@@ -23,3 +23,18 @@ Feature: Use the navigation header bar
     And I navigate away from the home page
     When I click the home icon
     Then I see the home page
+
+  @native
+  Scenario: Dynamic back link leads to the correct pages
+    Given there are EMIS appointments available to book with a reason
+    And a booked appointment can be cancelled
+    When I try to progress to the available appointments page
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I click the back link
+    Then the Available Appointments page is displayed
+    When I click the back link
+    Then I am on the Appointments Guidance page
+    When I click the back link
+    Then the My Appointments page is displayed
+    And the back bar is not visible

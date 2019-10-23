@@ -52,6 +52,9 @@ export const readableBytes = (bytes) => {
 
   return `${Number(parseFloat(bytes / 1000000).toFixed(2))}MB`;
 };
+export const navigateBack = (self) => {
+  self.$router.go(-1);
+};
 
 export const datePart = (value, dateFormat) => {
   switch (dateFormat) {

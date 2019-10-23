@@ -39,7 +39,8 @@ class AppointmentNavigationStepDefinitions {
     @Given("^I am on the Appointment Guidance page$")
     fun iAmOnTheGuidancePage() {
         iAmOnMyAppointmentsPage()
-        myAppointmentsUI.clickOnBookAppointmentButton()
+        myAppointmentsUI.
+                clickOnBookAppointmentButton()
         appointmentGuidanceSteps.appointmentGuidancePage.
                 locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()

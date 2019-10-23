@@ -50,7 +50,8 @@ open class MyAppointmentsUISteps {
     @Step
     fun clickOnBookAppointmentButton() {
         myAppointmentsPage.locatorMethods.assertNativeElementsLoaded(myAppointmentsPage.bookButton)
-        myAppointmentsPage.bookButton.click()
+        myAppointmentsPage.
+                bookButton.click()
     }
 
     @Step

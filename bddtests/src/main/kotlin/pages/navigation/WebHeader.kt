@@ -1,7 +1,9 @@
 package pages.navigation
 
+import org.junit.Assert
 import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.isDisplayed
 
 
 open class WebHeader : HybridPageObject() {
@@ -55,6 +57,17 @@ open class WebHeader : HybridPageObject() {
             page = this
     )
 
+    private val backLinkBar = HybridPageElement(
+            webDesktopLocator = "//div[@id=navbar-breadcrumb]",
+            page = this
+    )
+
+    private val backLink = HybridPageElement(
+            webDesktopLocator = backLinkBar.webDesktopLocator + "//a[normalize-space(text())='Back']",
+            page = this
+    )
+
+
     fun getPageTitle(): HybridPageElement {
         val headerXPath = "//h1"
         return HybridPageElement(
@@ -95,4 +108,18 @@ open class WebHeader : HybridPageObject() {
     fun isPageTitleCorrect(page: String) {
         getPageTitle().withText(pageHeaders.get(page)!!)
     }
+
+
+    fun clickBackLink() {
+        backLink.click()
+    }
+
+    fun assertBackLinkBarVisible(){
+        Assert.assertTrue("Expected back link bar to be visible", backLinkBar.isDisplayed)
+    }
+
+    fun assertBackLinkBarNotVisible(){
+        Assert.assertTrue("Expected back link bar not to be visible", !backLinkBar.isDisplayed)
+    }
+
 }

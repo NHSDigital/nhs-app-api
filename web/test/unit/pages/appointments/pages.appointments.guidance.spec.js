@@ -49,21 +49,9 @@ describe('booking guidance', () => {
     expect(wrapper.find(AppointmentGuidanceMenu).exists()).toBe(false);
   });
 
-  it('will include the back button online consultations enabled and it is native', () => {
-    wrapper = mountAs({ onlineConsultationsEnabled: true, isNativeApp: true });
-    expect(wrapper.find('#back_btn').exists()).toBe(true);
-  });
-
   it('will include the destop back link if online consultations enabled and it is not native', () => {
     wrapper = mountAs({ onlineConsultationsEnabled: true });
     expect(wrapper.find(DesktopGenericBackLink).exists()).toBe(true);
-  });
-
-  it('will go to the previous page the back button when clicked', () => {
-    wrapper = mountAs({ onlineConsultationsEnabled: true, isNativeApp: true });
-    wrapper.find('#back_btn').trigger('click');
-
-    expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
   });
 
   it('will go to the previous page when the desktop back link clicked', () => {

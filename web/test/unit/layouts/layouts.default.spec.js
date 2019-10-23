@@ -20,7 +20,7 @@ const $style = {
 const localVue = createLocalVue();
 
 
-const createDefaultPage = ($store) => {
+const createDefaultPage = ($store, routeName = 'index') => {
   localVue.use(Vuex);
   localVue.mixin({
     methods: {
@@ -36,7 +36,7 @@ const createDefaultPage = ($store) => {
   };
   const $route = {
     query: '',
-    name: 'notLogin',
+    name: routeName,
   };
   const loggedIn = true;
   return shallowMount(DefaultPage, {
@@ -126,6 +126,37 @@ describe('default.vue - is native', () => {
       .toHaveBeenLastCalledWith('auth/nativeLogin');
   });
 
+  it('will show breadcrumb on the correct pages when native', () => {
+    const $store = createStore(true);
+
+    const noBreadcrumbPages = [
+      'Login',
+      'symptoms',
+      'appointments',
+      'prescriptions',
+      'my-record',
+      'gp-medical-record',
+      'more',
+    ];
+
+    const breadcrumbPages = [
+      'appointments-booking-guidance',
+      'appointments-booking',
+      'appointments-confirmation',
+      'prescriptions-repeat-courses',
+    ];
+
+    noBreadcrumbPages.forEach((name) => {
+      const defaultPage = createDefaultPage($store, name);
+      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(false);
+    });
+
+    breadcrumbPages.forEach((name) => {
+      const defaultPage = createDefaultPage($store, name);
+      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(true);
+    });
+  });
+
   it('will not dispatch native login message when native', () => {
     const $store = createStore(false);
 
@@ -178,3 +209,40 @@ describe('default.vue - is native', () => {
   });
 });
 
+describe('default.vue - is web', () => {
+  beforeEach(() => {
+    process.client = true;
+    window.validateSession = () => {};
+  });
+
+  it('will show breadcrumb on the correct pages when in web', () => {
+    const $store = createStore(false);
+
+    const noBreadcrumbPages = [
+      'Login',
+    ];
+
+    const breadcrumbPages = [
+      'appointments-booking-guidance',
+      'appointments-booking',
+      'appointments-confirmation',
+      'prescriptions-repeat-courses',
+      'symptoms',
+      'appointments',
+      'prescriptions',
+      'my-record',
+      'gp-medical-record',
+      'more',
+    ];
+
+    noBreadcrumbPages.forEach((name) => {
+      const defaultPage = createDefaultPage($store, name);
+      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(false);
+    });
+
+    breadcrumbPages.forEach((name) => {
+      const defaultPage = createDefaultPage($store, name);
+      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(true);
+    });
+  });
+});

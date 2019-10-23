@@ -306,7 +306,11 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     private fun onBreadcrumbSelected() {
-        nhsWeb.loadUrl(resources.getString(R.string.myAccountPath))
+        if(!nhsWeb.reloadUrl.isNullOrBlank()){
+            nhsWeb.loadUrl(nhsWeb.reloadUrl!!)
+        } else {
+            nhsWeb.loadWelcomePage()
+        }
         menuBar.deselectActiveItem()
     }
 

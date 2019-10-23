@@ -54,6 +54,13 @@ import {
   GP_FINDER,
   INDEX,
   LOGIN,
+  APPOINTMENTS,
+  PRESCRIPTIONS,
+  MYRECORD,
+  GP_MEDICAL_RECORD,
+  SYMPTOMS,
+  MORE,
+  ACCOUNT,
 } from '@/lib/routes';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -145,7 +152,7 @@ export default {
       return (
         !this.$store.state.device.isNativeApp &&
         this.loggedIn &&
-        this.$route.name !== 'Login'
+        this.$route.name !== LOGIN.name
       );
     },
     shouldShowButton() {
@@ -157,8 +164,23 @@ export default {
     shouldShowBreadCrumb() {
       return (
         this.loggedIn &&
-        this.$route.name !== 'Login'
+        this.$route.name !== LOGIN.name &&
+        !this.breadcrumbDisabledNative
       );
+    },
+    breadcrumbDisabledNative() {
+      if (this.$store.state.device.isNativeApp) {
+        return (
+          this.$route.name === APPOINTMENTS.name ||
+          this.$route.name === PRESCRIPTIONS.name ||
+          this.$route.name === MYRECORD.name ||
+          this.$route.name === GP_MEDICAL_RECORD.name ||
+          this.$route.name === SYMPTOMS.name ||
+          this.$route.name === MORE.name ||
+          this.$route.name === ACCOUNT.name
+        );
+      }
+      return false;
     },
     shouldShowFullDesktopHeader() {
       return (

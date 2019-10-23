@@ -82,7 +82,7 @@
             {{ $t('rp06.empty.body') }}
           </p>
         </div>
-        <desktopGenericBackLink v-else
+        <desktopGenericBackLink v-else-if="!$store.state.device.isNativeApp"
                                 :path="getBackPath"
                                 :button-text="'rp03.backButton'"
                                 @clickAndPrevent="backButtonClicked"/>

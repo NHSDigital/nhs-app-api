@@ -4,25 +4,37 @@
     <div class="nhsuk-width-container">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <ol class="nhsuk-breadcrumb__list">
-            <li v-for="(route, index) in routes" :key="index"
-                class="nhsuk-breadcrumb__item">
-              <nuxt-link class="nhsuk-breadcrumb__link" :to="route.path" tabindex="0" >
-                {{ $t(`crumbName.${route.crumb.i8nKey}`) }}
+          <div v-if="!$store.state.device.isNativeApp" id="navbar-breadcrumb">
+            <ol class="nhsuk-breadcrumb__list">
+              <li v-for="(route, index) in routes" :key="index"
+                  class="nhsuk-breadcrumb__item">
+                <nuxt-link class="nhsuk-breadcrumb__link" :to="route.path" tabindex="0" >
+                  {{ $t(`crumbName.${route.crumb.i8nKey}`) }}
+                </nuxt-link>
+              </li>
+            </ol>
+            <p class="nhsuk-breadcrumb__back">
+              <nuxt-link :class="['nhsuk-breadcrumb__backlink',
+                                  $store.state.device.isNativeApp && $style.native
+                         ]"
+                         :to="lastCrumb.path"
+                         tabindex="0"
+                         :aria-label="$t('crumbName.backTo',
+                                         { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)})">
+                {{ $t('crumbName.backTo',
+                      { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)}) }}
               </nuxt-link>
-            </li>
-          </ol>
-          <p class="nhsuk-breadcrumb__back">
-            <nuxt-link :class="['nhsuk-breadcrumb__backlink',
-                                $store.state.device.isNativeApp && $style.native
-                       ]"
-                       :to="lastCrumb.path"
-                       tabindex="0"
-                       :aria-label="$t('crumbName.backTo',
-                                       { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)})">
-              {{ $t('crumbName.backTo', { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)}) }}
-            </nuxt-link>
-          </p>
+            </p>
+          </div>
+          <div v-else>
+            <span class="nhsuk-breadcrumb__back" :class="$style['native-back']" >
+              <a class="nhsuk-breadcrumb__backlink"
+                 :class="$style['native'] "
+                 @click.prevent="backLinkClicked()" >
+                Back
+              </a>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -32,6 +44,7 @@
 <script>
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
+import { navigateBack } from '@/lib/utils';
 
 export default {
   name: 'BreadCrumbTrail',
@@ -50,6 +63,11 @@ export default {
     },
     hasCrumbs() {
       return !isEmpty(this.routes);
+    },
+  },
+  methods: {
+    backLinkClicked() {
+      navigateBack(this);
     },
   },
 };
@@ -79,6 +97,10 @@ export default {
       color: $nhs_blue;
       }
     }
+  }
+
+  .native-back {
+    display: block;
   }
 
 </style>

@@ -34,4 +34,9 @@ class AppointmentGuidanceStepDefinitions {
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
+
+    @Then("^I am on the Appointments Guidance page$")
+    fun thenIAmOnTheAppointmentsGuidancePage() {
+        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+    }
 }

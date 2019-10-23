@@ -45,17 +45,11 @@
       </div>
     </div>
 
-    <div class="nhsuk-grid-row">
+    <div v-if="!$store.state.device.isNativeApp"
+         class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <sjr-if journey="onlineConsultations">
-          <generic-button v-if="$store.state.device.isNativeApp"
-                          id="back_btn"
-                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                          @click="onBackButtonClicked">
-            {{ $t('appointments.guidance.backButtonText') }}
-          </generic-button>
-          <desktopGenericBackLink v-else
-                                  :path="indexPath"
+          <desktopGenericBackLink :path="indexPath"
                                   button-text="appointments.guidance.backDesktopLinkText"
                                   @clickAndPrevent="onBackButtonClicked"/>
         </sjr-if>
