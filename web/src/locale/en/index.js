@@ -1331,6 +1331,16 @@ export default {
     noStartDate: 'Unknown Date',
   },
   messaging: {
+    index: {
+      hidden: {
+        from: 'Messages from: ',
+        lastSent: 'The last message was sent ',
+        latestSubject: 'Latest message subject: ',
+        unreadFrom: 'unread messages from ',
+        youHave: 'You have ',
+      },
+      noMessages: 'You have no messages',
+    },
     messages: {
       titlePrefix: 'Messages from:',
       unreadMessages: 'Unread messages',

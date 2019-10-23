@@ -2887,8 +2887,6 @@
                               type: "boolean"
                             userInfo: 
                               type: "boolean"
-                            hasLinkedAccounts: 
-                              type: "boolean"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
             content: 
@@ -3388,8 +3386,6 @@
                           type: "boolean"
                         userInfo: 
                           type: "boolean"
-                        hasLinkedAccounts: 
-                          type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 
@@ -3709,16 +3705,14 @@
                               format: "date-time"
                               description: "Message sent time."
                             read: 
-                              type: "string"
-                              format: "date-time"
-                              description: "Message read time."
+                              type: "boolean"
                           example: 
                             id: "9fbd0bea-5a63-4fd4-b4be-4bcd9c063227"
                             sender: "b1f99cf0-278d-49ca-a325-0a1504799488"
                             version: 1
                             body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                             sendTime: "2019-09-17T02:15:12.350Z"
-                            read: "2019-09-19T02:15:12.350Z"
+                            read: true
           204: 
             description: "Successful operation. Content is empty."
           400: 

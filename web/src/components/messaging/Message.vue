@@ -6,14 +6,13 @@
         <!-- eslint-disable-next-line vue/no-v-html -->
         <p v-html="content"/>
       </div>
-      <time :datetime="sentTimeAttribute">Sent {{ sentTime }}</time>
+      <time :datetime="sentTime | formatDate('YYYY-MM-DD h:mma')"
+      >Sent {{ sentTime | formatDate('h:mma, DD MMMM YYYY') }}</time>
     </div>
   </li>
 </template>
 
 <script>
-import moment from 'moment-timezone';
-
 export default {
   name: 'Message',
   props: {
@@ -25,8 +24,7 @@ export default {
   data() {
     return {
       content: this.message.body.replace(/\n/g, '<br />'),
-      sentTime: moment.tz(this.message.sentTime, 'Europe/London').format('h:mma, DD MMMM YYYY', { trim: false }),
-      sentTimeAttribute: moment.tz(this.message.sentTime, 'Europe/London').format('YYYY-MM-DD h:mma', { trim: false }),
+      sentTime: this.message.sentTime,
     };
   },
 };

@@ -65,8 +65,6 @@ components:
               type: boolean
             userInfo:
               type: boolean
-            hasLinkedAccounts:
-              type: boolean
     defaultProvider:
       type: object
       properties:

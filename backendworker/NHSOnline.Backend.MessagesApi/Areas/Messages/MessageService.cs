@@ -48,9 +48,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     SentTime = DateTime.Now
                 };
 
-                // TODO: only for testing purposes, to be removed
-                _logger.LogInformation($"Message to be created:\n{JsonConvert.SerializeObject(userMessage)}");
-
                 await _messageRepository.Create(userMessage);
                
                 return new MessageResult.Success();

@@ -3,6 +3,7 @@ import {
   initialState,
   INIT,
   LOADED,
+  SET_SENDER,
 } from '@/store/modules/messaging/mutation-types';
 
 describe('messaging mutations', () => {
@@ -31,8 +32,20 @@ describe('messaging mutations', () => {
       mutations[LOADED](state, data);
     });
 
-    it('will set the unread messages state to the received value', () => {
-      expect(state.unreadMessages).toEqual(data);
+    it('will set the sender messages state to the received value', () => {
+      expect(state.senderMessages).toEqual(data);
+    });
+  });
+
+  describe('SET_SENDER', () => {
+    const data = 'test state';
+
+    beforeEach(() => {
+      mutations[SET_SENDER](state, data);
+    });
+
+    it('will set the selected sender state to the received value', () => {
+      expect(state.selectedSender).toEqual(data);
     });
   });
 });

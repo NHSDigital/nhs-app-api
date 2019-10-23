@@ -1,5 +1,5 @@
 import actions from '@/store/modules/messaging/actions';
-import { INIT, LOADED } from '@/store/modules/messaging/mutation-types';
+import { INIT, LOADED, SET_SENDER } from '@/store/modules/messaging/mutation-types';
 
 describe('messaging actions', () => {
   const getResponse = 'get test response';
@@ -36,14 +36,40 @@ describe('messaging actions', () => {
       await actions.load({ commit });
     });
 
-    it('will call the `getV1ApiUsersMeMessages` endpoint', () => {
-      expect($http.getV1ApiUsersMeMessages).toBeCalled();
-      expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+    it('will call the `getV1ApiUsersMeMessages` endpoint with `summary=true`', () => {
+      expect($http.getV1ApiUsersMeMessages).toBeCalledWith({ summary: true });
     });
 
     it('will commit endpoint response to `LOADED`', () => {
       expect(commit).toBeCalledWith(LOADED, getResponse);
-      expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+    });
+
+    it('will dispatch `device/unlockNavBar` event', () => {
+      expect(dispatch).toBeCalledWith('device/unlockNavBar');
+    });
+
+    describe('with sender', () => {
+      const sender = 'test sender';
+
+      beforeEach(async () => {
+        await actions.load({ commit }, sender);
+      });
+
+      it('will call the `getV1ApiUsersMeMessages` endpoint with sender', () => {
+        expect($http.getV1ApiUsersMeMessages).toBeCalledWith({ sender });
+      });
+    });
+  });
+
+  describe('selectSender', () => {
+    const sender = 'test sender';
+
+    beforeEach(() => {
+      actions.selectSender({ commit }, sender);
+    });
+
+    it('will commit `SET_SENDER with passed value`', () => {
+      expect(commit).toBeCalledWith(SET_SENDER, sender);
     });
   });
 });

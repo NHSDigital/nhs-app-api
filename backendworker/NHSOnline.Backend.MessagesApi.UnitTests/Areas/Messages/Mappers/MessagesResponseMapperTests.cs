@@ -36,13 +36,13 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                 .With(x => x.SentTime, DateTime.UtcNow)
                 .With(x => x.Read, DateTime.UtcNow)
                 .Create();
-            
+
             var oldestMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, sender)
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(-10))
                 .With(x => x.Read, default(DateTime?))
                 .Create();
-            
+
             var latestMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, sender)
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(10))
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                 .Create();
 
             // Act
-            var result = _systemUnderTest.Map(new List<UserMessage>{ currentMessage, oldestMessage, latestMessage });
+            var result = _systemUnderTest.Map(new List<UserMessage> { currentMessage, oldestMessage, latestMessage });
 
             // Assert
             result.Should().NotBeEmpty();
@@ -59,10 +59,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             {
                 Sender = sender,
                 UnreadCount = 2,
-                Messages = new List<UserMessage> { latestMessage, currentMessage, oldestMessage }
+                Messages = MapToMessages(latestMessage, currentMessage, oldestMessage)
             });
         }
-        
+
         [TestMethod]
         public void Map_WithNoUserMessages_MapsToEmptyResponse()
         {
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             // Assert
             result.Should().BeEmpty();
         }
-        
+
         [TestMethod]
         public void Map_WhenUserMessagesIsNull_ThrowsException()
         {
@@ -91,77 +91,45 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             var currentMessage = _fixture.Build<SummaryMessage>()
                 .With(x => x.SentTime, DateTime.UtcNow)
                 .Create();
-            
+
             var oldestMessage = _fixture.Build<SummaryMessage>()
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(-10))
                 .Create();
-            
+
             var latestMessage = _fixture.Build<SummaryMessage>()
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(10))
                 .Create();
 
             // Act
-            var result = _systemUnderTest.Map(new List<SummaryMessage>{ currentMessage, oldestMessage, latestMessage });
+            var result = _systemUnderTest.Map(new List<SummaryMessage>
+                { currentMessage, oldestMessage, latestMessage });
 
             // Assert
             result.Should().NotBeEmpty();
             result.Should().HaveCount(3);
             result.Should().BeEquivalentTo(new List<SenderMessages>
             {
-                new SenderMessages {
+                new SenderMessages
+                {
                     Sender = latestMessage.Sender,
                     UnreadCount = latestMessage.UnreadCount,
-                    Messages = new List<UserMessage>
-                    {
-                        new UserMessage
-                        {
-                            Id = latestMessage.Id,
-                            NhsLoginId = latestMessage.NhsLoginId,
-                            Sender = latestMessage.Sender,
-                            Version = latestMessage.Version,
-                            Body = latestMessage.Body,
-                            Read = latestMessage.Read,
-                            SentTime = latestMessage.SentTime,
-                        }
-                    }
+                    Messages =  MapToMessages(latestMessage)
                 },
-                new SenderMessages {
+                new SenderMessages
+                {
                     Sender = currentMessage.Sender,
                     UnreadCount = currentMessage.UnreadCount,
-                    Messages = new List<UserMessage>
-                    {
-                        new UserMessage
-                        {
-                            Id = currentMessage.Id,
-                            NhsLoginId = currentMessage.NhsLoginId,
-                            Sender = currentMessage.Sender,
-                            Version = currentMessage.Version,
-                            Body = currentMessage.Body,
-                            Read = currentMessage.Read,
-                            SentTime = currentMessage.SentTime,
-                        }
-                    }
+                    Messages = MapToMessages(currentMessage)
                 },
-                new SenderMessages {
+                new SenderMessages
+                {
                     Sender = oldestMessage.Sender,
                     UnreadCount = oldestMessage.UnreadCount,
-                    Messages = new List<UserMessage>
-                    {
-                        new UserMessage
-                        {
-                            Id = oldestMessage.Id,
-                            NhsLoginId = oldestMessage.NhsLoginId,
-                            Sender = oldestMessage.Sender,
-                            Version = oldestMessage.Version,
-                            Body = oldestMessage.Body,
-                            Read = oldestMessage.Read,
-                            SentTime = oldestMessage.SentTime,
-                        }
-                    }
+                    Messages = MapToMessages(oldestMessage)
                 },
             });
         }
-        
+
         [TestMethod]
         public void Map_WithNoSummaryMessages_MapsToEmptyResponse()
         {
@@ -171,7 +139,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             // Assert
             result.Should().BeEmpty();
         }
-        
+
         [TestMethod]
         public void Map_WhenSummaryMessagesIsNull_ThrowsException()
         {
@@ -182,5 +150,16 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             act.Should().Throw<ArgumentNullException>()
                 .And.ParamName.Should().Be("source");
         }
+
+        private List<Message> MapToMessages(params UserMessage[] userMessages)
+            => userMessages.Select(m => new Message
+            {
+                Id = m.Id,
+                Sender = m.Sender,
+                Version = m.Version,
+                Body = m.Body,
+                Read = m.Read.HasValue,
+                SentTime = m.SentTime,
+            }).ToList();
     }
 }

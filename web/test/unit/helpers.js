@@ -1,13 +1,10 @@
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable import/no-extraneous-dependencies */
-import get from 'lodash/fp/get';
-import has from 'lodash/fp/has';
-import isString from 'lodash/fp/isString';
-import merge from 'lodash/fp/merge';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Vue from 'vue';
 import Vuex from 'vuex';
 import '@/plugins/directives';
 import _locale from '@/locale/en';
+import { get, has, isString, merge } from 'lodash/fp';
+import { formatDate } from '@/plugins/filters';
 import {
   createLocalVue,
   mount as vueMount,
@@ -80,6 +77,8 @@ export const createScrollTo = () => {
 export const initFilters = () => [
   'longDate',
 ].map(filter => Vue.filter(filter, value => value));
+
+Vue.filter('formatDate', formatDate);
 
 export const locale = _locale;
 

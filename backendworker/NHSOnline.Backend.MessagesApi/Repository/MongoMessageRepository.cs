@@ -85,26 +85,26 @@ namespace NHSOnline.Backend.MessagesApi.Repository
                     .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
                     .IsValid();
 
-                using (_logger.WithTimer("Aggregate summary messages in Mongo"))
+                using (_logger.WithTimer("Aggregate summary messages"))
                 {
-                    return await Aggregate()
-                        .Match(x => x.NhsLoginId == nhsLoginId)
-                        .SortByDescending(x => x.SentTime)
-                        .Group(
-                            k => new { k.NhsLoginId, k.Sender },
-                            g => new SummaryMessage
+                    var messages = await Find(x => x.NhsLoginId == nhsLoginId);
+
+                    return messages.OrderByDescending(x => x.SentTime)
+                        .GroupBy(k => k.Sender)
+                        .Select(g => g.Select(m => new SummaryMessage
                             {
                                 UnreadCount = g.Count(v => !v.Read.HasValue),
-                                Id = g.First().Id,
-                                NhsLoginId = g.First().NhsLoginId,
-                                Sender = g.First().Sender,
-                                Version = g.First().Version,
-                                Body = g.First().Body,
-                                Read = g.First().Read,
-                                SentTime = g.First().SentTime
-                            }
+                                Id = m.Id,
+                                NhsLoginId = m.NhsLoginId,
+                                Sender = m.Sender,
+                                Version = m.Version,
+                                Body = m.Body,
+                                Read = m.Read,
+                                SentTime = m.SentTime
+                            })
+                            .First()
                         )
-                        .ToListAsync();
+                        .ToList();
                 }
             }
             finally

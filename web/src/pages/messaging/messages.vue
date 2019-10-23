@@ -6,7 +6,7 @@
           <span :class="$style['messages-title']">
             <span :class="$style['messages-title-prefix']">
               {{ $t('messaging.messages.titlePrefix') }}
-            </span>Everyone</span>
+            </span>{{ sender }}</span>
         </page-title>
       </div>
     </div>
@@ -27,6 +27,9 @@
 import Message from '@/components/messaging/Message';
 import PageDivider from '@/components/widgets/PageDivider';
 import PageTitle from '@/components/widgets/PageTitle';
+import { dropWhile, first, get, takeWhile } from 'lodash/fp';
+import { redirectTo } from '@/lib/utils';
+import { MESSAGING } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -37,8 +40,8 @@ export default {
   },
   data() {
     return {
-      readMessages: this.$store.state.messaging.readMessages,
-      unreadMessages: this.$store.state.messaging.unreadMessages,
+      messages: get('messages')(first(this.$store.state.messaging.senderMessages)) || [],
+      sender: this.$store.state.messaging.selectedSender,
     };
   },
   computed: {
@@ -48,9 +51,27 @@ export default {
     hasUnreadMessages() {
       return this.unreadMessages.length > 0;
     },
+    readMessages() {
+      return takeWhile(m => m.read)(this.messages);
+    },
+    unreadMessages() {
+      return dropWhile(m => m.read)(this.messages);
+    },
   },
-  async fetch({ store }) {
-    await store.dispatch('messaging/load');
+  async fetch({ redirect, store }) {
+    const sender = store.state.messaging.selectedSender;
+
+    if (!sender) {
+      redirect(MESSAGING.path);
+      return;
+    }
+
+    await store.dispatch('messaging/load', sender);
+  },
+  created() {
+    if (!this.messages.length) {
+      redirectTo(this, MESSAGING.path);
+    }
   },
 };
 </script>
@@ -68,7 +89,7 @@ ul.panel-group-nomargin {
   .messages-title-prefix {
     @include nhsuk-typography-responsive(19);
     display: block;
-    color: #425563;
+    color: $nhsuk-secondary-text-color;
     font-weight: 400;
   }
 }

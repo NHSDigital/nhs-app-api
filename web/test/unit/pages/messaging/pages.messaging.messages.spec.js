@@ -1,5 +1,6 @@
 import Messages from '@/pages/messaging/messages';
 import { initialState } from '@/store/modules/messaging/mutation-types';
+import { MESSAGING } from '@/lib/routes';
 import { createStore, mount } from '../../helpers';
 
 describe('messaging messages', () => {
@@ -7,7 +8,9 @@ describe('messaging messages', () => {
   const panelItemClass = 'nhsuk-panel-group__item';
   const readSectionId = 'readSection';
   const unreadSectionId = 'unreadSection';
+  const sender = 'test sender';
   let $store;
+  let storeRedirect;
   let wrapper;
 
   const mountMessages = () => mount(Messages, {
@@ -18,41 +21,109 @@ describe('messaging messages', () => {
     },
   });
 
+  const createSenderMessage = (messages) => {
+    $store.state.messaging.senderMessages = [{
+      sender,
+      messages,
+    }];
+  };
+
   beforeEach(() => {
+    storeRedirect = jest.fn();
     $store = createStore({
+      context: {
+        redirect: storeRedirect,
+      },
       state: {
         messaging: initialState(),
       },
     });
   });
 
-  describe('has no messages', () => {
+  describe('fetch', () => {
+    let redirect;
+
+    const fetch = ({ selectedSender = '' } = {}) => {
+      redirect = jest.fn();
+      $store.state.messaging.selectedSender = selectedSender;
+      wrapper.vm.$options.fetch({ redirect, store: $store });
+    };
+
     beforeEach(() => {
       wrapper = mountMessages();
     });
 
-    it('will not show read section', () => {
-      expect(wrapper.find(`#${readSectionId}`).exists()).toBe(false);
+    describe('has selected sender', () => {
+      const selectedSender = 'test1';
+
+      beforeEach(() => {
+        fetch({ selectedSender });
+      });
+
+      it('will dispatch `messaging/load` with selected sender', () => {
+        expect($store.dispatch).toBeCalledWith('messaging/load', selectedSender);
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
     });
 
-    it('will not show unread page divider', () => {
-      expect(wrapper.find(`.${pageDividerClass}`).exists()).toBe(false);
-    });
+    describe('has no selected sender', () => {
+      beforeEach(() => {
+        redirect = jest.fn();
+        fetch();
+      });
 
-    it('will not show unread section', () => {
-      expect(wrapper.find(`#${unreadSectionId}`).exists()).toBe(false);
+      it('will not dispatch', () => {
+        expect($store.dispatch).not.toBeCalled();
+      });
+
+      it('will redirect to `MESSAGING`', () => {
+        expect(redirect).toBeCalledWith(MESSAGING.path);
+      });
     });
   });
 
-  describe('has read messages', () => {
+  describe('created', () => {
+    beforeEach(() => {
+      process.server = true;
+    });
+
+    describe('has no messages', () => {
+      beforeEach(() => {
+        wrapper = mountMessages();
+      });
+
+      it('will redirect to `MESSAGING`', () => {
+        expect(storeRedirect).toBeCalledWith(MESSAGING.path);
+      });
+    });
+
+    describe('has messages', () => {
+      beforeEach(() => {
+        createSenderMessage([
+          { body: 'read message 1', read: true },
+        ]);
+
+        wrapper = mountMessages();
+      });
+
+      it('will not redirect', () => {
+        expect(storeRedirect).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('has only read messages', () => {
     let readSection;
 
     beforeEach(() => {
-      $store.state.messaging.readMessages = [
-        { body: 'read message 1', sender: 'Test 1', sentTime: '2019-09-14T02:15:12.356Z' },
-        { body: 'read message 2', sender: 'Test 2', sentTime: '2019-09-14T02:16:12.356Z' },
-        { body: 'read message 3', sender: 'Test 3', sentTime: '2019-09-14T02:17:12.356Z' },
-      ];
+      createSenderMessage([
+        { body: 'read message 1', read: true },
+        { body: 'read message 2', read: true },
+        { body: 'read message 3', read: true },
+      ]);
       wrapper = mountMessages();
       readSection = wrapper.find(`#${readSectionId}`);
     });
@@ -78,15 +149,16 @@ describe('messaging messages', () => {
     });
   });
 
-  describe('has unread messages', () => {
+  describe('has a read message before unread, shows as only unread messages', () => {
     let unreadSection;
 
     beforeEach(() => {
-      $store.state.messaging.unreadMessages = [
-        { body: 'unread message 1', sender: 'Test 1', sentTime: '2019-09-14T02:15:12.356Z' },
-        { body: 'unread message 2', sender: 'Test 2', sentTime: '2019-09-14T02:16:12.356Z' },
-        { body: 'unread message 3', sender: 'Test 3', sentTime: '2019-09-14T02:17:12.356Z' },
-      ];
+      createSenderMessage([
+        { body: 'unread message 1', read: false },
+        { body: 'unread message 2', read: false },
+        { body: 'read message 4', read: true },
+        { body: 'unread message 3', read: false },
+      ]);
       wrapper = mountMessages();
       unreadSection = wrapper.find(`#${unreadSectionId}`);
     });
@@ -105,28 +177,28 @@ describe('messaging messages', () => {
 
     it('will show all unread messages', () => {
       const unreadMessages = unreadSection.findAll(`.${panelItemClass}`);
-      expect(unreadMessages.length).toBe(3);
+      expect(unreadMessages.length).toBe(4);
       expect(unreadMessages.at(0).text()).toContain('unread message 1');
       expect(unreadMessages.at(1).text()).toContain('unread message 2');
-      expect(unreadMessages.at(2).text()).toContain('unread message 3');
+      expect(unreadMessages.at(2).text()).toContain('read message 4');
+      expect(unreadMessages.at(3).text()).toContain('unread message 3');
     });
   });
 
-  describe('has both messages', () => {
+  describe('has read and unread messages', () => {
     let unreadSection;
     let readSection;
 
     beforeEach(() => {
-      $store.state.messaging.readMessages = [
-        { body: 'read message 1', sender: 'Test 1', sentTime: '2019-09-14T02:15:12.356Z' },
-        { body: 'read message 2', sender: 'Test 2', sentTime: '2019-09-14T02:16:12.356Z' },
-        { body: 'read message 3', sender: 'Test 3', sentTime: '2019-09-14T02:17:12.356Z' },
-      ];
-      $store.state.messaging.unreadMessages = [
-        { body: 'unread message 1', sender: 'Test 1', sentTime: '2019-09-14T02:18:12.356Z' },
-        { body: 'unread message 2', sender: 'Test 2', sentTime: '2019-09-14T02:19:12.356Z' },
-        { body: 'unread message 3', sender: 'Test 3', sentTime: '2019-09-14T02:20:12.356Z' },
-      ];
+      createSenderMessage([
+        { body: 'read message 1', read: true },
+        { body: 'read message 2', read: true },
+        { body: 'read message 3', read: true },
+        { body: 'unread message 1', read: false },
+        { body: 'unread message 2', read: false },
+        { body: 'read message 4', read: true },
+        { body: 'unread message 3', read: false },
+      ]);
       wrapper = mountMessages();
       readSection = wrapper.find(`#${readSectionId}`);
       unreadSection = wrapper.find(`#${unreadSectionId}`);
@@ -154,10 +226,11 @@ describe('messaging messages', () => {
 
     it('will show all unread messages', () => {
       const unreadMessages = unreadSection.findAll(`.${panelItemClass}`);
-      expect(unreadMessages.length).toBe(3);
+      expect(unreadMessages.length).toBe(4);
       expect(unreadMessages.at(0).text()).toContain('unread message 1');
       expect(unreadMessages.at(1).text()).toContain('unread message 2');
-      expect(unreadMessages.at(2).text()).toContain('unread message 3');
+      expect(unreadMessages.at(2).text()).toContain('read message 4');
+      expect(unreadMessages.at(3).text()).toContain('unread message 3');
     });
   });
 });

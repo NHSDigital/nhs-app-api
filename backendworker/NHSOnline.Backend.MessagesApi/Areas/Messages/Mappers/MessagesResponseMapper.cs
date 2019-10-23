@@ -35,7 +35,16 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                 {
                     Sender = source.First().Sender,
                     UnreadCount = source.Count(m => !m.Read.HasValue),
-                    Messages = source.OrderBy(m => m.SentTime).ToList()
+                    Messages = source.OrderBy(m => m.SentTime)
+                        .Select(m => new Message
+                        {
+                            Id = m.Id,
+                            Sender = m.Sender,
+                            Version = m.Version,
+                            Body = m.Body,
+                            Read = m.Read.HasValue,
+                            SentTime = m.SentTime,
+                        }).ToList()
                 }
             };
         }
@@ -51,16 +60,15 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                 {
                     Sender = s.Sender,
                     UnreadCount = s.UnreadCount,
-                    Messages = new List<UserMessage>
+                    Messages = new List<Message>
                     {
-                        new UserMessage
+                        new Message
                         {
                             Id = s.Id,
-                            NhsLoginId = s.NhsLoginId,
                             Sender = s.Sender,
                             Version = s.Version,
                             Body = s.Body,
-                            Read = s.Read,
+                            Read = s.Read.HasValue,
                             SentTime = s.SentTime,
                         }
                     }

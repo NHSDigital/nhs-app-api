@@ -1,12 +1,12 @@
-/* eslint-disable */
+import getOr from 'lodash/fp/getOr';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Vue from 'vue';
 import MedicationCourseStatus from '@/lib/medication-course-status';
-import { LOGIN, ACCOUNT_SIGNOUT, MYRECORD } from '@/lib/routes';
-import Sources from '@/lib/sources';
-import { redirectTo } from '@/lib/utils'
-import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus'
 import NativeCallbacks from '@/services/native-app';
-import INDEX from '@/lib/routes';
+import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus';
+import Sources from '@/lib/sources';
+import { redirectTo } from '@/lib/utils';
+import { ACCOUNT_SIGNOUT, LOGIN, MYRECORD } from '@/lib/routes';
 
 Vue.mixin(ResetPageFocusMixin);
 
@@ -19,6 +19,7 @@ Vue.mixin({
   },
   methods: {
     getMedicationCourseStatus(medicationStatusId) {
+      // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(MedicationCourseStatus)) {
         if (value === medicationStatusId) {
           return key;
@@ -32,12 +33,12 @@ Vue.mixin({
         return;
       }
 
-      if (url === MYRECORD.path && statusCode == 504) {
+      if (url === MYRECORD.path && statusCode === 504) {
         this.$store.dispatch('myRecord/resetTerms');
       }
 
       if ((url === LOGIN.path && this.$store.getters['session/isLoggedIn']())
-        || url == ACCOUNT_SIGNOUT.path) {
+        || url === ACCOUNT_SIGNOUT.path) {
         this.$store.dispatch('auth/logout');
         return;
       }
@@ -53,25 +54,18 @@ Vue.mixin({
       redirectTo(this, url);
     },
     correctUrl(url) {
-      if (url === LOGIN.path && this.$store.getters['session/isLoggedIn']()) {
-        url = ACCOUNT_SIGNOUT.path;
-      }
-      return url;
+      return url === LOGIN.path && this.$store.getters['session/isLoggedIn']()
+        ? ACCOUNT_SIGNOUT.path
+        : url;
     },
     configureWebContext(currentHelpUrl) {
       if (this.$store.state.device.isNativeApp) {
-
-        let retryPath = ''
-        if (this.$store.state.errors.pageSettings.redirectUrl &&
-          this.$store.state.errors.pageSettings.redirectUrl.default) {
-          retryPath = this.$store.state.errors.pageSettings.redirectUrl.default
-        }
+        const retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
 
         NativeCallbacks.configureWebContext(currentHelpUrl, retryPath);
       } else {
         // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)
       }
     },
-    //Deprecated, here for backwards compatability
   },
 });

@@ -154,17 +154,56 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         public async Task Summary_ReturnsMessages()
         {
             // Arrange
-            var messages = new List<SummaryMessage>
+            var latestFirstSenderMessage = _fixture.Build<UserMessage>()
+                .With(x => x.Sender, "Sender 1")
+                .With(x => x.SentTime, DateTime.UtcNow)
+                .With(x => x.Read, default(DateTime?))
+                .Create();
+
+            var latestSecondSenderMessage = _fixture.Build<UserMessage>()
+                .With(x => x.Sender, "Sender 2")
+                .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(5))
+                .With(x => x.Read, default(DateTime?))
+                .Create();
+
+            var latestThirdSenderMessage = _fixture.Build<UserMessage>()
+                .With(x => x.Sender, "Sender 3")
+                .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(-5))
+                .With(x => x.Read, DateTime.UtcNow)
+                .Create();
+
+            var messages = new List<UserMessage>
             {
-                _fixture.Create<SummaryMessage>(),
-                _fixture.Create<SummaryMessage>()
+                latestFirstSenderMessage,
+                _fixture.Build<UserMessage>()
+                    .With(x => x.Sender, latestSecondSenderMessage.Sender)
+                    .With(x => x.SentTime, latestSecondSenderMessage.SentTime.AddSeconds(-1))
+                    .With(x => x.Read, default(DateTime?))
+                    .Create(),
+                latestSecondSenderMessage,
+                _fixture.Build<UserMessage>()
+                    .With(x => x.Sender, latestSecondSenderMessage.Sender)
+                    .With(x => x.SentTime, latestSecondSenderMessage.SentTime)
+                    .With(x => x.Read, DateTime.UtcNow)
+                    .Create(),
+                _fixture.Build<UserMessage>()
+                    .With(x => x.Sender, latestThirdSenderMessage.Sender)
+                    .With(x => x.SentTime, latestThirdSenderMessage.SentTime.AddSeconds(-10))
+                    .With(x => x.Read, DateTime.UtcNow)
+                    .Create(),
+                latestThirdSenderMessage,
+                _fixture.Build<UserMessage>()
+                    .With(x => x.Sender, latestThirdSenderMessage.Sender)
+                    .With(x => x.SentTime, latestThirdSenderMessage.SentTime.AddSeconds(-5))
+                    .With(x => x.Read, DateTime.UtcNow)
+                    .Create(),
             };
 
             var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, messages);
 
-            _mongoCollectionMock.Setup(x => x.AggregateAsync(
-                    It.IsAny<PipelineDefinition<UserMessage, SummaryMessage>>(),
-                    It.IsAny<AggregateOptions>(), It.IsAny<CancellationToken>()))
+            _mongoCollectionMock
+                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
+                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(cursorMock.Object);
 
             // Act
@@ -173,7 +212,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             // Assert
             _mongoCollectionMock.VerifyAll();
             result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(messages);
+            result.Should().BeEquivalentTo(new List<SummaryMessage>
+            {
+                MapToSummaryMessage(latestSecondSenderMessage, 2),
+                MapToSummaryMessage(latestFirstSenderMessage, 1),
+                MapToSummaryMessage(latestThirdSenderMessage, 0),
+            });
         }
 
         [TestMethod]
@@ -182,9 +226,9 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             // Arrange
             var cursorMock = MongoHelper.CreateCursorMockFindNone<SummaryMessage>(_fixture);
 
-            _mongoCollectionMock.Setup(x => x.AggregateAsync(
-                    It.IsAny<PipelineDefinition<UserMessage, SummaryMessage>>(),
-                    It.IsAny<AggregateOptions>(), It.IsAny<CancellationToken>()))
+            _mongoCollectionMock
+                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
+                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(cursorMock.Object);
 
             // Act
@@ -195,5 +239,18 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             result.Should().NotBeNull();
             result.Should().BeEmpty();
         }
+
+        private SummaryMessage MapToSummaryMessage(UserMessage userMessage, int unreadCount)
+            => new SummaryMessage
+            {
+                UnreadCount = unreadCount,
+                Id = userMessage.Id,
+                NhsLoginId = userMessage.NhsLoginId,
+                Sender = userMessage.Sender,
+                Version = userMessage.Version,
+                Body = userMessage.Body,
+                Read = userMessage.Read,
+                SentTime = userMessage.SentTime
+            };
     }
 }

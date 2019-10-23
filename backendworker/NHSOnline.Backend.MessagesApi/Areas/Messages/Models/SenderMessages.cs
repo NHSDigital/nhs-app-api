@@ -8,6 +8,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
         
         public int UnreadCount { get; set; }
         
-        public List<UserMessage> Messages { get; set; }
+        public List<Message> Messages { get; set; }
     }
 }
