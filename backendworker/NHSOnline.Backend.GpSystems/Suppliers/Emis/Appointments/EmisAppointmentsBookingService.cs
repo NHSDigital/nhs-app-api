@@ -35,11 +35,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                     return new AppointmentBookResult.BadRequest();
                 }
 
-                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger); 
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
-                var postRequest = new BookAppointmentSlotPostRequest(emisRequestParameters.UserPatientLinkToken, request);
+                var response = await _emisClient.AppointmentsPost(
+                    emisRequestParameters,
+                    request);
 
-                var response = await _emisClient.AppointmentsPost(emisRequestParameters, postRequest);
                 return InterpretAppointmentsPostResponse(response);
             }
             catch (HttpRequestException exception)
@@ -55,13 +56,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 
         private AppointmentBookResult InterpretAppointmentsPostResponse(
             EmisClient.EmisApiResponse response)
-        {   
+        {
             if (response.HasSuccessResponse)
             {
                 return new AppointmentBookResult.Success();
             }
 
-            if (SlotIsNotAvailableForBooking(response) || 
+            if (SlotIsNotAvailableForBooking(response) ||
                 SlotIsInThePast(response) ||
                 SlotNotFound(response) ||
                 SlotIsOutsidePracticeDefinedDays(response))
@@ -73,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             {
                 return new AppointmentBookResult.AppointmentLimitReached();
             }
-            
+
             if (TelephoneNumberIsBlank(response))
             {
                 return new AppointmentBookResult.BadRequest();
@@ -85,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 _logger.LogEmisErrorResponse(response);
                 return new AppointmentBookResult.Forbidden();
             }
-            
+
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
             return new AppointmentBookResult.BadGateway();

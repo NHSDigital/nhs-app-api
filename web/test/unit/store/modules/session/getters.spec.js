@@ -113,4 +113,87 @@ describe('getters', () => {
       expect(isExpiring(currentState)(expiringWarningSeconds)).toEqual(false);
     });
   });
+
+  describe('isProxying', () => {
+    const { isProxying } = getters;
+    it('returns true when acting as another user', () => {
+      const currentState = {};
+      const rootState = {
+        linkedAccounts: {
+          actingAsUser: {
+            id: 'user-id-0',
+          },
+        },
+      };
+
+      // act / assert
+      expect(isProxying(currentState, getters, rootState)).toBe(true);
+    });
+
+    it('returns false when not acting as another user', () => {
+      const currentState = {};
+      const rootState = {
+        linkedAccounts: {
+          actingAsUser: null,
+        },
+      };
+
+      // act / assert
+      expect(isProxying(currentState, getters, rootState)).toBe(false);
+    });
+  });
+
+  describe('currentProfile', () => {
+    const { currentProfile } = getters;
+    it('returns proxy user details when acting as another user', () => {
+      const proxyUserDetails = {
+        nhsNumber: '987123456',
+        name: 'harry',
+        dateOfBirth: '2001-01-01',
+      };
+
+      const mockGetters = {
+        isProxying: true,
+      };
+
+      const currentSessionState = {};
+      const rootState = {
+        linkedAccounts: {
+          actingAsUser: proxyUserDetails,
+        },
+      };
+
+      // act / assert
+      expect(currentProfile(currentSessionState, mockGetters, rootState))
+        .toEqual(proxyUserDetails);
+    });
+
+    it('returns session user details when not acting as another user', () => {
+      const sessionUserDetails = {
+        nhsNumber: '987123456',
+        name: 'harry',
+        dateOfBirth: '2001-01-01',
+      };
+
+      const currentSessionState = {
+        user: sessionUserDetails.name,
+        nhsNumber: sessionUserDetails.nhsNumber,
+        dateOfBirth: sessionUserDetails.dateOfBirth,
+      };
+
+      const mockGetters = {
+        isProxying: false,
+      };
+
+      const rootState = {
+        linkedAccounts: {
+          actingAsUser: null,
+        },
+      };
+
+      // act / assert
+      expect(currentProfile(currentSessionState, mockGetters, rootState))
+        .toEqual(sessionUserDetails);
+    });
+  });
 });

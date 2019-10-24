@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         {
             string userPatientLinkToken = null;
             var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
-               
+
             if (gpLinkedAccountModel.PatientId == emisUserSession.Id)
             {
                 userPatientLinkToken = emisUserSession.UserPatientLinkToken;
@@ -20,12 +20,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             {
                 userPatientLinkToken = emisUserSession.ProxyPatients
                     .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId)?.UserPatientLinkToken;
-                
+
                 if (userPatientLinkToken != null)
                 {
                     logger.LogInformation("Patient Id match found on proxy patient");
                 }
-            }           
+            }
 
             // For now, default to the main (logged in user) to prevent any potential errors in production.
             // A Future story will be created for error handling when all applicable endpoints are using the
@@ -39,7 +39,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 userPatientLinkToken = emisUserSession.UserPatientLinkToken;
             }
 
-            return new EmisRequestParameters(emisUserSession, userPatientLinkToken);
+            return new EmisRequestParameters(emisUserSession)
+            {
+                UserPatientLinkToken = userPatientLinkToken,
+            };
         }
     }
 }

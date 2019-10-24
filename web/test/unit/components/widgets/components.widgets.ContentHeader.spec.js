@@ -3,13 +3,18 @@ import { createStore, mount } from '../../helpers';
 import ContentHeader from '@/components/widgets/ContentHeader';
 
 describe('ContentHeader.vue', () => {
+  let getter;
+
+  beforeEach(() => {
+    getter = {};
+  });
+
   describe('Login', () => {
     let $route;
     let $store;
     let wrapper;
 
-    const mountAs = ({ native = true }) => {
-      const getter = {};
+    const mountAs = ({ native = true, linkedAccountsState = {} }) => {
       getter['appVersion/isNativeVersionAfter'] = jest.fn();
       $store = createStore({
         state: {
@@ -30,6 +35,7 @@ describe('ContentHeader.vue', () => {
               },
             },
           },
+          linkedAccounts: linkedAccountsState,
           session: {
             csrfToken: 'someToken',
           },
@@ -42,23 +48,55 @@ describe('ContentHeader.vue', () => {
       return mount(ContentHeader, { $store, $route });
     };
 
-    beforeEach(() => {
-      wrapper = mountAs({ native: true });
-    });
-
     it('currentBreadCrumbs will return nothing when in Login page', () => {
+      wrapper = mountAs({ native: true });
       expect(wrapper.vm.currentBreadCrumbs).toEqual([]);
     });
-    it('showBanner will return undefined', () => {
-      expect(wrapper.vm.showBanner).toBeUndefined();
+
+    it('showYellowBanner will return undefined', () => {
+      wrapper = mountAs({ native: true });
+      expect(wrapper.vm.showYellowBanner).toBeUndefined();
+    });
+
+    describe('when no warning banner for route', () => {
+      it('will not show yellow banner when not proxying', () => {
+        getter['session/isProxying'] = false;
+        wrapper = mountAs({ native: true });
+
+        expect(wrapper.vm.showYellowBanner).toEqual(false);
+      });
+
+      it('will show yellow banner when proxying', () => {
+        getter['session/isProxying'] = true;
+        wrapper = mountAs({
+          native: true,
+          linkedAccountsState: {
+            actingAsUser: {
+              name: 'david',
+            },
+          },
+        });
+
+        const warning = wrapper.find('#acting-as-other-user-warning');
+
+        // assert
+        expect(wrapper.vm.isProxying).toBe(true);
+        expect(wrapper.vm.showYellowBanner).toBe(true);
+        expect(warning.exists()).toBe(true);
+      });
     });
   });
+
   describe('Admin Help and GP Advice', () => {
     let $store;
     let wrapper;
 
-    const mountAs = ({ native = true, demographicsQuestionAnswered = true, route }) => {
-      const getter = {};
+    const mountAs = ({
+      native = true,
+      demographicsQuestionAnswered = false,
+      linkedAccountsState = {},
+      route,
+    }) => {
       getter['appVersion/isNativeVersionAfter'] = jest.fn();
       $store = createStore({
         state: {
@@ -79,6 +117,7 @@ describe('ContentHeader.vue', () => {
               },
             },
           },
+          linkedAccounts: linkedAccountsState,
           session: {
             csrfToken: 'someToken',
           },
@@ -94,22 +133,46 @@ describe('ContentHeader.vue', () => {
       });
     };
 
+    it('with demographics question not answered but proxying will display appropriate warning', () => {
+      getter['session/isProxying'] = true;
+      wrapper = mountAs({
+        native: true,
+        demographicsQuestionAnswered: false,
+        linkedAccountsState: {
+          actingAsUser: {
+            name: 'david',
+          },
+        },
+      });
+      const warning = wrapper.find('#acting-as-other-user-warning');
+
+      // assert
+      expect(wrapper.vm.demographicsQuestionAnswered).toBe(false);
+      expect(wrapper.vm.isProxying).toBe(true);
+      expect(wrapper.vm.showYellowBanner).toEqual(true);
+      expect(warning.exists()).toBe(true);
+    });
+
     each([
       'appointments-admin-help',
       'appointments-gp-advice',
-    ]).it('showBanner will return true when demographics answered', (routeName) => {
+    ]).it('showYellowBanner will return true when demographics answered', (routeName) => {
+      getter['session/isProxying'] = false;
+      debugger;
       wrapper = mountAs({
         native: true,
+        demographicsQuestionAnswered: true,
         route: {
           name: routeName,
           warningBanner: true,
         },
       });
-      expect(wrapper.vm.showBanner).toEqual(true);
+      expect(wrapper.vm.showYellowBanner).toEqual(true);
     });
 
     each(['appointments-admin-help', 'appointments-gp-advice'])
-      .it('showBanner will return false when demographics not answered', (routeName) => {
+      .it('showYellowBanner will return false when demographics not answered', (routeName) => {
+        getter['session/isProxying'] = false;
         wrapper = mountAs({
           native: true,
           demographicsQuestionAnswered: false,
@@ -118,8 +181,7 @@ describe('ContentHeader.vue', () => {
             warningBanner: true,
           },
         });
-        expect(wrapper.vm.showBanner).toEqual(false);
+        expect(wrapper.vm.showYellowBanner).toEqual(false);
       });
   });
 });
-

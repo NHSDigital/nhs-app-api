@@ -3,16 +3,29 @@
     <div :class="$style[fixBreadCrumb ? 'fix-breadcrumb' : '']">
       <bread-crumb-trail v-if="showBreadCrumb" id="bread-crumb"
                          :routes="currentBreadCrumbs"/>
-      <yellow-banner v-if="showBanner"
+      <yellow-banner v-if="showYellowBanner"
                      id="yellow-banner-line"
                      :class="$style['bannerLine']"/>
     </div>
     <div :class="[$style[fixBreadCrumb ? 'native-padding' : '']]">
-      <yellow-banner v-if="showBanner" id="yellow-banner">
-        <p>
-          {{ $t('externalServiceWarning.warningText') }}
-        </p>
+      <yellow-banner v-if="showYellowBanner" id="yellow-banner">
+        <div v-if="showExternalServiceWarning" id="external-service-warning">
+          <p>
+            <b>
+              {{ $t('externalServiceWarning.warningText') }}
+            </b>
+          </p>
+        </div>
+        <div v-if="isProxying" id="acting-as-other-user-warning">
+          <p>
+            {{ $t('linkedProfiles.actingAsOtherUserBannerWarningText') }}
+            <b class="nhsuk-u-margin-top-2">
+              {{ actingAsPersonName }}
+            </b>
+          </p>
+        </div>
       </yellow-banner>
+
       <div :class="['nhsuk-width-container']">
         <div class="nhsuk-grid-row">
           <div class="nhsuk-grid-column-full">
@@ -58,6 +71,9 @@ export default {
     },
   },
   computed: {
+    isProxying() {
+      return this.$store.getters['session/isProxying'];
+    },
     currentBreadCrumbs() {
       return getCrumbTrailForRoute(findByName(this.$route.name));
     },
@@ -73,7 +89,10 @@ export default {
       return this.showBreadCrumb &&
         !isEmpty(this.currentBreadCrumbs) && this.$store.state.device.isNativeApp;
     },
-    showBanner() {
+    showYellowBanner() {
+      return this.showExternalServiceWarning || this.isProxying;
+    },
+    showExternalServiceWarning() {
       const route = findByName(this.$route.name);
       if (route === undefined) {
         return false;
@@ -82,6 +101,9 @@ export default {
         return route.warningBanner && this.demographicsQuestionAnswered;
       }
       return route.warningBanner;
+    },
+    actingAsPersonName() {
+      return this.$store.state.linkedAccounts.actingAsUser.name;
     },
     getProviderName() {
       const route = findByName(this.$route.name);
@@ -110,7 +132,7 @@ export default {
   }
 
   .bannerLine {
-   height: 5px;
+    height: 5px;
   }
 
   .native-padding {

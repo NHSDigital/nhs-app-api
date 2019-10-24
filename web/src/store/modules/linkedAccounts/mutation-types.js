@@ -6,9 +6,11 @@ export const SELECT = 'SELECT';
 export const CLEAR_LINKED_ACCOUNTS = 'CLEAR_LINKED_ACCOUNTS';
 export const LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY = 'LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY';
 export const SET_LINKED_ACCOUNTS_CONFIG = 'SET_LINKED_ACCOUNTS_CONFIG';
+export const SWITCH_TO_LINKED_ACCOUNT = 'SWITCH_TO_LINKED_ACCOUNT';
 export const initialState = () => ({
   items: [],
   selectedLinkedAccount: null,
+  actingAsUser: null,
   hasLoaded: false,
   hasErrored: false,
   config: {

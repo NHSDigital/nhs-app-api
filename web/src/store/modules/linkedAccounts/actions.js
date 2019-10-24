@@ -8,6 +8,7 @@ import {
   CLEAR_LINKED_ACCOUNTS,
   LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
   SET_LINKED_ACCOUNTS_CONFIG,
+  SWITCH_TO_LINKED_ACCOUNT,
 } from './mutation-types';
 
 export default {
@@ -51,6 +52,16 @@ export default {
       })
       .finally(() => {
         this.dispatch('device/unlockNavBar');
+      });
+  },
+  switchProfile({ commit }, profile) {
+    const params = {
+      id: profile.id,
+    };
+    return this.app.$http
+      .postV1PatientLinkedAccountsSwitchById(params)
+      .then(() => {
+        commit(SWITCH_TO_LINKED_ACCOUNT, profile);
       });
   },
 };

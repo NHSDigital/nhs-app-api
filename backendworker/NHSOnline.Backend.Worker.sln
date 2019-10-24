@@ -37,6 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.log.yaml = contracts\nhsonline.log.yaml
 		contracts\nhsonline.messages.yaml = contracts\nhsonline.messages.yaml
 		contracts\nhsonline.userinfo.yaml = contracts\nhsonline.userinfo.yaml
+		contracts\nhsonline.documents.yaml = contracts\nhsonline.documents.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"

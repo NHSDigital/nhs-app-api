@@ -29,6 +29,11 @@ class LinkedProfileSummaryPage : HybridPageObject() {
             page = this
     )
 
+    val switchProfileButton = HybridPageElement(
+            webDesktopLocator = "//button",
+            page = this
+    ).withText("Switch to this profile", false)
+
     fun isLoaded(patientName: String) {
         headerNative.waitForPageHeaderText(patientName)
     }

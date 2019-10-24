@@ -124,6 +124,62 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         }
 
         [TestMethod]
+        public void IsValidLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSession()
+        {
+            // Arrange
+            var proxyId = Guid.NewGuid();
+
+            _emisUserSession = new EmisUserSession
+            {
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession
+                    {
+                        Id = Guid.NewGuid(),
+                    },
+                    new EmisProxyUserSession
+                    {
+                        Id = proxyId,
+                    },
+                }
+            };
+
+            // Act
+            var result = _systemUnderTest.IsValidLinkedAccountId(_emisUserSession, proxyId);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void IsValidLinkedAccountId_ReturnsFalse_WhenLinkedAccountWithMatchingIdFoundInUserSession()
+        {
+            // Arrange
+            var randomGuidWhichWontBeFound = Guid.NewGuid();
+
+            _emisUserSession = new EmisUserSession
+            {
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession
+                    {
+                        Id = Guid.NewGuid(),
+                    },
+                    new EmisProxyUserSession
+                    {
+                        Id = Guid.NewGuid(),
+                    },
+                }
+            };
+
+            // Act
+            var result = _systemUnderTest.IsValidLinkedAccountId(_emisUserSession, randomGuidWhichWontBeFound);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
         public async Task GetLinkedAccount_ReturnsNotFoundResult_WhenProxyUserNotFoundInSession()
         {
             // Act
@@ -145,10 +201,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 Body = settingsResponse,
             };
 
-            _emisClient.Setup(x => x.MeSettingsGet(proxyAccountToUse.UserPatientLinkToken,
+            _emisClient.Setup(x => x.MeSettingsGet(
                 It.Is<EmisRequestParameters>(e =>
                     string.Equals(e.SessionId, _emisUserSession.SessionId, StringComparison.Ordinal) &&
-                    string.Equals(e.EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal))))
+                    string.Equals(e.EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                    string.Equals(e.UserPatientLinkToken, proxyAccountToUse.UserPatientLinkToken, StringComparison.Ordinal))))
                 .ReturnsAsync(settingsResult)
                 .Verifiable();
 
@@ -172,10 +229,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var settingsResult =
                 new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.InternalServerError);
 
-            _emisClient.Setup(x => x.MeSettingsGet(proxyAccountToUse.UserPatientLinkToken,
+            _emisClient.Setup(x => x.MeSettingsGet(
                 It.Is<EmisRequestParameters>(e =>
                     string.Equals(e.SessionId, _emisUserSession.SessionId, StringComparison.Ordinal) &&
-                    string.Equals(e.EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal))))
+                    string.Equals(e.EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                    string.Equals(e.UserPatientLinkToken, proxyAccountToUse.UserPatientLinkToken, StringComparison.Ordinal))))
                 .ReturnsAsync(settingsResult)
                 .Verifiable();
 

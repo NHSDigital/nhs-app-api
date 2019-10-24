@@ -30,7 +30,6 @@ export default {
     background: $warning_title;
   }
   p {
-    font-weight: bold;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
   }

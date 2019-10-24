@@ -4,14 +4,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models
 {
     public class SlotsMetadataGetQueryParameters
     {
-        public SlotsMetadataGetQueryParameters(DateTimeOffset fromDate, DateTimeOffset toDate, string userPatientLinkToken)
+        public SlotsMetadataGetQueryParameters(DateTimeOffset fromDate, DateTimeOffset toDate)
         {
             SessionStartDate = fromDate;
             SessionEndDate = toDate;
-            UserPatientLinkToken = userPatientLinkToken;
         }
 
-        public string UserPatientLinkToken { get;}
         public DateTimeOffset SessionStartDate { get;  }
         public DateTimeOffset SessionEndDate { get;  }
     }

@@ -53,7 +53,7 @@ open class HomePage : HybridPageObject() {
 
     private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/span"
 
-    private val banner = HybridPageElement(
+    val banner = HybridPageElement(
             webDesktopLocator = "//*[@id='yellow-banner']",
             webMobileLocator = "//*[@id='yellow-banner']",
             page = this
@@ -175,9 +175,5 @@ open class HomePage : HybridPageObject() {
         Assert.assertEquals("Expected survey content",
                 "Help us make this service better. Complete our quick survey.",
                 surveyContent.text)
-    }
-
-    fun assertYellowBannerIsNotPresent() {
-        banner.assertElementNotPresent()
     }
 }

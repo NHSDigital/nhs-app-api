@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -34,17 +33,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogEnter();
                 var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
-                                    
-                var deleteRequestOption = GetCancelAppointmentDeleteRequest(emisRequestParameters.UserPatientLinkToken, request);
-                if (deleteRequestOption.IsEmpty)
+
+                if (_cancellationReasonService.TryGetCancellationReason(request.CancellationReasonId, out var cancellationReason) &&
+                    TryGetAppointmentId(request, out var slotId))
                 {
-                    return new AppointmentCancelResult.BadRequest();
+                    var response = await _emisClient.AppointmentsDelete(emisRequestParameters, slotId, cancellationReason);
+                    return InterpretAppointmentsDeleteResponse(response);
                 }
-                
-                var deleteRequest = deleteRequestOption.ValueOrFailure();
-                
-                var response = await _emisClient.AppointmentsDelete(emisRequestParameters, deleteRequest);
-                return InterpretAppointmentsDeleteResponse(response);
+
+                return new AppointmentCancelResult.BadRequest();
             }
             catch (HttpRequestException exception)
             {
@@ -55,22 +52,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogExit();
             }
-        }
-
-        private Option<CancelAppointmentDeleteRequest> GetCancelAppointmentDeleteRequest(
-            string userPatientLinkToken, AppointmentCancelRequest request
-        )
-        {
-            if (_cancellationReasonService.TryGetCancellationReason(request.CancellationReasonId, out var cancellationReason) &&
-                TryGetAppointmentId(request, out var slotId))
-            {
-                var deleteRequest = new CancelAppointmentDeleteRequest(
-                    userPatientLinkToken, cancellationReason.DisplayName, slotId);
-
-                return Option.Some(deleteRequest);
-            }
-
-            return Option.None<CancelAppointmentDeleteRequest>();
         }
 
         private bool TryGetAppointmentId(AppointmentCancelRequest request, out long slotId)

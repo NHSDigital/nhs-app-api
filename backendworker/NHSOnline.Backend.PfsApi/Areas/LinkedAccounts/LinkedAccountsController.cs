@@ -94,6 +94,29 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
+        [Route("switch/{id:guid}")]
+        [HttpPost]
+        public IActionResult Switch(Guid id)
+        {
+            _logger.LogInformation($"Attempt to switch to profile id {id}");
+            var userSession = HttpContext.GetUserSession();
+
+            var linkedAccountsService = _gpSystemFactory
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .GetLinkedAccountsService();
+
+            var isValidLinkedAccountId = linkedAccountsService.IsValidLinkedAccountId(userSession.GpUserSession, id);
+
+            if (isValidLinkedAccountId)
+            {
+                _logger.LogInformation($"Switched profile to id {id}");
+                return Ok();
+            }
+
+            _logger.LogInformation($"Couldn't find profile with id {id} to switch to");
+            return new NotFoundResult();
+        }
+
         private string GetPracticeNameToDisplay(Task<GpSearchResult> gpSearchTask, string odsCodeSearched)
         {
             string gpPracticeName = string.Empty;

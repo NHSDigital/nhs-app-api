@@ -53,6 +53,8 @@ paths:
     $ref: ./nhsonline.linkedaccounts.yaml#/paths/~1linked-accounts
   /v1/patient/linked-accounts/access-summary:
     $ref: ./nhsonline.linkedaccounts.yaml#/paths/~1linked-accounts~1access-summary
+  /v1/patient/linked-accounts/switch/{id}:
+    $ref: ./nhsonline.linkedaccounts.yaml#/paths/~1linked-accounts~1switch~1{id}
   /v1/api/users/devices:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1devices
   /v1/api/users/me/messages:

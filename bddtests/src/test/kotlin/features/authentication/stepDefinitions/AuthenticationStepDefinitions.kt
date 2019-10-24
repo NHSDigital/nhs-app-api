@@ -22,6 +22,8 @@ import org.junit.Assert
 import pages.ServiceUnavailablePage
 import pages.account.MyAccountPage
 import pages.navigation.BreadcrumbHeader
+import pages.assertElementNotPresent
+import pages.isPresent
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
@@ -226,9 +228,14 @@ class AuthenticationStepDefinitions {
         nav.assertVisible()
     }
 
+    @Then("^I see the yellow banner$")
+    fun iSeeYellowBanner() {
+        Assert.assertTrue("Can't find yellow banner", home.homePage.banner.isPresent)
+    }
+
     @Then("^I do not see the yellow banner$")
     fun iDoNotSeeYellowBanner() {
-        home.homePage.assertYellowBannerIsNotPresent()
+        home.homePage.banner.assertElementNotPresent()
     }
 
     @Then("^I do not see the menu bar$")

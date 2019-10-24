@@ -1,11 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
-using NHSOnline.Backend.GpSystems.PatientRecord.Models;
-using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
@@ -19,7 +18,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,
             MeApplicationsPostRequest model);
 
-        Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(string userPatientLinkToken, EmisRequestParameters requestParameters);
+        Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(EmisRequestParameters requestParameters);
 
         // Sessions
         Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost();
@@ -39,19 +38,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(EmisRequestParameters emisRequestParameters, RecordType recordType);
 
-        // Patient Record
-        //        Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
-        //            string endUserSessionId);
-
-        //        Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
-        //            string endUserSessionId);
-
-        //        Task<EmisClient.EmisApiObjectResponse<ImmunisationRequestsGetResponse>> ImmunisationsGet(string userPatientLinkToken, string responseSessionId,
-        //            string endUserSessionId);
-
-        //        Task<EmisClient.EmisApiObjectResponse<TestResultRequestsGetResponse>> TestResultsGet(string userPatientLinkToken, string responseSessionId,
-        //            string endUserSessionId);
-
         // PracticeSettings
         Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> PracticeSettingsGet(
              EmisRequestParameters requestParameters, string practiceCode);
@@ -65,18 +51,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             EmisRequestParameters requestParameters, SlotsMetadataGetQueryParameters queryParameters);
 
         // Courses
-        Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet( EmisRequestParameters emisRequestParameters);
+        Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(EmisRequestParameters emisRequestParameters);
 
         // Appointments
         Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(
             EmisRequestParameters requestParameters,
-            BookAppointmentSlotPostRequest postRequest);
+            AppointmentBookRequest bookRequest);
 
         Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(EmisRequestParameters requestParameters);
 
         Task<EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
             EmisRequestParameters requestParameters,
-            CancelAppointmentDeleteRequest deleteRequest);
+            long slotId,
+            CancellationReason cancellationReason);
 
         // Linkage
         Task<EmisApiObjectResponse<AddVerificationResponse>> VerificationPost(

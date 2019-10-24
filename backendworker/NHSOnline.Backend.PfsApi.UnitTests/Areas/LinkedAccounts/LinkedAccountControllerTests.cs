@@ -67,6 +67,44 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         }
 
         [TestMethod]
+        public void Switch_Returns200_WhenLinkedAccountIdIsFound()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+
+            _linkedAccountService.Setup(x => x.IsValidLinkedAccountId(_userSession.GpUserSession, id))
+                .Returns(true)
+                .Verifiable();
+
+            // Act
+            var result = _systemUnderTest.Switch(id);
+
+            // Assert
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
+            _linkedAccountService.Verify();
+            result.Should().BeAssignableTo<OkResult>();
+        }
+
+        [TestMethod]
+        public void Switch_Returns404_WhenLinkedAccountIdIsFound()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+
+            _linkedAccountService.Setup(x => x.IsValidLinkedAccountId(_userSession.GpUserSession, id))
+                .Returns(false)
+                .Verifiable();
+
+            // Act
+            var result = _systemUnderTest.Switch(id);
+
+            // Assert
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
+            _linkedAccountService.Verify();
+            result.Should().BeAssignableTo<NotFoundResult>();
+        }
+
+        [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(

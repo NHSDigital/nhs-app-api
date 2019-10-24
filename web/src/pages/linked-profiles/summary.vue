@@ -58,7 +58,8 @@
 import GreenTick from '@/components/icons/GreenTick';
 import RedCross from '@/components/icons/RedCross';
 import GenericButton from '@/components/widgets/GenericButton';
-import { LINKED_PROFILES } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
+import { INDEX, LINKED_PROFILES } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -108,7 +109,9 @@ export default {
     this.$store.dispatch('linkedAccounts/clearSelectedLinkedAccount');
   },
   methods: {
-    switchProfileButtonClicked() {
+    async switchProfileButtonClicked() {
+      await this.$store.dispatch('linkedAccounts/switchProfile', this.linkedAccount);
+      redirectTo(this, INDEX.path, null);
     },
   },
 };

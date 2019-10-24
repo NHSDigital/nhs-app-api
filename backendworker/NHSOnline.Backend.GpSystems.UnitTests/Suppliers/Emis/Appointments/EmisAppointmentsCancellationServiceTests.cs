@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private string _cancellationReasonText;
         private Mock<ICancellationReasonService> _cancellationReasonService;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-        
+
         private const int ProvidedAppointmentSlotInPast = -1152;
 
         [TestInitialize]
@@ -47,17 +47,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             _cancellationReasonText = "No longer required";
-            
+
             var cancellationReason = new CancellationReason
             {
                 Id = _request.CancellationReasonId,
                 DisplayName = _cancellationReasonText
             };
-            
+
             _cancellationReasonService.Setup(x=>x.TryGetCancellationReason(_request.CancellationReasonId,out cancellationReason))
                 .Returns(true)
                 .Verifiable();
-            
+
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
 
         }
@@ -87,12 +87,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Cancel_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.AppointmentsDelete(It.IsAny<EmisRequestParameters>(),
-                    It.IsAny<CancelAppointmentDeleteRequest>())).
+            _mockEmisClient.Setup(x => x.AppointmentsDelete(
+                    It.IsAny<EmisRequestParameters>(),
+                    It.IsAny<long>(),
+                    It.IsAny<CancellationReason>())).
                 Throws<HttpRequestException>()
                 .Verifiable();
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -109,7 +111,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -152,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -173,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -190,7 +192,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -217,7 +219,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();
         }
-        
+
         [TestMethod]
         public async Task Cancel_AppointmentNotFoundException_ReturnsNotCancellable()
         {
@@ -231,7 +233,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -291,13 +293,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             _mockEmisClient.Setup(x => x.AppointmentsDelete(
                 It.Is<EmisRequestParameters>(p =>
-                    p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
-                    && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
-                It.Is<CancelAppointmentDeleteRequest>(p =>
-                    p.CancellationReason.Equals(_cancellationReasonText, StringComparison.Ordinal)
-                    && p.SlotId == long.Parse(_request.AppointmentId, CultureInfo.InvariantCulture)
-                    && p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))
-                )
+                    p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                    p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                    p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
+                long.Parse(_request.AppointmentId, CultureInfo.InvariantCulture),
+                It.Is<CancellationReason>(c => c.DisplayName.Equals(_cancellationReasonText, StringComparison.Ordinal)))
             ).Returns(Task.FromResult(response)).Verifiable();
         }
     }

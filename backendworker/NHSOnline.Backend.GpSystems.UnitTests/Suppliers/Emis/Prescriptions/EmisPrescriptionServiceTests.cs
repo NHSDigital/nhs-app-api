@@ -29,6 +29,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private IFixture _fixture;
         private RepeatPrescriptionRequest _repeatPrescriptionRequest;
         private Guid _patientId;
+        private string _patientLinkToken;
+        private Guid _linkedAccountPatientId;
+        private string _linkedAccountLinkToken;
         private const string DefaultEmisVersion = "2.1.0.0";
         private static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
         private static readonly Uri BaseUri = new Uri("http://emis_base_url/");
@@ -43,15 +46,34 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _emisUserSession = _fixture.Create<EmisUserSession>();
+
+            _patientId = Guid.NewGuid();
+            _patientLinkToken = _fixture.Create<string>();
+            _linkedAccountPatientId = Guid.NewGuid();
+            _linkedAccountLinkToken = _fixture.Create<string>();
+
+            _emisUserSession = new EmisUserSession
+            {
+                EndUserSessionId = _fixture.Create<string>(),
+                SessionId = _fixture.Create<string>(),
+                Id = _patientId,
+                UserPatientLinkToken = _patientLinkToken,
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession
+                    {
+                        Id = _linkedAccountPatientId,
+                        UserPatientLinkToken = _linkedAccountLinkToken,
+                    }
+                }
+            };
+
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
-            
-            _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
-                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, 
+
+            _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
                 Environment);
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<EmisPrescriptionService>();
@@ -61,7 +83,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     "766ecd82-3008-4454-95a5-98c423ce0527",
                     "766ecd82-3008-4454-95a5-98c423ce0527"
-                }
+                },
+                SpecialRequest = _fixture.Create<string>(),
             };
         }
 
@@ -520,20 +543,66 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         #region Post Prescription
 
         [TestMethod]
-        public async Task Post_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        public async Task Post_ReturnsSuccessfulResponseForHappyPath_WhenNotProxying_AndWhenSuccessfulResponseFromEmis()
         {
             // Arrange
-            _emisClient.Setup(x => x.PrescriptionsPost(_emisUserSession.SessionId,
-                    _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
+            _emisClient.Setup(x => x.PrescriptionsPost(
+                    _emisUserSession.SessionId,
+                    _emisUserSession.EndUserSessionId,
+                    It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK)));
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK)))
+                .Callback((string sessionId, string endUserSessionId, PrescriptionRequestsPost request) =>
+                    {
+                        CollectionAssert.AreEqual(
+                            _repeatPrescriptionRequest.CourseIds.ToList(),
+                            request.MedicationCourseGuids.ToList());
+                        Assert.AreEqual(_repeatPrescriptionRequest.SpecialRequest, request.RequestComment);
+                        Assert.AreEqual(_patientLinkToken, request.UserPatientLinkToken);
+                    })
+                .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(new GpLinkedAccountModel(_emisUserSession, _patientId), _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(
+                new GpLinkedAccountModel(_emisUserSession, _patientId),
+                _repeatPrescriptionRequest);
 
             // Assert
-            _emisClient.Verify(x => x.PrescriptionsPost(_emisUserSession.SessionId,
-                _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()));
+            _emisClient.VerifyAll();
+
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Success>()
+                .Subject.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public async Task Post_ReturnsSuccessfulResponseForHappyPath_WhenProxying_AndWhenSuccessfulResponseFromEmis()
+        {
+            // Arrange
+            _emisUserSession.HasLinkedAccounts = true;
+
+            _emisClient.Setup(x => x.PrescriptionsPost(
+                    _emisUserSession.SessionId,
+                    _emisUserSession.EndUserSessionId,
+                    It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK)))
+                .Callback((string sessionId, string endUserSessionId, PrescriptionRequestsPost request) =>
+                {
+                    CollectionAssert.AreEqual(
+                        _repeatPrescriptionRequest.CourseIds.ToList(),
+                        request.MedicationCourseGuids.ToList());
+                    Assert.AreEqual(_repeatPrescriptionRequest.SpecialRequest, request.RequestComment);
+                    Assert.AreEqual(_linkedAccountLinkToken, request.UserPatientLinkToken);
+                })
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(
+                new GpLinkedAccountModel(_emisUserSession, _linkedAccountPatientId),
+                _repeatPrescriptionRequest);
+
+            // Assert
+            _emisClient.VerifyAll();
 
             result.Should().BeAssignableTo<OrderPrescriptionResult.Success>()
                 .Subject.Should().NotBeNull();

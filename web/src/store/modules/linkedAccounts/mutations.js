@@ -8,6 +8,7 @@ import {
   CLEAR_LINKED_ACCOUNTS,
   LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
   SET_LINKED_ACCOUNTS_CONFIG,
+  SWITCH_TO_LINKED_ACCOUNT,
   initialState,
 } from './mutation-types';
 
@@ -50,5 +51,8 @@ export default {
     state.config.hasLoaded = true;
     state.config.patientId = config.id;
     state.config.hasLinkedAccounts = config.hasLinkedAccounts;
+  },
+  [SWITCH_TO_LINKED_ACCOUNT](state, profile) {
+    state.actingAsUser = profile;
   },
 };

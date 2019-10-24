@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -25,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private const string BookingReason = "I caught a cold!";
         private const string SlotId = "2862517";
         private const string TelephoneNumber = "07123456789";
-        
+
         private const int ProvidedAppointmentSlotInPast = -1152;
         private const int RequiredFieldValueMissing = -1014;
         private const int OnlineUserMaxAppointmentBookCount = -1156;
@@ -37,22 +36,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private EmisUserSession _emisUserSession;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             _emisUserSession = _fixture.Create<EmisUserSession>();
             _emisUserSession.AppointmentBookingReasonNecessity = Necessity.Optional;
 
             _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
-                
+
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
-            
+
             _request = new AppointmentBookRequest
             {
                 BookingReason = BookingReason,
@@ -73,8 +72,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             MockEmisClientAppointmentPostMethod(response);
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -86,12 +85,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Book_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.AppointmentsPost(It.IsAny<EmisRequestParameters>(),
-                    It.IsAny<BookAppointmentSlotPostRequest>())).
+            _mockEmisClient.Setup(x => x.AppointmentsPost(
+                    It.IsAny<EmisRequestParameters>(),
+                    It.IsAny<AppointmentBookRequest>())).
                 Throws<HttpRequestException>()
                 .Verifiable();
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -117,20 +117,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
-                
+
         [TestMethod]
         public async Task Book_WhenNotFoundAppointmentException_ReturnsSlotNotAvailable()
         {
             // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsPost_NotFound;
-            
+
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .InternalServerError) {ExceptionErrorResponse = errorResponse};
-            
+
             MockEmisClientAppointmentPostMethod(response);
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -157,7 +157,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
-        
+
         [TestMethod]
         public async Task Book_WhenAppointmentsIsInThePastException_ReturnsSlotNotAvailable()
         {
@@ -167,27 +167,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .InternalServerError) { ExceptionErrorResponse = errorResponse };
-            
+
             MockEmisClientAppointmentPostMethod(response);
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
-        
+
         [TestMethod]
         public async Task Book_WhenAppointmentsHasBeenAlreadyBooked_ReturnsSlotNotAvailable()
         {
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .Conflict);
-            
+
             MockEmisClientAppointmentPostMethod(response);
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -203,7 +203,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
             errorResponse.InternalResponseCode = emisErrorCode;
-            
+
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                     .BadRequest)
                 { StandardErrorResponse = errorResponse };
@@ -224,10 +224,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
                 .Forbidden);
-            
+
             MockEmisClientAppointmentPostMethod(response);
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -267,7 +267,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -309,7 +309,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -330,7 +330,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -368,7 +368,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
         }
-        
+
         [TestMethod]
         public async Task Book_WhenTelephoneNumberRequiredButNotProvided_ReturnsBadRequestResponse()
         {
@@ -389,7 +389,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
         }
-        
+
         [TestMethod]
         public async Task Book_WhenTelephoneNumberRequiredException_ReturnsBadRequestResponse()
         {
@@ -403,32 +403,32 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
-        }        
+        }
 
         private void MockEmisClientAppointmentPostMethod(EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentsPost(
                     It.Is<EmisRequestParameters>(p =>
-                        p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
-                        && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
-                    It.Is<BookAppointmentSlotPostRequest>(p =>
+                        p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                        p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                        p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
+                    It.Is<AppointmentBookRequest>(p =>
                         p.BookingReason.Equals(BookingReason, StringComparison.Ordinal)
                         && p.TelephoneNumber.Equals(TelephoneNumber, StringComparison.Ordinal)
-                        && p.SlotId == Convert.ToInt64(SlotId, CultureInfo.InvariantCulture)
-                        && p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)
+                        && p.SlotId.Equals(SlotId, StringComparison.Ordinal)
                     )
                 )
             ).Returns(
                 Task.FromResult(
                     response
                 )
-            ).Verifiable();    
-        }  
+            ).Verifiable();
+        }
     }
 }

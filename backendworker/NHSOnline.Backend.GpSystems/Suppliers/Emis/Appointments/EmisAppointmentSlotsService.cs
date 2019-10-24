@@ -33,10 +33,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 _logger.LogEnter();
 
                 var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
-                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger); 
-                var patientLinkToken = emisRequestParameters.UserPatientLinkToken;
-                var metaParams = new SlotsMetadataGetQueryParameters(dateRange.FromDate, dateRange.ToDate, patientLinkToken);
-                var slotsParams = new SlotsGetQueryParameters(dateRange.FromDate, dateRange.ToDate, patientLinkToken);
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+                var metaParams = new SlotsMetadataGetQueryParameters(dateRange.FromDate, dateRange.ToDate);
+                var slotsParams = new SlotsGetQueryParameters(dateRange.FromDate, dateRange.ToDate);
 
                 _logger.LogInformation("Creating appointment slots requests");
                 var metaTask = _emisClient.AppointmentSlotsMetadataGet(emisRequestParameters, metaParams);
@@ -47,9 +46,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 
                 var practiceTask = _emisClient.PracticeSettingsGet(
                     emisRequestParameters, gpLinkedAccountModel.GpUserSession.OdsCode);
-                
+
                 var demographicsTask = _emisClient.DemographicsGet(emisRequestParameters);
-                
+
                 // Wait for practice and demographics tasks to complete, but unlike the other tasks suppress any errors such as timeout.
                 try
                 {

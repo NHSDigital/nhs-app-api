@@ -1,13 +1,10 @@
 <template>
   <div v-if="showTemplate">
     <h2 data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
-    <welcome-section :date-of-birth="$store.state.session.dateOfBirth"
-                     :nhs-number="$store.state.session.nhsNumber" />
+    <welcome-section :date-of-birth="currentProfile.dateOfBirth"
+                     :nhs-number="currentProfile.nhsNumber" />
     <biometric-banner />
-    <navigation-list-menu
-      nhs-number="nhsNumber"
-      dob="dob"
-    />
+    <navigation-list-menu />
   </div>
 </template>
 
@@ -25,10 +22,13 @@ export default {
     NavigationListMenu,
   },
   computed: {
+    currentProfile() {
+      return this.$store.getters['session/currentProfile'];
+    },
     greetingMessage() {
       const message = this.$t('homeLoggedIn.welcome');
-      const { user } = this.$store.state.session;
-      return `${message}, ${user}`;
+      const { name } = this.currentProfile;
+      return `${message}, ${name}`;
     },
   },
   mounted() {

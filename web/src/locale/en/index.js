@@ -1517,6 +1517,7 @@ export default {
     accessibilityStatement: 'Accessibility statement',
   },
   linkedProfiles: {
+    actingAsOtherUserBannerWarningText: 'Acting on behalf of',
     linkedInformation: 'You have proxy access for the following people.',
     informationHeaders: {
       dob: 'Date of birth',

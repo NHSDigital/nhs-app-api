@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
 
                 EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
-                
+
                 var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisRequestParameters, fromDate, toDate);
 
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
                 var requestedMedicationCourses = prescription.RequestedMedicationCourses.ToList();
 
-                var repeatCoursesInPrescription = 
+                var repeatCoursesInPrescription =
                     requestedMedicationCourses
                     .Where(x => repeatCourseIdLookup.ContainsKey(x.RequestedMedicationCourseGuid))
                     .ToList();
@@ -157,10 +157,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 { "Returned to user",  prescriptionsReturnedToUserCount.ToString(CultureInfo.InvariantCulture) }
             };
 
-            await _auditor.Audit(auditType, 
-                    "Prescriptions Received: {0}, Number of prescriptions without repeatable courses: {1}, Number of prescriptions returned to user: {2}", 
-                    prescriptionsReceivedCount.ToString(CultureInfo.InvariantCulture), 
-                    prescriptionsWithNoRepeatableCoursesCount.ToString(CultureInfo.InvariantCulture), 
+            await _auditor.Audit(auditType,
+                    "Prescriptions Received: {0}, Number of prescriptions without repeatable courses: {1}, Number of prescriptions returned to user: {2}",
+                    prescriptionsReceivedCount.ToString(CultureInfo.InvariantCulture),
+                    prescriptionsWithNoRepeatableCoursesCount.ToString(CultureInfo.InvariantCulture),
                     prescriptionsReturnedToUserCount.ToString(CultureInfo.InvariantCulture));
 
             _logger.LogInformationKeyValuePairs("Prescription Count", kvp);
@@ -177,22 +177,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         public async Task<OrderPrescriptionResult> OrderPrescription(GpLinkedAccountModel gpLinkedAccountModel, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             const string auditType = AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsResponse;
-
-            var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
+            EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
             var postRequest = new PrescriptionRequestsPost
             {
                 MedicationCourseGuids = repeatPrescriptionRequest.CourseIds,
                 RequestComment = repeatPrescriptionRequest.SpecialRequest,
-                UserPatientLinkToken = emisUserSession.UserPatientLinkToken
+                UserPatientLinkToken = emisRequestParameters.UserPatientLinkToken
             };
-            
-            EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
             var prescriptionsAttemptingToOrderCount = repeatPrescriptionRequest.CourseIds.Count();
             _logger.LogInformation($"Attempting to order {prescriptionsAttemptingToOrderCount} prescriptions");
             await _auditor.Audit(auditType, "Attempting to order {0} prescriptions", prescriptionsAttemptingToOrderCount);
-
 
             try
             {
@@ -249,7 +245,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             _logger.LogEmisErrorResponse(response);
             return new GetPrescriptionsResult.BadGateway();
         }
-        
+
         private OrderPrescriptionResult InterpretOrderPrescriptionError(
             EmisClient.EmisApiResponse response)
         {

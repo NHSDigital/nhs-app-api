@@ -3520,6 +3520,46 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+    /v1/patient/linked-accounts/switch/{id}: 
+      post: 
+        tags: 
+          - "linked accounts"
+        parameters: 
+          - 
+            in: "path"
+            name: "id"
+            required: true
+            description: "The id of the user to switch to"
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Subsequent requests can now be made for the requested patient's account."
+          401: 
+            description: "User session missing or expired."
+          404: 
+            description: "The id was not found to switch to."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+          504: 
+            description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/api/users/devices: 
       get: 
         security: 
