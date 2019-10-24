@@ -30,11 +30,10 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IJwtTokenService<IdToken>, IdTokenService>();
             services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
-
-
+            
+            services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
             services.AddSingleton<IInfoService, InfoService>();
             services.AddSingleton<IInfoRepository, MongoUserInfoRepository>();
-            services.AddSingleton<IMongoClient, ApiMongoClient>();
 
             base.ConfigureServices(services, configuration);
         }

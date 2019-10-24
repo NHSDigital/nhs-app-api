@@ -9,6 +9,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
+using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
 using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
@@ -20,7 +21,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
     {
         private IFixture _fixture;
         private MongoUserInfoRepository _systemUnderTest;
-        private Mock<IMongoClient> _mockMongoClient;
+        private Mock<IApiMongoClient<IMongoConfiguration>> _mockMongoClient;
         private Mock<IMongoCollection<UserAndInfo>> _mongoCollectionMock;
 
         [TestInitialize]
@@ -35,7 +36,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             mongoDatabaseMock.Setup(x => x.GetCollection<UserAndInfo>(It.IsAny<string>(), null))
                 .Returns(_mongoCollectionMock.Object);
 
-            _mockMongoClient = _fixture.Freeze<Mock<IMongoClient>>();
+            _mockMongoClient = _fixture.Freeze<Mock<IApiMongoClient<IMongoConfiguration>>>();
             _mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
                 .Returns(mongoDatabaseMock.Object);
 

@@ -10,6 +10,7 @@ using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.MessagesApi.Repository;
 using NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages;
+using NHSOnline.Backend.Support.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
@@ -19,7 +20,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
     {
         private IFixture _fixture;
         private MongoMessageRepository _systemUnderTest;
-        private Mock<IMongoClient> _mockMongoClient;
+        private Mock<IApiMongoClient<IMongoConfiguration>> _mockMongoClient;
         private Mock<IMongoCollection<UserMessage>> _mongoCollectionMock;
 
         [TestInitialize]
@@ -34,7 +35,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             mongoDatabaseMock.Setup(x => x.GetCollection<UserMessage>(It.IsAny<string>(), null))
                 .Returns(_mongoCollectionMock.Object);
 
-            _mockMongoClient = _fixture.Freeze<Mock<IMongoClient>>();
+            _mockMongoClient = _fixture.Freeze<Mock<IApiMongoClient<IMongoConfiguration>>>();
             _mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
                 .Returns(mongoDatabaseMock.Object);
 

@@ -11,13 +11,13 @@ using NHSOnline.Backend.Support.Repository;
 
 namespace NHSOnline.Backend.MessagesApi.Repository
 {
-    internal class MongoMessageRepository : MongoRepository<UserMessage>, IMessageRepository
+    internal class MongoMessageRepository : MongoRepository<IMongoConfiguration, UserMessage>, IMessageRepository
     {
         private readonly ILogger<MongoMessageRepository> _logger;
         
         public MongoMessageRepository(
             ILogger<MongoMessageRepository> logger,
-            IMongoClient mongoClient,
+            IApiMongoClient<IMongoConfiguration> mongoClient,
             IMongoConfiguration mongoConfiguration
         )
             : base(mongoClient, mongoConfiguration)
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.MessagesApi.Repository
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1309",
-            Justification = "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
+            Justification = "Method CompareOrdinal is not supported on Mongo Driver")]
         public async Task<List<UserMessage>> Find(string nhsLoginId)
         {
             try

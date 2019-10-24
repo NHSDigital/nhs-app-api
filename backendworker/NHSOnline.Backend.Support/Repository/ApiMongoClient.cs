@@ -3,14 +3,14 @@ using MongoDB.Driver;
 
 namespace NHSOnline.Backend.Support.Repository
 {
-    public class ApiMongoClient : MongoClient
+    public class ApiMongoClient<TConfiguration> : MongoClient, IApiMongoClient<TConfiguration> where TConfiguration : IMongoConfiguration
     {
-        public ApiMongoClient(IMongoConfiguration mongoConfiguration)
+        public ApiMongoClient(TConfiguration mongoConfiguration)
             : base(BuildSettings(mongoConfiguration))
         {
         }
 
-        private static MongoClientSettings BuildSettings(IMongoConfiguration mongoConfiguration)
+        private static MongoClientSettings BuildSettings(TConfiguration mongoConfiguration)
         {
             var username = mongoConfiguration.Username;
             var settings = new MongoClientSettings

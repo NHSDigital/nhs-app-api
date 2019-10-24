@@ -8,14 +8,15 @@ using MongoDB.Driver;
 
 namespace NHSOnline.Backend.Support.Repository
 {
-    public abstract class MongoRepository<TRecord>
+    public abstract class MongoRepository<TConfig, TRecord>
         where TRecord : MongoRecord
+        where TConfig : IMongoConfiguration
     {
         private readonly IMongoClient _mongoClient;
         private readonly string _databaseName;
         private readonly string _collectionName;
 
-        protected MongoRepository(IMongoClient mongoClient, IMongoConfiguration mongoConfiguration)
+        protected MongoRepository(IApiMongoClient<TConfig> mongoClient, TConfig mongoConfiguration)
         {
             _mongoClient = mongoClient;
             _databaseName = mongoConfiguration.DatabaseName;
@@ -24,13 +25,13 @@ namespace NHSOnline.Backend.Support.Repository
 
         protected async Task InsertOneAsync(TRecord record)
         {
-            record.TimeStamp = DateTime.UtcNow;
+            record.Timestamp = DateTime.UtcNow;
             await GetCollection().InsertOneAsync(record);
         }
 
         protected async Task CreateOrUpdateOneAsync(Expression<Func<TRecord, bool>> filter, TRecord record)
         {
-            record.TimeStamp = DateTime.UtcNow;
+            record.Timestamp = DateTime.UtcNow;
             await GetCollection().ReplaceOneAsync(filter, record, new UpdateOptions { IsUpsert = true });
         }
 

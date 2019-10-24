@@ -17,10 +17,12 @@ namespace NHSOnline.Backend.UsersApi
             services.AddSingleton<IRegistrationDescriptionFactory, RegistrationDescriptionFactory>();
             services.AddSingleton<IAzureNotificationHubClient, AzureNotificationHubClient>();
             services.AddSingleton<INotificationService, AzureNotificationHubService>();
+            
+            services.AddSingleton(typeof(IApiMongoClient<>),typeof(ApiMongoClient<>));
             services.AddSingleton<IUserDeviceRepository, MongoUserDeviceRepository>();
-            services.AddSingleton<IDeviceIdGenerator, DeviceIdGenerator>();
             services.AddSingleton<IDeviceRepositoryService, DeviceRepositoryService>();
-            services.AddSingleton<IMongoClient, ApiMongoClient>();
+            
+            services.AddSingleton<IDeviceIdGenerator, DeviceIdGenerator>();
             services.AddTransient<IOperationStepBuilder, OperationStepBuilder>();
             services.AddTransient<RemoveRegistrationsStep>();
             services.AddTransient<CreateRegistrationIdStep>();

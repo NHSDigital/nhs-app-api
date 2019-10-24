@@ -9,14 +9,14 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.UsersApi.Repository
 {
-    internal class MongoUserDeviceRepository : MongoRepository<UserDevice>, IUserDeviceRepository
+    internal class MongoUserDeviceRepository : MongoRepository<IMongoConfiguration, UserDevice>, IUserDeviceRepository
     {
         private readonly ILogger<MongoUserDeviceRepository> _logger;
 
         public MongoUserDeviceRepository
         (
             ILogger<MongoUserDeviceRepository> logger,
-            IMongoClient mongoClient,
+            IApiMongoClient<IMongoConfiguration> mongoClient,
             IMongoConfiguration mongoConfiguration
         )
             : base(mongoClient, mongoConfiguration)

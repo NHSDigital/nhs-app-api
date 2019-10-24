@@ -1,10 +1,12 @@
 using System;
+using MongoDB.Bson.Serialization.Attributes;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Repository;
 
 namespace NHSOnline.Backend.Auditing
 {
     [Serializable]
-    public class AuditRecord
+    public class AuditRecord : MongoRecord
     {
         public AuditRecord(
             DateTime timestamp, 
@@ -29,14 +31,28 @@ namespace NHSOnline.Backend.Auditing
             NativeVersion = version.Native;
         }
         
-        public DateTime Timestamp { get; private set; }
+        [BsonElement]
         public string NhsLoginSubject { get; private set; }
+        
+        [BsonElement]
         public string NhsNumber { get; private set; }
+        
+        [BsonElement]
         public string Supplier { get; private set; }
+        
+        [BsonElement]
         public string Operation { get; private set; }
+        
+        [BsonElement]
         public string Details { get; private set; }
+        
+        [BsonElement]
         public string ApiVersion { get; private set; }
+        
+        [BsonElement]
         public string WebVersion { get; private set; }
+        
+        [BsonElement]
         public string NativeVersion { get; private set; }
     }
 }

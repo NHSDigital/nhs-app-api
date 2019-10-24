@@ -12,13 +12,13 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
 {
     [SuppressMessage("Microsoft.Globalization", "CA1309",
         Justification = "Method �CompareOrdinal� is not supported on Mongo Driver")]
-    internal class MongoUserInfoRepository : MongoRepository<UserAndInfo>, IInfoRepository
+    internal class MongoUserInfoRepository : MongoRepository<IMongoConfiguration, UserAndInfo>, IInfoRepository
     {
         private readonly ILogger<MongoUserInfoRepository> _logger;
 
         public MongoUserInfoRepository(
             ILogger<MongoUserInfoRepository> logger,
-            IMongoClient mongoClient,
+            IApiMongoClient<IMongoConfiguration> mongoClient,
             IMongoConfiguration mongoConfiguration
         )
             : base(mongoClient, mongoConfiguration)

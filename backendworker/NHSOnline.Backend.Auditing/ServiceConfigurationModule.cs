@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.Auditing
@@ -25,7 +26,11 @@ namespace NHSOnline.Backend.Auditing
                     services.AddSingleton<IAuditSink>(
                         new StreamAuditSink(new System.IO.FileStream(filePath, System.IO.FileMode.Append)));
                     break;
-                    
+                case "MONGO":
+                    services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
+                    services.AddSingleton<MongoDbAuditSinkConfiguration>();
+                    services.AddSingleton<IAuditSink, MongoDbAuditorSink>();
+                    break;
                 default:
                     services.AddSingleton<IAzureCosmosDbAuditorSinkConfig, AzureCosmosDbAuditorSinkConfig>();
                     services.AddSingleton<IAuditSink, AzureCosmosDbAuditorSink>();

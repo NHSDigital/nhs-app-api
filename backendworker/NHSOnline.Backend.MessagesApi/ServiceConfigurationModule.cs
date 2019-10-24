@@ -12,9 +12,10 @@ namespace NHSOnline.Backend.MessagesApi
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
+            
             services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IMessageRepository, MongoMessageRepository>();
-            services.AddSingleton<IMongoClient, ApiMongoClient>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
             services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
