@@ -120,6 +120,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             PatientRecordNotFound = 198,
             [Description("No self-associated user exist with this patient")]
             NoSelfAssociatedUserExistWithThisPatient = 199,
+            [Description("Error returned for given demographics")]
+            ErrorRetrievingGivenDemographics = 200,
             [Description("Linkage keys are currently not supported by the supplier")]
             LinkageKeysNotSupportedBySupplier = 550
         }
@@ -192,6 +194,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
                 { InternalCode.UnderMinimumAgeOrNonCompetent, ExternalCode.UnderMinimumAgeOrNonCompetent },
 
                 { InternalCode.NoMatchFoundForGivenDemographics,ExternalCode.PatientNotFound  },
+                { InternalCode.ErrorRetrievingGivenDemographics,ExternalCode.PatientNotFound  },
+                
                 { InternalCode.NoUserFoundForLinkageDetails, ExternalCode.PatientNotFound },
 
                 { InternalCode.InvalidLinkageDetails,ExternalCode.InvalidDetails },

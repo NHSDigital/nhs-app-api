@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
             var errorResponses = systemUnderTest.InternalErrorResponses;
             
             errorResponses.Should().NotBeNull();
-            errorResponses.Count.Should().Be(40);
+            errorResponses.Count.Should().Be(41);
             const int singleCode = (int)Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails;
 
             var specificResponse = errorResponses[singleCode];

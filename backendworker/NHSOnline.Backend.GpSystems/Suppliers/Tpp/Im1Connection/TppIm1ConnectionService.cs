@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 
             var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
-            var response = new PatientIm1ConnectionResponse
+            var response = new CreateIm1ConnectionResponse
             {
                 ConnectionToken = connectionToken.SerializeJson(),
                 NhsNumbers = nhsNumbers,

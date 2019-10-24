@@ -179,6 +179,7 @@ paths:
             * 101 - Practice not enabled
             * 102 - Patient Archived or Disabled
             * 104 - Patient under minimum age or non competent
+            * 200 - Error returned for given demographics
         "404":
           content:
             application/json:

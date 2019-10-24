@@ -12,9 +12,9 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
         public class Success : Im1ConnectionRegisterResult
         {
-            public PatientIm1ConnectionResponse Response { get; }
+            public CreateIm1ConnectionResponse Response { get; }
 
-            public Success(PatientIm1ConnectionResponse response)
+            public Success(CreateIm1ConnectionResponse response)
             {
                 Response = response;
             }

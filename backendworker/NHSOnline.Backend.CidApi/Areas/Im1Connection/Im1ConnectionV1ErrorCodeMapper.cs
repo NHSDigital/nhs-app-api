@@ -14,6 +14,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 { InternalCode.InvalidOption, StatusCodes.Status500InternalServerError },
                 { InternalCode.InvalidLinkageDetails, StatusCodes.Status400BadRequest },
                 { InternalCode.NoMatchFoundForGivenDemographics, StatusCodes.Status404NotFound },
+                { InternalCode.ErrorRetrievingGivenDemographics, StatusCodes.Status403Forbidden },
                 { InternalCode.UnableToFindOrganisation, StatusCodes.Status400BadRequest },
                 { InternalCode.UserAccountIsInactiveOrArchived, StatusCodes.Status403Forbidden },
                 { InternalCode.PracticeNotLive, StatusCodes.Status400BadRequest },

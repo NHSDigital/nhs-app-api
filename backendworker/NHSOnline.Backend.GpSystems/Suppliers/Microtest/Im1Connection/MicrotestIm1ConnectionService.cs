@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -49,7 +50,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                     _logger.LogError($"Error response when retrieving Microtest demographics as part of im1 verification. Status code: {(int)demographicsResponse.StatusCode}");
                     if (demographicsResponse.HasInternalServerError || demographicsResponse.HasForbiddenResponse)
                     {
-                        return new Im1ConnectionVerifyResult.Forbidden();
+                       
+                        return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
+                            .ErrorRetrievingGivenDemographics);
                     }
 
                     return new Im1ConnectionVerifyResult.BadGateway();
@@ -98,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                     var connectionToken = cachedConnectionToken.ValueOrFailure();
                     _logger.LogDebug("IM1 connection token found in cache.");
 
-                    var response = new PatientIm1ConnectionResponse
+                    var response = new CreateIm1ConnectionResponse
                     {
                         ConnectionToken = connectionToken.SerializeJson(),
                         NhsNumbers = new List<PatientNhsNumber>

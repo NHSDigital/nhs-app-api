@@ -147,13 +147,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             }
         }
 
-        private PatientIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
+        private CreateIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
             PatientIm1ConnectionRequest request,
             VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse,
             VisionConnectionToken connectionToken)
         {
             var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();
-            return new PatientIm1ConnectionResponse
+            return new CreateIm1ConnectionResponse
             {
                 ConnectionToken = connectionToken.SerializeJson(),
                 NhsNumbers = nhsNumbers,

@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
     public class Im1ConnectionControllerTests
     {
         private const string DefaultOdsCode = "A12345";
+        private const string MicrotestOdsCode = "B81603";
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
 
@@ -47,6 +48,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         private Mock<Im1ConnectionErrorCodes> _im1ErrorCodes;
         private Mock<Im1ConnectionErrorCodes> _errorCodes;
         private readonly GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse _verifySuccessfulResponse;
+        private readonly GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse _verifyPatientIm1ConnectionV2SuccessfulResponse;
+        private readonly PatientIm1ConnectionResponse _expectedSuccessfulVerifyV2Response;
         private readonly PatientIm1ConnectionResponse _expectedSuccessfulVerifyResponse;
 
         public Im1ConnectionControllerTests()
@@ -60,6 +63,20 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = _expectedNhsNumbers
+            };
+            
+            _verifyPatientIm1ConnectionV2SuccessfulResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = _expectedNhsNumbers,
+                OdsCode = MicrotestOdsCode
+            };
+            
+            _expectedSuccessfulVerifyV2Response = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = _expectedNhsNumbers,
+                OdsCode = MicrotestOdsCode
             };
         }
 
@@ -188,7 +205,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.Success(_verifySuccessfulResponse));
+                new Im1ConnectionVerifyResult.Success(_verifyPatientIm1ConnectionV2SuccessfulResponse));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             _gpSystemFactory
@@ -203,7 +220,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Assert
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>().Subject;
-            actualResponse.Should().BeEquivalentTo(_expectedSuccessfulVerifyResponse);
+            actualResponse.Should().BeEquivalentTo(_expectedSuccessfulVerifyV2Response);
 
             _auditor.Verify(x => x.AuditRegistrationEvent(_expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
                 AuditingOperations.Im1ConnectionVerifyResponse, It.IsAny<string>(), It.IsAny<object[]>()));
@@ -259,8 +276,15 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var model = _fixture.Create<PatientIm1ConnectionRequest>();
             model.OdsCode = odsCode;
+            
+            var verifyResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse()
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = _expectedNhsNumbers,
+                OdsCode = DefaultOdsCode,
+            };
 
-            var registerResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
+            var registerResponse = new CreateIm1ConnectionResponse()
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = _expectedNhsNumbers,
@@ -278,7 +302,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.Success(registerResponse));
+                new Im1ConnectionVerifyResult.Success(verifyResponse));
             
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             
@@ -297,7 +321,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<CreatedResult>()
-                .Subject.Value.Should().BeAssignableTo<PatientIm1ConnectionResponse>()
+                .Subject.Value.Should().BeAssignableTo<NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.CreateIm1ConnectionResponse>()
                 .Subject.Should().BeEquivalentTo(expectedResponse);
 
             _auditor.Verify(x => x.AuditRegistrationEvent(_expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
@@ -325,6 +349,66 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 StatusCodes.Status501NotImplemented,
                 Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
                 "Invalid Details. Invalid parameters: odsCode");
+        }
+        
+        [TestMethod]
+        public async Task GetV2_MicrotestDemographicsFailsWithInternalServerError_ReturnsForbidden()
+        {
+            // Arrange
+            const string odsCode = MicrotestOdsCode;
+            const string patientIdentifier = DefaultConnectionToken;
+
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
+
+            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
+                new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.NoMatchFoundForGivenDemographics));
+            
+            var gpSystemMock = MockGpSystem(im1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(odsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            _systemUnderTest = CreateIm1ConnectionController();
+
+            // Act
+            var result = await _systemUnderTest.GetV2(DefaultConnectionToken, odsCode);
+
+            //Assert
+            AssertErrorWithStatusCode(
+                result, 
+                StatusCodes.Status404NotFound,
+                Im1ConnectionErrorCodes.ExternalCode.PatientNotFound,
+                "Patient not found");
+        }
+        
+        [TestMethod]
+        public async Task GetV2_MicrotestDemographicsFails_ReturnsBadGateway()
+        {
+            // Arrange
+            const string odsCode = MicrotestOdsCode;
+            const string patientIdentifier = DefaultConnectionToken;
+
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
+
+            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
+                new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed));
+            
+            var gpSystemMock = MockGpSystem(im1ConnectionService);
+            _gpSystemFactory
+                .Setup(x => x.LookupGpSystem(odsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            _systemUnderTest = CreateIm1ConnectionController();
+
+            // Act
+            var result = await _systemUnderTest.GetV2(DefaultConnectionToken, odsCode);
+
+            //Assert
+            AssertErrorWithStatusCode(
+                result, 
+                StatusCodes.Status502BadGateway,
+                Im1ConnectionErrorCodes.ExternalCode.UpstreamError,
+                "Upstream Error");
         }
 
         [TestMethod]
@@ -426,7 +510,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
             
-            var expectedResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
+            var expectedResponse = new GpSystems.Im1Connection.Models.CreateIm1ConnectionResponse()
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = new []{new PatientNhsNumber { NhsNumber = "1112223333" }}
@@ -446,7 +530,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<CreatedResult>()
-                .Subject.Value.Should().BeAssignableTo<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>()
+                .Subject.Value.Should().BeAssignableTo<CreateIm1ConnectionResponse>()
                 .Subject.Should().BeEquivalentTo(expectedResponse);
         }
 
@@ -582,7 +666,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                     It.IsAny<IGpSystem>())).ReturnsAsync(
                 new LinkageResult.SuccessfullyCreated(linkageResponse));
 
-            var connectionResponse = _fixture.Create<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>();
+            var connectionResponse = _fixture.Create<CreateIm1ConnectionResponse>();
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
                 .ReturnsAsync(new Im1ConnectionRegisterResult.Success(connectionResponse));
@@ -592,7 +676,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<CreatedResult>()
-                .Subject.Value.Should().BeAssignableTo<GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse>()
+                .Subject.Value.Should().BeAssignableTo<CreateIm1ConnectionResponse>()
                 .Subject.Should().BeEquivalentTo(connectionResponse);
         }
 

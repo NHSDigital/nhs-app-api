@@ -208,7 +208,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
                 var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
-                var response = new PatientIm1ConnectionResponse
+                var response = new CreateIm1ConnectionResponse
                 {
                     ConnectionToken = connectionToken.SerializeJson(),
                     NhsNumbers = nhsNumbers,

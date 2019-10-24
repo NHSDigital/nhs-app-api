@@ -83,7 +83,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Forbidden>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>().Subject.ErrorCode.Should().Be(InternalCode.ErrorRetrievingGivenDemographics);
+        }
+        
+        [DataTestMethod]
+        [DataRow(HttpStatusCode.Forbidden)]
+        [DataRow(HttpStatusCode.InternalServerError)]
+        public async Task Verify_V2_ReturnsUpstreamConnectionError_WhenDemographicsFailsWithExpectedStatusCode(HttpStatusCode demographicsStatusCode)
+        {
+            // Arrange
+            var response = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(demographicsStatusCode);
+            _microtestClientInterface.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(response);
+
+            // Act
+            var systemUnderTest = CreateSystemUnderTest();
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>().Subject.ErrorCode.Should().Be(InternalCode.ErrorRetrievingGivenDemographics);
         }
         
         [DataTestMethod]
@@ -92,6 +110,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
         [DataRow(HttpStatusCode.Conflict)]
         [DataRow(HttpStatusCode.Unauthorized)]
         public async Task Verify_ReturnsBadGateway_WhenDemographicsFailsWithUnexpectedErrorCode(HttpStatusCode demographicsStatusCode)
+        {
+            // Arrange
+            var response = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(demographicsStatusCode);
+            _microtestClientInterface.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(response);
+
+            // Act
+            var systemUnderTest = CreateSystemUnderTest();
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
+        }
+        
+        [DataTestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.Conflict)]
+        [DataRow(HttpStatusCode.Unauthorized)]
+        public async Task Verify_V2_ReturnsNotFound_WhenDemographicsFailsWithUnexpectedErrorCode(HttpStatusCode demographicsStatusCode)
         {
             // Arrange
             var response = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(demographicsStatusCode);

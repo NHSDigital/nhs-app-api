@@ -31,6 +31,16 @@ Feature: Im1 Connection GET V2
       | VISION    | 200        | -15    | 400            | 113          | User record unavailable                                        |
 
 
+  Scenario Outline: A MICROTEST user verifying their im1 Connection can get a <ExpectedCode> error when demographics fails with a <GPHttpCode> error
+    Given I am a MICROTEST user and verifying my im1 connection returns '<GPHttpCode>' '<GPCode>' '<Message>'
+    When I verify patient data using the v2 endpoint
+    Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
+    Examples:
+      | GPHttpCode | GPCode    | ExpectedStatus | ExpectedCode | Message |
+      | 502        |           | 502            | 100          | Unknown Error |
+      | 403        |           | 404            | 103          | Patient not found |
+      | 500        |           | 404            | 103          | Patient not found |
+
     # Returning NHS numbers from TPP covered with EMIS BDD
     # and TPP structure is covered with unit tests
     # MICROTEST users must have an NHS number to verify
