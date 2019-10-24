@@ -34,10 +34,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 _logger.LogEnter();
             
                 var emisUserSession = (EmisUserSession) userSession;
-                var emisHeaders = new EmisHeaderParameters(emisUserSession);
+                var emisRequestParameters = new EmisRequestParameters(emisUserSession);
                 
                 var response = await _emisClient.AppointmentsGet(
-                    emisHeaders,
+                    emisRequestParameters,
                     emisUserSession.UserPatientLinkToken);
                 return InterpretAppointmentsGetResponse(response);
             }

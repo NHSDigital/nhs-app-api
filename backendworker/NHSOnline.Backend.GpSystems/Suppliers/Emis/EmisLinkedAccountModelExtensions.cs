@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
     public static class EmisLinkedAccountModelExtensions
     {
-        public static EmisHttpRequestData BuildHttpRequestData(this GpLinkedAccountModel gpLinkedAccountModel, ILogger logger)
+        public static EmisRequestParameters BuildEmisRequestParameters(this GpLinkedAccountModel gpLinkedAccountModel, ILogger logger)
         {
             string userPatientLinkToken = null;
             var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
@@ -42,12 +42,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
                 userPatientLinkToken = emisUserSession.UserPatientLinkToken;
             }
-            
-            return new EmisHttpRequestData()
-            {
-                HeaderParameters = new EmisHeaderParameters(emisUserSession),
-                UserPatientLinkToken = userPatientLinkToken
-            }; 
+
+            return new EmisRequestParameters(emisUserSession, userPatientLinkToken);
         }
     }
 }

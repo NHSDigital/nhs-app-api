@@ -297,7 +297,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                     }));
             
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisHttpRequestData>()))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
                     {
@@ -348,7 +348,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                     }));
             
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisHttpRequestData>()))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
                     {
@@ -648,10 +648,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             emisClientMock
                 .Setup(x => x.DemographicsGet(
-                    It.Is<EmisHttpRequestData>(
+                    It.Is<EmisRequestParameters>(
                         e => e.UserPatientLinkToken.Equals(userPatientLinkToken, StringComparison.Ordinal) &&
-                             e.HeaderParameters.SessionId.Equals(sessionResponse.SessionId, StringComparison.Ordinal) &&
-                             e.HeaderParameters.EndUserSessionId.Equals(endUserSessionResponse.EndUserSessionId, StringComparison.Ordinal)
+                             e.SessionId.Equals(sessionResponse.SessionId, StringComparison.Ordinal) &&
+                             e.EndUserSessionId.Equals(endUserSessionResponse.EndUserSessionId, StringComparison.Ordinal)
                             )))
                 .ReturnsAsync(
                     new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)

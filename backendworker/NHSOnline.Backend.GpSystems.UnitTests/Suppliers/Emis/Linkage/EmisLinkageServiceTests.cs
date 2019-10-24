@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
-            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisRequestParameters>(), It.Is<AddVerificationRequest>(
                 req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
                 req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                 req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
-            _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+            _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisRequestParameters>(), It.Is<AddVerificationRequest>(
                 req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
                 req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                 req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
-            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisRequestParameters>(), It.Is<AddVerificationRequest>(
                     req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
                            req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                            req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
-            _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+            _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisRequestParameters>(), It.Is<AddVerificationRequest>(
                 req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
                        req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                        req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
@@ -200,7 +200,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             };
 
             _emisClient.Setup(x => x.VerificationPost(
-                    It.Is<EmisHeaderParameters>(
+                    It.Is<EmisRequestParameters>(
                         header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
                     It.Is<AddVerificationRequest>(
                         req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify(x => x.VerificationPost(
-                It.Is<EmisHeaderParameters>(
+                It.Is<EmisRequestParameters>(
                     header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
                 It.Is<AddVerificationRequest>(
                     req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
@@ -243,7 +243,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
-            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisRequestParameters>(), It.Is<AddVerificationRequest>(
                 req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
                 req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                 req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
@@ -276,7 +276,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
             _emisClient.Setup(x => x.NhsUserPost(
-                It.Is<EmisHeaderParameters>(
+                It.Is<EmisRequestParameters>(
                     header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
                 It.Is<AddNhsUserRequest>(
                     request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
@@ -287,7 +287,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                         Body = addNhsUserResponse,
                     });
 
-            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisRequestParameters>(), It.Is<AddVerificationRequest>(
                 req => req.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.OrdinalIgnoreCase) &&
                 req.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.OrdinalIgnoreCase) &&
                 req.Token.Equals(createLinkageRequest.IdentityToken, StringComparison.OrdinalIgnoreCase))))
@@ -390,7 +390,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             };
 
             _emisClient.Setup(x => x.NhsUserPost(
-                It.Is<EmisHeaderParameters>(
+                It.Is<EmisRequestParameters>(
                     header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
                 It.Is<AddNhsUserRequest>(
                     request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
@@ -416,7 +416,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
    
            _emisClient.Setup(x => x.NhsUserPost(
-               It.Is<EmisHeaderParameters>(
+               It.Is<EmisRequestParameters>(
                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
                It.Is<AddNhsUserRequest>(
                    request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
@@ -450,7 +450,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
             _emisClient.Setup(x => x.NhsUserPost(
-                It.Is<EmisHeaderParameters>(
+                It.Is<EmisRequestParameters>(
                     header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
                 It.Is<AddNhsUserRequest>(
                     request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)

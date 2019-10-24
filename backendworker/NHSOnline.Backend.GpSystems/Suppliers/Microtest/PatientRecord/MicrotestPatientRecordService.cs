@@ -29,11 +29,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             _microtestMyRecordMapper = microtestMyRecordMapper;
         }
 
-        public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
+        public async Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
 
-            var microtestUserSession = (MicrotestUserSession) gpUserSession;
+            var microtestUserSession = (MicrotestUserSession) gpLinkedAccountModel.GpUserSession;
 
             try
             {

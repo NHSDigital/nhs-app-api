@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Book_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.AppointmentsPost(It.IsAny<EmisHeaderParameters>(),
+            _mockEmisClient.Setup(x => x.AppointmentsPost(It.IsAny<EmisRequestParameters>(),
                     It.IsAny<BookAppointmentSlotPostRequest>())).
                 Throws<HttpRequestException>()
                 .Verifiable();
@@ -408,7 +408,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private void MockEmisClientAppointmentPostMethod(EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentsPost(
-                    It.Is<EmisHeaderParameters>(p =>
+                    It.Is<EmisRequestParameters>(p =>
                         p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
                         && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
                     It.Is<BookAppointmentSlotPostRequest>(p =>

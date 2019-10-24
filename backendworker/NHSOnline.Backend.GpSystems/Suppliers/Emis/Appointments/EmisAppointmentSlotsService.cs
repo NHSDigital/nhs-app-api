@@ -38,21 +38,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 var metaParams = new SlotsMetadataGetQueryParameters(dateRange.FromDate, dateRange.ToDate,
                     patientLinkToken);
                 var slotsParams = new SlotsGetQueryParameters(dateRange.FromDate, dateRange.ToDate, patientLinkToken);
-                var headerParams = new EmisHeaderParameters(emisUserSession);
+                var emisRequestParameters = new EmisRequestParameters(emisUserSession, patientLinkToken);
 
                 _logger.LogInformation("Creating appointment slots requests");
-                var metaTask = _emisClient.AppointmentSlotsMetadataGet(headerParams, metaParams);
-                var slotTask = _emisClient.AppointmentSlotsGet(headerParams, slotsParams);
+                var metaTask = _emisClient.AppointmentSlotsMetadataGet(emisRequestParameters, metaParams);
+                var slotTask = _emisClient.AppointmentSlotsGet(emisRequestParameters, slotsParams);
 
                 await Task.WhenAll(metaTask, slotTask);
                 _logger.LogInformation("Appointment slot requests completed");
 
-                var practiceTask = _emisClient.PracticeSettingsGet(headerParams, emisUserSession.OdsCode);
-                var demographicsTask = _emisClient.DemographicsGet(new EmisHttpRequestData
-                    {
-                        HeaderParameters = headerParams,
-                        UserPatientLinkToken = patientLinkToken    
-                    });
+                var practiceTask = _emisClient.PracticeSettingsGet(emisRequestParameters, emisUserSession.OdsCode);
+                var demographicsTask = _emisClient.DemographicsGet(emisRequestParameters);
                 
                 // Wait for practice and demographics tasks to complete, but unlike the other tasks suppress any errors such as timeout.
                 try

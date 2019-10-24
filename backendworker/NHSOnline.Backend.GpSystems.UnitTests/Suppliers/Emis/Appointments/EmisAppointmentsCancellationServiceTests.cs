@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Cancel_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.AppointmentsDelete(It.IsAny<EmisHeaderParameters>(),
+            _mockEmisClient.Setup(x => x.AppointmentsDelete(It.IsAny<EmisRequestParameters>(),
                     It.IsAny<CancelAppointmentDeleteRequest>())).
                 Throws<HttpRequestException>()
                 .Verifiable();
@@ -288,7 +288,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentsDelete(
-                It.Is<EmisHeaderParameters>(p =>
+                It.Is<EmisRequestParameters>(p =>
                     p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
                     && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
                 It.Is<CancelAppointmentDeleteRequest>(p =>

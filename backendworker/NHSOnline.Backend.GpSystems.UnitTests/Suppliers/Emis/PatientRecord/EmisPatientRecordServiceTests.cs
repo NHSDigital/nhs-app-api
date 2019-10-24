@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -9,6 +10,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord;
 using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 {
@@ -41,7 +43,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             var consultationsResponse = _fixture.Create<MedicationRootObject>();
             var documentsResponse = _fixture.Create<MedicationRootObject>();
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Medication))
+            _emisClient.Setup(x => x.MedicalRecordGet(
+                    It.Is<EmisRequestParameters>(
+                        e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                             e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                             e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                    RecordType.Medication))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -50,7 +57,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies))
+            _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
+                    e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                         e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal))
+                    , RecordType.Allergies))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -59,7 +70,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Immunisations))
+            _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
+                    e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                         e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                    RecordType.Immunisations))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -68,7 +83,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.TestResults))
+            _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
+                    e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                         e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                    RecordType.TestResults))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -77,7 +96,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Problems))
+            _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
+                    e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                         e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
+                    RecordType.Problems))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -86,7 +109,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Consultations))
+            _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
+                    e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                         e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                    RecordType.Consultations))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -95,7 +122,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
 
-            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Documents))
+            _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
+                    e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                         e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                    RecordType.Documents))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -105,10 +136,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_emisUserSession);
+            var result = await _systemUnderTest.GetMyRecord(new GpLinkedAccountModel(_emisUserSession));
 
             // Assert
-            _emisClient.Verify(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies));
+            _emisClient.Verify(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
+                e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                     e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                     e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                RecordType.Allergies));
 
             result.Should().BeAssignableTo<GetMyRecordResult.Success>()
                 .Subject.Response.Should().NotBeNull();

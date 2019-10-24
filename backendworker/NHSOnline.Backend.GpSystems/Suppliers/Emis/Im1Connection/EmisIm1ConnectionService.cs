@@ -78,14 +78,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 }
 
                 var demographicsResponse = await _emisClient.DemographicsGet(
-                    new EmisHttpRequestData
+                    new EmisRequestParameters
                     {
                         UserPatientLinkToken = userPatientLinkToken,
-                        HeaderParameters = new EmisHeaderParameters
-                        {
-                            SessionId = sessionsResponse.Body.SessionId,
-                            EndUserSessionId = endUserSessionId
-                        }
+                        SessionId = sessionsResponse.Body.SessionId,
+                        EndUserSessionId = endUserSessionId 
                     });
 
                 if (!demographicsResponse.HasSuccessResponse)
@@ -195,15 +192,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
                 var demographicsResponse =
                     await _emisClient.DemographicsGet(
-                        new EmisHttpRequestData
+                        new EmisRequestParameters
                         {
                             UserPatientLinkToken = userPatientLinkToken,
-                            HeaderParameters = new EmisHeaderParameters
-                            {
-                                SessionId = sessionsResponse.Body.SessionId,
-                                EndUserSessionId = endUserSessionId
-                            }
-                        });
+                            SessionId = sessionsResponse.Body.SessionId,
+                            EndUserSessionId = endUserSessionId 
+                        });                        
 
                 if (!demographicsResponse.HasSuccessResponse)
                 {

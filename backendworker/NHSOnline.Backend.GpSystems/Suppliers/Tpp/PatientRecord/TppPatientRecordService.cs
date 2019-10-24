@@ -39,11 +39,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _logger = logger;
         }
         
-        public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
+        public async Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
             
-            var tppUserSession = (TppUserSession)gpUserSession;
+            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {

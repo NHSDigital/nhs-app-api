@@ -83,25 +83,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return await Post<SessionsPostRequest, SessionsPostResponse>(model, SessionsPath, endUserSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(EmisHttpRequestData emisHttpRequestData)
+        public async Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(EmisRequestParameters emisRequestParameters)
 
         {
             _logger.LogInformation("EMIS: Fetching patient demographics");
-            var path = string.Format(CultureInfo.InvariantCulture, DemographicsPath, emisHttpRequestData.UserPatientLinkToken);
+            var path = string.Format(CultureInfo.InvariantCulture, DemographicsPath, emisRequestParameters.UserPatientLinkToken);
 
             return await Get<DemographicsGetResponse>
-                (path, emisHttpRequestData.HeaderParameters.EndUserSessionId, emisHttpRequestData.HeaderParameters.SessionId);
+                (path, emisRequestParameters.EndUserSessionId, emisRequestParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken,
-            string responseSessionId, string endUserSessionId,
-            RecordType recordType)
+        public async Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(EmisRequestParameters emisRequestParameters, RecordType recordType)
         {
-
             _logger.LogInformation("EMIS: Fetching patient medical record - {0}", recordType.ToString());
-            var path = string.Format(CultureInfo.InvariantCulture, PatientRecordPath, userPatientLinkToken, recordType.ToString());
+            var path = string.Format(CultureInfo.InvariantCulture, 
+                PatientRecordPath, emisRequestParameters.UserPatientLinkToken, recordType.ToString());
 
-            return await Get<MedicationRootObject>(path, endUserSessionId, responseSessionId);
+            return await Get<MedicationRootObject>(path, emisRequestParameters.EndUserSessionId, emisRequestParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<IndividualDocument>> MedicalDocumentGet(string userPatientLinkToken,
@@ -153,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
-            EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters)
+            EmisRequestParameters requestParameters, SlotsGetQueryParameters queryParameters)
         {
             var fromDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.FromDateTime).ToString("s", CultureInfo.InvariantCulture);
             var toDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.ToDateTime).ToString("s", CultureInfo.InvariantCulture);
@@ -164,23 +162,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 fromDateTime,
                 toDateTime);
 
-            var response = await Get<AppointmentSlotsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+            var response = await Get<AppointmentSlotsGetResponse>(path, requestParameters.EndUserSessionId, requestParameters.SessionId);
             return response;
         }
 
         public async Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> PracticeSettingsGet(
-            EmisHeaderParameters headerParameters, string practiceCode)
+            EmisRequestParameters requestParameters, string practiceCode)
         {
             var path = string.Format(CultureInfo.InvariantCulture,
                                      PracticeSettingsPath,
                                      practiceCode);
 
-            var response = await Get<PracticeSettingsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+            var response = await Get<PracticeSettingsGetResponse>(path, requestParameters.EndUserSessionId, requestParameters.SessionId);
             return response;
         }
 
         public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
-            EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters queryParameters)
+            EmisRequestParameters requestParameters, SlotsMetadataGetQueryParameters queryParameters)
         {
             var fromDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.SessionStartDate).ToString("s", CultureInfo.InvariantCulture);
             var toDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.SessionEndDate).ToString("s", CultureInfo.InvariantCulture);
@@ -191,8 +189,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 fromDateTime,
                 toDateTime);
 
-            return await Get<AppointmentSlotsMetadataGetResponse>(path, headerParameters.EndUserSessionId,
-                headerParameters.SessionId);
+            return await Get<AppointmentSlotsMetadataGetResponse>(path, requestParameters.EndUserSessionId,
+                requestParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
@@ -204,15 +202,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(
-            EmisHeaderParameters headerParameters,
+            EmisRequestParameters requestParameters,
             BookAppointmentSlotPostRequest postRequest)
         {
             return await Post<BookAppointmentSlotPostRequest, BookAppointmentSlotPostResponse>(postRequest,
-                AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
+                AppointmentsPath, requestParameters.EndUserSessionId, requestParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
-            EmisHeaderParameters headerParameters, string userPatientLinkToken)
+            EmisRequestParameters requestParameters, string userPatientLinkToken)
         {
             var queryParams = string.Format(CultureInfo.InvariantCulture,
                 "?UserPatientLinkToken={0}&FetchPreviousAppointments=true&PreviousAppointmentsFromDate={1}", 
@@ -223,41 +221,41 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             var path = $"{AppointmentsPath}{queryParams}";
 
             var response =
-                await Get<AppointmentsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+                await Get<AppointmentsGetResponse>(path, requestParameters.EndUserSessionId, requestParameters.SessionId);
             return response;
         }
 
         public async Task<EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
-            EmisHeaderParameters headerParameters, CancelAppointmentDeleteRequest deleteRequest)
+            EmisRequestParameters requestParameters, CancelAppointmentDeleteRequest deleteRequest)
         {
             return await Delete<CancelAppointmentDeleteRequest, CancelAppointmentDeleteResponse>(
-                deleteRequest, AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
+                deleteRequest, AppointmentsPath, requestParameters.EndUserSessionId, requestParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<AddVerificationResponse>> VerificationPost(
-            EmisHeaderParameters headerParameters, AddVerificationRequest addVerificationRequest)
+            EmisRequestParameters requestParameters, AddVerificationRequest addVerificationRequest)
         {
             return await Post<AddVerificationRequest, AddVerificationResponse>(
                 addVerificationRequest, MeVerificationsPath,
-                headerParameters.EndUserSessionId,
-                headerParameters.SessionId,
+                requestParameters.EndUserSessionId,
+                requestParameters.SessionId,
                 _settings.EmisExtendedHttpTimeoutSeconds);
         }
         
-        public async Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(string userPatientLinkToken, EmisHeaderParameters headerParameters)
+        public async Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(string userPatientLinkToken, EmisRequestParameters requestParameters)
         {
             _logger.LogInformation("EMIS: Fetching patient settings");
             var path = string.Format(CultureInfo.InvariantCulture, MeSettingsPath, userPatientLinkToken);
 
-            return await Get<MeSettingsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+            return await Get<MeSettingsGetResponse>(path, requestParameters.EndUserSessionId, requestParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest)
+        public async Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(EmisRequestParameters requestParameters, AddNhsUserRequest addNhsUserRequest)
         {
             return await Post<AddNhsUserRequest, AddNhsUserResponse>(
                 addNhsUserRequest, UsersNhsPath,
-                headerParameters.EndUserSessionId,
-                headerParameters.SessionId,
+                requestParameters.EndUserSessionId,
+                requestParameters.SessionId,
                 _settings.EmisExtendedHttpTimeoutSeconds);
         }
         

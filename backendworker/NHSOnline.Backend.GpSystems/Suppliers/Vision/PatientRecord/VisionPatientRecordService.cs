@@ -57,10 +57,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             _proceduresMapper = proceduresMapper;
         }
 
-        public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
+        public async Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession)gpUserSession;
+            var visionUserSession = (VisionUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {

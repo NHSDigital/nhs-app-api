@@ -207,7 +207,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _systemUnderTest.MeSettingsGet(endUserSessionId, new EmisHeaderParameters(emisUserSession));
+            var response = await _systemUnderTest.MeSettingsGet(endUserSessionId, new EmisRequestParameters(emisUserSession));
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
@@ -236,14 +236,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.DemographicsGet(new EmisHttpRequestData
+            var response = await _systemUnderTest.DemographicsGet(new EmisRequestParameters
             {
                 UserPatientLinkToken = userPatientLinkToken,
-                HeaderParameters = new EmisHeaderParameters 
-                {
-                    SessionId = sessionId,
-                    EndUserSessionId = endUserSessionId
-                }
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId
             });
 
             // Assert
@@ -359,7 +356,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.MedicalRecordGet(userPatientLinkToken, sessionId, endUserSessionId,
+            var response = await _systemUnderTest.MedicalRecordGet(
+                new EmisRequestParameters
+                {
+                    UserPatientLinkToken = userPatientLinkToken,
+                    SessionId = sessionId,
+                    EndUserSessionId = endUserSessionId
+                },
                 RecordType.Allergies);
 
             // Assert
@@ -451,7 +454,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var userSession = new EmisUserSession();
 
             // Act
-            var response = await _systemUnderTest.AppointmentsPost(new EmisHeaderParameters(userSession),
+            var response = await _systemUnderTest.AppointmentsPost(new EmisRequestParameters(userSession),
                 new BookAppointmentSlotPostRequest(userSession.UserPatientLinkToken, new AppointmentBookRequest()));
 
             // Assert
@@ -473,7 +476,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 EndUserSessionId = endUserSessionId,
             };
 
-            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
+            var emisRequestParameters = new EmisRequestParameters(emisUserSession);
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
@@ -487,7 +490,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.NhsUserPost(emisHeaderParameters, requestBody);
+            var response = await _systemUnderTest.NhsUserPost(emisRequestParameters, requestBody);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -503,7 +506,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var addVerificationRequest = _fixture.Create<AddVerificationRequest>();
             var expectedResponse = _fixture.Create<AddVerificationResponse>();
 
-            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
+            var emisRequestParameters = new EmisRequestParameters(emisUserSession);
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
@@ -517,7 +520,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.VerificationPost(emisHeaderParameters, addVerificationRequest);
+            var response = await _systemUnderTest.VerificationPost(emisRequestParameters, addVerificationRequest);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -545,11 +548,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             SetupMockedHandlerEmisForEmisCustomTimeout();
 
             var emisUserSession = _fixture.Create<EmisUserSession>();
-            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
+            var emisRequestParameters = new EmisRequestParameters(emisUserSession);
             var requestBody = _fixture.Create<AddNhsUserRequest>();
             
             // Act
-            await _systemUnderTest.NhsUserPost(emisHeaderParameters, requestBody);
+            await _systemUnderTest.NhsUserPost(emisRequestParameters, requestBody);
 
             // Assert
             VerifyCustomTimeoutPresentInRequest();
@@ -563,10 +566,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var emisUserSession = _fixture.Create<EmisUserSession>();
             var addVerificationRequest = _fixture.Create<AddVerificationRequest>();
-            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
+            var emisRequestParameters = new EmisRequestParameters(emisUserSession);
             
             // Act
-            await _systemUnderTest.VerificationPost(emisHeaderParameters, addVerificationRequest);
+            await _systemUnderTest.VerificationPost(emisRequestParameters, addVerificationRequest);
 
             // Assert
             VerifyCustomTimeoutPresentInRequest();

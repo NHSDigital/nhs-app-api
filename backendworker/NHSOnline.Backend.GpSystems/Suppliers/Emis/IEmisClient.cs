@@ -12,13 +12,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
     public interface IEmisClient
     {
         // Demographics
-        Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(EmisHttpRequestData emisHttpRequestData);
+        Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(EmisRequestParameters emisRequestParameters);
 
         // Me
         Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,
             MeApplicationsPostRequest model);
 
-        Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(string userPatientLinkToken, EmisHeaderParameters headerParameters);
+        Task<EmisApiObjectResponse<MeSettingsGetResponse>> MeSettingsGet(string userPatientLinkToken, EmisRequestParameters requestParameters);
 
         // Sessions
         Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost();
@@ -37,8 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);
 
-        Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken, string responseSessionId,
-            string endUserSessionId, RecordType recordType);
+        Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(EmisRequestParameters emisRequestParameters, RecordType recordType);
 
         // Patient Record
         //        Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
@@ -55,15 +54,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         // PracticeSettings
         Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> PracticeSettingsGet(
-             EmisHeaderParameters headerParameters, string practiceCode);
+             EmisRequestParameters requestParameters, string practiceCode);
 
         // AppointmentSlots
         Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
-            EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters);
+            EmisRequestParameters requestParameters, SlotsGetQueryParameters queryParameters);
 
         // AppointmentSlotsMetadata
         Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
-            EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters queryParameters);
+            EmisRequestParameters requestParameters, SlotsMetadataGetQueryParameters queryParameters);
 
         // Courses
         Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
@@ -71,21 +70,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         // Appointments
         Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(
-            EmisHeaderParameters headerParameters,
+            EmisRequestParameters requestParameters,
             BookAppointmentSlotPostRequest postRequest);
 
         Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
-            EmisHeaderParameters headerParameters, string userPatientLinkToken);
+            EmisRequestParameters requestParameters, string userPatientLinkToken);
 
         Task<EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
-            EmisHeaderParameters headerParameters,
+            EmisRequestParameters requestParameters,
             CancelAppointmentDeleteRequest deleteRequest);
 
         // Linkage
         Task<EmisApiObjectResponse<AddVerificationResponse>> VerificationPost(
-            EmisHeaderParameters headerParameters, AddVerificationRequest addVerificationRequest);
+            EmisRequestParameters requestParameters, AddVerificationRequest addVerificationRequest);
 
         Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(
-            EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest);
+            EmisRequestParameters requestParameters, AddNhsUserRequest addNhsUserRequest);
     }
 }

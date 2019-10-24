@@ -41,9 +41,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 }
                 
                 var deleteRequest = deleteRequestOption.ValueOrFailure();
-                var emisHeaders = new EmisHeaderParameters(emisUserSession);
+                var emisRequestParameters = new EmisRequestParameters(emisUserSession);
                 
-                var response = await _emisClient.AppointmentsDelete(emisHeaders, deleteRequest);
+                var response = await _emisClient.AppointmentsDelete(emisRequestParameters, deleteRequest);
                 return InterpretAppointmentsDeleteResponse(response);
             }
             catch (HttpRequestException exception)

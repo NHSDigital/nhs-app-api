@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
                     }));
 
             _mockEmisClient.Setup(x => x.PracticeSettingsGet(
-                    It.IsAny<EmisHeaderParameters>(),
+                    It.IsAny<EmisRequestParameters>(),
                     It.IsAny<string>()))
                 .ReturnsAsync(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK)
                 {

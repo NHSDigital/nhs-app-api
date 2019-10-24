@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecords
 {
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     }));
             
             // Act
-            var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
+            var result = await _microtestPatientRecordService.GetMyRecord(new GpLinkedAccountModel(_microtestUserSession));
 
             result.Should().BeAssignableTo<GetMyRecordResult.Success>()
                 .Subject.Should().NotBeNull();
@@ -58,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(HttpStatusCode.Forbidden)));
             
             // Act
-            var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
+            var result = await _microtestPatientRecordService.GetMyRecord(new GpLinkedAccountModel(_microtestUserSession));
             
             // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.Success>()
@@ -78,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(statusCode)));
             
             // Act
-            var result = await _microtestPatientRecordService.GetMyRecord(_microtestUserSession);
+            var result = await _microtestPatientRecordService.GetMyRecord(new GpLinkedAccountModel(_microtestUserSession));
             
             // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.BadGateway>();

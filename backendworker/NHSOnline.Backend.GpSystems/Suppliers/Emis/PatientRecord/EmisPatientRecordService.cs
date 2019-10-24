@@ -52,35 +52,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             _patientDocumentTaskChecker = patientDocumentTaskChecker;
         }
 
-        public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
+        public async Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession)gpUserSession;
+            var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {
+                EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+                
                 _logger.LogInformation("Creating patient record api tasks");
-                var medicationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Medication);
+                var medicationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Medication);
 
-                var allergiesTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Allergies);
+                var allergiesTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Allergies);
 
-                var immunisationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Immunisations);
+                var immunisationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Immunisations);
 
-                var testResultsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.TestResults);
+                var testResultsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.TestResults);
 
-                var problemsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Problems);
+                var problemsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Problems);
 
-                var consultationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Consultations);
+                var consultationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Consultations);
 
-                var documentsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken, 
-                  emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Documents);
+                var documentsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Documents);
 
                 await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask, documentsTask);
                 _logger.LogInformation("Patient record tasks completed");

@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
             
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_gpUserSession);
+            var result = await _systemUnderTest.GetMyRecord(new GpLinkedAccountModel(_gpUserSession));
 
             // Assert
             _tppClient.Verify(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()));

@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK));
                 
             _mockEmisClient
-                .Setup(x => x.AppointmentSlotsGet(It.IsAny<EmisHeaderParameters>(), It.IsAny<SlotsGetQueryParameters>()))
+                .Setup(x => x.AppointmentSlotsGet(It.IsAny<EmisRequestParameters>(), It.IsAny<SlotsGetQueryParameters>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
 
@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentSlotGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK));
 
             _mockEmisClient
-                .Setup(x => x.AppointmentSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(), It.IsAny<SlotsMetadataGetQueryParameters>()))
+                .Setup(x => x.AppointmentSlotsMetadataGet(It.IsAny<EmisRequestParameters>(), It.IsAny<SlotsMetadataGetQueryParameters>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
 
@@ -172,7 +172,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             _mockEmisClient
-                .Setup(x => x.PracticeSettingsGet(It.IsAny<EmisHeaderParameters>(), It.IsAny<string>()))
+                .Setup(x => x.PracticeSettingsGet(It.IsAny<EmisRequestParameters>(), It.IsAny<string>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
 
@@ -437,7 +437,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private void MockEmisClientPracticeSettingsGetMethod(
             EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse> response)
         {
-            _mockEmisClient.Setup(x => x.PracticeSettingsGet(It.Is<EmisHeaderParameters>(p =>
+            _mockEmisClient.Setup(x => x.PracticeSettingsGet(It.Is<EmisRequestParameters>(p =>
                     p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
                     && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)), _emisUserSession.OdsCode))
                 .ReturnsAsync(response)
@@ -448,7 +448,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentSlotsGet(
-                    It.Is<EmisHeaderParameters>(p =>
+                    It.Is<EmisRequestParameters>(p =>
                         p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
                         && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
                     It.Is<SlotsGetQueryParameters>(p =>
@@ -466,7 +466,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentSlotsMetadataGet(
-                        It.Is<EmisHeaderParameters>(p =>
+                        It.Is<EmisRequestParameters>(p =>
                             p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
                             && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
                         It.Is<SlotsMetadataGetQueryParameters>(p =>
@@ -483,10 +483,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private void MockEmisDemographicsGetMethod(EmisClient.EmisApiObjectResponse<DemographicsGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.DemographicsGet(
-                    It.Is<EmisHttpRequestData>(
-                        e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
-                             e.HeaderParameters.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
-                             e.HeaderParameters.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal))))
+                    It.Is<EmisRequestParameters>(
+                    e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
+                         e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal))))
                 .ReturnsAsync(response).Verifiable();
         }
     }

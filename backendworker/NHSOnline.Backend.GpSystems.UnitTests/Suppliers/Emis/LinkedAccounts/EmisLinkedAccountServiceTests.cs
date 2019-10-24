@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             _emisClient.Setup(x => x.MeSettingsGet(proxyAccountToUse.UserPatientLinkToken,
-                It.Is<EmisHeaderParameters>(e =>
+                It.Is<EmisRequestParameters>(e =>
                     string.Equals(e.SessionId, _emisUserSession.SessionId, StringComparison.Ordinal) &&
                     string.Equals(e.EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal))))
                 .ReturnsAsync(settingsResult)
@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.InternalServerError);
 
             _emisClient.Setup(x => x.MeSettingsGet(proxyAccountToUse.UserPatientLinkToken,
-                It.Is<EmisHeaderParameters>(e =>
+                It.Is<EmisRequestParameters>(e =>
                     string.Equals(e.SessionId, _emisUserSession.SessionId, StringComparison.Ordinal) &&
                     string.Equals(e.EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal))))
                 .ReturnsAsync(settingsResult)

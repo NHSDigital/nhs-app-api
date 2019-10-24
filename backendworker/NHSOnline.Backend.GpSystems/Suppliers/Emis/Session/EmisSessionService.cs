@@ -108,13 +108,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                     PrescriptionSpecialRequestNecessity = Necessity.Optional
                 };
 
-                var headerParams = new EmisHeaderParameters(session);
+                var emisRequestParameters = new EmisRequestParameters(session);
 
                 var either = EmisConnectionTokenParser.Parse(connectionToken);
                 var accessIdentityGuid = either.Match(guid => guid, ct => ct.AccessIdentityGuid);
 
                 var sessionRequestTask = SendSessionsRequest(endUserSessionResponse.EndUserSessionId, accessIdentityGuid, odsCode);
-                var practiceSettingsTask =  _emisClient.PracticeSettingsGet(headerParams, odsCode);
+                var practiceSettingsTask =  _emisClient.PracticeSettingsGet(emisRequestParameters, odsCode);
                 await Task.WhenAll(sessionRequestTask, practiceSettingsTask);
 
                 try

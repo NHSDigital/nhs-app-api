@@ -52,9 +52,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                 EndUserSessionId = endUserSessionId,
             };
 
-            var headerParams = new EmisHeaderParameters(emisUserSession);
+            var emisRequestParameters = new EmisRequestParameters(emisUserSession);
 
-            var linkageResponse = await _emisClient.VerificationPost(headerParams, addVerificationRequest);
+            var linkageResponse = await _emisClient.VerificationPost(emisRequestParameters, addVerificationRequest);
 
             return linkageResponse;
         }
@@ -74,9 +74,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                 EndUserSessionId = endUserSessionId,
             };
 
-            var headerParams = new EmisHeaderParameters(emisUserSession);
+            var emisRequestParameters = new EmisRequestParameters(emisUserSession);
 
-            var createNhsUserResponse = await _emisClient.NhsUserPost(headerParams, request);
+            var createNhsUserResponse = await _emisClient.NhsUserPost(emisRequestParameters, request);
 
             return createNhsUserResponse;
         }

@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             {
                 var settings = await _emisClient.MeSettingsGet(
                     tempProxyUserSession.UserPatientLinkToken,
-                    new EmisHeaderParameters(tempProxyUserSession));
+                    new EmisRequestParameters(tempProxyUserSession));
 
                 _logger.LogInformation($"Finished call to {nameof(_emisClient.MeSettingsGet)}");
 

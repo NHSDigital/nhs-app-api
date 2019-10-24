@@ -28,15 +28,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 _logger.LogEnter();
 
                 var emisUserSession = (EmisUserSession)gpUserSession;
-                var response = await _emisClient.DemographicsGet(new EmisHttpRequestData
-                {
-                    UserPatientLinkToken = emisUserSession.UserPatientLinkToken,
-                    HeaderParameters = new EmisHeaderParameters
+                var response = await _emisClient.DemographicsGet(
+                    new EmisRequestParameters
                     {
+                        UserPatientLinkToken = emisUserSession.UserPatientLinkToken,
                         SessionId = emisUserSession.SessionId,
                         EndUserSessionId = emisUserSession.EndUserSessionId,
-                    }
-                });
+                        
+                    });
 
                 if (response.HasSuccessResponse)
                 {

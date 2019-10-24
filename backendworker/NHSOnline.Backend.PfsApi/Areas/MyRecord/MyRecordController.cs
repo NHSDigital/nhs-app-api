@@ -8,6 +8,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
@@ -32,10 +33,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMyRecord()
+        public async Task<IActionResult> GetMyRecord([FromHeader(Name=PatientId)] Guid patientId)
         {   
             _logger.LogEnter();
-            
+            _logger.LogInformation($"{nameof(GetMyRecord)} with patientId {patientId}");
+   
             var userSession = HttpContext.GetUserSession();
             
             // Audit attempt made to view patient record
@@ -46,8 +48,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetPatientRecordService();
 
+            var gpLinkedAccountUserSession = new GpLinkedAccountModel(
+                userSession.GpUserSession, patientId
+            );
             _logger.LogInformation("Fetching patient record");
-            var result = await patientRecordService.GetMyRecord(userSession.GpUserSession);
+            var result = await patientRecordService.GetMyRecord(gpLinkedAccountUserSession);
             
             // Audit result of attempt to view patient record    
             await result.Accept(new MyRecordAuditingVisitor(_auditor, _logger));

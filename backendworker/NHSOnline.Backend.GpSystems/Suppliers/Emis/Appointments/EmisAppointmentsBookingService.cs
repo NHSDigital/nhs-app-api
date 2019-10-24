@@ -33,9 +33,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 }
 
                 var postRequest = new BookAppointmentSlotPostRequest(emisUserSession.UserPatientLinkToken, request);
-                var emisHeaders = new EmisHeaderParameters(emisUserSession);
+                var emisRequestParameters = new EmisRequestParameters(emisUserSession);
 
-                var response = await _emisClient.AppointmentsPost(emisHeaders, postRequest);
+                var response = await _emisClient.AppointmentsPost(emisRequestParameters, postRequest);
                 return InterpretAppointmentsPostResponse(response);
             }
             catch (HttpRequestException exception)
