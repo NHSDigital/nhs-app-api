@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@id/header_view_switcher"
         app:layout_constraintVertical_bias="1.0">
 
-        <WebView
+        <com.nhs.online.nhsonline.web.NhsWebView
             android:id="@+id/webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -151,6 +151,8 @@
     <string name="UpdateHeader">You need to update the NHS App</string>
     <string name="UpdateDesc">You won\'t be able to use it until you do.</string>
     <string name="UpdateNativeLink">&lt;a href=\"market://details?id=com.nhs.online.nhsonline\">Click here to update&lt;/a></string>
+    <string name="OverlayDetectedHeader">Screen overlay detected</string>
+    <string name="OverlayDetectedContent">Sorry, you cannot use the NHS App because other apps are overlaying the screen. Turn off the overlaying apps to use the NHS App.</string>
     <string name="Close">Close</string>
 
     <string name="locale_language">en</string>
