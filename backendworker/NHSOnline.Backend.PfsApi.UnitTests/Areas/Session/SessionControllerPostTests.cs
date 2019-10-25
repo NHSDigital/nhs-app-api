@@ -131,11 +131,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _serviceJourneyRulesConfigResult =
                 new ServiceJourneyRulesConfigResult.Success(_serviceJourneyRulesResponse);
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true));
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode));
 
             _mockServiceJourneyRulesService
                 .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true))
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult));
 
             _userSession = new UserSession
@@ -518,7 +518,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockServiceJourneyRulesService
                 .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true))
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
 
@@ -569,7 +569,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockServiceJourneyRulesService
                 .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, true))
+                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
 
@@ -672,31 +672,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockAuditor.VerifyAll();
             _mockLogger.VerifyAll();
             _mockServiceJourneyRulesService.VerifyAll();
-        }
-
-        [DataRow(true, true, true)]
-        [DataRow(true, false, false)]
-        [DataRow(false, true, false)]
-        [DataRow(false, false, false)]
-        [DataTestMethod]
-        public async Task Post_VerifyCorrectLinkedAccountsValuePassedToServiceJourneyRulesService
-            (bool proxyEnabledFeatureToggle, bool hasLinkedAccounts, bool expectedValue)
-        {
-            // Arrange
-            _sessionConfigSettings.ProxyEnabled = proxyEnabledFeatureToggle;
-            _userSession.GpUserSession.HasLinkedAccounts = hasLinkedAccounts;
-            
-            _mockServiceJourneyRulesService
-                .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode, expectedValue))
-                .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
-                .Verifiable();
-            
-            // Act
-            await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockServiceJourneyRulesService.Verify();
         }
         
         [TestMethod]

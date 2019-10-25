@@ -46,7 +46,7 @@ describe('linked profile is there', () => {
         trackButtonClick: jest.fn(),
       };
       wrapper = mountPage();
-      $store.getters['serviceJourneyRules/hasLinkedAccountsEnabled'] = true;
+      $store.getters['linkedAccounts/hasLinkedAccounts'] = true;
     });
 
     it('first linked user name and dob is visible', () => {

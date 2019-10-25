@@ -65,8 +65,6 @@ components:
               type: bool
             userInfo:
               type: bool
-            hasLinkedAccounts:
-              type: bool
     defaultProvider:
       type: object
       properties:
@@ -122,9 +120,11 @@ components:
           enum:
           - 1
           - 2
-    PatientIdResponse:
+    LinkedAccountsConfigResponse:
       type: object
       properties:
         id:
           type: string
           description: The guid of the current user
+        hasLinkedAccounts:
+          type: bool

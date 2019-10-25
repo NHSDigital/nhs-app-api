@@ -18,6 +18,7 @@ import {
 const getWebVersion = get('store.state.appVersion.webVersion');
 const getNativeVersion = get('store.state.appVersion.nativeVersion');
 const getPlatform = get('store.state.device.source');
+const getPatientId = get('store.state.linkedAccounts.config.patientId');
 
 /**
  * {{swagger.info.description}}
@@ -156,8 +157,9 @@ class NHSOnlineApi {
           }
         }
 
-        if (this.store.state && this.store.state.serviceJourneyRules) {
-          headers['NHSO-Patient-Id'] = this.store.state.serviceJourneyRules.patientGuid;
+        const patientId = getPatientId(this);
+        if (patientId) {
+          headers['NHSO-Patient-Id'] = patientId;
         }
 
         const resolve = ({

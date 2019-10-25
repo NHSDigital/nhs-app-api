@@ -44,13 +44,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 await _auditor.Audit(AuditingOperations.GetServiceJourneyRulesAuditTypeRequest,
                     "Attempting to get service journey rules");
 
-                var userSession = HttpContext.GetUserSession();
-                var odsCode = userSession.GpUserSession.OdsCode;
-                var enableLinkedAccounts = _sessionSettings.ProxyEnabled && userSession.GpUserSession.HasLinkedAccounts;
+                var odsCode = HttpContext.GetUserSession().GpUserSession.OdsCode;
 
-                _logger.LogInformation($"Fetching Service Journey Rules for {userSession.GpUserSession.OdsCode}");
+                _logger.LogInformation($"Fetching Service Journey Rules for {odsCode}");
                 
-                var result = await _serviceJourneyRulesService.GetServiceJourneyRulesForOdsCode(odsCode, enableLinkedAccounts);
+                var result = await _serviceJourneyRulesService.GetServiceJourneyRulesForOdsCode(odsCode);
 
                 return result.Accept(new ServiceJourneyRulesGetResultVisitor());
             }
@@ -62,16 +60,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         [HttpGet]
         [Route("patient/configuration")]
-        public async Task<IActionResult> GetPatientGuid()
+        public async Task<IActionResult> GetLinkedAccountPatientConfig()
         {
             await _auditor.Audit(AuditingOperations.GetPatientGuid,"Attempting to get Guid for patient");
 
-            GetPatientGuidResult result = new GetPatientGuidResult.Success(new PatientIdResponse
+            var userSession = HttpContext.GetUserSession();
+            var enableLinkedAccounts = _sessionSettings.ProxyEnabled && userSession.GpUserSession.HasLinkedAccounts;
+
+            LinkedAccountsConfigResult result = new LinkedAccountsConfigResult.Success(new LinkedAccountsConfigResponse
             {
-                Id = HttpContext.GetUserSession().GpUserSession.Id      
+                Id = userSession.GpUserSession.Id,
+                HasLinkedAccounts = enableLinkedAccounts
             });
             
-            return result.Accept(new PatientGuidResultVisitor());
+            return result.Accept(new LinkedAccountsConfigResultVisitor());
         }
         
     }

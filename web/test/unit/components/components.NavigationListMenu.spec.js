@@ -5,7 +5,7 @@ const mountComponent = ({ isEnabled }) =>
   mount(NavigationListMenu, {
     $store: createStore({
       getters: {
-        'serviceJourneyRules/hasLinkedAccountsEnabled': isEnabled,
+        'linkedAccounts/hasLinkedAccounts': isEnabled,
       },
     }),
   });

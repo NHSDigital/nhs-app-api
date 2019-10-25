@@ -5,20 +5,24 @@ import { AUTH_RETURN, APPOINTMENTS } from '@/lib/routes';
 describe('middleware/serviceJourneyRules', () => {
   let store;
 
-  const callServiceJourneyRules = async ({ routeName, isLoggedIn, isLoaded }) => {
-    store = {
-      getters: {
-        'session/isLoggedIn': () => isLoggedIn,
-      },
-      dispatch: jest.fn(),
-      state: {
-        serviceJourneyRules: initialState(),
-      },
-    };
+  const callServiceJourneyRules
+   = async ({ routeName, isLoggedIn, isLoaded, linkedAccountsConfigLoaded }) => {
+     store = {
+       getters: {
+         'session/isLoggedIn': () => isLoggedIn,
+       },
+       dispatch: jest.fn(),
+       state: {
+         serviceJourneyRules: initialState(),
+         linkedAccounts: initialState(),
+       },
+     };
 
-    store.state.serviceJourneyRules.isLoaded = isLoaded;
-    await serviceJourneyRules({ route: { name: routeName }, store });
-  };
+     store.state.serviceJourneyRules.isLoaded = isLoaded;
+     store.state.linkedAccounts.config = {};
+     store.state.linkedAccounts.config.hasLoaded = linkedAccountsConfigLoaded;
+     await serviceJourneyRules({ route: { name: routeName }, store });
+   };
 
   describe('anonymous path', () => {
     beforeEach(async () => {
@@ -26,6 +30,7 @@ describe('middleware/serviceJourneyRules', () => {
         routeName: AUTH_RETURN.name,
         isLoggedIn: true,
         isLoaded: false,
+        linkedAccountsConfigLoaded: false,
       });
     });
 
@@ -40,6 +45,7 @@ describe('middleware/serviceJourneyRules', () => {
         routeName: APPOINTMENTS.name,
         isLoggedIn: false,
         isLoaded: false,
+        linkedAccountsConfigLoaded: false,
       });
     });
 
@@ -54,6 +60,7 @@ describe('middleware/serviceJourneyRules', () => {
         routeName: APPOINTMENTS.name,
         isLoggedIn: true,
         isLoaded: true,
+        linkedAccountsConfigLoaded: true,
       });
     });
 
@@ -68,6 +75,7 @@ describe('middleware/serviceJourneyRules', () => {
         routeName: APPOINTMENTS.name,
         isLoggedIn: true,
         isLoaded: false,
+        linkedAccountsConfigLoaded: false,
       });
     });
 

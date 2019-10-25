@@ -7,11 +7,12 @@ import {
   CLEAR_SELECTED_LINKED_ACCOUNT,
   CLEAR_LINKED_ACCOUNTS,
   LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
+  SET_LINKED_ACCOUNTS_CONFIG,
 } from './mutation-types';
 
 export default {
   load({ commit }) {
-    this.dispatch('linkedAccounts/init');
+    this.dispatch('linkedAccounts/clearLinkedAccounts');
     return this.app.$http
       .getV1PatientLinkedAccounts()
       .then((data) => {
@@ -20,6 +21,12 @@ export default {
       .finally(() => {
         this.dispatch('device/unlockNavBar');
       });
+  },
+  async initialiseConfig({ commit }) {
+    const patientConfigResponse = await this.app.$http.getV1PatientConfiguration();
+    if (patientConfigResponse) {
+      commit(SET_LINKED_ACCOUNTS_CONFIG, patientConfigResponse.response);
+    }
   },
   init({ commit }) {
     commit(INIT);

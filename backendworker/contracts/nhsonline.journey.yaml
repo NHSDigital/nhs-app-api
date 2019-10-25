@@ -33,4 +33,4 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "servicejourneyrules.yaml#/components/schemas/PatientIdResponse"
+                $ref: "servicejourneyrules.yaml#/components/schemas/LinkedAccountsConfigResponse"

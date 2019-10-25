@@ -31,9 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
        }
 
        [TestMethod]
-       [DataRow(true)]
-       [DataRow(false)]
-       public async Task GetServiceJourneyRulesForOdsCode_ValidRequest_ReturnsSuccessResult(bool hasLinkedAccounts)
+       public async Task GetServiceJourneyRulesForOdsCode_ValidRequest_ReturnsSuccessResult()
        {
            // Arrange
            _serviceJourneyRulesClient.Setup(x => x.GetServiceJourneyRules(DefaultOdsCode))
@@ -43,13 +41,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                });
 
            // Act
-           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode, hasLinkedAccounts);
+           var result = await _systemUnderTest.GetServiceJourneyRulesForOdsCode(DefaultOdsCode);
 
            // Assert
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.Success>();
-           var serviceJourneyRulesResponse = ((ServiceJourneyRulesConfigResult.Success) result).Response;
 
-           Assert.AreEqual(hasLinkedAccounts, serviceJourneyRulesResponse.Journeys.HasLinkedAccounts);
        }
 
        [TestMethod]

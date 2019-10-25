@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     hasLinkedProfiles() {
-      return this.$store.getters['serviceJourneyRules/hasLinkedAccountsEnabled'];
+      return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
     },
   },
 };

@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
             _logger = logger;
         }
 
-        public async Task<ServiceJourneyRulesConfigResult> GetServiceJourneyRulesForOdsCode(string odsCode, bool hasLinkedAccounts = false)
+        public async Task<ServiceJourneyRulesConfigResult> GetServiceJourneyRulesForOdsCode(string odsCode)
         {
             _logger.LogEnter();
             try
@@ -26,7 +26,6 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 
                 if (result.HasSuccessResponse && result.Body != null)
                 {
-                    result.Body.Journeys.HasLinkedAccounts = hasLinkedAccounts;
                     return new ServiceJourneyRulesConfigResult.Success(result.Body);
                 }
 

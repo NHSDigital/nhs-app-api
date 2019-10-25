@@ -7,6 +7,7 @@ import {
   CLEAR_SELECTED_LINKED_ACCOUNT,
   CLEAR_LINKED_ACCOUNTS,
   LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
+  SET_LINKED_ACCOUNTS_CONFIG,
   initialState,
 } from './mutation-types';
 
@@ -44,5 +45,10 @@ export default {
   },
   [LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY](state, data) {
     Object.assign(state.selectedLinkedAccount, data);
+  },
+  [SET_LINKED_ACCOUNTS_CONFIG](state, config) {
+    state.config.hasLoaded = true;
+    state.config.patientId = config.id;
+    state.config.hasLinkedAccounts = config.hasLinkedAccounts;
   },
 };

@@ -24,8 +24,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         
         public bool? UserInfo { get; set; }
 
-        public bool HasLinkedAccounts { get; set; }
-
         public Journeys Clone() => new Journeys
         {
             Appointments = Appointments?.Clone(),
@@ -37,7 +35,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Notifications = Notifications,
             Messaging = Messaging,
             UserInfo = UserInfo,
-            HasLinkedAccounts = HasLinkedAccounts
         };
 
         public Journeys AddSupplier(Supplier supplier)

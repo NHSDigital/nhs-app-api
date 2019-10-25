@@ -205,10 +205,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             // Get Service Journey Rules
             _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.OdsCode}");
 
-            var enableLinkedAccounts = _sessionSettings.ProxyEnabled && userSession.GpUserSession.HasLinkedAccounts;
-
             var serviceJourneyRulesResultVisited =
-                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.OdsCode, enableLinkedAccounts);
+                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.OdsCode);
 
             if (!serviceJourneyRulesResultVisited.ServiceJourneyRulesRetrieved)
             {
@@ -437,9 +435,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 : Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
         }
 
-        private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode, bool enableLinkedAccounts)
+        private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)
         {
-            var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode, enableLinkedAccounts);
+            var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode);
             return serviceJourneyRulesConfig.Accept(new ServiceJourneyRulesConfigResultVisitor());
         }
 

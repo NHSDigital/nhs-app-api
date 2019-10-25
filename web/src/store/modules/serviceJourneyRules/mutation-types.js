@@ -10,8 +10,6 @@ export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const NOTIFICATIONS = 'notifications';
 export const SET_RULES = 'SET_RULES';
 export const ONLINE_CONSULTATIONS = 'onlineConsultations';
-export const LINKED_ACCOUNTS = 'hasLinkedAccounts';
-export const SET_PATIENT_GUID = 'SET_PATIENT_GUID';
 
 export const initialState = () => ({
   isLoaded: false,
@@ -34,7 +32,5 @@ export const initialState = () => ({
     prescriptions: {
       provider: IM1_PROVIDER,
     },
-    hasLinkedAccounts: false,
   },
-  patientGuid: '',
 });
