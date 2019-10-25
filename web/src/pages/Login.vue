@@ -158,10 +158,7 @@ export default {
     }
 
     if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.hideHeader();
-      NativeCallbacks.hideMenuBar();
-      NativeCallbacks.hideHeaderSlim();
-      NativeCallbacks.hideWhiteScreen();
+      NativeCallbacks.hideElements();
       if (throttlingEnabled && betaCookie && betaCookie.Skipped) {
         NativeCallbacks.storeBetaCookie();
       }

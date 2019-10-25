@@ -26,6 +26,18 @@ export default {
     return false;
   },
 
+  configureWebContext(helpUrl, reloadPath) {
+    const app = window.nativeApp;
+    this.setHelpUrl(helpUrl); // For backwards compatability
+
+    if (app && app.configureWebContext) {
+      app.configureWebContext(helpUrl, reloadPath);
+      return true;
+    }
+
+    return false;
+  },
+
   fetchNativeAppVersion() {
     const app = window.nativeApp;
     if (app && app.fetchNativeAppVersion) {
@@ -52,6 +64,13 @@ export default {
     return false;
   },
 
+  hideElements() {
+    this.hideHeader();
+    this.hideHeaderSlim();
+    this.hideMenuBar();
+    this.hideWhiteScreen();
+  },
+
   hideHeader() {
     const app = window.nativeApp;
     if (app && app.hideHeader) {
@@ -61,19 +80,15 @@ export default {
     return false;
   },
 
+  hideHeaders() {
+    this.hideHeader();
+    this.hideHeaderSlim();
+  },
+
   hideHeaderSlim() {
     const app = window.nativeApp;
     if (app && app.hideHeaderSlim) {
       app.hideHeaderSlim();
-      return true;
-    }
-    return false;
-  },
-
-  showMenuBar() {
-    const app = window.nativeApp;
-    if (app && app.showMenuBar) {
-      app.showMenuBar();
       return true;
     }
     return false;
@@ -151,19 +166,9 @@ export default {
     return false;
   },
 
-  configureWebContext(helpUrl, reloadPath) {
-    const app = window.nativeApp;
-    this.setHelpUrl(helpUrl); // For backwards compatability
-
-    if (app && app.configureWebContext) {
-      app.configureWebContext(helpUrl, reloadPath);
-      return true;
-    }
-
-    return false;
-  },
-
-  // Deprecated, here for backwards compatability
+  /**
+   * @deprecated since version 1.21, here for backwards compatability
+   * */
   setHelpUrl(url) {
     const app = window.nativeApp;
     if (app && app.setHelpUrl) {
@@ -195,6 +200,15 @@ export default {
     const app = window.nativeApp;
     if (app && app.showHeaderSlim) {
       app.showHeaderSlim();
+      return true;
+    }
+    return false;
+  },
+
+  showMenuBar() {
+    const app = window.nativeApp;
+    if (app && app.showMenuBar) {
+      app.showMenuBar();
       return true;
     }
     return false;

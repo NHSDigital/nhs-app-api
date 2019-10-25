@@ -64,17 +64,17 @@
 </template>
 
 <script>
+import moment from 'moment';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import LoginBanner from '@/components/LoginBanner';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import HelpIcon from '@/components/icons/HelpIcon';
+import NativeCallbacks from '@/services/native-app';
 import NhsLogo from '@/components/icons/NhsLogo';
 import { setCookie } from '@/lib/cookie-manager';
 import { GP_FINDER_RESULTS, LOGIN } from '@/lib/routes';
-import NativeCallbacks from '@/services/native-app';
-import moment from 'moment';
 
 export default {
   components: {
@@ -105,15 +105,12 @@ export default {
   },
   beforeCreate() {
     if (process.client) {
-      NativeCallbacks.hideHeader();
-      NativeCallbacks.hideHeaderSlim();
+      NativeCallbacks.hideHeaders();
     }
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.hideHeader();
-      NativeCallbacks.hideHeaderSlim();
-      NativeCallbacks.hideWhiteScreen();
+      NativeCallbacks.hideElements();
     } else {
       window.scrollTo(0, 0);
     }
