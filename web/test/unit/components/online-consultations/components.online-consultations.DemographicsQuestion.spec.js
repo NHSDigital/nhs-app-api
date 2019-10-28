@@ -28,7 +28,6 @@ const mountComponent = ({
     propsData: {
       provider: 'stubs',
       serviceDefinitionId: 'NHS_ADMIN',
-      checkboxLabel: 'I consent',
     },
     slots,
     methods,
@@ -40,7 +39,6 @@ describe('demographics question', () => {
     each([
       'provider',
       'serviceDefinitionId',
-      'checkboxLabel',
     ]).it('is required and is a String', (propName) => {
       const component = mountComponent();
       const prop = component.vm.$options.props[propName];
@@ -49,62 +47,25 @@ describe('demographics question', () => {
       expect(prop.type).toBe(String);
     });
   });
-  describe('computed props', () => {
-    describe('demographicsAnswer', () => {
-      it('will read from the olc store answer', () => {
-        // Arrange
-        const $store = defaultStore();
-        $store.state.onlineConsultations.answer = ['CHOICE_1'];
-
-        // Act
-        const component = mountComponent({
-          $store,
-        });
-
-        // Assert
-        expect(component.vm.demographicsAnswer).toEqual(['CHOICE_1']);
-      });
-      it('will update olc store answer when set', () => {
-        // Arrange
-        const $store = defaultStore();
-        $store.state.onlineConsultations.answer = ['CHOICE_1'];
-        const component = mountComponent({
-          $store,
-        });
-
-        // Act
-        component.setData({ demographicsAnswer: ['CHOICE_2'] });
-
-        // Assert
-        expect(component.vm.$store.dispatch).toHaveBeenCalledTimes(1);
-        expect(component.vm.$store.dispatch).toHaveBeenCalledWith('onlineConsultations/setAnswer', ['CHOICE_2']);
-      });
-    });
-  });
   describe('methods', () => {
     describe('demographicsContinueClicked', () => {
       afterEach(() => {
         EventBus.$emit.mockClear();
         NativeApp.resetPageFocus.mockClear();
       });
-      each([{
-        option: 'NHSAPP_DEMOGRAPHICS_CONSENT_GIVEN',
-        consentGiven: true,
-      }, {
-        option: 'ANOTHER_NON_CONSENT_OPTION',
-        consentGiven: false,
-      }]).it('will update store consent given if NHSAPP_DEMOGRAPHICS_CONSENT_GIVEN selected and dispatch getServiceDefinition action', async ({ option, consentGiven }) => {
+      it('will update store consent given if isAccepted is true and dispatch getServiceDefinition action', async () => {
         // Arrange
         const $store = defaultStore();
-        $store.state.onlineConsultations.answer = [option];
         const component = mountComponent({ $store });
+
+        component.setData({ isDemographicsAccepted: true });
 
         // Act
         await component.vm.demographicsContinueClicked();
 
         // Assert
         expect($store.dispatch).toHaveBeenCalledTimes(2);
-        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setDemographicsConsentGiven', consentGiven);
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setDemographicsConsentGiven', true);
         expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition', {
           provider: 'stubs',
           serviceDefinitionId: 'NHS_ADMIN',
@@ -135,6 +96,24 @@ describe('demographics question', () => {
         expect(scrollTo).toHaveBeenCalledTimes(1);
       });
     });
+    describe('selectValueChanged', () => {
+      it('will dispatch the correct code when isDemographicsAccepted is true', () => {
+        const $store = defaultStore();
+        const component = mountComponent({ $store });
+        component.setData({ isDemographicsAccepted: false, code: 'DEMOGRAPHICS_CODE' });
+        component.vm.selectValueChanged();
+
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setAnswer', 'DEMOGRAPHICS_CODE');
+      });
+      it('will dispatch undefined when isDemographicsAccepted is false', () => {
+        const $store = defaultStore();
+        const component = mountComponent({ $store });
+        component.setData({ isDemographicsAccepted: true });
+        component.vm.selectValueChanged();
+
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setAnswer', undefined);
+      });
+    });
   });
   describe('template', () => {
     it('have a slot for question text, and place in the Question component', () => {
@@ -152,20 +131,16 @@ describe('demographics question', () => {
       expect(questionText).toBeDefined();
       expect(questionText.text()).toEqual('This is the question text');
     });
-    it('will use a QuestionMultipleChoice for presenting the choice option', () => {
+    it('will use a GenericCheckbox for presenting the choice option', () => {
       // Arrange
       const component = mountComponent();
 
       // Act
-      const multipleChoice = component.find('question-multiple-choice-stub').vm;
+      const multipleChoice = component.find('generic-checkbox-stub').vm;
 
       // Assert
-      expect(multipleChoice.options).toEqual([{
-        label: 'I consent',
-        code: 'NHSAPP_DEMOGRAPHICS_CONSENT_GIVEN',
-        required: false,
-      }]);
       expect(multipleChoice.name).toEqual('NHSAPP_DEMOGRAPHICS_CONSENT');
+      expect(multipleChoice.required).toEqual(false);
     });
     it('will wrap the question multiple choice with a nojsform with a hidden input to identify consent question on postback', () => {
       // Arrange
@@ -176,7 +151,7 @@ describe('demographics question', () => {
       const hiddenInput = noJsForm.find('input[type=hidden]').element;
 
       // Assert
-      expect(noJsForm.find('question-multiple-choice-stub')).toBeDefined();
+      expect(noJsForm.find('generic-checkbox-stub')).toBeDefined();
       expect(hiddenInput.name).toEqual('ANSWERING_CONSENT_QUESTION');
       expect(hiddenInput.value).toEqual('true');
     });

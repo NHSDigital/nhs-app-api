@@ -492,6 +492,10 @@ export default {
     btnAccept: 'Continue',
   },
   onlineConsultations: {
+    demographics: {
+      checkboxLabel: 'Use my name, date of birth, NHS number and postal address with the online consultation service as described in the',
+      checkboxLink: 'NHS App privacy policy',
+    },
     validationErrors: {
       header: 'There\'s a problem',
       message: {
@@ -812,8 +816,7 @@ export default {
     gp_advice: {
       demographicsQuestion: {
         p1: 'It takes around 5 minutes to answer a few questions about your condition.',
-        p2: 'If you share personal information which we hold about you with the online consultation service, it can save you having to type it in.',
-        checkboxLabel: 'Share my name, date of birth, NHS number and postal address with the online consultation service.',
+        p2: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
       },
       errors: {
         pageTitle: 'Server error',
@@ -838,8 +841,7 @@ export default {
       demographicsQuestion: {
         p1: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
         p2: 'It takes around 5 minutes to answer a few questions.',
-        p3: 'If you share personal information which we hold about you with the online consultation service, it can save you having to type it in.',
-        checkboxLabel: 'Share my name, date of birth, NHS number and postal address with the online consultation service.',
+        p3: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
       },
       errors: {
         pageTitle: 'Server error',
@@ -1354,7 +1356,7 @@ export default {
     signOut: 'Log out',
   },
   externalServiceWarning: {
-    warningText: 'This GP service is provided by {providerName}',
+    warningText: 'This service is provided by your GP surgery',
   },
   pageHeaders: {
     home: 'Home',

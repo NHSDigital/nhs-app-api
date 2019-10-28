@@ -5,9 +5,24 @@
     </div>
     <no-js-form :value="noJsState" method="post">
       <input :name="answeringDemographicsName" value="true" type="hidden">
-      <question-multiple-choice v-model="demographicsAnswer"
-                                :options="demographicsQuestion.options"
-                                :name="demographicsQuestion.name"/>
+      <generic-checkbox :key="code"
+                        checkbox-id="demographics-checkbox"
+                        :name="name"
+                        :required="false"
+                        :value="code"
+                        @input="selectValueChanged()">
+        <span>
+          {{ $t('onlineConsultations.demographics.checkboxLabel') }}
+          <span>
+            <!-- opening and closing tag must be on one line to
+            avoid the inline-block white space issue - inline block
+            prevents font boosting - accessibility issue
+            -->
+            <a :href="this.$store.app.$env.PRIVACY_POLICY_URL"
+               target="_blank">{{ $t('onlineConsultations.demographics.checkboxLink') }}.</a>
+          </span>
+        </span>
+      </generic-checkbox>
       <generic-button :button-classes="['nhsuk-button']"
                       click-delay="short"
                       @click.prevent="demographicsContinueClicked">
@@ -20,8 +35,8 @@
 <script>
 import Question from '@/components/online-consultations/Question';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import QuestionMultipleChoice from '@/components/online-consultations/QuestionMultipleChoice';
 import GenericButton from '@/components/widgets/GenericButton';
+import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import {
   ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
@@ -35,7 +50,7 @@ export default {
   components: {
     Question,
     NoJsForm,
-    QuestionMultipleChoice,
+    GenericCheckbox,
     GenericButton,
   },
   props: {
@@ -47,22 +62,13 @@ export default {
       type: String,
       required: true,
     },
-    checkboxLabel: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
+      code: DEMOGRAPHICS_QUESTION_OPTION,
       answeringDemographicsName: ANSWERING_DEMOGRAPHICS_NAME,
-      demographicsQuestion: {
-        name: DEMOGRAPHICS_QUESTION_NAME,
-        options: [{
-          code: DEMOGRAPHICS_QUESTION_OPTION,
-          label: this.checkboxLabel,
-          required: false,
-        }],
-      },
+      name: DEMOGRAPHICS_QUESTION_NAME,
+      isDemographicsAccepted: false,
     };
   },
   computed: {
@@ -74,19 +80,19 @@ export default {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
-    demographicsAnswer: {
-      get() {
-        return this.$store.state.onlineConsultations.answer;
-      },
-      set(value) {
-        this.$store.dispatch('onlineConsultations/setAnswer', value);
-      },
-    },
   },
   methods: {
+    selectValueChanged() {
+      this.isDemographicsAccepted = !this.isDemographicsAccepted;
+      const code = (this.isDemographicsAccepted) ? this.code : undefined;
+      this.$store.dispatch('onlineConsultations/setAnswer', code);
+    },
+    stopProp(event) {
+      event.stopPropagation();
+    },
     async demographicsContinueClicked() {
       document.activeElement.blur();
-      const consentGiven = (this.demographicsAnswer || []).includes(DEMOGRAPHICS_QUESTION_OPTION);
+      const consentGiven = this.isDemographicsAccepted;
       await this.$store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
       await this.$store.dispatch('onlineConsultations/getServiceDefinition', {
         provider: this.provider,
@@ -106,5 +112,8 @@ export default {
 <style lang="scss">
   .demographicsQuestion p:not(:last-of-type) {
     margin-bottom: 1em;
+  }
+  .nhsuk-button {
+    margin-top: 1em;
   }
 </style>

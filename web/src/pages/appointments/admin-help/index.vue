@@ -30,8 +30,7 @@
 
         <demographics-question v-if="!demographicsQuestionAnswered"
                                :provider="provider"
-                               :service-definition-id="serviceDefinitionId"
-                               :checkbox-label="getDemographicsCheckboxLabel">
+                               :service-definition-id="serviceDefinitionId">
           <template>
             <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
             <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
@@ -83,11 +82,6 @@ export default {
     },
     getProviderName() {
       return this.$store.state.onlineConsultations.adminProviderName;
-    },
-    getDemographicsCheckboxLabel() {
-      return this.$t(
-        'appointments.admin_help.demographicsQuestion.checkboxLabel',
-      );
     },
   },
   async asyncData({ store, req }) {

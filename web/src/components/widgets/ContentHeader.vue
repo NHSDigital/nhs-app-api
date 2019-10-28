@@ -10,7 +10,7 @@
     <div :class="[$style[fixBreadCrumb ? 'native-padding' : '']]">
       <yellow-banner v-if="showBanner" id="yellow-banner">
         <p>
-          {{ $t('externalServiceWarning.warningText', {providerName: getProviderName}) }}
+          {{ $t('externalServiceWarning.warningText') }}
         </p>
       </yellow-banner>
       <div :class="['nhsuk-width-container']">

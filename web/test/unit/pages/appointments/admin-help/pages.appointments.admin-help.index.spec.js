@@ -362,12 +362,11 @@ describe('Admin Help page', () => {
         mountPage();
 
         // Act
-        const { provider, serviceDefinitionId, checkboxLabel } = page.find('div.demographicsQuestion').vm;
+        const { provider, serviceDefinitionId } = page.find('div.demographicsQuestion').vm;
 
         // Assert
         expect(provider).toEqual('stubs');
         expect(serviceDefinitionId).toEqual('NHS_ADMIN');
-        expect(checkboxLabel).toEqual('translate_appointments.admin_help.demographicsQuestion.checkboxLabel');
       });
       it('will display the warning followed by three demographics question paragraphs passed via slot', () => {
         // Arrange

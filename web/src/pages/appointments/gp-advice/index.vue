@@ -14,8 +14,7 @@
 
       <demographics-question v-else-if="!demographicsQuestionAnswered"
                              :provider="provider"
-                             :service-definition-id="serviceDefinitionId"
-                             :checkbox-label="getDemographicsCheckboxLabel">
+                             :service-definition-id="serviceDefinitionId">
         <template>
           <p>{{ $t('appointments.gp_advice.demographicsQuestion.p1') }}</p>
           <p>{{ $t('appointments.gp_advice.demographicsQuestion.p2') }}</p>
@@ -60,11 +59,6 @@ export default {
     },
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
-    },
-    getDemographicsCheckboxLabel() {
-      return this.$t(
-        'appointments.admin_help.demographicsQuestion.checkboxLabel',
-      );
     },
   },
   async asyncData({ store, req, redirect, route }) {
