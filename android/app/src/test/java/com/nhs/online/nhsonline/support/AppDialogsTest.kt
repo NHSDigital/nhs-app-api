@@ -52,7 +52,7 @@ class AppDialogsTest {
     @Test
     fun showOverlayDetectedDialog() {
         val expectedTitle = "Screen overlay detected"
-        val expectedPartMessageText = "other apps overlaying the screen"
+        val expectedPartMessageText = "other apps are overlaying the screen"
         appDialogs.showOverlayDetectedDialog()
         val overlayDialog = getCurrentActiveAlertDialog()
         val title = extractAlertDialogTitle(overlayDialog)
@@ -63,7 +63,7 @@ class AppDialogsTest {
     }
 
     @Test
-    fun sshowOverlayDetectedDialog_ClickingNegativeButton_FinishesActivity() {
+    fun showOverlayDetectedDialog_ClickingNegativeButton_FinishesActivity() {
         val spyActivity = spy(activity)
         appDialogs = AppDialogs(spyActivity)
         appDialogs.showOverlayDetectedDialog()
