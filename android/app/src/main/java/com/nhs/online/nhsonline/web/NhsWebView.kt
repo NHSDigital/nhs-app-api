@@ -6,18 +6,19 @@ import android.view.MotionEvent
 import android.webkit.WebView
 import com.nhs.online.nhsonline.activities.MainActivity
 
-class NhsWebView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : WebView(context, attrs, defStyleAttr) {
+ class NhsWebView : WebView {
+     constructor(context: Context) : super(context)
+     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    override fun onFilterTouchEventForSecurity(event: MotionEvent?): Boolean {
-        if(event != null && event.flags and MotionEvent.FLAG_WINDOW_IS_OBSCURED == MotionEvent.FLAG_WINDOW_IS_OBSCURED)
+     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr)
+
+     override fun onFilterTouchEventForSecurity(event: MotionEvent?): Boolean {
+         if(event != null && event.flags and MotionEvent.FLAG_WINDOW_IS_OBSCURED == MotionEvent.FLAG_WINDOW_IS_OBSCURED)
         {
             val activity = context as MainActivity
             activity.showOverlayDetectedDialog()
             return false
         }
-
-        return super.onFilterTouchEventForSecurity(event)
-    }
+         return super.onFilterTouchEventForSecurity(event)
+     }
 }
