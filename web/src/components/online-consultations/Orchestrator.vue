@@ -370,6 +370,9 @@ export default {
     &:hover {
       @include linkHoverStyle;
     }
-
   }
+
+ /deep/strong {
+  display: inline;
+ }
 </style>
