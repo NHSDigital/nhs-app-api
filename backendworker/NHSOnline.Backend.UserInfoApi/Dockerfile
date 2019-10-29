@@ -1,7 +1,7 @@
 ARG PROJECT_NAME=NHSOnline.Backend.UserInfoApi
 ARG PORT=8091
-ARG RUNTIME_IMAGE=mcr.microsoft.com/dotnet/core/runtime:2.1
-ARG SDK_IMAGE=mcr.microsoft.com/dotnet/core/sdk:2.1
+ARG RUNTIME_IMAGE=nhsapp.azurecr.io/nhsonline-dotnetcore-runtime
+ARG SDK_IMAGE=nhsapp.azurecr.io/nhsonline-dotnetcore-build
 ARG PROJECT_PLATFORM=linux-x64
 
 FROM ${RUNTIME_IMAGE} AS runtime
@@ -13,8 +13,7 @@ RUN apt-get update && \
       /var/lib/apt/lists/* \
       /var/log/* \
       /tmp/* \
-      /var/tmp/* && \
-    useradd -m aspnetcore
+      /var/tmp/* 
 
 FROM ${SDK_IMAGE} AS build
 RUN apt-get update && \
@@ -77,4 +76,4 @@ COPY --chown=aspnetcore:aspnetcore --from=publish /app .
 
 USER aspnetcore
 EXPOSE $PORT
-CMD exec dotnet ${PROJECT_NAME}.dll
+CMD sudo update-ca-certificates && exec dotnet ${PROJECT_NAME}.dll

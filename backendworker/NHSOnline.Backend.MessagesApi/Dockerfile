@@ -50,4 +50,4 @@ COPY --chown=aspnetcore:aspnetcore --from=publish /app .
 
 USER aspnetcore
 EXPOSE $PORT
-CMD exec dotnet ${PROJECT_NAME}.dll
+CMD sudo update-ca-certificates && exec dotnet ${PROJECT_NAME}.dll
