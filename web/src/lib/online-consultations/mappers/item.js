@@ -1,7 +1,21 @@
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import mapHtmlTags from '@/lib/online-consultations/mappers/html-tags';
 
-function getQuestion(item) {
+export function getConditionsList(questionnaire) {
+  try {
+    return questionnaire.item.map(item => ({
+      category: item.text,
+      items: item.item.map(condition => ({
+        id: condition.linkId,
+        title: condition.text,
+      })),
+    }));
+  } catch (e) {
+    return undefined;
+  }
+}
+
+export function getQuestion(item) {
   try {
     let { type } = item;
 
@@ -127,5 +141,3 @@ function getQuestion(item) {
     return undefined;
   }
 }
-
-export default getQuestion;

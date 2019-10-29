@@ -8,6 +8,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public string ServiceDefinition { get; set; }
 
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
+        public string ConditionsServiceDefinition { get; set; }
+
         public Cdss Clone() => MemberwiseClone() as Cdss;
     }
 }

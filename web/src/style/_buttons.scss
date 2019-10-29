@@ -1,6 +1,7 @@
 /** BUTTONS */
 @import './colours';
 @import './textstyles';
+@import './desktopWeb/accessibility';
 
 a.button {
   text-decoration: none;
@@ -96,4 +97,21 @@ a.button-desktop {
   width: auto;
   padding-left: 2em!important;
   padding-right: 2em!important;
+}
+
+button.link {
+  background: none;
+  border: none;
+  font-size: 1em;
+  margin: 0.5em 0;
+  color: $nhs_blue;
+  font-weight: bold;
+  
+  &:focus {
+    @include linkFocusStyle;
+  }
+
+  &:hover {
+    @include linkHoverStyle;
+  }
 }

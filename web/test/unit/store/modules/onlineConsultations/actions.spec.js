@@ -9,15 +9,18 @@ import {
   SET_REFERRAL_REQUESTS,
   SET_ADMIN_PROVIDER_NAME,
   SET_ADVICE_PROVIDER_NAME,
+  SET_CONDITIONS_LIST,
 } from '@/store/modules/onlineConsultations/mutation-types';
 import getParameters from '@/lib/online-consultations/mappers/parameters';
-import { getDataRequirements, getSessionId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/response';
-import getQuestion from '@/lib/online-consultations/mappers/item';
+import { getDataRequirements, getSessionId, getQuestionnaire, getQuestionnaireId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/response';
+import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappers/item';
+import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 import each from 'jest-each';
 
 jest.mock('@/lib/online-consultations/mappers/parameters');
 jest.mock('@/lib/online-consultations/mappers/response');
 jest.mock('@/lib/online-consultations/mappers/item');
+jest.mock('@/lib/online-consultations/constants/termsConditionsAnswers');
 
 const { getServiceDefinition, evaluateServiceDefinition, setProviderNames } = actions;
 
@@ -47,6 +50,7 @@ const rootState = {
       },
       cdssAdvice: {
         serviceDefinition: 'NHS_ADVICE',
+        conditionsServiceDefinition: 'NHS_CONDITION_LIST',
         provider: 'stubs',
       },
     },
@@ -241,7 +245,7 @@ describe('online consultations store actions', () => {
 
         // Assert
         expect(result).toBeUndefined();
-        expect(getParameters).toHaveBeenCalledWith(state, rootState);
+        expect(getParameters).toHaveBeenCalledWith(state, rootState, undefined);
         expect(getParameters).toHaveBeenCalledTimes(1);
         expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
         expect(store.dispatch).toHaveBeenCalledTimes(1);
@@ -253,11 +257,11 @@ describe('online consultations store actions', () => {
     describe('successfully get parameters from state', () => {
       let parameters;
       let request;
-      const actionParams = { provider: 'stubs', serviceDefinitionId: 'NHS_ADMIN', addJavascriptDisabledHeader: true };
+      let actionParams;
 
       beforeEach(() => {
         parameters = {
-          parameters: 'test',
+          parameter: ['test'],
         };
         request = {
           parameters,
@@ -265,6 +269,7 @@ describe('online consultations store actions', () => {
           provider: 'stubs',
           addJavascriptDisabledHeader: true,
         };
+        actionParams = { provider: 'stubs', serviceDefinitionId: 'NHS_ADMIN', addJavascriptDisabledHeader: true, answeringConditionsQuestion: false };
 
         getParameters.mockClear();
         getParameters.mockReturnValue(parameters);
@@ -375,19 +380,26 @@ describe('online consultations store actions', () => {
               getSessionId.mockClear();
               getQuestion.mockClear();
               getQuestionnaireItem.mockClear();
+              getQuestionnaire.mockClear();
+              getConditionsList.mockClear();
+              getQuestionnaireId.mockClear();
+              getTCsAnswerForProvider.mockClear();
             });
 
-            describe('cannot retrieve question or session id from response', () => {
+            describe('cannot retrieve either question or session id from response, as well as a list of conditions', () => {
               each([{
                 sessionId: undefined,
                 question: {},
+                conditionList: [],
               }, {
                 sessionId: 'session-id',
                 question: undefined,
+                conditionList: [],
               }, {
                 sessionId: undefined,
                 question: undefined,
-              }]).it('will dispatch clearAndSetError', ({ sessionId, question }) => {
+                conditionList: undefined,
+              }]).it('will dispatch clearAndSetError', ({ sessionId, question, conditionList }) => {
                 // Arrange
                 const expectedQuestionnaireItem = { item: 'value' };
                 const expectedResponse = { status: 'data-required' };
@@ -397,6 +409,7 @@ describe('online consultations store actions', () => {
                   );
                 getSessionId.mockReturnValue(sessionId);
                 getQuestion.mockReturnValue(question);
+                getConditionsList.mockReturnValue(conditionList);
                 getQuestionnaireItem.mockReturnValue(expectedQuestionnaireItem);
 
                 // Act
@@ -413,6 +426,67 @@ describe('online consultations store actions', () => {
               });
             });
 
+            describe('guidance response contains questionnaire matching conditionsServiceDefinition in SJR', () => {
+              it('will store list of service definitions in conditionList', () => {
+                // Arrange
+                const expectedConditionsList = [{
+                  category: 'Allergies',
+                  items: [{
+                    id: 'HAY',
+                    title: 'Hayfever',
+                  }, {
+                    id: 'URT',
+                    title: 'Urticaria',
+                  }],
+                }];
+                store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+                  .mockImplementation(
+                    () => Promise.resolve({ status: 'data-required' }),
+                  );
+                getQuestionnaireId.mockReturnValue('NHS_CONDITION_LIST');
+                getQuestionnaire.mockReturnValue({ id: 'NHS_CONDITION_LIST' });
+                getConditionsList.mockReturnValue(expectedConditionsList);
+
+                // Act
+                return evaluateServiceDefinition
+                  .call(store, { commit, state, rootState }, actionParams)
+                  .then(() => {
+                    // Assert
+                    expect(commit).toHaveBeenCalledWith(
+                      SET_CONDITIONS_LIST,
+                      expectedConditionsList,
+                    );
+                    expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+                  });
+              });
+            });
+
+            describe('evaluating a new service definition selected from conditionList', () => {
+              it('will add the terms and conditions answer to the fhir parameters and set the appropriate value for demographics consent', () => {
+                // Arrange
+                const expectedTCsAnswer = { termsAccepted: true };
+                const expectedRequest = { ...request, demographicsConsentGiven: false };
+                store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+                  .mockImplementation(
+                    () => Promise.resolve({ status: 'data-required' }),
+                  );
+                getTCsAnswerForProvider.mockReturnValue(expectedTCsAnswer);
+                actionParams.answeringConditionsQuestion = true;
+
+                // Act
+                return evaluateServiceDefinition
+                  .call(store, { commit, state, rootState }, actionParams)
+                  .then(() => {
+                    // Assert
+                    expect(getTCsAnswerForProvider).toHaveBeenCalledWith(actionParams.provider);
+                    expect(store.app.$cdsApi
+                      .postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                      .toHaveBeenCalledWith(expectedRequest);
+                    expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
+                  });
+              });
+            });
+
             describe('retrieves session id and question from response', () => {
               it('will commit session id and question to store', () => {
                 // Arrange
@@ -424,6 +498,7 @@ describe('online consultations store actions', () => {
                   .mockImplementation(
                     () => Promise.resolve(expectedResponse),
                   );
+                getQuestionnaire.mockReturnValue({});
                 getSessionId.mockReturnValue(expectedSessionId);
                 getQuestion.mockReturnValue(expectedQuestion);
                 getQuestionnaireItem.mockReturnValue(expectedQuestionnaireItem);

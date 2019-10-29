@@ -96,18 +96,19 @@ describe('my-record documents', () => {
     beforeEach(() => {
       next.mockClear();
     });
-    each([
-      '/login', '/logout',
-    ]).it('will not show header and menubar if going to LOGIN or LOGOUT routes', (to) => {
-      DocumentPage.beforeRouteLeave(to, undefined, next);
-      expect(NativeCallbacks.showHeader).not.toHaveBeenCalled();
-      expect(NativeCallbacks.showMenuBar).not.toHaveBeenCalled();
-      expect(next).toHaveBeenCalled();
-    });
+    each(['/login', '/logout'])
+      .it('will not show header and menubar if going to LOGIN or LOGOUT routes', (to) => {
+        DocumentPage.beforeRouteLeave({ path: to }, undefined, next);
+        expect(NativeCallbacks.showHeader).not.toHaveBeenCalled();
+        expect(NativeCallbacks.showMenuBar).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalled();
+      });
     it('will show header and menubar if not going to LOGIN or LOGOUT routes', () => {
-      DocumentPage.beforeRouteLeave('/appointments', undefined, next);
-      expect(NativeCallbacks.showHeader).not.toHaveBeenCalled();
-      expect(NativeCallbacks.showMenuBar).not.toHaveBeenCalled();
+      DocumentPage.beforeRouteLeave.call(
+        { navHidden: true }, { path: '/appointments' }, undefined, next,
+      );
+      expect(NativeCallbacks.showHeader).toHaveBeenCalled();
+      expect(NativeCallbacks.showMenuBar).toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
     });
   });

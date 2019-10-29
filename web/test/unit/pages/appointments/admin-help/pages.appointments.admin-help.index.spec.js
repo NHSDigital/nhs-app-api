@@ -15,36 +15,20 @@ describe('Admin Help page', () => {
   const redirect = jest.fn();
 
   const $store = {
-    app: {
-      $env: {
-        ONLINE_CONSULTATIONS_URL: 'www.google.co.uk',
-      },
-    },
+    app: { $env: { PRIVACY_POLICY_URL: 'www.google.co.uk' } },
     state: {
-      device: {
-        isNativeApp: true,
-      },
+      device: { isNativeApp: true },
       onlineConsultations: {
-        providerName: {
-          name: 'eConsult Health Ltd',
-        },
+        adminProviderName: 'eConsult Health Ltd',
       },
       serviceJourneyRules: {
         rules: {
-          cdssAdmin: {
-            serviceDefinition: 'NHS_ADMIN',
-            provider: 'stubs',
-          },
-          cdssAdvice: {
-            serviceDefinition: 'NHS_ADVICE',
-            provider: 'stubs',
-          },
+          cdssAdmin: { serviceDefinition: 'NHS_ADMIN', provider: 'stubs' },
+          cdssAdvice: { serviceDefinition: 'NHS_ADVICE', provider: 'stubs' },
         },
       },
     },
-    getters: {
-      getProviderName: 'eConsult Health Ltd',
-    },
+    getters: { getProviderName: 'eConsult Health Ltd' },
     dispatch,
   };
 
@@ -357,7 +341,7 @@ describe('Admin Help page', () => {
         // Assert
         expect(demographicsQuestion).toBeDefined();
       });
-      it('will have appropriate attributes set for provider, serviceDefinitionId and checkboxLabel', () => {
+      it('will have appropriate attributes set for provider and serviceDefinitionId', () => {
         // Arrange
         mountPage();
 
@@ -368,7 +352,7 @@ describe('Admin Help page', () => {
         expect(provider).toEqual('stubs');
         expect(serviceDefinitionId).toEqual('NHS_ADMIN');
       });
-      it('will display the warning followed by three demographics question paragraphs passed via slot', () => {
+      it('will display three demographics question paragraphs passed via slot', () => {
         // Arrange
         mountPage({ stubDemographicsQuestion: false });
 
@@ -379,16 +363,6 @@ describe('Admin Help page', () => {
         expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
         expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
         expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
-      });
-      it('will contain a link to the online consultations help page', () => {
-        // Arrange
-        mountPage({ stubDemographicsQuestion: false });
-        // Act
-        const helpLink = page.find('#conditionWarning');
-        expect(helpLink.find('span').text()).toContain('translate_appointments.admin_help.warning.warningText');
-        expect(helpLink.find('a').text()).toEqual('translate_appointments.admin_help.warning.warningLink');
-        // Assert
-        expect(helpLink.find('a').attributes().href).toEqual('www.google.co.uk');
       });
     });
     describe('orchestrator', () => {

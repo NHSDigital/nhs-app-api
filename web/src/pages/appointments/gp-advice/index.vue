@@ -11,36 +11,45 @@
           {{ $t('appointments.gp_advice.errors.message.text') }}
         </message-text>
       </message-dialog>
-
-      <demographics-question v-else-if="!demographicsQuestionAnswered"
-                             :provider="provider"
-                             :service-definition-id="serviceDefinitionId">
-        <template>
+      <template v-else>
+        <demographics-question v-if="!demographicsQuestionAnswered"
+                               :provider="provider"
+                               :provider-name="getProviderName"
+                               :service-definition-id="serviceDefinitionId">
           <p>{{ $t('appointments.gp_advice.demographicsQuestion.p1') }}</p>
           <p>{{ $t('appointments.gp_advice.demographicsQuestion.p2') }}</p>
-        </template>
-      </demographics-question>
+        </demographics-question>
 
-      <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
+        <condition-list v-else-if="conditionsList" :service-definitions="conditionsList"/>
+
+        <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { get } from 'lodash/fp';
-import Orchestrator from '@/components/online-consultations/Orchestrator';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import Orchestrator from '@/components/online-consultations/Orchestrator';
 import DemographicsQuestion from '@/components/online-consultations/DemographicsQuestion';
+import ConditionList from '@/components/online-consultations/ConditionList';
 import { noJsParameterName } from '@/lib/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
-import { APPOINTMENT_GP_ADVICE_CONDITIONS } from '@/lib/routes';
 import {
   ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
   DEMOGRAPHICS_QUESTION_OPTION,
-} from '@/lib/online-consultations/constants/demographics';
+  NHSAPP_SELECTED_CONDITION,
+} from '@/lib/online-consultations/constants/nojsInputNames';
+
+const getServiceDefinitionId = ({ requestBody, store }) => (
+  get('serviceDefinitionId', requestBody) ||
+  store.state.onlineConsultations.gpAdviceServiceDefinitionId ||
+  store.state.serviceJourneyRules.rules.cdssAdvice.conditionsServiceDefinition
+);
 
 export default {
   layout: 'nhsuk-layout',
@@ -49,8 +58,12 @@ export default {
     MessageText,
     Orchestrator,
     DemographicsQuestion,
+    ConditionList,
   },
   computed: {
+    serviceDefinitionId() {
+      return getServiceDefinitionId({ store: this.$store });
+    },
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
     },
@@ -60,70 +73,75 @@ export default {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
+    conditionsList() {
+      return this.$store.state.onlineConsultations.conditionsList;
+    },
+    getProviderName() {
+      return this.$store.state.onlineConsultations.adviceProviderName;
+    },
   },
-  async asyncData({ store, req, redirect, route }) {
-    const serviceDefinitionId = route.query.serviceDefinitionId ||
-        store.state.onlineConsultations.gpAdviceServiceDefinitionId;
-    if (!serviceDefinitionId) {
-      return redirect(302, APPOINTMENT_GP_ADVICE_CONDITIONS.path, null);
-    }
-
+  async asyncData({ store, req }) {
     const requestBody = get('body', req);
-    const noJsDataPresent = get(noJsParameterName, requestBody) !== undefined;
+    let serviceDefinitionId = getServiceDefinitionId({ requestBody, store });
+    let consentGiven =
+      get(DEMOGRAPHICS_QUESTION_NAME, requestBody) === DEMOGRAPHICS_QUESTION_OPTION;
+    const { provider } = store.state.serviceJourneyRules.rules.cdssAdvice;
+    const handlingNoJS = get(noJsParameterName, requestBody) !== undefined;
     const { question } = store.state.onlineConsultations;
     const answeringConsultationQuestion = question !== undefined;
     const previousClicked = get('direction', requestBody) === 'back';
     const answeringDemographics = get(ANSWERING_DEMOGRAPHICS_NAME, requestBody) !== undefined;
-    const consentGiven =
-      get(DEMOGRAPHICS_QUESTION_NAME, requestBody) === DEMOGRAPHICS_QUESTION_OPTION;
+    const selectedCondition = get(NHSAPP_SELECTED_CONDITION, requestBody);
 
-    const journeyInfo = {
-      provider: store.state.serviceJourneyRules.rules.cdssAdvice.provider,
-      serviceDefinitionId,
+    const data = {
+      provider,
       addJavascriptDisabledHeader: false,
     };
 
-    if (noJsDataPresent) {
+    if (selectedCondition) {
+      data.addJavascriptDisabledHeader = process.server;
+      serviceDefinitionId = selectedCondition;
+      consentGiven = get(DEMOGRAPHICS_QUESTION_NAME, requestBody);
+      store.dispatch('onlineConsultations/setGpAdviceServiceDefinitionId', serviceDefinitionId);
+      store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
+      store.dispatch('onlineConsultations/setDemographicsQuestionAnswered');
+    } else if (handlingNoJS) {
+      data.addJavascriptDisabledHeader = process.server;
       if (answeringDemographics) {
-        await store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
-        await store.dispatch('onlineConsultations/setDemographicsQuestionAnswered');
-        await store.dispatch('onlineConsultations/setAnswer', undefined);
+        store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
+        store.dispatch('onlineConsultations/setDemographicsQuestionAnswered');
+        store.dispatch('onlineConsultations/setAnswer', undefined);
       } else if (answeringConsultationQuestion) {
-        journeyInfo.addJavascriptDisabledHeader = process.server;
         const answer = getAnswerFromRequestBody(requestBody, question);
-
-        await store.dispatch('onlineConsultations/setAnswer', answer);
-        await store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
-        await store.dispatch('onlineConsultations/setValidationError');
+        store.dispatch('onlineConsultations/setAnswer', answer);
+        store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
+        store.dispatch('onlineConsultations/setValidationError');
       }
     }
 
     const demographicsAnswered = store.state.onlineConsultations.demographicsQuestionAnswered;
     const { answerIsValid } = store.state.onlineConsultations;
+    const journeyInfo = {
+      ...data,
+      serviceDefinitionId,
+      answeringConditionsQuestion: !!selectedCondition,
+    };
 
-    if (!answeringConsultationQuestion && demographicsAnswered) {
+    if (selectedCondition) {
+      await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
+    } else if (!answeringConsultationQuestion && demographicsAnswered) {
       await store.dispatch('onlineConsultations/getServiceDefinition', journeyInfo);
-    } else if (answerIsValid) {
+    } else if (answerIsValid || previousClicked) {
+      if (previousClicked) {
+        store.dispatch('onlineConsultations/setPrevious');
+      }
       await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
     }
 
-    if (previousClicked) {
-      await store.dispatch('onlineConsultations/setPrevious');
-      await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
-    }
-
-    return journeyInfo;
+    return data;
   },
   beforeDestroy() {
     this.$store.dispatch('onlineConsultations/clear', true);
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../../style/fonts';
-  .warningText {
-    font-family: $default_web;
-    font-weight: normal;
-  }
-</style>

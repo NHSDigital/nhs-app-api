@@ -19,25 +19,28 @@ import {
   CLEAR_VALIDATION,
   PREVIOUS_SELECTED,
   CLEAR_CLIENT_ERRORS,
-  SET_SERVICE_DEFINITIONS,
   SET_GP_ADVICE_SERVICE_DEFINITION_ID,
   SET_DEMOGRAPHICS_CONSENT_GIVEN,
   SET_DEMOGRAPHICS_QUESTION_ANSWERED,
   SET_ADMIN_PROVIDER_NAME,
   SET_ADVICE_PROVIDER_NAME,
+  SET_CONDITIONS_LIST,
 } from './mutation-types';
 import {
   getDataRequirements,
   getSessionId,
+  getQuestionnaire,
   getQuestionnaireItem,
   getCarePlansAndReferralRequests,
   getPreviousQuestion,
   getQuestionnaireResponseAnswers,
   getAllIssues,
+  getQuestionnaireId,
 } from '@/lib/online-consultations/mappers/response';
-import getQuestion from '@/lib/online-consultations/mappers/item';
+import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappers/item';
 import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
+import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 
 const showError = (store) => {
   store.dispatch('onlineConsultations/clearAndSetError');
@@ -63,26 +66,7 @@ export default {
       }).catch(() => {});
     }
   },
-  getServiceDefinitions({ commit }, params) {
-    const store = this;
-    const { provider } = params;
-
-    return store.app.$cdsApi.getFhirServiceDefinitionByProvider({
-      provider,
-    }).then((response) => {
-      commit(CLEAR);
-
-      if (response === undefined) {
-        showError(store);
-        return;
-      }
-
-      commit(SET_SERVICE_DEFINITIONS, response);
-    }).catch(() => {
-      showError(store);
-    });
-  },
-  getServiceDefinition({ commit }, params) {
+  getServiceDefinition({ commit }, params = {}) {
     const store = this;
     const { serviceDefinitionId, provider } = params;
 
@@ -124,10 +108,15 @@ export default {
       showError(store);
     });
   },
-  evaluateServiceDefinition({ commit, state, rootState }, params) {
+  evaluateServiceDefinition({ commit, state, rootState }, params = {}) {
     const store = this;
-    const { serviceDefinitionId, provider, addJavascriptDisabledHeader } = params;
-    const parameters = getParameters(state, rootState);
+    const {
+      serviceDefinitionId,
+      provider,
+      addJavascriptDisabledHeader,
+      answeringConditionsQuestion,
+    } = params;
+    const parameters = getParameters(state, rootState, answeringConditionsQuestion);
 
     if (parameters === undefined) {
       showError(store);
@@ -141,10 +130,16 @@ export default {
       parameters,
     };
 
-    if (state.dataRequirements &&
-        state.dataRequirements.patient &&
-        state.demographicsConsentGiven) {
-      requestParams.demographicsConsentGiven = state.demographicsConsentGiven;
+    if (answeringConditionsQuestion) {
+      const tcsAnswer = getTCsAnswerForProvider(provider);
+      requestParams.parameters.parameter.push(tcsAnswer);
+      requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
+    } else if (
+      state.dataRequirements &&
+      state.dataRequirements.patient &&
+      state.demographicsConsentGiven
+    ) {
+      requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     }
 
     return store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate(
@@ -161,19 +156,27 @@ export default {
 
       if (status === DATA_REQUIRED) {
         const sessionId = getSessionId(response);
+        const questionnaire = getQuestionnaire(response, getQuestionnaireId(response));
         const question = getQuestion(getQuestionnaireItem(response));
+        const conditionsList = getConditionsList(questionnaire);
+        const isConditionsQuestion = questionnaire.id ===
+          rootState.serviceJourneyRules.rules.cdssAdvice.conditionsServiceDefinition;
         const issues = getAllIssues(response);
         const previousQuestion = getQuestion(getPreviousQuestion(response));
         const previousAnswers = getQuestionnaireResponseAnswers(response);
 
-        if (sessionId === undefined || question === undefined) {
+        if ((sessionId === undefined || question === undefined) && conditionsList === undefined) {
           showError(store);
           return;
         }
 
         commit(SET_SESSION_ID, sessionId);
-        commit(SET_QUESTION, question);
         commit(SET_PREVIOUS_QUESTION, previousQuestion);
+        if (isConditionsQuestion) {
+          commit(SET_CONDITIONS_LIST, conditionsList);
+        } else {
+          commit(SET_QUESTION, question);
+        }
         if (issues !== undefined) {
           commit(SET_VALIDATION_ERROR_FROM_RESPONSE, issues);
         }

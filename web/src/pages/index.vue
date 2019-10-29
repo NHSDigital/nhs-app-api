@@ -24,7 +24,6 @@ export default {
     WelcomeSection,
     NavigationListMenu,
   },
-
   computed: {
     greetingMessage() {
       const message = this.$t('homeLoggedIn.welcome');

@@ -11,33 +11,18 @@
           {{ $t('appointments.admin_help.errors.message.text') }}
         </message-text>
       </message-dialog>
-      <div v-else>
-        <message-dialog v-if="!demographicsQuestionAnswered"
-                        id="conditionWarning"
-                        message-type="warning" icon-text="Important">
-          <span :class="[$style.warningText, $style.msgText]">
-            {{ $t('appointments.admin_help.warning.warningText',
-                  { providerName: getProviderName }) }}
-            <span>
-              <a id="online_consultations_help_link"
-                 :href="onlineConsultationsURL"
-                 target="_blank">{{ $t('appointments.admin_help.warning.warningLink') }}</a>
-            </span>
-          </span>
-        </message-dialog>
-
+      <template v-else>
         <demographics-question v-if="!demographicsQuestionAnswered"
                                :provider="provider"
+                               :provider-name="getProviderName"
                                :service-definition-id="serviceDefinitionId">
-          <template>
-            <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
-            <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
-            <p>{{ $t('appointments.admin_help.demographicsQuestion.p3') }}</p>
-          </template>
+          <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
+          <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
+          <p>{{ $t('appointments.admin_help.demographicsQuestion.p3') }}</p>
         </demographics-question>
 
         <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -55,7 +40,7 @@ import {
   ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
   DEMOGRAPHICS_QUESTION_OPTION,
-} from '@/lib/online-consultations/constants/demographics';
+} from '@/lib/online-consultations/constants/nojsInputNames';
 
 export default {
   layout: 'nhsuk-layout',
@@ -69,9 +54,6 @@ export default {
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
     },
-    onlineConsultationsURL() {
-      return this.$store.app.$env.ONLINE_CONSULTATIONS_URL;
-    },
     isError() {
       return this.$store.state.onlineConsultations.error;
     },
@@ -84,7 +66,7 @@ export default {
   },
   async asyncData({ store, req }) {
     const requestBody = get('body', req);
-    const noJsDataPresent = get(noJsParameterName, requestBody) !== undefined;
+    const handlingNoJS = get(noJsParameterName, requestBody) !== undefined;
     const { question } = store.state.onlineConsultations;
     const answeringConsultationQuestion = question !== undefined;
     const previousClicked = get('direction', requestBody) === 'back';
@@ -98,18 +80,17 @@ export default {
       addJavascriptDisabledHeader: false,
     };
 
-    if (noJsDataPresent) {
+    if (handlingNoJS) {
       if (answeringDemographics) {
-        await store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
-        await store.dispatch('onlineConsultations/setDemographicsQuestionAnswered');
-        await store.dispatch('onlineConsultations/setAnswer', undefined);
+        store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
+        store.dispatch('onlineConsultations/setDemographicsQuestionAnswered');
+        store.dispatch('onlineConsultations/setAnswer', undefined);
       } else if (answeringConsultationQuestion) {
-        journeyInfo.addJavascriptDisabledHeader = process.server;
         const answer = getAnswerFromRequestBody(requestBody, question);
-
-        await store.dispatch('onlineConsultations/setAnswer', answer);
-        await store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
-        await store.dispatch('onlineConsultations/setValidationError');
+        journeyInfo.addJavascriptDisabledHeader = process.server;
+        store.dispatch('onlineConsultations/setAnswer', answer);
+        store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
+        store.dispatch('onlineConsultations/setValidationError');
       }
     }
 
@@ -118,12 +99,10 @@ export default {
 
     if (!answeringConsultationQuestion && demographicsAnswered) {
       await store.dispatch('onlineConsultations/getServiceDefinition', journeyInfo);
-    } else if (answerIsValid) {
-      await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
-    }
-
-    if (previousClicked) {
-      await store.dispatch('onlineConsultations/setPrevious');
+    } else if (answerIsValid || previousClicked) {
+      if (previousClicked) {
+        store.dispatch('onlineConsultations/setPrevious');
+      }
       await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
     }
 
@@ -134,20 +113,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../../style/fonts';
-  @import "../../../style/textstyles";
-.msgText {
-  padding: 1em 1em 0.150em 1em;
-  @include message;
-}
-.warningText {
-  font-family: $default_web;
-  font-weight: normal;
-
-  a {
-    display: inline;
-  }
-}
-</style>

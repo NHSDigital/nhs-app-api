@@ -4,7 +4,7 @@
     <div :class="$style.info">
       <message-dialog id="warning-dialog-nominated-pharmacy"
                       message-type="warning"
-                      icon-text="Important">
+                      :icon-text="$t('messageIconText.important')">
         <div v-if="noPharmacyNominated">
           <message-text>
             {{ $t('nominated_pharmacy.search.line1') }}

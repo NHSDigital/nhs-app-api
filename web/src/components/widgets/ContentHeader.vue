@@ -35,6 +35,8 @@ import PageTitle from '@/components/widgets/PageTitle';
 import {
   findByName,
   getCrumbTrailForRoute,
+  APPOINTMENT_GP_ADVICE,
+  APPOINTMENT_ADMIN_HELP,
 } from '@/lib/routes';
 import YellowBanner from './YellowBanner';
 
@@ -73,13 +75,13 @@ export default {
     },
     showBanner() {
       const route = findByName(this.$route.name);
-      if (route !== undefined) {
-        if (route.name === 'appointments-admin-help') {
-          return !!(route.warningBanner && this.demographicsQuestionAnswered);
-        }
-        return !!(route.warningBanner && true);
+      if (route === undefined) {
+        return false;
       }
-      return false;
+      if (route.path === APPOINTMENT_ADMIN_HELP.path || route.path === APPOINTMENT_GP_ADVICE.path) {
+        return route.warningBanner && this.demographicsQuestionAnswered;
+      }
+      return route.warningBanner;
     },
     getProviderName() {
       const route = findByName(this.$route.name);

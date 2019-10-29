@@ -167,3 +167,16 @@ export default {
     }
   }
 </style>
+
+<style module lang="scss" scoped>
+  @import "../../style/desktopWeb/accessibility";
+  /deep/a {
+    &:focus {
+      @include linkFocusStyle;
+    }
+
+    &:hover {
+      @include linkHoverStyle;
+    }
+  }
+</style>

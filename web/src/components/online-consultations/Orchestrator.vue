@@ -248,7 +248,7 @@ export default {
         this.$store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition) {
         return APPOINTMENT_ADMIN_HELP.path;
       }
-      return `${APPOINTMENT_GP_ADVICE.path}?serviceDefinitionId=${this.serviceDefinitionId}`;
+      return APPOINTMENT_GP_ADVICE.path;
     },
     backButtonText() {
       return this.isSuccess
@@ -345,7 +345,6 @@ export default {
 
 
 <style module lang="scss" scoped>
-  @import "../../style/desktopWeb/accessibility";
   .errorDialog {
     margin-bottom: 2em;
   }
@@ -362,17 +361,7 @@ export default {
     }
   }
 
-  /deep/a {
-    &:focus {
-      @include linkFocusStyle;
-    }
-
-    &:hover {
-      @include linkHoverStyle;
-    }
+  /deep/strong {
+    display: inline;
   }
-
- /deep/strong {
-  display: inline;
- }
 </style>

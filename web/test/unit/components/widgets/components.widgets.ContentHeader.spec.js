@@ -1,5 +1,6 @@
+import each from 'jest-each';
 import { createStore, mount } from '../../helpers';
-import ContentHeader from '../../../../src/components/widgets/ContentHeader';
+import ContentHeader from '@/components/widgets/ContentHeader';
 
 describe('ContentHeader.vue', () => {
   describe('Login', () => {
@@ -48,16 +49,15 @@ describe('ContentHeader.vue', () => {
     it('currentBreadCrumbs will return nothing when in Login page', () => {
       expect(wrapper.vm.currentBreadCrumbs).toEqual([]);
     });
-    it('showBanner will return false', () => {
-      expect(wrapper.vm.showBanner).toEqual(false);
+    it('showBanner will return undefined', () => {
+      expect(wrapper.vm.showBanner).toBeUndefined();
     });
   });
-  describe('appointments-admin-help', () => {
-    let $route;
+  describe('Admin Help and GP Advice', () => {
     let $store;
     let wrapper;
 
-    const mountAs = ({ native = true }) => {
+    const mountAs = ({ native = true, demographicsQuestionAnswered = true, route }) => {
       const getter = {};
       getter['appVersion/isNativeVersionAfter'] = jest.fn();
       $store = createStore({
@@ -69,7 +69,7 @@ describe('ContentHeader.vue', () => {
             headerText: 'Test',
           },
           onlineConsultations: {
-            demographicsQuestionAnswered: true,
+            demographicsQuestionAnswered,
           },
           serviceJourneyRules: {
             rules: {
@@ -85,26 +85,41 @@ describe('ContentHeader.vue', () => {
         },
         getters: getter,
       });
-      $route = {
-        name: 'appointments-admin-help',
-        warningBanner: true,
-      };
       return mount(ContentHeader, {
         $store,
-        $route,
+        $route: route,
         stubs: {
           'nuxt-link': '<a></a>',
         },
       });
     };
 
-    beforeEach(() => {
-      wrapper = mountAs({ native: true });
-    });
-
-    it('showBanner will return true', () => {
+    each([
+      'appointments-admin-help',
+      'appointments-gp-advice',
+    ]).it('showBanner will return true when demographics answered', (routeName) => {
+      wrapper = mountAs({
+        native: true,
+        route: {
+          name: routeName,
+          warningBanner: true,
+        },
+      });
       expect(wrapper.vm.showBanner).toEqual(true);
     });
+
+    each(['appointments-admin-help', 'appointments-gp-advice'])
+      .it('showBanner will return false when demographics not answered', (routeName) => {
+        wrapper = mountAs({
+          native: true,
+          demographicsQuestionAnswered: false,
+          route: {
+            name: routeName,
+            warningBanner: true,
+          },
+        });
+        expect(wrapper.vm.showBanner).toEqual(false);
+      });
   });
 });
 

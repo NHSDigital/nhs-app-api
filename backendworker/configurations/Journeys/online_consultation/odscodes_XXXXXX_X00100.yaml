@@ -7,6 +7,7 @@ journeys:
   cdssAdvice:
     provider: stubs
     serviceDefinition: NHS_ADVICE
+    conditionsServiceDefinition: NHS_CONDITION_LIST
   cdssAdmin:
     provider: stubs
     serviceDefinition: NHS_ADMIN

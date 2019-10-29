@@ -45,7 +45,7 @@ import MenuItemList from '@/components/MenuItemList';
 import {
   APPOINTMENT_ADMIN_HELP,
   APPOINTMENT_BOOKING_GUIDANCE,
-  APPOINTMENT_GP_ADVICE_CONDITIONS,
+  APPOINTMENT_GP_ADVICE,
   SYMPTOMS,
 } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
@@ -70,7 +70,7 @@ export default {
     },
     gpAdviceConditionsPath() {
       return createUri({
-        path: APPOINTMENT_GP_ADVICE_CONDITIONS.path,
+        path: APPOINTMENT_GP_ADVICE.path,
         noJs: { onlineConsultations: { previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path } },
       });
     },

@@ -45,17 +45,17 @@
 
 @mixin linkHoverStyle {
   background: $hover_highlight;
-    box-shadow: 0 0 0 4px $hover_highlight;
-    color: $black;
-    width: auto;
-    text-decoration: underline;
+  box-shadow: 0 0 0 4px $hover_highlight;
+  color: $black;
+  width: auto;
+  text-decoration: underline;
 }
 
 
 @mixin linkFocusStyle {
   background: $focus_highlight;
-    box-shadow: 0 0 0 4px $focus_highlight;
-    color: $black;
-    outline: 0;
-    width: auto;
+  box-shadow: 0 0 0 4px $focus_highlight;
+  color: $black;
+  outline: 0;
+  width: auto;
 }

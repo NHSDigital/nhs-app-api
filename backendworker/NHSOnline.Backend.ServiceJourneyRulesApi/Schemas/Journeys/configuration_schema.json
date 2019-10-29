@@ -45,9 +45,10 @@
             "provider": {
               "enum": [ "eConsult", "stubs" ]
             },
-            "serviceDefinition": { "type": "string" }
+            "serviceDefinition": { "type": "string" },
+            "conditionsServiceDefinition": { "type": "string" }
           },
-          "required": [ "provider", "serviceDefinition" ]
+          "required": [ "provider", "serviceDefinition", "conditionsServiceDefinition" ]
         }
       ]
     },

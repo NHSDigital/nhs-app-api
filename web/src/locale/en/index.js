@@ -31,6 +31,7 @@ export default {
     warning: 'Warning',
     error: 'Error',
     message: 'Message',
+    important: 'Important',
   },
   generic: {
     questions: {
@@ -502,6 +503,10 @@ export default {
       checkboxLabel: 'Use my name, date of birth, NHS number and postal address with the online consultation service as described in the',
       checkboxLink: 'NHS App privacy policy',
     },
+    warning: {
+      warningText: 'This service is provided by an online consultation service provider, {providerName}, on behalf of your GP surgery.',
+      warningLink: 'Find out more about online consultation services.',
+    },
     validationErrors: {
       header: 'There\'s a problem',
       message: {
@@ -840,10 +845,6 @@ export default {
       },
     },
     admin_help: {
-      warning: {
-        warningText: 'This service is provided by an online consultation service provider, {providerName}, on behalf of your GP surgery.',
-        warningLink: 'Find out more about online consultation services.',
-      },
       demographicsQuestion: {
         p1: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
         p2: 'It takes around 5 minutes to answer a few questions.',

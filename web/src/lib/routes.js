@@ -155,20 +155,6 @@ const routes = {
       gpAdviceDisabledRedirect,
     ],
   },
-  APPOINTMENT_GP_ADVICE_CONDITIONS: {
-    name: 'appointments-gp-advice-conditions',
-    path: '/appointments/gp-advice/conditions',
-    crumb: {
-      i8nKey: 'appointmentsGpAdvice',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-    helpUrl: baseNhsAppHelpUrl,
-    sjrRedirectRules: [
-      gpAdviceDisabledRedirect,
-    ],
-  },
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
     path: '/appointments/booking',
@@ -1019,7 +1005,6 @@ export const {
   APPOINTMENT_CANCEL_NOJS,
   APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_ADMIN_HELP,
-  APPOINTMENT_GP_ADVICE_CONDITIONS,
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,

@@ -2,7 +2,7 @@
   <div v-if="showTemplate"
        id="mainDiv"
        :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <message-dialog message-type="warning" icon-text="Important">
+    <message-dialog message-type="warning" :icon-text="$t('messageIconText.important')">
       <message-text :class="$style.warningText">
         {{ $t('my_record.personalRecordText.warningText.wt1') }}
       </message-text>

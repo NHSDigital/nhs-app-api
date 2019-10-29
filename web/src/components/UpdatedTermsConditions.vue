@@ -3,7 +3,6 @@
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
       <message-dialog :class="$style.customErrorBox"
                       message-type="error"
-                      icon-text="Error"
                       role="alert">
         <p :class="$style.customErrorText">
           {{ $t('updatedTermsAndConditions.errorMsgHeader') }}

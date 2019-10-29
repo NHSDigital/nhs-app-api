@@ -86,7 +86,6 @@ export default {
   box-sizing: border-box;
   background: $white url(~assets/icon_arrow_left.svg) no-repeat center right;
   background-position: right 1em center;
-  position: relative;
   margin-left: 0;
 
   border-top: 1px $border_grey solid;
@@ -108,6 +107,16 @@ export default {
     outline: none;
     text-decoration: underline;
   }
+}
+
+button.listMenuItemLink {
+  display: block;
+  width: 100%;
+  color: $nhs_blue;
+  text-align: left;
+  font-weight: bold;
+  border-left: none;
+  border-right: none;
 }
 
 .no-decoration {

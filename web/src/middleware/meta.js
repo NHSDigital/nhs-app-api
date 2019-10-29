@@ -10,7 +10,6 @@ import {
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_ADMIN_HELP,
-  APPOINTMENT_GP_ADVICE_CONDITIONS,
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
@@ -128,7 +127,6 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.appointmentAdminHelp';
       break;
     case APPOINTMENT_GP_ADVICE.name:
-    case APPOINTMENT_GP_ADVICE_CONDITIONS.name:
       route.meta.headerKey = 'pageHeaders.appointmentGpAdvice';
       route.meta.pageTitleKey = 'pageTitles.appointmentGpAdvice';
       break;

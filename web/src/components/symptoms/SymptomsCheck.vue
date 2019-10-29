@@ -42,7 +42,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { APPOINTMENT_GP_ADVICE_CONDITIONS, SYMPTOMS } from '@/lib/routes';
+import { APPOINTMENT_GP_ADVICE, SYMPTOMS } from '@/lib/routes';
 import srjIf from '@/lib/sjrIf';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
@@ -79,7 +79,7 @@ export default {
           previousRoute: this.symptomsPath,
         },
       };
-      return createUri({ path: APPOINTMENT_GP_ADVICE_CONDITIONS.path, noJs: noJsData });
+      return createUri({ path: APPOINTMENT_GP_ADVICE.path, noJs: noJsData });
     },
   },
   methods: {

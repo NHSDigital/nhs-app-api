@@ -18,12 +18,12 @@ export const SET_VALIDATION_ERROR_FROM_RESPONSE = 'SET_VALIDATION_ERROR_FROM_RES
 export const FILE_LOADING = 'FILE_LOADING';
 export const FILE_LOAD_COMPLETE = 'FILE_LOAD_COMPLETE';
 export const PREVIOUS_SELECTED = 'PREVIOUS_SELECTED';
-export const SET_SERVICE_DEFINITIONS = 'SET_SERVICE_DEFINITIONS';
 export const SET_PREVIOUS_ROUTE = 'SET_PREVIOUS_ROUTE';
 export const SET_DEMOGRAPHICS_CONSENT_GIVEN = 'SET_DEMOGRAPHICS_CONSENT_GIVEN';
 export const SET_DEMOGRAPHICS_QUESTION_ANSWERED = 'SET_DEMOGRAPHICS_QUESTION_ANSWERED';
 export const SET_ADMIN_PROVIDER_NAME = 'SET_ADMIN_PROVIDER_NAME';
 export const SET_ADVICE_PROVIDER_NAME = 'SET_ADVICE_PROVIDER_NAME';
+export const SET_CONDITIONS_LIST = 'SET_CONDITIONS_LIST';
 
 export const initialState = () => ({
   demographicsQuestionAnswered: false,
@@ -32,7 +32,6 @@ export const initialState = () => ({
   status: undefined,
   dataRequirements: undefined,
   question: undefined,
-  serviceDefinitions: undefined,
   previousQuestion: undefined,
   previousSelected: false,
   previousAnswers: undefined,
@@ -54,4 +53,5 @@ export const initialState = () => ({
   gpAdviceServiceDefinitionId: undefined,
   adminProviderName: undefined,
   adviceProviderName: undefined,
+  conditionsList: undefined,
 });

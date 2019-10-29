@@ -13,7 +13,6 @@ import {
   SET_REFERRAL_REQUESTS,
   SET_ERROR,
   SET_ANSWER_IS_EMPTY,
-  SET_SERVICE_DEFINITIONS,
   FILE_LOADING,
   FILE_LOAD_COMPLETE,
   SET_VALIDATION_ERROR_FROM_RESPONSE,
@@ -25,6 +24,7 @@ import {
   SET_DEMOGRAPHICS_QUESTION_ANSWERED,
   SET_ADMIN_PROVIDER_NAME,
   SET_ADVICE_PROVIDER_NAME,
+  SET_CONDITIONS_LIST,
 } from './mutation-types';
 
 export default {
@@ -51,7 +51,9 @@ export default {
     state.validationErrorMessageFromResponse = undefined;
     state.additionalValue = undefined;
     state.latestAdditionalValue = undefined;
+    state.conditionsList = undefined;
     if (clearDemographicsConsent) {
+      state.gpAdviceServiceDefinitionId = undefined;
       state.demographicsConsentGiven = false;
       state.demographicsQuestionAnswered = false;
     }
@@ -67,9 +69,6 @@ export default {
   },
   [SET_QUESTION](state, question) {
     state.question = question;
-  },
-  [SET_SERVICE_DEFINITIONS](state, serviceDefinitions) {
-    state.serviceDefinitions = serviceDefinitions;
   },
   [SET_PREVIOUS_QUESTION](state, previousQuestion) {
     state.previousQuestion = previousQuestion;
@@ -138,5 +137,8 @@ export default {
   },
   [SET_ADVICE_PROVIDER_NAME](state, providerName) {
     state.adviceProviderName = providerName;
+  },
+  [SET_CONDITIONS_LIST](state, conditionsList) {
+    state.conditionsList = conditionsList;
   },
 };

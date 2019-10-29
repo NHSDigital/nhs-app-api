@@ -13,7 +13,7 @@ import {
 import { SESSION_ID } from '@/lib/online-consultations/constants/parameter-names';
 import { ACTIVE } from '@/lib/online-consultations/constants/status-types';
 
-function getQuestionnaireId(response) {
+export function getQuestionnaireId(response) {
   const questionnaireIds = response.dataRequirement
     .filter(d => d.type === QUESTIONNAIRE_RESPONSE);
 
@@ -26,7 +26,8 @@ function getQuestionnaireResponse(guidanceResponse) {
 
   return questionnaireResponse[0];
 }
-function getQuestionnaire(response, questionnaireId) {
+
+export function getQuestionnaire(response, questionnaireId) {
   const activeQuestionnaires = response.contained
     .filter(c => c.resourceType === QUESTIONNAIRE &&
                  c.id === questionnaireId &&

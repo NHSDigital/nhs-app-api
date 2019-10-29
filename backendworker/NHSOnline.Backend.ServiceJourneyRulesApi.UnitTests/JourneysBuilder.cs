@@ -25,14 +25,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
         }
 
         public JourneysBuilder CdssAdviceProvider(CdssProvider? cdssAdviceProvider,
-            string cdssAdviceServiceDefinition = null)
+            string cdssAdviceServiceDefinition = null,
+            string cdssAdviceConditionsServiceDefinition = null)
         {
             if (cdssAdviceProvider != null)
             {
                 _journeys.CdssAdvice = new Cdss
                 {
                     Provider = cdssAdviceProvider.Value,
-                    ServiceDefinition = cdssAdviceServiceDefinition
+                    ServiceDefinition = cdssAdviceServiceDefinition,
+                    ConditionsServiceDefinition = cdssAdviceConditionsServiceDefinition
                 };
             }
             else

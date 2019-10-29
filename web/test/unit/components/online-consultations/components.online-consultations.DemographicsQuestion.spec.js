@@ -10,6 +10,7 @@ jest.mock('@/services/native-app');
 
 const defaultStore = () => (
   createStore({
+    $env: { ONLINE_CONSULTATIONS_URL: 'www.google.co.uk' },
     state: {
       onlineConsultations: {},
       device: { isNativeApp: false },
@@ -28,6 +29,7 @@ const mountComponent = ({
     propsData: {
       provider: 'stubs',
       serviceDefinitionId: 'NHS_ADMIN',
+      providerName: 'Stubs',
     },
     slots,
     methods,
@@ -116,6 +118,17 @@ describe('demographics question', () => {
     });
   });
   describe('template', () => {
+    it('will display a warning containing a link to the online consultations help page', () => {
+      // Arrange
+      const component = mountComponent();
+      // Act
+      const warning = component.find('#demographicsWarning');
+      const warningHelpLink = warning.find('a');
+      // Assert
+      expect(warning.find('span').text()).toContain('translate_onlineConsultations.warning.warningText');
+      expect(warningHelpLink.text()).toEqual('translate_onlineConsultations.warning.warningLink');
+      expect(warningHelpLink.attributes().href).toEqual('www.google.co.uk');
+    });
     it('have a slot for question text, and place in the Question component', () => {
       // Arrange
       const component = mountComponent({

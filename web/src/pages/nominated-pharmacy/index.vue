@@ -16,7 +16,7 @@
     <message-dialog v-if="!isCommunityPharmacy"
                     id="warning-dialog-dispensing-practice"
                     message-type="warning"
-                    icon-text="Important">
+                    :icon-text="$t('messageIconText.important')">
       <message-text id="warning-text-1"
                     :class="$style.warningText">
         {{ $t('nominated_pharmacy.warning.changeDispensingPractice.line1') }}

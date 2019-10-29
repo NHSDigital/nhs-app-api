@@ -252,22 +252,19 @@ function getInputDataParameter({ question,
   return inputData;
 }
 
-export function getParameters(state, rootState) {
+export function getParameters(state, rootState, answeringConditionsQuestion) {
   try {
     const parameters = {
       resourceType: PARAMETERS,
       parameter: [],
     };
 
-    // Adding patient and organization parameters when valid answer is given and
-    // data requirements present - assumed to be Ts&Cs.
-    if (state.answerIsValid && state.dataRequirements) {
-      if (state.dataRequirements.organization) {
-        parameters.parameter.push(getOrganizationParameter(rootState.session.gpOdsCode));
-      }
+    if ((state.answerIsValid && state.dataRequirements && state.dataRequirements.organization)
+        || answeringConditionsQuestion) {
+      parameters.parameter.push(getOrganizationParameter(rootState.session.gpOdsCode));
     }
 
-    if (state.status === DATA_REQUIRED) {
+    if (state.status === DATA_REQUIRED && !answeringConditionsQuestion) {
       if (state.sessionId) {
         parameters.parameter.push(getSessionIdParameter(state.sessionId));
       }

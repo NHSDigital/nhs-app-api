@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
-      <message-dialog :class="$style.customErrorBox" message-type="error" icon-text="Error"
+      <message-dialog :class="$style.customErrorBox" message-type="error"
                       role="alert">
         <p :class="$style.customErrorText"> {{ $t('termsAndConditions.errorMsgHeader') }} </p>
         <ul>
