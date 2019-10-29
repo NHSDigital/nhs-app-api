@@ -123,10 +123,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
-            string userPatientLinkToken, string responseSessionId,
-            string endUserSessionId, DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime)
+            EmisRequestParameters emisRequestParameters, DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime)
         {
-            var path = string.Format(CultureInfo.InvariantCulture, PrescriptionsPath, userPatientLinkToken);
+            var path = string.Format(CultureInfo.InvariantCulture, PrescriptionsPath, emisRequestParameters.UserPatientLinkToken);
 
             if (fromDateTime.HasValue)
             {
@@ -138,7 +137,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 path += $"&filterToDate={EncodeDateTimeOffsetToIso(toDateTime.Value)}";
             }
 
-            return await Get<PrescriptionRequestsGetResponse>(path, endUserSessionId, responseSessionId);
+            return await Get<PrescriptionRequestsGetResponse>(path, emisRequestParameters.EndUserSessionId, emisRequestParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
@@ -193,12 +192,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 requestParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
-            string responseSessionId, string endUserSessionId)
+        public async Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(EmisRequestParameters emisRequestParameters)
         {
-            var path = string.Format(CultureInfo.InvariantCulture, CoursesPath, userPatientLinkToken);
+            var path = string.Format(CultureInfo.InvariantCulture, CoursesPath, emisRequestParameters.UserPatientLinkToken);
 
-            return await Get<CoursesGetResponse>(path, endUserSessionId, responseSessionId);
+            return await Get<CoursesGetResponse>(path, emisRequestParameters.EndUserSessionId, emisRequestParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(

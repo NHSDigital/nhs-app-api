@@ -33,10 +33,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             _settings.Validate();
         }
 
-        public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
+        public async Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession)gpUserSession;
+            var visionUserSession = (VisionUserSession)gpLinkedAccountModel.GpUserSession;
             
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {

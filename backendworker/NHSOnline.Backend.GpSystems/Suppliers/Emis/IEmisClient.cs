@@ -5,6 +5,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
@@ -28,8 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         // Prescriptions
         Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
-            string userPatientLinkToken, string responseSessionId, string endUserSessionId,
-            DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime);
+            EmisRequestParameters emisRequestParameters, DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime);
 
         Task<EmisApiObjectResponse<IndividualDocument>> MedicalDocumentGet(string userPatientLinkToken,
             string responseSessionId, string documentGuid, string endUserSessionId);
@@ -65,8 +65,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             EmisRequestParameters requestParameters, SlotsMetadataGetQueryParameters queryParameters);
 
         // Courses
-        Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
-            string responseSessionId, string endUserSessionId);
+        Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet( EmisRequestParameters emisRequestParameters);
 
         // Appointments
         Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(

@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 {
@@ -28,6 +29,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private VisionConfigurationSettings _settings;
         private VisionUserSession _visionUserSession;
         private IFixture _fixture;
+        private Guid _patientId;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
         private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
         private const string CertificatePassphrase = "CertificatePassphrase";
@@ -45,11 +48,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsRepeatPrescriptionsEnabled = true;
             _visionUserSession.AllowFreeTextPrescriptions = true;
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_visionUserSession, _patientId);
             
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionPrescriptionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
@@ -70,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionUserSession.IsRepeatPrescriptionsEnabled = false;
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, null, null);
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
@@ -114,7 +119,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionPrescriptionMapper.Setup(x => x.Map(It.IsAny<PrescriptionHistory>())).Returns(mappingResult);
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, null, null);
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
@@ -165,7 +170,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionPrescriptionMapper.Setup(x => x.Map(It.IsAny<PrescriptionHistory>())).Returns(mappingResult);
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, null, null);
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
@@ -236,7 +241,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Callback<PrescriptionHistory>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, null, null);
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
@@ -324,7 +329,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Callback<PrescriptionHistory>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, fromDateOneWeekAgo, toDateToday);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDateOneWeekAgo, toDateToday);
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
@@ -391,7 +396,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Callback<PrescriptionHistory>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, null, null);
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
@@ -411,7 +416,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                    new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.InternalServerError)));
             
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, null, null);
 
             // Assert
             result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
@@ -427,7 +432,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, null, null);
 
             // Assert
             result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
@@ -471,7 +476,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     .Callback<VisionUserSession, OrderNewPrescriptionRequest>((visionUserSession, orderNewPrescriptionRequest) => capturedRequest = orderNewPrescriptionRequest);
             
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, request);
 
             // Assert
             var expectedRequest = new OrderNewPrescriptionRequest
@@ -500,7 +505,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, request);
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
@@ -520,7 +525,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, request);
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
@@ -567,7 +572,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     .Callback<VisionUserSession, OrderNewPrescriptionRequest>((visionUserSession, orderNewPrescriptionRequest) => capturedRequest = orderNewPrescriptionRequest);
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, request);
 
             // Assert
             var expectedRequest = new OrderNewPrescriptionRequest
@@ -594,7 +599,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, request);
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
@@ -628,7 +633,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, request);
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
@@ -644,7 +649,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, request);
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();

@@ -31,9 +31,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             _auditor = auditor;
         }
 
-        public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
+        public async Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var microtestUserSession = (MicrotestUserSession)gpUserSession;
+            var microtestUserSession = (MicrotestUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {

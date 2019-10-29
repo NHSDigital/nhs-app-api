@@ -34,17 +34,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             _settings.Validate();
         }
 
-        public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
+        public async Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var emisUserSession = (EmisUserSession)gpUserSession;
+            var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
             
             try
             {
+                EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+                
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Courses for user");
                 
-                var coursesResponse = await _emisClient.CoursesGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, 
-                    emisUserSession.EndUserSessionId);
+                var coursesResponse = await _emisClient.CoursesGet(emisRequestParameters);
                 
                 _logger.LogDebug("Fetch Courses for user complete");
 

@@ -398,8 +398,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.PrescriptionsGet(userPatientLinkToken, sessionId, endUserSessionId, fromDateTime,
-                toDateTime);
+            var response = await _systemUnderTest.PrescriptionsGet(
+                new EmisRequestParameters
+                {
+                    SessionId = sessionId,
+                    EndUserSessionId = endUserSessionId,
+                    UserPatientLinkToken = userPatientLinkToken
+                }, 
+                fromDateTime, toDateTime);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -429,7 +435,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.CoursesGet(userPatientLinkToken, sessionId, endUserSessionId);
+            var response = await _systemUnderTest.CoursesGet(  new EmisRequestParameters
+            {
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId,
+                UserPatientLinkToken = userPatientLinkToken
+            });
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -602,7 +613,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             SetupMockedHandlerEmisForEmisCustomTimeout();
             
             // Act
-            await _systemUnderTest.CoursesGet(userPatientLinkToken, sessionId, endUserSessionId);
+            await _systemUnderTest.CoursesGet(  new EmisRequestParameters
+            {
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId,
+                UserPatientLinkToken = userPatientLinkToken
+            });
 
             // Assert
             _mockedHandler.Protected().Verify(

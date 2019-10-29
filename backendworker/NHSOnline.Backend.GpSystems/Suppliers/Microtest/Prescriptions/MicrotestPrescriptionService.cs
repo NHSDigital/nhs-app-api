@@ -36,9 +36,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             _auditor = auditor;
         }
 
-        public async Task<GetPrescriptionsResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate = null, DateTimeOffset? toDate = null)
+        public async Task<GetPrescriptionsResult> GetPrescriptions(GpLinkedAccountModel gpLinkedAccountModel, DateTimeOffset? fromDate = null, DateTimeOffset? toDate = null)
         {
-            var microtestUserSession = (MicrotestUserSession) gpUserSession;
+            var microtestUserSession = (MicrotestUserSession) gpLinkedAccountModel.GpUserSession;
 
             try
             {
@@ -96,9 +96,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             }
         }
 
-        public async Task<OrderPrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<OrderPrescriptionResult> OrderPrescription(GpLinkedAccountModel gpLinkedAccountModel, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            var microtestUserSession = (MicrotestUserSession) gpUserSession;
+            var microtestUserSession = (MicrotestUserSession) gpLinkedAccountModel.GpUserSession;
 
             var postRequest = new PrescriptionRequestsPost
             {

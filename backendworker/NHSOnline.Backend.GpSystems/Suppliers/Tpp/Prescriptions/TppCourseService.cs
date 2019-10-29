@@ -30,9 +30,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             _settings.Validate();
         }
 
-        public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
+        public async Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var tppUserSession = (TppUserSession)gpUserSession;
+            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {

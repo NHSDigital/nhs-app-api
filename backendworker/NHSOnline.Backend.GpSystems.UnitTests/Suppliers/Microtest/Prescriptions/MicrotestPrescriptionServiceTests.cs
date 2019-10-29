@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescriptions
 {
@@ -28,18 +29,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         private MicrotestUserSession _microtestUserSession;
         private IFixture _fixture;
         private RepeatPrescriptionRequest _repeatPrescriptionRequest;
+        private Guid _patientId;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
 
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _microtestUserSession = _fixture.Freeze<MicrotestUserSession>();
             _microtestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _microtestPrescriptionMapper = _fixture.Freeze<Mock<IMicrotestPrescriptionMapper>>();
-
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_microtestUserSession, _patientId);
             _settings = new MicrotestConfigurationSettings(
                 null, string.Empty, string.Empty, string.Empty, PrescriptionsMaxCoursesSoftLimit, 0);
 
@@ -77,7 +81,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _microtestPrescriptionMapper.Setup(x => x.Map(prescriptionsResponse)).Returns(mappingResult);
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
@@ -134,7 +138,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Callback<PrescriptionHistoryGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
@@ -197,7 +201,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Callback<PrescriptionHistoryGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
@@ -256,7 +260,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Callback<PrescriptionHistoryGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             _microtestClient.Verify(x => x.PrescriptionHistoryGet(
@@ -280,7 +284,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     new MicrotestClient.MicrotestApiObjectResponse<PrescriptionHistoryGetResponse>(HttpStatusCode.InternalServerError)));
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
@@ -298,7 +302,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
@@ -320,7 +324,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             result.Should().BeAssignableTo<GetPrescriptionsResult.InternalServerError>();
@@ -348,7 +352,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.OK)));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, _repeatPrescriptionRequest);
 
             // Assert
             _microtestClient.Verify(x => x.PrescriptionsPost(_microtestUserSession.OdsCode,
@@ -370,7 +374,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.InternalServerError)));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, _repeatPrescriptionRequest);
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
@@ -388,7 +392,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.Conflict)));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, _repeatPrescriptionRequest);
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.CannotReorderPrescription>();
@@ -406,7 +410,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     new MicrotestClient.MicrotestApiObjectResponse<PrescriptionHistoryGetResponse>(HttpStatusCode.Forbidden)));
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_microtestUserSession, fromDate, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
 
             // Assert
             result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
@@ -425,7 +429,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     new MicrotestClient.MicrotestApiObjectResponse<PrescriptionOrderResponse>(HttpStatusCode.Forbidden)));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, _repeatPrescriptionRequest);
 
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.Forbidden>();
@@ -496,7 +500,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     }));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_microtestUserSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_gpLinkedAccountModel, _repeatPrescriptionRequest);
 
             // Assert
             _microtestClient.Verify(x => x.PrescriptionsPost(_microtestUserSession.OdsCode,

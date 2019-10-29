@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
 {
     public interface ICourseService
     {
-        Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession);
+        Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel);
     }
 }

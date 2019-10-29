@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 {
@@ -28,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private VisionConfigurationSettings _settings;
         private VisionUserSession _visionUserSession;
         private IFixture _fixture;
+        private Guid _patientId;
         private VisionResponseEnvelope<EligibleRepeatsResponse> _eligibleRepeatsResponse;
         private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
@@ -47,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+            _patientId = Guid.NewGuid();
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsRepeatPrescriptionsEnabled = true;
 
@@ -109,7 +111,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Returns(mappedResponse);
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_visionUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
@@ -137,7 +139,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Returns(mappedResponse);
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_visionUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
@@ -153,7 +155,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionUserSession.IsRepeatPrescriptionsEnabled = false;
             
             // Act
-            var result = await _systemUnderTest.GetCourses(_visionUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
@@ -196,7 +198,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Callback<EligibleRepeats>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_visionUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
@@ -219,7 +221,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                             }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_visionUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
@@ -234,7 +236,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_visionUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
@@ -257,7 +259,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_visionUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));

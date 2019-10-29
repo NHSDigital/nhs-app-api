@@ -30,12 +30,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         private MicrotestUserSession _microtestUserSession;
         private IFixture _fixture;
         private ILogger<MicrotestCourseService> _logger;
-
+        private Guid _patientId;
         private const int CoursesMaxCoursesLimit = 100;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _microtestUserSession = _fixture.Create<MicrotestUserSession>();
@@ -67,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
@@ -133,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
@@ -186,7 +187,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
@@ -252,7 +253,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
@@ -276,7 +277,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                         .InternalServerError)));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
@@ -291,7 +292,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
@@ -310,7 +311,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
@@ -327,7 +328,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
                         .Forbidden)));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_microtestUserSession);
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_microtestUserSession, _patientId));
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.Forbidden>();

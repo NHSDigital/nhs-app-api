@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -24,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private UserSession _userSession;
-        
+        private Guid _patientId;
         private Mock<IAuditor> _mockAuditor;
 
         private const string RequestAuditType = "RepeatPrescriptions_ViewRepeatMedications_Request";
@@ -33,6 +34,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
@@ -81,15 +83,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             mockGpSystem.Setup(x => x.GetCourseService())
                 .Returns(courseService.Object);
 
-            courseService.Setup(x => x.GetCourses(_userSession.GpUserSession)).Returns(Task.FromResult((GetCoursesResult)getCoursesResult));
+            courseService.Setup(x => x.GetCourses(
+                It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId))).Returns(Task.FromResult((GetCoursesResult)getCoursesResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientId);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetCourseService());
-            courseService.Verify(x => x.GetCourses(_userSession.GpUserSession));
+            courseService.Verify(x => x.GetCourses(
+                It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeEquivalentTo(coursesGetResponse);
             

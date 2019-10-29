@@ -37,17 +37,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             _settings.Validate();
         }
 
-        public async Task<GetPrescriptionsResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate,
+        public async Task<GetPrescriptionsResult> GetPrescriptions(GpLinkedAccountModel gpLinkedAccountModel, DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
-            var emisUserSession = (EmisUserSession) gpUserSession;
             try
             {
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
 
-                var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, fromDate, toDate);
+                EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+                
+                var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisRequestParameters, fromDate, toDate);
 
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
 
@@ -174,11 +174,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             return prescriptionListResponseFiltered;
         }
 
-        public async Task<OrderPrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<OrderPrescriptionResult> OrderPrescription(GpLinkedAccountModel gpLinkedAccountModel, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             const string auditType = AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsResponse;
 
-            var emisUserSession = (EmisUserSession) gpUserSession;
+            var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
 
             var postRequest = new PrescriptionRequestsPost
             {
@@ -186,6 +186,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 RequestComment = repeatPrescriptionRequest.SpecialRequest,
                 UserPatientLinkToken = emisUserSession.UserPatientLinkToken
             };
+            
+            EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
             var prescriptionsAttemptingToOrderCount = repeatPrescriptionRequest.CourseIds.Count();
             _logger.LogInformation($"Attempting to order {prescriptionsAttemptingToOrderCount} prescriptions");
@@ -198,7 +200,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 _logger.LogInformation("Beginning Place Prescription Request");
 
                 var response = await _emisClient.PrescriptionsPost(
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, postRequest);
+                    emisRequestParameters.SessionId, emisRequestParameters.EndUserSessionId, postRequest);
 
                 if (response.HasSuccessResponse)
                 {
