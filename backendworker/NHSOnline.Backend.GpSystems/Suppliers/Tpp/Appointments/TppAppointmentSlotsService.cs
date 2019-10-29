@@ -24,13 +24,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
             _appointmentSlotsMapper = appointmentSlotsMapper;
         }
-        public async Task<AppointmentSlotsResult> GetSlots(GpUserSession gpUserSession, AppointmentSlotsDateRange dateRange)
+        public async Task<AppointmentSlotsResult> GetSlots(
+            GpLinkedAccountModel gpLinkedAccountModel, AppointmentSlotsDateRange dateRange)
         {
             try
             {
                 _logger.LogEnter();
             
-                var tppUserSession = (TppUserSession) gpUserSession;
+                var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
                 var listSlotsRequest = new ListSlots(tppUserSession, dateRange);
                 var listSlotsTask = _tppClient.ListSlotsPost(listSlotsRequest, tppUserSession.Suid);
                 await listSlotsTask;

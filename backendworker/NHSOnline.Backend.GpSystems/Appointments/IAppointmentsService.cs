@@ -6,10 +6,10 @@ namespace NHSOnline.Backend.GpSystems.Appointments
 {
     public interface IAppointmentsService
     {
-        Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request);
+        Task<AppointmentBookResult> Book(GpLinkedAccountModel gpLinkedAccountModel, AppointmentBookRequest request);
 
-        Task<AppointmentCancelResult> Cancel(GpUserSession gpUserSession, AppointmentCancelRequest request);
+        Task<AppointmentCancelResult> Cancel(GpLinkedAccountModel gpLinkedAccountModel, AppointmentCancelRequest request);
 
-        Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession);
+        Task<AppointmentsResult> GetAppointments(GpLinkedAccountModel gpLinkedAccountModel);
     }
 }

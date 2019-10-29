@@ -26,19 +26,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             _logger = logger;
         }
 
-        public async Task<AppointmentsResult> GetAppointments(
-            GpUserSession userSession)
+        public async Task<AppointmentsResult> GetAppointments(GpLinkedAccountModel gpLinkedAccountModel)
         {
             try
             {
                 _logger.LogEnter();
             
-                var emisUserSession = (EmisUserSession) userSession;
-                var emisRequestParameters = new EmisRequestParameters(emisUserSession);
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger); 
+
+                var response = await _emisClient.AppointmentsGet(emisRequestParameters);
                 
-                var response = await _emisClient.AppointmentsGet(
-                    emisRequestParameters,
-                    emisUserSession.UserPatientLinkToken);
                 return InterpretAppointmentsGetResponse(response);
             }
             catch (HttpRequestException exception)

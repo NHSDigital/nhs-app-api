@@ -5,6 +5,7 @@ using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
@@ -19,12 +20,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             _tppClient = tppClient;
         }
 
-        public async Task<AppointmentCancelResult> Cancel(TppUserSession userSession, AppointmentCancelRequest request)
+        public async Task<AppointmentCancelResult> Cancel(GpLinkedAccountModel gpLinkedAccountModel, AppointmentCancelRequest request)
         {
             try
             {
                 _logger.LogEnter();
-            
+                var userSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+
                 var postRequest = new CancelAppointment(userSession, request);
                 
                 var response = await _tppClient.CancelAppointmentPost(postRequest, userSession.Suid);

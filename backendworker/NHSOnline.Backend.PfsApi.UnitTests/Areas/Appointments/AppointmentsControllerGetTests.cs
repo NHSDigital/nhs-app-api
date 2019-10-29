@@ -36,7 +36,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<ILogger<AppointmentsController>> _mockLogger;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
-
+        private Guid _patientGuid;
+        
         private const string RequestAuditType = "Appointments_ViewBooked_Request";
         private const string ResponseAuditType = "Appointments_ViewBooked_Response";
 
@@ -46,6 +47,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientGuid = Guid.NewGuid();
+            
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
@@ -62,8 +65,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _appointmentsResponse = _fixture.Create<AppointmentsResponse>();
             var result = new AppointmentsResult.Success(_appointmentsResponse);
-
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
+            
+            _mockAppointmentsService.Setup(x => x.GetAppointments(
+                It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession 
+                         && d.PatientId == _patientGuid)))
                 .Returns(Task.FromResult((AppointmentsResult)result));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -93,7 +99,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfulResult()
         {
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
@@ -110,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentCount()
         {
             // Act
-            await _systemUnderTest.Get();
+            await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             var expectedLogMessage =
@@ -137,7 +143,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             // Arrange
             var serviceResult = (AppointmentsResult) Activator.CreateInstance(serviceResultType);
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(
+                    It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession 
+                             && d.PatientId == _patientGuid)))  
                 .Returns(Task.FromResult(serviceResult));
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
                     expectedStatusCode, _userSession.GpUserSession.Supplier))
@@ -149,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -167,7 +176,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Act
-            await _systemUnderTest.Get();
+            await _systemUnderTest.Get(_patientGuid);
 
             // Assert
             _mockGpSystem.VerifyAll();

@@ -5,6 +5,7 @@ using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
@@ -22,12 +23,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
 
-        public async Task<AppointmentBookResult> Book(TppUserSession userSession, AppointmentBookRequest request)
+        public async Task<AppointmentBookResult> Book(GpLinkedAccountModel gpLinkedAccountModel, AppointmentBookRequest request)
         {
             try
             {
                 _logger.LogEnter();
-            
+                var userSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+
                 if (!request.StartTime.HasValue || !request.EndTime.HasValue)
                 {
                     _logger.LogError("Appointment book request was missing dates", request);

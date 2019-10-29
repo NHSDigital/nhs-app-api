@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 {
@@ -32,6 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
         private MicrotestUserSession _microtestUserSession;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
         
         [TestInitialize]
         public void TestInitialize()
@@ -50,6 +52,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 SlotId = SlotId,
                 TelephoneNumber = TelephoneNumber
             };
+            
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_microtestUserSession, Guid.NewGuid());
         }
 
         [TestMethod]
@@ -64,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MockMicrotestClientAppointmentPostMethod(response);
             
             // Act            
-            var result = await _systemUnderTest.Book(_microtestUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockMicrotestClient.Verify();
@@ -83,7 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MockMicrotestClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_microtestUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockMicrotestClient.Verify();
@@ -102,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MockMicrotestClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_microtestUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockMicrotestClient.Verify();
@@ -118,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _request.BookingReason = bookingReason;
 
             // Act
-            var result = await _systemUnderTest.Book(_microtestUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
@@ -128,8 +132,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MicrotestClient.MicrotestApiObjectResponse<string> response)
         {
             _mockMicrotestClient.Setup(x => x.AppointmentsPost(
-                    _microtestUserSession.OdsCode,
-                    _microtestUserSession.NhsNumber,
+                    ((MicrotestUserSession)_gpLinkedAccountModel.GpUserSession).OdsCode,
+                    ((MicrotestUserSession)_gpLinkedAccountModel.GpUserSession).NhsNumber,
                     It.Is<BookAppointmentSlotPostRequest>(p=> 
                         p.BookingReason.Equals(BookingReason, StringComparison.Ordinal)
                         && p.SlotId.Equals(SlotId, StringComparison.Ordinal))

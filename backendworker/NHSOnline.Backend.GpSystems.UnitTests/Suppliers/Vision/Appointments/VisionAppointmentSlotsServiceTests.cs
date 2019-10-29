@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
@@ -32,6 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private Mock<IAvailableAppointmentsResponseMapper> _mockAppointmentsMapper;
         private Mock<ILogger<VisionAppointmentSlotsService>> _mockLogger;
         private IEnumerable<Slot> _mappedSlots;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
         private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
         private const string CertificatePassphrase = "CertificatePassphrase";
@@ -55,7 +57,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsAppointmentsEnabled = true;
-                        
+               
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_visionUserSession, Guid.NewGuid());
+            
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientSlotsResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
             
@@ -109,7 +113,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>()
@@ -126,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var systemUnderTest = BuildSystemUnderTest();
             
             // Act
-            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
             
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentSlotsResult.Success>().Subject.Response;
@@ -143,7 +147,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var systemUnderTest = BuildSystemUnderTest();
             
             // Act
-            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
             
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>()
@@ -160,7 +164,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var systemUnderTest = BuildSystemUnderTest();
             
             // Act
-            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
             
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
@@ -176,7 +180,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             _mockVisionClient.Verify();
@@ -196,7 +200,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
@@ -213,7 +217,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.InternalServerError>();

@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 userPatientLinkToken = emisUserSession.UserPatientLinkToken;
                 logger.LogInformation("Patient Id match found against main (logged in) user");
             }
-            else if (emisUserSession.ProxyPatients != null && emisUserSession.ProxyPatients.Any())
+            else if (emisUserSession.HasLinkedAccounts)
             {
                 userPatientLinkToken = emisUserSession.ProxyPatients
                     .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId)?.UserPatientLinkToken;
@@ -25,11 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 {
                     logger.LogInformation("Patient Id match found on proxy patient");
                 }
-            }
-            else
-            {
-                logger.LogInformation("No Proxy Patients in EmisUserSession");
-            }
+            }           
 
             // For now, default to the main (logged in user) to prevent any potential errors in production.
             // A Future story will be created for error handling when all applicable endpoints are using the

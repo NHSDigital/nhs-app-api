@@ -7,6 +7,7 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 {
@@ -21,19 +22,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             _emisClient = emisClient;
         }
 
-        public async Task<AppointmentBookResult> Book(EmisUserSession emisUserSession, AppointmentBookRequest request)
+        public async Task<AppointmentBookResult> Book(GpLinkedAccountModel gpLinkedAccountModel, AppointmentBookRequest request)
         {
             try
             {
                 _logger.LogEnter();
+
+                var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
 
                 if (BookingReasonInvalid(emisUserSession, request))
                 {
                     return new AppointmentBookResult.BadRequest();
                 }
 
-                var postRequest = new BookAppointmentSlotPostRequest(emisUserSession.UserPatientLinkToken, request);
-                var emisRequestParameters = new EmisRequestParameters(emisUserSession);
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger); 
+
+                var postRequest = new BookAppointmentSlotPostRequest(emisRequestParameters.UserPatientLinkToken, request);
 
                 var response = await _emisClient.AppointmentsPost(emisRequestParameters, postRequest);
                 return InterpretAppointmentsPostResponse(response);

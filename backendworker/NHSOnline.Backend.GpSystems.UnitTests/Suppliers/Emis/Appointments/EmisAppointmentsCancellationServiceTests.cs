@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 {
@@ -27,6 +28,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private AppointmentCancelRequest _request;
         private string _cancellationReasonText;
         private Mock<ICancellationReasonService> _cancellationReasonService;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
         
         private const int ProvidedAppointmentSlotInPast = -1152;
 
@@ -37,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _cancellationReasonService = _fixture.Freeze<Mock<ICancellationReasonService>>();
             _emisUserSession = _fixture.Create<EmisUserSession>();
-
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, Guid.NewGuid());
             _request = new AppointmentCancelRequest
             {
                 AppointmentId = _fixture.Create<int>().ToString(CultureInfo.InvariantCulture),
@@ -74,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -91,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 .Verifiable();
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -108,7 +110,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -129,7 +131,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -151,7 +153,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -172,7 +174,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -189,7 +191,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -209,7 +211,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -230,7 +232,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -247,7 +249,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _request.CancellationReasonId = cancellationReasonId;
 
             // Act
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentCancelResult.BadRequest>();
@@ -260,7 +262,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _request.CancellationReasonId = _fixture.Create<string>();
 
             // Act
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentCancelResult.BadRequest>();
@@ -278,7 +280,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _request.AppointmentId = appointmentId;
 
             // Act
-            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
+            var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentCancelResult.BadRequest>();

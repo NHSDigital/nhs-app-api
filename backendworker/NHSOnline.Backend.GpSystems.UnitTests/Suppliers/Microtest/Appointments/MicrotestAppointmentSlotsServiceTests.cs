@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
 
@@ -33,10 +34,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private IAppointmentSlotsService _systemUnderTest;
         private Mock<IAppointmentSlotsResponseMapper> _mockResponseMapper;
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
+        private Guid _patientId;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
             _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
@@ -52,6 +56,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _mockResponseMapper = _fixture.Freeze<Mock<IAppointmentSlotsResponseMapper>>();
 
             _microtestUserSession = _fixture.Create<MicrotestUserSession>();
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_microtestUserSession, _patientId);
 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
@@ -257,7 +262,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         
         private async Task<AppointmentSlotsResult> GetAppointmentSlotsResult()
         {
-            return await _systemUnderTest.GetSlots(_microtestUserSession, _dateRange);
+            return await _systemUnderTest.GetSlots(_gpLinkedAccountModel,_dateRange);
         }
     }
 }

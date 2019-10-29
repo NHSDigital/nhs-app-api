@@ -26,19 +26,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(
-            GpUserSession gpUserSession, 
-            AppointmentSlotsDateRange dateRange)
+            GpLinkedAccountModel gpLinkedAccountModel, AppointmentSlotsDateRange dateRange)
         {
             try
             {
                 _logger.LogEnter();
-            
-                var emisUserSession = (EmisUserSession) gpUserSession;
-                var patientLinkToken = emisUserSession.UserPatientLinkToken;
-                var metaParams = new SlotsMetadataGetQueryParameters(dateRange.FromDate, dateRange.ToDate,
-                    patientLinkToken);
+
+                var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger); 
+                var patientLinkToken = emisRequestParameters.UserPatientLinkToken;
+                var metaParams = new SlotsMetadataGetQueryParameters(dateRange.FromDate, dateRange.ToDate, patientLinkToken);
                 var slotsParams = new SlotsGetQueryParameters(dateRange.FromDate, dateRange.ToDate, patientLinkToken);
-                var emisRequestParameters = new EmisRequestParameters(emisUserSession, patientLinkToken);
 
                 _logger.LogInformation("Creating appointment slots requests");
                 var metaTask = _emisClient.AppointmentSlotsMetadataGet(emisRequestParameters, metaParams);
@@ -47,7 +45,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 await Task.WhenAll(metaTask, slotTask);
                 _logger.LogInformation("Appointment slot requests completed");
 
-                var practiceTask = _emisClient.PracticeSettingsGet(emisRequestParameters, emisUserSession.OdsCode);
+                var practiceTask = _emisClient.PracticeSettingsGet(
+                    emisRequestParameters, gpLinkedAccountModel.GpUserSession.OdsCode);
+                
                 var demographicsTask = _emisClient.DemographicsGet(emisRequestParameters);
                 
                 // Wait for practice and demographics tasks to complete, but unlike the other tasks suppress any errors such as timeout.

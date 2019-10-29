@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
             try
             {
                 _logger.LogEnter();   
-                _logger.LogInformation($"{nameof(Get)} with patientId {patientId}");
+                _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
 
                 await _auditor.Audit(AuditingOperations.GetDemographicsAuditTypeRequest,
                     "Attempting to view Demographics");

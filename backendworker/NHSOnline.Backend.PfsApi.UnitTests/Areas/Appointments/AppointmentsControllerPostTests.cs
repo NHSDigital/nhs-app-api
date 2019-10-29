@@ -33,6 +33,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IAuditor> _mockAuditor;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
+        private Guid _patientId;
 
         private const string RequestAuditType = "Appointments_Book_Request";
         private const string ResponseAuditType = "Appointments_Book_Response";
@@ -43,6 +44,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
+            
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
@@ -63,7 +66,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
+            _mockAppointmentsService.Setup(x => x.Book(
+                    It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), 
+                    _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.Success()));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -98,7 +104,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Post_AppointmentsServiceBookReturnsSuccess_ReturnsCreated()
         {
             // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest);
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId);
 
             // Assert
             result.Should().BeAssignableTo<CreatedResult>();
@@ -120,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest);
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -157,7 +163,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             // Arrange
             var serviceResult = (AppointmentBookResult) Activator.CreateInstance(serviceResultType);
-            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
+            _mockAppointmentsService.Setup(x => x.Book(
+                It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                    _appointmentBookRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
                     expectedStatusCode, _userSession.GpUserSession.Supplier))
@@ -169,7 +178,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest);
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -189,7 +198,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Act
-            await _systemUnderTest.Post(_appointmentBookRequest);
+            await _systemUnderTest.Post(_appointmentBookRequest, _patientId);
 
             // Assert
             _mockGpSystem.VerifyAll();

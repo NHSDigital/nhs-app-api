@@ -32,13 +32,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             _settings.Validate();
         }
 
-        public async Task<AppointmentSlotsResult> GetSlots(GpUserSession gpUserSession, AppointmentSlotsDateRange dateRange)
+        public async Task<AppointmentSlotsResult> GetSlots(
+            GpLinkedAccountModel gpLinkedAccountModel, AppointmentSlotsDateRange dateRange)
         {          
             try
             {
                 _logger.LogEnter();
 
-                var visionUserSession = (VisionUserSession) gpUserSession;
+                var visionUserSession = (VisionUserSession) gpLinkedAccountModel.GpUserSession;
                 
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {

@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support.AspNet;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -57,12 +58,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId)
         {
             try
             {
                 _logger.LogEnter();
-                
+                _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
+               
                 await _auditor.Audit(AuditingOperations.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
                 var userSession = HttpContext.GetUserSession();
@@ -72,7 +74,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider);
 
-                var result = await appointmentService.GetSlots(userSession.GpUserSession, dateRange);
+                var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+
+                var result = await appointmentService.GetSlots(gpLinkedAccountsModel, dateRange);
 
                 LogAppointmentSlotInformation(userSession.GpUserSession, result);
 

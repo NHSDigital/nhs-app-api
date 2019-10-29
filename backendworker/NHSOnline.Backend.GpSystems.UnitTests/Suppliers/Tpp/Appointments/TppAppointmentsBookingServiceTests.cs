@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 {
@@ -30,16 +31,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
         private TppUserSession _tppUserSession;
+        private Guid _patientId;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
+                
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
 
             _tppUserSession = _fixture.Create<TppUserSession>();
 
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
+            
             _systemUnderTest = _fixture.Create<TppAppointmentsService>();
 
             _request = new AppointmentBookRequest
@@ -64,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -81,7 +88,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Verifiable();
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -101,7 +108,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -121,7 +128,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -141,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -161,7 +168,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -181,7 +188,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -198,7 +205,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -212,7 +219,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _request.StartTime = null;
 
             // Act
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
@@ -225,7 +232,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _request.StartTime = null;
 
             // Act
-            var result = await _systemUnderTest.Book(_tppUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();

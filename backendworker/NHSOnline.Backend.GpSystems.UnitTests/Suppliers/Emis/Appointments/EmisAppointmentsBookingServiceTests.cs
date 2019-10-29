@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 {
@@ -34,15 +35,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
         private EmisUserSession _emisUserSession;
+        private Guid _patientId;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
         
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
             _emisUserSession = _fixture.Create<EmisUserSession>();
             _emisUserSession.AppointmentBookingReasonNecessity = Necessity.Optional;
-            
+
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
+                
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
@@ -69,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
             
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -86,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 .Verifiable();
             
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -105,7 +111,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -125,7 +131,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
             
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -145,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -165,7 +171,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
             
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -182,7 +188,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
             
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -205,7 +211,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -222,7 +228,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
             
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -241,7 +247,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -262,7 +268,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -283,7 +289,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -304,7 +310,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -325,7 +331,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -342,7 +348,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _request.BookingReason = bookingReason;
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -356,7 +362,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _emisUserSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -377,7 +383,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -398,7 +404,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentPostMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Book(_emisUserSession, _request);
+            var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockEmisClient.Verify();

@@ -33,7 +33,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IAuditor> _mockAuditor;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
-
+        private Guid _patientId;
+        
         private const string RequestAuditType = "Appointments_Cancel_Request";
         private const string ResponseAuditType = "Appointments_Cancel_Response";
 
@@ -42,6 +43,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId =Guid.NewGuid();
+            
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
@@ -59,7 +62,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(
+                It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession 
+                         && d.PatientId == _patientId), _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.Success()));
 
             _mockAppointmentsValidationService.Setup(x => x.IsDeleteValid(_appointmentCancelRequest))
@@ -99,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Delete_AppointmentsServiceCancelReturnsSuccess_ReturnsNoContent()
         {
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
 
             // Assert
             result.Should().BeAssignableTo<NoContentResult>();
@@ -121,7 +127,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -156,7 +162,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             // Arrange
             var serviceResult = (AppointmentCancelResult) Activator.CreateInstance(serviceResultType);
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(
+                    It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession 
+                             && d.PatientId == _patientId),
+                    _appointmentCancelRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
                     expectedStatusCode, _userSession.GpUserSession.Supplier))
@@ -168,7 +178,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -187,7 +197,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Delete_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Act
-            await _systemUnderTest.Delete(_appointmentCancelRequest);
+            await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
 
             // Assert
             _mockGpSystem.VerifyAll();

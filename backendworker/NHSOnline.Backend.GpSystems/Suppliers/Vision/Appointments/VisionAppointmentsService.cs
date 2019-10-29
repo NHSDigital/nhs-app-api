@@ -30,23 +30,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             _appointmentCancellationReasonLogger = appointmentCancellationReasonLogger;
         }
         
-        public async Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request)
+        public async Task<AppointmentBookResult> Book(GpLinkedAccountModel gpLinkedAccountModel, AppointmentBookRequest request)
         {
-            return await _booker.Book((VisionUserSession)gpUserSession, request);
+            return await _booker.Book((VisionUserSession)gpLinkedAccountModel.GpUserSession, request);
         }
 
-        public async Task<AppointmentCancelResult> Cancel(GpUserSession gpUserSession, AppointmentCancelRequest request)
+        public async Task<AppointmentCancelResult> Cancel(GpLinkedAccountModel gpLinkedAccountModel, AppointmentCancelRequest request)
         {
-            return await _canceller.Cancel((VisionUserSession)gpUserSession, request);
+            return await _canceller.Cancel((VisionUserSession)gpLinkedAccountModel.GpUserSession, request);
         }
 
-        public async Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession)
+        public async Task<AppointmentsResult> GetAppointments(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var appointmentsResult = await _getter.GetAppointments(gpUserSession);
+            var appointmentsResult = await _getter.GetAppointments(gpLinkedAccountModel.GpUserSession);
 
             try
             {
-                _appointmentCancellationReasonLogger.CaptureCancellationReasons(gpUserSession, appointmentsResult);
+                _appointmentCancellationReasonLogger.
+                    CaptureCancellationReasons(gpLinkedAccountModel.GpUserSession, appointmentsResult);
             }
             catch (Exception e)
             {

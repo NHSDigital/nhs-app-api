@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
 
@@ -33,6 +34,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private DateTimeOffset _fromDateTimeOffset;
         private DateTimeOffset _toDateTimeOffset;
         private AppointmentSlotsDateRange _dateRange;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
+            
 
         [TestInitialize]
         public void TestInitialize()
@@ -52,6 +55,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _mockSlotsMapper = _fixture.Freeze<Mock<IAppointmentSlotsMapper>>();
 
             _tppUserSession = _fixture.Create<TppUserSession>();
+            
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, Guid.NewGuid());
                 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
@@ -71,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Verifiable();
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_tppUserSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
             
             // Assert
             _mockTppClient.Verify();
@@ -93,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientRequestSystmOnlineMessagesPost(new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_tppUserSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             _mockTppClient.Verify();
@@ -112,7 +117,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientListSlotsPost(new TppClient.TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_tppUserSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             _mockTppClient.Verify();
@@ -134,7 +139,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientListSlotsPost(new TppClient.TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_tppUserSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             _mockTppClient.Verify();
@@ -157,7 +162,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             MockTppClientRequestSystmOnlineMessagesPost(new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_tppUserSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             _mockTppClient.Verify();
@@ -178,7 +183,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Throws<Exception>();
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_tppUserSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             _mockTppClient.Verify();
@@ -201,7 +206,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Returns(expectedResponse);
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_tppUserSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
             _mockTppClient.Verify();

@@ -22,13 +22,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             _appointmentResultBuilder = appointmentResultBuilder;
         }
 
-        public async Task<AppointmentsResult> GetAppointments(GpUserSession userSession)
+        public async Task<AppointmentsResult> GetAppointments(GpLinkedAccountModel gpLinkedAccountModel)
         {
             try
             {
                 _logger.LogEnter();
 
-                var tppUserSession = (TppUserSession)userSession;
+                var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
                 var requestPast = new ViewAppointments(tppUserSession, false);
                 var requestUpcoming = new ViewAppointments(tppUserSession, true);
 

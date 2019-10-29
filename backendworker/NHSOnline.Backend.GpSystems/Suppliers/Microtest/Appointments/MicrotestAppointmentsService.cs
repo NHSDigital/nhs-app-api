@@ -21,19 +21,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             _canceller = canceller;
         }
         
-        public async Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request)
+        public async Task<AppointmentBookResult> Book(GpLinkedAccountModel gpLinkedAccountModel, AppointmentBookRequest request)
         {
-            return await _booker.Book((MicrotestUserSession) gpUserSession, request);
+            return await _booker.Book((MicrotestUserSession) gpLinkedAccountModel.GpUserSession, request);
         }
 
-        public async Task<AppointmentCancelResult> Cancel(GpUserSession gpUserSession, AppointmentCancelRequest request)
+        public async Task<AppointmentCancelResult> Cancel(GpLinkedAccountModel gpLinkedAccountModel, AppointmentCancelRequest request)
         {
-            return await _canceller.Cancel((MicrotestUserSession) gpUserSession, request);
+            return await _canceller.Cancel((MicrotestUserSession) gpLinkedAccountModel.GpUserSession, request);
         }
 
-        public async Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession)
+        public async Task<AppointmentsResult> GetAppointments(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            return await _getter.GetAppointments(gpUserSession);
+            return await _getter.GetAppointments((MicrotestUserSession) gpLinkedAccountModel.GpUserSession);
         }
     }
 }

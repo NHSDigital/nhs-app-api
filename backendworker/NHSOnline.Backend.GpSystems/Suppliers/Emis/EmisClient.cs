@@ -208,13 +208,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
-            EmisRequestParameters requestParameters, string userPatientLinkToken)
+            EmisRequestParameters requestParameters)
         {
             var queryParams = string.Format(CultureInfo.InvariantCulture,
                 "?UserPatientLinkToken={0}&FetchPreviousAppointments=true&PreviousAppointmentsFromDate={1}", 
-                userPatientLinkToken,
+                requestParameters.UserPatientLinkToken,
                 DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-
 
             var path = $"{AppointmentsPath}{queryParams}";
 

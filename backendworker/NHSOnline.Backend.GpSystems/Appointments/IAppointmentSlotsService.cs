@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.GpSystems.Appointments
 {
     public interface IAppointmentSlotsService
     {   
-        Task<AppointmentSlotsResult> GetSlots(GpUserSession gpUserSession, AppointmentSlotsDateRange dateRange);
+        Task<AppointmentSlotsResult> GetSlots(GpLinkedAccountModel gpLinkedAccountModel, AppointmentSlotsDateRange dateRange);
     }
 }

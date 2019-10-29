@@ -27,14 +27,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(
-            GpUserSession gpUserSession,
-            AppointmentSlotsDateRange dateRange)
+            GpLinkedAccountModel gpLinkedAccountModel, AppointmentSlotsDateRange dateRange)
         {
             try
             {
                 _logger.LogEnter();
 
-                var microtestUserSession = (MicrotestUserSession) gpUserSession;
+                var microtestUserSession = (MicrotestUserSession) gpLinkedAccountModel.GpUserSession;
 
                 _logger.LogInformation("Demographic data request starting");
 

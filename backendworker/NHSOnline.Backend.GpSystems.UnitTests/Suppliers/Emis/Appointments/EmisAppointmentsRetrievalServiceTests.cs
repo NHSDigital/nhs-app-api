@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 {
@@ -26,10 +27,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private AppointmentsGetResponse _emisClientGetResponse;
         private Mock<IAppointmentsResponseMapper> _mockResponseMapper;
         private AppointmentsResponse _mappedResponse;
+        private Guid _patientId;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
             _emisUserSession = _fixture.Create<EmisUserSession>();
@@ -47,6 +51,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockResponseMapper.Setup(x => x.Map(_emisClientGetResponse))
                 .Returns(_mappedResponse);
             
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
+            
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
         }
 
@@ -54,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
             // Act
-            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
 
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentsResult.Success>().Subject.Response;
@@ -69,16 +75,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             _mockEmisClient.Setup(x => x.AppointmentsGet(
-                    It.Is<EmisRequestParameters>(p =>
-                        p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
-                        && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
-                    _emisUserSession.UserPatientLinkToken
-                    ))
+                    It.Is<EmisRequestParameters>(
+                        p => p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                             && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)
+                             && p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
@@ -92,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 .Throws<Exception>();
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
@@ -106,7 +111,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
@@ -125,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
@@ -146,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
@@ -166,7 +171,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
@@ -178,8 +183,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient.Setup(x => x.AppointmentsGet(
                     It.Is<EmisRequestParameters>(p =>
                         p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
-                        && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
-                    _emisUserSession.UserPatientLinkToken))
+                        && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)
+                        && p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .ReturnsAsync(response);
         }
     }

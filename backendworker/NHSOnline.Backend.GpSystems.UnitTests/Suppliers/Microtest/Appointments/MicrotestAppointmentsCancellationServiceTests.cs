@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 {
@@ -26,6 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private Mock<IMicrotestClient> _mockMicrotestClient;
         private IFixture _fixture;
         private Mock<ICancellationReasonService> _cancellationReasonService;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
 
         [TestInitialize]
         public void TestInitialize()
@@ -41,6 +43,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _mockMicrotestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _cancellationReasonService = _fixture.Freeze<Mock<ICancellationReasonService>>();
             _systemUnderTest = _fixture.Create<MicrotestAppointmentsService>();
+            
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_microtestUserSession, Guid.NewGuid());
         }
 
         [TestMethod]
@@ -62,7 +66,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MockMicrotestClientAppointmentDeleteMethod(response);
 
             // Act
-            var cancelRequest = await _systemUnderTest.Cancel(_microtestUserSession, _appointmentCancelRequest);
+            var cancelRequest = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _appointmentCancelRequest);
 
             // Assert
             _cancellationReasonService.VerifyAll();
@@ -89,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MockMicrotestClientAppointmentDeleteMethod(response);
 
             // Act
-            var cancelRequest = await _systemUnderTest.Cancel(_microtestUserSession, _appointmentCancelRequest);
+            var cancelRequest = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _appointmentCancelRequest);
 
             // Assert
             _cancellationReasonService.VerifyAll();
@@ -116,7 +120,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MockMicrotestClientAppointmentDeleteMethod(response);
 
             // Act
-            var cancelRequest = await _systemUnderTest.Cancel(_microtestUserSession, _appointmentCancelRequest);
+            var cancelRequest = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _appointmentCancelRequest);
 
             // Assert
             _cancellationReasonService.VerifyAll();

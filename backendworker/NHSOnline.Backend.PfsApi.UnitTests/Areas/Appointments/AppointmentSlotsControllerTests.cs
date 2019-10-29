@@ -39,7 +39,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
         private AppointmentSlotsResponse _slotsResponse;
-
+        private Guid _patientId;
+        
         private const string RequestAuditType = "Appointments_GetSlots_Request";
         private const string ResponseAuditType = "Appointments_GetSlots_Response";
 
@@ -48,6 +49,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
+            
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
@@ -66,7 +69,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var successResponse = new AppointmentSlotsResult.Success(_slotsResponse);
 
             _mockAppointmentSlotsService
-                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
+                .Setup(x => x.GetSlots(
+                    It.Is<GpLinkedAccountModel>(
+                        g => g.GpUserSession ==_userSession.GpUserSession && g.PatientId == _patientId), 
+                    It.IsAny<AppointmentSlotsDateRange>()))
                 .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
 
             var mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
@@ -107,10 +113,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientId);
 
             // Assert
-            _mockAppointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
+            _mockAppointmentSlotsService.Verify(x => x.GetSlots(
+                It.Is<GpLinkedAccountModel>(
+                    g => g.GpUserSession ==_userSession.GpUserSession && g.PatientId == _patientId),
                 It.IsAny<AppointmentSlotsDateRange>()));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<AppointmentSlotsResponse>();
@@ -122,7 +130,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotCount()
         {
             // Act
-            await _systemUnderTest.Get();
+            await _systemUnderTest.Get(_patientId);
 
             // Assert
             var expectedLogMessage =
@@ -135,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotMetadata()
         {
             // Act
-            await _systemUnderTest.Get();
+            await _systemUnderTest.Get(_patientId);
 
             // Assert
             var locations = string.Join(",", _slotsResponse.Slots.Select(x => "\"" + x.Location + "\""));
@@ -161,7 +169,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             // Arrange
             var serviceResult = (AppointmentSlotsResult)Activator.CreateInstance(serviceResultType);
-            _mockAppointmentSlotsService.Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
+            _mockAppointmentSlotsService.Setup(x => x.GetSlots(
+                    It.Is<GpLinkedAccountModel>(
+                        g => g.GpUserSession ==_userSession.GpUserSession && g.PatientId == _patientId),
+                    It.IsAny<AppointmentSlotsDateRange>()))
                 .Returns(Task.FromResult(serviceResult));
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
                     expectedStatusCode, _userSession.GpUserSession.Supplier))
@@ -173,10 +184,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_patientId);
 
             // Assert
-            _mockAppointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
+            _mockAppointmentSlotsService.Verify(x => x.GetSlots(
+                It.Is<GpLinkedAccountModel>(
+                    g => g.GpUserSession ==_userSession.GpUserSession && g.PatientId == _patientId),
                 It.IsAny<AppointmentSlotsDateRange>()));
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
