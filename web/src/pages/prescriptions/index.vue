@@ -23,7 +23,7 @@
                      :click-func="onNominatedPharmacyDetailClicked"
                      :aria-label="ariaLabelCaption(
                        pharmacyWidgetText,
-                       pharmacyWidgetText)"/>
+                       pharmacyName)"/>
         </menu-item-list>
       </div>
     </sjr-if>
@@ -144,9 +144,12 @@ export default {
   },
   async asyncData({ store }) {
     await store.dispatch('prescriptions/clear');
-    await store.dispatch('nominatedPharmacy/clear');
     await store.dispatch('prescriptions/load');
-    await store.dispatch('nominatedPharmacy/load');
+
+    if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
+      await store.dispatch('nominatedPharmacy/clear');
+      await store.dispatch('nominatedPharmacy/load');
+    }
     return {
       nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
     };
@@ -175,7 +178,7 @@ export default {
       return GetNavigationPathFromPrescriptions(this.$store);
     },
     ariaLabelCaption(header, body) {
-      return `${this.$t(header)}. ${this.$t(body)}`;
+      return `${header}. ${body}`;
     },
   },
 };

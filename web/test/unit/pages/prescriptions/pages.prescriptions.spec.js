@@ -71,8 +71,12 @@ const createPrescriptionsPage = ($store) => {
 
 describe('prescriptions/index.vue -', () => {
   describe('asyncData', () => {
-    it('will clear and load the prescriptions', async () => {
+    it('will clear and load the prescriptions, '
+    + 'and will clear and load nominated pharmacy when enabled via sjr', async () => {
       const $store = createStore(true);
+      $store.getters = {
+        'serviceJourneyRules/nominatedPharmacyEnabled': true,
+      };
 
       jest.spyOn($store, 'dispatch');
 
@@ -83,6 +87,24 @@ describe('prescriptions/index.vue -', () => {
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clear');
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/load');
+    });
+
+    it('will clear and load prescriptions, '
+    + 'but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
+      const $store = createStore(true);
+      $store.getters = {
+        'serviceJourneyRules/nominatedPharmacyEnabled': false,
+      };
+
+      jest.spyOn($store, 'dispatch');
+
+      const page = createPrescriptionsPage($store);
+      await page.vm.$options.asyncData({ store: $store });
+
+      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
+      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
+      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
     });
   });
 
