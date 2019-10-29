@@ -40,5 +40,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
             return null;
         }
+
+        public object Visit(OrganDonationWithdrawResult.BadRequest result)
+        {
+            _auditor.Audit(AuditType, "The organ donation withdraw request failed validation");
+
+            return null;
+        }
     }
 }

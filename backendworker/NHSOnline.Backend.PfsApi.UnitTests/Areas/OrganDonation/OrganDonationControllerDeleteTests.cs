@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         private Mock<IOrganDonationService> _mockOrganDonationService;
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<IOrganDonationValidationService> _mockValidator;
 
         private const string RequestAuditType = "OrganDonation_Withdraw_Request";
         private const string ResponseAuditType = "OrganDonation_Withdraw_Response";
@@ -39,9 +40,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _userSession = _fixture.Create<UserSession>();
             _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-
-            var mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
-            mockValidator
+            
+            _mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
+            _mockValidator
                 .Setup(x => x.IsDeleteValid(It.IsAny<OrganDonationWithdrawRequest>()))
                 .Returns(true);
 
@@ -57,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         }
 
         [TestMethod]
-        public async Task Withdraw_WhenServiceReturnsSuccessResult_ReturnsSuccessfulResult()
+        public async Task Delete_WhenServiceReturnsSuccessResult_ReturnsSuccessfulResult()
         {
             // Arrange
             var newResult = new OrganDonationWithdrawResult.SuccessfullyWithdrawn();
@@ -76,6 +77,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
                 x.Audit(ResponseAuditType, "The organ donation decision has been successfully Withdrawn"));
+        }
+
+        [TestMethod]
+        public async Task Delete_WhenValidationFails_ReturnsBadRequest()
+        {
+            // Arrange
+            _mockValidator
+                .Setup(x => x.IsDeleteValid(It.IsAny<OrganDonationWithdrawRequest>()))
+                .Returns(false);
+            
+            // Act
+            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
+            
+            // Assert
+            result.Should().BeOfType<BadRequestResult>();
+            _mockOrganDonationService.Verify(x => x.Withdraw(It.IsAny<OrganDonationWithdrawRequest>(), _userSession), Times.Never);
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation withdraw request failed validation"));
         }
 
         [TestMethod]

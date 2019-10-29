@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         public class UpstreamError : OrganDonationRegistrationResult
         {
             public IApiErrorResponse Response { get; }
-            
+
             public UpstreamError(IApiErrorResponse response)
             {
                 Response = response;
@@ -38,6 +38,11 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         }
 
         public class Timeout : OrganDonationRegistrationResult
+        {
+            public override T Accept<T>(IOrganDonationRegistrationResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public class BadRequest : OrganDonationRegistrationResult
         {
             public override T Accept<T>(IOrganDonationRegistrationResultVisitor<T> visitor) => visitor.Visit(this);
         }

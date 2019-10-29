@@ -66,5 +66,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationRegistrationResult.Timeout)}");
             }
         }
+        
+        public async Task Visit(OrganDonationRegistrationResult.BadRequest result)
+        {
+            try
+            {
+                await _auditor.Audit(AuditType, "The organ donation registration request failed validation");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationRegistrationResult.BadRequest)}");
+            }
+        }
     }
 }

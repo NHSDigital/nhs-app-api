@@ -29,5 +29,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+
+        public IActionResult Visit(OrganDonationWithdrawResult.BadRequest result)
+        {
+            return new BadRequestResult();
+        }
     }
 }

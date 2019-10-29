@@ -74,17 +74,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                if (!_validator.IsPostValid(model))
-                {
-                    _logger.LogError("Invalid request body supplied to registration request");
-                    return BadRequest();
-                }
-
                 await _auditor.Audit(AuditingOperations.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
-                
-                var userSession = HttpContext.GetUserSession();
 
-                var result = await _organDonationService.Register(model, userSession);
+                var result = await Register(model);
 
                 await result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor, _logger));
                 return result.Accept(new OrganDonationRegistrationVisitor());
@@ -102,20 +94,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                if (!_validator.IsPutValid(model))
-                {
-                    _logger.LogError("Invalid request body supplied to registration update request");
-                    return BadRequest();
-                }
-
                 await _auditor.Audit(AuditingOperations.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
-
-                var userSession = HttpContext.GetUserSession();
-
-                var result = await _organDonationService.Update(model, userSession);
+                
+                var result = await Update(model);
 
                 result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor));
-
                 return result.Accept(new OrganDonationRegistrationUpdateVisitor());
             }
             finally
@@ -131,17 +114,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
                 
-                if (!_validator.IsDeleteValid(model))
-                {
-                    _logger.LogError("Invalid request body supplied to withdraw request");
-                    return BadRequest();
-                }
-
                 await _auditor.Audit(AuditingOperations.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
-
-                var userSession = HttpContext.GetUserSession();
-
-                var result = await _organDonationService.Withdraw(model, userSession);
+                
+                var result = await Withdraw(model);
 
                 result.Accept(new OrganDonationWithdrawAuditingVisitor(_auditor));
 
@@ -151,6 +126,45 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogExit();
             }
+        }
+        
+        private async Task<OrganDonationRegistrationResult> Update(OrganDonationRegistrationRequest model)
+        {
+            var userSession = HttpContext.GetUserSession();
+
+            if (!_validator.IsPutValid(model))
+            {
+                _logger.LogError("Invalid request body supplied to registration update request");
+                return new OrganDonationRegistrationResult.BadRequest();
+            }
+
+            return await _organDonationService.Update(model, userSession);
+        }
+        
+        private async Task<OrganDonationRegistrationResult> Register(OrganDonationRegistrationRequest model)
+        {
+            var userSession = HttpContext.GetUserSession();
+
+            if (!_validator.IsPostValid(model))
+            {
+                _logger.LogError("Invalid request body supplied to registration request");
+                return new OrganDonationRegistrationResult.BadRequest();
+            }
+
+            return await _organDonationService.Register(model, userSession);
+        }
+
+        private async Task<OrganDonationWithdrawResult> Withdraw(OrganDonationWithdrawRequest model)
+        {
+            var userSession = HttpContext.GetUserSession();
+            
+            if (!_validator.IsDeleteValid(model))
+            {
+                _logger.LogError("Invalid request body supplied to withdraw request");
+                return new OrganDonationWithdrawResult.BadRequest();
+            }
+
+            return await _organDonationService.Withdraw(model, userSession);
         }
     }
 }

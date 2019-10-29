@@ -8,5 +8,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         T Visit(OrganDonationRegistrationResult.Timeout result);
         T Visit(OrganDonationRegistrationResult.SystemError result);
         T Visit(OrganDonationRegistrationResult.UpstreamError result);
+        T Visit(OrganDonationRegistrationResult.BadRequest result);
     }
 }

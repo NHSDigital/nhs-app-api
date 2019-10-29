@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         private Mock<IOrganDonationService> _mockOrganDonationService;
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<IOrganDonationValidationService> _mockValidator;
 
         private const string RequestAuditType = "OrganDonation_Update_Request";
         private const string ResponseAuditType = "OrganDonation_Update_Response";
@@ -37,8 +38,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            var mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
-            mockValidator
+            _mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
+            _mockValidator
                 .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>()))
                 .Returns(true);
 
@@ -80,6 +81,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 x.Audit(ResponseAuditType, "The organ donation decision has been successfully updated"));
         }
 
+        [TestMethod]
+        public async Task Put_ReturnsBadRequest_WhenRequestFailsValidation()
+        {
+            // Arrange
+            _mockValidator
+                .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>()))
+                .Returns(false);
+            
+            // Act
+            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest());
+
+            // Assert
+            result.Should().BeOfType<BadRequestResult>();
+            
+            
+            _mockOrganDonationService.Verify(x => x.Update(It.IsAny<OrganDonationRegistrationRequest>(), _userSession), Times.Never);
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation update registration request failed validation"));
+        }
+        
         [TestMethod]
         public async Task Put_ReturnsGatewayTimeout_WhenServiceReturnTimeoutResult()
         {

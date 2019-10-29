@@ -33,5 +33,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         {
             public override T Accept<T>(IOrganDonationWithdrawResultVisitor<T> visitor) => visitor.Visit(this);
         }
+
+        public class BadRequest : OrganDonationWithdrawResult
+        {
+            public override T Accept<T>(IOrganDonationWithdrawResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }

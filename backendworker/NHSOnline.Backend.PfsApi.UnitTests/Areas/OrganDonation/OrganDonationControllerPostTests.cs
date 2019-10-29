@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         private Mock<IOrganDonationService> _mockOrganDonationService;
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<IOrganDonationValidationService> _mockValidator;
 
         private const string RequestAuditType = "OrganDonation_Registration_Request";
         private const string ResponseAuditType = "OrganDonation_Registration_Response";
@@ -41,8 +42,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            var mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
-            mockValidator
+            _mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
+            _mockValidator
                 .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>()))
                 .Returns(true);
 
@@ -83,6 +84,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
                 x.Audit(ResponseAuditType, "The organ donation decision has been successfully registered"));
+        }
+
+        [TestMethod]
+        public async Task Post_ReturnsBadRequest_WhenRequestFailsValidation()
+        {
+            // Arrange
+            _mockValidator
+                .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>()))
+                .Returns(false);
+            
+            // Act
+            var result = await _systemUnderTest.Post(new OrganDonationRegistrationRequest());
+            
+            // Assert
+            result.Should().BeOfType<BadRequestResult>();
+            
+            _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession), Times.Never);
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x =>
+                x.Audit(ResponseAuditType, "The organ donation registration request failed validation"));
         }
 
         [TestMethod]
