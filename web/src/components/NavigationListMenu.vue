@@ -33,7 +33,8 @@
                :click-param="myRecordPath"/>
 
     <organ-donation-link id="organ-donation-link"
-                         data-sid="organ-donation-menu-item" />
+                         data-sid="organ-donation-menu-item"
+                         :back-link-override="indexPath"/>
 
     <menu-item v-if="hasLinkedProfiles()"
                id="menu-item-linkedProfiles"
@@ -51,7 +52,7 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES } from '@/lib/routes';
+import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX } from '@/lib/routes';
 
 export default {
   name: 'NavigationListMenu',
@@ -80,6 +81,9 @@ export default {
     },
     linkedProfilesPath() {
       return LINKED_PROFILES.path;
+    },
+    indexPath() {
+      return INDEX.path;
     },
   },
   methods: {

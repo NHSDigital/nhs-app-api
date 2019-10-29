@@ -28,7 +28,8 @@
 
       <organ-donation-link id="btn_organ_donation"
                            header-tag="h2"
-                           :description="$t('sc04.organDonation.body')"/>
+                           :description="$t('sc04.organDonation.body')"
+                           :back-link-override="morePath"/>
 
       <menu-item id="btn_data_sharing"
                  header-tag="h2"
@@ -81,6 +82,9 @@ export default {
     messagingEnabled() {
       return srjIf({ $store: this.$store, journey: 'messaging' });
     },
+    morePath() {
+      return MORE.path;
+    },
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
@@ -92,7 +96,7 @@ export default {
 
       if (event.currentTarget.pathname === this.requestAdminHelpPath) {
         this.$store.dispatch('navigation/setNewMenuItem', 4);
-        this.$store.dispatch('onlineConsultations/setPreviousRoute', MORE.path);
+        this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
       }
     },
     ariaLabelCaption(header, body) {

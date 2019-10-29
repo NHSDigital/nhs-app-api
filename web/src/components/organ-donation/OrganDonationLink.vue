@@ -5,7 +5,7 @@
              :description="description"
              :header-tag="headerTag"
              :click-func="onClickOrganDonation"
-             :prevent-default="useIntegratedOrganDonation"
+             :prevent-default="true"
              :target="organDonationTarget"
              :aria-label="ariaLabelCaption(
                'sc04.organDonation.subheader',
@@ -52,6 +52,10 @@ export default {
       type: String,
       default: 'span',
     },
+    backLinkOverride: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     organDonationTarget() {
@@ -76,6 +80,8 @@ export default {
 
     onClickOrganDonation(event) {
       if (this.useIntegratedOrganDonation) {
+        this.$store.dispatch('navigation/setBackLinkOverride', this.backLinkOverride);
+
         this.navigate(event);
       }
     },

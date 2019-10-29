@@ -45,6 +45,7 @@
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
 import { navigateBack } from '@/lib/utils';
+import { ORGAN_DONATION, MORE } from '@/lib/routes';
 
 export default {
   name: 'BreadCrumbTrail',
@@ -67,7 +68,18 @@ export default {
   },
   methods: {
     backLinkClicked() {
-      navigateBack(this);
+      if (this.$route.name === ORGAN_DONATION.name) {
+        // eslint-disable-next-line prefer-destructuring
+        let backLinkOverride = this.$store.state.navigation.backLinkOverride;
+
+        if (!backLinkOverride) {
+          backLinkOverride = MORE.path;
+        }
+
+        this.goToUrl(backLinkOverride);
+      } else {
+        navigateBack(this);
+      }
     },
   },
 };

@@ -6,6 +6,7 @@ import { createEvent, createStore, mount } from '../../helpers';
 const ID_TEST_LINK = 'test-link';
 const URL_EXTERNAL = 'http://foo.bar/';
 const URL_INTERNAL = ORGAN_DONATION.path;
+const BACK_LINK_OVERRIDE = '/correct-url';
 
 describe('organ donation link', () => {
   let $env;
@@ -24,10 +25,14 @@ describe('organ donation link', () => {
         device: {
           isNativeApp: native,
         },
+        navigation: {
+          backLinkOverride: undefined,
+        },
       },
     });
     propsData = {
       id: ID_TEST_LINK,
+      backLinkOverride: BACK_LINK_OVERRIDE,
     };
 
     return mount(OrganDonationLink, { $env, $store, $router, propsData });
@@ -132,6 +137,24 @@ describe('organ donation link', () => {
       it('will prevent the default action on the event', () => {
         wrapper.vm.onClickOrganDonation(event);
         expect(event.preventDefault).toHaveBeenCalled();
+      });
+    });
+
+    describe('back link override', () => {
+      beforeEach(() => {
+        event = createEvent({ currentTarget: { pathname: URL_INTERNAL } });
+      });
+
+      it('the correct value is added to the store when integration is enabled', () => {
+        wrapper = mountAs({ enabled: true });
+        wrapper.vm.onClickOrganDonation(event);
+        expect($store.dispatch).toHaveBeenCalledWith('navigation/setBackLinkOverride', BACK_LINK_OVERRIDE);
+      });
+
+      it('no value is added to the store when integration is disabled', () => {
+        wrapper = mountAs({ enabled: false });
+        wrapper.vm.onClickOrganDonation(event);
+        expect($store.dispatch).not.toHaveBeenCalled();
       });
     });
   });

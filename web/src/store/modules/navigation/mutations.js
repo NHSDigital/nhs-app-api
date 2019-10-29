@@ -2,7 +2,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
 import NativeCallbacks from '@/services/native-app';
-import { CLEAR_SELECTED_MENUITEM, SET_NEWMENUITEM, INIT_NAVIGATION } from './mutation-types';
+import {
+  CLEAR_SELECTED_MENUITEM,
+  SET_NEWMENUITEM,
+  INIT_NAVIGATION,
+  SET_BACK_LINK_OVERRIDE,
+} from './mutation-types';
 
 /* eslint-disable no-shadow */
 function clearPreviousSelectedMenuItem(state) {
@@ -31,5 +36,8 @@ export default {
   },
   [INIT_NAVIGATION](state) {
     state.menuItemStatusAt = [];
+  },
+  [SET_BACK_LINK_OVERRIDE](state, backLinkOverride) {
+    state.backLinkOverride = backLinkOverride;
   },
 };
