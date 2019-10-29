@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var userPatientLinkModels = new[]
             {
                 CreateUserPatientLinkModel("proxy", AssociationType.Proxy),
-                CreateUserPatientLinkModel("self", AssociationType.Self)
+                CreateUserPatientLinkModel("self")
             };
             var patientIdentifiers = new[] {CreatePatientIdentifier(expectedNhsNumber)};
 
@@ -165,10 +165,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var emisClientMock = new Mock<IEmisClient>();
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
             var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
-            var patientIdentifiers = (PatientIdentifier[]) null;
 
-            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels,
-                patientIdentifiers: patientIdentifiers);
+            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
             var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
@@ -198,9 +196,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         {
             var emisClientMock = new Mock<IEmisClient>();
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
-            var userPatientLinkModels = (UserPatientLink[]) null;
 
-            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
+            SetupEmisClientMock(emisClientMock);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -246,9 +243,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>();
-            var errorCase = (Im1ConnectionVerifyResult.ErrorCase) result;
-            errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice);
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadRequest>();
         }
 
         [TestMethod]

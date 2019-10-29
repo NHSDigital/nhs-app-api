@@ -53,7 +53,8 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithUserNotRegistered(): Mapping {
-        return respondWithException(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toInt(),
+        return respondWithError(HttpStatus.SC_FORBIDDEN,
+                                    ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toString(),
                                     "User Identity '00000000-0000-0000-0000-000000000000' " +
                                     "required account status 'Inactive, Active' from Application " +
                                     "'00000000-0000-0000-0000-000000000000'. Actual account status is " +

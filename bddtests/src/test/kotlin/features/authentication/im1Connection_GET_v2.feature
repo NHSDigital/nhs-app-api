@@ -23,12 +23,13 @@ Feature: Im1 Connection GET V2
     When I verify patient data using the v2 endpoint
     Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode    | ExpectedStatus | ExpectedCode | Message |
-      | EMIS      | 403        | 1030      | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice|
-      | TPP       | 200        | 6         | 400            | 112          | Problem logging in |
-      | TPP       | 200        | 9         | 400            | 112          | Problem logging in |
-      | VISION    | 200        | -100      | 502            | 107          | Connection to service failed |
-      | VISION    | 200        | -15       | 400            | 113          | User record unavailable |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message                                                        |
+      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice |
+      | TPP       | 200        | 6      | 400            | 112          | Problem logging in                                             |
+      | TPP       | 200        | 9      | 400            | 112          | Problem logging in                                             |
+      | VISION    | 200        | -100   | 502            | 107          | Connection to service failed                                   |
+      | VISION    | 200        | -15    | 400            | 113          | User record unavailable                                        |
+
 
     # Returning NHS numbers from TPP covered with EMIS BDD
     # and TPP structure is covered with unit tests
@@ -57,20 +58,16 @@ Feature: Im1 Connection GET V2
       | VISION    |
 
 
-  Scenario Outline: A Non-existent IM1 Connection Token for the <GP System> tries verification using the v2 endpoint and recieves a Bad Gateway error
+  Scenario Outline: A Non-existent IM1 Connection Token for the <GP System> tries verification using the v2 endpoint and receives a Bad Gateway error
     Given I have an <GP System> IM1 Connection Token that does not exist
     When I verify patient data using the v2 endpoint
-    Then I receive a "Bad Gateway" error
+    Then I receive a "<Http Error>" error
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
+      | GP System | Http Error  |
+      | EMIS      | Bad Request |
+      | TPP       | Bad Gateway |
+      | VISION    | Bad Request |
 
-    
-  Scenario: A VISION patient with a Non-existent IM1 Connection Token for the VISION tries verification using the v2 endpoint and receives a Bad Request error
-    Given I have an VISION IM1 Connection Token that does not exist
-    When I verify patient data using the v2 endpoint
-    Then I receive a "Bad Request" error
 
 
   Scenario Outline: No ODS Code for a <GP System> user when trying verification using the v2 endpoint and receives a Bad Request error

@@ -41,16 +41,13 @@ Feature: Patient Verification Backend
   Scenario Outline: Non-existent IM1 Connection Token for the <GP System>
     Given I have an <GP System> IM1 Connection Token that does not exist
     When I verify patient data using the v1 endpoint
-    Then I receive a "Bad Gateway" error
+    Then I receive a "<HTTP Error>" error
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
+      | GP System | HTTP Error  |
+      | EMIS      | Bad Request |
+      | TPP       | Bad Gateway |
+      | VISION    | Bad Request |
 
-  Scenario: Non-existent IM1 Connection Token for VISION
-    Given I have an VISION IM1 Connection Token that does not exist
-    When I verify patient data using the v1 endpoint
-    Then I receive a "Bad Request" error
 
   Scenario Outline: <GP System> IM1 Connection Token not in the expected format
     Given I have an <GP System> IM1 Connection Token that is in an invalid format

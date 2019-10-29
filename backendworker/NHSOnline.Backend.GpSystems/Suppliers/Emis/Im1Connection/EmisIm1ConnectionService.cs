@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice);
+                    return new Im1ConnectionVerifyResult.BadRequest();
                 }
 
                 if (!sessionsResponse.HasSuccessResponse)
