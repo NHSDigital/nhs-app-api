@@ -8,5 +8,7 @@ class AppointmentMatchers {
         const val successMatcherForAppointments = "give me a good response"
         const val cancellationReasonMatcher = "No longer required"
         const val timeoutMatcherForAppointments = "give me a time out response"
+        const val appointmentConflictMatcher = "give me an appointment conflict response"
+        const val appointmentLimitReachedMatcher = "give me an appointment limit reached response"
     }
 }

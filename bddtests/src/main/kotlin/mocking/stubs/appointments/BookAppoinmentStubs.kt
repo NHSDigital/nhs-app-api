@@ -6,6 +6,8 @@ import mocking.stubs.InputResponse
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.TppStubsPatientFactory
 import mocking.stubs.appointments.AppointmentMatchers.Companion.appointmentBookingSlotForMatcher
+import mocking.stubs.appointments.AppointmentMatchers.Companion.appointmentConflictMatcher
+import mocking.stubs.appointments.AppointmentMatchers.Companion.appointmentLimitReachedMatcher
 import mocking.stubs.appointments.AppointmentMatchers.Companion.appointmentNotFoundMatcher
 import mocking.stubs.appointments.AppointmentMatchers.Companion.successMatcherForAppointments
 import mocking.stubs.appointments.AppointmentMatchers.Companion.timeoutMatcherForAppointments
@@ -55,6 +57,26 @@ class BookAppoinmentStubs(private val mockingClient: MockingClient, private val 
                         .addResponse(successMatcherForAppointments)
                         {
                             builder -> builder.respondWithSuccess()
+                        }
+
+                        .addResponse(timeoutMatcherForAppointments)
+                        {
+                            builder -> builder.withDelay(Duration.ofSeconds(TIMEOUT_DELAY)).respondWithSuccess()
+                        }
+
+                        .addResponse(appointmentNotFoundMatcher)
+                        {
+                            builder -> builder.respondWithExceptionWhenNotAvailable()
+                        }
+
+                        .addResponse(appointmentConflictMatcher)
+                        {
+                            builder -> builder.respondWithConflictException()
+                        }
+
+                        .addResponse(appointmentLimitReachedMatcher)
+                        {
+                            builder -> builder.respondWithBookingLimitException()
                         }
 
         mapBookAppointmentStubs.listResponse().forEach { scenario ->
