@@ -1,13 +1,14 @@
 <template>
   <div>
-
-    <a
-      :class="$style['nhsuk-u-margin-bottom-4']"
-      :href="retryUrl"
-      :target="target"
-      data-purpose="main-back-button"
-      @click.prevent="onRetryButtonClicked">
-      {{ $t(buttonText.text) }}</a>
+    <div class="nhsuk-back-link">
+      <a :class="[$style['nhsuk-back-link__link'], $style['desktopBackLink']]"
+         :href="retryUrl"
+         :target="target"
+         data-purpose="main-back-button"
+         @click.prevent="onRetryButtonClicked">
+        {{ $t(buttonText.text) }}
+      </a>
+    </div>
   </div>
 </template>
 

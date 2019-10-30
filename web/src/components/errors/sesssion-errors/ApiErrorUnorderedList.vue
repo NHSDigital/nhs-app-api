@@ -1,6 +1,6 @@
 <template>
   <div v-if="list !== ''">
-    <ul >
+    <ul class="nhsuk-u-margin-top-3">
       <li v-for="(item, index) in list" :id="item.id"
           :key="index"
           :aria-label="item.label">
@@ -41,7 +41,9 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../../style/listmenu";
-ul li {
+ul {
+  margin-bottom: 0px;
+  & li {
   margin-left: 1em;
-}
+}}
 </style>

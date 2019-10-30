@@ -1,7 +1,8 @@
 <template>
   <div v-if="messageText!==''">
     <message-text v-if="messageText.isVisible"
-                  :is-before-footer="true" :aria-label="messageText.label"
+                  :aria-label="messageText.label"
+                  :override-style="overrideStyle"
                   data-purpose="msg-text">
       {{ messageText.textBefore }}
       <span v-if="messageText.errorCode!=''" id="errorCode"

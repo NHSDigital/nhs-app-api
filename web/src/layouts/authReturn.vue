@@ -37,7 +37,7 @@
               >
                 <session-error-api-error
                   :id="$style.serverError"
-                  class="pull-content"
+                  :class="$store.state.device.isNativeApp?'pull-content nhsuk-u-padding-top-7':''"
                 >
                   <h1 v-if="!$store.state.device.isNativeApp"
                       class="nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-4">
@@ -64,7 +64,6 @@
                           from="auth_return.errors.464.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
-                          :class="$style['api-error-button']"
                         />
                       </div>
                     </api-error-container>
@@ -92,12 +91,10 @@
                           from="auth_return.errors.400.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
-                          :class="$style['api-error-button']"
                         />
                         <api-error-button
                           from="auth_return.errors.400.backButtonText"
                           :action="backToHomeUrl"
-                          :class="$style['api-error-button']"
                         />
                       </div>
                     </api-error-container>
@@ -118,12 +115,10 @@
                           from="auth_return.errors.403.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
-                          :class="$style['api-error-button']"
                         />
                         <api-error-button
                           from="auth_return.errors.403.backButtonText"
                           :action="backToHomeUrl"
-                          :class="$style['api-error-button']"
                         />
                       </div>
                     </api-error-container>
@@ -144,12 +139,10 @@
                           from="auth_return.errors.500.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
-                          :class="$style['api-error-button']"
                         />
                         <api-error-button
                           from="auth_return.errors.500.backButtonText"
                           :action="backToHomeUrl"
-                          :class="$style['api-error-button']"
                         />
                       </div>
                     </api-error-container>
@@ -158,6 +151,7 @@
                         title="auth_return.errors.502.title"
                         header="auth_return.errors.502.header"
                       />
+
                       <api-error-paragraph from="auth_return.errors.502.listTitle" />
                       <api-error-unordered-list from="auth_return.errors.502.uList" />
                       <api-error-paragraph from="auth_return.errors.502.line3" />
@@ -171,12 +165,11 @@
                           from="auth_return.errors.502.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
-                          :class="$style['api-error-button']"
                         />
                         <api-error-button
                           from="auth_return.errors.502.backButtonText"
                           :action="backToHomeUrl"
-                          :class="$style['api-error-button']"
+
                         />
                       </div>
                     </api-error-container>
@@ -192,18 +185,18 @@
                         from="auth_return.errors.504.line4"
                         :variable="serviceDeskReference"
                       />
+
                       <api-error-paragraph from="auth_return.errors.504.message" />
                       <div :class="$style['api-error-button-container']">
                         <api-error-button
                           from="auth_return.errors.504.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
-                          :class="$style['api-error-button']"
                         />
                         <api-error-button
                           from="auth_return.errors.504.backButtonText"
                           :action="backToHomeUrl"
-                          :class="$style['api-error-button']"
+
                         />
                       </div>
                     </api-error-container>
@@ -223,7 +216,6 @@
                         <api-error-button
                           from="auth_return.errors.default.defaultRetryButtonText"
                           :action="backToHomeUrl"
-                          :class="$style['api-error-button']"
                         />
                       </div>
                     </api-error-container>
@@ -342,6 +334,7 @@ export default {
       if (this.$store.state.device.isNativeApp) {
         classes.push('native');
         classes.push('slim');
+        classes.push('nhsuk-u-margin-bottom-9');
       }
       return classes;
     },
@@ -397,12 +390,10 @@ div {
     }
 
   }
-  .api-error-button {
-      margin-left: 1em;
-      margin-right: 1em;
-    }
+
     .api-error-button-container {
       display: inline-block;
+      padding: 1em;
     }
 }
 </style>
