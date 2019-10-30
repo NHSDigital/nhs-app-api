@@ -8,22 +8,18 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import worker.models.messages.MessagesSummaryFacade
 
-private const val HEADER_BEFORE_SENDER_INDEX = 0
-private const val HEADER_UNREAD_INDEX =1
-private const val HEADER_BEFORE_TIME_INDEX = 2
-private const val HEADER_TIME_INDEX =3
 
-private const val BODY_BEFORE_UNREAD_COUNT_INDEX = 0
-private const val BODY_SENDER_INDEX =1
-private const val BODY_AFTER_UNREAD_COUNT_INDEX = 2
-private const val BODY_BEFORE_MESSAGE_INDEX = 3
-private const val BODY_MESSAGE_INDEX =4
+private const val HEADER_SENDER_INDEX = 0
+private const val HEADER_TIME_INDEX = 1
+
+private const val BODY_UNREAD_INDEX = 0
+private const val BODY_MESSAGE_INDEX = 1
+
 class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
 
     fun assertMessages(expectedMessages: ArrayList<MessagesSummaryFacade>) {
         val actualMessages = getMessages()
         Assert.assertEquals("Expected messages", expectedMessages.count(), actualMessages.count())
-        actualMessages.forEach { actualMessage -> actualMessage.assertAccessibilityText() }
 
         val expectedInboxMessages = expectedMessages.flatMap { inboxMessage ->
             inboxMessage.messages.map { m ->
@@ -59,27 +55,10 @@ class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
         private val headerElements = element.findElement<WebElement>(By.xpath("./h2")).text.split("\n")
         private val bodyElements = element.findElement<WebElement>(By.xpath("./p")).text.split("\n")
 
-        val sender: String = headerElements[BODY_SENDER_INDEX]
-        val messageBody: String = bodyElements[BODY_MESSAGE_INDEX]
+        val sender: String = headerElements[HEADER_SENDER_INDEX]
         val sentTime: String = headerElements[HEADER_TIME_INDEX]
-        val unreadCount: Int? = bodyElements[HEADER_UNREAD_INDEX].toInt()
-
-        fun assertAccessibilityText() {
-            Assert.assertEquals("Accessibility text prior to sender",
-                    "Messages from:", headerElements[HEADER_BEFORE_SENDER_INDEX])
-            Assert.assertEquals("Accessibility text prior to time",
-                    "The last message was sent", headerElements[HEADER_BEFORE_TIME_INDEX])
-
-            Assert.assertEquals(
-                    "Accessibility text prior to unread count",
-                    "You have", bodyElements[BODY_BEFORE_UNREAD_COUNT_INDEX])
-            Assert.assertEquals(
-                    "Accessibility text after unread count",
-                    "unread messages from $sender", bodyElements[BODY_AFTER_UNREAD_COUNT_INDEX])
-            Assert.assertEquals(
-                    "Accessibility text prior to message",
-                    "Latest message subject:", bodyElements[BODY_BEFORE_MESSAGE_INDEX])
-        }
+        val messageBody: String = bodyElements[BODY_MESSAGE_INDEX]
+        val unreadCount: Int? = bodyElements[BODY_UNREAD_INDEX].toInt()
 
         fun click() {
             element.click()

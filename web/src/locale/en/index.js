@@ -1340,11 +1340,8 @@ export default {
   messaging: {
     index: {
       hidden: {
-        from: 'Messages from: ',
-        lastSent: 'The last message was sent ',
-        latestSubject: 'Latest message subject: ',
-        unreadFrom: 'unread messages from ',
-        youHave: 'You have ',
+        intro: 'Messages from: {sender}. The last message was sent on {date}. ',
+        unread: 'You have {count} unread message{plural}. ',
       },
       noMessages: 'You have no messages',
     },

@@ -1,36 +1,27 @@
 <template>
   <a :href="generateMessageUrl(sender)"
      :class="$style['nhs-app-message__link']"
+     :aria-label="messageLabel"
      @click.stop.prevent="goToMessages(sender)">
-    <h2 :class="$style['nhsuk-heading-xs']">
-      <span :class="$style['nhsuk-u-visually-hidden']"
-      >{{ $t('messaging.index.hidden.from') }}</span>
+    <h2 :class="$style['nhsuk-heading-xs']" aria-hidden="true">
       {{ sender }}
-      <span :class="$style['nhsuk-u-visually-hidden']"
-      >{{ $t('messaging.index.hidden.lastSent') }}</span>
       <span :class="{
         [$style['nhs-app-message__date']]: true,
         [$style['nhs-app-message__date--unread']]: unreadCount
       }">{{ message.sentTime | formatDate('DD/MM/YYYY') }}</span>
     </h2>
-    <p :class="[$style['nhsuk-body-s'], $style['nhs-app-message__subject-line']]">
+    <p :class="[$style['nhsuk-body-s'], $style['nhs-app-message__subject-line']]"
+       aria-hidden="true">
       <span v-if="unreadCount" :class="$style['nhs-app-message__meta']">
-        <span :class="$style['nhsuk-u-visually-hidden']"
-        >{{ $t('messaging.index.hidden.youHave') }}</span>
         <span :class="$style['nhs-app-message__count']">{{ unreadCount }}</span>
-        <span :class="{
-          [$style['nhs-app-message__unread']]: unreadCount,
-          [$style['nhsuk-u-visually-hidden']]: true,
-        }">{{ $t('messaging.index.hidden.unreadFrom') }}{{ sender }}</span>
       </span>
-      <span :class="$style['nhsuk-u-visually-hidden']"
-      >{{ $t('messaging.index.hidden.latestSubject') }}</span>
       {{ message.body }}
     </p>
   </a>
 </template>
 
 <script>
+import { formatDate } from '@/plugins/filters';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 import { MESSAGING_MESSAGES } from '@/lib/routes';
@@ -49,6 +40,20 @@ export default {
     unreadCount: {
       type: Number,
       required: true,
+    },
+  },
+  computed: {
+    messageLabel() {
+      let label = this.$t('messaging.index.hidden.intro')
+        .replace('{sender}', this.sender)
+        .replace('{date}', formatDate(this.message.sentTime, 'DD MMMM YYYY'));
+
+      if (this.unreadCount > 0) {
+        label += this.$t('messaging.index.hidden.unread')
+          .replace('{count}', this.unreadCount)
+          .replace('{plural}', this.unreadCount > 1 ? 's' : '');
+      }
+      return label;
     },
   },
   methods: {
@@ -71,6 +76,13 @@ export default {
 
 <style module lang="scss" scoped>
 @import '~nhsuk-frontend/packages/nhsuk';
+
+@mixin overflow-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .nhs-app-message__link {
   font-size: 1em;
   display: block;
@@ -82,18 +94,13 @@ export default {
     background-color: transparent;
     box-shadow: inset 0 0 0 $nhsuk-box-shadow-spread #ffcd60;
     outline: none;
-    h2 {
-      text-decoration: underline;
-    }
   }
   h2 {
     padding: 0 6.5em 0 0;
     font-family: $nhsuk-font, $nhsuk-font-fallback;
     margin: nhsuk-spacing(0);
     position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include overflow-ellipsis;
   }
 }
 
@@ -109,9 +116,7 @@ export default {
   padding-right: 3em;
   margin-bottom: nhsuk-spacing(0);
   color: $nhsuk-secondary-text-color;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  @include overflow-ellipsis;
   @include govuk-media-query($until: tablet) {
     max-width: 90%;
   }
@@ -131,10 +136,13 @@ export default {
   font-size: 0.75rem;
   font-weight: $nhsuk-font-bold;
   background-color: #FFC107;
-  border-radius: 50%;
-  padding: nhsuk-spacing(1) nhsuk-spacing(2);
+  border-radius: nhsuk-spacing(3);
+  padding: 1px nhsuk-spacing(1);
   color: $nhsuk-text-color;
   border: 1px solid #B58F1C;
+    display: inline-block;
+    min-width: nhsuk-spacing(4);
+    text-align: center;
 }
 
 .nhs-app-message__count--long {
