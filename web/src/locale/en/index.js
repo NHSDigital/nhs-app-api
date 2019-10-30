@@ -2059,7 +2059,7 @@ export default {
     organDonationNotParticipating: [
       'Record organ donation decision',
     ],
-    createAccountMessage: 'To use the NHS App fully, you\'ll need to create an NHS account.',
+    createAccountMessage: 'To use the NHS App fully, you\'ll need to create an NHS login.',
     ctaContinue: 'Continue',
     ctaNotMySurgery: 'This is not my GP surgery',
     limitingFeaturesWarning: 'Each GP surgery manages its own online services. They may choose to limit some of these features. Contact your surgery for more information.',
