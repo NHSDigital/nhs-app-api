@@ -50,6 +50,30 @@ class AppDialogsTest {
     }
 
     @Test
+    fun showOverlayDetectedDialog() {
+        val expectedTitle = "Screen overlay detected"
+        val expectedPartMessageText = "other apps are overlaying the screen"
+        appDialogs.showOverlayDetectedDialog()
+        val overlayDialog = getCurrentActiveAlertDialog()
+        val title = extractAlertDialogTitle(overlayDialog)
+        Assert.assertEquals(title, expectedTitle)
+        val message = extractAlertDialogMessage(overlayDialog)
+        Assert.assertNotNull(message)
+        message?.apply { Assert.assertTrue(message.contains(expectedPartMessageText)) }
+    }
+
+    @Test
+    fun showOverlayDetectedDialog_ClickingNegativeButton_FinishesActivity() {
+        val spyActivity = spy(activity)
+        appDialogs = AppDialogs(spyActivity)
+        appDialogs.showOverlayDetectedDialog()
+        val overlayDialog = getCurrentActiveAlertDialog()
+        val negativeButton: Button = overlayDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+        negativeButton.callOnClick()
+        verify(spyActivity).finishAndRemoveTask()
+    }
+
+    @Test
     fun dismissVersionDialog_NoAction_IfActivityIsFinishing() {
         val spyActivity = spy(activity)
         appDialogs = AppDialogs(spyActivity)

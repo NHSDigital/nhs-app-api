@@ -598,6 +598,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         return biometricsInterface.isFingerprintRegistered
     }
 
+    fun showOverlayDetectedDialog() {
+        appDialogs.showOverlayDetectedDialog()
+    }
+
     private fun onSuccessButton() {
         activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
         nhsWeb.reloadCurrentUrl()
