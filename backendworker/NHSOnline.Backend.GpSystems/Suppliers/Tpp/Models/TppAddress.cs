@@ -6,6 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
     {
         [XmlAttribute(AttributeName="address")]
         public string Address { get; set; }
+
         [XmlAttribute(AttributeName="addressType")]
         public string AddressType { get; set; }
     }

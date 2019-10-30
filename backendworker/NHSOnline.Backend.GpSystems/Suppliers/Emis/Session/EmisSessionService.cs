@@ -136,10 +136,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                     patientName = FormatName(sessionResponse.Body);
 
-                    if (sessionResponse.Body.HasLinkedPatients())
-                    {
-                        LogProxyInformation(sessionResponse.Body);
-                    }
+                    LogProxyInformation(sessionResponse.Body);
 
                     if (string.IsNullOrWhiteSpace(patientName))
                     {
@@ -208,7 +205,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             var differentOdsCode = userPatientLinks.Count(x => !x.NationalPracticeCode.Equals(userOdsCode, StringComparison.Ordinal));
 
             _logger.LogInformation(
-                $"User has linked_accounts={userPatientLinks.Count()}, with different_ods_codes_to_user={differentOdsCode}");
+                $"User has linked_accounts={userPatientLinks.Count}, with different_ods_codes_to_user={differentOdsCode}");
         }
 
         private static string FormatName(SessionsPostResponse sessionResponse)

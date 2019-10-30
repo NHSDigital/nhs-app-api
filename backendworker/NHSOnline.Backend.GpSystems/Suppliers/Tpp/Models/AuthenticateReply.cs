@@ -10,16 +10,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
     [Serializable]
     public class AuthenticateReply
     {
-        [XmlAttribute("patientId")]
-        public string PatientId { get; set; }
-        
         [XmlAttribute("onlineUserId")]
         public string OnlineUserId { get; set; }
-        
-        public User User { get; set; }
-        
+
         [XmlAttribute("uuid")]
         public Guid Uuid { get; set; }
+
+        public User User { get; set; }
+
+        public Registration Registration { get; set; }
 
         public IEnumerable<PatientNhsNumber> ExtractNhsNumbers()
         {

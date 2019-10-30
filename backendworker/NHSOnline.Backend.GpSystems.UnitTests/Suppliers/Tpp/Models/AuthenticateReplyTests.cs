@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
@@ -11,21 +12,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models
         private const string PatientId = "2367";
         private const string OnlineUserId = "7422";
         private readonly Guid _uuid = new Guid("2714afa8-89f3-4daa-adf1-7699db85267b");
-        
+
         protected override AuthenticateReply CreateModel() => new AuthenticateReply
         {
-            PatientId = PatientId,
             OnlineUserId = OnlineUserId,
             User = new User(),
-            Uuid = _uuid
+            Uuid = _uuid,
+            Registration = new Registration
+            {
+                PatientAccess = new List<PatientAccess>
+                {
+                    new PatientAccess
+                    {
+                        PatientId = PatientId,
+                    },
+                }
+            },
         };
 
         [TestMethod]
-        public void Serialization_PatientId_SerializesAsAttribute()
+        public void Serialization_Registration_SerializesAsElement()
         {
-            Element.Attribute("patientId").Should().HaveValue(PatientId);
+            Element.Should().HaveElement("Registration")
+                .Which.Should().HaveElement("PatientAccess");
         }
-        
+
         [TestMethod]
         public void Serialization_OnlineUserId_SerializesAsAttribute()
         {

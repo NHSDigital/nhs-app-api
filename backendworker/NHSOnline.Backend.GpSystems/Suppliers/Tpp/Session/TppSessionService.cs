@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -56,6 +59,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                     }
                 }
 
+                LogProxyInformation(reply.Body);
+
                 var userSession = _sessionMapper.Map(reply, odsCode, nhsNumber);
                 if (!userSession.HasValue)
                 {
@@ -87,11 +92,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             try
             {
                 _logger.LogEnter();
-            
-                var tppUserSession = (TppUserSession)gpUserSession;
+
+                var tppUserSession = (TppUserSession) gpUserSession;
                 var logoffReply = await _client.LogoffPost(tppUserSession);
 
-                if (!logoffReply.HasSuccessResponse) 
+                if (!logoffReply.HasSuccessResponse)
                 {
                     return new SessionLogoffResult.BadGateway();
                 }
@@ -114,7 +119,52 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogExit();
             }
+        }
 
+        private void LogProxyInformation(AuthenticateReply response)
+        {
+            var patientId = response.User?.Person?.PatientId;
+
+            if (string.IsNullOrWhiteSpace(patientId))
+            {
+                _logger.LogWarning($"TPP user with no {nameof(AuthenticateReply.User.Person.PatientId)}");
+                return;
+            }
+
+            var patientAccessItems = response.Registration?.PatientAccess ?? new List<PatientAccess>();
+
+            var selfPatient = patientAccessItems.FirstOrDefault(
+                x => patientId.Equals(x.PatientId, StringComparison.Ordinal));
+
+            var linkedPatients = patientAccessItems.Where(
+                x => !patientId.Equals(x.PatientId, StringComparison.Ordinal));
+
+            if (selfPatient == null)
+            {
+                _logger.LogWarning(
+                    $"TPP user details not found in {nameof(AuthenticateReply.Registration.PatientAccess)}");
+                return;
+            }
+
+            var userPractice = new
+            {
+                UnitName = selfPatient.SiteDetails?.UnitName,
+                Address = selfPatient.SiteDetails?.Address?.Address,
+            };
+
+            if (userPractice.UnitName == null || userPractice.Address == null)
+            {
+                _logger.LogWarning(
+                    $"TPP user practice details not specified. unitName:{userPractice.UnitName} address:{userPractice.Address}");
+                return;
+            }
+
+            var differentPracticeAddressCount = linkedPatients.Count(x =>
+                !userPractice.UnitName.Equals(x.SiteDetails.UnitName, StringComparison.Ordinal) ||
+                !userPractice.Address.Equals(x.SiteDetails.Address.Address, StringComparison.Ordinal));
+
+            _logger.LogInformation(
+                $"User has linked_accounts={linkedPatients.Count()}, with different_ods_codes_to_user={differentPracticeAddressCount}");
         }
     }
 }

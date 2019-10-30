@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 {
@@ -23,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
     {
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
-        private ILogger<EmisSessionService> _logger;
+        private Mock<ILogger<EmisSessionService>> _logger;
         private EmisSessionService _systemUnderTest;
         private SessionsEndUserSessionPostResponse _endUserSessionResponse;
         private SessionsPostResponse _sessionsResponse;
@@ -36,7 +37,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Freeze<ILogger<EmisSessionService>>();
+            _logger = new Mock<ILogger<EmisSessionService>>();
+            _fixture.Inject(_logger);
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
             _connectionToken = _fixture.Create<string>();
@@ -263,7 +265,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
 
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
@@ -274,13 +276,121 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             var expectedResult = new GpSessionCreateResult.Success(expected, new EmisUserSession
             {
-                Id = createdResult.UserSession.Id, 
-                NhsNumber = _nhsNumber, 
-                OdsCode = _odsCode, 
+                Id = createdResult.UserSession.Id,
+                NhsNumber = _nhsNumber,
+                OdsCode = _odsCode,
                 HasLinkedAccounts = true
             });
 
             createdResult.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [TestMethod]
+        public async Task Create_NoLinkedAccounts_LogsSuccessfully()
+        {
+            // Arrange
+            var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
+            var enumMapper = new EmisEnumMapper(enumMapperLogger);
+
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+
+            // only self patient link
+            _sessionsResponse.UserPatientLinks = new List<UserPatientLink>
+            {
+                new UserPatientLink
+                {
+                    UserPatientLinkToken = _fixture.Create<string>(),
+                    AssociationType = AssociationType.Self,
+                    NationalPracticeCode = "ABC12",
+                }
+            };
+
+            // Act
+            var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+
+            // Assert
+            _mockEmisClient.VerifyAll();
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
+
+            createdResult.Should().BeOfType<GpSessionCreateResult.Success>();
+            _logger.VerifyLogger(LogLevel.Information,
+                $"User has linked_accounts=0, with different_ods_codes_to_user=0", Times.Once());
+        }
+
+        [TestMethod]
+        public async Task Create_LinkedAccountFromDifferentPractice_LogsSuccessfully()
+        {
+            // Arrange
+            var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
+            var enumMapper = new EmisEnumMapper(enumMapperLogger);
+
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+
+            // only self patient link
+            _sessionsResponse.UserPatientLinks = new List<UserPatientLink>
+            {
+                new UserPatientLink
+                {
+                    UserPatientLinkToken = _fixture.Create<string>(),
+                    AssociationType = AssociationType.Self,
+                    NationalPracticeCode = "ABC12",
+                },
+                new UserPatientLink
+                {
+                    UserPatientLinkToken = _fixture.Create<string>(),
+                    AssociationType = AssociationType.Proxy,
+                    NationalPracticeCode = "ABC13",
+                },
+            };
+
+            // Act
+            var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+
+            // Assert
+            _mockEmisClient.VerifyAll();
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
+
+            createdResult.Should().BeOfType<GpSessionCreateResult.Success>();
+            _logger.VerifyLogger(LogLevel.Information,
+                "User has linked_accounts=1, with different_ods_codes_to_user=1", Times.Once());
+        }
+
+        [TestMethod]
+        public async Task Create_LinkedAccountFromSamePractice_LogsSuccessfully()
+        {
+            // Arrange
+            var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
+            var enumMapper = new EmisEnumMapper(enumMapperLogger);
+
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+
+            // only self patient link
+            _sessionsResponse.UserPatientLinks = new List<UserPatientLink>
+            {
+                new UserPatientLink
+                {
+                    UserPatientLinkToken = _fixture.Create<string>(),
+                    AssociationType = AssociationType.Self,
+                    NationalPracticeCode = "ABC12",
+                },
+                new UserPatientLink
+                {
+                    UserPatientLinkToken = _fixture.Create<string>(),
+                    AssociationType = AssociationType.Proxy,
+                    NationalPracticeCode = "ABC12",
+                },
+            };
+
+            // Act
+            var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+
+            // Assert
+            _mockEmisClient.VerifyAll();
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
+
+            createdResult.Should().BeOfType<GpSessionCreateResult.Success>();
+            _logger.VerifyLogger(LogLevel.Information,
+                "User has linked_accounts=1, with different_ods_codes_to_user=0", Times.Once());
         }
 
         [TestMethod]
@@ -292,7 +402,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
 
             _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.None;
             _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
@@ -322,7 +432,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
 
             _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.Proxy;
             _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
@@ -337,9 +447,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             var expectedResult = new GpSessionCreateResult.Success(expectedName, new EmisUserSession
             {
-                Id = createdResult.UserSession.Id, 
-                NhsNumber = _nhsNumber, 
-                OdsCode = _odsCode, 
+                Id = createdResult.UserSession.Id,
+                NhsNumber = _nhsNumber,
+                OdsCode = _odsCode,
                 HasLinkedAccounts = true
             });
 

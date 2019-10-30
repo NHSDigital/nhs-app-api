@@ -32,8 +32,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         private readonly ILogger<TppClient> _logger;
         private readonly IGuidCreator _guidCreator;
         private readonly TppConfigurationSettings _config;
-        public TppClient(TppHttpClient httpClient, 
-            IXmlResponseParser responseParser, 
+        public TppClient(TppHttpClient httpClient,
+            IXmlResponseParser responseParser,
             ILogger<TppClient> logger,
             TppConfigurationSettings config,
             IGuidCreator guidCreator)
@@ -160,7 +160,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 TestResultId = testResultId,
             };
 
-            _logger.LogExit(); 
+            _logger.LogExit();
             return await Post<TestResultsViewDetailed, TestResultsViewReply>(request, tppUserSession.Suid);
         }
 
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             return await Post<CancelAppointment, CancelAppointmentReply>(cancelAppointment, suid);
         }
-        
+
         public async Task<TppApiObjectResponse<RequestSystmOnlineMessagesReply>> RequestSystmOnlineMessages(RequestSystmOnlineMessages requestModel, string suid)
         {
             return await Post<RequestSystmOnlineMessages, RequestSystmOnlineMessagesReply>(requestModel, suid);
