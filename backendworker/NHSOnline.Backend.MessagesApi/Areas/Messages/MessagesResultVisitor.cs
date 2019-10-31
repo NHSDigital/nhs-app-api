@@ -20,7 +20,12 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
-        
+
+        public IActionResult Visit(MessagesResult.BadRequest result)
+        {
+           return new BadRequestResult();
+        }
+
         public IActionResult Visit(MessagesResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);

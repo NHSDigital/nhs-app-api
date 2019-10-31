@@ -99,6 +99,16 @@ namespace NHSOnline.Backend.Support
 
             return this;
         }
+        
+        public ValidateAndLog IsListValid<T>(IEnumerable<T> value, Func<T, bool> invalidItemsSelector, string name, ValidationOptions options = ValidationOptions.None)
+        {
+            if(value == null || value.Any(invalidItemsSelector))
+            {
+                HandleError(name, "List provided does not match expected validation", options);
+            }
+
+            return this;
+        }
 
         public ValidateAndLog HasValue<T>(T value, string name, ValidationOptions options = ValidationOptions.None)
         {

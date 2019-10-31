@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
+using MongoDB.Bson;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -93,18 +93,63 @@ namespace NHSOnline.Backend.MessagesApi.Repository
                         .GroupBy(k => k.Sender)
                         .Select(g => g.Select(m => new SummaryMessage
                             {
-                                UnreadCount = g.Count(v => !v.Read.HasValue),
+                                UnreadCount = g.Count(v => !v.ReadTime.HasValue),
                                 Id = m.Id,
                                 NhsLoginId = m.NhsLoginId,
                                 Sender = m.Sender,
                                 Version = m.Version,
                                 Body = m.Body,
-                                Read = m.Read,
+                                ReadTime = m.ReadTime,
                                 SentTime = m.SentTime
                             })
                             .First()
                         )
                         .ToList();
+                }
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+
+        public async Task<UserMessage> FindOne(string messageId)
+        {
+            try
+            {
+                _logger.LogEnter();
+                
+                new ValidateAndLog(_logger)
+                    .IsNotNull(messageId, nameof(messageId), ThrowError)
+                    .IsValid();
+                
+                var id = ObjectId.Parse(messageId);
+                
+                using (_logger.WithTimer("Find single message on Mongo"))
+                {
+                    return await FindOne(m => m.Id == id);
+                }
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task UpdateOne(UserMessage userMessage)
+        {
+            try
+            {
+                _logger.LogEnter();
+                
+                new ValidateAndLog(_logger)
+                    .IsNotNull(userMessage, nameof(userMessage), ThrowError)
+                    .IsValid();
+                
+                using (_logger.WithTimer("Update single message on Mongo"))
+                {
+                    await UpdateOne(m => m.Id == userMessage.Id, userMessage);
                 }
             }
             finally

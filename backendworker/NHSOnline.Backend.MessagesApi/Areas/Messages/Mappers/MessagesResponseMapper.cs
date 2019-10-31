@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                 new SenderMessages
                 {
                     Sender = source.First().Sender,
-                    UnreadCount = source.Count(m => !m.Read.HasValue),
+                    UnreadCount = source.Count(m => !m.ReadTime.HasValue),
                     Messages = source.OrderBy(m => m.SentTime)
                         .Select(m => new Message
                         {
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                             Sender = m.Sender,
                             Version = m.Version,
                             Body = m.Body,
-                            Read = m.Read.HasValue,
+                            Read = m.ReadTime.HasValue,
                             SentTime = m.SentTime,
                         }).ToList()
                 }
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                             Sender = s.Sender,
                             Version = s.Version,
                             Body = s.Body,
-                            Read = s.Read.HasValue,
+                            Read = s.ReadTime.HasValue,
                             SentTime = s.SentTime,
                         }
                     }

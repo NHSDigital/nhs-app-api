@@ -27,6 +27,11 @@ export default {
       sentTime: this.message.sentTime,
     };
   },
+  created() {
+    if (!this.message.read) {
+      this.$store.dispatch('messaging/markAsRead', this.message.id);
+    }
+  },
 };
 </script>
 <style module lang="scss" scoped>

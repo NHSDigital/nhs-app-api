@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 
@@ -11,5 +12,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         Task<MessagesResult> GetMessages(AccessToken accessToken, string sender);
 
         Task<MessagesResult> GetSummaryMessages(AccessToken accessToken);
+        
+        Task<MessagePatchResult> PatchMessage(JsonPatchDocument<Message> messagePatchDocument, string messageId);
     }
 }

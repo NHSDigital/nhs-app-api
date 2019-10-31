@@ -3958,6 +3958,77 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/users/me/messages/{messageId}: 
+      patch: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "messages"
+        summary: "Mark message as read"
+        description: "Updates the read timestamp of a message pertaining to the authorized user"
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+          - 
+            in: "path"
+            name: "messageId"
+            required: true
+            description: "A unique identifier for a message."
+            schema: 
+              type: "string"
+        requestBody: 
+          x-name: "PatchMessageRequest"
+          content: 
+            application/json: 
+              schema: 
+                type: "array"
+                items: 
+                  type: "object"
+                  description: "A JSONPatch document as defined by RFC 6902"
+                  required: 
+                    - "op"
+                    - "path"
+                  properties: 
+                    op: 
+                      type: "string"
+                      description: "The operation to be performed"
+                      enum: 
+                        - "add"
+                        - "remove"
+                        - "replace"
+                        - "move"
+                        - "copy"
+                        - "test"
+                    path: 
+                      type: "string"
+                      description: "A JSON-Pointer"
+                    value: 
+                      type: "object"
+                      description: "The value to be used within the operations."
+                    from: 
+                      type: "string"
+                      description: "A string containing a JSON Pointer value."
+          description: "Details of the message to be created"
+          required: true
+        responses: 
+          204: 
+            description: "Successful operation. Message updated with read timestamp."
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          404: 
+            description: "Message to be updated cannot be found."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/users/{nhsLoginId}/messages: 
       post: 
         tags: 

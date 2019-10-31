@@ -46,7 +46,6 @@ class NHSOnlineApi {
     this.req = options.req;
     this.cookies = options.cookies;
     this.__domain = options.domain;
-
   }
 
   get domain() {
@@ -99,6 +98,8 @@ class NHSOnlineApi {
      * @param {object} form - form data object
      * @param {object} deferred - promise object
      * @param {object} ignoreError - boolean to control dispatching ApiError message
+     * @param {object} ignoreLoading - boolean to control dispatching http/isLoading
+     * 
      */
     request({
         method,
@@ -110,6 +111,7 @@ class NHSOnlineApi {
         form,
         deferred,
         ignoreError,
+        ignoreLoading,
         useAccessToken
       }) {
         const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null;
@@ -122,7 +124,9 @@ class NHSOnlineApi {
         const CancelToken = axios.CancelToken;
         let cancel;
 
-        this.store.dispatch('http/isLoading');
+        if (!ignoreLoading){
+          this.store.dispatch('http/isLoading');
+        }
 
         if (useAccessToken) {
           const accessToken = get('accessToken')(this.cookies.get('nhso.session'));
@@ -234,8 +238,10 @@ class NHSOnlineApi {
 
           return response.data
         }).then((body) => {
-          this.store.dispatch('http/loadingCompleted');
-            resolve({
+          if (!ignoreLoading){
+            this.store.dispatch('http/loadingCompleted');
+          }
+          resolve({
               deferred,
               result: body,
               store: this.store
@@ -252,7 +258,9 @@ class NHSOnlineApi {
               consola.error(new Error(`Error setting up the request: ${method} ${urlWithParams}, error: ${error.message}, duration: ${requestDurationMilliseconds}ms, CorrelationId=${nhsoRequestId}`));
             }
           }
-          this.store.dispatch('http/loadingCompleted');
+          if (!ignoreLoading){
+            this.store.dispatch('http/loadingCompleted');
+          }
           if (!axios.isCancel(error)) {
             if (error.response !== undefined && 401 === error.response.status) {
               this.store.dispatch('auth/unauthorised');
@@ -306,6 +314,7 @@ class NHSOnlineApi {
       parameters = {};
     }
     let ignoreError = parameters.ignoreError || false;
+    let ignoreLoading = parameters.ignoreLoading || false;
     let deferred = {{#isNode}}Q{{/isNode}}{{^isNode}}$q{{/isNode}}.defer();
     let domain = this.domain;
     let path = '/v1{{../../subresource}}';
@@ -324,12 +333,6 @@ class NHSOnlineApi {
       {{/each}}
     {{/../security}}
 
-  {{#ifEquals @key 'post'}}
-    headers['Content-Type'] = ['application/json'];
-  {{/ifEquals}}
-  {{#ifEquals @key 'put'}}
-    headers['Content-Type'] = ['application/json'];
-  {{/ifEquals}}
   {{#ifEquals @key 'delete'}}
     headers['Content-Type'] = ['application/json'];
   {{/ifEquals}}
@@ -344,62 +347,71 @@ class NHSOnlineApi {
       {{/ifEquals}}
     {{/each}}
   {{/ifEquals}}
+  {{#ifEquals @key 'patch'}}
+    headers['Content-Type'] = ['application/json-patch+json'];
+  {{/ifEquals}}
+  {{#ifEquals @key 'post'}}
+    headers['Content-Type'] = ['application/json'];
+  {{/ifEquals}}
+  {{#ifEquals @key 'put'}}
+    headers['Content-Type'] = ['application/json'];
+  {{/ifEquals}}
 
-    {{#each ../parameters}}
-      {{#ifEquals this.in "query"}}
-        if (parameters['{{this.name}}'] !== undefined) {
-          queryParameters['{{this.name}}'] = parameters['{{this.name}}'];
-        }
-
-        {{#ifEquals this.required true}}
-        if (parameters['{{this.name}}'] === undefined) {
-          deferred.reject(new Error('Missing required  parameter: {{this.name}}'));
-          return deferred.promise;
-        }
-        {{/ifEquals}}
-      {{/ifEquals}}
-      {{#ifEquals this.in "path"}}
-        {{#ifEquals this.required true}}
-        if (parameters['{{this.name}}'] === undefined) {
-          deferred.reject(new Error('Missing required parameter: {{this.name}}'));
-          return deferred.promise;
-        }
-        {{/ifEquals}}
-        if (parameters['{{this.name}}'] !== undefined) {
-          path = path.replace(':{{this.name}}', parameters['{{this.name}}']);
-        }
-      {{/ifEquals}}
-    {{/each}}
-
-    {{#with ../requestBody}}
-      if (parameters['{{camelCase this.x-name}}'] !== undefined) {
-        body = parameters['{{camelCase this.x-name}}'];
-      }
-
-    {{#ifEquals this.required true}}
-      if (parameters['{{camelCase this.x-name}}'] === undefined) {
-        deferred.reject(new Error('Missing required  parameter: {{camelCase this.x-name}}'));
+  {{#each ../parameters}}
+    {{#ifEquals this.in "query"}}
+      {{#ifEquals this.required true}}
+      if (parameters['{{this.name}}'] === undefined) {
+        deferred.reject(new Error('Missing required  parameter: {{this.name}}'));
         return deferred.promise;
       }
+      {{/ifEquals}}
+      if (parameters['{{this.name}}'] !== undefined) {
+        queryParameters['{{this.name}}'] = parameters['{{this.name}}'];
+      }
     {{/ifEquals}}
-    {{/with}}
+    {{#ifEquals this.in "path"}}
+      {{#ifEquals this.required true}}
+      if (parameters['{{this.name}}'] === undefined) {
+        deferred.reject(new Error('Missing required parameter: {{this.name}}'));
+        return deferred.promise;
+      }
+      {{/ifEquals}}
+      if (parameters['{{this.name}}'] !== undefined) {
+        path = path.replace(':{{this.name}}', parameters['{{this.name}}']);
+      }
+    {{/ifEquals}}
+  {{/each}}
 
-      queryParameters = this.mergeQueryParams(parameters, queryParameters);
+  {{#with ../requestBody}}
+    if (parameters['{{camelCase this.x-name}}'] !== undefined) {
+      body = parameters['{{camelCase this.x-name}}'];
+    }
 
-      this.request({
-        method: '{{toUpperCase @key}}',
-        url: domain + path,
-        parameters,
-        body,
-        headers,
-        queryParameters,
-        form,
-        deferred,
-        ignoreError,
-        useAccessToken
-      });
-
+  {{#ifEquals this.required true}}
+    if (parameters['{{camelCase this.x-name}}'] === undefined) {
+      deferred.reject(new Error('Missing required  parameter: {{camelCase this.x-name}}'));
       return deferred.promise;
+    }
+  {{/ifEquals}}
+  {{/with}}
+
+    queryParameters = this.mergeQueryParams(parameters, queryParameters);
+
+    this.request({
+      method: '{{toUpperCase @key}}',
+      url: domain + path,
+      parameters,
+      body,
+      headers,
+      queryParameters,
+      form,
+      deferred,
+      ignoreError,
+      ignoreLoading,
+      useAccessToken
+    });
+
+    return deferred.promise;
   }
     {{/validMethod}}{{/each}}{{/each}}
 }

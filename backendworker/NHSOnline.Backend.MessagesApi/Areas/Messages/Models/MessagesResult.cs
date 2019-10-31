@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 {
     public abstract class MessagesResult
@@ -30,6 +28,14 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
         }
 
         public class BadGateway : MessagesResult
+        {
+            public override T Accept<T>(IMessagesResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+        
+        public class BadRequest : MessagesResult
         {
             public override T Accept<T>(IMessagesResultVisitor<T> visitor)
             {

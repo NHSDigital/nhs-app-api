@@ -19,6 +19,14 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
                 return visitor.Visit(this);
             }
         }
+               
+        public class BadRequest : MessageResult
+        {
+            public override T Accept<T>(IMessageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
         
         public class InternalServerError : MessageResult
         {

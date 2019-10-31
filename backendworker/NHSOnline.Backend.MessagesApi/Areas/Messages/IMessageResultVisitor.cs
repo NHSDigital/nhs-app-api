@@ -6,6 +6,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     {
         T Visit(MessageResult.Success result);
         T Visit(MessageResult.BadGateway result);
+        T Visit(MessageResult.BadRequest result);
         T Visit(MessageResult.InternalServerError result);
     }
 }

@@ -64,6 +64,19 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
         }
 
+        public async Task Visit(MessagesResult.BadRequest result)
+        {
+            try
+            {
+                var auditMessage = "User messages request unsuccessful due to BadRequest";
+                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier,AuditType, auditMessage);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(MessagesResult.BadRequest)}");
+            }
+        }
+
         public async Task Visit(MessagesResult.InternalServerError result)
         {
             try

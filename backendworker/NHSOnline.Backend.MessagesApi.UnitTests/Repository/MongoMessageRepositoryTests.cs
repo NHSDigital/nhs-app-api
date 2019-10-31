@@ -6,6 +6,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
@@ -136,6 +137,120 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             result.Should().NotBeNull();
             result.Should().BeEmpty();
         }
+        
+        [TestMethod]
+        public void FindOne_WhenMessageIdIsNull_ThrowsException()
+        {
+            // Act
+            Func<Task> act = async () => await _systemUnderTest.FindOne(null);
+
+            // Assert
+            act.Should().Throw<AggregateException>()
+                .And.InnerExceptions.Should().HaveCount(1)
+                .And.AllBeOfType<ArgumentNullException>()
+                .And.Contain(x =>
+                    ((ArgumentNullException) x).ParamName.Equals("messageId", StringComparison.Ordinal));
+        }
+
+        [TestMethod]
+        public async Task FindOne_ReturnMessage()
+        {
+            // Arrange
+            var userMessage = _fixture.Create<UserMessage>();
+            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[] { userMessage });
+
+            _mongoCollectionMock
+                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
+                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(cursorMock.Object);
+
+            // Act
+            var result = await _systemUnderTest.FindOne(userMessage.Id.ToString());
+
+            // Assert
+            _mongoCollectionMock.VerifyAll();
+            result.Should().BeEquivalentTo(userMessage);
+        }
+
+        [TestMethod]
+        public async Task FindOne_WhenRecordDoesNotExist_ShouldNotReturnRecord()
+        {
+            // Arrange
+            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserMessage>(_fixture);
+            var id = new ObjectId(_fixture.CreateStringFromRegex("^[0-9a-f]{24}$")); //24 digit hex regex
+
+            _mongoCollectionMock
+                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
+                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(cursorMock.Object);
+
+            // Act
+            var result = await _systemUnderTest.FindOne(id.ToString());
+
+            // Assert
+            _mongoCollectionMock.VerifyAll();
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void UpdateOne_WhenMessageIsNull_ThrowsException()
+        {
+            // Act
+            Func<Task> act = async () => await _systemUnderTest.UpdateOne(null);
+
+            // Assert
+            act.Should().Throw<AggregateException>()
+                .And.InnerExceptions.Should().HaveCount(1)
+                .And.AllBeOfType<ArgumentNullException>()
+                .And.Contain(x =>
+                    ((ArgumentNullException) x).ParamName.Equals("userMessage", StringComparison.Ordinal));
+        }
+
+        [TestMethod]
+        public async Task UpdateOne_UpdateMessage()
+        {
+            // Arrange
+            var userMessage = _fixture.Create<UserMessage>();
+            userMessage.ReadTime = null;
+            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[] { userMessage });
+
+            _mongoCollectionMock
+                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
+                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(cursorMock.Object);
+
+            Assert.AreEqual(null, userMessage.ReadTime);
+            
+            // Act
+            userMessage.ReadTime = DateTime.UtcNow;
+            await _systemUnderTest.UpdateOne(userMessage);
+            var result = await _systemUnderTest.FindOne(userMessage.Id.ToString());
+
+            // Assert
+            _mongoCollectionMock.VerifyAll();
+            Assert.AreEqual(userMessage.ReadTime, result.ReadTime);
+        }
+
+        [TestMethod]
+        public async Task UpdateOne_WhenRecordDoesNotExist_ShouldNotUpdateRecord()
+        {
+            // Arrange
+            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserMessage>(_fixture);
+            var userMessage = _fixture.Create<UserMessage>();
+
+            _mongoCollectionMock
+                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
+                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(cursorMock.Object);
+
+            // Act
+            await _systemUnderTest.UpdateOne(userMessage);
+            var result = await _systemUnderTest.FindOne(userMessage.Id.ToString());
+
+            // Assert
+            _mongoCollectionMock.VerifyAll();
+            result.Should().BeNull();           
+        }
 
         [TestMethod]
         public void Summary_WhenNhsLoginIdIsNull_ThrowsException()
@@ -157,19 +272,19 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             var latestFirstSenderMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, "Sender 1")
                 .With(x => x.SentTime, DateTime.UtcNow)
-                .With(x => x.Read, default(DateTime?))
+                .With(x => x.ReadTime, default(DateTime?))
                 .Create();
 
             var latestSecondSenderMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, "Sender 2")
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(5))
-                .With(x => x.Read, default(DateTime?))
+                .With(x => x.ReadTime, default(DateTime?))
                 .Create();
 
             var latestThirdSenderMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, "Sender 3")
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(-5))
-                .With(x => x.Read, DateTime.UtcNow)
+                .With(x => x.ReadTime, DateTime.UtcNow)
                 .Create();
 
             var messages = new List<UserMessage>
@@ -178,24 +293,24 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
                 _fixture.Build<UserMessage>()
                     .With(x => x.Sender, latestSecondSenderMessage.Sender)
                     .With(x => x.SentTime, latestSecondSenderMessage.SentTime.AddSeconds(-1))
-                    .With(x => x.Read, default(DateTime?))
+                    .With(x => x.ReadTime, default(DateTime?))
                     .Create(),
                 latestSecondSenderMessage,
                 _fixture.Build<UserMessage>()
                     .With(x => x.Sender, latestSecondSenderMessage.Sender)
                     .With(x => x.SentTime, latestSecondSenderMessage.SentTime)
-                    .With(x => x.Read, DateTime.UtcNow)
+                    .With(x => x.ReadTime, DateTime.UtcNow)
                     .Create(),
                 _fixture.Build<UserMessage>()
                     .With(x => x.Sender, latestThirdSenderMessage.Sender)
                     .With(x => x.SentTime, latestThirdSenderMessage.SentTime.AddSeconds(-10))
-                    .With(x => x.Read, DateTime.UtcNow)
+                    .With(x => x.ReadTime, DateTime.UtcNow)
                     .Create(),
                 latestThirdSenderMessage,
                 _fixture.Build<UserMessage>()
                     .With(x => x.Sender, latestThirdSenderMessage.Sender)
                     .With(x => x.SentTime, latestThirdSenderMessage.SentTime.AddSeconds(-5))
-                    .With(x => x.Read, DateTime.UtcNow)
+                    .With(x => x.ReadTime, DateTime.UtcNow)
                     .Create(),
             };
 
@@ -249,7 +364,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
                 Sender = userMessage.Sender,
                 Version = userMessage.Version,
                 Body = userMessage.Body,
-                Read = userMessage.Read,
+                ReadTime = userMessage.ReadTime,
                 SentTime = userMessage.SentTime
             };
     }

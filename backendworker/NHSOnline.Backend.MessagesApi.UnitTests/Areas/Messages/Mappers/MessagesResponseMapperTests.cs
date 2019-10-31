@@ -34,19 +34,19 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             var currentMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, sender)
                 .With(x => x.SentTime, DateTime.UtcNow)
-                .With(x => x.Read, DateTime.UtcNow)
+                .With(x => x.ReadTime, DateTime.UtcNow)
                 .Create();
 
             var oldestMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, sender)
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(-10))
-                .With(x => x.Read, default(DateTime?))
+                .With(x => x.ReadTime, default(DateTime?))
                 .Create();
 
             var latestMessage = _fixture.Build<UserMessage>()
                 .With(x => x.Sender, sender)
                 .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(10))
-                .With(x => x.Read, default(DateTime?))
+                .With(x => x.ReadTime, default(DateTime?))
                 .Create();
 
             // Act
@@ -158,7 +158,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                 Sender = m.Sender,
                 Version = m.Version,
                 Body = m.Body,
-                Read = m.Read.HasValue,
+                Read = m.ReadTime.HasValue,
                 SentTime = m.SentTime,
             }).ToList();
     }

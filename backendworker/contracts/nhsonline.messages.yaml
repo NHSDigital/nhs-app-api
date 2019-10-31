@@ -50,6 +50,48 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
+  /users/me/messages/{messageId}:
+    patch:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - messages
+      summary: Updates the message
+      description: Updates the message pertaining to the authorized user using Json Patch operations
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+        - in: path
+          name: messageId
+          required: true
+          description: A unique identifier for a message.
+          schema:
+            type: string
+      requestBody:
+        x-name: PatchMessageRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchBody'
+        description: Details of the message to be created
+        required: true
+      responses:
+        "204":
+          description: Successful operation. Message updated with Json Patch.
+        "400":
+          description: Bad request. Supplied request contains an invalid Json Patch operation.
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "404":
+          description: Message to be updated cannot be found.
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
   /users/{nhsLoginId}/messages:
     post:
       tags:
@@ -147,3 +189,33 @@ components:
           description: Array of messages per sender for an authorized user.
           items:
             $ref: "#/components/schemas/MessageResponse"
+    PatchBody:
+      type: array
+      items:
+        $ref: "#/components/schemas/PatchOperation"
+    PatchOperation:
+      type: object
+      description: A JSONPatch document as defined by RFC 6902
+      required:
+        - "op"
+        - "path"
+      properties:
+        op:
+          type: string
+          description: The operation to be performed
+          enum:
+            - "add"
+            - "remove"
+            - "replace"
+            - "move"
+            - "copy"
+            - "test"
+        path:
+          type: string
+          description: A JSON-Pointer
+        value:
+          type: object
+          description: The value to be used within the operations.
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.

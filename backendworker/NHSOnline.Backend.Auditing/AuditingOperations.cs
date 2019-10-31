@@ -60,6 +60,8 @@ namespace NHSOnline.Backend.Auditing
         public const string RegisterUsersDeviceAuditTypeResponse = "Users_Device_Registration_Response";
         public const string GetUserMessagesAuditTypeRequest = "Users_Messages_Get_Request";
         public const string GetUserMessagesAuditTypeResponse = "Users_Messages_Get_Response";
+        public const string PatchUserMessageAuditTypeRequest = "Users_Messages_Patch_Request";
+        public const string PatchUserMessageAuditTypeResponse = "Users_Messages_Patch_Response";
         public const string GetUserInfoAuditTypeRequest = "User_Info_Get_Request";
         public const string GetUserInfoAuditTypeResponse = "User_Info_Get_Response";
         public const string PostUserInfoAuditTypeRequest = "User_Info_Post_Request";
