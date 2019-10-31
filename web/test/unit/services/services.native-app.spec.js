@@ -52,6 +52,7 @@ describe('native app', () => {
   callNative('onLogin');
   callNative('onLogout');
   callNative('onSessionExpiring', 115);
+  callNative('openAppSettings');
   callNative('pageLoadComplete');
   callNative('requestPnsToken', 'load');
   callNative('resetPageFocus');

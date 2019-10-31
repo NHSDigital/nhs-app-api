@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
                     .IsValid();
 
                 await CreateOrUpdateOne(d => d.NhsLoginId == userAndInfo.NhsLoginId, userAndInfo);
-                return new PostInfoResult.Created();
+                return new PostInfoResult.Created(userAndInfo.Info);
             }
             finally
             {

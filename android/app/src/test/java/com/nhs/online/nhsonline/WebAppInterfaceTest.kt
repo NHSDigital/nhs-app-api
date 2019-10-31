@@ -9,6 +9,7 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
+import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import junit.framework.Assert
@@ -24,6 +25,7 @@ class WebAppInterfaceTest {
     private lateinit var contextMock: MainActivity
     private lateinit var webAppInterface: WebAppInterface
     private lateinit var nhsWebMock: NhsWeb
+    private lateinit var settingsService: SettingsService
 
     @Before
     fun setUp() {
@@ -37,16 +39,20 @@ class WebAppInterfaceTest {
 
             Mockito.`when`( connectivityManager.activeNetworkInfo ).thenReturn(networkInfo)
             Mockito.`when`( networkInfo.isConnected).thenReturn( true )
-            Mockito.`when`(networkInfo.isAvailable).thenReturn(true)
-            Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(true)
+            Mockito.`when`( networkInfo.isAvailable).thenReturn(true)
+            Mockito.`when`( networkInfo.isConnectedOrConnecting).thenReturn(true)
 
             on { resources }.thenReturn(resourcesMock)
             on { getString(any()) }.thenReturn("text")
             on { getSharedPreferences(any(), any()) }.thenReturn(sharedPref)
-            on {getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
+            on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
         }
+
+        settingsService = mock()
+        doNothing().whenever(settingsService).openSettings()
+
         nhsWebMock = mock()
-        webAppInterface = WebAppInterface(contextMock, contextMock, nhsWebMock)
+        webAppInterface = WebAppInterface(contextMock, contextMock, nhsWebMock, settingsService)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
 
     }
@@ -206,6 +212,12 @@ class WebAppInterfaceTest {
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).showExtendSessionDialogue(10)
+    }
+
+    @Test
+    fun openAppSettingsTest() {
+        webAppInterface.openAppSettings()
+        verify(settingsService).openSettings()
     }
 
     @Test

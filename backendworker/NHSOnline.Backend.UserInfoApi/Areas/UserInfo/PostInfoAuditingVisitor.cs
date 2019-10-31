@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         private readonly ILogger<InfoController> _logger;
 
         private const Supplier Supplier = Support.Supplier.Microsoft;
-        private const string AuditType = AuditingOperations.GetUserMessagesAuditTypeResponse;
+        private const string AuditType = AuditingOperations.PostUserInfoAuditTypeResponse;
 
         public PostInfoAuditingVisitor(ILogger<InfoController> logger, IAuditor auditor, AccessToken accessToken)
         {
@@ -27,8 +27,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         {
             try
             {
-                var auditMessage = "User info created";
-                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier, AuditType, auditMessage);
+                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier, AuditType, "User info created {0}", result.Record.SerializeJson());
             }
             catch (Exception e)
             {

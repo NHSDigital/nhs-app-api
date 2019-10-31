@@ -62,6 +62,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "onLogin")
         webView.configuration.userContentController.add(delegate, name: "onLogout")
         webView.configuration.userContentController.add(delegate, name: "onSessionExpiring")
+        webView.configuration.userContentController.add(delegate, name: "openAppSettings")
         webView.configuration.userContentController.add(delegate, name: "pageLoadComplete")
         webView.configuration.userContentController.add(delegate, name: "requestPnsToken")
         webView.configuration.userContentController.add(delegate, name: "resetPageFocus")

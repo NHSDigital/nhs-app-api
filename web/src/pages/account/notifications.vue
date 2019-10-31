@@ -14,7 +14,7 @@
     />
     <div>
       <p>
-        <a :class="$style.iconLink">
+        <a href="#" :class="$style.iconLink" @click.prevent="openAppSettings">
           <external-link-arrow-right-icon />
           <span>{{ $t('notifications.settingsLinkText') }}</span>
         </a>
@@ -28,6 +28,7 @@
 import BackButton from '@/components/BackButton';
 import ExternalLinkArrowRightIcon from '@/components/icons/ExternalLinkArrowRightIcon';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
+import NativeApp from '@/services/native-app';
 
 export default {
   components: {
@@ -51,6 +52,11 @@ export default {
   },
   async asyncData({ store }) {
     await store.dispatch('notifications/load');
+  },
+  methods: {
+    openAppSettings() {
+      NativeApp.openAppSettings();
+    },
   },
 };
 </script>

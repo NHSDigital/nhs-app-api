@@ -7,12 +7,14 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.web.NhsWeb
 
 class WebAppInterface(
     private val activity: Activity,
     private val uiInteractor: IInteractor,
-    private val nhsWeb: NhsWeb
+    private val nhsWeb: NhsWeb,
+    private val settingsService: SettingsService
 ) {
 
     @JavascriptInterface
@@ -74,6 +76,12 @@ class WebAppInterface(
         activity.runOnUiThread {
             nhsWeb.onWebLoggedOut()
         }
+    }
+
+    @JavascriptInterface
+    fun openAppSettings() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering openAppSettings")
+        settingsService.openSettings()
     }
 
     @JavascriptInterface

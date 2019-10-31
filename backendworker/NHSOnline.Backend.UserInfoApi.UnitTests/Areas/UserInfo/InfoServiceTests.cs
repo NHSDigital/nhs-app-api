@@ -55,10 +55,16 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             UserAndInfo actualUserInfo = null;
+            PostInfoResult.Created expectedResult
+                = new PostInfoResult.Created(new Info
+                {
+                    NhsNumber = _nhsNumber,
+                    OdsCode = _odsCode
+                });
 
             _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>()))
                 .Callback<UserAndInfo>(u => actualUserInfo = u)
-                .ReturnsAsync(new PostInfoResult.Created());
+                .ReturnsAsync(() =>  new PostInfoResult.Created(actualUserInfo.Info));
 
             // Act
             var result = await _systemUnderTest.Send(_accessToken, _odsCode);
@@ -66,6 +72,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoRepository.VerifyAll();
             result.Should().BeAssignableTo<PostInfoResult.Created>();
+            result.Should().BeEquivalentTo(expectedResult);
             actualUserInfo.NhsLoginId.Should().BeEquivalentTo(_nhsLoginId);
             actualUserInfo.Info.NhsNumber.Should().BeEquivalentTo(_nhsNumber);
             actualUserInfo.Info.OdsCode.Should().Be(_odsCode);

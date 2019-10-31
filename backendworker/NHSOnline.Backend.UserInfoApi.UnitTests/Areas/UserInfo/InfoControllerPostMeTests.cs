@@ -12,6 +12,7 @@ using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
+using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
@@ -50,7 +51,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             var odsCode = _fixture.Freeze<string>();
             MockUserProfileWithOdsCode(odsCode);
             _mockInfoService.Setup(x => x.Send(It.IsAny<AccessToken>(), odsCode))
-                .ReturnsAsync(new PostInfoResult.Created());
+                .ReturnsAsync(new PostInfoResult.Created(_fixture.Create<Info>()));
 
             // Act
             var result = await _systemUnderTest.Post();

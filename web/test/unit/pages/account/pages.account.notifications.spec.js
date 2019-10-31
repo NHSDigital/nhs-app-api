@@ -1,6 +1,9 @@
+import NativeApp from '@/services/native-app';
 import Notifications from '@/pages/account/notifications';
 import { initialState } from '@/store/modules/notifications/mutation-types';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/services/native-app');
 
 describe('notifications', () => {
   let wrapper;
@@ -39,6 +42,13 @@ describe('notifications', () => {
 
     it('will dispatch `notifications/load`', () => {
       expect($store.dispatch).toBeCalledWith('notifications/load');
+    });
+  });
+
+  describe('native settings link', () => {
+    it('will call the native app function to open settings', () => {
+      wrapper.find('a').trigger('click');
+      expect(NativeApp.openAppSettings).toHaveBeenCalled();
     });
   });
 

@@ -52,6 +52,10 @@ window.nativeApp.onSessionExpiring = function(sessionDuration) {
     window.webkit.messageHandlers.onSessionExpiring.postMessage(sessionDuration);
 };
 
+window.nativeApp.openAppSettings = function() {
+    window.webkit.messageHandlers.openAppSettings.postMessage(null)
+}
+
 window.nativeApp.pageLoadComplete = function () {
     window.webkit.messageHandlers.pageLoadComplete.postMessage(null);
 };

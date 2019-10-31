@@ -41,6 +41,11 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
                 _logger.LogEnter();
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
+                
+                await _auditor.AuditSecureTokenEvent(accessToken,
+                    Supplier.Microsoft,
+                    AuditingOperations.PostUserInfoAuditTypeRequest,
+                    "Attempting to post users info");
 
                 var odsCode = await GetOdsCode(accessToken);
 

@@ -139,6 +139,15 @@ export default {
     return false;
   },
 
+  openAppSettings() {
+    const app = window.nativeApp;
+    if (app && app.openAppSettings) {
+      app.openAppSettings();
+      return true;
+    }
+    return false;
+  },
+
   pageLoadComplete() {
     const app = window.nativeApp;
     if (app && app.pageLoadComplete) {

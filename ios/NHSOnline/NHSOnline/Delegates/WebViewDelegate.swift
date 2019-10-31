@@ -270,8 +270,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 if sessionDuration == nil {
                     sessionDuration = 20
                 }
-                
                 viewController.displayExtendSessionDialogue(sessionDuration: sessionDuration!)
+                break
+            case "openAppSettings":
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 break
             case "pageLoadComplete":
                 viewController.applicationState.unBlock()

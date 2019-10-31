@@ -13,6 +13,7 @@ import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
@@ -41,7 +42,7 @@ class NhsWeb(
     private val chromeClient = ChromeClientLocationHandler(activity)
     private val appPersistData = PersistData(activity)
     private val errorMessageHandler = ErrorMessageHandler(activity)
-    private var originalWebViewZoom = 0
+    private val settingsService = SettingsService(activity)
 
     var applicationState =
             ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
@@ -62,7 +63,7 @@ class NhsWeb(
                 WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers)
         webView.webViewClient = webInterceptor
 
-        val webInterface = WebAppInterface(activity, uiInteractor, this)
+        val webInterface = WebAppInterface(activity, uiInteractor, this, settingsService)
         webView.addJavascriptInterface(webInterface, NATIVE_APP)
 
         webView.webChromeClient = chromeClient
