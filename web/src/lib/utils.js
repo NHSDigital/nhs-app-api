@@ -1,4 +1,4 @@
-import { isUndefined, isEqual } from 'lodash/fp';
+import { get, isEqual } from 'lodash/fp';
 import moment from 'moment-timezone';
 
 export const datePart = (value, dateFormat) => {
@@ -56,30 +56,26 @@ export const readableBytes = (bytes) => {
   return `${Number(parseFloat(bytes / 1000000).toFixed(2))}MB`;
 };
 
-export const redirectTo = (self, path, query) => {
+export const redirectTo = ({ $router, $store }, path, query) => {
   if (process.server) {
     if (!query) {
-      self.$store.app.context.redirect(path);
+      $store.app.context.redirect(path);
     } else {
-      self.$store.app.context.redirect(302, path, query);
+      $store.app.context.redirect(302, path, query);
     }
-  } else if (self.$router.currentRoute && self.$router.currentRoute.path === path) {
-    const localQuery = (isUndefined(query) && self.$store.state.device.isNativeApp)
+  } else if (get('currentRoute.path')($router) === path) {
+    const localQuery = !query || isEqual($router.currentRoute.query, query)
       ? {
-        ...self.$router.currentRoute.query,
-        ...{ source: self.$store.state.device.source },
+        ...$router.currentRoute.query,
+        ts: moment().unix(),
       }
       : query;
 
-    if (!localQuery || isEqual(self.$router.currentRoute.query, localQuery)) {
-      self.$router.go();
-    } else {
-      self.$router.push({ path, query: localQuery });
-    }
+    $router.push({ path, query: localQuery });
   } else if (!query) {
-    self.$router.push(path);
+    $router.push(path);
   } else {
-    self.$router.push({ path, query });
+    $router.push({ path, query });
   }
 };
 

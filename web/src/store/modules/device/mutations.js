@@ -14,7 +14,7 @@ export default {
       const sourceValue = this.app.store.state.device.source;
       redirectTo(this, '/check-your-symptoms', { source: sourceValue });
     } else {
-      redirectTo(this, CHECKYOURSYMPTOMS.path, null);
+      redirectTo(this, CHECKYOURSYMPTOMS.path);
     }
   },
   [GO_TO_GP_FINDER](state) {
@@ -22,7 +22,7 @@ export default {
       const sourceValue = this.app.store.state.device.source;
       redirectTo(this, '/gp-finder', { source: sourceValue });
     } else {
-      redirectTo(this, GP_FINDER.path, null);
+      redirectTo(this, GP_FINDER.path);
     }
   },
   [SET_SOURCE_DEVICE](state, source) {

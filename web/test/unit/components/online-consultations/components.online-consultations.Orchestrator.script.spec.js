@@ -653,7 +653,7 @@ describe('orchestrator', () => {
         orchestrator.vm.backToHomeClicked();
 
         // Assert
-        expect(LibUtils.redirectTo).toHaveBeenCalledWith(orchestrator.vm, '/', null);
+        expect(LibUtils.redirectTo).toHaveBeenCalledWith(orchestrator.vm, '/');
         expect(LibUtils.redirectTo).toHaveBeenCalledTimes(1);
       });
     });

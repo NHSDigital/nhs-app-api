@@ -1,4 +1,4 @@
-package com.nhs.online.nhsonline
+package com.nhs.online.nhsonline.webinterfaces
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,12 +6,12 @@ import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import com.nhaarman.mockito_kotlin.*
+import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.web.NhsWeb
-import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import junit.framework.Assert
 import org.junit.Test
 

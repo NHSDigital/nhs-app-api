@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     goBack() {
-      if (this.gotoPath) redirectTo(this, this.gotoPath, null);
+      if (this.gotoPath) redirectTo(this, this.gotoPath);
       else this.$router.goBack();
     },
   },

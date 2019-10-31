@@ -46,7 +46,7 @@ export default {
   methods: {
     chooseDecision() {
       this.$store.dispatch('organDonation/makeDecision', this.decision);
-      redirectTo(this, this.nextRoute, null);
+      redirectTo(this, this.nextRoute);
     },
   },
 };

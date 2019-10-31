@@ -319,7 +319,7 @@ export default {
       window.scrollTo(0, 0);
     },
     backToHomeClicked() {
-      redirectTo(this, INDEX.path, null);
+      redirectTo(this, INDEX.path);
     },
     validationErrorMessages(localError, responseErrors) {
       const errorMessages = [];
@@ -330,7 +330,7 @@ export default {
       return errorMessages;
     },
     goBack() {
-      redirectTo(this, this.indexPath, null);
+      redirectTo(this, this.indexPath);
     },
   },
 };

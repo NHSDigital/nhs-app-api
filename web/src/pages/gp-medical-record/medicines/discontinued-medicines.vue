@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.getBackPath, null);
+      redirectTo(this, this.getBackPath);
     },
   },
 };

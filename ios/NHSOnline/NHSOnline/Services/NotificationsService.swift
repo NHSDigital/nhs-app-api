@@ -22,38 +22,34 @@ class NotificationsService {
                         return
                     }
                     
-                    self?.areNotificationsEnabled { areEnabled in
-                        if areEnabled {
-                            DispatchQueue.main.async {
-                                UIApplication.shared.registerForRemoteNotifications()
-                            }
-                        } else {
-                            self?.unauthorised()
-                        }
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
                     }
-            }
+                }
         } else {
             logNotSupported()
         }
     }
     
-    func areNotificationsEnabled() {
-        areNotificationsEnabled { areEnabled in
-            self.appWebInterface.areNotificationsEnabled(areEnabled: areEnabled)
-        }
-    }
-    
-    private func areNotificationsEnabled(callback: @escaping (Bool) -> Void) {
+    func getNotificationsStatus() {
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
-                guard settings.authorizationStatus == .authorized else {
+                var status: AuthorisationStatus;
+                
+                switch settings.authorizationStatus {
+                case .notDetermined:
+                    status = AuthorisationStatus.notDetermined
+                    Logger.logInfo(message: "Authorisation request has not been made yet")
+                case .denied:
+                    status = AuthorisationStatus.denied
                     Logger.logInfo(message: "Allow notifications is disabled")
-                    callback(false)
-                    return
+                case .authorized,
+                        .provisional:
+                    status = AuthorisationStatus.authorised
+                    Logger.logInfo(message: "Allow notifications is enabled")
                 }
                 
-                Logger.logInfo(message: "Allow notifications is enabled")
-                callback(true)
+                self.appWebInterface.getNotificationsStatus(status: status.rawValue)
             }
         }
     }
@@ -84,5 +80,12 @@ class NotificationsService {
     
     private func resetTrigger() {
         trigger = "load"
+    }
+    
+    private enum AuthorisationStatus: String
+    {
+        case notDetermined
+        case denied
+        case authorised
     }
 }

@@ -16,7 +16,7 @@ export default {
   methods: {
     amendDecision() {
       this.$store.dispatch('organDonation/amendStart');
-      redirectTo(this, ORGAN_DONATION_AMEND.path, null);
+      redirectTo(this, ORGAN_DONATION_AMEND.path);
     },
   },
 };

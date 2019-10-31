@@ -74,7 +74,7 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path, null);
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
   });
 
   it('will not redirect to search if a search query is present', () => {
@@ -125,7 +125,7 @@ describe('nominated pharmacy search results', () => {
 
     // assert
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path, null);
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
   });
 
   describe('pharmacyPracticeClicked', () => {
@@ -149,7 +149,7 @@ describe('nominated pharmacy search results', () => {
       // assert
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/select', pharmacy);
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CONFIRM.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CONFIRM.path);
     });
   });
 

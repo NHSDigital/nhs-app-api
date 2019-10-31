@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     navigate(event) {
-      redirectTo(this, event.currentTarget.pathname, null);
+      redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();
 
       if (event.currentTarget.id !== 'btn_symptoms_link') {

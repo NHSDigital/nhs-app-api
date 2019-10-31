@@ -7,8 +7,8 @@ class AppWebInterface {
         self.webView = webView
     }
     
-    func areNotificationsEnabled(areEnabled: Bool) {
-        dispatchEvent(event: "notifications/settingsEnabled", args: areEnabled)
+    func getNotificationsStatus(status: String) {
+        dispatchEvent(event: "notifications/settingsStatus", args: "'\(status)'")
     }
     
     func extendSession() {
@@ -26,10 +26,6 @@ class AppWebInterface {
     func notificationsAuthorised(devicePns: String, trigger: String) {
         let response = "'{\"devicePns\":\"\(devicePns)\",\"deviceType\":\"ios\",\"trigger\":\"\(trigger)\"}'"
         dispatchEvent(event: "notifications/authorised", args: response)
-    }
-    
-    private func dispatchEvent(event: String, args: Bool) {
-        dispatchEvent(event: event, args: String(args))
     }
     
     private func dispatchEvent(event: String, args: String = "") {

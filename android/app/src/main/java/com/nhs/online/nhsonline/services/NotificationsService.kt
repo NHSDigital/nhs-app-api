@@ -33,7 +33,8 @@ class NotificationsService(
         }
     }
 
-    fun areNotificationsEnabled() {
-        appWebInterface.areNotificationsEnabled(areNotificationsEnabled)
+    fun getNotificationsStatus() {
+        val status = if(areNotificationsEnabled) "authorised" else "denied"
+        appWebInterface.getNotificationsStatus(status)
     }
 }

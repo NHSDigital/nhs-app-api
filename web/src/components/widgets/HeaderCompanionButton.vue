@@ -63,7 +63,7 @@ export default {
   methods: {
     onButtonClicked(pathTo) {
       this.$store.app.$analytics.trackButtonClick(pathTo, true);
-      redirectTo(this, pathTo, null);
+      redirectTo(this, pathTo);
     },
   },
 };

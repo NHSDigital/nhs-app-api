@@ -76,12 +76,12 @@ export default {
   },
   created() {
     if (!this.$store.state.repeatPrescriptionCourses.partialOrderResult) {
-      redirectTo(this, PRESCRIPTIONS.path, null);
+      redirectTo(this, PRESCRIPTIONS.path);
     }
   },
   methods: {
     backToPrescriptionsClicked() {
-      redirectTo(this, PRESCRIPTIONS.path, null);
+      redirectTo(this, PRESCRIPTIONS.path);
     },
   },
 };

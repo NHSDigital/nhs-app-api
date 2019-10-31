@@ -43,6 +43,10 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         clearAndInsertJson(jsonToInsert)
     }
 
+    fun <T> clearAndInsertValue(value: T) {
+        clearAndInsertValues(listOf(value))
+    }
+
     fun clearAndInsertJson(values: List<String>) {
         val documentsToInsert = values.map { value -> Document.parse(value) }
         onCollection { collection ->

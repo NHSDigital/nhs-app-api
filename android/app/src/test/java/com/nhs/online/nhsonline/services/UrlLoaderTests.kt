@@ -5,15 +5,13 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
-import com.nhs.online.nhsonline.webinterfaces.WebJavascript
-import junit.framework.Assert
+import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.util.ReflectionHelpers
-
 
 @RunWith(RobolectricTestRunner::class)
 class UrlLoaderTests {
@@ -31,13 +29,13 @@ class UrlLoaderTests {
 
 
     private lateinit var urlLoader: UrlLoader
-    private lateinit var webviewMock: WebView
+    private lateinit var webViewMock: WebView
     private lateinit var knownServicesMock: KnownServices
-    private lateinit var webJavascriptMock: WebJavascript
+    private lateinit var appWebInterfaceMock: AppWebInterface
 
     @Before
     fun setUp() {
-        webviewMock = mock {
+        webViewMock = mock {
             on { url } doReturn baseUrl
         }
 
@@ -48,10 +46,9 @@ class UrlLoaderTests {
             on { findKnownServiceAndAddMissingQueryFor(reloadUrl) } doReturn (reloadUrlWithQueryParams)
         }
 
-        this.urlLoader = UrlLoader(webviewMock, knownServicesMock, baseUrl)
+        appWebInterfaceMock = mock()
 
-        webJavascriptMock = mock()
-        ReflectionHelpers.setField(urlLoader, "webJavascript", webJavascriptMock)
+        this.urlLoader = UrlLoader(webViewMock, knownServicesMock, baseUrl, appWebInterfaceMock)
     }
 
     @Test
@@ -59,7 +56,7 @@ class UrlLoaderTests {
         urlLoader.loadUrl(prescriptionsAppPageUrl, true)
 
         verify(knownServicesMock).findKnownServiceAndAddMissingQueryFor(prescriptionsAppPageUrl)
-        verify(webviewMock).loadUrl(appPageUrlWithQueryParams)
+        verify(webViewMock).loadUrl(appPageUrlWithQueryParams)
     }
 
     @Test
@@ -67,9 +64,9 @@ class UrlLoaderTests {
         // navigate from prescriptions to appointments (page on nhs app to another page on nhs app)
         urlLoader.loadUrl(appointmentsAppPageUrl, false)
 
-        verify(webJavascriptMock).loadSpaPath("/$appointmentsPath")
+        verify(appWebInterfaceMock).goTo("/$appointmentsPath")
         verify(knownServicesMock, never()).findKnownServiceAndAddMissingQueryFor(anyString())
-        verify(webviewMock, never()).loadUrl(anyString())
+        verify(webViewMock, never()).loadUrl(anyString())
     }
 
     @Test
@@ -77,21 +74,21 @@ class UrlLoaderTests {
         // navigate from prescriptions to appointments (page on nhs app to another page on nhs app)
         urlLoader.loadUrl(appointmentsAppPageUrl, true)
 
-        verify(webJavascriptMock, never()).loadSpaPath(anyString())
+        verify(appWebInterfaceMock, never()).goTo(anyString())
         verify(knownServicesMock).findKnownServiceAndAddMissingQueryFor(appointmentsAppPageUrl)
-        verify(webviewMock).loadUrl(appPageUrlWithQueryParams)
+        verify(webViewMock).loadUrl(appPageUrlWithQueryParams)
     }
 
     @Test
     fun testThatWhenDoesNotRequireFullPageReload_AndComingFromExternalPage_AndGoingToNhsAppPage_DoesNotLoadInSPAMode() {
-        whenever(webviewMock.url).thenReturn(externalPageUrl)
+        whenever(webViewMock.url).thenReturn(externalPageUrl)
 
         // navigate from prescriptions to appointments (page on nhs app to another page on nhs app)
         urlLoader.loadUrl(appointmentsAppPageUrl, false)
 
-        verify(webJavascriptMock, never()).loadSpaPath(anyString())
+        verify(appWebInterfaceMock, never()).goTo(anyString())
         verify(knownServicesMock).findKnownServiceAndAddMissingQueryFor(appointmentsAppPageUrl)
-        verify(webviewMock).loadUrl(appointmentsPageUrlWithQueryParams)
+        verify(webViewMock).loadUrl(appointmentsPageUrlWithQueryParams)
     }
 
     @Test
@@ -99,36 +96,36 @@ class UrlLoaderTests {
         // navigate from prescriptions to appointments (page on nhs app to another page on nhs app)
         urlLoader.loadUrl(externalPageUrl, false)
 
-        verify(webJavascriptMock, never()).loadSpaPath(anyString())
+        verify(appWebInterfaceMock, never()).goTo(anyString())
         verify(knownServicesMock).findKnownServiceAndAddMissingQueryFor(externalPageUrl)
-        verify(webviewMock).loadUrl(externalPageUrl)
+        verify(webViewMock).loadUrl(externalPageUrl)
     }
 
     @Test
     fun testThatReloadRequest_LoadsTheValueOfReloadUrl_WhenReloadUrlIsNotNull() {
         urlLoader.reloadRequest(reloadUrl)
 
-        verify(webviewMock).loadUrl(reloadUrlWithQueryParams)
+        verify(webViewMock).loadUrl(reloadUrlWithQueryParams)
     }
 
     @Test
     fun testThatReloadRequest_CallsTheWebViewToReload_WhenReloadUrlIsNull() {
         urlLoader.reloadRequest(null)
 
-        verify(webviewMock).reload()
+        verify(webViewMock).reload()
     }
 
     @Test
     fun testThatProduceValidUrl_PrefixesUrlWithBaseUrl_IfTheUrlIsNotValid() {
         val result = urlLoader.produceValidUrl(prescriptionsPath)
 
-        Assert.assertEquals(result, prescriptionsAppPageUrl)
+        assertEquals(result, prescriptionsAppPageUrl)
     }
 
     @Test
     fun testThatProduceValidUrl_ReturnsUrlAsIs_IfTheUrlIsValid() {
         val result = urlLoader.produceValidUrl(prescriptionsAppPageUrl)
 
-        Assert.assertEquals(result, prescriptionsAppPageUrl)
+        assertEquals(result, prescriptionsAppPageUrl)
     }
 }

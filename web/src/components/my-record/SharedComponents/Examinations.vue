@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     viewExaminations() {
-      redirectTo(this, this.examinationsPath, null);
+      redirectTo(this, this.examinationsPath);
     },
     onKeyDown(e) {
       if (e.key === key.Enter) {

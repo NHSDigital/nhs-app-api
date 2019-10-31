@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.backPath, null);
+      redirectTo(this, this.backPath);
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value

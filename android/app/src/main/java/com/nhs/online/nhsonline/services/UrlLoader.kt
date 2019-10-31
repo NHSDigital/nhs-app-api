@@ -2,17 +2,14 @@ package com.nhs.online.nhsonline.services
 
 import android.webkit.URLUtil
 import android.webkit.WebView
-import com.nhs.online.nhsonline.webinterfaces.WebJavascript
-
+import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 
 class UrlLoader(
-
     private val webView: WebView,
     private val knownServices: KnownServices,
-    private val baseURL: String
+    private val baseURL: String,
+    private val appWebInterface: AppWebInterface
 ) {
-    private val webJavascript = WebJavascript(webView)
-
     fun loadUrl(url: String, requiresFullPageLoad: Boolean) {
         if (!requiresFullPageLoad && isNavigatingFromNhsAppPageToAnotherNhsAppPage(webView.url, url)) {
             loadUrlThroughSpa(url)
@@ -36,7 +33,7 @@ class UrlLoader(
 
     private fun loadUrlThroughSpa(url: String) {
         val path = getPath(url)
-        webJavascript.loadSpaPath(path)
+        appWebInterface.goTo(path)
     }
 
     private fun hardLoadUrl(url: String) {

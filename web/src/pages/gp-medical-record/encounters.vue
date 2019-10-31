@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.backPath, null);
+      redirectTo(this, this.backPath);
     },
     getRecordedOnDate(recordedOn, defaultValue) {
       return recordedOn && recordedOn.value ? recordedOn.value : defaultValue;

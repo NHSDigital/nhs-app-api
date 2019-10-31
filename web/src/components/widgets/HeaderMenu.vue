@@ -132,7 +132,7 @@ export default {
       if (a.target === '_blank') {
         window.open(a.href, '_blank');
       } else {
-        redirectTo(this, a.pathname, null);
+        redirectTo(this, a.pathname);
       }
       this.closeMiniMenu();
     },

@@ -1,14 +1,15 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
 import ErrorSettings from '@/components/errors/Settings';
 import {
   ADD_API_ERROR,
-  SET_ROUTE_PATH,
-  DISABLE_API_ERROR,
   CLEAR_ALL_API_ERRORS,
+  DISABLE_API_ERROR,
   SET_CONNECTION_PROBLEM,
+  SET_ROUTE_PATH,
+  handledErrors,
+  standardErrors,
 } from './mutation-types';
+
+const allErrors = standardErrors.concat(handledErrors);
 
 export default {
   [ADD_API_ERROR](state, error) {
@@ -22,23 +23,22 @@ export default {
     if (error.response) {
       const { status, data } = error.response;
       statusCode = status;
-      if (error.response.data && error.response.data.serviceDeskReference) {
-        this.serviceDeskReference = error.response.data.serviceDeskReference;
-      }
-      ({ errorCode } = data || {});
+      ({ errorCode, serviceDeskReference } = data || {});
     } else {
       statusCode = 500;
       state.hasConnectionProblem = true;
     }
 
-    const apiError = {
-      status: statusCode,
-      error: errorCode,
-      message: error.message,
-      serviceDeskReference: this.serviceDeskReference || '',
-    };
+    if (statusCode >= 500 || allErrors.indexOf(statusCode) !== -1) {
+      const apiError = {
+        status: statusCode,
+        error: errorCode,
+        message: error.message,
+        serviceDeskReference: serviceDeskReference || '',
+      };
 
-    state.apiErrors.push(apiError);
+      state.apiErrors.push(apiError);
+    }
   },
   [SET_ROUTE_PATH](state, route) {
     const routePath = route.replace(/\/$/, '');
@@ -51,8 +51,6 @@ export default {
   [CLEAR_ALL_API_ERRORS](state) {
     state.apiErrors = [];
     state.showApiError = true;
-    state.routePath = '';
-    state.pageSettings = ErrorSettings.default;
   },
   [SET_CONNECTION_PROBLEM](state, hasConnectionProblem) {
     state.hasConnectionProblem = hasConnectionProblem;

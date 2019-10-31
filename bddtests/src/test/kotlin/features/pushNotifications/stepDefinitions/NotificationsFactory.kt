@@ -15,11 +15,13 @@ import utils.SerenityHelpers
 import utils.addToList
 import utils.getOrFail
 import utils.set
+import worker.models.userDevices.InvalidUserDevice
 import java.util.*
 
 class NotificationsFactory {
 
     val mockingClient = MockingClient.instance
+    private val devicePns = "0123456789ABCDEF"
 
     fun setUpUser(gpSystem: String? = null, patient: Patient? = null): Patient {
         val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem,
@@ -30,6 +32,7 @@ class NotificationsFactory {
         CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
         SessionCreateJourneyFactory.getForSupplier(gpSystemToUse, mockingClient).createFor(patientToUse)
         MongoDBConnection.UserDevicesCollection.clearCache()
+        PushNotificationsSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(patientToUse.subject)
         return patientToUse
     }
 
@@ -50,18 +53,19 @@ class NotificationsFactory {
 
     fun setUpDeviceValues() {
         val deviceType = "Android"
-        val devicePns = "0123456789ABCDEF"
         PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.set(deviceType)
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(devicePns)
     }
 
-    fun mockNativeNotificationFunctions() {
+    fun mockNativeNotificationFunctions(status: SettingStatus, authorised: Boolean = true) {
         val pns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
         val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>().toLowerCase()
-        val notificationsAuthorisedFunction = mockNotificationsAuthorised(pns, deviceType)
-        GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsAuthorisedFunction)
-        val notificationsEnabledFunction = mockNotificationsEnabled()
-        GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsEnabledFunction)
+        val notificationsFunction =
+                if (authorised) mockNotificationsAuthorised(pns, deviceType)
+                else mockNotificationsUnauthorised()
+        GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsFunction)
+        val notificationsStatusFunction = mockNotificationsStatus(status)
+        GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsStatusFunction)
     }
 
     fun setUpExistingRegistration(patient: Patient? = null) {
@@ -73,16 +77,40 @@ class NotificationsFactory {
         Assert.assertNotNull(userDevices)
     }
 
-    private fun mockNotificationsEnabled(): String {
-        return "areNotificationsEnabled : " +
-                "function(){window.\$nuxt.\$store.dispatch(" +
-                "'notifications/settingsEnabled', true)}"
+    fun setUpInvalidMongoDeviceRegistration() {
+        MongoDBConnection.UserDevicesCollection.clearCache()
+        val patient = SerenityHelpers.getPatient()
+        val device = createInvalidDevice(patient)
+        createUserDeviceInRepository(device)
     }
 
-    private fun mockNotificationsAuthorised(pns: String, deviceType: String):String {
+    private fun mockNotificationsStatus(status: SettingStatus): String {
+        return "getNotificationsStatus : " +
+                "function(){window.\$nuxt.\$store.dispatch(" +
+                "'notifications/settingsStatus', '${status.name.decapitalize()}')}"
+    }
+
+    private fun mockNotificationsAuthorised(pns: String, deviceType: String): String {
         return "requestPnsToken : " +
                 "function(trigger){window.\$nuxt.\$store.dispatch(" +
                 "'notifications/authorised', " +
                 "'{\"devicePns\":\"$pns\",\"deviceType\":\"$deviceType\", \"trigger\":\"' + trigger +'\"}')}"
+    }
+
+    private fun mockNotificationsUnauthorised(): String {
+        return "requestPnsToken : " +
+                "function(trigger){window.\$nuxt.\$store.dispatch(" +
+                "'notifications/unauthorised')}"
+    }
+
+    private fun createInvalidDevice(patient: Patient): InvalidUserDevice {
+        return InvalidUserDevice(
+                patient.subject + "-" + devicePns,
+                patient.subject,
+                "this is an invalid field")
+    }
+
+    private fun createUserDeviceInRepository(userDevice: InvalidUserDevice) {
+        MongoDBConnection.UserDevicesCollection.clearAndInsertValue(userDevice)
     }
 }

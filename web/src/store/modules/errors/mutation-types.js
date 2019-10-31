@@ -14,3 +14,5 @@ export const initialState = () => ({
   routePath: '',
   errorTitle: '',
 });
+export const handledErrors = [464, 465];
+export const standardErrors = [400, 403, 409, 460, 461, 466];

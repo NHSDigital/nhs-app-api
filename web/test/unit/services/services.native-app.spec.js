@@ -44,6 +44,7 @@ describe('native app', () => {
 
   callNative('attemptBiometricLogin');
   callNative('clearMenuBarItem');
+  callNative('getNotificationsStatus');
   callNative('goToLoginOptions');
   callNative('hideHeader');
   callNative('hideHeaderSlim');

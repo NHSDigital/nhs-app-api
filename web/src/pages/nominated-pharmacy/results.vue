@@ -103,12 +103,12 @@ export default {
   },
   mounted() {
     if (!this.searchQuery || (!this.pharmacies && !this.technicalError && !this.noResultsFound)) {
-      redirectTo(this, this.searchNominatedPharmacyPath, null);
+      redirectTo(this, this.searchNominatedPharmacyPath);
     }
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, PRESCRIPTIONS.path, null);
+      redirectTo(this, PRESCRIPTIONS.path);
     }
   },
   methods: {
@@ -121,10 +121,10 @@ export default {
     },
     async pharmacyPracticeClicked(pharmacy) {
       this.$store.dispatch('nominatedPharmacy/select', pharmacy);
-      redirectTo(this, NOMINATED_PHARMACY_CONFIRM.path, null);
+      redirectTo(this, NOMINATED_PHARMACY_CONFIRM.path);
     },
     backButtonClicked() {
-      redirectTo(this, this.searchNominatedPharmacyPath, null);
+      redirectTo(this, this.searchNominatedPharmacyPath);
     },
   },
 };

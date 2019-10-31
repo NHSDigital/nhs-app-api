@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     viewDocuments() {
-      redirectTo(this, MY_RECORD_DOCUMENTS.path, null);
+      redirectTo(this, MY_RECORD_DOCUMENTS.path);
     },
     onKeyDown(e) {
       if (e.key === key.Enter) {

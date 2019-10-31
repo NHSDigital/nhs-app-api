@@ -3,7 +3,6 @@ package com.nhs.online.nhsonline.web
 import android.app.Activity
 import android.util.Log
 import android.webkit.CookieManager
-import android.webkit.URLUtil
 import android.webkit.WebView
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.R
@@ -21,14 +20,10 @@ import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
+import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import java.net.MalformedURLException
 import java.net.URL
-import android.content.Context.DOWNLOAD_SERVICE
-import android.app.DownloadManager
-import android.os.Environment.DIRECTORY_DOWNLOADS
-import android.net.Uri
-import com.nhs.online.nhsonline.support.FileDownloadHelper
 
 
 private val TAG = NhsWeb::class.java.simpleName
@@ -38,13 +33,14 @@ class NhsWeb(
         private val activity: Activity,
         private val uiInteractor: IInteractor,
         private val webView: WebView,
-        private val notificationsService: NotificationsService
+        private val notificationsService: NotificationsService,
+        appWebInterface: AppWebInterface
 ) {
     private val knownServices = KnownServices(activity)
     private val openBrowserActivity =
             OpenUrlInBrowserActivity(activity.resources.getStringArray(R.array.nativeAppHosts))
     private val urlLoader =
-            UrlLoader(webView, knownServices, activity.getString(R.string.baseURL))
+            UrlLoader(webView, knownServices, activity.getString(R.string.baseURL), appWebInterface)
     private val chromeClient = ChromeClientLocationHandler(activity)
     private val appPersistData = PersistData(activity)
     private val errorMessageHandler = ErrorMessageHandler(activity)
@@ -318,7 +314,7 @@ class NhsWeb(
                 .setCookie(domain, "$cookieName=; Expires=Sat, 1 Jan 2000 00:00:01 UTC;")
     }
 
-    fun areNotificationsEnabled() {
-        notificationsService.areNotificationsEnabled()
+    fun getNotificationsStatus() {
+        notificationsService.getNotificationsStatus()
     }
 }

@@ -45,7 +45,7 @@ class NhsWebTest {
         urlLoader = mock()
         interactorMock = mock()
         notificationsServiceMock = mock()
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock)
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock())
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())

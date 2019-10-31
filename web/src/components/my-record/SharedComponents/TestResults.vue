@@ -150,7 +150,7 @@ export default {
       redirectTo(this, this.getTestResultPath(testResultId));
     },
     viewVisionTestResults() {
-      redirectTo(this, this.testResultsPath, null);
+      redirectTo(this, this.testResultsPath);
     },
     getTestResultPath(testResultId) {
       return `/my-record/testresultdetail/${testResultId}`;

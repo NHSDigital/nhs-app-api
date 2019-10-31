@@ -112,7 +112,7 @@ export default {
       if (this.showError) {
         window.scrollTo(0, 0);
       } else {
-        redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS.path, null);
+        redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS.path);
       }
     },
   },

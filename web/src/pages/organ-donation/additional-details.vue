@@ -90,7 +90,7 @@ export default {
   methods: {
     continueClicked() {
       this.$store.dispatch('organDonation/setAdditionalDetails', mapAdditionalDetails(this));
-      redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION.path, null);
+      redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
     },
   },
 };

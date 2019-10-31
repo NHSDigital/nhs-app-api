@@ -28,8 +28,8 @@ class AppWebInterface(private val webview: WebView) {
         loadDispatchEvent("session/extend")
     }
 
-    fun areNotificationsEnabled(areEnabled: Boolean) {
-        loadDispatchEvent("notifications/settingsEnabled", areEnabled.toString())
+    fun getNotificationsStatus(status: String) {
+        loadDispatchEvent("notifications/settingsStatus", "'$status'")
     }
 
     fun notificationsAuthorised(devicePns: String, trigger: String) {
@@ -39,6 +39,10 @@ class AppWebInterface(private val webview: WebView) {
 
     fun notificationsUnauthorised() {
         loadDispatchEvent("notifications/unauthorised")
+    }
+
+    fun goTo(path: String) {
+        loadDispatchEvent("navigation/goTo", "'$path'")
     }
 
     private fun loadDispatchEvent(event: String, args: String = "") {

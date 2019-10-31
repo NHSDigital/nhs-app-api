@@ -57,6 +57,9 @@ export const createStore = ({
   },
 } = {}) => ({
   app: {
+    $analytics: {
+      logicError: jest.fn(),
+    },
     $cookies,
     $env,
     $http,

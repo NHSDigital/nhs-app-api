@@ -134,6 +134,7 @@
     "jest-vue-preprocessor": "1.5.0",
     "node-glob": "1.2.0",
     "node-sass": "4.11.0",
+    "mockdate": "2.0.5",
     "sass-loader": "7.1.0",
     "webpack": "4.29.6"
   }

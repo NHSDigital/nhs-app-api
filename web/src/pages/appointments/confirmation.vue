@@ -332,7 +332,7 @@ export default {
   },
   mounted() {
     if (!this.slot) {
-      redirectTo(this, APPOINTMENT_BOOKING.path, null);
+      redirectTo(this, APPOINTMENT_BOOKING.path);
     }
   },
   created() {
@@ -368,7 +368,7 @@ export default {
       this.showPhoneNumberTextBox = false;
     },
     onCancelButtonClicked() {
-      redirectTo(this, this.cancelBookingPath, null);
+      redirectTo(this, this.cancelBookingPath);
     },
     async onConfirmButtonClicked(e) {
       e.preventDefault();
@@ -405,7 +405,7 @@ export default {
           });
         }
         this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
-        redirectTo(this, this.appointmentPath, null);
+        redirectTo(this, this.appointmentPath);
       } catch (error) {
         /*
         empty catch block as the

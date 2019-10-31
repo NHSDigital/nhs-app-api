@@ -93,7 +93,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         val notificationManager = NotificationManagerCompat(this)
         val notificationsService = NotificationsService(appWebInterface, FirebaseClient(), notificationManager)
         downloadHelper = FileDownloadHelper(this)
-        nhsWeb = NhsWeb(this, this, webview, notificationsService)
+        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface)
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         menuBar.nhsWeb = nhsWeb

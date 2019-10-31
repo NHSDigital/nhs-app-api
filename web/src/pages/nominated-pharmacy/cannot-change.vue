@@ -49,12 +49,12 @@ export default {
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, this.prescriptions, null);
+      redirectTo(this, this.prescriptions);
     }
   },
   methods: {
     onBackButtonClicked() {
-      redirectTo(this, this.prescriptions, null);
+      redirectTo(this, this.prescriptions);
     },
   },
 };

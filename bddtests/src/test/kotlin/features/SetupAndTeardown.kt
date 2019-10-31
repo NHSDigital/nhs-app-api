@@ -21,6 +21,7 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
                 ,"redirectToCitizenId"
                 ,"Failed to load resource"
                 ,"Request failed with status code 50"
+                ,"Uncaught (in promise)"
                 ,"https://assets.nhs.uk/fonts")
 
 class SetupAndTeardown {

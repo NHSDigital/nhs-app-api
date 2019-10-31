@@ -76,7 +76,7 @@ export default {
     },
     onBackButtonClicked(event) {
       event.preventDefault();
-      redirectTo(this, this.indexPath, null);
+      redirectTo(this, this.indexPath);
     },
   },
 };

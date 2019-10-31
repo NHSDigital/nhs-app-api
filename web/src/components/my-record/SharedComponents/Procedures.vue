@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     viewProcedures() {
-      redirectTo(this, this.proceduresPath, null);
+      redirectTo(this, this.proceduresPath);
     },
     onKeyDown(e) {
       if (e.key === key.Enter) {

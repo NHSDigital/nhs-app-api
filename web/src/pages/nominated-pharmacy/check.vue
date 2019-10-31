@@ -74,15 +74,15 @@ export default {
   },
   created() {
     if (this.$store.state.nominatedPharmacy.hasLoaded === false || !this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, this.prescriptionsPath, null);
+      redirectTo(this, this.prescriptionsPath);
     }
   },
   methods: {
     onContinueButtonClicked() {
-      redirectTo(this, PRESCRIPTION_REPEAT_COURSES.path, null);
+      redirectTo(this, PRESCRIPTION_REPEAT_COURSES.path);
     },
     onBackButtonClicked() {
-      redirectTo(this, this.prescriptionsPath, null);
+      redirectTo(this, this.prescriptionsPath);
     },
   },
 };

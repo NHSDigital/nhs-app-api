@@ -18,9 +18,9 @@ class WebAppInterface(
 ) {
 
     @JavascriptInterface
-    fun areNotificationsEnabled() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering areNotificationsEnabled")
-        activity.runOnUiThread { nhsWeb.areNotificationsEnabled() }
+    fun getNotificationsStatus() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering getNotificationsStatus")
+        activity.runOnUiThread { nhsWeb.getNotificationsStatus() }
     }
 
     @JavascriptInterface

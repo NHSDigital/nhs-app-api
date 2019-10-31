@@ -40,7 +40,7 @@ export default {
   methods: {
     goToAddOrChangeNominatedPharmacy() {
       this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', this.$router.currentRoute.path);
-      redirectTo(this, this.nominatedPharmacySearchPath, null);
+      redirectTo(this, this.nominatedPharmacySearchPath);
     },
   },
 };

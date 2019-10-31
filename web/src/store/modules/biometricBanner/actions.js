@@ -1,4 +1,4 @@
-import { DISMISS, SYNC, REFRESH_PAGE } from './mutation-types';
+import { DISMISS, SYNC } from './mutation-types';
 
 export default {
   dismiss({ commit }) {
@@ -6,8 +6,5 @@ export default {
   },
   sync({ commit }) {
     commit(SYNC);
-  },
-  refreshPage({ commit }) {
-    commit(REFRESH_PAGE);
   },
 };

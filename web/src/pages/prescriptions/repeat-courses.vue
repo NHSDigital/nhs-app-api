@@ -267,7 +267,7 @@ export default {
           specialRequest,
         };
         this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', repeatPrescriptionCoursesAdditionalInfo);
-        redirectTo(this, this.confirmCoursesPath, null);
+        redirectTo(this, this.confirmCoursesPath);
       } else {
         const validationObj = {
           isValid: this.courseSelectionValid && this.specialRequestValid,
@@ -278,7 +278,7 @@ export default {
       }
     },
     backButtonClicked() {
-      redirectTo(this, this.getBackPath, null);
+      redirectTo(this, this.getBackPath);
     },
   },
 };

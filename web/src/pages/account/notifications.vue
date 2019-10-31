@@ -2,7 +2,7 @@
   <div v-if="showTemplate"
        :class="['pull-content', !$store.state.device.isNativeApp && $style.desktopWeb]" >
     <div :class="$style.info">
-      <p v-for="(paragraph, index) of $t('notifications.paragraphs')" :key="index">
+      <p v-for="(paragraph, index) of $t('account.notifications.paragraphs')" :key="index">
         {{ paragraph }}
       </p>
     </div>
@@ -10,13 +10,13 @@
       v-model="registered"
       checkbox-id="allow_notifications"
       :is-waiting="isWaiting"
-      :label="$t('notifications.toggleLabel')"
+      :label="$t('account.notifications.toggleLabel')"
     />
     <div>
       <p>
         <a href="#" :class="$style.iconLink" @click.prevent="openAppSettings">
           <external-link-arrow-right-icon />
-          <span>{{ $t('notifications.settingsLinkText') }}</span>
+          <span>{{ $t('account.notifications.settingsLinkText') }}</span>
         </a>
       </p>
     </div>

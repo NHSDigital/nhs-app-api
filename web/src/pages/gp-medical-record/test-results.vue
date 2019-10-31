@@ -135,7 +135,7 @@ export default {
       redirectTo(this, this.getTestResultPath(testResultId));
     },
     backButtonClicked() {
-      redirectTo(this, this.backPath, null);
+      redirectTo(this, this.backPath);
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value

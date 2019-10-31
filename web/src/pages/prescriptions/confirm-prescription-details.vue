@@ -170,7 +170,7 @@ export default {
   created() {
     if (!this.$store.getters['errors/showApiError'] &&
       (!this.selectedPrescriptions || this.selectedPrescriptions.length === 0)) {
-      redirectTo(this, PRESCRIPTIONS.path, null);
+      redirectTo(this, PRESCRIPTIONS.path);
     }
   },
   methods: {
@@ -186,7 +186,7 @@ export default {
           redirectTo(this, PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path, null);
         } else {
           this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
-          redirectTo(this, PRESCRIPTIONS.path, null);
+          redirectTo(this, PRESCRIPTIONS.path);
         }
       } catch (error) {
         /*
@@ -197,7 +197,7 @@ export default {
       }
     },
     backToPrescriptionsClicked() {
-      redirectTo(this, this.prescriptionRepeatCoursesPath, null);
+      redirectTo(this, this.prescriptionRepeatCoursesPath);
     },
   },
 };

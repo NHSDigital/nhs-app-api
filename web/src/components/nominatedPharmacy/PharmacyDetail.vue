@@ -79,7 +79,7 @@ export default {
       this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', this.previousPath);
       const nextPage = (this.pharmacy.pharmacyType === PharmacyType.P3) ?
         NOMINATED_PHARMACY_CANNOT_CHANGE.path : NOMINATED_PHARMACY_SEARCH.path;
-      redirectTo(this, nextPage, null);
+      redirectTo(this, nextPage);
     },
   },
 };

@@ -84,7 +84,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
 import { noJsParameterName } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
@@ -118,6 +117,16 @@ const getSelectedOptions = get('state.availableAppointments.selectedOptions');
 const getSlots = get('state.availableAppointments.slots');
 const hasLoaded = get('state.availableAppointments.hasLoaded');
 
+const load = async ({ $store }, query) => {
+  $store.dispatch('availableAppointments/init');
+  await $store.dispatch('availableAppointments/load');
+
+  if (containsFilter(query)) {
+    $store.dispatch('availableAppointments/setSelectedFilters', { ...query, date: query['time-period'] });
+    $store.dispatch('availableAppointments/filter');
+  }
+};
+
 export default {
   layout: 'nhsuk-layout',
   components: {
@@ -129,6 +138,7 @@ export default {
   },
   data() {
     return {
+      appointmentsPath: APPOINTMENTS.path,
       availableAppointmentsScreenReaderMessage: [],
       filtered: false,
     };
@@ -189,24 +199,17 @@ export default {
       return noJsParameterName;
     },
   },
-  asyncData({ store, req }) {
+  watch: {
+    '$route.query.ts': async function watchTimestamp() {
+      await load(this, this.$route.query);
+      this.filtered = containsFilter(this.$route.query);
+    },
+  },
+  async asyncData({ store, req }) {
     const query = req ? qs.parse(req.url.substr(req.url.indexOf('?') + 1)) : undefined;
 
-    const result = store
-      .dispatch('availableAppointments/init')
-      .then(() => store.dispatch('availableAppointments/load'));
-
-    if (containsFilter(query)) {
-      query.date = query['time-period'];
-      result
-        .then(() => store.dispatch('availableAppointments/setSelectedFilters', query))
-        .then(() => store.dispatch('availableAppointments/filter'));
-    }
-
-    return result.then(() => ({
-      appointmentsPath: APPOINTMENTS.path,
-      filtered: containsFilter(query),
-    }));
+    await load({ $store: store }, query);
+    return { filtered: containsFilter(query) };
   },
   methods: {
     filterSlots(val) {
@@ -247,7 +250,7 @@ export default {
       this.$store.dispatch('analytics/satelliteTrack', trackEvent, objectToTrack);
     },
     goBack() {
-      redirectTo(this, APPOINTMENTS.path, null);
+      redirectTo(this, APPOINTMENTS.path);
     },
   },
 };

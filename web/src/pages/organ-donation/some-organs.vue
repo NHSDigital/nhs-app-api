@@ -110,7 +110,7 @@ export default {
     continueClicked() {
       this.hasTriedToContinue = true;
       if (this.hasMadeChoices) {
-        redirectTo(this, ORGAN_DONATION_FAITH.path, null);
+        redirectTo(this, ORGAN_DONATION_FAITH.path);
         return;
       }
       window.scrollTo(0, 0);

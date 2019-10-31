@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     viewDiagnosis() {
-      redirectTo(this, this.diagnosisPath, null);
+      redirectTo(this, this.diagnosisPath);
     },
     onKeyDown(e) {
       if (e.key === key.Enter) {

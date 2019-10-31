@@ -62,6 +62,11 @@ open class ErrorPage : HybridPageObject() {
         return this
     }
 
+    fun assertNoSubHeader(): ErrorPage {
+        subHeading.assertElementNotPresent()
+        return this
+    }
+
     fun assertSubHeaderText(subHeaderText: String): ErrorPage {
         assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.text)
         return this

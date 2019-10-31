@@ -50,7 +50,7 @@ export default {
   },
   created() {
     if (this.nominatedPharmacy === null) {
-      redirectTo(this, NOMINATED_PHARMACY.path, null);
+      redirectTo(this, NOMINATED_PHARMACY.path);
     }
   },
   methods: {
@@ -63,7 +63,7 @@ export default {
         await this.$store.dispatch('nominatedPharmacy/update', this.nominatedPharmacy.odsCode);
         this.$store.dispatch('flashMessage/addSuccess', successMessage);
         this.$store.dispatch('nominatedPharmacy/clearSelectedNominatedPharmacy');
-        redirectTo(this, NOMINATED_PHARMACY.path, null);
+        redirectTo(this, NOMINATED_PHARMACY.path);
       } catch (error) {
         /*
         empty catch block as the
@@ -73,7 +73,7 @@ export default {
       }
     },
     cancelButtonClicked() {
-      redirectTo(this, this.nominatedPharmacySearchResultsPath, null);
+      redirectTo(this, this.nominatedPharmacySearchResultsPath);
     },
   },
 };

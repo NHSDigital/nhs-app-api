@@ -77,7 +77,7 @@ describe('linked profile is there', () => {
         .toHaveBeenCalledWith(LINKED_PROFILES_SUMMARY.path, true);
       expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/select', $store.state.linkedAccounts.items[1]);
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, LINKED_PROFILES_SUMMARY.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, LINKED_PROFILES_SUMMARY.path);
     });
   });
 });

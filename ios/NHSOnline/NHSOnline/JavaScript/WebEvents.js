@@ -1,7 +1,7 @@
 window.nativeApp = {};
 
-window.nativeApp.areNotificationsEnabled = function() {
-    window.webkit.messageHandlers.areNotificationsEnabled.postMessage(null);
+window.nativeApp.getNotificationsStatus = function() {
+    window.webkit.messageHandlers.getNotificationsStatus.postMessage(null);
 };
 
 window.nativeApp.attemptBiometricLogin = function() {

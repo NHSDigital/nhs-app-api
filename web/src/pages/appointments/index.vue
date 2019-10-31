@@ -132,7 +132,7 @@ export default {
   methods: {
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
-      redirectTo(this, this.guidancePath, null);
+      redirectTo(this, this.guidancePath);
     },
   },
 };

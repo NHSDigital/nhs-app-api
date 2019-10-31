@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.backPath, null);
+      redirectTo(this, this.backPath);
     },
     getRecordDate(recordDate, defaultValue) {
       return recordDate && recordDate.value ? recordDate.value : defaultValue;

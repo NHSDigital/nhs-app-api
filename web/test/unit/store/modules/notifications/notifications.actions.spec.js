@@ -1,33 +1,93 @@
 import actions from '@/store/modules/notifications/actions';
-import { SET_REGISTRATION, SET_SETTINGS_ENABLED, SET_WAITING } from '@/store/modules/notifications/mutation-types';
+import { SET_REGISTRATION, SET_WAITING } from '@/store/modules/notifications/mutation-types';
 
 describe('notifications actions', () => {
-  let getSuccess;
   let $http;
   let commit;
+  let deleteSuccess;
+  let error;
+  let getSuccess;
+  let postSuccess;
 
   const promiseReturn = (success) => {
     if (success) {
       return Promise.resolve();
     }
-    return Promise.reject();
+    return Promise.reject(error);
+  };
+
+  const toggleOnError = ({ deviceResponse, state }) => {
+    let exception;
+    const execute = async () => {
+      try {
+        await actions.authorised({ commit, state }, JSON.stringify(deviceResponse));
+      } catch (e) {
+        exception = e;
+      }
+    };
+
+    describe('404', () => {
+      beforeEach(async () => {
+        error.response.status = 404;
+        await execute();
+      });
+
+      it('will throw an error', () => {
+        expect(exception.message).toBe(error.message);
+      });
+
+      it('will dispatch `errors/addApiError` with error code `10003`', () => {
+        expect(actions.dispatch).toBeCalledWith('errors/addApiError', {
+          message: error.message,
+          response: {
+            data: {
+              errorCode: 10003,
+            },
+            status: 500,
+          },
+        });
+      });
+    });
+
+    describe('any other', () => {
+      beforeEach(async () => {
+        await execute();
+      });
+
+      it('will throw an error', () => {
+        expect(exception.message).toBe(error.message);
+      });
+
+      it('will not dispatch `errors/addApiError`', () => {
+        expect(actions.dispatch).not.toBeCalled();
+      });
+    });
   };
 
   beforeEach(() => {
+    error = {
+      response: {
+        status: 500,
+      },
+      message: 'Error message',
+    };
     getSuccess = true;
+    deleteSuccess = true;
+    postSuccess = true;
     commit = jest.fn();
     $http = {
-      deleteV1ApiUsersDevices: jest.fn().mockImplementation(() => Promise.resolve()),
+      deleteV1ApiUsersDevices: jest.fn().mockImplementation(() => promiseReturn(deleteSuccess)),
       getV1ApiUsersDevices: jest.fn().mockImplementation(() => promiseReturn(getSuccess)),
-      postV1ApiUsersDevices: jest.fn().mockImplementation(() => Promise.resolve()),
+      postV1ApiUsersDevices: jest.fn().mockImplementation(() => promiseReturn(postSuccess)),
     };
     actions.app = {
       get $http() {
         return $http;
       },
     };
+    actions.dispatch = jest.fn();
     global.nativeApp = {
-      areNotificationsEnabled: jest.fn(),
+      getNotificationsStatus: jest.fn(),
       requestPnsToken: jest.fn(),
     };
   });
@@ -37,7 +97,10 @@ describe('notifications actions', () => {
     const deviceResponse = { deviceType: 'android', devicePns: 5, trigger: 'toggle' };
 
     describe('on load', () => {
+      let loading;
+
       beforeEach(() => {
+        loading = actions.load();
         deviceResponse.trigger = 'load';
       });
 
@@ -56,6 +119,8 @@ describe('notifications actions', () => {
         it('will commit a value of `true` to `SET_REGISTRATION`', () => {
           expect(commit).toBeCalledWith(SET_REGISTRATION, true);
         });
+
+        it('will resolve loading promise with `authorised`', () => expect(loading).resolves.toBe('authorised'));
       });
 
       describe('not found', () => {
@@ -73,6 +138,8 @@ describe('notifications actions', () => {
         it('will commit a value of `false` to `SET_REGISTRATION`', () => {
           expect(commit).toBeCalledWith(SET_REGISTRATION, false);
         });
+
+        it('will resolve loading promise with `authorised`', () => expect(loading).resolves.toBe('authorised'));
       });
     });
 
@@ -103,6 +170,14 @@ describe('notifications actions', () => {
         it('will commit a value of `true` to `SET_REGISTRATION`', () => {
           expect(commit).toBeCalledWith(SET_REGISTRATION, true);
         });
+
+        describe('on error', () => {
+          beforeEach(() => {
+            postSuccess = false;
+          });
+
+          toggleOnError({ deviceResponse, state });
+        });
       });
 
       describe('registered', () => {
@@ -124,18 +199,28 @@ describe('notifications actions', () => {
         it('will commit a value of `false` to `SET_REGISTRATION`', () => {
           expect(commit).toBeCalledWith(SET_REGISTRATION, false);
         });
+
+        describe('on error', () => {
+          beforeEach(() => {
+            deleteSuccess = false;
+          });
+
+          toggleOnError({ deviceResponse, state });
+        });
       });
     });
   });
 
-  describe('settingsEnabled', () => {
-    describe('is enabled', () => {
-      beforeEach(() => {
-        actions.settingsEnabled({ commit }, true);
-      });
+  describe('settingsStatus', () => {
+    let loading;
 
-      it('will commit a value of `true` to `SET_SETTINGS_ENABLED`', () => {
-        expect(commit).toBeCalledWith(SET_SETTINGS_ENABLED, true);
+    beforeEach(() => {
+      loading = actions.load();
+    });
+
+    describe('authorised', () => {
+      beforeEach(() => {
+        actions.settingsStatus({ commit }, 'authorised');
       });
 
       it('will call native app `requestPnsToken`', () => {
@@ -143,13 +228,9 @@ describe('notifications actions', () => {
       });
     });
 
-    describe('is disabled', () => {
+    describe('notDetermined', () => {
       beforeEach(() => {
-        actions.settingsEnabled({ commit }, false);
-      });
-
-      it('will commit a value of `false` to `SET_SETTINGS_ENABLED`', () => {
-        expect(commit).toBeCalledWith(SET_SETTINGS_ENABLED, false);
+        actions.settingsStatus({ commit }, 'notDetermined');
       });
 
       it('will not call native app `requestPnsToken`', () => {
@@ -158,6 +239,41 @@ describe('notifications actions', () => {
 
       it('will commit a value of `false` to `SET_REGISTRATION`', () => {
         expect(commit).toBeCalledWith(SET_REGISTRATION, false);
+      });
+
+      it('will resolve loading promise with `notDetermined`', () => expect(loading).resolves.toBe('notDetermined'));
+    });
+
+    describe('denied', () => {
+      let rejectFunc;
+
+      beforeEach(() => {
+        rejectFunc = jest.fn();
+        loading.catch(rejectFunc);
+        actions.settingsStatus({ commit }, 'denied');
+      });
+
+      it('will not call native app `requestPnsToken`', () => {
+        expect(global.nativeApp.requestPnsToken).not.toBeCalled();
+      });
+
+      it('will commit a value of `false` to `SET_REGISTRATION`', () => {
+        expect(commit).toBeCalledWith(SET_REGISTRATION, false);
+      });
+
+      it('will dispatch `errors/addApiError` with error code `10001`', () => {
+        expect(actions.dispatch).toBeCalledWith('errors/addApiError', {
+          response: {
+            status: 500,
+            data: {
+              errorCode: 10001,
+            },
+          },
+        });
+      });
+
+      it('will reject loading promise with `denied`', () => {
+        expect(rejectFunc).toBeCalledWith('denied');
       });
     });
   });
@@ -169,8 +285,8 @@ describe('notifications actions', () => {
       result = actions.load();
     });
 
-    it('will call native app `areNotificationsEnabled`', () => {
-      expect(global.nativeApp.areNotificationsEnabled).toBeCalledWith();
+    it('will call native app `getNotificationsStatus`', () => {
+      expect(global.nativeApp.getNotificationsStatus).toBeCalled();
     });
 
     it('will return a promise', () => {
@@ -201,8 +317,15 @@ describe('notifications actions', () => {
       expect(commit).toBeCalledWith(SET_WAITING, false);
     });
 
-    it('will commit a value of `false` to `SET_REGISTRATION`', () => {
-      expect(commit).toBeCalledWith(SET_REGISTRATION, false);
+    it('will dispatch `errors/addApiError` with error code `10002`', () => {
+      expect(actions.dispatch).toBeCalledWith('errors/addApiError', {
+        response: {
+          status: 500,
+          data: {
+            errorCode: 10002,
+          },
+        },
+      });
     });
   });
 });

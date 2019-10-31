@@ -145,7 +145,7 @@ describe('condition list', () => {
         conditionList.vm.endMyConsultationClicked();
 
         // Assert
-        expect(redirectTo).toHaveBeenCalledWith(conditionList.vm, '/', null);
+        expect(redirectTo).toHaveBeenCalledWith(conditionList.vm, '/');
       });
     });
   });

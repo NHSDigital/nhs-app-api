@@ -167,16 +167,16 @@ export default {
     onNominatedPharmacyDetailClicked() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
         this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_SEARCH.path, true);
-        redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
+        redirectTo(this, NOMINATED_PHARMACY_SEARCH.path);
       } else {
         this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
-        redirectTo(this, NOMINATED_PHARMACY.path, null);
+        redirectTo(this, NOMINATED_PHARMACY.path);
       }
     },
     onOrderRepeatPrescriptionClicked() {
       const path = this.getContinueButtonPath();
       this.$store.app.$analytics.trackButtonClick(path, true);
-      redirectTo(this, path, null);
+      redirectTo(this, path);
     },
     getContinueButtonPath() {
       return GetNavigationPathFromPrescriptions(this.$store);

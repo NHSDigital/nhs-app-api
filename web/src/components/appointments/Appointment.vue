@@ -114,7 +114,7 @@ export default {
       if (this.showCancellationLink) {
         this.$store.dispatch('myAppointments/select', this.appointment);
       }
-      redirectTo(this, APPOINTMENT_CANCELLING.path, null);
+      redirectTo(this, APPOINTMENT_CANCELLING.path);
     },
     showPhoneNumber() {
       return (this.appointment || {}).channel === channel.Telephone;

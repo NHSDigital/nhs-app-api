@@ -129,7 +129,7 @@ export default {
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, PRESCRIPTIONS.path, null);
+      redirectTo(this, PRESCRIPTIONS.path);
     }
   },
   methods: {
@@ -154,7 +154,7 @@ export default {
 
       this.$store.dispatch('nominatedPharmacy/setSearchQuery', processedQuery);
       this.$store.dispatch('nominatedPharmacy/setSearchResults', pharmacySearchResponse);
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
     },
     searchFormSubmitted() {
       this.searchClicked();
@@ -196,7 +196,7 @@ export default {
       return pharmacySearchResult;
     },
     cancelButtonClicked() {
-      redirectTo(this, this.backButtonPath, null);
+      redirectTo(this, this.backButtonPath);
     },
   },
 };

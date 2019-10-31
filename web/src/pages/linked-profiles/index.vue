@@ -63,7 +63,7 @@ export default {
       this.$store.dispatch('linkedAccounts/select', selectedLinkedAccount);
 
       this.$store.app.$analytics.trackButtonClick(this.linkedProfileSummaryPath, true);
-      redirectTo(this, this.linkedProfileSummaryPath, null);
+      redirectTo(this, this.linkedProfileSummaryPath);
     },
   },
 };

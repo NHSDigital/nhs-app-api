@@ -1,10 +1,8 @@
-package com.nhs.online.nhsonline
+package com.nhs.online.nhsonline.webinterfaces
 
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
-import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
-import com.nhs.online.nhsonline.webinterfaces.WebJavascript
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,10 +20,9 @@ class AppWebInterfaceTest {
     }
 
     @Test
-    fun loadSPATest() {
-        val webJavascript = WebJavascript(webviewMock)
-        webJavascript.loadSpaPath("testpath")
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$router.push('testpath')", null)
+    fun goToTest() {
+        appWebInterface.goTo("testpath")
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('navigation/goTo', 'testpath')", null)
     }
 
     @Test

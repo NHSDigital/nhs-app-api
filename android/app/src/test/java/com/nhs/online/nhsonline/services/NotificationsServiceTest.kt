@@ -61,20 +61,20 @@ class NotificationsServiceTest {
     }
 
     @Test
-    fun areNotificationsEnabled_whenNotificationsAreEnabled_shouldCallbackWebWithTrue() {
+    fun getNotificationsStatus_whenNotificationsAreEnabled_shouldCallbackWebWithAuthorised() {
         whenever(notificationManager.areNotificationsEnabled()).thenReturn(true)
 
-        notificationsService.areNotificationsEnabled()
+        notificationsService.getNotificationsStatus()
 
-        verify(appWebInterface).areNotificationsEnabled(true)
+        verify(appWebInterface).getNotificationsStatus("authorised")
     }
 
     @Test
-    fun areNotificationsEnabled_whenNotificationsAreNotEnabled_shouldCallbackWebWithFalse() {
+    fun getNotificationsStatus_whenNotificationsAreNotEnabled_shouldCallbackWebWithDenied() {
         whenever(notificationManager.areNotificationsEnabled()).thenReturn(false)
 
-        notificationsService.areNotificationsEnabled()
+        notificationsService.getNotificationsStatus()
 
-        verify(appWebInterface).areNotificationsEnabled(false)
+        verify(appWebInterface).getNotificationsStatus("denied")
     }
 }

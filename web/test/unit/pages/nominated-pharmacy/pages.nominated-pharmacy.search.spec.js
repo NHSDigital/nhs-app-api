@@ -150,7 +150,7 @@ describe('search pharmacies', () => {
 
       // assert
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
+        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
     });
   });
 
@@ -178,7 +178,7 @@ describe('search pharmacies', () => {
       dependency.redirectTo = jest.fn();
       backLink.trigger('click');
 
-      expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY.path, null);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY.path);
     });
   });
 });

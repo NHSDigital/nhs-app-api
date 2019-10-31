@@ -49,6 +49,10 @@ describe('mixins', () => {
         configureWebContext = jest.spyOn(NativeCallbacks, 'configureWebContext');
       });
 
+      afterEach(() => {
+        configureWebContext.mockClear();
+      });
+
       describe('native app', () => {
         beforeEach(() => {
           state.device = { isNativeApp: true };
@@ -96,10 +100,6 @@ describe('mixins', () => {
         it('will not call native callback `configureWebContext`', () => {
           expect(configureWebContext).not.toBeCalled();
         });
-      });
-
-      afterEach(() => {
-        configureWebContext.mockClear();
       });
     });
   });

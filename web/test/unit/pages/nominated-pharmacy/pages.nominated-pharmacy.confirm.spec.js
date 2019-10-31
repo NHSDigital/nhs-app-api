@@ -102,7 +102,7 @@ describe('confirm nominated pharmacy', () => {
       expect($store.dispatch)
         .toHaveBeenNthCalledWith(3, 'nominatedPharmacy/clearSelectedNominatedPharmacy');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
     });
 
     it('will submit nominated pharmacy on click and call to redirect when changing an existing nominated pharmacy', async () => {
@@ -118,7 +118,7 @@ describe('confirm nominated pharmacy', () => {
       expect($store.dispatch)
         .toHaveBeenNthCalledWith(3, 'nominatedPharmacy/clearSelectedNominatedPharmacy');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
     });
   });
 
@@ -188,7 +188,7 @@ describe('confirm nominated pharmacy', () => {
       dependency.redirectTo = jest.fn();
       await backLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
     });
   });
 });

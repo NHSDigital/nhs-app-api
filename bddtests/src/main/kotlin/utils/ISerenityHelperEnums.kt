@@ -25,6 +25,10 @@ fun <T>ISerenityHelperEnums.addToList(value : T) {
     this.set(values)
 }
 
+fun <T>ISerenityHelperEnums.clearList() {
+    this.set(arrayListOf<T>())
+}
+
 fun ISerenityHelperEnums.isTrueOrFalse() : Boolean {
     return this.getOrNull<Boolean>() == true
 }

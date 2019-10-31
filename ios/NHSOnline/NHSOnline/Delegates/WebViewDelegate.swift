@@ -18,7 +18,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var webAppInterface: WebAppInterface
     var schemeHandlers: SchemeHandlers
     var badResponse: Bool = false
-    
+
     init(controller: HomeViewController, knownServices: KnownServices, webAppInterface: WebAppInterface) {
         self.viewController = controller
         self.knownServices = knownServices
@@ -223,8 +223,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             switch message.name {
-            case "areNotificationsEnabled":
-                viewController.areNotificationsEnabled()
+            case "getNotificationsStatus":
+                viewController.getNotificationsStatus()
                 break;
             case "attemptBiometricLogin":
                 viewController.delayedBiometricsStart(0.3)
@@ -334,7 +334,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             failedUrl = URL(string: config().HomeUrl + suffix)
         }
     }
-    
+
     func ensureSupportedScheme(_ url: URL) -> URL {
         if(url.scheme==config().AppScheme) {
             self.viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)

@@ -61,11 +61,6 @@ describe('errors getters', () => {
       expect(showApiError(state)).toBe(false);
     });
 
-    it('will be false when the status is an ignored one', () => {
-      state = mergeState({ apiErrors: [{ status: 401 }], showApiError: true });
-      expect(showApiError(state)).toBe(false);
-    });
-
     it('will be true when there is a server error', () => {
       state = mergeState({ apiErrors: [{ status: 500 }], showApiError: true });
       expect(showApiError(state)).toBe(true);
@@ -83,11 +78,6 @@ describe('errors getters', () => {
       expect(showApiError(state)).toBe(false);
     });
 
-    it('will be false when the status code unknown', () => {
-      state = mergeState({ apiErrors: [{ status: 256 }], showApiError: true });
-      expect(showApiError(state)).toBe(false);
-    });
-
     each([
       464,
       465,
@@ -97,7 +87,7 @@ describe('errors getters', () => {
       460,
       461,
       466,
-    ]).it(' will be a standard error for status code: %s', (code) => {
+    ]).it('will be a standard error for status code: %s', (code) => {
       state = mergeState({ apiErrors: [{ status: code }], showApiError: true });
       expect(showApiError(state)).toBe(true);
     });

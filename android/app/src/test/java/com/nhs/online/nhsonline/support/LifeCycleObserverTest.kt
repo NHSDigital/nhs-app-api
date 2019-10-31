@@ -51,7 +51,7 @@ class LifeCycleObserverTest {
         val webViewMock: WebView = mock {
             on { settings }.thenReturn(mock())
         }
-        val nhsWeb = NhsWeb(contextSpy, contextSpy, webViewMock, mock())
+        val nhsWeb = NhsWeb(contextSpy, contextSpy, webViewMock, mock(), appWebInterfaceMock)
         nhsWebMock = spy(nhsWeb)
 
         lifeCycleObserver = LifeCycleObserver(contextSpy, appWebInterfaceMock,

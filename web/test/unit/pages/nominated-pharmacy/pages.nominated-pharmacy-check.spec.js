@@ -72,7 +72,7 @@ describe('nominated pharmacy not found', () => {
       dependency.redirectTo = jest.fn();
       await continueButton.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES.path);
     });
   });
 
@@ -99,7 +99,7 @@ describe('nominated pharmacy not found', () => {
       dependency.redirectTo = jest.fn();
       await backLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
     });
   });
 });
@@ -150,7 +150,7 @@ describe('back button present on mobile app', () => {
     dependency.redirectTo = jest.fn();
     await backButton.trigger('click');
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path, null);
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
   });
 });
 
@@ -204,7 +204,7 @@ describe('community pharmacy is nominated', () => {
       dependency.redirectTo = jest.fn();
       await continueButton.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES.path);
     });
   });
 

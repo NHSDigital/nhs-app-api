@@ -49,7 +49,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
-        webView.configuration.userContentController.add(delegate, name: "areNotificationsEnabled")
+        webView.configuration.userContentController.add(delegate, name: "getNotificationsStatus")
         webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
         webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
         webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
@@ -98,7 +98,8 @@ class WebViewController: UIViewController, WKUIDelegate {
                 }
             }
         }
-        webView.evaluateJavaScript("window.$nuxt.$router.push('\(spaPath)');", completionHandler: completionHandler)
+        webView.evaluateJavaScript("window.$nuxt.$store.dispatch('navigation/goTo', '\(spaPath)') && undefined;",
+            completionHandler: completionHandler)
         webViewDelegate?.viewController.showWebViewContainer()
     }
     

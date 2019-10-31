@@ -42,7 +42,7 @@ export default {
   deselect({ commit }) {
     commit(DESELECT);
   },
-  book({ commit }, slot) {
+  book(_, slot) {
     const param = {
       appointmentBookRequest: slot,
     };

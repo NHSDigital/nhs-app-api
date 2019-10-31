@@ -153,7 +153,7 @@ export default {
     this.isReasonRequired = this.cancellationReasons.length > 0;
 
     if (!this.appointment) {
-      redirectTo(this, this.appointmentPath, null);
+      redirectTo(this, this.appointmentPath);
     }
   },
   beforeDestroy() {
@@ -172,7 +172,7 @@ export default {
         try {
           await this.$store.dispatch('myAppointments/cancel', data);
           this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
-          redirectTo(this, APPOINTMENTS.path, null);
+          redirectTo(this, APPOINTMENTS.path);
         } catch (error) {
           /*
           empty catch block as the
@@ -187,7 +187,7 @@ export default {
       }
     },
     onBackButtonClicked() {
-      redirectTo(this, this.appointmentPath, null);
+      redirectTo(this, this.appointmentPath);
     },
   },
 };

@@ -98,13 +98,13 @@ export default {
   },
   methods: {
     onBookButtonClicked() {
-      redirectTo(this, APPOINTMENT_BOOKING.path, null);
+      redirectTo(this, APPOINTMENT_BOOKING.path);
     },
     onCheckSymptomClicked() {
-      redirectTo(this, SYMPTOMS.path, null);
+      redirectTo(this, SYMPTOMS.path);
     },
     onBackButtonClicked() {
-      redirectTo(this, APPOINTMENTS.path, null);
+      redirectTo(this, APPOINTMENTS.path);
     },
   },
 };

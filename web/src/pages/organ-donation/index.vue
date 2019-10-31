@@ -68,6 +68,11 @@ import {
 import { INDEX } from '@/lib/routes';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
 
+const load = async (store) => {
+  await store.dispatch('organDonation/getReferenceData');
+  await store.dispatch('organDonation/getRegistration');
+};
+
 export default {
   components: {
     AlreadyRegisteredLink,
@@ -81,18 +86,18 @@ export default {
     OtherThingsToDo,
     StillYourDecision,
   },
-  data() {
-    return {
-      decision: this.$store.state.organDonation.originalRegistration.decision,
-      decisionDetails: this.$store.state.organDonation.originalRegistration.decisionDetails,
-      faithDeclaration: this.$store.state.organDonation.originalRegistration.faithDeclaration,
-      isSomeOrgans: this.$store.getters['organDonation/isSomeOrgans'],
-      state: this.$store.state.organDonation.originalRegistration.state,
-    };
-  },
   computed: {
     choices() {
       return get('choices')(this.decisionDetails);
+    },
+    decision() {
+      return this.$store.state.organDonation.originalRegistration.decision;
+    },
+    decisionDetails() {
+      return this.$store.state.organDonation.originalRegistration.decisionDetails;
+    },
+    faithDeclaration() {
+      return this.$store.state.organDonation.originalRegistration.faithDeclaration;
     },
     hasAppointedRep() {
       return this.decision === DECISION_APPOINTED_REP;
@@ -109,13 +114,23 @@ export default {
     isConflicted() {
       return this.state === STATE_CONFLICTED && this.decision === DECISION_UNKNOWN;
     },
+    isSomeOrgans() {
+      return this.$store.getters['organDonation/isSomeOrgans'];
+    },
+    state() {
+      return this.$store.state.organDonation.originalRegistration.state;
+    },
+  },
+  watch: {
+    '$route.query.ts': function watchTimestamp() {
+      load(this.$store);
+    },
   },
   async asyncData({ redirect, route, store }) {
     if (!isNativeApp({ route, store })) {
       redirect(INDEX.path);
     } else {
-      await store.dispatch('organDonation/getReferenceData');
-      await store.dispatch('organDonation/getRegistration');
+      await load(store);
     }
   },
   created() {

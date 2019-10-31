@@ -1,35 +1,32 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
-import { setCookie } from '@/lib/cookie-manager';
-import {
-  DISMISS,
-  SYNC,
-  REFRESH_PAGE,
-} from './mutation-types';
-import { INDEX } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 
-const SECONDS_IN_A_DAY = 60 * 60 * 24;
+import moment from 'moment';
+import { setCookie } from '@/lib/cookie-manager';
+import { DISMISS, SYNC } from './mutation-types';
 
 export default {
   [DISMISS](state) {
     state.dismissed = true;
-  },
-  [REFRESH_PAGE](state) {
-    redirectTo(this, INDEX.path, null);
+    setCookie({
+      cookies: this.app.$cookies,
+      key: 'HideBiometricBanner',
+      value: true,
+      options: {
+        maxAge: moment.duration(5, 'y').asSeconds(),
+        secure: this.app.$env.SECURE_COOKIES,
+      },
+    });
   },
   [SYNC](state) {
     const cookieState = !!this.app.$cookies.get('HideBiometricBanner');
-    state.dismissed = state.dismissed || cookieState;
-    if (!cookieState) {
+    state.dismissed = state.dismissed || !!cookieState;
+    if (state.dismissed && !cookieState) {
       setCookie({
         cookies: this.app.$cookies,
         key: 'HideBiometricBanner',
         value: state.dismissed,
         options: {
+          maxAge: moment.duration(5, 'y').asSeconds(),
           secure: this.app.$env.SECURE_COOKIES,
-          maxAge: ((this.app.$env.COOKIES_BANNER_EXPIRY_DAYS * 5) || 0) * SECONDS_IN_A_DAY,
         },
       });
     }

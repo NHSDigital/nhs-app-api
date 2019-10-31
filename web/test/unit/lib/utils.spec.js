@@ -1,4 +1,6 @@
 import each from 'jest-each';
+import mockdate from 'mockdate';
+import moment from 'moment';
 import { isFalsy, isTruthy, redirectTo, readableBytes, stripHtml } from '@/lib/utils';
 
 let self;
@@ -86,55 +88,58 @@ describe('util library', () => {
         process.server = false;
       });
 
-      it('will call push without a query if query is null', () => {
-        redirectTo(self, 'a-path', null);
-        expect(self.$router.push).toHaveBeenCalledWith('a-path');
+      it('will call push with query if passed', () => {
+        const query = { source: 'ios' };
+        redirectTo(self, 'a-path', query);
+        expect(self.$router.push).toBeCalledWith({ path: 'a-path', query });
       });
 
-      it('will call push with a query if query is not null', () => {
-        redirectTo(self, 'a-path', { query: 'aQuery' });
-        expect(self.$router.push).toHaveBeenCalledWith({ path: 'a-path', query: { query: 'aQuery' } });
+      each([
+        null,
+        undefined,
+      ]).it('will call push with path only if query value is `%s`', (query) => {
+        redirectTo(self, 'a-path', query);
+        expect(self.$router.push).toBeCalledWith('a-path');
       });
 
       describe('same page', () => {
         let path;
+        let ts;
 
         beforeEach(() => {
-          // eslint-disable-next-line prefer-destructuring
-          path = self.$router.currentRoute.path;
+          const nowDate = moment();
+          mockdate.set(nowDate);
+          ts = nowDate.unix();
+
+          ({ path } = self.$router.currentRoute);
         });
 
-        it('will call go if query is null', () => {
-          redirectTo(self, path, null);
-          expect(self.$router.go).toHaveBeenCalled();
+        afterEach(() => {
+          mockdate.reset();
         });
 
-        it('will call go if query is the same as current', () => {
-          const query = { source: 'ios' };
+        it('will call push with timespan if query is not passed', () => {
+          redirectTo(self, path);
+          expect(self.$router.push).toBeCalledWith({ path, query: { ts } });
+        });
+
+        it('will call push with passed query and timespan if it is the same as current', () => {
+          const query = { source: 'ios', ts: 12345678 };
           self.$router.currentRoute.query = query;
           redirectTo(self, path, query);
-          expect(self.$router.go).toHaveBeenCalled();
+          expect(self.$router.push).toBeCalledWith({
+            path,
+            query: {
+              ...query,
+              ts,
+            },
+          });
         });
 
-        it('will call push with query if query is not the same as current', () => {
+        it('will call push with passed query if not the same as current', () => {
           const query = { source: 'ios' };
           redirectTo(self, path, query);
-          expect(self.$router.push).toHaveBeenCalledWith({ path, query });
-        });
-
-        it('will call push with query if native and previously had no query', () => {
-          self.$store.state.device.isNativeApp = true;
-          self.$store.state.device.source = 'ios';
-          redirectTo(self, path);
-          expect(self.$router.push).toHaveBeenCalledWith({ path, query: { source: 'ios' } });
-        });
-
-        it('will call push with query if native and previous query is different', () => {
-          self.$store.state.device.isNativeApp = true;
-          self.$store.state.device.source = 'ios';
-          self.$router.currentRoute.query = { value: 'boom' };
-          redirectTo(self, path);
-          expect(self.$router.push).toHaveBeenCalledWith({ path, query: { source: 'ios', value: 'boom' } });
+          expect(self.$router.push).toBeCalledWith({ path, query });
         });
       });
     });

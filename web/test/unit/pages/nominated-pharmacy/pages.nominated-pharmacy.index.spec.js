@@ -66,7 +66,7 @@ describe('nominated pharmacy not found', () => {
         dependency.redirectTo = jest.fn();
         await backButton.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path, null);
+          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
       });
     });
   });

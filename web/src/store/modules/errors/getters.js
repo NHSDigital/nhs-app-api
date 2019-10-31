@@ -1,7 +1,5 @@
 import isEmpty from 'lodash/fp/isEmpty';
-
-const handledErrors = [464, 465];
-const standardErrors = [400, 403, 409, 460, 461, 466];
+import { standardErrors } from './mutation-types';
 
 export default {
   showApiError(state) {
@@ -10,15 +8,9 @@ export default {
     if (state.hasConnectionProblem) return false;
     if (isEmpty(state.apiErrors)) return false;
 
-    const error = state.apiErrors[0];
-    if (error.status >= 500) return true;
+    const { status } = state.apiErrors[0];
 
-    const errorsStatusCollection = standardErrors.concat(handledErrors);
-
-    const isExpectedStatus = errorsStatusCollection.indexOf(error.status) !== -1;
-    const ignorePageError = state.pageSettings.ignoredErrors.indexOf(error.status) !== -1;
-
-    return (isExpectedStatus && !ignorePageError);
+    return status >= 500 || state.pageSettings.ignoredErrors.indexOf(status) === -1;
   },
   isStandardError(state) {
     return state.apiErrors.length > 0 &&

@@ -10,12 +10,12 @@ import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import ReaffirmDecisionLink from '@/components/organ-donation/ReaffirmDecisionLink';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
+  initialState,
   DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
   DECISION_OPT_OUT,
   DECISION_UNKNOWN,
   STATE_CONFLICTED,
-  initialState,
 } from '@/store/modules/organDonation/mutation-types';
 import { createStore, mount } from '../../helpers';
 
@@ -116,7 +116,7 @@ describe('organ donation index page', () => {
   let $style;
   let wrapper;
 
-  const mountOrganDonation = () => mount(OrganDonation, { $store, $style });
+  const mountOrganDonation = $route => mount(OrganDonation, { $route, $store, $style });
 
   describe('created', () => {
     beforeEach(() => {
@@ -159,6 +159,23 @@ describe('organ donation index page', () => {
 
     it('will dispatch the "organDonation/getRegistration" action', async () => {
       expect($store.dispatch).toHaveBeenCalledWith('organDonation/getRegistration');
+    });
+  });
+
+  describe('watch - $router.query.ts', () => {
+    beforeEach(() => {
+      $store = createPageStore({ state: createState() });
+      wrapper = mountOrganDonation({ query: {} });
+
+      wrapper.setData({ $route: { query: { ts: 'foo' } } });
+    });
+
+    it('will dispatch `organDonation/getReferenceData`', () => {
+      expect($store.dispatch).toBeCalledWith('organDonation/getReferenceData');
+    });
+
+    it('will dispatch `organDonation/getRegistration`', () => {
+      expect($store.dispatch).toBeCalledWith('organDonation/getRegistration');
     });
   });
 

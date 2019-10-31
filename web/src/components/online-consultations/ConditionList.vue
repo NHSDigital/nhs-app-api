@@ -123,7 +123,7 @@ export default {
       window.scrollTo(0, 0);
     },
     endMyConsultationClicked() {
-      redirectTo(this, this.indexPath, null);
+      redirectTo(this, this.indexPath);
     },
   },
 };

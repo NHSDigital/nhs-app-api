@@ -84,7 +84,7 @@ describe('can not change nominated pharmacy', () => {
       dependency.redirectTo = jest.fn();
       await backButton.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path, null);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
     });
   });
 });

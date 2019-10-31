@@ -66,7 +66,7 @@ export default {
         id: mainPatientId,
       };
       await this.$store.dispatch('linkedAccounts/switchToMainUserProfile', mainUserObject);
-      redirectTo(this, INDEX.path, null);
+      redirectTo(this, INDEX.path);
     },
   },
 };

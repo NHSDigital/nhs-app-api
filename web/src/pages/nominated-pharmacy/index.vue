@@ -80,7 +80,7 @@ export default {
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, this.prescriptionsPath, null);
+      redirectTo(this, this.prescriptionsPath);
     }
   },
   mounted() {
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.prescriptionsPath, null);
+      redirectTo(this, this.prescriptionsPath);
     },
   },
 };

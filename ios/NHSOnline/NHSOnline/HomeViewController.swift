@@ -528,8 +528,8 @@ class HomeViewController : UIViewController {
         notificationsService?.failedToRegister()
     }
     
-    func areNotificationsEnabled() {
-        notificationsService?.areNotificationsEnabled()
+    func getNotificationsStatus() {
+        notificationsService?.getNotificationsStatus()
     }
     
     func showDownloadError() {

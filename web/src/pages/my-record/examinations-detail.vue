@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     onBackButtonClicked() {
-      redirectTo(this, this.myRecordReturnPath, null);
+      redirectTo(this, this.myRecordReturnPath);
     },
   },
 };

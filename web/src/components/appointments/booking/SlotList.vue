@@ -42,7 +42,7 @@ export default {
     formatDate: dateTime => DateProvider.create(dateTime).format('dddd D MMMM YYYY'),
     select(ref) {
       this.$refs[ref][0].select();
-      redirectTo(this, APPOINTMENT_CONFIRMATIONS.path, null);
+      redirectTo(this, APPOINTMENT_CONFIRMATIONS.path);
     },
     hasAppointments(daySlots) {
       return daySlots[1].length > 0;

@@ -33,23 +33,20 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import GenericButton from '@/components/widgets/GenericButton';
 import NativeCallbacks from '@/services/native-app';
-import { setCookie } from '@/lib/cookie-manager';
-import { findByName } from '../../lib/routes';
-import moment from 'moment';
+import { findByName } from '@/lib/routes';
 
 export default {
   name: 'BiometricBanner',
   components: {
     AnalyticsTrackedTag,
+    GenericButton,
     MessageDialog,
     MessageText,
-    GenericButton,
   },
   data() {
     return {
@@ -65,37 +62,22 @@ export default {
       };
     },
     showBiometricBanner() {
-      const hideBiometricBannerCookie = this.$store.app.$cookies.get('HideBiometricBanner');
-      return (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios') &&
-        (hideBiometricBannerCookie === undefined || hideBiometricBannerCookie === false);
+      return this.$store.state.device.isNativeApp && !this.$store.state.biometricBanner.dismissed;
     },
+  },
+  created() {
+    this.$store.dispatch('biometricBanner/sync');
   },
   mounted() {
     this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
   },
   methods: {
+    dismissBiometricsBannerClicked() {
+      this.$store.dispatch('biometricBanner/dismiss');
+    },
     goToLoginOptions() {
       this.configureWebContext(findByName('Login').helpUrl);
       NativeCallbacks.goToLoginOptions();
-    },
-    dismissBiometricsBannerClicked() {
-      let hideBiometricBannerCookie = this.$store.app.$cookies.get('HideBiometricBanner');
-
-      hideBiometricBannerCookie = {
-        ...hideBiometricBannerCookie,
-        Dismissed: true,
-      };
-
-      setCookie({
-        cookies: this.$store.app.$cookies,
-        key: 'HideBiometricBanner',
-        value: hideBiometricBannerCookie.Dismissed,
-        options: {
-          maxAge: moment.duration(5, 'y').asSeconds(),
-          secure: this.$store.app.$env.SECURE_COOKIES,
-        },
-      });
-      this.$store.dispatch('biometricBanner/refreshPage');
     },
   },
 };

@@ -1,13 +1,4 @@
 export default {
-  areNotificationsEnabled() {
-    const app = window.nativeApp;
-    if (app && app.areNotificationsEnabled) {
-      app.areNotificationsEnabled();
-      return true;
-    }
-    return false;
-  },
-
   attemptBiometricLogin() {
     const app = window.nativeApp;
     if (app && app.attemptBiometricLogin) {
@@ -45,6 +36,15 @@ export default {
       return appVersion;
     }
     return '';
+  },
+
+  getNotificationsStatus() {
+    const app = window.nativeApp;
+    if (app && app.getNotificationsStatus) {
+      app.getNotificationsStatus();
+      return true;
+    }
+    return false;
   },
 
   goToLoginOptions() {

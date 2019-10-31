@@ -82,7 +82,7 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^I get the registration for push notifications with an unregistered device pns token$")
     fun iGetTheRegistrationForPushNotificationsWithAnUnregisteredDeviceId() {
-        val unregisteredDevicePns ="0123456789ABCDEF"
+        val unregisteredDevicePns = "0123456789ABCDEF"
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(unregisteredDevicePns)
         val authToken = SerenityHelpers.getPatient().accessToken
         NotificationsApi.getRegistration(authToken = authToken)
@@ -96,7 +96,7 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^I delete the registration for push notifications with an unregistered device pns token$")
     fun iDeleteTheRegistrationForPushNotificationsWithAnUnregisteredDeviceId() {
-        val unregisteredDevicePns ="0123456789ABCDEF"
+        val unregisteredDevicePns = "0123456789ABCDEF"
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(unregisteredDevicePns)
         val authToken = SerenityHelpers.getPatient().accessToken
         NotificationsApi.deleteRegistration(authToken = authToken)
@@ -140,21 +140,21 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^a registration attempt with an invalid access token will return an Unauthorised error$")
     fun aRegistrationAttemptWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
-        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised {  accessToken ->
+        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised { accessToken ->
             NotificationsApi.postRegistration(authToken = accessToken)
         }
     }
 
     @When("^getting a notification registration with an invalid access token will return an Unauthorised error$")
     fun anAttemptToGetTheNotificationRegistrationWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
-        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised {  accessToken ->
+        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised { accessToken ->
             NotificationsApi.getRegistration(authToken = accessToken)
         }
     }
 
     @When("^deleting a notification registration with an invalid access token will return an Unauthorised error$")
     fun anAttemptToDeleteTheNotificationRegistrationWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
-        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised {  accessToken ->
+        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised { accessToken ->
             NotificationsApi.deleteRegistration(authToken = accessToken)
         }
     }
