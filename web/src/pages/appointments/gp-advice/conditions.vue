@@ -11,18 +11,18 @@
       </message-text>
     </message-dialog>
     <div v-else>
-      <message-dialog id="conditionWarning" message-type="warning" icon-text="Important">
-        <message-text :class="$style.warningText">
+      <message-dialog v-if="!demographicsQuestionAnswered"
+                      id="conditionWarning"
+                      message-type="warning" icon-text="Important">
+        <span :class="[$style.warningText, $style.msgText]">
           {{ $t('appointments.admin_help.warning.warningText',
                 { providerName: getProviderName }) }}
-        </message-text>
-        <message-text role="link">
-          <a id="online_consultations_help_link"
-             :href="onlineConsultationsURL"
-             target="_blank">
-            {{ $t('appointments.admin_help.warning.warningLink') }}
-          </a>
-        </message-text>
+          <span>
+            <a id="online_consultations_help_link"
+               :href="onlineConsultationsURL"
+               target="_blank">{{ $t('appointments.admin_help.warning.warningLink') }}</a>
+          </span>
+        </span>
       </message-dialog>
       <div id="conditionInfo" :class="$style.info" data-purpose="info">
         <p>{{ $t('appointments.gp_advice.conditions.paragraph') }}</p>
@@ -148,6 +148,12 @@ export default {
   @import '../../../style/fonts';
   @import "../../../style/nhsukoverrides";
   @import '../../../style/fonts';
+  @import "../../../style/textstyles";
+
+  .msgText {
+    padding: 1em 1em 0.150em 1em;
+    @include message;
+  }
 
   div.desktopWeb {
     .cannotFindConditionLink {
@@ -158,6 +164,10 @@ export default {
   .warningText {
     font-family: $default_web;
     font-weight: normal;
+
+    a {
+      display: inline;
+    }
   }
 
   button {

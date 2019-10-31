@@ -15,17 +15,15 @@
         <message-dialog v-if="!demographicsQuestionAnswered"
                         id="conditionWarning"
                         message-type="warning" icon-text="Important">
-          <message-text :class="$style.warningText">
+          <span :class="[$style.warningText, $style.msgText]">
             {{ $t('appointments.admin_help.warning.warningText',
                   { providerName: getProviderName }) }}
-          </message-text>
-          <message-text role="link">
-            <a id="online_consultations_help_link"
-               :href="onlineConsultationsURL"
-               target="_blank">
-              {{ $t('appointments.admin_help.warning.warningLink') }}
-            </a>
-          </message-text>
+            <span>
+              <a id="online_consultations_help_link"
+                 :href="onlineConsultationsURL"
+                 target="_blank">{{ $t('appointments.admin_help.warning.warningLink') }}</a>
+            </span>
+          </span>
         </message-dialog>
 
         <demographics-question v-if="!demographicsQuestionAnswered"
@@ -139,8 +137,17 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/fonts';
-  .warningText {
-    font-family: $default_web;
-    font-weight: normal;
+  @import "../../../style/textstyles";
+.msgText {
+  padding: 1em 1em 0.150em 1em;
+  @include message;
+}
+.warningText {
+  font-family: $default_web;
+  font-weight: normal;
+
+  a {
+    display: inline;
   }
+}
 </style>

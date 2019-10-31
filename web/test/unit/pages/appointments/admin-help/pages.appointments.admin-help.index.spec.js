@@ -385,15 +385,14 @@ describe('Admin Help page', () => {
         mountPage({ stubDemographicsQuestion: false });
         // Act
         const helpLink = page.find('#conditionWarning');
-        const warning = page.find('#online_consultations_help_link');
-        expect(helpLink.find('p').text()).toEqual('translate_appointments.admin_help.warning.warningText');
-        expect(warning.find('a').text()).toEqual('translate_appointments.admin_help.warning.warningLink');
+        expect(helpLink.find('span').text()).toContain('translate_appointments.admin_help.warning.warningText');
+        expect(helpLink.find('a').text()).toEqual('translate_appointments.admin_help.warning.warningLink');
         // Assert
-        expect(warning.attributes().href).toEqual('www.google.co.uk');
+        expect(helpLink.find('a').attributes().href).toEqual('www.google.co.uk');
       });
     });
     describe('orchestrator', () => {
-      it('should appear if onlineConsultations error state is false and demographics question answered', () => {
+      it('should appear if onlineConsultations errori state is false and demographics question answered', () => {
         // Arrange
         $store.state.onlineConsultations.error = false;
         $store.state.onlineConsultations.demographicsQuestionAnswered = true;
