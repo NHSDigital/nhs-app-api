@@ -36,7 +36,7 @@ Feature: Get demographic data Backend
     And I have logged in and have a valid session cookie
     And the GP System is unavailable
     When I communicate with <GP System>
-    Then I get a "Bad gateway" error
+    Then I receive a "Bad gateway" error
 
     Examples:
       | GP System |

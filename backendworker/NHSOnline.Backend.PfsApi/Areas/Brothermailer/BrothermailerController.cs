@@ -31,6 +31,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Brothermailer
                 _logger.LogEnter();
 
                 _logger.LogInformation("Signing up email address to brothermailer");
+
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
                 
                 var result = await _brothermailerService.SendEmailAddress(brothermailerRequest);
                 

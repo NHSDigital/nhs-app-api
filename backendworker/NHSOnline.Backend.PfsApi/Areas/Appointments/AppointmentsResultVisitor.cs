@@ -18,6 +18,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             _sessionCacheService = sessionCacheService;
         }
+        
+        protected override ErrorCategory ErrorCategory => ErrorCategory.Appointments;
 
         public async Task<IActionResult> Visit(AppointmentsResult.Success result)
         {

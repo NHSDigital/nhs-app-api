@@ -24,7 +24,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses?.Count()).Sum() } courses");
+                await _auditor.Audit(AuditType, "Prescriptions successfully retrieved - {0} courses",  
+                    result.Response?.Prescriptions?.Select(x => x.Courses?.Count).Sum());
             }
             catch (Exception e)
             {
@@ -77,30 +78,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetPrescriptionsResult.BadRequest)}");
-            }
-        }
-
-        public async Task Visit(GetPrescriptionsResult.CannotReorderPrescription result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Cannot Reorder Prescription");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetPrescriptionsResult.CannotReorderPrescription)}");
-            }
-        }
-
-        public async Task Visit(GetPrescriptionsResult.MedicationAlreadyOrderedWithinLast30Days result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error retrieving prescriptions: Medication already ordered within last 30 days");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetPrescriptionsResult.MedicationAlreadyOrderedWithinLast30Days)}");
             }
         }
     }

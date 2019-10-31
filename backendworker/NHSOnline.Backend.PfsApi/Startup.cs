@@ -162,7 +162,6 @@ namespace NHSOnline.Backend.PfsApi
         {
             options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
             options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
-            options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(new AuthorizeFilter(
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );

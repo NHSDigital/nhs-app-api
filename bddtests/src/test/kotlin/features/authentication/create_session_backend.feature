@@ -96,4 +96,4 @@ Feature: Create Session Backend
   Scenario: session fails to be saved in cache
     Given I have valid OAuth details and the <GP System> session fails to be saved in cache
     When I create a user session
-    Then I get a "Server Error" error
+    Then I receive a "Server Error" error

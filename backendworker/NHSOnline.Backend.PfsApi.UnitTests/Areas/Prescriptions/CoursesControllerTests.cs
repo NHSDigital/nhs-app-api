@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,6 +13,7 @@ using NHSOnline.Backend.PfsApi.Areas.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
@@ -27,10 +28,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private UserSession _userSession;
         private Guid _patientId;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<ICourseService> _mockCourseService;
+        private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private string _serviceDeskReference;
+        private Mock<IGpSystem> _mockGpSystem;
+        private CourseListResponse _courseListResponse;
 
         private const string RequestAuditType = "RepeatPrescriptions_ViewRepeatMedications_Request";
         private const string ResponseAuditType = "RepeatPrescriptions_ViewRepeatMedications_Response";
-        
+
+        private const string RequestAuditMessage = "Attempting to retrieve courses";
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -38,21 +46,40 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
-            
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _userSession = _fixture.Create<UserSession>();
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+
+            _userSession = _fixture.Create<UserSession>();
+
+            _mockCourseService = _fixture.Freeze<Mock<ICourseService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _systemUnderTest = _fixture.Create<CoursesController>();
+            _courseListResponse = _fixture.Create<CourseListResponse>();
+            var result = new GetCoursesResult.Success(_courseListResponse);
 
+            _mockCourseService.Setup(x => x.GetCourses(
+                    It.Is<GpLinkedAccountModel>(d =>
+                        d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
+                .Returns(Task.FromResult((GetCoursesResult) result));
+
+            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem
+                .Setup(x => x.GetCourseService())
+                .Returns(_mockCourseService.Object);
+            
+            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory
+                .Setup(x => x.CreateGpSystem(Supplier.Emis))
+                .Returns(_mockGpSystem.Object);
+
+            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
+            _serviceDeskReference = _fixture.Create<string>();
+
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
+
+            _systemUnderTest = _fixture.Create<CoursesController>();
             _systemUnderTest.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContextMock.Object
@@ -62,45 +89,61 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
-            var mockGpSystem = new Mock<IGpSystem>();
-            var courseService = new Mock<ICourseService>();
+            // Act
+            var result = await _systemUnderTest.Get(_patientId);
 
-            var coursesGetResponse = new CourseListResponse
-            {
-                Courses = new List<Course>
-                {
-                    new Course(),
-                    new Course(),
-                }
-            };
+            // Assert
+            _mockCourseService.VerifyAll();
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(_courseListResponse);
 
-            var getCoursesResult = new GetCoursesResult.Success(coursesGetResponse);
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, It.IsAny<object[]>()));
+            _mockAuditor.Verify(x =>
+                x.Audit(ResponseAuditType, "Courses successfully retrieved - {0} courses", It.IsAny<object[]>()));
+        }
 
+        [DataTestMethod]
+        [DataRow(typeof(GetCoursesResult.Forbidden), StatusCodes.Status403Forbidden, 
+            "Error retrieving courses: Insufficient permissions")]
+        [DataRow(typeof(GetCoursesResult.InternalServerError), StatusCodes.Status500InternalServerError, 
+            "Error retrieving courses: Internal Server Error")]
+        [DataRow(typeof(GetCoursesResult.BadGateway), StatusCodes.Status502BadGateway, 
+            "Error retrieving courses: Supplier Unavailable")]
+        public async Task Get_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessageFormat)
+        {
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
-                .Returns(mockGpSystem.Object);
+            var serviceResult = (GetCoursesResult) Activator.CreateInstance(serviceResultType);
+            _mockCourseService.Setup(x => x.GetCourses(
+                    It.Is<GpLinkedAccountModel>(d => 
+                    d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
+                .Returns(Task.FromResult(serviceResult))
+                .Verifiable();
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
+                    expectedStatusCode, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference);
 
-            mockGpSystem.Setup(x => x.GetCourseService())
-                .Returns(courseService.Object);
-
-            courseService.Setup(x => x.GetCourses(
-                It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId))).Returns(Task.FromResult((GetCoursesResult)getCoursesResult));
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
 
             // Act
             var result = await _systemUnderTest.Get(_patientId);
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
-            mockGpSystem.Verify(x => x.GetCourseService());
-            courseService.Verify(x => x.GetCourses(
-                It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)));
-            result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(coursesGetResponse);
-            
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, "Attempting to retrieve courses", It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Courses successfully retrieved - 2 courses", It.IsAny<object[]>()));
+            _mockCourseService.Verify();
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            using (new AssertionScope())
+            {
+                objectResult.StatusCode.Should().Be(expectedStatusCode);
+                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            }
+
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat));
         }
     }
 }

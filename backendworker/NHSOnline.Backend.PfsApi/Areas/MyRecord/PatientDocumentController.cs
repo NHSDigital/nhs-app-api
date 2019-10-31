@@ -36,6 +36,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             {
                 _logger.LogEnter();
                 
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
+                
                 await _auditor.Audit(AuditingOperations.GetDocumentAuditTypeRequest,
                     "Attempting to view document");
 

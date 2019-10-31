@@ -16,7 +16,7 @@ import java.lang.AssertionError
 const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 550
 class ResponseStatusCodeSteps {
 
-    @Then("^I receive (?:a|an) \"(.*)\" (?:error|response)$")
+    @Then("^I (?:get|receive) (?:a|an) \"(.*)\" (?:error|response)$")
     fun thenIReceiveAnError(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val errorResponse = SerenityHelpers.getHttpException()
@@ -25,11 +25,6 @@ class ResponseStatusCodeSteps {
                 errorResponse
         )
         assertEquals("Incorrect status code returned. ", converted, errorResponse!!.statusCode)
-    }
-
-    @Then("^I get (?:a|an) \"(.*)\" error")
-    fun thenIGetAnError(expectedStatusCode: String) {
-        thenIReceiveAnError(expectedStatusCode)
     }
 
     @Then("^I receive (?:a|an) \"(.*)\" error with service desk reference prefixed \"(.*)\"$")
@@ -64,6 +59,12 @@ class ResponseStatusCodeSteps {
     fun thenIReceiveAStatusCode(expectedStatusCode: Int) {
         val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
         assertEquals(expectedStatusCode, exception.statusCode)
+    }
+
+    @Then("^I receive (?:a|an) \"(.*)\" error status code with service desk reference prefixed \"(.*)\"$")
+    fun thenIReceiveAStatusCodeWithServiceDeskReferencePrefixed(expectedStatusCode: Int,
+                                                                expectedServiceDeskReferencePrefix: String) {
+        assertNhsoException(expectedStatusCode, null, expectedServiceDeskReferencePrefix)
     }
 
     @Then("^I receive (?:a|an) \"(.*)\" error status code with code \"(.*)\"$")

@@ -7,7 +7,5 @@
         T Visit(GetPrescriptionsResult.Forbidden result);
         T Visit(GetPrescriptionsResult.InternalServerError result);
         T Visit(GetPrescriptionsResult.BadRequest result);
-        T Visit(GetPrescriptionsResult.CannotReorderPrescription result);
-        T Visit(GetPrescriptionsResult.MedicationAlreadyOrderedWithinLast30Days result);
     }
 }

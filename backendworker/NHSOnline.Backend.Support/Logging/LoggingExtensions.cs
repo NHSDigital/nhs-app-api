@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace NHSOnline.Backend.Support.Logging
 {
@@ -77,6 +78,12 @@ namespace NHSOnline.Backend.Support.Logging
             }
 
             logger.LogInformation(logMessageStringBuilder.ToString());
+        }
+
+        public static void LogModelStateValidationFailure<T>(this ILogger<T> logger, ModelStateDictionary modelState)
+        {
+            logger.LogWarning("Model state validation failed: {0}", 
+                modelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
         }
 
         private static void LogInnerException<T>(this ILogger<T> logger, Exception exception, int level = 0)

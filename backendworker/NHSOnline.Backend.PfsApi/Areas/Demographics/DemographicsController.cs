@@ -38,8 +38,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
             try
             {
                 _logger.LogEnter();   
+                
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
+                
                 _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
-
+                
                 await _auditor.Audit(AuditingOperations.GetDemographicsAuditTypeRequest,
                     "Attempting to view Demographics");
                 

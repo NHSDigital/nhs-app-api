@@ -36,7 +36,7 @@ Feature: Patient Registration Backend
     Given I have data for a <GP System> patient that does not exist
     And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
-    Then I get a "Not found" error
+    Then I receive a "Not found" error
 
     Examples:
       | GP System |
@@ -47,7 +47,7 @@ Feature: Patient Registration Backend
   Scenario Outline: Incorrect <GP System> Linkage Key
     Given I have data for a <GP System> patient with incorrect linkage key
     When I register the user's IM1 credentials
-    Then I get a "Not found" error
+    Then I receive a "Not found" error
 
     Examples:
       | GP System |
@@ -59,7 +59,7 @@ Feature: Patient Registration Backend
     Given I have data for a <GP System> patient with incorrect surname
     And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
-    Then I get a "Not found" error
+    Then I receive a "Not found" error
 
     Examples:
       | GP System |
@@ -71,7 +71,7 @@ Feature: Patient Registration Backend
     Given I have data for a <GP System> patient with incorrect date of birth
     And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
-    Then I get a "Not found" error
+    Then I receive a "Not found" error
 
     Examples:
       | GP System |
@@ -82,28 +82,28 @@ Feature: Patient Registration Backend
   Scenario: Registering an EMIS patient who is already registered creates a Conflict response
     Given I have data for an EMIS patient that has already been associated with the application in the GP system
     When I register the user's IM1 credentials
-    Then I get a "Conflict" error
+    Then I receive a "Conflict" error
 
   Scenario: Registering a VISION patient who is already registered creates a Conflict response
     Given I have data for a Vision patient that has already been associated with the application in the GP system
     When I register the user's IM1 credentials
-    Then I get a "Conflict" error
+    Then I receive a "Conflict" error
 
   Scenario: Registering a patient which has been locked by VISION creates a Bad Gateway response
     Given I have data for a Vision patient with a locked account as the account is opened in the Vision application
     When I register the user's IM1 credentials
-    Then I get a "forbidden" error
+    Then I receive a "forbidden" error
 
   Scenario: ODS Code not in the expected format
     Given I have a user's IM1 credentials with an ODS Code not in the expected format
     When I register the user's IM1 credentials
-    Then I get a "Bad Request" error
+    Then I receive a "Bad Request" error
 
   Scenario Outline: <GP System> - Surname not in the expected format
     Given I have a <GP System> user's IM1 credentials with a Surname not in the expected format
     And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
-    Then I get a "<Response>" error
+    Then I receive a "<Response>" error
 
     Examples:
       | GP System | Response    |
@@ -114,7 +114,7 @@ Feature: Patient Registration Backend
   Scenario Outline: <GP System> - Account ID not in the expected format
     Given I have a <GP System> user's IM1 credentials with an Account ID not in the expected format
     When I register the user's IM1 credentials
-    Then I get a "<Response>" error
+    Then I receive a "<Response>" error
 
     Examples:
       | GP System | Response    |
@@ -125,7 +125,7 @@ Feature: Patient Registration Backend
   Scenario Outline: <GP System> - Linkage Key not in the expected format
     Given I have a <GP System> user's IM1 credentials with a Linkage Key not in the expected format
     When I register the user's IM1 credentials
-    Then I get a "<Response>" error
+    Then I receive a "<Response>" error
 
     Examples:
       | GP System | Response    |
@@ -136,7 +136,7 @@ Feature: Patient Registration Backend
   Scenario Outline: <GP System> - Date Of Birth not in the expected format
     Given I have a <GP System> user's IM1 credentials with a Date Of Birth not in the expected format
     When I register the user's IM1 credentials
-    Then I get a "<Response>" error
+    Then I receive a "<Response>" error
 
     Examples:
       | GP System | Response    |
@@ -147,12 +147,12 @@ Feature: Patient Registration Backend
   Scenario: Missing ODS Code
     Given I have a user's IM1 credentials with missing ODS Code
     When I register the user's IM1 credentials
-    Then I get a "Bad Request" error
+    Then I receive a "Bad Request" error
 
   Scenario Outline: <GP System> - Missing Surname
     Given I have a <GP System> user's IM1 credentials with missing Surname
     When I register the user's IM1 credentials
-    Then I get a "<Response>" error
+    Then I receive a "<Response>" error
 
     Examples:
       | GP System | Response    |
@@ -163,7 +163,7 @@ Feature: Patient Registration Backend
   Scenario Outline: <GP System> - Missing Account ID
     Given I have a <GP System> user's IM1 credentials with missing Account ID
     When I register the user's IM1 credentials
-    Then I get a "<Response>" error
+    Then I receive a "<Response>" error
 
     Examples:
       | GP System | Response    |
@@ -175,7 +175,7 @@ Feature: Patient Registration Backend
   Scenario Outline: <GP System> - Missing Linkage Key
     Given I have a <GP System> user's IM1 credentials with missing Linkage Key
     When I register the user's IM1 credentials
-    Then I get a "<Response>" error
+    Then I receive a "<Response>" error
 
     Examples:
       | GP System | Response    |

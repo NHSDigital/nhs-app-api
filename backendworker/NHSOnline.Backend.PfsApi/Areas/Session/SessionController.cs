@@ -83,6 +83,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 _logger.LogEnter();
 
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
+
                 var validator = new SessionValidator(_logger);
 
                 if (!validator.IsPostValid(model))

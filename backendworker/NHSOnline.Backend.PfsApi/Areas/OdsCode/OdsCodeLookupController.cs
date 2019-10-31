@@ -27,6 +27,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.OdsCode
         {
             _logger.LogEnter();
 
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+            
             if (string.IsNullOrEmpty(odsCode))
             {
                 return BadRequest();

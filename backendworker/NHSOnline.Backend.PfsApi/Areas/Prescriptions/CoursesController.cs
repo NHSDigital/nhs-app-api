@@ -17,17 +17,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly ILogger<CoursesController> _logger;
         private readonly IAuditor _auditor;
         private readonly ISessionCacheService _sessionCacheService;
+        private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
         public CoursesController(
             ILogger<CoursesController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
-            ISessionCacheService sessionCacheService)
+            ISessionCacheService sessionCacheService,
+            IErrorReferenceGenerator errorReferenceGenerator)
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
             _sessionCacheService = sessionCacheService;
+            _errorReferenceGenerator = errorReferenceGenerator;
         }
 
         [HttpGet]
@@ -49,7 +52,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             var result = await courseService.GetCourses(gpLinkedAccountUserSession);
             
             await result.Accept(new CourseResultAuditingVisitor(_auditor, _logger));
-            return await result.Accept(new CourseResultVisitor(_sessionCacheService, userSession));
+            return await result.Accept(new CourseResultVisitor(_sessionCacheService, _errorReferenceGenerator, userSession));
         }
     }
 }

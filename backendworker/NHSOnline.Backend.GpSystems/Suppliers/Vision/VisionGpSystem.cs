@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             return _serviceProvider.GetService<VisionLinkageValidationService>();
         }
         
-        public IPrescriptionValidationService GetPrescriptionRequestValidationService()
+        public IPrescriptionValidationService GetPrescriptionValidationService()
         {
             return _serviceProvider.GetService<VisionPrescriptionValidationService>();
         }

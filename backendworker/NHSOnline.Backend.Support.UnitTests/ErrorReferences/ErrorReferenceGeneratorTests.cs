@@ -68,6 +68,15 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(typeof(ErrorTypes.TimeoutServiceJourneyRules), "zj")]
         [DataRow(typeof(ErrorTypes.TimeoutTpp), "zt")]
         [DataRow(typeof(ErrorTypes.TimeoutVision), "zs")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsBadRequest), "5a")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsForbidden), "5c")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsConflict), "5f")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsMedicationAlreadyOrderedWithinLast30Days), "5g")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsUnexpectedError), "5k")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayEmis), "5e")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayMicrotest), "5m")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayTpp), "5t")]
+        [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayVision), "5s")]
         public void GenerateAndLogErrorReference_UsingErrorType_ReturnsCorrectCode(Type type, string expectedPrefix)
         {
             var errorType = (ErrorTypes) Activator.CreateInstance(type);
@@ -88,6 +97,11 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Appointments, 460, "4g")]
         [DataRow(ErrorCategory.Appointments, 461, "4h")]
         [DataRow(ErrorCategory.Appointments, 500, "4k")]
+        [DataRow(ErrorCategory.Prescriptions, 400, "5a")]
+        [DataRow(ErrorCategory.Prescriptions, 403, "5c")]
+        [DataRow(ErrorCategory.Prescriptions, 409, "5f")]
+        [DataRow(ErrorCategory.Prescriptions, 466, "5g")]
+        [DataRow(ErrorCategory.Prescriptions, 500, "5k")]
         public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCode_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, string expectedPrefix)
         {
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode);
@@ -106,6 +120,11 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Appointments, 460, "4g")]
         [DataRow(ErrorCategory.Appointments, 461, "4h")]
         [DataRow(ErrorCategory.Appointments, 500, "4k")]
+        [DataRow(ErrorCategory.Prescriptions, 400, "5a")]
+        [DataRow(ErrorCategory.Prescriptions, 403, "5c")]
+        [DataRow(ErrorCategory.Prescriptions, 409, "5f")]
+        [DataRow(ErrorCategory.Prescriptions, 466, "5g")]
+        [DataRow(ErrorCategory.Prescriptions, 500, "5k")]
         public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCodeAndOptionalSupplier_ReturnsCorrectCode(
             ErrorCategory errorCategory, int statusCode, string expectedPrefix)
         {
@@ -129,6 +148,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Appointments, 502, Supplier.Microtest, "4m")]
         [DataRow(ErrorCategory.Appointments, 502, Supplier.Tpp, "4t")]
         [DataRow(ErrorCategory.Appointments, 502, Supplier.Vision, "4s")]
+        [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Emis, "5e")]
+        [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Microtest, "5m")]
+        [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Tpp, "5t")]
+        [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Vision, "5s")]
         [DataRow(ErrorCategory.Timeout, 504, Supplier.Emis, "ze")]
         [DataRow(ErrorCategory.Timeout, 504, Supplier.Microtest, "zm")]
         [DataRow(ErrorCategory.Timeout, 504, Supplier.Tpp, "zt")]
@@ -150,6 +173,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(ErrorCategory.Appointments, 502, SourceApi.Microtest, "4m")]
         [DataRow(ErrorCategory.Appointments, 502, SourceApi.Tpp, "4t")]
         [DataRow(ErrorCategory.Appointments, 502, SourceApi.Vision, "4s")]
+        [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Emis, "5e")]
+        [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Microtest, "5m")]
+        [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Tpp, "5t")]
+        [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Vision, "5s")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Emis, "ze")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Microtest, "zm")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Tpp, "zt")]

@@ -220,13 +220,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         private GetPrescriptionsResult InterpretGetPrescriptionsError(
             EmisClient.EmisApiResponse response)
         {
-            if (HasAlreadyBeenOrderedLast30Days(response))
-            {
-                _logger.LogWarning("The prescription request is invalid as the prescription has already been ordered in the last 30 days");
-                _logger.LogEmisWarningResponse(response);
-                return new GetPrescriptionsResult.MedicationAlreadyOrderedWithinLast30Days();
-            }
-
             if (response.HasForbiddenResponse())
             {
                 _logger.LogError("The emis prescriptions service is not enabled");

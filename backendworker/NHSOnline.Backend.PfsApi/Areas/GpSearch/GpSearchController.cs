@@ -30,6 +30,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.GpSearch
             {
                 _logger.LogEnter();
 
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
+                
                 _logger.LogInformation($"Fetching Gp Practices for {searchInput.SearchTerm}");
                 
                 var result = await _gpSearchService.Search(searchInput.SearchTerm);

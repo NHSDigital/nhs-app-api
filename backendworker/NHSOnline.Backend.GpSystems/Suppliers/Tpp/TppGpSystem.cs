@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppPrescriptionService>();
         }
 
-        public IPrescriptionValidationService GetPrescriptionRequestValidationService()
+        public IPrescriptionValidationService GetPrescriptionValidationService()
         {
             return _serviceProvider.GetService<TppPrescriptionValidationService>();
         }

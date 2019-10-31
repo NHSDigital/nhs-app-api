@@ -12,6 +12,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
         }
 
+        protected override ErrorCategory ErrorCategory => ErrorCategory.Appointments;
+        
         public IActionResult Visit(AppointmentCancelResult.Success result)
         {
             return new NoContentResult();

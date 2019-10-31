@@ -26,10 +26,22 @@ paths:
         "403":
           description: The patient does not have the necessary permissions within the GP
             system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
           content:
@@ -64,21 +76,45 @@ paths:
         "400":
           description: Bad request. Supplied connection details or request data is
             incomplete or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"         
         "401":
           description: User session missing or expired.
         "403":
           description: The patient does not have the necessary permissions within the GP
             system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "409":
           description: Conflict. A repeat prescription for the given course already exists
             preventing a new one to be created.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "466":
           description: The patient is trying to order medication which has already been
             ordered within the last 30 days.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
           content:
@@ -112,15 +148,31 @@ paths:
                 $ref: "#/components/schemas/PrescriptionListResponse"
         "400":
           description: Bad request. All headers must be provided.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "401":
           description: User session has expired.
         "403":
           description: The patient does not have the necessary permissions within the GP
             system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "500":
           description: An unexpected error occurred processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "502":
           description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "504":
           description: Timeout when calling upstream system.
           content:

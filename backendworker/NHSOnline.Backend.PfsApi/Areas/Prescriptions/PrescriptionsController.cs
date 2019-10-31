@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
@@ -23,36 +24,84 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<PrescriptionsController> _logger;
         private readonly IAuditor _auditor;
+        private readonly IErrorReferenceGenerator _errorReferenceGenerator;
         
         public PrescriptionsController(
             ConfigurationSettings settings,
             ILogger<PrescriptionsController> logger,
             IGpSystemFactory gpSystemFactory,
-            IAuditor auditor)
+            IAuditor auditor,
+            IErrorReferenceGenerator errorReferenceGenerator)
         {
             _settings = settings;
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
+            _errorReferenceGenerator = errorReferenceGenerator;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] DateTimeOffset? fromDate, [FromHeader(Name=PatientId)] Guid patientId)
         {
-            var defaultFromDate = GetDefaultFromDate();
+            try
+            {
+                _logger.LogEnter();
+                
+                var userSession = HttpContext.GetUserSession();
 
-            var userSession = HttpContext.GetUserSession();
+                await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
+                var result = await GetPrescriptions(fromDate, userSession, patientId);
+            
+                await result.Accept(new GetPrescriptionsResultAuditingVisitor(_auditor, _logger));
+                return result.Accept(new GetPrescriptionsResultVisitor(_errorReferenceGenerator, userSession));
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest, [FromHeader(Name=PatientId)] Guid patientId)
+        {
+            try
+            {
+                _logger.LogEnter();
+                
+                var userSession = HttpContext.GetUserSession();
+
+                var courseIds = FormatCourseIds(repeatPrescriptionRequest?.CourseIds ?? new List<string>());
+            
+                await _auditor.Audit(AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
+
+                var result = await OrderPrescription(repeatPrescriptionRequest, userSession, patientId);
+
+                await result.Accept(new OrderPrescriptionResultAuditingVisitor(_auditor, _logger, courseIds));
+                return result.Accept(new OrderPrescriptionResultVisitor(_errorReferenceGenerator, userSession));
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private async Task<GetPrescriptionsResult> GetPrescriptions(DateTimeOffset? fromDate, UserSession userSession, Guid patientId)
+        {
             var gpSystem = _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier);
-            
-            var gpLinkedAccountUserSession = new GpLinkedAccountModel(
-                userSession.GpUserSession, patientId
-            );
 
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.GpUserSession.Supplier}");
-            var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
+            var prescriptionRequestValidationService = gpSystem.GetPrescriptionValidationService();
 
+            var defaultFromDate = GetDefaultFromDate();
+            
+            if (!ModelState.IsValid)
+            {
+                _logger.LogModelStateValidationFailure(ModelState);
+                return new GetPrescriptionsResult.BadRequest();
+            }
+            
             if (!prescriptionRequestValidationService.IsGetValid(fromDate, defaultFromDate))
             {
                 _logger.LogWarning($"Setting {nameof(fromDate)} to default {defaultFromDate:O} because value {fromDate:O} is earlier than allowed.");
@@ -62,51 +111,44 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionService = gpSystem.GetPrescriptionService();
 
-            await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
-
             _logger.LogInformation($"Calling prescription service to get prescriptions");
-            var result = await prescriptionService.GetPrescriptions(gpLinkedAccountUserSession, fromDate, DateTimeOffset.Now);
-            
-            await result.Accept(new GetPrescriptionsResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new GetPrescriptionsResultVisitor());
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest, [FromHeader(Name=PatientId)] Guid patientId)
-        {
-            OrderPrescriptionResult result;
-            UserSession userSession = HttpContext.GetUserSession();
-
-            var gpSystem = _gpSystemFactory
-                .CreateGpSystem(userSession.GpUserSession.Supplier);
-
-            var courseIds = FormatCourseIds(repeatPrescriptionRequest.CourseIds);
-            
-            var gpLinkedAccountUserSession = new GpLinkedAccountModel(
+            var gpLinkedAccountModel = new GpLinkedAccountModel(
                 userSession.GpUserSession, patientId
             );
-            
-            await _auditor.Audit(AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
+            return await prescriptionService.GetPrescriptions(gpLinkedAccountModel, fromDate, DateTimeOffset.Now);
+        }
+
+        private async Task<OrderPrescriptionResult> OrderPrescription(
+            RepeatPrescriptionRequest repeatPrescriptionRequest, UserSession userSession, Guid patientId)
+        {
+            var gpSystem = _gpSystemFactory
+                .CreateGpSystem(userSession.GpUserSession.Supplier);
             
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.GpUserSession.Supplier}");
-            var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
+            var prescriptionRequestValidationService = gpSystem.GetPrescriptionValidationService();
 
+            if (!ModelState.IsValid)
+            {
+                _logger.LogModelStateValidationFailure(ModelState);
+                return new OrderPrescriptionResult.BadRequest();
+            }
+            
             if (!prescriptionRequestValidationService.IsPostValid(repeatPrescriptionRequest))
             {
                 _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");
-                result = new OrderPrescriptionResult.BadRequest();
-            }
-            else
-            {
-                _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.GpUserSession.Supplier}");
-                var prescriptionService = gpSystem.GetPrescriptionService();
-
-                _logger.LogInformation($"Calling prescription service to order prescriptions");
-                result = await prescriptionService.OrderPrescription(gpLinkedAccountUserSession, repeatPrescriptionRequest);      
+                return new OrderPrescriptionResult.BadRequest();
             }
 
-            await result.Accept(new OrderPrescriptionResultAuditingVisitor(_auditor, _logger, courseIds));
-            return result.Accept(new OrderPrescriptionResultVisitor());
+            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.GpUserSession.Supplier}");
+            var prescriptionService = gpSystem.GetPrescriptionService();
+            
+            var gpLinkedAccountModel = new GpLinkedAccountModel(
+                userSession.GpUserSession, patientId
+            );
+
+            _logger.LogInformation($"Calling prescription service to order prescriptions");
+            return await prescriptionService.OrderPrescription(gpLinkedAccountModel, repeatPrescriptionRequest);
         }
 
         private DateTimeOffset GetDefaultFromDate()

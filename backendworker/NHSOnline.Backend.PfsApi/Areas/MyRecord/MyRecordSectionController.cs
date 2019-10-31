@@ -31,6 +31,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         public async Task<IActionResult> GetSection([FromQuery] VisionMapperType section)
         {
             _logger.LogEnter();
+            
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
 
             var userSession = HttpContext.GetUserSession();
 

@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return _serviceProvider.GetService<MicrotestPatientRecordService>();
         }
 
-        public IPrescriptionValidationService GetPrescriptionRequestValidationService()
+        public IPrescriptionValidationService GetPrescriptionValidationService()
         {
             return _serviceProvider.GetService<MicrotestPrescriptionValidationService>();
         }

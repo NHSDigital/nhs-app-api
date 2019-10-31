@@ -141,13 +141,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 return new GetPrescriptionsResult.Forbidden();
             }
 
-            if (PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(response))
-            {
-                _logger.LogError("The tpp prescription has already been ordered or is not available");
-                
-                return new GetPrescriptionsResult.CannotReorderPrescription();
-            }
-            
             if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response) )
             {
                 _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");

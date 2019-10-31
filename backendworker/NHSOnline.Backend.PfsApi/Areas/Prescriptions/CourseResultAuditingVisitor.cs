@@ -24,7 +24,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Courses successfully retrieved - { result.Response?.Courses?.Count() } courses");
+                await _auditor.Audit(AuditType, "Courses successfully retrieved - {0} courses",
+                    result.Response?.Courses?.Count());
             }
             catch (Exception e)
             {

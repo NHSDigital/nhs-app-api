@@ -52,21 +52,5 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
                 return visitor.Visit(this);
             }
         }
-        
-        public class CannotReorderPrescription : GetPrescriptionsResult
-        {
-            public override T Accept<T>(IGetPrescriptionsResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class MedicationAlreadyOrderedWithinLast30Days : GetPrescriptionsResult
-        {
-            public override T Accept<T>(IGetPrescriptionsResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
     }
 }

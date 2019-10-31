@@ -22,6 +22,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
         [AllowAnonymous]
         public IActionResult Get([FromQuery] GetConfigurationQueryParameters deviceDetails)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+            
             if (string.IsNullOrEmpty(deviceDetails?.DeviceName) || string.IsNullOrEmpty(deviceDetails?.NativeAppVersion))
             {
                 return BadRequest();

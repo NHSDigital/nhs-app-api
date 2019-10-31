@@ -41,36 +41,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] AppointmentCancelRequest model, [FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Delete([FromBody] AppointmentCancelRequest request, [FromHeader(Name=PatientId)] Guid patientId)
         {
             try
             {
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Delete)} with patientId {patientId}");
-   
-                await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {model.AppointmentId}");
-                
+
+                await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {request.AppointmentId}");
+
                 var userSession = HttpContext.GetUserSession();
                 
-                AppointmentCancelResult cancelResult;
-                
-                var appointmentValidator = GetAppointmentsValidationService(userSession);
-                if (!appointmentValidator.IsDeleteValid(model))
-                {
-                    _logger.LogError("Invalid request body supplied to delete request");
-                    cancelResult = new AppointmentCancelResult.BadRequest();
-                }
-                else
-                {
-                    var appointmentsService = GetAppointmentsService(userSession);
-                    
-                    var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
-                    
-                    cancelResult = await appointmentsService.Cancel(gpLinkedAccountsModel, model);
-                }
-                
-                await cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, model.AppointmentId));
-                return cancelResult.Accept(new AppointmentCancelResultVisitor(_errorReferenceGenerator, userSession));
+                var result = await Cancel(request, userSession, patientId);
+
+                await result.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, request.AppointmentId));
+                return result.Accept(new AppointmentCancelResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally
             {
@@ -90,11 +75,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                               
                 var userSession = HttpContext.GetUserSession();
                 
-                var gpLinkedAccountUserSession = new GpLinkedAccountModel(
+                var gpLinkedAccountModel = new GpLinkedAccountModel(
                     userSession.GpUserSession, patientId
                 );
                 
-                var result = await GetAppointmentsService(userSession).GetAppointments(gpLinkedAccountUserSession);
+                var result = await GetAppointmentsService(userSession).GetAppointments(gpLinkedAccountModel);
 
                 LogAppointmentsInformation(userSession.GpUserSession, result);
                 
@@ -108,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
         
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] AppointmentBookRequest model, [FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Post([FromBody] AppointmentBookRequest request, [FromHeader(Name=PatientId)] Guid patientId)
         {
             try
             {
@@ -116,35 +101,48 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogDebug($"{nameof(Post)} with patientId {patientId}");
 
                 await _auditor.Audit(AuditingOperations.BookAppointmentAuditTypeRequest,
-                    $"Attempting to book appointment with id: {model.SlotId} and startTime: {model.StartTime:O}");
+                    $"Attempting to book appointment with id: {request.SlotId} and startTime: {request.StartTime:O}");
 
                 var userSession = HttpContext.GetUserSession();
-
-                AppointmentBookResult bookResult;
-
-                var appointmentValidator = GetAppointmentsValidationService(userSession);
-                if (!appointmentValidator.IsPostValid(model))
-                {
-                    _logger.LogError("Invalid request body supplied to post request");
-                    bookResult = new AppointmentBookResult.BadRequest();
-                }
-                else
-                {
-                    var appointmentsService = GetAppointmentsService(userSession);
-
-                    var gpLinkedAccountUserSession = new GpLinkedAccountModel(
-                        userSession.GpUserSession, patientId
-                    );
-                    bookResult = await appointmentsService.Book(gpLinkedAccountUserSession, model);   
-                }
-
-                await bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, model.SlotId, model.StartTime));
-                return bookResult.Accept(new AppointmentBookResultVisitor(_errorReferenceGenerator, userSession));
+                var result = await Book(request, userSession, patientId);
+                
+                await result.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime));
+                return result.Accept(new AppointmentBookResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally
             {
                 _logger.LogExit();
             }
+        }
+        
+        private async Task<AppointmentCancelResult> Cancel(AppointmentCancelRequest request, UserSession userSession, Guid patientId)
+        {
+            var appointmentValidator = GetAppointmentsValidationService(userSession);
+            if (!appointmentValidator.IsDeleteValid(request))
+            {
+                _logger.LogError("Invalid request body supplied to delete request");
+                return new AppointmentCancelResult.BadRequest();
+            }
+
+            var appointmentsService = GetAppointmentsService(userSession);
+            var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+            return await appointmentsService.Cancel(gpLinkedAccountsModel, request);
+        }
+
+        private async Task<AppointmentBookResult> Book(AppointmentBookRequest request, UserSession userSession, Guid patientId)
+        {
+            var appointmentValidator = GetAppointmentsValidationService(userSession);
+            if (!appointmentValidator.IsPostValid(request))
+            {
+                _logger.LogError("Invalid request body supplied to post request");
+                return new AppointmentBookResult.BadRequest();
+            }
+
+            var appointmentsService = GetAppointmentsService(userSession);
+            var gpLinkedAccountModel = new GpLinkedAccountModel(
+                userSession.GpUserSession, patientId
+            );
+            return await appointmentsService.Book(gpLinkedAccountModel, request);
         }
 
         private IAppointmentsService GetAppointmentsService(UserSession userSession)

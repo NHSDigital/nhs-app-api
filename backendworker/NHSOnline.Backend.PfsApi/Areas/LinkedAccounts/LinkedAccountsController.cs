@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -50,6 +50,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         [HttpGet]
         public async Task<IActionResult> GetAccessSummaryOfLinkedAccount([FromQuery] Guid id)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+            
             var userSession = HttpContext.GetUserSession();
 
             var linkedAccountsService = _gpSystemFactory

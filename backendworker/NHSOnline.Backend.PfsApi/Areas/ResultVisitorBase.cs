@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.Areas.Appointments
+namespace NHSOnline.Backend.PfsApi.Areas
 {
     public abstract class ResultVisitorBase
     {
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
         protected UserSession UserSession { get; }
-        
+
+        protected abstract ErrorCategory ErrorCategory { get; }
+
         protected ResultVisitorBase(
             IErrorReferenceGenerator errorReferenceGenerator,
             UserSession userSession)
@@ -21,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             var serviceDeskReference =
                 _errorReferenceGenerator.GenerateAndLogErrorReference(
-                    ErrorCategory.Appointments, statusCode,
+                    ErrorCategory, statusCode,
                     UserSession.GpUserSession.Supplier);
 
             return new ObjectResult(new PfsErrorResponse

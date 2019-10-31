@@ -51,12 +51,12 @@ Feature: View prescriptions backend
       | TPP       |
       | VISION    |
       | MICROTEST |
-
+    
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate not in the expected format
     Given I have logged into <GP System> and have a valid session cookie
     But a fromDate in an unexpected format
     When I request prescriptions for the last 6 months
-    Then I receive a "Bad request" error
+    Then I receive a "Bad request" error with service desk reference prefixed "5a"
     Examples:
       | GP System |
       | EMIS      |
@@ -74,7 +74,6 @@ Feature: View prescriptions backend
     When I request prescriptions for the last 6 months with an invalid cookie
     Then I receive a "Unauthorized" error
 
-
   Scenario Outline: <GP System> patient requesting prescriptions with when their session has expired
     Given I have logged into <GP System> and have a valid session cookie
     But I allow my session to expire
@@ -91,7 +90,7 @@ Feature: View prescriptions backend
     Given I have logged into <GP System> and have a valid session cookie
     And the GP System has disabled prescriptions
     When I request prescriptions for the last 6 months
-    Then I receive a "Forbidden" error
+    Then I receive a "Forbidden" error with service desk reference prefixed "5c"
     Examples:
       | GP System |
       | EMIS      |

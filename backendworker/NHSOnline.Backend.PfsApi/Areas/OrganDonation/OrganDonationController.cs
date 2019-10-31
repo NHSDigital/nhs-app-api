@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -73,6 +74,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 _logger.LogEnter();
+                
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
 
                 await _auditor.Audit(AuditingOperations.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
 
@@ -93,6 +99,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 _logger.LogEnter();
+                
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
 
                 await _auditor.Audit(AuditingOperations.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
                 
@@ -113,7 +124,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 _logger.LogEnter();
-                
+
                 await _auditor.Audit(AuditingOperations.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
                 
                 var result = await Withdraw(model);
@@ -157,6 +168,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         private async Task<OrganDonationWithdrawResult> Withdraw(OrganDonationWithdrawRequest model)
         {
             var userSession = HttpContext.GetUserSession();
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogModelStateValidationFailure(ModelState);
+                return new OrganDonationWithdrawResult.BadRequest();
+            }
             
             if (!_validator.IsDeleteValid(model))
             {

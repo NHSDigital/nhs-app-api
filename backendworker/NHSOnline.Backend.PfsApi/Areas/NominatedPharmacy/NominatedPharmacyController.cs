@@ -141,6 +141,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 _logger.LogInformation("Nominated pharmacy feature is disabled");
                 return new StatusCodeResult((int)HttpStatusCode.Forbidden);
             }
+            
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
 
             UserSession userSession = HttpContext.GetUserSession();
 
@@ -167,6 +172,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             try
             {
                 _logger.LogEnter();
+                
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
+                
                 _logger.LogInformation($"Fetching Pharmacies for {searchTerm}");
 
                 var pharmacySearchResponse = await _pharmacySearchService.Search(searchTerm);

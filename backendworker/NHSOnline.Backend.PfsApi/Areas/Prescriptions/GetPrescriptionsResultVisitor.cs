@@ -5,8 +5,15 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
-    internal class GetPrescriptionsResultVisitor : IGetPrescriptionsResultVisitor<IActionResult>
+    internal class GetPrescriptionsResultVisitor : ResultVisitorBase, IGetPrescriptionsResultVisitor<IActionResult>
     {
+        public GetPrescriptionsResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, UserSession userSession) 
+            : base(errorReferenceGenerator, userSession)
+        {
+        }
+
+        protected override ErrorCategory ErrorCategory => ErrorCategory.Prescriptions;
+        
         public IActionResult Visit(GetPrescriptionsResult.Success result)
         {
             return new OkObjectResult(result.Response);
@@ -14,32 +21,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 
         public IActionResult Visit(GetPrescriptionsResult.BadGateway result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return BuildErrorResult(StatusCodes.Status502BadGateway);
         }
         
         public IActionResult Visit(GetPrescriptionsResult.Forbidden result)
         {
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+            return BuildErrorResult(StatusCodes.Status403Forbidden);
         }
         
         public IActionResult Visit(GetPrescriptionsResult.BadRequest result)
         {
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            return BuildErrorResult(StatusCodes.Status400BadRequest);
         }
         
         public IActionResult Visit(GetPrescriptionsResult.InternalServerError result)
         {
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        }
-        
-        public IActionResult Visit(GetPrescriptionsResult.CannotReorderPrescription result)
-        {
-            return new StatusCodeResult(StatusCodes.Status409Conflict);
-        }
-
-        public IActionResult Visit(GetPrescriptionsResult.MedicationAlreadyOrderedWithinLast30Days result)
-        {
-            return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status466MedicationAlreadyOrderedWithinLast30Days);
+            return BuildErrorResult(StatusCodes.Status500InternalServerError);
         }
     }
 }

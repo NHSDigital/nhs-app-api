@@ -46,6 +46,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         public async Task<IActionResult> Post([FromBody] ConsentRequest model)
         {
             _logger.LogEnter();
+
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
             
             var userSession = HttpContext.GetUserSession();
 

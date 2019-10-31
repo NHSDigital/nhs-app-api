@@ -36,6 +36,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         public async Task<IActionResult> GetMyRecord([FromHeader(Name=PatientId)] Guid patientId)
         {   
             _logger.LogEnter();
+            
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+            
             _logger.LogDebug($"{nameof(GetMyRecord)} with patientId {patientId}");
    
             var userSession = HttpContext.GetUserSession();

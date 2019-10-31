@@ -12,7 +12,8 @@ namespace NHSOnline.Backend.Support
         None,
         Login,
         Timeout,
-        Appointments
+        Appointments,
+        Prescriptions
     }
     
     //Disabling CA1717 (no plurals) as detects the i as a plural when not in this case
