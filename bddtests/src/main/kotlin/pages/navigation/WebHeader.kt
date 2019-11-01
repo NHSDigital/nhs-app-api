@@ -58,12 +58,12 @@ open class WebHeader : HybridPageObject() {
     )
 
     private val backLinkBar = HybridPageElement(
-            webDesktopLocator = "//div[@id=navbar-breadcrumb]",
+            webDesktopLocator = "//nav[@id='bread-crumb']",
             page = this
     )
 
-    private val backLink = HybridPageElement(
-            webDesktopLocator = backLinkBar.webDesktopLocator + "//a[normalize-space(text())='Back']",
+    val backLink = HybridPageElement(
+            webDesktopLocator = "//nav[@id='bread-crumb']//a[normalize-space(text())='Back']",
             page = this
     )
 

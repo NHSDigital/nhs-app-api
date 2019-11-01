@@ -7,7 +7,7 @@
       <h3>{{ content.subheader }}</h3>
       <p>{{ content.body }}</p>
     </div>
-    <back-button :class="$style['mt-3']"/>
+    <back-button v-if="!$store.state.device.isNativeApp" :class="$style['mt-3']"/>
   </div>
 </template>
 

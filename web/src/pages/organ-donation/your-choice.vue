@@ -24,7 +24,7 @@
                     @click.prevent="continueClicked">
       {{ $t('organDonation.yourChoice.continueButtonText') }}
     </generic-button>
-    <back-button :before="beforeBack" />
+    <back-button v-if="!$store.state.device.isNativeApp" :before="beforeBack" />
   </div>
 </template>
 <script>

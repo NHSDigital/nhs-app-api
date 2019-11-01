@@ -6,7 +6,8 @@
         <find-out-more-link/>
       </li>
     </ul>
-    <generic-button id="back-button"
+    <generic-button v-if="!$store.state.device.isNativeApp"
+                    id="back-button"
                     :class="[$style.button, $style.grey]"
                     @click="goBack" >
       {{ $t('generic.backButton.text') }}

@@ -41,7 +41,7 @@
         {{ $t('organDonation.additionalDetails.continueButton') }}
       </generic-button>
 
-      <back-button />
+      <back-button v-if="!$store.state.device.isNativeApp" />
     </div>
   </div>
 </template>

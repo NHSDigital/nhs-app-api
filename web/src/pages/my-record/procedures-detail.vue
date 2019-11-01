@@ -18,12 +18,6 @@
             </p>
           </div>
         </div>
-        <form v-if="$store.state.device.isNativeApp" :action="myRecordReturnPath" method="get">
-          <input :value="noJsWarningAcceptance" type="hidden" name="nojs">
-          <floating-button-bottom :button-classes="['grey']" @click.prevent="onBackButtonClicked">
-            {{ $t('my_record.procedureDetails.backButton') }}
-          </floating-button-bottom>
-        </form>
         <desktopGenericBackLink
           v-if="!$store.state.device.isNativeApp"
           :path="noJsPath"
@@ -35,14 +29,12 @@
 </template>
 
 <script>
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import { MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
   components: {
-    FloatingButtonBottom,
     DesktopGenericBackLink,
   },
   data() {

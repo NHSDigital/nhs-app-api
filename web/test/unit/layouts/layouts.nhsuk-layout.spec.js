@@ -1,6 +1,20 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { create$T } from '../helpers';
+import {
+  INDEX,
+  LOGIN,
+  SYMPTOMS,
+  APPOINTMENTS,
+  APPOINTMENT_BOOKING,
+  APPOINTMENT_BOOKING_GUIDANCE,
+  APPOINTMENT_CONFIRMATIONS,
+  PRESCRIPTIONS,
+  PRESCRIPTION_REPEAT_COURSES,
+  MYRECORD,
+  GP_MEDICAL_RECORD,
+  MORE,
+} from '@/lib/routes';
 
 const $t = create$T();
 
@@ -16,7 +30,7 @@ const $style = {
 };
 const localVue = createLocalVue();
 
-const createPage = ($store, routeName = 'index') => {
+const createPage = ($store, route = INDEX) => {
   localVue.use(Vuex);
   localVue.mixin({
     methods: {
@@ -32,8 +46,9 @@ const createPage = ($store, routeName = 'index') => {
   };
 
   const $route = {
+    name: route.name,
     query: '',
-    name: routeName,
+    crumb: route.crumb,
   };
 
   const loggedIn = true;
@@ -86,21 +101,20 @@ describe('nhsuk-layout - is native', () => {
     const $store = createStore(true);
 
     const noBreadcrumbPages = [
-      'Login',
-      'symptoms',
-      'appointments',
-      'prescriptions',
-      'my-record',
-      'gp-medical-record',
-      'more',
-      'account',
+      LOGIN,
+      SYMPTOMS,
+      APPOINTMENTS,
+      PRESCRIPTIONS,
+      MYRECORD,
+      GP_MEDICAL_RECORD,
+      MORE,
     ];
 
     const breadcrumbPages = [
-      'appointments-booking-guidance',
-      'appointments-booking',
-      'appointments-confirmation',
-      'prescriptions-repeat-courses',
+      APPOINTMENT_BOOKING_GUIDANCE,
+      APPOINTMENT_BOOKING,
+      APPOINTMENT_CONFIRMATIONS,
+      PRESCRIPTION_REPEAT_COURSES,
     ];
 
     noBreadcrumbPages.forEach((name) => {
@@ -125,20 +139,20 @@ describe('nhsuk-layout - is web', () => {
     const $store = createStore(false);
 
     const noBreadcrumbPages = [
-      'Login',
+      LOGIN,
     ];
 
     const breadcrumbPages = [
-      'appointments-booking-guidance',
-      'appointments-booking',
-      'appointments-confirmation',
-      'prescriptions-repeat-courses',
-      'symptoms',
-      'appointments',
-      'prescriptions',
-      'my-record',
-      'gp-medical-record',
-      'more',
+      APPOINTMENT_BOOKING_GUIDANCE,
+      APPOINTMENT_BOOKING,
+      APPOINTMENT_CONFIRMATIONS,
+      PRESCRIPTION_REPEAT_COURSES,
+      SYMPTOMS,
+      APPOINTMENTS,
+      PRESCRIPTIONS,
+      MYRECORD,
+      GP_MEDICAL_RECORD,
+      MORE,
     ];
 
     noBreadcrumbPages.forEach((name) => {

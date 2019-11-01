@@ -43,7 +43,7 @@
                     @click="clickSubmit">
       {{ $t('organDonation.reviewYourDecision.submitButton') }}
     </generic-button>
-    <back-button />
+    <back-button v-if="!$store.state.device.isNativeApp"/>
   </div>
 </template>
 

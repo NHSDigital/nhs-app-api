@@ -79,7 +79,7 @@ Feature: Organ Donation Withdraw Frontend
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to withdraw my organ donation decision
     Then the Organ Donation Withdraw Decision page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to withdraw my organ donation decision
     Then the Organ Donation Withdraw Decision page is displayed

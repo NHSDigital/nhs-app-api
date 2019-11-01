@@ -1,5 +1,7 @@
 <template>
-  <nav v-if="hasCrumbs && loggedIn" class="nhsuk-breadcrumb"
+  <nav v-if="hasCrumbs && loggedIn"
+       id="bread-crumb"
+       class="nhsuk-breadcrumb"
        aria-label="Breadcrumb">
     <div class="nhsuk-width-container">
       <div class="nhsuk-grid-row">
@@ -45,7 +47,7 @@
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
 import { navigateBack } from '@/lib/utils';
-import { ORGAN_DONATION, MORE } from '@/lib/routes';
+import { ORGAN_DONATION, MORE, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
 
 export default {
   name: 'BreadCrumbTrail',
@@ -68,7 +70,8 @@ export default {
   },
   methods: {
     backLinkClicked() {
-      if (this.$route.name === ORGAN_DONATION.name) {
+      if (this.$route.name === ORGAN_DONATION.name ||
+          this.$route.name === ORGAN_DONATION_VIEW_DECISION.name) {
         // eslint-disable-next-line prefer-destructuring
         let backLinkOverride = this.$store.state.navigation.backLinkOverride;
 

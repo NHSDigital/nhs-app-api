@@ -55,7 +55,7 @@ Feature: Organ Donation - Reaffirm
     Then the Organ Donation View Registration page is displayed
     When I choose to reaffirm my organ donation decision
     Then the Organ Donation Check Details page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation View Registration page is displayed
 
   Scenario: A user can navigate back through the reaffirm opt in journey
@@ -65,9 +65,8 @@ Feature: Organ Donation - Reaffirm
     Then the Organ Donation View Registration page is displayed
     When I choose to reaffirm my organ donation decision
     Then the Organ Donation Check Details page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation View Registration page is displayed
-
 
   Scenario: A user can navigate back through the reaffirm opt in with some organs journey
     Given I am a EMIS user registered as opt-in with some organs who wishes to reaffirm their decision
@@ -86,13 +85,13 @@ Feature: Organ Donation - Reaffirm
     Then the Organ Donation Decision Additional Details page is displayed
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation Decision Additional Details page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation Faith And Beliefs page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation Specific Organ Choice page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation Your Choice page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation View Registration page is displayed

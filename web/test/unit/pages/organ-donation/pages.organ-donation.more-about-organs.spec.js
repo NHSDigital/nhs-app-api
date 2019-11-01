@@ -1,4 +1,3 @@
-import BackButton from '@/components/BackButton';
 import MoreAboutOrgans from '@/pages/organ-donation/more-about-organs';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { createStore, locale, mount } from '../../helpers';
@@ -44,20 +43,6 @@ describe('organ donation more about organs', () => {
     it('will add each content item with a body', () => {
       const items = locale.organDonation.moreAboutOrgans.contentItems;
       items.forEach((item, index) => expect(bodies.at(index).text()).toBe(item.body));
-    });
-  });
-
-  describe('back', () => {
-    describe('button', () => {
-      let backButton;
-
-      beforeEach(() => {
-        backButton = wrapper.find(BackButton);
-      });
-
-      it('will exist', () => {
-        expect(backButton.exists()).toBe(true);
-      });
     });
   });
 });

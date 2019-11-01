@@ -72,6 +72,7 @@ const routes = {
     name: 'account',
     path: '/account',
     crumb: {
+      nativeDisabled: true,
       i8nKey: 'account',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -114,6 +115,7 @@ const routes = {
     name: 'appointments',
     path: '/appointments',
     crumb: {
+      nativeDisabled: true,
       i8nKey: 'appointments',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -364,6 +366,7 @@ const routes = {
     path: '/login',
     isAnonymous: true,
     crumb: {
+      nativeDisabled: true,
       get parentRoute() {
         return undefined;
       },
@@ -421,6 +424,7 @@ const routes = {
     name: 'more',
     path: '/more',
     crumb: {
+      nativeDisabled: true,
       i8nKey: 'more',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -437,6 +441,7 @@ const routes = {
     name: 'my-record',
     path: '/my-record',
     crumb: {
+      nativeDisabled: true,
       i8nKey: 'myRecord',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -453,6 +458,7 @@ const routes = {
     name: 'gp-medical-record',
     path: '/gp-medical-record',
     crumb: {
+      nativeDisabled: true,
       i8nKey: 'myRecord',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -829,6 +835,7 @@ const routes = {
     name: 'prescriptions',
     path: '/prescriptions',
     crumb: {
+      nativeDisabled: true,
       i8nKey: 'prescriptions',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -891,6 +898,7 @@ const routes = {
     name: 'symptoms',
     path: '/symptoms',
     crumb: {
+      nativeDisabled: true,
       i8nKey: 'symptoms',
       get parentRoute() {
         return this.allRoutes.INDEX;

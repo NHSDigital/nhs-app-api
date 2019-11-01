@@ -1,4 +1,3 @@
-import BackButton from '@/components/BackButton';
 import RadioGroup from '@/components/RadioGroup';
 import YourChoice from '@/pages/organ-donation/your-choice';
 import { ORGAN_DONATION_FAITH } from '@/lib/routes';
@@ -8,6 +7,9 @@ import { createRouter, createStore, mount } from '../../helpers';
 const createState = (choice = '') => {
   const state = {
     organDonation: initialState(),
+    device: {
+      isNativeApp: true,
+    },
   };
 
   state.organDonation.registration.decisionDetails.all = choice;
@@ -36,24 +38,6 @@ describe('organ donation your choice page', () => {
 
   it('will have radio buttons', () => {
     expect(wrapper.find(RadioGroup).exists()).toBe(true);
-  });
-
-  describe('back', () => {
-    describe('button', () => {
-      let backButton;
-
-      beforeEach(() => {
-        backButton = wrapper.find(BackButton);
-        $style = {
-          button: 'button',
-          grey: 'grey',
-        };
-      });
-
-      it('will exist', () => {
-        expect(backButton.exists()).toBe(true);
-      });
-    });
   });
 
   describe('continue', () => {

@@ -54,5 +54,5 @@ Feature: Messages
       Then the Messages Inbox page is displayed
       When I click on a sender in the Messages Inbox
       Then the Messages page is displayed
-      When I click the 'Messages' breadcrumb
+      When I click the back link
       Then the Messages Inbox page is displayed

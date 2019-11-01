@@ -38,7 +38,8 @@
                       @click.stop.prevent="continueClicked">
         {{ $t('organDonation.withdrawReason.continueButton') }}
       </generic-button>
-      <generic-button id="back-button"
+      <generic-button v-if="!$store.state.device.isNativeApp"
+                      id="back-button"
                       :class="[$style.button, $style.grey]"
                       @click.stop.prevent="goBack" >
         {{ $t('generic.backButton.text') }}

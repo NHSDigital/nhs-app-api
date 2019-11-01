@@ -38,3 +38,29 @@ Feature: Use the navigation header bar
     When I click the back link
     Then the My Appointments page is displayed
     And the back bar is not visible
+
+  Scenario: A user can navigate through organ donation with the dynamic back button
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt in
+    And I navigate to the internal Organ Donation Choice Page
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    When I select the option to donate all my organs
+    And I click the 'Continue' button on an Organ Donation page
+    Then the Organ Donation Faith And Beliefs page is displayed
+    And no options on the Organ Donation Faith And Beliefs page are selected
+    When I select an option in sharing my organ donation faith and beliefs
+    And I click the 'Continue' button on an Organ Donation page
+    Then the Organ Donation Decision Additional Details page is displayed
+    When I click the 'Continue' button on an Organ Donation page
+    Then the Organ Donation Check Details page is displayed
+    And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the back link
+    Then the Organ Donation Decision Additional Details page is displayed
+    When I click the back link
+    Then the Organ Donation Faith And Beliefs page is displayed
+    When I click the back link
+    Then the Organ Donation Your Choice page is displayed
+    When I click the back link
+    And I click the back link
+    Then I am on the More Page

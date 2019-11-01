@@ -5,7 +5,7 @@
              :description="description"
              :header-tag="headerTag"
              :click-func="onClickOrganDonation"
-             :prevent-default="true"
+             :prevent-default="useIntegratedOrganDonation"
              :target="organDonationTarget"
              :aria-label="ariaLabelCaption(
                'sc04.organDonation.subheader',

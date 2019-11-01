@@ -63,14 +63,7 @@ import {
   GP_FINDER,
   INDEX,
   LOGIN,
-  APPOINTMENTS,
-  PRESCRIPTIONS,
-  MYRECORD,
-  GP_MEDICAL_RECORD,
   MESSAGING_MESSAGES,
-  SYMPTOMS,
-  MORE,
-  ACCOUNT,
 } from '@/lib/routes';
 
 export default {
@@ -175,18 +168,8 @@ export default {
       );
     },
     breadcrumbDisabledNative() {
-      if (this.$store.state.device.isNativeApp) {
-        return (
-          this.$route.name === APPOINTMENTS.name ||
-          this.$route.name === PRESCRIPTIONS.name ||
-          this.$route.name === MYRECORD.name ||
-          this.$route.name === GP_MEDICAL_RECORD.name ||
-          this.$route.name === SYMPTOMS.name ||
-          this.$route.name === MORE.name ||
-          this.$route.name === ACCOUNT.name
-        );
-      }
-      return false;
+      return this.$store.state.device.isNativeApp &&
+        (findByName(this.$route.name).crumb || {}).nativeDisabled;
     },
     shouldShowContentHeader() {
       return this.loggedIn &&

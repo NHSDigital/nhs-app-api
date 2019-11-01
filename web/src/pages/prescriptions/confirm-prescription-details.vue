@@ -38,13 +38,7 @@
       </CardGroupItem>
     </CardGroup>
     <div>
-      <generic-button v-if="$store.state.device.isNativeApp"
-                      id="back-to-prescriptions"
-                      :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                      @click="backToPrescriptionsClicked">
-        {{ $t('rp04.backButton') }}
-      </generic-button>
-      <desktopGenericBackLink v-else
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                               :path="prescriptionRepeatCoursesPath"
                               :button-text="'rp04.backButton'"
                               @clickAndPrevent="backToPrescriptionsClicked"/>

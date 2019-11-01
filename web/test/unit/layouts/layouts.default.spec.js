@@ -4,6 +4,20 @@ import ContentHeader from '@/components/widgets/ContentHeader';
 import WebHeader from '@/components/widgets/WebHeader';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { create$T } from '../helpers';
+import {
+  INDEX,
+  LOGIN,
+  SYMPTOMS,
+  APPOINTMENTS,
+  APPOINTMENT_BOOKING,
+  APPOINTMENT_BOOKING_GUIDANCE,
+  APPOINTMENT_CONFIRMATIONS,
+  PRESCRIPTIONS,
+  PRESCRIPTION_REPEAT_COURSES,
+  MYRECORD,
+  GP_MEDICAL_RECORD,
+  MORE,
+} from '@/lib/routes';
 
 const $t = create$T();
 
@@ -20,7 +34,7 @@ const $style = {
 const localVue = createLocalVue();
 
 
-const createDefaultPage = ($store, routeName = 'index') => {
+const createDefaultPage = ($store, route = INDEX) => {
   localVue.use(Vuex);
   localVue.mixin({
     methods: {
@@ -35,8 +49,9 @@ const createDefaultPage = ($store, routeName = 'index') => {
     name: 'HotJar',
   };
   const $route = {
+    name: route.name,
     query: '',
-    name: routeName,
+    crumb: route.crumb,
   };
   const loggedIn = true;
   return shallowMount(DefaultPage, {
@@ -130,20 +145,20 @@ describe('default.vue - is native', () => {
     const $store = createStore(true);
 
     const noBreadcrumbPages = [
-      'Login',
-      'symptoms',
-      'appointments',
-      'prescriptions',
-      'my-record',
-      'gp-medical-record',
-      'more',
+      LOGIN,
+      SYMPTOMS,
+      APPOINTMENTS,
+      PRESCRIPTIONS,
+      MYRECORD,
+      GP_MEDICAL_RECORD,
+      MORE,
     ];
 
     const breadcrumbPages = [
-      'appointments-booking-guidance',
-      'appointments-booking',
-      'appointments-confirmation',
-      'prescriptions-repeat-courses',
+      APPOINTMENT_BOOKING_GUIDANCE,
+      APPOINTMENT_BOOKING,
+      APPOINTMENT_CONFIRMATIONS,
+      PRESCRIPTION_REPEAT_COURSES,
     ];
 
     noBreadcrumbPages.forEach((name) => {
@@ -219,20 +234,20 @@ describe('default.vue - is web', () => {
     const $store = createStore(false);
 
     const noBreadcrumbPages = [
-      'Login',
+      LOGIN,
     ];
 
     const breadcrumbPages = [
-      'appointments-booking-guidance',
-      'appointments-booking',
-      'appointments-confirmation',
-      'prescriptions-repeat-courses',
-      'symptoms',
-      'appointments',
-      'prescriptions',
-      'my-record',
-      'gp-medical-record',
-      'more',
+      APPOINTMENT_BOOKING_GUIDANCE,
+      APPOINTMENT_BOOKING,
+      APPOINTMENT_CONFIRMATIONS,
+      PRESCRIPTION_REPEAT_COURSES,
+      SYMPTOMS,
+      APPOINTMENTS,
+      PRESCRIPTIONS,
+      MYRECORD,
+      GP_MEDICAL_RECORD,
+      MORE,
     ];
 
     noBreadcrumbPages.forEach((name) => {

@@ -228,7 +228,7 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
-    When I click the 'Back' button on an Organ Donation page
+    When I click the back link
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
 
   Scenario: A user is informed when an amended registration is in conflicted state

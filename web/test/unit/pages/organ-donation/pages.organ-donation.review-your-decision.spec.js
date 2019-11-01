@@ -1,5 +1,4 @@
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
-import BackButton from '@/components/BackButton';
 import ContactDetails from '@/components/organ-donation/ContactDetails';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import PersonalDetails from '@/components/organ-donation/PersonalDetails';
@@ -85,10 +84,6 @@ describe('review your decision', () => {
 
   it('will not show withdraw body text', () => {
     expect(wrapper.text()).not.toContain('translate_organDonation.reviewYourDecision.withdraw.body');
-  });
-
-  it('will have a back button', () => {
-    expect(wrapper.find(BackButton).exists()).toBe(true);
   });
 
   describe('is withdrawing', () => {
