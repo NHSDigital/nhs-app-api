@@ -19,7 +19,7 @@ jest.mock('@/lib/online-consultations/mappers/parameters');
 jest.mock('@/lib/online-consultations/mappers/response');
 jest.mock('@/lib/online-consultations/mappers/item');
 
-const { getServiceDefinition, evaluateServiceDefinition, setNames } = actions;
+const { getServiceDefinition, evaluateServiceDefinition, setProviderNames } = actions;
 
 const commit = jest.fn();
 const store = {
@@ -506,30 +506,36 @@ describe('online consultations store actions', () => {
       });
     });
   });
-  describe('setName', () => {
-    describe('setsNames correctly', () => {
+  describe('setProviderNames', () => {
+    describe('sets provider names correctly', () => {
       it('will set names when they exist', () => {
         store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider
           .mockImplementation(
             () => Promise.resolve({ response: 'test' }),
           );
-        setNames.call(store, { commit, state, rootState },
-          { adminProviderName: 'test', adviceProviderName: 'test' })
+        setProviderNames.call(store, { commit, state, rootState },
+          {
+            adminProviderName: 'test',
+            adviceProviderName: 'test',
+          })
           .then(() => {
             // Assert
             expect(store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider)
               .toHaveBeenCalledTimes(2);
             expect(commit)
-              .toHaveBeenCalledWith(SET_ADMIN_PROVIDER_NAME, 'test');
+              .toHaveBeenCalledWith(SET_ADMIN_PROVIDER_NAME, { response: 'test' });
             expect(commit)
-              .toHaveBeenCalledWith(SET_ADVICE_PROVIDER_NAME, 'test');
+              .toHaveBeenCalledWith(SET_ADVICE_PROVIDER_NAME, { response: 'test' });
           });
       });
     });
-    describe('setsNames none', () => {
+    describe('setProviderNames none', () => {
       it('will not set names when they are none', () => {
-        setNames.call(store, { commit, state, rootState },
-          { adminProviderName: 'none', adviceProviderName: 'none' })
+        setProviderNames.call(store, { commit, state, rootState },
+          {
+            adminProviderName: 'none',
+            adviceProviderName: 'none',
+          })
           .then(() => {
             // Assert
             expect(store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider)

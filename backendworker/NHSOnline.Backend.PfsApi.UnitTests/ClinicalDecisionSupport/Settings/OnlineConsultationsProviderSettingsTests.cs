@@ -42,18 +42,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.Settings
         [DataRow("")]
         [DataRow("   ")]
         [ExpectedException(typeof(ConfigurationNotFoundException))]
-        public void Validate_WhenBearerTokenIsNullOrEmpty_ThrowsConfigurationNotFoundException(string bearerToken)
+        public void Validate_WhenBaseAddressIsNullOrEmpty_ThrowsConfigurationNotFoundException(string baseAddress)
         {
             // Arrange
-            _providerSettings.BearerToken = bearerToken;
+            _providerSettings.BaseAddress = baseAddress;
             
             // Act
             _providerSettings.Validate();
         }
 
         [TestMethod]
-        [DataRow("")]
-        [DataRow("   ")]
         [DataRow("randomte.ccccc")]
         [ExpectedException(typeof(UriFormatException))]
         public void Validate_WhenBaseAddressIsInvalidUrl_ThrowsUriFormatException(string baseAddress)
@@ -66,22 +64,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.Settings
         }
         
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Validate_WhenBaseAddressIsNull_ThrowsUriFormatException()
-        {
-            // Arrange
-            _providerSettings.BaseAddress = null;
-            
-            // Act
-            _providerSettings.Validate();
-        }
-        
-        [TestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow("   ")]
         [ExpectedException(typeof(ConfigurationNotFoundException))]
-        public void Validate_WhenProviderNAmeIsNullOrEmpty_ThrowsConfigurationNotFoundException(string provider)
+        public void Validate_WhenProviderNameIsNullOrEmpty_ThrowsConfigurationNotFoundException(string provider)
         {
             // Arrange
             _providerSettings.ProviderName = provider;

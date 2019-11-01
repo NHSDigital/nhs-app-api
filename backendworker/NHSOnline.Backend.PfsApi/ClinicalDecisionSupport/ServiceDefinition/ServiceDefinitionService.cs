@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
@@ -198,14 +199,20 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
         }
 
-        public ServiceDefinitionResult GetProviderName(string provider)
+        public ServiceDefinitionResult GetProviderName(string providerKey)
         {
             _logger.LogEnter();
-            
-            var retrievedProvider = _olcProvidersSettings.getProvider(provider);
-            var providerName = retrievedProvider.ProviderName;
+
+            var provider = _olcProvidersSettings.Providers
+                .FirstOrDefault(a => a.Provider.Equals(providerKey, StringComparison.Ordinal));
+
+            if (provider == null) {
+                return new ServiceDefinitionResult.NotFound();
+            }
+
             _logger.LogExit();
-            return new ServiceDefinitionResult.Success(providerName);
+
+            return new ServiceDefinitionResult.Success(provider.ProviderName);
         }
 
         public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(

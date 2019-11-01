@@ -181,12 +181,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
         [HttpGet]
         [Route("/fhir/ServiceDefinition/providerName/{provider}")]
-        public ServiceDefinitionResult GetProviderName([FromRoute(Name = "provider")] string provider)
+        public IActionResult GetProviderName([FromRoute(Name = "provider")] string provider)
         {
             _logger.LogEnter();
             try
             {
-                return _service.GetProviderName(provider);
+                var visitor = new ServiceDefinitionResultVisitor();
+                var result = _service.GetProviderName(provider);
+
+                return result.Accept(visitor);
             }
             finally
             {

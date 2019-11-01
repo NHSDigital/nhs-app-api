@@ -11,7 +11,7 @@ export default async ({ route, store }) => {
     && (route.name === APPOINTMENT_ADMIN_HELP.name
         || route.name === APPOINTMENT_GP_ADVICE.name
         || route.name === APPOINTMENT_GP_ADVICE_CONDITIONS.name)) {
-    await store.dispatch('onlineConsultations/setNames',
+    await store.dispatch('onlineConsultations/setProviderNames',
       { adminProviderName: store.state.serviceJourneyRules.rules.cdssAdmin.provider,
         adviceProviderName: store.state.serviceJourneyRules.rules.cdssAdvice.provider,
       });

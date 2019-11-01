@@ -8,11 +8,15 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings
         public string Provider { get; set; }
         public string BaseAddress { get; set; }
         public string BearerToken { get; set; }
-        
         public string ProviderName { get; set; }
 
         public void Validate()
         {
+            if (string.IsNullOrWhiteSpace(BaseAddress))
+            {
+                throw new ConfigurationNotFoundException("OnlineConsultationsProvider.BaseAddress");
+            }
+
             if (string.IsNullOrWhiteSpace(Provider))
             {
                 throw new ConfigurationNotFoundException("OnlineConsultationsProvider.Provider");
@@ -23,11 +27,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings
                 throw new ConfigurationNotFoundException("OnlineConsultationsProvider.ProviderName");
             }
             
-            if (string.IsNullOrWhiteSpace(BearerToken))
-            {
-                throw new ConfigurationNotFoundException("OnlineConsultationsProvider.BearerToken");
-            }
-
             var uri = new Uri(BaseAddress);
         }
     }

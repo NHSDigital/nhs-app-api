@@ -59,7 +59,7 @@ describe('middleware/onlineConsultations', () => {
       });
     });
 
-    it('will not dispatch `onlineConsultations/setNames`', () => {
+    it('will not dispatch `onlineConsultations/setProviderNames`', () => {
       expect(store.dispatch).not.toBeCalled();
     });
   });
@@ -75,7 +75,7 @@ describe('middleware/onlineConsultations', () => {
       });
     });
 
-    it('will dispatch `onlineConsultations/setNames`', () => {
+    it('will dispatch `onlineConsultations/setProviderNames`', () => {
       expect(store.dispatch).toBeCalled();
     });
   });
@@ -91,7 +91,7 @@ describe('middleware/onlineConsultations', () => {
       });
     });
 
-    it('will dispatch `onlineConsultations/setNames`', () => {
+    it('will dispatch `onlineConsultations/setProviderNames`', () => {
       expect(store.dispatch).toBeCalled();
     });
   });
@@ -107,7 +107,7 @@ describe('middleware/onlineConsultations', () => {
       });
     });
 
-    it('will dispatch `onlineConsultations/setNames`', () => {
+    it('will dispatch `onlineConsultations/setProviderNames`', () => {
       expect(store.dispatch).not.toBeCalled();
     });
   });
@@ -123,7 +123,7 @@ describe('middleware/onlineConsultations', () => {
       });
     });
 
-    it('will dispatch `onlineConsultations/setNames`', () => {
+    it('will dispatch `onlineConsultations/setProviderNames`', () => {
       expect(store.dispatch).not.toBeCalled();
     });
   });

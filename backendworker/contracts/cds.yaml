@@ -213,6 +213,8 @@ paths:
               schema:
                 type: string
                 description: provider name
+        "404":
+          description: provider name was not found in the configuration
 components:
   requestBodies:
     olcEvaluate:

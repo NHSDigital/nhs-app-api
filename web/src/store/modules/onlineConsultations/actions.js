@@ -47,19 +47,19 @@ export default {
   clear({ commit }, clearDemographicsConsent) {
     commit(CLEAR, clearDemographicsConsent);
   },
-  async setNames({ commit }, { adminProviderName, adviceProviderName }) {
+  async setProviderNames({ commit }, { adminProviderName, adviceProviderName }) {
     if (adminProviderName !== 'none') {
       await this.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider({
         provider: adminProviderName,
       }).then((providerName) => {
-        commit(SET_ADMIN_PROVIDER_NAME, providerName.response);
+        commit(SET_ADMIN_PROVIDER_NAME, providerName);
       }).catch(() => {});
     }
     if (adviceProviderName !== 'none') {
       await this.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider({
         provider: adviceProviderName,
       }).then((providerName) => {
-        commit(SET_ADVICE_PROVIDER_NAME, providerName.response);
+        commit(SET_ADVICE_PROVIDER_NAME, providerName);
       }).catch(() => {});
     }
   },
