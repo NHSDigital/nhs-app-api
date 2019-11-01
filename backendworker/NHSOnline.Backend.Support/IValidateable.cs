@@ -1,6 +1,6 @@
 
 namespace NHSOnline.Backend.Support {
-    public interface IValidateable
+    public interface IValidatable
     {   
         void Validate();
     }

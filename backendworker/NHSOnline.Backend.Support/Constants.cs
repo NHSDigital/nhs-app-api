@@ -96,7 +96,12 @@ namespace NHSOnline.Backend.Support
         {
             public const string RequestIdentifierHeader = "type";
         }
-        
+
+        public static class OnlineConsultationConstants
+        {
+            public const string RequestIdentifierHeader = "type";
+        }
+
         public static class VisionConstants
         {
             public const string RequestIdentifierHeader = "type";

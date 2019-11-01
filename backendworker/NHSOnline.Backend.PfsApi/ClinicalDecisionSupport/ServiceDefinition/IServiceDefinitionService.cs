@@ -8,10 +8,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 {
     public interface IServiceDefinitionService
     {
-        Task<ServiceDefinitionResult> GetServiceDefinitionById(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, string provider, UserSession userSession);
-        Task<ServiceDefinitionResult> EvaluateServiceDefinition(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, Parameters parameters, bool addJavascriptDisabledHeader, bool demographicsConsentGiven, UserSession userSession);
-        Task<ServiceDefinitionListResult> GetServiceDefinitions(IOnlineConsultationsProviderHttpClient httpClient);
-        
+        Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey, string serviceDefinitionId, UserSession userSession);
+        Task<ServiceDefinitionResult> EvaluateServiceDefinition(string providerKey, string serviceDefinitionId, Parameters parameters, bool addJavascriptDisabledHeader, bool demographicsConsentGiven, UserSession userSession);
         ServiceDefinitionResult GetProviderName(string providerKey);
     }
 }

@@ -3,7 +3,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp {
-    public class TppConfigurationSettings: IValidateable
+    public class TppConfigurationSettings: IValidatable
     {
         public Uri ApiUrl { get; set; }
         public string ApiVersion { get; set; }

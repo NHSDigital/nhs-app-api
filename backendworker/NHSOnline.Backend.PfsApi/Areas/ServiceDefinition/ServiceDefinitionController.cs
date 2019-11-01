@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.Support.AspNet;
@@ -17,53 +16,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
     {
         private readonly IServiceDefinitionService _service;
         private readonly ILogger<ServiceDefinitionController> _logger;
-        private readonly IOnlineConsultationsProviderHttpClientPool _onlineConsultationsProviderHttpClientPool;
 
         public ServiceDefinitionController(
             IServiceDefinitionService service,
-            ILoggerFactory loggerFactory,
-            IOnlineConsultationsProviderHttpClientPool onlineConsultationsProviderHttpClientPool)
+            ILoggerFactory loggerFactory)
         {
             _service = service;
             _logger = loggerFactory.CreateLogger<ServiceDefinitionController>();
-            _onlineConsultationsProviderHttpClientPool = onlineConsultationsProviderHttpClientPool;
-        }
-
-        [HttpGet]
-        [Route("fhir/ServiceDefinition/{provider}")]
-        public async Task<IActionResult> GetServiceDefinitions([FromRoute(Name = "provider")] string provider)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                var visitor = new ServiceDefinitionListResultVisitor();
-
-                if (string.IsNullOrWhiteSpace(provider))
-                {
-                  _logger.LogError("Missing provider in route");
-                  return new ServiceDefinitionListResult.BadRequest().Accept(visitor);
-                }
-
-                var httpClient =
-                    _onlineConsultationsProviderHttpClientPool.GetClientByProviderName(
-                        provider);
-
-                if (httpClient == null)
-                {
-                    _logger.LogError($"No http client found for provider {provider}");
-
-                    return new ServiceDefinitionListResult.BadRequest().Accept(visitor);
-                }
-
-                var result = await _service.GetServiceDefinitions(httpClient);
-
-                return result.Accept(visitor);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
         }
 
         [HttpGet]
@@ -77,32 +36,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 var visitor = new ServiceDefinitionResultVisitor();
 
-                if (string.IsNullOrWhiteSpace(provider))
-                {
-                  _logger.LogError("Missing provider in route");
-                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
-                }
-
-                if (string.IsNullOrWhiteSpace(serviceDefinitionId))
-                {
-                  _logger.LogError("Missing serviceDefinition in route");
-                  return new ServiceDefinitionResult.BadRequest().Accept(visitor);
-                }
-
-                var httpClient =
-                    _onlineConsultationsProviderHttpClientPool.GetClientByProviderName(
-                        provider);
-
-                if (httpClient == null)
-                {
-                    _logger.LogError($"No http client found for provider {provider}");
-
-                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
-                }
-                
                 var userSession = HttpContext.GetUserSession();
 
-                var result = await _service.GetServiceDefinitionById(httpClient, serviceDefinitionId, provider, userSession);
+                var result = await _service.GetServiceDefinitionById(provider, serviceDefinitionId, userSession);
 
                 _logger.LogInformation($"Starting consultation with ServiceDefinition: {serviceDefinitionId}");
 
@@ -127,19 +63,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             {
                 var visitor = new ServiceDefinitionResultVisitor();
 
-                if (string.IsNullOrWhiteSpace(provider))
-                {
-                    _logger.LogError("Missing provider in querystring");
-                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
-                }
-
-
-                if (string.IsNullOrWhiteSpace(serviceDefinitionId))
-                {
-                    _logger.LogError("Missing service definition in querystring");
-                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
-                }
-
                 _logger.LogEnter();
 
                 if (parameters == null)
@@ -150,21 +73,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 }
                 
                 var userSession = HttpContext.GetUserSession();
-                var httpClient =
-                    _onlineConsultationsProviderHttpClientPool.GetClientByProviderName(
-                        provider);
-
-                if (httpClient == null)
-                {
-                    _logger.LogError($"No http client found for provider {provider}");
-
-                    return new ServiceDefinitionResult.BadRequest().Accept(visitor);
-                }
-
+            
                 _logger.LogInformation($"Evaluating ServiceDefinition: {serviceDefinitionId}");
 
                 return (await _service.EvaluateServiceDefinition(
-                        httpClient,
+                        provider,
                         serviceDefinitionId,
                         parameters,
                         "true".Equals(Request.Headers[Constants.HttpHeaders.JavascriptDisabled],

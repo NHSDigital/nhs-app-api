@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
     public class ServiceDefinitionService: IServiceDefinitionService
     {
         private readonly ILogger<ServiceDefinitionService> _logger;
-        private readonly IServiceDefinitionListBuilder _serviceDefinitionListBuilder;
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IFhirSanitizationHelper _fhirSanitizationHelper;
         
@@ -33,21 +32,20 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ICreateFhirParameter _createFhirParameter;
         private readonly OnlineConsultationsProvidersSettings _olcProvidersSettings;
+        private readonly IEvaluateServiceDefinitionQuery _evaluateServiceDefinitionQuery;
 
         public ServiceDefinitionService(
             ILogger<ServiceDefinitionService> logger,
-            IServiceDefinitionListBuilder serviceDefinitionListBuilder,
             IHtmlSanitizer htmlSanitizer,
             IFhirSanitizationHelper fhirSanitizationHelper,
             IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
             IAuditor auditor, 
             IGpSystemFactory gpSystemFactory,
             ICreateFhirParameter createFhirParameter,
-            OnlineConsultationsProvidersSettings olcProvidersSettings
-            )
+            OnlineConsultationsProvidersSettings olcProvidersSettings,
+            IEvaluateServiceDefinitionQuery evaluateServiceDefinitionQuery)
         {
             _logger = logger;
-            _serviceDefinitionListBuilder = serviceDefinitionListBuilder;
             _htmlSanitizer = htmlSanitizer;
             _fhirSanitizationHelper = fhirSanitizationHelper;
 
@@ -62,9 +60,10 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _createFhirParameter = createFhirParameter;
 
             _olcProvidersSettings = olcProvidersSettings;
+            _evaluateServiceDefinitionQuery = evaluateServiceDefinitionQuery;
         }
 
-        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(IOnlineConsultationsProviderHttpClient httpClient, string serviceDefinitionId, string provider, UserSession userSession)
+        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey, string serviceDefinitionId, UserSession userSession)
         {
             try
             {
@@ -82,12 +81,15 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                 try
                 {
-                    responseMessage = await httpClient.EvaluateServiceDefinition(serviceDefinitionId,
-                        bodyString, false);
+                    responseMessage = await _evaluateServiceDefinitionQuery.EvaluateServiceDefinition(
+                        providerKey,
+                        serviceDefinitionId,
+                        bodyString,
+                        false);
                 }
                 catch (HttpRequestException hre)
                 {
-                    _logger.LogError($"Error sending request to CDSS supplier: {hre.Message}");
+                    _logger.LogError($"Error sending request to CDSS supplier: {hre.Message}", hre);
 
                     return new ServiceDefinitionResult.BadRequest();
                 }
@@ -137,68 +139,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
         }
 
-        public async Task<ServiceDefinitionListResult> GetServiceDefinitions(IOnlineConsultationsProviderHttpClient httpClient)
-        {
-            try
-            {
-                HttpResponseMessage responseMessage;
-                Bundle bundle;
-                
-                _logger.LogEnter();
-
-                try
-                {
-                    responseMessage = await httpClient.SearchServiceDefinitionsByQuery();
-                }
-                catch (HttpRequestException hre)
-                {
-                    _logger.LogError($"Error sending request to CDSS supplier: {hre.Message}");
-
-                    return new ServiceDefinitionListResult.BadRequest();
-                }
-
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"Supplier responded with status code: {responseMessage.StatusCode}");
-
-                    return new ServiceDefinitionListResult.BadGateway();
-                }
-                
-                _logger.LogInformation($"Supplier responded with status code: {responseMessage.StatusCode}");
-
-                var stringResponse = responseMessage.Content != null
-                    ? await responseMessage.Content.ReadAsStringAsync()
-                    : null;
-
-                _logger.LogInformation($"Supplier responded with status code: {responseMessage.StatusCode}");
-
-                try
-                {
-                    bundle = _parser.Parse<Bundle>(stringResponse);
-                }
-                catch (ArgumentNullException)
-                {
-                    _logger.LogError("Received null content from provider");
-
-                    return new ServiceDefinitionListResult.BadGateway();
-                }
-                catch (FormatException fe)
-                {
-                    _logger.LogError($"Failed to parse search result bundle: {fe.Message}");
-
-                    return new ServiceDefinitionListResult.BadGateway();
-                }
-                
-                var serviceDefinitionList = _serviceDefinitionListBuilder.BuildServiceDefinitionList(bundle);
-
-                return new ServiceDefinitionListResult.Success(serviceDefinitionList);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
         public ServiceDefinitionResult GetProviderName(string providerKey)
         {
             _logger.LogEnter();
@@ -216,7 +156,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         }
 
         public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(
-            IOnlineConsultationsProviderHttpClient httpClient,
+            string providerKey,
             string serviceDefinitionId,
             Parameters parameters,
             bool addJavascriptDisabledHeader,
@@ -267,8 +207,11 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                 try
                 {
-                    responseMessage = await httpClient.EvaluateServiceDefinition(serviceDefinitionId,
-                        _serializer.SerializeToString(parameters), addJavascriptDisabledHeader);
+                    responseMessage = await _evaluateServiceDefinitionQuery.EvaluateServiceDefinition(
+                        providerKey,
+                        serviceDefinitionId,
+                        _serializer.SerializeToString(parameters),
+                        addJavascriptDisabledHeader);
                 }
                 catch (HttpRequestException hre)
                 {

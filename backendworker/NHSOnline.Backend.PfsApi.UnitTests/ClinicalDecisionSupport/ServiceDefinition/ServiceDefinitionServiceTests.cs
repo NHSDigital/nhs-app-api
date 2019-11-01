@@ -1,577 +1,586 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using AutoFixture;
-using AutoFixture.AutoMoq;
-using FluentAssertions;
-using Hl7.Fhir.Model;
-using Hl7.Fhir.Serialization;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Sanitization;
-using UnitTestHelper;
-using Address = Hl7.Fhir.Model.Address;
-using Constants = NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Constants;
-using Task = System.Threading.Tasks.Task;
+ using System;
+ using System.Collections.Generic;
+ using System.Net;
+ using System.Net.Http;
+ using System.Text;
+ using AutoFixture;
+ using AutoFixture.AutoMoq;
+ using FluentAssertions;
+ using Hl7.Fhir.Model;
+ using Hl7.Fhir.Serialization;
+ using Microsoft.Extensions.Logging;
+ using Microsoft.VisualStudio.TestTools.UnitTesting;
+ using Moq;
+ using NHSOnline.Backend.Auditing;
+ using NHSOnline.Backend.GpSystems;
+ using NHSOnline.Backend.GpSystems.Demographics;
+ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
+ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
+ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
+ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
+ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
+ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
+ using NHSOnline.Backend.Support;
+ using NHSOnline.Backend.Support.Sanitization;
+ using UnitTestHelper;
+ using Address = Hl7.Fhir.Model.Address;
+ using Constants = NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Constants;
+ using Task = System.Threading.Tasks.Task;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefinition
-{
-    [TestClass]
-    public class ServiceDefinitionServiceTests
-    {
-        private IFixture _fixture;
-        private Mock<IHtmlSanitizer> _mockHtmlSanitizer;
-        private Mock<IFhirSanitizationHelper> _mockFhirSanitizationHelper;
-        private Mock<ILogger<ServiceDefinitionService>> _mockLogger;
-        private Mock<IOnlineConsultationsProviderHttpClient> _mockProviderHttpClient;
-        private Mock<IMapper<DemographicsResponse, OlcDemographics>> _mockDemographicsOlcMapper;
-        private Mock<IAuditor> _mockAuditor;
-        private UserSession _userSession;
-        private Mock<IGpSystem> _mockGpSystem;
-        private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private Mock<IDemographicsService> _mockDemographicsService;
-        private Mock<ICreateFhirParameter> _mockCreateFhirParam;
-        private Mock<IServiceDefinitionListBuilder> _mockServiceDefinitionListBuilder;
+ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefinition
+ {
+     [TestClass]
+     public class ServiceDefinitionServiceTests
+     {
+         private IFixture _fixture;
+         private Mock<IHtmlSanitizer> _mockHtmlSanitizer;
+         private Mock<IFhirSanitizationHelper> _mockFhirSanitizationHelper;
+         private Mock<ILogger<ServiceDefinitionService>> _mockLogger;
+         private Mock<IMapper<DemographicsResponse, OlcDemographics>> _mockDemographicsOlcMapper;
+         private Mock<IAuditor> _mockAuditor;
+         private UserSession _userSession;
+         private Mock<IGpSystem> _mockGpSystem;
+         private Mock<IGpSystemFactory> _mockGpSystemFactory;
+         private Mock<IDemographicsService> _mockDemographicsService;
+         private Mock<ICreateFhirParameter> _mockCreateFhirParam;
+         private Mock<IEvaluateServiceDefinitionQuery> _mockEvaluateServiceDefinitionQuery;
         
-        private const string ServiceDefinitionId = "testId";
-        private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\" }";
-        private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
-        private const string paramString =
-            "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
+         private const string ServiceDefinitionId = "testId";
+         private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\" }";
+         private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
+         private const string paramString =
+             "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
 
-        private ServiceDefinitionService _service;
-        private DemographicsResult _demographicsResult;
+         private ServiceDefinitionService _service;
+         private DemographicsResult _demographicsResult;
         
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-            _mockHtmlSanitizer = new Mock<IHtmlSanitizer>();
-            _mockFhirSanitizationHelper = new Mock<IFhirSanitizationHelper>();
-            _mockLogger = new Mock<ILogger<ServiceDefinitionService>>();
-            _mockProviderHttpClient = new Mock<IOnlineConsultationsProviderHttpClient>();
-            _mockDemographicsOlcMapper = new Mock<IMapper<DemographicsResponse, OlcDemographics>>();
-            _mockAuditor = new Mock<IAuditor>();
-            _mockCreateFhirParam = new Mock<ICreateFhirParameter>();
+         [TestInitialize]
+         public void TestInitialize()
+         {
+             _fixture = new Fixture()
+                 .Customize(new AutoMoqCustomization())
+                 .Customize(new ApiControllerAutoFixtureCustomization());
+             _mockHtmlSanitizer = new Mock<IHtmlSanitizer>();
+             _mockFhirSanitizationHelper = new Mock<IFhirSanitizationHelper>();
+             _mockLogger = new Mock<ILogger<ServiceDefinitionService>>();
+             _mockDemographicsOlcMapper = new Mock<IMapper<DemographicsResponse, OlcDemographics>>();
+             _mockAuditor = new Mock<IAuditor>();
+             _mockCreateFhirParam = new Mock<ICreateFhirParameter>();
+             _mockEvaluateServiceDefinitionQuery = new Mock<IEvaluateServiceDefinitionQuery>();
             
-            _demographicsResult = new DemographicsResult.Success(_fixture.Create<DemographicsResponse>());
+             _demographicsResult = new DemographicsResult.Success(_fixture.Create<DemographicsResponse>());
             
-            _mockServiceDefinitionListBuilder = new Mock<IServiceDefinitionListBuilder>();
+             _fixture.Customize<UserSession>(c => c
+                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+             _userSession = _fixture.Create<UserSession>();
+
+             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
+
+             _mockDemographicsService
+                 .Setup(x => x.GetDemographics(
+                     It.Is<GpLinkedAccountModel>(
+                         d => d.GpUserSession == _userSession.GpUserSession 
+                              && d.PatientId == _userSession.GpUserSession.Id)))
+                 .Returns(Task.FromResult(_demographicsResult));
+
+             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+             _mockGpSystem
+                 .Setup(x => x.GetDemographicsService())
+                 .Returns(_mockDemographicsService.Object);
+
+             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+             _mockGpSystemFactory
+                 .Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
+                 .Returns(_mockGpSystem.Object);
+
+             var providersSettings = new OnlineConsultationsProvidersSettings();
+             var providerSetting = new OnlineConsultationsProviderSettings
+             {
+                 Provider = "eConsult", ProviderName = "eConsult Health Ltd"
+             };
             
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-            _userSession = _fixture.Create<UserSession>();
+             var providerSettingsList = new List<OnlineConsultationsProviderSettings> { providerSetting };
+             providersSettings.Providers = providerSettingsList;
 
-            _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
-
-            _mockDemographicsService
-                .Setup(x => x.GetDemographics(
-                    It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession 
-                             && d.PatientId == _userSession.GpUserSession.Id)))
-                .Returns(Task.FromResult(_demographicsResult));
-
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
-            _mockGpSystem
-                .Setup(x => x.GetDemographicsService())
-                .Returns(_mockDemographicsService.Object);
-
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _mockGpSystemFactory
-                .Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
-                .Returns(_mockGpSystem.Object);
-
-            var providersSettings = new OnlineConsultationsProvidersSettings();
-            var providerSetting = new OnlineConsultationsProviderSettings
-            {
-                Provider = "eConsult", ProviderName = "eConsult Health Ltd"
-            };
-            
-            var providerSettingsList = new List<OnlineConsultationsProviderSettings> { providerSetting };
-            providersSettings.Providers = providerSettingsList;
-
-            _service = new ServiceDefinitionService(
-                _mockLogger.Object,
-                _mockServiceDefinitionListBuilder.Object,
-                _mockHtmlSanitizer.Object,
-                _mockFhirSanitizationHelper.Object,
-                _mockDemographicsOlcMapper.Object,
-                _mockAuditor.Object,
-                _mockGpSystemFactory.Object,
-                _mockCreateFhirParam.Object,
-                providersSettings
-                );
-        }
+             _service = new ServiceDefinitionService(
+                 _mockLogger.Object,
+                 _mockHtmlSanitizer.Object,
+                 _mockFhirSanitizationHelper.Object,
+                 _mockDemographicsOlcMapper.Object,
+                 _mockAuditor.Object,
+                 _mockGpSystemFactory.Object,
+                 _mockCreateFhirParam.Object,
+                 providersSettings,
+                 _mockEvaluateServiceDefinitionQuery.Object
+             );
+         }
         
-        [TestMethod]
-        public async Task GetServiceDefinitionById_WhenProviderClientThrowsException_ReturnsBadRequest()
-        {
-            // Arrange
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .Throws<HttpRequestException>();
+         [TestMethod]
+         public async Task GetServiceDefinitionById_WhenProviderClientThrowsException_ReturnsBadRequest()
+         {
+             // Arrange
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .Throws<HttpRequestException>();
 
-            // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
+             // Act
+             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
-        }
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
+         }
 
-        [TestMethod]
-        public async Task GetServiceDefinitionById_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
+         [TestMethod]
+         public async Task GetServiceDefinitionById_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
+             
+             // Act
+             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
 
-            // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+         }
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
-        }
+         [TestMethod]
+         public async Task GetServiceDefinitionById_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = null
+             };
 
-        [TestMethod]
-        public async Task GetServiceDefinitionById_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = null
-            };
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
+             
+             // Act
+             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+         }
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
-        }
+         [TestMethod]
+         [DataRow("")]
+         [DataRow("  ")]
+         [DataRow(BundleJsonContent)]
+         public async Task GetServiceDefinitionById_WhenProviderClientReturnsNonServiceDefinitionContent_ReturnsBadGateway(string content)
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
 
-        [TestMethod]
-        [DataRow("")]
-        [DataRow("  ")]
-        [DataRow(BundleJsonContent)]
-        public async Task GetServiceDefinitionById_WhenProviderClientReturnsNonServiceDefinitionContent_ReturnsBadGateway(string content)
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
-            
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
+             
+             // Act
+             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinition(
-                It.IsAny<Hl7.Fhir.Model.ServiceDefinition>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
-        }
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinition(
+                 It.IsAny<Hl7.Fhir.Model.ServiceDefinition>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
+         }
 
-        [TestMethod]
-        public async Task GetServiceDefinitionById_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
-        {
-            
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
+         [TestMethod]
+         public async Task GetServiceDefinitionById_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.GetServiceDefinitionById(_mockProviderHttpClient.Object, ServiceDefinitionId, "eConsult", _userSession);
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
-                It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
-        }
+             // Act
+             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
+
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
+             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
+                 It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+         }
         
-        [TestMethod]
-        public void GetProviderName_ReturnsSuccess()
-        {
-            // Act
-            var response = _service.GetProviderName("eConsult");
+         [TestMethod]
+         public void GetProviderName_ReturnsSuccess()
+         {
+             // Act
+             var response = _service.GetProviderName("eConsult");
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>()
-                .Subject.Response.Equals("eConsult Health Ltd", StringComparison.Ordinal);
-        }
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
+             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>()
+                 .Subject.Response.Equals("eConsult Health Ltd", StringComparison.Ordinal);
+         }
 
-        [TestMethod]
-        public async Task GetServiceDefinitions_WhenProviderClientThrowsException_ReturnsBadRequest()
-        {
-            // Arrange
-            _mockProviderHttpClient
-                .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-                .Throws<HttpRequestException>();
-
-            // Act
-            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
-
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadRequest>();
-        }
+//         [TestMethod]
+//         public async Task GetServiceDefinitions_WhenProviderClientThrowsException_ReturnsBadRequest()
+//         {
+//             // Arrange
+//             _mockEconsultProviderHttpClient
+//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
+//                 .Throws<HttpRequestException>();
+//
+//             // Act
+//             var response = await _service.GetServiceDefinitions("eConsult");
+//
+//             // Assert
+//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadRequest>();
+//         }
         
-        [TestMethod]
-        public async Task GetServiceDefinitions_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
+//         [TestMethod]
+//         public async Task GetServiceDefinitions_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
+//         {
+//             // Arrange
+//             var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
+//
+//             _mockEconsultProviderHttpClient
+//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
+//                 .ReturnsAsync(httpResponse);
+//
+//             // Act
+//             var response = await _service.GetServiceDefinitions("eConsult");
+//
+//             // Assert
+//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
+//         }
+//
+//         [TestMethod]
+//         public async Task GetServiceDefinitions_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
+//         {
+//             // Arrange
+//             var httpResponse = new HttpResponseMessage
+//             {
+//                 StatusCode = HttpStatusCode.OK,
+//                 Content = null
+//             };
+//
+//             _mockEconsultProviderHttpClient
+//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
+//                 .ReturnsAsync(httpResponse);
+//            
+//             // Act
+//             var response = await _service.GetServiceDefinitions("eConsult");
+//
+//             // Assert
+//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
+//         }
+//
+//         [TestMethod]
+//         [DataRow("")]
+//         [DataRow("  ")]
+//         [DataRow("{ \"resourceType\" : \"ServiceDefinition\", \"contained\": [ { \"resourceType\": \"Questionnaire\" } ], \"publisher\" : \"eConsultHealthLtd\"  }")]
+//         public async Task GetServiceDefinitions_WhenProviderClientReturnsNonBundleContent_ReturnsBadGateway(string content)
+//         {
+//             // Arrange
+//             var httpResponse = new HttpResponseMessage
+//             {
+//                 StatusCode = HttpStatusCode.OK,
+//                 Content = new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+//             };
+//
+//             _mockEconsultProviderHttpClient
+//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
+//                 .ReturnsAsync(httpResponse);
+//            
+//             // Act
+//             var response = await _service.GetServiceDefinitions("eConsult");
+//
+//             // Assert
+//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
+//             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinitionSearchBundle(
+//                 It.IsAny<Bundle>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
+//         }
+//        
+//         [TestMethod]
+//         public async Task GetServiceDefinitions_WhenResponseParsedSuccessfully_BuildsListAndReturnsSuccess()
+//         {
+//             // Arrange
+//             var httpResponse = new HttpResponseMessage
+//             {
+//                 StatusCode = HttpStatusCode.OK,
+//                 Content = new StringContent(BundleJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+//             };
+//
+//             _mockEconsultProviderHttpClient
+//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
+//                 .ReturnsAsync(httpResponse);
+//            
+//             // Act
+//             var response = await _service.GetServiceDefinitions("eConsult");
+//
+//             // Assert
+//             response.Should().BeAssignableTo<ServiceDefinitionListResult.Success>();
+//
+//             _mockServiceDefinitionListBuilder.Verify(a => a.BuildServiceDefinitionList(It.IsAny<Bundle>()), Times.Once);
+//         }
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-                .ReturnsAsync(httpResponse);
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenNullParametersProvided_ReturnsBadRequest()
+         {
+             // Act
+             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, null, false, false, _userSession);
 
-            // Act
-            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
+         }
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
-        }
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenProviderClientThrowsException_ReturnsBadRequest()
+         {
+             // Arrange
 
-        [TestMethod]
-        public async Task GetServiceDefinitions_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = null
-            };
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .Throws<HttpRequestException>();
+             
+             // Act
+             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
-
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
-        }
-
-        [TestMethod]
-        [DataRow("")]
-        [DataRow("  ")]
-        [DataRow("{ \"resourceType\" : \"ServiceDefinition\", \"contained\": [ { \"resourceType\": \"Questionnaire\" } ], \"publisher\" : \"eConsultHealthLtd\"  }")]
-        public async Task GetServiceDefinitions_WhenProviderClientReturnsNonBundleContent_ReturnsBadGateway(string content)
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
-            
-            _mockProviderHttpClient
-                .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
-
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinitionSearchBundle(
-                It.IsAny<Bundle>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
-        }
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
+         }
         
-        [TestMethod]
-        public async Task GetServiceDefinitions_WhenResponseParsedSuccessfully_BuildsListAndReturnsSuccess()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(BundleJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.GetServiceDefinitions(_mockProviderHttpClient.Object);
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
+             
+             // Act
+             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionListResult.Success>();
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+         }
 
-            _mockServiceDefinitionListBuilder.Verify(a => a.BuildServiceDefinitionList(It.IsAny<Bundle>()), Times.Once);
-        }
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = null
+             };
 
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenNullParametersProvided_ReturnsBadRequest()
-        {
-            // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, null, false, false, _userSession);
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
-        }
+             // Act
+             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenProviderClientThrowsException_ReturnsBadRequest()
-        {
-            // Arrange
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .Throws<HttpRequestException>();
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+         }
 
-            // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
+         [TestMethod]
+         [DataRow("")]
+         [DataRow("  ")]
+         [DataRow(BundleJsonContent)]
+         public async Task EvaluateServiceDefinition_WhenProviderClientReturnsNonGuidanceResponseContent_ReturnsBadGateway(string content)
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
-        }
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
+
+             // Act
+             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
+
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
+             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
+                 It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
+         }
         
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
+
+             // Act
+             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
             
-            // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
-
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
-        }
-
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = null
-            };
-
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
-
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
-        }
-
-        [TestMethod]
-        [DataRow("")]
-        [DataRow("  ")]
-        [DataRow(BundleJsonContent)]
-        public async Task EvaluateServiceDefinition_WhenProviderClientReturnsNonGuidanceResponseContent_ReturnsBadGateway(string content)
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
-            
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
-
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
-                It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
-        }
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
+             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
+                 It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+         }
         
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenResponseParsedSuccessfullyAddPatient_SanitizesResponseAndReturnsSuccess()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), false, false, _userSession);
-            
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
-                It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
-        }
-        
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenResponseParsedSuccessfullyAddPatient_SanitizesResponseAndReturnsSuccess()
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.Is<string>(body => body.Contains("\"resourceType\":\"Patient\"", StringComparison.Ordinal)),
+                     It.IsAny<bool>()))
+                 .ReturnsAsync(httpResponse);
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.Is<string>(body => body.Contains("\"resourceType\":\"Patient\"", StringComparison.Ordinal)),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(httpResponse);
+             var olcDemographics = new OlcDemographics
+             {
+                 NameFull = "Test Test",
+                 NhsNumber = "111 111 111",
+                 AddressFull = "Test",
+                 DateOfBirth = DateTime.UtcNow
+             };
 
-            var olcDemographics = new OlcDemographics
-            {
-                NameFull = "Test Test",
-                NhsNumber = "111 111 111",
-                AddressFull = "Test",
-                DateOfBirth = DateTime.UtcNow
-            };
+             _mockDemographicsOlcMapper.Setup(d => d.Map(It.IsAny<DemographicsResponse>())).Returns(olcDemographics);
 
-            _mockDemographicsOlcMapper.Setup(d => d.Map(It.IsAny<DemographicsResponse>())).Returns(olcDemographics);
+             _mockCreateFhirParam.Setup(cfp => cfp.CreatePatientFhir(
+                 It.IsAny<IMapper<DemographicsResponse, OlcDemographics>>(),
+                 It.IsAny<DemographicsResult.Success>())).Returns(new Patient
+             {
+                 Address = new List<Address>
+                 {
+                     new Address
+                     {
+                         Text = olcDemographics.AddressFull
+                     }
+                 },
+                 BirthDate = olcDemographics.DateOfBirth.ToString(),
+                 Name = new List<HumanName>
+                 {
+                     new HumanName
+                     {
+                         Text = olcDemographics.NameFull
+                     }
+                 },
+                 Identifier = new List<Identifier>
+                 {
+                     new Identifier
+                     {
+                         Value = olcDemographics.NhsNumber
+                     }
+                 }
+             });
 
-            _mockCreateFhirParam.Setup(cfp => cfp.CreatePatientFhir(
-                It.IsAny<IMapper<DemographicsResponse, OlcDemographics>>(),
-                It.IsAny<DemographicsResult.Success>())).Returns(new Patient
-            {
-                Address = new List<Address>
-                {
-                    new Address
-                    {
-                        Text = olcDemographics.AddressFull
-                    }
-                },
-                BirthDate = olcDemographics.DateOfBirth.ToString(),
-                Name = new List<HumanName>
-                {
-                    new HumanName
-                    {
-                        Text = olcDemographics.NameFull
-                    }
-                },
-                Identifier = new List<Identifier>
-                {
-                    new Identifier
-                    {
-                        Value = olcDemographics.NhsNumber
-                    }
-                }
-            });
-
-            var fhirParser = new FhirJsonParser();
-            var paramsParsed = fhirParser.Parse(paramString);
+             var fhirParser = new FhirJsonParser();
+             var paramsParsed = fhirParser.Parse(paramString);
            
-            var bodyParameters = (Parameters) paramsParsed;
+             var bodyParameters = (Parameters) paramsParsed;
             
-            // Act
-            var response = await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, bodyParameters, false, true ,_userSession);
+             // Act
+             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, bodyParameters, false, true ,_userSession);
 
-            // Assert
-            response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
-                It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
-        }
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
+             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
+                 It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+         }
         
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
-        public async Task EvaluateServiceDefinition_WillPassAddJsDisabledParameterToProviderClient(bool addJsDisabledHeader)
-        {
-            // Arrange
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-            };
+         [TestMethod]
+         [DataRow(true)]
+         [DataRow(false)]
+         public async Task EvaluateServiceDefinition_WillPassAddJsDisabledParameterToProviderClient(bool addJsDisabledHeader)
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
 
-            _mockProviderHttpClient
-                .Setup(pc => pc.EvaluateServiceDefinition(
-                    It.Is<string>(sid => ServiceDefinitionId.Equals(sid, StringComparison.Ordinal)),
-                    It.IsAny<string>(),
-                    It.Is<bool>(addHeader => addHeader == addJsDisabledHeader)))
-                .ReturnsAsync(httpResponse);
-            
-            // Act
-            await _service.EvaluateServiceDefinition(_mockProviderHttpClient.Object, ServiceDefinitionId, new Parameters(), addJsDisabledHeader, false, _userSession);
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.Is<bool>(addHeader => addHeader == addJsDisabledHeader)))
+                 .ReturnsAsync(httpResponse);
+             
+             // Act
+             await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), addJsDisabledHeader, false, _userSession);
 
-            // Assert
-            _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
-                It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
-        }
-    }
-}
+             // Assert
+             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
+                 It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+         }
+     }
+ }

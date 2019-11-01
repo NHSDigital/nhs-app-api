@@ -7,8 +7,8 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
 {
     public class SettingValidationStartupFilter : IStartupFilter 
     {
-        readonly IEnumerable<IValidateable> _validateableObjects;
-        public SettingValidationStartupFilter(IEnumerable<IValidateable> validateableObjects)
+        readonly IEnumerable<IValidatable> _validateableObjects;
+        public SettingValidationStartupFilter(IEnumerable<IValidatable> validateableObjects)
         {
             _validateableObjects = validateableObjects;
         }

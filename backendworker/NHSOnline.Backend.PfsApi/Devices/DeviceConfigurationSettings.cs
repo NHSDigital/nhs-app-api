@@ -4,7 +4,7 @@ using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Devices 
 {
-    public class DeviceConfigurationSettings : IValidateable
+    public class DeviceConfigurationSettings : IValidatable
     {
         public string MinimumSupportedAndroidVersion { get; set; }
         public string MinimumSupportediOSVersion { get; set; }

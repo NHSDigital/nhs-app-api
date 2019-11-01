@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.Settings
 {

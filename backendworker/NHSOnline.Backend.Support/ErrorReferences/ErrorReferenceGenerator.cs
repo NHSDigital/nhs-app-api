@@ -28,7 +28,9 @@ namespace NHSOnline.Backend.Support
         NhsLogin = 5,
         ServiceJourneyRules = 6,
         OrganDonation = 7,
-        UserInfo = 8
+        UserInfo = 8,
+        OnlineConsultations = 9,
+        OLCStubs = 10
     }
 
     public interface IErrorReferenceGenerator

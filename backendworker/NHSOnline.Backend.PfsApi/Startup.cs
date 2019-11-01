@@ -19,7 +19,6 @@ using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Session;
@@ -31,18 +30,16 @@ using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
 using NHSOnline.Backend.PfsApi.Devices;
 using NHSOnline.Backend.NominatedPharmacy;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.RequestFormatters;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
-using SettingValidationStartupFilter = NHSOnline.Backend.Support.AspNet.Filters.SettingValidationStartupFilter;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.PfsApi.SpineSearch;
 using NHSOnline.Backend.Support.Certificate;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
+using Microsoft.Extensions.Options;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -119,7 +116,6 @@ namespace NHSOnline.Backend.PfsApi
 
             services.AddSingleton(Configuration);
 
-            services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
             services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
             services.AddSingleton<IGuidCreator, GuidCreator>();
             services.AddSingleton<ISessionCacheService, MongoSessionCacheService>();
@@ -133,18 +129,8 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
             services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
             services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
-            services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
-
-            services.Configure<OnlineConsultationsProvidersSettings>(Configuration.GetSection("OnlineConsultationsProvidersSettings"));
-            services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
-            services.AddSingleton(resolver =>
-                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);
-            services.AddSingleton<IValidatable>(resolver =>
-                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);
-
-            services.AddSingleton<IFhirSanitizationHelper, FhirSanitizationHelper>();
-            services.AddSingleton<IOnlineConsultationsProviderHttpClientPool, OnlineConsultationsProviderHttpClientPool>();
+            services.AddTransient(typeof(HttpTimeoutHandler<>));
+            services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
@@ -201,6 +187,8 @@ namespace NHSOnline.Backend.PfsApi
         {
             configurationSettings = CreateAndValidateEnvironmentVariables();
 
+            services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
+
             services.AddSingleton(configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
 
@@ -255,7 +243,7 @@ namespace NHSOnline.Backend.PfsApi
 
             var nominatedPharmacyConfig = CreateAndValidateSpineEnvironmentVariables(nhsAppSpinePdsTraceProperties, nhsAppSpinePdsUpdateProperties);
             services.AddSingleton<INominatedPharmacyConfigurationSettings>(nominatedPharmacyConfig);
-        }
+         }
 
         private SpineSearchService GetSpineSearchService(SpineLdapConfigurationSettings spineLdapConfigurationSettings)
         {
@@ -541,6 +529,35 @@ namespace NHSOnline.Backend.PfsApi
             }
 
             return config;
+        }
+    }
+
+    public static class ServiceCollectionExtensions
+    {
+        /// <summary>
+        /// Add an <see cref="IStartupFilter"/> to the application that invokes <see cref="IValidatable.Validate"/> on all registered objects
+        /// </summary>
+        public static IServiceCollection UseConfigurationValidation(this IServiceCollection services)
+        {
+            return services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
+        }
+
+        /// <summary>
+        /// Registers a configuration instance which <typeparamref name="TOptions"/> will bind against, and registers as a validatble setting. 
+        /// Additionally registers the configuration object directly with the DI container, so can be retrieved without referencing IOptions. 
+        /// 
+        /// </summary>
+        /// <typeparam name="T">The type of options being configured</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection "/> to add the services</param>
+        /// <param name="configuration">The configuration being bound.</param>
+        /// <returns></returns>
+        public static IServiceCollection ConfigureValidatableSetting<TOptions>(this IServiceCollection services, IConfiguration configuration)
+            where TOptions : class, IValidatable, new()
+        {
+            services.Configure<TOptions>(configuration);
+            services.AddSingleton<TOptions>(ctx => ctx.GetRequiredService<IOptions<TOptions>>().Value);
+            services.AddSingleton<IValidatable>(ctx => ctx.GetRequiredService<IOptions<TOptions>>().Value);
+            return services;
         }
     }
 }

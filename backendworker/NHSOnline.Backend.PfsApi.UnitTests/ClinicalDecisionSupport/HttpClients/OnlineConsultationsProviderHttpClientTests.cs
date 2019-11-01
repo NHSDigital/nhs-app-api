@@ -1,179 +1,138 @@
-using System;
-using System.Globalization;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
-using RichardSzalay.MockHttp;
+ using System;
+ using System.Linq;
+ using System.Net;
+ using System.Net.Http;
+ using System.Threading;
+ using System.Threading.Tasks;
+ using FluentAssertions;
+ using Microsoft.Extensions.Logging;
+ using Microsoft.VisualStudio.TestTools.UnitTesting;
+ using Moq;
+ using Moq.Protected;
+ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
+ using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.HttpClients
-{
-    [TestClass]
-    public sealed class OnlineConsultationsProviderHttpClientTests : IDisposable
-    {
-        private Mock<ILogger<OnlineConsultationsProviderHttpClient>> _mockLogger;
+ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.HttpClients
+ {
+     [TestClass]
+     public sealed class EvaluateServiceDefinitionQueryTests
+     {
+         [TestMethod]
+         public async Task EvaluateServiceDefinitionQuery__ProxiesRequestToProvider()
+         {
+             // Arrange
+             //
+             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+             
+             handlerMock
+                 .Protected()
+                 .Setup<Task<HttpResponseMessage>>(
+                     "SendAsync",
+                     ItExpr.IsAny<HttpRequestMessage>(),
+                     ItExpr.IsAny<CancellationToken>())
+                 .ReturnsAsync(new HttpResponseMessage
+                 {
+                     StatusCode = HttpStatusCode.OK,
+                     Content = new StringContent("{\"test\": \"value\"}")
+                 })
+                 .Verifiable();
+             
+             var mockLogger = new Mock<ILogger<EvaluateServiceDefinitionQuery>>();
+             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+             const string Provider = "ProviderKey";
+             const string ServiceDefinitionId = "SOME_SD";
+             const string RequestBody = "{\"request\": \"body\"}";
 
-        private MockHttpMessageHandler _mockHttpMessageHandler;
-        private HttpClient _httpClient;
+             var httpClient = new HttpClient(handlerMock.Object)
+             {
+                BaseAddress = new Uri("http://test.com/")
+             };
+             
+             mockHttpClientFactory.Setup(a => a.CreateClient(Provider))
+                 .Returns(httpClient);
 
-        private OnlineConsultationsProviderHttpClient _onlineConsultationsProviderHttpClient;
+             var sut = new EvaluateServiceDefinitionQuery(mockLogger.Object,
+                 mockHttpClientFactory.Object);
 
-        private const string ServiceDefinitionId = "testId";
-        private const string MockedProviderResponse = "{\"test\": \"value\"}";
-        private const string MockedEvaluateRequestBody = "{\"request\": \"body\"}";
-        private string _searchServiceDefinitionPath;
+             // Act
+             //
+             var result = await sut.EvaluateServiceDefinition(Provider,
+                 ServiceDefinitionId,
+                 RequestBody,
+                 false);
 
-        private bool _addJsDisabledHeader;
-        
-        private readonly OnlineConsultationsProviderSettings _testProviderSettings =
-            new OnlineConsultationsProviderSettings
-            {
-                Provider = "eConsult",
-                BaseAddress = "http://test.test/test/",
-                BearerToken = "testBearerToken"
-            };
+             // Assert
+             //
+             result.Should().NotBeNull();
+             
+             handlerMock.Protected().Verify(
+                 "SendAsync",
+                 Times.Once(),
+                 ItExpr.Is<HttpRequestMessage>(req =>
+                     req.Properties.Count == 0
+                     && req.Headers.All(a => !string.Equals(a.Key, Constants.HttpHeaders.JavascriptDisabled, StringComparison.Ordinal))
+                 ),
+                 ItExpr.IsAny<CancellationToken>()
+             );
+         }
+         
+         [TestMethod]
+         public async Task EvaluateServiceDefinitionQuery__Adds_A_JavaScriptDisabledHeader()
+         {
+             // Arrange
+             //
+             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+             
+             handlerMock
+                 .Protected()
+                 .Setup<Task<HttpResponseMessage>>(
+                     "SendAsync",
+                     ItExpr.IsAny<HttpRequestMessage>(),
+                     ItExpr.IsAny<CancellationToken>())
+                 .ReturnsAsync(new HttpResponseMessage
+                 {
+                     StatusCode = HttpStatusCode.OK,
+                     Content = new StringContent("{\"test\": \"value\"}")
+                 })
+                 .Verifiable();
+             
+             var mockLogger = new Mock<ILogger<EvaluateServiceDefinitionQuery>>();
+             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+             const string Provider = "ProviderKey";
+             const string ServiceDefinitionId = "SOME_SD";
+             const string RequestBody = "{\"request\": \"body\"}";
 
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _mockHttpMessageHandler = new MockHttpMessageHandler();
-            _httpClient = new HttpClient(_mockHttpMessageHandler);
-            _mockLogger = new Mock<ILogger<OnlineConsultationsProviderHttpClient>>();
+             var httpClient = new HttpClient(handlerMock.Object)
+             {
+                BaseAddress = new Uri("http://test.com/")
+             };
+             
+             mockHttpClientFactory.Setup(a => a.CreateClient(Provider))
+                 .Returns(httpClient);
 
-            _onlineConsultationsProviderHttpClient = new OnlineConsultationsProviderHttpClient(
-                _httpClient,
-                _testProviderSettings,
-                _mockLogger.Object);
+             var sut = new EvaluateServiceDefinitionQuery(mockLogger.Object,
+                 mockHttpClientFactory.Object);
 
-            _searchServiceDefinitionPath =
-                _testProviderSettings.BaseAddress + Constants.CdsApiEndpoints.ServiceDefinitionPath;
-        }
+             // Act
+             //
+             var result = await sut.EvaluateServiceDefinition(Provider,
+                 ServiceDefinitionId,
+                 RequestBody,
+                 true);
 
-        [TestMethod]
-        public void OnlineConsultationsProviderHttpClient_WhenCreated_ConfiguresHttpClientBasedOnProviderSettings()
-        {
-            // Assert
-            _httpClient.BaseAddress.Should().Be(_testProviderSettings.BaseAddress);
-        }
-
-        [TestMethod]
-        public async Task GetServiceDefinitionById_WhenInvoked_ProxiesRequestToProvider()
-        {
-            // Arrange
-            _mockHttpMessageHandler
-                .When(HttpMethod.Get, GetFormattedUrl(Constants.CdsApiEndpoints.GetServiceDefinitionByIdPathFormat, ServiceDefinitionId))
-                .With(ValidateMockRequestHeaders)
-                .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
-
-            // Act
-            var response = await _onlineConsultationsProviderHttpClient.GetServiceDefinitionById(ServiceDefinitionId);
-
-            // Assert
-            (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
-        }
-
-        [TestMethod]
-        public async Task SearchServiceDefinitionsByQuery_WhenInvoked_ProxiesRequestToProvider()
-        {
-            // Arrange
-            _mockHttpMessageHandler
-                .When(HttpMethod.Get, _searchServiceDefinitionPath)
-                .With(ValidateMockRequestHeaders)
-                .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
-            
-            // Act
-            var response = await _onlineConsultationsProviderHttpClient.SearchServiceDefinitionsByQuery();
-            
-            // Assert
-            (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
-        }
-
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenInvoked_ProxiesRequestToProvider()
-        {
-            // Arrange
-            _mockHttpMessageHandler
-                .When(HttpMethod.Post, GetFormattedUrl(Constants.CdsApiEndpoints.EvaluateServiceDefinitionPathFormat, ServiceDefinitionId))
-                .With(ValidateMockRequestHeaders)
-                .With(ValidateMockEvaluateRequestBody)
-                .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
-            
-            // Act
-            var response = await _onlineConsultationsProviderHttpClient.EvaluateServiceDefinition(ServiceDefinitionId, MockedEvaluateRequestBody, false);
-            
-            // Assert
-            (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
-        }
-
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenInvokedWithAddJSDisabledHeaderTrue_AddsHeader()
-        {
-            // Arrange
-            _addJsDisabledHeader = true;
-            _mockHttpMessageHandler
-                .When(HttpMethod.Post, GetFormattedUrl(Constants.CdsApiEndpoints.EvaluateServiceDefinitionPathFormat, ServiceDefinitionId))
-                .With(ValidateMockRequestHeaders)
-                .With(ValidateMockEvaluateRequestBody)
-                .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
-            
-            // Act
-            var response = await _onlineConsultationsProviderHttpClient.EvaluateServiceDefinition(ServiceDefinitionId, MockedEvaluateRequestBody, _addJsDisabledHeader);
-            
-            // Assert
-            (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
-        }
-        
-        [TestMethod]
-        public async Task EvaluateServiceDefinition_WhenInvokedWithAddJSDisabledHeaderFalse_DoesNotAddHeader()
-        {
-            // Arrange
-            _addJsDisabledHeader = false;
-            _mockHttpMessageHandler
-                .When(HttpMethod.Post, GetFormattedUrl(Constants.CdsApiEndpoints.EvaluateServiceDefinitionPathFormat, ServiceDefinitionId))
-                .With(ValidateMockRequestHeaders)
-                .With(ValidateMockEvaluateRequestBody)
-                .Respond(HttpStatusCode.OK, Constants.ContentTypes.ApplicationJsonFhir, MockedProviderResponse);
-            
-            // Act
-            var response = await _onlineConsultationsProviderHttpClient.EvaluateServiceDefinition(ServiceDefinitionId, MockedEvaluateRequestBody, _addJsDisabledHeader);
-            
-            // Assert
-            (await response.Content.ReadAsStringAsync()).Should().BeEquivalentTo(MockedProviderResponse);
-        }
-
-        private string GetFormattedUrl(string endpointFormat, string serviceDefinitionId)
-        {
-            return _testProviderSettings.BaseAddress + string.Format(
-                       CultureInfo.InvariantCulture,
-                       endpointFormat,
-                       serviceDefinitionId);
-        }
-
-        private bool ValidateMockRequestHeaders(HttpRequestMessage request)
-        {
-            return 
-                "Bearer".Equals(request.Headers.Authorization.Scheme, StringComparison.Ordinal) &&
-                   (!_addJsDisabledHeader || request.Headers.Contains("NHSO-Javascript-Disabled")) &&
-                   _testProviderSettings.BearerToken.Equals(request.Headers.Authorization.Parameter,
-                       StringComparison.Ordinal);
-        }
-
-        private static bool ValidateMockEvaluateRequestBody(HttpRequestMessage request)
-        {
-            return request.Content.ReadAsStringAsync().Result.Equals(MockedEvaluateRequestBody, StringComparison.Ordinal);
-        }
-
-        public void Dispose()
-        {
-            _httpClient.Dispose();
-            _mockHttpMessageHandler.Dispose();
-            GC.SuppressFinalize(this);
-        }
-    }
-}
+             // Assert
+             //
+             result.Should().NotBeNull();
+             
+             handlerMock.Protected().Verify(
+                 "SendAsync",
+                 Times.Once(),
+                 ItExpr.Is<HttpRequestMessage>(req =>
+                     req.Properties.Count == 0
+                     && req.Headers.Contains(Constants.HttpHeaders.JavascriptDisabled)
+                 ),
+                 ItExpr.IsAny<CancellationToken>()
+             );
+         }
+     }
+ }
