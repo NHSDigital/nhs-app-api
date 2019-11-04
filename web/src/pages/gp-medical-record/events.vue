@@ -1,0 +1,116 @@
+<template>
+  <div>
+    <dcr-error-no-access-gp-record
+      v-if="showError"
+      :has-errored="events.hasErrored"
+      :has-access="events.hasAccess"
+      :has-undetermined-access="events.hasUndeterminedAccess"
+    />
+    <div v-else data-purpose="events">
+      <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
+        <MedicalRecordCardGroupItem
+          v-for="(event, index) in orderedEvents"
+          :key="`event-${index}`"
+          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2"
+        >
+          <Card data-label="events">
+            <div data-purpose="events-card">
+              <span
+                v-if="event.date"
+                class="nhsuk-u-font-weight-bold"
+              >{{ event.date | datePart }}</span>
+              <span v-else>{{ $t('my_record.noStartDate') }}</span>
+
+              <p class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+                {{ event.locationAndDoneBy }}
+              </p>
+
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li v-for="(eventItem, eventItemIndex)
+                      in event.eventItems"
+                    :key="`line-${eventItemIndex}`"
+                    :class="$style['nhsuk-body-m']">
+                  {{ eventItem }}
+                </li>
+              </ul>
+            </div>
+          </Card>
+        </MedicalRecordCardGroupItem>
+      </div>
+    </div>
+    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                            :path="getBackPath"
+                            :button-text="'rp03.backButton'"
+                            @clickAndPrevent="backButtonClicked"/>
+    <glossary v-if="!showError"/>
+  </div>
+</template>
+
+<script>
+import _ from 'lodash';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import Card from '@/components/widgets/card/Card';
+import { MYRECORD } from '@/lib/routes';
+import Glossary from '@/components/Glossary';
+import { redirectTo } from '@/lib/utils';
+import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
+
+export default {
+  layout: 'nhsuk-layout',
+  components: {
+    Card,
+    DesktopGenericBackLink,
+    MedicalRecordCardGroupItem,
+    Glossary,
+    DcrErrorNoAccessGpRecord,
+  },
+  data() {
+    return {
+      resultsCollapsed: true,
+    };
+  },
+  computed: {
+    orderedEvents() {
+      return _.orderBy(this.events.data, [obj => obj.date], ['desc']);
+    },
+    getBackPath() {
+      return MYRECORD.path;
+    },
+    showError() {
+      return this.events.hasErrored
+             || this.events.data.length === 0
+             || !this.events.hasAccess;
+    },
+  },
+  async asyncData({ store }) {
+    if (!store.state.myRecord.record.tppDcrEvents) {
+      await store.dispatch('myRecord/load');
+    }
+    return {
+      events: store.state.myRecord.record.tppDcrEvents,
+    };
+  },
+  methods: {
+    backButtonClicked() {
+      redirectTo(this, this.getBackPath, null);
+    },
+  },
+};
+</script>
+
+<style module scoped lang="scss">
+@import "../../style/colours";
+@import "../../style/desktopWeb/accessibility";
+a {
+  display: inline-block;
+  &:focus {
+    @include outlineStyle;
+    background-color: $focus_highlight;
+  }
+  &:hover {
+    @include linkHoverStyle;
+    cursor: pointer;
+  }
+}
+</style>

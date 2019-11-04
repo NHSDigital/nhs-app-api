@@ -1,17 +1,27 @@
 <template>
-  <menu-item id="test-results"
-             data-purpose="test-results"
-             :href="testResultsPath"
-             :text="$t('my_record.testResults.sectionHeader.tpp')"
-             :click-func="goToUrl"
-             :click-param="'/gp-medical-record/test-results'"/>
+  <div>
+    <menu-item id="events"
+               data-purpose="events"
+               :href="eventsPath"
+               :text="$t('my_record.consultationsAndEvents.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="eventsPath"/>
 
-  <!-- put the rest in here -->
+    <menu-item id="test-results"
+               data-purpose="test-results"
+               :href="testResultsPath"
+               :text="$t('my_record.testResults.sectionHeader.tpp')"
+               :click-func="goToUrl"
+               :click-param="'/gp-medical-record/test-results'"/>
+    <!-- put the rest in here -->
+  </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { TESTRESULTS } from '@/lib/routes';
+import { TESTRESULTS,
+  EVENTS,
+} from '@/lib/routes';
 
 const TESTRESULTSSTRING = 'testresults';
 
@@ -28,6 +38,9 @@ export default {
   computed: {
     testResultsPath() {
       return TESTRESULTS.path;
+    },
+    eventsPath() {
+      return EVENTS.path;
     },
   },
 };

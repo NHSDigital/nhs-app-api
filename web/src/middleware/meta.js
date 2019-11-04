@@ -14,6 +14,8 @@ import {
   APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
   CHECKYOURSYMPTOMS,
+  CONSULTATIONS,
+  EVENTS,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
@@ -156,6 +158,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 0);
       route.meta.headerKey = 'pageHeaders.symptoms';
       route.meta.pageTitleKey = 'pageTitles.symptoms';
+      break;
+    case CONSULTATIONS.name:
+    case EVENTS.name:
+      route.meta.headerKey = 'pageHeaders.consultationsAndEvents';
+      route.meta.pageTitleKey = 'pageTitles.consultationsAndEvents';
       break;
     case APPOINTMENTS.name:
       store.dispatch('navigation/setNewMenuItem', 1);

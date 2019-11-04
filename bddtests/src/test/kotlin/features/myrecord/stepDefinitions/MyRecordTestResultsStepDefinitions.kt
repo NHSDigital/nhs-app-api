@@ -64,7 +64,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has six test results$")
     fun givenTheGpPracticeHasSixTestResults() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         TestResultsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
     }
 

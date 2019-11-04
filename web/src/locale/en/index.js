@@ -1183,6 +1183,12 @@ export default {
     acuteMedications: {
       sectionHeader: 'Acute (short-term) medications',
     },
+    consultations: {
+      sectionHeader: 'Consultations and events',
+    },
+    events: {
+      sectionHeader: 'Consultations and events',
+    },
     currentRepeatMedications: {
       sectionHeader: 'Repeat medications: current',
     },
@@ -1381,6 +1387,7 @@ export default {
     prescriptions: 'My repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
+    consultationsAndEvents: 'Consultations and events',
     account: 'My account',
     settings: 'Settings',
     appointments: 'My appointments',
@@ -1428,6 +1435,7 @@ export default {
     prescriptions: 'Repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
+    consultationsAndEvents: 'Consultations and events',
     account: 'My account',
     allergiesAndReactions: 'Allergies and adverse reactions',
     testResults: 'Test results',
@@ -1470,6 +1478,8 @@ export default {
     accountSignOut: 'Sign Out',
     home: 'Home',
     allergiesAndReactions: 'Allergies and adverse reactions',
+    consultations: 'Consultations',
+    events: 'Events',
     testResults: 'Test results',
     immunisations: 'Immunisations',
     appointments: 'My appointments',

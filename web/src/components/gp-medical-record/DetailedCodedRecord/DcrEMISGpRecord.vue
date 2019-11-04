@@ -1,12 +1,5 @@
 <template>
   <div>
-    <menu-item id="test-results"
-               data-purpose="test-results"
-               :href="testResultsPath"
-               :text="$t('my_record.testResults.sectionHeader.default')"
-               :click-func="goToUrl"
-               :click-param="'/gp-medical-record/test-results'"/>
-
     <menu-item id="immunisations"
                data-purpose="immunisations"
                :href="immunisationsPath"
@@ -14,13 +7,29 @@
                :click-func="goToUrl"
                :click-param="immunisationsPath" />
 
+    <menu-item id="consultations"
+               data-purpose="consultations"
+               :href="consultationsPath"
+               :text="$t('my_record.consultationsAndEvents.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="consultationsPath"/>
+
+    <menu-item id="test-results"
+               data-purpose="test-results"
+               :href="testResultsPath"
+               :text="$t('my_record.testResults.sectionHeader.default')"
+               :click-func="goToUrl"
+               :click-param="'/gp-medical-record/test-results'"/>
   <!-- put the rest in here -->
   </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { TESTRESULTS, IMMUNISATIONS } from '@/lib/routes';
+import { TESTRESULTS,
+  IMMUNISATIONS,
+  CONSULTATIONS,
+} from '@/lib/routes';
 
 const TESTRESULTSSTRING = 'testresults';
 
@@ -40,6 +49,9 @@ export default {
     },
     immunisationsPath() {
       return IMMUNISATIONS.path;
+    },
+    consultationsPath() {
+      return CONSULTATIONS.path;
     },
   },
 };

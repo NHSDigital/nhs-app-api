@@ -285,6 +285,17 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
   },
+  CONSULTATIONS: {
+    name: 'gp-medical-record-consultations',
+    path: '/gp-medical-record/consultations',
+    crumb: {
+      i8nKey: 'consultations',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   DATA_SHARING_PREFERENCES: {
     name: 'data-sharing',
     path: '/data-sharing',
@@ -294,6 +305,17 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+  },
+  EVENTS: {
+    name: 'gp-medical-record-events',
+    path: '/gp-medical-record/events',
+    crumb: {
+      i8nKey: 'events',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   GP_FINDER: {
     name: 'gp-finder',
@@ -1019,7 +1041,9 @@ export const {
   AUTH_RETURN,
   BEGINLOGIN,
   CHECKYOURSYMPTOMS,
+  CONSULTATIONS,
   DATA_SHARING_PREFERENCES,
+  EVENTS,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,

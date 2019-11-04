@@ -49,7 +49,6 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
                 }
             }
             "TPP" -> {
-                setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
@@ -73,7 +72,6 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
                 }
             }
             "TPP" -> {
-                setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getDefaultTppDcrData())

@@ -17,6 +17,7 @@ import mocking.microtest.myRecord.TestResultOptions
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
+import pages.gpMedicalRecord.MyRecordConsultationsAndEventsModule
 import pages.gpMedicalRecord.MyRecordImmunisationsModule
 import pages.gpMedicalRecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
@@ -34,6 +35,8 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var immunisationModule: MyRecordImmunisationsModule
+    @Steps
+    lateinit var consultationsAndEventsModule: MyRecordConsultationsAndEventsModule
 
     private lateinit var myRecordWarningPage: MyRecordWarningPage
 
@@ -98,6 +101,11 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @When("I click the Immunisations link on my record - GP Medical Record")
     fun iClickTheImmunisationsLinkOnTheAccountPage(){
         immunisationModule.link.click()
+    }
+
+    @When("I click the Consultations and events link on my record - GP Medical Record")
+    fun iClickTheConsultationsLinkOnTheAccountPage(){
+        consultationsAndEventsModule.link.click()
     }
 
     @When("I click the test result link on my record - GP Medical Record")
