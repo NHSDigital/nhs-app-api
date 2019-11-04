@@ -3,7 +3,7 @@ package pages
 class ServiceUnavailablePage : HybridPageObject() {
 
     private val header = HybridPageElement(
-            webDesktopLocator = "//h1[contains(text(), 'You are too young to use the NHS App')]",
+            webDesktopLocator = "//h1[contains(text(), 'Login failed')]",
             androidLocator = null,
             page = this,
             helpfulName = "content"
@@ -15,7 +15,7 @@ class ServiceUnavailablePage : HybridPageObject() {
             page = this,
             helpfulName = "error message"
     )
-    
+
     fun assertIsPresent(titleText: String, message: String) {
         assert(titleText.equals(titleText))
         assert(header.isVisible)

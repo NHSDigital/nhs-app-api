@@ -84,7 +84,7 @@ export default {
   auth_return: {
     errors: {
       pageTitle: 'Login failed',
-      pageHeader: 'Lgin failed',
+      pageHeader: 'Login failed',
       header: 'Login failed',
       subheader: 'There\'s been a problem loading this page.',
       message: 'Go back to the home screen and log in again.',
@@ -94,23 +94,31 @@ export default {
       },
       retryButtonText: 'Back to home',
       default: {
-        pageTitle: 'Login failed',
-        pageHeader: 'Login failed',
-        subheader: {
-          text: 'There\'s been a problem loading this page.',
-          label: 'There\'s been a problem loading this page.',
+        header: 'Login failed',
+        title: 'Login failed - NHS App',
+        line1: {
+          text: 'We cannot log you in to the NHS App.',
+          label: 'We cannot log you in to the NHS App.',
         },
-        message: {
-          text: 'Go back to the home screen and log in again.',
-          label: 'Go back to the home screen and log in again.',
+        line3: {
+          text: 'Go back to the home screen and try logging in again.',
+          label: 'Go back to the home screen and try logging in again.',
         },
-        additionalInfo: {
-          text: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        line4: {
+          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
+          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         },
-        defaultRetryButtonText: {
+        line5: {
+          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+        },
+        contactUsButtonText: {
+          text: 'Contact us',
+          label: 'Contact us',
+        },
+        backButtonText: {
           text: 'Back to home',
-          label: 'Back to home',
+          label: 'back to home',
         },
       },
       400: {
@@ -121,8 +129,8 @@ export default {
           label: 'Go back to the home screen and try logging in again.',
         },
         line2: {
-          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
-          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
+          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         },
         contactUs: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
@@ -148,11 +156,9 @@ export default {
           text: 'Go back to the home screen and try logging in again.',
           label: 'Go back to the home screen and try logging in again.',
         },
-
         line3: {
-
-          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
-          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
+          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         },
         line4: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
@@ -187,8 +193,8 @@ export default {
           },
         },
         contactUs: {
-          text: 'Contact us and quote the error code {errorCode}.',
-          label: 'Contact us and quote the error code {errorCode}.',
+          text: 'Contact us and quote the error code {errorCode} to help us resolve the problem more quickly.',
+          label: 'Contact us and quote the error code {errorCode} to help us resolve the problem more quickly.',
         },
         message: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
@@ -219,8 +225,8 @@ export default {
           label: 'Go back to the home screen and try logging in again.',
         },
         line4: {
-          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
-          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
+          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         },
         line5: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
@@ -259,8 +265,8 @@ export default {
           label: 'Go back to the home screen and try logging in again.',
         },
         line4: {
-          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
-          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
+          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
+          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         },
         message: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',

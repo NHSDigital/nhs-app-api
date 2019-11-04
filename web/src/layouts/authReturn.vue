@@ -41,7 +41,7 @@
                 >
                   <h1 v-if="!$store.state.device.isNativeApp"
                       class="nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-4">
-                    {{ $store.state.header.headerText }} </h1>
+                    {{ $t('auth_return.errors.pageTitle') }} </h1>
                   <message-dialog
                     :override-style="overrideStyle"
                     message-type="error"
@@ -203,18 +203,25 @@
 
                     <api-error-container v-else>
                       <api-error-title
-                        title="auth_return.errors.default.pageTitle"
-                        header="auth_return.errors.default.pageHeader"
+                        title="auth_return.errors.default.title"
+                        header="auth_return.errors.default.header"
                       />
-                      <api-error-paragraph from="auth_return.errors.default.subheader" />
-
-                      <api-error-paragraph from="auth_return.errors.default.message" />
-
-                      <api-error-paragraph from="auth_return.errors.default.additionalInfo" />
+                      <api-error-paragraph from="auth_return.errors.default.line1" />
+                      <api-error-paragraph from="auth_return.errors.default.line3" />
+                      <api-error-paragraph
+                        from="auth_return.errors.default.line4"
+                        :variable="serviceDeskReference"
+                      />
+                      <api-error-paragraph from="auth_return.errors.default.line5" />
                       <div :class="$style['api-error-button-container']">
-
                         <api-error-button
-                          from="auth_return.errors.default.defaultRetryButtonText"
+                          from="auth_return.errors.default.contactUsButtonText"
+                          :action="contactUsUrl"
+                          :target="target"
+                          :class="$style['api-error-button']"
+                        />
+                        <api-error-button
+                          from="auth_return.errors.default.backButtonText"
                           :action="backToHomeUrl"
                         />
                       </div>
@@ -289,7 +296,7 @@ export default {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
-      title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
+      title: this.$t('auth_return.errors.pageTitle'),
       script: [],
     };
     if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
@@ -305,8 +312,8 @@ export default {
     serviceDeskReference() {
       return {
         swap: true,
-        text: this.$store.state.errors.apiErrors[0].serviceDeskReference || '',
-        label: this.$store.state.errors.apiErrors[0].serviceDeskReference || '',
+        text: (this.$store.state.errors.apiErrors[0] || {}).serviceDeskReference || '',
+        label: (this.$store.state.errors.apiErrors[0] || {}).serviceDeskReference || '',
       };
     },
     target() {
@@ -348,6 +355,7 @@ export default {
       this.$store.dispatch('device/updateIsNativeApp', Sources.isNative(source));
       this.$store.dispatch('device/setSourceDevice', source);
     }
+    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('auth_return.errors.pageTitle'));
   },
   mounted() {
     NativeVersionSetup(this.$store, this.$route);
