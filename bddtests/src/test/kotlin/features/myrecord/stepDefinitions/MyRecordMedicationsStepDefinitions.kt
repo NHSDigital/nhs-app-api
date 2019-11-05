@@ -81,13 +81,15 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
         val onScreenAcuteMedications = myRecordInfoPage.acuteMedications.allRecordItems()
 
-        Assert.assertEquals(expectedAcuteMedications.size, onScreenAcuteMedications.count())
+        Assert.assertEquals(expectedAcuteMedications.size -1, onScreenAcuteMedications.count())
 
         for (i in onScreenAcuteMedications.indices){
+            Assert.assertNotEquals("Amoxicillin", onScreenAcuteMedications[i].label)
             if(i == 0){
                 Assert.assertEquals("Unknown Date", onScreenAcuteMedications[i].label)
             } else {
-                val expectedDate = expectedAcuteMedications[i].firstIssueDate?.takeWhile { !it.isLetter() }
+                //First record in expectedAcuteMedications array will be removed by backend worker
+                val expectedDate = expectedAcuteMedications[i + 1].firstIssueDate?.takeWhile { !it.isLetter() }
                 val actualDate = LocalDate.parse(onScreenAcuteMedications[i].label,
                         DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
 

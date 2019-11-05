@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             // Assert
             result.Should().NotBeNull();
-            result.Data.AcuteMedications.Should().HaveCount(3);
+            result.Data.AcuteMedications.Should().HaveCount(2);
             result.Data.CurrentRepeatMedications.Should().HaveCount(2);
             result.Data.DiscontinuedRepeatMedications.Should().HaveCount(2);
 
@@ -112,25 +112,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                 new MedicationLineItem
                                 {
                                     Text = "28 capsules",
-                                },
-                            }
-                        },
-                        new MedicationItem
-                        {
-                            Date = oneYearAgo,
-                            LineItems = new List<MedicationLineItem>
-                            {
-                                new MedicationLineItem
-                                {
-                                    Text = "Third Acute Drug",
-                                },
-                                new MedicationLineItem
-                                {
-                                    Text = "One taken twice a day",
-                                },
-                                new MedicationLineItem
-                                {
-                                    Text = "10 capsules",
                                 },
                             }
                         },
@@ -271,10 +252,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 new Medication
                 {
                     FirstIssueDate = now.AddYears(-1),
-                    Term = "Third Acute Drug",
+                    Term = "Removed Acute Drug",
                     IsMixture = false,
-                    Dosage = "One taken twice a day",
-                    QuantityRepresentation = "10 capsules",
                     PrescriptionType = "Acute",
                     LastIssueDate = now.AddYears(-1)
                 },

@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord.T
                 "drug_term=\"Panadol ActiFast 50mg tablets\" " +
                 "first_prescribed_date=\"2012-10-08T01:01:01\" " +
                 $"last_prescribed_date=\"{now.AddMonths(-7).ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)}\" " +
-                "packsize=\"capsules\" quantity=\"14\" subgroup_code=\"DiscontinuedRepeat\" />";
+                "packsize=\"cpasules\" quantity=\"14\" subgroup_code=\"DiscontinuedRepeat\" />";
         }
         
         private static string GetCurrentRepeatMedication(DateTime now)

@@ -32,7 +32,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 {
                     var acuteMedications = medicalRecord.Medication
                         .OrderByDescending(x => x.LastIssueDate)
-                        .Where(x => PrescriptionTypeAcute.Equals(x.PrescriptionType, StringComparison.Ordinal));
+                        .Where(x => PrescriptionTypeAcute.Equals(x.PrescriptionType, StringComparison.Ordinal) &&
+                            x.LastIssueDate > DateTimeOffset.Now.AddYears(-1));
                       
                     result.Data.AcuteMedications = acuteMedications.Select(MapMedicationResponse);
 

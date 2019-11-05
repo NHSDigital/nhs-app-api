@@ -125,30 +125,30 @@ object MedicationsData {
                                         firstIssueDate = "",
                                         prescriptionType = "Acute",
                                         drugStatus = "Active",
-                                        term = "Penicillin",
+                                        term = "Amoxicillin",
                                         isMixture = false,
                                         dosage = "One to be taken four times a day",
                                         quantityRepresentation = "28 Capsules",
                                         lastIssueDate = ""
                                 ),
                                 MedicationItem (
-                                        firstIssueDate = twentyMonthsAgo,
+                                        firstIssueDate = "",
+                                        prescriptionType = "Acute",
+                                        drugStatus = "Active",
+                                        term = "Penicillin",
+                                        isMixture = false,
+                                        dosage = "One to be taken twice a day",
+                                        quantityRepresentation = "14 Capsules",
+                                        lastIssueDate = tenMonthsAgo
+                                ),
+                                MedicationItem (
+                                        firstIssueDate = tenMonthsAgo,
                                         prescriptionType = "Acute",
                                         drugStatus = "Active",
                                         term = "Ibuprofen",
                                         isMixture = false,
                                         dosage = "One to be taken twice a day",
                                         quantityRepresentation = "14 Capsules",
-                                        lastIssueDate = twentyMonthsAgo
-                                ),
-                                MedicationItem (
-                                        firstIssueDate = twentyMonthsAgo,
-                                        prescriptionType = "Acute",
-                                        drugStatus = "Active",
-                                        term = "Ibuprofen Plus",
-                                        isMixture = false,
-                                        dosage = "One to be taken once a day",
-                                        quantityRepresentation = "7 Capsules",
                                         lastIssueDate = tenMonthsAgo
                                 )
                         )
@@ -178,7 +178,7 @@ object MedicationsData {
                                         isMixture = false,
                                         dosage = "One to be taken twice a day",
                                         quantityRepresentation = "14 Capsules",
-                                        lastIssueDate = twentyMonthsAgo
+                                        lastIssueDate = tenMonthsAgo
 
                                 )
                         )

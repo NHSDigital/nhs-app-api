@@ -95,17 +95,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
                                 new MedicationLineItem { Text = "28 tablets" }
                             }
                             
-                        },
-                        new MedicationItem
-                        {
-                            Date = DateTime.Parse("2012-10-08T00:00:00", CultureInfo.InvariantCulture),
-                            LineItems = new List<MedicationLineItem>
-                            {
-                                new MedicationLineItem { Text = "Panadol ActiFast 50mg tablets" },
-                                new MedicationLineItem { Text = "1 TABLET UP TO FIVE TIMES DAILY AS REQUIRED" },
-                                new MedicationLineItem { Text = "14 capsules" }
-                            }
-                            
                         }
                     },
                     AcuteMedications = new List<MedicationItem>()
@@ -119,18 +108,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
                                 new MedicationLineItem { Text = "Panadol ActiFast 500mg tablets (GlaxoSmithKline Consumer Healthcare)" },
                                 new MedicationLineItem { Text = "FIVE TABLETS UP TO THREE TIMES DAILY AS REQUIRED" },
                                 new MedicationLineItem { Text = "30 tablets" }
-                            }
-                            
-                        },
-                        new MedicationItem
-                        {
-                            Date = DateTime.Parse(today.AddMonths(-13).Date.ToString(CultureInfo.InvariantCulture),
-                                CultureInfo.InvariantCulture),
-                            LineItems = new List<MedicationLineItem>
-                            {
-                                new MedicationLineItem { Text = "Flucloxacillin 100mg capsules" },
-                                new MedicationLineItem { Text = "SIX TABLETS UP TO TWICE DAILY AS REQUIRED" },
-                                new MedicationLineItem { Text = "80 capsules" }
                             }
                             
                         }

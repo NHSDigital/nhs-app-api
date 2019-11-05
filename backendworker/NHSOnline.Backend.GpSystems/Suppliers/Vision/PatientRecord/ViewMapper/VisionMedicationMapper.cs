@@ -39,7 +39,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
                 var parsedContent = rawContent.DeserializeXml<Root>();
 
                 var acuteMedications = parsedContent.Patient.Clinicals
-                    .Where(x => x.SubGroupCode.Equals(Acute, StringComparison.OrdinalIgnoreCase));
+                    .Where(x => x.SubGroupCode.Equals(Acute, StringComparison.OrdinalIgnoreCase) &&
+                                DateTime.TryParse(x.EventDate, out var eventDate) 
+                                && eventDate.Date >= DateTime.Now.AddYears(-1).Date);
 
                 medications.Data.AcuteMedications = 
                     acuteMedications.Select(MapMedicationResponse);
@@ -50,9 +52,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
 
                 medications.Data.CurrentRepeatMedications =
                     currentRepeatMedications.Select(MapMedicationResponse);
-
+                
                 var discontinuedRepeatMedications = parsedContent.Patient.Clinicals
-                    .Where(x => x.SubGroupCode.Equals(DiscontinuedRepeat, StringComparison.OrdinalIgnoreCase));
+                    .Where(x => x.SubGroupCode.Equals(DiscontinuedRepeat, StringComparison.OrdinalIgnoreCase) &&
+                                DateTime.TryParse(x.LastPrescribedDate,  out var lastPrescribedDate) 
+                                && lastPrescribedDate.Date >= DateTime.Now.AddMonths(-6).Date);
 
                 medications.Data.DiscontinuedRepeatMedications =
                     discontinuedRepeatMedications.Select(MapMedicationResponse);
