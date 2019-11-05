@@ -292,21 +292,13 @@ export default {
   },
   mixins: [ErrorMessageMixin],
   head() {
-    const head = {
+    return {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
       title: this.$t('auth_return.errors.pageTitle'),
       script: [],
     };
-    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
-      head.script = [
-        {
-          src: this.$env.ANALYTICS_SCRIPT_URL,
-        },
-      ];
-    }
-    return head;
   },
   computed: {
     serviceDeskReference() {

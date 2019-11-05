@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { create$T } from '../helpers';
+import { create$T, mockCookies } from '../helpers';
 import {
   INDEX,
   LOGIN,
@@ -24,7 +24,9 @@ jest.mock('@/components/widgets/HotJar', () => {
 import NhsukLayout from '@/layouts/nhsuk-layout';
 
 const $http = jest.fn();
-const $env = {};
+const $env = {
+  ANALYTICS_SCRIPT_URL: 'test script',
+};
 const $style = {
   homeMain: true,
 };
@@ -73,14 +75,23 @@ const createPage = ($store, route = INDEX) => {
 
 const createStore = isNativeApp => ({
   app: {
+    $cookies: mockCookies(),
     $env: {
       VERSION_TAG: 1,
     },
   },
   dispatch: jest.fn(),
   state: {
+    appVersion: {
+      webVersion: '1.2.3',
+      nativeVersion: '3.2.1',
+    },
     device: {
       isNativeApp,
+      source: 'ios',
+    },
+    pageTitle: {
+      pageTitle: 'some title',
     },
     session: {
       csrfToken: 'someToken',
@@ -126,6 +137,24 @@ describe('nhsuk-layout - is native', () => {
       const page = createPage($store, name);
       expect(page.vm.shouldShowBreadCrumb).toBe(true);
     });
+  });
+
+  it('will load analytics when on a logged in page', () => {
+    const $store = createStore(true);
+    $store.app.$cookies.get = jest.fn(() => undefined);
+    const defaultPage = createPage($store);
+    const head = defaultPage.vm.$options.head.call(defaultPage.vm);
+
+    expect(head.script[0].src).toBe('test script');
+  });
+
+  it('will not load analytics when on a logged off page', () => {
+    const $store = createStore(true);
+    $store.app.$cookies.get = jest.fn(() => undefined);
+    const defaultPage = createPage($store, LOGIN);
+    const head = defaultPage.vm.$options.head.call(defaultPage.vm);
+
+    expect(head.script).toBeUndefined();
   });
 });
 

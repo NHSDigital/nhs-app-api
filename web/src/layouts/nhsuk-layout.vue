@@ -62,6 +62,7 @@ import {
   getCrumbTrailForRoute,
   GP_FINDER,
   INDEX,
+  isAnonymous,
   LOGIN,
   MESSAGING_MESSAGES,
 } from '@/lib/routes';
@@ -114,16 +115,12 @@ export default {
       }
     }
 
-    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET' && this.isAnalyticsCookieAccepted()) {
-      const analyticsScript = [
+    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET' && this.isAnalyticsCookieAccepted() && !isAnonymous(this.$route.name)) {
+      head.script = [
         {
           src: this.$env.ANALYTICS_SCRIPT_URL,
         },
       ];
-
-      if (this.isAnalyticsCookieAccepted()) {
-        head.script = analyticsScript;
-      }
     }
     return head;
   },

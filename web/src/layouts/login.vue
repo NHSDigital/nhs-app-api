@@ -82,22 +82,13 @@ export default {
     },
   },
   head() {
-    const head = {
+    return {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.header.headerText} screen`,
       script: [],
     };
-    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
-      head.script = [
-        {
-          src: this.$env.ANALYTICS_SCRIPT_URL,
-          async: true,
-        },
-      ];
-    }
-    return head;
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {

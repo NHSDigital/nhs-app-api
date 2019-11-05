@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import ContentHeader from '@/components/widgets/ContentHeader';
 import WebHeader from '@/components/widgets/WebHeader';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { create$T } from '../helpers';
+import { create$T, mockCookies } from '../helpers';
 import {
   INDEX,
   LOGIN,
@@ -27,7 +27,9 @@ jest.mock('@/components/widgets/HotJar', () => {
 import DefaultPage from '@/layouts/default';
 
 const $http = jest.fn();
-const $env = {};
+const $env = {
+  ANALYTICS_SCRIPT_URL: 'test script',
+};
 const $style = {
   homeMain: true,
 };
@@ -99,6 +101,7 @@ const createDefaultPageForLoginScreen = ($store) => {
 
 const createStore = isNativeApp => ({
   app: {
+    $cookies: mockCookies(),
     $env: {
       VERSION_TAG: 1,
     },
@@ -109,11 +112,19 @@ const createStore = isNativeApp => ({
     'errors/showApiError': false,
   },
   state: {
-    header: {
-      headerText: 'someheader',
+    appVersion: {
+      webVersion: '1.2.3',
+      nativeVersion: '3.2.1',
     },
     device: {
       isNativeApp,
+      source: 'ios',
+    },
+    header: {
+      headerText: 'someheader',
+    },
+    pageTitle: {
+      pageTitle: 'some title',
     },
     session: {
       csrfToken: 'someToken',
@@ -123,7 +134,6 @@ const createStore = isNativeApp => ({
     },
   },
 });
-
 
 describe('default.vue - is native', () => {
   beforeEach(() => {
@@ -221,6 +231,24 @@ describe('default.vue - is native', () => {
     jest.spyOn($store, 'dispatch');
 
     expect(defaultPage.vm.currentHelpUrl).toBe(expectedHelpUrl);
+  });
+
+  it('will load analytics when on a logged in page', () => {
+    const $store = createStore(true);
+    $store.app.$cookies.get = jest.fn(() => undefined);
+    const defaultPage = createDefaultPage($store);
+    const head = defaultPage.vm.$options.head.call(defaultPage.vm);
+
+    expect(head.script[0].src).toBe('test script');
+  });
+
+  it('will not load analytics when on a logged off page', () => {
+    const $store = createStore(true);
+    $store.app.$cookies.get = jest.fn(() => undefined);
+    const defaultPage = createDefaultPageForLoginScreen($store);
+    const head = defaultPage.vm.$options.head.call(defaultPage.vm);
+
+    expect(head.script).toBeUndefined();
   });
 });
 

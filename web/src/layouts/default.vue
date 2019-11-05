@@ -53,6 +53,7 @@ import {
   findByName,
   GP_FINDER,
   INDEX,
+  isAnonymous,
   LOGIN,
 } from '@/lib/routes';
 import WebHeader from '@/components/widgets/WebHeader';
@@ -114,16 +115,12 @@ export default {
       }
     }
 
-    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
-      const analyticsScript = [
+    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET' && this.isAnalyticsCookieAccepted() && !isAnonymous(this.$route.name)) {
+      head.script = [
         {
           src: this.$env.ANALYTICS_SCRIPT_URL,
         },
       ];
-
-      if (this.isAnalyticsCookieAccepted()) {
-        head.script = analyticsScript;
-      }
     }
     return head;
   },
