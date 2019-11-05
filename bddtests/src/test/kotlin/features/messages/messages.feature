@@ -53,3 +53,28 @@ Feature: Messages
       | /messaging/messages  |
       | /messaging/messages?source=ios  |
       | /messaging/messages?source=android  |
+
+
+  Scenario: A user getting their summary messages when an internal server error occurs sees an error and can try again
+    Given I am a user wishing to view my messages but retrieving the messages will cause an internal server error
+    And I am logged in
+    When I navigate to the More page for mobile devices
+    And I click the Messages link on the More page
+    Then an error with a retry button is displayed indicating that there was a problem getting messages
+    When the messages in the repository can be retrieved successfully
+    And I click the 'Try again' button
+    Then the Messages Inbox page is displayed
+
+  Scenario: A user getting messages from a sender when an internal server error occurs sees an error and can try again
+    Given I am a user wishing to view my messages
+    And I am logged in
+    When I navigate to the More page for mobile devices
+    And I click the Messages link on the More page
+    Then the Messages Inbox page is displayed
+    When retrieving the messages from the repository will cause an internal server error
+    And I click on a sender in the Messages Inbox
+    Then an error with a retry button is displayed indicating that there was a problem getting messages from the sender
+    When the messages in the repository can be retrieved successfully
+    And I click the 'Try again' button
+    Then the Messages page is displayed
+    And my messages from the sender are displayed

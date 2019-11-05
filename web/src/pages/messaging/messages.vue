@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <page-title>

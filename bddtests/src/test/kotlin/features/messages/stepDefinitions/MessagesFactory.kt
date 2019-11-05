@@ -105,6 +105,13 @@ class MessagesFactory {
         )
     }
 
+    fun setUpInvalidMessageInCache(){
+        MongoDBConnection.MessagesCollection.clearCache()
+        val nhsLoginId = SerenityHelpers.getPatient().subject
+        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
+        MongoDBConnection.MessagesCollection.clearAndInsertJson(listOf(asInvalidJson(nhsLoginId, senderOne)))
+    }
+
     private fun createUnreadMessage(sender: String, body: String, sentTime: ZonedDateTime): SingleMessageFacade {
         return SingleMessageFacade(sender,
                 body,
@@ -130,5 +137,13 @@ class MessagesFactory {
 
     companion object{
         val patchToUpdateAsRead = JsonPatch(JsonPatchOperation.ADD, "/read",true)
+    }
+
+    private fun asInvalidJson(nhsLoginId: String, sender: String): String {
+        return "{" +
+                "\"NhsLoginId\" : \"$nhsLoginId\"," +
+                "\"Sender\" : \"$sender\"," +
+                "\"Blah\" : \"Blah\"," +
+                "},"
     }
 }

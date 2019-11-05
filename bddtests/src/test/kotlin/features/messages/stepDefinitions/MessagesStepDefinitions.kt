@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import pages.messages.MessagesErrorPage
 import pages.messages.MessagesInboxPage
 import pages.messages.MessagesPage
 import utils.getOrFail
@@ -14,6 +15,7 @@ class MessagesStepDefinitions {
 
     private lateinit var messagesPage: MessagesPage
     private lateinit var messagesInboxPage: MessagesInboxPage
+    private lateinit var messagesErrorPage: MessagesErrorPage
 
     @Given("^I am a user wishing to view my messages$")
     fun iAmAUserWishingToViewTheirMessages() {
@@ -32,6 +34,28 @@ class MessagesStepDefinitions {
                 ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
+    }
+
+    @Given("^I am a user wishing to view my messages but retrieving the messages will cause an internal server error$")
+    fun iAmAUserWishingToViewTheirMessagesButIHaveAnInvalidMessage() {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
+        factory.setUpInvalidMessageInCache()
+    }
+
+    @When("^the messages in the repository can be retrieved successfully$")
+    fun theMessagesInTheRepositoryCanBeRetrievedSuccessfully(){
+        val factory = MessagesFactory()
+        factory.setUpMultipleMessagesInCache()
+    }
+
+    @When("^retrieving the messages from the repository will cause an internal server error$")
+    fun retrievingTheMessagesFromTheRepositoryWillCauseAnInternalServerError(){
+        val factory = MessagesFactory()
+        factory.setUpInvalidMessageInCache()
     }
 
     @When("^I click on a sender in the Messages Inbox$")
@@ -84,6 +108,18 @@ class MessagesStepDefinitions {
         expectedReadMessages.addAll(expectedMessages)
         val sender = MessagesSerenityHelpers.TARGET_SENDER.getOrFail<String>()
         messagesPage.messages.assertAllReadMessages(expectedReadMessages, sender)
+    }
+
+    @Then( "^an error with a retry button is displayed indicating that there was a problem getting messages$")
+    fun anErrorWithARetryButtonIsDisplayedIndicatingThatThereWasAProblemGettingMessages(){
+        messagesErrorPage.assertInboxErrorPage()
+    }
+
+    @Then( "^an error with a retry button is displayed indicating that there was a problem getting " +
+            "messages from the sender$")
+    fun anErrorWithARetryButtonIsDisplayedIndicatingThatThereWasAProblemGettingMessagesFromTheSender(){
+        val sender = MessagesSerenityHelpers.TARGET_SENDER.getOrFail<String>()
+        messagesErrorPage.assertSenderErrorPage(sender)
     }
 }
 

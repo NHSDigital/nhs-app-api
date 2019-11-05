@@ -10,6 +10,8 @@ import {
   AUTH_RETURN,
   LOGIN,
   BEGINLOGIN,
+  MESSAGING,
+  MESSAGING_MESSAGES,
   MYRECORD,
   MY_RECORD_DOCUMENT,
   MY_RECORD_DOCUMENTS,
@@ -96,6 +98,19 @@ export default {
       redirectUrl: {
         default: LOGIN.path,
       },
+    },
+    {
+      route: MESSAGING.path,
+      redirectUrl: {
+        default: MESSAGING.path,
+      },
+    },
+    {
+      route: MESSAGING_MESSAGES.path,
+      redirectUrl: {
+        default: MESSAGING_MESSAGES.path,
+      },
+      additionalInfoComponent: 'MessagesSenderError',
     },
     {
       route: MYRECORD.path,

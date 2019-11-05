@@ -1368,6 +1368,39 @@ export default {
     messages: {
       titlePrefix: 'Messages from:',
       unreadMessages: 'Unread messages',
+      errorText: 'If the problem continues and you need this information now, contact {senderName} directly.',
+      errors: {
+        500: {
+          pageTitle: 'Messages error',
+          pageHeader: 'Messages error',
+          header: 'There is a problem getting your messages',
+          message: 'Try again now.',
+          retryButtonText: 'Try again',
+        },
+        502: {
+          pageTitle: 'Messages error',
+          pageHeader: 'Messages error',
+          header: 'There is a problem getting your messages',
+          message: 'Try again now.',
+          retryButtonText: 'Try again',
+        },
+      },
+    },
+    errors: {
+      500: {
+        pageTitle: 'Messages error',
+        pageHeader: 'Messages error',
+        header: 'There is a problem getting your messages',
+        message: 'Try again now.',
+        retryButtonText: 'Try again',
+      },
+      502: {
+        pageTitle: 'Messages error',
+        pageHeader: 'Messages error',
+        header: 'There is a problem getting your messages',
+        message: 'Try again now.',
+        retryButtonText: 'Try again',
+      },
     },
   },
   common: {

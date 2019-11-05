@@ -61,6 +61,7 @@ import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import HeaderSlim from '@/components/HeaderSlim';
 import MessageDialog from '@/components/widgets/MessageDialog';
+import MessagesSenderError from '@/components/errors/additional-info/MessagesSenderError';
 import MessageText from '@/components/widgets/MessageText';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import { getMessage, getComponentErrorCodeKey, getComponentKey } from '@/lib/errors';
@@ -86,6 +87,7 @@ export default {
     GenericButton,
     HeaderSlim,
     MessageDialog,
+    MessagesSenderError,
     MessageText,
     NativeApp,
   },
