@@ -4,7 +4,7 @@
     <welcome-section :date-of-birth="currentProfile.dateOfBirth"
                      :nhs-number="currentProfile.nhsNumber" />
     <biometric-banner />
-    <navigation-list-menu />
+    <navigation-list-menu v-if="!isProxying" />
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
     BiometricBanner,
     WelcomeSection,
     NavigationListMenu,
+  },
+  data() {
+    return {
+      isProxying: this.$store.getters['session/isProxying'],
+    };
   },
   computed: {
     currentProfile() {

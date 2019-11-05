@@ -14,3 +14,4 @@ Feature: Login with proxy access
     Then I see the home page
     And I see the yellow banner
     And the yellow banner contains details for the user I am acting on behalf of
+    And I do not see the home page links

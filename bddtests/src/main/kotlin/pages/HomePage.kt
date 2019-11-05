@@ -144,6 +144,10 @@ open class HomePage : HybridPageObject() {
         linksToCheck.forEach { link -> link.assertSingleElementPresent() }
     }
 
+    fun assertHomePageLinksNotPresent() {
+        listOfLinks().assertElementNotPresent()
+    }
+
     fun isLinkedProfileVisible(): Boolean {
         return linkedProfilesLink.isVisible
     }

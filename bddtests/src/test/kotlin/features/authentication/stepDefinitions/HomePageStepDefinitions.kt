@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -42,8 +43,6 @@ class HomePageStepDefinitions : AbstractSteps() {
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
     @Steps
     private lateinit var recordWarning: MyRecordWarningStepDefinitions
-    @Steps
-    lateinit var home: HomeSteps
 
     private lateinit var prescriptions: PrescriptionsPage
 
@@ -66,12 +65,12 @@ class HomePageStepDefinitions : AbstractSteps() {
 
     @Then("^I see the home page$")
     fun iSeeTheHomePage() {
-        home.assertHeaderVisible()
+        homeSteps.assertHeaderVisible()
     }
 
     @Then("^I see the home page header$")
     fun iSeeTheHomePageHeader() {
-        home.assertHeaderVisible()
+        homeSteps.assertHeaderVisible()
     }
 
     @Then("^I see the current app version")
@@ -97,13 +96,13 @@ class HomePageStepDefinitions : AbstractSteps() {
         Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number " +
                 "to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
                 regex.containsMatchIn(patient.nhsNumbers.first()))
-        home.assertPatientDetailsShownFor(patient)
+        homeSteps.assertPatientDetailsShownFor(patient)
     }
 
     @Then("^I see a welcome message$")
     fun iSeeAWelcomeMessageFor() {
         val patient = SerenityHelpers.getPatient()
-        home.assertWelcomeMessageShownFor(patient)
+        homeSteps.assertWelcomeMessageShownFor(patient)
     }
 
     @Then("I see and can follow links within the home page body$")
@@ -128,6 +127,11 @@ class HomePageStepDefinitions : AbstractSteps() {
             if (index != linksToFollow.size - 1)
                 navigateBackToHomePage()
         }
+    }
+
+    @And("I do not see the home page links")
+    fun iDoNotSeeTheHomePageLinks() {
+        homeSteps.homePage.assertHomePageLinksNotPresent()
     }
 
     private fun navigateBackToHomePage(){
