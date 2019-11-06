@@ -19,6 +19,9 @@ function displayUsage () {
   The release notes will be created in a file in the format <TAG>.txt against the associated previous
   release. i.e if it is a minor update, the release notes will be created against the previous minor version.
 
+  Argument Includes Jason Array of email addresses to send release notes to
+  eg. \"{\"email\": \"leeg@kainos.com\",\"name\": \"Lee Gathercole\"}\"
+
   Flags:
     -h     Display this help message
   "
@@ -98,16 +101,18 @@ EMAIL="${EMAIL}to:lee.gathercole@nhs.net\n"
 EMAIL="${EMAIL}subject: $SUBJECT\n"
 EMAIL="${EMAIL}${MESSAGE}"
 
-TOEMAILADDRESS="matthew.smith48@nhs.net"
-TOEMAILNAME="Matthew Smith"
+#TOEMAILADDRESS="matthew.smith48@nhs.net"
+#TOEMAILNAME="Matthew Smith"
+TOEMAILADDRESS=$1
+
 FROMEMAILADDRESS="TeamCity@teamcity.dev.nonlive.nhsapp.service.nhs.uk"
 FROMEMAILNAME="TeamCity"
 
-JSON_FMT='{"personalizations" : [{"to": [{"email": "%s","name": "%s"}],"subject": "%s"}],"from": {"email": "%s", "name": "%s"},"reply_to": {"email": "%s", "name": "%s"},"content": [{"type": "text/html","value": "%s"}]}'
+JSON_FMT='{"personalizations" : [{"to": [%s],"subject": "%s"}],"from": {"email": "%s", "name": "%s"},"reply_to": {"email": "%s", "name": "%s"},"content": [{"type": "text/html","value": "%s"}]}'
 
-printf "$JSON_FMT" "$TOEMAILADDRESS" "$TOEMAILNAME" "$SUBJECT" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$MESSAGE" > $TAG.json
+printf "$JSON_FMT" "$TOEMAILADDRESS" "$SUBJECT" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$MESSAGE" > $TAG.json
 
-printf "$EMAIL" > $TAG.txt
+printf "$GITLOG" > $TAG.txt
 
 info "Release email written to $TAG.txt"
 
