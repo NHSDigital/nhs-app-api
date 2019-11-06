@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi
         public void ConfigureServices(IServiceCollection services)
         {
             var environment = Configuration.GetOrWarn("ASPNETCORE_ENVIRONMENT", _logger);
-            
+
             SetupConfigurationSettings(services, environment);
 
             services
@@ -235,8 +235,6 @@ namespace NHSOnline.Backend.PfsApi
             NhsAppSpinePdsTraceProperties nhsAppSpinePdsTraceProperties = null;
             NhsAppSpinePdsUpdateProperties nhsAppSpinePdsUpdateProperties = null;
 
-            
-
             if (isSpineLdapLookupEnabled)
             {
                 var spineSearchService = GetSpineSearchService(spineLdapConfigurationSettings);
@@ -365,7 +363,6 @@ namespace NHSOnline.Backend.PfsApi
 
         private SpineLdapConfigurationSettings CreateAndValidateSpineLdapConfig(bool isLDAPEnabled)
         {
-            var nhsAppPartyId = Configuration.GetOrThrow("NHS_APP_PARTY_ID_FOR_SPINE", _logger);
             SpineLdapConfigurationSettings config;
 
             if (isLDAPEnabled)
@@ -375,11 +372,13 @@ namespace NHSOnline.Backend.PfsApi
                 var loginDn = Configuration.GetOrThrow("SPINE_LDAP_LOGIN_DN", _logger);
                 var certPath = Configuration.GetOrThrow("SPINE_CERT_PATH", _logger);
                 var certPassword = Configuration.GetOrThrow("SPINE_CERT_PASSWORD", _logger);
+                var nhsAppPartyId = Configuration.GetOrThrow("NHS_APP_PARTY_ID_FOR_SPINE", _logger);
+
                 config = new SpineLdapConfigurationSettings(ldapHost, ldapPort, loginDn, certPath, certPassword, nhsAppPartyId);
             }
             else
             {
-                config = new SpineLdapConfigurationSettings(nhsAppPartyId);
+                config = new SpineLdapConfigurationSettings();
             }
 
             config.Validate(isLDAPEnabled);

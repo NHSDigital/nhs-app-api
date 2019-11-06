@@ -26,11 +26,6 @@
             NhsAppPartyId = nhsAppPartyId;
         }
 
-        public SpineLdapConfigurationSettings(string nhsAppPartyId)
-        {
-            NhsAppPartyId = nhsAppPartyId;
-        }
-
         public void Validate(bool ldapEnabled)
         {
             if (ldapEnabled)
@@ -59,11 +54,11 @@
                 {
                     throw new ConfigurationNotFoundException(nameof(CertPassword));
                 }
-            }
 
-            if (NhsAppPartyId == null)
-            {
-                throw new ConfigurationNotFoundException(nameof(NhsAppPartyId));
+                if (NhsAppPartyId == null)
+                {
+                    throw new ConfigurationNotFoundException(nameof(NhsAppPartyId));
+                }
             }
         }
     }

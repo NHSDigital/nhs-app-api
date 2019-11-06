@@ -108,6 +108,7 @@ services:
       - TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE=xxx
       - NOMINATED_PHARMACY_ENABLED=true
       - SPINE_CERT_PASSWORD=xxx
+      - NHS_APP_PARTY_ID_FOR_SPINE=xxx
       - PROXY_ACCESS_ENABLED=true
       - USERINFO_API_BASE_URL=http://userinfo.local.bitraft.io:8091/v1/api/me/info
     depends_on:
