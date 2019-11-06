@@ -13,7 +13,7 @@
                         :error="error"
                         type="text"
                         :required="required"
-                        :max-length="maxLength"/>
+                        :maxlength="maxLength"/>
   </div>
 </template>
 
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.$emit('validate', questionStringAnswerValid(value, this.required));
+      this.$emit('validate', questionStringAnswerValid(value, this.required, this.maxLength));
     },
   },
 };

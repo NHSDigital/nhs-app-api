@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     checkAndEmitIsValueValid(value) {
-      this.$emit('validate', questionTextAnswerValid(value, this.required, this.maxlength));
+      this.$emit('validate', questionTextAnswerValid(value, this.required, this.maxLength));
     },
   },
 };

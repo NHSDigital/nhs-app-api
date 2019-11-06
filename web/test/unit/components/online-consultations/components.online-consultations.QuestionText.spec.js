@@ -1,7 +1,10 @@
 // import each from 'jest-each';
 import QuestionInteger from '@/components/online-consultations/QuestionText';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
+import { questionTextAnswerValid } from '@/lib/online-consultations/answer-validators';
 import { shallowMount, mount } from '../../helpers';
+
+jest.mock('@/lib/online-consultations/answer-validators');
 
 const defaultAnswerId = 'text-answer';
 
@@ -65,6 +68,26 @@ describe('QuestionText.vue', () => {
       expect(textAreaInputVm.name).toEqual(defaultAnswerId);
       expect(textAreaInputVm.id).toEqual(defaultAnswerId);
       expect(textAreaInputVm.maxlength).toEqual('20');
+    });
+  });
+
+  describe('methods', () => {
+    describe('checkAndEmitIsValueValid', () => {
+      beforeAll(() => {
+        questionTextAnswerValid.mockClear();
+      });
+      it('will validate the answer and emit the result', () => {
+        // Arrange
+        questionTextAnswerValid.mockReturnValue({ valid: false, message: 'too long' });
+        wrapper = mountQuestion();
+
+        // Act
+        wrapper.vm.checkAndEmitIsValueValid('an answer longer than 20 characters');
+
+        // Assert
+        expect(questionTextAnswerValid).toHaveBeenCalledWith('an answer longer than 20 characters', true, '20');
+        expect(wrapper.emitted('validate')[1][0]).toEqual({ valid: false, message: 'too long' });
+      });
     });
   });
 });

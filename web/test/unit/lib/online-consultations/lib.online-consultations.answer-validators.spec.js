@@ -303,11 +303,10 @@ describe('online consultations answer validators', () => {
 
     describe('answer is empty', () => {
       describe('answer is not required', () => {
-        each([{
-          day: '',
-          month: '',
-          year: '',
-        }, undefined]).it('will return is valid and empty true', (answer) => {
+        each([
+          { day: '', month: '', year: '' },
+          undefined,
+        ]).it('will return is valid and empty true', (answer) => {
           // Arrange
           const expectedValidation = {
             isValid: true,
@@ -323,11 +322,10 @@ describe('online consultations answer validators', () => {
       });
 
       describe('answer is required', () => {
-        each([{
-          day: '',
-          month: '',
-          year: '',
-        }, undefined]).it('will return is valid and empty true', (answer) => {
+        each([
+          { day: '', month: '', year: '' },
+          undefined,
+        ]).it('will return is valid and empty true', (answer) => {
           // Arrange
           const expectedValidation = {
             isValid: false,
@@ -344,28 +342,21 @@ describe('online consultations answer validators', () => {
       });
     });
 
-    describe('answer is partially empty or year is not 4 characters long', () => {
-      each([{
-        day: '',
-        month: '1',
-        year: '2000',
-      }, {
-        day: '1',
-        month: '',
-        year: '',
-      }, {
-        day: '1',
-        month: '11',
-        year: '',
-      }, {
-        day: '31',
-        month: '12',
-        year: '20000',
-      }, {
-        day: '31',
-        month: '12',
-        year: '99',
-      }]).it('will return is valid false', (answer) => {
+    describe('any part of the date is invalid or outside accepted range', () => {
+      each([
+        { day: '32', month: '12', year: '1999' },
+        { day: '0', month: '12', year: '1999' },
+        { day: '31', month: '13', year: '1999' },
+        { day: '31', month: '0', year: '1999' },
+        { day: '31', month: '12', year: '10000' },
+        { day: '31', month: '12', year: '999' },
+        { day: 'day', month: '12', year: '1999' },
+        { day: '31', month: 'month', year: '1999' },
+        { day: '31', month: '12', year: 'year' },
+        { day: '10.2', month: '12', year: '1999' },
+        { day: '31', month: '2.54', year: '1999' },
+        { day: '31', month: '12', year: '45.6' },
+      ]).it('will return is valid false', (answer) => {
         // Arrange
         const expectedValidation = {
           isValid: false,
@@ -378,37 +369,6 @@ describe('online consultations answer validators', () => {
 
         // Assert
         expect(validation).toEqual(expectedValidation);
-      });
-    });
-
-    describe('answer used to create a date in the format yyyy-MM-dd', () => {
-      describe('Date.getTime() is NaN', () => {
-        each([{
-          day: 'something',
-          month: 'not a',
-          year: 'date',
-        }, {
-          day: '99',
-          month: '99',
-          year: '1999',
-        }, {
-          day: '1',
-          month: '13',
-          year: '1999',
-        }]).it('will return is valid false', (answer) => {
-          // Arrange
-          const expectedValidation = {
-            isValid: false,
-            message: `${baseMessage}date`,
-            isEmpty: false,
-          };
-
-          // Act
-          const validation = validator(answer, true);
-
-          // Assert
-          expect(validation).toEqual(expectedValidation);
-        });
       });
     });
 
@@ -443,13 +403,10 @@ describe('online consultations answer validators', () => {
     describe('answer is empty', () => {
       message = `${baseMessage}dateTimeEmpty`;
       describe('answer is not required', () => {
-        each([{
-          day: '',
-          month: '',
-          year: '',
-          hour: '',
-          minute: '',
-        }, undefined]).it('will return is valid and empty true', (answer) => {
+        each([
+          { day: '', month: '', year: '', hour: '', minute: '' },
+          undefined,
+        ]).it('will return is valid and empty true', (answer) => {
           // Arrange
           const expectedValidation = {
             isValid: true,
@@ -465,13 +422,10 @@ describe('online consultations answer validators', () => {
       });
 
       describe('answer is required', () => {
-        each([{
-          day: '',
-          month: '',
-          year: '',
-          hour: '',
-          minute: '',
-        }, undefined]).it('will return is valid and empty true', (answer) => {
+        each([
+          { day: '', month: '', year: '', hour: '', minute: '' },
+          undefined,
+        ]).it('will return is valid and empty true', (answer) => {
           // Arrange
           const expectedValidation = {
             isValid: false,
@@ -488,20 +442,29 @@ describe('online consultations answer validators', () => {
       });
     });
 
-    describe('answer year is not 4 characters long, hour/minute are not between 0-23/0-59 respectively', () => {
-      each([{
-        day: '31',
-        month: '12',
-        year: '20000',
-        hour: '1',
-        minute: '2',
-      }, {
-        day: '31',
-        month: '12',
-        year: '99',
-        hour: '1',
-        minute: '2',
-      }]).it('will return is valid false', (answer) => {
+    describe('any part of the datetime is invalid or outside accepted range', () => {
+      each([
+        { day: '32', month: '12', year: '1999', hour: '1', minute: '2' },
+        { day: '0', month: '12', year: '1999', hour: '1', minute: '2' },
+        { day: '31', month: '13', year: '1999', hour: '1', minute: '2' },
+        { day: '31', month: '0', year: '1999', hour: '1', minute: '2' },
+        { day: '31', month: '12', year: '10000', hour: '1', minute: '2' },
+        { day: '31', month: '12', year: '999', hour: '1', minute: '2' },
+        { day: '31', month: '12', year: '1999', hour: '24', minute: '20' },
+        { day: '31', month: '12', year: '1999', hour: '-1', minute: '20' },
+        { day: '31', month: '12', year: '1999', hour: '1', minute: '60' },
+        { day: '31', month: '12', year: '1999', hour: '1', minute: '-1' },
+        { day: 'day', month: '12', year: '1999', hour: '10', minute: '40' },
+        { day: '31', month: 'month', year: '1999', hour: '10', minute: '40' },
+        { day: '31', month: '12', year: 'year', hour: '10', minute: '40' },
+        { day: '31', month: '12', year: '1999', hour: 'hour', minute: '40' },
+        { day: '31', month: '12', year: '1999', hour: '10', minute: 'minute' },
+        { day: '00.1', month: '12', year: '1999', hour: '10', minute: '40' },
+        { day: '31', month: '11.5', year: '1999', hour: '10', minute: '40' },
+        { day: '31', month: '12', year: '199.45', hour: '10', minute: '40' },
+        { day: '31', month: '12', year: '1999', hour: '10.2', minute: '40' },
+        { day: '31', month: '12', year: '1999', hour: '10', minute: '59.5' },
+      ]).it('will return is valid false', (answer) => {
         // Arrange
         const expectedValidation = {
           isValid: false,
@@ -517,79 +480,14 @@ describe('online consultations answer validators', () => {
       });
     });
 
-    describe('hour/minute are not between 0-23/0-59 respectively', () => {
-      message = `${baseMessage}dateTime`;
-      each([{
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '24',
-        minute: '20',
-      }, {
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '12',
-        minute: '100',
-      }, {
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '-1',
-        minute: '10',
-      }, {
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '12',
-        minute: '-12',
-      }]).it('will return is valid false', (answer) => {
-        // Arrange
-        const expectedValidation = {
-          isValid: false,
-          message,
-          isEmpty: false,
-        };
-        // Act
-        const validation = validator(answer, true);
-
-        // Assert
-        expect(validation).toEqual(expectedValidation);
-      });
-    });
-
     describe('answer is partially empty', () => {
-      each([{
-        day: '',
-        month: '1',
-        year: '2000',
-        hour: '1',
-        minute: '2',
-      }, {
-        day: '1',
-        month: '',
-        year: '',
-        hour: '1',
-        minute: '2',
-      }, {
-        day: '1',
-        month: '11',
-        year: '',
-        hour: '1',
-        minute: '2',
-      }, {
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '',
-        minute: '2',
-      }, {
-        day: '31',
-        month: '12',
-        year: '1992',
-        hour: '1',
-        minute: '',
-      }]).it('will return is valid false', (answer) => {
+      each([
+        { day: '', month: '12', year: '1999', hour: '1', minute: '2' },
+        { day: '31', month: '', year: '1999', hour: '1', minute: '2' },
+        { day: '31', month: '12', year: '', hour: '1', minute: '2' },
+        { day: '31', month: '12', year: '1999', hour: '', minute: '2' },
+        { day: '31', month: '12', year: '1999', hour: '1', minute: '' },
+      ]).it('will return is valid false', (answer) => {
         // Arrange
         const expectedValidation = {
           isValid: false,
@@ -602,44 +500,6 @@ describe('online consultations answer validators', () => {
 
         // Assert
         expect(validation).toEqual(expectedValidation);
-      });
-    });
-
-    describe('answer used to create a date in the format yyyy-MM-dd', () => {
-      describe('Date.getTime() is NaN', () => {
-        message = `${baseMessage}dateTime`;
-        each([{
-          day: 'something',
-          month: 'not a',
-          year: 'date',
-          hour: '10',
-          minute: '40',
-        }, {
-          day: '99',
-          month: '99',
-          year: '1999',
-          hour: '10',
-          minute: '40',
-        }, {
-          day: '1',
-          month: '13',
-          year: '1999',
-          hour: '10',
-          minute: '40',
-        }]).it('will return is valid false', (answer) => {
-          // Arrange
-          const expectedValidation = {
-            isValid: false,
-            message,
-            isEmpty: false,
-          };
-
-          // Act
-          const validation = validator(answer, true);
-
-          // Assert
-          expect(validation).toEqual(expectedValidation);
-        });
       });
     });
 
@@ -1526,10 +1386,10 @@ describe('online consultations answer validators', () => {
 
     describe('answer is empty', () => {
       describe('answer is not required', () => {
-        each([{
-          hour: '',
-          minute: '',
-        }, undefined]).it('will return is valid and empty true', (answer) => {
+        each([
+          { hour: '', minute: '' },
+          undefined,
+        ]).it('will return is valid and empty true', (answer) => {
           // Arrange
           const expectedValidation = {
             isValid: true,
@@ -1545,10 +1405,10 @@ describe('online consultations answer validators', () => {
       });
 
       describe('answer is required', () => {
-        each([{
-          hour: '',
-          minute: '',
-        }, undefined]).it('will return is valid false and is empty true', (answer) => {
+        each([
+          { hour: '', minute: '' },
+          undefined,
+        ]).it('will return is valid false and is empty true', (answer) => {
           // Arrange
           const expectedValidation = {
             isValid: false,
@@ -1565,26 +1425,17 @@ describe('online consultations answer validators', () => {
       });
     });
 
-    describe('answer is partially empty or hour/minute are not between 0-23/0-59 respectively', () => {
-      each([{
-        hour: '',
-        minute: '23',
-      }, {
-        hour: '11',
-        minute: '',
-      }, {
-        hour: '-11',
-        minute: '23',
-      }, {
-        hour: '11',
-        minute: '-23',
-      }, {
-        hour: '24',
-        minute: '23',
-      }, {
-        hour: '11',
-        minute: '60',
-      }]).it('will return is valid false', (answer) => {
+    describe('any part of the time is invalid or outside accepted range', () => {
+      each([
+        { hour: '24', minute: '20' },
+        { hour: '-1', minute: '20' },
+        { hour: '1', minute: '60' },
+        { hour: '1', minute: '-1' },
+        { hour: 'hour', minute: '40' },
+        { hour: '10', minute: 'minute' },
+        { hour: '01.02', minute: '40' },
+        { hour: '10', minute: '10.20' },
+      ]).it('will return is valid false', (answer) => {
         // Arrange
         const expectedValidation = {
           isValid: false,

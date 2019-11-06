@@ -1,26 +1,29 @@
 import QuestionString from '@/components/online-consultations/QuestionString';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
+import { questionStringAnswerValid } from '@/lib/online-consultations/answer-validators';
 import { mount } from '../../helpers';
 
+jest.mock('@/lib/online-consultations/answer-validators');
 
 let wrapper;
 const getInputWrapper = (useComponent = true) => wrapper.find(useComponent ? GenericTextInput : 'input[type=text]');
 
+const mountQuestion = ({ propsData } = {}) =>
+  mount(QuestionString, {
+    propsData,
+    state: {
+      device: {
+        isNativeApp: false,
+      },
+    },
+  });
 
 describe('QuestionString.vue', () => {
   beforeEach(() => {
-    const mountConfirmation = ({ propsData } = {}) =>
-      mount(QuestionString, {
-        propsData,
-        state: {
-          device: {
-            isNativeApp: false,
-          },
-        },
-      });
-    wrapper = mountConfirmation({
+    wrapper = mountQuestion({
       propsData: {
         name: 'name',
+        maxLength: '20',
       },
     });
   });
@@ -46,6 +49,25 @@ describe('QuestionString.vue', () => {
     it('has a type of text', async () => {
       const input = wrapper.find('input');
       expect(input.attributes().type).toBe('text');
+    });
+  });
+
+  describe('methods', () => {
+    describe('checkAndEmitIsValueValid', () => {
+      beforeAll(() => {
+        questionStringAnswerValid.mockClear();
+      });
+      it('will validate the answer and emit the result', () => {
+        // Arrange
+        questionStringAnswerValid.mockReturnValue({ valid: false, message: 'too long' });
+
+        // Act
+        wrapper.vm.checkAndEmitIsValueValid('an answer longer than 20 characters');
+
+        // Assert
+        expect(questionStringAnswerValid).toHaveBeenCalledWith('an answer longer than 20 characters', true, '20');
+        expect(wrapper.emitted('validate')[1][0]).toEqual({ valid: false, message: 'too long' });
+      });
     });
   });
 });

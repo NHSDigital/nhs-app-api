@@ -1,10 +1,20 @@
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import moment from 'moment';
 
+const positiveIntegerRegExp = /^\d+$/;
 const integerRegExp = /^-?\d+$/;
 const decimalRegExp = /^-?\d+(\.\d+)?$/;
 const baseMessagePath = 'onlineConsultations.validationErrors.message.';
 const booleanOptions = ['true', 'false'];
+
+function isValidIntegerInRange(value, min, max, positiveOnly = false) {
+  const regExp = positiveOnly ? positiveIntegerRegExp : integerRegExp;
+  const isValidNumber = !Number.isNaN(value) && regExp.exec(value) !== null;
+  if (isValidNumber) {
+    return value >= min && value <= max;
+  }
+  return false;
+}
 
 export function questionAttachmentAnswerValid(answer = {}, required, accept = [], maxSize) {
   const { base64, type, size } = answer;
@@ -70,16 +80,20 @@ export function questionDateAnswerValid(
     };
   }
 
-  if (year < 1000 || year > 9999 || dayEmpty || monthEmpty || yearEmpty) {
+  const yearValid = isValidIntegerInRange(year, 1000, 9999, true);
+  const monthValid = isValidIntegerInRange(month, 1, 12, true);
+  const dayValid = isValidIntegerInRange(day, 1, 31, true);
+
+  if (yearValid && monthValid && dayValid) {
     return {
-      isValid: false,
+      isValid: moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').isValid(),
       message: `${baseMessagePath}date`,
       isEmpty,
     };
   }
 
   return {
-    isValid: moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').isValid(),
+    isValid: false,
     message: `${baseMessagePath}date`,
     isEmpty,
   };
@@ -108,16 +122,22 @@ export function questionDateTimeAnswerValid(answer = {}, required) {
     };
   }
 
-  if (year < 1000 || year > 9999 || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+  const yearValid = isValidIntegerInRange(year, 1000, 9999, true);
+  const monthValid = isValidIntegerInRange(month, 1, 12, true);
+  const dayValid = isValidIntegerInRange(day, 1, 31, true);
+  const hourValid = isValidIntegerInRange(hour, 0, 23, true);
+  const minuteValid = isValidIntegerInRange(minute, 0, 59, true);
+
+  if (yearValid && monthValid && dayValid && hourValid && minuteValid) {
     return {
-      isValid: false,
+      isValid: moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').isValid(),
       message: `${baseMessagePath}dateTime`,
       isEmpty,
     };
   }
 
   return {
-    isValid: moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').isValid(),
+    isValid: false,
     message: `${baseMessagePath}dateTime`,
     isEmpty,
   };
@@ -151,8 +171,7 @@ export function questionNumberAnswerValid(
 
   const isInteger = type === QuestionTypes.INTEGER;
   const regExp = isInteger ? integerRegExp : decimalRegExp;
-  if (Number.isNaN(answer) ||
-      regExp.exec(answer) === null || answer === '-') {
+  if (Number.isNaN(answer) || regExp.exec(answer) === null) {
     return {
       isValid: false,
       message: isInteger ? `${baseMessagePath}integer` : `${baseMessagePath}decimal`,
@@ -345,8 +364,11 @@ export function questionTimeAnswerValid(answer = {}, required) {
     return { isValid: true, isEmpty };
   }
 
+  const hourValid = isValidIntegerInRange(hour, 0, 23, true);
+  const minuteValid = isValidIntegerInRange(minute, 0, 59, true);
+
   return {
-    isValid: !hourIsEmpty && !timeIsEmpty && hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59,
+    isValid: !hourIsEmpty && !timeIsEmpty && hourValid && minuteValid,
     message: `${baseMessagePath}time`,
     isEmpty,
   };
