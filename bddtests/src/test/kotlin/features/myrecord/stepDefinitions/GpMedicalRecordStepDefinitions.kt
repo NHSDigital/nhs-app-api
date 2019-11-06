@@ -18,6 +18,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
 import pages.gpMedicalRecord.MyRecordConsultationsAndEventsModule
+import pages.gpMedicalRecord.MyRecordHealthConditionsModule
 import pages.gpMedicalRecord.MyRecordImmunisationsModule
 import pages.gpMedicalRecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
@@ -37,6 +38,8 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     lateinit var immunisationModule: MyRecordImmunisationsModule
     @Steps
     lateinit var consultationsAndEventsModule: MyRecordConsultationsAndEventsModule
+    @Steps
+    lateinit var healthConditionsModule: MyRecordHealthConditionsModule
 
     private lateinit var myRecordWarningPage: MyRecordWarningPage
 
@@ -93,6 +96,13 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
         myRecordModuleCounts.allergyCount = count
     }
 
+
+    @Given("^MICROTEST have enabled medical record and records exist - GP Medical Record$")
+    fun givenMicrotestHaveEnabledMedicalRecordAndRecordsExist() {
+        val myRecordModuleCounts = MyRecordModuleCounts()
+        createRecordStubsMicrotest(myRecordModuleCounts)
+    }
+
     @When("I click the Allergies and adverse reactions link on my record - GP Medical Record")
     fun iClickTheAllergiesLinkOnTheAccountPage(){
         myRecordInfoPage.allergies.allergies.click()
@@ -104,8 +114,13 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     }
 
     @When("I click the Consultations and events link on my record - GP Medical Record")
-    fun iClickTheConsultationsLinkOnTheAccountPage(){
+    fun iClickTheConsultationsLinkOnTheAccountPage() {
         consultationsAndEventsModule.link.click()
+    }
+
+    @When("I click the Health conditions link on my record - GP Medical Record")
+    fun iClickTheHealthConditionsLinkOnTheAccountPage(){
+        healthConditionsModule.link.click()
     }
 
     @When("I click the test result link on my record - GP Medical Record")
@@ -138,5 +153,16 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     private fun assertTextOnPage(message: String) {
         val section = myRecordInfoPage.getBody(message)
         assertEquals(message, section.text)
+    }
+
+    private fun createRecordStubsMicrotest(moduleCounts: MyRecordModuleCounts) {
+        val supplier = "MICROTEST"
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(supplier).enabledWithData(
+                SerenityHelpers.getPatient(),
+                moduleCounts,
+                TestResultOptions())
     }
 }

@@ -22,27 +22,23 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     @Given("^the GP Practice has enabled problems functionality$")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityFor() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         ProblemsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled problems functionality$")
     fun butTheGPPracticeHasDisabledProblemsFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         ProblemsFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
     @Given("^no Problems records exist for the patient$")
     fun givenNoProblemsRecordsExistForThePatient() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         ProblemsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an error retrieving Problems data$")
     fun givenThereIsAnErrorRetrievingProblemsData() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         ProblemsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
     }
 

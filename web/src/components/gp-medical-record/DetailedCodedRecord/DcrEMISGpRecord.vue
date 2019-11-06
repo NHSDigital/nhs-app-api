@@ -20,6 +20,13 @@
                :text="$t('my_record.testResults.sectionHeader.default')"
                :click-func="goToUrl"
                :click-param="'/gp-medical-record/test-results'"/>
+
+    <menu-item id="healthConditions"
+               data-purpose="healthConditions"
+               :href="healthConditionsPath"
+               :text="$t('my_record.healthConditions.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="healthConditionsPath" />
   <!-- put the rest in here -->
   </div>
 </template>
@@ -29,6 +36,7 @@ import MenuItem from '@/components/MenuItem';
 import { TESTRESULTS,
   IMMUNISATIONS,
   CONSULTATIONS,
+  HEALTH_CONDITIONS,
 } from '@/lib/routes';
 
 const TESTRESULTSSTRING = 'testresults';
@@ -52,6 +60,9 @@ export default {
     },
     consultationsPath() {
       return CONSULTATIONS.path;
+    },
+    healthConditionsPath() {
+      return HEALTH_CONDITIONS.path;
     },
   },
 };

@@ -13,12 +13,19 @@
                :text="$t('my_record.immunisations.sectionHeader')"
                :click-func="goToUrl"
                :click-param="immunisationsPath" />
+
+    <menu-item id="healthConditions"
+               data-purpose="healthConditions"
+               :href="healthConditionsPath"
+               :text="$t('my_record.healthConditions.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="healthConditionsPath" />
   </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { TESTRESULTSDETAIL, IMMUNISATIONS } from '@/lib/routes';
+import { TESTRESULTSDETAIL, IMMUNISATIONS, HEALTH_CONDITIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -34,6 +41,9 @@ export default {
   computed: {
     immunisationsPath() {
       return IMMUNISATIONS.path;
+    },
+    healthConditionsPath() {
+      return HEALTH_CONDITIONS.path;
     },
   },
   methods: {

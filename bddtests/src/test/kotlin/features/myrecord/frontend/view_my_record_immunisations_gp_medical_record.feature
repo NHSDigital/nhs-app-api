@@ -42,7 +42,7 @@ Feature: View My Immunisation Information
 
   Scenario: A MICROTEST user can view immunisations - GP Medical Record
     Given I am a MICROTEST user setup to use medical record version 2
-    And MICROTEST have enabled immunisations and records exist - GP Medical Record
+    And the my record wiremocks are populated without setting the patient for MICROTEST
     And I am logged in
     And I am on my record information page and glossary is visible - GP Medical Record
     When I click the Immunisations link on my record - GP Medical Record
@@ -50,7 +50,8 @@ Feature: View My Immunisation Information
 
   Scenario: A MICROTEST user has no immunisations on their record - GP Medical
     Given I am a MICROTEST user setup to use medical record version 2
-    And MICROTEST have enabled immunisations and no records exist - GP Medical Record
+    And I have 0 Immunisations
+    And the my record wiremocks are populated without setting the patient for MICROTEST
     And I am logged in
     And I am on my record information page and glossary is visible - GP Medical Record
     When I click the Immunisations link on my record - GP Medical Record

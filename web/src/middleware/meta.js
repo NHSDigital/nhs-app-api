@@ -65,6 +65,7 @@ import {
   TESTRESULTS,
   TESTRESULTSDETAIL,
   IMMUNISATIONS,
+  HEALTH_CONDITIONS,
   TESTRESULTID,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
@@ -306,6 +307,10 @@ export default function ({ route, store, app }) {
     case IMMUNISATIONS.name:
       route.meta.headerKey = 'pageHeaders.immunisations';
       route.meta.pageTitleKey = 'pageTitles.immunisations';
+      break;
+    case HEALTH_CONDITIONS.name:
+      route.meta.headerKey = 'pageHeaders.healthConditions';
+      route.meta.pageTitleKey = 'pageTitles.healthConditions';
       break;
     case NOMINATED_PHARMACY_SEARCH.name:
       store.dispatch('navigation/setNewMenuItem', 2);

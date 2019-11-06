@@ -916,6 +916,17 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
+  HEALTH_CONDITIONS: {
+    name: 'gp-medical-record-health-conditions',
+    path: '/gp-medical-record/health-conditions',
+    crumb: {
+      i8nKey: 'healthConditions',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   SYMPTOMS: {
     name: 'symptoms',
     path: '/symptoms',
@@ -1091,6 +1102,7 @@ export const {
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
+  HEALTH_CONDITIONS,
   SYMPTOMS,
   TERMSANDCONDITIONS,
   TESTRESULTS,

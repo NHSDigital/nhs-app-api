@@ -153,11 +153,17 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun givenMyRecordWiremocksArePopulatedFor(gpSystem: String) {
         SerenityHelpers.setGpSupplier(gpSystem)
         setPatientToDefaultFor(gpSystem)
+        givenMyRecordWiremocksArePopulatedForNoPatient(gpSystem)
+    }
+
+    @Given("^the my record wiremocks are populated without setting the patient for (.*)$")
+    fun givenMyRecordWiremocksArePopulatedForNoPatient(gpSystem: String) {
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
         MyRecordFactory.getForSupplier(gpSystem).
                 enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
     }
+
 
     @When("^I enter url address for my record directly into the url$")
     fun whenIEnterUrlAddressForMyRecordDirectlyIntoTheUrl() {
