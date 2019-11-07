@@ -135,7 +135,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
     sjrRedirectRules: [
       adminHelpDisabledRedirect,
     ],
@@ -150,7 +150,7 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
     sjrRedirectRules: [
       gpAdviceDisabledRedirect,
     ],

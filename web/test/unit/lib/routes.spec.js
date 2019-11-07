@@ -75,10 +75,13 @@ describe('routes', () => {
       const appointmentsHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/appointments/';
       const prescriptionsHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/prescriptions/';
       const recordHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/record/';
+      const onlineConsultationsHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/online-consultations/';
 
       expect(findByName('appointments').helpUrl).toBe(appointmentsHelpUrl);
       expect(findByName('prescriptions').helpUrl).toBe(prescriptionsHelpUrl);
       expect(findByName('my-record').helpUrl).toBe(recordHelpUrl);
+      expect(findByName('appointments-admin-help').helpUrl).toBe(onlineConsultationsHelpUrl);
+      expect(findByName('appointments-gp-advice').helpUrl).toBe(onlineConsultationsHelpUrl);
     });
   });
 
