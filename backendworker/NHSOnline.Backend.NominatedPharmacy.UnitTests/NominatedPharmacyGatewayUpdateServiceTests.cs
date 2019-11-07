@@ -16,7 +16,7 @@ using NHSOnline.Backend.Support;
  namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {
     [TestClass]
-    public class NominatedPharmacyControllerTests
+    public class NominatedPharmacyGatewayUpdateServiceTests
     {
         private const string OdsCode = "AB123";
         private const string NominatedPharmacyTypeP3 = "P3";
@@ -46,16 +46,19 @@ using NHSOnline.Backend.Support;
         }
 
         [TestMethod]
-        public async Task Update_ReturnsSuccessful200Result_WhenServiceReturnsSuccessfully()
+        public async Task Update_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Arrange            
-            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
-            var nominatedPharmacyResultAfterUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, UpdatedOdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
+            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult.Success(
+                new GetNominatedPharmacyResponse(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3));
+            
+            var nominatedPharmacyResultAfterUpdate = new GetNominatedPharmacyResult.Success(
+                new GetNominatedPharmacyResponse(HttpStatusCode.OK, UpdatedOdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3));
 
             _mockNominatedPharmacyService
                 .SetupSequence(x => x.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession))
-                .Returns(Task.FromResult(nominatedPharmacyResultBeforeUpdate)) // first call
-                .Returns(Task.FromResult(nominatedPharmacyResultAfterUpdate)); // second call
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResultBeforeUpdate)) // first call
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResultAfterUpdate)); // second call
 
             var updateNominatedPharmacyResult = new UpdateNominatedPharmacyResult(HttpStatusCode.Accepted);
 
@@ -81,19 +84,20 @@ using NHSOnline.Backend.Support;
                     string.Equals(npu.PertinentSerialChangeNumber, _pertinentSerialChangeNumber, StringComparison.Ordinal) &&
                     npu.HasExistingNominatedPharmacy == true &&
                     string.Equals(npu.UpdatedOdsCode, UpdatedOdsCode, StringComparison.Ordinal))), Times.Once);
-            var value = result.Should().BeAssignableTo<OkResult>().Subject;
+            result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.Success>();
         }
 
         [TestMethod]
-        public async Task Update_ReturnsBadGateway_WhenUpdateReturnsSuccessfully_ButSubsequentRetrievalOfPharmacyIndicatesUpdateWasNotSuccessful()
+        public async Task Update_ReturnsUpdatedButStillOldCode_WhenUpdateReturnsSuccessfully_ButSubsequentRetrievalOfPharmacyIndicatesUpdateWasNotSuccessful()
         {
             // Arrange
-            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
-
+            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
+                    HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3));
+            
             _mockNominatedPharmacyService
                 .SetupSequence(x => x.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession))
-                .Returns(Task.FromResult(nominatedPharmacyResultBeforeUpdate)) // first call
-                .Returns(Task.FromResult(nominatedPharmacyResultBeforeUpdate)); // second call also returns same value, indicating update failed
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResultBeforeUpdate)) // first call
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResultBeforeUpdate)); // second call also returns same value, indicating update failed
 
             var updateNominatedPharmacyResult = new UpdateNominatedPharmacyResult(HttpStatusCode.Accepted);
 
@@ -120,19 +124,19 @@ using NHSOnline.Backend.Support;
                     string.Equals(npu.PertinentSerialChangeNumber, _pertinentSerialChangeNumber, StringComparison.Ordinal) &&
                     npu.HasExistingNominatedPharmacy == true &&
                     string.Equals(npu.UpdatedOdsCode, UpdatedOdsCode, StringComparison.Ordinal))), Times.Once);
-            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            value.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.UpdatedButStillOldCode>();
         }
 
         [TestMethod]
-        public async Task Update_ReturnsSuccessful500Result_WhenGetPharmacyFails()
+        public async Task Update_ReturnsFailure_WhenGetPharmacyFails()
         {
             // Arrange
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.BadGateway, OdsCode, _pertinentSerialChangeNumber, false, NominatedPharmacyTypeP3);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
+                HttpStatusCode.BadGateway, OdsCode, _pertinentSerialChangeNumber, false, NominatedPharmacyTypeP3));
 
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession))
-                .Returns(Task.FromResult(nominatedPharmacyResult))
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResult))
                 .Verifiable();
 
             // Act
@@ -142,19 +146,19 @@ using NHSOnline.Backend.Support;
             _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Once);
             _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdate>()), Times.Never);
 
-            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            value.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.GetNominatedPharmacyFailure>();
         }
 
         [TestMethod]
-        public async Task Update_Returns400Result_WhenUpdatePharmacyFails()
+        public async Task Update_ReturnsBadGateway_WhenUpdatePharmacyFails()
         {
             // Arrange            
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
+                HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3));
 
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession))
-                .Returns(Task.FromResult(nominatedPharmacyResult))
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResult))
                 .Verifiable();
 
             var updateNominatedPharmacyResult = new UpdateNominatedPharmacyResult(HttpStatusCode.BadRequest);
@@ -180,21 +184,21 @@ using NHSOnline.Backend.Support;
                     string.Equals(npu.PertinentSerialChangeNumber, _pertinentSerialChangeNumber, StringComparison.Ordinal) &&
                     npu.HasExistingNominatedPharmacy == true &&
                     string.Equals(npu.UpdatedOdsCode, UpdatedOdsCode, StringComparison.Ordinal))), Times.Once);
-            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            value.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Update_ReturnsBadGateway_WhenGetPharmacyHadMissingPertinentSerialChangeNumber()
+        public async Task Update_ReturnsNominatedPharmacyFailure_WhenGetPharmacyHadMissingPertinentSerialChangeNumber()
         {
             // Arrange
             string pertinentSerialChangeNumber = null;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, OdsCode, pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
+                HttpStatusCode.OK, OdsCode, pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3));
 
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession))
-                .Returns(Task.FromResult(nominatedPharmacyResult))
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResult))
                 .Verifiable();
 
             // Act
@@ -203,8 +207,7 @@ using NHSOnline.Backend.Support;
             // Assert
             _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Once);
 
-            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            value.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.GetNominatedPharmacyFailure>();
         }
     }
 }

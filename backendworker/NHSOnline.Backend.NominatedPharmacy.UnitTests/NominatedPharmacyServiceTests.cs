@@ -157,9 +157,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             // Assert
             _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
-            result.PharmacyOdsCode.Should().Be(null);
-            result.HaveAllChecksPassed.Should().BeTrue();
+            result.Should().BeAssignableTo<GetNominatedPharmacyResult.Success>();
+            result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(null);
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeTrue();
         }
 
         [DataTestMethod]
@@ -310,9 +311,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             // Assert
             _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(httpStatusCode);
-            result.PharmacyOdsCode.Should().Be(expectedPharmacyOdsCodeInResult);
-            result.HaveAllChecksPassed.Should().Be(expectedIsNominatedPharmacyEnabledValue);
+            result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(httpStatusCode);
+            result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(expectedPharmacyOdsCodeInResult);
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().Be(expectedIsNominatedPharmacyEnabledValue);
         }
         
         [DataTestMethod]
@@ -460,9 +461,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession);
 
             // Assert
-            _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
-            result.HaveAllChecksPassed.Should().Be(expectedIsNominatedPharmacyEnabledValue);
+            _nominatedPharmacyClient.Verify();        
+            result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().Be(expectedIsNominatedPharmacyEnabledValue);
         }
 
         
@@ -542,9 +543,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             // Assert
             _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
-            result.PharmacyOdsCode.Should().Be(null);
-            result.HaveAllChecksPassed.Should().BeFalse();
+            result.Should().BeAssignableTo<GetNominatedPharmacyResult.NhsNumberSuperseded>();
+            result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(null);
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();
         }
         
         [DataRow("SS")]
@@ -630,9 +632,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             // Assert
             _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
-            result.PharmacyOdsCode.Should().Be(null);
-            result.HaveAllChecksPassed.Should().BeFalse();
+            result.Should().BeAssignableTo<GetNominatedPharmacyResult.ConfidentialAccount>();
+            result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(null);
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();
         }
          
         [TestMethod]
@@ -751,9 +754,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             // Assert
             _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(httpStatusCode);
-            result.PharmacyOdsCode.Should().Be(ExpectedPharmacyOdsCodeInResult);
-            result.HaveAllChecksPassed.Should().BeFalse();
+            result.Should().BeAssignableTo<GetNominatedPharmacyResult.PharmacyChecksFailed>();
+            result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(httpStatusCode);
+            result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(ExpectedPharmacyOdsCodeInResult);
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();
         }
         
         [DataTestMethod]
@@ -772,8 +776,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             
             // Assert
             _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-            result.HaveAllChecksPassed.Should().BeFalse();        
+            result.Should().BeAssignableTo<GetNominatedPharmacyResult.PharmacyRetrievalFailure>();
+            result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();        
         }
         
         [TestMethod]
@@ -793,7 +798,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             // Assert
             _nominatedPharmacyClient.Verify();
-            result.HttpStatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result.Should().BeAssignableTo<GetNominatedPharmacyResult.InternalServerError>();
         }
 
         private static NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>
@@ -835,6 +840,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                     {
                                                         PlayedOtherProviderPatients =
                                                             GetPatientCareProvisionEvents(pharmacyCodes)
+                                                    },
+                                                    Id = new Id
+                                                    {
+                                                        Extension = NhsNumberTrimmed
                                                     }
                                                 }
                                             },

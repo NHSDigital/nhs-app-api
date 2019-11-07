@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
     public interface IPharmacySearchService
     {
-        Task<PharmacySearchResponse> Search(string searchTerm);
+        Task<PharmacySearchResult> Search(string searchTerm);
     }
 }

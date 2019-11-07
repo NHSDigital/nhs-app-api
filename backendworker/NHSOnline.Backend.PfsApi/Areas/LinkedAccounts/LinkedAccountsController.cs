@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
@@ -165,8 +165,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                     toNhsNumber = linkedAccountsService.GetNhsNumberForProxyUser(userSession.GpUserSession, id);
                 } 
                 
-                fromNhsNumber = fromNhsNumber.Replace(" ", string.Empty, StringComparison.Ordinal);
-                toNhsNumber = toNhsNumber.Replace(" ", string.Empty, StringComparison.Ordinal);
+                fromNhsNumber = fromNhsNumber.RemoveWhiteSpace();
+                toNhsNumber = toNhsNumber.RemoveWhiteSpace();
 
                 _logger.LogInformation($"Switching profile from nhsnumber={fromNhsNumber} to nhsnumber={toNhsNumber}");
 

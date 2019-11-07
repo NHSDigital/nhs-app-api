@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using GeoCoordinatePortable;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.Support;
@@ -20,22 +23,27 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
         private readonly IGpLookupConfig _gpLookupConfig;
         private readonly INhsSearchResultChecker _nhsSearchResultChecker;
         private readonly IPostcodeParser _postcodeParser;
+        private readonly IPharmacyDetailsToPharmacyDetailsResponseMapper _pharmacyDetailsToPharmacyDetailsResponseMapper;
+
 
         public PharmacySearchService(
             ILogger<PharmacySearchService> logger,
             IGpLookupClient gpLookupClient,
             IGpLookupConfig gpLookupConfig,
             INhsSearchResultChecker nhsSearchResultChecker,
-            IPostcodeParser postcodeParser)
+            IPostcodeParser postcodeParser,
+            IPharmacyDetailsToPharmacyDetailsResponseMapper pharmacyDetailsToPharmacyDetailsResponseMapper
+            )
         {
             _logger = logger;
             _gpLookupClient = gpLookupClient;
             _gpLookupConfig = gpLookupConfig;
             _nhsSearchResultChecker = nhsSearchResultChecker;
             _postcodeParser = postcodeParser;
+            _pharmacyDetailsToPharmacyDetailsResponseMapper = pharmacyDetailsToPharmacyDetailsResponseMapper;
         }
 
-        public async Task<PharmacySearchResponse> Search(string searchTerm)
+        public async Task<PharmacySearchResult> Search(string searchTerm)
         {
             _logger.LogEnter();
 
@@ -47,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 
             if (!isValid)
             {
-                return new PharmacySearchResponse(HttpStatusCode.BadRequest);
+                return new PharmacySearchResult.BadRequest();
             }
 
             var postcodeDetail = _postcodeParser.ParseSearchTermForPostcodeMatch(searchTerm);
@@ -55,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             if (!postcodeDetail.IsPostcode)
             {
                 _logger.LogInformation($"Didn't recognise as valid postcode: {searchTerm}");
-                return new PharmacySearchResponse(HttpStatusCode.OK);
+                return new PharmacySearchResult.InvalidPostcode();
             }
 
             try
@@ -71,41 +79,54 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                     {
                         _logger.LogError($"Unsuccessful request searching for Postcode Latitude and Longitude " +
                                          $"on Nhs Search Service, Status code: " +
-                                         $"{(int)postcodeSearchResult.StatusCode}");
-                        return new PharmacySearchResponse(postcodeSearchResult.StatusCode);
+                                         $"{(int) postcodeSearchResult.StatusCode}");
+                        
+                        return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);
                     }
 
                     var postcodeCoordinates = postcodeSearchResult?.Body?.PostcodeData?.FirstOrDefault();
 
                     if (postcodeCoordinates == null)
                     {
-                        _logger.LogInformation($"NHS Search service returned no postcode data for: {searchTerm} ");
-                        return new PharmacySearchResponse(postcodeSearchResult.StatusCode);
+                        _logger.LogInformation($"NHS Search service returned no postcode data for: {searchTerm}");
+                        return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);
                     }
 
                     var organisationSearchQuery = CreateOrganisationPostcodeSearchQuery(postcodeCoordinates);
                     
-                    var pharmacySearchResponse = await ExecuteOrganisationPostcodeSearch(
-                        organisationSearchQuery,
-                        postcodeDetail.Postcode);
+                    var pharmacySearchResponse = 
+                        await ExecuteOrganisationPostcodeSearch(organisationSearchQuery, postcodeDetail.Postcode);
 
 
                     pharmacySearchResponse.PostcodeCoordinate = new GeoCoordinate(
                         double.Parse(postcodeCoordinates.Latitude, CultureInfo.InvariantCulture),
                         double.Parse(postcodeCoordinates.Longitude, CultureInfo.InvariantCulture));
 
-                    return pharmacySearchResponse;
+                    var pharmacies = Enumerable.Empty<PharmacyDetails>();
+                    try
+                    {
+                         pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(
+                            pharmacySearchResponse.Pharmacies,
+                            pharmacySearchResponse.PostcodeCoordinate);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
+                        return new PharmacySearchResult.InternalServerError();
+                    } 
+
+                    return new PharmacySearchResult.Success(pharmacies);
                 }
                 catch (HttpRequestException ex)
                 {
                     _logger.LogError(ex, $"Search for Nhs pharmacies Failed for: {searchTerm} ");
-                    return new PharmacySearchResponse(HttpStatusCode.InternalServerError);
+                    return new PharmacySearchResult.InternalServerError();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error processing Postcode search input: {searchTerm} ");
-                return new PharmacySearchResponse(HttpStatusCode.InternalServerError);
+                return new PharmacySearchResult.InternalServerError();
             }
             finally
             {
