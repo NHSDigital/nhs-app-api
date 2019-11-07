@@ -8,7 +8,7 @@ Feature: Get medications data Backend
     And I have logged in and have a valid session cookie
     And the GP Practice has enabled medications functionality
     When I get the users my record data
-    Then I receive "1" acute medications as part of the my record object
+    Then I receive "2" acute medications as part of the my record object
     And I receive "3" current repeat medications as part of the my record object
     And I receive "2" discontinued repeat medications as part of the my record object
     And the field indicating supplier is set
