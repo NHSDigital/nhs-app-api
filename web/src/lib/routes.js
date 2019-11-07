@@ -134,7 +134,7 @@ const routes = {
     crumb: {
       i8nKey: 'appointmentsAdminHelp',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return undefined;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
@@ -149,7 +149,7 @@ const routes = {
     crumb: {
       i8nKey: 'appointmentsGpAdvice',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return undefined;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
