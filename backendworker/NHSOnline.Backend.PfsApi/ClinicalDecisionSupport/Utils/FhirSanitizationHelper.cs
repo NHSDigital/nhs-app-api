@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Hl7.Fhir.Model;
 using NHSOnline.Backend.Support.Sanitization;
 
@@ -91,14 +92,13 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         {
             if (referralRequest == null) return;
 
-            referralRequest.Description = htmlSanitizer.SanitizeHtml(referralRequest.Description, null);
+            referralRequest.Description = SanitizeAndDecodeHtml(referralRequest.Description, htmlSanitizer, null);
         }
 
         private static void SanitizeCarePlan(CarePlan carePlan, IHtmlSanitizer htmlSanitizer)
         {
             if (carePlan == null) return;
-            
-            carePlan.Title = htmlSanitizer.SanitizeHtml(carePlan.Title, null);
+            carePlan.Title = SanitizeAndDecodeHtml(carePlan.Title, htmlSanitizer, null);
             SanitizeCarePlanActivities(carePlan.Activity, htmlSanitizer);
         }
 
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
             foreach (var activityComponent in activityComponents)
             {
-                activityComponent.Detail.Description = htmlSanitizer.SanitizeHtml(activityComponent.Detail?.Description, null);
+                activityComponent.Detail.Description = SanitizeAndDecodeHtml(activityComponent.Detail?.Description, htmlSanitizer, null);
             }
         }
         
@@ -159,22 +159,32 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
             items.ForEach(item =>
             {
-                item.Text = htmlSanitizer.SanitizeHtml(item.Text, null);
+                item.Text = SanitizeAndDecodeHtml(item.Text, htmlSanitizer, null);
 
                 if (item.Option == null || item.Option.Count == 0)
                 {
+                    if (item.Item != null  && item.Item.Count > 0)
+                    {
+                        SanitizeItems(item.Item, htmlSanitizer);
+                    }
+
                     return;
+
                 }
 
                 item.Option.ForEach(option =>
                 {
                     var optionValue = (Coding) option.Value;
-                    optionValue.Display = htmlSanitizer.SanitizeHtml(optionValue.Display, Whitelist);
+                    optionValue.Display = SanitizeAndDecodeHtml(optionValue.Display, htmlSanitizer, Whitelist);
                     option.Value = optionValue;
                 });
-
-                SanitizeItems(item.Item, htmlSanitizer);
             });
+        }
+        
+        private static string SanitizeAndDecodeHtml(string html, IHtmlSanitizer htmlSanitizer, HashSet<string> whitelist)
+        {
+            html = htmlSanitizer.SanitizeHtml(html, whitelist);
+            return WebUtility.HtmlDecode(html);
         }
     }
 }
