@@ -48,6 +48,7 @@ services:
       - SPINE_PDS_URL=http://stubs.local.bitraft.io:8080/spine/
       - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
       - PROXY_ACCESS_ENABLED=true
+      - NHS_APP_PARTY_ID_FOR_SPINE=xxx
     volumes:
       - ../src/main/kotlin/mocking/dummycerts:/app/bddcerts
   cid.local.bitraft.io:
