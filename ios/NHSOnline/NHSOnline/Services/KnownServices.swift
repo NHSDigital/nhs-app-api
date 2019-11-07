@@ -111,8 +111,11 @@ class KnownServices {
     
     private func buildExternalSites() {
         let helpURL: URL = URL(string: config.HelpURL)!
+        let helpAppointmentsURL: URL = URL(string: config.HelpAppointmentsURL)!
         let HelpAccountURL: URL = URL(string: config.HelpAccountURL)!
         let HelpLoginURL: URL = URL(string: config.HelpLoginURL)!
+        let helpPrescriptionsURL: URL = URL(string: config.HelpPrescriptionsURL)!
+        let helpRecordURL: URL = URL(string: config.HelpRecordURL)!
         let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
         let privacyPolicyURL: URL = URL(string: config.PrivacyPolicyURL)!
         let cookiesPolicyURL: URL = URL(string: config.CookiesPolicyURL)!
@@ -132,8 +135,30 @@ class KnownServices {
         let conditionsUrl: URL = URL(string: config.ConditionsUrlPath)!
         let dataSharingUrl: URL = URL(string: config.DataSharingUrlPath)!
         
-        externalSites = [helpURL, HelpAccountURL, HelpLoginURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL, biometricsHelpURl,
-                        helpURLOld, termsAndConditionsURLOld, privacyPolicyURLOld, cookiesPolicyURLOld, openSourceLicensesURLOld, medicalRecordAbbreviationsURLOld, accessibilityStatementURLOld, conditionsUrl, dataSharingUrl]
+        externalSites = [
+            helpURL,
+            HelpAccountURL,
+            helpAppointmentsURL,
+            HelpLoginURL,
+            helpPrescriptionsURL,
+            helpRecordURL,
+            termsAndConditionsURL,
+            privacyPolicyURL,
+            cookiesPolicyURL,
+            openSourceLicensesURL,
+            medicalRecordAbbreviationsURL,
+            accessibilityStatementURL,
+            biometricsHelpURl,
+            helpURLOld,
+            termsAndConditionsURLOld,
+            privacyPolicyURLOld,
+            cookiesPolicyURLOld,
+            openSourceLicensesURLOld,
+            medicalRecordAbbreviationsURLOld,
+            accessibilityStatementURLOld,
+            conditionsUrl,
+            dataSharingUrl
+        ]
     }
     
     private func buildKnownServices() {

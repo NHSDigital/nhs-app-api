@@ -4,7 +4,6 @@ import WebKit
 
 class BiometricsViewControllerTests : XCTestCase {
     var biometricsViewController: BiometricsViewController!
-    var homeViewController: HomeViewController!
     var testWebview: WKWebView!
 
     override func setUp() {
@@ -12,6 +11,7 @@ class BiometricsViewControllerTests : XCTestCase {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: BiometricsViewController = storyboard.instantiateViewController(withIdentifier: "BiometricsViewController") as! BiometricsViewController
         biometricsViewController = vc
+
     }
     
     func test_activatingBiometricsToggle_SetsPromptCookie() {
@@ -38,6 +38,33 @@ class BiometricsViewControllerTests : XCTestCase {
     func test_biometricBreadcrumb_Returns_True() {
         biometricsViewController.viewDidLoad()
         XCTAssert(true, "MyAccountTitle")
+    }
+    
+    func test_biometricViewController_ShouldCallHomeViewController() {
+        
+        let homeViewController = MockHomeViewController()
+        biometricsViewController.homeViewController = homeViewController
+        
+        let bogusGestureRecogniser: UITapGestureRecognizer = UITapGestureRecognizer()
+        biometricsViewController.selectMyAccount(sender: bogusGestureRecogniser)
+        
+        assert(homeViewController.showWebViewContainerCalled == true,
+               "Expected the showWebViewContainer() Method to be invoked")
+        
+        assert(homeViewController.updateHeaderTextCalled == true,
+               "Expected the updateHeaderText() Method to be invoked")
+    }
+}
+
+class MockHomeViewController: HomeViewController {
+    var showWebViewContainerCalled = false
+    var updateHeaderTextCalled = false
+    override func showWebViewContainer() {
+        showWebViewContainerCalled = true
+    }
+    
+    override func updateHeaderText(headerText: String?, accessibilityLabel: String? = nil) {
+        updateHeaderTextCalled = true
     }
 }
     

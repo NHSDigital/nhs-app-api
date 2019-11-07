@@ -126,10 +126,11 @@ class BiometricsViewController: UIViewController {
 
         return url!
     }
-
+    
     @objc func selectMyAccount(sender : UITapGestureRecognizer) {
-        createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
-        homeViewController?.reloadLoginPage()
+        UserDefaults.standard.set(config().HelpAccountURL, forKey: "HelpUrl")
+        homeViewController?.showWebViewContainer()
+        homeViewController?.updateHeaderText(headerText: NSLocalizedString("MyAccountTitle", comment: ""))
     }
 
     func setupBreadcrumbLink() {

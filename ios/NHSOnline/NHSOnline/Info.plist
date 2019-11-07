@@ -95,8 +95,14 @@
 	<string>auth-return?error=server_data_expired&amp;state=A</string>
 	<key>HelpAccountURL</key>
 	<string>https://$(HELP_ACCOUNT_URL)</string>
+	<key>HelpAppointmentsURL</key>
+	<string>https://$(HELP_APPOINTMENTS_URL)</string>
 	<key>HelpLoginURL</key>
 	<string>https://$(HELP_LOGIN_URL)</string>
+	<key>HelpPrescriptionsURL</key>
+	<string>https://$(HELP_PRESCRIPTIONS_URL)</string>
+	<key>HelpRecordURL</key>
+	<string>https://$(HELP_RECORD_URL)</string>
 	<key>HelpURL</key>
 	<string>https://$(HELP_URL)</string>
 	<key>HelpURLOld</key>
