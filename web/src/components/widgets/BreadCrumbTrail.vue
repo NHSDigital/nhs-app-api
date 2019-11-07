@@ -33,7 +33,8 @@
               <a class="nhsuk-breadcrumb__backlink"
                  :class="$style['native'] "
                  @click.prevent="backLinkClicked()" >
-                Back
+                <span v-if="isProxyPage">Back to Home</span>
+                <span v-else>Back</span>
               </a>
             </span>
           </div>
@@ -47,7 +48,7 @@
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
 import { navigateBack } from '@/lib/utils';
-import { ORGAN_DONATION, MORE, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
+import { ORGAN_DONATION, MORE, ORGAN_DONATION_VIEW_DECISION, SWITCH_PROFILE, INDEX } from '@/lib/routes';
 
 export default {
   name: 'BreadCrumbTrail',
@@ -58,6 +59,9 @@ export default {
     },
   },
   computed: {
+    isProxyPage() {
+      return this.$route.name === SWITCH_PROFILE.name;
+    },
     lastCrumb() {
       return last(this.routes);
     },
@@ -80,6 +84,8 @@ export default {
         }
 
         this.goToUrl(backLinkOverride);
+      } else if (this.$route.name === SWITCH_PROFILE.name) {
+        this.goToUrl(INDEX.path);
       } else {
         navigateBack(this);
       }

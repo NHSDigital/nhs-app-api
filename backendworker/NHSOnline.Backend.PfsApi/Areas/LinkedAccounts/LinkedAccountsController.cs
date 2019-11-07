@@ -110,9 +110,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetLinkedAccountsService();
 
-            var isValidLinkedAccountId = linkedAccountsService.IsValidLinkedAccountId(userSession.GpUserSession, id);
+            var IsValidAccountOrLinkedAccountId = linkedAccountsService.IsValidAccountOrLinkedAccountId(userSession.GpUserSession, id);
 
-            if (isValidLinkedAccountId)
+            if (IsValidAccountOrLinkedAccountId)
             {
                 _logger.LogInformation($"Switched profile to id {id}");
                 return Ok();

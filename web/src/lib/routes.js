@@ -1027,6 +1027,17 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}proxy/`,
   },
+  SWITCH_PROFILE: {
+    name: 'switch-profile',
+    path: '/switch-profile',
+    crumb: {
+      i8nKey: 'switchProfile',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}proxy/`,
+  },
   // Legacy
   LEGACY_MYRECORDWARNING: {
     name: 'my-record-warning',
@@ -1171,4 +1182,5 @@ export const {
   IMMUNISATIONS,
   LINKED_PROFILES,
   LINKED_PROFILES_SUMMARY,
+  SWITCH_PROFILE,
 } = routes;

@@ -1,0 +1,16 @@
+@import "./colours";
+
+@mixin icon-arrow-left {
+  background: transparent url('~assets/icon_arrow_left.svg') no-repeat center right;
+  background-position: right 1em center;
+}
+
+@mixin icon-arrow-down {
+  background: transparent url('~assets/icon_arrow_down.svg') no-repeat center right;
+  background-position: right 1em center;
+}
+
+@mixin icon-arrow-left-white-background {
+  background: $white url(~assets/icon_arrow_left.svg) no-repeat center right;
+  background-position: right 1em center;
+}

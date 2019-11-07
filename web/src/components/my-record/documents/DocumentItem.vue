@@ -78,11 +78,11 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '../../../style/arrow';
   .document {
     &.available {
       padding-right: 2em;
-      background-image: url(~assets/icon_arrow_left.svg);
-      background-position: right 1em center;
+      @include icon-arrow-left;
       background-repeat: no-repeat;
     }
 

@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             // Arrange
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.IsValidLinkedAccountId(_userSession.GpUserSession, id))
+            _linkedAccountService.Setup(x => x.IsValidAccountOrLinkedAccountId(_userSession.GpUserSession, id))
                 .Returns(true)
                 .Verifiable();
 
@@ -86,12 +86,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         }
 
         [TestMethod]
-        public void Switch_Returns404_WhenLinkedAccountIdIsFound()
+        public void Switch_Returns404_WhenLinkedAccountIdIsNotFound()
         {
             // Arrange
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.IsValidLinkedAccountId(_userSession.GpUserSession, id))
+            _linkedAccountService.Setup(x => x.IsValidAccountOrLinkedAccountId(_userSession.GpUserSession, id))
                 .Returns(false)
                 .Verifiable();
 

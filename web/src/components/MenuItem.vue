@@ -80,12 +80,12 @@ export default {
 @import '../style/textstyles';
 @import '../style/fonts';
 @import '../style/colours';
+@import '../style/arrow';
 
 .listMenuItemLink {
+  @include icon-arrow-left-white-background;
   display: block;
   box-sizing: border-box;
-  background: $white url(~assets/icon_arrow_left.svg) no-repeat center right;
-  background-position: right 1em center;
   margin-left: 0;
 
   border-top: 1px $border_grey solid;

@@ -1,6 +1,6 @@
 @import './colours';
 @import './textstyles';
-
+@import './arrow';
 
 /** MEDICAL RECORD */
 a.record-title {
@@ -9,22 +9,18 @@ a.record-title {
 	padding: 1em;
 	padding-right: 1.875em;
 	box-sizing: border-box;
-	background: transparent url('~assets/icon_arrow_left.svg') no-repeat center right;
-	background-position: right 1em center;
+	@include icon-arrow-left;
 	transition: background ease 0.5s;
 	margin: 0.5em 0 0 0;
 
 	&.opened {
-		background: transparent url('~assets/icon_arrow_down.svg') no-repeat center right;
-		background-position: right 1em center;
+		@include icon-arrow-down;
 
 		border-bottom: none;
 
 	}
 	&.closed {
-		background: transparent url('~assets/icon_arrow_left.svg') no-repeat center right;
-		background-position: right 1em center;
-
+		@include icon-arrow-left;
 		border-bottom: 0.125em solid $white;
 	}
 }

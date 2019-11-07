@@ -9,6 +9,7 @@ import {
   LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
   SET_LINKED_ACCOUNTS_CONFIG,
   SWITCH_TO_LINKED_ACCOUNT,
+  SWITCH_TO_MAIN_USER_ACCOUNT,
   initialState,
 } from './mutation-types';
 
@@ -54,5 +55,8 @@ export default {
   },
   [SWITCH_TO_LINKED_ACCOUNT](state, profile) {
     state.actingAsUser = profile;
+  },
+  [SWITCH_TO_MAIN_USER_ACCOUNT](state) {
+    state.actingAsUser = null;
   },
 };

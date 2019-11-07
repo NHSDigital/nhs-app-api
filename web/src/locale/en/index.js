@@ -296,8 +296,8 @@ export default {
             label: 'we cannot get your NHS login details',
           },
           item2: {
-            id: '2',
             text: 'we cannot connect to your GP surgery',
+            id: '2',
             label: 'we cannot connect to your GP surgery',
           },
         },
@@ -1427,6 +1427,7 @@ export default {
     dataSharing: 'Find out why your data matters',
     more: 'More',
     linkedProfiles: 'Linked profiles',
+    switchProfile: 'You are acting on behalf of {name}',
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
@@ -1480,6 +1481,7 @@ export default {
     more: 'More',
     login: 'Login',
     linkedProfiles: 'Linked profiles',
+    switchProfile: 'You are acting on behalf of {name}',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
     recalls: 'Recalls',
@@ -1523,6 +1525,7 @@ export default {
     myRecordProceduresDetail: 'My medical results',
     myRecordTestResultsDetail: 'My medical results',
     myRecordDocuments: 'Documents',
+    switchProfile: 'Home',
     organ_donation: 'Organ Donation',
     prescriptions: 'My repeat prescriptions',
     prescriptionRepeatCourses: 'My repeat prescriptions',
@@ -1565,6 +1568,14 @@ export default {
       orderRepeatPrescription: 'Order repeat prescription',
       viewMedicalRecord: 'View medical record',
     },
+  },
+  switchProfile: {
+    informationHeaders: {
+      dob: 'Date of birth',
+      nhsNumber: 'NHS number',
+      gpPractice: 'GP surgery',
+    },
+    switchToMyProfileButton: 'Switch to my profile',
   },
   notifications: {
     paragraphs: [

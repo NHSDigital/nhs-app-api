@@ -44,6 +44,7 @@ export default {
 
 <style module lang="scss" scoped>
 @import '~nhsuk-frontend/packages/nhsuk';
+@import '../../style/arrow';
 ul.nhs-app-message {
   list-style: none;
 }
@@ -60,8 +61,7 @@ ul.nhs-app-message {
 .nhs-app-message__item {
   margin-bottom: nhsuk-spacing(0);
   box-sizing: border-box;
-  background: white url(~assets/icon_arrow_left.svg) no-repeat center right;
-  background-position: right 1em center;
+  @include icon-arrow-left-white-background;
   position: relative;
   margin-left: nhsuk-spacing(0);
   border-bottom: 1px $nhsuk-border-color solid;

@@ -152,8 +152,8 @@ class LinkedProfilesStepDefinitions {
                 displayedLinkedProfile.gpPracticeName)
     }
 
-    @When("I click the Switch to my profile button")
-    fun iClickTheSwitchToMyProfileButton() {
+    @When("I click the Switch to this profile button for the proxy user")
+    fun iClickTheSwitchToThisProfileButtonForTheProxyUser() {
         linkedProfileSummaryPage.switchProfileButton.click()
     }
 

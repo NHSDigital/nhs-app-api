@@ -9,6 +9,7 @@ import {
   LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
   SET_LINKED_ACCOUNTS_CONFIG,
   SWITCH_TO_LINKED_ACCOUNT,
+  SWITCH_TO_MAIN_USER_ACCOUNT,
 } from './mutation-types';
 
 export default {
@@ -62,6 +63,16 @@ export default {
       .postV1PatientLinkedAccountsSwitchById(params)
       .then(() => {
         commit(SWITCH_TO_LINKED_ACCOUNT, profile);
+      });
+  },
+  switchToMainUserProfile({ commit }, profile) {
+    const params = {
+      id: profile.id,
+    };
+    return this.app.$http
+      .postV1PatientLinkedAccountsSwitchById(params)
+      .then(() => {
+        commit(SWITCH_TO_MAIN_USER_ACCOUNT);
       });
   },
 };

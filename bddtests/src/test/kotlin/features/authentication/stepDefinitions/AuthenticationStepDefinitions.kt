@@ -233,6 +233,11 @@ class AuthenticationStepDefinitions {
         Assert.assertTrue("Can't find yellow banner", home.homePage.banner.isPresent)
     }
 
+    @Then("^I click the yellow banner$")
+    fun iClickYellowBanner() {
+        home.homePage.banner.click()
+    }
+
     @Then("^I do not see the yellow banner$")
     fun iDoNotSeeYellowBanner() {
         home.homePage.banner.assertElementNotPresent()

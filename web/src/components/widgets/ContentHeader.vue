@@ -16,7 +16,10 @@
             </b>
           </p>
         </div>
-        <div v-if="isProxying" id="acting-as-other-user-warning">
+        <div v-if="isProxying" id="acting-as-other-user-warning"
+             :class="$style['banner']" tabindex="0"
+             @keypress.enter="proxyBannerClicked"
+             @click="proxyBannerClicked">
           <p>
             {{ $t('linkedProfiles.actingAsOtherUserBannerWarningText') }}
             <b class="nhsuk-u-margin-top-2">
@@ -50,6 +53,7 @@ import {
   getCrumbTrailForRoute,
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_ADMIN_HELP,
+  SWITCH_PROFILE,
 } from '@/lib/routes';
 import YellowBanner from './YellowBanner';
 
@@ -116,6 +120,13 @@ export default {
       return '';
     },
   },
+  methods: {
+    proxyBannerClicked() {
+      if (this.$route.name !== SWITCH_PROFILE.name) {
+        this.goToUrl(SWITCH_PROFILE.path);
+      }
+    },
+  },
 };
 </script>
 
@@ -124,6 +135,9 @@ export default {
   @import '../../style/screensizes';
   @import '../../style/textstyles';
   @import "../../style/fonts";
+  @import "../../style/arrow";
+  @import '../../style/accessibility';
+  @import '../../style/desktopWeb/accessibility';
 
   .fix-breadcrumb {
     z-index: 4;
@@ -138,5 +152,29 @@ export default {
   .native-padding {
     padding-top: 48px;
   }
+
+  .banner {
+    @include icon-arrow-left;
+
+    &:hover {
+      outline-color: $focus_highlight;
+      box-shadow: inset 0 0 0 4px $focus_highlight;
+      outline-offset: -5px;
+    }
+
+    &:focus {
+      @include focusStyleLightMenuItem;
+      color: #000;
+    }
+  }
+
+  .focusedItem {
+    &:focus {
+      @include focusStyleLightMenuItem;
+      color: #000;
+    }
+  }
+
+
 </style>
 

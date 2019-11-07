@@ -37,12 +37,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             return proxy?.OdsCode;
         }
 
-        public bool IsValidLinkedAccountId(GpUserSession gpUserSession, Guid id)
+        public bool IsValidAccountOrLinkedAccountId(GpUserSession gpUserSession, Guid id)
         {
             var emisUserSession = (EmisUserSession)gpUserSession;
             var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
-
-            return proxy != null;
+            return (proxy != null || emisUserSession.Id == id);
         }
 
         public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)

@@ -153,6 +153,26 @@ describe('BreadCrumbTrail.vue', () => {
       expect(wrapper.vm.$route.name).toBe('organ-donation');
       expect(goToUrl).toHaveBeenCalledWith(BACKLINK_OVERRIDE);
     });
+
+    it('will navigate to the correct place from the switch to my profile proxy page', () => {
+      routeName = 'switch-profile';
+      const wrapper = createBreadCrumbTrail({
+        $store: {
+          state: {
+            device: {
+              isNativeApp: true,
+            },
+            session: {
+              csrfToken: 'some token',
+            },
+          },
+        },
+      });
+
+      wrapper.vm.backLinkClicked();
+      expect(wrapper.vm.$route.name).toBe('switch-profile');
+      expect(goToUrl).toHaveBeenCalledWith(INDEX.path);
+    });
   });
 });
 

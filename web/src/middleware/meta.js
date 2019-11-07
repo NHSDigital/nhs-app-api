@@ -66,6 +66,7 @@ import {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
   RECALLS,
   SYMPTOMS,
+  SWITCH_PROFILE,
   TERMSANDCONDITIONS,
   TESTRESULTS,
   TESTRESULTSDETAIL,
@@ -216,6 +217,10 @@ export default function ({ route, store, app }) {
     case LINKED_PROFILES.name:
       route.meta.headerKey = 'pageHeaders.linkedProfiles';
       route.meta.pageTitleKey = 'pageTitles.linkedProfiles';
+      break;
+    case SWITCH_PROFILE.name:
+      route.meta.headerKey = 'pageHeaders.switchProfile';
+      route.meta.pageTitleKey = 'pageTitles.switchProfile';
       break;
     case LINKED_PROFILES_SUMMARY.name:
       route.meta.headerKey = '';

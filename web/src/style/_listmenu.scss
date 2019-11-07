@@ -1,6 +1,7 @@
 @import './colours';
 @import './textstyles';
 @import './fonts';
+@import './arrow';
 
 .list-menu {
   font-size: 1em;
@@ -65,8 +66,7 @@
 
   li {
     box-sizing: border-box;
-    background: $white url(~assets/icon_arrow_left.svg) no-repeat center right;
-    background-position: right 1em center;
+    @include icon-arrow-left-white-background;
     position: relative;
     margin-bottom: 5px;
     margin-left: -16px;
@@ -105,7 +105,8 @@ ul.list-menu-white {
   @include ul-list-menu;
 
   li {
-    background: $white url(~assets/icon_arrow_left.svg) no-repeat center right 12px;
+    @include icon-arrow-left-white-background;
+    background: 12px;
     padding: 1em;
   }
 }

@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         }
 
         [TestMethod]
-        public void IsValidLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSession()
+        public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
         {
             // Arrange
             var proxyId = Guid.NewGuid();
@@ -145,14 +145,43 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidLinkedAccountId(_emisUserSession, proxyId);
+            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_emisUserSession, proxyId);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+        
+        
+        [TestMethod]
+        public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
+        {
+            // Arrange
+            var mainUserGuid = Guid.NewGuid();
+
+            _emisUserSession = new EmisUserSession
+            {
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession
+                    {
+                        Id = mainUserGuid,
+                    },
+                    new EmisProxyUserSession
+                    {
+                        Id = Guid.NewGuid(),
+                    },
+                }
+            };
+
+            // Act
+            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_emisUserSession, mainUserGuid);
 
             // Assert
             result.Should().BeTrue();
         }
 
         [TestMethod]
-        public void IsValidLinkedAccountId_ReturnsFalse_WhenLinkedAccountWithMatchingIdFoundInUserSession()
+        public void IsValidAccountOrLinkedAccountId_ReturnsFalse_WhenLinkedAccountWithMatchingIdFoundInUserSession()
         {
             // Arrange
             var randomGuidWhichWontBeFound = Guid.NewGuid();
@@ -173,7 +202,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidLinkedAccountId(_emisUserSession, randomGuidWhichWontBeFound);
+            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_emisUserSession, randomGuidWhichWontBeFound);
 
             // Assert
             result.Should().BeFalse();
