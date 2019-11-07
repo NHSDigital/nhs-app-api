@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
         }
 
-        public async Task<MessagePatchResult> PatchMessage(JsonPatchDocument<Message> messagePatchDocument, string messageId)
+        public async Task<MessagePatchResult> PatchMessage(JsonPatchDocument<Message> messagePatchDocument,AccessToken accessToken, string messageId)
         {
             _logger.LogEnter();
 
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return new MessagePatchResult.BadRequest();
                 }
                 
-                var userMessage = await _messageRepository.FindOne(messageId);
+                var userMessage = await _messageRepository.FindOne(accessToken.Subject, messageId);
                 if (userMessage != null)
                 {
                     var userMessagePatchDocument = _messageToUserMessagePatchMapper.Map(messagePatchDocument);

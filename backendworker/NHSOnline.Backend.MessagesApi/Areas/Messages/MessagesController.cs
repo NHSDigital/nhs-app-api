@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 await _auditor.AuditSecureTokenEvent(accessToken, Supplier.Microsoft,
                     AuditingOperations.PatchUserMessageAuditTypeRequest, "Attempting to patch user message");
                 
-                var messageResult = await _messageService.PatchMessage(patchDocument, messageId);
+                var messageResult = await _messageService.PatchMessage(patchDocument, accessToken, messageId);
 
                 await messageResult.Accept(new MessagePatchAuditingVisitor(_logger, _auditor, accessToken));
                 return messageResult.Accept(new MessagePatchResultVisitor());

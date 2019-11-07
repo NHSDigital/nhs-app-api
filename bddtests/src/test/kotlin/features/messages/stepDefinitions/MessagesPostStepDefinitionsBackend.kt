@@ -4,7 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mongodb.MongoDBConnection
-import mongodb.MongoRepositoryMessage
 import org.apache.http.HttpStatus
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -35,19 +34,8 @@ class MessagesPostStepDefinitionsBackend {
 
     @Then("^the message is available in the database$")
     fun theMessageIsAvailableInTheDatabase() {
-        //Cache has been cleared in data setup.
-        MongoDBConnection.MessagesCollection.assertNumberOfDocuments(1)
-        val messages = MongoDBConnection.MessagesCollection
-                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
-        Assert.assertNotNull("Messages", messages)
-        Assert.assertEquals("Number of Messages", 1, messages.count())
-        val message = messages.first()
-        Assert.assertNotNull("Message id", message)
         val expectedMessage = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MessageRequest>()
-        val expectedNhsLoginId = MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.getOrFail<String>()
-        Assert.assertEquals("Message nhsLoginId", expectedNhsLoginId, message.NhsLoginId)
-        Assert.assertEquals("Message body", expectedMessage.body, message.Body)
-        Assert.assertEquals("Message version", expectedMessage.version, message.Version)
+        MessagesRepository.assertSingleMessageInRepository(expectedMessage, read = false)
     }
 
     @Then("^an attempt to post incomplete messages will return a Bad Request error$")

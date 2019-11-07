@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         public void FindOne_WhenMessageIdIsNull_ThrowsException()
         {
             // Act
-            Func<Task> act = async () => await _systemUnderTest.FindOne(null);
+            Func<Task> act = async () => await _systemUnderTest.FindOne(_fixture.Create<string>(),null);
 
             // Assert
             act.Should().Throw<AggregateException>()
@@ -151,12 +151,27 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
                 .And.Contain(x =>
                     ((ArgumentNullException) x).ParamName.Equals("messageId", StringComparison.Ordinal));
         }
+        
+        [TestMethod]
+        public void FindOne_WhenNhsLoginidIsNull_ThrowsException()
+        {
+            // Act
+            Func<Task> act = async () => await _systemUnderTest.FindOne(null,_fixture.Create<string>());
+
+            // Assert
+            act.Should().Throw<AggregateException>()
+                .And.InnerExceptions.Should().HaveCount(1)
+                .And.AllBeOfType<ArgumentNullException>()
+                .And.Contain(x =>
+                    ((ArgumentNullException) x).ParamName.Equals("nhsLoginId", StringComparison.Ordinal));
+        }
 
         [TestMethod]
         public async Task FindOne_ReturnMessage()
         {
             // Arrange
             var userMessage = _fixture.Create<UserMessage>();
+            var nhsLoginId = _fixture.Create<string>();
             var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[] { userMessage });
 
             _mongoCollectionMock
@@ -165,7 +180,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
                 .ReturnsAsync(cursorMock.Object);
 
             // Act
-            var result = await _systemUnderTest.FindOne(userMessage.Id.ToString());
+            var result = await _systemUnderTest.FindOne(nhsLoginId, userMessage.Id.ToString());
 
             // Assert
             _mongoCollectionMock.VerifyAll();
@@ -177,6 +192,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         {
             // Arrange
             var cursorMock = MongoHelper.CreateCursorMockFindNone<UserMessage>(_fixture);
+            var nhsLoginId = _fixture.Create<string>();
             var id = new ObjectId(_fixture.CreateStringFromRegex("^[0-9a-f]{24}$")); //24 digit hex regex
 
             _mongoCollectionMock
@@ -185,7 +201,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
                 .ReturnsAsync(cursorMock.Object);
 
             // Act
-            var result = await _systemUnderTest.FindOne(id.ToString());
+            var result = await _systemUnderTest.FindOne(nhsLoginId, id.ToString());
 
             // Assert
             _mongoCollectionMock.VerifyAll();
@@ -210,6 +226,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         public async Task UpdateOne_UpdateMessage()
         {
             // Arrange
+            var nhsLoginId = _fixture.Create<string>();
             var userMessage = _fixture.Create<UserMessage>();
             userMessage.ReadTime = null;
             var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[] { userMessage });
@@ -224,7 +241,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             // Act
             userMessage.ReadTime = DateTime.UtcNow;
             await _systemUnderTest.UpdateOne(userMessage);
-            var result = await _systemUnderTest.FindOne(userMessage.Id.ToString());
+            var result = await _systemUnderTest.FindOne(nhsLoginId, userMessage.Id.ToString());
 
             // Assert
             _mongoCollectionMock.VerifyAll();
@@ -235,6 +252,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         public async Task UpdateOne_WhenRecordDoesNotExist_ShouldNotUpdateRecord()
         {
             // Arrange
+            var nhsLoginId = _fixture.Create<string>();
             var cursorMock = MongoHelper.CreateCursorMockFindNone<UserMessage>(_fixture);
             var userMessage = _fixture.Create<UserMessage>();
 
@@ -245,7 +263,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
 
             // Act
             await _systemUnderTest.UpdateOne(userMessage);
-            var result = await _systemUnderTest.FindOne(userMessage.Id.ToString());
+            var result = await _systemUnderTest.FindOne(nhsLoginId, userMessage.Id.ToString());
 
             // Assert
             _mongoCollectionMock.VerifyAll();

@@ -173,9 +173,9 @@ Feature: Organ Donation Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Decision Additional Details page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the internal Organ Donation Choice Page is displayed
 
   Scenario: A user can navigate back through the opt in journey
@@ -194,13 +194,13 @@ Feature: Organ Donation Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Decision Additional Details page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Faith And Beliefs page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Your Choice page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the internal Organ Donation Choice Page is displayed
 
   Scenario: A user can navigate back through the opt in with some organs journey
@@ -221,16 +221,16 @@ Feature: Organ Donation Frontend
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Decision Additional Details page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Faith And Beliefs page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Specific Organ Choice page is displayed
     And my previous decisions are displayed on the Organ Donation Specific Organ Choice page
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Your Choice page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the internal Organ Donation Choice Page is displayed
 
   Scenario: A user is shown a validation message if they submit their decision without ticking both the required checkboxes
@@ -315,7 +315,7 @@ Feature: Organ Donation Frontend
     Then the Organ Donation Specific Organ Choice page is displayed
     When I click the Find out more about organs and tissue link
     Then the Find Out More About Organs And Tissue Page is displayed
-    When I click the back link
+    When I click the 'Back' breadcrumb
     Then the Organ Donation Specific Organ Choice page is displayed
 
   Scenario Outline: A user opting out, where OD returns a <Error Code> recoverable error is shown an error message and can retry

@@ -72,3 +72,21 @@ Feature: Messages Backend
     Given I am an api user wishing to post a message
     When I post a message to the api
     Then an attempt to post incomplete messages will return a Bad Request error
+
+  Scenario: An api user can mark a message as read
+    Given I am an api user wishing to mark a message as read
+    And I have logged in and have a valid session cookie
+    When I patch the message to indicate that it has been read
+    Then I receive a "No Content" success code
+    And the message has been marked as read in the repository
+
+  Scenario: An api user attempting to mark a message as read without an access token will receive a 401
+    Given I am an api user wishing to mark a message as read
+    And I have logged in and have a valid session cookie
+    When I patch the message to indicate that it has been read without an access token
+    Then I receive an "Unauthorized" error
+
+  Scenario: An api user attempting to mark a message as read with an invalid access token will receive a 401
+    Given I am an api user wishing to mark a message as read
+    And I have logged in and have a valid session cookie
+    Then an attempt to mark a message as read with an invalid access token will return an Unauthorised error

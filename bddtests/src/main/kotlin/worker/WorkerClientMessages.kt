@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.methods.HttpGet
+import org.apache.http.client.methods.HttpPatch
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.entity.StringEntity
@@ -43,8 +44,23 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
         return arrayOf()
     }
 
+    fun patch(authToken: String?, messageId: String, patch: JsonPatch): HttpResponse {
+        val uriBuilder = URIBuilder(uri("me") +"/"+ messageId)
+        val httpPatch = HttpPatch(uriBuilder.build())
+        if (authToken != null) {
+            httpPatch.addHeader("Authorization", "Bearer $authToken")
+        }
+        val entity = StringEntity(gson.toJson(arrayListOf(patch)), "UTF-8")
+        entity.setContentType("application/json")
+        httpPatch.entity = entity
+        val response = sender.sendAsync(httpPatch)
+        httpPatch.releaseConnection()
+        return response!!
+    }
+
     private fun uri(userIdentifier: String): String {
         return config.apiBackendUrl +
                 WorkerPaths.userMessages.replace(WorkerPaths.userPlaceholder, userIdentifier)
     }
 }
+

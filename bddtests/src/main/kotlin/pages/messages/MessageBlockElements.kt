@@ -7,15 +7,18 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertElementNotPresent
 import worker.models.messages.SingleMessageFacade
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MessageBlockElements(private val page:HybridPageObject) {
 
+    private val unreadMessagesBar = "div/span[normalize-space(text())='Unread messages']"
+
     private fun messagesXpathAboveUnreadLine(aboveUnreadLine: Boolean): String {
         val followingOrPrecedingUnread = if (aboveUnreadLine) "following" else  "preceding"
-        return "//ul[$followingOrPrecedingUnread-sibling::div/span[normalize-space(text())='Unread messages']]/li/div"
+        return "//ul[$followingOrPrecedingUnread-sibling::$unreadMessagesBar]/li/div"
     }
 
     fun assertUnreadMessages(expectedMessages: ArrayList<SingleMessageFacade>, expectedSender: String) {
@@ -25,6 +28,16 @@ class MessageBlockElements(private val page:HybridPageObject) {
 
     fun assertReadMessages(expectedMessages: ArrayList<SingleMessageFacade>, expectedSender: String) {
         val actualReadMessages = getMessages(page, messagesXpathAboveUnreadLine(true))
+        assertMessages(expectedMessages, actualReadMessages, "read", expectedSender)
+    }
+
+    fun assertAllReadMessages(expectedMessages: ArrayList<SingleMessageFacade>, expectedSender: String) {
+        HybridPageElement(
+                "//$unreadMessagesBar",
+                "//$unreadMessagesBar",
+                page = page,
+                helpfulName = "Unread Messages Bar").assertElementNotPresent()
+        val actualReadMessages = getMessages(page,"//ul/li/div")
         assertMessages(expectedMessages, actualReadMessages, "read", expectedSender)
     }
 

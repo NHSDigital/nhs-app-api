@@ -1,7 +1,7 @@
 @messages
 Feature: Messages
 #The following tests are gp system agnostic
-  
+
 @smoketest
   Scenario: A user can see their messages
     Given I am a user wishing to view my messages
@@ -13,6 +13,14 @@ Feature: Messages
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     And my messages from the sender are displayed
+    # We need to check the functionality to mark the messages as read with the back button,
+    # to ensure that the state is updated
+    When I click the 'Back' breadcrumb
+    Then the Messages Inbox page is displayed
+    And the viewed messages are marked as read on the Messages Inbox page
+    When I click on a sender in the Messages Inbox
+    Then the Messages page is displayed
+    And my messages from the sender are displayed as read
 
   Scenario: A user with no messages can navigate to the messages inbox, but sees no messages
     Given I am a user wishing to view my messages, but I have no messages
@@ -45,14 +53,3 @@ Feature: Messages
       | /messaging/messages  |
       | /messaging/messages?source=ios  |
       | /messaging/messages?source=android  |
-
-    Scenario: A user can use the breadcrumbs to navigate back from the messages page to the inbox
-      Given I am a user wishing to view my messages
-      And I am logged in
-      When I navigate to the More page for mobile devices
-      And I click the Messages link on the More page
-      Then the Messages Inbox page is displayed
-      When I click on a sender in the Messages Inbox
-      Then the Messages page is displayed
-      When I click the back link
-      Then the Messages Inbox page is displayed

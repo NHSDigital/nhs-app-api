@@ -331,7 +331,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageService.Setup(x =>
-                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
+                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.Updated());
 
             // Act
@@ -347,7 +347,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageService.Setup(x =>
-                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
+                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.NotFound());
 
             // Act
@@ -364,7 +364,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageService.Setup(x =>
-                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
+                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.BadGateway());
 
             // Act
@@ -382,7 +382,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Arrange
             
             _mockMessageService.Setup(x =>
-                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
+                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.InternalServerError());
 
             // Act
@@ -399,7 +399,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageService.Setup(x =>
-                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
+                    x.PatchMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .Throws<ArgumentException>();
 
             // Act
@@ -416,7 +416,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Act
             _mockMessageService.Setup(x => x.PatchMessage(
-                    It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
+                    It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.BadRequest());
             
             var result = await _systemUnderTest.Patch(null, _fixture.Create<string>());

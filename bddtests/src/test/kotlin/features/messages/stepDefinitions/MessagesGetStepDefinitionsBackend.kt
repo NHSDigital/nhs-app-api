@@ -17,14 +17,14 @@ class MessagesGetStepDefinitionsBackend {
     @Given("^I am an api user wishing to get my messages$")
     fun iAmAnApiUserWishingToGetTheirMessages() {
         val factory = MessagesFactory()
-        factory.setUpUser("EMIS")
+        factory.setUpUser()
         factory.setUpMultipleMessagesInCache()
     }
 
     @Given("^I am an api user wishing to get my messages, but I have no messages$")
     fun iAmAnApiUserWishingToGetTheirMessagesButIHaveNoMessages() {
         val factory = MessagesFactory()
-        factory.setUpUser("EMIS")
+        factory.setUpUser()
     }
 
     @When("^I get a summary of my messages from the api$")

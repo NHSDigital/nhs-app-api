@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.MessagesApi.Repository
         Task Create(UserMessage userMessage);
         Task<List<UserMessage>> Find(string nhsLoginId, string sender);
         Task<List<SummaryMessage>> Summary(string nhsLoginId);
-        Task<UserMessage> FindOne(string messageId);
+        Task<UserMessage> FindOne(string nhsLoginId, string messageId);
         Task UpdateOne(UserMessage userMessage);
     }
 }

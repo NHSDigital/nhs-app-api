@@ -8,13 +8,6 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import worker.models.messages.MessagesSummaryFacade
 
-
-private const val HEADER_SENDER_INDEX = 0
-private const val HEADER_TIME_INDEX = 1
-
-private const val BODY_UNREAD_INDEX = 0
-private const val BODY_MESSAGE_INDEX = 1
-
 class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
 
     fun assertMessages(expectedMessages: ArrayList<MessagesSummaryFacade>) {
@@ -51,14 +44,15 @@ class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
     }
 
     private class InboxMessageBlockElement(private val element: WebElementFacade) {
-
-        private val headerElements = element.findElement<WebElement>(By.xpath("./h2")).text.split("\n")
+        private val headerElements: List<String> = element.findElement<WebElement>(By.xpath("./h2")).text.split("\n")
         private val bodyElements = element.findElement<WebElement>(By.xpath("./p")).text.split("\n")
 
-        val sender: String = headerElements[HEADER_SENDER_INDEX]
-        val sentTime: String = headerElements[HEADER_TIME_INDEX]
-        val messageBody: String = bodyElements[BODY_MESSAGE_INDEX]
-        val unreadCount: Int? = bodyElements[BODY_UNREAD_INDEX].toInt()
+        private val hasUnread = bodyElements.count() == 2
+
+        val sender: String = headerElements[0]
+        val sentTime: String = headerElements[1]
+        val messageBody: String = if (hasUnread) bodyElements[1] else bodyElements.single()
+        val unreadCount: Int? = if (hasUnread) bodyElements[0].toInt() else 0
 
         fun click() {
             element.click()

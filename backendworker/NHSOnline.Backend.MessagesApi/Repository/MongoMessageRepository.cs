@@ -113,8 +113,9 @@ namespace NHSOnline.Backend.MessagesApi.Repository
             }
         }
 
-
-        public async Task<UserMessage> FindOne(string messageId)
+        [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
+            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
+        public async Task<UserMessage> FindOne(string nhsLoginId, string messageId)
         {
             try
             {
@@ -122,13 +123,14 @@ namespace NHSOnline.Backend.MessagesApi.Repository
                 
                 new ValidateAndLog(_logger)
                     .IsNotNull(messageId, nameof(messageId), ThrowError)
+                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
                     .IsValid();
                 
                 var id = ObjectId.Parse(messageId);
                 
                 using (_logger.WithTimer("Find single message on Mongo"))
                 {
-                    return await FindOne(m => m.Id == id);
+                    return await FindOne(m => m.Id == id && m.NhsLoginId == nhsLoginId);
                 }
             }
             finally
@@ -136,7 +138,9 @@ namespace NHSOnline.Backend.MessagesApi.Repository
                 _logger.LogExit();
             }
         }
-
+        
+        [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
+            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
         public async Task UpdateOne(UserMessage userMessage)
         {
             try
@@ -149,7 +153,7 @@ namespace NHSOnline.Backend.MessagesApi.Repository
                 
                 using (_logger.WithTimer("Update single message on Mongo"))
                 {
-                    await UpdateOne(m => m.Id == userMessage.Id, userMessage);
+                    await UpdateOne(m => m.Id == userMessage.Id && m.NhsLoginId == userMessage.NhsLoginId, userMessage);
                 }
             }
             finally
