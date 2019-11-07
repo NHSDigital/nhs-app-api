@@ -1,0 +1,77 @@
+<template>
+  <div>
+    <scr-error-no-access-gp-record
+      v-if="showError"
+      :has-errored="medicines.hasErrored"
+      :has-undetermined-access="medicines.hasUndeterminedAccess"/>
+    <div
+      v-else
+      role="list"
+      class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
+      <MedicalRecordCardGroupItem
+        v-for="(item, index) in orderedMedicines"
+        :key="`medicine-${index}`"
+        data-purpose="record-item"
+        class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
+        <Card data-label="medicines">
+          <div data-purpose="medicines-card">
+            <span v-if="item.date">
+              <strong>
+                {{ item.date | datePart }}
+              </strong>
+            </span>
+            <span v-else>
+              <strong>{{ $t('my_record.noStartDate') }}</strong>
+            </span>
+            <p v-for="(lineItem, lineIndex) in item.lineItems"
+               :key="`line-${lineIndex}`">
+              {{ lineItem.text }}
+              <ul v-if="lineItem.lineItems">
+                <li v-for="(innerLineItem, innerLineItemIndex) in lineItem.lineItems"
+                    :key="`innerline-${innerLineItemIndex}`">
+                  {{ innerLineItem }}
+                </li>
+              </ul>
+            </p>
+          </div>
+        </Card>
+      </MedicalRecordCardGroupItem>
+    </div>
+  </div>
+</template>
+
+<script>
+import orderBy from 'lodash/fp/orderBy';
+import ScrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/SCRErrorNoAccessGpRecord';
+import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import Card from '@/components/widgets/card/Card';
+
+export default {
+  name: 'Medicines',
+  components: {
+    Card,
+    ScrErrorNoAccessGpRecord,
+    MedicalRecordCardGroupItem,
+  },
+  props: {
+    medicines: {
+      type: Array,
+      default: () => [],
+    },
+    showError: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    orderedMedicines() {
+      return orderBy([item => item.date], ['desc'])(this.medicines);
+    },
+  },
+};
+</script>
+
+<style module scoped lang="scss">
+@import "../../../style/colours";
+@import "../../../style/desktopWeb/accessibility";
+</style>

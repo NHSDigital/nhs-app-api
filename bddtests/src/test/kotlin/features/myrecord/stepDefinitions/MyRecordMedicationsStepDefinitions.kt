@@ -35,7 +35,6 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has enabled medication functionality and the patient has no medications$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedications() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         val factory = MedicationsFactory.getForSupplier(gpSystem)
         factory.enabledWithBlankRecord(SerenityHelpers.getPatient())
         factory.getResult()

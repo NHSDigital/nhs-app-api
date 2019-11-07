@@ -39,8 +39,6 @@ import { TESTRESULTS,
   HEALTH_CONDITIONS,
 } from '@/lib/routes';
 
-const TESTRESULTSSTRING = 'testresults';
-
 export default {
   name: 'DcrEMISGpRecord',
   components: {
@@ -48,22 +46,11 @@ export default {
   },
   data() {
     return {
-      TESTRESULTSSTRING,
+      testResultsPath: TESTRESULTS.path,
+      immunisationsPath: IMMUNISATIONS.path,
+      consultationsPath: CONSULTATIONS.path,
+      healthConditionsPath: HEALTH_CONDITIONS.path,
     };
-  },
-  computed: {
-    testResultsPath() {
-      return TESTRESULTS.path;
-    },
-    immunisationsPath() {
-      return IMMUNISATIONS.path;
-    },
-    consultationsPath() {
-      return CONSULTATIONS.path;
-    },
-    healthConditionsPath() {
-      return HEALTH_CONDITIONS.path;
-    },
   },
 };
 </script>

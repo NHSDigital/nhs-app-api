@@ -29,7 +29,7 @@
       </div>
     </div>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            :path="getBackPath"
+                            :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
     <glossary v-if="!showError"/>
@@ -57,15 +57,13 @@ export default {
   },
   data() {
     return {
+      backPath: MYRECORD.path,
       resultsCollapsed: true,
     };
   },
   computed: {
     orderedAllergies() {
       return _.orderBy((this.allergies || {}).data, [obj => obj.date.value], ['desc']);
-    },
-    getBackPath() {
-      return MYRECORD.path;
     },
     showError() {
       return ((this.allergies || {}).hasErrored) || (this.allergies || {}).data.length === 0;
@@ -81,7 +79,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.getBackPath, null);
+      redirectTo(this, this.backPath, null);
     },
   },
 };

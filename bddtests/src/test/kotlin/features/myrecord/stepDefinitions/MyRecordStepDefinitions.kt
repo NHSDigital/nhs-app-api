@@ -64,7 +64,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Given("^the GP Practice has disabled summary care record functionality$")
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         MyRecordFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
 
@@ -151,13 +150,13 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the my record wiremocks are populated for (.*)$")
     fun givenMyRecordWiremocksArePopulatedFor(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
         setPatientToDefaultFor(gpSystem)
         givenMyRecordWiremocksArePopulatedForNoPatient(gpSystem)
     }
 
-    @Given("^the my record wiremocks are populated without setting the patient for (.*)$")
+    @Given("^the my record wiremocks are populated when the patient is already set for (.*)$")
     fun givenMyRecordWiremocksArePopulatedForNoPatient(gpSystem: String) {
+        SerenityHelpers.setGpSupplier(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
         MyRecordFactory.getForSupplier(gpSystem).

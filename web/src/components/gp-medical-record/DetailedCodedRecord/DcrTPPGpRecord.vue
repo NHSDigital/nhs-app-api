@@ -23,8 +23,6 @@ import { TESTRESULTS,
   EVENTS,
 } from '@/lib/routes';
 
-const TESTRESULTSSTRING = 'testresults';
-
 export default {
   name: 'DcrTPPGpRecord',
   components: {
@@ -32,16 +30,9 @@ export default {
   },
   data() {
     return {
-      TESTRESULTSSTRING,
+      testResultsPath: TESTRESULTS.path,
+      eventsPath: EVENTS.path,
     };
-  },
-  computed: {
-    testResultsPath() {
-      return TESTRESULTS.path;
-    },
-    eventsPath() {
-      return EVENTS.path;
-    },
   },
 };
 </script>

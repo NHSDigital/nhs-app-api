@@ -1225,6 +1225,18 @@ export default {
     medicalHistory: {
       sectionHeader: 'Medical History',
     },
+    medicines: {
+      sectionHeader: 'Medicines',
+      acuteMedicines: {
+        sectionHeader: 'Acute (short-term) medicines',
+      },
+      currentMedicines: {
+        sectionHeader: 'Repeat medicines: current',
+      },
+      discontinuedMedicines: {
+        sectionHeader: 'Repeat medicines: discontinued',
+      },
+    },
     recalls: {
       sectionHeader: 'Recalls',
       result: 'Result: ',
@@ -1380,6 +1392,10 @@ export default {
   },
   pageHeaders: {
     home: 'Home',
+    acuteMedicines: 'Acute (short-term) medicines',
+    currentMedicines: 'Repeat medicines: current',
+    discontinuedMedicines: 'Repeat medicines: discontinued',
+    medicines: 'Medicines',
     gpFinder: 'Check what features you can use',
     gpFinderParticipation: 'GP surgery features',
     gpFinderWaitingListSignup: 'Waiting list',
@@ -1429,6 +1445,10 @@ export default {
   },
   pageTitles: {
     home: 'Home',
+    acuteMedicines: 'Acute (short-term) medicines',
+    currentMedicines: 'Repeat medicines: current',
+    discontinuedMedicines: 'Repeat medicines: discontinued',
+    medicines: 'Medicines',
     gpFinder: 'GP Finder',
     gpFinderParticipation: 'Features used by your GP surgery',
     gpFinderWaitingListSignup: 'Want us to email you when all features are available at your GP surgery?',
@@ -1491,6 +1511,7 @@ export default {
     appointmentsBooking: 'Booking',
     appointmentsConfirmation: 'Confirm',
     checkYourSymptoms: 'Symptoms',
+    medicines: 'Medicines',
     myRecord: 'My GP medical record',
     myRecordNoAccess: 'My GP medical record',
     more: 'More',

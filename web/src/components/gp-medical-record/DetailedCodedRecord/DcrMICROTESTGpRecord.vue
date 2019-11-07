@@ -25,13 +25,11 @@ export default {
   components: {
     MenuItem,
   },
-  computed: {
-    immunisationsPath() {
-      return IMMUNISATIONS.path;
-    },
-    healthConditionsPath() {
-      return HEALTH_CONDITIONS.path;
-    },
+  data() {
+    return {
+      immunisationsPath: IMMUNISATIONS.path,
+      healthConditionsPath: HEALTH_CONDITIONS.path,
+    };
   },
 };
 </script>

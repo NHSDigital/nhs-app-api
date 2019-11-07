@@ -15,7 +15,7 @@
       <desktopGenericBackLink
         v-if="!$store.state.device.isNativeApp"
         class="nhsuk-u-margin-top-3"
-        :path="getBackPath"
+        :path="backPath"
         :button-text="'rp03.backButton'"
         @clickAndPrevent="backButtonClicked"/>
       <glossary v-if="myRecord.testResults.markup"/>
@@ -39,10 +39,10 @@ export default {
     DesktopGenericBackLink,
     Glossary,
   },
-  computed: {
-    getBackPath() {
-      return MYRECORD.path;
-    },
+  data() {
+    return {
+      backPath: MYRECORD.path,
+    };
   },
   async asyncData({ store }) {
     if (!store.state.myRecord.testResults) {
@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.getBackPath, null);
+      redirectTo(this, this.backPath, null);
     },
   },
 };

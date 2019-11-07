@@ -36,15 +36,9 @@ export default {
   data() {
     return {
       testResultsPath: TESTRESULTSDETAIL.path,
+      immunisationsPath: IMMUNISATIONS.path,
+      healthConditionsPath: HEALTH_CONDITIONS.path,
     };
-  },
-  computed: {
-    immunisationsPath() {
-      return IMMUNISATIONS.path;
-    },
-    healthConditionsPath() {
-      return HEALTH_CONDITIONS.path;
-    },
   },
   methods: {
     viewVisionTestResults() {

@@ -111,6 +111,17 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}account/`,
   },
+  ACUTE_MEDICINES: {
+    name: 'gp-medical-record-medicines-acute-medicines',
+    path: '/gp-medical-record/medicines/acute-medicines',
+    crumb: {
+      i8nKey: 'medicines',
+      get parentRoute() {
+        return this.allRoutes.MEDICINES;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   APPOINTMENTS: {
     name: 'appointments',
     path: '/appointments',
@@ -273,6 +284,17 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}app-login/`,
   },
+  CURRENT_MEDICINES: {
+    name: 'gp-medical-record-medicines-current-medicines',
+    path: '/gp-medical-record/medicines/current-medicines',
+    crumb: {
+      i8nKey: 'current_medicines',
+      get parentRoute() {
+        return this.allRoutes.MEDICINES;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   CHECKYOURSYMPTOMS: {
     name: 'check-your-symptoms',
     path: '/check-your-symptoms',
@@ -313,6 +335,17 @@ const routes = {
       i8nKey: 'events',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  DISCONTINUED_MEDICINES: {
+    name: 'gp-medical-record-medicines-discontinued-medicines',
+    path: '/gp-medical-record/medicines/discontinued-medicines',
+    crumb: {
+      i8nKey: 'medicines',
+      get parentRoute() {
+        return this.allRoutes.MEDICINES;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
@@ -578,6 +611,17 @@ const routes = {
     path: '/gp-medical-record/immunisations',
     crumb: {
       i8nKey: 'immunisations',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  MEDICINES: {
+    name: 'gp-medical-record-medicines',
+    path: '/gp-medical-record/medicines-index',
+    crumb: {
+      i8nKey: 'medicines',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -1039,6 +1083,7 @@ export const {
   ACCOUNT_NOTIFICATIONS,
   ACCOUNT_SIGNOUT,
   ALLERGIESANDREACTIONS,
+  ACUTE_MEDICINES,
   APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
@@ -1053,8 +1098,10 @@ export const {
   BEGINLOGIN,
   CHECKYOURSYMPTOMS,
   CONSULTATIONS,
-  DATA_SHARING_PREFERENCES,
   EVENTS,
+  CURRENT_MEDICINES,
+  DATA_SHARING_PREFERENCES,
+  DISCONTINUED_MEDICINES,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
@@ -1064,6 +1111,7 @@ export const {
   LEGACY_MYRECORDWARNING,
   LOGIN,
   LOGOUT,
+  MEDICINES,
   MESSAGING,
   MESSAGING_MESSAGES,
   MORE,

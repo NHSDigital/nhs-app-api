@@ -21,6 +21,7 @@ import pages.gpMedicalRecord.MyRecordConsultationsAndEventsModule
 import pages.gpMedicalRecord.MyRecordHealthConditionsModule
 import pages.gpMedicalRecord.MyRecordImmunisationsModule
 import pages.gpMedicalRecord.MyRecordInfoPage
+import pages.gpMedicalRecord.MyRecordMedicinesModule
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.NavBarNative
 import pages.text
@@ -34,6 +35,8 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     lateinit var login: LoginSteps
     @Steps
     lateinit var nav: NavigationSteps
+    @Steps
+    lateinit var medicinesModule: MyRecordMedicinesModule
     @Steps
     lateinit var immunisationModule: MyRecordImmunisationsModule
     @Steps
@@ -85,6 +88,12 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
         myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
     }
 
+    @Then("^I am on the medical record v2 page$")
+    fun givenIAmOnTheGpMedicalRecordPage(){
+        myRecordInfoPage.pageTitle.assertIsVisible()
+        myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
+    }
+
     @Then("^I see a message telling me to contact my GP for information on My Record - GP Medical Record$")
     fun thenISeeAMessageTellingMeToContactMyGP() {
         assertTextOnPage(
@@ -96,12 +105,26 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
         myRecordModuleCounts.allergyCount = count
     }
 
-
     @Given("^MICROTEST have enabled medical record and records exist - GP Medical Record$")
     fun givenMicrotestHaveEnabledMedicalRecordAndRecordsExist() {
         val myRecordModuleCounts = MyRecordModuleCounts()
         createRecordStubsMicrotest(myRecordModuleCounts)
     }
+
+    @Given("^the my record wiremocks are initialised when the patient is already set for (.*)$")
+    fun givenMyRecordWiremocksAreInitialisedForNoPatient(gpSystem: String) {
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
+    }
+
+    @Given("^the my record wiremocks have data when the patient is already set for (.*)$")
+    fun givenMyRecordWiremocksHaveDataForNoPatient(gpSystem: String) {
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(gpSystem).enabledWithAllRecords(SerenityHelpers.getPatient())
+    }
+
 
     @When("I click the Allergies and adverse reactions link on my record - GP Medical Record")
     fun iClickTheAllergiesLinkOnTheAccountPage(){
@@ -119,8 +142,13 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     }
 
     @When("I click the Health conditions link on my record - GP Medical Record")
-    fun iClickTheHealthConditionsLinkOnTheAccountPage(){
+    fun iClickTheHealthConditionsLinkOnTheAccountPage() {
         healthConditionsModule.link.click()
+    }
+
+    @When("I click the Medicines link on my record - GP Medical Record")
+    fun iClickTheMedicinesLinkOnTheAccountPage(){
+        medicinesModule.link.click()
     }
 
     @When("I click the test result link on my record - GP Medical Record")

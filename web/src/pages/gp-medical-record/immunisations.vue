@@ -42,7 +42,7 @@
 
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
-      :path="getBackPath"
+      :path="backPath"
       :button-text="'rp03.backButton'"
       @clickAndPrevent="backButtonClicked"
     />
@@ -69,6 +69,11 @@ export default {
     MedicalRecordCardGroupItem,
     Glossary,
   },
+  data() {
+    return {
+      backPath: MYRECORD.path,
+    };
+  },
   computed: {
     orderedImmunisations() {
       return orderBy([item => item.effectiveDate.value], ['desc'])(this.immunisations.data);
@@ -79,9 +84,6 @@ export default {
         (this.immunisations || {}).data.length === 0 ||
         !this.immunisations.hasAccess
       );
-    },
-    getBackPath() {
-      return MYRECORD.path;
     },
   },
   async asyncData({ store }) {
@@ -94,7 +96,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.getBackPath, null);
+      redirectTo(this, this.backPath, null);
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value

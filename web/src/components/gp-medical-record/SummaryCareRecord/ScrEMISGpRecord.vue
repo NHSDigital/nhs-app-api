@@ -1,19 +1,25 @@
 <template>
-  <menu-item id="allergies-and-reactions"
-             data-purpose="allergies-and-reactions"
-             :href="allergiesAndReactionsPath"
-             :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
-             :click-func="goToUrl"
-             :click-param="allergiesAndReactionsPath"/>
+  <div>
+    <menu-item id="allergies-and-reactions"
+               data-purpose="allergies-and-reactions"
+               :href="allergiesAndReactionsPath"
+               :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="allergiesAndReactionsPath"/>
 
+    <menu-item id="medicines"
+               data-purpose="medicines"
+               :href="medicinesPath"
+               :text="$t('my_record.medicines.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="medicinesPath"/>
+  </div>
   <!-- put the rest in here -->
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { ALLERGIESANDREACTIONS } from '@/lib/routes';
-
-const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
+import { ALLERGIESANDREACTIONS, MEDICINES } from '@/lib/routes';
 
 export default {
   name: 'ScrEMISGpRecord',
@@ -22,13 +28,9 @@ export default {
   },
   data() {
     return {
-      ALLERGIESANDADVERSEREACTIONS,
+      allergiesAndReactionsPath: ALLERGIESANDREACTIONS.path,
+      medicinesPath: MEDICINES.path,
     };
-  },
-  computed: {
-    allergiesAndReactionsPath() {
-      return ALLERGIESANDREACTIONS.path;
-    },
   },
 };
 </script>

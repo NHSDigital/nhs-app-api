@@ -12,10 +12,10 @@ object MedicationsData {
     private const val TEN_MONTHS: Long = 10
     private const val ONE_MONTH: Long = 1
 
-    private val now = LocalDateTime.now()
-    private val oneMonthAgo = now.minusMonths(ONE_MONTH).toString()
-    private val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
-    private val twentyMonthsAgo = now.minusMonths(TWENTY_MONTHS).toString()
+    val now = LocalDateTime.now()
+    val oneMonthAgo = now.minusMonths(ONE_MONTH).toString()
+    val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
+    val twentyMonthsAgo = now.minusMonths(TWENTY_MONTHS).toString()
 
     fun getEmisMedicationData(): MedicationsResponse {
 

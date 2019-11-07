@@ -39,7 +39,7 @@
       </div>
     </div>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            :path="getBackPath"
+                            :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
     <glossary v-if="!showError"/>
@@ -67,15 +67,13 @@ export default {
   },
   data() {
     return {
+      backPath: MYRECORD.path,
       resultsCollapsed: true,
     };
   },
   computed: {
     orderedEvents() {
       return _.orderBy(this.events.data, [obj => obj.date], ['desc']);
-    },
-    getBackPath() {
-      return MYRECORD.path;
     },
     showError() {
       return this.events.hasErrored
@@ -93,7 +91,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.getBackPath, null);
+      redirectTo(this, this.backPath, null);
     },
   },
 };

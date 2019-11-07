@@ -4,6 +4,7 @@ import {
   ACCOUNT,
   ACCOUNT_NOTIFICATIONS,
   ALLERGIESANDREACTIONS,
+  ACUTE_MEDICINES,
   APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
@@ -16,6 +17,8 @@ import {
   CHECKYOURSYMPTOMS,
   CONSULTATIONS,
   EVENTS,
+  CURRENT_MEDICINES,
+  DISCONTINUED_MEDICINES,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
@@ -28,6 +31,7 @@ import {
   LOGIN,
   LOGOUT,
   BEGINLOGIN,
+  MEDICINES,
   MESSAGING,
   MESSAGING_MESSAGES,
   MORE,
@@ -125,6 +129,10 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.notifications';
       route.meta.pageTitleKey = 'pageTitles.notifications';
       break;
+    case ACUTE_MEDICINES.name:
+      route.meta.headerKey = 'pageHeaders.acuteMedicines';
+      route.meta.pageTitleKey = 'pageTitles.acuteMedicines';
+      break;
     case APPOINTMENT_ADMIN_HELP.name:
       route.meta.headerKey = 'pageHeaders.appointmentAdminHelp';
       route.meta.pageTitleKey = 'pageTitles.appointmentAdminHelp';
@@ -132,6 +140,14 @@ export default function ({ route, store, app }) {
     case APPOINTMENT_GP_ADVICE.name:
       route.meta.headerKey = 'pageHeaders.appointmentGpAdvice';
       route.meta.pageTitleKey = 'pageTitles.appointmentGpAdvice';
+      break;
+    case CURRENT_MEDICINES.name:
+      route.meta.headerKey = 'pageHeaders.currentMedicines';
+      route.meta.pageTitleKey = 'pageTitles.currentMedicines';
+      break;
+    case DISCONTINUED_MEDICINES.name:
+      route.meta.headerKey = 'pageHeaders.discontinuedMedicines';
+      route.meta.pageTitleKey = 'pageTitles.discontinuedMedicines';
       break;
     case GP_FINDER.name:
     case GP_FINDER_RESULTS.name:
@@ -311,6 +327,10 @@ export default function ({ route, store, app }) {
     case HEALTH_CONDITIONS.name:
       route.meta.headerKey = 'pageHeaders.healthConditions';
       route.meta.pageTitleKey = 'pageTitles.healthConditions';
+      break;
+    case MEDICINES.name:
+      route.meta.headerKey = 'pageHeaders.medicines';
+      route.meta.pageTitleKey = 'pageTitles.medicines';
       break;
     case NOMINATED_PHARMACY_SEARCH.name:
       store.dispatch('navigation/setNewMenuItem', 2);

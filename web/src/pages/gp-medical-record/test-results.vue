@@ -68,7 +68,7 @@
 
       <desktopGenericBackLink
         v-if="!$store.state.device.isNativeApp"
-        :path="getBackPath"
+        :path="backPath"
         :button-text="'rp03.backButton'"
         @clickAndPrevent="backButtonClicked"
       />
@@ -96,6 +96,11 @@ export default {
     MedicalRecordCardGroupItem,
     Glossary,
   },
+  data() {
+    return {
+      backPath: MYRECORD.path,
+    };
+  },
   computed: {
     orderedTestResults() {
       return _.orderBy(
@@ -110,9 +115,6 @@ export default {
         (this.results || {}).data.length === 0 ||
         !this.results.hasAccess
       );
-    },
-    getBackPath() {
-      return MYRECORD.path;
     },
     getTotalResults() {
       return (this.results || {}).data.length > 10;
@@ -133,7 +135,7 @@ export default {
       redirectTo(this, this.getTestResultPath(testResultId));
     },
     backButtonClicked() {
-      redirectTo(this, this.getBackPath, null);
+      redirectTo(this, this.backPath, null);
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value
