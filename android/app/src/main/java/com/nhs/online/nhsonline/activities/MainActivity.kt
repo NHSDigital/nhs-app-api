@@ -61,7 +61,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
     private lateinit var activityViewSwitcher: MainActivityViewSwitcher
-
+    private val nhsAndroidUserAgent = "nhsapp-android/" + com.nhs.online.nhsonline.BuildConfig.VERSION_NAME
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
 
@@ -113,6 +113,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         webview.settings.allowUniversalAccessFromFileURLs = true
 
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
+        val userAgent = webview.settings.userAgentString
+        webview.settings.setUserAgentString("$userAgent $nhsAndroidUserAgent")
     }
 
     private fun onErrorRetryButton() {
