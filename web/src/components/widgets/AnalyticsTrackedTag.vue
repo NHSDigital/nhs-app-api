@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { key } from '@/lib/utils';
+
 /* eslint-disable no-unreachable */
 export default {
   name: 'AnalyticsTrackedTag',
@@ -106,7 +108,7 @@ export default {
       }
     },
     onKeyDown(e) {
-      if (e.keyCode === 13) {
+      if (e.key === key.Enter) {
         this.trackClick(e);
       }
     },

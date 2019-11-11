@@ -13,9 +13,8 @@
 <script>
 /* eslint-disable import/extensions */
 import BackIcon from '@/components/icons/BackIcon';
+import { key } from '@/lib/utils';
 import { ACCOUNT_SIGNOUT } from '@/lib/routes';
-
-const ENTER_KEY_CODE = 13;
 
 export default {
   name: 'HeaderSlim',
@@ -51,7 +50,7 @@ export default {
       this.goToUrl(this.backUrl);
     },
     keyPress(event) {
-      if (event.keyCode === ENTER_KEY_CODE) {
+      if (event.key === key.Enter) {
         this.backClick(event);
       }
     },

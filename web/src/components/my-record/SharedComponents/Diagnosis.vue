@@ -22,8 +22,8 @@
 </template>
 <script>
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
+import { key, redirectTo } from '@/lib/utils';
 import { MY_RECORD_VISION_DIAGNOSIS_DETAIL } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'Diagnosis',
@@ -71,7 +71,7 @@ export default {
       redirectTo(this, this.diagnosisPath, null);
     },
     onKeyDown(e) {
-      if (e.keyCode === 13) {
+      if (e.key === key.Enter) {
         this.viewDiagnosis();
       }
     },

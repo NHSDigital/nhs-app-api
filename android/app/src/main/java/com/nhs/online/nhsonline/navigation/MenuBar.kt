@@ -69,8 +69,8 @@ class MenuBar @JvmOverloads constructor(
     }
 
     private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
-        if(nhsWeb?.applicationState?.isReady() ==  false)
-                return
+        if(nhsWeb?.applicationState?.isReady() ==  false && shouldInvokeListener)
+            return
 
         if(menuItemNotCurrentlySelected(position)) {
             if(getMenuBarItemAt(position).isBlockingMenuItem()) {

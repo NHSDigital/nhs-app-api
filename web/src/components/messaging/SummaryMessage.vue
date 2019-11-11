@@ -15,7 +15,7 @@
       <span v-if="unreadCount" :class="$style['nhs-app-message__meta']">
         <span :class="$style['nhs-app-message__count']">{{ unreadCount }}</span>
       </span>
-      {{ message.body }}
+      {{ sanitizedContent }}
     </p>
   </a>
 </template>
@@ -23,7 +23,7 @@
 <script>
 import { formatDate } from '@/plugins/filters';
 import { createUri } from '@/lib/noJs';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, stripHtml } from '@/lib/utils';
 import { MESSAGING_MESSAGES } from '@/lib/routes';
 
 export default {
@@ -54,6 +54,9 @@ export default {
           .replace('{plural}', this.unreadCount > 1 ? 's' : '');
       }
       return label;
+    },
+    sanitizedContent() {
+      return stripHtml(this.message.body);
     },
   },
   methods: {

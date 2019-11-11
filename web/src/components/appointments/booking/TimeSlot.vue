@@ -24,8 +24,9 @@
 /* eslint-disable import/extensions */
 import DateProvider from '@/services/DateProvider';
 import TabFocusMixin from '@/components/widgets/TabFocusMixin';
-import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
+import { key } from '@/lib/utils';
+import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
 
 export default {
   name: 'TimeSlot',
@@ -71,7 +72,7 @@ export default {
       this.$store.dispatch('availableAppointments/deselect');
     },
     onKeyDown(e) {
-      if (e.keyCode === 13) {
+      if (e.key === key.Enter) {
         this.select();
       }
     },

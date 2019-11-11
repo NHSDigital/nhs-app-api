@@ -79,13 +79,13 @@
 
 <script>
 import _ from 'lodash';
-import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
-import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
-import { MYRECORD } from '@/lib/routes';
+import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-import { redirectTo } from '@/lib/utils';
+import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import { key, redirectTo } from '@/lib/utils';
+import { MYRECORD } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -143,7 +143,7 @@ export default {
         : defaultValue;
     },
     onKeyDown(testResultId, e) {
-      if (e.keyCode === 13) {
+      if (e.key === key.Enter) {
         this.activateTestResult(testResultId, e);
       }
     },

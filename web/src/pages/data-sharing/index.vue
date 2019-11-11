@@ -42,25 +42,26 @@
 
 <script>
 /* eslint-disable import/extensions */
-import GenericButton from '@/components/widgets/GenericButton';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import BottomNav from '@/components/data-sharing/BottomNav';
+import GenericButton from '@/components/widgets/GenericButton';
+import MakeYourChoice from '@/components/data-sharing/MakeYourChoice';
 import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
 import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
-import MakeYourChoice from '@/components/data-sharing/MakeYourChoice';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import { key } from '@/lib/utils';
 
 import keys from 'lodash/fp/keys';
 
 export default {
   components: {
-    GenericButton,
+    AnalyticsTrackedTag,
     BottomNav,
+    GenericButton,
+    MakeYourChoice,
     Overview,
     WhereConfidentialPatientInformationIsUsed,
     WhereYourChoiceDoesNotApply,
-    MakeYourChoice,
-    AnalyticsTrackedTag,
   },
   data() {
     return {
@@ -88,17 +89,17 @@ export default {
       window.scrollTo(0, 0);
       this.pageIndex = index;
     },
+    contentsKeyPressed(event, pageId) {
+      if (event.key === key.Enter) {
+        event.preventDefault();
+        this.goToPage(pageId);
+      }
+    },
     goToPage(pageId) {
       this.changePage(this.pageIds.indexOf(pageId));
     },
     isLinkActive(pageId) {
       return pageId === this.pageIds[this.pageIndex] ? this.$style.active : undefined;
-    },
-    contentsKeyPressed(event, pageId) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        this.goToPage(pageId);
-      }
     },
     async startNow() {
       const scope = this;

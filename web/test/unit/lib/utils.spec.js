@@ -1,5 +1,5 @@
 import each from 'jest-each';
-import { isFalsy, isTruthy, redirectTo, readableBytes } from '@/lib/utils';
+import { isFalsy, isTruthy, redirectTo, readableBytes, stripHtml } from '@/lib/utils';
 
 let self;
 
@@ -176,6 +176,18 @@ describe('util library', () => {
 
       // Assert
       expect(output).toEqual(bytes);
+    });
+  });
+
+  describe('stripHtml', () => {
+    let result;
+
+    beforeEach(() => {
+      result = stripHtml('Sample <b>content</b> with html');
+    });
+
+    it('will return sanitized content', () => {
+      expect(result).toBe('Sample content with html');
     });
   });
 });

@@ -29,7 +29,7 @@ describe('message', () => {
   });
 
   it('will replace message content new lines with `<br/>`', () => {
-    expect(wrapper.find('p').html()).toBe('<p>Test1<br>new Line<br>regards</p>');
+    expect(wrapper.find('p').html()).toBe('<p class="panel-content">Test1<br>new Line<br>regards</p>');
   });
 
   describe('sent time', () => {

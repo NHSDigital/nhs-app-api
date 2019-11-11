@@ -3,8 +3,7 @@
     <div>
       <h3>{{ message.sender }}</h3>
       <div :class="$style['nhsuk-panel']">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-html="content"/>
+        <linkify-content class="panel-content" :content="message.body" tag="p" />
       </div>
       <time :datetime="sentTime | formatDate('YYYY-MM-DD h:mma')"
       >Sent {{ sentTime | formatDate('h:mma, DD MMMM YYYY') }}</time>
@@ -13,8 +12,13 @@
 </template>
 
 <script>
+import LinkifyContent from '@/components/widgets/LinkifyContent';
+
 export default {
   name: 'Message',
+  components: {
+    LinkifyContent,
+  },
   props: {
     message: {
       type: Object,
@@ -23,7 +27,7 @@ export default {
   },
   data() {
     return {
-      content: this.message.body.replace(/\n/g, '<br />'),
+      content: this.message.body,
       sentTime: this.message.sentTime,
     };
   },
@@ -34,6 +38,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  p.panel-content > a{
+    display: inline;
+    font-weight: normal;
+    vertical-align: unset;
+  }
+</style>
+
 <style module lang="scss" scoped>
   @import "~nhsuk-frontend/packages/nhsuk";
 

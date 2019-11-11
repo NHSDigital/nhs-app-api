@@ -23,8 +23,8 @@
 
 <script>
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
+import { key, redirectTo } from '@/lib/utils';
 import { MY_RECORD_DOCUMENTS } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'Documents',
@@ -60,7 +60,7 @@ export default {
       redirectTo(this, MY_RECORD_DOCUMENTS.path, null);
     },
     onKeyDown(e) {
-      if (e.keyCode === 13) {
+      if (e.key === key.Enter) {
         this.viewDocuments();
       }
     },

@@ -1,10 +1,5 @@
 <script>
-const KeyCodes = {
-  NoKey: 0,
-  TabKey: 9,
-  LeftArrowKey: 38,
-  DownArrowKey: 40,
-};
+import { key } from '@/lib/utils';
 
 export default {
   name: 'TabFocusMixin',
@@ -26,7 +21,7 @@ export default {
       return {
         stylingBinding: null,
         highlight: false,
-        lastKey: KeyCodes.NoKey };
+        lastKey: '' };
     },
     computed: {
       getStyleClasses() {
@@ -50,21 +45,21 @@ export default {
     },
     methods: {
       onFocusButton(e) {
-        if (e.keyCode === KeyCodes.TabKey ||
-          (e.keyCode >= KeyCodes.LeftArrowKey && e.keyCode <= KeyCodes.DownArrowKey)) {
+        if (e.key === key.Tab ||
+          (e.key >= key.ArrowLeft && e.key <= key.ArrowDown)) {
           this.highlight = true;
         }
-        this.lastKey = KeyCodes.NoKey;
+        this.lastKey = '';
       },
       onKeyDown(e) {
-        this.lastKey = e.keyCode;
+        this.lastKey = e.key;
       },
       onBlurButton(e) {
         this.highlight = false;
         if (e.relatedTarget === null &&
-          (this.lastKey === KeyCodes.TabKey ||
-            (this.lastKey >= KeyCodes.LeftArrowKey && this.lastKey <= KeyCodes.DownArrowKey))) {
-          this.lastKey = KeyCodes.NoKey;
+          (this.lastKey === key.Tab ||
+            (this.lastKey >= key.ArrowLeft && this.lastKey <= key.ArrowDown))) {
+          this.lastKey = '';
         }
       },
     },

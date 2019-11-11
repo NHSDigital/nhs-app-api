@@ -22,8 +22,7 @@
 <script>
 /* eslint-disable import/extensions */
 import PlusMinusIcon from '@/components/icons/PlusMinusIcon';
-
-const ENTER_KEY_CODE = 13;
+import { key } from '@/lib/utils';
 
 export default {
   name: 'CollapsibleDialog',
@@ -45,7 +44,7 @@ export default {
       this.showContent = !this.showContent;
     },
     keyPress(event) {
-      if (event.keyCode === ENTER_KEY_CODE) {
+      if (event.key === key.Enter) {
         event.preventDefault();
         this.toggle();
       }

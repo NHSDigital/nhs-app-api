@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { get } from 'lodash/fp';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
@@ -132,11 +133,17 @@ export default {
     };
   },
   computed: {
+    currentRoute() {
+      return findByName(this.$route.name);
+    },
     currentBreadCrumbs() {
-      return getCrumbTrailForRoute(findByName(this.$route.name));
+      return getCrumbTrailForRoute(this.currentRoute);
     },
     currentHelpUrl() {
-      return findByName(this.$route.name).helpUrl;
+      return (this.currentRoute || INDEX).helpUrl;
+    },
+    currentCrumb() {
+      return (this.currentRoute || INDEX).crumb;
     },
     isGpFinderPage() {
       return this.$route.name === GP_FINDER.name;
@@ -178,7 +185,7 @@ export default {
     },
     breadcrumbDisabledNative() {
       return this.$store.state.device.isNativeApp &&
-        (findByName(this.$route.name).crumb || {}).nativeDisabled;
+        get('nativeDisabled')(this.currentCrumb);
     },
     shouldShowContentHeader() {
       return this.loggedIn &&

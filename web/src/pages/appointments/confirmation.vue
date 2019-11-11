@@ -164,106 +164,110 @@
   </div>
 </template>
 
-
 <script>
-import { redirectTo } from '@/lib/utils';
-import { createUri } from '@/lib/noJs';
-import { APPOINTMENT_BOOKING, APPOINTMENTS, APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
-import moment from 'moment';
 import get from 'lodash/fp/get';
+import moment from 'moment';
+import channel from '@/lib/channel';
+import necessity from '@/lib/necessity';
 import AppointmentSlot from '@/components/appointments/Appointment';
+import Card from '@/components/widgets/card/Card';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import GenericButton from '@/components/widgets/GenericButton';
+import GenericTextArea from '@/components/widgets/GenericTextArea';
+import GenericTextInput from '@/components/widgets/GenericTextInput';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
-import GenericTextArea from '@/components/widgets/GenericTextArea';
-import GenericButton from '@/components/widgets/GenericButton';
-import GenericTextInput from '@/components/widgets/GenericTextInput';
-import Necessity from '@/lib/necessity';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import channel from '@/lib/channel';
+import { createUri } from '@/lib/noJs';
 import { getMessage } from '@/lib/errors';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
-import CardGroup from '@/components/widgets/card/CardGroup';
-import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import Card from '@/components/widgets/card/Card';
+import { key, redirectTo } from '@/lib/utils';
+import { APPOINTMENT_BOOKING, APPOINTMENT_CONFIRMATIONS, APPOINTMENTS } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
 
   components: {
+    AppointmentSlot,
+    Card,
+    CardGroup,
+    CardGroupItem,
     DesktopGenericBackLink,
+    ErrorMessage,
+    GenericButton,
+    GenericTextArea,
     GenericTextInput,
     MessageDialog,
     MessageText,
     MessageList,
-    AppointmentSlot,
-    ErrorMessage,
-    GenericTextArea,
-    GenericButton,
     NoJsForm,
-    Card,
-    CardGroupItem,
-    CardGroup,
   },
   data() {
     return {
-      symptoms: '',
-      slot: this.$store.state.availableAppointments.selectedSlot,
-      reasonError: false,
-      telephoneNumber: '',
-      otherTelephoneNumber: '',
-      telephoneNumberError: false,
-      patientTelephoneNumbers: get('availableAppointments.patientTelephoneNumbers')(this.$store.state),
-      showPhoneNumberTextBox: true,
-      isJavascriptOn: false,
       appointmentBookingPath: APPOINTMENT_BOOKING.path,
+      isJavascriptOn: false,
+      otherTelephoneNumber: '',
+      patientTelephoneNumbers: get('availableAppointments.patientTelephoneNumbers')(this.$store.state),
+      reasonError: false,
+      showPhoneNumberTextBox: true,
+      slot: this.$store.state.availableAppointments.selectedSlot,
+      symptoms: '',
+      telephoneNumber: '',
+      telephoneNumberError: false,
     };
   },
   computed: {
-    cancelBookingPath() {
-      return APPOINTMENT_BOOKING.path;
-    },
     appointmentPath() {
       return APPOINTMENTS.path;
+    },
+    cancelBookingPath() {
+      return APPOINTMENT_BOOKING.path;
     },
     confirmBookingPath() {
       return APPOINTMENT_CONFIRMATIONS.path;
     },
-    reasonBoxAriaLabelledBy() {
-      return this.showError ? 'booking-reason-label error-label max-reason-desc' : 'booking-reason-label max-reason-desc';
-    },
-    telephoneNumberTextAriaLabelledBy() {
-      return this.showTelephoneError ? 'telephone-error-label telephone-number-desc' : 'telephone-number-desc';
-    },
-    defaultClasses() {
-      return this.showError ? undefined : undefined;
-    },
-    showReasonError() {
-      return this.reasonError && !this.symptoms;
-    },
-    reasonRequired() {
-      return !this.bookingReasonOptional();
-    },
-    showTelephoneError() {
-      return this.telephoneNumberError && !this.telephoneNumber;
-    },
-    telephoneErrorStyle() {
-      return this.showTelephoneError ? 'nhsuk-form-group--error' : '';
-    },
-    showError() {
-      return this.showReasonError || this.showTelephoneError;
-    },
-    reasonTextErrorStyle() {
-      return this.showReasonError ? 'nhsuk-form-group--error' : '';
+    confirmationMessage() {
+      return this.$t(this.confirmationMessageKey);
     },
     confirmationMessageKey() {
       return this.$store.state.myAppointments.disableCancellation
         ? 'appointments.index.successAndCancellationDisabledText'
         : 'appointments.index.successText';
     },
-    confirmationMessage() {
-      return this.$t(this.confirmationMessageKey);
+    defaultClasses() {
+      return this.showError ? undefined : undefined;
+    },
+    formData() {
+      return {
+        myAppointments: {
+          disableCancellation: this.$store.state.myAppointments.disableCancellation,
+        },
+      };
+    },
+    noJsTelephoneNumber() {
+      if (!this.telephoneNumber) return undefined;
+      return this.telephoneNumber;
+    },
+    reasonBoxAriaLabelledBy() {
+      return this.showError ? 'booking-reason-label error-label max-reason-desc' : 'booking-reason-label max-reason-desc';
+    },
+    reasonRequired() {
+      return !this.bookingReasonOptional();
+    },
+    reasonTextErrorStyle() {
+      return this.showReasonError ? 'nhsuk-form-group--error' : '';
+    },
+    showError() {
+      return this.showReasonError || this.showTelephoneError;
+    },
+    showReasonError() {
+      return this.reasonError && !this.symptoms;
+    },
+    showTelephoneError() {
+      return this.telephoneNumberError && !this.telephoneNumber;
     },
     slotEndTime() {
       if (!this.slot) return undefined;
@@ -277,16 +281,11 @@ export default {
       if (!this.slot) return undefined;
       return this.slot.startTime;
     },
-    noJsTelephoneNumber() {
-      if (!this.telephoneNumber) return undefined;
-      return this.telephoneNumber;
+    telephoneNumberTextAriaLabelledBy() {
+      return this.showTelephoneError ? 'telephone-error-label telephone-number-desc' : 'telephone-number-desc';
     },
-    formData() {
-      return {
-        myAppointments: {
-          disableCancellation: this.$store.state.myAppointments.disableCancellation,
-        },
-      };
+    telephoneErrorStyle() {
+      return this.showTelephoneError ? 'nhsuk-form-group--error' : '';
     },
   },
   watch: {
@@ -347,37 +346,29 @@ export default {
     this.$store.dispatch('availableAppointments/deselect');
   },
   methods: {
-    showBookingReason() {
-      return this.$store.state.availableAppointments
-        .bookingReasonNecessity !== Necessity.NotAllowed;
-    },
     bookingReasonOptional() {
       return this.$store.state.availableAppointments
-        .bookingReasonNecessity === Necessity.Optional;
+        .bookingReasonNecessity === necessity.Optional;
     },
-    showPhoneNumber() {
-      return (this.slot || {}).channel === channel.Telephone;
-    },
-    otherPhoneNumberSelected() {
-      this.telephoneNumber = '';
-      this.showPhoneNumberTextBox = true;
+    async confirmTheAppointmentSlot(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
+      if (!slot) {
+        throw new ErrorMessage('Slot should not be null');
+      }
+      const bookingData = {
+        SlotId: slot.id,
+        BookingReason: reason,
+        StartTime: slot.startTime,
+        EndTime: slot.endTime,
+        TelephoneNumber: (telephoneNumberField !== null && telephoneNumberField !== '')
+          ? telephoneNumberField : otherTelephoneNumberField,
+      };
+      await this.$store.dispatch('availableAppointments/book', bookingData);
     },
     hidePhoneNumberTextBox() {
       this.showPhoneNumberTextBox = false;
     },
-    selected(event) {
-      if (event.currentTarget.id === 'otherPhoneNumberRadioInput') {
-        this.otherPhoneNumberSelected();
-      } else {
-        this.telephoneNumber = event.currentTarget.id;
-        this.hidePhoneNumberTextBox();
-      }
-      event.stopPropagation();
-    },
-    onKeyDown(e) {
-      if (e.keyCode === 13) {
-        this.selected(e);
-      }
+    onCancelButtonClicked() {
+      redirectTo(this, this.cancelBookingPath, null);
     },
     async onConfirmButtonClicked(e) {
       e.preventDefault();
@@ -393,7 +384,7 @@ export default {
       }
 
       const isMandatory = this.$store.state.availableAppointments
-        .bookingReasonNecessity === Necessity.Mandatory;
+        .bookingReasonNecessity === necessity.Mandatory;
       this.symptoms = this.symptoms.trim();
       if (this.symptoms.length === 0 && isMandatory) {
         this.reasonError = true;
@@ -423,22 +414,30 @@ export default {
         */
       }
     },
-    async confirmTheAppointmentSlot(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
-      if (!slot) {
-        throw new ErrorMessage('Slot should not be null');
+    onKeyDown(e) {
+      if (e.key === key.Enter) {
+        this.selected(e);
       }
-      const bookingData = {
-        SlotId: slot.id,
-        BookingReason: reason,
-        StartTime: slot.startTime,
-        EndTime: slot.endTime,
-        TelephoneNumber: (telephoneNumberField !== null && telephoneNumberField !== '')
-          ? telephoneNumberField : otherTelephoneNumberField,
-      };
-      await this.$store.dispatch('availableAppointments/book', bookingData);
     },
-    onCancelButtonClicked() {
-      redirectTo(this, this.cancelBookingPath, null);
+    otherPhoneNumberSelected() {
+      this.telephoneNumber = '';
+      this.showPhoneNumberTextBox = true;
+    },
+    selected(event) {
+      if (event.currentTarget.id === 'otherPhoneNumberRadioInput') {
+        this.otherPhoneNumberSelected();
+      } else {
+        this.telephoneNumber = event.currentTarget.id;
+        this.hidePhoneNumberTextBox();
+      }
+      event.stopPropagation();
+    },
+    showBookingReason() {
+      return this.$store.state.availableAppointments
+        .bookingReasonNecessity !== necessity.NotAllowed;
+    },
+    showPhoneNumber() {
+      return (this.slot || {}).channel === channel.Telephone;
     },
   },
 };

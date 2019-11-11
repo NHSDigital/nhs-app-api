@@ -97,8 +97,8 @@
 <script>
 import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
+import { key, redirectTo } from '@/lib/utils';
 import { MY_RECORD_VISION_TEST_RESULTS_DETAIL } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'TestResults',
@@ -156,12 +156,12 @@ export default {
       return `/my-record/testresultdetail/${testResultId}`;
     },
     onKeyDownVision(e) {
-      if (e.keyCode === 13) {
+      if (e.key === key.Enter) {
         this.viewVisionTestResults();
       }
     },
     onKeyDown(testResultId, e) {
-      if (e.keyCode === 13) {
+      if (e.key === key.Enter) {
         this.activateTestResult(testResultId, e);
       }
     },

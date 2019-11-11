@@ -48,7 +48,20 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import { get } from 'lodash/fp';
+import ApiError from '@/components/errors/ApiError';
+import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
+import FlashMessage from '@/components/widgets/FlashMessage';
+import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
+import HotJar from '@/components/widgets/HotJar';
+import Modal from '@/components/modal/Modal';
+import NativeVersionSetup from '../services/nativeVersionSetup';
+import Spinner from '@/components/widgets/Spinner';
+import SurveyBar from '@/components/SurveyBar';
+import WebFooter from '@/components/widgets/WebFooter';
+import WebHeader from '@/components/widgets/WebHeader';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import {
   findByName,
   GP_FINDER,
@@ -56,32 +69,20 @@ import {
   isAnonymous,
   LOGIN,
 } from '@/lib/routes';
-import WebHeader from '@/components/widgets/WebHeader';
-import WebFooter from '@/components/widgets/WebFooter';
-import Spinner from '@/components/widgets/Spinner';
-import ApiError from '@/components/errors/ApiError';
-import ConnectionError from '@/components/errors/ConnectionError';
-import FlashMessage from '@/components/widgets/FlashMessage';
-import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
-import SurveyBar from '@/components/SurveyBar';
-import HotJar from '@/components/widgets/HotJar';
-import NativeVersionSetup from '../services/nativeVersionSetup';
-import Modal from '@/components/modal/Modal';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
   components: {
-    ContentHeader,
-    WebHeader,
-    WebFooter,
-    Spinner,
     ApiError,
     ConnectionError,
+    ContentHeader,
     FlashMessage,
     HeaderCompanionButton,
-    SurveyBar,
     HotJar,
     Modal,
+    Spinner,
+    SurveyBar,
+    WebFooter,
+    WebHeader,
   },
   head() {
     let { platform } = this.$store.state.device.source;
@@ -132,11 +133,14 @@ export default {
     };
   },
   computed: {
+    currentRoute() {
+      return findByName(this.$route.name);
+    },
     currentHelpUrl() {
-      if (findByName(this.$route.name) === undefined) {
-        return INDEX.helpUrl;
-      }
-      return findByName(this.$route.name).helpUrl;
+      return (this.currentRoute || INDEX).helpUrl;
+    },
+    currentCrumb() {
+      return (this.currentRoute || INDEX).crumb;
     },
     showMenu() {
       return (
@@ -160,7 +164,7 @@ export default {
     },
     breadcrumbDisabledNative() {
       return this.$store.state.device.isNativeApp &&
-        (findByName(this.$route.name).crumb || {}).nativeDisabled;
+        get('nativeDisabled')(this.currentCrumb);
     },
     shouldShowFullDesktopHeader() {
       return (
