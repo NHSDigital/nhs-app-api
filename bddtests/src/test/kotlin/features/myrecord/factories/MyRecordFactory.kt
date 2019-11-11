@@ -11,6 +11,7 @@ abstract class MyRecordFactory {
     val mockingClient = MockingClient.instance
 
     abstract fun disabled(patient:Patient)
+    abstract fun disabledForProxy(patient:Patient, actingOnBehalfOf: Patient)
     abstract fun enabledWithBlankRecord(patient: Patient)
     abstract fun enabledWithData(
             patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions)

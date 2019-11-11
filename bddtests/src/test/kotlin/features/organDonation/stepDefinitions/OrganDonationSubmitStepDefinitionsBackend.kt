@@ -3,6 +3,7 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.organDonation.OrganDonationWithdrawalResponse
@@ -52,9 +53,11 @@ class OrganDonationSubmitStepDefinitionsBackend {
         val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
                 .getOrFail<OrganDonationRegistrationRequest>()
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
-                    .postRegistration(registration)
+                    .postRegistration(registration, patientId)
             setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
@@ -66,9 +69,11 @@ class OrganDonationSubmitStepDefinitionsBackend {
         val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
                 .getOrFail<OrganDonationRegistrationRequest>()
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
-                    .putRegistration(registration)
+                    .putRegistration(registration, patientId)
             setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
@@ -81,9 +86,11 @@ class OrganDonationSubmitStepDefinitionsBackend {
                 .getOrFail<OrganDonationRegistrationRequest>()
         registration.registration.faithDeclaration = "Yes"
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
-                    .postRegistration(registration)
+                    .postRegistration(registration, patientId)
             setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
@@ -95,9 +102,11 @@ class OrganDonationSubmitStepDefinitionsBackend {
         val withdrawalRequestBody = OrganDonationSerenityHelpers.ORGAN_DONATION_WITHDRAWAL
                 .getOrFail<OrganDonationWithdrawRequest>()
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
-                    .deleteRegistration(withdrawalRequestBody)
+                    .deleteRegistration(withdrawalRequestBody, patientId)
             setSessionVariable(OrganDonationWithdrawalResponse::class).to(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)

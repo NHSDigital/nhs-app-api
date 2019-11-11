@@ -18,6 +18,13 @@ import java.time.Duration
 import java.time.OffsetDateTime
 
 class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
+    override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
+        mockingClient
+                .forEmis {
+                    prescriptions.prescriptionsRequestViaProxy(patient, actingOnBehalfOf)
+                            .respondWithPrescriptionsNotEnabled()
+                }
+    }
 
     override val getCoursesLoader: ICoursesLoader<*> = EmisCoursesLoader
     override val getPrescriptionsLoader: IPrescriptionLoader<*> = EmisPrescriptionLoader

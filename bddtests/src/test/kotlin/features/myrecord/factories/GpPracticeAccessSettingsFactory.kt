@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
+import mockingFacade.linkedProfiles.FeaturesEnabledFacade
 import models.Patient
 
 abstract class GpPracticeAccessSettingsFactory {
@@ -9,7 +10,10 @@ abstract class GpPracticeAccessSettingsFactory {
     val mockingClient = MockingClient.instance
 
     abstract fun enabled(patient: Patient)
-    abstract fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient)
+    abstract fun enabledViaProxy(
+            callingPatient: Patient,
+            actingOnBehalfOf: Patient,
+            featuresEnabled: FeaturesEnabledFacade)
 
     companion object : SupplierSpecificFactory<GpPracticeAccessSettingsFactory>() {
 

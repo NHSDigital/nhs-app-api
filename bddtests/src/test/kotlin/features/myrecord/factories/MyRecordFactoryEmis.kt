@@ -16,9 +16,38 @@ import mocking.microtest.myRecord.TestResultOptions
 class MyRecordFactoryEmis: MyRecordFactory() {
 
     override fun disabled(patient: Patient) {
-
         mockingClient.forEmis {
             myRecord.allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
+        }
+    }
+
+    override fun disabledForProxy(patient: Patient, actingOnBehalfOf: Patient) {
+        mockingClient.forEmis {
+            myRecordProxy.allergiesRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
+        }
+
+        mockingClient.forEmis {
+            myRecordProxy.immunisationsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
+        }
+
+        mockingClient.forEmis {
+            myRecordProxy.testResultsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
+        }
+
+        mockingClient.forEmis {
+            myRecordProxy.problemsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
+        }
+
+        mockingClient.forEmis {
+            myRecordProxy.consultationsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
+        }
+
+        mockingClient.forEmis {
+            myRecordProxy.medicationsRequest(patient, actingOnBehalfOf).responseErrorForbiddenService()
+        }
+
+        mockingClient.forEmis {
+            myRecordProxy.documentsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
     }
 

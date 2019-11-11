@@ -78,6 +78,11 @@ const routes = {
         return this.allRoutes.INDEX;
       },
     },
+    redirectRules: [{
+      condition: 'session/isProxying',
+      value: true,
+      url: '/linked-profiles/shutter/settings',
+    }],
     helpUrl: `${baseNhsAppHelpUrl}account/`,
   },
   ACCOUNT_NOTIFICATIONS: {
@@ -94,6 +99,10 @@ const routes = {
       condition: 'device/isNativeApp',
       value: false,
       url: '/',
+    }, {
+      condition: 'session/isProxying',
+      value: true,
+      url: '/linked-profiles/shutter/settings',
     }],
     sjrRedirectRules: [{
       journey_disabled: 'notifications',
@@ -137,6 +146,7 @@ const routes = {
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
+    proxyShutterPath: '/linked-profiles/shutter/appointments',
   },
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
@@ -490,6 +500,10 @@ const routes = {
       condition: 'device/isNativeApp',
       value: false,
       url: '/',
+    }, {
+      condition: 'session/isProxying',
+      value: true,
+      url: '/linked-profiles/shutter/more',
     }],
   },
   MYRECORD: {
@@ -932,6 +946,7 @@ const routes = {
     sjrRedirectRules: [
       gpAtHandPrescriptionsRedirect,
     ],
+    proxyShutterPath: '/linked-profiles/shutter/prescriptions',
   },
   PRESCRIPTION_CONFIRM_COURSES: {
     name: 'prescriptions-confirm-prescription-details',
@@ -1025,6 +1040,11 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    redirectRules: [{
+      condition: 'session/isProxying',
+      value: true,
+      url: '/linked-profiles/shutter/symptoms',
+    }],
   },
   TERMSANDCONDITIONS: {
     name: 'terms-and-conditions',
@@ -1058,6 +1078,61 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}proxy/`,
+  },
+  LINKED_PROFILES_SHUTTER_MORE: {
+    name: 'linked-profiles-shutter-more',
+    path: '/linked-profiles/shutter/more',
+    crumb: {
+      i8nKey: 'linkedProfiles',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}proxy/`,
+  },
+  LINKED_PROFILES_SHUTTER_SYMPTOMS: {
+    name: 'linked-profiles-shutter-symptoms',
+    path: '/linked-profiles/shutter/symptoms',
+    crumb: {
+      i8nKey: 'linkedProfiles',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}proxy/`,
+  },
+  LINKED_PROFILES_SHUTTER_SETTINGS: {
+    name: 'linked-profiles-shutter-settings',
+    path: '/linked-profiles/shutter/settings',
+    crumb: {
+      i8nKey: 'linkedProfiles',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}proxy/`,
+  },
+  LINKED_PROFILES_SHUTTER_APPOINTMENTS: {
+    name: 'linked-profiles-shutter-appointments',
+    path: '/linked-profiles/shutter/appointments',
+    crumb: {
+      i8nKey: 'linkedProfiles',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+  },
+  LINKED_PROFILES_SHUTTER_PRESCRIPTIONS: {
+    name: 'linked-profiles-shutter-prescriptions',
+    path: '/linked-profiles/shutter/prescriptions',
+    crumb: {
+      i8nKey: 'linkedProfiles',
+      get parentRoute() {
+        return this.allRoutes.INDEX;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
   SWITCH_PROFILE: {
     name: 'switch-profile',
@@ -1098,6 +1173,8 @@ Object.keys(routes).forEach((key) => { routes[key].crumb.allRoutes = routes; });
  * @returns a single route object.
  */
 export const findByName = name => find(({ name: routeName }) => routeName === name)(routes);
+
+export const findByPath = path => find(({ path: pathValue }) => pathValue === path)(routes);
 
 export const getRouteNames = () => Object.keys(routes).map(key => routes[key].name);
 
@@ -1217,5 +1294,10 @@ export const {
   IMMUNISATIONS,
   LINKED_PROFILES,
   LINKED_PROFILES_SUMMARY,
+  LINKED_PROFILES_SHUTTER_MORE,
+  LINKED_PROFILES_SHUTTER_SYMPTOMS,
+  LINKED_PROFILES_SHUTTER_SETTINGS,
+  LINKED_PROFILES_SHUTTER_APPOINTMENTS,
+  LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
   SWITCH_PROFILE,
 } = routes;

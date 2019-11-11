@@ -22,6 +22,13 @@ class TppMappingBuilderAppointments: IAppointmentMappingBuilder {
     override fun viewMyAppointmentsRequest(patient: Patient, appointmentType: IMyAppointmentsBuilder.AppointmentType):
             IMyAppointmentsBuilder = MyAppointmentsBuilderTpp(patient, appointmentType)
 
+    override fun viewMyAppointmentsRequestViaProxy(
+            patient: Patient,
+            actingOnBehalfOf: Patient,
+            appointmentType: IMyAppointmentsBuilder.AppointmentType): IMyAppointmentsBuilder {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade):
             IBookAppointmentsBuilder = BookAppointmentsBuilderTpp(patient, request)
 

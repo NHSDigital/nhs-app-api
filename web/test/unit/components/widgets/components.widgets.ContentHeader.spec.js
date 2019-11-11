@@ -158,7 +158,6 @@ describe('ContentHeader.vue', () => {
       'appointments-gp-advice',
     ]).it('showYellowBanner will return true when demographics answered', (routeName) => {
       getter['session/isProxying'] = false;
-      debugger;
       wrapper = mountAs({
         native: true,
         demographicsQuestionAnswered: true,

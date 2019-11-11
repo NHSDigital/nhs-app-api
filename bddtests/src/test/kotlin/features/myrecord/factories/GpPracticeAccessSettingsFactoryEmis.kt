@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import mocking.emis.models.MeSettingsResponseModel
 import mocking.emis.models.UserGpPracticeSettingsResponseModel
+import mockingFacade.linkedProfiles.FeaturesEnabledFacade
 import models.Patient
 
 class GpPracticeAccessSettingsFactoryEmis: GpPracticeAccessSettingsFactory() {
@@ -19,7 +20,10 @@ class GpPracticeAccessSettingsFactoryEmis: GpPracticeAccessSettingsFactory() {
         }
     }
 
-    override fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
+    override fun enabledViaProxy(
+            callingPatient: Patient,
+            actingOnBehalfOf: Patient,
+            featuresEnabled: FeaturesEnabledFacade) {
         mockingClient.forEmis {
             authentication.meSettingsRequest(
                     patient = actingOnBehalfOf,
@@ -28,9 +32,9 @@ class GpPracticeAccessSettingsFactoryEmis: GpPracticeAccessSettingsFactory() {
                     .respondWithSuccess(
                             MeSettingsResponseModel(
                                     UserGpPracticeSettingsResponseModel(
-                                            appointmentsEnabled = true,
-                                            prescribingEnabled = false,
-                                            medicalRecordEnabled = true)
+                                            appointmentsEnabled = featuresEnabled.appointmentsEnabled,
+                                            prescribingEnabled = featuresEnabled.prescribingEnabled,
+                                            medicalRecordEnabled = featuresEnabled.medicalRecordEnabled)
                             )
                     )
         }

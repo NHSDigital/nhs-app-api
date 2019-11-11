@@ -13,6 +13,7 @@ using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
@@ -216,7 +217,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockAuditor.Verify(
                 x => x.Audit(ResponseAuditType, "Error received from demographics"));
         }
-        
+
         [TestMethod]
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnDemographicsRetrievalFailedResult()
         {
@@ -284,6 +285,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(
                 x => x.Audit(ResponseAuditType, "There was an issue retrieving the demographics record"));
+        }
+
+        [TestMethod]
+        public void EnsureControllerHasProxyingNotAllowedAttribute_ToPreventProxyAccess()
+        {
+            typeof(OrganDonationController).Should().BeDecoratedWith<ProxyingNotAllowedAttribute>();
         }
     }
 }

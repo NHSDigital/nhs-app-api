@@ -15,22 +15,16 @@ namespace NHSOnline.Backend.PfsApi.Filters
     {
         private readonly JourneyFeature _journeyFeature;
         private readonly HttpStatusCode _httpStatusCode;
-        
+
         public JourneyFeatureFilterAttribute(JourneyFeature currentJourneyFeature, HttpStatusCode currentHttpStatusCode = HttpStatusCode.Forbidden)
         {
             _journeyFeature = currentJourneyFeature;
             _httpStatusCode = currentHttpStatusCode;
         }
 
-        public JourneyFeature CurrentJourneyFeature
-        {
-            get { return _journeyFeature; }
-        }
-        
-        public HttpStatusCode CurrentHttpStatusCode
-        {
-            get { return _httpStatusCode; }
-        }
+        public JourneyFeature CurrentJourneyFeature => _journeyFeature;
+
+        public HttpStatusCode CurrentHttpStatusCode => _httpStatusCode;
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
@@ -39,27 +33,27 @@ namespace NHSOnline.Backend.PfsApi.Filters
             var odsCode = context.HttpContext.GetUserSession().GpUserSession.OdsCode;
 
             ValidateObjects(logger, sjrClient, odsCode);
-            
+
             var sjrResponse =  await sjrClient.GetServiceJourneyRules(odsCode);
             if (sjrResponse.HasSuccessResponse)
-            {                
+            {
                 switch (_journeyFeature)
                 {
-                    case JourneyFeature.NominatedPharmacy: 
+                    case JourneyFeature.NominatedPharmacy:
                         if (sjrResponse.Body.Journeys.NominatedPharmacy != true)
-                        {                            
+                        {
                             logger.LogInformation($"Nominated Pharmacy is not enabled on SJR for OdsCode {odsCode}");
                             context.Result = new StatusCodeResult((int)_httpStatusCode);
                         }
                         break;
-                    
+
                     default:
                         logger.LogWarning($"{_journeyFeature} not handled by [{this.GetType().Name}]");
                         break;
                 }
             }
             else
-            {                            
+            {
                 logger.LogInformation($"ServiceJourneyRules.Get returned a response code of {sjrResponse.StatusCode}");
                 context.Result = new StatusCodeResult((int)sjrResponse.StatusCode);
             }
@@ -71,17 +65,17 @@ namespace NHSOnline.Backend.PfsApi.Filters
             if (logger == null)
             {
                 throw new ArgumentNullException(nameof(logger));
-            }        
-            
+            }
+
             if (sjrClient == null)
             {
                 throw new ArgumentNullException(nameof(sjrClient));
             }
-            
+
             if (string.IsNullOrEmpty(odsCode))
             {
                 throw new ArgumentNullException(nameof(odsCode));
-            } 
+            }
         }
     }
 }

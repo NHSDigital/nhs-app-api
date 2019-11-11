@@ -15,7 +15,6 @@ import java.time.Duration
 import java.time.OffsetDateTime
 
 class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
-
     override val getCoursesLoader: ICoursesLoader<*> = TppCoursesLoader
     override val getPrescriptionsLoader: IPrescriptionLoader<*> = TppPrescriptionLoader
 
@@ -121,6 +120,10 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
     }
 
     override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
         throw UnsupportedOperationException()
     }
 }

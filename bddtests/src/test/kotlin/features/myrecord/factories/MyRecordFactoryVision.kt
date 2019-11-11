@@ -102,4 +102,8 @@ class MyRecordFactoryVision: MyRecordFactory() {
     override fun respondWithForbidden(patient: Patient) {
         throw UnsupportedOperationException()
     }
+
+    override fun disabledForProxy(patient: Patient, actingOnBehalfOf: Patient) {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
 }

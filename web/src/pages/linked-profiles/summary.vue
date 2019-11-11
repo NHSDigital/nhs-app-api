@@ -4,7 +4,7 @@
       <div class="nhsuk-grid-column-full">
 
         <generic-button id="btn-switch-profile"
-                        :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                        :button-classes="['nhsuk-button']"
                         @click.stop.prevent="switchProfileButtonClicked">
           {{ $t('linkedProfiles.switchProfileButton') }}
         </generic-button>

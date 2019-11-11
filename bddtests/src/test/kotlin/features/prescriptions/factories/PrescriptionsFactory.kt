@@ -54,6 +54,7 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
     abstract fun gpSessionHasExpired()
     abstract fun orderPrescriptionReturnsConflictResponse()
     abstract fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade)
+    abstract fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient)
 
     val mockingClient = MockingClient.instance
     val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)

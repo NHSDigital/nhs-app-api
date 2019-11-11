@@ -138,6 +138,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     return new LinkedAccount
                     {
                         Id = x.Key,
+                        GivenName = demographics.Response.NameParts.Given,
                         Name = demographics.Response.PatientName,
                         DateOfBirth = demographics.Response.DateOfBirth,
                         NhsNumber = demographics.Response.NhsNumber,

@@ -149,4 +149,8 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
                     .whenScenarioStateIs(Scenario.STARTED)
         }
     }
+
+    override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
+        throw UnsupportedOperationException()
+    }
 }

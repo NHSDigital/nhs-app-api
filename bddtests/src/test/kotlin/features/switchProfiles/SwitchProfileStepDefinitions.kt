@@ -32,7 +32,8 @@ class SwitchProfileStepDefinitions {
 
     @Then("^the switch profiles page is displayed$")
     fun theSwitchProfilesPageIsDisplayed() {
-        switchProfilePage.isLoaded()
+        val selectedPatient = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        switchProfilePage.isLoaded(selectedPatient.profile.formattedFullName())
     }
 
     @And("^the correct proxy user details are displayed$")
@@ -44,21 +45,19 @@ class SwitchProfileStepDefinitions {
     private fun checkDisplayedValuesAreCorrect(
             displayedProxyDetails: SwitchProfileData)
     {
-
         val currentProxyPatient = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        //First proxy patient was selected in previous step
-            Assert.assertEquals(
-                    "Proxy patient nhs number did not match",
-                    currentProxyPatient.profile.formattedNHSNumber(),displayedProxyDetails.nhsNumber)
+        // proxy patient was selected in previous step
+        Assert.assertEquals(
+                "Proxy patient nhs number did not match",
+                currentProxyPatient.profile.formattedNHSNumber(), displayedProxyDetails.nhsNumber)
 
         Assert.assertEquals(
                 "Proxy patient date of birth did not match",
-                currentProxyPatient.profile.formattedDateOfBirth(),displayedProxyDetails.dateOfBirth)
+                currentProxyPatient.profile.formattedDateOfBirth(), displayedProxyDetails.dateOfBirth)
 
         Assert.assertEquals(
                 "Proxy patient gp practice did not match",
-                currentProxyPatient.gpPracticeName,displayedProxyDetails.gpPracticeName)
-
+                currentProxyPatient.gpPracticeName, displayedProxyDetails.gpPracticeName)
     }
 
     @When("I click the Switch to my profile button for the main user")

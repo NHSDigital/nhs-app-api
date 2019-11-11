@@ -14,6 +14,7 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import mockingFacade.appointments.metadata.LocationFacade
 import mockingFacade.appointments.metadata.SlotTypeFacade
+import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
@@ -138,6 +139,12 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
     fun createMyAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         mockMyAppointments(mapping = mapping)
         generateDefaultUserData()
+    }
+
+    fun disableForProxy(actingOnBehalfOf: Patient) {
+        appointmentMapper.requestMapping {
+            viewMyAppointmentsRequestViaProxy(patient, actingOnBehalfOf).respondWithGPErrorWhenNotEnabled()
+        }
     }
 
     private fun convertToMyAppointmentsFacade(facade: AppointmentSlotsResponseFacade): MyAppointmentsFacade {

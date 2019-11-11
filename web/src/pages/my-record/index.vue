@@ -53,7 +53,10 @@
       </div>
       <div v-else class="pull-content">
         <div v-if="hasLoaded">
-          <div id="errorMsg" :class="$style.info">
+          <div v-if="isProxying" :class="[$style['info'], 'nhsuk-u-margin-top-3']">
+            <shutter :feature="'medicalRecord'" />
+          </div>
+          <div v-else id="errorMsg" :class="$style.info">
             <p><strong style="margin-top: 0.5em;">
               {{ $t( supplier === 'MICROTEST' ?
                 'my_record.noRecordsOrNoAccess.warningHeader' :
@@ -86,6 +89,7 @@ import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import Shutter from '@/components/linked-profiles/Shutter';
 
 const PATIENTDETAILS = 'patientdetails';
 
@@ -104,12 +108,14 @@ export default {
     ScrVision,
     ScrMicrotest,
     Warning,
+    Shutter,
   },
   data() {
     return {
       PATIENTDETAILS,
       clinicalAbbreviationsUrl: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
       hasAgreed: false,
+      isProxying: this.$store.getters['session/isProxying'],
     };
   },
   computed: {

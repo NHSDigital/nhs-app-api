@@ -21,6 +21,13 @@ open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBu
     override fun viewMyAppointmentsRequest(patient: Patient, appointmentType: IMyAppointmentsBuilder.AppointmentType):
             IMyAppointmentsBuilder = MyAppointmentsBuilderVision(patient)
 
+    override fun viewMyAppointmentsRequestViaProxy(
+            patient: Patient,
+            actingOnBehalfOf: Patient,
+            appointmentType: IMyAppointmentsBuilder.AppointmentType): IMyAppointmentsBuilder {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade):
             IBookAppointmentsBuilder = BookAppointmentsBuilderVision(patient, request)
 

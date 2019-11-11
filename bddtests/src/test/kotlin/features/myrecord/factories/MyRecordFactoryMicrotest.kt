@@ -55,4 +55,8 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
                             .respondWith(HttpStatus.SC_FORBIDDEN, resolve = {})
                 }
     }
+
+    override fun disabledForProxy(patient: Patient, actingOnBehalfOf: Patient) {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
 }

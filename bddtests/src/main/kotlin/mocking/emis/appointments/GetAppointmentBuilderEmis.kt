@@ -10,14 +10,17 @@ import mocking.emis.appointments.helpers.GetAppointmentHelper
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.MyAppointmentsFacade
-import models.Patient
 import org.apache.http.HttpStatus
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient)
+class GetAppointmentBuilderEmis(
+        configuration: EmisConfiguration?,
+        endUserSessionId: String,
+        sessionId: String,
+        userPatientLinkToken: String)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointments"), IMyAppointmentsBuilder {
 
     init {
@@ -27,9 +30,9 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
                 .withZoneSameInstant(TimeZone.getTimeZone("Europe/London").toZoneId())
 
         requestBuilder
-                .andHeader(HEADER_API_END_USER_SESSION_ID, patient.endUserSessionId)
-                .andHeader(HEADER_API_SESSION_ID, patient.sessionId)
-                .andQueryParameter("UserPatientLinkToken", patient.userPatientLinkToken)
+                .andHeader(HEADER_API_END_USER_SESSION_ID, endUserSessionId)
+                .andHeader(HEADER_API_SESSION_ID, sessionId)
+                .andQueryParameter("UserPatientLinkToken", userPatientLinkToken)
                 .andQueryParameter("FetchPreviousAppointments", fetchPreviousAppointments.toString())
                 .andQueryParameter(
                         "PreviousAppointmentsFromDate",

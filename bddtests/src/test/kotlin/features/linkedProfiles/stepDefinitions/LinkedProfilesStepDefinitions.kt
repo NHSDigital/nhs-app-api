@@ -8,6 +8,8 @@ import features.authentication.steps.LoginSteps
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.GpPracticeAccessSettingsFactory
+import features.myrecord.factories.MyRecordFactory
+import features.prescriptions.factories.PrescriptionsFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
@@ -15,15 +17,23 @@ import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.nhsAzureSearchService.nhsAzureSearchOrganisationByOdsCodeRequestBody
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
+import mockingFacade.linkedProfiles.FeaturesEnabledFacade
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
 import models.linkedProfiles.LinkedProfileOption
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
+import pages.isPresent
 import pages.isVisible
 import pages.linkedProfiles.LinkedProfileSummaryPage
 import pages.linkedProfiles.LinkedProfilesPage
+import pages.linkedProfiles.shutterPages.AppointmentsShutterPage
+import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
+import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
+import pages.linkedProfiles.shutterPages.SettingsShutterPage
+import pages.linkedProfiles.shutterPages.SymptomsShutterPage
 import pages.text
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -43,6 +53,11 @@ class LinkedProfilesStepDefinitions {
 
     private lateinit var linkedProfilesPage: LinkedProfilesPage
     private lateinit var linkedProfileSummaryPage: LinkedProfileSummaryPage
+    private lateinit var prescriptionsShutterPage: PrescriptionsShutterPage
+    private lateinit var appointmentsShutterPage: AppointmentsShutterPage
+    private lateinit var settingsShutterPage: SettingsShutterPage
+    private lateinit var symptomsShutterPage: SymptomsShutterPage
+    private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
 
     val mockingClient = MockingClient.instance
 
@@ -97,8 +112,7 @@ class LinkedProfilesStepDefinitions {
         checkDisplayedValuesAreCorrect(displayedLinkedProfiles, userLinkedProfiles)
     }
 
-    @Then("^I select a linked profile$")
-    fun iSelectALinkedProfile() {
+    private fun iSelectALinkedProfileWithFeatures(featuresEnabled: FeaturesEnabledFacade) {
         val patient = SerenityHelpers.getPatient()
         val gpSystem = SerenityHelpers.getGpSupplier()
 
@@ -116,7 +130,11 @@ class LinkedProfilesStepDefinitions {
 
         GpPracticeAccessSettingsFactory.getForSupplier(gpSystem).enabledViaProxy(
                 callingPatient = patient,
-                actingOnBehalfOf = linkedAccount
+                actingOnBehalfOf = linkedAccount,
+                featuresEnabled = FeaturesEnabledFacade(
+                        appointmentsEnabled = featuresEnabled.appointmentsEnabled,
+                        prescribingEnabled = featuresEnabled.prescribingEnabled,
+                        medicalRecordEnabled = featuresEnabled.medicalRecordEnabled)
         )
 
         LinkedProfilesSerenityHelpers.SELECTED_PROFILE.set(
@@ -126,6 +144,50 @@ class LinkedProfilesStepDefinitions {
         )
 
         linkedProfilesPage.selectLinkedProfile(linkedAccount.formattedFullName())
+    }
+
+    @Then("^I select a linked profile$")
+    fun iSelectALinkedProfile() {
+        iSelectALinkedProfileWithFeatures(
+                FeaturesEnabledFacade(
+                        appointmentsEnabled = true,
+                        prescribingEnabled = false,
+                        medicalRecordEnabled = true)
+        )
+    }
+
+    @Then("^I select a linked profile with " +
+            "appointments enabled (.*), " +
+            "prescriptions enabled (.*) and " +
+            "medical record enabled (.*)$")
+    fun iSelectALinkedProfileWithFeaturesDisabled(
+            appointments: Boolean,
+            prescriptions: Boolean,
+            medicalRecord: Boolean) {
+        iSelectALinkedProfileWithFeatures(
+                FeaturesEnabledFacade(
+                        appointmentsEnabled = appointments,
+                        prescribingEnabled = prescriptions,
+                        medicalRecordEnabled = medicalRecord)
+        )
+
+        val patient = SerenityHelpers.getPatient()
+        val actingOnBehalfOf = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+
+        if (!prescriptions) {
+            PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+                    .disableForProxy(patient, actingOnBehalfOf.profile)
+        }
+
+        if (!appointments) {
+            MyAppointmentsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+                    .disableForProxy(actingOnBehalfOf.profile)
+        }
+
+        if (!medicalRecord) {
+            MyRecordFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+                    .disabledForProxy(patient, actingOnBehalfOf.profile)
+        }
     }
 
     @Then("details for the selected linked profile are displayed")
@@ -167,6 +229,49 @@ class LinkedProfilesStepDefinitions {
 
         Assert.assertTrue("Banner does not contain expected name",
                 bannerText.contains(expectedProfile.profile.formattedFullName()))
+    }
+
+    @Then("^the symptoms shutter page is displayed$")
+    fun theSymptomsShutterPageIsDisplayed() {
+        symptomsShutterPage.isLoaded()
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        symptomsShutterPage.assertSummaryText(selectedProfile.profile.firstName)
+        symptomsShutterPage.assertSwitchText()
+    }
+
+    @Then("^the settings shutter page is displayed$")
+    fun theSettingsShutterPageIsDisplayed() {
+        settingsShutterPage.isLoaded()
+
+        Assert.assertFalse(
+                "Summary text should not be visible",
+                settingsShutterPage.summaryText.isPresent)
+
+        settingsShutterPage.assertSwitchText()
+    }
+
+    @Then("^the prescriptions shutter page is displayed$")
+    fun thePrescriptionsShutterPageIsDisplayed() {
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        prescriptionsShutterPage.isLoaded(selectedProfile.profile.firstName)
+        prescriptionsShutterPage.assertSummaryText(selectedProfile.profile.firstName)
+        prescriptionsShutterPage.assertSwitchText()
+    }
+
+    @Then("^the appointments shutter page is displayed$")
+    fun theAppointmentsShutterPageIsDisplayed() {
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        appointmentsShutterPage.isLoaded(selectedProfile.profile.firstName)
+        appointmentsShutterPage.assertSummaryText(selectedProfile.profile.firstName)
+        appointmentsShutterPage.assertSwitchText()
+    }
+
+    @Then("^the medical record shutter page is displayed$")
+    fun theMedicalRecordShutterPageIsDisplayed() {
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        medicalRecordShutterComponent.assertSubHeaderText(selectedProfile.profile.firstName)
+        medicalRecordShutterComponent.assertSummaryText(selectedProfile.profile.firstName)
+        medicalRecordShutterComponent.assertSwitchText()
     }
 
     private fun checkDisplayedValuesAreCorrect(

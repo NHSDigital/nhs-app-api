@@ -20,6 +20,12 @@ class MicrotestMappingBuilderAppointments : IAppointmentMappingBuilder {
             appointmentType: IMyAppointmentsBuilder.AppointmentType
     ): IMyAppointmentsBuilder = GetAppointmentBuilderMicrotest(patient)
 
+    override fun viewMyAppointmentsRequestViaProxy(
+            patient: Patient,
+            actingOnBehalfOf: Patient,
+            appointmentType: IMyAppointmentsBuilder.AppointmentType): IMyAppointmentsBuilder {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
 
     override fun bookAppointmentSlotRequest(
             patient: Patient,

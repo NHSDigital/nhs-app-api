@@ -82,19 +82,25 @@ import {
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_CHECK,
   NOMINATED_PHARMACY_CANNOT_CHANGE,
+  LINKED_PROFILES_SHUTTER_MORE,
+  LINKED_PROFILES_SHUTTER_SYMPTOMS,
+  LINKED_PROFILES_SHUTTER_SETTINGS,
+  LINKED_PROFILES_SHUTTER_APPOINTMENTS,
+  LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
 } from '@/lib/routes';
 
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import get from 'lodash/fp/get';
 
 function setPageTitle(route, store, app) {
   let header = '';
   let title = '';
 
   if (route.meta.headerKey !== '') {
-    header = app.i18n.tc(route.meta.headerKey);
+    header = app.i18n.tc(route.meta.headerKey, null, route.meta.formatArguments);
   }
   if (route.meta.title !== '') {
-    title = app.i18n.tc(route.meta.pageTitleKey);
+    title = app.i18n.tc(route.meta.pageTitleKey, null, route.meta.formatArguments);
   }
 
   store.dispatch('header/updateHeaderText', header);
@@ -414,6 +420,40 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.referrals';
       route.meta.pageTitleKey = 'pageTitles.referrals';
       break;
+    case LINKED_PROFILES_SHUTTER_MORE.name: {
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'linkedProfiles.shutter.more.header';
+      route.meta.pageTitleKey = 'linkedProfiles.shutter.more.header';
+      break;
+    }
+    case LINKED_PROFILES_SHUTTER_SYMPTOMS.name: {
+      store.dispatch('navigation/setNewMenuItem', 0);
+      route.meta.headerKey = 'linkedProfiles.shutter.symptoms.header';
+      route.meta.pageTitleKey = 'linkedProfiles.shutter.symptoms.header';
+      break;
+    }
+    case LINKED_PROFILES_SHUTTER_SETTINGS.name: {
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'linkedProfiles.shutter.settings.header';
+      route.meta.pageTitleKey = 'linkedProfiles.shutter.settings.header';
+      break;
+    }
+    case LINKED_PROFILES_SHUTTER_APPOINTMENTS.name: {
+      store.dispatch('navigation/setNewMenuItem', 1);
+      const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
+      route.meta.headerKey = 'linkedProfiles.shutter.appointments.header';
+      route.meta.pageTitleKey = 'linkedProfiles.shutter.appointments.header';
+      route.meta.formatArguments = { name: givenName };
+      break;
+    }
+    case LINKED_PROFILES_SHUTTER_PRESCRIPTIONS.name: {
+      store.dispatch('navigation/setNewMenuItem', 2);
+      const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
+      route.meta.headerKey = 'linkedProfiles.shutter.prescriptions.header';
+      route.meta.pageTitleKey = 'linkedProfiles.shutter.prescriptions.header';
+      route.meta.formatArguments = { name: givenName };
+      break;
+    }
     default:
       route.meta.headerKey = 'errors.404.header';
       route.meta.pageTitleKey = 'errors.404.pageTitle';

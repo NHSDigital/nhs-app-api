@@ -33,6 +33,7 @@ describe('mixins', () => {
   it('will have correct number of globally registered mounted mixins', () => {
     const expectedGlobalMountedMixins = [
       'ResetPageFocus',
+      'CheckProxyNoAccessMixin',
     ];
     // assert
     const mountedFunctions = Vue.options.mounted;

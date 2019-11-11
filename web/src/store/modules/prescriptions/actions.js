@@ -20,7 +20,9 @@ export default {
       .getV1PatientPrescriptions(getPrescriptionsParameters())
       .then((data) => {
         commit(PRESCRIPTIONS_LOADED, data);
+        return true;
       })
+      .catch(() => false)
       .finally(() => {
         this.dispatch('device/unlockNavBar');
       });

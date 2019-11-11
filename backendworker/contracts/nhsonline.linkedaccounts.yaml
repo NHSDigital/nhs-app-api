@@ -97,9 +97,12 @@ components:
         id:
           type: string
           description: Id to identify the person
+        givenName:
+          type: string
+          description: Person's given name
         name:
           type: string
-          description: Person's name
+          description: Person's full name
         dateOfBirth:
           type: string
           format: date-time

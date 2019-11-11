@@ -12,6 +12,7 @@ import java.time.OffsetDateTime
 
 private const val END_DATE = 60L
 class MyRecordFactoryTpp: MyRecordFactory() {
+
     private val testResultsFactory by lazy {TestResultsFactoryTpp()}
     private val patientOverviewFactory by lazy {PatientOverviewFactoryTpp()}
 
@@ -66,5 +67,9 @@ class MyRecordFactoryTpp: MyRecordFactory() {
 
     override fun respondWithForbidden(patient: Patient) {
         throw UnsupportedOperationException()
+    }
+
+    override fun disabledForProxy(patient: Patient, actingOnBehalfOf: Patient) {
+        throw NotImplementedError("Not implemented for this GP system")
     }
 }

@@ -315,6 +315,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 linkedAccountDetail.Id.Should().Be(userDetail.Id);
                 linkedAccountDetail.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
                 linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
+                linkedAccountDetail.GivenName.Should().Be(demographicsResponseForUser.NameParts.Given);
                 linkedAccountDetail.DateOfBirth.Should().Be(demographicsResponseForUser.DateOfBirth);
             }
 

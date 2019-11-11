@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IGpLookupClient, GpLookupClient>();
-            services.AddTransient<IGpLookupConfig, GpLookupConfig>();
+            services.AddSingleton<IGpLookupConfig, GpLookupConfig>();
             services.AddTransient<IGpSearchService, GpSearchService>();
             services.AddHttpClient<GpLookupHttpClient>();
             services.AddTransient<INhsSearchResultChecker, NhsSearchResultChecker>();

@@ -132,4 +132,8 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
         throw UnsupportedOperationException()
     }
+
+    override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
+        throw UnsupportedOperationException()
+    }
 }

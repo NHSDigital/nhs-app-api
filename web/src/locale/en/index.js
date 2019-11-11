@@ -1606,11 +1606,43 @@ export default {
       gpPractice: 'GP practice',
     },
     switchProfileButton: 'Switch to this profile',
+    switchToMyProfileButton: 'Switch to my profile',
     thingsYouCanDoOnBehalfOf: {
       text: 'Things you can do on behalf of',
       bookAnAppointment: 'Book an appointment',
       orderRepeatPrescription: 'Order repeat prescription',
       viewMedicalRecord: 'View medical record',
+    },
+    shutter: {
+      prescriptions: {
+        header: 'You do not have access to {name}\'s repeat prescriptions',
+        summary: 'Contact {name}\'s GP surgery to request access.',
+        switch: 'Switch to your profile to order repeat prescriptions for yourself.',
+      },
+      appointments: {
+        header: 'You do not have access to {name}\'s appointments',
+        summary: 'Contact {name}\'s GP surgery to request access.',
+        switch: 'Switch to your profile to book appointments for yourself.',
+      },
+      medicalRecord: {
+        subHeader: 'You do not have access to {name}\'s medical record',
+        summary: 'Contact {name}\'s GP surgery to request access.',
+        switch: 'Switch to your profile to view your GP medical record.',
+      },
+      more: {
+        header: 'More',
+        summary: 'It\'s not possible to access this section while acting on {name}\'s behalf.',
+        switch: 'Switch to your profile to access this section.',
+      },
+      settings: {
+        header: 'Settings',
+        switch: 'Switch to your profile to access your settings.',
+      },
+      symptoms: {
+        header: 'Symptoms',
+        summary: 'It\'s not possible to check your symptoms while acting on {name}\'s behalf.',
+        switch: 'Switch to your profile to check your symptoms.',
+      },
     },
   },
   switchProfile: {

@@ -16,8 +16,9 @@ import worker.WorkerClient.HttpDeleteWithBody
 
 class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
-    fun getOrganDonationConnection(): OrganDonationSearchResponse {
+    fun getOrganDonationConnection(patientId: String): OrganDonationSearchResponse {
         val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.organDonationConnection)
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
 
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
@@ -34,8 +35,10 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
         return gson.fromJson(result, ReferenceDataResponse::class.java)
     }
 
-    fun postRegistration(registration: OrganDonationRegistrationRequest): OrganDonationRegistrationResponse {
+    fun postRegistration(registration: OrganDonationRegistrationRequest, patientId: String)
+            : OrganDonationRegistrationResponse {
         val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.organDonationConnection )
+        httpPost.setHeader(WorkerHeaders.PatientId, patientId)
 
         val jsonRequest = gson.toJson(registration)
         val entity = StringEntity(jsonRequest, "UTF-8")
@@ -49,8 +52,10 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
          OrganDonationRegistrationResponse::class.java)
     }
 
-    fun putRegistration(registration: OrganDonationRegistrationRequest): OrganDonationRegistrationResponse {
+    fun putRegistration(registration: OrganDonationRegistrationRequest, patientId: String)
+            : OrganDonationRegistrationResponse {
         val httpPut = HttpPut(config.apiBackendUrl + WorkerPaths.organDonationConnection)
+        httpPut.setHeader(WorkerHeaders.PatientId, patientId)
 
         val jsonRequest = gson.toJson(registration)
         val entity = StringEntity(jsonRequest, "UTF-8")
@@ -64,8 +69,9 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
                 OrganDonationRegistrationResponse::class.java)
     }
 
-    fun deleteRegistration(withdrawalRequestBody: OrganDonationWithdrawRequest): HttpResponse {
+    fun deleteRegistration(withdrawalRequestBody: OrganDonationWithdrawRequest, patientId: String): HttpResponse {
         val httpDelete = HttpDeleteWithBody(config.apiBackendUrl + WorkerPaths.organDonationConnection)
+        httpDelete.setHeader(WorkerHeaders.PatientId, patientId)
         val entity = StringEntity(gson.toJson(withdrawalRequestBody), "UTF-8")
         entity.setContentType("application/json")
         httpDelete.entity = entity

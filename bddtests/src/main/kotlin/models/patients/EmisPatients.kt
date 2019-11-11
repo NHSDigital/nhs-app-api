@@ -13,7 +13,7 @@ class EmisPatients {
         }
 
         fun getPatientWithLinkedProfiles(): Patient {
-            return montelFrye
+            return tonyStark
         }
 
         val paulSmith = Patient(
@@ -129,6 +129,53 @@ class EmisPatients {
                 linkageKey = "KjwzyFSEUAGj4",
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
                 nhsNumbers = listOf("7174450393")
+        )
+
+        val karadanvers = Patient(
+                title = "Miss",
+                firstName = "Kara",
+                surname = "Danvers",
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
+                dateOfBirth = "1972-04-12",
+                sessionId = "AJYF0ufQI6tTpdfwaXAt",
+                connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                nhsNumbers = listOf("2227007273")
+        )
+
+        val lenaluthor = Patient(
+                title = "Miss",
+                firstName = "Lena",
+                surname = "Luthor",
+                dateOfBirth = "1972-04-12",
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                userPatientLinkToken = "id83hdydGyo6kKl0gaRdRb",
+                sessionId = "fbWgorZ8Fggk9c5PgKd7",
+                connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                nhsNumbers = listOf("2227007273")
+        )
+
+        val tonyStark = Patient(
+                title = "Mr",
+                firstName = "Tony",
+                surname = "Stark",
+                dateOfBirth = "1972-04-12",
+                sex = Sex.Male,
+                address = Patient.defaultAddress,
+                telephoneFirst = Patient.defaultTelephoneFirst,
+                telephoneSecond = Patient.defaultTelephoneSecond,
+                emailAddress = Patient.defaultEmailAddress,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                sessionId = "2jM47sZ0ic4FIAcVogI4WI",
+                connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                nhsNumbers = listOf("0968764215"),
+                accountId = "4140044939",
+                linkageKey = "vVGO8bgV6fvPb",
+                userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
+                linkedAccounts = setOf(karadanvers, lenaluthor)
         )
     }
 }

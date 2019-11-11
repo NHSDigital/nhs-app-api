@@ -16,10 +16,9 @@ open class SwitchProfilesPage : HybridPageObject() {
             page = this
     ).withText("Switch to my profile", false)
 
-    fun isLoaded() {
-        headerNative.waitForPageHeaderText("You are acting on behalf of Mr Paul Smith")
+    fun isLoaded(name: String) {
+        headerNative.waitForPageHeaderText("You are acting on behalf of $name")
     }
-
 
     fun getDisplayedProxyDetails(): SwitchProfileData {
 

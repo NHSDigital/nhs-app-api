@@ -15,7 +15,21 @@ import java.time.ZonedDateTime
 class EmisMappingBuilderAppointments(private var configuration: EmisConfiguration?) : IAppointmentMappingBuilder {
 
     override fun viewMyAppointmentsRequest(patient: Patient, appointmentType: IMyAppointmentsBuilder.AppointmentType):
-            IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)
+            IMyAppointmentsBuilder = GetAppointmentBuilderEmis(
+            configuration,
+            patient.endUserSessionId,
+            patient.sessionId,
+            patient.userPatientLinkToken)
+
+    override fun viewMyAppointmentsRequestViaProxy(
+            patient: Patient,
+            actingOnBehalfOf: Patient,
+            appointmentType: IMyAppointmentsBuilder.AppointmentType):
+            IMyAppointmentsBuilder = GetAppointmentBuilderEmis(
+            configuration,
+            patient.endUserSessionId,
+            patient.sessionId,
+            actingOnBehalfOf.userPatientLinkToken)
 
     override fun appointmentSlotsRequest(patient: Patient,
                                          fromDateTime: ZonedDateTime?,

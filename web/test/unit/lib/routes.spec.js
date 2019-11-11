@@ -11,6 +11,7 @@ import {
   getCrumbTrailForRoute,
   getRouteNames,
   findByName,
+  findByPath,
 } from '@/lib/routes';
 
 describe('routes', () => {
@@ -67,6 +68,16 @@ describe('routes', () => {
 
     it('should return the corresponding route object for a given name.', () => {
       expect(findByName('appointments-booking-guidance')).toEqual(APPOINTMENT_BOOKING_GUIDANCE);
+    });
+  });
+
+  describe('findByPath', () => {
+    it('should not return route object for a not found path.', () => {
+      expect(findByPath('invalid')).toBeUndefined();
+    });
+
+    it('should return the corresponding route object for a given path.', () => {
+      expect(findByPath('/appointments')).toEqual(APPOINTMENTS);
     });
   });
 

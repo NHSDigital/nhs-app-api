@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
+import worker.models.linkedAccounts.LinkedAccountsConfigResponse
 import worker.models.ndop.NdopResponse
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
@@ -96,11 +97,12 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         return UserSessionResponse(userSessionResponseCookie, userSessionResponseBody)
     }
 
-    fun getNdopToken(): NdopResponse {
+    fun getNdopToken(patientId: String): NdopResponse {
         val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.ndopConnection)
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
-        return gson.fromJson<NdopResponse>(result, NdopResponse::class.java)
+        return gson.fromJson(result, NdopResponse::class.java)
     }
 
     fun getLinkageKey(linkage: LinkageInformationFacade): LinkageResponse {
@@ -133,5 +135,12 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         } else {
             return LinkageResponse("default", "default", "default")
         }
+    }
+
+    fun getPatientLinkedAccountsConfiguration(): LinkedAccountsConfigResponse {
+        val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.patientConfiguration)
+        val result = sender.sendAsyncAndGetResult(httpGet)
+        httpGet.releaseConnection()
+        return gson.fromJson(result, LinkedAccountsConfigResponse::class.java)
     }
 }

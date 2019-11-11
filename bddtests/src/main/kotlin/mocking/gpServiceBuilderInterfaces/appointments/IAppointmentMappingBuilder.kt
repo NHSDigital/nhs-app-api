@@ -11,6 +11,12 @@ interface IAppointmentMappingBuilder {
             appointmentType: IMyAppointmentsBuilder.AppointmentType = IMyAppointmentsBuilder.AppointmentType.BOTH
     ): IMyAppointmentsBuilder
 
+    fun viewMyAppointmentsRequestViaProxy(
+            patient: Patient,
+            actingOnBehalfOf: Patient,
+            appointmentType: IMyAppointmentsBuilder.AppointmentType = IMyAppointmentsBuilder.AppointmentType.BOTH
+    ): IMyAppointmentsBuilder
+
     fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder
 
     fun appointmentSlotsRequest(patient: Patient,

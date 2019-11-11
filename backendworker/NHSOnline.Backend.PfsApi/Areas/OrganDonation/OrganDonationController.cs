@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
@@ -13,6 +14,7 @@ using NHSOnline.Backend.Support.Logging;
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
     [Route("patient/organdonation")]
+    [ProxyingNotAllowed]
     public class OrganDonationController : Controller
     {
         private readonly ILogger<OrganDonationController> _logger;

@@ -18,6 +18,15 @@ class EmisMappingBuilderPrescriptions(private var configuration: EmisConfigurati
             fromDate,
             toDate)
 
+    fun prescriptionsRequestViaProxy(patient: Patient, actingOnBehalfOf: Patient, fromDate: OffsetDateTime? = null,
+                             toDate: OffsetDateTime? = null) = EmisPrescriptionsBuilder(
+            configuration!!,
+            patient.endUserSessionId,
+            patient.sessionId,
+            actingOnBehalfOf.userPatientLinkToken,
+            fromDate,
+            toDate)
+
     fun coursesRequest(patient: Patient) = EmisCoursesBuilder(
             configuration!!,
             patient.endUserSessionId,

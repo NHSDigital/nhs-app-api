@@ -3,7 +3,7 @@
     <h2 data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
     <welcome-section :date-of-birth="currentProfile.dateOfBirth"
                      :nhs-number="currentProfile.nhsNumber" />
-    <biometric-banner />
+    <biometric-banner v-if="!isProxying" />
     <navigation-list-menu v-if="!isProxying" />
   </div>
 </template>

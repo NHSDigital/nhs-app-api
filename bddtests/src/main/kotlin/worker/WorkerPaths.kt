@@ -15,6 +15,7 @@ object WorkerPaths {
     const val sessionConnectionExtend = "/v1/session/extend"
     const val LinkageKey = "/v1/patient/linkage"
     const val ndopConnection = "/v1/patient/ndop"
+    const val patientConfiguration = "/v1/patient/configuration"
     const val organDonationConnection = "/v1/patient/organdonation"
     const val serviceJourneyRules = "/v1/patient/journey-configuration"
     const val userDevices = "/v1/api/users/devices"
