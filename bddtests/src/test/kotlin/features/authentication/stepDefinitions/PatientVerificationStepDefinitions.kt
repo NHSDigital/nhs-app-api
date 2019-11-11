@@ -30,6 +30,11 @@ class PatientVerificationStepDefinitions {
         PatientVerificationFactory.getForSupplier(gpSystem).im1ConnectionTokenDoesNotExist()
     }
 
+    @Given("Vision responds with a connection to external service failed")
+    fun givenVisionRespondsWithAConnectionToExternalServiceFailed() {
+        PatientVerificationFactory.getForSupplier("VISION").connectionToExternalServiceFailed()
+    }
+
     @Given("I have an (.*) IM1 Connection Token that is in an invalid format")
     fun givenIHaveAnIm1ConnectionTokenThatIsInAnInvalidFormat(gpSystem: String) {
         PatientVerificationSerenityHelpers.ConnectionToken.set("token")

@@ -6,6 +6,7 @@ import mocking.vision.VisionConstants.getVisionResponse
 import mocking.vision.VisionErrorResponses.getInvalidRequestError
 import mocking.vision.VisionErrorResponses.getInvalidUserCredentialsError
 import mocking.vision.VisionErrorResponses.getUnknownError
+import mocking.vision.VisionErrorResponses.getConnectionToExternalServiceFailedError
 import mocking.vision.VisionErrorResponses.securityHeaderErrorResponse
 import mocking.vision.models.Configuration
 import mocking.vision.models.ServiceDefinition
@@ -81,9 +82,15 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
         }
     }
 
-    fun respondWitInvalidUserCredentials(): Mapping {
+    fun respondWithInvalidUserCredentials(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getInvalidUserCredentialsError(serviceDefinition)).build()
+        }
+    }
+
+    fun respondWithConnectionToExternalServiceFailed(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(getConnectionToExternalServiceFailedError(serviceDefinition)).build()
         }
     }
 }

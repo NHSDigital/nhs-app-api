@@ -225,8 +225,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
-                .Subject.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed);
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.UnmappedErrorWithStatusCode>()
+                .Subject.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]

@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 { InternalCode.PatientArchived, StatusCodes.Status403Forbidden },
                 { InternalCode.NoUserFoundForLinkageDetails, StatusCodes.Status404NotFound },
                 { InternalCode.UserAlreadyLinked, StatusCodes.Status409Conflict },
-                { InternalCode.ConnectionToServiceFailed, StatusCodes.Status400BadRequest },
+                { InternalCode.ConnectionToServiceFailed, StatusCodes.Status502BadGateway },
                 { InternalCode.UserAccountDisabled, StatusCodes.Status403Forbidden },
                 { InternalCode.UnknownError, StatusCodes.Status400BadRequest },
                 { InternalCode.InvalidLinkageDetailsTpp, StatusCodes.Status404NotFound },

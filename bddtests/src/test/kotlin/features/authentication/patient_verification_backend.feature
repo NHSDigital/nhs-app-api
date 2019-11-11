@@ -48,6 +48,10 @@ Feature: Patient Verification Backend
       | TPP       | Bad Gateway |
       | VISION    | Bad Request |
 
+  Scenario: Vision responds with a connection to external service failed
+    Given Vision responds with a connection to external service failed
+    When I verify patient data using the v1 endpoint
+    Then I receive a "Bad Gateway" error
 
   Scenario Outline: <GP System> IM1 Connection Token not in the expected format
     Given I have an <GP System> IM1 Connection Token that is in an invalid format

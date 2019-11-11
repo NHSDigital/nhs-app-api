@@ -190,7 +190,7 @@ Feature: Im1 Connection V2 POST
       | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
       | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
       | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
-      | VISION    | 200        | -100   | 502            | 100  | Unknown Error |
+      | VISION    | 200        | -100   | 500            | 100  | Unknown Error |
       | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
       | TPP       | 400        | 1      | 502            | 100  | Unmapped Error |
       | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
@@ -232,7 +232,7 @@ Feature: Im1 Connection V2 POST
       | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
       | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
       | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
-      | VISION    | 200        | -100   | 502            | 100  | Unknown Error |
+      | VISION    | 200        | -100   | 500            | 100  | Unknown Error |
       | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
       | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
 
@@ -271,7 +271,7 @@ Feature: Im1 Connection V2 POST
       | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
       | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
       | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
-      | VISION    | 200        | -100   | 502            | 100  | Unknown Error |
+      | VISION    | 200        | -100   | 500            | 100  | Unknown Error |
       | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
       | TPP       | 400        | 1      | 502            | 100  | Unmapped Error |
       | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |

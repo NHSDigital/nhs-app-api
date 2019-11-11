@@ -96,6 +96,10 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(TppMockDefaults.DEFAULT_ODS_CODE_TPP)
     }
 
+    override fun connectionToExternalServiceFailed() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     fun createConnectionToken(accountId: String = TppMockDefaults.DEFAULT_TPP_ACCOUNT_ID,
                               passphrase : String = TppMockDefaults.DEFAULT_TPP_PASSPHRASE,
                               providerId :String = TppMockDefaults.DEFAULT_TPP_PROVIDER_ID): String {

@@ -85,14 +85,19 @@ Feature: Patient Registration Backend
     Then I receive a "Conflict" error
 
   Scenario: Registering a VISION patient who is already registered creates a Conflict response
-    Given I have data for a Vision patient that has already been associated with the application in the GP system
+    Given I have data for a Vision patient and Vision returns with "Already Registered"
     When I register the user's IM1 credentials
     Then I receive a "Conflict" error
 
-  Scenario: Registering a patient which has been locked by VISION creates a Bad Gateway response
-    Given I have data for a Vision patient with a locked account as the account is opened in the Vision application
+  Scenario: Registering a patient which has been locked by VISION creates a Forbidden response
+    Given I have data for a Vision patient and Vision returns with "Patient Locked"
     When I register the user's IM1 credentials
     Then I receive a "forbidden" error
+
+  Scenario: Registering a patient and VISION responding with a connection to external service failed creates a Bad Gateway response
+    Given I have data for a Vision patient and Vision returns with "Vision Connection To External Service Failed"
+    When I register the user's IM1 credentials
+    Then I get a "Bad Gateway" error
 
   Scenario: ODS Code not in the expected format
     Given I have a user's IM1 credentials with an ODS Code not in the expected format

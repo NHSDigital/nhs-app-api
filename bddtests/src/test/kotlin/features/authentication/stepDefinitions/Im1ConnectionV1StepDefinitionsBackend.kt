@@ -145,19 +145,10 @@ class Im1ConnectionV1StepDefinitionsBackend {
         )
     }
 
-    @Given("^I have data for a Vision patient that has already been associated with the application in the GP system$")
-    fun iHaveDataForAVisionPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
+    @Given("^I have data for a Vision patient and Vision returns with \"(.*)\"$")
+    fun iHaveDataForAVisionPatientThatReturnsWith(errorText: String) {
         val patient = Patient.getDefault("VISION")
-        AuthenticationFactoryVision.patientIsAlreadyRegistered(patient)
-        setIm1Request(patient)
-        setSessionVariable("HttpExceptionExpected").to(true)
-    }
-
-    @Given("^I have data for a Vision patient with a locked account " +
-            "as the account is opened in the Vision application$")
-    fun iHaveDataForAVisionPatientThatHasALockedAccount() {
-        val patient = Patient.getDefault("VISION")
-        AuthenticationFactoryVision.patientHasALockedAccount(patient)
+        AuthenticationFactoryVision.createInvalidTestForVision(patient, errorText)
         setIm1Request(patient)
         setSessionVariable("HttpExceptionExpected").to(true)
     }
@@ -205,7 +196,7 @@ class Im1ConnectionV1StepDefinitionsBackend {
     }
 
     @Given("^I have a microtest user's IM1 credentials with a emis connection token$")
-    fun iHaveAMicrotestUsersIMCredentialsEmisConnectionToeken(gpSystem: String) {
+    fun iHaveAMicrotestUsersIMCredentialsEmisConnectionToken(gpSystem: String) {
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(

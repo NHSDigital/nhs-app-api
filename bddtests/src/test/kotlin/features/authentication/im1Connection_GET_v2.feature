@@ -17,7 +17,6 @@ Feature: Im1 Connection GET V2
       | VISION    |
       | MICROTEST |
 
-
   Scenario Outline: A <GP System> user verifying their im1 Connection can get a <ExpectedCode> error from a <GPCode> error
     Given I am a <GP System> user and verifying my im1 connection returns '<GPHttpCode>' '<GPCode>' '<Message>'
     When I verify patient data using the v2 endpoint
@@ -27,9 +26,8 @@ Feature: Im1 Connection GET V2
       | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice |
       | TPP       | 200        | 6      | 400            | 112          | Problem logging in                                             |
       | TPP       | 200        | 9      | 400            | 112          | Problem logging in                                             |
-      | VISION    | 200        | -100   | 502            | 107          | Connection to service failed                                   |
+      | VISION    | 200        | -100   | 502            | 107          | Connection to external service failed                                   |
       | VISION    | 200        | -15    | 400            | 113          | User record unavailable                                        |
-
 
   Scenario Outline: A MICROTEST user verifying their im1 Connection can get a <ExpectedCode> error when demographics fails with a <GPHttpCode> error
     Given I am a MICROTEST user and verifying my im1 connection returns '<GPHttpCode>' '<GPCode>' '<Message>'
@@ -68,7 +66,7 @@ Feature: Im1 Connection GET V2
       | VISION    |
 
 
-  Scenario Outline: A Non-existent IM1 Connection Token for the <GP System> tries verification using the v2 endpoint and receives a Bad Gateway error
+  Scenario Outline: A Non-existent IM1 Connection Token for the <GP System> tries verification using the v2 endpoint and receives a <Http Error> error
     Given I have an <GP System> IM1 Connection Token that does not exist
     When I verify patient data using the v2 endpoint
     Then I receive a "<Http Error>" error

@@ -51,6 +51,9 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
     }
 
+    override fun connectionToExternalServiceFailed() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
 
     private fun emisValidCredentialsWithNHSNumbers(numbers: List<String>) {
         val patient = Patient(

@@ -43,6 +43,10 @@ class PatientVerificationFactoryMicrotest: PatientVerificationFactory("MICROTEST
         throw NotImplementedError("For Microtest this is covered by the 'moved to a different practice' scenario")
     }
 
+    override fun connectionToExternalServiceFailed() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice() {
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)

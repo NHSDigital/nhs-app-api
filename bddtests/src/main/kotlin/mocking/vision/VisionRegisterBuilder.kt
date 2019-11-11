@@ -3,6 +3,7 @@ package mocking.vision
 import mocking.JSonXmlConverter
 import mocking.models.Mapping
 import mocking.vision.VisionConstants.getVisionResponse
+import mocking.vision.VisionErrorResponses.getConnectionToExternalServiceFailedError
 import mocking.vision.VisionErrorResponses.getInvalidDetailsProvidedError
 import mocking.vision.VisionErrorResponses.getInvalidParameterProvidedError
 import mocking.vision.VisionErrorResponses.getPatientAlreadyRegisteredError
@@ -52,6 +53,8 @@ class VisionRegisterBuilder(var userSession: VisionUserSession,
                 "Invalid Parameter" -> andXmlBody(getInvalidParameterProvidedError(serviceDefinition)).build()
                 "Already Registered" -> andXmlBody(getPatientAlreadyRegisteredError(serviceDefinition)).build()
                 "Patient Locked" -> andXmlBody(getPatientLockedError(serviceDefinition)).build()
+                "Vision Connection To External Service Failed" ->
+                    andXmlBody(getConnectionToExternalServiceFailedError(serviceDefinition)).build()
                 else -> throw IllegalArgumentException("$typeOfError is not recognised as an Error Type")
             }
         }

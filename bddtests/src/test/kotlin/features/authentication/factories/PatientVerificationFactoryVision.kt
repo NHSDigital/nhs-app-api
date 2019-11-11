@@ -58,7 +58,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
                                     "999999999",
                                     "nonexistingapikey",
                                     patient.odsCode, patientId = patient.patientId))
-                            .respondWitInvalidUserCredentials()
+                            .respondWithInvalidUserCredentials()
                 }
 
         PatientVerificationSerenityHelpers.ConnectionToken.set(nonExistingConnectionToken)
@@ -66,6 +66,24 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
         PatientVerificationSerenityHelpers.NhsNumber.set(patient.nhsNumbers[0])
     }
 
+     override fun connectionToExternalServiceFailed() {
+        val patient = VisionMockDefaults.patientVision
+        val nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
+
+        mockingClient
+                .forVision {
+                    authentication.getConfigurationRequest(
+                            visionUserSession = VisionUserSession(
+                                    "999999999",
+                                    "nonexistingapikey",
+                                    patient.odsCode, patientId = patient.patientId))
+                            .respondWithConnectionToExternalServiceFailed()
+                }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(nonExistingConnectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumber.set(patient.nhsNumbers[0])
+    }
 
     private fun visionValidCredentialsWithNHSNumbers(nhsNumbers: Array<String>){
         val patient = VisionMockDefaults.patientVision

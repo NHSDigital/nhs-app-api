@@ -57,7 +57,7 @@ class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
         mockingClient
                 .forVision {
                     authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
-                            .respondWitInvalidUserCredentials()
+                            .respondWithInvalidUserCredentials()
                 }
     }
 
@@ -71,14 +71,6 @@ class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
 
     companion object {
         val mockingClient = SerenityHelpers.getMockingClient()
-
-        fun patientIsAlreadyRegistered(patient: Patient) {
-            createInvalidTestForVision(patient, "Already Registered")
-        }
-
-        fun patientHasALockedAccount(patient: Patient) {
-            createInvalidTestForVision(patient, "Patient Locked")
-        }
 
         fun createInvalidTestForVision(patient: Patient, typeOfError: String) {
             mockingClient.forVision {

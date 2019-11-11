@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             new KeyAndMessageToEnumMapper<InternalCode>()
                 .Add("200-100", "Connection to external service failed",
                     InternalCode.ConnectionToServiceFailed)
+                .Add("200-100", "Unknown Error", InternalCode.UnknownError)
                 .AddKeyToEnum("200-31", InternalCode.InvalidLinkageDetails)
                 .AddKeyToEnum("200-34", InternalCode.UserAccountIsInactiveOrArchived)
                 .AddKeyToEnum("400V4205", InternalCode.InvalidNhsNumber)

@@ -10,6 +10,7 @@ abstract class PatientVerificationFactory(protected val gpSystem: String)  {
     abstract val odsCode: String
 
     abstract fun im1ConnectionTokenDoesNotExist()
+    abstract fun connectionToExternalServiceFailed()
     abstract fun validPatientWithOneNhsNumber()
     abstract fun validPatientWithMultipleNumbers()
     abstract fun validPatientWithNoNhsNumber()
