@@ -17,6 +17,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
@@ -32,6 +33,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         private const string DefaultIdentifierValue = "identifier";
 
         private IFixture _fixture;
+        private Mock<ILogger<EmisIm1ConnectionService>> _mockLogger;
+
         private Mock<IEmisClient> _mockEmisClient;
         private EmisIm1ConnectionService _systemUnderTest;
         private ILogger<EmisIm1ConnectionService> _logger;
@@ -42,6 +45,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            _mockLogger = _fixture.Freeze<Mock<ILogger<EmisIm1ConnectionService>>>();
 
             _logger = _fixture.Freeze<ILogger<EmisIm1ConnectionService>>();
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
@@ -62,12 +67,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         {
             const string expectedNhsNumber = "AB123";
 
-            var expectedNhsNumbers = new[] {new PatientNhsNumber {NhsNumber = expectedNhsNumber}};
-            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
-            var patientIdentifiers = new[] {CreatePatientIdentifier(expectedNhsNumber)};
+            var expectedNhsNumbers = new[] { new PatientNhsNumber { NhsNumber = expectedNhsNumber } };
+            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
+            var patientIdentifiers = new[] { CreatePatientIdentifier(expectedNhsNumber) };
             var emisClientMock = new Mock<IEmisClient>();
 
-            SetupEmisClientMock(
+            SetupEmisClientMockForVerify(
                 emisClientMock,
                 userPatientLinkModels: userPatientLinkModels,
                 patientIdentifiers: patientIdentifiers
@@ -95,11 +100,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 CreateUserPatientLinkModel("proxy", AssociationType.Proxy),
                 CreateUserPatientLinkModel("self")
             };
-            var patientIdentifiers = new[] {CreatePatientIdentifier(expectedNhsNumber)};
+            var patientIdentifiers = new[] { CreatePatientIdentifier(expectedNhsNumber) };
 
-            SetupEmisClientMock(
+            SetupEmisClientMockForVerify(
                 emisClientMock,
-                userPatientLinkToken: "self", userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
+                userPatientLinkToken: "self", userPatientLinkModels: userPatientLinkModels,
+                patientIdentifiers: patientIdentifiers);
 
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
 
@@ -113,11 +119,37 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
         [TestMethod]
         public async Task
+            Verify_LoggerReturnsCorrectPatientIdentifiersCount_WhenTheyAreReturnedFromTheIM1ConnectionFromEmis()
+        {
+            var emisClientMock = new Mock<IEmisClient>();
+            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
+            var patientIdentifiers = new[]
+            {
+                CreatePatientIdentifier("test", IdentifierType.NhsNumber),
+                CreatePatientIdentifier("test1", IdentifierType.NhsNumber),
+                CreatePatientIdentifier("test2", IdentifierType.Unknown),
+                CreatePatientIdentifier("test3", IdentifierType.ChiNumber)
+            };
+
+            SetupEmisClientMockForVerify(
+                emisClientMock,
+                userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
+
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
+
+            await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            const string expectedLogMessage = "Emis returned 2 NHS Numbers for the user";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+        }
+
+        [TestMethod]
+        public async Task
             Verify_ReturnsThePatientNhsNumbersOfTypeNhsNumber_WhenTheMultipleNhsNumbersAreReturnedFromEmis()
         {
-            var expectedNhsNumbers = new[] {"1234", "345"};
+            var expectedNhsNumbers = new[] { "1234", "345" };
             var emisClientMock = new Mock<IEmisClient>();
-            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
+            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
 
             var patientIdentifiers = new[]
             {
@@ -127,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 CreatePatientIdentifier(expectedNhsNumbers[1])
             };
 
-            SetupEmisClientMock(
+            SetupEmisClientMockForVerify(
                 emisClientMock,
                 userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
 
@@ -146,10 +178,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         {
             var emisClientMock = new Mock<IEmisClient>();
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
-            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
+            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
             var patientIdentifiers = Array.Empty<PatientIdentifier>();
 
-            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels,
+            SetupEmisClientMockForVerify(emisClientMock, userPatientLinkModels: userPatientLinkModels,
                 patientIdentifiers: patientIdentifiers);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
@@ -164,9 +196,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         {
             var emisClientMock = new Mock<IEmisClient>();
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
-            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
+            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
 
-            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
+            SetupEmisClientMockForVerify(emisClientMock, userPatientLinkModels: userPatientLinkModels);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
             var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
@@ -182,7 +214,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
             var userPatientLinkModels = Array.Empty<UserPatientLink>();
 
-            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
+            SetupEmisClientMockForVerify(emisClientMock, userPatientLinkModels: userPatientLinkModels);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -197,7 +229,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var emisClientMock = new Mock<IEmisClient>();
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
 
-            SetupEmisClientMock(emisClientMock);
+            SetupEmisClientMockForVerify(emisClientMock);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -282,7 +314,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var connectionToken = _fixture.Create<EmisConnectionToken>();
             _mockIm1CacheService.Setup(x => x.GetIm1ConnectionToken<EmisConnectionToken>(key))
                 .Returns(Task.FromResult(Option.Some(connectionToken)));
-            
+
             var sessionResponse = _fixture.Create<SessionsPostResponse>();
             _mockEmisClient.Setup(x => x.SessionsPost(It.IsAny<string>(), It.IsAny<SessionsPostRequest>()))
                 .Returns(Task.FromResult(
@@ -290,7 +322,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                     {
                         Body = sessionResponse
                     }));
-            
+
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
             _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
                 .Returns(Task.FromResult(
@@ -298,15 +330,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                     {
                         Body = demographicsResponse
                     }));
-            
+
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
-            
+
             // Act
             var result = await _systemUnderTest.Register(request);
-            
+
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
-                       
+
             _mockEmisClient.Verify(
                 x => x.MeApplicationsPost(
                     It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()),
@@ -317,52 +349,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         public async Task Register_SuccessfullyRegistered_WhenDataAreCorrect()
         {
             // Arrange
-            // emis client returns expected responses
-            var endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
-            _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
-                Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
-                    {
-                        Body = endUserSessionResponse
-                    }));
-            
-            var meApplicationsResponse = _fixture.Create<MeApplicationsPostResponse>();
-            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.OK)
-                    {
-                        Body = meApplicationsResponse
-                    }));
+            var request = SetupEmisClientMockForRegister(_mockEmisClient);
 
-            var sessionResponse = _fixture.Create<SessionsPostResponse>();
-            _mockEmisClient.Setup(x => x.SessionsPost(It.IsAny<string>(), It.IsAny<SessionsPostRequest>()))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
-                    {
-                        Body = sessionResponse
-                    }));
-            
-            var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
-                    {
-                        Body = demographicsResponse
-                    }));
-
-            const string key = "Key";
-            _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
-                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(key);
-
-            _mockIm1CacheService.Setup(x => x.GetIm1ConnectionToken<EmisConnectionToken>(key))
-                .Returns(Task.FromResult(Option.None<EmisConnectionToken>())).Verifiable();
-
-            _mockIm1CacheService.Setup(x => x.SaveIm1ConnectionToken(key, It.IsAny<EmisConnectionToken>()))
-                .Returns(Task.FromResult(true)).Verifiable();
-
-            var request = _fixture.Create<PatientIm1ConnectionRequest>();
-            
             // Act
             var result = await _systemUnderTest.Register(request);
 
@@ -370,7 +358,29 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
             _mockIm1CacheService.Verify();
         }
-        
+
+        [TestMethod]
+        public async Task Register_LoggerReturnsCorrectPatientIdentifiersCount()
+        {
+            // Arrange
+            var patientIdentifiers = new[]
+            {
+                CreatePatientIdentifier("test", IdentifierType.NhsNumber),
+                CreatePatientIdentifier("test1", IdentifierType.NhsNumber),
+                CreatePatientIdentifier("test2", IdentifierType.Unknown),
+                CreatePatientIdentifier("test3", IdentifierType.ChiNumber)
+            };
+
+            var request = SetupEmisClientMockForRegister(_mockEmisClient, patientIdentifiers);
+
+            // Act
+            await _systemUnderTest.Register(request);
+
+            // Assert
+            const string expectedLogMessage = "Emis returned 2 NHS Numbers for the user";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+        }
+
         [TestMethod]
         public async Task Register_ReturnsBadGateway_WhenEmisClientThrowsHttpRequestException()
         {
@@ -405,7 +415,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
-            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
@@ -420,10 +430,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
 
-            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
+                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -433,7 +443,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var errorCase = (Im1ConnectionRegisterResult.ErrorCase) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsAccountIdNotFoundErrorMessage()
         {
@@ -445,22 +455,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = accountNotFoundErrorMessage;
 
-            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
+                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
+            var errorCase = (Im1ConnectionRegisterResult.ErrorCase) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserFoundForLinkageDetails);
         }
-        
+
         [TestMethod]
-        public async Task Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsLinkageKeyDoesNotMatchErrorMessage()
+        public async Task
+            Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsLinkageKeyDoesNotMatchErrorMessage()
         {
             const string linkageKeyDoesNotMatchErrorMessage = "Invalid linkage details";
 
@@ -470,22 +481,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = linkageKeyDoesNotMatchErrorMessage;
 
-            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
+                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
+            var errorCase = (Im1ConnectionRegisterResult.ErrorCase) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
         }
-        
+
         [TestMethod]
-        public async Task Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsIncorrectSurnameOrDateOfBirthErrorMessage()
+        public async Task
+            Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsIncorrectSurnameOrDateOfBirthErrorMessage()
         {
             const string incorrectSurnameOrDateOfBirthErrorMessage = "No match found for given demographics";
 
@@ -495,27 +507,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = incorrectSurnameOrDateOfBirthErrorMessage;
 
-            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
+                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorCase = (Im1ConnectionRegisterResult.ErrorCase)result;
+            var errorCase = (Im1ConnectionRegisterResult.ErrorCase) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoMatchFoundForGivenDemographics);
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsBadRequest_WhenEmisClientMeApplicationsReturnsBadRequest()
         {
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
-            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
                         .BadRequest)));
@@ -525,10 +537,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
-            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsBadRequest_WhenEmisClientMeApplicationsReturnsBadRequest_NullMessage()
         {
@@ -538,20 +550,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = null;
 
-            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .BadRequest) {ExceptionErrorResponse = errorResponse}));
+                        .BadRequest) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
-            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
-        
+
         [TestMethod]
         public async Task Register_ReturnsBadRequest_WhenEmisClientMeApplicationsReturnsBadRequest_NullExceptions()
         {
@@ -561,17 +573,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions = null;
 
-            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .BadRequest) {ExceptionErrorResponse = errorResponse}));
+                        .BadRequest) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>();
-            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode)result;
+            var errorCase = (Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode) result;
             errorCase.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
@@ -599,7 +611,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             };
         }
 
-        private static void SetupEmisClientMock(Mock<IEmisClient> emisClientMock,
+        private static void SetupEmisClientMockForVerify(Mock<IEmisClient> emisClientMock,
             string endUserSessionId = DefaultEndUserSessionId,
             string sessionId = DefaultSessionId,
             string userPatientLinkToken = null,
@@ -646,13 +658,67 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                     It.Is<EmisRequestParameters>(
                         e => e.UserPatientLinkToken.Equals(userPatientLinkToken, StringComparison.Ordinal) &&
                              e.SessionId.Equals(sessionResponse.SessionId, StringComparison.Ordinal) &&
-                             e.EndUserSessionId.Equals(endUserSessionResponse.EndUserSessionId, StringComparison.Ordinal)
-                            )))
+                             e.EndUserSessionId.Equals(endUserSessionResponse.EndUserSessionId,
+                                 StringComparison.Ordinal)
+                    )))
                 .ReturnsAsync(
                     new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
                     {
                         Body = demographicsResponse
                     });
+        }
+
+        private PatientIm1ConnectionRequest SetupEmisClientMockForRegister(Mock<IEmisClient> emisClientMock,
+            IEnumerable<PatientIdentifier> patientIdentifiers = null)
+        {
+            var endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
+            emisClientMock.Setup(x => x.SessionsEndUserSessionPost()).Returns(
+                Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    {
+                        Body = endUserSessionResponse
+                    }));
+
+            var meApplicationsResponse = _fixture.Create<MeApplicationsPostResponse>();
+            emisClientMock.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.OK)
+                    {
+                        Body = meApplicationsResponse
+                    }));
+
+            var sessionResponse = _fixture.Create<SessionsPostResponse>();
+            emisClientMock.Setup(x => x.SessionsPost(It.IsAny<string>(), It.IsAny<SessionsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
+                    {
+                        Body = sessionResponse
+                    }));
+
+            var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
+            emisClientMock.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = demographicsResponse
+                    }));
+            
+            demographicsResponse.PatientIdentifiers = patientIdentifiers;
+
+            const string key = "Key";
+            _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
+                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(key);
+
+            _mockIm1CacheService.Setup(x => x.GetIm1ConnectionToken<EmisConnectionToken>(key))
+                .Returns(Task.FromResult(Option.None<EmisConnectionToken>())).Verifiable();
+
+            _mockIm1CacheService.Setup(x => x.SaveIm1ConnectionToken(key, It.IsAny<EmisConnectionToken>()))
+                .Returns(Task.FromResult(true)).Verifiable();
+
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+            
+            return request;
         }
 
         private EmisIm1ConnectionService CreateSystemUnderTest(Mock<IEmisClient> emisClientMock)

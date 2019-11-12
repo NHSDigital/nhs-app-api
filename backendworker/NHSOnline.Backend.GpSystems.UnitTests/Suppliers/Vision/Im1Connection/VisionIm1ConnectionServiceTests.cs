@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
@@ -15,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
@@ -33,6 +35,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         private Mock<IIm1CacheService> _im1CacheService;
         private Mock<IIm1CacheKeyGenerator> _im1CacheKeyGenerator;
         private VisionIm1ConnectionService _systemUnderTest;
+        private Mock<ILogger<VisionIm1ConnectionService>> _mockLogger;
+
 
         [TestInitialize]
         public void TestInitialize()
@@ -42,6 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _systemUnderTest = _fixture.Create<VisionIm1ConnectionService>();
+            _mockLogger = _fixture.Freeze<Mock<ILogger<VisionIm1ConnectionService>>>();
         }
 
         [TestMethod]
@@ -72,7 +77,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                             },
                         },
                     }));
-            
+
             // Act
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -82,6 +87,45 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
             successResult.Response.NhsNumbers.Should().BeEquivalentTo(expectedNhsNumbers);
+        }
+
+        [TestMethod]
+        public async Task Verify_LoggerReturnsCorrectNHSNumberCount()
+        {
+            // Arrange
+            var patientNumber = new PatientNumber()
+            {
+                Number = "1234"
+            };
+            
+            var patientConfiguration = SetUpPatientConfigurationWithNoPatientNumbers();
+
+            patientConfiguration.Account.PatientNumbers.Add(patientNumber);
+
+            var systemUnderTest = CreateSystemUnderTest();
+
+            // Act
+            await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            const string expectedLogMessage = "Vision returned 1 NHS Numbers for the user";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+        }
+
+        [TestMethod]
+        public async Task Verify_LoggerReturnsZeroNHSNumbersCount_WhenNoNHSNumbersAreReturned()
+        {
+            // Arrange
+            SetUpPatientConfigurationWithNoPatientNumbers();
+
+            var systemUnderTest = CreateSystemUnderTest();
+
+            // Act
+            await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            const string expectedLogMessage = "Vision returned 0 NHS Numbers for the user";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
         [TestMethod]
@@ -119,7 +163,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
-                .Subject.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.InvalidRequest);
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidRequest);
         }
 
         [TestMethod]
@@ -158,7 +202,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
-                .Subject.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
         }
 
         [TestMethod]
@@ -187,7 +231,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
-                .Subject.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.InvalidSecurity);
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidSecurity);
         }
 
         [TestMethod]
@@ -226,7 +270,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.UnmappedErrorWithStatusCode>()
-                .Subject.ErrorCode.Should().Be( Im1ConnectionErrorCodes.InternalCode.UnknownError);
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
         [TestMethod]
@@ -253,7 +297,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.UnmappedErrorWithStatusCode>();
         }
-        
+
         [TestMethod]
         public async Task Register_WhenConnectionTokenCached_SuccessfulRegister_ObtainNHSnumber()
         {
@@ -319,7 +363,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         }
 
         [TestMethod]
-        public async Task Register_WhenConnectionTokenNotCached_SuccessfulRegister_ObtainNHSnumber()
+        public async Task Register_WhenConnectionTokenNotCached_SuccessfulRegister_ObtainNHSNumber()
         {
             // Arrange
             var apiKey = _fixture.Create<string>();
@@ -404,6 +448,43 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         }
 
         [TestMethod]
+        public async Task Register_LoggerReturnsCorrectNHSNumberCount_OnSuccessfulRegister()
+        {
+            // Arrange
+            var patientNumber = new PatientNumber()
+            {
+                Number = "1234"
+            };
+
+            var request = SetUpForRegister(patientNumber);
+            
+            var systemUnderTest = CreateSystemUnderTest();
+
+            // Act
+            await systemUnderTest.Register(request);
+
+            // Assert
+            const string expectedLogMessage = "Vision returned 1 NHS Numbers for the user";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+        }
+
+        [TestMethod]
+        public async Task Register_LoggerReturnsZeroNHSNumberCount_WhenNoNHSNumberIsReturned()
+        {
+            // Arrange
+            var request = SetUpForRegister(null);
+            
+            var systemUnderTest = CreateSystemUnderTest();
+
+            // Act
+            await systemUnderTest.Register(request);
+
+            // Assert
+            const string expectedLogMessage = "Vision returned 0 NHS Numbers for the user";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+        }
+
+        [TestMethod]
         public async Task Register_UserAccountLocked()
         {
             // Arrange
@@ -425,7 +506,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>();
-            var errorResult = (Im1ConnectionRegisterResult.ErrorCase)result;
+            var errorResult = (Im1ConnectionRegisterResult.ErrorCase) result;
             errorResult.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserAccountDisabled);
         }
 
@@ -566,6 +647,77 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                         },
                     }));
             return _mockVisionClient;
+        }
+
+        private VisionIm1ConnectionService CreateSystemUnderTest()
+        {
+            return new VisionIm1ConnectionService(_mockVisionClient.Object, _im1CacheService.Object,
+                _im1CacheKeyGenerator.Object, _mockLogger.Object);
+        }
+        
+        private PatientConfiguration SetUpPatientConfigurationWithNoPatientNumbers()
+        {
+            var patientConfiguration = _fixture.Create<PatientConfiguration>();
+
+            _mockVisionClient.Setup(x =>
+                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        {
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            {
+                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
+                                {
+                                    ServiceContent = new PatientConfigurationResponse
+                                    {
+                                        Configuration = patientConfiguration,
+                                    },
+                                },
+                            },
+                        },
+                    }));
+
+            patientConfiguration.Account.PatientNumbers.Clear();
+
+            return patientConfiguration;
+        }
+        
+        private PatientIm1ConnectionRequest SetUpForRegister(PatientNumber patientNumber)
+        {
+            var cacheKey = _fixture.Create<string>();
+            var apiKey = _fixture.Create<string>();
+
+            var connectionToken = new VisionConnectionToken
+            {
+                RosuAccountId = AccountId,
+                ApiKey = apiKey,
+            };
+
+            var patientConfiguration = SetUpPatientConfigurationWithNoPatientNumbers();
+            if (patientNumber != null)
+            {
+                patientConfiguration.Account.PatientNumbers.Add(patientNumber);
+            }
+
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = AccountId,
+                DateOfBirth = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
+            };
+            
+            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey))
+                .Returns(cacheKey);
+            _im1CacheService
+                .Setup(x => x.GetIm1ConnectionToken<VisionConnectionToken>(cacheKey))
+                .Returns(Task.FromResult(Option.Some(connectionToken)))
+                .Verifiable();
+            
+            return request;
         }
     }
 }

@@ -74,7 +74,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     _logger.LogError($"Emis {nameof(userPatientLinkToken)} not found");
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.InvalidUserPatientLinkToken);
+                    return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
+                        .InvalidUserPatientLinkToken);
                 }
 
                 var demographicsResponse = await _emisClient.DemographicsGet(
@@ -82,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     {
                         UserPatientLinkToken = userPatientLinkToken,
                         SessionId = sessionsResponse.Body.SessionId,
-                        EndUserSessionId = endUserSessionId 
+                        EndUserSessionId = endUserSessionId
                     });
 
                 if (!demographicsResponse.HasSuccessResponse)
@@ -100,6 +101,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     NhsNumbers = nhsNumbers,
                     OdsCode = odsCode
                 };
+
+                _logger.LogInformation($"Emis returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
 
                 _logger.LogDebug("Verify successfully completed");
                 return new Im1ConnectionVerifyResult.Success(response);
@@ -196,8 +199,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                         {
                             UserPatientLinkToken = userPatientLinkToken,
                             SessionId = sessionsResponse.Body.SessionId,
-                            EndUserSessionId = endUserSessionId 
-                        });                        
+                            EndUserSessionId = endUserSessionId
+                        });
 
                 if (!demographicsResponse.HasSuccessResponse)
                 {
@@ -216,6 +219,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     LinkageKey = request.LinkageKey,
                     AccountId = request.AccountId
                 };
+
+                _logger.LogInformation($"Emis returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
 
                 return new Im1ConnectionRegisterResult.Success(response);
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -18,9 +19,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly IIm1CacheService _im1CacheService;
         private readonly ILogger<MicrotestIm1ConnectionService> _logger;
-        
+
         public MicrotestIm1ConnectionService(
-            IMicrotestClient microtestClient, 
+            IMicrotestClient microtestClient,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
             IIm1CacheService im1CacheService,
             ILogger<MicrotestIm1ConnectionService> logger)
@@ -30,27 +31,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
             _im1CacheService = im1CacheService;
             _logger = logger;
         }
-        
+
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
         {
             _logger.LogEnter();
             try
             {
-                
                 var token = connectionToken.DeserializeJson<MicrotestConnectionToken>();
-    
+
                 var nhsNumber = token.NhsNumber;
-                
+
                 var demographicsResponse = await _microtestClient.DemographicsGet(
                     odsCode,
                     nhsNumber);
-                
+
                 if (!demographicsResponse.HasSuccessResponse)
                 {
-                    _logger.LogError($"Error response when retrieving Microtest demographics as part of im1 verification. Status code: {(int)demographicsResponse.StatusCode}");
+                    _logger.LogError(
+                        $"Error response when retrieving Microtest demographics as part of im1 verification. Status code: {(int) demographicsResponse.StatusCode}");
                     if (demographicsResponse.HasInternalServerError || demographicsResponse.HasForbiddenResponse)
                     {
-                       
                         return new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
                             .ErrorRetrievingGivenDemographics);
                     }
@@ -70,7 +70,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                     },
                     OdsCode = odsCode
                 };
-                
+
+                _logger.LogInformation($"Microtest returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
+
                 return new Im1ConnectionVerifyResult.Success(response);
             }
             catch (HttpRequestException e)
@@ -88,14 +90,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
         public async Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
         {
             _logger.LogEnter();
-            try 
+            try
             {
                 var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
-                
+
                 var cachedConnectionToken =
                     await _im1CacheService.GetIm1ConnectionToken<MicrotestConnectionToken>(key);
-                
+
                 if (cachedConnectionToken.HasValue)
                 {
                     var connectionToken = cachedConnectionToken.ValueOrFailure();
@@ -115,16 +117,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                         AccountId = request.AccountId,
                         LinkageKey = request.LinkageKey,
                     };
-    
+
                     _logger.LogExit();
                     return new Im1ConnectionRegisterResult.Success(response);
                 }
-                
+
                 _logger.LogDebug("IM1 connection token not found in cache.");
                 _logger.LogExit();
                 return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
                     .LinkageKeysNotSupportedBySupplier);
-                
             }
             finally
             {
@@ -132,5 +133,4 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
             }
         }
     }
-    
 }

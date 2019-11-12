@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                     _logger.LogError($"Tpp Authentication call failed - {authenticateReply.ErrorForLogging}");
                     return TppIm1VerifyErrorMapper.Map(authenticateReply, _logger);
                 }
-                
+
                 var response = CreatePatientIm1ConnectionResponse(authenticateReply, connectionToken, odsCode);
 
                 _logger.LogDebug($"{nameof(TppIm1ConnectionService)} Verify successfully completed");
@@ -61,17 +62,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             }
         }
 
-        private static PatientIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
+        private PatientIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
             TppClient.TppApiObjectResponse<AuthenticateReply> authenticateReply, string connectionToken, string odsCode)
         {
             var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
-            return new PatientIm1ConnectionResponse
+
+            var response = new PatientIm1ConnectionResponse
             {
                 ConnectionToken = connectionToken,
                 NhsNumbers = nhsNumbers,
                 OdsCode = odsCode
             };
+
+            _logger.LogInformation($"Tpp returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
+
+            return response;
         }
 
         public async Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
@@ -108,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 
                     await CacheConnectionToken(connectionToken);
                 }
-                
+
                 return await HandleAuthenticateRequestAndResponse(connectionToken, linkAccountRequest);
             }
             catch (HttpRequestException e)
@@ -123,10 +129,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             }
         }
 
-        private async Task<Im1ConnectionRegisterResult> HandleAuthenticateRequestAndResponse(TppConnectionToken connectionToken,
+        private async Task<Im1ConnectionRegisterResult> HandleAuthenticateRequestAndResponse(
+            TppConnectionToken connectionToken,
             LinkAccount linkAccountRequest)
         {
-
             var authenticateRequest = CreateAuthenticate(connectionToken, linkAccountRequest);
 
             var authenticateReply = await _tppClient.AuthenticatePost(authenticateRequest);
@@ -149,13 +155,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 LinkageKey = linkAccountRequest.Passphrase
             };
 
+            _logger.LogInformation($"Tpp returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
+
             _logger.LogDebug($"{nameof(TppIm1ConnectionService)} {nameof(Register)} successfully completed");
             return new Im1ConnectionRegisterResult.Success(response);
-
         }
 
         private static TppConnectionToken CreateTppConnectionToken(LinkAccount linkAccountRequest,
-            TppClient.TppApiObjectResponse<LinkAccountReply> linkAccountReply, string key) {
+            TppClient.TppApiObjectResponse<LinkAccountReply> linkAccountReply, string key)
+        {
             return new TppConnectionToken
             {
                 AccountId = linkAccountRequest.AccountId,
@@ -165,7 +173,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             };
         }
 
-        private static Authenticate CreateAuthenticate(TppConnectionToken connectionToken, LinkAccount linkAccountRequest)
+        private static Authenticate CreateAuthenticate(TppConnectionToken connectionToken,
+            LinkAccount linkAccountRequest)
         {
             return new Authenticate
             {
@@ -174,7 +183,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 UnitId = linkAccountRequest.OrganisationCode,
                 ProviderId = connectionToken.ProviderId
             };
-
         }
 
         private static LinkAccount CreateLinkAccount(PatientIm1ConnectionRequest request)

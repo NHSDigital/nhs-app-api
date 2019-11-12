@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
 
                 if (getConfigurationReply.HasErrorResponse)
                 {
-                    _logger.LogError($"Vision system encountered an error: { getConfigurationReply.ErrorForLogging }");
+                    _logger.LogError($"Vision system encountered an error: {getConfigurationReply.ErrorForLogging}");
                     return VisionIm1VerifyErrorMapper.Map(getConfigurationReply, _logger);
                 }
 
@@ -55,6 +56,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                     NhsNumbers = formattedNhsNumbers,
                     OdsCode = odsCode
                 };
+
+                _logger.LogInformation($"Vision returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
 
                 return new Im1ConnectionVerifyResult.Success(response);
             }
@@ -92,23 +95,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 else
                 {
                     var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    
+
                     VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> linkAccountResponse;
-                    
+
                     try
                     {
                         linkAccountResponse = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
                     }
                     catch (SocketException ex)
                     {
-                        _logger.LogError(ex, $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked." + ex );
-                        return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
+                        _logger.LogError(ex,
+                            $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked." +
+                            ex);
+                        return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
+                            .UserAlreadyLinked);
                     }
 
                     if (linkAccountResponse.HasErrorResponse)
                     {
                         return VisionIm1RegisterErrorMapper.Map(linkAccountResponse, _logger);
                     }
+
                     var apiToken = linkAccountResponse.Body.AuthenticationRef.ApiToken;
                     connectionToken = new VisionConnectionToken
                     {
@@ -124,13 +131,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 if (configResponse.HasErrorResponse)
                 {
                     _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
-                             $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
-                             $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
+                                     $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
+                                     $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
                     _logger.LogVisionErrorResponse(configResponse);
                     return new Im1ConnectionRegisterResult.BadGateway();
                 }
-                
+
                 var response = CreatePatientIm1ConnectionResponse(request, configResponse, connectionToken);
+                _logger.LogInformation($"Vision returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
                 _logger.LogDebug($"{nameof(VisionIm1ConnectionService)} Register successfully completed");
 
                 return new Im1ConnectionRegisterResult.Success(response);
