@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Session;
@@ -30,27 +31,30 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
         private SessionConfigurationSettings _sessionConfigSettings;
         private UserSession _userSession;
-        private UserProfile _userProfile;
-        private ServiceJourneyRulesConfigResult _serviceJourneyRulesConfigResult;
-        private ServiceJourneyRulesResponse _serviceJourneyRulesResponse;
+       private Mock<IGpSystemFactory> _mockGpSystemFactory;
+       private Guid _patientId;
+       private Mock<ILinkedAccountsService> _mockLinkedAccountService;
+       private Mock<IGpSystem> _mockGpSystem;
+       private string _defaultOdsCode;
+       
+       
         
         [TestInitialize]
         public void TestInitialize()
         {
+            _patientId = Guid.NewGuid();
+            _defaultOdsCode = "A123456";
+           
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
             _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
             _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
-            _userProfile = _fixture.Freeze<UserProfile>();
             _userSession = _fixture.Create<UserSession>();
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
-            _serviceJourneyRulesResponse = _fixture.Create<ServiceJourneyRulesResponse>();
-            _serviceJourneyRulesConfigResult =
-                new ServiceJourneyRulesConfigResult.Success(_serviceJourneyRulesResponse);
-            
+
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }
@@ -61,6 +65,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockLogger = _fixture.Freeze<Mock<ILogger<ServiceJourneyRulesController>>>();
             _mockLogger.SetupLogger(LogLevel.Information, $"Fetching Service Journey Rules for {_userSession.GpUserSession.OdsCode}", null);
 
+            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockLinkedAccountService = new Mock<ILinkedAccountsService>();
+            _mockGpSystem = new Mock<IGpSystem>();
+            
             _systemUnderTest = _fixture.Create<ServiceJourneyRulesController>();
             
             _systemUnderTest.ControllerContext = new ControllerContext
@@ -153,6 +161,70 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = value.Should().BeAssignableTo<LinkedAccountsConfigResult.Success>().Subject.Response;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+        
+        
+        
+        [TestMethod]
+        public async Task GetLinkedAccountConfiguration_WhenServiceReturnsSuccessfully_ReturnsSuccessfulResult()
+        {
+            // Arrange
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
+                .Returns(_mockGpSystem.Object);
+
+            _mockGpSystem.Setup(x => x.GetLinkedAccountsService())
+                .Returns(_mockLinkedAccountService.Object);
+
+            _mockLinkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, _patientId))
+                .Returns(_defaultOdsCode);
+            
+            var expectedResponse = new ServiceJourneyRulesResponse
+            {
+                Journeys = new Journeys()
+            };
+            
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForLinkedAccount(_defaultOdsCode))
+                .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
+
+            // Act
+            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId);
+
+            // Assert
+            _mockGpSystemFactory.Verify();
+            _mockServiceJourneyRulesService.Verify();
+            _mockLogger.Verify();
+            
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            var actualResponse = value.Should().BeAssignableTo<ServiceJourneyRulesResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+        
+        [TestMethod]
+        public async Task GetLinkedAccountConfiguration_WhenServiceDoesNotFindConfiguration_ReturnsNotFound()
+        {
+            // Arrange
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
+                .Returns(_mockGpSystem.Object);
+
+            _mockGpSystem.Setup(x => x.GetLinkedAccountsService())
+                .Returns(_mockLinkedAccountService.Object);
+
+            _mockLinkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, _patientId))
+                .Returns(_defaultOdsCode);
+            
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForLinkedAccount(_defaultOdsCode))
+                .ReturnsAsync(new ServiceJourneyRulesConfigResult.NotFound());
+
+            // Act
+            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId);
+
+            // Assert
+            _mockGpSystemFactory.Verify();
+            _mockServiceJourneyRulesService.Verify();
+            _mockLogger.Verify();
+            
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
     }
 }

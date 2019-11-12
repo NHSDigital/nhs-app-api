@@ -12,6 +12,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     {
         im1,
         informatica,
-        gpAtHand
+        gpAtHand,
+        linkedAccount,
+        eConsult
     }
 }

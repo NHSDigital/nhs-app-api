@@ -19,6 +19,7 @@ import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.nominatedPharmacy.SearchNominatedPharmacyPage
 import pages.prescription.PrescriptionsPage
 import pages.text
+import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
 
@@ -66,6 +67,11 @@ class NominatedPharmacyStepDefinitions {
     @Given("^I have a (.*) typed nominated pharmacy with (.*) OdsCode$")
     fun iHaveANominatedPharmacy(pharmacyType : String, odsCode: String) {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, odsCode)
+    }
+
+    @Given("^I have a (.*) typed nominated pharmacy$")
+    fun iHaveANominatedPharmacy(pharmacyType : String) {
+        nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, SerenityHelpers.getPatient().odsCode)
     }
 
     @Given("^I have a P1 typed Internet pharmacy with (.*) OdsCode$")

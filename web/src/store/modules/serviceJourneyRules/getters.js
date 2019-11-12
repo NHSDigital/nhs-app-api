@@ -10,6 +10,7 @@ import {
   NOMINATED_PHARMACY,
   NOTIFICATIONS,
   ONLINE_CONSULTATIONS,
+  LINKED_ACCOUNT,
 } from './mutation-types';
 
 export default {
@@ -30,6 +31,9 @@ export default {
   },
   [`${INFORMATICA}AppointmentsEnabled`](state) {
     return get('rules.appointments.provider')(state) === INFORMATICA;
+  },
+  [`${LINKED_ACCOUNT}AppointmentsEnabled`](state) {
+    return get('rules.appointments.provider')(state) === LINKED_ACCOUNT;
   },
   [`${GP_AT_HAND}MyRecordEnabled`](state) {
     return get('rules.medicalRecord.provider')(state) === GP_AT_HAND;

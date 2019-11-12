@@ -65,6 +65,11 @@ const messagingDisabledRedirect = {
   url: '/',
 };
 
+const linkedAccountAppointmentRedirect = {
+  journey: 'linkedAccountAppointments',
+  url: '/linked-profiles/shutter/appointments',
+};
+
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
 const routes = {
@@ -143,6 +148,7 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
     sjrRedirectRules: [
+      linkedAccountAppointmentRedirect,
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],

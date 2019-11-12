@@ -1,0 +1,10 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A10003"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://the-andover-health-centre-medical-practice.appointments-online.co.uk/  
+  nominatedPharmacy: true
+  notifications: true
+  messaging: true

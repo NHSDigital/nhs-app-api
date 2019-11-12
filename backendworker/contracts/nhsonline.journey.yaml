@@ -34,3 +34,21 @@ paths:
             application/json:
               schema:
                 $ref: "servicejourneyrules.yaml#/components/schemas/LinkedAccountsConfigResponse"
+  /linked-account-journey-configuration:
+    get:
+      tags:
+        - service-journey-rules
+      summary: Gets the service journey rules for a linked account patient's practice
+      description: This call returns the service journey rules for a linked account patient's practice.
+      responses:
+        "200":
+          description: Successful operation. Service Journey Rules returned
+          content:
+            application/json:
+              schema:
+                $ref: "servicejourneyrules.yaml#/components/schemas/ServiceJourneyRulesResponse"
+        "404":
+          description: Service Journey Rules Configuration not found.
+        "500":
+          description: An unexpected error occurred processing the request.
+

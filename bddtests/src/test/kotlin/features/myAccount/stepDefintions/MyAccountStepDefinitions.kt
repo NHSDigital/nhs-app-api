@@ -41,4 +41,9 @@ class MyAccountStepDefinitions {
     fun thereAreNoAccountSettingsAvailable(){
         myAccount.settings.assertNotDisplayed()
     }
+
+    @Then("the link to Notifications is not available on the Account page")
+    fun theLinkToNotificationsIsNotAvailableOnTheAccountPage() {
+        myAccount.settings.assertNotDisplayed()
+    }
 }

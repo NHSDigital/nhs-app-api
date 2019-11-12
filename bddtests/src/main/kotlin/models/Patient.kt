@@ -4,6 +4,7 @@ import config.Config
 import constants.DateTimeFormats
 import mocking.AccessTokenBuilder
 import mocking.IdTokenBuilder
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
@@ -127,6 +128,20 @@ data class Patient(
             return MicrotestPatients.microtestPostLinkageUserDetails(accountID, linkageKey)
         }
 
+        fun setOdsCodeBasedOnAppointmentsProvider(patient: Patient, provider: String) {
+            return when (provider.toUpperCase()) {
+                "ECONSULT" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
+                "IM1" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1)
+                "INFORMATICA" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA)
+                "GPATHAND" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND)
+                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
+            }
+        }
+
+        fun updateOdsCodes(patient: Patient, odsCode: String) {
+            patient.odsCode = odsCode
+            patient.linkedAccounts.forEach {e -> e.odsCode = odsCode }
+        }
     }
 }
 

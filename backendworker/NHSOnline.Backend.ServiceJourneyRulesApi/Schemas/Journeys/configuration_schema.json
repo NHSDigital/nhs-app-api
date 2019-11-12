@@ -11,7 +11,7 @@
           "additionalProperties": false,
           "properties": {
             "provider": {
-              "enum": [ "im1", "gpAtHand" ]
+              "enum": [ "im1", "gpAtHand", "eConsult" ]
             }
           },
           "required": [ "provider" ]

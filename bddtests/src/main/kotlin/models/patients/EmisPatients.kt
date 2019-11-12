@@ -13,6 +13,13 @@ class EmisPatients {
         }
 
         fun getPatientWithLinkedProfiles(): Patient {
+            // Ensure the sessionId and endUserSessionId of the linkes accounts
+            // match the values in the main (logged in) account
+            tonyStark.linkedAccounts.forEach {
+                linkedAccount ->
+                    linkedAccount.sessionId = tonyStark.sessionId
+                    linkedAccount.endUserSessionId = tonyStark.endUserSessionId
+            }
             return tonyStark
         }
 

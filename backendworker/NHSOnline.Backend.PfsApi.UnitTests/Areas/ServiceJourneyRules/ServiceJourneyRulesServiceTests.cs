@@ -49,6 +49,46 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.Success>();
 
        }
+       
+       [DataTestMethod]
+       [DataRow(AppointmentsProvider.informatica, AppointmentsProvider.linkedAccount)]
+       [DataRow(AppointmentsProvider.gpAtHand, AppointmentsProvider.linkedAccount)]
+       [DataRow(AppointmentsProvider.im1, AppointmentsProvider.im1)]
+       [DataRow(AppointmentsProvider.eConsult, AppointmentsProvider.im1)]
+       public async Task GetServiceJourneyRulesForOdsCode_ForLinkedAccount_ValidRequest_ReturnsSuccessResult
+           (AppointmentsProvider originalProvider, AppointmentsProvider expectedProvider)
+       {
+           // Arrange
+           _serviceJourneyRulesClient.Setup(x => x.GetServiceJourneyRules(DefaultOdsCode))
+               .ReturnsAsync(new ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>(HttpStatusCode.Created)
+               {
+                   Body = new ServiceJourneyRulesResponse
+                   {
+                       Journeys = new Journeys
+                       {
+                           Appointments = new ServiceJourneyRulesApi.Models.Appointments
+                           {
+                               Provider = originalProvider
+                           },
+                           NominatedPharmacy = true,
+                           Messaging = true,
+                           Notifications = true,
+                       }
+                   }
+               });
+
+           // Act
+           var result = await _systemUnderTest.GetServiceJourneyRulesForLinkedAccount(DefaultOdsCode);
+
+           // Assert
+           result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.Success>();
+
+           var response = result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.Success>().Subject.Response;
+           Assert.AreEqual(false, response.Journeys.Messaging);
+           Assert.AreEqual(false, response.Journeys.NominatedPharmacy);
+           Assert.AreEqual(false, response.Journeys.Notifications);
+           Assert.AreEqual(expectedProvider, response.Journeys.Appointments.Provider);
+       }
 
        [TestMethod]
        public async Task GetServiceJourneyRulesForOdsCode_ValidRequest_ReturnsNotFoundIfBodyNull()

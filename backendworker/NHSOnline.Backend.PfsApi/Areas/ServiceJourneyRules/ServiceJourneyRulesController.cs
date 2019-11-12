@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
@@ -19,18 +21,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         private readonly IAuditor _auditor;
         private readonly IServiceJourneyRulesService _serviceJourneyRulesService;
         private readonly SessionConfigurationSettings _sessionSettings;
+        private readonly IGpSystemFactory _gpSystemFactory;
+
 
         public ServiceJourneyRulesController(
             ILogger<ServiceJourneyRulesController> logger,
             IAuditor auditor, 
             IServiceJourneyRulesService serviceJourneyRulesService,
-            SessionConfigurationSettings sessionSettings
+            SessionConfigurationSettings sessionSettings,
+            IGpSystemFactory gpSystemFactory
         )
         {
             _logger = logger;
             _auditor = auditor;
             _serviceJourneyRulesService = serviceJourneyRulesService;
             _sessionSettings = sessionSettings;
+            _gpSystemFactory = gpSystemFactory;
         }
 
         [HttpGet]
@@ -74,6 +80,36 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             });
             
             return result.Accept(new LinkedAccountsConfigResultVisitor());
+        }
+
+        [HttpGet]
+        [Route("patient/linked-account-journey-configuration")]
+        public async Task<IActionResult> GetLinkedAccountConfiguration([FromHeader(Name = PatientId)] Guid patientId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                await _auditor.Audit(AuditingOperations.GetServiceJourneyRulesAuditForLinkedAccountRequest,
+                    "Attempting to get service journey rules for linked account");
+
+                var gpUserSession = HttpContext.GetUserSession().GpUserSession;
+
+                var linkedAccountsService = 
+                    _gpSystemFactory.CreateGpSystem(gpUserSession.Supplier).GetLinkedAccountsService(); 
+                               
+                string odsCode = linkedAccountsService.GetOdsCodeForLinkedAccount(gpUserSession, patientId);
+
+                _logger.LogInformation($"Fetching Service Journey Rules for linked account");
+
+                var result = await _serviceJourneyRulesService.GetServiceJourneyRulesForLinkedAccount(odsCode);
+
+                return result.Accept(new ServiceJourneyRulesGetResultVisitor());
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
         
     }

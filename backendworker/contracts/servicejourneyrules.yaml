@@ -39,6 +39,8 @@ components:
               oneOf:
                 - $ref: "#/components/schemas/defaultProvider"
                 - $ref: "#/components/schemas/informatica"
+                - $ref: "#/components/schemas/linkedAccount"
+                - $ref: "#/components/schemas/eConsult"
             cdssAdvice:
               type: object
               oneOf:
@@ -74,6 +76,22 @@ components:
           enum:
             - im1
             - gpAtHand
+    linkedAccount:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: The provider
+          enum:
+            - linkedAccount
+    eConsult:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: The provider
+          enum:
+            - eConsult
     informatica:
       type: object
       properties:

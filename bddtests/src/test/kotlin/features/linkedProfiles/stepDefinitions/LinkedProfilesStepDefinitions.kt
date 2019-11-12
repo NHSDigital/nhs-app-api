@@ -34,7 +34,9 @@ import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
 import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
 import pages.linkedProfiles.shutterPages.SettingsShutterPage
 import pages.linkedProfiles.shutterPages.SymptomsShutterPage
+import pages.navigation.WebHeader
 import pages.text
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
@@ -58,14 +60,21 @@ class LinkedProfilesStepDefinitions {
     private lateinit var settingsShutterPage: SettingsShutterPage
     private lateinit var symptomsShutterPage: SymptomsShutterPage
     private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
+    private lateinit var webHeader: WebHeader
 
     val mockingClient = MockingClient.instance
 
-    @Given("^I am logged in as a (.*) user with linked profiles$")
-    fun iAmLoggedInWithLinkedProfiles(gpSystem: String) {
+    @Given("^I am logged in as a (.*) user with linked profiles and appointments provider (.*)$")
+    fun iAmLoggedInWithLinkedProfilesAndAppointmentsProvider(gpSystem: String, provider: String) {
         val patient = Patient.getPatientWithLinkedProfiles(gpSystem)
+        Patient.setOdsCodeBasedOnAppointmentsProvider(patient, provider)
         SerenityHelpers.setGpSupplier(gpSystem)
         setupWithLinkedAccountsAndLogIn(patient, gpSystem)
+    }
+
+    @Given("^I click on the Appointments link on the header$")
+    fun iClickOnAppointmentsLinkInHeader() {
+        webHeader.clickAppointmentsPageLink()
     }
 
     private fun setupWithLinkedAccountsAndLogIn(patient: Patient, gpSystem: String) {
@@ -143,6 +152,9 @@ class LinkedProfilesStepDefinitions {
                         gpPractice.value[0].OrganisationName)
         )
 
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
+                GlobalSerenityHelpers.SWITCHED_LINKED_ACCOUNT, linkedAccount)
+
         linkedProfilesPage.selectLinkedProfile(linkedAccount.formattedFullName())
     }
 
@@ -218,7 +230,7 @@ class LinkedProfilesStepDefinitions {
     fun iClickTheSwitchToThisProfileButtonForTheProxyUser() {
         linkedProfileSummaryPage.switchProfileButton.click()
     }
-
+    
     @Then("^the yellow banner contains details for the user I am acting on behalf of$")
     fun theYellowBannerContainsDetailsForTheUserIAmActingOnBehalfOf() {
         val expectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()

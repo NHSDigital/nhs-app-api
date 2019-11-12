@@ -2998,6 +2998,22 @@
                                     informaticaUrl: 
                                       type: "string"
                                       description: "The informaticaUrl"
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "linkedAccount"
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    provider: 
+                                      type: "string"
+                                      description: "The provider"
+                                      enum: 
+                                        - "eConsult"
                             cdssAdvice: 
                               type: "object"
                               oneOf: 
@@ -3497,6 +3513,22 @@
                                 informaticaUrl: 
                                   type: "string"
                                   description: "The informaticaUrl"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "linkedAccount"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "eConsult"
                         cdssAdvice: 
                           type: "object"
                           oneOf: 
@@ -3604,6 +3636,150 @@
                       description: "The guid of the current user"
                     hasLinkedAccounts: 
                       type: "bool"
+    /v1/patient/linked-account-journey-configuration: 
+      get: 
+        tags: 
+          - "service-journey-rules"
+        summary: "Gets the service journey rules for a linked account patient's practice"
+        description: "This call returns the service journey rules for a linked account patient's practice."
+        responses: 
+          200: 
+            description: "Successful operation. Service Journey Rules returned"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    journeys: 
+                      type: "object"
+                      properties: 
+                        appointments: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "im1"
+                                    - "gpAtHand"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "informatica"
+                                informaticaUrl: 
+                                  type: "string"
+                                  description: "The informaticaUrl"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "linkedAccount"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "eConsult"
+                        cdssAdvice: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "none"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The cdss provider"
+                                  enum: 
+                                    - "eConsult"
+                                    - "stubs"
+                                serviceDefinition: 
+                                  type: "string"
+                                  description: "The service definition"
+                        cdssAdmin: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "none"
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The cdss provider"
+                                  enum: 
+                                    - "eConsult"
+                                    - "stubs"
+                                serviceDefinition: 
+                                  type: "string"
+                                  description: "The service definition"
+                        medicalRecord: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "im1"
+                                    - "gpAtHand"
+                                version: 
+                                  type: "string"
+                                  description: "The version of My Medical Records"
+                                  enum: 
+                                    - 1
+                                    - 2
+                        prescriptions: 
+                          type: "object"
+                          oneOf: 
+                            - 
+                              type: "object"
+                              properties: 
+                                provider: 
+                                  type: "string"
+                                  description: "The provider"
+                                  enum: 
+                                    - "im1"
+                                    - "gpAtHand"
+                        nominatedPharmacy: 
+                          type: "boolean"
+                        notifications: 
+                          type: "boolean"
+                        messaging: 
+                          type: "boolean"
+                        userInfo: 
+                          type: "boolean"
+          404: 
+            description: "Service Journey Rules Configuration not found."
+          500: 
+            description: "An unexpected error occurred processing the request."
     /v1/patient/linked-accounts: 
       get: 
         tags: 

@@ -1,5 +1,5 @@
 import getters from '@/store/modules/serviceJourneyRules/getters';
-import { initialState, GP_AT_HAND, IM1_PROVIDER, INFORMATICA } from '@/store/modules/serviceJourneyRules/mutation-types';
+import { initialState, GP_AT_HAND, IM1_PROVIDER, INFORMATICA, LINKED_ACCOUNT } from '@/store/modules/serviceJourneyRules/mutation-types';
 
 describe('getters', () => {
   let currentState;
@@ -35,6 +35,11 @@ describe('getters', () => {
       currentState.rules.appointments.provider = IM1_PROVIDER;
       expect(gpAtHandAppointmentsEnabled(currentState)).toBe(false);
     });
+
+    it('will be false if the appointments provider is linkedAccount', () => {
+      currentState.rules.appointments.provider = LINKED_ACCOUNT;
+      expect(gpAtHandAppointmentsEnabled(currentState)).toBe(false);
+    });
   });
 
   describe('im1AppointmentsEnabled', () => {
@@ -52,6 +57,11 @@ describe('getters', () => {
 
     it('will be false if the appointments provider is informatica', () => {
       currentState.rules.appointments.provider = INFORMATICA;
+      expect(im1AppointmentsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be false if the appointments provider is linkedAccount', () => {
+      currentState.rules.appointments.provider = LINKED_ACCOUNT;
       expect(im1AppointmentsEnabled(currentState)).toBe(false);
     });
   });
@@ -72,6 +82,35 @@ describe('getters', () => {
     it('will be false if the appointments provider is im1', () => {
       currentState.rules.appointments.provider = IM1_PROVIDER;
       expect(informaticaAppointmentsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be false if the appointments provider is linkedAccount', () => {
+      currentState.rules.appointments.provider = LINKED_ACCOUNT;
+      expect(informaticaAppointmentsEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('linkedAccountAppointmentsEnabled', () => {
+    const { linkedAccountAppointmentsEnabled } = getters;
+
+    it('will be false if the appointments provider is gp at hand', () => {
+      currentState.rules.appointments.provider = GP_AT_HAND;
+      expect(linkedAccountAppointmentsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be false if the appointments provider is Informatica', () => {
+      currentState.rules.appointments.provider = INFORMATICA;
+      expect(linkedAccountAppointmentsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be false if the appointments provider is im1', () => {
+      currentState.rules.appointments.provider = IM1_PROVIDER;
+      expect(linkedAccountAppointmentsEnabled(currentState)).toBe(false);
+    });
+
+    it('will be true if the appointments provider is linkedAccount', () => {
+      currentState.rules.appointments.provider = LINKED_ACCOUNT;
+      expect(linkedAccountAppointmentsEnabled(currentState)).toBe(true);
     });
   });
 

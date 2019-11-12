@@ -13,6 +13,7 @@ import models.Patient
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import java.time.Duration
 import java.time.OffsetDateTime
@@ -47,7 +48,8 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
                                                prescriptionLoader: IPrescriptionLoader<*>,
                                                fromdate: OffsetDateTime,
                                                toDate: OffsetDateTime) {
-        val currentPatient = SerenityHelpers.getPatient()
+        val linkedProfile = SerenityHelpers.getValueOrNull<Patient>(GlobalSerenityHelpers.SWITCHED_LINKED_ACCOUNT)
+        val currentPatient =  linkedProfile ?: SerenityHelpers.getPatient()
         val duration = if (delay != null) Duration.ofSeconds(delay) else null
         mockingClient
                 .forEmis {

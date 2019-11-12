@@ -1,4 +1,4 @@
-package features.switchProfiles
+package features.linkedProfiles.stepDefinitions
 
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
@@ -42,8 +42,7 @@ class SwitchProfileStepDefinitions {
         checkDisplayedValuesAreCorrect(displayedProxyDetails)
     }
 
-    private fun checkDisplayedValuesAreCorrect(
-            displayedProxyDetails: SwitchProfileData)
+    private fun checkDisplayedValuesAreCorrect(displayedProxyDetails: SwitchProfileData)
     {
         val currentProxyPatient = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
         // proxy patient was selected in previous step

@@ -10,6 +10,7 @@ export const NOMINATED_PHARMACY = 'nominatedPharmacy';
 export const NOTIFICATIONS = 'notifications';
 export const SET_RULES = 'SET_RULES';
 export const ONLINE_CONSULTATIONS = 'onlineConsultations';
+export const LINKED_ACCOUNT = 'linkedAccount';
 
 export const initialState = () => ({
   isLoaded: false,
