@@ -726,7 +726,7 @@ export default {
           default_option: 'Select location',
         },
         clinician: {
-          label: 'Practice member',
+          label: 'Practice member (optional)',
           default_option: 'No preference',
         },
         date: {

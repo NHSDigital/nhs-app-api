@@ -45,7 +45,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     val clinicianFilter = DropdownElement(
-            "Practice member",
+            "Practice member (optional)",
             "Appointment Clinician filter",
             this
     )
