@@ -1856,7 +1856,7 @@ export default {
         },
         tellFamily: {
           subheader: 'Tell your family and friends',
-          body: 'Use our message templates and conversation guides to tell your family and friends you are a donor.',
+          body: 'Do your family and friends know what you want? Help them to support your decision by talking about it.',
         },
         optOutText: 'Please inform your family about your decision.',
       },

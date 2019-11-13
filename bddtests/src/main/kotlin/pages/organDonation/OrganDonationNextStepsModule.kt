@@ -18,8 +18,8 @@ open class OrganDonationNextStepsModule(page :HybridPageObject) : LinksElement(p
         private const val shareLinkDescription ="Help promote organ donation on social media " +
                 "by telling people you are a donor."
         private const val tellFamilyLinkTitle ="Tell your family and friends"
-        private const val tellFamilyLinkDescription ="Use our message templates and " +
-                "conversation guides to tell your family and friends you are a donor."
+        private const val tellFamilyLinkDescription ="Do your family and friends know what you want? " +
+                "Help them to support your decision by talking about it."
 
         private var nextStepsContent = LinksWithDescriptionsContent(
                 linkBlockTitle = "Next steps",
