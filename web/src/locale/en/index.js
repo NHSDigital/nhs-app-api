@@ -774,7 +774,7 @@ export default {
       telephoneNumberLabel: 'Choose a phone number for this appointment',
       telephoneNumberDescription: 'This number will only be used for this appointment. It will not be saved.',
       headerLabel: 'Give a reason for this appointment',
-      headerLabelSuffix: ' (Optional)',
+      headerLabelSuffix: ' (optional)',
       useOtherPhoneNumberLabel: 'Use other phone number',
       reasonDesc: {
         line1: 'Text must be shorter than 150 characters (about 25 words).',
@@ -1650,11 +1650,11 @@ export default {
       description: 'This optional information is only used by the NHS to understand the make up of the NHS Organ Donor Register and is not stored against your registration.',
       ethnicity: {
         placeholder: 'Please select',
-        label: 'Ethnicity (Optional)',
+        label: 'Ethnicity (optional)',
       },
       religion: {
         placeholder: 'Please select',
-        label: 'Religion (Optional)',
+        label: 'Religion (optional)',
       },
       subheader: 'Additional details',
     },
