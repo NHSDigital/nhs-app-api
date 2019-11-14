@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IAppointmentSlotMetadataLogger, AppointmentSlotMetadataLogger>();
+            services.AddTransient<IAppointmentTypeTransformingVisitor, AppointmentTypeTransformingVisitor>();
             base.ConfigureServices(services, configuration);
         }
     }

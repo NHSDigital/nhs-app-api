@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             _logger = logger;
         }
 
-        public IEnumerable<Slot> Map(
+        public IList<Slot> Map(
             IEnumerable<Suppliers.Microtest.Models.Appointments.Slot> sourceSlots)
         {
             _logger.LogEnter();

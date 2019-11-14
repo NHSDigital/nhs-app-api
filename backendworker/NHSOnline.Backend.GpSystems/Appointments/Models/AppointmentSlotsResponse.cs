@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.GpSystems.Appointments.Models
         [JsonConverter(typeof(StringEnumConverter), false)]
         public Necessity BookingReasonNecessity { get; set; } = Necessity.Mandatory;
 
-        public IEnumerable<Slot> Slots { get; set; } = Array.Empty<Slot>();
-        public IEnumerable<PatientTelephoneNumber> TelephoneNumbers { get; set; } = Array.Empty<PatientTelephoneNumber>();
+        public IList<Slot> Slots { get; set; } = new List<Slot>();
+        public IList<PatientTelephoneNumber> TelephoneNumbers { get; set; } = new List<PatientTelephoneNumber>();
     }
 }

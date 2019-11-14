@@ -35,9 +35,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AppointmentsController>> _mockLogger;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private Mock<IAppointmentTypeTransformingVisitor> _mockAppointmentTypeTransformingVisitor;
         private string _serviceDeskReference;
         private Guid _patientGuid;
-        
+        private AppointmentsResult.Success _serviceResult;
+
         private const string RequestAuditType = "Appointments_ViewBooked_Request";
         private const string ResponseAuditType = "Appointments_ViewBooked_Response";
 
@@ -62,15 +64,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentsController>>>();
+            _mockAppointmentTypeTransformingVisitor = _fixture.Freeze<Mock<IAppointmentTypeTransformingVisitor>>();
 
             _appointmentsResponse = _fixture.Create<AppointmentsResponse>();
-            var result = new AppointmentsResult.Success(_appointmentsResponse);
+            _serviceResult = new AppointmentsResult.Success(_appointmentsResponse);
             
             _mockAppointmentsService.Setup(x => x.GetAppointments(
                 It.Is<GpLinkedAccountModel>(
                     d => d.GpUserSession == _userSession.GpUserSession 
                          && d.PatientId == _patientGuid)))
-                .Returns(Task.FromResult((AppointmentsResult)result));
+                .Returns(Task.FromResult((AppointmentsResult)_serviceResult));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockGpSystem
@@ -111,7 +114,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 _appointmentsResponse.PastAppointments.Count());
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedResponseAuditMessage));
         }
-        
+
+        [TestMethod]
+        public async Task Get_ServiceReturnsResult_SlotTypesAreTransformed()
+        {
+            // Act
+            await _systemUnderTest.Get(_patientGuid);
+            
+            // Assert
+            _mockAppointmentTypeTransformingVisitor.Verify(x => x.Visit(_serviceResult));
+        }
+
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentCount()
         {

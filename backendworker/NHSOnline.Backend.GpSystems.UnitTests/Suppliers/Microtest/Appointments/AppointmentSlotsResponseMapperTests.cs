@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -20,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private AppointmentSlotsGetResponse _appointmentsGetResponse;
         private Mock<IAppointmentSlotsMapper> _mockAppointmentSlotsMapper;
         private IAppointmentSlotsResponseMapper _systemUnderTest;
-        private IEnumerable<NHSOnline.Backend.GpSystems.Appointments.Models.Slot> _microtestSlots;
+        private IList<NHSOnline.Backend.GpSystems.Appointments.Models.Slot> _microtestSlots;
         private IEnumerable<Slot> _returnedSlots;
 
         [TestInitialize]
@@ -28,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _microtestSlots = _fixture.CreateMany<NHSOnline.Backend.GpSystems.Appointments.Models.Slot>();
+            _microtestSlots = _fixture.CreateMany<NHSOnline.Backend.GpSystems.Appointments.Models.Slot>().ToList();
             
             _mockAppointmentSlotsMapper = _fixture.Freeze<Mock<IAppointmentSlotsMapper>>();
             _mockAppointmentSlotsMapper.Setup(x => x.Map(It.IsAny<IEnumerable<Slot>>()))

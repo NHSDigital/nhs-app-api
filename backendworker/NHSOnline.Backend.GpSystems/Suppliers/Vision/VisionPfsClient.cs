@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public async Task<VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
             VisionUserSession visionUserSession, AppointmentSlotsDateRange dateRange)
         {
-            var visionServiceDefinition = new GetAvailableAppointmenServiceDefinition();
+            var visionServiceDefinition = new GetAvailableAppointmentsServiceDefinition();
 
             var request = new AvailableAppointmentsRequest
             {

@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {
     public interface IAvailableAppointmentsMapper
     {
-        IEnumerable<Slot> Map(AvailableAppointments availableAppointments);
+        IList<Slot> Map(AvailableAppointments availableAppointments);
     }
     
     public class AvailableAppointmentsMapper: IAvailableAppointmentsMapper
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             _logger = logger;
         }
         
-        public IEnumerable<Slot> Map(AvailableAppointments availableAppointments)
+        public IList<Slot> Map(AvailableAppointments availableAppointments)
         {
             var mappedAppointments = new List<Slot>();
             

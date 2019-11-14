@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.SharedModels;
@@ -42,11 +43,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             return response;
         }
         
-        private static IEnumerable<PatientTelephoneNumber> MapTelephoneNumbers(DemographicsGetResponse demographicsResponse)
+        private static IList<PatientTelephoneNumber> MapTelephoneNumbers(DemographicsGetResponse demographicsResponse)
         {
             if (demographicsResponse?.Demographics == null)
             {
-                return Array.Empty<PatientTelephoneNumber>();
+                return new List<PatientTelephoneNumber>();
             }
             
             return MapTelephoneNumbers(new[]{
@@ -54,18 +55,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 demographicsResponse.Demographics.Telephone2});
         }
         
-        private static IEnumerable<PatientTelephoneNumber> MapTelephoneNumbers(IEnumerable<string> sourceNumbers)
+        private static IList<PatientTelephoneNumber> MapTelephoneNumbers(IEnumerable<string> sourceNumbers)
         {
-            foreach (var sourceNumber in sourceNumbers)
-            {
-                if (!string.IsNullOrEmpty(sourceNumber))
-                {
-                    yield return new PatientTelephoneNumber()
-                    {
-                        TelephoneNumber = sourceNumber
-                    };
-                }
-            }
+            var numbers = sourceNumbers
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Select(x => new PatientTelephoneNumber() { TelephoneNumber = x })
+                .ToList();
+
+            return numbers;
         }
     }
 }

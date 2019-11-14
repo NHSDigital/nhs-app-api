@@ -24,13 +24,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IAuditor _auditor;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
+        private readonly IAppointmentTypeTransformingVisitor _appointmentTypeTransformingVisitor;
 
         public AppointmentsController(
             ILogger<AppointmentsController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
             ISessionCacheService sessionCacheService,
-            IErrorReferenceGenerator errorReferenceGenerator
+            IErrorReferenceGenerator errorReferenceGenerator,
+            IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor
             )
         {
             _logger = logger;
@@ -38,6 +40,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _auditor = auditor;
             _sessionCacheService = sessionCacheService;
             _errorReferenceGenerator = errorReferenceGenerator;
+            _appointmentTypeTransformingVisitor = appointmentTypeTransformingVisitor;
         }
 
         [HttpDelete]
@@ -81,6 +84,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 
                 var result = await GetAppointmentsService(userSession).GetAppointments(gpLinkedAccountModel);
 
+                await result.Accept(_appointmentTypeTransformingVisitor);
+                
                 LogAppointmentsInformation(userSession.GpUserSession, result);
                 
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger));

@@ -37,10 +37,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AppointmentSlotsController>> _mockLogger;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private Mock<IAppointmentTypeTransformingVisitor> _mockAppointmentTypeTransformingVisitor;
         private string _serviceDeskReference;
         private AppointmentSlotsResponse _slotsResponse;
         private Guid _patientId;
-        
+        private AppointmentSlotsResult.Success _serviceResult;
+
         private const string RequestAuditType = "Appointments_GetSlots_Request";
         private const string ResponseAuditType = "Appointments_GetSlots_Response";
 
@@ -64,16 +66,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentSlotsController>>>();
+            _mockAppointmentTypeTransformingVisitor = _fixture.Freeze<Mock<IAppointmentTypeTransformingVisitor>>();
             
             _slotsResponse = _fixture.Create<AppointmentSlotsResponse>();
-            var successResponse = new AppointmentSlotsResult.Success(_slotsResponse);
+            _serviceResult = new AppointmentSlotsResult.Success(_slotsResponse);
 
             _mockAppointmentSlotsService
                 .Setup(x => x.GetSlots(
                     It.Is<GpLinkedAccountModel>(
                         g => g.GpUserSession ==_userSession.GpUserSession && g.PatientId == _patientId), 
                     It.IsAny<AppointmentSlotsDateRange>()))
-                .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
+                .Returns(Task.FromResult((AppointmentSlotsResult)_serviceResult));
 
             var mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
@@ -125,6 +128,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {_slotsResponse.Slots.Count()} slots"));
         }
+
+        [TestMethod]
+        public async Task Get_ServiceReturnsResult_SlotTypesAreTransformed()
+        {
+            // Act
+            await _systemUnderTest.Get(_patientId);
+            
+            // Assert
+            _mockAppointmentTypeTransformingVisitor.Verify(x => x.Visit(_serviceResult));
+        }
         
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotCount()
@@ -138,20 +151,37 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 $"Count={_slotsResponse.Slots.Count()}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
-        
+
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotMetadata()
+        public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotMetadataAfterSlotsHaveBeenTransformed()
         {
+            // Arrange
+            var originalFirstSlotType = _slotsResponse.Slots.First().Type;
+            const string transformedFirstSlotType = "Transformed Slot Type";
+
+            _mockAppointmentTypeTransformingVisitor.Setup(x => x.Visit(_serviceResult))
+                .Callback<AppointmentSlotsResult.Success>(result =>
+                {
+                    result.Response.Slots.First().Type = transformedFirstSlotType;
+                })
+                .Returns(Task.CompletedTask);
+
             // Act
             await _systemUnderTest.Get(_patientId);
 
             // Assert
             var locations = string.Join(",", _slotsResponse.Slots.Select(x => "\"" + x.Location + "\""));
-            var slotTypes = string.Join(",", _slotsResponse.Slots.Select(x => "\"" + x.Type + "\""));
+            var slotTypes = string.Join(",", _slotsResponse.Slots.Select(x => "\"" + x.Type + "\""))
+                .Replace(originalFirstSlotType, transformedFirstSlotType, StringComparison.OrdinalIgnoreCase);
+            var slotTypesFromGpSystem = string.Join(",", _slotsResponse.Slots.Select(x => "\"" + x.TypeFromGpSystem + "\""));
             var expectedLogMessage =
-                "appointment_slot_data={\"SlotTypes\":["+slotTypes+"],"+
+                "appointment_slot_data={" +
+                "\"Supplier\":\""+_userSession.GpUserSession.Supplier+"\"," + 
+                "\"OdsCode\":\""+_userSession.GpUserSession.OdsCode+"\","+
+                "\"SlotTypes\":["+slotTypes+"]," +
+                "\"SlotTypesFromGpSystem\":["+slotTypesFromGpSystem+"]," +
                 "\"Locations\":["+locations+"]," +
-                "\"SlotCount\":"+_slotsResponse.Slots.Count()+"}";
+                "\"SlotCount\":"+_slotsResponse.Slots.Count+"}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
         

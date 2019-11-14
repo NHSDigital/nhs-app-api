@@ -17,10 +17,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
         }
 
-        public IEnumerable<GpSystems.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions)
+        public IList<GpSystems.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions)
         {
+            var slots = new List<GpSystems.Appointments.Models.Slot>();
+
             if (sessions == null)
-                yield break;
+            {
+                return slots;
+            }
 
             foreach (var session in sessions.Where(s => s.Slots != null))
             {
@@ -47,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                         _logger.LogWarning($"Unable to create {nameof(DateTimeOffset)} from slot {nameof(sourceSlot.EndDate)} '{sourceSlot.EndDate}'.");
                     }
 
-                    yield return new GpSystems.Appointments.Models.Slot
+                    var slot = new GpSystems.Appointments.Models.Slot
                     {
                         Clinicians = GetCliniciansForSession(session),
                         EndTime = endDate,
@@ -58,8 +62,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                         SessionName = 
                             string.IsNullOrWhiteSpace(session.Type) ? string.Empty : session.Type.Trim(),
                     };
+                    
+                    slots.Add(slot);
                 }
             }
+
+            return slots;
         }
 
         private static string[] GetCliniciansForSession(Models.Appointments.Session session)

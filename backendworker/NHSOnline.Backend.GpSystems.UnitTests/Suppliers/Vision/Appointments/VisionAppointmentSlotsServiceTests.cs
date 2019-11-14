@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private AppointmentSlotsDateRange _dateRange;
         private Mock<IAvailableAppointmentsResponseMapper> _mockAppointmentsMapper;
         private Mock<ILogger<VisionAppointmentSlotsService>> _mockLogger;
-        private IEnumerable<Slot> _mappedSlots;
+        private IList<Slot> _mappedSlots;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
@@ -100,10 +100,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             MockVisionClientConfigurationGetMethod(configResponse);
 
-            _mappedSlots = _fixture.CreateMany<Slot>();
+            _mappedSlots = _fixture.CreateMany<Slot>().ToList();
             _mockAppointmentsMapper = _fixture.Freeze<Mock<IAvailableAppointmentsResponseMapper>>();
             _mockAppointmentsMapper.Setup(x => x.Map(slotsResponse.Body, configResponse.Body, _visionUserSession))
-                .Returns(new AppointmentSlotsResponse() { Slots = _mappedSlots });
+                .Returns(new AppointmentSlotsResponse { Slots = _mappedSlots });
         }
         
         [TestMethod]

@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 {
     public interface IAppointmentSlotsMapper
     {
-        IEnumerable<Slot> Map(IEnumerable<AppointmentSlotSession> slotSessions, IEnumerable<Location> locations, IEnumerable<SessionHolder> sessionHolders, IEnumerable<Models.Session> sessions);
+        IList<Slot> Map(IEnumerable<AppointmentSlotSession> slotSessions, IEnumerable<Location> locations, IEnumerable<SessionHolder> sessionHolders, IEnumerable<Models.Session> sessions);
     }
 
     public class AppointmentSlotsMapper : IAppointmentSlotsMapper
@@ -28,20 +28,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             _emisEnumMapper = emisEnumMapper;
         }
 
-        public IEnumerable<Slot> Map(
+        public IList<Slot> Map(
             IEnumerable<AppointmentSlotSession> slotSessions, 
             IEnumerable<Location> locations, 
             IEnumerable<SessionHolder> sessionHolders,
             IEnumerable<Models.Session> sessions)
         {
+            var slots = new List<Slot>();
+            
             if (slotSessions == null || !slotSessions.Any())
             {
-                yield break;
+                return slots;
             }
 
             if (sessions == null || !sessions.Any())
             {
-                yield break;
+                return slots;
             }
 
             var keyedSessions = sessions.ToDictionary(session => session.SessionId);
@@ -77,9 +79,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                         Channel = _emisEnumMapper.MapSlotTypeStatus(sourceSlot.SlotTypeStatus, Channel.Unknown)             
                     };
 
-                    yield return slot;
+                    slots.Add(slot);
                 }
             }
+
+            return slots;
         }
 
         private static IEnumerable<string> FindCliniciansForSession(

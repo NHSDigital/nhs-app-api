@@ -22,13 +22,25 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     {
         internal class AppointmentSlotsInformation
         {
+            public string Supplier { get; }
+            public string OdsCode { get; }
             public string[] SlotTypes { get; }
+            public string[] SlotTypesFromGpSystem { get; }
             public string[] Locations { get; }
             public int SlotCount { get; }
 
-            public AppointmentSlotsInformation(string[] slotTypes, string[] locations, int slotCount)
+            public AppointmentSlotsInformation(
+                string supplier,
+                string odsCode,
+                string[] slotTypes, 
+                string[] slotTypesFromGpSystem,
+                string[] locations, 
+                int slotCount)
             {
+                Supplier = supplier;
+                OdsCode = odsCode;
                 SlotTypes = slotTypes;
+                SlotTypesFromGpSystem = slotTypesFromGpSystem;
                 Locations = locations;
                 SlotCount = slotCount;
             }
@@ -40,6 +52,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IAuditor _auditor;
         private readonly IAppointmentSlotMetadataLogger _appointmentSlotMetadataLogger;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
+        private readonly IAppointmentTypeTransformingVisitor _appointmentTypeTransformingVisitor;
 
         public AppointmentSlotsController(
             IGpSystemFactory gpSystemFactory,
@@ -47,7 +60,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             ILogger<AppointmentSlotsController> logger,
             IAuditor auditor,
             IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger, 
-            IErrorReferenceGenerator errorReferenceGenerator)
+            IErrorReferenceGenerator errorReferenceGenerator,
+            IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor)
         {
             _gpSystemFactory = gpSystemFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
@@ -55,6 +69,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _auditor = auditor;
             _appointmentSlotMetadataLogger = appointmentSlotMetadataLogger;
             _errorReferenceGenerator = errorReferenceGenerator;
+            _appointmentTypeTransformingVisitor = appointmentTypeTransformingVisitor;
         }
 
         [HttpGet]
@@ -77,7 +92,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
 
                 var result = await appointmentService.GetSlots(gpLinkedAccountsModel, dateRange);
-
+                
+                await result.Accept(_appointmentTypeTransformingVisitor);
+                
                 LogAppointmentSlotInformation(userSession.GpUserSession, result);
 
                 await result.Accept(new AppointmentSlotsAuditingVisitor(_auditor, _logger));
@@ -113,7 +130,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogInformationKeyValuePairs("Appointment Slot Count", kvp);
 
                 var slotInfo = new AppointmentSlotsInformation(
+                    gpUserSession.Supplier.ToString(),
+                    gpUserSession.OdsCode,
                     slots.Select(x => x.Type).Distinct().ToArray(),
+                    slots.Select(x => x.TypeFromGpSystem).Distinct().ToArray(),
                     slots.Select(x => x.Location).Distinct().ToArray(),
                     slotCount);
 
