@@ -10,6 +10,7 @@ jest.mock('@/services/native-app');
 
 let page;
 let $store;
+let dummyMetaTag;
 const route = {
   params: { id: 'document-id' },
   query: { type: 'img', name: 'query file' },
@@ -23,6 +24,8 @@ const mountPage = () => {
 };
 
 describe('my-record documents', () => {
+  dummyMetaTag = document.createElement('meta');
+  document.getElementsByName = jest.fn().mockReturnValue([dummyMetaTag]);
   beforeEach(() => {
     $store = createStore({
       $env: { MY_RECORD_DOCUMENTS_ENABLED: true },
@@ -71,6 +74,13 @@ describe('my-record documents', () => {
       expect(NativeCallbacks.hideHeader).toHaveBeenCalled();
       expect(NativeCallbacks.hideMenuBar).toHaveBeenCalled();
     });
+    it('will set the meta tag content so the user can zoom in', () => {
+      process.client = true;
+      $store.state.myRecord.document.data = {};
+      mountPage();
+      expect(document.getElementsByName('viewport')[0].getAttribute('content'))
+        .toEqual('width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes');
+    });
     each([{
       client: false,
       document: {},
@@ -89,6 +99,26 @@ describe('my-record documents', () => {
     it('will set documents path to documents route with current id as #', () => {
       mountPage();
       expect(page.vm.documentsPath).toEqual('/my-record/documents#document-document-id');
+    });
+  });
+  describe('methods', () => {
+    it('will set the viewport accordingly when setZoom is called', () => {
+      mountPage();
+      page.vm.setZoom(true);
+      expect(document.getElementsByName('viewport')[0].getAttribute('content'))
+        .toEqual('width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes');
+
+      page.vm.setZoom(false);
+      expect(document.getElementsByName('viewport')[0].getAttribute('content'))
+        .toEqual('width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0');
+    });
+  });
+  describe('beforeDestroy', () => {
+    it('will set the content on the viewport so that the user cannot zoom in', () => {
+      mountPage();
+      page.destroy();
+      expect(document.getElementsByName('viewport')[0].getAttribute('content'))
+        .toEqual('width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0');
     });
   });
   describe('beforeRouteLeave', () => {

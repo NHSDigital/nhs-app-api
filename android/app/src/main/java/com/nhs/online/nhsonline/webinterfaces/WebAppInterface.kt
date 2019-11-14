@@ -103,6 +103,12 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    fun setZoomable(canZoom: Boolean) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering setZoomable")
+        activity.runOnUiThread{ uiInteractor.setZoomable(canZoom) }
+    }
+
+    @JavascriptInterface
     fun requestPnsToken(trigger: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering requestPnsToken")
         activity.runOnUiThread { nhsWeb.requestPnsToken(trigger) }

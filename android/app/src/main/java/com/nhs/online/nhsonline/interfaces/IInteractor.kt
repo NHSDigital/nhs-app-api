@@ -34,6 +34,8 @@ interface IInteractor {
 
     fun showMenuBar()
 
+    fun setZoomable(canZoom: Boolean)
+
     fun setHelpUrl(url: String)
 
     fun setRetryPath(url: String)

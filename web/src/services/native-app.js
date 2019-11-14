@@ -175,6 +175,17 @@ export default {
     return false;
   },
 
+
+  /* Android only - for document zoom */
+  setZoomable(canZoom) {
+    const app = window.nativeApp;
+    if (app && app.setZoomable) {
+      app.setZoomable(canZoom);
+      return true;
+    }
+    return false;
+  },
+
   /**
    * @deprecated since version 1.21, here for backwards compatability
    * */

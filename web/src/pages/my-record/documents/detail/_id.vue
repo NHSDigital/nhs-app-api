@@ -34,6 +34,9 @@ export default {
     document() {
       return this.$store.state.myRecord.document.data;
     },
+    isAndroid() {
+      return this.$store.state.device.source === 'android';
+    },
   },
   async asyncData({ store, route, redirect }) {
     if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
@@ -53,11 +56,36 @@ export default {
     }
   },
   mounted() {
+    // Need to set user-scalable=yes
+    // and maximum-scale=10.0 options
+    // from the content attribute so user can zoom
+    // on their document.
+    this.setZoom(true);
     EventBus.$emit(FOCUS_NHSAPP_ROOT);
+  },
+  beforeDestroy() {
+    // Set the user-scalable=0 and maxium-scale=1.0
+    // when the component is destroyed.
+    this.setZoom(false);
   },
   methods: {
     backToDocumentsClicked() {
       redirectTo(this, this.documentsPath, null);
+    },
+    setZoom(zoomable) {
+      const viewport = document.getElementsByName('viewport')[0];
+      let content = 'width=device-width, initial-scale=1, minimum-scale=1.0';
+      if (!zoomable) {
+        content += ', maximum-scale=1.0, user-scalable=0';
+      } else {
+        content += ', maximum-scale=10.0, user-scalable=yes';
+      }
+      viewport.setAttribute('content', content);
+
+      // Android needs a native callback to set zoom on the webview natively.
+      if (this.isAndroid) {
+        NativeAppCallbacks.setZoomable(zoomable);
+      }
     },
   },
   beforeRouteLeave(to, from, next) {

@@ -569,6 +569,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
     }
 
+    override fun setZoomable(canZoom: Boolean) {
+        logger.info("Entering setZoomable - setting zoomable to: $canZoom")
+        webview.settings.displayZoomControls = false
+        webview.settings.builtInZoomControls = canZoom
+    }
+
     override fun hideBlankScreen() {
         logger.info("Entering hideBlankScreen")
         dismissProgressDialog()

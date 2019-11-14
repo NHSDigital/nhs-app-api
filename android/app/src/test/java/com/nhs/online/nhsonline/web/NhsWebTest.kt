@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.web
 import android.app.Activity
 import android.content.res.Resources
 import android.webkit.CookieManager
+import android.webkit.WebSettings
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.services.NotificationsService
@@ -31,12 +32,16 @@ class NhsWebTest {
     private lateinit var nhsWeb: NhsWeb
     private lateinit var urlLoader: UrlLoader
     private lateinit var spyWeb: NhsWeb
+    private lateinit var webSettings: WebSettings
 
     @Before
     fun setUp() {
         spyActivity = spy(activity)
         interactorMock = mock()
-        webViewMock = mock()
+        webSettings = mock()
+        webViewMock = mock{
+            on { settings }.doReturn(webSettings)
+        }
         urlLoader = mock()
         interactorMock = mock()
         notificationsServiceMock = mock()
@@ -234,6 +239,7 @@ class NhsWebTest {
     fun onWebLoggedOut_Sets_IsLoginToFalse_And_DismissSessionExtensionDialog_And_CallsShowBiometricLoginIfEnabled() {
         nhsWeb.onWebLoggedOut()
         Assert.assertFalse(nhsWeb.isUserLoggedIn)
+        Assert.assertFalse(webViewMock.settings.builtInZoomControls)
         verify(interactorMock).dismissSessionExtensionDialog()
         verify(interactorMock).showBiometricLoginIfEnabled(false)
     }

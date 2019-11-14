@@ -188,6 +188,8 @@ class NhsWeb(
         requiresFullPageLoad = true
         isUserLoggedIn = false
 
+        webView.settings.builtInZoomControls = false
+
         uiInteractor.dismissSessionExtensionDialog()
         uiInteractor.showBiometricLoginIfEnabled()
     }
