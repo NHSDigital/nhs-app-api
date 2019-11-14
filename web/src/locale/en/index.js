@@ -1225,7 +1225,7 @@ export default {
       status: 'Status: ',
     },
     medicalHistory: {
-      sectionHeader: 'Medical History',
+      sectionHeader: 'Medical history',
     },
     medicines: {
       sectionHeader: 'Medicines',
@@ -1454,6 +1454,7 @@ export default {
     appointmentBooking: 'Book an appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
+    medicalHistory: 'Medical history',
     myRecord: 'My GP medical record',
     myRecordDocuments: 'Documents',
     notifications: 'Notifications',
@@ -1510,6 +1511,7 @@ export default {
     appointmentBooking: 'Book an appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
+    medicalHistory: 'Medical history',
     myRecord: 'Sensitive information - My record',
     myRecordDocuments: 'Documents - Your GP medical record',
     notifications: 'Notifications',
@@ -1556,6 +1558,7 @@ export default {
     appointmentsConfirmation: 'Confirm',
     checkYourSymptoms: 'Symptoms',
     medicines: 'Medicines',
+    medicalHistory: 'Medical history',
     myRecord: 'My GP medical record',
     myRecordNoAccess: 'My GP medical record',
     more: 'More',

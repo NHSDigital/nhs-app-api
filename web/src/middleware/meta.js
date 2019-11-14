@@ -33,6 +33,7 @@ import {
   LOGOUT,
   BEGINLOGIN,
   MEDICINES,
+  MEDICAL_HISTORY,
   MESSAGING,
   MESSAGING_MESSAGES,
   MORE,
@@ -273,6 +274,10 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.messaging';
       route.meta.pageTitleKey = 'pageTitles.messaging';
+      break;
+    case MEDICAL_HISTORY.name:
+      route.meta.headerKey = 'pageHeaders.medicalHistory';
+      route.meta.pageTitleKey = 'pageTitles.medicalHistory';
       break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:

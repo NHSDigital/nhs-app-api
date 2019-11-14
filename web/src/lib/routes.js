@@ -639,6 +639,17 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
+  MEDICAL_HISTORY: {
+    name: 'gp-medical-record-medical-history',
+    path: '/gp-medical-record/medical-history',
+    crumb: {
+      i8nKey: 'medicalHistory',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   MYRECORDTESTRESULT: {
     name: 'my-record-testresultdetail-testResultId',
     path: '/my-record/testresultdetail/:testResultId',
@@ -1156,6 +1167,7 @@ export const {
   LOGIN,
   LOGOUT,
   MEDICINES,
+  MEDICAL_HISTORY,
   MESSAGING,
   MESSAGING_MESSAGES,
   MORE,

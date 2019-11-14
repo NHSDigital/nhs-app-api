@@ -24,6 +24,7 @@ import pages.gpMedicalRecord.MyRecordEncountersModule
 import pages.gpMedicalRecord.MyRecordMedicinesModule
 import pages.gpMedicalRecord.MyRecordRecallsModule
 import pages.gpMedicalRecord.MyRecordReferralsModule
+import pages.gpMedicalRecord.MyRecordMedicalHistoryModule
 import pages.gpMedicalRecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.NavBarNative
@@ -38,15 +39,12 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     lateinit var login: LoginSteps
     @Steps
     lateinit var nav: NavigationSteps
-    @Steps
-    lateinit var medicinesModule: MyRecordMedicinesModule
-    @Steps
-    lateinit var immunisationModule: MyRecordImmunisationsModule
-    @Steps
-    lateinit var consultationsAndEventsModule: MyRecordConsultationsAndEventsModule
-    @Steps
-    lateinit var healthConditionsModule: MyRecordHealthConditionsModule
 
+    lateinit var medicinesModule: MyRecordMedicinesModule
+    lateinit var immunisationModule: MyRecordImmunisationsModule
+    lateinit var consultationsAndEventsModule: MyRecordConsultationsAndEventsModule
+    lateinit var healthConditionsModule: MyRecordHealthConditionsModule
+    lateinit var medicalHistoryModule: MyRecordMedicalHistoryModule
     lateinit var recallsModule: MyRecordRecallsModule
 
     lateinit var referralsModule: MyRecordReferralsModule
@@ -166,13 +164,18 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     }
 
     @When("^I click the Recalls link on my record - GP Medical Record$")
-    fun iClickTheRecallsLinkOnTheAccountPage(){
+    fun iClickTheRecallsLinkOnTheAccountPage() {
         recallsModule.link.click()
     }
 
     @When("^I click the Referrals link on my record - GP Medical Record$")
-    fun iClickTheReferralsLinkOnTheAccountPage(){
+    fun iClickTheReferralsLinkOnTheAccountPage() {
         referralsModule.link.click()
+    }
+
+    @When("^I click the Medical history link on my record - GP Medical Record")
+    fun iClickTheMedicalHistoryLinkOnTheAccountPage(){
+        medicalHistoryModule.link.click()
     }
 
     @When("I click the test result link on my record - GP Medical Record")

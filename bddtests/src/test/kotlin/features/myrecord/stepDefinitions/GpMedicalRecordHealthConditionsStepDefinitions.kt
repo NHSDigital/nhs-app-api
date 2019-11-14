@@ -30,7 +30,7 @@ open class GpMedicalRecordHealthConditionsStepDefinitions : AbstractDemographics
             ))
 
     @Then("^I see the expected health conditions - GP Medical Record$")
-    fun thenISeeExpectedImmunisationsRecordGpMedicalRecord() {
+    fun thenISeeExpectedHealthConditionsGpMedicalRecord() {
         val healthConditionsMessages = healthConditionsPage.getHealthConditionsElements()
 
         val supplier = SerenityHelpers.getGpSupplier()
