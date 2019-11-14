@@ -235,14 +235,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "fetchNativeAppVersion":
                 self.viewController.setupAppVersion()
                 break
-            case "focusElement":
-                let elementToFocus = message.body;
-                let script = "var result = jQuery('\(elementToFocus)').focus();"
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100), execute: {
-                    self.viewController.executeJavascript(scriptToExecute: script)
-                })
-                break
             case "goToLoginOptions":
                 goToLoginOptions()
                 break

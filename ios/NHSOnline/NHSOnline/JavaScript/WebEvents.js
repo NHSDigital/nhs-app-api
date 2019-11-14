@@ -16,10 +16,6 @@ window.nativeApp.fetchNativeAppVersion = function() {
     window.webkit.messageHandlers.fetchNativeAppVersion.postMessage(null);
 };
 
-window.nativeApp.focusElement = function(elementToFocus) {
-    window.webkit.messageHandlers.focusElement.postMessage(elementToFocus);
-};
-
 window.nativeApp.goToLoginOptions = function() {
     window.webkit.messageHandlers.goToLoginOptions.postMessage(null);
 };

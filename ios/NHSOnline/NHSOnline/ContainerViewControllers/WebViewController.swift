@@ -52,7 +52,6 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "areNotificationsEnabled")
         webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
         webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
-        webView.configuration.userContentController.add(delegate, name: "focusElement")
         webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
         webView.configuration.userContentController.add(delegate, name: "goToLoginOptions")
         webView.configuration.userContentController.add(delegate, name: "hideHeaderSlim")
