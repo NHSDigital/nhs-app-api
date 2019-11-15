@@ -132,6 +132,9 @@ COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/queue-staging.nhsapp
 COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/root-staging.crt /usr/local/share/ca-certificates/root-staging.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/subca-staging.crt /usr/local/share/ca-certificates/subca-staging.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/nhsapp.ncrs.nhs.uk.crt /usr/local/share/ca-certificates/nhsapp.ncrs.nhs.uk.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/subca-prod.crt /usr/local/share/ca-certificates/subca-prod.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/root-prod.crt /usr/local/share/ca-certificates/root-prod.crt
+
 RUN chmod 644 /usr/local/share/ca-certificates/*
 RUN update-ca-certificates
 
