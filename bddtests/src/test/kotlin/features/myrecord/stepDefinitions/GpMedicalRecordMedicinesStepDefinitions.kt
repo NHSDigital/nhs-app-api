@@ -21,7 +21,9 @@ open class GpMedicalRecordMedicinesStepDefinitions : AbstractDemographicsStepDef
     val expectedAcuteMedicinesData = mapOf(
         "EMIS" to arrayOf(
                 "${formatDate(MedicationsData.twentyMonthsAgo)}\nPenicillin\nOne to be taken four times a day\n" +
-                        "28 Capsules"
+                        "28 Capsules",
+                "${formatDate(MedicationsData.twentyMonthsAgo)}\nIbuprofen\nOne to be taken twice a day\n" +
+                        "14 Capsules"
         ), "VISION" to arrayOf(
                 "${formatDate(MedicationsData.tenMonthsAgo)}\nPanadol ActiFast 500mg tablets " +
                     "(GlaxoSmithKline Consumer Healthcare)\n" +
