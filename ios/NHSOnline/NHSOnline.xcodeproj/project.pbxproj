@@ -86,6 +86,11 @@
 		F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */; };
 		F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D2E5D520501EAA0067DEC4 /* WebViewDelegate.swift */; };
 		F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */; };
+		F9EBD64D237C25FE006FFA8C /* DataDownloadErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */; };
+		F9EBD64F237C260D006FFA8C /* DataDownloadStringHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */; };
+		F9EBD652237C3C5F006FFA8C /* DataDownloadAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */; };
+		F9EBD654237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD653237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift */; };
+		F9EBD656237C3D3C006FFA8C /* DataDownloadAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD655237C3D3C006FFA8C /* DataDownloadAlert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -280,6 +285,11 @@
 		F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageUnavailabilityViewController.swift; sourceTree = "<group>"; };
 		F1C008774FB9FCBEBBC57A5B /* Pods-NHSOnline.scratch2.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch2.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch2.xcconfig"; sourceTree = "<group>"; };
 		F2CCB1614CE17CAF075D799D /* Pods-NHSOnline.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.demo.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.demo.xcconfig"; sourceTree = "<group>"; };
+		F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadErrorStrings.swift; sourceTree = "<group>"; };
+		F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadStringHandler.swift; sourceTree = "<group>"; };
+		F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadAlertType.swift; sourceTree = "<group>"; };
+		F9EBD653237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadAlertStringHandler.swift; sourceTree = "<group>"; };
+		F9EBD655237C3D3C006FFA8C /* DataDownloadAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadAlert.swift; sourceTree = "<group>"; };
 		FC9E248064386F82A81B7A8C /* Pods-NHSOnline.browserstacktc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstacktc.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstacktc.xcconfig"; sourceTree = "<group>"; };
 		FFCCD83844515B1E7760C99B /* Pods-NHSOnlineTests.scratch17.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch17.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch17.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -390,13 +400,6 @@
 				8A78F38122F9B58A00BB161F /* BiometricState.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		1A1878A122E0742B00F2BACC /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Framework;
 			sourceTree = "<group>";
 		};
 		2EC6C6C82243128900EE49B9 /* Utils */ = {
@@ -539,8 +542,8 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
+				F9EBD64B237C25AD006FFA8C /* Download */,
 				2EC60A6C23194F94004094F3 /* NHSOnline.entitlements */,
-				1A1878A122E0742B00F2BACC /* Framework */,
 				4793CF0C219AF18500C95F51 /* CustomNotifications.swift */,
 				981E9E31214E5FB300DA80EB /* Config.swift */,
 				9200DC9D2142854C009EFFEF /* Network */,
@@ -701,6 +704,26 @@
 				F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */,
 			);
 			path = Delegates;
+			sourceTree = "<group>";
+		};
+		F9EBD64B237C25AD006FFA8C /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				F9EBD650237C3C38006FFA8C /* DownloadAlertHandling */,
+				F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */,
+				F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */,
+			);
+			path = Download;
+			sourceTree = "<group>";
+		};
+		F9EBD650237C3C38006FFA8C /* DownloadAlertHandling */ = {
+			isa = PBXGroup;
+			children = (
+				F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */,
+				F9EBD653237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift */,
+				F9EBD655237C3D3C006FFA8C /* DataDownloadAlert.swift */,
+			);
+			path = DownloadAlertHandling;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -898,6 +921,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E60CCB82316D70D000AFA17 /* NotificationsService.swift in Sources */,
+				F9EBD64F237C260D006FFA8C /* DataDownloadStringHandler.swift in Sources */,
 				C21428212164B21300F00948 /* KnownService.swift in Sources */,
 				4793CF0D219AF18500C95F51 /* CustomNotifications.swift in Sources */,
 				F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */,
@@ -922,14 +946,18 @@
 				14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
 				47D88A4621998CBD004771B5 /* Configuration.swift in Sources */,
+				F9EBD652237C3C5F006FFA8C /* DataDownloadAlertType.swift in Sources */,
 				1381D48E21BFFFD300B54300 /* Policy.swift in Sources */,
 				2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */,
 				139D331621F71B8200E6C92C /* BiometricAlertType.swift in Sources */,
+				F9EBD64D237C25FE006FFA8C /* DataDownloadErrorStrings.swift in Sources */,
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
 				139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
+				F9EBD654237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift in Sources */,
 				14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
+				F9EBD656237C3D3C006FFA8C /* DataDownloadAlert.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
 				139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */,

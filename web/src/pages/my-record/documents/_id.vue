@@ -122,7 +122,7 @@ export default {
       /* eslint-disable func-names */
       const fileExtension = this.mapFileTypeToDownloadType(this.type);
       const mimeType = this.getMimeType;
-      const isAndroid = this.$store.state.device.source === 'android';
+      const isNative = this.$store.state.device.isNativeApp;
       let fullFileName = '';
       const { userAgent } = window.navigator;
 
@@ -149,11 +149,17 @@ export default {
             blob = new Blob([response], fullFileName, { type: mimeType });
             window.navigator.msSaveOrOpenBlob(blob, fullFileName);
             return;
+          } else if (userAgent.match(/CriOS/i)) {
+            const reader = new FileReader();
+            blob = new File([response], fullFileName, { type: mimeType });
+            reader.onload = function () {
+              window.location.href = reader.result;
+            };
+            reader.readAsDataURL(blob);
           } else {
             blob = new File([response], fullFileName, { type: mimeType });
           }
-
-          if (isAndroid) {
+          if (isNative) {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(blob);
             fileReader.onloadend = function () {

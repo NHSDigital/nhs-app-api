@@ -84,3 +84,7 @@ window.nativeApp.showHeaderSlim = function() {
 window.nativeApp.updateHeaderText = function(header) {
     window.webkit.messageHandlers.updateHeaderText.postMessage(header);
 };
+
+window.nativeApp.startDownload = function(base64Data, fileName, mimeType) {
+    window.webkit.messageHandlers.startDownload.postMessage(base64Data + "|split|" + fileName + "|split|" + mimeType);
+}

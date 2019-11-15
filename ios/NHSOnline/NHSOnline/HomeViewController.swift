@@ -9,6 +9,7 @@ class HomeViewController : UIViewController {
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     
     let applicationState = ApplicationState()
+    var documentInteractionController = UIDocumentInteractionController()
     
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var headerBarSlim: HeaderBarSlim!
@@ -44,6 +45,7 @@ class HomeViewController : UIViewController {
     var biometricService: BiometricService?
     var configurationService: ConfigurationService?
     var notificationsService: NotificationsService?
+    
     public var selectedTab: Int?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -274,6 +276,10 @@ class HomeViewController : UIViewController {
     
     func getBiometricRegistrationErrorStrings() -> BiometricErrorStrings{
         return BiometricStringHandler().getErrorStrings()
+    }
+    
+    func getDownloadErrorStrings() -> DataDownloadErrorStrings{
+        return DataDownloadHandler().getErrorStrings()
     }
     
     func showWebViewContainer() {
@@ -524,5 +530,102 @@ class HomeViewController : UIViewController {
     
     func areNotificationsEnabled() {
         notificationsService?.areNotificationsEnabled()
+    }
+    
+    func showDownloadError() {
+        self.errorViewController?.setUnavailabilityError(errorMessage: ErrorMessage(.DownloadError))
+        self.updateHeaderText(headerText: getDownloadErrorStrings().DownloadPageHeader)
+        cycleFromViewController(oldViewController: self.webViewController!, toViewController: errorViewController!)
+        currentNativeViewController = errorViewController
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, errorViewController?.errorTextView)
+    }
+    
+    func showDataDownloadAlert(alertType: DataDownloadAlertType) {
+        let alert = DataDownloadAlertHandler().getDownloadAlert(type: alertType)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func downloadFile(messageBody: String) {
+         if #available(iOS 10.0, *) {
+             let splitMessage = messageBody.components(separatedBy: "|split|")
+             let base64Data = splitMessage[0]
+             let fileName = splitMessage[1]
+             let mimeType = splitMessage[2]
+
+             let dataWithoutStart = base64Data.split(separator: ",", maxSplits: 1, omittingEmptySubsequences: true)[1]
+             let convertedData = Data(base64Encoded: String(describing: dataWithoutStart), options: .ignoreUnknownCharacters)
+
+             if (mimeType.containsAnyOf(["image"])){
+                 
+                 let tmpURL = FileManager.default.temporaryDirectory
+                     .appendingPathComponent(fileName)
+                 do {
+                     try convertedData!.write(to: tmpURL)
+                 } catch {
+                     self.showDownloadError()
+                     return
+                 }
+                 self.documentInteractionController.url = tmpURL
+                 self.documentInteractionController.uti = "public.image, public.content"
+                 self.documentInteractionController.name = tmpURL.lastPathComponent
+                 if UIDevice.current.userInterfaceIdiom == .pad {
+                     var squareFrame: CGRect {
+                         let midX = self.view.bounds.midX
+                         let midY = self.view.bounds.midY
+                         let size: CGFloat = 64
+                         return CGRect(x: midX-size/2, y: midY-size/2, width: size, height: size)
+                     }
+                     
+                     self.documentInteractionController.presentOptionsMenu(
+                         from: squareFrame,
+                         in: self.view,
+                         animated: true
+                     )
+                 } else {
+                     self.documentInteractionController.presentOptionsMenu(
+                         from: self.view.frame,
+                         in: self.view,
+                         animated: true
+                     )
+                 }
+             } else {
+                 let tmpURL = FileManager.default.temporaryDirectory
+                     .appendingPathComponent(fileName)
+                 do {
+                     try convertedData!.write(to: tmpURL)
+                 } catch {
+                     self.showDownloadError()
+                     return
+                 }
+                     
+                 self.documentInteractionController.url = tmpURL
+                 self.documentInteractionController.uti = "public.data, public.content"
+                 self.documentInteractionController.name = tmpURL.lastPathComponent
+                 if UIDevice.current.userInterfaceIdiom == .pad {
+                     var squareFrame: CGRect {
+                         let midX = self.view.bounds.midX
+                         let midY = self.view.bounds.midY
+                         let size: CGFloat = 64
+                         return CGRect(x: midX-size/2, y: midY-size/2, width: size, height: size)
+                     }
+                     
+                     self.documentInteractionController.presentOpenInMenu(
+                         from: squareFrame,
+                         in: self.view,
+                         animated: true
+                     )
+                 } else {
+                 self.documentInteractionController.presentOpenInMenu(
+                     from: self.view.frame,
+                     in: self.view,
+                     animated: true
+                 )
+                 }
+             }
+             
+         } else {
+             self.showDataDownloadAlert(alertType: .OSNotSupported)
+             return
+         }
     }
 }

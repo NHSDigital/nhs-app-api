@@ -301,6 +301,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
                 break
+            case "startDownload":
+                viewController.downloadFile(messageBody: String(describing: message.body))
+                break
             default:
                 break
             }

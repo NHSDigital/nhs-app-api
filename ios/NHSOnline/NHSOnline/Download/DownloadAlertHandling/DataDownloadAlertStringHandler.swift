@@ -1,0 +1,16 @@
+import Foundation
+import UIKit
+class DataDownloadAlertHandler {
+
+    func getDownloadAlert(type: DataDownloadAlertType) -> UIAlertController {
+        let downloadAlert = DataDownloadAlert(alertType: (type))
+        let alertController = UIAlertController(title: downloadAlert.title, message: downloadAlert.message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: NSLocalizedString("AppUpdateRequiredCloseButtonText", comment: ""), style: .cancel) { (action) -> Void in
+            alertController.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(cancel)
+        
+        return alertController
+    }
+}

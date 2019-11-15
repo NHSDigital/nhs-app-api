@@ -71,6 +71,12 @@
 "BiometricSessionTimeoutMessage" = "It was not your fault. Try logging in again.";
 "BiometricSessionTimeoutButtonText" = "Return to login screen";
 
+/*Data Download Errors*/
+"DataDownloadErrorHeader" = "Sorry, something went wrong";
+"DataDownloadErrorMessage" = "\nWe could not download this file.\n\nIf the problem continues and you need to view this document now, contact your GP surgery and request it from them directly.";
+"DataDownloadOSNotSupportedTitle" = "Important";
+"DataDownloadOSNotSupportedMessage" = "You may be able to use it if you can update your operating system. Check with your operating system developer.";
+
 /*TouchID String*/
 "TouchId" = "Touch ID";
 "NoTouchIdTitle" = "We can't find your Touch ID";

@@ -28,6 +28,10 @@ struct ErrorMessage{
             title = NSLocalizedString("BiometricSessionTimeoutHeader", comment: "")
             message = NSLocalizedString("BiometricSessionTimeoutMessage", comment: "")
             accessibleMessage = NSLocalizedString("AccessibilityBiometricsTimeoutMessage", comment: "")
+        case .DownloadError:
+            title = NSLocalizedString("DataDownloadErrorHeader", comment: "")
+            message = NSLocalizedString("DataDownloadErrorMessage", comment: "")
+            accessibleMessage = NSLocalizedString("DataDownloadErrorMessage", comment: "")
         }
 }
     enum ErrorType {
@@ -36,6 +40,7 @@ struct ErrorMessage{
         case APICallFailure
         case BiometricRegistrationError
         case BiometricLoginSessionError
+        case DownloadError
     }
 
 }

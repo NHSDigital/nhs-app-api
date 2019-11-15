@@ -71,6 +71,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "showHeader")
         webView.configuration.userContentController.add(delegate, name: "showHeaderSlim")
         webView.configuration.userContentController.add(delegate, name: "updateHeaderText")
+        webView.configuration.userContentController.add(delegate, name: "startDownload")
     }
     
     private func loadSpaPage(path: String)  {
