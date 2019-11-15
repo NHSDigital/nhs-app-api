@@ -20,6 +20,7 @@ import pages.assertIsVisible
 import pages.gpMedicalRecord.MyRecordConsultationsAndEventsModule
 import pages.gpMedicalRecord.MyRecordHealthConditionsModule
 import pages.gpMedicalRecord.MyRecordImmunisationsModule
+import pages.gpMedicalRecord.MyRecordEncountersModule
 import pages.gpMedicalRecord.MyRecordMedicinesModule
 import pages.gpMedicalRecord.MyRecordRecallsModule
 import pages.gpMedicalRecord.MyRecordReferralsModule
@@ -51,6 +52,8 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     lateinit var referralsModule: MyRecordReferralsModule
 
     private lateinit var myRecordWarningPage: MyRecordWarningPage
+
+    lateinit var encountersModule: MyRecordEncountersModule
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
@@ -150,6 +153,11 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @When("I click the Health conditions link on my record - GP Medical Record")
     fun iClickTheHealthConditionsLinkOnTheAccountPage() {
         healthConditionsModule.link.click()
+    }
+
+    @When("I click the Encounters link on my record - GP Medical Record")
+    fun iClickTheEncountersLinkOnTheAccountPage() {
+        encountersModule.link.click()
     }
 
     @When("I click the Medicines link on my record - GP Medical Record")

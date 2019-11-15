@@ -573,6 +573,17 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
+  ENCOUNTERS: {
+    name: 'gp-medical-record-encounters',
+    path: '/gp-medical-record/encounters',
+    crumb: {
+      i8nKey: 'encounters',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   TESTRESULTS: {
     name: 'gp-medical-record-test-results',
     path: '/gp-medical-record/test-results',
@@ -1134,6 +1145,7 @@ export const {
   CURRENT_MEDICINES,
   DATA_SHARING_PREFERENCES,
   DISCONTINUED_MEDICINES,
+  ENCOUNTERS,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,

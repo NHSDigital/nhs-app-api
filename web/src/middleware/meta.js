@@ -19,6 +19,7 @@ import {
   EVENTS,
   CURRENT_MEDICINES,
   DISCONTINUED_MEDICINES,
+  ENCOUNTERS,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
@@ -304,6 +305,10 @@ export default function ({ route, store, app }) {
     case ALLERGIESANDREACTIONS.name:
       route.meta.headerKey = 'pageHeaders.allergiesAndReactions';
       route.meta.pageTitleKey = 'pageTitles.allergiesAndReactions';
+      break;
+    case ENCOUNTERS.name:
+      route.meta.headerKey = 'pageHeaders.encounters';
+      route.meta.pageTitleKey = 'pageTitles.encounters';
       break;
     case MORE.name:
       store.dispatch('navigation/setNewMenuItem', 4);
