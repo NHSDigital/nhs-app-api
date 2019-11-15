@@ -22,6 +22,7 @@ import pages.gpMedicalRecord.MyRecordHealthConditionsModule
 import pages.gpMedicalRecord.MyRecordImmunisationsModule
 import pages.gpMedicalRecord.MyRecordMedicinesModule
 import pages.gpMedicalRecord.MyRecordRecallsModule
+import pages.gpMedicalRecord.MyRecordReferralsModule
 import pages.gpMedicalRecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.NavBarNative
@@ -46,6 +47,8 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     lateinit var healthConditionsModule: MyRecordHealthConditionsModule
 
     lateinit var recallsModule: MyRecordRecallsModule
+
+    lateinit var referralsModule: MyRecordReferralsModule
 
     private lateinit var myRecordWarningPage: MyRecordWarningPage
 
@@ -157,6 +160,11 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @When("^I click the Recalls link on my record - GP Medical Record$")
     fun iClickTheRecallsLinkOnTheAccountPage(){
         recallsModule.link.click()
+    }
+
+    @When("^I click the Referrals link on my record - GP Medical Record$")
+    fun iClickTheReferralsLinkOnTheAccountPage(){
+        referralsModule.link.click()
     }
 
     @When("I click the test result link on my record - GP Medical Record")

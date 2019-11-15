@@ -65,6 +65,7 @@ import {
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
   RECALLS,
+  REFERRALS,
   SYMPTOMS,
   SWITCH_PROFILE,
   TERMSANDCONDITIONS,
@@ -396,9 +397,12 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.cannotChangePharmacy';
       break;
     case RECALLS.name:
-      store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.recalls';
       route.meta.pageTitleKey = 'pageTitles.recalls';
+      break;
+    case REFERRALS.name:
+      route.meta.headerKey = 'pageHeaders.referrals';
+      route.meta.pageTitleKey = 'pageTitles.referrals';
       break;
     default:
       route.meta.headerKey = 'errors.404.header';

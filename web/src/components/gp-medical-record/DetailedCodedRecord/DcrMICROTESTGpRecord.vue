@@ -20,12 +20,19 @@
                :text="$t('my_record.recalls.sectionHeader')"
                :click-func="goToUrl"
                :click-param="recallsPath" />
+
+    <menu-item id="referrals"
+               data-purpose="referrals"
+               :href="referralsPath"
+               :text="$t('my_record.referrals.sectionHeader')"
+               :click-func="goToUrl"
+               :click-param="referralsPath" />
   </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { IMMUNISATIONS, HEALTH_CONDITIONS, RECALLS } from '@/lib/routes';
+import { IMMUNISATIONS, HEALTH_CONDITIONS, RECALLS, REFERRALS } from '@/lib/routes';
 
 export default {
   name: 'DcrMICROTESTGpRecord',
@@ -37,6 +44,7 @@ export default {
       immunisationsPath: IMMUNISATIONS.path,
       healthConditionsPath: HEALTH_CONDITIONS.path,
       recallsPath: RECALLS.path,
+      referralsPath: REFERRALS.path,
     };
   },
 };
