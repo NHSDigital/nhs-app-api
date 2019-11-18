@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 documentData.Add(documentItem);
               }
 
-              documents.Data = documentData;
+              documents.Data = documentData.OrderByDescending(d => d.EffectiveDate.Value).ToList();
               
             }
           }

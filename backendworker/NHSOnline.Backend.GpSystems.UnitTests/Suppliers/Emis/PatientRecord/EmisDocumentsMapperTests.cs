@@ -44,6 +44,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         public void MapDocumentsRequestsGetResponseToDocumentListResponse_WithValues_ReturnsResultValues()
         {
             // Arrange
+            var today = DateTime.Now;
+            var twoDaysAgo = today.AddDays(-2);
+            var yesterday = today.AddDays(-1);
             var item = new MedicationRootObject {
                 MedicalRecord = new MedicalRecord
                 {
@@ -60,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                 EffectiveDate = new EffectiveDate
                                 {
                                     DatePart = "Unknown",
-                                    Value = _fixture.Create<DateTime>()
+                                    Value = twoDaysAgo
                                 },
                                 Term = _fixture.Create<string>(),
                                 AssociatedText = new List<AssociatedText>
@@ -91,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                 EffectiveDate = new EffectiveDate
                                 {
                                     DatePart = "Unknown",
-                                    Value = _fixture.Create<DateTime>()
+                                    Value = yesterday
                                 },
                                 Term = _fixture.Create<string>(),
                                 AssociatedText  = new List<AssociatedText>
@@ -148,6 +151,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 }
             };
 
+            result.Data.ElementAt(0).EffectiveDate.Value.Should().Be(yesterday);
+            result.Data.ElementAt(1).EffectiveDate.Value.Should().Be(twoDaysAgo);
             result.Should().BeEquivalentTo(expectedResult);
         }       
     }
