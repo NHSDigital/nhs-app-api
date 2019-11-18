@@ -132,6 +132,18 @@ class WebAppInterface(
             uiInteractor.setHelpUrl(helpUrl)
             uiInteractor.setRetryPath(retryPath)
         }
+
+    }
+
+    @JavascriptInterface
+    fun setHelpUrl(url: String) {
+        activity.runOnUiThread { uiInteractor.setHelpUrl(url) }
+    }
+
+    @JavascriptInterface
+    fun startDownload(base64Data: String, fileName: String, mimeType: String) {
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering startDownload")
+            activity.runOnUiThread{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
     }
 
     @JavascriptInterface

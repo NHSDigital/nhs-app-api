@@ -40,6 +40,7 @@ using NHSOnline.Backend.PfsApi.SpineSearch;
 using NHSOnline.Backend.Support.Certificate;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using Microsoft.Extensions.Options;
+using Wkhtmltopdf.NetCore;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -113,6 +114,8 @@ namespace NHSOnline.Backend.PfsApi
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
+            
+            services.AddWkhtmltopdf();
 
             services.AddSingleton(Configuration);
 

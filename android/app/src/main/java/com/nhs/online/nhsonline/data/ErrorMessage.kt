@@ -4,7 +4,8 @@ import android.content.Context
 import com.nhs.online.nhsonline.R
 
 class ErrorMessage(context: Context, errorType: ErrorType) {
-    var title:String
+    var header: String = ""
+    var title: String
     var message:String?
     var accessibleMessage:String?
     var isRetry:Boolean
@@ -12,6 +13,7 @@ class ErrorMessage(context: Context, errorType: ErrorType) {
     init {
         when(errorType){
             ErrorType.NoConnection -> {
+                header = context.resources.getString(R.string.connection_error_header)
                 title = context.resources.getString(R.string.connection_error_title)
                 message = context.resources.getString(R.string.connection_error_message)
                 accessibleMessage = context.resources.getString(R.string.Accessible_connection_error_message)
@@ -47,6 +49,13 @@ class ErrorMessage(context: Context, errorType: ErrorType) {
                 accessibleMessage = context.resources.getString(R.string.biometric_device_failure_message)
                 isRetry = false
             }
+            ErrorType.DownloadDocumentError -> {
+                header = context.resources.getString(R.string.download_failure_title)
+                title = ""
+                message = context.resources.getString(R.string.download_failure_message)
+                accessibleMessage = context.resources.getString(R.string.accessible_download_failure_message)
+                isRetry = false
+            }
         }
     }
 
@@ -67,5 +76,6 @@ class ErrorMessage(context: Context, errorType: ErrorType) {
 
 enum class ErrorType {
     NoConnection, ServiceUnavailable, ApiCallFailure,
-    BrowserNotAvailable, BiometricDeviceFailure, BiometricRegistrationFailure
+    BrowserNotAvailable, BiometricDeviceFailure, BiometricRegistrationFailure,
+    DownloadDocumentError
 }

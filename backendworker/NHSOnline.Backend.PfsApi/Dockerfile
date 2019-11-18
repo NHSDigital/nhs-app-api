@@ -22,8 +22,10 @@ FROM built AS publish
 ARG PROJECT_PLATFORM
 RUN dotnet publish --no-restore -c Release -o /app -r ${PROJECT_PLATFORM}
 COPY /certs/* /app/certs/
+COPY /Rotativa/Linux/* /app/Rotativa/Linux/
 
 FROM nhsapp.azurecr.io/nhsonline-dotnetcore-runtime AS final
+RUN apt-get update -qq && apt-get -y install libgdiplus libc6-dev
 ARG PROJECT_NAME=NHSOnline.Backend.PfsApi
 ARG PORT=8082
 
@@ -122,6 +124,8 @@ ENV USERINFO_API_BASE_URL http://api.local.bitraft.io:8091/v1/api/me/info
 WORKDIR /app
 RUN chown aspnetcore:aspnetcore /app
 COPY --chown=aspnetcore:aspnetcore --from=publish /app .
+
+RUN chmod 755 /app/Rotativa/Linux/wkhtmltopdf
 
 # Setup trusts for self-signed certificates
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppDev.crt /usr/local/share/ca-certificates/TppDev.crt

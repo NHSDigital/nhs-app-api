@@ -4276,4 +4276,40 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+    /v1/documents/{documentGuid}/download: 
+      post: 
+        tags: 
+          - "patient document"
+        summary: "Gets a specific document and initiates a download of the document."
+        description: "Returns only the specified document from the users document list for the logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        requestBody: 
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  type: 
+                    type: "string"
+                    description: "The name of the document, used for img alt text on image document types"
+                  name: 
+                    type: "string"
+                    description: "The type of the document, to determine whether or not to add the name as alt text"
+          required: true
+          x-name: "GetPatientDocumentRequest"
+        parameters: 
+          - 
+            in: "path"
+            name: "documentGuid"
+            required: true
+            description: "document Guid of specific document to return"
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Returns specified document for the logged in user."
+            content: 
+              application/octect-stream: 
+                schema: 
+                  type: "string"
+                  format: "binary"
 

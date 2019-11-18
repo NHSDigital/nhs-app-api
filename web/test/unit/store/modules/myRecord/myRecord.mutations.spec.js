@@ -57,14 +57,6 @@ describe('my record mutations', () => {
       expect(state.hasLoaded).toEqual(true);
     });
 
-    // this test should be removed when the
-    // download story (NHSO-7073)
-    // is complete
-    it('will filter the documents', () => {
-      expect(state.record.documents.data[0].name).toEqual('Document2');
-      expect(state.record.documents.data.length).toBe(1);
-    });
-
     it('will set is patient details collapsed loaded to false', () => {
       expect(state.isPatientDetailsCollapsed).toEqual(false);
     });

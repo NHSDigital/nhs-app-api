@@ -24,6 +24,12 @@ import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import java.net.MalformedURLException
 import java.net.URL
+import android.content.Context.DOWNLOAD_SERVICE
+import android.app.DownloadManager
+import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.net.Uri
+import com.nhs.online.nhsonline.support.FileDownloadHelper
+
 
 private val TAG = NhsWeb::class.java.simpleName
 private const val NATIVE_APP = "nativeApp"
@@ -60,7 +66,7 @@ class NhsWeb(
         schemeHandlers.registerHandler(MailToSchemeHandler(activity))
 
         val webInterceptor =
-                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers)
+            WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers)
         webView.webViewClient = webInterceptor
 
         val webInterface = WebAppInterface(activity, uiInteractor, this, settingsService)
@@ -258,7 +264,7 @@ class NhsWeb(
     fun clearSessionCookies() {
         val host = readResourceString(R.string.baseHost)
         val allHosts = host.split('.')
-                .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
+            .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
         for (String in allHosts) {
             clearCookie("nhso.session", "https://$String")
             clearCookie("NHSO-Session-Id", "https://.$String")

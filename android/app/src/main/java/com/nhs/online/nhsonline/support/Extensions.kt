@@ -1,18 +1,17 @@
 package com.nhs.online.nhsonline.support
 
-import android.graphics.Typeface.BOLD
 import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
 import android.widget.TextView
-import org.json.JSONException
-import org.json.JSONObject
 
 
 fun TextView.setServiceError(header: String, message: String? = null) {
     val builder = SpannableStringBuilder()
-    builder.appendText(header, 0)
-    message?.let { builder.appendText(it) }
-
+    if (header.isNotEmpty()){
+        builder.appendText(header, 0)
+        message?.let { builder.appendText(it) }
+    } else {
+        builder.appendText(message!!, 0)
+    }
     this.text = builder
 }
 

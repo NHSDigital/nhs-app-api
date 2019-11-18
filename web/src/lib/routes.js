@@ -706,7 +706,6 @@ const routes = {
   },
   MY_RECORD_DOCUMENT_DETAIL: {
     name: 'my-record-documents-detail-id',
-    isAnonymous: true,
     path: '/my-record/documents/detail/:id',
     crumb: {
       get parentRoute() {

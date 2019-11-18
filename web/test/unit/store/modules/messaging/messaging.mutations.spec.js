@@ -26,14 +26,26 @@ describe('messaging mutations', () => {
   });
 
   describe('LOADED', () => {
-    const data = 'test state';
+    describe('with data', () => {
+      const data = 'test state';
 
-    beforeEach(() => {
-      mutations[LOADED](state, data);
+      beforeEach(() => {
+        mutations[LOADED](state, data);
+      });
+
+      it('will set the sender messages state to the received value', () => {
+        expect(state.senderMessages).toBe(data);
+      });
     });
 
-    it('will set the sender messages state to the received value', () => {
-      expect(state.senderMessages).toEqual(data);
+    describe('no data', () => {
+      beforeEach(() => {
+        mutations[LOADED](state, null);
+      });
+
+      it('will set the sender messages state to empty collection', () => {
+        expect(state.senderMessages).toEqual([]);
+      });
     });
   });
 

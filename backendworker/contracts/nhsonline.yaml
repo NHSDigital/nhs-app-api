@@ -71,3 +71,5 @@ paths:
     $ref: ./nhsonline.log.yaml#/paths/~1log
   /v1/documents/{documentGuid}:
     $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentGuid}
+  /v1/documents/{documentGuid}/download:
+    $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentGuid}~1download

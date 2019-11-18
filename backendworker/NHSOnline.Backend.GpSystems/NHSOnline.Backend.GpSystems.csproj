@@ -13,10 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlToOpenXml.dll" Version="2.0.3" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.9.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.8.1" />
+    <PackageReference Include="Open-XML-SDK" Version="2.9.0" />
+    <PackageReference Include="Wkhtmltopdf.NetCore" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

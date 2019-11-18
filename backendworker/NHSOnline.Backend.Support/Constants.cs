@@ -72,24 +72,95 @@ namespace NHSOnline.Backend.Support
             public const string ClientSideLogMessageNewLine = "\r\n";
         }
 
-        public static class EmisConstants
+        public static class FileConstants
         {
-            public static readonly HashSet<string> ImgDocumentTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            public static class FileTypes
             {
-                "pdf",
-                "bmp",
-                "dib",
-                "gif",
-                "jpg",
-                "jpeg",
-                "jpe",
-                "jfif",
-                "tif",
-                "tiff",
-                "png",
-                "tga",
-                "tpic"
-            };
+                public static class ImageType
+                {
+                    public const string Bmp = "bmp";
+                    public const string Dib = "dib";
+                    public const string Gif = "gif";
+                    public const string Jpg = "jpg";
+                    public const string Jpeg = "jpeg";
+                    public const string Jpe = "jpe";
+                    public const string Jfif = "jfif";
+                    public const string Tif = "tif";
+                    public const string Tiff = "tiff";
+                    public const string Png = "png";
+                    public const string Tga = "tga";
+                    public const string Tpic = "tpic";
+                }
+        
+                public static readonly List<string> ImageTypes = new List<string>
+                {
+                    ImageType.Bmp,
+                    ImageType.Dib,
+                    ImageType.Gif,
+                    ImageType.Jpg,
+                    ImageType.Jpeg,
+                    ImageType.Jpe,
+                    ImageType.Jfif,
+                    ImageType.Tif,
+                    ImageType.Tiff,
+                    ImageType.Png,
+                    ImageType.Tga,
+                    ImageType.Tpic
+                };
+        
+                public static class DocumentType
+                {
+                    public const string Pdf = "pdf";
+                    public const string Doc = "doc";
+                    public const string Docx = "docx";
+                    public const string Docm = "docm";
+                    public const string Dot = "dot";
+                    public const string Rtf = "rtf";
+                }
+        
+                public static readonly List<string> DocumentTypes = new List<string>
+                {
+                    DocumentType.Doc,
+                    DocumentType.Docx,
+                    DocumentType.Docm,
+                    DocumentType.Dot
+                };
+                
+                public static class TextType
+                {
+                    public const string Txt = "txt";
+                    public const string Rtf = "rtf";
+                }
+        
+                public static readonly List<string> TextTypes = new List<string>
+                {
+                    TextType.Txt,
+                    TextType.Rtf
+                };
+                
+                public static readonly Dictionary<string, string> DocumentMimeTypes = new Dictionary<string, string>
+                {
+                    { DocumentType.Pdf, "application/pdf" },
+                    { ImageType.Bmp, "image/bmp" },
+                    { ImageType.Dib, "image/dib" },
+                    { ImageType.Gif, "image/gif" },
+                    { ImageType.Jpg, "image/jpg" },
+                    { ImageType.Jpeg, "image/jpg" },
+                    { ImageType.Jpe, "image/jpg" },
+                    { ImageType.Jfif, "image/jpg" },
+                    { ImageType.Tif, "image/tiff" },
+                    { ImageType.Tiff, "image/tiff" },
+                    { ImageType.Png, "image/png" },
+                    { ImageType.Tga, "image/x-tga" },
+                    { ImageType.Tpic, "image/x-tga" },
+                    { DocumentType.Doc, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+                    { DocumentType.Docx, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+                    { DocumentType.Docm, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+                    { DocumentType.Dot, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+                    { TextType.Rtf, "application/rtf"},
+                    { TextType.Txt, "text/plain"}
+                };
+            }
         }
 
         public static class TppConstants

@@ -2,8 +2,6 @@
   <div v-if="isVisible"
        :class="[!$store.state.device.isNativeApp && $style.desktopWeb, 'pull-content']">
     <message-dialog message-type="error">
-      <message-text v-if="$store.state.device.isNativeApp"
-                    :is-header="true">{{ header }}</message-text>
       <message-text>{{ subheader }}</message-text>
       <message-text :aria-label="messageLabel">{{ messageText }}</message-text>
     </message-dialog>

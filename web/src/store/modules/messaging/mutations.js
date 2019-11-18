@@ -14,7 +14,7 @@ export default {
     })(state);
   },
   [LOADED](state, data) {
-    state.senderMessages = data;
+    state.senderMessages = data || [];
   },
   [SET_SENDER](state, sender) {
     state.selectedSender = sender;

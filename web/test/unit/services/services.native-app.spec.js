@@ -212,4 +212,29 @@ describe('native app', () => {
       });
     });
   });
+
+  describe('startDownload', () => {
+    describe('native method exists', () => {
+      let startDownload;
+      beforeEach(() => {
+        global.nativeApp.startDownload = jest.fn();
+        startDownload = jest.spyOn(global.nativeApp, 'startDownload');
+        nativeApp.startDownload('base64', 'example.jpg', 'image/jpg');
+      });
+
+      it('will return true', () => {
+        expect(nativeApp.startDownload()).toBe(true);
+      });
+
+      it('will call the method', () => {
+        expect(startDownload).toBeCalledWith('base64', 'example.jpg', 'image/jpg');
+      });
+    });
+
+    describe('native method does not exist', () => {
+      it('will return false', () => {
+        expect(nativeApp.startDownload()).toBe(false);
+      });
+    });
+  });
 });

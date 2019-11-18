@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 
                 if (!string.IsNullOrEmpty(documentType)
                     && !string.IsNullOrEmpty(documentName)
-                    && Constants.EmisConstants.ImgDocumentTypes.Contains(documentType))
+                    && Constants.FileConstants.FileTypes.ImageTypes.Contains(documentType))
                 {
                     documentContent = AddAltTextToImage(documentContent, documentName);
                 }

@@ -60,10 +60,9 @@ describe('ConnectionError.vue', () => {
     const component = createConnectionErrorComponent(route, apiError);
     const paragraphs = component.findAll('p');
 
-    expect(paragraphs.at(0).text()).toBe('Internet connection error');
-    expect(paragraphs.at(1).text()).toBe('There is a problem with your internet connection');
+    expect(paragraphs.at(0).text()).toBe('There is a problem with your internet connection');
 
-    const messageElement = paragraphs.at(2);
+    const messageElement = paragraphs.at(1);
     expect(messageElement.text()).toBe('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.');
     expect(messageElement.attributes()['aria-label']).toBe('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.');
   });

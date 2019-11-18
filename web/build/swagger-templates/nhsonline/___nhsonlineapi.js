@@ -96,6 +96,7 @@ class NHSOnlineApi {
      * @param {object} headers - header parameters
      * @param {object} queryParameters - querystring parameters
      * @param {object} form - form data object
+     * @param {object} responseType - responseType of request
      * @param {object} deferred - promise object
      * @param {object} ignoreError - boolean to control dispatching ApiError message
      * @param {object} ignoreLoading - boolean to control dispatching http/isLoading
@@ -109,6 +110,7 @@ class NHSOnlineApi {
         headers,
         queryParameters,
         form,
+        responseType,
         deferred,
         ignoreError,
         ignoreLoading,
@@ -216,6 +218,7 @@ class NHSOnlineApi {
           url: urlWithParams,
           method,
           headers,
+          responseType,
           withCredentials: true,
           crossDomain: true,
           data: JSON.stringify(body)
@@ -294,6 +297,7 @@ class NHSOnlineApi {
           });
         });
     }
+
 
   {{#each operation}}
     {{#each this.path}}
@@ -387,31 +391,47 @@ class NHSOnlineApi {
       body = parameters['{{camelCase this.x-name}}'];
     }
 
-  {{#ifEquals this.required true}}
-    if (parameters['{{camelCase this.x-name}}'] === undefined) {
-      deferred.reject(new Error('Missing required  parameter: {{camelCase this.x-name}}'));
-      return deferred.promise;
-    }
-  {{/ifEquals}}
+    {{#ifEquals this.required true}}
+      if (parameters['{{camelCase this.x-name}}'] === undefined) {
+        deferred.reject(new Error('Missing required  parameter: {{camelCase this.x-name}}'));
+        return deferred.promise;
+      }
+    {{/ifEquals}}
   {{/with}}
 
-    queryParameters = this.mergeQueryParams(parameters, queryParameters);
+  queryParameters = this.mergeQueryParams(parameters, queryParameters);
 
-    this.request({
-      method: '{{toUpperCase @key}}',
-      url: domain + path,
-      parameters,
-      body,
-      headers,
-      queryParameters,
-      form,
-      deferred,
-      ignoreError,
-      ignoreLoading,
-      useAccessToken
-    });
+  {{#ifEquals ../operationId 'postV1DocumentsByDocumentguidDownload'  }}
+  this.request({
+    method: '{{toUpperCase @key}}',
+    url: domain + path,
+    parameters,
+    body,
+    headers,
+    queryParameters,
+    form,
+    responseType: 'arraybuffer',
+    deferred,
+    ignoreError,
+    useAccessToken
+  });
+  {{else}}
+  this.request({
+    method: '{{toUpperCase @key}}',
+    url: domain + path,
+    parameters,
+    body,
+    headers,
+    queryParameters,
+    form,
+    deferred,
+    ignoreError,
+    ignoreLoading,
+    useAccessToken
+  });
+  {{/ifEquals}}
 
-    return deferred.promise;
+  return deferred.promise;
   }
     {{/validMethod}}{{/each}}{{/each}}
 }

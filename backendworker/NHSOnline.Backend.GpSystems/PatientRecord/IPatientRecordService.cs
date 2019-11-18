@@ -1,6 +1,6 @@
 ﻿using NHSOnline.Backend.Support;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 
 namespace NHSOnline.Backend.GpSystems.PatientRecord
 {
@@ -11,5 +11,8 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
         Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId);
 
         Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid, string documentType, string documentName);
+        Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid, string documentType, string documentName);
+
+        byte[] ConvertDocumentToCorrectFormat(string type, string content);
     }
 }

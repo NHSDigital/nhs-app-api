@@ -91,9 +91,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         {
             throw new NotImplementedException();
         }
+        
+        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid, string documentType,
+            string documentName)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
             string documentType, string documentName)
+        {
+            throw new NotImplementedException();
+        }
+        public byte[] ConvertDocumentToCorrectFormat(string type, string content)
         {
             throw new NotImplementedException();
         }

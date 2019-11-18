@@ -32,9 +32,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     HasErrored = true
                 };
             }
-            
+
             var documentResponse = task.Result;
-            
+
             if (!documentResponse.HasSuccessResponse)
             {
                 _logger.LogError(

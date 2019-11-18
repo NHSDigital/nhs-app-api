@@ -100,7 +100,7 @@ describe('document view', () => {
   });
 
   describe('methods', () => {
-    it('will navigate to the view document page with the correct id in the path', async () => {
+    it('will navigate to the view document page with the correct id in the path', () => {
       // Arrange
       const route = { name: MY_RECORD_DOCUMENT_DETAIL.name, params: { id: 1 } };
       const page = mountPage({ $store });
@@ -111,10 +111,18 @@ describe('document view', () => {
       // Assert
       expect($router.push).toHaveBeenCalledWith(route);
     });
+    it('will convert map the download type correctly', async () => {
+      // Arrange
+      const page = mountPage({ $store });
+
+      // Act & Assert
+      expect(page.vm.mapFileTypeToDownloadType('docm')).toEqual('doc');
+      expect(page.vm.mapFileTypeToDownloadType('jpeg')).toEqual('jpeg');
+    });
   });
 
   describe('template', () => {
-    it('will display the date subtext if there is a name', async () => {
+    it('will display the date subtext if there is a name', () => {
       // Arrange
       const data = () => ({
         name: 'Document1',
@@ -128,7 +136,7 @@ describe('document view', () => {
       expect(documentInfo.exists()).toBe(true);
     });
 
-    it('will not display the date subtext if there is no name', async () => {
+    it('will not display the date subtext if there is no name', () => {
       // Arrange
       const data = () => ({
         name: undefined,
@@ -142,16 +150,34 @@ describe('document view', () => {
       expect(documentInfo.exists()).toBe(false);
     });
 
+    it('will display a download warning', () => {
+      // Arrange
+      const data = () => ({
+        name: undefined,
+      });
+      const page = mountPage({ $store, data });
+
+      // Act
+      const downloadWarning = page.find('#downloadWarning');
+
+      // Assert
+      expect(downloadWarning.exists()).toBe(true);
+      expect(downloadWarning.text()).toEqual('translate_my_record.documents.downloadWarning');
+    });
+
     it('will display the actions for the document', () => {
       // Arrange
       const page = mountPage({ $store });
 
       // Act
       const viewItem = page.find('#btn_viewDocument');
+      const downloadItem = page.find('#btn_downloadDocument');
 
       // Assert
       expect(viewItem.text()).toEqual('translate_my_record.documents.actions.view');
+      expect(downloadItem.text()).toEqual('translate_my_record.documents.actions.download');
       expect(viewItem.exists()).toBe(true);
+      expect(downloadItem.exists()).toBe(true);
     });
   });
 });

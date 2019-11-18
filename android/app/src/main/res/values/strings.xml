@@ -86,6 +86,10 @@
     <string name="accessible_browser_unavailable_message">
         This could be because your device’s settings are preventing us from opening this page.\n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.
         For urgent medical advice, call 111.</string>
+    <string name="download_failure_title">Sorry, something went wrong</string>
+    <string name="download_failure_message">
+        We could not download this file.\n\nIf the problem continues and you need to view this document now, contact your GP surgery and request it from them directly.</string>
+    <string name="accessible_download_failure_message">We could not download this file.\n\nIf the problem continues and you need to view this document now, contact your GP surgery and request it from them directly.</string>
 
     <string name="retryButtonText">Try again</string>
     <string name="errorIconText">Error</string>

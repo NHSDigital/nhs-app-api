@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
@@ -12,7 +14,6 @@ import android.support.v7.app.AppCompatDelegate
 import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
@@ -37,6 +38,7 @@ import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
+import com.nhs.online.nhsonline.support.STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
@@ -62,6 +64,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private var lifeCycleObserver: LifeCycleObserver? = null
     private lateinit var activityViewSwitcher: MainActivityViewSwitcher
     private val nhsAndroidUserAgent = "nhsapp-android/" + com.nhs.online.nhsonline.BuildConfig.VERSION_NAME
+    private lateinit  var downloadHelper: FileDownloadHelper
+
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
 
@@ -71,7 +75,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         super.onCreate(savedInstanceState)
 
         if (resources.getString(R.string.secureFlag) != "disabled" &&
-              android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O){
+              Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE)
         }
@@ -84,9 +88,11 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         appDialogs = AppDialogs(this)
 
         configureWebView()
+
         appWebInterface = AppWebInterface(webview)
         val notificationManager = NotificationManagerCompat(this)
         val notificationsService = NotificationsService(appWebInterface, FirebaseClient(), notificationManager)
+        downloadHelper = FileDownloadHelper(this)
         nhsWeb = NhsWeb(this, this, webview, notificationsService)
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
@@ -111,7 +117,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         webview.settings.domStorageEnabled = true
         webview.settings.javaScriptCanOpenWindowsAutomatically = true
         webview.settings.allowUniversalAccessFromFileURLs = true
-
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
         val userAgent = webview.settings.userAgentString
         webview.settings.setUserAgentString("$userAgent $nhsAndroidUserAgent")
@@ -289,6 +294,26 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         nhsWeb.loadUrl(url)
     }
 
+    override fun startDownload(base64Data: String, fileName: String, mimeType: String) {
+
+        downloadHelper.fileName = fileName
+        downloadHelper.fileMimeType = mimeType
+        downloadHelper.base64Data = base64Data
+
+        // User needs to allow access to their
+        // internal storage on the device.
+        if (downloadHelper.isStoragePermissionGranted()) {
+            try {
+                downloadHelper.convertBase64StringToFileAndStoreIt()
+            } catch (e: Exception) {
+                Log.e(TAG, "Download document resulted in error: ", e)
+                showDownloadDocumentFailureError()
+            }
+        } else {
+            downloadHelper.showStoragePermissionsPopup()
+        }
+    }
+
     override fun loadPage(url: String) {
         nhsWeb.loadUrl(url)
     }
@@ -354,7 +379,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun onPause() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
         super.onPause()
@@ -363,7 +388,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun onResume() {
         super.onResume()
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
@@ -390,8 +415,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun showProgressDialog() {
-        if (progressBarLayout.visibility == View.GONE) {
-            progressBarLayout.visibility = View.VISIBLE
+        if (progressBarLayout.visibility == GONE) {
+            progressBarLayout.visibility = VISIBLE
             window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
@@ -399,9 +424,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun dismissProgressDialog() {
-        if (progressBarLayout.visibility == View.VISIBLE) {
+        if (progressBarLayout.visibility == VISIBLE) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            progressBarLayout.visibility = View.GONE
+            progressBarLayout.visibility = GONE
         }
     }
 
@@ -441,12 +466,21 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         showErrorScreen( biometricDeviceErrorMessage )
     }
 
+    private fun showDownloadDocumentFailureError() {
+        Log.d(Application.TAG, "Download document failed")
+        showErrorScreen( ErrorMessage(this, ErrorType.DownloadDocumentError) )
+    }
+
     override fun showUnavailabilityError(errorMessage: ErrorMessage) {
         showErrorScreen(errorMessage)
     }
 
     private fun showErrorScreen (errorMessage: ErrorMessage) {
         try {
+            if(errorMessage.header.isEmpty()) {
+                errorHeader.visibility = GONE
+            }
+            errorHeader.text = errorMessage.header
             errorTextView.setServiceError(errorMessage.title, errorMessage.message)
             errorTextView.contentDescription = errorMessage.title + ". " +
                     errorMessage.accessibleMessage
@@ -492,6 +526,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             logger.info("Checking Camera Storage Request Code: $CAMERA_STORAGE_REQUEST_CODE")
 
             nhsWeb.handleCameraFilePermissionResult(grantResults)
+        } else if (requestCode == STORAGE_REQUEST_CODE) {
+            logger.info("Storage permission granted, starting download")
+            handleDownloadPermissionResult(grantResults)
         }
     }
 
@@ -560,13 +597,13 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun showBlankScreen() {
         logger.info("Entering showBlankScreen")
-        viewSwitcher.visibility = View.GONE
-        blankScreen.visibility = View.VISIBLE
+        viewSwitcher.visibility = GONE
+        blankScreen.visibility = VISIBLE
     }
 
     override fun resetFocusToNhsLogoForAccessibility() {
         val a11yMng = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-        if (logged_in_header.visibility == View.VISIBLE && a11yMng.isTouchExplorationEnabled && a11yMng.isEnabled) {
+        if (logged_in_header.visibility == VISIBLE && a11yMng.isTouchExplorationEnabled && a11yMng.isEnabled) {
             homeLogoIcon.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
         }
     }
@@ -580,8 +617,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun hideBlankScreen() {
         logger.info("Entering hideBlankScreen")
         dismissProgressDialog()
-        viewSwitcher.visibility = View.VISIBLE
-        blankScreen.visibility = View.GONE
+        viewSwitcher.visibility = VISIBLE
+        blankScreen.visibility = GONE
     }
 
     override fun pageLoadComplete() {
@@ -646,4 +683,13 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
     }
 
+    private fun handleDownloadPermissionResult(grantResults: IntArray) {
+        if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+            Log.d(TAG, "Permissions granted for storage")
+
+            startDownload(downloadHelper.base64Data, downloadHelper.fileName, downloadHelper.fileMimeType)
+        } else {
+            Log.d(TAG, "Permission not granted")
+        }
+    }
 }

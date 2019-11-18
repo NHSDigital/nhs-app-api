@@ -198,6 +198,15 @@ export default {
     return false;
   },
 
+  startDownload(base64Data, fileName, mimeType) {
+    const app = window.nativeApp;
+    if (app && app.startDownload) {
+      app.startDownload(base64Data, fileName, mimeType);
+      return true;
+    }
+    return false;
+  },
+
   setMenuBarItem(index) {
     const app = window.nativeApp;
     if (app && app.setMenuBarItem) {

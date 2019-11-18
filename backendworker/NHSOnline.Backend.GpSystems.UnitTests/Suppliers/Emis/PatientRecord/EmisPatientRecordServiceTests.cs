@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using Moq;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
 using NHSOnline.Backend.Support;
@@ -147,6 +148,59 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             result.Should().BeAssignableTo<GetMyRecordResult.Success>()
                 .Subject.Response.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public async Task GetPatientDocument_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        {
+
+            var patientDocumentResponse = new IndividualDocument
+            {
+                CompressedEncodedDocumentContent =
+                    "H4sIAAAAAAAA/y1PX2+DIBz8QHtBsi7zFYtUWhGx/Eh5U1hqg6NN2mj1089ue7o/ucvlJOtRZ6Y3yfhod2HF4WFnsrjvMuVY9Z7Rj9YkvcV6dGwTK8x7hzUW2fMGgUsd3dQgHzuUk1rnlU7gqgDiykkN8PKICoKYl9aiOsXh0tHfbKHMM9dgVXOks97W42E5j34p3xUaiKGK1+GRl1QVX8zf27DJ1o6sQJ2OW2IFTQv/t5k1AwehYW7RLVrsUtm4zwP+/5OlV8+Su7xM+x9Ry9YU7AAAAA=="
+            };
+            _emisClient.Setup(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<IndividualDocument>(HttpStatusCode.OK)
+                    {
+                        Body = patientDocumentResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            var result = await _systemUnderTest.GetPatientDocument(_emisUserSession, "1", "img/jpeg", "example");
+            
+            _emisClient.Verify(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId));
+            
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.Should().NotBeNull();
+
+        }
+        
+        [TestMethod]
+        public async Task GetPatientDocument_ReturnsBadGateway_WhenUnsuccessfulResponseFromEmis()
+        {
+
+            var patientDocumentResponse = new IndividualDocument
+            {
+                CompressedEncodedDocumentContent =
+                    "H4sIAAAAAAAA/y1PX2+DIBz8QHtBsi7zFYtUWhGx/Eh5U1hqg6NN2mj1089ue7o/ucvlJOtRZ6Y3yfhod2HF4WFnsrjvMuVY9Z7Rj9YkvcV6dGwTK8x7hzUW2fMGgUsd3dQgHzuUk1rnlU7gqgDiykkN8PKICoKYl9aiOsXh0tHfbKHMM9dgVXOks97W42E5j34p3xUaiKGK1+GRl1QVX8zf27DJ1o6sQJ2OW2IFTQv/t5k1AwehYW7RLVrsUtm4zwP+/5OlV8+Su7xM+x9Ry9YU7AAAAA=="
+            };
+            _emisClient.Setup(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<IndividualDocument>(HttpStatusCode.BadRequest)
+                    {
+                        Body = patientDocumentResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            var result = await _systemUnderTest.GetPatientDocument(_emisUserSession, "1", "img/jpeg", "example");
+            
+            _emisClient.Verify(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId));
+            
+            result.Should().BeAssignableTo<GetPatientDocumentResult.BadGateway>();
+
         }
     }
 }

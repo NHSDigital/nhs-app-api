@@ -52,6 +52,16 @@ Feature: View My Medical Record Information - Documents Frontend
     When I click the Back link
     Then I see a list of documents
 
+  Scenario: An EMIS user can download a document from their record
+    Given the my record wiremocks are initialised for EMIS
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has multiple documents
+    And I am on my record information page
+    When I select to view my documents
+    Then I see a list of documents
+    When I select an available document
+    Then The download action item is enabled
+    
   Scenario: An EMIS user selecting an unavailable or invalid document will see an error page
     Given the my record wiremocks are initialised for EMIS
     And the GP Practice has enabled demographics functionality

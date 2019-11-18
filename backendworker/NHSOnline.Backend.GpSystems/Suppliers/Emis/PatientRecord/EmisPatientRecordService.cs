@@ -1,12 +1,23 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml;
+using HtmlToOpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using HtmlAgilityPack;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using Microsoft.AspNetCore.Http;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using Wkhtmltopdf.NetCore;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -25,6 +36,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         private readonly GetDocumentsTaskChecker _documentsTaskChecker;
         private readonly GetPatientDocumentTaskChecker _patientDocumentTaskChecker;
 
+        private readonly IGeneratePdf _generatePdf;
+
         public EmisPatientRecordService(
             ILogger<EmisPatientRecordService> logger,
             IEmisClient emisClient, IEmisMyRecordMapper emisMyRecordMapper,
@@ -35,7 +48,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             GetProblemsTaskChecker problemsTaskChecker,
             GetConsultationsTaskChecker consultationsTaskChecker,
             GetDocumentsTaskChecker documentsTaskChecker,
-            GetPatientDocumentTaskChecker patientDocumentTaskChecker
+            GetPatientDocumentTaskChecker patientDocumentTaskChecker,
+            IGeneratePdf generatePdf
         )
         {
             _emisClient = emisClient;
@@ -50,6 +64,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             _consultationsTaskChecker = consultationsTaskChecker;
             _documentsTaskChecker = documentsTaskChecker;
             _patientDocumentTaskChecker = patientDocumentTaskChecker;
+            _generatePdf = generatePdf;
         }
 
         public async Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel)
@@ -126,7 +141,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 await Task.WhenAll(getDocumentsTask);
 
-                var documentResponse =  _patientDocumentTaskChecker.Check(getDocumentsTask, documentType, documentName);
+                var documentResponse = _patientDocumentTaskChecker.Check(getDocumentsTask, documentType, documentName);
 
                 if (documentResponse.HasErrored)
                 {
@@ -151,10 +166,156 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 _logger.LogExit();
             }
         }
+        
+        public async Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid,
+            string documentType, string documentName)
+        {
+            _logger.LogEnter();
+
+            var emisUserSession = (EmisUserSession)gpUserSession;
+
+            try
+            {
+                var getDocumentsTask = _emisClient.MedicalDocumentGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, documentGuid, emisUserSession.EndUserSessionId);
+
+                await Task.WhenAll(getDocumentsTask);
+
+                var documentResponse =  _patientDocumentTaskChecker.Check(getDocumentsTask, documentType, documentName);
+
+                if (documentResponse.HasErrored)
+                {
+                    _logger.LogExitWith($"{nameof(documentResponse.HasErrored)}=true");
+                    return documentResponse;
+                }
+
+                return documentResponse;
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request retrieving document");
+                return new PatientDocument {
+                    HasErrored = true
+                };
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Record document retrieval return null body"); 
+                return new PatientDocument {
+                    HasErrored = true
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception when retrieving document for download"); 
+                return new PatientDocument {
+                    HasErrored = true
+                };
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
 
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             throw new NotImplementedException();
+        }
+
+        public byte[] ConvertDocumentToCorrectFormat(string type, string content)
+        {
+            var isImageType = Constants.FileConstants.FileTypes.ImageTypes.Contains(type);
+            var isTextType = Constants.FileConstants.FileTypes.TextTypes.Contains(type);
+            var isPdfType = type.Equals(Constants.FileConstants.FileTypes.DocumentType.Pdf, StringComparison.Ordinal);
+            byte[] data = null;
+            
+            var doc = new HtmlDocument
+            {
+                OptionWriteEmptyNodes = true
+            };
+
+            doc.LoadHtml(content);
+            
+
+            if (isImageType || isTextType)
+            {
+                
+                if (isImageType)
+                {
+                    data = IsImage(doc);
+                }
+                else
+                {
+                    _logger.LogInformation("File is a text type");
+                    data = Encoding.UTF8.GetBytes(System.Net.WebUtility.HtmlDecode(doc.DocumentNode.InnerText)); 
+                }
+            }
+            else if (Constants.FileConstants.FileTypes.DocumentTypes.Contains(type))
+            {
+                data = IsDocumentType(content);
+            }
+            else if (isPdfType)
+            {
+                _logger.LogInformation("File is a pdf type");
+                var htmlContent = "<html><body>";
+                var imgNodes = doc.DocumentNode.SelectNodes(".//img");
+
+                // Make the image 100% width of the PDF page
+                foreach (var imageNode in imgNodes)
+                {
+                    imageNode.Attributes.Add("width", "100%");
+                }
+
+                htmlContent += doc.DocumentNode.InnerHtml;
+                htmlContent += "</body></html>";
+                data = _generatePdf.GetPDF(htmlContent);
+            }
+
+            return data;
+        }
+
+         private byte[] IsImage(HtmlDocument document)
+        {
+            _logger.LogInformation("File is an image type");
+            var imgNodes = document.DocumentNode.SelectNodes(".//img");
+            
+            byte[] data;
+
+            if (imgNodes == null)
+            {
+                _logger.LogInformation("Document contains no img tag. Returning null data");
+                return null;
+            }
+
+            data = Convert.FromBase64String(imgNodes[0].GetAttributeValue("src", "").Split("base64,")[1]);
+
+            return data;
+        }
+
+        private byte[] IsDocumentType(string content)
+        {
+            _logger.LogInformation("File is a document type");
+            using (var generatedDocument = new MemoryStream())
+            {
+                using (var package =
+                    WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
+                {
+                    var mainPart = package.MainDocumentPart;
+                    if (mainPart == null)
+                    {
+                        mainPart = package.AddMainDocumentPart();
+                        new Document(new Body()).Save(mainPart);
+                    }
+
+                    var converter = new HtmlConverter(mainPart);
+                    converter.ParseHtml(content);
+
+                    mainPart.Document.Save();
+                }
+
+                return generatedDocument.ToArray();
+            }
         }
     }
 }

@@ -242,6 +242,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
         {
             throw new NotImplementedException();
         }
+        public byte[] ConvertDocumentToCorrectFormat(string type, string content)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid, string documentType,
+            string documentName)
+        {
+            throw new NotImplementedException();
+        }
 
         private static class ResponseFormats {
             public const string HTML = "HTML";

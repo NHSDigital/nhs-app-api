@@ -1215,7 +1215,9 @@ export default {
       documentPageSubtext: 'Document added on',
       actions: {
         view: 'View',
+        download: 'Download',
       },
+      downloadWarning: 'When you download this document, you become responsible for keeping it confidential.',
     },
     immunisations: {
       sectionHeader: 'Immunisations',

@@ -82,6 +82,15 @@ export default {
     const { content } = response || {};
     commit(LOADED_DOCUMENT, content);
   },
+  downloadDocument({ state }, documentGuid) {
+    return this.app.$http.postV1DocumentsByDocumentguidDownload({
+      documentGuid,
+      getPatientDocumentRequest: {
+        type: state.document.type,
+        name: state.document.name,
+      },
+    });
+  },
   setSelectedDocumentInfo({ commit }, selectedDocumentInfo) {
     commit(SET_SELECTED_DOCUMENT_INFO, selectedDocumentInfo);
   },

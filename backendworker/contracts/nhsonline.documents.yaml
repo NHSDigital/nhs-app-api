@@ -46,6 +46,36 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+  /documents/{documentGuid}/download:
+    post:
+      tags:
+        - patient document
+      summary: Gets a specific document and initiates a download of the document.
+      description: Returns only the specified document from the users document list for the
+        logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained
+        from session endpoint).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetPatientDocumentRequest"
+        required: true
+        x-name: GetPatientDocumentRequest
+      parameters:
+        - in: path
+          name: documentGuid
+          required: true
+          description: document Guid of specific document to return
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns specified document for the logged in user.
+          content:
+            application/octect-stream:
+              schema:
+                type: string
+                format: binary
 components:
   schemas:
     GetPatientDocumentRequest:

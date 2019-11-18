@@ -35,11 +35,13 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
     }
 
     val viewActionLink = link("btn_viewDocument")
+    val downloadActionLink = link("btn_downloadDocument")
 
     fun assertDocumentActionsVisible(actions: List<String>) {
         for(action in actions) {
             when (action) {
                 "View" -> viewActionLink.assertIsVisible()
+                "Download" -> downloadActionLink.assertIsVisible()
                 else -> throw IllegalArgumentException("$action is not a supported document action")
             }
         }

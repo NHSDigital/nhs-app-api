@@ -6,6 +6,7 @@ import cucumber.api.java.en.When
 import features.myrecord.factories.DocumentsFactory
 import mocking.defaults.EmisMockDefaults
 import models.ExpectedDocument
+import org.junit.Assert
 import pages.ErrorPage
 import pages.assertIsVisible
 import pages.myrecord.MyRecordDocumentInformationPage
@@ -13,6 +14,7 @@ import pages.myrecord.MyRecordDocumentPage
 import pages.myrecord.MyRecordDocumentsPage
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
+import pages.isCurrentlyEnabled
 
 open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -102,6 +104,11 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
         myRecordDocumentsPage
             .assertDocumentItemsVisible(
                 SerenityHelpers.getValueOrNull<List<ExpectedDocument>>(SerenityVariable.EXPECTED_DOCUMENTS)!!)
+    }
+
+    @Then("The download action item is enabled")
+    fun iClickTheDocumentDownloadLink(){
+        Assert.assertTrue(myRecordDocumentInformationPage.downloadActionLink.isCurrentlyEnabled)
     }
 
     @Then("^I see the appropriate error message for a document server error$")

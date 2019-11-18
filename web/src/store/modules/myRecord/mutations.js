@@ -54,9 +54,10 @@ export default {
     state.patientDetails = patientDetails;
     state.isPatientDetailsCollapsed = false;
 
-    // NHSO-7073
-    // temporarily removing TGA documents until Download functionality is implemented
-    const filteredDocuments = (record.documents.data || []).filter(d => `${d.extension}`.toLowerCase() !== 'tga');
+    // temporarily removing TGA & TPIC documents until issue fixed with these types
+    const filteredDocuments = (record.documents.data || [])
+      .filter(d => `${d.extension}`.toLowerCase() !== 'tga' && `${d.extension}`.toLowerCase() !== 'tpic');
+
     state.record.documents.data = filteredDocuments;
     state.record.documents.recordCount = filteredDocuments.length;
 

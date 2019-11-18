@@ -88,6 +88,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             throw new NotImplementedException();
         }
 
+        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid, string documentType,
+            string documentName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] ConvertDocumentToCorrectFormat(string type, string content)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             _logger.LogEnter();

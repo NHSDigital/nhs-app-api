@@ -1,5 +1,6 @@
 <template>
   <card :id="`document-${id}`"
+        tabindex="0"
         :component="documentTag"
         :class="['document', documentAvailable && 'available']"
         @click.prevent="documentClicked">
