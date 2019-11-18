@@ -1,6 +1,6 @@
 @my-record
 @pending @NHSO-7509
-Feature: View My Recalls Information
+Feature: View My Recalls Information - GP Medical Record
 
   Scenario: A MICROTEST user can view recalls - GP Medical Record
     Given I am a MICROTEST user setup to use medical record version 2

@@ -1,7 +1,9 @@
 package pages.gpMedicalRecord
 
 import pages.HybridPageObject
+import pages.sharedElements.LinksElement
 import pages.HybridPageElement
+import pages.sharedElements.LinksContent
 
 class MyRecordInfoPage : HybridPageObject() {
 
@@ -17,12 +19,6 @@ class MyRecordInfoPage : HybridPageObject() {
                     androidLocator = null,
                     page = this)
 
-    val allergies = MyRecordAllergiesModule(this)
-
-    val immunisations = MyRecordImmunisationsModule()
-
-    val testResults = MyRecordTestResultsModule(this)
-
     fun getBody(message: String): HybridPageElement {
         val noInformationText =
                 HybridPageElement(
@@ -30,5 +26,15 @@ class MyRecordInfoPage : HybridPageObject() {
                         androidLocator = null,
                         page = this)
         return noInformationText
+    }
+
+    fun clickMedicalRecordSectionLink(linkText: String) {
+        val linkContent = LinksContent(
+                linkBlockTitle = "",
+                containerXPath = "//div[@data-purpose='medical-record-menu']")
+                .addLink(linkText)
+        val linkElement by lazy {LinksElement(this, linkContent)}
+        val link = linkElement.link(linkText)
+        link.click()
     }
 }

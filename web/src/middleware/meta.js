@@ -20,6 +20,8 @@ import {
   CURRENT_MEDICINES,
   DISCONTINUED_MEDICINES,
   ENCOUNTERS,
+  DIAGNOSIS_V2,
+  EXAMINATIONS_V2,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
@@ -66,6 +68,7 @@ import {
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
+  PROCEDURES_V2,
   RECALLS,
   REFERRALS,
   SYMPTOMS,
@@ -156,9 +159,21 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.currentMedicines';
       route.meta.pageTitleKey = 'pageTitles.currentMedicines';
       break;
+    case DIAGNOSIS_V2.name:
+      route.meta.headerKey = 'pageHeaders.diagnosisV2';
+      route.meta.pageTitleKey = 'pageTitles.diagnosisV2';
+      break;
     case DISCONTINUED_MEDICINES.name:
       route.meta.headerKey = 'pageHeaders.discontinuedMedicines';
       route.meta.pageTitleKey = 'pageTitles.discontinuedMedicines';
+      break;
+    case EXAMINATIONS_V2.name:
+      route.meta.headerKey = 'pageHeaders.examinationsV2';
+      route.meta.pageTitleKey = 'pageTitles.examinationsV2';
+      break;
+    case PROCEDURES_V2.name:
+      route.meta.headerKey = 'pageHeaders.proceduresV2';
+      route.meta.pageTitleKey = 'pageTitles.proceduresV2';
       break;
     case GP_FINDER.name:
     case GP_FINDER_RESULTS.name:

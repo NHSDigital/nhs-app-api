@@ -21,21 +21,18 @@ open class MyRecordExaminationsStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^I do not have access to examinations$")
     fun givenIDoNotHaveAccessToExaminations() {
-        setPatientToDefaultFor("VISION")
         examinationsFactoryVision = ExaminationsFactoryVision()
         examinationsFactoryVision.noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple examinations$")
     fun andTheGpPracticeHasMultipleExaminationsFor() {
-        setPatientToDefaultFor("VISION")
         examinationsFactoryVision = ExaminationsFactoryVision()
         examinationsFactoryVision.enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^an error occurred retrieving the examinations")
     fun andAnErrorOccurredRetrievingTheExaminationsFor() {
-        setPatientToDefaultFor("VISION")
         examinationsFactoryVision = ExaminationsFactoryVision()
         examinationsFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }

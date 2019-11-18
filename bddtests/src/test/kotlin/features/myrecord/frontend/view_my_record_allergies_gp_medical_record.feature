@@ -1,6 +1,6 @@
 @my-record
 @pending @NHSO-7509
-Feature: View My Medical Record Information - Allergies Frontend GP Medical Record
+Feature: View My Allergies Information - GP Medical Record
 
   Scenario: A VISION user has a drug and non drug allergy record - GP Medical Record
     Given I am a VISION user setup to use medical record version 2

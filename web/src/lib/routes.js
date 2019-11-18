@@ -648,6 +648,39 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
+  DIAGNOSIS_V2: {
+    name: 'gp-medical-record-diagnosis',
+    path: '/gp-medical-record/diagnosis',
+    crumb: {
+      i8nKey: 'diagnosis',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  EXAMINATIONS_V2: {
+    name: 'gp-medical-record-examinations',
+    path: '/gp-medical-record/examinations',
+    crumb: {
+      i8nKey: 'examinations',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  PROCEDURES_V2: {
+    name: 'gp-medical-record-procedures',
+    path: '/gp-medical-record/procedures',
+    crumb: {
+      i8nKey: 'procedures',
+      get parentRoute() {
+        return this.allRoutes.MYRECORD;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
   MEDICINES: {
     name: 'gp-medical-record-medicines',
     path: '/gp-medical-record/medicines-index',
@@ -1238,8 +1271,10 @@ export const {
   EVENTS,
   CURRENT_MEDICINES,
   DATA_SHARING_PREFERENCES,
+  DIAGNOSIS_V2,
   DISCONTINUED_MEDICINES,
   ENCOUNTERS,
+  EXAMINATIONS_V2,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
@@ -1289,6 +1324,7 @@ export const {
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
+  PROCEDURES_V2,
   RECALLS,
   REFERRALS,
   HEALTH_CONDITIONS,

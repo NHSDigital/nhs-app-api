@@ -21,21 +21,18 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
 
     @Given( "^I do not have access to diagnosis$" )
     fun givenIDoNotHaveAccessToDiagnosisFor(){
-        setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
         diagnosisFactoryVision.noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple diagnosis$")
     fun andTheGpPracticeHasMultipleDiagnosisFor(){
-        setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
         diagnosisFactoryVision.enabledWithRecords(SerenityHelpers.getPatient())
     }
 
     @Given("^an error occurred retrieving the diagnosis")
     fun andAnErrorOccurredRetrievingTheDiagnosisFor() {
-        setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
         diagnosisFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }

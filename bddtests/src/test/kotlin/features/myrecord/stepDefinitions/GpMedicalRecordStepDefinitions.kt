@@ -17,14 +17,6 @@ import mocking.microtest.myRecord.TestResultOptions
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
-import pages.gpMedicalRecord.MyRecordConsultationsAndEventsModule
-import pages.gpMedicalRecord.MyRecordHealthConditionsModule
-import pages.gpMedicalRecord.MyRecordImmunisationsModule
-import pages.gpMedicalRecord.MyRecordEncountersModule
-import pages.gpMedicalRecord.MyRecordMedicinesModule
-import pages.gpMedicalRecord.MyRecordRecallsModule
-import pages.gpMedicalRecord.MyRecordReferralsModule
-import pages.gpMedicalRecord.MyRecordMedicalHistoryModule
 import pages.gpMedicalRecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.NavBarNative
@@ -40,18 +32,7 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @Steps
     lateinit var nav: NavigationSteps
 
-    lateinit var medicinesModule: MyRecordMedicinesModule
-    lateinit var immunisationModule: MyRecordImmunisationsModule
-    lateinit var consultationsAndEventsModule: MyRecordConsultationsAndEventsModule
-    lateinit var healthConditionsModule: MyRecordHealthConditionsModule
-    lateinit var medicalHistoryModule: MyRecordMedicalHistoryModule
-    lateinit var recallsModule: MyRecordRecallsModule
-
-    lateinit var referralsModule: MyRecordReferralsModule
-
     private lateinit var myRecordWarningPage: MyRecordWarningPage
-
-    lateinit var encountersModule: MyRecordEncountersModule
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
@@ -131,56 +112,10 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
         MyRecordFactory.getForSupplier(gpSystem).enabledWithAllRecords(SerenityHelpers.getPatient())
     }
-
-
-    @When("I click the Allergies and adverse reactions link on my record - GP Medical Record")
-    fun iClickTheAllergiesLinkOnTheAccountPage(){
-        myRecordInfoPage.allergies.allergies.click()
-    }
-
-    @When("I click the Immunisations link on my record - GP Medical Record")
-    fun iClickTheImmunisationsLinkOnTheAccountPage(){
-        immunisationModule.link.click()
-    }
-
-    @When("I click the Consultations and events link on my record - GP Medical Record")
-    fun iClickTheConsultationsLinkOnTheAccountPage() {
-        consultationsAndEventsModule.link.click()
-    }
-
-    @When("I click the Health conditions link on my record - GP Medical Record")
-    fun iClickTheHealthConditionsLinkOnTheAccountPage() {
-        healthConditionsModule.link.click()
-    }
-
-    @When("I click the Encounters link on my record - GP Medical Record")
-    fun iClickTheEncountersLinkOnTheAccountPage() {
-        encountersModule.link.click()
-    }
-
-    @When("I click the Medicines link on my record - GP Medical Record")
-    fun iClickTheMedicinesLinkOnTheAccountPage(){
-        medicinesModule.link.click()
-    }
-
-    @When("^I click the Recalls link on my record - GP Medical Record$")
-    fun iClickTheRecallsLinkOnTheAccountPage() {
-        recallsModule.link.click()
-    }
-
-    @When("^I click the Referrals link on my record - GP Medical Record$")
-    fun iClickTheReferralsLinkOnTheAccountPage() {
-        referralsModule.link.click()
-    }
-
-    @When("^I click the Medical history link on my record - GP Medical Record")
-    fun iClickTheMedicalHistoryLinkOnTheAccountPage(){
-        medicalHistoryModule.link.click()
-    }
-
-    @When("I click the test result link on my record - GP Medical Record")
-    fun iClickTheTestResultsLinkOnTheAccountPage(){
-        myRecordInfoPage.testResults.testResults.click()
+    
+    @When("I click the (.*) link on my record - GP Medical Record")
+    fun iClickTheSectionLinkOnMyRecordPage(linkText: String) {
+        myRecordInfoPage.clickMedicalRecordSectionLink(linkText)
     }
 
     @Then("^I see an error occurred message on My Record - GP Medical Record$")

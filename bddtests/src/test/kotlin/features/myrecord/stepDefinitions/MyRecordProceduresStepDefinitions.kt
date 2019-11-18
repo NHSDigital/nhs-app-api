@@ -21,14 +21,12 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
 
     @And( "^I do not have access to procedures$" )
     fun givenIDoNotHaveAccessToProceduresFor(){
-        setPatientToDefaultFor("VISION")
         proceduresFactoryVision = ProceduresFactoryVision()
         proceduresFactoryVision.noAccess(SerenityHelpers.getPatient())
     }
 
     @And("^the GP Practice has multiple procedures$")
     fun andTheGpPracticeHasMultipleProceduresFor(){
-        setPatientToDefaultFor("VISION")
         proceduresFactoryVision = ProceduresFactoryVision()
         proceduresFactoryVision.enabledWithRecords(SerenityHelpers.getPatient())
     }
@@ -40,7 +38,6 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
 
     @And("^an error occurred retrieving the procedures")
     fun andAnErrorOccurredRetrievingTheProcedures() {
-        setPatientToDefaultFor("VISION")
         proceduresFactoryVision = ProceduresFactoryVision()
         proceduresFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }

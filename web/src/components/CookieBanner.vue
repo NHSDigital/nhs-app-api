@@ -1,6 +1,6 @@
 <template>
   <div v-if="showCookieBanner" :class="$style['nhsuk-cookie-banner']">
-    <div data-purpose='cookie-banner'
+    <div data-purpose="cookie-banner"
          :class="$style['cookie-banner-panel']" style="display: block;">
       <div class="nhsuk-width-container">
         <p :class="$style['cookie-banner__message']">
