@@ -58,18 +58,23 @@ export default {
 @import '../../style/desktopWeb/accessibility';
 
 div.info-message {
-
   cursor: pointer;
 
-  &.desktopWeb {
   .info-header {
     &:focus{
       @include outlineStyle;
     }
-    &:hover{
-      @include outlineStyleLight;
-    }
   }
+  &.desktopWeb {
+    .info-header {
+      &:hover{
+        @include outlineStyleLight;
+      }
+      h2 {
+        font-family: $default-web;
+        font-weight: normal;
+      }
+    }
   }
 }
 </style>
