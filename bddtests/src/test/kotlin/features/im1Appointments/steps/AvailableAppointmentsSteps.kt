@@ -72,7 +72,7 @@ open class AvailableAppointmentsSteps {
     @Step
     fun clickOnBackLink() {
         if (availableAppointmentsPage.onMobile()) {
-            breadcrumbs.selectBreadcrumbLink("My appointments")
+            breadcrumbs.selectBreadcrumbLink("Your appointments")
         }
         else
             availableAppointmentsPage.clickDesktopBackButton()

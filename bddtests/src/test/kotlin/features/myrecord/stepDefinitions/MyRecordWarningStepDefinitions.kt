@@ -49,7 +49,7 @@ open class MyRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions(
 
     @Then("^I see record warning page opened$")
     fun thenISeeRecordWarningPageOpened() {
-        myRecordStepDefinitions.thenISeeHeaderTextIsMyGPMedicalRecord()
+        myRecordStepDefinitions.thenISeeHeaderTextIsYourGPMedicalRecord()
         thenISeeContinue()
         thenISeeBackToHome()
     }
@@ -57,7 +57,7 @@ open class MyRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions(
     @Then("^I see the my record warning page")
     fun iSeeTheMyRecordWarningPage() {
         thenISeeRecordWarningPageOpened()
-        myRecordStepDefinitions.thenISeeHeaderTextIsMyGPMedicalRecord()
+        myRecordStepDefinitions.thenISeeHeaderTextIsYourGPMedicalRecord()
         thenISeeWhatMedicalInformationWillBeShown()
         theISeeYourRecordMayContainSensitiveInformationMessage()
         thenISeeListOfSensitiveDataInformation()

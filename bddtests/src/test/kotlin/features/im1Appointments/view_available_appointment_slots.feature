@@ -154,7 +154,7 @@ Feature: View Available Appointment Slots Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I acknowledge that there are no appointments and go back to my appointments
-    Then the My Appointments page is displayed
+    Then the Your Appointments page is displayed
     Examples:
       | GP System |
       | TPP       |
@@ -294,7 +294,7 @@ Feature: View Available Appointment Slots Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I decide I don't want to select an appointment and go back
-    Then the My Appointments page is displayed
+    Then the Your Appointments page is displayed
 
   @nativesmoketest
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
@@ -302,6 +302,6 @@ Feature: View Available Appointment Slots Frontend
     Given there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I retrieve the 'My Prescriptions' page directly
+    Then I retrieve the 'Your Prescriptions' page directly
     And I wait for 5 seconds
     Then I don't see filters for available slots

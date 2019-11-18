@@ -1,7 +1,7 @@
 @appointments
 @my
-Feature: My Appointments Frontend
-  Users can view their upcoming and past appointments in the My Appointments screen.
+Feature: Your Appointments Frontend
+  Users can view their upcoming and past appointments in the Your Appointments screen.
 
   #This test covers navigation via buttons/links
 
@@ -9,7 +9,7 @@ Feature: My Appointments Frontend
   Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
     Given the <GP System> GP appointment system is unavailable
     And I am logged in
-    When I am on the My Appointments error page
+    When I am on the Your Appointments error page
     Then I see page header indicating there is an appointment data error
     And I see the appropriate error messages for the appointment data error
     Examples:
@@ -28,8 +28,8 @@ Feature: My Appointments Frontend
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming or historical appointments
     Given I have no booked appointments for <GP System>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am informed I have no upcoming appointments
     And I am informed I have no historical appointments
     And I can book an appointment
@@ -42,8 +42,8 @@ Feature: My Appointments Frontend
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming appointments
     Given I have no booked appointments for <GP System>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am informed I have no upcoming appointments
     And I am not informed I have no historical appointments
     And I can book an appointment
@@ -55,8 +55,8 @@ Feature: My Appointments Frontend
   appointments
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am given the list of upcoming appointments
     And each appointment can be cancelled
     And I am informed I have no historical appointments
@@ -71,8 +71,8 @@ Feature: My Appointments Frontend
   appointments
     Given I have historical appointments for <GP System>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am informed I have no upcoming appointments
     And I am given the list of historical appointments
     And I can book an appointment
@@ -85,8 +85,8 @@ Feature: My Appointments Frontend
   Scenario Outline: A <GP System> user sees both their upcoming and historical appointments
     Given I have historical and upcoming appointments for <GP System>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am given the list of upcoming appointments
     And each appointment can be cancelled
     And I am given the list of historical appointments
@@ -105,8 +105,8 @@ Feature: My Appointments Frontend
   Scenario: A VISION user can see their upcoming appointments
     Given I have upcoming appointments before cutoff time for VISION
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am given the list of upcoming appointments
     And each appointment can be cancelled
     And I am not informed I have no historical appointments
@@ -115,8 +115,8 @@ Feature: My Appointments Frontend
   Scenario Outline: A <GP System> user can see the telephone number they will be phoned on for an upcoming telephone appointment
     Given I have upcoming telephone appointments before cutoff time for <GP System>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I can see the list of upcoming telephone appointments
     Examples:
       | GP System |
@@ -126,8 +126,8 @@ Feature: My Appointments Frontend
   Scenario Outline: A <GP System> user can see the telephone number they have been phoned on for a past telephone appointment
     Given I have historical telephone appointments for <GP System>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I can see the list of past telephone appointments
     Examples:
       | GP System |
@@ -139,15 +139,15 @@ Feature: My Appointments Frontend
       # VISION Specific test
     Given Appointments are disabled for VISION at a GP Practice level
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
+    When I retrieve the 'Your Appointments' page directly
     Then I see appropriate information message when appointments are disabled
     And there should not be an option to try again
 
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available
     Given I have upcoming appointments before cutoff time for VISION without cancellation reasons
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am given the list of upcoming appointments
     And no appointment can be cancelled
     And I can book an appointment
@@ -155,8 +155,8 @@ Feature: My Appointments Frontend
   Scenario: Cancellation link won't be displayed for VISION appointment within cancellation cut off period without cancellation reason(s) available
     Given I have upcoming appointments within cutoff time for VISION without cancellation reasons
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am given the list of upcoming appointments
     And no appointment can be cancelled
     And I can book an appointment
@@ -164,8 +164,8 @@ Feature: My Appointments Frontend
   Scenario: Cancellation link won't be displayed for VISION appointment within cancellation cut off period with cancellation reason(s) available
     Given I have upcoming appointments within cutoff time for VISION with cancellation reasons
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am given the list of upcoming appointments
     And no appointment can be cancelled
     And I can book an appointment
@@ -173,8 +173,8 @@ Feature: My Appointments Frontend
   Scenario: Cancellation link will be displayed for VISION appointment only before cancellation cut off period with cancellation reason(s) available
     Given I have upcoming appointments before and within cutoff time for VISION with cancellation reasons
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
-    Then the page title is "My appointments"
+    When I retrieve the 'Your Appointments' page directly
+    Then the page title is "Your appointments"
     And I am given the list of upcoming appointments
     And booked appointments before and one appointment within cutoff time are correctly displayed with relevant ability to cancel
     And I can book an appointment
@@ -185,5 +185,5 @@ Feature: My Appointments Frontend
     Given I have no booked appointments for EMIS
     And I am logged in
     And I lose my internet connection
-    When I am on the My Appointments page
+    When I am on the Your Appointments page
     Then I see a message indicating user may have connectivity problems

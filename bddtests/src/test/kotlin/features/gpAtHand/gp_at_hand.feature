@@ -7,7 +7,7 @@ Feature: GP at Hand Frontend
       | Journey            | Value     |
       | appointments       | gpAtHAnd  |
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
+    When I retrieve the 'Your Appointments' page directly
     Then I see an appropriate message informing me that my GP surgery uses the Babylon App for appointments
     When I click the link called 'use the Babylon app' with a url of 'https://www.gpathand.nhs.uk/download-app'
     Then a new tab has been opened by the link
@@ -29,7 +29,7 @@ Feature: GP at Hand Frontend
       | Journey            | Value     |
       | prescriptions      | gpAtHAnd  |
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see an appropriate message informing me that my GP surgery uses the Babylon App for prescriptions
     When I click the link called 'use the Babylon app' with a url of 'https://www.gpathand.nhs.uk/download-app'
     Then a new tab has been opened by the link

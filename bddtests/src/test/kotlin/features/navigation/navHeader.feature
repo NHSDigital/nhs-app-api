@@ -36,7 +36,7 @@ Feature: Use the navigation header bar
     When I click the 'Back' breadcrumb
     Then I am on the Appointments Guidance page
     When I click the 'Back' breadcrumb
-    Then the My Appointments page is displayed
+    Then the Your Appointments page is displayed
     And the breadcrumb bar is not visible
 
   Scenario: A user can navigate through organ donation with the dynamic back button

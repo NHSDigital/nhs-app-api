@@ -15,7 +15,7 @@ import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class MyAppointmentsBackendSteps {
+open class YourAppointmentsBackendSteps {
 
     val mockingClient = MockingClient.instance
 

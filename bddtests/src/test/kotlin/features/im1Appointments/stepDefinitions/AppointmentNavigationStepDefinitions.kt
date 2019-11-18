@@ -4,7 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.AppointmentGuidanceSteps
 import features.im1Appointments.steps.AvailableAppointmentsSteps
-import features.im1Appointments.steps.MyAppointmentsUISteps
+import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import pages.ErrorPage
@@ -19,18 +19,18 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var errorPage: ErrorPage
     @Steps
-    lateinit var myAppointmentsUI: MyAppointmentsUISteps
+    lateinit var myAppointmentsUI: YourAppointmentsUISteps
     @Steps
     lateinit var navigation: NavigationSteps
 
-    @Given("^I am on the My Appointments page$")
+    @Given("^I am on the Your Appointments page$")
     fun iAmOnMyAppointmentsPage() {
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
-        myAppointmentsUI.myAppointmentsPage.
-                locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.myAppointmentsPage.bookButton)
+        myAppointmentsUI.yourAppointmentsPage.
+                locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.yourAppointmentsPage.bookButton)
     }
 
-    @Given("^I am on the My Appointments error page$")
+    @Given("^I am on the Your Appointments error page$")
     fun iAmOnMyAppointmentsErrorPage() {
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
         errorPage.locatorMethods.assertNativeElementsLoaded(errorPage.heading)

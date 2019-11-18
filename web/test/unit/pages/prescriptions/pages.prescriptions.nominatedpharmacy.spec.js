@@ -124,7 +124,7 @@ describe('prescriptions/index.vue', () => {
       });
     });
 
-    describe('order new repeat prescription button', () => {
+    describe('order a repeat prescription button', () => {
       let button;
 
       beforeEach(() => {

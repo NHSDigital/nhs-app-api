@@ -4,7 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
-import features.im1Appointments.steps.MyAppointmentsBackendSteps
+import features.im1Appointments.steps.YourAppointmentsBackendSteps
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
@@ -17,10 +17,10 @@ import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
 import java.time.LocalDateTime
 
-class MyAppointmentsStepDefinitionsBackend {
+class YourAppointmentsStepDefinitionsBackend {
 
     @Steps
-    lateinit var myAppointmentsBackendSteps: MyAppointmentsBackendSteps
+    lateinit var yourAppointmentsBackendSteps: YourAppointmentsBackendSteps
 
     private val appointmentSlotsExample = AppointmentsSlotsExample()
     private val appointmentSlotsTelephoneExample = AppointmentSlotsTelephoneExample()
@@ -206,7 +206,7 @@ class MyAppointmentsStepDefinitionsBackend {
 
     @When("^my appointments are requested$")
     fun whenTheAPIRetrievesMyAppointments() {
-        myAppointmentsBackendSteps.createSerenityMyAppointmentSessionVariable()
+        yourAppointmentsBackendSteps.createSerenityMyAppointmentSessionVariable()
     }
 
     @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
@@ -227,35 +227,35 @@ class MyAppointmentsStepDefinitionsBackend {
 
     @Then("^I will only receive upcoming appointments$")
     fun iWillOnlyReceiveUpcomingAppointments() {
-        myAppointmentsBackendSteps.checkUpcomingAppointments()
-        myAppointmentsBackendSteps.checkHistoricalAppointments(false)
+        yourAppointmentsBackendSteps.checkUpcomingAppointments()
+        yourAppointmentsBackendSteps.checkHistoricalAppointments(false)
     }
 
     @Then("^I will only receive historical appointments$")
     fun iWillOnlyReceiveHistoricalAppointments() {
-        myAppointmentsBackendSteps.checkUpcomingAppointments(false)
-        myAppointmentsBackendSteps.checkHistoricalAppointments()
+        yourAppointmentsBackendSteps.checkUpcomingAppointments(false)
+        yourAppointmentsBackendSteps.checkHistoricalAppointments()
     }
 
     @Then("^I will receive both historical and upcoming appointments$")
     fun iWillReceiveBothHistoricalAndUpcomingAppointments() {
-        myAppointmentsBackendSteps.checkUpcomingAppointments()
-        myAppointmentsBackendSteps.checkHistoricalAppointments()
+        yourAppointmentsBackendSteps.checkUpcomingAppointments()
+        yourAppointmentsBackendSteps.checkHistoricalAppointments()
     }
 
     @Then("^I will receive no appointments$")
     fun iReceiveNoAppointments() {
-        myAppointmentsBackendSteps.checkUpcomingAppointments(false)
-        myAppointmentsBackendSteps.checkHistoricalAppointments(false)
+        yourAppointmentsBackendSteps.checkUpcomingAppointments(false)
+        yourAppointmentsBackendSteps.checkHistoricalAppointments(false)
     }
 
     @Then("^I will receive upcoming appointments with appointments in the past$")
     fun iWillReceiveUpcomingAppointmentsInThePast() {
-        myAppointmentsBackendSteps.checkUpcomingAppointments()
+        yourAppointmentsBackendSteps.checkUpcomingAppointments()
     }
 
     @Then("^a list of cancellation reasons if the GP Service provides the list$")
     fun thenAListOfCancellationReasons() {
-        myAppointmentsBackendSteps.checkCancellationReasonExistForApplicableGPService()
+        yourAppointmentsBackendSteps.checkCancellationReasonExistForApplicableGPService()
     }
 }

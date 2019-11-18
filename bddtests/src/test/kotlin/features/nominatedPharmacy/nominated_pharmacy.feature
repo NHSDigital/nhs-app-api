@@ -214,7 +214,7 @@ Feature: nominated pharmacy journey
     And my GP Practice is EPS enabled
     And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     Then I see nominated pharmacy information is shown and correct

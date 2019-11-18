@@ -9,7 +9,7 @@ import pages.text
 import pages.withoutRetrying
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments")
-class MyAppointmentsPage : AppointmentSharedElementsPage() {
+class YourAppointmentsPage : AppointmentSharedElementsPage() {
 
     val upcomingAppointmentsHeading = HybridPageElement(
             webDesktopLocator = "//h2[text()='Upcoming appointments']",
@@ -53,7 +53,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    override val titleText: String = "My appointments"
+    override val titleText: String = "Your appointments"
 
     private val upcomingAppointmentParentXpath = "//div[@data-purpose='upcoming-appointments']"
     private val historicalAppointmentParentXpath = "//div[@data-purpose='past-appointments']"

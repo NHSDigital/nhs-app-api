@@ -10,23 +10,23 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import pages.ErrorPage
-import pages.appointments.MyAppointmentsPage
+import pages.appointments.YourAppointmentsPage
 import pages.isDisplayed
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 import pages.text
 import java.util.*
 
-open class MyAppointmentsUISteps {
+open class YourAppointmentsUISteps {
 
     val mockingClient = MockingClient.instance
 
-    lateinit var myAppointmentsPage: MyAppointmentsPage
+    lateinit var yourAppointmentsPage: YourAppointmentsPage
     lateinit var errorPage: ErrorPage
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
 
-    private val pageHeader = "My appointments"
+    private val pageHeader = "Your appointments"
 
     private val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
     private val cancellationSuccessMessage = "Your appointment has been cancelled."
@@ -38,7 +38,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkBookingSuccessMessage(includesReferenceToCancel: Boolean = true) {
-        val actualMessage = myAppointmentsPage.getSuccessMessage()
+        val actualMessage = yourAppointmentsPage.getSuccessMessage()
         val expectedMessage =
                 if (includesReferenceToCancel)
                     bookingSuccessMessage
@@ -49,8 +49,8 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun clickOnBookAppointmentButton() {
-        myAppointmentsPage.locatorMethods.assertNativeElementsLoaded(myAppointmentsPage.bookButton)
-        myAppointmentsPage.
+        yourAppointmentsPage.locatorMethods.assertNativeElementsLoaded(yourAppointmentsPage.bookButton)
+        yourAppointmentsPage.
                 bookButton.click()
     }
 
@@ -61,21 +61,21 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkNoUpcomingAppointmentsTextIsDisplaying() {
-        val actualNoUpcomingText = myAppointmentsPage.getNoUpcomingText()
+        val actualNoUpcomingText = yourAppointmentsPage.getNoUpcomingText()
         Assert.assertEquals("Incorrect text when no upcoming appointments. ",
                 expectedNoUpcomingText, actualNoUpcomingText)
     }
 
     @Step
     fun checkNoHistoricalAppointmentsTextIsDisplaying() {
-        val actualNoPastText = myAppointmentsPage.getNoPastText()
+        val actualNoPastText = yourAppointmentsPage.getNoPastText()
         Assert.assertEquals("Incorrect text when no past appointments. ",
                 expectedNoPastText, actualNoPastText)
     }
 
     @Step
     fun checkUpcomingAppointmentsAreCorrectlyPopulated() {
-        myAppointmentsPage.upcomingAppointmentsHeading.isDisplayed
+        yourAppointmentsPage.upcomingAppointmentsHeading.isDisplayed
         checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
         )
@@ -83,7 +83,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkHistoricalAppointmentsAreCorrectlyPopulated() {
-        myAppointmentsPage.pastAppointmentsHeading.isDisplayed
+        yourAppointmentsPage.pastAppointmentsHeading.isDisplayed
         checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS
         )
@@ -98,9 +98,9 @@ open class MyAppointmentsUISteps {
         val areCliniciansExpected = expectedSlots.isNotEmpty() && expectedSlots[0].clinicians.isNotEmpty()
         val slots = when (sessionVariableKey) {
             MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS ->
-                myAppointmentsPage.getAllUpcomingSlots(areCliniciansExpected, isTelephoneAppointment)
+                yourAppointmentsPage.getAllUpcomingSlots(areCliniciansExpected, isTelephoneAppointment)
             MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS ->
-                myAppointmentsPage.getAllHistoricalSlots(areCliniciansExpected, isTelephoneAppointment)
+                yourAppointmentsPage.getAllHistoricalSlots(areCliniciansExpected, isTelephoneAppointment)
             else -> null
         }
         assertNotNull("Invalid session variable key. ", slots)
@@ -111,7 +111,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkIfUpcomingSlotsAreInCorrectOrder() {
-        val slotDate = myAppointmentsPage.getDateTimestampsOfUpcomingSlots()
+        val slotDate = yourAppointmentsPage.getDateTimestampsOfUpcomingSlots()
         Assert.assertTrue(
                 "Upcoming slots are in the wrong order. ",
                 Ordering.natural<Long>().isOrdered(slotDate)
@@ -120,7 +120,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkIfHistoricalSlotsAreInCorrectOrder() {
-        val slotDate = myAppointmentsPage.getDateTimestampsOfHistoricalSlots()
+        val slotDate = yourAppointmentsPage.getDateTimestampsOfHistoricalSlots()
         Assert.assertTrue(
                 "Historical slots are in the wrong order. ",
                 Ordering.natural<Long>().reverse<Long>().isOrdered(slotDate)
@@ -129,7 +129,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun verifyCancellationConfirmationMessage() {
-        val message = myAppointmentsPage.getSuccessMessage()
+        val message = yourAppointmentsPage.getSuccessMessage()
         assertEquals(cancellationSuccessMessage, message)
     }
 
@@ -141,12 +141,12 @@ open class MyAppointmentsUISteps {
         assertEquals(
                 "Missing at least one cancel link. ",
                 (expectedNumberOfSlots - appointmentsWithoutCancelLink),
-                myAppointmentsPage.getNumberOfCancelLinks()
+                yourAppointmentsPage.getNumberOfCancelLinks()
         )
         assertEquals(
                 "Found a reference to not being able to cancel. ",
                 appointmentsWithoutCancelLink,
-                myAppointmentsPage.getNumberOfAppointmentsThatCannotBeCancelled()
+                yourAppointmentsPage.getNumberOfAppointmentsThatCannotBeCancelled()
         )
     }
 
@@ -158,12 +158,12 @@ open class MyAppointmentsUISteps {
         assertEquals(
                 "Missing a reference to not being able to cancel. ",
                 expectedNumberOfSlots,
-                myAppointmentsPage.getNumberOfAppointmentsThatCannotBeCancelled()
+                yourAppointmentsPage.getNumberOfAppointmentsThatCannotBeCancelled()
         )
         assertEquals(
                 "Found a cancel link. ",
                 0,
-                myAppointmentsPage.getNumberOfCancelLinks()
+                yourAppointmentsPage.getNumberOfCancelLinks()
         )
     }
 

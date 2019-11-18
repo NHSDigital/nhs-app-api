@@ -6,16 +6,16 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.ErrorPage
-import pages.appointments.MyAppointmentsPage
+import pages.appointments.YourAppointmentsPage
 import pages.isDisplayed
 import pages.navigation.HeaderNative
 
-open class MyAppointmentsTelephoneSteps {
+open class YourAppointmentsTelephoneSteps {
     val mockingClient = MockingClient.instance
 
-    lateinit var myAppointmentsPage: MyAppointmentsPage
+    lateinit var yourAppointmentsPage: YourAppointmentsPage
     @Steps
-    lateinit var myAppointmentsUiSteps: MyAppointmentsUISteps
+    lateinit var yourAppointmentsUiSteps: YourAppointmentsUISteps
     lateinit var errorPage: ErrorPage
     lateinit var headerNative: HeaderNative
 
@@ -24,8 +24,8 @@ open class MyAppointmentsTelephoneSteps {
 
     @Step
     fun checkUpcomingTelephoneAppointmentsAreCorectlyPopulated() {
-        myAppointmentsPage.upcomingAppointmentsHeading.isDisplayed
-        myAppointmentsUiSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
+        yourAppointmentsPage.upcomingAppointmentsHeading.isDisplayed
+        yourAppointmentsUiSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS,
                 true
         )
@@ -34,8 +34,8 @@ open class MyAppointmentsTelephoneSteps {
 
     @Step
     fun checkPastTelephoneAppointmentsAreCorectlyPopulated() {
-        myAppointmentsPage.pastAppointmentsHeading.isDisplayed
-        myAppointmentsUiSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
+        yourAppointmentsPage.pastAppointmentsHeading.isDisplayed
+        yourAppointmentsUiSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS,
                 true
         )
@@ -45,7 +45,7 @@ open class MyAppointmentsTelephoneSteps {
     private fun checkAppointmentsTelephoneAppointmentsTextCorrect(
             isUpcomingAppointment: Boolean
     ) {
-        val phoneFields = myAppointmentsPage.getTelephoneField()
+        val phoneFields = yourAppointmentsPage.getTelephoneField()
         Assert.assertNotNull("Invalid session variable key. ", phoneFields)
         phoneFields.forEach { string ->
             val compareString = string.split(" ").dropLast(1).joinToString(separator = " ")

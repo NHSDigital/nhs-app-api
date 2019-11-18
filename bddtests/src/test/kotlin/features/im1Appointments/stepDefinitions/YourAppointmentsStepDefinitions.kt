@@ -4,8 +4,8 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
 import features.im1Appointments.steps.CancelAppointmentSteps
-import features.im1Appointments.steps.MyAppointmentsTelephoneSteps
-import features.im1Appointments.steps.MyAppointmentsUISteps
+import features.im1Appointments.steps.YourAppointmentsTelephoneSteps
+import features.im1Appointments.steps.YourAppointmentsUISteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.assertSingleElementPresent
@@ -16,14 +16,14 @@ import pages.isCurrentlyEnabled
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
-class MyAppointmentsStepDefinitions {
+class YourAppointmentsStepDefinitions {
 
     @Steps
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
     @Steps
-    lateinit var myAppointmentsUISteps: MyAppointmentsUISteps
+    lateinit var yourAppointmentsUISteps: YourAppointmentsUISteps
     @Steps
-    lateinit var myAppointmentsTelephoneSteps: MyAppointmentsTelephoneSteps
+    lateinit var yourAppointmentsTelephoneSteps: YourAppointmentsTelephoneSteps
     @Steps
     lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
@@ -33,122 +33,122 @@ class MyAppointmentsStepDefinitions {
 
     @When("^I select \"([^\"]*)\" button$")
     fun whenISelectButton(buttonText: String) {
-        myAppointmentsUISteps.myAppointmentsPage.locatorMethods.waitForNativeStepToComplete()
-        myAppointmentsUISteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
+        yourAppointmentsUISteps.yourAppointmentsPage.locatorMethods.waitForNativeStepToComplete()
+        yourAppointmentsUISteps.yourAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 
     @When("^I select a \"Cancel this appointment\" link$")
     fun iSelectACancelThisAppointmentLink() {
-        myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
+        yourAppointmentsUISteps.yourAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
-        webHeader.getPageTitle().withText("Confirm appointment")
+        webHeader.getPageTitle().withText("Confirm your appointment")
         appointmentsConfirmationSteps.checkAppointmentDetails()
     }
 
     @Then("^the Appointment Booking success message is displayed$")
     fun appointmentBookingSuccessMessage() {
-        myAppointmentsUISteps.myAppointmentsPage.
-                locatorMethods.assertNativeElementsLoaded(myAppointmentsUISteps.myAppointmentsPage.bookButton)
-        myAppointmentsUISteps.checkBookingSuccessMessage()
+        yourAppointmentsUISteps.yourAppointmentsPage.
+                locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
+        yourAppointmentsUISteps.checkBookingSuccessMessage()
     }
 
     @Then("^the booked appointment before cutoff time is correctly displayed with ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithCancel() {
-        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
-        myAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+        yourAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        yourAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 
     @Then("^booked appointments before and one appointment within cutoff time " +
             "are correctly displayed with relevant ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithCancelExceptOnesWithinCutoffTime() {
-        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
-        myAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment(1)
+        yourAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        yourAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment(1)
     }
 
     @Then("^the Appointment Booking success message is displayed without reference to being able to cancel$")
     fun appointmentBookingConfirmationScreenIsDisplayedWithoutReferenceToCancel() {
-        myAppointmentsUISteps.checkBookingSuccessMessage(false)
+        yourAppointmentsUISteps.checkBookingSuccessMessage(false)
 
     }
 
     @Then("^the booked appointment is correctly displayed without ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithoutCancel() {
-        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
-        myAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
+        yourAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        yourAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
     }
 
     @Then("^I can book an appointment$")
     fun iCanBookAnAppointment() {
-        myAppointmentsUISteps.myAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
-        myAppointmentsUISteps.myAppointmentsPage.bookButton.waitUntilPresent()
+        yourAppointmentsUISteps.yourAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
+        yourAppointmentsUISteps.yourAppointmentsPage.bookButton.waitUntilPresent()
 
         Assert.assertTrue("Book an appointment is not displaying",
-                myAppointmentsUISteps.myAppointmentsPage.bookButton.isDisplayed)
+                yourAppointmentsUISteps.yourAppointmentsPage.bookButton.isDisplayed)
 
         Assert.assertTrue("Book an appointment is not enabled",
-                myAppointmentsUISteps.myAppointmentsPage.bookButton.isCurrentlyEnabled)
+                yourAppointmentsUISteps.yourAppointmentsPage.bookButton.isCurrentlyEnabled)
     }
 
-    @Then("^the page title is \"My appointments\"$")
-    fun thePageTitleIsMyAppointments() {
-        myAppointmentsUISteps.checkHeaderTextIsCorrect()
+    @Then("^the page title is \"Your appointments\"$")
+    fun thePageTitleIsYourAppointments() {
+        yourAppointmentsUISteps.checkHeaderTextIsCorrect()
     }
 
-    @Then("^the My Appointments page is displayed$")
+    @Then("^the Your Appointments page is displayed$")
     fun iWillBeOnTheMyAppointmentsScreen() {
-        myAppointmentsUISteps.myAppointmentsPage.
-                locatorMethods.assertNativeElementsLoaded(myAppointmentsUISteps.myAppointmentsPage.bookButton)
+        yourAppointmentsUISteps.yourAppointmentsPage.
+                locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
         iCanBookAnAppointment()
-        thePageTitleIsMyAppointments()
+        thePageTitleIsYourAppointments()
     }
 
     @Then("^I am informed I have no upcoming appointments$")
     fun thenIAmInformedIHaveNoBookedAppointments() {
-        myAppointmentsUISteps.checkNoUpcomingAppointmentsTextIsDisplaying()
+        yourAppointmentsUISteps.checkNoUpcomingAppointmentsTextIsDisplaying()
     }
 
     @Then("^I am informed I have no historical appointments$")
     fun thenIAmInformedIHaveNoHistoricalAppointments() {
-        myAppointmentsUISteps.checkNoHistoricalAppointmentsTextIsDisplaying()
+        yourAppointmentsUISteps.checkNoHistoricalAppointmentsTextIsDisplaying()
     }
 
     @Then("^I am not informed I have no historical appointments$")
     fun thenIAmNotInformedIHaveNoHistoricalAppointments() {
-        myAppointmentsUISteps.myAppointmentsPage.assertPastTextNotPresent()
+        yourAppointmentsUISteps.yourAppointmentsPage.assertPastTextNotPresent()
     }
 
     @Then("^I am given the list of upcoming appointments$")
     fun thenIAmGivenTheListOfUpcomingAppointments() {
-        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
-        myAppointmentsUISteps.checkIfUpcomingSlotsAreInCorrectOrder()
+        yourAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        yourAppointmentsUISteps.checkIfUpcomingSlotsAreInCorrectOrder()
     }
 
     @Then("^I am given the list of historical appointments$")
     fun thenIAmGivenTheListOfHistoricalAppointments() {
-        myAppointmentsUISteps.checkHistoricalAppointmentsAreCorrectlyPopulated()
-        myAppointmentsUISteps.checkIfHistoricalSlotsAreInCorrectOrder()
+        yourAppointmentsUISteps.checkHistoricalAppointmentsAreCorrectlyPopulated()
+        yourAppointmentsUISteps.checkIfHistoricalSlotsAreInCorrectOrder()
     }
 
     @Then("^each appointment can be cancelled$")
     fun eachAppointmentCanBeCancelled() {
         Assert.assertEquals(
                 "Missing at least one cancel link. ",
-                myAppointmentsUISteps.myAppointmentsPage.getWebAppointmentSlotDivs().size,
-                myAppointmentsUISteps.myAppointmentsPage.getNumberOfCancelLinks()
+                yourAppointmentsUISteps.yourAppointmentsPage.getWebAppointmentSlotDivs().size,
+                yourAppointmentsUISteps.yourAppointmentsPage.getNumberOfCancelLinks()
         )
     }
 
     @Then("^no appointment can be cancelled$")
     fun noAppointmentCanBeCancelled() {
-        myAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
+        yourAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
     }
 
     @Then("^a \"Cancellation confirmed\" message is displayed$")
     fun cancellationConfirmationMessage() {
-        myAppointmentsUISteps.verifyCancellationConfirmationMessage()
+        yourAppointmentsUISteps.verifyCancellationConfirmationMessage()
     }
 
     @Then("^I see page header indicating there is an appointment data error$")
@@ -158,20 +158,20 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^I see the appropriate error messages for the appointment data error$")
     fun iSeeTheAppropriateErrorMessagesForTheAppointmentDataError() {
-        myAppointmentsUISteps.checkAppointmentDataErrorMessagesAreCorrect()
+        yourAppointmentsUISteps.checkAppointmentDataErrorMessagesAreCorrect()
     }
 
     @Then("^I can see the list of upcoming telephone appointments")
     fun thenICanSeeTheListOfUpcomingTelephoneAppointments() {
-        myAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
+        yourAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
     }
     @Then("^I can see the list of past telephone appointments$")
     fun thenICanSeeTheListOfPastTelephoneAppointments() {
-        myAppointmentsTelephoneSteps.checkPastTelephoneAppointmentsAreCorectlyPopulated()
+        yourAppointmentsTelephoneSteps.checkPastTelephoneAppointmentsAreCorectlyPopulated()
     }
     @Then("^I can see the booked telephone appointment and it has a cancel link")
     fun thenICanSeeTheBookedTelephoneAppointmentAndItHasACancelLink() {
-        myAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
-        myAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+        yourAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
+        yourAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 }

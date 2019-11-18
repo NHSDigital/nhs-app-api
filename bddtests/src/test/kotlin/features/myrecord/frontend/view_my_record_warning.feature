@@ -6,7 +6,7 @@ Feature: View My Medical Record Information - Warning Frontend
     And the GP Practice has enabled demographics functionality
     And I am on the record warning page
     Then I see record warning page opened
-    And I see header text is My GP medical record
+    And I see header text is Your GP medical record
     And I see your record may contain sensitive information message
     And I see list of sensitive data information
     And I see continue
@@ -27,7 +27,7 @@ Feature: View My Medical Record Information - Warning Frontend
     And I am on the record warning page
     When I enter url address for my record directly into the url
     Then I see record warning page opened
-    And I see header text is My GP medical record
+    And I see header text is Your GP medical record
     And I see your record may contain sensitive information message
     And I see list of sensitive data information
     And I see continue

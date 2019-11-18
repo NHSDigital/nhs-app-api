@@ -80,7 +80,7 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
             helpfulName = "Telephone Error"
     )
 
-    override val titleText: String = "Confirm appointment"
+    override val titleText: String = "Confirm your appointment"
 
     private fun getTelephoneNumberRadioButtonText(telephoneNumber: String): String {
         return telephoneNumberRadioButtonSection(telephoneNumber).text.trim()

@@ -8,7 +8,7 @@ Feature: Service Journey Rules Frontend
       | appointments       | im1     |
     And I am logged in
     When I retrieve the 'Informatica Appointments' page directly
-    Then I am redirected to the 'My Appointments' page
+    Then I am redirected to the 'Your Appointments' page
 
   Scenario: A user with appointments configured to Im1 navigates directly to GP at Hand Appointments page and is redirected to the Im1 Appointments page
     Given I am a EMIS user where the journey configurations are:
@@ -16,14 +16,14 @@ Feature: Service Journey Rules Frontend
       | appointments       | im1     |
     And I am logged in
     When I retrieve the 'GP at Hand Appointments' page directly
-    Then I am redirected to the 'My Appointments' page
+    Then I am redirected to the 'Your Appointments' page
 
   Scenario: A user with appointments configured to Informatica navigates directly to Im1 Appointments page and is redirected to the Informatica Appointments page
     Given I am a EMIS user where the journey configurations are:
       | Journey            | Value       |
       | appointments       | informatica |
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
+    When I retrieve the 'Your Appointments' page directly
     Then I am redirected to the 'Informatica Appointments' page
 
   Scenario: A user with appointments configured to Informatica navigates directly to GP at Hand Appointments page and is redirected to the Informatica Appointments page
@@ -39,7 +39,7 @@ Feature: Service Journey Rules Frontend
       | Journey            | Value     |
       | appointments       | gpAtHand  |
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
+    When I retrieve the 'Your Appointments' page directly
     Then I am redirected to the 'GP at Hand Appointments' page
 
   Scenario: A user with appointments configured to GP at Hand navigates directly to Informatica Appointments page and is redirected to the GP at Hand Appointments page
@@ -80,12 +80,12 @@ Feature: Service Journey Rules Frontend
       | prescriptions      | im1       |
     And I am logged in
     When I retrieve the 'Gp at Hand Prescriptions' page directly
-    Then I am redirected to the 'My Prescriptions' page
+    Then I am redirected to the 'Your Prescriptions' page
 
   Scenario: A user with prescriptions configured to GP at Hand navigates directly to Im1 Prescriptions page and is redirected to the GP at Hand Prescriptions page
     Given I am a EMIS user where the journey configurations are:
       | Journey            | Value     |
       | prescriptions      | gpAtHand  |
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I am redirected to the 'GP at Hand Prescriptions' page

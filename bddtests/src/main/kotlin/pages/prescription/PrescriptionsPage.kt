@@ -40,7 +40,7 @@ open class PrescriptionsPage : HybridPageObject() {
     private lateinit var webHeader: WebHeader
 
     fun isLoaded() {
-        webHeader.getPageTitle().withText("My repeat prescriptions")
+        webHeader.getPageTitle().withText("Your repeat prescriptions")
     }
 
     fun isNoPrescriptionsMessageVisible(): Boolean {
@@ -88,7 +88,7 @@ open class PrescriptionsPage : HybridPageObject() {
     }
 
     fun clickOrderARepeatPrescriptionButton() {
-        clickOnButtonContainingText("Order new repeat prescription")
+        clickOnButtonContainingText("Order a repeat prescription")
     }
 
     fun assertPrescriptionsMatch(list: List<HistoricPrescription>,

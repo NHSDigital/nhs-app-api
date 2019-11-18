@@ -6,7 +6,7 @@
       Given I have no booked appointments for EMIS
       And there are EMIS appointments available to book
       And I am logged in
-      When I retrieve the 'My Appointments' page directly
+      When I retrieve the 'Your Appointments' page directly
       Then the MyAppointments_NoAppointments page is saved to disk
       When I retrieve the 'Appointment Booking' page directly
       And I have selected an appointment slot to book
@@ -16,14 +16,14 @@
     Scenario: The appointment cancellation page is captured
       Given EMIS is available to cancel a previously booked appointment before cutoff time because No longer required
       And I am logged in
-      When I retrieve the 'My Appointments' page directly
+      When I retrieve the 'Your Appointments' page directly
       Then the MyAppointments_WithAppointments page is saved to disk
       And I select a "Cancel this appointment" link
       Then I will be on the "Cancellation reason" screen
       Then the CancelAppointments page is saved to disk
       And I select a cancellation reason of No longer required
       When I select "Cancel appointment" button
-      Then the My Appointments page is displayed
+      Then the Your Appointments page is displayed
       Then the CancelConfirmation page is saved to disk
 
     Scenario: The appointment booking pages are captured

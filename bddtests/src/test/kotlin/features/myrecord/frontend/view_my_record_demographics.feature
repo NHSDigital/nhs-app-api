@@ -20,7 +20,7 @@ Feature: View My Medical Record Information - Demographics Frontend
     And the GP Practice has enabled demographics functionality
     And I am on the record warning page
     Then I click continue
-    And I see header text is My GP medical record
+    And I see header text is Your GP medical record
     Then I see the My details heading on My Record
     And I see the patient information details
     And I see my record button on the nav bar is highlighted

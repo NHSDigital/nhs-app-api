@@ -93,12 +93,6 @@ namespace NHSOnline.Backend.Support.Certificate
                 sb.AppendLine($"Version: {xh5092.Version}");
                 sb.AppendLine($"Valid Date: {xh5092.NotBefore}");
                 sb.AppendLine($"Expiry Date: {xh5092.NotAfter}");
-                sb.AppendLine($"Thumbprint: {xh5092.Thumbprint}");
-                sb.AppendLine($"Serial Number: {xh5092.SerialNumber}");
-                sb.AppendLine($"Friendly Name: {xh5092.PublicKey.Oid.FriendlyName}");
-                sb.AppendLine($"Public Key Format: {xh5092.PublicKey.EncodedKeyValue.Format(true)}");
-                sb.AppendLine($"Raw Data Length: {xh5092.RawData.Length}");
-                sb.AppendLine($"Certificate to string: {xh5092.ToString(true)}");
 
                 _logger.LogInformation(sb.ToString());
             }

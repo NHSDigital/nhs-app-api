@@ -28,7 +28,7 @@ Feature: Prescriptions submission Frontend
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I select 5 repeatable prescriptions to order
     And I enter text "As soon as possible please" for special request
     And I click Continue on the Order a repeat prescription page
@@ -39,12 +39,12 @@ Feature: Prescriptions submission Frontend
       | EMIS      |
       | VISION    |
       | MICROTEST |
-
+    
   Scenario Outline: The <GP System> user orders a repeat prescription with 1 entries
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
@@ -63,7 +63,7 @@ Feature: Prescriptions submission Frontend
     And I am using EMIS GP System to submit my prescription
     And I have 0 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I enter text "<script>" for special request
     And I click Continue on the Order a repeat prescription page
@@ -75,7 +75,7 @@ Feature: Prescriptions submission Frontend
     And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     But EMIS responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription
@@ -86,7 +86,7 @@ Feature: Prescriptions submission Frontend
     And I am using MICROTEST GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     But GP system responds with a conflict error when a repeat prescription is submitted
@@ -97,7 +97,7 @@ Feature: Prescriptions submission Frontend
     And I am using MICROTEST GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     But the GP system responds with an error indicating the order was partially successful

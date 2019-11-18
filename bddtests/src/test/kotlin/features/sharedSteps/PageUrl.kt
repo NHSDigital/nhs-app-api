@@ -8,11 +8,11 @@ open class PageUrl {
             hashMapOf(
                     "appointment booking" to "/appointments/booking",
                     "appointment guidance" to "/appointments/booking-guidance",
-                    "my appointments" to "/appointments",
+                    "your appointments" to "/appointments",
                     "informatica appointments" to "/appointments/informatica",
                     "gp at hand appointments" to "/appointments/gp-at-hand",
                     "data sharing" to "/data-sharing",
-                    "my prescriptions" to "/prescriptions",
+                    "your prescriptions" to "/prescriptions",
                     "prescription repeat courses" to "/prescriptions/repeat-courses",
                     "gp at hand prescriptions" to "/prescriptions/gp-at-hand",
                     "organ donation" to "/organ-donation",

@@ -7,7 +7,7 @@
       And I am using TPP GP System to submit my prescription
       And I have 1 historic prescriptions in this scenario
       And I am logged in
-      When I retrieve the 'My Prescriptions' page directly
+      When I retrieve the 'Your Prescriptions' page directly
       Then the MyPrescriptions_TPP page is saved to disk
       And I select 5 repeatable prescriptions to order
       Then the OrderPrescriptions page is saved to disk
@@ -21,5 +21,5 @@
       And I am using EMIS GP System to submit my prescription
       And I have 1 historic prescriptions in this scenario
       And I am logged in
-      When I retrieve the 'My Prescriptions' page directly
+      When I retrieve the 'Your Prescriptions' page directly
       Then the MyPrescriptions_EMIS page is saved to disk

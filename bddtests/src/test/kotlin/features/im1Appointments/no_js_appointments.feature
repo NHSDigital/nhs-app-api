@@ -10,7 +10,7 @@ Feature: Appointments Service With Javascript Disabled
   Scenario Outline: A <GP System> user can find and book available appointments with javascript disabled
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
-    And I am on the My Appointments page
+    And I am on the Your Appointments page
     Then I am informed I have no upcoming appointments
 
     When I click the 'Book an appointment' button
@@ -65,11 +65,11 @@ Feature: Appointments Service With Javascript Disabled
   Scenario Outline: A <GP System> user can cancel appointments with javascript disabled
     Given <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
+    When I retrieve the 'Your Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
-    Then the My Appointments page is displayed
+    Then the Your Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
     Examples:
       | Reason             | GP System |
@@ -79,9 +79,9 @@ Feature: Appointments Service With Javascript Disabled
   Scenario: A TPP user can cancel appointments with javascript disabled
     Given TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in
-    When I retrieve the 'My Appointments' page directly
+    When I retrieve the 'Your Appointments' page directly
     And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     When I select "Cancel appointment" button
-    Then the My Appointments page is displayed
+    Then the Your Appointments page is displayed
     And a "Cancellation confirmed" message is displayed

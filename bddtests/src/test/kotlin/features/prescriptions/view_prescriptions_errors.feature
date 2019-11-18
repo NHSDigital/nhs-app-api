@@ -9,7 +9,7 @@ Feature: View prescriptions error cases
     Given I am patient using the <GP System> GP System
     And I am logged in
     Given The prescriptions endpoint is timing out
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And I wait for 20 seconds
     Then I see the appropriate error message for a prescription timeout
     Examples:
@@ -21,7 +21,7 @@ Feature: View prescriptions error cases
     Given I am patient using the <GP System> GP System
     And I am logged in
     And The prescriptions endpoint is throwing a server error
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
@@ -33,7 +33,7 @@ Feature: View prescriptions error cases
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     And My session has expired
     Then I see the login page with the session expiry notification
 
@@ -42,7 +42,7 @@ Feature: View prescriptions error cases
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    Then I retrieve the 'My Prescriptions' page directly
+    Then I retrieve the 'Your Prescriptions' page directly
     And The courses endpoint is timing out
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I wait for 20 seconds
@@ -63,7 +63,7 @@ Feature: View prescriptions error cases
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    Then I retrieve the 'My Prescriptions' page directly
+    Then I retrieve the 'Your Prescriptions' page directly
     But The courses endpoint is throwing a server error
     When I retrieve the 'Prescription Repeat Courses' page directly
     Then I see the appropriate error message for a prescription server error
@@ -79,7 +79,7 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    Then I retrieve the 'My Prescriptions' page directly
+    Then I retrieve the 'Your Prescriptions' page directly
     And The prescription submission endpoint is timing out
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
@@ -98,7 +98,7 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    Then I retrieve the 'My Prescriptions' page directly
+    Then I retrieve the 'Your Prescriptions' page directly
     And The prescription submission endpoint is throwing a server error
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
@@ -116,7 +116,7 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    Then I retrieve the 'My Prescriptions' page directly
+    Then I retrieve the 'Your Prescriptions' page directly
     And The prescription submission endpoint is throwing an already ordered exception
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
@@ -134,7 +134,7 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    Then I retrieve the 'My Prescriptions' page directly
+    Then I retrieve the 'Your Prescriptions' page directly
     And The prescription submission endpoint is throwing an invalid guid exception
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order

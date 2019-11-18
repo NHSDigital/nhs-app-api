@@ -25,7 +25,7 @@ Feature: View prescriptions Frontend
     And I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see no prescriptions
     And I see a message indicating that I have no repeat prescriptions
     Examples:
@@ -37,7 +37,7 @@ Feature: View prescriptions Frontend
     And I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 100 prescriptions
     Examples:
       | GP System |
@@ -50,7 +50,7 @@ Feature: View prescriptions Frontend
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 3 prescriptions
     Examples:
       | GP System |
@@ -61,7 +61,7 @@ Feature: View prescriptions Frontend
     And I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 3 prescriptions
     Examples:
       | GP System |
@@ -73,7 +73,7 @@ Feature: View prescriptions Frontend
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 3 prescriptions
     Examples:
       | GP System |
@@ -84,7 +84,7 @@ Feature: View prescriptions Frontend
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 2 prescriptions
 
   @nativesmoketest
@@ -92,7 +92,7 @@ Feature: View prescriptions Frontend
     Given I am patient using the <GP System> GP System
     Given prescriptions is disabled at a GP Practice level
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see a message informing me that I don't currently have access to this service
     Examples:
       | GP System |
@@ -104,7 +104,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only dosage info
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 1 prescriptions
     Examples:
       | GP System |
@@ -116,7 +116,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only quantity info
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 1 prescriptions
     Examples:
       | GP System |
@@ -128,7 +128,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has no info
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 1 prescriptions
 
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
@@ -143,6 +143,6 @@ Feature: View prescriptions Frontend
       | Unknown             |
       | Cancelled           |
     And I am logged in
-    When I retrieve the 'My Prescriptions' page directly
+    When I retrieve the 'Your Prescriptions' page directly
     Then I see 4 prescriptions
 
