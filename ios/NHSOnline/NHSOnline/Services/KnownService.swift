@@ -59,7 +59,7 @@ class KnownService {
             return false
         }
         
-        guard var urlComponents = URLComponents(string: urlString.lowercased()),
+        guard let urlComponents = URLComponents(string: urlString.lowercased()),
             urlComponents.fragment == nil else {
                 return false
         }
@@ -82,7 +82,7 @@ class KnownService {
             return urlString
         }
         
-        guard var urlComponents = URLComponents(string: urlString),
+        guard let urlComponents = URLComponents(string: urlString),
             urlComponents.fragment == nil else {
                 return urlString
         }

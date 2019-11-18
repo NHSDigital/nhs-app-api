@@ -38,7 +38,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         
         viewController.selectedTab = didSelect.tag
 
-        var selectedURL: String
+        var _: String
         if(selectedItem != .Symptoms) {
             viewController.applicationState.block()
         }

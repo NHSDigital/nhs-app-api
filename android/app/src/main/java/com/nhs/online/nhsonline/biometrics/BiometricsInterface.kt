@@ -1,7 +1,6 @@
 package com.nhs.online.nhsonline.biometrics
 
 import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
-import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
 import com.nhs.online.nhsonline.interfaces.IInteractor
 
 
@@ -38,11 +37,8 @@ class BiometricsInterface(private val biometricsInteractor: IBiometricsInteracto
 
             return true
         }
-        if (FingerprintSystemChecker.checkIfAndroidMOrAbove()) {
-            biometricsInteractor.showBiometricRegistrationError()
-        } else {
-            FingerprintSystemChecker.showCurrentOSNotSupportDialog(biometricsInteractor.getActivity(), interactor)
-        }
+
+        biometricsInteractor.showBiometricRegistrationError()
 
         return false
     }

@@ -27,9 +27,8 @@ class BiometricBreadcrumb: UIView {
         self.biometricLabel.font = UIFont.preferredFont(forTextStyle: .body)
         self.biometricLabel.text = NSLocalizedString("BreadcrumbMessage", comment: "")
         
-        if #available(iOS 10.0, *) {
-            self.biometricLabel.adjustsFontForContentSizeCategory = true
-        }
+        self.biometricLabel.adjustsFontForContentSizeCategory = true
+        
         // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
         contentView.accessibilityElements = [biometricLabel]
         addSubview(contentView)

@@ -1,9 +1,11 @@
 package com.nhs.online.nhsonline.network
 
 import android.content.Context
-import android.net.*
+import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
-import android.os.Build
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.util.Log
 import com.nhs.online.nhsonline.Application
 
@@ -30,31 +32,19 @@ class ConnectionStateMonitor(val context: Context) : NetworkCallback() {
     override fun onLost(network: Network?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLost, Is connected to network: " + isConnectedToNetwork)
 
-        if (Build.VERSION.SDK_INT < 23) {
-            val networkInfo = connectivityManager.getActiveNetworkInfo()
+        val activeNetwork = connectivityManager.getActiveNetwork()
 
-            if (networkInfo != null) {
-                isConnectedToNetwork = (networkInfo.isConnected() &&
-                        (networkInfo.getType() == ConnectivityManager.TYPE_WIFI ||
-                                networkInfo.getType() == ConnectivityManager.TYPE_MOBILE))
-            } else {
-                isConnectedToNetwork = false
+        if (activeNetwork != null) {
+            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+
+            if (capabilities != null) {
+                isConnectedToNetwork =
+                        (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
             }
         } else {
-            val activeNetwork = connectivityManager.getActiveNetwork()
-
-            if (activeNetwork != null) {
-                val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-
-                if (capabilities != null) {
-                    isConnectedToNetwork =
-                            (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
-                }
-            } else {
-                isConnectedToNetwork = false
-            }
+            isConnectedToNetwork = false
         }
 
         Log.d(Application.TAG, "${this::class.java.simpleName}: Exiting onLost, Is connected to network: " + isConnectedToNetwork)

@@ -8,16 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		03D2D097A7F082FA13F54BEA /* Pods_NHSOnline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F32C28B0605E3D28567797 /* Pods_NHSOnline.framework */; };
-		105BB9872179B67400571671 /* Scratch5.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9862179B67400571671 /* Scratch5.xcconfig */; };
-		105BB98C2179C08300571671 /* Scratch6.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB98B2179C08300571671 /* Scratch6.xcconfig */; };
-		105BB98E2179C09200571671 /* Scratch7.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB98D2179C09200571671 /* Scratch7.xcconfig */; };
-		105BB9902179C0A300571671 /* Scratch8.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB98F2179C0A300571671 /* Scratch8.xcconfig */; };
-		105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9912179C0B100571671 /* Scratch9.xcconfig */; };
-		105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9932179C0C400571671 /* Scratch10.xcconfig */; };
 		107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */ = {isa = PBXBuildFile; fileRef = 107EA7B621CCE3CC006C675B /* nativeAppAssets */; };
 		135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A621C9EF78001EC74B /* CookieHandler.swift */; };
 		13730A22220454FF00437FC1 /* BiometricType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A21220454FF00437FC1 /* BiometricType.swift */; };
-		1381D46321BFFAE100B54300 /* Scratch12.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1381D46221BFFAE100B54300 /* Scratch12.xcconfig */; };
 		1381D48621BFFFD300B54300 /* AAID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47821BFFFD000B54300 /* AAID.swift */; };
 		1381D48E21BFFFD300B54300 /* Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D48021BFFFD200B54300 /* Policy.swift */; };
 		139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */; };
@@ -31,7 +24,6 @@
 		1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */; };
 		1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702521F5D334003E3EAB /* String_Extensions.swift */; };
 		14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */; };
-		14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */; };
 		14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21821E8D711008A65E0 /* BiometricService.swift */; };
 		14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */; };
 		14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */; };
@@ -165,6 +157,7 @@
 		2EC60A6C23194F94004094F3 /* NHSOnline.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnline.entitlements; sourceTree = "<group>"; };
 		2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandlerTests.swift; sourceTree = "<group>"; };
 		2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlersTests.swift; sourceTree = "<group>"; };
+		2EE2C6262371CCAA00C02299 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTests.swift; sourceTree = "<group>"; };
 		3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlersTests.swift; sourceTree = "<group>"; };
 		30DC9CD1EB30D0B0FE83C615 /* Pods-NHSOnlineTests.scratch5.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch5.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch5.xcconfig"; sourceTree = "<group>"; };
@@ -300,6 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				981E9E33214E8EA200DA80EB /* Development.xcconfig */,
+				2EE2C6262371CCAA00C02299 /* Debug.xcconfig */,
 				981E9E34214E8F1000DA80EB /* Demo.xcconfig */,
 				981E9E35214E8F2000DA80EB /* Production.xcconfig */,
 				105BB9762178DC4300571671 /* Scratch1.xcconfig */,
@@ -778,22 +772,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				105BB98E2179C09200571671 /* Scratch7.xcconfig in Resources */,
 				107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */,
-				1381D46321BFFAE100B54300 /* Scratch12.xcconfig in Resources */,
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
-				105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */,
-				14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
 				DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */,
-				105BB98C2179C08300571671 /* Scratch6.xcconfig in Resources */,
-				105BB9872179B67400571671 /* Scratch5.xcconfig in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
 				F07607F320B44C0300069F7F /* WebEvents.js in Resources */,
-				105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */,
-				105BB9902179C0A300571671 /* Scratch8.xcconfig in Resources */,
 				C20578082028B94800CDBDC5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1016,7 +1002,7 @@
 /* Begin XCBuildConfiguration section */
 		105BB97A2179B49900571671 /* Scratch1 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch1;
@@ -1068,7 +1054,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch1;
@@ -1086,12 +1072,12 @@
 				APP_DISPLAY_NAME = Scratch1;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1122,7 +1108,7 @@
 		};
 		105BB97D2179B4A700571671 /* Scratch2 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch2;
@@ -1174,7 +1160,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch2;
@@ -1192,12 +1178,12 @@
 				APP_DISPLAY_NAME = Scratch2;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1228,7 +1214,7 @@
 		};
 		105BB9802179B4B700571671 /* Scratch3 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch3;
@@ -1280,7 +1266,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch3;
@@ -1298,12 +1284,12 @@
 				APP_DISPLAY_NAME = Scratch3;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1334,7 +1320,7 @@
 		};
 		105BB9832179B4C300571671 /* Scratch4 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch4;
@@ -1386,7 +1372,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch4;
@@ -1404,12 +1390,12 @@
 				APP_DISPLAY_NAME = Scratch4;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1440,7 +1426,7 @@
 		};
 		105BB9882179B68D00571671 /* Scratch5 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch5;
@@ -1492,7 +1478,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch5;
@@ -1510,12 +1496,12 @@
 				APP_DISPLAY_NAME = Scratch5;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1546,7 +1532,7 @@
 		};
 		105BB9952179C10500571671 /* Scratch6 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch6;
@@ -1598,7 +1584,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch6;
@@ -1616,12 +1602,12 @@
 				APP_DISPLAY_NAME = Scratch6;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1652,7 +1638,7 @@
 		};
 		105BB9982179C10800571671 /* Scratch7 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch7;
@@ -1704,7 +1690,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch7;
@@ -1722,12 +1708,12 @@
 				APP_DISPLAY_NAME = Scratch7;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1758,7 +1744,7 @@
 		};
 		105BB99B2179C10B00571671 /* Scratch8 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch8;
@@ -1810,7 +1796,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch8;
@@ -1828,12 +1814,12 @@
 				APP_DISPLAY_NAME = Scratch8;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1864,7 +1850,7 @@
 		};
 		105BB99E2179C10E00571671 /* Scratch9 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch9;
@@ -1916,7 +1902,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch9;
@@ -1934,12 +1920,12 @@
 				APP_DISPLAY_NAME = Scratch9;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1970,7 +1956,7 @@
 		};
 		105BB9A12179C11000571671 /* Scratch10 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch10;
@@ -2022,7 +2008,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch10;
@@ -2040,12 +2026,12 @@
 				APP_DISPLAY_NAME = Scratch10;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2076,7 +2062,7 @@
 		};
 		1381D46421BFFC2F00B54300 /* Scratch12 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch12;
@@ -2128,7 +2114,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
@@ -2146,12 +2132,12 @@
 				APP_DISPLAY_NAME = Scratch12;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2182,7 +2168,7 @@
 		};
 		14B849332226E9F9002E6851 /* BrowserstackTC */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Browserstack;
@@ -2234,7 +2220,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstack;
@@ -2257,7 +2243,7 @@
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstacklocal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2289,10 +2275,10 @@
 		};
 		1A18792122E07BD500F2BACC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APP_DISPLAY_NAME = Scratch12;
+				APP_DISPLAY_NAME = Debug;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2341,10 +2327,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.debug;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2353,20 +2339,23 @@
 		};
 		1A18792222E07BD500F2BACC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 44ABB054D17D93AF4A662E79 /* Pods-NHSOnline.debug.xcconfig */;
+			baseConfigurationReference = 2EE2C6262371CCAA00C02299 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
-				APP_DISPLAY_NAME = Scratch12;
+				APP_DISPLAY_NAME = Debug;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BASE_API_URL = "local.bitraft.io:8089/v1/";
+				BASE_SCHEME = http;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HOME_URL = "local.bitraft.io:3000/";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2395,7 +2384,7 @@
 		};
 		4703497A21945FB300F72D05 /* Preview */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4703497921945F5C00F72D05 /* Preview.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = "NHS App Preview";
@@ -2442,7 +2431,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				SDKROOT = iphoneos;
@@ -2459,14 +2448,14 @@
 				APP_DISPLAY_NAME = "NHS App Preview";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.preview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2498,7 +2487,7 @@
 		};
 		5598FF722189C32700767CAC /* BrowserstackLocal */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5598FF712189C27100767CAC /* BrowserstackLocal.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Browserstack;
@@ -2550,7 +2539,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstack;
@@ -2573,7 +2562,7 @@
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstacklocal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2652,7 +2641,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				SDKROOT = iphoneos;
@@ -2674,7 +2663,7 @@
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2757,7 +2746,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.preview;
@@ -2816,7 +2805,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				SDKROOT = iphoneos;
@@ -2837,8 +2826,9 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HOME_URL = local.bitraft.io/;
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.development;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2864,7 +2854,7 @@
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2914,7 +2904,7 @@
 		};
 		C2466F4B2243ED3B006C336F /* Scratch11 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch10;
@@ -2966,10 +2956,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch11a;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2984,14 +2974,14 @@
 				APP_DISPLAY_NAME = Scratch11;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch11a;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3020,10 +3010,10 @@
 		};
 		C2466F4E2243ED50006C336F /* Scratch13 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APP_DISPLAY_NAME = Scratch12;
+				APP_DISPLAY_NAME = Scratch13;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3072,10 +3062,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch13a;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -3090,14 +3080,14 @@
 				APP_DISPLAY_NAME = Scratch13;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch13;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch13a;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3126,7 +3116,7 @@
 		};
 		C2466F512243ED64006C336F /* Scratch14 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = Scratch12;
@@ -3178,10 +3168,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch14;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -3196,12 +3186,12 @@
 				APP_DISPLAY_NAME = Scratch14;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch14;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3232,10 +3222,10 @@
 		};
 		C2466F542243ED72006C336F /* Scratch15 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APP_DISPLAY_NAME = Scratch12;
+				APP_DISPLAY_NAME = Scratch15;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3284,10 +3274,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch15;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -3302,14 +3292,14 @@
 				APP_DISPLAY_NAME = Scratch15;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch15a;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3338,10 +3328,10 @@
 		};
 		C2466F572243ED81006C336F /* Scratch16 */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APP_DISPLAY_NAME = Scratch12;
+				APP_DISPLAY_NAME = Scratch16;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3390,10 +3380,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch16a;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -3408,14 +3398,14 @@
 				APP_DISPLAY_NAME = Scratch16;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch16;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch16a;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -25,5 +25,23 @@ In a terminal run the following commands
 
 see more here: https://guides.cocoapods.org/using/using-cocoapods.html
 
+## Running Locally
+
+Select the debug profile in XCode as the build configuration to use.
+Use the following as the url format setting in the web `nuxt.config.js`
+```
+// URL Formats
+URI_FORMAT_API_CLIENT: 'http://local.bitraft.io:8089',
+API_HOST_SERVER: 'http://api.local.bitraft.io:8089',
+URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}:3000/auth-return',
+URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://local.bitraft.io:3000/auth-return',
+```
+
+Run the backendworker in docker from the backendworker folder using
+`docker-compose up`
+
+Run the web in npm
+`npm run dev`
+
 ## Troubleshooting
 if when you try to run 'pod update' or 'pod install'you see an error that mentions a target opvveride the 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' build setting then go to the build settings for NHSOnline and in build options change 'Yes' to '$(inherited)'

@@ -1,8 +1,6 @@
 package com.nhs.online.nhsonline.biometrics
 
-import android.annotation.TargetApi
 import android.app.Activity
-import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Log
@@ -22,7 +20,6 @@ import java.lang.RuntimeException
 
 private val TAG = AuthenticationService::class.java.simpleName
 
-@TargetApi(Build.VERSION_CODES.M)
 class AuthenticationService(
         private val activity: FragmentActivity,
         private val biometricAsyncHandler: BiometricAsyncHandler,

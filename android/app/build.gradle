@@ -13,7 +13,7 @@ android {
     }
     defaultConfig {
         applicationId "com.nhs.online.nhsonline"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 41
         versionName "1.21.0"

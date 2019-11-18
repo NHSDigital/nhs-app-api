@@ -26,11 +26,7 @@ class   ConfigurationService : ConfigurationServiceProtocol {
             
             if(semaphore.wait(timeout: DispatchTime.now() + DispatchTimeInterval.seconds(config().ApiCallTimeoutSeconds)) == DispatchTimeoutResult.timedOut)
             {
-                if #available(iOS 10.0, *) {
-                    os_log("Failure doing native app version http check: %@", log: OSLog.default, type: .error, "Timed out")
-                } else {
-                    NSLog("Failure doing native app version http check: %@", "Timed out")
-                }
+                os_log("Failure doing native app version http check: %@", log: OSLog.default, type: .error, "Timed out")
             }
         }
     }
@@ -59,27 +55,15 @@ class   ConfigurationService : ConfigurationServiceProtocol {
                     let appConfig = try decoder.decode(Configuration.self, from: usableData)
                     completion(appConfig)
                 } catch {
-                    if #available(iOS 10.0, *) {
-                        os_log("Failure doing native app version http check: %@", log: OSLog.default, type: .error, "\(error)")
-                    } else {
-                        NSLog("Failure doing native app version http check: %@", "\(error)")
-                    }
+                    os_log("Failure doing native app version http check: %@", log: OSLog.default, type: .error, "\(error)")
                     completion(nil)
                 }
             } else {
-                self.logFailure()
+                os_log("Failure doing native app version http check", log: OSLog.default, type: .error)
                 completion(nil)
             }
         }
         task.resume()
-    }
-    
-    func logFailure() {
-        if #available(iOS 10.0, *) {
-            os_log("Failure doing native app version http check", log: OSLog.default, type: .error)
-        } else {
-            NSLog("Failure doing native app version http check")
-        }
     }
     
     func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
