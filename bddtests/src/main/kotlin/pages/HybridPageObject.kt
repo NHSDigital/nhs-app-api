@@ -154,12 +154,15 @@ open class HybridPageObject : PageObject() {
         return this.text.removeSuffix(charValToRemove)
     }
 
-    fun assertLinkExistsAndClickIt(linkTitle: String, url: String) {
+    fun assertLinkExists(linkTitle: String, url: String) {
         namedLinkWthGivenUrl(linkTitle, url).actOnTheElement {
             Assert.assertTrue("Expected the link called $linkTitle with target of $url to be available",
                     it.isVisible)
         }
+    }
 
+    fun assertLinkExistsAndClickIt(linkTitle: String, url: String) {
+        assertLinkExists(linkTitle, url)
         namedLinkWthGivenUrl(linkTitle,url).click()
     }
 

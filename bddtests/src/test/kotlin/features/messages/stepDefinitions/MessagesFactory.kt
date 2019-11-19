@@ -1,5 +1,7 @@
 package features.messages.stepDefinitions
 
+import config.Config
+import cucumber.api.DataTable
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -10,6 +12,7 @@ import mongodb.MongoRepositoryMessage
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.set
+import utils.toSingleElementList
 import worker.JsonPatch
 import worker.JsonPatchOperation
 import worker.models.messages.MessageRequest
@@ -30,7 +33,6 @@ class MessagesFactory {
     private val twoMonthsAgo = ZonedDateTime.now().minusMonths(TWO_MONTHS)
     private val oneMonthAgo = ZonedDateTime.now().minusMonths(ONE_MONTH)
     private val oneWeekAgo = ZonedDateTime.now().minusDays(SEVEN_DAYS)
-    private val threeDaysAgo = ZonedDateTime.now().minusDays(THREE_DAYS)
 
     private val senderOne = "Sender One"
     private val senderTwo = "Sender Two"
@@ -77,7 +79,26 @@ class MessagesFactory {
         MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(senderOneMessageOne))
     }
 
-    fun afterReading(senderOneSummaryMessage: MessagesSummaryFacade):MessagesSummaryFacade{
+    fun setUpMultipleMessagesWithContentInCache(table: DataTable) {
+        MongoDBConnection.MessagesCollection.clearCache()
+        val nhsLoginId = SerenityHelpers.getPatient().subject
+        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
+
+        val links = table.toSingleElementList();
+        val messages = links.mapIndexed{ index, link -> createReadMessage(senderOne,
+                "message ${prefixInternalLink(link)}", twoMonthsAgo.minusDays(index.toLong()))}
+
+        val senderMessages = createSenderMessages(messages as ArrayList<SingleMessageFacade>)
+        val senderSummaryMessage = MessagesSummaryFacade(senderOne, 0, arrayListOf(messages.first()),
+                lastMessageTime = frontendSummaryDateFormatter.format(twoMonthsAgo))
+
+        createMessagesInRepository(arrayListOf(senderMessages), nhsLoginId)
+
+        MessagesSerenityHelpers.EXPECTED_SUMMARY_MESSAGES.set(arrayListOf(senderSummaryMessage))
+        MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(senderMessages)
+    }
+
+    private fun afterReading(senderOneSummaryMessage: MessagesSummaryFacade):MessagesSummaryFacade{
         return  senderOneSummaryMessage.copy(
                 unreadCount = 0,
                 messages = senderOneSummaryMessage.messages.map { message -> message.copy(read = true) })
@@ -145,5 +166,12 @@ class MessagesFactory {
                 "\"Sender\" : \"$sender\"," +
                 "\"Blah\" : \"Blah\"," +
                 "},"
+    }
+
+    private fun prefixInternalLink(link: String): String{
+        if(link.startsWith("/")) {
+          return "${Config.instance.url}$link"
+        }
+        return link;
     }
 }

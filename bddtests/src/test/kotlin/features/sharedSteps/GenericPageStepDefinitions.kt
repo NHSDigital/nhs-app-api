@@ -10,11 +10,13 @@ import pages.clickOnActionContainingText
 
 class GenericPageStepDefinitions {
 
+    private lateinit var notFoundErrorPage: NotFoundErrorPage
     lateinit var genericPage: HybridPageObject
     @Steps
     lateinit var pageUrl: PageUrl
     @Steps
     lateinit var browser: BrowserSteps
+
 
      @When("^I click the '(.*)' action$")
      fun iClickTheAction(actionText: String) {
@@ -73,5 +75,10 @@ class GenericPageStepDefinitions {
                 .switchTo()
                 .activeElement()
                 .text)
+    }
+
+    @Then("^the Page not found error is displayed$")
+    fun thePageNotFoundErrorIsDisplayed() {
+        notFoundErrorPage.assertNotFoundErrorPage()
     }
 }

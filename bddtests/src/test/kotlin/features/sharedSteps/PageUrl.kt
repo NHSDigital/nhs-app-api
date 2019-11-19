@@ -40,7 +40,6 @@ open class PageUrl {
     }
 
     fun getPage(pageName: String, isOnMobile: Boolean): String {
-
         var path = map[pageName.toLowerCase()]!!
         if (mobileOverrides.contains(pageName.toLowerCase())) {
             path = getPageUrl(isOnMobile, path)

@@ -1,12 +1,16 @@
 package features.messages.stepDefinitions
 
+import config.Config
+import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import pages.messages.MessagesErrorPage
 import pages.messages.MessagesInboxPage
 import pages.messages.MessagesPage
+import utils.SerenityHelpers
 import utils.getOrFail
 import worker.models.messages.MessagesSummaryFacade
 import worker.models.messages.SingleMessageFacade
@@ -25,6 +29,29 @@ class MessagesStepDefinitions {
         val factory = MessagesFactory()
         factory.setUpUser(patient)
         factory.setUpMultipleMessagesInCache()
+    }
+
+    @Given("^I am a user wishing to view my appointments and my messages with content$")
+    fun iAmAUserWishingToViewTheirAppointmentsAndMessagesWithContent(table: DataTable) {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
+        factory.setUpMultipleMessagesWithContentInCache(table)
+        val factoryAppointments = AppointmentsBookingFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+        factoryAppointments.generateDefaultAvailableAppointmentSlotExample()
+        factoryAppointments.generateSuccessfulBookingResponse()
+    }
+
+    @Given("^I am a user wishing to view my messages with content$")
+    fun iAmAUserWishingToViewTheirMessagesWithContent(table: DataTable) {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
+        factory.setUpMultipleMessagesWithContentInCache(table)
     }
 
     @Given("^I am a user wishing to view my messages, but I have no messages$")
@@ -121,5 +148,16 @@ class MessagesStepDefinitions {
         val sender = MessagesSerenityHelpers.TARGET_SENDER.getOrFail<String>()
         messagesErrorPage.assertSenderErrorPage(sender)
     }
-}
 
+    @Then("^I click on the '(.*)' link in the message$")
+    fun iClickOnTheNamedLinkInTheMessages(link: String){
+        val linkTitle = Config.instance.url + link
+        messagesPage.assertLinkExistsAndClickIt(linkTitle,link)
+    }
+
+    @Then("the email address '(.*)' is identified as a link in the message")
+    fun theNamedEmailAddressIsIdentifiedAsALinkInTheMessage(email: String){
+        val href = "mailto:$email"
+        messagesPage.assertLinkExists(email,href)
+    }
+}
