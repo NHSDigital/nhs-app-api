@@ -59,6 +59,11 @@
   <ItemGroup>
     <Content Remove="ClinicalDecisionSupport\cdss-wiremock\**" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Content Include="..\Rotativa\**\*" LinkBase="Rotativa\">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\postman\NHS App FHIR Examples (Wiremock).postman_collection.json" />
     <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\postman\NHS App Fhir Examples (Wiremock).postman_environment.json" />
