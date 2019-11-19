@@ -131,7 +131,9 @@ RUN chmod 755 /app/Rotativa/Linux/wkhtmltopdf
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppDev.crt /usr/local/share/ca-certificates/TppDev.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppProd.crt /usr/local/share/ca-certificates/TppProd.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt /usr/local/share/ca-certificates/vision-test-env.crt
-COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/spine_ldap_search_test_env.crt /usr/local/share/ca-certificates/spine_ldap_search_test_env.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/root-dev.crt /usr/local/share/ca-certificates/root-dev.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/subca-dev.crt /usr/local/share/ca-certificates/subca-dev.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/spine-dev.crt /usr/local/share/ca-certificates/spine-dev.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/queue-staging.nhsapp.service.nhs.uk.crt /usr/local/share/ca-certificates/queue-staging.nhsapp.service.nhs.uk.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/root-staging.crt /usr/local/share/ca-certificates/root-staging.crt
 COPY NHSOnline.Backend.GpSystems/Suppliers/Spine/PublicKeys/subca-staging.crt /usr/local/share/ca-certificates/subca-staging.crt
