@@ -117,11 +117,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 string stringResponse,
                 HttpResponseMessage responseMessage)
             {
-                Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
+                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
+                Body = body;
                 
                 if (!HasSuccessResponse)
                 {
-                    var errorResponseWrapper = responseParser.ParseBody<ErrorResponseWrapper>(stringResponse, responseMessage);
+                    responseParser.TryParseBody<ErrorResponseWrapper>(stringResponse, responseMessage, out var errorResponseWrapper);
                     ErrorResponse = errorResponseWrapper?.Error;
                 }
             }

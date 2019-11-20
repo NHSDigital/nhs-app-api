@@ -20,9 +20,8 @@ abstract class MicrotestMappingBuilder(method: String, relativePath: String = ""
                 .andHeader(HEADER_API_NHS_NUMBER, patient.nhsNumbers.first())
     }
 
-
-    fun respondWithCorruptedContent(content: String): Mapping {
-        return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }
+    override fun respondWithCorruptedContent(content: String?): Mapping {
+        return respondWith(HttpStatus.SC_OK) { andJsonBody(content ?: "{blah}") }
     }
 
     fun respondWithForbiddenError(): Mapping {

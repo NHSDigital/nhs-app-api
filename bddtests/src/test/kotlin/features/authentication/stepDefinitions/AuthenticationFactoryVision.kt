@@ -2,14 +2,17 @@ package features.authentication.stepDefinitions
 
 import mocking.defaults.VisionMockDefaults
 import models.Patient
-import org.junit.Assert
 import utils.SerenityHelpers
 import java.time.Duration
 
 class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
 
     override fun patientWithIncompleteResponse(patient: Patient) {
-        Assert.fail("NHSO-3484")
+        mockingClient
+                .forVision {
+                    authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
+                            .respondWithCorruptedContent()
+                }
     }
 
     override fun patientDoesNotExist(patient: Patient) {
@@ -71,6 +74,14 @@ class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
 
     companion object {
         val mockingClient = SerenityHelpers.getMockingClient()
+
+        fun patientIsAlreadyRegistered(patient: Patient) {
+            createInvalidTestForVision(patient, "Already Registered")
+        }
+
+        fun patientHasALockedAccount(patient: Patient) {
+            createInvalidTestForVision(patient, "Patient Locked")
+        }
 
         fun createInvalidTestForVision(patient: Patient, typeOfError: String) {
             mockingClient.forVision {

@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.MockingClient
+import mocking.citizenId.models.signingKeys.SucceededResponse
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -59,9 +60,13 @@ class AuthenticationStepDefinitionsBackend {
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         mockingClient.forCitizenId {
-            tokenRequest(codeVerifier!!, authCode)
-                    .respondWithServerError()
+            tokenRequest(codeVerifier!!, authCode).respondWithServerError()
+        }
+        mockingClient.forCitizenId {
             userInfoRequest(patient.accessToken).respondWithServerError()
+        }
+        mockingClient.forCitizenId {
+            signingKeyRequest().respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
         SessionCreateJourneyFactory.getForSupplier("EMIS", mockingClient).createFor(patient)
     }

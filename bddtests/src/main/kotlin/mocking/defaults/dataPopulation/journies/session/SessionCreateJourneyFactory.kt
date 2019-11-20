@@ -3,10 +3,20 @@ package mocking.defaults.dataPopulation.journies.session
 import mocking.MockingClient
 import models.Patient
 import org.junit.Assert
+import utils.GlobalSerenityHelpers
+import utils.isTrueOrFalse
+import utils.set
 
 abstract class SessionCreateJourneyFactory {
 
-    abstract fun createFor(patient: Patient)
+    fun createFor(patient: Patient, defaultPracticeSettings: Boolean = true, alternativeUser:Boolean = false) {
+        if (!GlobalSerenityHelpers.USER_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {
+            createFor(patient, defaultPracticeSettings)
+            GlobalSerenityHelpers.USER_SESSION_CREATED.set(true)
+        }
+    }
+
+    protected abstract fun createFor(patient: Patient, defaultPracticeSettings: Boolean)
 
     companion object {
 

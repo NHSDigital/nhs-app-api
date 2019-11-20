@@ -36,10 +36,10 @@ abstract class TppMappingBuilder(method: String = "POST", relativePath: String =
         }
     }
 
-    fun respondWithCorruptedContent(content: String): Mapping {
+    override fun respondWithCorruptedContent(content: String?): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andBody(content.replace(">", "|")
-                    .replace("}", "|"), contentType = "text/xml")
+            andBody(content?.replace(">", "|")
+                    ?.replace("}", "|") ?: "<<corrupted>>", contentType = "text/xml")
         }
     }
 

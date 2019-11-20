@@ -30,21 +30,15 @@ Feature: Cancel Appointments Backend
       | VISION    | zs     |
       | MICROTEST | zm     |
 
-  Scenario Outline: <GP System> returns corrupted data when trying to cancel a previously booked appointment
+  Scenario Outline: A <GP System> api user getting corrupted data when cancelling an appointment receives an unknown internal server error
     Given <GP System> returns corrupted response when trying to cancel a previously booked appointment
     And I have logged in and have a valid session cookie
     When I send a cancellation request to the API with a valid cancellation reason
-    Then I receive a "Internal Server Error" error with service desk reference prefixed "4k"
-  @bug @NHSO-3039
+    Then I receive a "Internal Server Error" error with service desk reference prefixed "xx"
     Examples:
       | GP System |
       | EMIS      |
-  @bug @NHSO-4923
-    Examples:
-      | GP System |
       | TPP       |
-    Examples:
-      | GP System |
       | VISION    |
 
   Scenario: VISION API will return a Conflict when cancelling an appointment booked by someone else

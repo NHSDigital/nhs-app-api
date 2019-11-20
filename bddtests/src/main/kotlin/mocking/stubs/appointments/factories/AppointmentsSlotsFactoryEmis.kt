@@ -1,6 +1,7 @@
 package mocking.stubs.appointments.factories
 
 import mocking.data.appointments.AppointmentSessionVariableKeys
+import mocking.emis.demographics.EmisDemographicsResponse
 import mocking.emis.models.InputRequirements
 import mocking.emis.models.Messages
 import mocking.emis.practices.NecessityOption
@@ -50,6 +51,12 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
         mockingClient.forEmis {
             mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate))
         }
+        val messages = Messages(appointmentsMessage = null)
+        val settingsResponse = SettingsResponseModel(messages = messages)
+        mockingClient.forEmis {
+            practiceSettingsRequest(patient)
+                    .respondWithSuccess(settingsResponse)
+        }
     }
 
     override fun getExpectedApiResponseSlots(facade: AppointmentSlotsResponseFacade) =
@@ -61,4 +68,9 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
             appointmentSlotsFactoryHelper.getExpectedUiRepresentationOfFilteredSlotsWithSessionNames(
                     facade, true
             )
+
+    override fun generateSpecificUserData() {
+        mockingClient.forEmis { authentication.demographicsRequest(patient)
+                .respondWithSuccess(EmisDemographicsResponse(patient, arrayOf())) }
+    }
 }

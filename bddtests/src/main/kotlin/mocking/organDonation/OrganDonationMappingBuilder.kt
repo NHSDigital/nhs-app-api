@@ -10,6 +10,7 @@ import mocking.organDonation.models.CodeableConcept
 import mocking.organDonation.models.Coding
 import mocking.organDonation.models.OrganDonationErrorResponse
 import models.Patient
+import org.apache.http.HttpStatus
 
 const val HEADER_SUBSCRIPTION_KEY = "Ocp-Apim-Subscription-Key"
 const val HEADER_SUBSCRIPTION_VALUE = "781859de3cce4bc48a715dfc8f36dc6f"
@@ -51,5 +52,9 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
         return respondWith(httpStatus) {
             andJsonBody(responseBody).build()
         }
+    }
+
+    override fun respondWithCorruptedContent(content: String?): Mapping {
+        return respondWith(HttpStatus.SC_OK) { andJsonBody(content ?: "{blah}") }
     }
 }

@@ -7,7 +7,6 @@ import mocking.microtest.MicrotestMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import org.apache.http.HttpStatus
-import worker.models.appointments.BookAppointmentSlotResponse
 import java.time.Duration
 
 class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
@@ -39,7 +38,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     }
 
     override fun respondWithSuccess(): Mapping {
-        return respondWithBody(BookAppointmentSlotResponse(true))
+        return respondWithBody("\"Appointment successfully created.\"")
     }
 
     override fun respondWithCorrupted(): Mapping {

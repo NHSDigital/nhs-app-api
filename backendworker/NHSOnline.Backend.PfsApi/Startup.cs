@@ -157,6 +157,7 @@ namespace NHSOnline.Backend.PfsApi
              *      it is invoked as a last resort. */
             options.Filters.Add(typeof(UnhandledExceptionFilterAttribute));
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
+            options.Filters.Add(typeof(UnparsableExceptionFilterAttribute));
             options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
 
             options.InputFormatters.Insert(0, new FhirParametersInputFormatter());

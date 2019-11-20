@@ -47,14 +47,28 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         {
             if (!HasSuccessResponse)
             {
-                ErrorResponse = responseParser.ParseBody<OrganDonationErrorResponse>(stringResponse, responseMessage);
+                var parseErrorSuccess = responseParser.TryParseBody<OrganDonationErrorResponse>(
+                    stringResponse, 
+                    responseMessage, 
+                    out var response);
+                if (!parseErrorSuccess)
+                {
+                    logger.LogError("An error occured while parsing the response");
+                }
                 logger.LogError($"Server returned with error. {ErrorForLogging}");
+                ErrorResponse = response;
                 return this;
             }
 
             Expires = responseMessage.Content?.Headers?.Expires;
 
-            Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
+            var parseSuccess = responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
+            if (!parseSuccess)
+            {
+                logger.LogError("An error occured while parsing the response");
+            }
+
+            Body = body;
             return this;
         }
 

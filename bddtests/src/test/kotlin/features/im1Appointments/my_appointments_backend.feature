@@ -83,17 +83,14 @@ Feature: My Appointments Backend
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: Appropriate error response, when <GP System> returns corrupted data
+  Scenario Outline: A <GP System> api user getting corrupted data when getting appointments receives an unknown internal server error
     Given <GP System> returns corrupted response for my appointments
     And I have logged in and have a valid session cookie
     When my appointments are requested
-    Then I receive a "Internal Server Error" error with service desk reference prefixed "4k"
-  @bug @NHSO-4923
+    Then I receive a "Internal Server Error" error with service desk reference prefixed "xx"
     Examples:
       | GP System |
       | TPP       |
-    Examples:
-      | GP System |
       | EMIS      |
       | VISION    |
       | MICROTEST |

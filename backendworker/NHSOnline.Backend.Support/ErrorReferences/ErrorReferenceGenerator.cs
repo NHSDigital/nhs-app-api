@@ -15,9 +15,9 @@ namespace NHSOnline.Backend.Support
         Appointments,
         Prescriptions
     }
-    
+
     //Disabling CA1717 (no plurals) as detects the i as a plural when not in this case
-    [SuppressMessage("Microsoft.Naming", "CA1717", Justification="False positive - Api is not a plural word")]
+    [SuppressMessage("Microsoft.Naming", "CA1717", Justification = "False positive - Api is not a plural word")]
     public enum SourceApi
     {
         None = 0,
@@ -36,16 +36,19 @@ namespace NHSOnline.Backend.Support
     public interface IErrorReferenceGenerator
     {
         string GenerateAndLogErrorReference(ErrorTypes errorTypes);
-        
-        string GenerateAndLogErrorReference(ErrorCategory category, int statusCode, SourceApi sourceApi = SourceApi.None);
-        
+
+        string GenerateAndLogErrorReference(ErrorCategory category, int statusCode,
+            SourceApi sourceApi = SourceApi.None);
+
         string GenerateAndLogErrorReference(ErrorCategory category, int statusCode, Supplier supplier);
     }
-    
+
     public class ErrorReferenceGenerator : IErrorReferenceGenerator
     {
         private readonly ILogger<ErrorReferenceGenerator> _logger;
+
         private readonly IRandomStringGenerator _randomStringGenerator;
+
         //string supplied should be lowercase and exclude b,d,i,l,p,q,v,0,1,2
         private const string CharactersForGenerator = "acefghjkmnorstuwxyz3456789";
 
@@ -60,7 +63,7 @@ namespace NHSOnline.Backend.Support
             };
 
         private static List<ErrorTypes> ErrorTypes { get; }
-        
+
         static ErrorReferenceGenerator()
         {
             ErrorTypes = Assembly
@@ -69,11 +72,12 @@ namespace NHSOnline.Backend.Support
                 .Where(t => typeof(ErrorTypes).IsAssignableFrom(t))
                 .Where(t => !t.IsAbstract)
                 .Where(t => t.IsClass)
-                .Select(t => (ErrorTypes)Activator.CreateInstance(t))
+                .Select(t => (ErrorTypes) Activator.CreateInstance(t))
                 .ToList();
         }
-        
-        public ErrorReferenceGenerator(ILogger<ErrorReferenceGenerator> logger, IRandomStringGenerator randomStringGenerator)
+
+        public ErrorReferenceGenerator(ILogger<ErrorReferenceGenerator> logger,
+            IRandomStringGenerator randomStringGenerator)
         {
             _logger = logger;
             _randomStringGenerator = randomStringGenerator;
@@ -83,19 +87,20 @@ namespace NHSOnline.Backend.Support
         {
             errorTypes = errorTypes ?? new ErrorTypes.UnhandledError();
 
-            var reference = string.Concat(errorTypes.Prefix, _randomStringGenerator.GenerateString(4, CharactersForGenerator));
+            var reference = string.Concat(errorTypes.Prefix,
+                _randomStringGenerator.GenerateString(4, CharactersForGenerator));
 
             _logger.LogInformation($"service_desk_error_reference={reference}");
 
             return reference;
         }
-        
+
         public string GenerateAndLogErrorReference(ErrorCategory category, int statusCode, SourceApi sourceApi)
         {
             var errorType = LookupErrorType(category, statusCode, sourceApi);
             return GenerateAndLogErrorReference(errorType);
         }
-        
+
         public string GenerateAndLogErrorReference(ErrorCategory category, int statusCode, Supplier supplier)
         {
             if (!SupplierToSourceApiMap.TryGetValue(supplier, out var sourceApi))
@@ -117,11 +122,13 @@ namespace NHSOnline.Backend.Support
             }
             catch (InvalidOperationException)
             {
-                _logger.LogWarning("LookupErrorTypeException=Cannot find a single ErrorType matching the provided parameters");
+                _logger.LogWarning("Cannot find a single ErrorType matching the provided parameters: " +
+                                   $"Category: {category}. " +
+                                   $"StatusCode: {statusCode}. " +
+                                   $"SourceApi: {sourceApi}.");
                 return new ErrorTypes.UnhandledError();
+
             }
         }
     }
 }
-
- 

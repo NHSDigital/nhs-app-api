@@ -17,6 +17,7 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
@@ -432,22 +433,36 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 RawResponse = stringResponse;
                 if (!string.IsNullOrEmpty(stringResponse))
                 {
-                    ParseResponse(responseParser, stringResponse, responseMessage);
+                    ParseResponse(responseParser, stringResponse, responseMessage, logger);
                 }
             }
 
             private void ParseResponse(
                 IResponseParser responseParser,
                 string stringResponse,
-                HttpResponseMessage responseMessage)
+                HttpResponseMessage responseMessage,
+                ILogger logger)
             {
-                Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
-                StandardErrorResponse =
-                    responseParser.ParseBadRequest<StandardErrorResponse>(stringResponse, responseMessage);
-                ErrorResponseBadRequest =
-                    responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
-                ExceptionErrorResponse =
-                    responseParser.ParseError<ExceptionErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
+                if (string.IsNullOrEmpty(stringResponse))
+                {
+                    logger.LogError("No response body");
+                    return;
+                }
+
+                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
+                Body = body;
+                responseParser.TryParseBadRequest<StandardErrorResponse>(stringResponse, responseMessage,
+                    out var standardErrorResponse);
+                StandardErrorResponse = standardErrorResponse;
+                responseParser.TryParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage,
+                    out var errorResponseBadRequest);
+                ErrorResponseBadRequest = errorResponseBadRequest;
+                responseParser.TryParseError<ExceptionErrorResponse>(
+                    stringResponse,
+                    responseMessage,
+                    out var exceptionErrorResponse,
+                    HttpStatusCode.BadRequest);
+                ExceptionErrorResponse = exceptionErrorResponse;
             }
 
             protected override bool FormatResponseIfUnsuccessful => true;

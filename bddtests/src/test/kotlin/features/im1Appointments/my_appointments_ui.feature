@@ -39,7 +39,6 @@ Feature: My Appointments Frontend
       | TPP       |
       | MICROTEST |
 
-
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming appointments
     Given I have no booked appointments for <GP System>
     And I am logged in

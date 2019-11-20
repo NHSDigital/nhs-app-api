@@ -325,22 +325,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
                     ? this
                     : ParseResponse(responseParser,
                         stringResponse,
-                        responseMessage,
-                        logger);
+                        responseMessage);
             }
 
             private MicrotestApiObjectResponse<TBody> ParseResponse(
                 IResponseParser responseParser,
                 string stringResponse,
-                HttpResponseMessage responseMessage,
-                ILogger logger)
+                HttpResponseMessage responseMessage)
             {
-                Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
-
-                if (Body != null) return this;
-                logger.LogError($"Response parsing failed. Raw response: {stringResponse}");
-                ErrorResponseMessage = stringResponse;
-                return new MicrotestApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
+                responseParser.TryParseBody<TBody>(
+                    stringResponse, 
+                    responseMessage,
+                    out var body);
+                Body = body;
+                return this;
             }
         }
     }

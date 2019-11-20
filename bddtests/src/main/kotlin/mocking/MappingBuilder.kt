@@ -50,4 +50,8 @@ abstract class MappingBuilder(method: String, url: String) {
             andXmlBody("")
         }
     }
+
+    open fun respondWithCorruptedContent(content: String? = null): Mapping {
+        return respondWith(HttpStatus.SC_OK) { andJsonBody(content ?: "{blah}") }
+    }
 }

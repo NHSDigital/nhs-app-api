@@ -41,6 +41,13 @@ open class AppointmentsBookingStepDefinitionsBackend {
         factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
     }
 
+    @Given("^an appointment booking for (.*) requires a booking reason$")
+    fun anAppointmentBookingForRequiresABookingReason(gpSystem: String) {
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.generateDefaultUserData(defaultPracticeSettings = false)
+        factory.requiresBookingReason(true)
+    }
+
     @Given("^an appointment booking for (.*) can be successful with booking reason of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String,
                                                                                       numberOfCharacters: Int) {
@@ -169,8 +176,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
     fun anAppointmentIsSubmittedWithNoSlotId() {
         val workerAppointmentRequest =
                 AppointmentBookRequest(
-                        null,
-                       AppointmentsBookingFactory. defaultApptBookingReason)
+                        slotId =  null,
+                        bookingReason = AppointmentsBookingFactory. defaultApptBookingReason)
         submitAppointmentRequest(workerAppointmentRequest)
     }
 
@@ -187,8 +194,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
     fun anAppointmentIsSubmittedWithNoBookingReason() {
         val workerAppointmentRequest =
                 AppointmentBookRequest(
-                        AppointmentsBookingFactory. defaultApptBookingSlotId.toString(),
-                        null)
+                       slotId = AppointmentsBookingFactory. defaultApptBookingSlotId.toString(),
+                       bookingReason = null)
         submitAppointmentRequest(workerAppointmentRequest)
     }
 

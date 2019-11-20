@@ -1,7 +1,7 @@
 package features.im1Appointments.steps
 
-import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.MockingClient
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import models.Slot
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
@@ -114,8 +114,5 @@ open class AppointmentsConfirmationSteps {
                 appointmentsConfirmation.getNumberOfSelectedPhoneNumberRadioButtons()
         )
     }
-
-    enum class SerenityVariable {
-        TELEPHONE_NUMBER_TO_BOOK_AGAINST
-    }
 }
+

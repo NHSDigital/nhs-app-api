@@ -379,12 +379,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             {
                 try
                 {
-                    var responseObject =
-                        responseParser.ParseBody<VisionResponseEnvelope<TBody>>(stringResponse, responseMessage);
+                    var parseSuccess = responseParser.TryParseBody<VisionResponseEnvelope<TBody>>(stringResponse, 
+                        responseMessage, 
+                        out var responseObject);
                     RawResponse = responseObject;
 
-                    if (responseObject == null)
+                    if (!parseSuccess)
                     {
+                        logger.LogError($"Vision Error Response could not be parsed: : {stringResponse}");
                         UnparsableResultMessage = stringResponse;
                     }
                 }
@@ -392,11 +394,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 {
                     logger.LogError(e, $"Vision Error Response could not be parsed: : {stringResponse}" );
                     UnparsableResultMessage = stringResponse;
-                }
-                catch (FormatException e)
-                {
-                    logger.LogError(e, "An error occured while parsing the response");
-                    return new VisionApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
                 }
 
                 return this;

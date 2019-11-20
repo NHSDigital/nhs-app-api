@@ -19,6 +19,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using RichardSzalay.MockHttp;
@@ -741,6 +742,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
         private void SetupMockedHandlerEmisForEmisCustomTimeout()
         {
+            var mockedResponse = _fixture.Create<CoursesGetResponse>().SerializeJson();
             _mockedHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
             _mockedHandler
                 .Protected()
@@ -752,7 +754,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .ReturnsAsync(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent("Anything"),
+                    Content = new StringContent(mockedResponse),
                 })
                 .Verifiable();
 

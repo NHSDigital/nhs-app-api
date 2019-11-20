@@ -13,7 +13,7 @@ import net.serenitybdd.core.Serenity
 
 class VisionSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
 
-    override fun createFor(patient: Patient) {
+    override fun createFor(patient: Patient, defaultPracticeSettings:Boolean) {
         var configuration = if (Serenity.sessionVariableCalled<String>(gpAppointmentsDisabled) == "true") {
             VisionMockDefaults.visionConfigurationResponseAppointmentsDisabled
         } else {

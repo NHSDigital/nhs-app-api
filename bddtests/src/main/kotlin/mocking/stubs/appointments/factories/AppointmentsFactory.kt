@@ -1,10 +1,10 @@
 package mocking.stubs.appointments.factories
 
 import constants.DateTimeFormats
-import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import models.Patient
@@ -29,10 +29,13 @@ abstract class AppointmentsFactory(gpSupplier: String) {
         appointmentMapper = MockingClientAppointmentMappingFactory.getForSupplier(supplier)
     }
 
-    fun generateDefaultUserData() {
+    fun generateDefaultUserData(defaultPracticeSettings:Boolean = true) {
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient, defaultPracticeSettings)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        generateSpecificUserData()
     }
+
+    open fun generateSpecificUserData(){}
 
     fun createGetEmptyAppointmentList() {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)

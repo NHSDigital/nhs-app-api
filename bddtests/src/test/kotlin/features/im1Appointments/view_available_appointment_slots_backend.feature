@@ -44,17 +44,6 @@ Feature: View Available Appointment Slots Backend
     Then I receive an "Unauthorized" error
     And the response contains an empty body
 
-  Scenario Outline: Requesting available appointment slots when <GP System> is unavailable returns "Bad gateway" error
-    Given I have logged into <GP System> and have a valid session cookie
-    When the available appointment slots are retrieved
-    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
-    Examples:
-      | GP System | Prefix |
-      | EMIS      | 4e     |
-      | TPP       | 4t     |
-      | VISION    | 4s     |
-      | MICROTEST | 4m     |
-
   Scenario Outline: Requesting available appointment slots when <GP System> is not accessible returns "Forbidden" error
     Given the system will respond with forbidden when trying to retrieve <GP System> appointment slots
     And I have logged into <GP System> and have a valid session cookie

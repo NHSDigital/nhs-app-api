@@ -3,6 +3,7 @@ package features.im1Appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.im1Appointments.steps.AppointmentSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
 import features.im1Appointments.steps.AvailableAppointmentFilterSteps
@@ -16,7 +17,7 @@ import org.junit.Assert
 import pages.assertDoesElementHaveFocus
 import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
-import utils.SerenityHelpers
+import utils.getOrFail
 
 class AppointmentsConfirmationStepDefinitions {
 
@@ -40,35 +41,6 @@ class AppointmentsConfirmationStepDefinitions {
         )
     }
 
-    @Given("^I wish to book a telephone appointment using my (\\w+) phone number$")
-    fun iWishToBookATelephoneAppointmentUserMyPhoneNumberOfType(phoneNumberToSelect: String) {
-        val patient = SerenityHelpers.getPatient()
-        when (phoneNumberToSelect) {
-            "first" ->
-                SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
-                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, patient.telephoneFirst)
-            "second" ->
-                SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
-                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, patient.telephoneSecond)
-            "custom" ->
-                SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
-                        .TELEPHONE_NUMBER_TO_BOOK_AGAINST, AppointmentsBookingFactory.telephoneNumberValueToEnter)
-            else -> Assert.fail("Invalid phone number type. ")
-        }
-    }
-
-    @Given("^I will manually enter this phone number$")
-    fun iWillManuallyEnterThisPhoneNumber() {
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(AppointmentsConfirmationSteps.SerenityVariable
-                .TELEPHONE_NUMBER_TO_BOOK_AGAINST, AppointmentsBookingFactory.telephoneNumberValueToEnter)
-        Assert.assertNotNull(
-                "No phone number has been referenced, so don't know what telephone number will be entered. ",
-                AppointmentsBookingFactory.telephoneNumberValueToEnter
-        )
-        Serenity.setSessionVariable(AppointmentsConfirmationSteps.SerenityVariable.TELEPHONE_NUMBER_TO_BOOK_AGAINST)
-                .to(AppointmentsBookingFactory.telephoneNumberValueToEnter)
-    }
-
     @Given("^I have selected a telephone appointment slot to book$")
     fun givenIHaveSelectedATelephoneAppointmentSlotToBook() {
         givenIHaveSelectedAnAppointmentSlotToBook()
@@ -86,20 +58,11 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.appointmentsConfirmation.describeSymptoms(symptoms)
     }
 
-    @When("^I select the (\\w+) number from available ones$")
-    fun iSelectPhoneNumberFromAvailableOnes(phoneNumberToSelect: String) {
-        val patient = SerenityHelpers.getPatient()
-        when(phoneNumberToSelect) {
-            "first" ->
-                appointmentsConfirmationSteps.appointmentsConfirmation
-                        .selectPhoneNumberRadioButtonByText(patient.telephoneFirst)
-            "second" ->
-                appointmentsConfirmationSteps.appointmentsConfirmation
-                        .selectPhoneNumberRadioButtonByText(patient.telephoneSecond)
-            else -> Assert.fail("Invalid phone number type. ")
-        }
-
-        appointmentsConfirmationSteps.checkOnlyOnePhoneNumberRadioButtonIsSelected()
+    @When("^I select a telephone number to book an appointment$")
+    fun iSelectATelephoneNumberToBookAnAppointment() {
+        val targetNumber = AppointmentSerenityHelpers.TELEPHONE_NUMBER_TO_BOOK_AGAINST.getOrFail<String>()
+        appointmentsConfirmationSteps.appointmentsConfirmation
+                .selectPhoneNumberRadioButtonByText(targetNumber)
     }
 
     @When("^I select the radio button for an alternative phone number to those stored$")
@@ -108,22 +71,9 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.checkOnlyOnePhoneNumberRadioButtonIsSelected()
     }
 
-    @When("^I alternate between the different number options from available ones$")
-    fun iSelectAlternatePhoneNumberOptions(list: List<String>) {
-        for (option in list) {
-            when (option) {
-                "first", "second" -> iSelectPhoneNumberFromAvailableOnes(option)
-                "alternative" -> iSelectAlternativePhoneNumberOption()
-                else -> Assert.fail("Invalid phone number option: $option")
-            }
-
-        }
-    }
-
     @When("^I enter a phone number for the appointment$")
     fun whenIEnterAPhoneNumberForTheAppointment() {
-        val telephoneNumber = Serenity.sessionVariableCalled<String>(AppointmentsConfirmationSteps.SerenityVariable
-                .TELEPHONE_NUMBER_TO_BOOK_AGAINST)
+        val telephoneNumber = AppointmentSerenityHelpers.TELEPHONE_NUMBER_TO_BOOK_AGAINST.getOrFail<String>()
         Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
         appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }
@@ -133,11 +83,6 @@ class AppointmentsConfirmationStepDefinitions {
         val telephoneNumber = "  "
         Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
         appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
-    }
-
-    @Then("^only the first (\\d+) characters will be displayed$")
-    fun thenOnlyTheFirstCharactersWillBeDisplayed(length: Int) {
-        appointmentsConfirmationSteps.checkSymptomsLength(length)
     }
 
     @Then("^I see appropriate information message after 10 seconds when it times-out on appointment confirmation page$")
@@ -187,16 +132,6 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertSingleElementPresent()
     }
 
-    @Then("^the radio button for an alternate phone number remains selected$")
-    fun theRadioButtonForAlternatePhoneNumberRemainsSelected() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.assertRadioButtonForAlternativePhoneNumberIsSelected()
-    }
-
-    @Then("^the phone number text field is not displayed$")
-    fun iDoNotSeeATextInputToEnterPhoneNumber() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertElementNotPresent()
-    }
-
     @Then("^the focus will go back to empty phone number input box$")
     fun theFocusWillGoBackToEmptyPhoneNumberInputbox() {
         appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertDoesElementHaveFocus()
@@ -210,26 +145,5 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^a message is displayed indicating a phone number is required$")
     fun thenAMessageIsDisplayedIndicatingAPhoneNumberIsRequired() {
         appointmentsConfirmationSteps.checkTelephoneNumberRequiredErrorMessage()
-    }
-
-    @Then("^I see radio buttons to select the user's telephone numbers$")
-    fun iSeeRadioButtonsToSelectUsersTelephoneNumbers() {
-        val usersPhoneNumbers = ArrayList<String>()
-        val patient = SerenityHelpers.getPatient()
-        if (!patient.telephoneFirst.isNullOrEmpty())
-            usersPhoneNumbers.add(patient.telephoneFirst)
-        if (!patient.telephoneSecond.isNullOrEmpty())
-            usersPhoneNumbers.add(patient.telephoneSecond)
-        appointmentsConfirmationSteps.checkRadioButtonsDisplayedForPhoneNumbers(usersPhoneNumbers)
-    }
-
-    @Then("^I see a radio button to select an alternate number$")
-    fun iSeeRadioButtonsToSelectAlternateNumber() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.assertRadioButtonDisplayedForAlternateNumber()
-    }
-
-    @Then("^none of available phone numbers are selected$")
-    fun noneOfAvailablePhoneNumbersAreSelected() {
-        appointmentsConfirmationSteps.checkNoPhoneNumberRadioButtonsAreSelected()
     }
 }

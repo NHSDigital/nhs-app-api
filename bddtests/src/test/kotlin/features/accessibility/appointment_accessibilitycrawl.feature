@@ -27,16 +27,18 @@
       Then the CancelConfirmation page is saved to disk
 
     Scenario: The appointment booking pages are captured
-      Given I have only first telephone number(s) stored for EMIS
-      And I wish to book a telephone appointment using my first phone number
-      And there are appointments available to book which are of telephone type for EMIS
+      Given I wish to book a EMIS telephone appointment
+        | number of stored telephone numbers  | 1         |
+        | the reason on the appointment is    | mandatory |
+        | selecting telephone number          | select    |
+        | symptoms to enter                   | yes       |
       And I am logged in
       When I retrieve the 'Appointment Booking' page directly
       Then the AppointmentBooking page is saved to disk
       When I have selected a telephone appointment slot to book
       Then the Appointment Slot page is displayed
       Then the AppointmentSlot_Telephone page is saved to disk
-      When I select the first number from available ones
+      When I select a telephone number to book an appointment
       And I enter symptoms
       And I click the 'Confirm and book appointment' button
       Then the Appointment Booking success message is displayed

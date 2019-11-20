@@ -4,15 +4,19 @@ import mocking.emis.me.EmisMeApplicationsBuilder
 
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
+import mocking.emis.practices.SettingsResponseModel
 import mocking.models.Mapping
 import models.Patient
-import org.junit.Assert
 import java.time.Duration
 
 class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
 
     override fun patientWithIncompleteResponse(patient: Patient) {
-        Assert.fail("NHSO-3484")
+        mockingClient.forEmis { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis {
+            authentication.sessionRequest(patient).respondWithCorruptedContent()
+        }
     }
 
     override fun patientDoesNotExist(patient: Patient) {
@@ -51,23 +55,31 @@ class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
     }
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
-        mockingClient.forEmis { authentication.endUserSessionRequest()
-                .respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(delayBySeconds)) }
+        mockingClient.forEmis {
+            practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel())
+                    .delayedBy(Duration.ofSeconds(delayBySeconds))
+        }
+        mockingClient.forEmis {
+            authentication.endUserSessionRequest()
+                    .respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(delayBySeconds))
+        }
         mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, associationType) }
     }
 
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
+        mockingClient.forEmis { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { authentication.sessionRequest(patient).respondWithForbidden() }
     }
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
+        mockingClient.forEmis { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithServiceUnavailable() }
         mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, associationType) }
-
     }
 
     private fun createInvalidLinkageTest( patient: Patient, emisResponse: (EmisMeApplicationsBuilder.() -> Mapping)) {
+        mockingClient.forEmis { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
         mockingClient.forEmis { emisResponse(authentication
                 .meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))) }
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }

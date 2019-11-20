@@ -6,6 +6,7 @@ Feature: Book Appointments  Backend
   As a logged in user
   I want to book an appointment to see a clinician at my GP practice
 
+
   Scenario Outline: Booking an appointment with <GP System> returns a successful response
     Given an appointment booking for <GP System> can be successful
     And I have logged in and have a valid session cookie
@@ -52,7 +53,8 @@ Feature: Book Appointments  Backend
       | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no booking reason is provided
-    Given I have logged into <GP System> and have a valid session cookie
+    Given an appointment booking for <GP System> requires a booking reason
+    And I have logged in and have a valid session cookie
     When an appointment booking is submitted with no booking reason
     Then I receive a "Bad Request" error with service desk reference prefixed "4a"
     Examples:
@@ -62,13 +64,15 @@ Feature: Book Appointments  Backend
       | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if an empty booking reason is provided
-    Given an appointment booking for <GP System> can be successful
+    Given an appointment booking for <GP System> requires a booking reason
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted with booking reason of 0 characters
     Then I receive a "Bad Request" error with service desk reference prefixed "4a"
     Examples:
       | GP System |
       | EMIS      |
+    Examples:
+      | GP System |
       | TPP       |
       | MICROTEST |
 
@@ -226,21 +230,15 @@ Feature: Book Appointments  Backend
       | VISION    | zs     |
       | MICROTEST | zm     |
 
-  Scenario Outline: <GP System> returns corrupted data
+  Scenario Outline: A <GP System> api user getting corrupted data when booking an appointment receives an unknown internal server error
     Given <GP System> returns corrupted response for booking request
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive a "Internal Server Error" error with service desk reference prefixed "4k"
-  @bug @NHSO-3039
+    Then I receive a "Internal Server Error" error with service desk reference prefixed "xx"
     Examples:
       | GP System |
       | EMIS      |
-  @bug @NHSO-4923
-    Examples:
-      | GP System |
       | TPP       |
-    Examples:
-      | GP System |
       | VISION    |
 
   Scenario Outline: Booking a telephone appointment with <GP System> returns successful response if the phone number is provided

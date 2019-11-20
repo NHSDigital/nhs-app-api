@@ -57,7 +57,7 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
         }
     }
 
-    override fun createFor(patient: Patient) {
+    override fun createFor(patient: Patient, defaultPracticeSettings:Boolean) {
         createAuthenticateRequest(patient)
         client.forTpp { authentication.logOffRequest().respondWithSuccess() }
     }

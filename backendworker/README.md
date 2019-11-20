@@ -80,6 +80,23 @@ Finally, you will also need to create a second appsettings file called *appsetti
 
 *appsettings.Development.json* is ignored by Git.
 
+
+### Debugging the pfs api while running BDD tests
+
+In order to run the pfs api in debug mode: 
+* Change the bdd nginx config proxy_pass
+``` 
+proxy_pass http://pfs.local.bitraft.io:8082/;
+```
+to 
+``` 
+proxy_pass http://host.docker.internal:8082/;
+``` 
+* Remove the pfs.local.bitraft.io from docker-compose and docker-compose.override files in bdd
+* Add passwords from docker-compose.override into launchSettings if using
+* Add the TestCert.pfx into NhsOnline.Backend.PfsApi/app/bddCerts (or other path stated in launch settings) in order to run Vision tests
+* Spin up the pfs api in debug mode, and then spin up the bdd tests in docker
+
 ## Example curls to verify
 ### STUBS
 curl -v \

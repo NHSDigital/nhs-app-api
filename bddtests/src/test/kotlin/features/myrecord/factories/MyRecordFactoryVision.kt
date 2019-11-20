@@ -25,10 +25,16 @@ class MyRecordFactoryVision: MyRecordFactory() {
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mocker.generatePatientDataResponse(patient, VisionConstants.allergiesView, VisionConstants.htmlResponseFormat)
+        mocker.generatePatientDataResponse(patient, VisionConstants.allergiesView,
+                VisionConstants.htmlResponseFormat)
         { request -> request.respondWithSuccess(AllergiesData.getVisionAllergiesData(0))}
 
-        mocker.generatePatientDataResponse(patient, VisionConstants.immunisationsView)
+        mocker.generatePatientDataResponse(patient, VisionConstants.immunisationsView,
+                VisionConstants.xmlResponseFormat)
+        { request -> request.respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())}
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.proceduresView,
+                VisionConstants.htmlResponseFormat)
         { request -> request.respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())}
 
         mocker.generatePatientDataResponse(patient, VisionConstants.medicationsView)
@@ -36,13 +42,24 @@ class MyRecordFactoryVision: MyRecordFactory() {
 
         mocker.generatePatientDataResponse(patient, VisionConstants.testResultsView)
         { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.problemsView)
+        { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.diagnosisView)
+        { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.examinationsView)
+        { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
     }
 
     override fun enabledWithAllRecords(patient: Patient){
-        mocker.generatePatientDataResponse(patient, VisionConstants.allergiesView, VisionConstants.htmlResponseFormat)
+        mocker.generatePatientDataResponse(patient, VisionConstants.allergiesView,
+                VisionConstants.htmlResponseFormat)
         { request -> request.respondWithSuccess(AllergiesData.getVisionAllergiesData(NUMBER_OF_ALLERGY_RECORDS))}
 
-        mocker.generatePatientDataResponse(patient, VisionConstants.immunisationsView)
+        mocker.generatePatientDataResponse(patient, VisionConstants.immunisationsView,
+                VisionConstants.xmlResponseFormat)
         { request -> request.respondWithSuccess(
                 ImmunisationsData.getVisionImmunisationsData(NUMBER_OF_IMMUNISATION_RECORDS))}
 
@@ -51,7 +68,8 @@ class MyRecordFactoryVision: MyRecordFactory() {
         mocker.generatePatientDataResponse(patient, VisionConstants.problemsView)
         { request -> request.respondWithSuccess(ProblemsData.getVisionProblemsData())}
 
-        mocker.generatePatientDataResponse(patient, VisionConstants.testResultsView, VisionConstants.htmlResponseFormat)
+        mocker.generatePatientDataResponse(patient, VisionConstants.testResultsView,
+                VisionConstants.htmlResponseFormat)
         { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithMultipleResults()) }
 
         mocker.generatePatientDataResponse(

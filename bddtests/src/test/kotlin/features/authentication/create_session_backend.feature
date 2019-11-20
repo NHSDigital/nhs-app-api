@@ -54,7 +54,6 @@ Feature: Create Session Backend
     Given I have valid OAuth details and <GP System> is not available
     When I create a user session
     Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
-
     Examples:
       | GP System | Prefix |
       | EMIS      | 3e     |
@@ -62,13 +61,16 @@ Feature: Create Session Backend
       | VISION    | 3s     |
       | MICROTEST | 3m     |
 
-  Scenario Outline: When creating a session with <GP System> an incomplete response returns a Bad Gateway
+  Scenario Outline: When creating a session with <GP System> an incomplete response returns an internal server error
     Given I have valid OAuth details and <GP System> returns with an incomplete response
     When I create a user session
-    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
+    Then I receive a "Internal Server Error" error with service desk reference prefixed "xx"
     Examples:
-      | GP System | Prefix |
-      | TPP       | 3t     |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
 
   Scenario Outline: CID connection token fails to authenticate with <GP System>
     Given I have invalid OAuth details and CID connection token fails to authenticate with <GP System>

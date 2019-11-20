@@ -13,11 +13,11 @@ namespace NHSOnline.Backend.Support.ResponseParsers
 
     public interface IResponseParser
     {
-        T ParseBadRequest<T>(string stringResponse, HttpResponseMessage message);
-        T ParseBody<T>(string stringResponse, HttpResponseMessage message);
-        T ParseError<T>(
-            string stringResponse,
+        bool TryParseBadRequest<T>(string stringResponse, HttpResponseMessage message, out T response);
+        bool TryParseBody<T>(string stringResponse, HttpResponseMessage message, out T response);
+        bool TryParseError<T>(string stringResponse,
             HttpResponseMessage message,
+            out T response,
             params HttpStatusCode[] allowedErrorStatuses);
     }
 }

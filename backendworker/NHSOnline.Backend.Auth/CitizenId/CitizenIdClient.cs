@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
 
@@ -107,8 +108,10 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 return response;
             }
 
-            response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
-            response.ErrorResponse = _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage);
+            _responseParser.TryParseBody<TResponse>(stringResponse, responseMessage, out var body);
+            response.Body = body;
+            _responseParser.TryParseError<ErrorResponse>(stringResponse, responseMessage, out var error);
+            response.ErrorResponse = error;
 
             return response;
         }

@@ -126,7 +126,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 string stringResponse, 
                 HttpResponseMessage responseMessage)
             {
-                Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
+                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
+                Body = body;
                 return this;
             }
 

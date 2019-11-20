@@ -17,6 +17,7 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using RichardSzalay.MockHttp;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
@@ -126,7 +127,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         }
 
         [TestMethod]
-        public async Task AuthenticatePostRequest_ReturnsErrorWithInternalServerErrorCode_WhenResponseIsIncomplete()
+        public async Task AuthenticatePostRequest_ReturnsNhsUnparsableException_WhenResponseIsIncomplete()
         {
             // Arrange
             var authenticateRequestModel = _fixture.Create<Authenticate>();
@@ -166,10 +167,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
             // Act
-            var response = await _systemUnderTest.AuthenticatePost(authenticateRequestModel);
-            
+            Func<Task> act = async () => { await _systemUnderTest.AuthenticatePost(authenticateRequestModel); };
+
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            await act.Should().ThrowAsync<NhsUnparsableException>();
             VerifyLogging(authenticateRequestModel);
         }
 

@@ -5,16 +5,21 @@ import mocking.MockingClient
 import mocking.citizenId.models.notifications.SuccessResponse
 import mocking.citizenId.models.signingKeys.SucceededResponse
 import models.Patient
+import utils.GlobalSerenityHelpers
+import utils.isTrueOrFalse
+import utils.set
 import worker.models.patient.Im1ConnectionToken
 
 private const val DELAY_BY = 1000L
 class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
-    fun createFor(patient: Patient) {
-        val accessToken = createMockingSteps(patient)
-
-        mockingClient.forCitizenId {
-            userInfoRequest(accessToken).respondWithSuccess(patient)
+    fun createFor(patient: Patient, alternativeUser:Boolean = false) {
+        if (!GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {
+            val accessToken = createMockingSteps(patient)
+            mockingClient.forCitizenId {
+                userInfoRequest(accessToken).respondWithSuccess(patient)
+            }
+            GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.set(true)
         }
     }
 

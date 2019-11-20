@@ -51,6 +51,8 @@ class AuthenticationFactoryMicrotest : AuthenticationFactory("MICROTEST") {
     }
 
     override fun patientWithIncompleteResponse(patient: Patient) {
-        throw NotImplementedError("Not implemented for Microtest")
+        mockingClient.forMicrotest {
+            demographics.demographicsRequest(patient).respondWithCorruptedContent()
+        }
     }
 }

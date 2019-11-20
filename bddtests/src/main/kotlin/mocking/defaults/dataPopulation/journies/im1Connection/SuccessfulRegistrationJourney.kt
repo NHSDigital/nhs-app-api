@@ -17,6 +17,7 @@ import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
 import mocking.tpp.models.User
 import mocking.defaults.VisionMockDefaults
+import mocking.emis.practices.SettingsResponseModel
 import mocking.vision.models.Account
 import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber
@@ -72,6 +73,9 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                             )
                     ).respondWithSuccess(patient.connectionToken)
                 }
+        client.forEmis {
+            practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel())
+        }
     }
 
     private fun generateTppMocks(patient: Patient) {

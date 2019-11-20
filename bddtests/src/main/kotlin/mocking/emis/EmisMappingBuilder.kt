@@ -43,8 +43,8 @@ abstract class EmisMappingBuilder(configuration: EmisConfiguration?,
                 .SC_FORBIDDEN)
     }
 
-    fun respondWithCorruptedContent(content: String): Mapping {
-        return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }
+    override fun respondWithCorruptedContent(content: String?): Mapping {
+        return respondWith(HttpStatus.SC_OK) { andJsonBody(content?: "<<randomtag/>>") }
     }
 
     fun respondWithEmisNotAuthorised(): Mapping {

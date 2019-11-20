@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.ServiceJourneyRules.Common.Models
@@ -28,7 +29,8 @@ namespace NHSOnline.Backend.ServiceJourneyRules.Common.Models
             string stringResponse, 
             HttpResponseMessage responseMessage)
         {
-            Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
+            responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
+            Body = body;
             return this;
         }
 

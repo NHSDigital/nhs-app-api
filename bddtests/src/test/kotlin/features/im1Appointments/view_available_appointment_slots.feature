@@ -3,10 +3,7 @@
 Feature: View Available Appointment Slots Frontend
   Users can view available appointments from the available appointments Page.
 
-  #This test covers navigation via buttons/links
-
   #GP System agnostic scenario, so only need to test with EMIS
-
   @nativesmoketest
   Scenario: A user who is signed in sees the appointments navigation button highlighted
     Given there are available appointment slots with different criteria for EMIS
@@ -15,7 +12,6 @@ Feature: View Available Appointment Slots Frontend
     Then the appointments menu button is highlighted
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
-
   Scenario Outline: A <GP System> user enters the available appointments page
     Given there are available appointment slots with different criteria for <GP System>
     And I am logged in
@@ -299,17 +295,6 @@ Feature: View Available Appointment Slots Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I decide I don't want to select an appointment and go back
     Then the My Appointments page is displayed
-
-    # covered in Manual Regression Test pack
-  @native
-  @tech-debt   @NHSO-4061
-  Scenario: A user sees appropriate information message when internet connection has been lost
-    #    GP System agnostic scenario, so only need to test with EMIS
-    Given I am on the My Appointments page
-    And internet connection drops
-    When I press the "Book this appointment" button
-    Then I see appropriate information message when there is no internet connection
-    And there should be a button to try again
 
   @nativesmoketest
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession

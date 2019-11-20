@@ -6,6 +6,7 @@ import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.emis.practices.SettingsResponseModel
 import models.patients.EmisPatients
 import models.Patient
 import models.patients.TppPatients
@@ -52,7 +53,16 @@ class AuthReturnStepDefinitions {
         this.patient = EmisPatients.montelFrye
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-
+        mockingClient.forEmis {
+            authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId)
+        }
+        mockingClient.forEmis {
+            practiceSettingsRequest(patient)
+                    .respondWithSuccess( SettingsResponseModel())
+        }
+        mockingClient.forEmis {
+            authentication.sessionRequest(patient).respondWithServerError()
+        }
         browser.goToApp()
         login.using(this.patient)
     }

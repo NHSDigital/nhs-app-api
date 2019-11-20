@@ -23,22 +23,13 @@ namespace NHSOnline.Backend.Support
         {
             if (string.IsNullOrEmpty(json))
             {
-                Console.WriteLine($"JSON was null or empty when attempting to deserialize: { typeof(T).FullName }");
-                return default(T);
+                Console.WriteLine($"JSON was null or empty when attempting to deserialize: {typeof(T).FullName}");
+                return default;
             }
 
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(json);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Exception when attempting to deserialize json: { typeof(T).FullName }");
-                Console.WriteLine(e);
-                return default(T);
-            }
+            return JsonConvert.DeserializeObject<T>(json);
         }
-        
+
         public static string SerializeXml<T>(this T toXml)
         {
             if (toXml == null)
@@ -74,7 +65,7 @@ namespace NHSOnline.Backend.Support
             if (string.IsNullOrEmpty(xml))
             {
                 Console.WriteLine($"XML was null or empty when attempting to deserialize: { typeof(T).FullName }");
-                return default(T);
+                return default;
             }
             
             var serializer = new XmlSerializer(typeof(T));

@@ -20,9 +20,10 @@ namespace NHSOnline.Backend.Support.UnitTests.ResponseParsers
             var httpResponse = new HttpResponseMessage(HttpStatusCode.OK);
             
             // Act
-            var result = parser.ParseBody<Application>(
+            parser.TryParseBody<Application>(
                 "<Application deviceType=\"coco pops\"></Application>", 
-                httpResponse
+                httpResponse, 
+                out var result
             );
 
             // Assert

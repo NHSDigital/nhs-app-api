@@ -86,20 +86,17 @@ abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFact
     }
 
     private fun setAppointmentToBeBooked(toBeBooked: BookAppointmentSlotFacade) {
-        Serenity.setSessionVariable(appointmentToBookKey).to(getAppointmentBookRequest(toBeBooked))
-        Serenity.setSessionVariable(symptomsToEnter).to(toBeBooked.bookingReason)
-    }
-
-    private fun getAppointmentBookRequest(bookApptSlot: BookAppointmentSlotFacade): AppointmentBookRequest {
-        return AppointmentBookRequest(
-                bookApptSlot.userPatientLinkToken,
-                bookApptSlot.slotId.toString(),
-                bookApptSlot.bookingReason,
-                bookApptSlot.startTime,
-                bookApptSlot.endTime,
-                bookApptSlot.telephoneNumber,
-                bookApptSlot.telephoneContactType
+        val appointmentRequest = AppointmentBookRequest(
+                toBeBooked.userPatientLinkToken,
+                toBeBooked.slotId.toString(),
+                toBeBooked.bookingReason,
+                toBeBooked.startTime,
+                toBeBooked.endTime,
+                toBeBooked.telephoneNumber,
+                toBeBooked.telephoneContactType
         )
+        Serenity.setSessionVariable(appointmentToBookKey).to(appointmentRequest)
+        Serenity.setSessionVariable(symptomsToEnter).to(toBeBooked.bookingReason)
     }
 
     private fun generateBookingResponse(bookingReason: String, booker: (IBookAppointmentsBuilder) ->
@@ -135,6 +132,8 @@ abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFact
                                              telephoneNumber: String? = null,
                                              telephoneContactType: String? = null): BookAppointmentSlotFacade
 
+    open fun requiresBookingReason(boolean: Boolean = true){}
+
     companion object : SupplierSpecificFactory<AppointmentsBookingFactory>() {
 
         override val map: HashMap<String, (() -> AppointmentsBookingFactory)>
@@ -150,7 +149,6 @@ abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFact
         const val appointmentToBookKey = "appointmentToBook"
         const val symptomsToEnter = "symptomsToEnter"
         const val telephoneNumberToEnter = "telephoneNumberToEnter"
-        const val telephoneNumberValueToEnter = "01642 849 894"
         const val selectedSlot = "selectedSlot"
 
         const val defaultApptBookingReason = "I have a bad back."

@@ -1,15 +1,13 @@
 package features.im1Appointments.stepDefinitions
 
 import cucumber.api.java.en.Given
-import mocking.stubs.appointments.factories.AppointmentsBookingFactory
-import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
-import features.im1Appointments.steps.AppointmentsConfirmationSteps
-import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import net.serenitybdd.core.Serenity
 import utils.GlobalSerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrFail
 import java.time.Duration
 
@@ -17,8 +15,6 @@ private const val DELAY_IN_SECONDS = 12L
 private const val DEFAULT_BOOKING_REASON = "I would like to see a doctor"
 
 class AppointmentsBookingStepDefinitions {
-
-    private var emptyReason: Boolean = false
 
     @Given("^there are (.*) appointments available to book$")
     fun thereAreAvailableAppointmentsToBook(gpSystem: String) {
@@ -128,42 +124,5 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.NOT_ALLOWED)
         factory.generateSuccessfulBookingResponse("")
-    }
-
-    @Given("^there are appointments available to book which are of telephone type for (.*)$")
-    fun thereAreAvailableAppointmentsToBookWhichAreOfTelephoneType(gpSystem: String) {
-        generateStubsForTelephoneAppointments(gpSystem, NecessityOption.MANDATORY)
-    }
-
-    @Given("I wish to book an appointment without specifying a reason$")
-    fun iWishToBookAnAppointmentWithoutSpecifyingAReason() {
-        emptyReason = true
-    }
-
-    @Given("^there are appointments available to book which are of telephone type with " +
-            "optional booking reason for (.*)$")
-    fun thereAreAppointmentsAvailableToBookWhichAreOfTelephoneTypeWithOptionalBookingReason(gpSystem: String) {
-        generateStubsForTelephoneAppointments(gpSystem, NecessityOption.OPTIONAL)
-    }
-
-    private fun generateStubsForTelephoneAppointments(gpSystem: String, necessityOption: NecessityOption) {
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        val telephoneNumber = Serenity.sessionVariableCalled<String>(AppointmentsConfirmationSteps
-                .SerenityVariable.TELEPHONE_NUMBER_TO_BOOK_AGAINST) ?: "7777777777"
-
-        if (SerenityHelpers.getValueOrNull<String>(AppointmentsBookingFactory.telephoneNumberToEnter) == null) {
-            Serenity.setSessionVariable(AppointmentsBookingFactory.telephoneNumberToEnter).to(telephoneNumber)
-        }
-
-        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(reasonNecessityOption = necessityOption)
-
-        factory.telephoneAppointmentBookingSetupWithResult(telephoneNumber, emptyReason) { builder ->
-            builder
-                    .respondWithSuccess()
-                    .inScenario("Appointments")
-                    .willSetStateTo("Appointment Booked")
-        }
-
-        aBookedAppointmentCanBeCancelled()
     }
 }

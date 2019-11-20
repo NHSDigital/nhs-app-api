@@ -62,7 +62,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         (1), appointmentSlotsFactoryHelper.defaultEndDate()) {
             respondWithSuccess(example)
         }
-        generateDefaultUserData()
+        generateDefaultUserData(defaultPracticeSettings = false)
         createGetEmptyAppointmentList()
     }
 
@@ -132,7 +132,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
                         )
                 )
         appointmentSlotsFactoryHelper.storeUIDetailsOfSlotToSelect()
-        generateDefaultUserData()
+        generateDefaultUserData(defaultPracticeSettings = false)
         createGetEmptyAppointmentList()
     }
 

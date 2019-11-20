@@ -40,8 +40,10 @@ class NotificationsFactory {
                 listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
         patient.subject = UUID.randomUUID().toString()
         patient.accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier(), mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney(mockingClient)
+                .createFor(patient, alternativeUser = true)
+        SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier(), mockingClient)
+                .createFor(patient, alternativeUser = true)
         MongoDBConnection.UserDevicesCollection.clearCache()
         return patient
     }

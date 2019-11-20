@@ -38,15 +38,14 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients.Models
             string stringResponse,
             HttpResponseMessage responseMessage)
         {
-            try
+            var parseSuccess = responseParser.TryParseBody<NominatedPharmacyResponseEnvelope<TBody>>(
+                stringResponse,
+                responseMessage,
+                out var response);
+            RawResponse = response;
+            if (!parseSuccess)
             {
-                RawResponse =
-                    responseParser.ParseBody<NominatedPharmacyResponseEnvelope<TBody>>(stringResponse,
-                        responseMessage);
-            }
-            catch (FormatException e)
-            {
-                logger.LogError(e, "An error occured while parsing the response");
+                logger.LogError("An error occured while parsing the response");
             }
         }
 

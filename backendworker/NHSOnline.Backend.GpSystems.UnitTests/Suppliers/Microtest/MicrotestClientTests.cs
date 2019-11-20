@@ -12,6 +12,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 using UnitTestHelper;
@@ -82,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         }
 
         [TestMethod]
-        public async Task AppointmentSlotsGet_ReturnsInternalServerError_WhenResponseIsNotJson()
+        public async Task AppointmentSlotsGet_ReturnsNhsUnparsableException_WhenResponseIsNotJson()
         {
             // Arrange
             var fromDate = new DateTime(2000, 1, 1);
@@ -98,10 +99,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             var dateRange = new AppointmentSlotsDateRange(fromDate, toDate);
 
             // Act
-            var response = await _systemUnderTest.AppointmentSlotsGet(_odsCode, _nhsNumber, dateRange);
+            Func<Task> act = async () => { await _systemUnderTest.AppointmentSlotsGet(_odsCode, _nhsNumber, dateRange); };
 
             // Assert
-            response.StatusCode.Should().Be(500);
+            await act.Should().ThrowAsync<NhsUnparsableException>();
         }
 
         [TestMethod]
@@ -129,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         }
 
         [TestMethod]
-        public async Task AppointmentsGet_ReturnsInternalServerError_WhenResponseIsNotJson()
+        public async Task AppointmentsGet_ReturnsNhsUnparsableException_WhenResponseIsNotJson()
         {
             // Arrange
             var nonJsonResponse = _fixture.Create<string>();
@@ -145,10 +146,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
                 .Respond(HttpStatusCode.OK, "application/json", nonJsonResponse);
 
             // Act
-            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber, pastAppointmentsFromDate);
+            Func<Task> act = async () => { await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber, pastAppointmentsFromDate); };
 
             // Assert
-            response.StatusCode.Should().Be(500);
+            await act.Should().ThrowAsync<NhsUnparsableException>();
         }
 
         [TestMethod]
@@ -176,7 +177,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         {
             // Arrange
             var request = _fixture.Create<BookAppointmentSlotPostRequest>();
-            const string expectedResponse = "Appointment successfully created.";
+            const string expectedResponse = "\"Appointment successfully created.\"";
 
             _mockHttpHandler
                 .WhenMicrotest(HttpMethod.Post, "patient/appointments")
@@ -230,7 +231,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         }
 
         [TestMethod]
-        public async Task DemographicsGet_ReturnsInternalServerError_WhenResponseIsNotJson()
+        public async Task DemographicsGet_ReturnsNhsUnparsableException_WhenResponseIsNotJson()
         {
             // Arrange
             var nonJsonResponse = _fixture.Create<string>();
@@ -241,10 +242,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
                 .Respond(HttpStatusCode.OK, "application/json", nonJsonResponse);
 
             // Act
-            var response = await _systemUnderTest.DemographicsGet(_odsCode, _nhsNumber);
+            Func<Task> act = async () => { await _systemUnderTest.DemographicsGet(_odsCode, _nhsNumber); };
 
             // Assert
-            response.StatusCode.Should().Be(500);
+            await act.Should().ThrowAsync<NhsUnparsableException>();
         }
 
         [TestMethod]

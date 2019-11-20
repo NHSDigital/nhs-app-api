@@ -12,6 +12,7 @@ using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 
@@ -134,7 +135,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         }
 
         [TestMethod]
-        public async Task GetSigningKeys_ReceivedOkWithPoorlyFormedJson_ReturnsErrorMessage()
+        public void GetSigningKeys_ReceivedOkWithPoorlyFormedJson_ReturnsException()
         {
             // Arrange
             _mockHttpHandler
@@ -143,17 +144,14 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                     "{ \"something\" : \"Here\"}}}");
 
             // Act
-            var response = await _systemUnderTest.GetSigningKeys();
+            Func<Task> act = async () => { await _systemUnderTest.GetSigningKeys(); };
 
             // Assert
-            response.Body.Should().BeNull();
-            response.ErrorResponse.Should().BeNull();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            _mockHttpHandler.VerifyNoOutstandingExpectation();
+            act.Should().Throw<NhsUnparsableException>();
         }
 
         [TestMethod]
-        public async Task GetSigningKeys_ReceivedOkWithNoContent_ReturnsErrorMessage()
+        public async Task GetSigningKeys_ReceivedOkWithNoContent_ReturnsOKAndNullErrorMessage()
         {
             // Arrange
             _mockHttpHandler

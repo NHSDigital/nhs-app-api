@@ -377,23 +377,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 string stringResponse,
                 HttpResponseMessage responseMessage)
             {
-                try
+                if (IsErrorResponse(stringResponse))
                 {
-                    if (IsErrorResponse(stringResponse))
-                    {
-                        ErrorResponse = responseParser.ParseBody<Error>(stringResponse, responseMessage);
-                        logger.LogError($"Server returned with error. {ErrorForLogging}");
-                        return;
-                    }
-
-                    Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
-                }
-                catch (Exception e)
-                {
-                    logger.LogError(e, "An error occured while parsing the response");
-                    StatusCode = HttpStatusCode.InternalServerError;
+                    responseParser.TryParseBody<Error>(stringResponse, responseMessage, out var error);
+                    ErrorResponse = error;
+                    logger.LogError($"Server returned with error. {ErrorForLogging}");
                     return;
                 }
+                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
+                Body = body;
 
                 if (responseMessage.Headers.TryGetValues(ResponseSuidHeader, out var values))
                 {
