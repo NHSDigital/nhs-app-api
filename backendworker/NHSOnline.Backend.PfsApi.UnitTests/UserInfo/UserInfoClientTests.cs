@@ -6,10 +6,12 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using CorrelationId;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using RichardSzalay.MockHttp;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
 {
@@ -23,12 +25,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         private Mock<IUserInfoApiConfig> _configMock;
         private IFixture _fixture; 
         private ICorrelationContextAccessor _correlationContext;
-        
+        private Mock<HttpContext> _httpContext;
+
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
+            _httpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
             _mockHttpHandler = new MockHttpMessageHandler();
 
             _configMock = _fixture.Create<Mock<IUserInfoApiConfig>>();
@@ -51,9 +55,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
             _mockHttpHandler
                 .WhenUserInfo(HttpMethod.Post, string.Empty)
                 .Respond(HttpStatusCode.Created);
-            
+
             // Act
-            var response = await _systemUnderTest.Post(_fixture.Create<string>());
+            var response = await _systemUnderTest.Post(_fixture.Create<string>(), _httpContext.Object);
             
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -72,7 +76,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
                 .Respond(httpStatusCode);
             
             // Act
-            var response = await _systemUnderTest.Post(_fixture.Create<string>());
+            var response = await _systemUnderTest.Post(_fixture.Create<string>(), _httpContext.Object);
             
             // Assert
             response.StatusCode.Should().Be(httpStatusCode);

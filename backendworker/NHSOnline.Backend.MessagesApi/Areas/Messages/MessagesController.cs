@@ -19,20 +19,16 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly IMessageService _messageService;
         private readonly ILogger<MessagesController> _logger;
         private readonly IAuditor _auditor;
-        private readonly IMessagesValidationService _validator;
 
         public MessagesController
         (
             IMessageService messageService,
             ILogger<MessagesController> logger,
-            IAuditor auditor,
-            IMessagesValidationService validator
-        )
+            IAuditor auditor)
         {
             _messageService = messageService;
             _logger = logger;
             _auditor = auditor;
-            _validator = validator;
         }
 
         [HttpPost]

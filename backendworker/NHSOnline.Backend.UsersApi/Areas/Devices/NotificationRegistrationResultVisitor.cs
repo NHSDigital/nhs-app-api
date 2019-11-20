@@ -4,7 +4,7 @@ using NHSOnline.Backend.UsersApi.Notifications;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
-    internal class RegistrationResultVisitor : IRegistrationResultVisitor<IActionResult>
+    internal class NotificationRegistrationResultVisitor : IRegistrationResultVisitor<IActionResult>
     {
         public IActionResult Visit(RegistrationResult.Success result)
         {

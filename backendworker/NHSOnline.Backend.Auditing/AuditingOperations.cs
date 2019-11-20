@@ -56,8 +56,12 @@ namespace NHSOnline.Backend.Auditing
         public const string SearchNominatedPharmacyAuditTypeResponse = "SearchNominatedPharmacy_Get_Response";
         public const string GetServiceJourneyRulesAuditTypeRequest = "ServiceJourneyRules_Get_Request";
         public const string OnlineConsultationsDemographicAuditTypeRequest = "OnlineConsultations_Demographics_Request";
-        public const string RegisterUsersDeviceAuditTypeRequest = "Users_Device_Registration_Request";
-        public const string RegisterUsersDeviceAuditTypeResponse = "Users_Device_Registration_Response";
+        public const string UsersDeviceDeleteAuditTypeRequest = "Users_Device_Delete_Request";
+        public const string UsersDeviceDeleteAuditTypeResponse = "Users_Device_Delete_Response";
+        public const string UsersDeviceGetAuditTypeRequest = "Users_Device_Get_Request";
+        public const string UsersDeviceGetAuditTypeResponse = "Users_Device_Get_Response";
+        public const string UsersDevicePostAuditTypeRequest = "Users_Device_Registration_Request";
+        public const string UsersDevicePostAuditTypeResponse = "Users_Device_Registration_Response";
         public const string GetUserMessagesAuditTypeRequest = "Users_Messages_Get_Request";
         public const string GetUserMessagesAuditTypeResponse = "Users_Messages_Get_Response";
         public const string PatchUserMessageAuditTypeRequest = "Users_Messages_Patch_Request";

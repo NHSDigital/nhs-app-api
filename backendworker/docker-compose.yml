@@ -132,6 +132,17 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8083
+      - AUDIT_SINK_TYPE=FILE
+      - AUDIT_FILE audit.txt
+      - AUDIT_MONGO_DATABASE_NAME=development
+      - AUDIT_MONGO_DATABASE_COLLECTION=audit_devices
+      - AUDIT_MONGO_DATABASE_HOST=nhsonline.mongodb
+      - AUDIT_MONGO_DATABASE_PORT=27017
+      - AUDIT_MONGO_DATABASE_USERNAME=
+      - AUDIT_MONGO_DATABASE_PASSWORD=
+      - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
+      - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
       - PORT=8083
       - CORS_AUTHORITY=*
       - VERSION_TAG=users_docker_main
@@ -139,9 +150,6 @@ services:
       - USERS_MONGO_DATABASE_PORT=27017
       - USERS_MONGO_DATABASE_USERNAME=
       - USERS_MONGO_DATABASE_PASSWORD=
-      - AZURE_NOTIFICATION_HUB_PATH=nhsapp-nonlive
-      - AZURE_NOTIFICATION_HUB_CONNECTION_STRING=Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-      - AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=
   userinfo.local.bitraft.io:
     image: nhsonline.backend.userinfoapi
     build:
@@ -152,6 +160,14 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8091
+      - AUDIT_SINK_TYPE=FILE
+      - AUDIT_FILE audit.txt
+      - AUDIT_MONGO_DATABASE_NAME=development
+      - AUDIT_MONGO_DATABASE_COLLECTION=audit_info
+      - AUDIT_MONGO_DATABASE_HOST=nhsonline.mongodb
+      - AUDIT_MONGO_DATABASE_PORT=27017
+      - AUDIT_MONGO_DATABASE_USERNAME=
+      - AUDIT_MONGO_DATABASE_PASSWORD=
       - PORT=8091
       - CORS_AUTHORITY=*
       - VERSION_TAG=userinfo_docker_main
@@ -176,6 +192,14 @@ services:
       - MESSAGES_MONGO_DATABASE_PORT=27017
       - MESSAGES_MONGO_DATABASE_USERNAME=
       - MESSAGES_MONGO_DATABASE_PASSWORD=
+      - AUDIT_SINK_TYPE=FILE
+      - AUDIT_FILE audit.txt
+      - AUDIT_MONGO_DATABASE_NAME=development
+      - AUDIT_MONGO_DATABASE_COLLECTION=audit_messages
+      - AUDIT_MONGO_DATABASE_HOST=nhsonline.mongodb
+      - AUDIT_MONGO_DATABASE_PORT=27017
+      - AUDIT_MONGO_DATABASE_USERNAME=
+      - AUDIT_MONGO_DATABASE_PASSWORD=
   log.local.bitraft.io:
     image: nhsonline.backend.loggerapi
     build:

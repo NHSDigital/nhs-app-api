@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -9,7 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Notifications;
 using NHSOnline.Backend.UsersApi.Repository;
@@ -24,6 +24,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         private DevicesController _systemUnderTest;
         private Mock<INotificationService> _mockNotificationService;
         private Mock<IDeviceRepositoryService> _mockDeviceRepositoryService;
+        private Mock<IAuditor> _mockAuditor;
+
+        private const string UsersDeviceDeleteAuditTypeRequest = "Users_Device_Delete_Request";
+        private const string UsersDeviceDeleteAuditTypeResponse = "Users_Device_Delete_Response";
+
+        private const string RequestAuditMessage = "Attempting to delete user notification registration";
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,6 +40,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             _mockNotificationService = _fixture.Freeze<Mock<INotificationService>>();
             _mockDeviceRepositoryService = _fixture.Freeze<Mock<IDeviceRepositoryService>>();
+
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _systemUnderTest = _fixture.Create<DevicesController>();
             _systemUnderTest.ControllerContext = new ControllerContext
@@ -69,6 +77,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+            
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "User device notification registration successfully deleted");
         }
 
         [TestMethod]
@@ -101,6 +112,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "No user device registrations for notifications found");
         }
 
         [TestMethod]
@@ -120,10 +134,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "User devices registrations for notifications search unsuccessful due to InternalServerError");
         }
 
         [TestMethod]
-        public async Task Delete_FindDeviceBadGateway_ReturnsServiceUnavailable()
+        public async Task Delete_FindDeviceBadGateway_ReturnsBadGateway()
         {
             // Arrange
             var devicePns = _fixture.Create<string>();
@@ -139,6 +156,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "User devices registrations for notifications search unsuccessful due to BadGateway");
         }
 
         [TestMethod]
@@ -165,10 +185,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+         }
 
         [TestMethod]
-        public async Task Delete_DeleteRegistrationBadGateway_ReturnsServiceUnavailable()
+        public async Task Delete_DeleteRegistrationBadGateway_ReturnsBadGateway()
         {
             // Arrange
             var devicePns = _fixture.Create<string>();
@@ -191,6 +213,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "User device notification registration deletion unsuccessful due to BadGateway");
         }
 
         [TestMethod]
@@ -220,10 +245,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
         }
 
         [TestMethod]
-        public async Task Delete_DeleteDeviceBadGateway_ReturnsServiceUnavailable()
+        public async Task Delete_DeleteDeviceBadGateway_ReturnsBadGateway()
         {
             // Arrange
             var devicePns = _fixture.Create<string>();
@@ -249,6 +276,96 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "User device notification registration deletion unsuccessful due to BadGateway");
+        }
+
+        [TestMethod]
+        public async Task Delete_DeleteDeviceFromRepositoryBadGateway_ReturnsBadGateway()
+        {
+            // Arrange
+            var devicePns = _fixture.Create<string>();
+            var userDevice = _fixture.Build<UserDevice>()
+                .With(u => u.PnsToken, devicePns)
+                .Create();
+
+            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
+                .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
+
+            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.Success>());
+
+            _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, It.IsAny<AccessToken>()))
+                .ReturnsAsync(_fixture.Create<DeleteDeviceResult.BadGateway>());
+
+            // Act
+            var result = await _systemUnderTest.Delete(devicePns);
+
+            // Assert
+            _mockDeviceRepositoryService.VerifyAll();
+            _mockNotificationService.VerifyAll();
+
+            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "User device notification registration deletion unsuccessful due to BadGateway");
+        }
+
+        [TestMethod]
+        public async Task Delete_DeleteDeviceFromRepositoryInternalServerError_ReturnsInternalServerError()
+        {
+            // Arrange
+            var devicePns = _fixture.Create<string>();
+            var userDevice = _fixture.Build<UserDevice>()
+                .With(u => u.PnsToken, devicePns)
+                .Create();
+
+
+            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
+                .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
+
+            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.Success>());
+
+            _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, It.IsAny<AccessToken>()))
+                .ReturnsAsync(_fixture.Create<DeleteDeviceResult.InternalServerError>());
+
+            // Act
+            var result = await _systemUnderTest.Delete(devicePns);
+
+            // Assert
+            _mockDeviceRepositoryService.VerifyAll();
+            _mockNotificationService.VerifyAll();
+
+            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            AssertAudit(UsersDeviceDeleteAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(UsersDeviceDeleteAuditTypeResponse, "User device notification registration deletion unsuccessful due to InternalServerError");
+        }
+
+        [TestMethod]
+        public async Task Delete_DeviceDeletionException_ReturnsInternalServerError()
+        {
+            // Arrange
+            var devicePns = _fixture.Create<string>();
+
+            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
+                .Throws(new ArgumentException("Test"));
+
+            // Act
+            var result = await _systemUnderTest.Delete(devicePns);
+
+            // Assert
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        private void AssertAudit(string request, string message)
+        {
+            _mockAuditor.Verify(x => x.AuditSecureTokenEvent(It.IsAny<AccessToken>(), Supplier.Microsoft, request, message));
         }
 
         [TestCleanup]

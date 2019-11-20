@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
@@ -24,6 +26,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         private RegisterDeviceRequest _validRegisterDeviceRequest;
         private Mock<INotificationService> _mockNotificationService;
         private Mock<IDeviceRepositoryService> _mockDeviceRepositoryService;
+        private Mock<IAuditor> _mockAuditor;
+
+        private const string RegisterUsersDeviceAuditTypeRequest = "Users_Device_Registration_Request";
+        private const string RegisterUsersDeviceAuditTypeResponse = "Users_Device_Registration_Response";
+
+        private const string RequestAuditMessage = "Attempting to register user notification registration";
 
         [TestInitialize]
         public void TestInitialize()
@@ -37,6 +45,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             _mockNotificationService = _fixture.Freeze<Mock<INotificationService>>();
             _mockDeviceRepositoryService = _fixture.Freeze<Mock<IDeviceRepositoryService>>();
             _validRegisterDeviceRequest = _fixture.Create<RegisterDeviceRequest>();
+
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _systemUnderTest = _fixture.Create<DevicesController>();
             _systemUnderTest.ControllerContext = new ControllerContext
@@ -72,6 +82,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var resultBody = objectResult.Subject.Value.Should().BeAssignableTo<Device>().Subject;
             resultBody.DeviceType.Should().Be(_validRegisterDeviceRequest.DeviceType);
             resultBody.DeviceId.Should().Be(userDevice.DeviceId);
+
+            AssertAudit(RegisterUsersDeviceAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(RegisterUsersDeviceAuditTypeResponse, "User device successfully added to the repository for push notifications");
         }
 
         [TestMethod]
@@ -113,7 +126,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         }
 
         [TestMethod]
-        public async Task Post_HubServiceRegistrationFailure_ReturnsServiceUnavailable()
+        public async Task Post_HubServiceRegistrationFailure_ReturnsBadGateway()
         {
             // Arrange
             _mockNotificationService.Setup(x => x.Register(_validRegisterDeviceRequest, It.IsAny<AccessToken>()))
@@ -125,6 +138,27 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+
+            AssertAudit(RegisterUsersDeviceAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(RegisterUsersDeviceAuditTypeResponse, "User device failed to register for push notifications due to BadGateway");
+        }
+
+        [TestMethod]
+        public async Task Post_HubServiceInternalServerError_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockNotificationService.Setup(x => x.Register(_validRegisterDeviceRequest, It.IsAny<AccessToken>()))
+                .ReturnsAsync(_fixture.Create<RegistrationResult.InternalServerError>());
+
+            // Act
+            var result = await _systemUnderTest.Post(_validRegisterDeviceRequest);
+
+            // Assert
+            var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            AssertAudit(RegisterUsersDeviceAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(RegisterUsersDeviceAuditTypeResponse, "User device failed to register for push notifications due to InternalServerError");
         }
 
         [TestMethod]
@@ -140,7 +174,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
+
+            AssertAudit(RegisterUsersDeviceAuditTypeRequest, RequestAuditMessage);
+         }
 
         [TestMethod]
         public async Task Post_DeviceRegistrationInternalServerError_ReturnsInternalServerError()
@@ -161,10 +197,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             var objectResult = result.Should().BeAssignableTo<StatusCodeResult>();
             objectResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            AssertAudit(RegisterUsersDeviceAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(RegisterUsersDeviceAuditTypeResponse, "User device failed to be added to the repository for push notifications due to InternalServerError");
         }
 
         [TestMethod]
-        public async Task Post_DeviceRegistrationBadGateway_ReturnsServiceUnavailable()
+        public async Task Post_DeviceRegistrationBadGateway_ReturnsBadGateway()
         {
             // Arrange
             _mockNotificationService.Setup(x => x.Register(_validRegisterDeviceRequest, It.IsAny<AccessToken>()))
@@ -182,6 +221,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+
+            AssertAudit(RegisterUsersDeviceAuditTypeRequest, RequestAuditMessage);
+            AssertAudit(RegisterUsersDeviceAuditTypeResponse, "User device failed to be added to the repository for push notifications due to BadGateway");
         }
 
         [TestMethod]
@@ -204,6 +246,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            AssertAudit(RegisterUsersDeviceAuditTypeRequest, RequestAuditMessage);
+        }
+
+        private void AssertAudit(string request, string message)
+        {
+            _mockAuditor.Verify(x => x.AuditSecureTokenEvent(It.IsAny<AccessToken>(), Supplier.Microsoft, request, message));
         }
 
         [TestCleanup]

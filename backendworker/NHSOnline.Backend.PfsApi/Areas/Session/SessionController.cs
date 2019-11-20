@@ -239,7 +239,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             // Post to the UserInfo service
             if (serviceJourneyRulesVisitorOutput.Response.Journeys.UserInfo == true)
             {
-                await _userInfoService.Update(userSession.CitizenIdUserSession.AccessToken);
+                await _userInfoService.Update(userSession.CitizenIdUserSession.AccessToken, HttpContext);
             }
 
             // Delete connection token from cache

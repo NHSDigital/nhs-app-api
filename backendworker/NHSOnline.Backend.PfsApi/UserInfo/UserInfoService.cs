@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 
@@ -19,12 +20,12 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
             _userInfoClient = userInfoClient;
         }
 
-        public async Task<UserInfoResult> Update(string accessToken)
+        public async Task<UserInfoResult> Update(string accessToken, HttpContext httpContext)
         {
             _logger.LogEnter();
             try
             {
-                var response = await _userInfoClient.Post(accessToken);
+                var response = await _userInfoClient.Post(accessToken, httpContext);
 
                 if (response.HasSuccessResponse)
                 {
