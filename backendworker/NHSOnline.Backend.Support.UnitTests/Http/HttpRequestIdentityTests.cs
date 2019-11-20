@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 $"UpStreamMethod={requestMessage.Method}",
                 $"UpStreamUrl={requestMessage.RequestUri}");
 
-            result.Should().NotContainAny("UpStreamIdentifier", "CorrelationIdentifier");
+            result.Should().NotContainAny("UpStreamIdentifier", "CorrelationIdentifier", "OlcSessionId");
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 $"UpStreamUrl={requestMessage.RequestUri}",
                 $"UpStreamIdentifier={identifier}");
 
-            result.Should().NotContain("CorrelationIdentifier");
+            result.Should().NotContainAny("CorrelationIdentifier", "OlcSessionId");
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 $"UpStreamUrl={requestMessage.RequestUri}",
                 $"CorrelationIdentifier={correlationIdentifier}");
 
-            result.Should().NotContain("UpStreamIdentifier");
+            result.Should().NotContainAny("UpStreamIdentifier", "OlcSessionId");
         }
 
         [TestMethod]
@@ -121,6 +121,52 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 $"Provider={provider}",
                 $"UpStreamMethod={requestMessage.Method}",
                 $"UpStreamUrl={requestMessage.RequestUri}",
+                $"CorrelationIdentifier={correlationIdentifier}",
+                $"UpStreamIdentifier={identifier}");
+
+            result.Should().NotContainAny("OlcSessionId");
+        }
+
+        [TestMethod]
+        public void ToString_WithOlcSessionId_HappyPath()
+        {
+            var requestMessage = _fixture.Create<HttpRequestMessage>();
+            var provider = _fixture.Create<string>();
+            var olcSessionId = _fixture.Create<string>();
+
+            _systemUnderTest = new HttpRequestIdentity(provider, olcSessionId, requestMessage, SourceApi.OnlineConsultations);
+
+            var result = _systemUnderTest.ToString();
+
+            result.Should().ContainAll(
+                $"Provider={provider}",
+                $"UpStreamMethod={requestMessage.Method}",
+                $"UpStreamUrl={requestMessage.RequestUri}",
+                $"OlcSessionId={olcSessionId}");
+
+            result.Should().NotContainAny( "CorrelationIdentifier", "UpStreamIdentifier");
+        }
+
+        [TestMethod]
+        public void ToString_WithOlcSessionIdAndCorrelationIdAndIdentifier_HappyPath()
+        {
+            var requestMessage = _fixture.Create<HttpRequestMessage>();
+            var provider = _fixture.Create<string>();
+            var olcSessionId = _fixture.Create<string>();
+            var correlationIdentifier = _fixture.Create<string>();
+            var identifier = _fixture.Create<string>();
+
+            _systemUnderTest = new HttpRequestIdentity(provider, olcSessionId, requestMessage, SourceApi.OnlineConsultations)
+                .SetCorrelationIdentifier(correlationIdentifier)
+                .SetUpStreamIdentifier(identifier);
+
+            var result = _systemUnderTest.ToString();
+
+            result.Should().ContainAll(
+                $"Provider={provider}",
+                $"UpStreamMethod={requestMessage.Method}",
+                $"UpStreamUrl={requestMessage.RequestUri}",
+                $"OlcSessionId={olcSessionId}",
                 $"CorrelationIdentifier={correlationIdentifier}",
                 $"UpStreamIdentifier={identifier}");
         }

@@ -23,7 +23,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
         public async Task<HttpResponseMessage> EvaluateServiceDefinition(string providerKey,
             string serviceDefinitionId,
             string requestBody,
-            bool addJavascriptDisabledHeader)
+            bool addJavascriptDisabledHeader,
+            string sessionId = null)
         {
             try
             {
@@ -41,7 +42,12 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                     Content = new StringContent(requestBody, Encoding.UTF8, MediaTypeNames.Application.Json)
                 };
                 
-                requestMessage.Headers.Add(Support.Constants.OnlineConsultationConstants.RequestIdentifierHeader, providerKey);
+                requestMessage.Headers.Add(Support.Constants.OnlineConsultationConstants.ProviderIdentifierHeader, providerKey);
+
+                if (!string.IsNullOrWhiteSpace(sessionId))
+                {
+                    requestMessage.Headers.Add(Support.Constants.OnlineConsultationConstants.SessionIdentifierHeader, sessionId);
+                }
 
                 if (addJavascriptDisabledHeader)
                 {

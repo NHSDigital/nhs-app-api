@@ -170,7 +170,8 @@ namespace NHSOnline.Backend.Support
 
         public static class OnlineConsultationConstants
         {
-            public const string RequestIdentifierHeader = "type";
+            public const string ProviderIdentifierHeader = "provider";
+            public const string SessionIdentifierHeader = "olcSessionId";
         }
 
         public static class VisionConstants

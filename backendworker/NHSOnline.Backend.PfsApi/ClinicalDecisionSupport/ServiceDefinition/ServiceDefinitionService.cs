@@ -157,7 +157,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     providerKey,
                     serviceDefinitionId,
                     _serializer.SerializeToString(parameters),
-                    addJavascriptDisabledHeader);
+                    addJavascriptDisabledHeader,
+                    GetSessionIdFromParameters(parameters));
             }
             finally
             {
@@ -169,7 +170,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string providerKey,
             string serviceDefinitionId,
             string requestBody,
-            bool addJavascriptDisabledHeader)
+            bool addJavascriptDisabledHeader,
+            string sessionId = null)
         {
             HttpResponseMessage responseMessage;
             GuidanceResponse guidanceResponse;
@@ -180,7 +182,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     providerKey,
                     serviceDefinitionId,
                     requestBody,
-                    addJavascriptDisabledHeader);
+                    addJavascriptDisabledHeader,
+                    sessionId);
             }
             catch (HttpRequestException e)
             {
@@ -257,6 +260,25 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 default:
                     _logger.LogError("GP systems demographics record not successfully retrieved");
                     return new ServiceDefinitionResult.DemographicsRetrievalFailed();
+            }
+        }
+
+        private string GetSessionIdFromParameters(Parameters parameters)
+        {
+            try
+            {
+                return parameters?.Parameter?.Where(p => "sessionId".Equals(p.Name, StringComparison.Ordinal))
+                    .Select(p => ((FhirString) p.Value).Value).First();
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(e, "Could not retrieve sessionId from parameters - Parameter list is null");
+                return null;
+            }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError(e, "Could not retrieve sessionId from parameters - Parameter list is empty");
+                return null;
             }
         }
     }

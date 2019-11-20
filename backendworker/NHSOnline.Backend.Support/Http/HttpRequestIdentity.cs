@@ -17,8 +17,14 @@ namespace NHSOnline.Backend.Support.Http
             {
                 { "Provider", provider },
                 { "UpStreamMethod", request.Method?.ToString() },
-                { "UpStreamUrl", request.RequestUri?.ToString() },
+                { "UpStreamUrl", request.RequestUri?.ToString() }
             };
+        }
+        
+        public HttpRequestIdentity(string provider, string olcSessionId, HttpRequestMessage request, SourceApi sourceApi)
+            : this(provider, request, sourceApi)
+        {
+            _identifiers["OlcSessionId"] = olcSessionId;
         }
 
         public HttpRequestIdentity SetUpStreamIdentifier(string upStreamIdentifier)

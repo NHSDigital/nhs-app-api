@@ -50,7 +50,7 @@
          private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\" }";
          private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
          private const string paramString =
-             "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
+             "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"sessionId\",\"valueString\":\"9102fb79-bc0e-465d-b2de-2a724ec876dc\"},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
 
          private ServiceDefinitionService _service;
          private DemographicsResult _demographicsResult;
@@ -117,7 +117,7 @@
          }
         
          [TestMethod]
-         public async Task GetServiceDefinitionById_WhenProviderClientThrowsException_ReturnsBadRequest()
+         public async Task GetServiceDefinitionById_WhenQueryThrowsException_ReturnsBadRequest()
          {
              // Arrange
              _mockEvaluateServiceDefinitionQuery
@@ -125,7 +125,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .Throws<HttpRequestException>();
 
              // Act
@@ -136,7 +137,7 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionById_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
+         public async Task GetServiceDefinitionById_WhenQueryReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
          {
              // Arrange
              var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
@@ -146,7 +147,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
              
              // Act
@@ -157,7 +159,7 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionById_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
+         public async Task GetServiceDefinitionById_WhenQueryReturnsNullContent_ReturnsBadGateway()
          {
              // Arrange
              var httpResponse = new HttpResponseMessage
@@ -171,7 +173,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
              
              // Act
@@ -185,7 +188,7 @@
          [DataRow("")]
          [DataRow("  ")]
          [DataRow(BundleJsonContent)]
-         public async Task GetServiceDefinitionById_WhenProviderClientReturnsNonServiceDefinitionContent_ReturnsBadGateway(string content)
+         public async Task GetServiceDefinitionById_WhenQueryReturnsNonServiceDefinitionContent_ReturnsBadGateway(string content)
          {
              // Arrange
              var httpResponse = new HttpResponseMessage
@@ -199,7 +202,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
              
              // Act
@@ -226,7 +230,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
 
              // Act
@@ -250,108 +255,6 @@
                  .Subject.Response.Equals("eConsult Health Ltd", StringComparison.Ordinal);
          }
 
-//         [TestMethod]
-//         public async Task GetServiceDefinitions_WhenProviderClientThrowsException_ReturnsBadRequest()
-//         {
-//             // Arrange
-//             _mockEconsultProviderHttpClient
-//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-//                 .Throws<HttpRequestException>();
-//
-//             // Act
-//             var response = await _service.GetServiceDefinitions("eConsult");
-//
-//             // Assert
-//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadRequest>();
-//         }
-        
-//         [TestMethod]
-//         public async Task GetServiceDefinitions_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
-//         {
-//             // Arrange
-//             var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
-//
-//             _mockEconsultProviderHttpClient
-//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-//                 .ReturnsAsync(httpResponse);
-//
-//             // Act
-//             var response = await _service.GetServiceDefinitions("eConsult");
-//
-//             // Assert
-//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
-//         }
-//
-//         [TestMethod]
-//         public async Task GetServiceDefinitions_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
-//         {
-//             // Arrange
-//             var httpResponse = new HttpResponseMessage
-//             {
-//                 StatusCode = HttpStatusCode.OK,
-//                 Content = null
-//             };
-//
-//             _mockEconsultProviderHttpClient
-//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-//                 .ReturnsAsync(httpResponse);
-//            
-//             // Act
-//             var response = await _service.GetServiceDefinitions("eConsult");
-//
-//             // Assert
-//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
-//         }
-//
-//         [TestMethod]
-//         [DataRow("")]
-//         [DataRow("  ")]
-//         [DataRow("{ \"resourceType\" : \"ServiceDefinition\", \"contained\": [ { \"resourceType\": \"Questionnaire\" } ], \"publisher\" : \"eConsultHealthLtd\"  }")]
-//         public async Task GetServiceDefinitions_WhenProviderClientReturnsNonBundleContent_ReturnsBadGateway(string content)
-//         {
-//             // Arrange
-//             var httpResponse = new HttpResponseMessage
-//             {
-//                 StatusCode = HttpStatusCode.OK,
-//                 Content = new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-//             };
-//
-//             _mockEconsultProviderHttpClient
-//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-//                 .ReturnsAsync(httpResponse);
-//            
-//             // Act
-//             var response = await _service.GetServiceDefinitions("eConsult");
-//
-//             // Assert
-//             response.Should().BeAssignableTo<ServiceDefinitionListResult.BadGateway>();
-//             _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeServiceDefinitionSearchBundle(
-//                 It.IsAny<Bundle>(), It.IsAny<IHtmlSanitizer>()), Times.Never);
-//         }
-//        
-//         [TestMethod]
-//         public async Task GetServiceDefinitions_WhenResponseParsedSuccessfully_BuildsListAndReturnsSuccess()
-//         {
-//             // Arrange
-//             var httpResponse = new HttpResponseMessage
-//             {
-//                 StatusCode = HttpStatusCode.OK,
-//                 Content = new StringContent(BundleJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
-//             };
-//
-//             _mockEconsultProviderHttpClient
-//                 .Setup(pc => pc.SearchServiceDefinitionsByQuery())
-//                 .ReturnsAsync(httpResponse);
-//            
-//             // Act
-//             var response = await _service.GetServiceDefinitions("eConsult");
-//
-//             // Assert
-//             response.Should().BeAssignableTo<ServiceDefinitionListResult.Success>();
-//
-//             _mockServiceDefinitionListBuilder.Verify(a => a.BuildServiceDefinitionList(It.IsAny<Bundle>()), Times.Once);
-//         }
-
          [TestMethod]
          public async Task EvaluateServiceDefinition_WhenNullParametersProvided_ReturnsBadRequest()
          {
@@ -363,7 +266,7 @@
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinition_WhenProviderClientThrowsException_ReturnsBadRequest()
+         public async Task EvaluateServiceDefinition_WhenQueryThrowsException_ReturnsBadRequest()
          {
              // Arrange
 
@@ -372,7 +275,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .Throws<HttpRequestException>();
              
              // Act
@@ -383,7 +287,7 @@
          }
         
          [TestMethod]
-         public async Task EvaluateServiceDefinition_WhenProviderClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
+         public async Task EvaluateServiceDefinition_WhenQueryReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
          {
              // Arrange
              var httpResponse = new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
@@ -393,7 +297,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
              
              // Act
@@ -404,7 +309,7 @@
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinition_WhenProviderClientReturnsNullContent_ReturnsBadGateway()
+         public async Task EvaluateServiceDefinition_WhenQueryReturnsNullContent_ReturnsBadGateway()
          {
              // Arrange
              var httpResponse = new HttpResponseMessage
@@ -418,7 +323,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
 
              // Act
@@ -432,7 +338,7 @@
          [DataRow("")]
          [DataRow("  ")]
          [DataRow(BundleJsonContent)]
-         public async Task EvaluateServiceDefinition_WhenProviderClientReturnsNonGuidanceResponseContent_ReturnsBadGateway(string content)
+         public async Task EvaluateServiceDefinition_WhenQueryReturnsNonGuidanceResponseContent_ReturnsBadGateway(string content)
          {
              // Arrange
              var httpResponse = new HttpResponseMessage
@@ -446,7 +352,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
 
              // Act
@@ -473,7 +380,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     null))
                  .ReturnsAsync(httpResponse);
 
              // Act
@@ -500,7 +408,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.Is<string>(body => body.Contains("\"resourceType\":\"Patient\"", StringComparison.Ordinal)),
-                     It.IsAny<bool>()))
+                     It.IsAny<bool>(),
+                     "9102fb79-bc0e-465d-b2de-2a724ec876dc"))
                  .ReturnsAsync(httpResponse);
 
              var olcDemographics = new OlcDemographics
@@ -558,7 +467,7 @@
          [TestMethod]
          [DataRow(true)]
          [DataRow(false)]
-         public async Task EvaluateServiceDefinition_WillPassAddJsDisabledParameterToProviderClient(bool addJsDisabledHeader)
+         public async Task EvaluateServiceDefinition_WillPassAddJsDisabledParameterToQuery(bool addJsDisabledHeader)
          {
              // Arrange
              var httpResponse = new HttpResponseMessage
@@ -572,7 +481,8 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<string>(),
-                     It.Is<bool>(addHeader => addHeader == addJsDisabledHeader)))
+                     It.Is<bool>(addHeader => addHeader == addJsDisabledHeader),
+                     null))
                  .ReturnsAsync(httpResponse);
              
              // Act

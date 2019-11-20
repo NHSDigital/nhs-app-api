@@ -13,14 +13,22 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
         public override HttpRequestIdentity Identify(HttpRequestMessage request)
         {
             string provider = null;
-            if (request.Headers.Contains(Support.Constants.OnlineConsultationConstants.RequestIdentifierHeader))
+            if (request.Headers.Contains(Support.Constants.OnlineConsultationConstants.ProviderIdentifierHeader))
             {
-                request.Headers.TryGetValues(Support.Constants.OnlineConsultationConstants.RequestIdentifierHeader, out var values);
+                request.Headers.TryGetValues(Support.Constants.OnlineConsultationConstants.ProviderIdentifierHeader, out var values);
                 provider = values.FirstOrDefault();
             }
+            
+            string olcSessionId = null;
+            if (request.Headers.Contains(Support.Constants.OnlineConsultationConstants.SessionIdentifierHeader))
+            {
+                request.Headers.TryGetValues(Support.Constants.OnlineConsultationConstants.SessionIdentifierHeader, out var values);
+                olcSessionId = values.FirstOrDefault();
+            }
 
-            return
-                new HttpRequestIdentity(provider, request, SourceApi);
+            return olcSessionId == null
+                ? new HttpRequestIdentity(provider, request, SourceApi)
+                : new HttpRequestIdentity(provider, olcSessionId, request, SourceApi);
         }
     }
 }
