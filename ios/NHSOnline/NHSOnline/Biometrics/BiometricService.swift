@@ -4,8 +4,11 @@ import os.log
 import FidoClientIOS
 
 protocol BiometricProtocol {
+    @available(iOS 10.0, *)
     func register()
+    @available(iOS 10.0, *)
     func authenticate()
+    @available(iOS 10.0, *)
     func deRegister(deregisterFidoCredentials: Bool)
 }
 
@@ -29,6 +32,7 @@ class BiometricService: BiometricProtocol {
         self.biometricViewController = biometricController
     }
     
+    @available(iOS 10.0, *)
     func register() {
         do {
             let registrationUrl: String = endpointHelper.requestRequestEndpoint
@@ -49,6 +53,7 @@ class BiometricService: BiometricProtocol {
          biometricViewController.showBiometricRegistrationError()
     }
     
+    @available(iOS 10.0, *)
     func authenticate() {
         do {
             homeViewController.showWebViewContainer()
@@ -67,6 +72,7 @@ class BiometricService: BiometricProtocol {
         }
     }
     
+    @available(iOS 10.0, *)
     func deRegister(deregisterFidoCredentials: Bool) {
         do {
             let deregistrationRequestEndpoint: String = endpointHelper.deregistrationRequestEndpoint
@@ -82,6 +88,7 @@ class BiometricService: BiometricProtocol {
         }
     }
     
+    @available(iOS 10.0, *)
     func handleError(_ error: FidoError){
         switch error {
         case .invalidBiometrics:

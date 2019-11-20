@@ -1,6 +1,9 @@
 package com.nhs.online.nhsonline.biometrics
 
+import android.annotation.TargetApi
 import android.app.Activity
+import android.app.Application
+import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Log
@@ -25,6 +28,7 @@ import java.security.Signature
 private val TAG = RegistrationService::class.java.simpleName
 private const val KEY_ID_PREFIX = "nhs-app-key"
 
+@TargetApi(Build.VERSION_CODES.M)
 class RegistrationService(
         private val activity: FragmentActivity,
         private val biometricAsyncHandler: BiometricAsyncHandler,

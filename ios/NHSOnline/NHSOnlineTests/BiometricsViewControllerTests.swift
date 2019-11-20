@@ -11,6 +11,7 @@ class BiometricsViewControllerTests : XCTestCase {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: BiometricsViewController = storyboard.instantiateViewController(withIdentifier: "BiometricsViewController") as! BiometricsViewController
         biometricsViewController = vc
+
     }
     
     @available(iOS 11.0, *)

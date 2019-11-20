@@ -18,7 +18,9 @@
 
 package com.nhs.online.nhsonline.biometrics
 
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v4.app.DialogFragment
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.view.KeyEvent
@@ -30,6 +32,7 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.utils.SigningHelper
 import kotlinx.android.synthetic.main.fingerprint_dialog_container.*
 
+@RequiresApi(Build.VERSION_CODES.M)
 fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
                                                   fingerprintContent: FingerprintContent,
                                                   fingerprintAuthProcessor: FingerprintAuthProcessor) : FingerprintAuthenticationDialogFragment {
@@ -46,6 +49,7 @@ fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
  * A dialog which uses fingerprint APIs to authenticate the user, and falls back to password
  * authentication if fingerprint is not available.
  */
+@RequiresApi(Build.VERSION_CODES.M)
 class FingerprintAuthenticationDialogFragment : DialogFragment(),
     TextView.OnEditorActionListener,
         FingerprintUiHelper.Callback {

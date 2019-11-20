@@ -16,6 +16,8 @@
 
 package com.nhs.online.nhsonline.biometrics
 
+import android.annotation.TargetApi
+import android.os.Build
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.support.v4.os.CancellationSignal
 import android.widget.ImageView
@@ -28,6 +30,7 @@ import com.nhs.online.nhsonline.R
 private const val ERROR_TIMEOUT_MILLIS: Long = 1600
 private const val SUCCESS_DELAY_MILLIS: Long = 1300
 
+@TargetApi(Build.VERSION_CODES.M)
 class FingerprintUiHelper(
     private val fingerprintMgr: FingerprintManagerCompat,
     private val icon: ImageView,

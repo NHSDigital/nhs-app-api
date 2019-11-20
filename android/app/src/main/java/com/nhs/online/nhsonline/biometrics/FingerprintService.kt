@@ -1,5 +1,7 @@
 package com.nhs.online.nhsonline.biometrics
 
+import android.annotation.TargetApi
+import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
@@ -11,6 +13,7 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 
 private const val keyIdPrefix = "com.nhs.online.nhsonline.fidouafclient.keystore.key"
 
+@TargetApi(Build.VERSION_CODES.M)
 class FingerprintService(
         biometricsInteractor: IBiometricsInteractor,
         private val interactor: IInteractor,
@@ -97,7 +100,7 @@ class FingerprintService(
             fidoServerUrl: String,
             interactor: IInteractor
         ): FingerprintService? {
-            if (fidoServerUrl.isEmpty())
+            if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M) || fidoServerUrl.isEmpty())
                 return null
 
             val activity: FragmentActivity = biometricsInteractor.getActivity()

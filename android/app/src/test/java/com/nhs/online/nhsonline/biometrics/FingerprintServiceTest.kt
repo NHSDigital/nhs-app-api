@@ -69,9 +69,9 @@ class FingerprintServiceTest {
     }
 
     @Test
-    fun fingerprintServiceCompanionClass_ReturnsNonNullWhenApiVersionEqualOrHigherThan24() {
+    fun fingerprintServiceCompanionClass_ReturnsNonNullWhenApiVersionEqualOrHigherThan23() {
         val marshmallowOrHigherApis =
-            listOf(Build.VERSION_CODES.N, Build.VERSION_CODES.O)
+            listOf(Build.VERSION_CODES.M, Build.VERSION_CODES.N, Build.VERSION_CODES.O)
         val interactor: IInteractor = mock()
 
         marshmallowOrHigherApis.forEach { version ->
@@ -79,6 +79,22 @@ class FingerprintServiceTest {
             val fingerprintService =
                 FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl, interactor)
             Assert.assertNotNull(fingerprintService)
+        }
+    }
+
+    @Test
+    fun fingerprintServiceCompanionClass_ReturnsNullWhenApiVersionLessThan23() {
+        val lollipopOrLowerApis =
+            listOf(Build.VERSION_CODES.LOLLIPOP_MR1,
+                Build.VERSION_CODES.LOLLIPOP,
+                Build.VERSION_CODES.KITKAT)
+        val interactor: IInteractor = mock()
+
+        lollipopOrLowerApis.forEach { version ->
+            setAndroidApiVersion(version)
+            val fingerprintService =
+                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl, interactor)
+            Assert.assertNull(fingerprintService)
         }
     }
 

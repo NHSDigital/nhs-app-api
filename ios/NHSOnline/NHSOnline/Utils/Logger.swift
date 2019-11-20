@@ -3,11 +3,19 @@ import os.log
 
 class Logger {
     static func logError(message: StaticString) {
-        os_log(message, log: OSLog.default, type: .error)
+        if #available(iOS 10.0, *) {
+            os_log(message, log: OSLog.default, type: .error)
+        } else {
+            NSLog("\(message)")
+        }
     }
     
     static func logInfo(message: StaticString) {
-        os_log(message, log: OSLog.default, type: .info)
+        if #available(iOS 10.0, *) {
+            os_log(message, log: OSLog.default, type: .info)
+        } else {
+            NSLog("\(message)")
+        }
     }
 }
 

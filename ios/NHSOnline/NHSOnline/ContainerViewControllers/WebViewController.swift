@@ -84,7 +84,11 @@ class WebViewController: UIViewController, WKUIDelegate {
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
             if(error != nil) {
-                os_log("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.", log: OSLog.default, type: .error)
+                if #available(iOS 10.0, *) {
+                    os_log("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.", log: OSLog.default, type: .error)
+                } else {
+                    NSLog("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.")
+                }
                 let urlIsValid = self.verifyUrl(urlString: path)
                 if(urlIsValid){
                     self.webView.loadPage(url: path)
@@ -162,7 +166,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     func dismissSafariViewController() {
         webViewDelegate?.safariViewController?.dismiss(animated: true, completion: nil)
     }
-    
+
     func setRedirectCompleted(redirect: Bool?){
         self.redirect = redirect!
     }

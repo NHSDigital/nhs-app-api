@@ -11,7 +11,7 @@ git clone https://git.nhschoices.net/nhsonline/nhsonline-web
 2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
   - backendworker folder
   - web folder
-
+  
 ## Setup
 Before running the web locally, some entries need to be added to your machine's `hosts` file (`/etc/hosts` on Mac or `C:\windows\system32\drivers\etc\hosts` on Windows) to add the following entries:
 
@@ -71,21 +71,3 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 To enable biometrics on android or iOS, the BIOMETRICS_ENABLED environment variable should be set to true.
 To do this you can run
 `docker-compose -f docker-compose.yml -f docker-compose.biometrics.yml up`
-
-## Running Locally
-
-Select the debug profile in XCode as the build configuration to use.
-Use the following as the url format setting in the web `nuxt.config.js`
-```
-// URL Formats
-URI_FORMAT_API_CLIENT: 'http://local.bitraft.io:8089',
-API_HOST_SERVER: 'http://api.local.bitraft.io:8089',
-URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}:3000/auth-return',
-URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://local.bitraft.io:3000/auth-return',
-```
-
-Run the backendworker in docker from the backendworker folder using
-`docker-compose up`
-
-Run the web in npm
-`npm run dev`

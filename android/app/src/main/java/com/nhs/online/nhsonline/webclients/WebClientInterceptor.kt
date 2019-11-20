@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Handler
+import android.os.Build
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -170,7 +171,9 @@ class WebClientInterceptor(
 
             cancelTrackingWebRequestResponse()
             if (error != null) {
-                handleUnavailability(view?.url, error.errorCode)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    handleUnavailability(view?.url, error.errorCode)
+                }
             }
         } else {
             Log.d(Application.TAG,

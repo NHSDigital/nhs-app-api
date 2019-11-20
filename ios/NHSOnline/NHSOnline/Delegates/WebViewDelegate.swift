@@ -18,7 +18,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var webAppInterface: WebAppInterface
     var schemeHandlers: SchemeHandlers
     var badResponse: Bool = false
-
+    
     init(controller: HomeViewController, knownServices: KnownServices, webAppInterface: WebAppInterface) {
         self.viewController = controller
         self.knownServices = knownServices
@@ -31,11 +31,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         if let response = navigationResponse.response as? HTTPURLResponse {
-
+            
             let url = self.viewController.webViewController?.webView.url
             let baseUrl = URL(string: config().HomeUrl)
             let statusCode = response.statusCode
-
+            
             if ((url?.host==baseUrl?.host) && statusCode >= 400) {
                 badResponse = true
                 return decisionHandler(.cancel)
@@ -45,38 +45,38 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
         }
     }
-
+    
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-
+        
         shouldHandleErrors = false
-
+        
         if let initialUrl = navigationAction.request.url {
-
+            
             let url = ensureSupportedScheme(initialUrl)
-
+            
             if(schemeHandlers.handleUrl(url: url)) {
                 decisionHandler(.cancel)
                 return
-            }
-
+            }            
+            
             if(url.absoluteString == config().HomeUrl + config().FidoLoginErrorPath) {
                 viewController.showBiometricSessionError()
                 stopActivityIndicator()
                 decisionHandler(.cancel)
                 return
             }
-
+            
             guard navigationAction.targetFrame?.isMainFrame != false else {
                 decisionHandler(.allow)
                 return
             }
-
+            
             if (!knownServices.shouldURLOpenExternally( url)) {
                 self.failedUrl = url
             }
-
+            
             if(!Reachability.isConnectedToNetwork()) {
                 decisionHandler(.cancel)
                 self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
@@ -88,9 +88,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 openInSafari(url: url)
                 return
             }
-
+            
             let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
-
+            
             if(matchingKnownService != nil) {
                 if(matchingKnownService!.hasMissingQueryString(urlString: url.absoluteString)) {
                     let urlString = matchingKnownService!.addingMissingQueryParameters(urlString: url.absoluteString)
@@ -99,18 +99,18 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                     return
                 }
             }
-
+                
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return;
             }
         }
-
+        
         self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         decisionHandler(.allow)
     }
-
+    
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
@@ -118,41 +118,45 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
-
+        
         checkPageLoadOriginAndStartActivityIndicator()
     }
-
+    
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         self.showWebViewContainer()
         if(webView.url?.absoluteString == config().HomeUrl + config().NhsOnlineRequiredQueryString) {
             self.viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
         }
-
+        
         if(webView.url!.absoluteString.contains(config().CidUrlSuffix)) {
             viewController.updateHeaderText(headerText: "Log in to the NHS App", accessibilityLabel: "Login using Patient ID")
             viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
         }
-
+        
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
-
+        
         if !self.knownServices.isSameHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
             self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
         }
     }
-
+    
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
         if withError._code == NSURLErrorCancelled {
-            os_log("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", log: OSLog.default, type: .info, withError.localizedDescription)
+            if #available(iOS 10.0, *) {
+                os_log("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", log: OSLog.default, type: .info, withError.localizedDescription)
+            } else {
+                NSLog("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", withError.localizedDescription)
+            }
             stopActivityIndicator()
             viewController.applicationState.unBlock()
             return
         }
-
+        
         if shouldHandleErrors {
             if badResponse {
                 return self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
             }
-
+            
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
                     if let url = info["NSErrorFailingURLKey"] as? URL {                        self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
@@ -161,57 +165,62 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             } else {
                 self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(webView.url))
             }
-
-            os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
+            
+            if #available(iOS 10.0, *) {
+                os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
+            } else {
+                NSLog("Failed to load the page with error: %@", withError.localizedDescription)
+            }
         }
         stopActivityIndicator()
         viewController.applicationState.unBlock()
     }
-
+    
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-
+        
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
             self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         }
-
+        
         return nil
     }
-
+    
     func shouldOpenInSafari(url: URL) -> Bool {
-
-        let nativeWebViewUrlParts = ["login", config().CidUrlSuffix]
+        
+        let nativeWebViewUrlParts = ["login",
+                          config().CidUrlSuffix]
 
         if(url.absoluteString.containsAnyOf(nativeWebViewUrlParts)) {
             return false
         }
-
+        
         if let _ = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
             return false
         }
-
+        
         return true
     }
-
+    
     func openInSafari(url: URL) {
         self.safariViewController = SFSafariViewController(url: url)
         self.safariViewController?.delegate = self
         self.viewController.present(safariViewController!, animated: true, completion: nil)
     }
-
+    
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         self.viewController.delayedBiometricsStart(0.1)
     }
-
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 
         var shouldAllowNativeInteraction = false;
-
+        
         let url = self.viewController.webViewController?.webView.url;
         if(url?.absoluteString.contains("throttling"))!{
             shouldAllowNativeInteraction = true
         }
-
+        
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             switch message.name {
             case "areNotificationsEnabled":
@@ -256,7 +265,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 viewController.displayExtendSessionDialogue(sessionDuration: sessionDuration!)
                 break
             case "openAppSettings":
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 break
             case "pageLoadComplete":
                 viewController.applicationState.unBlock()
@@ -295,12 +306,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
         }
     }
-
+    
     func goToLoginOptions() {
         CookieHandler().readAccessTokenFromCookie()
         viewController.showBiometricViewContainer()
     }
-
+    
     func setMenuBarItem(index: Int){
         let tabBar = self.viewController.tabBar!
         if(index >= 0 && index < tabBar.items!.count){
@@ -308,11 +319,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             viewController.selectedTab = index
         }
     }
-
+    
     func setHelpUrl(url: String){
         UserDefaults.standard.set(url, forKey: "HelpUrl" )
     }
-
+    
     func setRetryUrl(path: String){
         if(!path.isEmpty){
             var suffix = path
@@ -320,7 +331,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             failedUrl = URL(string: config().HomeUrl + suffix)
         }
     }
-
+    
     func ensureSupportedScheme(_ url: URL) -> URL {
         if(url.scheme==config().AppScheme) {
             self.viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
@@ -328,15 +339,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         return url
     }
-
+    
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
         self.viewController.selectedTab = nil
     }
-
+    
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
-            os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
+            if #available(iOS 10.0, *) {
+                os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
+            } else {
+                NSLog("Page is not responding for a long time, loading stoped.")
+            }
             self.viewController.webViewController?.webView.stopLoading()
             let url = self.viewController.webViewController?.webView.url
             let baseUrl = URL(string: config().HomeUrl)
@@ -345,9 +360,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         stopActivityIndicator()
     }
-
+    
     func updateHeaderAndNavigationMenu(url: URL?) {
-
+        
         if let tabBarDelegate = self.viewController.tabBarDelegate {
             guard let serviceInfo = knownServices.findMatchingKnownServiceInfo(url: url) else {
                 return
@@ -370,19 +385,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break;
             default : break
             }
-
+            
             if let serviceTitle = serviceInfo.title, !serviceTitle.isEmpty {
                 viewController.updateHeaderText(headerText: serviceTitle, accessibilityLabel: serviceInfo.accessibleTitle)
             }
         }
     }
-
+    
     private func showWebViewContainer() {
         clearTimer()
         self.viewController.showWebViewContainer()
         stopActivityIndicator()
     }
-
+    
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
         clearTimer()
         stopActivityIndicator()
@@ -393,7 +408,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
     }
-
+    
     func clearTimer() {
         if self.timer != nil {
             self.timer.invalidate()
@@ -404,12 +419,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func checkPageLoadOriginAndStartActivityIndicator() {
         if(self.viewController.goingBack) {
             self.viewController.goingBack=false
-            os_log("Page looks like it came from a goBack - not starting native spinner", log: OSLog.default, type: .info)
+            if #available(iOS 10.0, *) {
+                os_log("Page looks like it came from a goBack - not starting native spinner", log: OSLog.default, type: .info)
+            } else {
+                NSLog("Page looks like it came from a goBack - not starting native spinner")
+            }
         } else {
             startActivityIndicator()
         }
     }
-
+    
     func startActivityIndicator() {
         self.activityIndicator.startAnimating()
         UIApplication.shared.beginIgnoringInteractionEvents()

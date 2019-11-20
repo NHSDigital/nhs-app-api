@@ -12,24 +12,28 @@ class NotificationsService {
     }
     
     func registerForPushNotifications(trigger: String) {
-        self.trigger = trigger
-        UNUserNotificationCenter.current()
-            .requestAuthorization(options: [.alert, .sound, .badge]) {
-                [weak self] granted, error in
-                guard granted else {
-                    self?.unauthorised()
-                    return
-                }
-                
-                self?.areNotificationsEnabled { areEnabled in
-                    if areEnabled {
-                        DispatchQueue.main.async {
-                            UIApplication.shared.registerForRemoteNotifications()
-                        }
-                    } else {
+        if #available(iOS 10.0, *) {
+            self.trigger = trigger
+            UNUserNotificationCenter.current()
+                .requestAuthorization(options: [.alert, .sound, .badge]) {
+                    [weak self] granted, error in
+                    guard granted else {
                         self?.unauthorised()
+                        return
                     }
-                }
+                    
+                    self?.areNotificationsEnabled { areEnabled in
+                        if areEnabled {
+                            DispatchQueue.main.async {
+                                UIApplication.shared.registerForRemoteNotifications()
+                            }
+                        } else {
+                            self?.unauthorised()
+                        }
+                    }
+            }
+        } else {
+            logNotSupported()
         }
     }
     
@@ -40,15 +44,17 @@ class NotificationsService {
     }
     
     private func areNotificationsEnabled(callback: @escaping (Bool) -> Void) {
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            guard settings.authorizationStatus == .authorized else {
-                Logger.logInfo(message: "Allow notifications is disabled")
-                callback(false)
-                return
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                guard settings.authorizationStatus == .authorized else {
+                    Logger.logInfo(message: "Allow notifications is disabled")
+                    callback(false)
+                    return
+                }
+                
+                Logger.logInfo(message: "Allow notifications is enabled")
+                callback(true)
             }
-            
-            Logger.logInfo(message: "Allow notifications is enabled")
-            callback(true)
         }
     }
     
@@ -70,6 +76,10 @@ class NotificationsService {
         Logger.logInfo(message: "Notifications permission not granted")
         appWebInterface.notificationsUnauthorised()
         resetTrigger()
+    }
+    
+    private func logNotSupported() {
+        Logger.logInfo(message: "Os too old, not supported")
     }
     
     private func resetTrigger() {

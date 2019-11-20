@@ -116,7 +116,9 @@ class HomeViewController : UIViewController {
         if isOnLogin(webView: webView) {
             clearSelectedTab()
             self.showWebViewContainer()
-            Timer.scheduledTimer(timeInterval: timer, target: self, selector: #selector(self.attemptBiometricLogin), userInfo: nil, repeats: false)
+            if #available(iOS 10.0, *) {
+                Timer.scheduledTimer(timeInterval: timer, target: self, selector: #selector(self.attemptBiometricLogin), userInfo: nil, repeats: false)
+            }
         }
     }
     
@@ -131,7 +133,8 @@ class HomeViewController : UIViewController {
         return webView.url?.absoluteString == loginURLString
     }
     
-    @objc public func attemptBiometricLogin() {
+    @objc @available(iOS 10.0, *)
+    public func attemptBiometricLogin() {
         do {
             
             if(UserDefaultsManager.getBiometricAvailability() == BiometricState.Registered) {
@@ -233,7 +236,11 @@ class HomeViewController : UIViewController {
                 let description = error.debugDescription
                 print(description)
                 
-                os_log("An error occured setting the app version number.", log: OSLog.default, type: .error)
+                if #available(iOS 10.0, *) {
+                    os_log("An error occured setting the app version number.", log: OSLog.default, type: .error)
+                } else {
+                    NSLog("An error occured setting the app version number.")
+                }
             }
         }
         
@@ -243,7 +250,7 @@ class HomeViewController : UIViewController {
     func setVisibilityOfHeaderAndMenuBars(visible: Bool, isSlim: Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             let constraintPriority:UILayoutPriority
-            
+
             if visible {
                 constraintPriority = self.showConstraintPriority
             } else {
@@ -391,7 +398,7 @@ class HomeViewController : UIViewController {
         if (UserDefaults.standard.string(forKey: "HelpUrl") == nil) {
             UserDefaults.standard.set(config().HelpURL, forKey: "HelpUrl")
         }
-        
+
         if (UserDefaults.standard.string(forKey: "HelpUrl") == config().HelpLoginURL) {
             self.pageUrl = config().HelpLoginURL
         } else {
@@ -474,17 +481,29 @@ class HomeViewController : UIViewController {
     }
     
     func isCheckYourSymptomsPath(webview: WKWebView!) -> Bool {
-        os_log("Checking current url for symtoms path", log: OSLog.default, type: .info)
+        if #available(iOS 10.0, *) {
+            os_log("Checking current url for symtoms path", log: OSLog.default, type: .info)
+        } else {
+            NSLog("Checking current url for symtoms path")
+        }
         let baseUrl = URL(string: config().HomeUrl)
         return (webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath)
     }
     
     func hasCidUrlSuffix(webview: WKWebView!) -> Bool {
-        os_log("Checking current url for CidSuffix", log: OSLog.default, type: .info)
+        if #available(iOS 10.0, *) {
+            os_log("Checking current url for CidSuffix", log: OSLog.default, type: .info)
+        } else {
+            NSLog("Checking current url for CidSuffix")
+        }
         let absoluteUrl = webview.url?.absoluteString
         
         if(absoluteUrl == nil) {
-            os_log("Current webview url is nil on checkSymptomsAndCIDBack call", log: OSLog.default, type: .info)
+            if #available(iOS 10.0, *) {
+                os_log("Current webview url is nil on checkSymptomsAndCIDBack call", log: OSLog.default, type: .info)
+            } else {
+                NSLog("Current webview url is nil on checkSymptomsAndCIDBack call")
+            }
             return false
         } else {
             return absoluteUrl!.contains(config().CidUrlSuffix)
