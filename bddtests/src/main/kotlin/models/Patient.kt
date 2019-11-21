@@ -20,6 +20,8 @@ import worker.models.session.UserSessionRequest
 
 data class Patient(
         val title: String = "",
+        val ageMonths: Int = 0,
+        val ageYears: Int = 0,
         val firstName: String = "",
         val surname: String = "",
         val callingName: String = "",
@@ -74,6 +76,27 @@ data class Patient(
                 dateOfBirth,
                 DateTimeFormats.dateWithoutTimeFormat,
                 DateTimeFormats.frontendBasicDateFormat)
+    }
+
+    fun formattedAge(): String {
+        var formattedAge = ""
+        if (ageYears == 0 && ageMonths == 0) {
+            formattedAge = "Less than one month old"
+        }
+        if (ageYears == 0 && ageMonths == 1) {
+            formattedAge = ageMonths.toString() + " month old"
+        }
+        if (ageYears == 0 && ageMonths > 1) {
+            formattedAge = ageMonths.toString() + " months old"
+        }
+        if (ageYears == 1 && ageMonths >= 0) {
+            formattedAge = ageYears.toString() + " year old"
+        }
+        if (ageYears > 1 && ageMonths >= 0) {
+            formattedAge = ageYears.toString() + " years old"
+        }
+
+        return formattedAge
     }
 
     fun dateOfBirthDigitsOnly(): String {

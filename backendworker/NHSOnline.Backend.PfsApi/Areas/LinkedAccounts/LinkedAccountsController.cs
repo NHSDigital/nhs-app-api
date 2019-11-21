@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
@@ -50,9 +51,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 .GetLinkedAccountsService();
 
             var hasProxyNhsNumbers = linkedAccountsService.HasProxyNhsNumbers(userSession.GpUserSession);
-
+            
             var result = await linkedAccountsService.GetLinkedAccounts(userSession.GpUserSession);
-
+            
             if (!hasProxyNhsNumbers)
             {
                 _logger.LogInformation($"Updating user session to store Nhs Numbers for linked accounts");
@@ -135,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         {
             _logger.LogInformation($"Attempt to switch to profile id {id}");
             var userSession = HttpContext.GetUserSession();
-            
+
             await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchRequest, 
                 $"Request to switch to linked account {id}");
 
@@ -162,11 +163,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                     //switching from main a/c
                     fromNhsNumber = userSession.GpUserSession.NhsNumber;
                     toNhsNumber = linkedAccountsService.GetNhsNumberForProxyUser(userSession.GpUserSession, id);
-                }
-
+                } 
+                
                 fromNhsNumber = fromNhsNumber.Replace(" ", string.Empty, StringComparison.Ordinal);
                 toNhsNumber = toNhsNumber.Replace(" ", string.Empty, StringComparison.Ordinal);
- 
+
                 _logger.LogInformation($"Switching profile from nhsnumber={fromNhsNumber} to nhsnumber={toNhsNumber}");
 
                 await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse, 

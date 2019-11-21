@@ -147,9 +147,10 @@ describe('getters', () => {
     const { currentProfile } = getters;
     it('returns proxy user details when acting as another user', () => {
       const proxyUserDetails = {
-        nhsNumber: '987123456',
-        name: 'harry',
-        dateOfBirth: '2001-01-01',
+        ageMonths: '10',
+        ageYears: '39',
+        givenName: 'harry',
+        name: 'harry dixon',
       };
 
       const mockGetters = {

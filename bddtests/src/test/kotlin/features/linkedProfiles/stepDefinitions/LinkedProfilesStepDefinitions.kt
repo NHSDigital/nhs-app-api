@@ -209,23 +209,6 @@ class LinkedProfilesStepDefinitions {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
 
         linkedProfileSummaryPage.isLoaded(selectedProfile.profile.formattedFullName())
-
-        val displayedLinkedProfile = linkedProfileSummaryPage.getDisplayedLinkedProfileDetail()
-
-        Assert.assertEquals(
-                "Linked profile NHS number did not match",
-                selectedProfile.profile.formattedNHSNumber(),
-                displayedLinkedProfile.nhsNumber)
-
-        Assert.assertEquals(
-                "Linked profile date of birth did not match",
-                selectedProfile.profile.formattedDateOfBirth(),
-                displayedLinkedProfile.dateOfBirth)
-
-        Assert.assertEquals(
-                "Linked profile GP practice name did not match",
-                selectedProfile.gpPracticeName,
-                displayedLinkedProfile.gpPracticeName)
     }
 
     @When("I click the Switch to this profile button for the proxy user")
@@ -303,9 +286,9 @@ class LinkedProfilesStepDefinitions {
                     patient.formattedFullName(),displayedLinkedProfiles[index].name)
 
             Assert.assertEquals(
-                    "Linked profile date of birth did not match",
-                    patient.formattedDateOfBirth(),
-                    displayedLinkedProfiles[index].dateOfBirth)
+                    "Linked profile age did not match",
+                    patient.formattedAge(),
+                    displayedLinkedProfiles[index].age)
         }
     }
 }

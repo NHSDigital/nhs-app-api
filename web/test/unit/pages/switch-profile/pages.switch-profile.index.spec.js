@@ -18,9 +18,9 @@ describe('switch profile page is there', () => {
       actingAsUser: {
         id: 'user-id-0',
         name: 'mr user 0',
-        dateOfBirth: '1989-07-04T00:00:00.000',
+        ageMonths: '10',
+        ageYears: '25',
         gpPracticeName: 'practice x',
-        nhsNumber: '999111222',
       },
       config: {
         patientId: '1234-abc-dddd',
@@ -55,9 +55,8 @@ describe('switch profile page is there', () => {
       expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_pageTitles.switchProfile');
     });
 
-    it('proxy users dob and nhs number is visible', () => {
-      expect(wrapper.find('[id="proxy-date-of-birth"]').text()).toEqual('4 July 1989');
-      expect(wrapper.find('[id=proxy-nhs-number]').text()).toEqual('999111222');
+    it('proxy users age is visible', () => {
+      expect(wrapper.find('[id="proxy-age"]').text()).toEqual('25translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
     });
 
     it('gp practice name is not visible with null value', () => {

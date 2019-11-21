@@ -16,7 +16,7 @@ open class LinkedProfilesPage : HybridPageObject() {
 
     private var linkedAccountsXpath = "//li[@data-sid='linked-account']"
     private var nameInsideLinkedProfileXpath: String = ".//span//span"
-    private var dateOfBirthInsideLinkedProfileXpath = ".//div[@data-sid='date-of-birth']"
+    private var ageInsideLinkedProfileXpath = ".//div[@data-sid='age-months']"
 
     fun isLoaded() {
         headerNative.waitForPageHeaderText("Linked profiles")
@@ -55,10 +55,10 @@ open class LinkedProfilesPage : HybridPageObject() {
                 By.xpath(nameInsideLinkedProfileXpath)
         )
 
-        val dateOfBirth = element.findElement<WebElement>(
-                By.xpath(dateOfBirthInsideLinkedProfileXpath))
+        val age = element.findElement<WebElement>(
+                By.xpath(ageInsideLinkedProfileXpath))
 
-        return LinkedProfileOption(name = name.text, dateOfBirth = dateOfBirth.text)
+        return LinkedProfileOption(name = name.text, age = age.text)
     }
 
     private fun getAllLinkedAccounts(): List<WebElement> {

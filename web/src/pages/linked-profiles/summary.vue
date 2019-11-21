@@ -2,39 +2,6 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-
-        <generic-button id="btn-switch-profile"
-                        :button-classes="['nhsuk-button']"
-                        @click.stop.prevent="switchProfileButtonClicked">
-          {{ $t('linkedProfiles.switchProfileButton') }}
-        </generic-button>
-
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-          {{ $t('linkedProfiles.informationHeaders.dob') }}:
-        </span>
-        <span id="user-date-of-birth"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
-          {{ linkedAccount.dateOfBirth | longDate }}
-        </span>
-
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-          {{ $t('linkedProfiles.informationHeaders.nhsNumber') }}:
-        </span>
-        <span id="user-nhs-number"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
-          {{ linkedAccount.nhsNumber }}
-        </span>
-
-        <div v-if="linkedAccount.gpPracticeName">
-          <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-            {{ $t('linkedProfiles.informationHeaders.gpPractice') }}:
-          </span>
-          <span id="user-gp-practice"
-                :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
-            {{ linkedAccount.gpPracticeName }}
-          </span>
-        </div>
-
         <div class="nhsuk-do-dont-list">
           <span :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
             {{ `${$t('linkedProfiles.thingsYouCanDoOnBehalfOf.text')} ${linkedAccount.name}` }}
@@ -49,6 +16,12 @@
             </li>
           </ul>
         </div>
+        <generic-button id="btn-switch-profile"
+                        :button-classes="['nhsuk-button']"
+                        @click.stop.prevent="switchProfileButtonClicked">
+          {{ $t('linkedProfiles.switchProfileButton').replace('{givenName}',
+                                                              linkedAccount.givenName)}}
+        </generic-button>
       </div>
     </div>
   </div>
@@ -101,9 +74,8 @@ export default {
     );
   },
   mounted() {
-    const accountName = this.linkedAccount.name;
-    this.$store.dispatch('header/updateHeaderText', accountName);
-    this.$store.dispatch('pageTitle/updatePageTitle', accountName);
+    this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.linkedProfilesSummary').replace('{name}', this.linkedAccount.name));
+    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.linkedProfilesSummary').replace('{name}', this.linkedAccount.name));
   },
   beforeDestroy() {
     this.$store.dispatch('linkedAccounts/clearSelectedLinkedAccount');

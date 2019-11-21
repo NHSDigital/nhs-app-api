@@ -7,17 +7,20 @@ import cucumber.api.java.en.When
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.stepDefinitions.MyRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import pages.prescription.PrescriptionsPage
 import utils.SerenityHelpers
+import utils.getOrFail
 import java.net.URL
 
 private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
@@ -96,6 +99,12 @@ class HomePageStepDefinitions {
                 "to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
                 regex.containsMatchIn(patient.nhsNumbers.first()))
         homeSteps.assertPatientDetailsShownFor(patient)
+    }
+
+    @Then("I see the proxy patient details of age and gp surgery$")
+    fun iSeeProxyPatientDetails() {
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        homeSteps.assertProxyPatientDetailsShownFor(selectedProfile)
     }
 
     @Then("^I see a welcome message$")

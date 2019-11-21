@@ -92,6 +92,69 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             // Assert
             resultOdsCode.Should().Be(proxyOdsCode);
         }
+        
+        [TestMethod]
+        public void CalculateAgeInMonthsAndYears_ReturnsEmptyAgeDataObjectWhenDateOfBirthIsNull()
+        {
+            // Arrange
+            DateTime? dateOfBirth = null;
+            var ageDataObject = new AgeData
+            {
+                AgeMonths = null,
+                AgeYears = null
+            };
+            
+            // Act
+            var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
+
+            // Assert
+            calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
+            calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
+        }
+        
+        [TestMethod]
+        public void CalculateAgeInMonthsAndYears_ReturnsCorrectAgeDataObjectWhenDateOfBirthIsValidAndGreaterThan1Year()
+        {
+            // Arrange
+            DateTime? dateOfBirth = (DateTime.Now).AddMonths(-2);
+            dateOfBirth = dateOfBirth.Value.AddYears(-5);
+            
+            var ageDataObject = new AgeData
+            {
+                //If the age is above 1, then the ageMonths will be 0
+                AgeMonths = 0,
+                AgeYears = 5
+            };
+            
+            // Act
+            var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
+
+            // Assert
+            calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
+            calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
+        }
+        
+        [TestMethod]
+        public void CalculateAgeInMonthsAndYears_ReturnsCorrectAgeDataObjectWhenDateOfBirthIsValidAndLessThan1Year()
+        {
+            // Arrange
+            DateTime? dateOfBirth = (DateTime.Now).AddMonths(-5);
+            dateOfBirth = dateOfBirth.Value.AddYears(0);
+            
+            var ageDataObject = new AgeData
+            {
+                AgeMonths = 5,
+                AgeYears = 0
+            };
+            
+            // Act
+            var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
+
+            // Assert
+            calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
+            calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
+        }
+        
 
         [TestMethod]
         public void GetOdsCodeForLinkedAccount_ReturnsNull_WhenLinkedAccountWithMatchingIdFoundInUserSession()
@@ -274,8 +337,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             _demographicsService.Verify();
             _emisClient.Verify();
         }
-
-        [TestMethod]
+        
+      [TestMethod]
         public async Task GetLinkedAccounts_ReturnsSuccessResponse_WhenSuccessfulResponseFromEmis()
         {
             _emisUserSession.HasLinkedAccounts = true;
@@ -312,13 +375,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 var demographicsResponseForUser = demographicsResponses[emisProxyPatient.Id];
                 var linkedAccountDetail = successResult.Response.LinkedAccounts.ElementAt(i);
 
-                emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
-                
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
-                linkedAccountDetail.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
                 linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
-                linkedAccountDetail.GivenName.Should().Be(demographicsResponseForUser.NameParts.Given);
-                linkedAccountDetail.DateOfBirth.Should().Be(demographicsResponseForUser.DateOfBirth);
+        linkedAccountDetail.AgeMonths.Should()
+        .Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
+        linkedAccountDetail.AgeYears.Should()
+        .Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
             }
 
             _demographicsService.VerifyAll();

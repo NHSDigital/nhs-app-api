@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -18,6 +20,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
         private readonly ILogger<EmisLinkedAccountsService> _logger;
         private readonly IEmisDemographicsService _demographicsService;
         private readonly IEmisClient _emisClient;
+        private const double AverageNumberOfDaysInMonth = 30.4;
 
         public EmisLinkedAccountsService(
             ILogger<EmisLinkedAccountsService> logger,
@@ -108,6 +111,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                 linkedAccountAuditResult.IsProxyMode = true;
                 linkedAccountAuditResult.ProxyNhsNumber 
                     = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id)?.NhsNumber;
+
             }
 
             return linkedAccountAuditResult;
@@ -162,31 +166,60 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     .Where(x => x.Value.Result is DemographicsResult.Success)
                     .ToList();
 
-                response.LinkedAccounts = successResults.Select(x => {
+                response.LinkedAccounts = successResults.Select(x =>
+                {
                     var demographics = (DemographicsResult.Success)x.Value.Result;
-
+                    
+                    var dateOfBirth = demographics.Response.DateOfBirth;
                     return new LinkedAccount
                     {
                         Id = x.Key,
                         GivenName = demographics.Response.NameParts.Given,
                         Name = demographics.Response.PatientName,
-                        DateOfBirth = demographics.Response.DateOfBirth,
-                        NhsNumber = demographics.Response.NhsNumber,
+                        AgeMonths = CalculateAgeInMonthsAndYears(dateOfBirth).AgeMonths,
+                        AgeYears = CalculateAgeInMonthsAndYears(dateOfBirth).AgeYears
                     };
+                    
                 });
-
+                
                 foreach (var proxy in emisUserSession.ProxyPatients)
                 {
-                    proxy.NhsNumber = response.LinkedAccounts.FirstOrDefault(x => x.Id == proxy.Id)?.NhsNumber;
-                }        
+                    proxy.NhsNumber = ((DemographicsResult.Success) successResults.First(p => p.Key == proxy.Id).Value.Result).Response.NhsNumber;
+                }
             }
-
             return new LinkedAccountsResult.Success(response);
         }
-
         private Boolean IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
             return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);
+        }
+        public AgeData CalculateAgeInMonthsAndYears(DateTime? dateOfBirth)
+        {
+            if (dateOfBirth != null)
+            {
+                DateTime now = DateTime.Now;  
+
+                int ageMonths = 0;
+                int ageInYears = now.Year - dateOfBirth.Value.Year -
+                                 (dateOfBirth.Value.DayOfYear < now.DayOfYear ? 0 : 1);
+                
+                if (ageInYears == 0)
+                {
+                    TimeSpan timeDifference = now - dateOfBirth.Value;
+                    ageMonths = Convert.ToInt32(timeDifference.Days / AverageNumberOfDaysInMonth);
+                }
+
+                var calculatedAge = new AgeData
+                {
+                    AgeMonths = ageMonths,
+                    AgeYears = ageInYears
+                };
+
+                return calculatedAge;
+            }
+            
+            return new AgeData();
+
         }
     }
 }

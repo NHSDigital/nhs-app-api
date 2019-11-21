@@ -28,17 +28,19 @@ export default {
     return !!(rootState.linkedAccounts && rootState.linkedAccounts.actingAsUser);
   },
   currentProfile(state, getters, rootState) {
-    const profile = { name: '', dateOfBirth: '', nhsNumber: '' };
     if (getters.isProxying) {
-      profile.name = rootState.linkedAccounts.actingAsUser.name;
-      profile.dateOfBirth = rootState.linkedAccounts.actingAsUser.dateOfBirth;
-      profile.nhsNumber = rootState.linkedAccounts.actingAsUser.nhsNumber;
-    } else {
-      profile.name = state.user;
-      profile.dateOfBirth = state.dateOfBirth;
-      profile.nhsNumber = state.nhsNumber;
+      return {
+        name: rootState.linkedAccounts.actingAsUser.name,
+        ageMonths: rootState.linkedAccounts.actingAsUser.ageMonths,
+        ageYears: rootState.linkedAccounts.actingAsUser.ageYears,
+        givenName: rootState.linkedAccounts.actingAsUser.givenName,
+      };
     }
 
-    return profile;
+    return {
+      name: state.user,
+      dateOfBirth: state.dateOfBirth,
+      nhsNumber: state.nhsNumber,
+    };
   },
 };

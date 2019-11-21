@@ -14,13 +14,10 @@
             :click-func="onLinkedProfileClicked"
             :click-param="item.id"
             data-sid="linked-account">
-            <div :class="[$style.dateOfBirth, 'nhsuk-u-margin-top-2']">
-              {{ $t('linkedProfiles.informationHeaders.dob') }}
-            </div>
-            <div :id="'linked-account-dob-' + index"
+            <div :id="'linked-account-age-' + index"
                  class="nhsuk-u-margin-top-1"
-                 data-sid="date-of-birth">
-              {{ item.dateOfBirth | longDate }}
+                 data-sid="age-months">
+              {{  getDisplayedAgeText(item) }}
             </div>
           </menu-item>
         </menu-item-list>
@@ -32,12 +29,14 @@
 <script>
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 import { LINKED_PROFILES_SUMMARY } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import { find } from 'lodash/fp';
 
 export default {
   layout: 'nhsuk-layout',
+  mixins: [CalculateAgeInMonthsAndYears],
   components: {
     MenuItemList,
     MenuItem,

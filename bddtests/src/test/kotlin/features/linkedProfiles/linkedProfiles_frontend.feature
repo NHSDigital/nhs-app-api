@@ -7,6 +7,7 @@ Feature: Login with proxy access
     When I select the linked profiles link from the home page
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
+    And I see the proxy patient details of age and gp surgery
     And I click the proxy warning
     Then the switch profiles page is displayed
     And the correct proxy user details are displayed
@@ -35,7 +36,7 @@ Feature: Login with proxy access
       | INFORMATICA           |
       | GPATHAND              |
 
-  Scenario Outline: An EMIS user proxying  behalf of another user will be shown Im1 Appointments page when appointments provider is <Appointments Provider>
+  Scenario Outline: An EMIS user proxying on behalf of another user will be shown Im1 Appointments page when appointments provider is <Appointments Provider>
     Given I am logged in as a EMIS user with linked profiles and appointments provider <Appointments Provider>
     Then I see the home page
     And I see the linked profiles link

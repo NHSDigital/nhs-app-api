@@ -20,8 +20,10 @@
         {{ $t('my_record.patientInfo.sectionHeader') }}
       </analytics-tracked-tag>
       <div :class="[$style.patientDetailsContainer, $style['nhsuk-u-padding-bottom-3']]">
-        <patient-details :is-collapsed="isPatientDetailsCollapsed"
+        <patient-details v-if="!isProxying" :is-collapsed="isPatientDetailsCollapsed"
                          :patient-details="$store.state.myRecord.patientDetails"/>
+        <proxy-patient-details v-else-if="isProxying" :is-collapsed="isPatientDetailsCollapsed"
+                               :proxy-patient-details="$store.state.linkedAccounts.actingAsUser"/>
       </div>
 
       <div v-if="hasRecordAccess()" :class="$style.summaryRecordContainer">
@@ -95,6 +97,7 @@ import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import Shutter from '@/components/linked-profiles/Shutter';
+import ProxyPatientDetails from '../../components/my-record/SharedComponents/ProxyPatientDetails';
 
 const PATIENTDETAILS = 'patientdetails';
 
@@ -114,6 +117,7 @@ export default {
     ScrMicrotest,
     Warning,
     Shutter,
+    ProxyPatientDetails,
   },
   data() {
     return {

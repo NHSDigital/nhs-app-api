@@ -19,12 +19,14 @@ describe('linked profile is there', () => {
         {
           id: 'user-id-0',
           name: 'user 0',
-          dateOfBirth: '2019-07-04T00:00:00.000',
+          ageMonths: '0',
+          ageYears: '20',
         },
         {
           id: 'user-id-1',
           name: 'user 1',
-          dateOfBirth: '2019-10-16T00:00:00.000',
+          ageMonths: '10',
+          ageYears: '42',
         },
       ],
     },
@@ -49,11 +51,11 @@ describe('linked profile is there', () => {
       $store.getters['linkedAccounts/hasLinkedAccounts'] = true;
     });
 
-    it('first linked user name and dob is visible', () => {
+    it('first linked user name and age is visible', () => {
       linkedProfileMenuItem = wrapper.find('#linked-account-menu-item-0');
       expect(linkedProfileMenuItem.exists()).toBe(true);
       expect(linkedProfileMenuItem.text()).toContain('user 0');
-      expect(wrapper.find('#linked-account-dob-0').text()).toEqual('4 July 2019');
+      expect(wrapper.find('#linked-account-age-0').text()).toEqual('20translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
     });
 
     it('second linked user name and dob is visible', () => {
@@ -61,7 +63,7 @@ describe('linked profile is there', () => {
 
       expect(linkedProfileMenuItem.exists()).toBe(true);
       expect(linkedProfileMenuItem.text()).toContain('user 1');
-      expect(wrapper.find('#linked-account-dob-1').text()).toEqual('16 October 2019');
+      expect(wrapper.find('#linked-account-age-1').text()).toEqual('42translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
     });
 
     it('should navigate when specific linked profile is clicked', () => {

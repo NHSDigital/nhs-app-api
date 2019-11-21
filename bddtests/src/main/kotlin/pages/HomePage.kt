@@ -1,5 +1,6 @@
 package pages
 
+import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
@@ -110,6 +111,13 @@ open class HomePage : HybridPageObject() {
         Assert.assertEquals("Welcome message did not match", expected, text)
     }
 
+    fun assertHasWelcomeMessageForProxy(proxy: LinkedProfileFacade) {
+        val name = "${proxy.profile.title} ${proxy.profile.firstName} ${proxy.profile.surname}".trim()
+        val expected = "Welcome, $name"
+        val text = greeting.text
+        Assert.assertEquals("Welcome message did not match", expected, text)
+    }
+
     fun assertHasPatientDetails(patient: Patient, expectedDetails: ArrayList<String>) {
 
         assertHasWelcomeMessageFor(patient)
@@ -121,6 +129,20 @@ open class HomePage : HybridPageObject() {
                             .map { element -> element.text })
         }
         assertCollection("PatientDetails", expectedDetails, actualDetails)
+    }
+
+
+    fun assertHasProxyPatientDetails(proxyPatient: LinkedProfileFacade, expectedDetails: ArrayList<String>) {
+
+        assertHasWelcomeMessageForProxy(proxyPatient)
+        val actualDetails = arrayListOf<String>()
+        greeting.actOnTheElement {
+            actualDetails.addAll(
+                    it.findElements<WebElement>(
+                            By.xpath("./following-sibling::div[1]/p"))
+                            .map { element -> element.text })
+        }
+        assertCollection("ProxyPatientDetails", expectedDetails, actualDetails)
     }
 
     fun isWelcomeHeaderVisible(): Boolean {

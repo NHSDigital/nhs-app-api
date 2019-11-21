@@ -22,11 +22,10 @@ open class SwitchProfilesPage : HybridPageObject() {
 
     fun getDisplayedProxyDetails(): SwitchProfileData {
 
-        val dateOfBirth = findByXpath("//span[@id='proxy-date-of-birth']")
+        val age = findByXpath("//span[@id='proxy-age']")
         val gpPracticeName = findByXpath("//span[@id='proxy-gp-practice']")
-        val nhsNumber = findByXpath("//span[@id='proxy-nhs-number']")
 
-        return SwitchProfileData(dateOfBirth = dateOfBirth.text, nhsNumber = nhsNumber.text,
+        return SwitchProfileData(age = age.text,
                 gpPracticeName = gpPracticeName.text)
     }
 }

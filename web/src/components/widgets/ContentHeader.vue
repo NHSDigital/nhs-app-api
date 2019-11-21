@@ -98,7 +98,8 @@ export default {
         !isEmpty(this.currentBreadCrumbs);
     },
     showYellowBanner() {
-      return this.showExternalServiceWarning || this.isProxying;
+      return this.showExternalServiceWarning ||
+        (this.isProxying && this.$route.name !== SWITCH_PROFILE.name);
     },
     showExternalServiceWarning() {
       const route = findByName(this.$route.name);

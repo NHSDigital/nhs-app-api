@@ -1,5 +1,6 @@
 package features.authentication.steps
 
+import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
@@ -28,10 +29,23 @@ open class HomeSteps {
                 "NHS number: ${patient.formattedNHSNumber()}")
     }
 
+    fun getExpectedProxyDetails(proxyPatient:LinkedProfileFacade): ArrayList<String> {
+        return arrayListOf(
+                "Age: ${proxyPatient.profile.formattedAge()}",
+                "GP surgery: ${proxyPatient.gpPracticeName}"
+        )
+    }
+
     @Step
     fun assertPatientDetailsShownFor(patient:Patient ) {
         homePage.assertHasPatientDetails(patient,getExpectedDetails(patient))
     }
+
+    @Step
+    fun assertProxyPatientDetailsShownFor(proxyProfile:LinkedProfileFacade ) {
+        homePage.assertHasProxyPatientDetails(proxyProfile,getExpectedProxyDetails(proxyProfile))
+    }
+
 
     @Step
     fun assertHeaderVisible() {

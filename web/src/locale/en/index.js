@@ -1172,6 +1172,7 @@ export default {
     patientInfo: {
       fieldLabelName: 'Name',
       fieldLabelDOB: 'Date of birth',
+      fieldLabelAge: 'Age',
       fieldLabelSex: 'Sex',
       fieldLabelAddress: 'Address',
       fieldLabelNHS: 'NHS number',
@@ -1417,6 +1418,12 @@ export default {
     welcome: 'Welcome',
     description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
   },
+  homeProxyMode: {
+    informationHeaders: {
+      age: 'Age',
+      gpSurgery: 'GP surgery',
+    },
+  },
   loginButton: {
     login: 'Continue with NHS login',
   },
@@ -1472,6 +1479,7 @@ export default {
     more: 'More',
     linkedProfiles: 'Linked profiles',
     switchProfile: 'You are acting on behalf of {name}',
+    linkedProfilesSummary: 'Switch to {name}\'s profile to act on their behalf',
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
@@ -1532,6 +1540,7 @@ export default {
     login: 'Login',
     linkedProfiles: 'Linked profiles',
     switchProfile: 'You are acting on behalf of {name}',
+    linkedProfilesSummary: 'Switch to {name}\'s profile to act on their behalf',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
     recalls: 'Recalls',
@@ -1609,19 +1618,25 @@ export default {
   },
   linkedProfiles: {
     actingAsOtherUserBannerWarningText: 'Acting on behalf of',
-    linkedInformation: 'You have proxy access for the following people.',
+    linkedInformation: 'You can access services in the app for the following people.',
     informationHeaders: {
-      dob: 'Date of birth',
-      nhsNumber: 'NHS number',
+      age: 'Age',
       gpPractice: 'GP practice',
     },
-    switchProfileButton: 'Switch to this profile',
+    ageLabels: {
+      lessThanOneMonth: 'Less than 1 month old',
+      oneMonth: ' month old',
+      greaterThanOneMonthLessThan1Year: ' months old',
+      oneYear: ' year old',
+      greaterThanOneYearOld: ' years old',
+    },
+    switchProfileButton: 'Switch to {givenName}\'s profile',
     switchToMyProfileButton: 'Switch to my profile',
     thingsYouCanDoOnBehalfOf: {
-      text: 'Things you can do on behalf of',
+      text: 'Services you can access for ',
       bookAnAppointment: 'Book an appointment',
-      orderRepeatPrescription: 'Order repeat prescription',
-      viewMedicalRecord: 'View medical record',
+      orderRepeatPrescription: 'Order a repeat prescription',
+      viewMedicalRecord: 'View their GP medical record',
     },
     shutter: {
       prescriptions: {
@@ -1657,8 +1672,7 @@ export default {
   },
   switchProfile: {
     informationHeaders: {
-      dob: 'Date of birth',
-      nhsNumber: 'NHS number',
+      age: 'Age',
       gpPractice: 'GP surgery',
     },
     switchToMyProfileButton: 'Switch to my profile',

@@ -2,28 +2,14 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <generic-button id="switch-profile-button" :button-classes="['nhsuk-button',
-                                                                     'nhsuk-button--primary']"
-                        @click.stop.prevent="switchProfileButtonClicked">
-          {{ $t('switchProfile.switchToMyProfileButton') }}
-        </generic-button>
+        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
+          {{ $t('switchProfile.informationHeaders.age') }}:
+        </span>
+        <span id="proxy-age"
+              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
+          {{ getDisplayedAgeText(currentProfile) }}
+        </span>
 
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-          {{ $t('switchProfile.informationHeaders.dob') }}:
-        </span>
-        <span id="proxy-date-of-birth"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
-          {{ currentProfile.dateOfBirth | longDate }}
-        </span>
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-          {{ $t('switchProfile.informationHeaders.nhsNumber') }}:
-        </span>
-        <span id="proxy-nhs-number"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
-          <generic-voice-over-text-split :class="$style.fieldValue"
-                                         :text="currentProfile.nhsNumber"
-                                         :data-sid="'proxy-nhs-number-data'"/>
-        </span>
         <div v-if="currentProfile.gpPracticeName">
           <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
             {{ $t('switchProfile.informationHeaders.gpPractice') }}:
@@ -33,6 +19,12 @@
             {{ currentProfile.gpPracticeName }}
           </span>
         </div>
+
+        <generic-button id="switch-profile-button" :button-classes="['nhsuk-button',
+                                                                     'nhsuk-button--primary']"
+                        @click.stop.prevent="switchProfileButtonClicked">
+          {{ $t('switchProfile.switchToMyProfileButton') }}
+        </generic-button>
       </div>
     </div>
   </div>
@@ -42,13 +34,13 @@
 import { redirectTo } from '@/lib/utils';
 import { INDEX } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
-import GenericVoiceOverTextSplit from '@/components/widgets/GenericVoiceOverTextSplit';
+import CalculateAgeInMonthsAndYears from '../../plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 
 export default {
   layout: 'nhsuk-layout',
+  mixins: [CalculateAgeInMonthsAndYears],
   components: {
     GenericButton,
-    GenericVoiceOverTextSplit,
   },
   data() {
     return {

@@ -64,37 +64,18 @@ describe('linked profile is there', () => {
 
     it('displays the correct text and icons for the selected profile', () => {
       const switchButton = wrapper.find('#btn-switch-profile');
-      const dateOfBirth = wrapper.find('[id="user-date-of-birth"]');
-      const nhsNumber = wrapper.find('[id="user-nhs-number"]');
-      const gpPractice = wrapper.find('[id="user-gp-practice"]');
       const canBookAppointment = wrapper.find('[id="book-an-appointment"]');
       const canOrderRepeatPrescription = wrapper.find('[id="order-repeat-prescription"]');
       const canViewMedicalRecord = wrapper.find('[id="view-medical-record"]');
 
       // assert
       expect(switchButton.exists()).toBe(true);
-      expect(dateOfBirth.text()).toBe('4 July 2019');
-      expect(nhsNumber.text()).toBe('999111222');
-      expect(gpPractice.text()).toBe('practice x');
       expect(canBookAppointment.find('svg[class*="nhsuk-icon__tick"]').exists()).toBe(true);
       expect(canOrderRepeatPrescription.find('svg[class*="nhsuk-icon__tick"]').exists()).toBe(true);
       expect(canViewMedicalRecord.find('svg[class*="nhsuk-icon__tick"]').exists()).toBe(false);
 
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'mr user 0');
-      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'mr user 0');
-    });
-
-    it('does not display the gp practice when no value it is empty', () => {
-      // should display when value is present
-      let gpPractice = wrapper.find('[id="user-gp-practice"]');
-      expect(gpPractice.exists()).toBe(true);
-      expect(gpPractice.text()).toBe('practice x');
-
-      $store.state.linkedAccounts.selectedLinkedAccount.gpPracticeName = '';
-
-      // try to find the element again after setting gp practice name to empty
-      gpPractice = wrapper.find('[id="user-gp-practice"]');
-      expect(gpPractice.exists()).toBe(false);
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_pageHeaders.linkedProfilesSummary');
+      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_pageTitles.linkedProfilesSummary');
     });
   });
 });

@@ -47,12 +47,8 @@ class SwitchProfileStepDefinitions {
         val currentProxyPatient = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
         // proxy patient was selected in previous step
         Assert.assertEquals(
-                "Proxy patient nhs number did not match",
-                currentProxyPatient.profile.formattedNHSNumber(), displayedProxyDetails.nhsNumber)
-
-        Assert.assertEquals(
-                "Proxy patient date of birth did not match",
-                currentProxyPatient.profile.formattedDateOfBirth(), displayedProxyDetails.dateOfBirth)
+                "Proxy patient age did not match",
+                currentProxyPatient.profile.formattedAge(), displayedProxyDetails.age)
 
         Assert.assertEquals(
                 "Proxy patient gp practice did not match",
