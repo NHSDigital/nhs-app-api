@@ -9,11 +9,17 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
         public class Success : GetCoursesResult
         {
             public CourseListResponse Response { get; }
+            
+            public FilteringCounts FilteringCounts { get; }
+
             public bool? AllowFreeTextPrescriptions { get; }
 
-            public Success(CourseListResponse response, bool? allowFreeTextPrescriptions = null)
+            public Success(CourseListResponse response,
+                FilteringCounts filteringCounts,
+                bool? allowFreeTextPrescriptions = null)
             {
                 Response = response;
+                FilteringCounts = filteringCounts;
                 AllowFreeTextPrescriptions = allowFreeTextPrescriptions;
             }
 

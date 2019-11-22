@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
@@ -18,17 +16,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 {
     public class EmisPrescriptionService : IPrescriptionService
     {
-        private readonly IAuditor _auditor;
         private readonly ILogger<EmisPrescriptionService> _logger;
         private readonly EmisConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
 
-        public EmisPrescriptionService(IAuditor auditor, ILogger<EmisPrescriptionService> logger,
+        public EmisPrescriptionService(
+            ILogger<EmisPrescriptionService> logger,
             EmisConfigurationSettings settings,
-            IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
+            IEmisClient emisClient, 
+            IEmisPrescriptionMapper emisPrescriptionMapper)
         {
-            _auditor = auditor;
             _logger = logger;
             _emisClient = emisClient;
             _settings = settings;
@@ -55,8 +53,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 {
                     try
                     {
-                        var prescriptionListResponseFiltered =
-                            await GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
+                        var (prescriptionListResponseFiltered, prescriptionsCount) = 
+                            GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
 
 
                         _logger.LogDebug($"Mapping successful response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
@@ -69,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
 
-                        return new GetPrescriptionsResult.Success(mappedPrescriptionList);
+                        return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                     }
                     catch (Exception e)
                     {
@@ -91,12 +89,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             }
         }
 
-        private async Task<PrescriptionRequestsGetResponse> GetPrescriptionsWithoutRepeatCourses(
-            PrescriptionRequestsGetResponse prescriptionsResponse)
+        private (PrescriptionRequestsGetResponse prescriptionListResponseFiltered, FilteringCounts prescriptionsCount) 
+            GetPrescriptionsWithoutRepeatCourses(PrescriptionRequestsGetResponse prescriptionsResponse)
         {
-            const string auditType = AuditingOperations.RepeatPrescriptionsViewHistoryResponse;
+            var prescriptionsReceivedCount = prescriptionsResponse.PrescriptionRequests.Count();
+            var totalCoursesRunningTotal = 0;
+            var numberOfPrescriptionsDiscarded = 0;
 
-            int totalCoursesRunningTotal = 0;
             var repeatCourses = prescriptionsResponse.MedicationCourses
                                                      .Where(x => x.PrescriptionType == PrescriptionType.Repeat)
                                                      .ToList();
@@ -109,18 +108,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
             var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
 
-            var coursesBeforeFiltering = prescriptionsResponse.PrescriptionRequests
-                .Sum(x => x.RequestedMedicationCourses.Count())
-                .ToString(CultureInfo.InvariantCulture);
-
-            await _auditor.Audit(auditType, "Total courses before filtering: {0}", coursesBeforeFiltering);
-
             foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x =>
                 x.DateRequested))
             {
                 if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit)
                 {
-                    _logger.LogInformation($"The number of courses has reached {totalCoursesRunningTotal} which has exceeded the maximum, discarding the remainder.");
+                    numberOfPrescriptionsDiscarded = prescriptionsReceivedCount - totalCoursesRunningTotal;
                     break;
                 }
 
@@ -141,29 +134,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                     filteredPrescriptionsCount += 1;
                 }
 
-                _logger.LogInformation($"{repeatCoursesInPrescription.Count} repeat courses in this prescription");
-
                 totalCoursesRunningTotal += repeatCoursesInPrescription.Count;
             }
-
+            
+            var prescriptionsWithRepeatableCourses = prescriptionsReceivedCount - filteredPrescriptionsCount;
             var prescriptionsReturnedToUserCount = prescriptionsWithRepeatCourses.Count;
-            var prescriptionsReceivedCount = prescriptionsResponse.PrescriptionRequests.Count();
-            var prescriptionsWithNoRepeatableCoursesCount = filteredPrescriptionsCount;
 
-            var kvp = new Dictionary<string, string>
+            var prescriptionsCount = new FilteringCounts
             {
-                { "Prescriptions Received",  prescriptionsReceivedCount.ToString(CultureInfo.InvariantCulture)},
-                { "Prescriptions with no repeatable courses",  prescriptionsWithNoRepeatableCoursesCount.ToString(CultureInfo.InvariantCulture)},
-                { "Returned to user",  prescriptionsReturnedToUserCount.ToString(CultureInfo.InvariantCulture) }
+                ReceivedCount = prescriptionsReceivedCount,
+                FilteredRemainingRepeatsCount = prescriptionsWithRepeatableCourses,
+                FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded,
+                ReturnedCount = prescriptionsReturnedToUserCount
             };
-
-            await _auditor.Audit(auditType,
-                    "Prescriptions Received: {0}, Number of prescriptions without repeatable courses: {1}, Number of prescriptions returned to user: {2}",
-                    prescriptionsReceivedCount.ToString(CultureInfo.InvariantCulture),
-                    prescriptionsWithNoRepeatableCoursesCount.ToString(CultureInfo.InvariantCulture),
-                    prescriptionsReturnedToUserCount.ToString(CultureInfo.InvariantCulture));
-
-            _logger.LogInformationKeyValuePairs("Prescription Count", kvp);
 
             var prescriptionListResponseFiltered = new PrescriptionRequestsGetResponse
             {
@@ -171,12 +154,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 MedicationCourses = repeatCourses,
             };
 
-            return prescriptionListResponseFiltered;
+            return (prescriptionListResponseFiltered, prescriptionsCount);
         }
 
         public async Task<OrderPrescriptionResult> OrderPrescription(GpLinkedAccountModel gpLinkedAccountModel, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            const string auditType = AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsResponse;
             EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
             var postRequest = new PrescriptionRequestsPost
@@ -188,7 +170,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
             var prescriptionsAttemptingToOrderCount = repeatPrescriptionRequest.CourseIds.Count();
             _logger.LogInformation($"Attempting to order {prescriptionsAttemptingToOrderCount} prescriptions");
-            await _auditor.Audit(auditType, "Attempting to order {0} prescriptions", prescriptionsAttemptingToOrderCount);
 
             try
             {

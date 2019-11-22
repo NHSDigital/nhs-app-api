@@ -6,6 +6,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private Mock<IAuditor> _mockAuditor;
         private Mock<ICourseService> _mockCourseService;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private Mock<ILogger<CoursesController>> _mockLogger;
         private string _serviceDeskReference;
         private Mock<IGpSystem> _mockGpSystem;
         private CourseListResponse _courseListResponse;
@@ -38,6 +40,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private const string ResponseAuditType = "RepeatPrescriptions_ViewRepeatMedications_Response";
 
         private const string RequestAuditMessage = "Attempting to retrieve courses";
+        private const int MockNumberOfCourses = 10;
 
         [TestInitialize]
         public void TestInitialize()
@@ -54,9 +57,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _mockCourseService = _fixture.Freeze<Mock<ICourseService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _mockLogger = _fixture.Freeze<Mock<ILogger<CoursesController>>>();
 
             _courseListResponse = _fixture.Create<CourseListResponse>();
-            var result = new GetCoursesResult.Success(_courseListResponse);
+            var result = new GetCoursesResult.Success(_courseListResponse, new FilteringCounts
+            {
+                ReceivedCount = MockNumberOfCourses,
+                FilteredRemainingRepeatsCount = MockNumberOfCourses,
+                FilteredMaxAllowanceDiscardedCount = MockNumberOfCourses,
+                ReturnedCount = MockNumberOfCourses
+            });
 
             _mockCourseService.Setup(x => x.GetCourses(
                     It.Is<GpLinkedAccountModel>(d =>
@@ -99,7 +109,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, It.IsAny<object[]>()));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "Courses successfully retrieved - {0} courses", It.IsAny<object[]>()));
+                x.Audit(ResponseAuditType, "Courses successfully retrieved. " +
+                                           $"Total courses before filtering: {MockNumberOfCourses}, " +
+                                           $"Total courses returned after filtering: {MockNumberOfCourses}"));
         }
 
         [DataTestMethod]
@@ -144,6 +156,49 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat));
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResult_LogsCoursesCountWithMaximumAllowanceDiscarded()
+        {
+            // Act
+            await _systemUnderTest.Get(_patientId);
+
+            // Assert
+            var expectedLogMessage =
+                $"Courses Count: Courses Received={MockNumberOfCourses} " + 
+                $"Courses remaining after filtering out non-repeats={MockNumberOfCourses} " +
+                $"Courses filtered out for exceeding maximum allowance={MockNumberOfCourses} " +
+                $"Courses Returned={MockNumberOfCourses}";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResult_LogsCoursesCountWithMaximumRequestableDiscarded()
+        {
+            // Arrange
+            var result = new GetCoursesResult.Success(_courseListResponse, new FilteringCounts
+            {
+                ReceivedCount = MockNumberOfCourses,
+                FilteredRemainingRepeatsCount = MockNumberOfCourses,
+                FilteredMaxAllowanceDiscardedCount = MockNumberOfCourses,
+                ReturnedCount = MockNumberOfCourses
+            });
+            _mockCourseService.Setup(x => x.GetCourses(
+                    It.Is<GpLinkedAccountModel>(d =>
+                        d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
+                .Returns(Task.FromResult((GetCoursesResult) result));
+            
+            // Act
+            await _systemUnderTest.Get(_patientId);
+
+            // Assert
+            var expectedLogMessage =
+                $"Courses Count: Courses Received={MockNumberOfCourses} " + 
+                $"Courses remaining after filtering out non-repeats={MockNumberOfCourses} " +
+                $"Courses filtered out for exceeding maximum allowance={MockNumberOfCourses} " +
+                $"Courses Returned={MockNumberOfCourses}";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
     }
 }

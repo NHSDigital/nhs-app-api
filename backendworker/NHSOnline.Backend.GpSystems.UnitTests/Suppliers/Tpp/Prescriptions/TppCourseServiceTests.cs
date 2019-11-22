@@ -185,7 +185,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromEmis()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromTpp()
         {
             // Arrange
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
@@ -204,7 +204,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingEmis()
+        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingTpp()
         {
             // Arrange
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))

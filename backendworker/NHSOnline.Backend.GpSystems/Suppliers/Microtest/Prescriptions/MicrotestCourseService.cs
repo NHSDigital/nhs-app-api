@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
@@ -20,15 +17,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
         private readonly MicrotestConfigurationSettings _settings;
         private readonly IMicrotestClient _microtestClient;
         private readonly IMicrotestPrescriptionMapper _microtestPrescriptionMapper;
-        private readonly IAuditor _auditor;
 
-        public MicrotestCourseService(ILogger<MicrotestCourseService> logger, MicrotestConfigurationSettings settings, IMicrotestClient emisClient, IMicrotestPrescriptionMapper microtestPrescriptionMapper, IAuditor auditor)
+        public MicrotestCourseService(
+            ILogger<MicrotestCourseService> logger, 
+            MicrotestConfigurationSettings settings, 
+            IMicrotestClient emisClient, 
+            IMicrotestPrescriptionMapper microtestPrescriptionMapper)
         {
             _logger = logger;
             _settings = settings;
             _microtestClient = emisClient;
             _microtestPrescriptionMapper = microtestPrescriptionMapper;
-            _auditor = auditor;
         }
 
         public async Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel)
@@ -58,18 +57,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                             .Where(x => string.Equals(x.Status, MedicationStatus.Repeat, StringComparison.OrdinalIgnoreCase))
                             .OrderBy(x => x.Name);
 
-                        var kvp = new Dictionary<string, string>
-                        {
-                            { "Total courses from response before filtering", totalCourses.ToString(CultureInfo.InvariantCulture) },
-                            { "Total courses after filtering", coursesResponse.Body.Courses.Count().ToString(CultureInfo.InvariantCulture) }
-                        };
-
-                        await _auditor.Audit(
-                            AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsResponse,
-                            $"Total courses before filtering: {totalCourses.ToString(CultureInfo.InvariantCulture)}, Total courses after filtering: {coursesResponse.Body.Courses.Count().ToString(CultureInfo.InvariantCulture)}");
-
-                        _logger
-                            .LogInformationKeyValuePairs("Filtering counts", kvp);
+                        var numberOfRepeatCourses = coursesResponse.Body.Courses.Count();
 
                         if (_settings.CoursesMaxCoursesLimit != null)
                         {
@@ -78,11 +66,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                                     .Take(_settings.CoursesMaxCoursesLimit.Value);
                         }
 
+                        var numberOfCoursesAfterFiltering = coursesResponse.Body.Courses.Count();
+                        var numberOfCoursesDiscarded = numberOfRepeatCourses - numberOfCoursesAfterFiltering;
+                        
+                        var coursesCount = new FilteringCounts
+                        {
+                            ReceivedCount = totalCourses,
+                            FilteredRemainingRepeatsCount = numberOfRepeatCourses,
+                            FilteredMaxAllowanceDiscardedCount = numberOfCoursesDiscarded,
+                            ReturnedCount = numberOfCoursesAfterFiltering
+                        };
+
                         _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
 
                         var courseListResponse = _microtestPrescriptionMapper.Map(coursesResponse.Body);
 
-                        return new GetCoursesResult.Success(courseListResponse);
+                        return new GetCoursesResult.Success(courseListResponse, coursesCount);
                     }
                     catch (Exception e)
                     {
@@ -100,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Error retrieving courses");
+                _logger.LogError(e, "Unsuccessful request retrieving courses");
                 return new GetCoursesResult.BadGateway();
             }
             finally

@@ -9,10 +9,14 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
         public class Success : GetPrescriptionsResult
         {
             public PrescriptionListResponse Response { get; }
+            
+            public FilteringCounts FilteringCounts { get; }
 
-            public Success(PrescriptionListResponse response)
+            public Success(PrescriptionListResponse response,
+                FilteringCounts filteringCounts)
             {
                 Response = response;
+                FilteringCounts = filteringCounts;
             }
 
             public override T Accept<T>(IGetPrescriptionsResultVisitor<T> visitor)

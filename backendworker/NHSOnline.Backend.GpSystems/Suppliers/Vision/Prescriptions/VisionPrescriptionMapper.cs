@@ -23,12 +23,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
         {
             if (prescriptionGetResponse == null)
             {
-                _logger.LogCritical($"Null {nameof(prescriptionGetResponse)} provided to mapper");
+                _logger.LogCritical($"Null prescription object provided to mapper");
                 throw new ArgumentNullException(nameof(prescriptionGetResponse));
             }
             
             var allPrescriptionsGrouped = new List<PrescriptionItem>();
             var allCourses = new List<Course>();
+            
+            _logger.LogInformation($"Mapping {prescriptionGetResponse.Requests.Count()} prescriptions.");
 
             if (prescriptionGetResponse.Requests?.Count > 0)
             {

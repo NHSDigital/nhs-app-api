@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         {
             if (medications == null)
             {
-                _logger.LogError("No Prescriptions provided to mapper");
+                _logger.LogError("Null prescription object provided to mapper");
                 throw new ArgumentNullException(nameof(medications));
             }
 

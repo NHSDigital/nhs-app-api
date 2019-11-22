@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Logging;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
@@ -50,9 +55,41 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
                 .GetCourseService();
 
             var result = await courseService.GetCourses(gpLinkedAccountUserSession);
-            
-            await result.Accept(new CourseResultAuditingVisitor(_auditor, _logger));
+
+            var coursesCount = new FilteringCounts();
+            if (result is GetCoursesResult.Success successResult)
+            {
+                coursesCount = successResult.FilteringCounts;
+                LogCourseInformation(coursesCount);
+            }
+
+            await result.Accept(new CourseResultAuditingVisitor(_auditor, _logger, coursesCount));
             return await result.Accept(new CourseResultVisitor(_sessionCacheService, _errorReferenceGenerator, userSession));
+        }
+        
+        private void LogCourseInformation(FilteringCounts result) 
+        {
+            try
+            {
+                var kvp = new Dictionary<string, string>
+                {
+                    { "Courses Received", 
+                        result.ReceivedCount.ToString(CultureInfo.InvariantCulture) },
+                    { "Courses remaining after filtering out non-repeats", 
+                        result.FilteredRemainingRepeatsCount.ToString(CultureInfo.InvariantCulture) },
+                    { "Courses filtered out for exceeding maximum allowance", 
+                        result.FilteredMaxAllowanceDiscardedCount.ToString(CultureInfo.InvariantCulture) },
+                    { "Courses Returned", 
+                        result.ReturnedCount.ToString(CultureInfo.InvariantCulture) }
+                };
+                
+                _logger.LogInformationKeyValuePairs("Courses Count", kvp);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to log courses filtering details. " +
+                                    "Catching exception to prevent inability to get courses");
+            }
         }
     }
 }

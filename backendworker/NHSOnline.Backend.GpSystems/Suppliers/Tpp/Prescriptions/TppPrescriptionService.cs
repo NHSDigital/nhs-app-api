@@ -51,18 +51,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 }
                 try
                 {
-                    var medicationListFiltered = GetMaxPrescriptions(response.Body.Medications.ToList());
+                    var medicationsToBeFiltered = response.Body.Medications.ToList();
+                    var medicationListFiltered = GetMaxPrescriptions(medicationsToBeFiltered);
+                    var numberOfPrescriptionsDiscarded = medicationsToBeFiltered.Count() - medicationListFiltered.Count();
+                    
+                    var prescriptionsCount = new FilteringCounts
+                    {
+                        ReceivedCount = medicationsToBeFiltered.Count(),
+                        FilteredRemainingRepeatsCount = medicationsToBeFiltered.Count(),
+                        FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded,
+                        ReturnedCount =  medicationListFiltered.Count()
+                    };
 
                     _logger.LogDebug(
-                        $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
-                    var mapppedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
-                    
-                    return new GetPrescriptionsResult.Success(mapppedPrescriptionList);
+                        $"Mapping successful response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
+                    var mappedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
+
+                    return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(
-                        $"Something went wrong during building the response. Exception message: {e.Message}");
+                    _logger.LogError(e, "Something went wrong building the Prescription History response");
                     return new GetPrescriptionsResult.InternalServerError();
                 }
             }
@@ -75,7 +84,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogExit();
             }
-
         }
 
         public async Task<OrderPrescriptionResult> OrderPrescription(GpLinkedAccountModel gpLinkedAccountModel, RepeatPrescriptionRequest repeatPrescriptionRequest)
@@ -125,7 +133,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 medications = medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
             }
-            
 
             return medications;
         }

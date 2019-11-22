@@ -22,7 +22,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
         public VisionPrescriptionService(ILogger<VisionPrescriptionService> logger,
             VisionConfigurationSettings settings,
-            IVisionClient visionClient, IVisionPrescriptionMapper visionPrescriptionMapper)
+            IVisionClient visionClient, 
+            IVisionPrescriptionMapper visionPrescriptionMapper)
         {
             _logger = logger;
             _visionClient = visionClient;
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
             try
             {
-                _logger.LogDebug("Beginning fetch prescriptions for user from Vision");
+                _logger.LogDebug("Beginning Fetch Prescriptions For User");
                 
                 var request = new PrescriptionRequest
                 {
@@ -58,15 +59,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 
                 var prescriptionsResponse = await _visionClient.GetHistoricPrescriptions(visionUserSession, request);
 
-                _logger.LogDebug("Fetch Prescriptions from Vision complete");
+                _logger.LogDebug("Fetch Prescriptions For User Complete");
                 
                 if (!prescriptionsResponse.HasErrorResponse)
                 {
                     try
                     {
                         var prescriptionHistory = prescriptionsResponse.Body.PrescriptionHistory;
+                        var prescriptionsCount = new FilteringCounts();
                         
-                        FilterAndSortPrescriptionHistoryRepeats(prescriptionHistory, fromDate, toDate);
+                        FilterAndSortPrescriptionHistoryRepeats(prescriptionHistory, fromDate, toDate, prescriptionsCount);
                         
                         _logger.LogDebug($"Mapping successful response from {nameof(PrescriptionHistory)} to {nameof(PrescriptionListResponse)}");
                         var mappedPrescriptionList = _visionPrescriptionMapper.Map(prescriptionHistory);
@@ -84,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
 
-                        return new GetPrescriptionsResult.Success(mappedPrescriptionList);
+                        return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                     }
                     catch (Exception e)
                     {
@@ -170,7 +172,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
         private void FilterAndSortPrescriptionHistoryRepeats(
             PrescriptionHistory prescriptionHistory,
             DateTimeOffset? fromDate,
-            DateTimeOffset? toDate)
+            DateTimeOffset? toDate,
+            FilteringCounts prescriptionsCount)
         {
             int initialPrescriptionCount = prescriptionHistory.Requests.Count;
 
@@ -193,24 +196,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             prescriptionHistory.Requests = prescriptionHistory.Requests.OrderByDescending(x => x.Date).ToList();
 
             // Limit
-            int totalCoursesRunningTotal = 0;
-            int prescriptionsToTake = 0;
+            var totalCoursesRunningTotal = 0;
+            var prescriptionsToTake = 0;
+            var numberOfPrescriptionsDiscarded = 0;
+            var numberOfPrescriptionsWithinDate = prescriptionHistory.Requests.Count;
             
             foreach (var prescription in prescriptionHistory.Requests)
             {
                 if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit)
                 {
-                    _logger.LogWarning("Total courses exceeded maximum, discarding remainder.");
+                    numberOfPrescriptionsDiscarded = numberOfPrescriptionsWithinDate - prescriptionsToTake;
                     break;
                 }
 
                 totalCoursesRunningTotal += prescription.Repeats.Count;
                 prescriptionsToTake++;
             }
-
             prescriptionHistory.Requests = prescriptionHistory.Requests.Take(prescriptionsToTake).ToList();
 
-            _logger.LogInformation($"{ initialPrescriptionCount } prescriptions received. { prescriptionHistory.Requests.Count } being returned.");
+            prescriptionsCount.ReceivedCount = initialPrescriptionCount;
+            prescriptionsCount.FilteredRemainingRepeatsCount = numberOfPrescriptionsWithinDate;
+            prescriptionsCount.FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded;
+            prescriptionsCount.ReturnedCount = prescriptionHistory.Requests.Count;
         }
     }
 }

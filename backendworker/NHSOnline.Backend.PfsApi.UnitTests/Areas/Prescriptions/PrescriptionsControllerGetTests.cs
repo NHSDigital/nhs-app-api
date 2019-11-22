@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -7,6 +6,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private Mock<IPrescriptionValidationService> _mockPrescriptionValidationService;
         private Mock<IPrescriptionService> _mockPrescriptionsService;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<ILogger<PrescriptionsController>> _mockLogger;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private ConfigurationSettings _options;
 
@@ -51,6 +52,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private const string GetResponseAuditType = "RepeatPrescriptions_ViewHistory_Response";
 
         private const string RequestAuditMessage = "Attempting to view prescriptions";
+        private const int MockNumberOfCourses = 10;
 
         [TestInitialize]
         public void TestInitialize()
@@ -69,6 +71,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockPrescriptionValidationService = _fixture.Freeze<Mock<IPrescriptionValidationService>>();
             
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _mockLogger = _fixture.Freeze<Mock<ILogger<PrescriptionsController>>>();
 
             PrescriptionsDefaultLastNumberMonthsToDisplay  = _fixture.Create<int>();
 
@@ -109,10 +112,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             // Arrange
             var fromDate = DateTime.Now;
             var response = _fixture.Create<PrescriptionListResponse>();
+            var filteringCounts = new FilteringCounts
+            {
+                ReceivedCount = 10,
+                ReturnedCount = 5
+            };
             _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
                     It.Is<GpLinkedAccountModel>(d =>
                         d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
-                .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response)));
+                .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response, filteringCounts)));
             _mockPrescriptionValidationService.Setup(x => 
                 x.IsGetValid(fromDate, It.IsAny<DateTimeOffset>())).Returns(true);
 
@@ -127,10 +135,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             result.Should().BeAssignableTo<OkObjectResult>().Subject
                 .Value.Should().BeEquivalentTo(response);
-
-            var coursesCount = response.Prescriptions.Select(x => x.Courses.Count).Sum();
+            
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved - {0} courses", coursesCount));
+            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved. " +
+                                                                   $"Total prescriptions before filtering: {filteringCounts.ReceivedCount}, " +
+                                                                   $"Total prescriptions returned after filtering: {filteringCounts.ReturnedCount}"));
         }
 
         [TestMethod]
@@ -139,10 +148,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             // Arrange
             DateTimeOffset? fromDateGenerated = null;
             var response = _fixture.Create<PrescriptionListResponse>();
+            var filteringCounts = new FilteringCounts
+            {
+                ReceivedCount = 10,
+                ReturnedCount = 5
+            };
             _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
                 It.Is<GpLinkedAccountModel>(d =>
                     d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
-                .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response)))
+                .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response, filteringCounts)))
                 .Callback((GpLinkedAccountModel s, DateTimeOffset? fd, DateTimeOffset? td) => fromDateGenerated = fd);
             _mockPrescriptionValidationService.Setup(x => 
                 x.IsGetValid(It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset>())).Returns(false);
@@ -163,9 +177,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var xMonthsAgo = DateTimeOffset.Now.AddMonths(-PrescriptionsDefaultLastNumberMonthsToDisplay);
             fromDateGenerated.Value.Date.Should().Be(xMonthsAgo.Date);
             
-            var coursesCount = response.Prescriptions.Select(x => x.Courses.Count).Sum();
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, RequestAuditMessage ));
-            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved - {0} courses", coursesCount));
+            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved. " +
+                                                                   $"Total prescriptions before filtering: {filteringCounts.ReceivedCount}, " +
+                                                                   $"Total prescriptions returned after filtering: {filteringCounts.ReturnedCount}"));
         }
 
         [DataTestMethod]
@@ -215,6 +230,37 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, expectedAuditResponseMessageFormat));
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResult_LogsCoursesCountWithMaximumAllowanceDiscarded()
+        {
+            // Arrange
+            var fromDate = DateTime.Now;
+            var response = _fixture.Create<PrescriptionListResponse>();
+            _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
+                    It.Is<GpLinkedAccountModel>(d =>
+                        d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
+                .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response, new FilteringCounts
+                {
+                    ReceivedCount = MockNumberOfCourses,
+                    FilteredRemainingRepeatsCount = MockNumberOfCourses,
+                    FilteredMaxAllowanceDiscardedCount = MockNumberOfCourses,
+                    ReturnedCount = MockNumberOfCourses
+                })));
+            _mockPrescriptionValidationService.Setup(x => 
+                x.IsGetValid(fromDate, It.IsAny<DateTimeOffset>())).Returns(true);
+
+            // Act
+            await _systemUnderTest.Get(fromDate, _patientId);
+
+            // Assert
+            var expectedLogMessage =
+                $"Prescription Count: Prescriptions Received={MockNumberOfCourses} " + 
+                $"Prescriptions remaining after filtering out non-repeats={MockNumberOfCourses} " +
+                $"Prescriptions filtered out for exceeding maximum allowance={MockNumberOfCourses} " +
+                $"Prescriptions Returned to user={MockNumberOfCourses}";
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
     }
 }

@@ -208,7 +208,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavilable_WhenErrorReceivedFromVision()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromVision()
         {
             // Arrange
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
@@ -228,7 +228,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingEmis()
+        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingVision()
         {
             // Arrange
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))

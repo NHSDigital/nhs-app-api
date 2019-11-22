@@ -56,6 +56,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 {
                     try
                     {
+                        var totalCourses = coursesResponse.Body.EligibleRepeats.Repeats.Count;
+
                         _logger
                             .LogDebug("Filtering courses from successful vision response. Unfiltered number of courses: " +
                                       $"{coursesResponse.Body.EligibleRepeats.Repeats.Count}");
@@ -71,6 +73,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                                 .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
                         }
 
+                        var numberOfCoursesAfterFiltering = coursesResponse.Body.EligibleRepeats.Repeats.Count();
+                        var numberOfCoursesDiscarded = totalCourses - numberOfCoursesAfterFiltering;
+                        
+                        var coursesCount = new FilteringCounts
+                        {
+                            ReceivedCount = totalCourses,
+                            FilteredRemainingRepeatsCount = totalCourses,
+                            FilteredMaxAllowanceDiscardedCount = numberOfCoursesDiscarded,
+                            ReturnedCount = numberOfCoursesAfterFiltering
+                        };
 
                         _logger.LogDebug($"Mapping response from {nameof(EligibleRepeatsResponse)} to {nameof(CourseListResponse)}");
 
@@ -78,7 +90,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
                         visionUserSession.AllowFreeTextPrescriptions = coursesResponse.Body.EligibleRepeats.Settings.AllowFreeText;
 
-                        return new GetCoursesResult.Success(courseListResponse, visionUserSession.AllowFreeTextPrescriptions);
+                        return new GetCoursesResult.Success(courseListResponse, 
+                            coursesCount, 
+                            visionUserSession.AllowFreeTextPrescriptions);
                     }
                     catch (Exception e)
                     {

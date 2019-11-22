@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -52,8 +53,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
                 await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
                 var result = await GetPrescriptions(fromDate, userSession, patientId);
-            
-                await result.Accept(new GetPrescriptionsResultAuditingVisitor(_auditor, _logger));
+                
+                var prescriptionCount = new FilteringCounts();
+                if (result is GetPrescriptionsResult.Success successResult)
+                {
+                    prescriptionCount = successResult.FilteringCounts;
+                    LogPrescriptionInformation(prescriptionCount);
+                }
+                
+                await result.Accept(new GetPrescriptionsResultAuditingVisitor(_auditor, _logger, prescriptionCount));
                 return result.Accept(new GetPrescriptionsResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally
@@ -160,6 +168,31 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             var enumerable = courseIds.ToList();
             return !EnumerableExtensions.Any(enumerable) ? "No course ID's provided" : string.Join(",", enumerable);
+        }
+        
+        private void LogPrescriptionInformation(FilteringCounts result) 
+        {
+            try
+            {
+                var kvp = new Dictionary<string, string>
+                {
+                    { "Prescriptions Received", 
+                        result.ReceivedCount.ToString(CultureInfo.InvariantCulture) },
+                    { "Prescriptions remaining after filtering out non-repeats", 
+                        result.FilteredRemainingRepeatsCount.ToString(CultureInfo.InvariantCulture) },
+                    { "Prescriptions filtered out for exceeding maximum allowance", 
+                        result.FilteredMaxAllowanceDiscardedCount.ToString(CultureInfo.InvariantCulture) },
+                    { "Prescriptions Returned to user", 
+                        result.ReturnedCount.ToString(CultureInfo.InvariantCulture) }
+                };
+                
+                _logger.LogInformationKeyValuePairs("Prescription Count", kvp);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to log prescription filtering details. " +
+                                    "Catching exception to prevent inability to get prescriptions");
+            }
         }
     }
 }

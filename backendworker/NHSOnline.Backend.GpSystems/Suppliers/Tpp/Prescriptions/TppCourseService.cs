@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,8 +18,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         private readonly ITppClient _tppClient;
         private readonly ITppCourseMapper _tppCourseMapper;
 
-        public TppCourseService(ILogger<TppCourseService> logger, TppConfigurationSettings settings,
-            ITppClient tppClient, ITppCourseMapper tppCourseMapper)
+        public TppCourseService(
+            ILogger<TppCourseService> logger, 
+            TppConfigurationSettings settings,
+            ITppClient tppClient, 
+            ITppCourseMapper tppCourseMapper)
         {
             _logger = logger;
             _settings = settings;
@@ -45,22 +47,45 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 {
                     try
                     {
+                        var totalCourses = response.Body.Medications.Count;
+
                         _logger
-                            .LogDebug("Filtering courses from successful emis response so we are left with only repeat courses which can be requested");
+                            .LogDebug("Filtering courses from successful tpp response so we are left with only repeat courses which can be requested");
                         
-                        var medicationListFiltered = GetMaxRequestablePrescriptions(response.Body.Medications.ToList());
+                        var medications = response.Body.Medications.ToList();
                         
+                        var requestableRepeatablePrescriptions = medications
+                            .Where(x => TppApiConstants.MedicationRequestable.Yes.Equals(x.Requestable,
+                                            StringComparison.OrdinalIgnoreCase) &&
+                                        TppApiConstants.MedicationType.Repeat.Equals(x.Type, StringComparison.OrdinalIgnoreCase));
+                        
+                        var repeatCoursesAfterLimit = _settings.CoursesMaxCoursesLimit.HasValue ?
+                            requestableRepeatablePrescriptions.Take(_settings.CoursesMaxCoursesLimit.Value) : requestableRepeatablePrescriptions;
+
+                        var numberOfRequestableRepeatCourses = requestableRepeatablePrescriptions.Count();
+                        
+                        var medicationListFiltered = repeatCoursesAfterLimit.OrderBy(x => x.Drug).ToList();
+                        var numberOfCoursesAfterFiltering = medicationListFiltered.Count;
+                        
+                        var numberOfCoursesDiscarded = numberOfRequestableRepeatCourses - numberOfCoursesAfterFiltering;
+                        
+                        var coursesCount = new FilteringCounts
+                        {
+                            ReceivedCount = totalCourses,
+                            FilteredRemainingRepeatsCount = numberOfRequestableRepeatCourses,
+                            FilteredMaxAllowanceDiscardedCount = numberOfCoursesDiscarded,
+                            ReturnedCount = numberOfCoursesAfterFiltering
+                        };
+
                         _logger.LogDebug(
                             $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(CourseListResponse)}");
                         
                         var mapppedPrescriptionList = _tppCourseMapper.Map(medicationListFiltered);
-                        return new GetCoursesResult.Success(mapppedPrescriptionList);
+                        return new GetCoursesResult.Success(mapppedPrescriptionList, coursesCount);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(
-                            $"Something went wrong during building the response. Exception message: {e.Message}");
-
+                        _logger.LogError(e, $"Something went wrong while building the response");
                         return new GetCoursesResult.InternalServerError();
                     }
                 }
@@ -70,29 +95,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Unsuccessful request retrieving repeat prescriptions");
+                _logger.LogError(e, "Unsuccessful request retrieving courses");
                 return new GetCoursesResult.BadGateway();
             }
             finally
             {
                 _logger.LogExit();
             }
-        }
-
-        private List<Medication> GetMaxRequestablePrescriptions(IEnumerable<Medication> medications)
-        {
-            var requestableRepeatablePrescriptions = medications
-                .Where(x => TppApiConstants.MedicationRequestable.Yes.Equals(x.Requestable,
-                                StringComparison.OrdinalIgnoreCase) &&
-                            TppApiConstants.MedicationType.Repeat.Equals(x.Type, StringComparison.OrdinalIgnoreCase));
-            if (_settings.CoursesMaxCoursesLimit.HasValue)
-            {
-                requestableRepeatablePrescriptions = 
-                    requestableRepeatablePrescriptions
-                        .Take(_settings.CoursesMaxCoursesLimit.Value);
-            }
-            
-            return requestableRepeatablePrescriptions.OrderBy(x => x.Drug).ToList();
         }
 
         private GetCoursesResult GetCorrectErrorResult(

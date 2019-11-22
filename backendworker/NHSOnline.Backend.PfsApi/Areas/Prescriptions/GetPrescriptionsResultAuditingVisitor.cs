@@ -1,9 +1,9 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
@@ -11,21 +11,25 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<PrescriptionsController> _logger;
+        private readonly FilteringCounts _prescriptionCount;
         
         private const string AuditType = AuditingOperations.RepeatPrescriptionsViewHistoryResponse;
 
-        public GetPrescriptionsResultAuditingVisitor(IAuditor auditor, ILogger<PrescriptionsController> logger)
+        public GetPrescriptionsResultAuditingVisitor(IAuditor auditor, ILogger<PrescriptionsController> logger, FilteringCounts prescriptionCount)
         {
             _auditor = auditor;
             _logger = logger;
+            _prescriptionCount = prescriptionCount;
         }
         
         public async Task Visit(GetPrescriptionsResult.Success result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Prescriptions successfully retrieved - {0} courses",  
-                    result.Response?.Prescriptions?.Select(x => x.Courses?.Count).Sum());
+                await _auditor.Audit(AuditType, 
+                    "Prescriptions successfully retrieved. " +
+                    $"Total prescriptions before filtering: {_prescriptionCount.ReceivedCount}, " +
+                    $"Total prescriptions returned after filtering: {_prescriptionCount.ReturnedCount}");
             }
             catch (Exception e)
             {

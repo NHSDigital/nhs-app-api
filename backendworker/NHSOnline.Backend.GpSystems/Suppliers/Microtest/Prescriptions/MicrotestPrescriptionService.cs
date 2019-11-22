@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using static NHSOnline.Backend.Support.SerializationExtensions;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
 {
@@ -21,19 +18,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
         private readonly MicrotestConfigurationSettings _settings;
         private readonly IMicrotestClient _microtestClient;
         private readonly IMicrotestPrescriptionMapper _microtestPrescriptionMapper;
-        private readonly IAuditor _auditor;
 
         public MicrotestPrescriptionService(ILogger<MicrotestPrescriptionService> logger,
             MicrotestConfigurationSettings settings,
             IMicrotestClient emisClient,
-            IMicrotestPrescriptionMapper microtestPrescriptionMapper,
-            IAuditor auditor)
+            IMicrotestPrescriptionMapper microtestPrescriptionMapper)
         {
             _logger = logger;
             _microtestClient = emisClient;
             _settings = settings;
             _microtestPrescriptionMapper = microtestPrescriptionMapper;
-            _auditor = auditor;
         }
 
         public async Task<GetPrescriptionsResult> GetPrescriptions(GpLinkedAccountModel gpLinkedAccountModel, DateTimeOffset? fromDate = null, DateTimeOffset? toDate = null)
@@ -56,7 +50,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                 {
                     try
                     {
-                        var prescriptionListResponseFiltered = await FilterPrescriptions(prescriptionsResponse.Body);
+                        var (prescriptionListResponseFiltered, prescriptionsCount) = 
+                            FilterPrescriptions(prescriptionsResponse.Body);
 
                         _logger.LogDebug($"Mapping successful response from {nameof(PrescriptionHistoryGetResponse)} to {nameof(PrescriptionListResponse)}");
                         var mappedPrescriptionList = _microtestPrescriptionMapper.Map(prescriptionListResponseFiltered);
@@ -68,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
 
-                        return new GetPrescriptionsResult.Success(mappedPrescriptionList);
+                        return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                     }
                     catch (Exception e)
                     {
@@ -78,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                 }
                 else if (prescriptionsResponse.HasForbiddenResponse)
                 {
-                    _logger.LogError("Microtest prescriptions is not enabled");
+                    _logger.LogError("Microtest prescriptions are not enabled");
                     return new GetPrescriptionsResult.Forbidden();
                 }
 
@@ -159,37 +154,35 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             }
         }
 
-        private async Task<PrescriptionHistoryGetResponse> FilterPrescriptions(PrescriptionHistoryGetResponse prescriptionsResponse)
+        private (PrescriptionHistoryGetResponse newPrescriptionHistory, FilteringCounts prescriptionsCount)
+            FilterPrescriptions(PrescriptionHistoryGetResponse prescriptionsResponse)
         {
             List<PrescriptionCourse> repeatCourses = prescriptionsResponse.Courses
-                                                     .Where(x => string.Equals(x.Type, PrescriptionType.Repeat, StringComparison.OrdinalIgnoreCase))
+                                                     .Where(x => string.Equals(x.Type, PrescriptionType.Repeat, 
+                                                         StringComparison.OrdinalIgnoreCase))
                                                      .OrderByDescending(x => x.OrderDate)
                                                      .ToList();
 
             var repeatCoursesAfterLimit = _settings.PrescriptionsMaxCoursesSoftLimit.HasValue ?
                 repeatCourses.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value) : repeatCourses;
 
-            var kvp = new Dictionary<string, string>
+            var prescriptionsReturnedToUserCount = repeatCoursesAfterLimit.Count();
+            var numberOfPrescriptionsDiscarded = repeatCourses.Count - prescriptionsReturnedToUserCount;
+            
+            var prescriptionsCount = new FilteringCounts
             {
-                { "Prescriptions Received",  prescriptionsResponse.Courses.Count().ToString(CultureInfo.InvariantCulture) },
-                { "Prescriptions remaining after filtering out non-repeats", repeatCourses.Count.ToString(CultureInfo.InvariantCulture) },
-                { "Returned to user",  repeatCoursesAfterLimit.Count().ToString(CultureInfo.InvariantCulture) }
+                ReceivedCount = prescriptionsResponse.Courses.Count(),
+                FilteredRemainingRepeatsCount = repeatCourses.Count,
+                FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded,
+                ReturnedCount = prescriptionsReturnedToUserCount
             };
-
-            await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewHistoryResponse,
-                    "Prescriptions received: {0}, Prescriptions remaining after filtering out non-repeats: {1}, Returned to user: {2}",
-                    prescriptionsResponse.Courses.Count().ToString(CultureInfo.InvariantCulture),
-                    repeatCourses.Count.ToString(CultureInfo.InvariantCulture),
-                    repeatCoursesAfterLimit.Count().ToString(CultureInfo.InvariantCulture));
-
-            _logger.LogInformationKeyValuePairs("Prescription Count", kvp);
 
             var newPrescriptionHistory = new PrescriptionHistoryGetResponse
             {
-                Courses = repeatCoursesAfterLimit,
+                Courses = repeatCoursesAfterLimit
             };
 
-            return newPrescriptionHistory;
+            return (newPrescriptionHistory, prescriptionsCount);
         }
     }
 }

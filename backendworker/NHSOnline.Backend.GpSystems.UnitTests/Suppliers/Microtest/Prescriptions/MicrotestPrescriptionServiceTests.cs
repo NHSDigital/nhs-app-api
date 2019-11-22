@@ -9,7 +9,6 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
@@ -332,6 +331,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         }
 
         [TestMethod]
+        public async Task Get_ReturnsForbiddenResponse_WhenForbiddenErrorReceivedFromMicrotest()
+        {
+            // Arrange
+            DateTimeOffset? fromDate = DateTimeOffset.Now;
+            DateTimeOffset? toDate = DateTimeOffset.Now;
+
+            _microtestClient.Setup(x => x.PrescriptionHistoryGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber, fromDate))
+                .Returns(Task.FromResult(
+                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionHistoryGetResponse>(HttpStatusCode.Forbidden)));
+
+            // Act
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
+
+            // Assert
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
+        }
+
+        [TestMethod]
         public async Task Post_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromMicrotest()
         {
             // Arrange
@@ -397,25 +414,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.CannotReorderPrescription>();
         }
-
-        [TestMethod]
-        public async Task Get_ReturnsForbiddenResponse_WhenForbiddenErrorReceivedFromMicrotest()
-        {
-            // Arrange
-            DateTimeOffset? fromDate = DateTimeOffset.Now;
-            DateTimeOffset? toDate = DateTimeOffset.Now;
-
-            _microtestClient.Setup(x => x.PrescriptionHistoryGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber, fromDate))
-                .Returns(Task.FromResult(
-                    new MicrotestClient.MicrotestApiObjectResponse<PrescriptionHistoryGetResponse>(HttpStatusCode.Forbidden)));
-
-            // Act
-            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel, fromDate, toDate);
-
-            // Assert
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
-        }
-
 
         [TestMethod]
         public async Task Post_ReturnsForbidden_WhenForbiddenErrorReceivedFromMicrotest()
