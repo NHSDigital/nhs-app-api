@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
@@ -63,75 +64,25 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _evaluateServiceDefinitionQuery = evaluateServiceDefinitionQuery;
         }
 
-        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey, string serviceDefinitionId, UserSession userSession)
+        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey,
+            string serviceDefinitionId, UserSession userSession)
         {
             try
             {
-                HttpResponseMessage responseMessage;
-    
                 _logger.LogEnter();
+                _logger.LogInformation($"Initial evaluation for Service Definition with id: {serviceDefinitionId}");
 
-                _logger.LogInformation($"Searching for Service Definition with id: {serviceDefinitionId}");
-
-                var bodyString = "{ \"resourceType\":\"Parameters\", \"meta\":{ \"profile\":[ " +
+                var requestBody = "{ \"resourceType\":\"Parameters\", \"meta\":{ \"profile\":[ " +
                                  "\"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\" ] }, " +
                                  "\"parameter\": [ { \"name\": \"organization\", \"resource\": { \"resourceType\": " +
                                  "\"Organization\", \"identifier\": { \"value\": \"" +
                                  userSession.GpUserSession.OdsCode + "\" }}}]}";
 
-                try
-                {
-                    responseMessage = await _evaluateServiceDefinitionQuery.EvaluateServiceDefinition(
-                        providerKey,
-                        serviceDefinitionId,
-                        bodyString,
-                        false);
-                }
-                catch (HttpRequestException hre)
-                {
-                    _logger.LogError($"Error sending request to CDSS supplier: {hre.Message}", hre);
-
-                    return new ServiceDefinitionResult.BadRequest();
-                }
-
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"Supplier responded with status code: {responseMessage.StatusCode}");
-
-                    return new ServiceDefinitionResult.BadGateway();
-                }
-
-                var stringResponse = responseMessage.Content != null
-                    ? await responseMessage.Content.ReadAsStringAsync()
-                    : null;
-
-                GuidanceResponse guidanceResponse;
-                
-                try
-                {
-                    guidanceResponse = _parser.Parse<GuidanceResponse>(stringResponse);
-                }
-                catch (ArgumentNullException)
-                {
-                    _logger.LogError("Received null content from provider");
-
-                    return new ServiceDefinitionResult.BadGateway();
-                }
-                catch (FormatException fe)
-                {
-                    _logger.LogError($"Failed to parse guidance response: {fe.Message}");
-
-                    return new ServiceDefinitionResult.BadGateway();
-                }
-                
-                _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);
-
-                if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
-                {
-                    _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}");
-                }
-
-                return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
+                return await SendEvaluateQueryAndHandleResponse(
+                    providerKey,
+                    serviceDefinitionId,
+                    requestBody,
+                    false);
             }
             finally
             {
@@ -165,9 +116,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         {
             try
             {
-                HttpResponseMessage responseMessage;
-                GuidanceResponse guidanceResponse;
-
                 _logger.LogEnter();
 
                 if (parameters == null)
@@ -205,62 +153,92 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                         "User has not agreed to share their name, age, NHS number and postal address.");
                 }
 
-                try
-                {
-                    responseMessage = await _evaluateServiceDefinitionQuery.EvaluateServiceDefinition(
-                        providerKey,
-                        serviceDefinitionId,
-                        _serializer.SerializeToString(parameters),
-                        addJavascriptDisabledHeader);
-                }
-                catch (HttpRequestException hre)
-                {
-                    _logger.LogError($"Error sending request to CDSS supplier: {hre.Message}");
-
-                    return new ServiceDefinitionResult.BadRequest();
-                }
-
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"Supplier responded with status code: {responseMessage.StatusCode}");
-
-                    return new ServiceDefinitionResult.BadGateway();
-                }
-
-                var stringResponse = responseMessage.Content != null
-                    ? await responseMessage.Content.ReadAsStringAsync()
-                    : null;
-
-                try
-                {
-                    guidanceResponse = _parser.Parse<GuidanceResponse>(stringResponse);
-                }
-                catch (ArgumentNullException)
-                {
-                    _logger.LogError("Received null content from provider");
-
-                    return new ServiceDefinitionResult.BadGateway();
-                }
-                catch (FormatException fe)
-                {
-                    _logger.LogError($"Failed to parse guidance response: {fe.Message}");
-
-                    return new ServiceDefinitionResult.BadGateway();
-                }
-
-                _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);
-
-                if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
-                {
-                    _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}");
-                }
-
-                return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
+                return await SendEvaluateQueryAndHandleResponse(
+                    providerKey,
+                    serviceDefinitionId,
+                    _serializer.SerializeToString(parameters),
+                    addJavascriptDisabledHeader);
             }
             finally
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task<ServiceDefinitionResult> SendEvaluateQueryAndHandleResponse(
+            string providerKey,
+            string serviceDefinitionId,
+            string requestBody,
+            bool addJavascriptDisabledHeader)
+        {
+            HttpResponseMessage responseMessage;
+            GuidanceResponse guidanceResponse;
+            
+            try
+            {
+                responseMessage = await _evaluateServiceDefinitionQuery.EvaluateServiceDefinition(
+                    providerKey,
+                    serviceDefinitionId,
+                    requestBody,
+                    addJavascriptDisabledHeader);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Error sending request to provider");
+
+                return new ServiceDefinitionResult.BadRequest();
+            }
+
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Provider responded with status code: {responseMessage.StatusCode}");
+
+                try
+                {
+                    var reason =
+                        JsonConvert.DeserializeObject<ErrorResponse>(
+                            await responseMessage.Content.ReadAsStringAsync());
+                    _logger.LogError(reason != null
+                        ? $"Reason: {reason.Message}"
+                        : "Unable to determine reason - empty response body returned from provider");
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Unable to determine reason - null response body returned from provider");
+                }
+                
+                return new ServiceDefinitionResult.BadGateway();
+            }
+
+            var stringResponse = responseMessage.Content != null
+                ? await responseMessage.Content.ReadAsStringAsync()
+                : null;
+
+            try
+            {
+                guidanceResponse = _parser.Parse<GuidanceResponse>(stringResponse);
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(e, "Received null content from provider");
+
+                return new ServiceDefinitionResult.BadGateway();
+            }
+            catch (FormatException e)
+            {
+                _logger.LogError(e, "Failed to parse guidance response");
+
+                return new ServiceDefinitionResult.BadGateway();
+            }
+
+            _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);
+
+            if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
+            {
+                _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}");
+            }
+
+            return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
         }
         
         private ServiceDefinitionResult GetDemographicsErrorResult(DemographicsResult myRecord)
@@ -268,16 +246,16 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             switch (myRecord)
             {
                 case DemographicsResult.BadGateway _:
-                    _logger.LogDebug("GP systems demographics call was unsuccessful");
+                    _logger.LogError("GP systems demographics call was unsuccessful");
                     return new ServiceDefinitionResult.DemographicsBadGateway();
                 case DemographicsResult.Forbidden _:
-                    _logger.LogDebug("GP systems demographics forbidden");
+                    _logger.LogError("GP systems demographics forbidden");
                     return new ServiceDefinitionResult.DemographicsForbidden();
                 case DemographicsResult.InternalServerError _:
-                    _logger.LogDebug("GP systems demographics threw an internal server error");
+                    _logger.LogError("GP systems demographics threw an internal server error");
                     return new ServiceDefinitionResult.DemographicsInternalServerError();
                 default:
-                    _logger.LogDebug("GP systems demographics record not successfully retrieved");
+                    _logger.LogError("GP systems demographics record not successfully retrieved");
                     return new ServiceDefinitionResult.DemographicsRetrievalFailed();
             }
         }

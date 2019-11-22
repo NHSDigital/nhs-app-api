@@ -1,7 +1,7 @@
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models
 {
-    public class ProviderName
+    public class ErrorResponse
     {
-        public string Name { get; set; }
+        public string Message { get; set; }
     }
 }
