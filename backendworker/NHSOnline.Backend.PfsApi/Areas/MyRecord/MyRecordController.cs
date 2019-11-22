@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _logger.LogDebug($"{nameof(GetMyRecord)} with patientId {patientId}");
    
             var userSession = HttpContext.GetUserSession();
-            
+
             // Audit attempt made to view patient record
             await _auditor.Audit(AuditingOperations.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
  

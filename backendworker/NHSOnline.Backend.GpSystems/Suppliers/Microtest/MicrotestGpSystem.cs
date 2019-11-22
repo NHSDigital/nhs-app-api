@@ -109,5 +109,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         {
             throw new NotImplementedException();
         }
+        
+        public bool SupportsLinkedAccounts => false;
     }
 }

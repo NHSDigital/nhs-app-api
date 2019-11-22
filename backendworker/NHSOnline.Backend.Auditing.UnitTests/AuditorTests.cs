@@ -180,6 +180,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
             actionContext.HttpContext.Items.Add("UserSession", CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid));
+            actionContext.HttpContext.Items.Add("LinkedAccountAuditInfo", CreateLinkedAccountAuditInfo(false, ""));
             _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<string, object>(), _systemUnderTest);
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
         }
@@ -196,6 +197,15 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 {
                     AccessToken = accessToken
                 }
+            };
+        }
+
+        private static LinkedAccountAuditInfo CreateLinkedAccountAuditInfo(bool isProxying, string proxyNhsNumber)
+        {
+            return new LinkedAccountAuditInfo
+            {
+                IsProxyMode = isProxying,
+                ProxyNhsNumber = proxyNhsNumber
             };
         }
 
@@ -259,7 +269,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | Emis | Test Audit | SomeDetails 'with parameters' |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Emis | Test Audit | SomeDetails 'with parameters' |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -313,7 +323,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -366,7 +376,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith("|  | " +  _nhsNumber1 + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
+            testString.Should().EndWith("|  | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' |");
         }
         
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -392,16 +402,47 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditLine1 = streamReader.ReadLine();
             auditLine1.Should().NotBeEmpty();
-            auditLine1.Should().EndWith(_nhsNumber2 + " | Emis | Testing | Message with rubbish scope 1 |");
+            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 |");
 
             var auditLine2 = streamReader.ReadLine();
             auditLine2.Should().NotBeEmpty();
-            auditLine2.Should().EndWith(_nhsNumber1 + " | Emis | Testing | TaskedMethod |");
+            auditLine2.Should().EndWith(_nhsNumber1 + " | False | Emis | Testing | TaskedMethod |");
 
             var auditLine3  = streamReader.ReadLine();
             auditLine3.Should().NotBeEmpty();
-            auditLine3.Should().EndWith(_nhsNumber2 + " | Emis | Testing | Message with rubbish scope 2 |");
+            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 |");
         }
+        
+        
+        [TestMethod]
+        public void TestCrossThreadAuditsWhileProxying()
+        {
+            const string proxyNhsNumber = "123 456 7890";
+            // set up http contexts for both controller and calling attribute overloads..
+            var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
+            actionContext.HttpContext.Items.Add("UserSession", CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid));
+            actionContext.HttpContext.Items.Add("LinkedAccountAuditInfo", CreateLinkedAccountAuditInfo(true, proxyNhsNumber));
+            _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<string, object>(), _systemUnderTest);
+            _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
+
+            RunControllerMethod(_systemUnderTest.NestedControllerMethod);
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var auditLine1 = streamReader.ReadLine();
+            auditLine1.Should().NotBeEmpty();
+            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 |");
+
+            var auditLine2 = streamReader.ReadLine();
+            auditLine2.Should().NotBeEmpty();
+            auditLine2.Should().EndWith(proxyNhsNumber + " | True | Emis | Testing | TaskedMethod |");
+
+            var auditLine3  = streamReader.ReadLine();
+            auditLine3.Should().NotBeEmpty();
+            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 |");
+        }
+
 
         public void Dispose()
         {

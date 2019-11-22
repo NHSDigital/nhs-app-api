@@ -35,17 +35,25 @@ namespace NHSOnline.Backend.Auditing
         {
             if (_httpContext.Items.Keys.Contains(Constants.HttpContextItems.UserSession) == false)
             {
-                return new AuditUserContext(null,null, Supplier.Unknown);
+                return new AuditUserContext(null,null, Supplier.Unknown, false, null);
+            }
+            var userSession = _httpContext.GetUserSession();
+            var isProxying = false;
+            string linkedAccountNhsNumber = null;
+
+            if (_httpContext.Items.Keys.Contains(Constants.HttpContextItems.LinkedAccountAuditInfo))
+            {
+                var linkedAccountAuditInfo = _httpContext.GetLinkedAccountAuditInfo();
+                isProxying = linkedAccountAuditInfo.IsProxyMode;
+                linkedAccountNhsNumber = linkedAccountAuditInfo.ProxyNhsNumber;
             }
 
-            var userSession = _httpContext.GetUserSession();
-
-            var auditContext = new AuditUserContext(
-                userSession.CitizenIdUserSession.AccessToken,
-                userSession.GpUserSession.NhsNumber,
-                userSession.GpUserSession.Supplier);
-
-            return auditContext;
+            return new AuditUserContext(
+                    userSession.CitizenIdUserSession.AccessToken,
+                    userSession.GpUserSession.NhsNumber,
+                    userSession.GpUserSession.Supplier, 
+                    isProxying, 
+                    linkedAccountNhsNumber);
         }
     }
 }

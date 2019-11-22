@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.Auditing
                     auditRecord.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture),
                     auditRecord.NhsLoginSubject,
                     auditRecord.NhsNumber,
+                    auditRecord.IsActingOnBehalfOfAnother,
                     auditRecord.Supplier,
                     auditRecord.Operation,
                     auditRecord.Details)

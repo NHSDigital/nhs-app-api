@@ -9,5 +9,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public string UserPatientLinkToken { get; set; }
 
         public string OdsCode { get; set; }
+        
+        public string NhsNumber { get; set; }
     }
 }

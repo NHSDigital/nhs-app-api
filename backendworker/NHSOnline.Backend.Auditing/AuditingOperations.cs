@@ -68,5 +68,11 @@ namespace NHSOnline.Backend.Auditing
         public const string PostUserInfoAuditTypeResponse = "User_Info_Post_Response";
         public const string GetPatientGuid = "Patient_Guid_Get_Response";
         public const string GetServiceJourneyRulesAuditForLinkedAccountRequest = "ServiceJourneyRules_LinkedAccount_Get_Request";
+        public const string GetLinkedAccountsRequest = "LinkedAccounts_Get_Request";
+        public const string GetLinkedAccountsResponse = "LinkedAccounts_Get_Response";
+        public const string LinkedAccountsAccessSummaryRequest = "LinkedAccounts_Access_Summary_Request";
+        public const string LinkedAccountsAccessSummaryResponse = "LinkedAccounts_Access_Summary_Response";
+        public const string LinkedAccountsSwitchRequest = "LinkedAccounts_Switch_Request";
+        public const string LinkedAccountsSwitchResponse = "LinkedAccounts_Switch_Response";
     }
 }

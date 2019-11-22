@@ -1,3 +1,4 @@
+using System;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Im1Connection;
@@ -43,5 +44,7 @@ namespace NHSOnline.Backend.GpSystems
         ILinkageValidationService GetLinkageValidationService();
 
         ILinkedAccountsService GetLinkedAccountsService();
+
+        Boolean SupportsLinkedAccounts { get; }
     }
 }

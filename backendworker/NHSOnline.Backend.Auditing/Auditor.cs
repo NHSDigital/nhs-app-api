@@ -31,8 +31,15 @@ namespace NHSOnline.Backend.Auditing
             var supplier = _scopeProvider.Value?.UserContext()?.Supplier ?? Supplier.Unknown;
             var accessToken = _scopeProvider.Value?.UserContext()?.AccessToken;
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+
+            var isProxying = _scopeProvider.Value?.UserContext().IsProxying ?? false;
+
+            if (isProxying)
+            {
+                nhsNumber = _scopeProvider.Value?.UserContext().LinkedAccountNhsNumber;
+            }
             
-            await AuditInternal(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
+            await AuditInternal(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
         }
 
         public async Task AuditRegistrationEvent(
@@ -44,7 +51,7 @@ namespace NHSOnline.Backend.Auditing
         )
         {
             const string nhsLoginSubject = "";
-            await AuditInternal(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
+            await AuditInternal(nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
         }
 
         public async Task AuditSessionEvent(
@@ -57,13 +64,13 @@ namespace NHSOnline.Backend.Auditing
         )
         {
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
-            await AuditInternal(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
+            await AuditInternal(nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
         }
 
         public Task AuditSecureTokenEvent(AccessToken accessToken, Supplier supplier, string operation, string details,
             params object[] parameters)
         {
-            return AuditInternal(accessToken.Subject, accessToken.NhsNumber, supplier, operation, details, parameters);
+            return AuditInternal(accessToken.Subject, accessToken.NhsNumber, false, supplier, operation, details, parameters);
         }
 
         public IDisposable BeginScope(HttpContext httpContext)
@@ -75,6 +82,7 @@ namespace NHSOnline.Backend.Auditing
         private async Task AuditInternal(
             string nhsLoginSubject, 
             string nhsNumber,
+            bool isProxying,
             Supplier supplier,
             string operation,
             string details,
@@ -86,7 +94,7 @@ namespace NHSOnline.Backend.Auditing
                 throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
             }
             
-            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, supplier, operation, details, parameters);
+            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
 
             await AuditInternal(auditRecord);
         }
@@ -104,7 +112,7 @@ namespace NHSOnline.Backend.Auditing
             }
         }
 
-        private AuditRecord BuildAuditRecord(string nhsLoginSubject, string nhsNumber, Supplier supplier, string operation,
+        private AuditRecord BuildAuditRecord(string nhsLoginSubject, string nhsNumber, bool isProxying, Supplier supplier, string operation,
             string details, params object[] parameters)
         {
             var formattedDetails = string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters);           
@@ -114,6 +122,7 @@ namespace NHSOnline.Backend.Auditing
                 DateTime.UtcNow,
                 nhsLoginSubject,
                 nhsNumber,
+                isProxying,
                 supplier,
                 operation,
                 formattedDetails,

@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.Auditing
             DateTime timestamp, 
             string nhsLoginSubject,
             string nhsNumber, 
+            bool isActingOnBehalfOfAnother,
             Supplier supplier, 
             string operation, 
             string details, 
@@ -20,6 +21,7 @@ namespace NHSOnline.Backend.Auditing
             Timestamp = timestamp;
             NhsLoginSubject = nhsLoginSubject;
             NhsNumber = nhsNumber;
+            IsActingOnBehalfOfAnother = isActingOnBehalfOfAnother;
             Supplier = supplier.ToString();
             Operation = operation;
             Details = details;
@@ -36,6 +38,9 @@ namespace NHSOnline.Backend.Auditing
         
         [BsonElement]
         public string NhsNumber { get; private set; }
+        
+        [BsonElement]
+        public bool IsActingOnBehalfOfAnother { get; private set; }
         
         [BsonElement]
         public string Supplier { get; private set; }

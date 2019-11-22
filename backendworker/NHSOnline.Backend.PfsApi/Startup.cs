@@ -293,7 +293,8 @@ namespace NHSOnline.Backend.PfsApi
 
             app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
-
+            app.UseMiddleware<ProxyAuditingMiddleware>();
+            
             app.UsePathBase(new PathString("/v1"));
 
             var corsAuthority = Configuration["CORS_AUTHORITY"];

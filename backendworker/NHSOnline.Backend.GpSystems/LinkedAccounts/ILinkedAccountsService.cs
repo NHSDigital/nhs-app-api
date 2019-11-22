@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.LinkedAccounts
@@ -13,5 +14,11 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
         Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession);
 
         Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id);
+
+        LinkedAccountAuditInfo GetProxyAuditData(GpUserSession gpUserSession, Guid id);
+
+        string GetNhsNumberForProxyUser(GpUserSession gpUserSession, Guid id);
+        
+        bool HasProxyNhsNumbers(GpUserSession gpUserSession);
     }
 }

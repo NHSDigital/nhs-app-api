@@ -108,5 +108,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             throw new NotImplementedException();
         }
+        
+        public bool SupportsLinkedAccounts => false;
     }
 }

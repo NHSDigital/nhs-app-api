@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 if (!nhsNumber.RemoveWhiteSpace().Equals(nhsNumberReturned, StringComparison.Ordinal))
                 {
                     _logger.LogInformation($"The sent nhsNumber has been superseded " +
-                                           $"- old number [{nhsNumber}], new number [{nhsNumberReturned}]");
+                                           $"- old NhsNumber={nhsNumber}, new NhsNumber={nhsNumberReturned}");
                     return new GetNominatedPharmacyResult(result.StatusCode, false);
                 } 
               

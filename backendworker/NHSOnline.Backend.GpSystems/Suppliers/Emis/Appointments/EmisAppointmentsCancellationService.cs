@@ -70,6 +70,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         {
             if (response.HasSuccessResponse)
             {
+                _logger.LogInformation("Appointment has been successfully cancelled.");
                 return new AppointmentCancelResult.Success();
             }
 

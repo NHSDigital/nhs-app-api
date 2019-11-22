@@ -108,5 +108,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         {
             return _serviceProvider.GetService<EmisLinkedAccountsService>();
         }
+
+        public bool SupportsLinkedAccounts => true;
     }
 }

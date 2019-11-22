@@ -58,6 +58,7 @@ namespace NHSOnline.Backend.Support
         public static class HttpContextItems
         {
             public const string UserSession = "UserSession";
+            public const string LinkedAccountAuditInfo = "LinkedAccountAuditInfo";
         }
 
         public static class OdsCodeFormats

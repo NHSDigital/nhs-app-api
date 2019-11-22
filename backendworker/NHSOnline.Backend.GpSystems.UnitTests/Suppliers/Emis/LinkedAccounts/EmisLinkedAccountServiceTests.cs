@@ -308,11 +308,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             for (var i = 0; i < _emisUserSession.ProxyPatients.Count; i++)
             {
-                var userDetail = _emisUserSession.ProxyPatients.ElementAt(i);
-                var demographicsResponseForUser = demographicsResponses[userDetail.Id];
+                var emisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(i);
+                var demographicsResponseForUser = demographicsResponses[emisProxyPatient.Id];
                 var linkedAccountDetail = successResult.Response.LinkedAccounts.ElementAt(i);
 
-                linkedAccountDetail.Id.Should().Be(userDetail.Id);
+                emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
+                
+                linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
                 linkedAccountDetail.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
                 linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
                 linkedAccountDetail.GivenName.Should().Be(demographicsResponseForUser.NameParts.Given);
@@ -352,6 +354,145 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             successResult.Response.Should().NotBeNull();
             successResult.Response.LinkedAccounts.Count().Should().Be(0);
             _demographicsService.VerifyAll();
+        }
+
+
+
+        [TestMethod]
+        public void GetProxyAuditData_WhenPatientIdFoundInProxyUser()
+        {
+            //Arrange
+            var patientId = Guid.NewGuid();
+            var proxyNhsNumber = _fixture.Create<string>();
+            
+            _emisUserSession = new EmisUserSession
+            {
+                Id = Guid.NewGuid(),
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession 
+                    {
+                        Id = Guid.NewGuid(),
+                        NhsNumber = _fixture.Create<string>()
+                    },
+                    new EmisProxyUserSession
+                    {
+                        Id = patientId,
+                        NhsNumber = proxyNhsNumber
+                    },
+                }
+            };
+
+            //Act
+            var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
+            
+            //Assert
+            result.IsProxyMode.Should().Be(true);
+            result.ProxyNhsNumber.Should().Be(proxyNhsNumber);
+        }
+        
+        
+        [TestMethod]
+        public void GetProxyAuditData_WhenPatientIdFoundInMainUser()
+        {
+            //Arrange
+            var patientId = Guid.NewGuid();
+            
+            _emisUserSession = new EmisUserSession
+            {
+                Id = patientId,
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession 
+                    {
+                        Id = Guid.NewGuid(),
+                        NhsNumber = _fixture.Create<string>()
+                    },
+                    new EmisProxyUserSession
+                    {
+                        Id = Guid.NewGuid(),
+                        NhsNumber = _fixture.Create<string>()
+                    },
+                }
+            };
+
+            //Act
+            var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
+            
+            //Assert
+            result.IsProxyMode.Should().Be(false);
+            result.ProxyNhsNumber.Should().Be(null);
+        }
+        
+        [TestMethod]
+        public void GetProxyAuditData_WhenPatientIdNotFound()
+        {
+            //Arrange
+            var patientId = Guid.NewGuid();
+            
+            _emisUserSession = new EmisUserSession
+            {
+                Id = Guid.NewGuid(),
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession 
+                    {
+                        Id = Guid.NewGuid(),
+                        NhsNumber = _fixture.Create<string>()
+                    },
+                    new EmisProxyUserSession
+                    {
+                        Id = Guid.NewGuid(),
+                        NhsNumber = _fixture.Create<string>()
+                    },
+                }
+            };
+
+            //Act
+            var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
+            
+            //Assert
+            result.IsProxyMode.Should().Be(false);
+            result.ProxyNhsNumber.Should().Be(null);
+        }
+
+        [DataTestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        public void HasProxyNhsNumbers_ReturnsFalse_WhenNoNhsNumbersHaveValues(string nhsNumber)
+        {
+            //Arrange
+            _emisUserSession.ProxyPatients.ToList().ForEach(x => x.NhsNumber = nhsNumber);
+
+            //Act
+            var result = _systemUnderTest.HasProxyNhsNumbers(_emisUserSession);
+            
+            //Assert
+            result.Should().BeFalse();
+        }
+        
+        [TestMethod]
+        public void HasProxyNhsNumbers_ReturnsTrue_WhenAllNhsNumbersHaveValues()
+        {
+            //Act
+            var result = _systemUnderTest.HasProxyNhsNumbers(_emisUserSession);
+            
+            //Assert
+            result.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public void HasProxyNhsNumbers_ReturnsTrue_WhenAtLeastOneNhsNumberHasAValue()
+        {
+            //Arrange
+            _emisUserSession.ProxyPatients.ToList().ForEach(x => x.NhsNumber = null);
+            _emisUserSession.ProxyPatients.ToList()[1].NhsNumber = "123 456 789";
+
+            //Act
+            var result = _systemUnderTest.HasProxyNhsNumbers(_emisUserSession);
+            
+            //Assert
+            result.Should().BeTrue();
         }
     }
 }

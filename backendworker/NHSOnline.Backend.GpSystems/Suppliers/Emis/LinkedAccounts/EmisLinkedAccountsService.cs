@@ -97,6 +97,36 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             return new LinkedAccountAccessSummaryResult.BadGateway();
         }
 
+        public LinkedAccountAuditInfo GetProxyAuditData(GpUserSession gpUserSession, Guid id)
+        {
+            var linkedAccountAuditResult = new LinkedAccountAuditInfo();
+                
+            if (IsValidLinkedAccount(gpUserSession, id))
+            {                
+                var emisUserSession = (EmisUserSession) gpUserSession;
+
+                linkedAccountAuditResult.IsProxyMode = true;
+                linkedAccountAuditResult.ProxyNhsNumber 
+                    = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id)?.NhsNumber;
+            }
+
+            return linkedAccountAuditResult;
+        }
+
+        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, Guid id)
+        {
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+
+            return proxy?.NhsNumber;        
+        }
+
+        public bool HasProxyNhsNumbers(GpUserSession gpUserSession)
+        {
+            var emisUserSession = (EmisUserSession) gpUserSession;
+            return emisUserSession.ProxyPatients.Any(x => !string.IsNullOrEmpty(x.NhsNumber));
+        }
+
         public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
         {
             GetLinkedAccountsResponse response = new GetLinkedAccountsResponse();
@@ -144,9 +174,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                         NhsNumber = demographics.Response.NhsNumber,
                     };
                 });
+
+                foreach (var proxy in emisUserSession.ProxyPatients)
+                {
+                    proxy.NhsNumber = response.LinkedAccounts.FirstOrDefault(x => x.Id == proxy.Id)?.NhsNumber;
+                }        
             }
 
             return new LinkedAccountsResult.Success(response);
+        }
+
+        private Boolean IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
+        {
+            return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);
         }
     }
 }
