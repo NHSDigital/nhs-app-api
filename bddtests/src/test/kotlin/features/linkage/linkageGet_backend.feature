@@ -128,6 +128,16 @@ Feature: Linkage Get Key
     When I call the Linkage GET endpoint
     Then I receive a "Forbidden" error
 
+  Scenario: Linkage request GET for Vision returns 404 Not found, user not found
+    Given VISION was unable to find the user for my NHS number
+    When I call the Linkage GET endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request GET for Vision returns 404 Not found, api key not found
+    Given VISION was unable to find the api key for my NHS number
+    When I call the Linkage GET endpoint
+    Then I receive a "Not Found" error
+
   Scenario: Linkage request GET for Microtest returns a Linkage Not Supported error when demographics call fails with an Internal Server Error
     Given I have valid MICROTEST linkage details
     And the demographics endpoint responds with an "internal server error" error

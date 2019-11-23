@@ -51,20 +51,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.PatientRecordNotFound);
         }
 
-        [TestMethod]
-        public void Map_WithNotFoundValuesWithMessage_MapsCorrectly()
+        [DataTestMethod]
+        [DataRow("V2210", "No user associated with the nhs number.", Im1ConnectionErrorCodes.InternalCode.NoUserAssociatedWithNhsNumber)]
+        [DataRow("V2210", "No API key associated with the nhs number.", Im1ConnectionErrorCodes.InternalCode.NoApiKeyAssociatedWithNhsNumber)]
+        public void Map_WithNotFoundValuesWithMessage_MapsCorrectly(
+            string code,
+            string message,
+            Im1ConnectionErrorCodes.InternalCode expectedInternalCode)
         {
             // Arrange
             var response = _helper.CreateResponse<LinkageKeyGetResponse>(HttpStatusCode.NotFound,
-                "V2210",
-                "No user associated with the nhs number");
+                code,
+                message);
 
             // Act
             var result = VisionLinkageGetErrorMapper.Map(response, _logger.Object);
             
             // Assert
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
-                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.NoUserAssociatedWithNhsNumber);
+                .Subject.ErrorCode.Should().Be(expectedInternalCode);
         }
 
         [TestMethod]

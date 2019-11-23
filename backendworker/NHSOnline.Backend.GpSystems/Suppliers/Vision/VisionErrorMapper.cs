@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             var statusCode = (int)response.StatusCode;
 
             var visionErrorCode = response.ErrorResponse?.Code;
-            var visionErrorMessage = response.ErrorResponse?.Text;
+            var visionErrorMessage = response.ErrorResponse?.Diagnostic;
             var key = $"{statusCode}{visionErrorCode}";
 
             return keyAndMessageTo.Map(logger, key, visionErrorMessage);

@@ -20,8 +20,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             var response = _fixture.Create<VisionLinkageClient.VisionApiObjectResponse<T>>();
 
             response.StatusCode = statusCode;
-            response.ErrorResponse.Code= errorCode;
-            response.ErrorResponse.Text = message;
+            response.ErrorResponse.Code = errorCode;
+            response.ErrorResponse.Diagnostic = message;
             return response;
         }
     }

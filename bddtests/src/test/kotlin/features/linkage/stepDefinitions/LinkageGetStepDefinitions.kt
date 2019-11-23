@@ -82,6 +82,21 @@ open class LinkageGetStepDefinitions {
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.LinkageKeyRevoked)
     }
 
+    @Given("(^.*) was unable to find the user for my NHS number")
+    fun wasUnableToFindTheUserForMyNHSNumber(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val linkage = LinkageFactory.validLinkage(supplier)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.NoUserAssociatedWithNHSNumber)
+    }
+
+    @Given("(^.*) was unable to find the api key for my NHS number")
+    fun wasUnableToFindTheApiKeyForMyNHSNumber(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val linkage = LinkageFactory.validLinkage(supplier)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.NoApiKeyAssociatedWithNHSNumber)
+    }
+
+
     @When("^I call the Linkage GET endpoint$")
     fun iCallTheLinkageGETEndpoint() {
         val gpSystem = SerenityHelpers.getGpSupplier()

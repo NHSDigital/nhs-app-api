@@ -73,6 +73,12 @@ class LinkageFactoryVision : LinkageFactory(Supplier.VISION) {
                 LinkageResult.LinkageKeyRevoked to { get ->
                     get.respondWithErrorLinkageKeyRevoked()
                 },
+                LinkageResult.NoUserAssociatedWithNHSNumber to { get ->
+                    get.respondWithErrorNoUserAssociatedWithNHSNumber()
+                },
+                LinkageResult.NoApiKeyAssociatedWithNHSNumber to { get ->
+                    get.respondWithErrorNoApiKeyAssociatedWithNHSNumber()
+                },
                 LinkageResult.InternalServerError to { get ->
                     get.respondWithErrorInternalServerError()
                 }

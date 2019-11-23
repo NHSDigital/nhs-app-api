@@ -57,6 +57,22 @@ class VisionLinkageGETBuilder(orgId: String, nhsNumber: String) : IErrorMappingB
         }
     }
 
+    fun respondWithErrorNoUserAssociatedWithNHSNumber(): Mapping {
+        return respondWithError(
+                HttpStatus.SC_NOT_FOUND,
+                ErrorResponseCodeVision.UNIQUE_RECORD_COULD_NOT_BE_FOUND,
+                "No user associated with the nhs number."
+        )
+    }
+
+    fun respondWithErrorNoApiKeyAssociatedWithNHSNumber(): Mapping {
+        return respondWithError(
+                HttpStatus.SC_NOT_FOUND,
+                ErrorResponseCodeVision.UNIQUE_RECORD_COULD_NOT_BE_FOUND,
+                "No API key associated with the nhs number."
+        )
+    }
+
     fun respondWithErrorInternalServerError(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR){}
     }
@@ -66,7 +82,7 @@ class VisionLinkageGETBuilder(orgId: String, nhsNumber: String) : IErrorMappingB
             val error = VisionRestApiErrorResponse(
                     VisionError(
                             code = errorCode,
-                            text = message?:""
+                            diagnostic = message?:""
                     )
             )
             andJsonBody(error, GsonFactory.asPascal)

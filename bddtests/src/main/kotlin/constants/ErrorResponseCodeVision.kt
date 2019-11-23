@@ -19,5 +19,5 @@ object ErrorResponseCodeVision {
     const val LINKAGE_KEY_REVOKED = "TO_BE_CONFIRMED" // to be confirmed - Vision question tracker #28
     const val PATIENT_RECORD_NOT_FOUND = "VY806"
     const val LINKAGE_KEY_ALREADY_EXISTS = "V2214"
-
+    const val UNIQUE_RECORD_COULD_NOT_BE_FOUND = "V2210"
 }

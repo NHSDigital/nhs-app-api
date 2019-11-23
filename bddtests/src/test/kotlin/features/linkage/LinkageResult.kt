@@ -17,5 +17,7 @@ enum class LinkageResult {
     PatientRecordNotFound,
     LinkageKeyRevoked,
     LinkageKeyAlreadyExists,
-    MultipleRecordsFound
+    MultipleRecordsFound,
+    NoUserAssociatedWithNHSNumber,
+    NoApiKeyAssociatedWithNHSNumber
 }
