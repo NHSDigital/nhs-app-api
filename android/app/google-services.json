@@ -298,9 +298,154 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:397558493129:android:cb6e6a1acd2d06ce078218",
+        "android_client_info": {
+          "package_name": "com.nhs.online.nhsonline.scratch17"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDgxMP0UX8aF9XTdqzQMP5prSjQcikyOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397558493129:android:4337375a2cfc9dae078218",
+        "android_client_info": {
+          "package_name": "com.nhs.online.nhsonline.scratch18"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDgxMP0UX8aF9XTdqzQMP5prSjQcikyOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397558493129:android:331a72e273837d0a078218",
+        "android_client_info": {
+          "package_name": "com.nhs.online.nhsonline.scratch19"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDgxMP0UX8aF9XTdqzQMP5prSjQcikyOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:397558493129:android:2b73406c74cd8964078218",
         "android_client_info": {
           "package_name": "com.nhs.online.nhsonline.scratch2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDgxMP0UX8aF9XTdqzQMP5prSjQcikyOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397558493129:android:b6e2220ba8c2d2ed078218",
+        "android_client_info": {
+          "package_name": "com.nhs.online.nhsonline.scratch20"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDgxMP0UX8aF9XTdqzQMP5prSjQcikyOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397558493129:android:eaf69f711b0e93a6078218",
+        "android_client_info": {
+          "package_name": "com.nhs.online.nhsonline.scratch21"
         }
       },
       "oauth_client": [
