@@ -920,7 +920,7 @@ describe('online consultations answer validators', () => {
   });
 
   describe('multiple choice validator', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       validator = questionMultipleChoiceAnswerValid;
       message = `${baseMessage}multiple_choiceAtLeastOneRequired`;
     });
@@ -945,16 +945,11 @@ describe('online consultations answer validators', () => {
     });
 
     describe('answer is not a valid option', () => {
-      each([{
-        answer: ['choice-1'],
-        validCodes: [],
-      }, {
-        answer: ['choice-1'],
-        validCodes: ['choice-2'],
-      }, {
-        answer: ['choice-1'],
-      }]).it('will return is valid false', ({ answer, validCodes }) => {
+      it('will return is valid false', () => {
         // Arrange
+        const answer = ['choice-1'];
+        const options = [{ code: 'choice-2' }, { code: 'choice-3' }];
+        const validCodes = ['choice-2', 'choice-3'];
         const expectedValidation = {
           isValid: false,
           message,
@@ -962,7 +957,27 @@ describe('online consultations answer validators', () => {
         };
 
         // Act
-        const validation = validator(answer, true, false, validCodes);
+        const validation = validator(answer, true, false, options, validCodes);
+
+        // Assert
+        expect(validation).toEqual(expectedValidation);
+      });
+    });
+
+    describe('options has only one value and must be checked', () => {
+      each([true, false]).it('will return is valid false if not checked', (optionRequired) => {
+        // Arrange
+        message = `${baseMessage}multiple_choiceOnlyOneOption`;
+        const options = [{ code: 'choice-1', required: optionRequired }];
+        const validCodes = ['choice-1'];
+        const expectedValidation = {
+          isValid: false,
+          message,
+          isEmpty: false,
+        };
+
+        // Act
+        const validation = validator(['choice-2'], true, false, options, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -973,7 +988,8 @@ describe('online consultations answer validators', () => {
       it('will return is valid false', () => {
         // Arrange
         const answer = ['choice-1', 'choice-2'];
-        const validCodes = ['choice-2'];
+        const options = [{ code: 'choice-2' }, { code: 'choice-3' }];
+        const validCodes = ['choice-2', 'choice-3'];
         const expectedValidation = {
           isValid: false,
           message,
@@ -981,7 +997,7 @@ describe('online consultations answer validators', () => {
         };
 
         // Act
-        const validation = validator(answer, true, false, validCodes);
+        const validation = validator(answer, true, false, options, validCodes);
 
         // Assert
         expect(validation).toEqual(expectedValidation);
@@ -992,21 +1008,8 @@ describe('online consultations answer validators', () => {
       it('will return is valid true', () => {
         // Arrange
         const answer = ['choice-1', 'choice-2'];
-        const validCodes = ['choice-2', 'choice-1', 'choice-3'];
-        const options = [
-          {
-            code: 'choice-1',
-            required: false,
-          },
-          {
-            code: 'choice-2',
-            required: false,
-          },
-          {
-            code: 'choice-3',
-            required: false,
-          },
-        ];
+        const validCodes = ['choice-1', 'choice-2', 'choice-3'];
+        const options = [{ code: 'choice-1' }, { code: 'choice-2' }, { code: 'choice-3' }];
         const expectedValidation = {
           isValid: true,
           message,
@@ -1026,55 +1029,36 @@ describe('online consultations answer validators', () => {
         message = `${baseMessage}multiple_choiceAllRequired`;
       });
 
-      describe('all options are selected', () => {
-        it('will return is valid true', () => {
-          // Arrange
-          const answer = ['choice-1', 'choice-2', 'choice-3'];
-          const validCodes = ['choice-2', 'choice-1', 'choice-3'];
-          const expectedValidation = {
-            isValid: true,
-            message,
-            isEmpty: false,
-          };
+      each([{
+        answer: ['choice-1', 'choice-3'],
+        isValid: false,
+      }, {
+        answer: ['choice-1', 'choice-2', 'choice-3'],
+        isValid: true,
+      }]).it('will return is valid true when all are selected', ({ answer, isValid }) => {
+        // Arrange
+        const options = [{
+          code: 'choice-1',
+          required: true,
+        }, {
+          code: 'choice-2',
+          required: true,
+        }, {
+          code: 'choice-3',
+          required: true,
+        }];
+        const validCodes = ['choice-1', 'choice-2', 'choice-3'];
+        const expectedValidation = {
+          isValid,
+          message,
+          isEmpty: false,
+        };
 
-          // Act
-          const validation = validator(answer, true, true, validCodes);
+        // Act
+        const validation = validator(answer, true, true, options, validCodes);
 
-          // Assert
-          expect(validation).toEqual(expectedValidation);
-        });
-      });
-      describe('all options are not selected', () => {
-        it('will return is valid false', () => {
-          // Arrange
-          const answer = ['choice-1', 'choice-3'];
-          const validCodes = ['choice-2', 'choice-1', 'choice-3'];
-          const options = [
-            {
-              code: 'choice-1',
-              required: false,
-            },
-            {
-              code: 'choice-2',
-              required: false,
-            },
-            {
-              code: 'choice-3',
-              required: false,
-            },
-          ];
-          const expectedValidation = {
-            isValid: false,
-            message,
-            isEmpty: false,
-          };
-
-          // Act
-          const validation = validator(answer, true, true, options, validCodes);
-
-          // Assert
-          expect(validation).toEqual(expectedValidation);
-        });
+        // Assert
+        expect(validation).toEqual(expectedValidation);
       });
     });
   });

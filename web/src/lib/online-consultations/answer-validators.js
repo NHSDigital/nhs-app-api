@@ -215,15 +215,21 @@ export function questionMultipleChoiceAnswerValid(
   if (!required && isEmpty) {
     return { isValid: true, isEmpty };
   }
+
   const requiredOptions = options.filter(c => c.required).map(x => x.code);
   const isValid = allOptionsRequired
     ? !isEmpty && validCodes.every(o => answer.includes(o))
     : !isEmpty && (answer.every(o => validCodes.includes(o) &&
-                    requiredOptions.every(p => answer.includes(p))));
+                   requiredOptions.every(p => answer.includes(p))));
 
-  const message = allOptionsRequired
-    ? `${baseMessagePath}multiple_choiceAllRequired`
-    : `${baseMessagePath}multiple_choiceAtLeastOneRequired`;
+  let message = baseMessagePath;
+  if (required && options.length === 1) {
+    message += 'multiple_choiceOnlyOneOption';
+  } else {
+    message += allOptionsRequired
+      ? 'multiple_choiceAllRequired'
+      : 'multiple_choiceAtLeastOneRequired';
+  }
 
   return {
     isValid,

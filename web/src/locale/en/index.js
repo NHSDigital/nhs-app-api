@@ -520,6 +520,7 @@ export default {
         decimal: 'Enter a number',
         image: 'Select the area on the image',
         integer: 'Enter a number',
+        multiple_choiceOnlyOneOption: 'Select the option',
         multiple_choiceAtLeastOneRequired: 'Select one or more options',
         multiple_choiceAllRequired: 'All options are required',
         quantity: 'Enter a number',
