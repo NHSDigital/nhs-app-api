@@ -18,7 +18,6 @@ import {
   SET_VALIDATION_ERROR_FROM_RESPONSE,
   CLEAR_VALIDATION,
   PREVIOUS_SELECTED,
-  CLEAR_CLIENT_ERRORS,
   SET_GP_ADVICE_SERVICE_DEFINITION_ID,
   SET_DEMOGRAPHICS_CONSENT_GIVEN,
   SET_DEMOGRAPHICS_QUESTION_ANSWERED,
@@ -121,10 +120,6 @@ export default {
   [CLEAR_VALIDATION](state) {
     state.validationError = undefined;
     state.validationErrorMessage = undefined;
-  },
-  [CLEAR_CLIENT_ERRORS](state) {
-    state.validationError = false;
-    state.validationErrorMessageFromResponse = undefined;
   },
   [SET_DEMOGRAPHICS_CONSENT_GIVEN](state, consent) {
     state.demographicsConsentGiven = consent;

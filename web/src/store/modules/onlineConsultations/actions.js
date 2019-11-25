@@ -18,7 +18,6 @@ import {
   SET_VALIDATION_ERROR_FROM_RESPONSE,
   CLEAR_VALIDATION,
   PREVIOUS_SELECTED,
-  CLEAR_CLIENT_ERRORS,
   SET_GP_ADVICE_SERVICE_DEFINITION_ID,
   SET_DEMOGRAPHICS_CONSENT_GIVEN,
   SET_DEMOGRAPHICS_QUESTION_ANSWERED,
@@ -238,9 +237,6 @@ export default {
   },
   setPrevious({ commit }) {
     commit(PREVIOUS_SELECTED);
-  },
-  clearClientErrors({ commit }) {
-    commit(CLEAR_CLIENT_ERRORS);
   },
   setDemographicsConsentGiven({ commit }, consent) {
     commit(SET_DEMOGRAPHICS_CONSENT_GIVEN, consent);

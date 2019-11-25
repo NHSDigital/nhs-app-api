@@ -289,7 +289,6 @@ export default {
       if (this.$store.state.onlineConsultations.isLoadingFile) {
         return;
       }
-      await this.$store.dispatch('onlineConsultations/clearClientErrors');
       await this.$store.dispatch('onlineConsultations/setValidationError');
       if (!this.isValidationError) {
         document.activeElement.blur();
