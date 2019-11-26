@@ -183,17 +183,17 @@ Feature: Im1 Connection V2 POST
     When I register the user's IM1 credentials using the v2 endpoint
     Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
-      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services API v2 is not enabled at this practice|
-      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services are not enabled by this practice      |
-      | EMIS      | 400        |        | 400            | 106  | Other length outside of valid range.|
-      | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
-      | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
-      | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
-      | VISION    | 200        | -100   | 500            | 100  | Unknown Error |
-      | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
-      | TPP       | 400        | 1      | 502            | 100  | Unmapped Error |
-      | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message                                                        |
+      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice |
+      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services are not enabled by this practice       |
+      | EMIS      | 400        |        | 400            | 106          | Other length outside of valid range.                           |
+      | VISION    | 200        | -100   | 502            | 107          | Connection to external service failed                          |
+      | EMIS      | 400        |        | 400            | 110          | AccountId length outside of valid range.                       |
+      | EMIS      | 400        |        | 400            | 111          | LinkageKey length outside of valid range.                      |
+      | VISION    | 200        | -100   | 502            | 107          | Unknown Error                                                  |
+      | EMIS      | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
+      | TPP       | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
+      | VISION    | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
 
   Scenario Outline: A <GP System> user registering with created linkage details can get <ExpectedCode> error from a <GPCode> and <GPHttpCode> error
     Given I am a <GP System> user with created linkage key but registering returns '<GPHttpCode>' '<GPCode>' '<Message>'
@@ -225,16 +225,16 @@ Feature: Im1 Connection V2 POST
     When I register the user's IM1 credentials using the v2 endpoint
     Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
-      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services API v2 is not enabled at this practice|
-      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services are not enabled by this practice      |
-      | EMIS      | 400        |        | 400            | 106  | Other length outside of valid range.|
-      | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
-      | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
-      | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
-      | VISION    | 200        | -100   | 500            | 100  | Unknown Error |
-      | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
-      | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message                                                        |
+      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice |
+      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services are not enabled by this practice       |
+      | EMIS      | 400        |        | 400            | 106          | Other length outside of valid range.                           |
+      | VISION    | 200        | -100   | 502            | 107          | Connection to external service failed                          |
+      | EMIS      | 400        |        | 400            | 110          | AccountId length outside of valid range.                       |
+      | EMIS      | 400        |        | 400            | 111          | LinkageKey length outside of valid range.                      |
+      | VISION    | 200        | -100   | 502            | 107          | Unknown Error                                                  |
+      | EMIS      | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
+      | VISION    | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
 
   Scenario Outline: A <GP System> user registering with provided linkage details can get a <ExpectedCode> error from a <GPCode> error
     Given I am a <GP System> user with provided linkage key but registering returns '<GPHttpCode>' '<GPCode>' '<Message>'
@@ -264,17 +264,17 @@ Feature: Im1 Connection V2 POST
     When I register the user's IM1 credentials using the v2 endpoint
     Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
-      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services API v2 is not enabled at this practice|
-      | EMIS      | 403        | 1030   | 403            | 101  | Patient Facing Services are not enabled by this practice      |
-      | EMIS      | 400        |        | 400            | 106  | Other length outside of valid range.|
-      | VISION    | 200        | -100   | 502            | 107  | Connection to external service failed |
-      | EMIS      | 400        |        | 400            | 110  | AccountId length outside of valid range.|
-      | EMIS      | 400        |        | 400            | 111  | LinkageKey length outside of valid range. |
-      | VISION    | 200        | -100   | 500            | 100  | Unknown Error |
-      | EMIS      | 400        | 1      | 502            | 100  | Unmapped Error |
-      | TPP       | 400        | 1      | 502            | 100  | Unmapped Error |
-      | VISION    | 400        | 1      | 502            | 100  | Unmapped Error |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message                                                        |
+      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice |
+      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services are not enabled by this practice       |
+      | EMIS      | 400        |        | 400            | 106          | Other length outside of valid range.                           |
+      | VISION    | 200        | -100   | 502            | 107          | Connection to external service failed                          |
+      | EMIS      | 400        |        | 400            | 110          | AccountId length outside of valid range.                       |
+      | EMIS      | 400        |        | 400            | 111          | LinkageKey length outside of valid range.                      |
+      | VISION    | 200        | -100   | 502            | 107          | Unknown Error                                                  |
+      | EMIS      | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
+      | TPP       | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
+      | VISION    | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
 
   @long-running
   Scenario Outline: A <GP System> user registering with Im1, when the request times out, receives a 504 timeout error

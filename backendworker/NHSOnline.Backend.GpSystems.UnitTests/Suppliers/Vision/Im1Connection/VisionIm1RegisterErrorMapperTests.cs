@@ -53,22 +53,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         }
 
         [TestMethod]
-        public void Map_WithOkayWithErrorValuesWithMessage_MapsCorrectly()
-        {
-            // Arrange
-            var response = CreateResponse(HttpStatusCode.OK,
-                "-100",
-                "Connection to external service failed");
-
-            // Act
-            var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
-            
-            // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
-                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed);
-        }
-
-        [TestMethod]
         public void Map_WithOkayWithErrorValuesWithUnknownMessage_MapsCorrectly()
         {
             // Arrange
@@ -80,8 +64,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = VisionIm1RegisterErrorMapper.Map(response, _logger.Object);
             
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode>()
-                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed);
         }
 
         [TestMethod]
