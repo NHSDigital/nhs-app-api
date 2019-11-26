@@ -513,7 +513,7 @@ export default {
         attachment: 'Select a file',
         boolean: 'Select an option',
         choice: 'Select an option',
-        date: 'Date must include a day, month and year',
+        date: 'Enter a real date and include a day, month and year',
         dateEmpty: 'Enter a date',
         dateTime: 'Enter the full date and time',
         dateTimeEmpty: 'Enter a date and time',
