@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
 {
@@ -13,5 +14,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
         public string Header { get; set; }
         public List<ObservationItemWithTerm> ObservationsWithTerm { get; set; }
         public List<string> AssociatedTexts { get; set; }
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
+        public List<string> Comments { get; set; }
     }
 }

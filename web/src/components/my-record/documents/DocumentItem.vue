@@ -55,6 +55,14 @@ export default {
       type: String,
       default: undefined,
     },
+    eventGuid: {
+      type: String,
+      default: undefined,
+    },
+    codeId: {
+      type: Number,
+      default: undefined,
+    },
   },
   data() {
     const documentAvailable = this.available && this.id;
@@ -70,6 +78,9 @@ export default {
           type: this.type,
           name: this.name,
           date: this.date,
+          codeId: this.codeId,
+          term: this.term,
+          eventGuid: this.eventGuid,
         });
         this.$router.push({ name: MY_RECORD_DOCUMENT.name, params: { id: this.id } });
       }

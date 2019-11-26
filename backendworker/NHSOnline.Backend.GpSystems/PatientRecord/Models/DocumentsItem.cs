@@ -11,5 +11,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
         public string Extension { get; set; }
         public bool IsAvailable { get; set; }
         public string Name { get; set; }
+        public string eventGuid { get; set; }
+        public long? codeId { get; set; }
     }
 }

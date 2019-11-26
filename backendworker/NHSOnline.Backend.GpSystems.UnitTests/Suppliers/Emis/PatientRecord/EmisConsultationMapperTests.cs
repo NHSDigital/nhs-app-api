@@ -71,8 +71,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                     new Observation { 
                                         Term = "test observation term 1", 
                                         AssociatedText = new List<AssociatedText> { new AssociatedText { Text = "Tired generally. Needs to have bloods etc" }},
-                                        ObservationType = "Unknown"
-                                        }  
+                                        ObservationType = "Unknown",
+                                        EventGuid = "test",
+                                        CodeId = 1234
+                                    }  
                                     },
                                 },
                             },
@@ -93,7 +95,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                                 new AssociatedText { Text = "steroids and see friday week" },
                                                 new AssociatedText { Text = "steroids and see friday week 2" }
                                             },
-                                            ObservationType = "Unknown"
+                                            ObservationType = "Unknown",
+                                            EventGuid = "test",
+                                            CodeId = 1234
                                         }  
                                     },
                                 },
@@ -110,8 +114,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                     Observations  = new List<Observation> { 
                                         new Observation { 
                                             Term = "test observation term 3", 
-                                            AssociatedText = null,
                                             ObservationType = "Observation",
+                                            EventGuid = "test",
+                                            CodeId = 1234,
                                         }  
                                     },
                                 },
@@ -145,6 +150,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             new ConsultationHeaderItem { Header = consultation1.Sections[0].Header, 
                                 ObservationsWithTerm = new List<ObservationItemWithTerm> { new ObservationItemWithTerm
                             {
+                                EventGuid = "test",
+                                CodeId = 1234,
+                                ObservationType ="Unknown",
                                 Term = consultation1.Sections[0].Observations[0].Term,
                                 AssociatedTexts = consultation1.Sections[0].Observations[0].AssociatedText.Select(x=>x.Text).ToList()
                             }}}    
@@ -159,6 +167,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             new ConsultationHeaderItem { Header = consultation2.Sections[0].Header, 
                                 ObservationsWithTerm = new List<ObservationItemWithTerm> { new ObservationItemWithTerm
                                 {
+                                    EventGuid = "test",
+                                    CodeId = 1234,
+                                    ObservationType ="Unknown",
                                     Term = consultation2.Sections[0].Observations[0].Term,
                                     AssociatedTexts = consultation2.Sections[0].Observations[0].AssociatedText.Select(x=>x.Text).ToList()
                                 }}}    
@@ -174,11 +185,100 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                 Header = consultation3.Sections[0].Header, 
                                 ObservationsWithTerm = new List<ObservationItemWithTerm> { new ObservationItemWithTerm
                                 {
+                                    EventGuid = "test",
+                                    CodeId = 1234,
+                                    ObservationType ="Observation",
                                     Term = consultation3.Sections[0].Observations[0].Term,
                                     AssociatedTexts = new List<string>()
                                 }}}
                         },
                     },   
+                }
+            };
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+        
+        [TestMethod]
+        public void MapConsultationRequestsGetResponseToConsultationListResponseDocument_WithValues_ReturnsResultDocumentWithComment()
+        {
+            // Arrange
+            var item = new MedicationRootObject {
+                MedicalRecord = new MedicalRecord
+                {
+                    Consultations = new List<Consultation>
+                    {
+                        new Consultation
+                        {
+                            EffectiveDate = new EffectiveDate { DatePart = "D MMMMM YYYY", Value = _fixture.Create<DateTime>() },
+                            ConsultantName = "Jean (Dr)",
+                            Location = "THE SURGERY - MOSS", 
+                            Sections = new List<Section>
+                            {
+                                new Section { Header = "Document", 
+                                    Observations  = new List<Observation> { 
+                                    new Observation { 
+                                        Term = "test observation term 1", 
+                                        AssociatedText = new List<AssociatedText> { new AssociatedText { Text = "Tired generally. Needs to have bloods etc" }},
+                                        ObservationType = "Unknown",
+                                        EventGuid = "test",
+                                        CodeId = 1234
+                                    }  
+                                    },
+                                },
+                                new Section { Header = "Comment", 
+                                    Observations  = new List<Observation> { 
+                                        new Observation { 
+                                            Term = "", 
+                                            AssociatedText = new List<AssociatedText> { new AssociatedText { Text = "Tired generally. Needs to have bloods etc" }},
+                                            ObservationType = "Observation",
+                                            EventGuid = "test1",
+                                            CodeId = 12345
+                                        }  
+                                    },
+                                },
+                            },
+                        },
+                    },
+                }
+            };
+                
+            // Act
+            var result = new EmisConsultationMapper(Mock.Of<ILogger<EmisConsultationMapper>>()).Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Consultations.Count);
+
+            var consultation1 = item.MedicalRecord.Consultations.ElementAt(0);
+            
+            var expectedResult = new Consultations
+            {
+                Data = new List<ConsultationItem>
+                {
+                    new ConsultationItem
+                    {
+                        EffectiveDate = new MyRecordDate { Value = consultation1.EffectiveDate.Value, DatePart = consultation1.EffectiveDate.DatePart },
+                        ConsultantLocation = $"{consultation1.Location} - {consultation1.ConsultantName}",
+                        ConsultationHeaders = new List<ConsultationHeaderItem>
+                        {
+                            new ConsultationHeaderItem { Header = consultation1.Sections[0].Header, 
+                                Comments = consultation1.Sections[0].Observations[0].AssociatedText.Select(x=>x.Text).ToList(),
+                                AssociatedTexts = new List<string>(),
+                                ObservationsWithTerm = new List<ObservationItemWithTerm> { new ObservationItemWithTerm
+                            {
+                                EventGuid = "test",
+                                CodeId = 1234,
+                                ObservationType ="Unknown",
+                                Term = consultation1.Sections[0].Observations[0].Term,
+                                AssociatedTexts = consultation1.Sections[0].Observations[0].AssociatedText.Select(x=>x.Text).ToList()
+                            }}},    
+                            new ConsultationHeaderItem { Header = consultation1.Sections[1].Header, 
+                                AssociatedTexts = consultation1.Sections[1].Observations[0].AssociatedText.Select(x=>x.Text).ToList(),
+                            Comments = null,
+                            ObservationsWithTerm = new List<ObservationItemWithTerm>()   
+                        },
+                    },
+                } 
                 }
             };
             result.Should().BeEquivalentTo(expectedResult);
@@ -215,7 +315,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                     },
                                     new Observation { 
                                         Term = null, 
-                                        AssociatedText = null,
                                         ObservationType = "Unknown"
                                     },
                                   },                                
@@ -269,7 +368,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                     Observations  = new List<Observation> { 
                                         new Observation { 
                                             Term = "test observation term 3", 
-                                            AssociatedText = null,
                                             ObservationType = "Observation",
                                         }  
                                     },
@@ -307,6 +405,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                 ObservationsWithTerm = new List<ObservationItemWithTerm> { 
                                 new ObservationItemWithTerm
                                     {
+                                        ObservationType = "Unknown",
                                         Term = consultation1.Sections[0].Observations[1].Term,
                                         AssociatedTexts = consultation1.Sections[0].Observations[1].AssociatedText.Select(x=>x.Text).ToList()
                                     },
@@ -324,6 +423,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                 Header = consultation2.Sections[0].Header, 
                                 ObservationsWithTerm = new List<ObservationItemWithTerm> { new ObservationItemWithTerm
                                 {
+                                    ObservationType = "Unknown",
                                     Term = consultation2.Sections[0].Observations[0].Term,
                                     AssociatedTexts = consultation2.Sections[0].Observations[0].AssociatedText.Select(x=>x.Text).ToList()
                                 }}}    
@@ -338,6 +438,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             new ConsultationHeaderItem { Header = consultation3.Sections[0].Header, 
                                 ObservationsWithTerm = new List<ObservationItemWithTerm> { new ObservationItemWithTerm
                                 {
+                                    ObservationType = "Observation",
                                     Term = consultation3.Sections[0].Observations[0].Term,
                                     AssociatedTexts = new List<string>()
                                 }}}    
@@ -420,7 +521,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                     Observations  = new List<Observation> { 
                                         new Observation { 
                                             Term = "",
-                                            AssociatedText = null, 
                                             ObservationType = "Observation"
                                         }  
                                     },
@@ -431,7 +531,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                     Observations  = new List<Observation> { 
                                         new Observation { 
                                             Term = null,
-                                            AssociatedText = null,
                                             ObservationType = "Observation"
                                         }  
                                     },

@@ -15,7 +15,9 @@ const $route = {
   },
 };
 
-const newStore = ({ isDocumentsEnabled = true, document } = {}) => (
+const newStore = ({ isDocumentsEnabled = true,
+  document,
+  documentConsultationsWithComments = [] } = {}) => (
   createStore({
     $env: {
       MY_RECORD_DOCUMENTS_ENABLED: isDocumentsEnabled,
@@ -24,6 +26,7 @@ const newStore = ({ isDocumentsEnabled = true, document } = {}) => (
       myRecord: {
         document,
         hasAcceptedTerms: true,
+        documentConsultationsWithComments,
       },
       device: {
         isNativeApp: false,
@@ -31,7 +34,7 @@ const newStore = ({ isDocumentsEnabled = true, document } = {}) => (
     },
   }));
 
-const mountPage = ({ $store, data = undefined }) =>
+const mountPage = ({ $store, data = () => ({ comments: [] }) }) =>
   mount(DocumentInformation, { $store, $router, $route, data });
 
 describe('document view', () => {
@@ -126,6 +129,7 @@ describe('document view', () => {
       // Arrange
       const data = () => ({
         name: 'Document1',
+        comments: [],
       });
       const page = mountPage({ $store, data });
 
@@ -136,10 +140,125 @@ describe('document view', () => {
       expect(documentInfo.exists()).toBe(true);
     });
 
+    it('will display a comment when there is a single comment', () => {
+      // Arrange
+      const document = {
+        name: 'Doc1',
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        term: 'test',
+        eventGuid: 'test',
+        codeId: 1234,
+      };
+      const documentComments = [{
+        consultationHeaders: [{
+          comments: [
+            'test',
+          ],
+          header: 'Document',
+          observationsWithTerm: [
+            {
+              codeId: 1234,
+              eventGuid: 'test',
+              term: 'test',
+            }],
+        },
+        ],
+      }];
+      $store = newStore({ document, documentComments });
+      const data = () => ({
+        name: 'Doc1',
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        term: 'test',
+        eventGuid: 'test',
+        codeId: 1234,
+        comments: ['this is a test'],
+      });
+      const page = mountPage({ $store, data });
+
+      // Act
+      const documentComment = page.find('#documentComment0 p');
+
+      // Assert
+      expect(documentComment.exists()).toBe(true);
+      expect(documentComment.text()).toBe('this is a test');
+    });
+
+    it('will display three comments when there are three', () => {
+      // Arrange
+      const document = {
+        name: 'Doc1',
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        term: 'test',
+        eventGuid: 'test',
+        codeId: 1234,
+      };
+      const documentComments = [{
+        documentKey: {
+          eventGuid: 'test',
+          term: 'test',
+          codeId: 1234,
+        },
+        comments: ['this is a test', 'this is a second test', 'this is a third test'],
+      }];
+      $store = newStore({ document, documentComments });
+      const data = () => ({
+        name: 'Doc1',
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        term: 'test',
+        eventGuid: 'test',
+        codeId: 1234,
+        comments: ['this is a test', 'this is a second test', 'this is a third test'],
+      });
+      const page = mountPage({ $store, data });
+
+      // Act
+      const firstDocumentComment = page.find('#documentComment0 p');
+      const secondDocumentComment = page.find('#documentComment1 p');
+      const thirdDocumentComment = page.find('#documentComment2 p');
+
+      // Assert
+      expect(firstDocumentComment.exists()).toBe(true);
+      expect(firstDocumentComment.text()).toBe('this is a test');
+
+      expect(secondDocumentComment.exists()).toBe(true);
+      expect(secondDocumentComment.text()).toBe('this is a second test');
+
+      expect(thirdDocumentComment.exists()).toBe(true);
+      expect(thirdDocumentComment.text()).toBe('this is a third test');
+    });
+
+    it('will not display the comments when there are none', () => {
+      // Arrange
+      const document = {
+        name: 'Doc1',
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        term: 'test',
+        eventGuid: 'test',
+        codeId: 1234,
+      };
+      $store = newStore({ document });
+      const data = () => ({
+        name: 'Doc1',
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        term: 'test',
+        eventGuid: 'test',
+        codeId: 1234,
+        comments: [],
+      });
+      const page = mountPage({ $store, data });
+
+      // Act
+      const documentComment = page.find('#documentComment0 p');
+
+      // Assert
+      expect(documentComment.exists()).toBe(false);
+    });
+
     it('will not display the date subtext if there is no name', () => {
       // Arrange
       const data = () => ({
         name: undefined,
+        comments: [],
       });
       const page = mountPage({ $store, data });
 
@@ -154,6 +273,7 @@ describe('document view', () => {
       // Arrange
       const data = () => ({
         name: undefined,
+        comments: [],
       });
       const page = mountPage({ $store, data });
 

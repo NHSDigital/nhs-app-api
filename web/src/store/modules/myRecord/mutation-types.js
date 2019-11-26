@@ -28,4 +28,5 @@ export const initialState = () => ({
   procedures: '',
   medicalRecordType: undefined,
   document: {},
+  documentConsultationsWithComments: [],
 });

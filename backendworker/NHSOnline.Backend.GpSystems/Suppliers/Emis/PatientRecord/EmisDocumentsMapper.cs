@@ -46,6 +46,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 documentItem.Extension = document.Extension;
 
                 documentItem.Term = document.Observation.Term;
+                documentItem.eventGuid = document.Observation.EventGuid;
+                documentItem.codeId = document.Observation.CodeId;
                 documentItem.DocumentGuid = document.DocumentGuid;
 
                 documentData.Add(documentItem);

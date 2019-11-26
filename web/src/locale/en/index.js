@@ -1219,6 +1219,7 @@ export default {
         download: 'Download',
       },
       downloadWarning: 'When you download this document, you become responsible for keeping it confidential.',
+      commentsHeader: 'Comments',
     },
     immunisations: {
       sectionHeader: 'Immunisations',

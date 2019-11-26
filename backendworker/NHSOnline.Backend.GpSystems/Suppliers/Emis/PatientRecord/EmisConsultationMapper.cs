@@ -91,16 +91,47 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     var observationItemWithTerms = FilterObservationsWithTerms(section);
                     var associatedTexts = FilterAssociatedTexts(section);
 
-                    consultationHeaders.Add(new ConsultationHeaderItem
+                    if (string.Equals(section.Header, "Document", StringComparison.Ordinal))
                     {
-                        Header = section.Header,
-                        ObservationsWithTerm = observationItemWithTerms,
-                        AssociatedTexts = associatedTexts
-                    });
+                        var documentComments = RetrieveAllComments(response);
+                        
+                        consultationHeaders.Add(new ConsultationHeaderItem
+                        {
+                            Header = section.Header,
+                            ObservationsWithTerm = observationItemWithTerms,
+                            AssociatedTexts = associatedTexts,
+                            Comments = documentComments
+                        });
+                    }
+                    else
+                    {
+                        consultationHeaders.Add(new ConsultationHeaderItem
+                        {
+                            Header = section.Header,
+                            ObservationsWithTerm = observationItemWithTerms,
+                            AssociatedTexts = associatedTexts
+                        });
+                    }
                 }
             }
 
             return consultationHeaders;
+        }
+
+        private static List<string> RetrieveAllComments(Consultation response)
+        {
+            var associatedTexts = new List<string>();
+            if (response?.Sections != null)
+            {
+                foreach (var section in response.Sections)
+                {
+                    if (string.Equals(section.Header, "Comment", StringComparison.Ordinal))
+                    {
+                        associatedTexts = FilterAssociatedTexts(section);
+                    }
+                }
+            }
+            return associatedTexts;
         }
 
         private static List<string> FilterAssociatedTexts(Section section)
@@ -119,15 +150,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                     if (obs.AssociatedText != null)
                     {
-                        foreach (var associatedText in obs.AssociatedText)
-                        {
-                            if (associatedText != null && !string.IsNullOrEmpty(associatedText.Text))
-                            {
-                                associatedTexts.Add(GetAssociatedText(associatedText));
-                            }
-                        }
+                        associatedTexts = FilterAssociatedTextsFromObservation(obs);
                     }
-                }                
+                }
             }
 
             return associatedTexts;
@@ -146,12 +171,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                         continue;
                     }
 
-                    var associatedTextsWithTerms = FilterAssociatedTextsWithTerms(obs);
+                    var associatedTextsWithTerms = FilterAssociatedTextsFromObservation(obs);
 
                     observationItemWithTerms.Add(new ObservationItemWithTerm
                     {
                         Term = obs.Term,
-                        AssociatedTexts = associatedTextsWithTerms
+                        AssociatedTexts = associatedTextsWithTerms,
+                        EventGuid = obs.EventGuid,
+                        CodeId = obs.CodeId,
+                        ObservationType = obs.ObservationType
                     });
                 }
             }
@@ -159,22 +187,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             return observationItemWithTerms;
         }
 
-        private static List<string> FilterAssociatedTextsWithTerms(Observation obs)
+        private static List<string> FilterAssociatedTextsFromObservation(Observation observation)
         {
-            var associatedTextsWithTerms = new List<string>();
-
-            if (obs?.AssociatedText != null)
-            {
-                foreach (var obsText in obs.AssociatedText)
-                {
-                    if (!string.IsNullOrEmpty(obsText.Text))
-                    {
-                        associatedTextsWithTerms.Add(GetAssociatedText(obsText));
-                    }
-                }
-            }
-
-            return associatedTextsWithTerms;
+            return observation.AssociatedText
+                .Where(at => at != null && !string.IsNullOrEmpty(at.Text))
+                .Select(GetAssociatedText).ToList();
         }
 
         private static bool FilterObservationTypes(Observation obs)

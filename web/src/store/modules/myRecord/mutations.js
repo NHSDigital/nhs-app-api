@@ -33,6 +33,7 @@ const clearState = (state) => {
   state.examinations = '';
   state.procedures = '';
   state.medicalRecordType = undefined;
+  state.documentConsultationsWithComments = [];
 };
 
 export default {
@@ -61,6 +62,10 @@ export default {
     state.record.documents.data = filteredDocuments;
     state.record.documents.recordCount = filteredDocuments.length;
 
+    state.documentConsultationsWithComments = (record.consultations.data || [])
+      .filter(d => d.consultationHeaders.filter(p => p.header === 'Document' || p.header === 'Comment').length > 0)
+      .filter(x => x.consultationHeaders.length > 1);
+
     state.hasLoaded = true;
   },
   [LOADED_TEST_RESULTS](state, { record }) {
@@ -88,6 +93,9 @@ export default {
       state.document.name = documentInfo.name;
       state.document.type = documentInfo.type;
       state.document.date = documentInfo.date;
+      state.document.term = documentInfo.term;
+      state.document.eventGuid = documentInfo.eventGuid;
+      state.document.codeId = documentInfo.codeId;
     }
   },
   [RESET_TERMS](state) {

@@ -16,7 +16,9 @@
                          :size-in-bytes="document.size"
                          :term="document.term"
                          :name="document.name"
-                         :available="document.isAvailable"/>
+                         :available="document.isAvailable"
+                         :event-guid="document.eventGuid"
+                         :code-id="document.codeId"/>
         </card-group-item>
       </card-group>
     </div>

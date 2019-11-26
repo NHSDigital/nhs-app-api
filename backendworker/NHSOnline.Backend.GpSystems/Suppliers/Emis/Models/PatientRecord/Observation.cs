@@ -5,6 +5,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord
 {
     public class Observation
     {
+        public Observation() {
+            AssociatedText = new List<AssociatedText>();
+        }
+
         public string ObservationType { get; set; }
         public string Episodicity { get; set; }
         public double? NumericValue { get; set; }
@@ -22,5 +26,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord
         public long? CodeId { get; set; }
         public string AuthorisingUserInRoleGuid { get; set; }
         public string EnteredByUserInRoleGuid { get; set; }
+
     }
 }

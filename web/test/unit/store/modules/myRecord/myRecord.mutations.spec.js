@@ -21,6 +21,13 @@ describe('my record mutations', () => {
             { name: 'Document2', extension: 'jpg' },
           ],
         },
+        consultations: {
+          data: [{
+            consultationHeaders: [{
+              header: 'Allergy',
+            }],
+          }],
+        },
       },
       patientDetails: 'details',
     };

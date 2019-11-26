@@ -7,11 +7,15 @@
         <div id="documentInfo" :class="$style.info" data-purpose="info">
           <p v-if="name">{{ dateString }}</p>
         </div>
-        <message-dialog message-type="warning" icon-text="Important">
-          <message-text id="downloadWarning" :class="$style.warningText">
-            {{ $t('my_record.documents.downloadWarning') }}
-          </message-text>
-        </message-dialog>
+        <div v-if="hasComments" :class="$style.comments">
+          <b>{{ $t('my_record.documents.commentsHeader') }}</b>
+          <div v-for="(comment, index) in retrieveComments"
+               :id="'documentComment' + index"
+               :key="'Comment'+index"
+               :data-purpose="'documentCommentContainer'+index">
+            <p :data-purpose="'documentComment'+index">{{ comment }}</p>
+          </div>
+        </div>
         <menu-item-list data-sid="action-list-menu">
           <menu-item v-if="!isTGAFile"
                      id="btn_viewDocument"
@@ -23,6 +27,12 @@
                      :text="$t('my_record.documents.actions.download')"
                      :aria-label="$t('my_record.documents.actions.download')"/>
         </menu-item-list>
+        <p id="downloadWarning">
+          {{ $t('my_record.documents.downloadWarning') }}
+        </p>
+        <p>
+          <glossary/>
+        </p>
       </div>
     </div>
   </div>
@@ -31,24 +41,28 @@
 import get from 'lodash/fp/get';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
 import { MY_RECORD_DOCUMENT_DETAIL, MYRECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { isFalsy, datePart } from '@/lib/utils';
 import NativeCallbacks from '@/services/native-app';
+import Glossary from '@/components/Glossary';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
     MenuItem,
     MenuItemList,
-    MessageDialog,
-    MessageText,
+    Glossary,
   },
   computed: {
     isTGAFile() {
       return this.type === 'tga' || this.type === 'TGA';
+    },
+    hasComments() {
+      return (this.comments !== null && this.comments.length > 0);
+    },
+    retrieveComments() {
+      return this.comments;
     },
     getMimeType() {
       switch (this.type.toUpperCase()) {
@@ -88,7 +102,7 @@ export default {
     const date = get('state.myRecord.document.date.value', store);
 
     if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
-      || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) || !date
+          || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) || !date
     ) {
       redirect(MYRECORD.path);
       return {};
@@ -97,7 +111,31 @@ export default {
     const name = get('state.myRecord.document.name', store);
     const dateString = `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePart(date, 'YearMonthDay')}`;
     const type = get('state.myRecord.document.type', store);
+    const codeId = get('state.myRecord.document.codeId', store);
+    const term = get('state.myRecord.document.term', store);
+    const eventGuid = get('state.myRecord.document.eventGuid', store);
+    const documentConsultationsWithComments = get('state.myRecord.documentConsultationsWithComments', store);
+    const comments = [];
 
+    if (documentConsultationsWithComments !== null
+      && documentConsultationsWithComments.length > 0) {
+      const documentConsultation = (documentConsultationsWithComments || []).filter(p =>
+        p.consultationHeaders.filter(x => x.observationsWithTerm.filter(r => r.codeId === codeId &&
+                  r.term === term &&
+                  r.eventGuid === eventGuid).length > 0).length > 0);
+
+      if (documentConsultation.length > 0) {
+        documentConsultation.forEach((consultation) => {
+          consultation.consultationHeaders
+            .filter(p => p.header === 'Document')
+            .map(x => x.comments).forEach((commentList) => {
+              commentList.forEach((comment) => {
+                comments.push(comment);
+              });
+            });
+        });
+      }
+    }
     if (name) {
       store.dispatch('header/updateHeaderText', name);
     } else {
@@ -109,6 +147,7 @@ export default {
       dateString,
       name,
       type,
+      comments,
     };
   },
   methods: {
@@ -197,9 +236,24 @@ export default {
   @import '../../../style/spacings';
   @import '../../../style/textstyles';
 
+  p {
+    font-family: $default_web;
+    font-weight: normal;
+    margin-bottom: 1em;
+  }
   .info {
     font-size: 1em;
     margin-bottom: 1em;
     margin-top: -1em;
-}
+
+    p {
+      margin-bottom: 0
+    }
+  }
+  .comments {
+    margin-bottom: 1em;
+    p {
+      margin-bottom: 0;
+    }
+  }
 </style>
