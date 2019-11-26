@@ -5,6 +5,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.myrecord.ConsultationsData
 import mocking.data.myrecord.TppDcrData
 import mocking.defaults.EmisMockDefaults
@@ -13,6 +14,7 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -118,7 +120,9 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
     @When("I get the users consultations")
     fun whenIGetTheUsersMyRecordData() {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .myRecord.getMyRecord(patientId)
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {

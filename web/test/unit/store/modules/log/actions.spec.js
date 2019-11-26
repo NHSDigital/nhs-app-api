@@ -11,7 +11,7 @@ describe('onError', () => {
       },
       app: {
         $http: {
-          postV1ApiLog: jest.fn().mockResolvedValue(),
+          postV1ApiLog: jest.fn().mockImplementation(() => Promise.resolve()),
         },
       },
       dispatch: jest.fn(),
@@ -24,5 +24,7 @@ describe('onError', () => {
 
     // assert
     expect(that.app.$http.postV1ApiLog).toBeCalled();
+    expect(that.dispatch).toHaveBeenNthCalledWith(1, 'spinner/prevent', true);
+    expect(that.dispatch).toHaveBeenNthCalledWith(2, 'spinner/prevent', false);
   });
 });

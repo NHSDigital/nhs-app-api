@@ -7,6 +7,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.courses.stepDefinitions.CoursesStepDefinitions
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.prescriptions.PrescriptionSerenityHelpers
 import features.prescriptions.factories.PrescriptionsFactory
@@ -270,9 +271,10 @@ open class PrescriptionsSubmissionStepDefinitions {
     @When("I submit the repeat prescription")
     fun whenISubmitTheRepeatPrescription() {
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.postPrescriptionsConnection(prescriptionSubmissionRequest)
+                    .prescriptions.postPrescriptionsConnection(patientId, prescriptionSubmissionRequest)
             SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)

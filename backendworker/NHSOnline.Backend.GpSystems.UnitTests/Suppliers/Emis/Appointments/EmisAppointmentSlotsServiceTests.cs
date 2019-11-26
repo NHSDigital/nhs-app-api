@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             _emisUserSession = _fixture.Create<EmisUserSession>();
 
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, Guid.NewGuid());
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.Id);
 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();

@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import features.im1Appointments.steps.YourAppointmentsBackendSteps
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
@@ -13,6 +14,7 @@ import mockingFacade.appointments.MyAppointmentsFacade
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
@@ -228,9 +230,10 @@ class YourAppointmentsStepDefinitionsBackend {
                 provider.toUpperCase())
 
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
             val result = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.setCsrfToken(csrfToken).getMyAppointments(LocalDateTime.now().toString())
+                    .appointments.setCsrfToken(csrfToken).getMyAppointments(patientId, LocalDateTime.now().toString())
             Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
             Assert.fail("The API did not fail with invalid token.")
         } catch (exception: NhsoHttpException) {

@@ -3,6 +3,7 @@ package features.prescriptions.stepDefinitions
 import constants.Supplier
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -24,8 +25,9 @@ class PrescriptionsStepDefinitionsBackend {
         val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(fromDateKey)
 
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
             val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            val response = sessionVariable.prescriptions.getPrescriptionsConnection(
+            val response = sessionVariable.prescriptions.getPrescriptionsConnection(patientId,
                     if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
             PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
         } catch (httpException: NhsoHttpException) {
@@ -36,9 +38,10 @@ class PrescriptionsStepDefinitionsBackend {
     @When("^I request prescriptions for the last 6 months$")
     fun iRequestPrescriptionsForTheLastSixMonths() {
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
             val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getPrescriptionsConnection(fromDate)
+                    .prescriptions.getPrescriptionsConnection(patientId, fromDate)
             PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
@@ -48,9 +51,10 @@ class PrescriptionsStepDefinitionsBackend {
     @When("^I request prescriptions for the last 6 months with an invalid cookie$")
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
             val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+                    .prescriptions.getPrescriptionsConnection(patientId, fromDate, WorkerClient.getHttpContext(true))
             PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)

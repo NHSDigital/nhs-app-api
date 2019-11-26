@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+import { INDEX } from '@/lib/routes';
+import moment from 'moment';
 import {
   CLEAR,
   LOADED,
@@ -74,5 +76,9 @@ export default {
       .then(() => {
         commit(SWITCH_TO_MAIN_USER_ACCOUNT);
       });
+  },
+  redirectAfterInvalidPatientIdDetected({ commit }) {
+    commit(INIT);
+    this.app.context.redirect(302, `${INDEX.path}?ts=${moment().unix()}`);
   },
 };

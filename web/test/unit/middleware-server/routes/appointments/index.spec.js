@@ -2,6 +2,7 @@ import appointments from '@/middleware-server/routes/appointments';
 import { APPOINTMENTS } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 
+const patientId = 1;
 let api;
 let apiFn;
 let post;
@@ -14,6 +15,7 @@ describe('middleware-server/routes/appointments', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     api = {
+      getV1PatientConfiguration: jest.fn(() => Promise.resolve({ response: { id: patientId } })),
       deleteV1PatientAppointments: jest.fn(() => Promise.resolve()),
     };
     apiFn = jest.fn(() => api);
@@ -82,8 +84,12 @@ describe('middleware-server/routes/appointments', () => {
       };
 
       await postHandler(req, res);
+      const patientRequestArgument = api.getV1PatientConfiguration.mock.calls[0][0];
+      expect(patientRequestArgument.cookie).toEqual(req.headers.cookie);
+
       const requestArgument = api.deleteV1PatientAppointments.mock.calls[0][0];
       expect(requestArgument.cookie).toEqual(req.headers.cookie);
+      expect(requestArgument.patientId).toEqual(patientId);
     });
 
     it('will pass the csrfToken from the API request through to the NHSOnlineApi', async () => {

@@ -4,6 +4,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.defaultTelephoneNumber
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
@@ -12,6 +13,7 @@ import net.serenitybdd.core.Serenity
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
+import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentBookRequest
@@ -235,10 +237,13 @@ open class AppointmentsBookingStepDefinitionsBackend {
     }
 
     private fun submitAppointmentRequest(workerAppointmentRequest: AppointmentBookRequest) {
+
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
+
         try {
             val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
             val sessionCookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
-            val result = workerClient.appointments.postAppointment(workerAppointmentRequest, sessionCookie)
+            val result = workerClient.appointments.postAppointment(patientId, workerAppointmentRequest, sessionCookie)
             Serenity.setSessionVariable("Http Status Code").to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)

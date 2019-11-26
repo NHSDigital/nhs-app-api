@@ -47,8 +47,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _emisUserSession = _fixture.Create<EmisUserSession>();
-            
+            _emisUserSession = _fixture.Build<EmisUserSession>()
+                .With(x => x.Id, _patientId)
+                .Create();
+
             _logger = Mock.Of<ILogger<EmisCourseService>>();
 
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();

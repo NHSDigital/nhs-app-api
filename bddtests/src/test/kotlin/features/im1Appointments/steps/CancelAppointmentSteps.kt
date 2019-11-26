@@ -2,6 +2,7 @@ package features.im1Appointments.steps
 
 import constants.Supplier
 import features.authentication.steps.LoginSteps
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
@@ -19,6 +20,7 @@ import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
 import pages.navigation.WebHeader
 import pages.text
+import utils.getOrFail
 import worker.WorkerClient
 import worker.models.appointments.GenericResponseObject
 import java.time.LocalDateTime
@@ -113,8 +115,9 @@ open class CancelAppointmentSteps {
 
     @Step
     fun retrieveCancellationReasons(): List<GenericResponseObject> {
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .appointments.getMyAppointments(LocalDateTime.now().toString())
+                .appointments.getMyAppointments(patientId, LocalDateTime.now().toString())
 
         return result.cancellationReasons
     }

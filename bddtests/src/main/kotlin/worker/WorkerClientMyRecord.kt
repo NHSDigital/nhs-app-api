@@ -17,8 +17,9 @@ class WorkerClientMyRecord(val config: Config, val sender: WorkerClientSender, v
         return gson.fromJson<Demographics>(result, Demographics::class.java)
     }
 
-    fun getMyRecord(): MyRecordResponse {
+    fun getMyRecord(patientId: String?): MyRecordResponse {
         val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getMyRecordConnection)
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
 

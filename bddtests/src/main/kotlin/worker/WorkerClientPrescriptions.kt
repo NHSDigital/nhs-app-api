@@ -14,18 +14,23 @@ import java.net.URLEncoder
 
 class WorkerClientPrescriptions(val config: Config, val sender: WorkerClientSender, val gson: Gson){
 
-    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext? = null): PrescriptionsListResponse {
+    fun getPrescriptionsConnection(
+            patientId: String?,
+            fromDate: String?,
+            context: HttpContext? = null): PrescriptionsListResponse {
         var queryString = ""
         if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
         val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
         val result = sender.sendAsyncAndGetResult(httpGet, context)
         httpGet.releaseConnection()
 
         return gson.fromJson<PrescriptionsListResponse>(result, PrescriptionsListResponse::class.java)
     }
 
-    fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?): HttpResponse {
+    fun postPrescriptionsConnection(patientId: String, requestBody: PrescriptionSubmissionRequest?): HttpResponse {
         val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.postPrescriptionsConnection)
+        httpPost.setHeader(WorkerHeaders.PatientId, patientId)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
@@ -35,9 +40,9 @@ class WorkerClientPrescriptions(val config: Config, val sender: WorkerClientSend
         return response!!
     }
 
-    fun getCoursesConnection(): CoursesListResponse {
+    fun getCoursesConnection(patientId: String): CoursesListResponse {
         val httpGet = HttpGet(config.apiBackendUrl + WorkerPaths.getCoursesConnection)
-
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
 

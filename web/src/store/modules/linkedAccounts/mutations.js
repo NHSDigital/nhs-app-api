@@ -28,7 +28,7 @@ export default {
   },
   [INIT](state) {
     const blank = initialState();
-    return mapKeys((key) => {
+    mapKeys((key) => {
       state[key] = blank[key];
     })(state);
   },

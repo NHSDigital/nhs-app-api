@@ -1,6 +1,7 @@
 package features.im1Appointments.steps
 
 import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.MockingClient
 import mocking.emis.models.AppointmentCancellationReason
@@ -9,6 +10,7 @@ import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
@@ -25,10 +27,11 @@ open class YourAppointmentsBackendSteps {
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         dateTimeFormat.timeZone = timeZone
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
         try {
             val result = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.getMyAppointments(fromDate)
+                    .appointments.getMyAppointments(patientId, fromDate)
             println(result)
             Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
         } catch (httpException: NhsoHttpException) {

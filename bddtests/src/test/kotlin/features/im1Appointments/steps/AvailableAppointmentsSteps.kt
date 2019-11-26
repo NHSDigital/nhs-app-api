@@ -1,5 +1,6 @@
 package features.im1Appointments.steps
 
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -13,6 +14,7 @@ import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
 import pages.navigation.BreadcrumbHeader
 import pages.navigation.WebHeader
+import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -81,10 +83,10 @@ open class AvailableAppointmentsSteps {
     @Step
     fun theAvailableAppointmentSlotsAreRetrieved() {
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.getAppointmentSlots(null,
-                    null,
-                    Serenity.sessionVariableCalled<Cookie>(Cookie::class))
+                    .appointments.getAppointmentSlots(
+                    patientId, null,null, sessionVariableCalled<Cookie>(Cookie::class))
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)

@@ -196,3 +196,14 @@ Feature: View prescriptions backend
       | TPP       |
       | VISION    |
       | MICROTEST |
+
+  Scenario Outline: <GP System> patient but NHSO-Patient-Id header is not valid
+    Given I have logged into <GP System> and have a valid session cookie
+    But the patient id sent in the request is not valid
+    And I have 3 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    When I get the users prescriptions with a valid cookie
+    Then I receive a "patient id not found" error
+    Examples:
+      | GP System |
+      | EMIS      |

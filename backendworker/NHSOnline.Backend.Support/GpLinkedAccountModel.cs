@@ -14,8 +14,8 @@ namespace NHSOnline.Backend.Support
             GpUserSession = gpUserSession;
             PatientId = id;
         }
-        
-        public GpUserSession GpUserSession { get; set; }
+
+        public GpUserSession GpUserSession { get; }
         public Guid PatientId { get; set; }
     }
 }

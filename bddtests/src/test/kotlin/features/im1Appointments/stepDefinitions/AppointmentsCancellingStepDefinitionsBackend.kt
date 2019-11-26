@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.CancelAppointmentSteps
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.MockingClient
 import mocking.stubs.StubbedEnvironment
 import mocking.vision.appointments.CancelAppointmentBuilderVision
@@ -13,6 +14,7 @@ import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.junit.Assert
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import java.time.Duration
@@ -79,10 +81,12 @@ class AppointmentsCancellingStepDefinitionsBackend {
                 id
         )
 
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.deleteAppointment(body)
+                    .appointments.deleteAppointment(patientId, body)
 
             SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
@@ -98,10 +102,12 @@ class AppointmentsCancellingStepDefinitionsBackend {
                 "NOT_EXISTING_REASON_ID"
         )
 
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.deleteAppointment(body)
+                    .appointments.deleteAppointment(patientId, body)
             SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)

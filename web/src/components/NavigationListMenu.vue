@@ -44,7 +44,7 @@
                id="menu-item-linkedProfiles"
                :header-tag="headerTag"
                data-sid="linkedProfile-menu-item"
-               :href="linkedProfilePath"
+               :href="linkedProfilesPath"
                :text="$t('navigationMenuList.linkedProfiles')"
                :aria-label="$t('navigationMenuList.linkedProfiles')"
                :click-func="goToUrl"

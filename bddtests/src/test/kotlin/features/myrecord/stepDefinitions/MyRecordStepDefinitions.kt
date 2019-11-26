@@ -6,6 +6,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -27,6 +28,7 @@ import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import pages.text
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -177,7 +179,9 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @When("^I get the users my record data$")
     fun whenIGetTheUsersMyRecordData() {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .myRecord.getMyRecord(patientId)
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)

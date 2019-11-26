@@ -2,9 +2,11 @@ package features.courses.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
@@ -14,9 +16,10 @@ class CoursesStepDefinitionsBackend {
     @When("I get the users courses with a valid cookie")
     fun whenIGetTheUsersCoursesWithAnValidCookie() {
         try {
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
             val result = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getCoursesConnection()
+                    .prescriptions.getCoursesConnection(patientId)
 
             Serenity.setSessionVariable(CoursesListResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {

@@ -21,13 +21,17 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
         return this
     }
 
-    fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false): MyAppointmentsResponse {
+    fun getMyAppointments(
+            patientId: String,
+            fromDate: String,
+            includePastAppointments: Boolean = false): MyAppointmentsResponse {
         val uriBuilder = URIBuilder(config.apiBackendUrl)
                 .setPath(WorkerPaths.myAppointments)
                 .addParameter("pastAppointmentsFromDate", fromDate)
                 .addParameter("includePastAppointments", includePastAppointments.toString())
 
         val httpGet = HttpGet(uriBuilder.build())
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
 
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
@@ -45,11 +49,13 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
         return response
     }
 
-    fun getAppointmentSlots(fromDate: String? = null,
+    fun getAppointmentSlots(patientId: String?,
+                            fromDate: String? = null,
                             toDate: String? = null,
                             sessionCookie: Cookie? = null): AppointmentSlotsResponse {
         val uriBuilder = createUriBuilderForAppointmentSlots(fromDate, toDate)
         val httpGet = HttpGet(uriBuilder.build())
+        httpGet.setHeader(WorkerHeaders.PatientId, patientId)
 
         if (sessionCookie != null) httpGet.addHeader("Cookie", sessionCookie.value.split(";")[0])
 
@@ -71,8 +77,9 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
         return uriBuilder
     }
 
-    fun deleteAppointment(requestBody: CancelAppointmentRequest): HttpResponse {
+    fun deleteAppointment(patientId: String, requestBody: CancelAppointmentRequest): HttpResponse {
         val httpDelete = WorkerClient.HttpDeleteWithBody(config.apiBackendUrl + WorkerPaths.myAppointments)
+        httpDelete.setHeader(WorkerHeaders.PatientId, patientId)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpDelete.entity = entity
@@ -82,9 +89,12 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
         return response!!
     }
 
-    fun postAppointment(appointmentBookRequest: AppointmentBookRequest, sessionCookie: Cookie? = null): HttpResponse {
+    fun postAppointment(
+            patientId: String?,
+            appointmentBookRequest: AppointmentBookRequest,
+            sessionCookie: Cookie? = null): HttpResponse {
         val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.myAppointments)
-
+        httpPost.setHeader(WorkerHeaders.PatientId, patientId)
         if (sessionCookie != null) httpPost.addHeader("Cookie", sessionCookie.value.split(";")[0])
         val entity = StringEntity(gson.toJson(appointmentBookRequest), "UTF-8")
         entity.setContentType("application/json")

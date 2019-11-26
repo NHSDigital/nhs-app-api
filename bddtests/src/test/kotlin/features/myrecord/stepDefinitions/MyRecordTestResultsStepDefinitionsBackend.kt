@@ -2,6 +2,7 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.myrecord.MyRecordSerenityHelpers
 import mocking.emis.testResults.TestResultValue
 import net.serenitybdd.core.Serenity
@@ -16,7 +17,9 @@ open class MyRecordTestResultsStepDefinitionsBackend : AbstractDemographicsStepD
     @When("^I get the users test results$")
     fun whenIGetTheUsersMyRecordData() {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .myRecord.getMyRecord(patientId)
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {

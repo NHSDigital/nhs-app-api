@@ -55,21 +55,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             Assert.AreEqual(emisRequestParameters.UserPatientLinkToken, user.UserPatientLinkToken);
             Assert.AreEqual(emisRequestParameters.SessionId, _emisUserSession.SessionId);
             Assert.AreEqual(emisRequestParameters.EndUserSessionId, _emisUserSession.EndUserSessionId);
-        }     
-        
-        [TestMethod]
-        public void BuildEmisHeaders_IdNotFound_UsesDefaultUserPatientLinkToken()
+        }
+
+        [TestMethod, ExpectedException(typeof(InvalidPatientIdException))]
+        public void BuildEmisHeaders_IdNotFound_ThrowsInvalidPatientIdException()
         {
             // Arrange
             _linkedAccountModel.PatientId = Guid.Empty;
-            
+
             // Act
             var emisRequestParameters = EmisLinkedAccountModelExtensions.BuildEmisRequestParameters(_linkedAccountModel, _logger.Object);
-            
-            // Assert
-            Assert.AreEqual(emisRequestParameters.UserPatientLinkToken, _emisUserSession.UserPatientLinkToken);
-            Assert.AreEqual(emisRequestParameters.SessionId, _emisUserSession.SessionId);
-            Assert.AreEqual(emisRequestParameters.EndUserSessionId, _emisUserSession.EndUserSessionId);
-        }        
+        }
     }
 }

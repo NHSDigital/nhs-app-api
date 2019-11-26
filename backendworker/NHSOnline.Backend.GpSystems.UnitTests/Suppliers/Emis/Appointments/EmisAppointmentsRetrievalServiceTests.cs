@@ -35,8 +35,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _emisUserSession = _fixture.Create<EmisUserSession>();
+
+            _emisUserSession = _fixture.Build<EmisUserSession>()
+                .With(x => x.Id, _patientId)
+                .Create();
+
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisClientGetResponse = _fixture.Create<AppointmentsGetResponse>();
             var response = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.OK)

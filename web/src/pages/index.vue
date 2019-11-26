@@ -23,11 +23,6 @@ export default {
     WelcomeSection,
     NavigationListMenu,
   },
-  data() {
-    return {
-      isProxying: this.$store.getters['session/isProxying'],
-    };
-  },
   computed: {
     currentProfile() {
       return this.$store.getters['session/currentProfile'];
@@ -36,6 +31,9 @@ export default {
       const message = this.$t('homeLoggedIn.welcome');
       const { name } = this.currentProfile;
       return `${message}, ${name}`;
+    },
+    isProxying() {
+      return this.$store.getters['session/isProxying'];
     },
   },
   mounted() {

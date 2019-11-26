@@ -27,16 +27,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 }
             }
 
-            // For now, default to the main (logged in user) to prevent any potential errors in production.
-            // A Future story will be created for error handling when all applicable endpoints are using the
-            // FromHeader Attribute to set the ProfileGUID received from the client.
             if (string.IsNullOrEmpty(userPatientLinkToken))
             {
-                var msg = $"Could not find a matching Id in EmisUserSession for " +
-                          $"{gpLinkedAccountModel.PatientId}, defaulting to UserPatientLinkToken of main (logged in) user";
-                logger.LogError(msg);
-
-                userPatientLinkToken = emisUserSession.UserPatientLinkToken;
+                throw new InvalidPatientIdException(gpLinkedAccountModel.PatientId);
             }
 
             return new EmisRequestParameters(emisUserSession)

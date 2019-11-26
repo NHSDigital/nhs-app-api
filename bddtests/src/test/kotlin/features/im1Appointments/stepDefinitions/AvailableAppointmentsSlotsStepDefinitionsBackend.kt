@@ -4,6 +4,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.appointments.AppointmentsSlotsExample
@@ -11,6 +12,7 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
+import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -81,9 +83,14 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
             cookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
         }
 
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
+
         try {
+
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.getAppointmentSlots(fromDate,
+                    .appointments.getAppointmentSlots(
+                    patientId,
+                    fromDate,
                     toDate,
                     cookie)
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)

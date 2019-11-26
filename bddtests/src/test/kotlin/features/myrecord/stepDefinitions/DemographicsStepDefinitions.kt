@@ -3,14 +3,15 @@ package features.myrecord.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
-import java.util.UUID
 
 open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -59,7 +60,7 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
     @When("^I get the users demographic data$")
     fun whenIGetTheUsersDemographicsDataFor() {
         try {
-            val patientId = UUID.randomUUID().toString()
+            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .myRecord.getDemographics(patientId)
 

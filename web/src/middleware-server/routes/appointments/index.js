@@ -26,6 +26,11 @@ export default (apiFn) => {
     const api = initialiseApi({ apiFn, req, res });
     const { reason, id, csrfToken } = get('body')(req) || {};
 
+    const patientConfig = await api.getV1PatientConfiguration({
+      cookie: get('headers.cookie')(req),
+      csrfToken,
+    });
+
     const appointmentCancelRequest = {
       appointmentId: id,
       cancellationReasonId: reason,
@@ -35,6 +40,7 @@ export default (apiFn) => {
       appointmentCancelRequest,
       cookie: get('headers.cookie')(req),
       csrfToken,
+      patientId: patientConfig.response.id,
     }).then(() => {
       const successMessage = {
         flashMessage: {

@@ -2,6 +2,7 @@ package features.sharedSteps.backend
 
 import config.Config
 import constants.Supplier
+import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
@@ -14,6 +15,7 @@ import utils.SerenityHelpers
 import utils.set
 import worker.WorkerClient
 import java.util.concurrent.TimeUnit
+import java.util.UUID
 
 private const val ADDITIONAL_TIME_TO_DELAY = 10
 open class SharedStepDefinitionsBackend{
@@ -47,5 +49,10 @@ open class SharedStepDefinitionsBackend{
     fun andIDelayMyRequestByTheDefaultTime() {
         val delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
         Thread.sleep(delayTime + ADDITIONAL_TIME_TO_DELAY)
+    }
+
+    @But("the patient id sent in the request is not valid")
+    fun thePatientIdSendInTheRequestIsNotValid() {
+        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(UUID.randomUUID().toString())
     }
 }

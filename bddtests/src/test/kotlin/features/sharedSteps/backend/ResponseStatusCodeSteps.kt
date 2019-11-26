@@ -15,6 +15,7 @@ import java.lang.AssertionError
 
 const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 550
 const val ODS_CODE_NOT_FOUND_RESPONSE_CODE = 464
+const val PATIENT_ID_NOT_FOUND_RESPONSE_CODE = 467
 class ResponseStatusCodeSteps {
 
     @Then("^I (?:get|receive) (?:a|an) \"(.*)\" (?:error|response)$")
@@ -135,7 +136,8 @@ class ResponseStatusCodeSteps {
             "not implemented" to HttpStatus.SC_NOT_IMPLEMENTED,
             "linkage not supported" to LINKAGE_NOT_SUPPORTED_RESPONSE_CODE,
             "no content" to HttpStatus.SC_NO_CONTENT,
-            "ods code not found" to ODS_CODE_NOT_FOUND_RESPONSE_CODE
+            "ods code not found" to ODS_CODE_NOT_FOUND_RESPONSE_CODE,
+            "patient id not found" to PATIENT_ID_NOT_FOUND_RESPONSE_CODE
     )
 
     private fun httpStatusCodeTransform(statusName: String): Int? {

@@ -114,7 +114,7 @@ class NHSOnlineApi {
         deferred,
         ignoreError,
         ignoreLoading,
-        useAccessToken
+        useAccessToken,
       }) {
         const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null;
         const urlWithParams = url + (queryParams ? '?' + queryParams : '');
@@ -173,11 +173,16 @@ class NHSOnlineApi {
           }
         }
 
-        if (this.store.state) {
-          let patientId = getPatientId(this);
+        let patientId = get('patientId')(parameters);
+        if (patientId) {
+          headers['NHSO-Patient-Id'] = patientId;
+        } else {
+          if (this.store.state) {
+            patientId = getPatientId(this);
 
-          if (patientId) {
-            headers['NHSO-Patient-Id'] = patientId;
+            if (patientId) {
+              headers['NHSO-Patient-Id'] = patientId;
+            }
           }
         }
 
@@ -265,6 +270,15 @@ class NHSOnlineApi {
             this.store.dispatch('http/loadingCompleted');
           }
           if (!axios.isCancel(error)) {
+            if (error.response && error.response.status === 467) {
+              this.store.dispatch('linkedAccounts/redirectAfterInvalidPatientIdDetected');
+              reject({
+                deferred,
+                error,
+                store: this.store,
+              });
+            }
+
             if (error.response !== undefined && 401 === error.response.status) {
               this.store.dispatch('auth/unauthorised');
               resolve({
