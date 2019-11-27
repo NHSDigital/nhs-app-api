@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 const createApp = router => ({
+  disable: jest.fn(),
   use: jest.fn(),
   Router: jest.fn(() => router),
 });

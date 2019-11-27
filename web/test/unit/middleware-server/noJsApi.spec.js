@@ -15,6 +15,10 @@ describe('middleware-server/noJsApi', () => {
     expect(express).toBeCalled();
   });
 
+  it('will disable x-powered-by header', () => {
+    expect(express().disable).toBeCalledWith('x-powered-by');
+  });
+
   it('will make express use the appointment routes', () => {
     expect(express().use).toBeCalled();
   });

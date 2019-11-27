@@ -29,6 +29,8 @@ app.use(appointments());
 app.use(organDonation());
 app.use(onlineConsultations());
 
+app.disable('x-powered-by');
+
 const router = Router();
 postEndpoints.map(path => router.post(path, (req, res, next) => next()));
 app.use(router);
