@@ -1,13 +1,10 @@
 package features.myrecord.stepDefinitions
 
-import constants.ErrorResponseCodeTpp
-import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.myrecord.factories.ConsultationsFactory
 import mocking.data.myrecord.ConsultationsData
-import mocking.data.myrecord.TppDcrData
-import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MedicalRecordV1Page
@@ -17,7 +14,6 @@ import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
-import java.lang.UnsupportedOperationException
 
 open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -28,21 +24,7 @@ open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStep
         val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatient()
 
-        when (gpSystem) {
-            Supplier.EMIS -> {
-                mockingClient.forEmis {
-                    myRecord.consultationsRequest(patient)
-                            .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
-                }
-            }
-            Supplier.TPP -> {
-                mockingClient.forTpp {
-                    myRecord.patientRecordRequest(patient.tppUserSession!!)
-                            .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
-                }
-            }
-            else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
-        }
+        ConsultationsFactory.getForSupplier(gpSystem).enabledWithRecords(patient)
     }
 
     @Given("^the Patient has no access to consultations$")
@@ -50,25 +32,7 @@ open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStep
         val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatient()
 
-        when (gpSystem) {
-            Supplier.EMIS -> {
-                mockingClient.forEmis {
-                    myRecord.consultationsRequest(patient).respondWithExceptionWhenNotEnabled()
-                }
-            }
-            Supplier.TPP -> {
-                mockingClient.forTpp {
-                    myRecord.patientRecordRequest(patient.tppUserSession!!)
-                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                    "You don&apos;t have access to this online service. " +
-                                            "You can request access to this service at Kainos GP Demo Unit by " +
-                                            "clicking Manage Online Services in the Account section.",
-                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                }
-
-            }
-            else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
-        }
+        ConsultationsFactory.getForSupplier(gpSystem).disabled(patient)
     }
 
     @Given("^the GP Practice has no consultations$")
@@ -76,32 +40,15 @@ open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStep
         val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatient()
 
-        when (gpSystem) {
-            Supplier.EMIS -> {
-                mockingClient.forEmis {
-                    myRecord.consultationsRequest(patient)
-                            .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
-                }
-            }
-            Supplier.TPP -> {
-                mockingClient.forTpp {
-                    myRecord.patientRecordRequest(patient.tppUserSession!!)
-                            .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
-
-                }
-
-            }
-            else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
-        }
+        ConsultationsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(patient)
     }
 
-    @Given("^the EMIS GP Practice has two consultations where the second record has no date$")
+    @Given("^the EMIS GP Practice has two consultations where the first record has no date$")
     fun givenTheEmisPracticeHasAConsultationWithNoDate(){
         val patient = SerenityHelpers.getPatient()
-
         mockingClient.forEmis {
             myRecord.consultationsRequest(patient)
-                    .respondWithSuccess(ConsultationsData.getTwoConsultationsWhereTheSecondRecordHasNoDate())
+                    .respondWithSuccess(ConsultationsData.getTwoConsultationsWhereTheFirstRecordHasNoDate())
         }
     }
 
@@ -110,21 +57,7 @@ open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStep
         val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatient()
 
-        when (gpSystem) {
-            Supplier.EMIS -> {
-                mockingClient.forEmis {
-                    myRecord.consultationsRequest(patient).respondWithNonDataAccessException()
-                }
-            }
-            Supplier.TPP -> {
-                mockingClient.forTpp {
-                    myRecord.patientRecordRequest(patient.tppUserSession!!)
-                            .respondWithServiceNotAvailableException()
-                }
-
-            }
-            else -> throw UnsupportedOperationException("Not implemented for this $gpSystem")
-        }
+        ConsultationsFactory.getForSupplier(gpSystem).errorRetrieving(patient)
     }
 
     @Given("^the GP practice returns bad consultations data$")
@@ -132,22 +65,7 @@ open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStep
         val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatient()
 
-        when (gpSystem) {
-            Supplier.EMIS -> {
-                mockingClient.forEmis {
-                    myRecord.consultationsRequest(patient)
-                            .respondWithCorruptedContent("Bad Data")
-                }
-            }
-            Supplier.TPP -> {
-                mockingClient.forTpp {
-                    myRecord.patientRecordRequest(patient.tppUserSession!!)
-                            .respondWithCorruptedContent()
-                }
-
-            }
-            else -> throw UnsupportedOperationException("Not implemented for this $gpSystem")
-        }
+        ConsultationsFactory.getForSupplier(gpSystem).recordWithBadConsultationsData(patient)
     }
 
     @When("I get the users consultations")
@@ -191,5 +109,6 @@ open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStep
     fun thenISeeConsultationsRecordsDisplayedV1(count: Int) {
         assertEquals(count, medicalRecordV1Page.consultations.allRecordItems().count())
     }
+
 }
 

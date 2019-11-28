@@ -42,4 +42,8 @@ class ProblemsFactoryVision : ProblemsFactory() {
     override fun getExpectedProblems(): List<ProblemItem> {
         throw UnsupportedOperationException()
     }
+
+    override fun secondProblemHasNoDate(patient: Patient) {
+        throw UnsupportedOperationException("Not yet implemented")
+    }
 }

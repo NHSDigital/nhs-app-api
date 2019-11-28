@@ -31,10 +31,17 @@ Feature: Consultations Frontend - Medical Record v2
    And I am on the medical record page
    When I click the Consultations and events link on my record - Medical Record v2
    Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
-    
+
   Scenario: An EMIS user receiving bad consultations response sees and error
     Given I am a EMIS user setup to use medical record version 2
     And the GP practice returns bad consultations data
     And I am on the medical record page
     When I click the Consultations and events link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
+
+  Scenario: An EMIS user has a consultation record with an unknown date - GP Medical Record
+    Given I am a EMIS user setup to use medical record version 2
+    And the EMIS GP Practice has two consultations where the first record has no date
+    And I am on the medical record page
+    When I click the Consultations and events link on my record - Medical Record v2
+    Then I see the second consultation record have unknown date - Medical Record v2

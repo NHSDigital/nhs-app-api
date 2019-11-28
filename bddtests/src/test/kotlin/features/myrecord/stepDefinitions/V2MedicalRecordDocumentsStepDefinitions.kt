@@ -31,15 +31,15 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     @Given("^the Patient has no access to Documents$")
     fun thePatientHasNoAccessToDocuments() {
         DocumentsFactory
-            .getForSupplier(SerenityHelpers.getGpSupplier())
-            .disabled(SerenityHelpers.getPatient())
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has no documents$")
     fun thePracticeHasNoDocuments() {
         DocumentsFactory
-            .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithNoDocuments(SerenityHelpers.getPatient())
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithNoDocuments(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has a document with a null page count$")
@@ -59,8 +59,8 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     @Given("^the GP Practice has multiple documents$")
     fun theGpPracticeHasMultipleDocuments() {
         DocumentsFactory
-            .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocuments(SerenityHelpers.getPatient())
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocuments(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple large documents$")
@@ -80,16 +80,23 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     @Given("^the GP Practice has multiple documents with no name or term$")
     fun theGpPracticeHasMultipleDocumentsWithNoNameOrTerm() {
         DocumentsFactory
-            .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient())
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple documents where one has an invalid id$")
     fun theGpPracticeHasMultipleDocumentsWhereOneHasAnInvalidId(){
         theGpPracticeHasMultipleDocuments()
         DocumentsFactory
-            .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocuments(SerenityHelpers.getPatient(), mockUnavailableDocument = true)
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocuments(SerenityHelpers.getPatient(), mockUnavailableDocument = true)
+    }
+
+    @Given("^the EMIS GP Practice has three document results where the first record has no date$")
+    fun theEmisGpPracticeHasThreeDocumentResultsWhereTheFirstRecordHasNoDate(){
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocumentsWithUnknownDate(SerenityHelpers.getPatient(), false)
     }
 
     @When("^I select an available document$")
@@ -155,6 +162,14 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     fun thenISeeTheDocumentInformationPageWithTheDocumentDateAsTheHeader() {
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         myRecordDocumentInformationPage.headerContainsText("Document added on ${selectedDocument.date}")
+    }
+
+    @Then("^I see the expected list of documents displayed with unknown date for the last result$")
+    fun thenISeeTheExpectedListOfDocumentsDisplayedWithUnknownDateForTheLastResult(){
+        myRecordDocumentsPage
+                .assertDocumentItemsVisible(
+                        SerenityHelpers.getValueOrNull<List<ExpectedDocument>>(SerenityVariable.EXPECTED_DOCUMENTS)!!)
+
     }
 
     private fun clickDocumentBySerenityVariable(documentToClick: SerenityVariable) {

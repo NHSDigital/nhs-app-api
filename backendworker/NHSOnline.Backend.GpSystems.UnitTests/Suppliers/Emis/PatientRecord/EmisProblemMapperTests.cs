@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -61,6 +61,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     Problems = new List<Problem>
                     {
+                        CreateProblem(new EffectiveDate { DatePart = "Unknown",
+                            Value = _fixture.Create<DateTime>() }
+                        ),
                         new Problem
                         {
                             Status = _fixture.Create<string>(),
@@ -75,36 +78,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                 },
                                 Term = _fixture.Create<string>(),
                                 AssociatedText = new List<AssociatedText>
-                                {
-                                    new AssociatedText
-                                    {
-                                        Text = _fixture.Create<string>()
-                                    },
-                                    new AssociatedText
-                                    {
-                                        Text = _fixture.Create<string>()
-                                    },
-                                    new AssociatedText
-                                    {
-                                        Text = _fixture.Create<string>()
-                                    }
-                                }
-                            }
-                        },
-                        new Problem
-                        {
-                            Status = _fixture.Create<string>(),
-                            Significance = _fixture.Create<string>(),
-                            ProblemEndDate = _fixture.Create<DateTime>(),
-                            Observation = new Observation
-                            {
-                                EffectiveDate = new EffectiveDate
-                                {
-                                    DatePart = "Unknown",
-                                    Value = _fixture.Create<DateTime>()
-                                },
-                                Term = _fixture.Create<string>(),
-                                AssociatedText  = new List<AssociatedText>
                                 {
                                     new AssociatedText
                                     {
@@ -205,6 +178,170 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
 
             result.Should().BeEquivalentTo(expectedResult);
-        }       
+        }
+
+        [TestMethod]
+        public void MapProblemRequestsGetResponseToProblemListResponse_WithNullEffectiveDate_ReturnsResultValuesWithEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Problems = new List<Problem>
+                    {
+                        CreateProblem(),
+                    },
+                }
+            };
+
+            // Act
+            var result = new EmisProblemMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Problems.Count);
+
+            var problem1 = item.MedicalRecord.Problems.ElementAt(0);
+
+            var expectedResult = new Problems
+            {
+                Data = new List<ProblemItem>
+                {
+                    new ProblemItem
+                    {
+                        EffectiveDate = new MyRecordDate { Value = null, DatePart = null },
+                        LineItems = new List<ProblemLineItem>
+                        {
+                            new ProblemLineItem
+                            {
+                                Text = problem1.Observation.Term
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Significance: " + problem1.Significance
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Status: " + problem1.Status
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Notes:",
+                                LineItems = new List<string>
+                                {
+                                    problem1.Observation.AssociatedText[0].Text,
+                                    problem1.Observation.AssociatedText[1].Text,
+                                    problem1.Observation.AssociatedText[2].Text,
+                                }
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Ended: " + problem1.ProblemEndDate.Value.ToString(DateFormat, CultureInfo.InvariantCulture)
+                            },
+                        }
+                    },
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [TestMethod]
+        public void MapProblemRequestsGetResponseToProblemListResponse_WithNullEffectiveDateValue_ReturnsResultValuesWithEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Problems = new List<Problem>
+                    {
+                        CreateProblem(new EffectiveDate()),
+                    },
+                }
+            };
+
+            // Act
+            var result = new EmisProblemMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Problems.Count);
+
+            var problem1 = item.MedicalRecord.Problems.ElementAt(0);
+
+            var expectedResult = new Problems
+            {
+                Data = new List<ProblemItem>
+                {
+                    new ProblemItem
+                    {
+                        EffectiveDate = new MyRecordDate { Value = problem1.Observation.EffectiveDate.Value, DatePart = problem1.Observation.EffectiveDate.DatePart },
+                        LineItems = new List<ProblemLineItem>
+                        {
+                            new ProblemLineItem
+                            {
+                                Text = problem1.Observation.Term
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Significance: " + problem1.Significance
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Status: " + problem1.Status
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Notes:",
+                                LineItems = new List<string>
+                                {
+                                    problem1.Observation.AssociatedText[0].Text,
+                                    problem1.Observation.AssociatedText[1].Text,
+                                    problem1.Observation.AssociatedText[2].Text,
+                                }
+                            },
+                            new ProblemLineItem
+                            {
+                                Text = "Ended: " + problem1.ProblemEndDate.Value.ToString(DateFormat, CultureInfo.InvariantCulture)
+                            },
+                        }
+                    },
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        private Problem CreateProblem(EffectiveDate date = null)
+        {
+            return new Problem
+            {
+                Status = _fixture.Create<string>(),
+                Significance = _fixture.Create<string>(),
+                ProblemEndDate = _fixture.Create<DateTime>(),
+                Observation = new Observation
+                {
+                    EffectiveDate = date,
+                    Term = _fixture.Create<string>(),
+                    AssociatedText = new List<AssociatedText>
+                    {
+                        new AssociatedText
+                        {
+                            Text = _fixture.Create<string>()
+                        },
+                        new AssociatedText
+                        {
+                            Text = _fixture.Create<string>()
+                        },
+                        new AssociatedText
+                        {
+                            Text = _fixture.Create<string>()
+                        }
+                    }
+                }
+            };
+        }
     }
 }

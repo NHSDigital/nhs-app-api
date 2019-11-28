@@ -61,7 +61,7 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedImmunisations() {
-      return orderBy([obj => obj.effectiveDate.value], ['desc'])(this.immunisations.data);
+      return orderBy([obj => this.getEffectiveDate(obj.effectiveDate, '')], ['desc'])(this.immunisations.data);
     },
     showError() {
       return this.immunisations.hasErrored ||
@@ -73,6 +73,11 @@ export default {
     getNextDateFormatted(nextDate) {
       return nextDate.rawValue != null ?
         nextDate.rawValue : this.$options.filters.datePart(nextDate.value, nextDate.datePart);
+    },
+    getEffectiveDate(effectiveDate, defaultValue) {
+      return effectiveDate && effectiveDate.value
+        ? effectiveDate.value
+        : defaultValue;
     },
   },
 };

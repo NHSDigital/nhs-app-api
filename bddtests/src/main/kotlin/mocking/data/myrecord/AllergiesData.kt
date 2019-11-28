@@ -6,6 +6,7 @@ import mocking.emis.allergies.AllergyResponseModel
 import mocking.emis.allergies.EffectiveDate
 import mocking.tpp.models.ViewPatientOverviewItem
 import mocking.tpp.models.ViewPatientOverviewReply
+import org.joda.time.DateTime
 import utils.set
 
 const val NUMBER_OF_ALLERGY_RECORDS = 2
@@ -14,6 +15,9 @@ object AllergiesData {
 
     private const val TERM = "Hay Fever"
     private const val DATE_FOR_ALLERGY_RECORDS = "2018-05-15T09:52:44.927"
+    private const val DATE_FOR_ALLERGY_YEAR = 2018
+    private const val DATE_FOR_ALLERGY_MONTH = 5
+    private const val DATE_FOR_ALLERGY_DAY = 15
 
     private fun getAllergies(): MutableList<AllergyResponse> {
         val allergies = mutableListOf<AllergyResponse>()
@@ -41,14 +45,17 @@ object AllergiesData {
         val expected = arrayListOf<String>()
         val allergies = mutableListOf<AllergyResponse>()
 
+        val date = DateTime().withDate(DATE_FOR_ALLERGY_YEAR, DATE_FOR_ALLERGY_MONTH, DATE_FOR_ALLERGY_DAY)
+
         for (i in 1..count) {
             allergies.add(AllergyResponse(term = TERM, effectiveDate =
-            EffectiveDate("UnKnown", DATE_FOR_ALLERGY_RECORDS)))
+            EffectiveDate("YearMonthDay", date.plusDays(i).toString())))
 
             expected.add(expectedAllergyData[0])
         }
+        val sortedExpectedAllergies = expected.sortedByDescending { it[0] }.toList()
 
-        MyRecordSerenityHelpers.EXPECTED_ALLERGY_DATA.set(expected)
+        MyRecordSerenityHelpers.EXPECTED_ALLERGY_DATA.set(sortedExpectedAllergies)
         return AllergyResponseModel(
                 medicalRecord = AllergyMedicalRecord(
                         allergies = allergies
@@ -65,14 +72,9 @@ object AllergiesData {
     }
 
     fun getEmisAllergyRecordsWhereTheFirstRecordHasNoEffectiveDate(): AllergyResponseModel {
-        val allergies = getAllergies().subList(0, 1)
-        allergies.first().effectiveDate.value = ""
-
-        return AllergyResponseModel(
-                medicalRecord = AllergyMedicalRecord(
-                        allergies = allergies
-                )
-        )
+        val allergiesResponseModel = getEmisAllergiesData(2)
+        allergiesResponseModel.medicalRecord.allergies.first().effectiveDate = null
+        return allergiesResponseModel
     }
 
     fun getEmisDefaultAllergyModel(): AllergyResponseModel {

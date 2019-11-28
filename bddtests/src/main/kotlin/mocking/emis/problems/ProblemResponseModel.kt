@@ -17,7 +17,7 @@ data class ProblemResponse(
 
 data class Observation(
         var term: String,
-        var effectiveDate: EffectiveDate,
+        var effectiveDate: EffectiveDate?,
         var associatedText: MutableList<AssociatedText> = arrayListOf()
 )
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -51,12 +51,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         }
         
         [TestMethod]
-        public void MapImmunisationRequestsGetResponseToImmunisationListResponse_WithNullEffectiveDate_GivesResponseWithOnlyTerm()
+        public void MapImmunisationRequestsGetResponseToImmunisationListResponse_WithNullEffectiveDate_ReturnsResultValuesWithEmptyDate()
         {
             // Arrange
             var immunisations = new List<Immunisation>
             {
-                new Immunisation { Term = "testImmunisation", EffectiveDate = null }
+                new Immunisation { Term = "testImmunisation" }
             };
 
             // Act
@@ -71,6 +71,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             // Assert
             var firstMappedImmunisation = mappedImmunisationList.Data.First();
             firstMappedImmunisation.Term.Should().Be("testImmunisation");
+            firstMappedImmunisation.EffectiveDate.Should().NotBeNull();
+            firstMappedImmunisation.EffectiveDate.DatePart.Should().BeNull();
+            firstMappedImmunisation.EffectiveDate.Value.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void MapImmunisationRequestsGetResponseToImmunisationListResponse_WithNullEffectiveDateValue_ReturnsResultValuesWithEmptyDate()
+        {
+            // Arrange
+            var immunisations = new List<Immunisation>
+            {
+                new Immunisation { Term = "testImmunisation", EffectiveDate = new EffectiveDate { } }
+            };
+
+            // Act
+            var mappedImmunisationList = _systemUnderTest.Map(new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Immunisations = immunisations
+                }
+            });
+
+            // Assert
+            var firstMappedImmunisation = mappedImmunisationList.Data.First();
+            firstMappedImmunisation.Term.Should().Be("testImmunisation");
+            firstMappedImmunisation.EffectiveDate.Should().NotBeNull();
             firstMappedImmunisation.EffectiveDate.DatePart.Should().BeNull();
             firstMappedImmunisation.EffectiveDate.Value.Should().BeNull();
         }

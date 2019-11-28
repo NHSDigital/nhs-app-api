@@ -23,7 +23,7 @@ class ProblemsFactoryMicrotest: ProblemsFactory(){
             ProblemItem(
                     effectiveDate = worker.models.myrecord.Date(
                             value = item.start_date,
-                            datePart = "Unknown"),
+                            datePart = "YearMonthDay"),
                     lineItems = mutableListOf(
                         ProblemLineItem(
                                 text = "Finish Date: " + item.finish_date,
@@ -35,7 +35,11 @@ class ProblemsFactoryMicrotest: ProblemsFactory(){
                         )
                     )
             )
-        }
+        }.sortedByDescending { it.effectiveDate }.toList()
+    }
+
+    override fun secondProblemHasNoDate(patient: Patient) {
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     override fun errorRetrieving(patient: Patient) {

@@ -14,7 +14,7 @@
       <div v-for="(testResult, testIndex) in orderedTestResults"
            :key="`testResult-${testIndex}`" :class="$style['record-item']"
            data-purpose="record-item">
-        <p v-if="testResult.date.value"
+        <p v-if="testResult.date && testResult.date.value"
            data-purpose="record-item-header"
            class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
            nhsuk-body-s">

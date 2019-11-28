@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
@@ -612,11 +612,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     {
                         new Consultation
                         {
-                            EffectiveDate = new EffectiveDate
-                            {
-                                DatePart = "DD-MM-YYYY",
-                                Value = null,
-                            },
+                            EffectiveDate = new EffectiveDate(),
                             ConsultantName = "Jean (Dr)",
                             Location = "Test SURGERY",
                         },                     

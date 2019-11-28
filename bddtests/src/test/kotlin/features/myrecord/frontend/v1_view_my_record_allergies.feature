@@ -72,4 +72,4 @@ Feature: Allergies Frontend - Medical Record v1
     And the EMIS GP Practice has two allergies results where the first record has no date
     And I am on the medical record page
     When I click the Allergies and adverse reactions section on My Record - Medical Record v1
-    Then I see the expected allergies displayed with unknown date for the first result - Medical Record v1
+    Then I see the expected allergies displayed with unknown date for the second result - Medical Record v1

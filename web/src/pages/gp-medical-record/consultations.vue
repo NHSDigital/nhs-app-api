@@ -23,7 +23,7 @@
               </p>
               <p v-else
                  data-purpose="record-item-header"
-                 class="nhsuk-u-margin-bottom-0">
+                 class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
                 {{ $t('my_record.noStartDate') }}</p>
               <p class="nhsuk-u-margin-bottom-0" data-purpose="record-item-detail">
                 {{ consultation.consultantLocation }}</p>

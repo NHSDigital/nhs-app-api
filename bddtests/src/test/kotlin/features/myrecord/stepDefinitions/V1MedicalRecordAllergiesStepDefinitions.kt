@@ -194,25 +194,26 @@ open class V1MedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDef
         allergyMessages.forEachIndexed { i, message -> Assert.assertEquals(expectedMessages[i], message) }
     }
 
-    @Then("^I see the expected allergies displayed with unknown date for the first result - Medical Record v1$")
-    fun thenISeeTheExpectedAllergiesDisplayedWithUnknownDateForFirstResultV1() {
-        val expectedAllergies =
-                AllergiesData.getEmisAllergyRecordsWhereTheFirstRecordHasNoEffectiveDate().medicalRecord.allergies
+    @Then("^I see the expected allergies displayed with unknown date for the second result - Medical Record v1$")
+    fun thenISeeTheExpectedAllergiesDisplayedWithUnknownDateForSecondResultV1() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val expectedAllergies = AllergiesFactory
+                .getForSupplier(gpSystem)
+                .getExpectedAllergies()
 
         val onScreenAllergies = medicalRecordV1Page.allergies.allRecordItems()
         Assert.assertEquals(expectedAllergies.size, onScreenAllergies.count())
 
         for (i in onScreenAllergies.indices) {
-            if (i == 0) {
+            if (i == expectedAllergies.lastIndex) {
                 Assert.assertEquals("Unknown Date", onScreenAllergies[i].label)
             } else {
-                val expectedDate = (expectedAllergies[i].effectiveDate.value).takeWhile { !it.isLetter() }
+                val expectedDate = (expectedAllergies[i].date.value).takeWhile { !it.isLetter() }
                 val actualDate = LocalDate.parse(onScreenAllergies[i].label,
                         DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
 
                 Assert.assertEquals(expectedDate, actualDate)
             }
-
         }
     }
 }

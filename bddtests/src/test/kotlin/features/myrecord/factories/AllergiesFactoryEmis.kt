@@ -23,8 +23,9 @@ class AllergiesFactoryEmis: AllergiesFactory() {
 
     override fun getExpectedAllergies(): List<AllergyItem> {
         return AllergiesData.getEmisAllergiesData(2).medicalRecord.allergies.map {
-            element -> AllergyItem(element.term, Date(element.effectiveDate.value, element.effectiveDate.datePart))
-        }
+            element -> AllergyItem(element.term, Date(element.effectiveDate?.value.toString(),
+                element.effectiveDate?.datePart.toString()))
+        }.sortedByDescending { it.date }.toList()
     }
 
     override fun respondWithCorruptedContent(patient: Patient) {

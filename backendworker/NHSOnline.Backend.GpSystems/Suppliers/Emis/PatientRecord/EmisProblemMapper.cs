@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                                 Value = problem.Observation.EffectiveDate.Value,
                                 DatePart = problem.Observation.EffectiveDate.DatePart
                             }
-                            : null;
+                            : new MyRecordDate();
                         
                         problemItem.LineItems = new List<ProblemLineItem>
                         {

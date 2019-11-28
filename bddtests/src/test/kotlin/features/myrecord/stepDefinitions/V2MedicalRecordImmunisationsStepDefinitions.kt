@@ -35,13 +35,13 @@ open class V2MedicalRecordImmunisationsStepDefinitions : AbstractDemographicsSte
             Assert.assertEquals(expectedData[supplier]?.get(i), message.text) }
     }
 
-    @Then("^I see the expected immunisations with an unknown date for the first result - Medical Record v2$")
+    @Then("^I see the expected immunisations with an unknown date for the second result - Medical Record v2$")
     fun thenISeeExpectedImmunisationsWithUnknownDateV2() {
         val immunisationsMessages = immunisationsPage.getImmunisationsElements()
 
         val expectedMessages = listOf(
-            "Unknown Date\nFirst meningitis C Vaccination",
-            "18 February 2018\nSecond meningitis C Vaccination"
+            "18 February 2018\nSecond meningitis C Vaccination",
+            "Unknown Date\nFirst meningitis C Vaccination"
         )
 
         Assert.assertEquals("Expected records", expectedMessages.size, immunisationsMessages.size )

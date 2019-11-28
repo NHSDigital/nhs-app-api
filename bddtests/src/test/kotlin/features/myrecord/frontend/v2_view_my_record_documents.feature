@@ -96,3 +96,10 @@ Feature: Documents Frontend - Medical Record v2
     Then I see the document information page with actions
     When I click the View action link on the document information page
     Then I see the appropriate error message for a document server error
+
+  Scenario: An EMIS user has a document result with an unknown date
+    Given I am a EMIS user setup to use medical record version 2
+    And the EMIS GP Practice has three document results where the first record has no date
+    And I am on the medical record page
+    When I click the Documents link on my record - Medical Record v2
+    Then I see the expected list of documents displayed with unknown date for the last result

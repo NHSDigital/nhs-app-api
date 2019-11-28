@@ -7,16 +7,16 @@
     <div v-if="showTemplate" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <menu-item-list>
-          <menu-item v-for="(document, index) in documents.data"
+          <menu-item v-for="(document, index) in orderedDocuments"
                      :id="document.documentGuid"
                      :key="index"
                      header-tag="h2"
                      :target="'_blank'"
-                     :text="documentTitle(document.term, document.effectiveDate.value)"
+                     :text="documentTitle(document.term, document.effectiveDate)"
                      :click-func="documentClicked"
                      :click-param="document"
                      :description="documentDescription(document.extension, document.size)"
-                     :aria-label="`${documentTitle(document.term, document.effectiveDate.value)}.
+                     :aria-label="`${documentTitle(document.term, document.effectiveDate)}.
                                 ${documentDescription(document.extension, document.size)}`"/>
         </menu-item-list>
       </div>
@@ -35,6 +35,7 @@ import { isFalsy, redirectTo, readableBytes, datePart } from '@/lib/utils';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import _ from 'lodash';
 
 export default {
   layout: 'nhsuk-layout',
@@ -55,6 +56,9 @@ export default {
       return (this.documents || {}).hasErrored ||
         (this.documents || {}).data.length === 0 ||
         !(this.documents || {}).hasAccess;
+    },
+    orderedDocuments() {
+      return _.orderBy(this.documents.data, [document => this.getEffectiveDate(document.effectiveDate, '')], ['desc']);
     },
   },
   async asyncData({ store, redirect }) {
@@ -83,7 +87,13 @@ export default {
       return `(${extension.toUpperCase()})`;
     },
     documentTitle(title, date) {
-      const dateString = datePart(date, 'YearMonthDay');
+      let dateString;
+      if (date && date.value) {
+        dateString = datePart(date.value, 'YearMonthDay');
+      } else {
+        dateString = this.$t('my_record.noStartDate');
+      }
+
       if (title) {
         return `${title} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
       }
@@ -100,6 +110,9 @@ export default {
         size: document.size,
       });
       this.$router.push({ name: DOCUMENT.name, params: { id: document.documentGuid } });
+    },
+    getEffectiveDate(effectiveDate, defaultValue) {
+      return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
     },
   },
 };

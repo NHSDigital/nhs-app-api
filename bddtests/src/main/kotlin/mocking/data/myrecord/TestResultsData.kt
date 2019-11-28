@@ -5,21 +5,29 @@ import mocking.emis.testResults.TestResultResponse
 import mocking.emis.testResults.TestResultResponseModel
 import mocking.tpp.models.TestResultsViewReply
 import mocking.tpp.models.TestResultsViewReplyItem
+import org.joda.time.DateTime
 import java.io.File
 import java.nio.file.Paths
 
-const val NUMBER_OF_TEST_RESULT_RECORDS = 2
+const val NUMBER_OF_TEST_RESULT_RECORDS = 3
 
 class TestResultsData {
 
     companion object{
         const val mockTestResultId: String = "C435000000000000"
+        private const val DATE_FOR_TEST_RESULT_YEAR = 2006
+        private const val DATE_FOR_TEST_RESULT_MONTH = 5
+        private const val DATE_FOR_TEST_RESULT_DAY = 15
 
         fun getTestResultsForEmis(count: Int): TestResultResponseModel {
             val testResults = mutableListOf<TestResultResponse>()
+
+            val date = DateTime().withDate(DATE_FOR_TEST_RESULT_YEAR, DATE_FOR_TEST_RESULT_MONTH,
+                    DATE_FOR_TEST_RESULT_DAY-1)
             for(testResultCount: Int in 1..count) {
                 testResults.add(TestResultResponseDataBuilder().testResultResponseData(
-                        childValueCount = 0))
+                        childValueCount = 0,
+                        date = date.plusDays(testResultCount)))
             }
             return TestResultResponseModel(
                     medicalRecord = TestResultMedicalRecord(
@@ -35,17 +43,20 @@ class TestResultsData {
             val testResults = mutableListOf<TestResultResponse>()
             testResults.add(TestResultResponseDataBuilder().testResultResponseData(
                     childValueCount = childValueCount,
-                    rangePresent = rangePresent
+                    rangePresent = rangePresent,
+                    date = DateTime().withDate(DATE_FOR_TEST_RESULT_YEAR, DATE_FOR_TEST_RESULT_MONTH,
+                            DATE_FOR_TEST_RESULT_DAY)
             ))
+
             return TestResultResponseModel(
                     medicalRecord = TestResultMedicalRecord(
                             testResults = testResults
                     ))
         }
 
-        fun getTwoTestResultsWhereTheSecondRecordHasNoDate(): TestResultResponseModel {
+        fun getThreeTestResultsWhereTheSecondRecordHasNoDate(): TestResultResponseModel {
             val testResults = getTestResultsForEmis(NUMBER_OF_TEST_RESULT_RECORDS)
-            testResults.medicalRecord.testResults[1].value.effectiveDate.value = ""
+            testResults.medicalRecord.testResults[1].value.effectiveDate = null
 
             return testResults
         }
@@ -119,7 +130,6 @@ class TestResultsData {
             return response + html + responseStringEnd
         }
     }
-
 
 }
 

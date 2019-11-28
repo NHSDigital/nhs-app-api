@@ -16,7 +16,7 @@ open class V2MedicalRecordConsultationsStepDefinitions : AbstractDemographicsSte
     val expectedData = mapOf(
             Supplier.EMIS to arrayOf(
                     "18 February 2018\nTHE SURGERY - MOSS - Jean (Dr)",
-                    "18 February 2018\nTHE SURGERY - MOSS - Jean (Dr)"
+                    "17 February 2018\nTHE SURGERY - MOSS - Jean (Dr)"
             ), Supplier.TPP to arrayOf(
             "16 February 2018\n" +
                 "Kainos GP Demo Unit (General Practice) - Mr General NhsApp\n" +
@@ -40,6 +40,21 @@ open class V2MedicalRecordConsultationsStepDefinitions : AbstractDemographicsSte
 
         consultationsAndEventsMessages.forEachIndexed { i, message -> run {
             Assert.assertEquals(expectedData[supplier]?.get(i), message.text)
+        }}
+    }
+
+    @Then("^I see the second consultation record have unknown date - Medical Record v2$")
+    fun thenISeeTheSecondExpectedConsultationRecordHaveUnknownDateV2() {
+        val supplier = SerenityHelpers.getGpSupplier()
+        val consultationsAndEventsMessages = getConsultationsOrEventsData(supplier)
+
+        val dataWithUnknownDate = expectedData[supplier]
+        dataWithUnknownDate?.set(1, dataWithUnknownDate[1].replace("17 February 2018", "Unknown Date"))
+
+        Assert.assertTrue(
+                "Expected records", consultationsAndEventsMessages!!.size == dataWithUnknownDate?.size )
+        consultationsAndEventsMessages.forEachIndexed { i, message -> run {
+            Assert.assertEquals(dataWithUnknownDate?.get(i), message.text)
         }}
     }
 

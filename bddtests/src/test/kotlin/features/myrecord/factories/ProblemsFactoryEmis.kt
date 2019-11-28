@@ -52,4 +52,11 @@ class ProblemsFactoryEmis : ProblemsFactory(){
     override fun getExpectedProblems(): List<ProblemItem> {
         throw UnsupportedOperationException()
     }
+
+    override fun secondProblemHasNoDate(patient: Patient) {
+        mockingClient.forEmis {
+            myRecord.problemsRequest(patient)
+                    .respondWithSuccess(ProblemsData.getEmisProblemRecordsWhereTheSecondRecordHasNoEffectiveDate())
+        }
+    }
 }

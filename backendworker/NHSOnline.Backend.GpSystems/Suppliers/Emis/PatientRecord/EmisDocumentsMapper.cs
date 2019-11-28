@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     Value = document.Observation.EffectiveDate.Value,
                     DatePart = document.Observation.EffectiveDate.DatePart
                 }
-                : null;
+                : new MyRecordDate();
 
                 if (document.Observation.AssociatedText != null)
                 {
@@ -52,10 +52,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 documentData.Add(documentItem);
               }
-
-              documents.Data = documentData.OrderByDescending(d => d.EffectiveDate.Value).ToList();
               
-            }
+                    documents.Data = documentData;
+                }
           }
 
           return documents;

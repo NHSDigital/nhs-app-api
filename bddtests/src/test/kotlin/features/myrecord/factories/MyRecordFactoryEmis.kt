@@ -103,7 +103,7 @@ class MyRecordFactoryEmis: MyRecordFactory() {
 
         mockingClient.forEmis {
             myRecord.immunisationsRequest(patient)
-                    .respondWithSuccess(ImmunisationsData.getImmunisationsData())
+                    .respondWithSuccess(ImmunisationsData.getValidImmunisationsData())
         }
 
         mockingClient.forEmis {

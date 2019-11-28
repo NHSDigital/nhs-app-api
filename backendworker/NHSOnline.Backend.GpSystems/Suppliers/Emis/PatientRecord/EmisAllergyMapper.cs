@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                         Name = x.Term,
                         Date = x.EffectiveDate != null ? 
                                         new MyRecordDate { Value = x.EffectiveDate.Value, DatePart = x.EffectiveDate.DatePart } :
-                                        null,
+                                        new MyRecordDate()
                     });
             }
 

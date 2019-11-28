@@ -14,7 +14,7 @@ class ImmunisationsFactoryEmis: ImmunisationsFactory(){
 
     override fun enabledWithRecords(patient: Patient) {
         mockingClient.forEmis {
-            myRecord.immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getImmunisationsData())
+            myRecord.immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getValidImmunisationsData())
         }
     }
 

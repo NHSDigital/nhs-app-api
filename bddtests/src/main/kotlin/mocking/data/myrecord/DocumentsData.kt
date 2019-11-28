@@ -6,12 +6,16 @@ import mocking.emis.documents.DocumentsResponse
 import mocking.emis.documents.DocumentsResponseModel
 import mocking.emis.documents.EffectiveDate
 import mocking.emis.documents.Observation
+import org.joda.time.DateTime
 
 object DocumentsData {
 
     const val DEFAULT_NUMBER_OF_DOCUMENTS = 3
     private const val LARGE_DOCUMENT_SIZE = 4000000L
     private const val REGULAR_DOCUMENT_SIZE = 1000000L
+    private const val DATE_FOR_DOCUMENT_YEAR = 2018
+    private const val DATE_FOR_DOCUMENT_MONTH = 2
+    private const val DATE_FOR_DOCUMENT_DAY = 17
 
     fun getNoDocumentData() : DocumentsResponseModel {
         return DocumentsResponseModel(
@@ -45,6 +49,9 @@ object DocumentsData {
             type = "tga"
         }
 
+        val date = DateTime().withDate(DATE_FOR_DOCUMENT_YEAR, DATE_FOR_DOCUMENT_MONTH,
+                DATE_FOR_DOCUMENT_DAY)
+
         for(documentNumber in 1..DEFAULT_NUMBER_OF_DOCUMENTS){
             documents.add(DocumentsResponse(
                 "document-$documentNumber",
@@ -54,7 +61,7 @@ object DocumentsData {
                 Observation(
                     String.format(termFormat, documentNumber),
                     mutableListOf(AssociatedText(String.format(nameFormat, documentNumber))),
-                    EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")
+                    EffectiveDate("YearMonthDay", date.plusDays(documentNumber).toString())
                 )))
         }
 
@@ -68,6 +75,9 @@ object DocumentsData {
     fun getLargeDocumentData() : DocumentsResponseModel {
         val documents = mutableListOf<DocumentsResponse>()
 
+        val date = DateTime().withDate(DATE_FOR_DOCUMENT_YEAR, DATE_FOR_DOCUMENT_MONTH,
+                DATE_FOR_DOCUMENT_DAY)
+
         for(documentNumber in 1..DEFAULT_NUMBER_OF_DOCUMENTS){
             documents.add(DocumentsResponse(
                     "document-$documentNumber",
@@ -77,7 +87,7 @@ object DocumentsData {
                     Observation(
                             null,
                             mutableListOf(AssociatedText(String.format("", documentNumber))),
-                            EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")
+                            EffectiveDate("YearMonthDay", date.plusDays(documentNumber).toString())
                     )))
         }
 

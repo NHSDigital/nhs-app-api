@@ -12,6 +12,7 @@ import utils.SerenityHelpers
 
 const val LARGE_DOCUMENT_SIZE = 4
 const val REGULAR_DOCUMENT_SIZE = 1
+private const val DATE_FOR_DOCUMENT_DAY = 18
 
 class DocumentsFactoryEmis: DocumentsFactory() {
 
@@ -39,7 +40,8 @@ class DocumentsFactoryEmis: DocumentsFactory() {
 
         val expectedDocuments = getExpectedDocumentsFromEmisDocuments(false,
                 documents = documents.medicalRecord.documents)
-        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(expectedDocuments[0]))
+        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(
+                expectedDocuments[expectedDocuments.lastIndex]))
     }
 
     override fun enabledWithNullSize() {
@@ -59,7 +61,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
                                       hasInvalidType: Boolean) {
         val documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)
 
-        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents)
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents, true)
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)
 
         val availableDocument = expectedDocuments[0]
@@ -86,6 +88,30 @@ class DocumentsFactoryEmis: DocumentsFactory() {
 
         val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents,
                 false, false)
+
+        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)
+
+        val availableDocument = expectedDocuments[0]
+        setSerenityVariable(SerenityVariable.AVAILABLE_DOCUMENT, availableDocument)
+
+        mockingClient.forEmis {
+            myRecord.documentsRequest(EmisMockDefaults.patientEmis)
+                    .respondWithSuccess(documents)
+        }
+        mockingClient.forEmis {
+            myRecord.documentRequest(EmisMockDefaults.patientEmis, availableDocument.id)
+                    .respondWithSuccess(DocumentData.getDefaultDocumentData())
+        }
+    }
+
+    override fun enabledWithDocumentsWithUnknownDate(patient: Patient, isLarge: Boolean) {
+        val documents = if (isLarge) DocumentsData.getLargeDocumentData()
+        else DocumentsData.getDefaultDocumentsData(true, true)
+        documents.medicalRecord.documents[0].observation.effectiveDate = null
+
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents,
+                true, true)
+        expectedDocuments[documents.medicalRecord.documents.lastIndex].date = "Unknown Date"
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)
 
         val availableDocument = expectedDocuments[0]
@@ -110,30 +136,34 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         includeName: Boolean = true, includeTerm: Boolean = true, includeSize: Boolean = true)
             : List<ExpectedDocument> {
 
+        val expectedDocuments= mutableListOf<ExpectedDocument>()
 
-        return documents.mapIndexed(fun(index, document): ExpectedDocument {
-            var typeAndSize = "(${document.extension.toUpperCase()})"
+        for(documentNumber in 0..(DEFAULT_NUMBER_OF_DOCUMENTS-1)){
+            var typeAndSize = "(${documents[documentNumber].extension.toUpperCase()})"
 
             if (includeSize) {
                 if (isLarge) {
-                    typeAndSize = "(${document.extension.toUpperCase()}, ${LARGE_DOCUMENT_SIZE}MB)"
+                    typeAndSize = "(${documents[documentNumber].extension.toUpperCase()}, ${LARGE_DOCUMENT_SIZE}MB)"
                 } else {
-                    typeAndSize = "(${document.extension.toUpperCase()}, ${REGULAR_DOCUMENT_SIZE}MB)"
+                    typeAndSize = "(${documents[documentNumber].extension.toUpperCase()}, " +
+                            "${REGULAR_DOCUMENT_SIZE}MB)"
                 }
             }
 
             val expectedDocument = ExpectedDocument(
-                document.documentGuid,
+                documents[documentNumber].documentGuid,
                 typeAndSize,
-                "18 February 2018",
+                    (DATE_FOR_DOCUMENT_DAY+documentNumber).toString() + " February 2018"  ,
                 mutableListOf("View"))
+
             if (includeName) {
-                expectedDocument.name = "Name ${index + 1}"
+                expectedDocument.name = "Name ${documentNumber + 1}"
             }
             if (includeTerm) {
-                expectedDocument.term = "Letter ${index + 1}"
+                expectedDocument.term = "Letter ${documentNumber + 1}"
             }
-            return expectedDocument
-        })
+            expectedDocuments.add(expectedDocument)
+        }
+        return expectedDocuments.sortedByDescending { it.date}
     }
 }

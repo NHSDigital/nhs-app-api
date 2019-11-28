@@ -10,7 +10,7 @@ data class AllergyMedicalRecord(
 
 data class AllergyResponse(
         var term: String,
-        var effectiveDate: EffectiveDate
+        var effectiveDate: EffectiveDate?
 )
 
 data class EffectiveDate(

@@ -33,7 +33,7 @@ class ImmunisationsFactoryMicrotest: ImmunisationsFactory(){
                             datePart = item.date),
                     nextDate = "Next Date: " + item.nextDate,
                     status = "Status: " + item.status)
-        }
+        }.sortedByDescending { it.effectiveDate }.toList()
     }
 
     override fun errorRetrieving(patient: Patient) {

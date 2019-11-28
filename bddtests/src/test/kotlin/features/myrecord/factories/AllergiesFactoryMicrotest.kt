@@ -30,6 +30,6 @@ class AllergiesFactoryMicrotest: AllergiesFactory() {
                 date = worker.models.myrecord.Date(
                         value = item.start_date,
                         datePart = item.start_date))
-        }
+        }.sortedByDescending { it.date }.toList()
     }
 }

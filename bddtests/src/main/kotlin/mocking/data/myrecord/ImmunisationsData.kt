@@ -14,7 +14,7 @@ object ImmunisationsData {
         val immunisations = mutableListOf<ImmunisationResponse>()
 
         immunisations.add(ImmunisationResponse(term = "First meningitis C Vaccination",
-                effectiveDate =  EffectiveDate("Unknown", "2002-05-15T09:52:44.927")))
+                effectiveDate =  null))
 
         immunisations.add(ImmunisationResponse(term = "Second meningitis C Vaccination",
                 effectiveDate =  EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")))
@@ -83,7 +83,7 @@ object ImmunisationsData {
     fun getTwoImmunisationResultsWhereTheFirstRecordHasNoDate(): ImmunisationResponseModel {
         val immunisationData = getValidImmunisationsData()
         // Overwrite effective date
-        immunisationData.medicalRecord.immunisations.first().effectiveDate.value = ""
+        immunisationData.medicalRecord.immunisations.first().effectiveDate = null
         return immunisationData
     }
 

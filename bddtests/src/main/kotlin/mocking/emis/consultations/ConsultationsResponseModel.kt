@@ -12,7 +12,7 @@ data class ConsultationResponse(
         var location: String,
         var consultantName: String,
         var sections: MutableList<Section> = arrayListOf(),
-        var effectiveDate: EffectiveDate
+        var effectiveDate: EffectiveDate?
 )
 
 data class Section(

@@ -52,36 +52,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     Documents = new List<Document>
                     {
-                        new Document
-                        {
-                            DocumentGuid = _fixture.Create<string>(),
-                            Size = _fixture.Create<int>(),
-                            Extension = _fixture.Create<string>(),
-                            Observation = new Observation
-                            {
-                                EffectiveDate = new EffectiveDate
-                                {
-                                    DatePart = "Unknown",
-                                    Value = twoDaysAgo
-                                },
-                                Term = _fixture.Create<string>(),
-                                AssociatedText = new List<AssociatedText>
-                                {
-                                    new AssociatedText
-                                    {
-                                        Text = _fixture.Create<string>()
-                                    },
-                                    new AssociatedText
-                                    {
-                                        Text = _fixture.Create<string>()
-                                    },
-                                    new AssociatedText
-                                    {
-                                        Text = _fixture.Create<string>()
-                                    }
-                                }
-                            }
-                        },
+                        CreateDocument(new EffectiveDate { DatePart = "Unknown",
+                                    Value = twoDaysAgo }
+                        ),
                         new Document
                         {
                             DocumentGuid = _fixture.Create<string>(),
@@ -149,9 +122,125 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 }
             };
 
-            result.Data.ElementAt(0).EffectiveDate.Value.Should().Be(yesterday);
-            result.Data.ElementAt(1).EffectiveDate.Value.Should().Be(twoDaysAgo);
             result.Should().BeEquivalentTo(expectedResult);
-        }       
+        }
+
+        [TestMethod]
+        public void MapDocumentsRequestsGetResponseToDocumentListResponse_WithNullEffectiveDate_ReturnsResultValuesWithEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Documents = new List<Document>
+                    {
+                        CreateDocument(),
+                    },
+                }
+            };
+
+            // Act
+            var result = new EmisDocumentsMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Documents.Count);
+
+            var document1 = item.MedicalRecord.Documents.ElementAt(0);
+
+            var expectedResult = new PatientDocuments
+            {
+                Data = new List<DocumentItem>
+                {
+                    new DocumentItem
+                    {
+                        DocumentGuid = document1.DocumentGuid,
+                        Term = document1.Observation.Term,
+                        IsAvailable = document1.Available,
+                        Extension = document1.Extension,
+                        Size = document1.Size,
+                        EffectiveDate = new MyRecordDate { Value = null, DatePart = null },
+                        Name = document1.Observation.AssociatedText[0].Text
+                    },
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [TestMethod]
+        public void MapDocumentsRequestsGetResponseToDocumentListResponse_WithNullEffectiveDateValue_ReturnsResultValuesWithEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Documents = new List<Document>
+                    {
+                        CreateDocument(new EffectiveDate()),
+                    },
+                }
+            };
+
+            // Act
+            var result = new EmisDocumentsMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Documents.Count);
+
+            var document1 = item.MedicalRecord.Documents.ElementAt(0);
+
+            var expectedResult = new PatientDocuments
+            {
+                Data = new List<DocumentItem>
+                {
+                    new DocumentItem
+                    {
+                        DocumentGuid = document1.DocumentGuid,
+                        Term = document1.Observation.Term,
+                        IsAvailable = document1.Available,
+                        Extension = document1.Extension,
+                        Size = document1.Size,
+                        EffectiveDate = new MyRecordDate { Value = document1.Observation.EffectiveDate.Value, DatePart = document1.Observation.EffectiveDate.DatePart },
+                        Name = document1.Observation.AssociatedText[0].Text
+                    },
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        private Document CreateDocument(EffectiveDate date = null)
+        {
+            return new Document
+            {
+                DocumentGuid = _fixture.Create<string>(),
+                Size = _fixture.Create<int>(),
+                Extension = _fixture.Create<string>(),
+                Observation = new Observation
+                {
+                    EffectiveDate = date,
+                    Term = _fixture.Create<string>(),
+                    AssociatedText = new List<AssociatedText>
+                    {
+                        new AssociatedText
+                        {
+                            Text = _fixture.Create<string>()
+                        },
+                        new AssociatedText
+                        {
+                            Text = _fixture.Create<string>()
+                        },
+                        new AssociatedText
+                        {
+                            Text = _fixture.Create<string>()
+                        }
+                    }
+                }
+            };
+        }
     }
 }

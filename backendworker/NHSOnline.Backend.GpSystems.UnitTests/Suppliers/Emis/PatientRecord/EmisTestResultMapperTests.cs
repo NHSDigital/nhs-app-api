@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         Term = "testTerm",
                         TextValue = "testTextVal",
                         NumericUnits = "cc",
-                        EffectiveDate = new EffectiveDate { Value = null, DatePart = "mm-dd-yyyy", },
+                        EffectiveDate = new EffectiveDate { },
                     }
                 }
             };
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             mappedTestResultsList.Data.Single().Date.Should().NotBeNull();
             mappedTestResultsList.Data.Single().Date.Value.Should().BeNull();
-            mappedTestResultsList.Data.Single().Date.Value.Should().BeNull();
+            mappedTestResultsList.Data.Single().Date.DatePart.Should().BeNull();
         }
 
         [TestMethod]
@@ -78,7 +78,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     Term = "testTerm",
                     TextValue = "testTextVal",
                     NumericUnits = "cc",
-                    EffectiveDate = null,
                 }
             });
             
@@ -97,7 +96,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             mappedTestResultsList.Data.Single().Date.Should().NotBeNull();
             mappedTestResultsList.Data.Single().Date.Value.Should().BeNull();
-            mappedTestResultsList.Data.Single().Date.Value.Should().BeNull();
+            mappedTestResultsList.Data.Single().Date.DatePart.Should().BeNull();
         }
     }
 }

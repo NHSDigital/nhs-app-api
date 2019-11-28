@@ -3,11 +3,8 @@ import { mount, createRouter, createStore } from '../../../helpers';
 import DocumentInformation from '@/pages/gp-medical-record/documents/_id';
 import { DOCUMENT_DETAIL, GP_MEDICAL_RECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { datePart } from '@/lib/utils';
-
 
 jest.mock('@/lib/sessionStorage');
-jest.mock('@/lib/utils');
 
 let redirect;
 const $router = createRouter();
@@ -47,13 +44,12 @@ describe('document view', () => {
     redirect = jest.fn();
     hasAgreedToMedicalWarning.mockClear();
     hasAgreedToMedicalWarning.mockReturnValue(true);
-    datePart.mockReturnValue('8 August 2019');
   });
 
   describe('asyncData', () => {
     it('will redirect to the my record page if the document environment variable is not enabled', async () => {
       // Arrange
-      $store = newStore(false);
+      $store = newStore({ isDocumentsEnabled: false });
       const page = mountPage({ $store });
 
       // Act
@@ -63,17 +59,24 @@ describe('document view', () => {
       expect(redirect).toBeCalledWith(GP_MEDICAL_RECORD.path);
     });
 
-    it('will redirect to the my record page if there is no document date', async () => {
+    it('will display Unknown Date if there is no document date', async () => {
       // Arrange
-      const document = { type: 'jpg', date: { value: undefined } };
-      $store = newStore(document);
-      const page = mountPage({ $store });
+      const data = () => ({
+        name: 'Document1',
+        comments: [],
+        size: 1000000,
+        type: 'jpg',
+        dateString: 'translate_my_record.documents.documentPageSubtext Unknown Date',
+      });
+      const page = mountPage({ $store, data });
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, redirect });
+      const documentInfo = page.find('#documentInfo p');
+      const dateString = 'translate_my_record.documents.documentPageSubtext Unknown Date';
 
       // Assert
-      expect(redirect).toBeCalledWith(GP_MEDICAL_RECORD.path);
+      expect(documentInfo.exists()).toBe(true);
+      expect(documentInfo.text()).toEqual(dateString);
     });
 
     it('will set the header and page title to the document name', async () => {

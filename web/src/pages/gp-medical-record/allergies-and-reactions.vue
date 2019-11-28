@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     orderedAllergies() {
-      return _.orderBy((this.allergies || {}).data, [obj => obj.date.value], ['desc']);
+      return _.orderBy((this.allergies || {}).data, [obj => this.getEffectiveDate(obj.date, '')], ['desc']);
     },
     showError() {
       return ((this.allergies || {}).hasErrored) || (this.allergies || {}).data.length === 0;
@@ -82,6 +82,9 @@ export default {
   methods: {
     backButtonClicked() {
       redirectTo(this, this.backPath);
+    },
+    getEffectiveDate(effectiveDate, defaultValue) {
+      return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
     },
   },
 };

@@ -57,7 +57,7 @@ Feature: Immunisations Frontend - Medical Record v2
     And the EMIS GP Practice has two immunisation results where the first record has no date
     And I am on the medical record page
     When I click the Immunisations link on my record - Medical Record v2
-    Then I see the expected immunisations with an unknown date for the first result - Medical Record v2
+    Then I see the expected immunisations with an unknown date for the second result - Medical Record v2
     
   Scenario Outline: An <GP System> user receiving a corrupted Immunisations response sees an error - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2

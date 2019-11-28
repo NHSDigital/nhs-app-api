@@ -4,21 +4,24 @@ import mocking.emis.testResults.EffectiveDate
 import mocking.emis.testResults.TestResultRange
 import mocking.emis.testResults.TestResultResponse
 import mocking.emis.testResults.TestResultValue
+import org.joda.time.DateTime
 import utils.set
 
 class TestResultResponseDataBuilder {
 
-    fun testResultResponseData(childValueCount: Int = 0, rangePresent: Boolean = true): TestResultResponse{
+    fun testResultResponseData(childValueCount: Int = 0, rangePresent: Boolean = true,
+                               date: DateTime): TestResultResponse{
         val rangeData: TestResultRange?
-        val rangeDataList = Pair("3.6","10")
+        val rangeDataList = Pair("3.6", "10")
         if(rangePresent) rangeData = TestResultRange(minimumText = rangeDataList.first,
                 maximumText = rangeDataList.second) else rangeData = null
 
-        return getTestResultResponse(rangeData,childValueCount)
+        return getTestResultResponse(rangeData, childValueCount, date)
     }
 
-    private fun getTestResultResponse(rangeData: TestResultRange?,childValueCount : Int = 0) : TestResultResponse{
-        val effectiveDate = EffectiveDate("YearMonthDay", "2006-05-15T09:52:44.927")
+    private fun getTestResultResponse(rangeData: TestResultRange?,childValueCount : Int = 0,
+                                      date: DateTime) : TestResultResponse{
+        val effectiveDate = EffectiveDate("YearMonthDay", date.toString())
         val testResultValueData = TestResultValue (
                 effectiveDate,
                 term = "Basophil count",

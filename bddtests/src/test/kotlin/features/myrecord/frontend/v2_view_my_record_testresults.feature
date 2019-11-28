@@ -60,11 +60,11 @@ Feature: Test Results Frontend - Medical Record v2
 
   Scenario: An EMIS user has a test result with an unknown date - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
-    And the EMIS GP Practice has two test results where the second record has no date
+    And the EMIS GP Practice has three test results where the second record has no date
     And I am on the medical record page
     When I click the Test results link on my record - Medical Record v2
-    Then I see 2 test results - Medical Record v2
-    And The second test result record has an unknown date - Medical Record v2
+    Then I see 3 test results - Medical Record v2
+    And The third test result record has an unknown date - Medical Record v2
 
   Scenario: A TPP user has multiple test results - Medical Record v2
     Given I am a TPP user setup to use medical record version 2
@@ -89,7 +89,7 @@ Feature: Test Results Frontend - Medical Record v2
     And I am on the medical record page
     When I click the Test results link on my record - Medical Record v2
     And I click a test result - Medical Record v2
-    And I see the test result content - Medical Record v2
+    And I see the test results content - Medical Record v2
 
   Scenario: A TPP user can navigate to a test result containing HTML entities - Medical Record v2
     Given I am a TPP user setup to use medical record version 2

@@ -19,7 +19,7 @@ data class EffectiveDate(
 )
 
 data class TestResultValue(
-        var effectiveDate: EffectiveDate,
+        var effectiveDate: EffectiveDate?,
         var term: String,
         var textValue: String,
         var numericUnits: String,

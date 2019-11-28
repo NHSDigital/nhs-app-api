@@ -18,7 +18,7 @@
           class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
           <Card data-label="allergies-and-reactions">
             <div data-purpose="test-results-card">
-              <p v-if="testResult.date.value"
+              <p v-if="testResult.date && testResult.date.value"
                  class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-header">
                 {{ testResult.date.value | datePart(testResult.date.datePart) }}

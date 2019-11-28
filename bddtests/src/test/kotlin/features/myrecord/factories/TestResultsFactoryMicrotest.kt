@@ -48,7 +48,7 @@ class TestResultsFactoryMicrotest : TestResultsFactory() {
         return TestResultItem(
             date = worker.models.myrecord.Date(
                 value = inrResult.recordDateTime,
-                datePart = "Unknown"),
+                datePart = "YearMonthDay"),
             description = "",
             testResultChildLineItems = mutableListOf(),
             associatedTexts = mutableListOf(

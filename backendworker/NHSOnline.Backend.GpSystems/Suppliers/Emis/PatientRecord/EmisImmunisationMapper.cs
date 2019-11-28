@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using MedicationRootObject = NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord.MedicationRootObject;
@@ -27,11 +27,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     new ImmunisationItem
                     {
                         Term = x.Term,
-                        EffectiveDate = new MyRecordDate
+                        EffectiveDate = x.EffectiveDate != null ? new MyRecordDate
                         {
                             Value = x.EffectiveDate?.Value,
                             DatePart = x.EffectiveDate?.DatePart
-                        }
+                        } : new MyRecordDate()
                     });
             return immunisations;
         }   

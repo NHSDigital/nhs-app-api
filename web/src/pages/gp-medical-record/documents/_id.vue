@@ -110,16 +110,16 @@ export default {
     },
   },
   asyncData({ store, redirect }) {
-    const date = get('state.myRecord.document.date.value', store);
+    const date = get('state.myRecord.document.date', store);
 
     if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
-          || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) || !date
+          || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning())
     ) {
       redirect(GP_MEDICAL_RECORD.path);
       return {};
     }
 
-    const datePartString = datePart(date, 'YearMonthDay');
+    const datePartString = (!date || !date.value) ? 'Unknown Date' : datePart(date.value, 'YearMonthDay');
     const name = get('state.myRecord.document.name', store);
     const dateString = `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePartString}`;
     const type = get('state.myRecord.document.type', store);

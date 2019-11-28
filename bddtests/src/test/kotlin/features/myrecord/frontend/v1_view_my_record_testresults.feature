@@ -11,12 +11,12 @@ Feature: Test Results Frontend - Medical Record v1
 
   Scenario: An EMIS user has a test result with an unknown date - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
-    And the EMIS GP Practice has two test results where the second record has no date
+    And the EMIS GP Practice has three test results where the second record has no date
     And I am on the medical record page
     When I click the Test results section on My Record - Medical Record v1
     And I click a test result - Medical Record v1
-    Then I see 2 test results - Medical Record v1
-    And The second test result record has an unknown date - Medical Record v1
+    Then I see 3 test results - Medical Record v1
+    And The third test result record has an unknown date - Medical Record v1
 
   Scenario: A TPP user has multiple test results - Medical Record v1
     Given I am a TPP user setup to use medical record version 1

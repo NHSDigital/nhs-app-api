@@ -25,9 +25,13 @@ import mocking.microtest.myRecord.Referrals
 import mocking.microtest.myRecord.Referral
 import mocking.microtest.myRecord.MyRecordResponseModel
 import mocking.microtest.myRecord.MyRecordModuleCounts
+import org.joda.time.DateTime
 import utils.set
 
 object MicrotestMyRecordData {
+    private const val DATE_FOR_MICROTEST_MY_RECORD_DATA_YEAR = 2019
+    private const val DATE_FOR_MICROTEST_MY_RECORD_DATA_MONTH = 7
+    private const val DATE_FOR_MICROTEST_MY_RECORD_DATA_DAY = 2
 
     fun getEmptyMicrotestMyRecord(): MyRecordResponseModel {
 
@@ -172,10 +176,12 @@ object MicrotestMyRecordData {
 
     private fun buildProblems(problemCount: Int) : Problems {
         val problemList = mutableListOf<Problem>()
+        val date = DateTime().withDate(DATE_FOR_MICROTEST_MY_RECORD_DATA_YEAR,
+                DATE_FOR_MICROTEST_MY_RECORD_DATA_MONTH, DATE_FOR_MICROTEST_MY_RECORD_DATA_DAY)
         for (i in 1..problemCount) {
             problemList.add(
                     Problem(
-                            start_date = "2019-07-03",
+                            start_date = date.plusDays(i).toLocalDate().toString(),
                             finish_date = "Ongoing",
                             rubric = "Rubric $i"
                     )
@@ -199,9 +205,12 @@ object MicrotestMyRecordData {
 
     private fun buildInrTestResultList(inrResultCount: Int) : MutableList<InrResult> {
         val inrResultList = mutableListOf<InrResult>()
+
+        val date = DateTime().withDate(DATE_FOR_MICROTEST_MY_RECORD_DATA_YEAR, DATE_FOR_MICROTEST_MY_RECORD_DATA_MONTH,
+                DATE_FOR_MICROTEST_MY_RECORD_DATA_DAY+1)
         for (i in 1..inrResultCount) {
             inrResultList.add(
-                    InrResult(recordDateTime = "2019-07-03",
+                    InrResult(recordDateTime = date.plusDays(i).toLocalDate().toString(),
                             codeDescr = "code",
                             therapy = "therapy",
                             target = "target",

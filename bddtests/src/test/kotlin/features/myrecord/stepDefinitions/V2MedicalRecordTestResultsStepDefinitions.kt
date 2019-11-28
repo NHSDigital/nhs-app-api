@@ -101,13 +101,13 @@ open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
             thenISeeMultipleTestResultsV2(tppDefaultTestResultsCount)
     }
 
-    @Then("^The second test result record has an unknown date - Medical Record v2$")
-    fun thenTheSecondResultHasAnUnknownDateV2() {
-        val dateLabel = testResultsPage.getTestResultsElements()[1].label
+    @Then("^The third test result record has an unknown date - Medical Record v2$")
+    fun thenTheThirdResultHasAnUnknownDateV2() {
+        val dateLabel = testResultsPage.getTestResultsElements()[2].label
         assertEquals("Test result date", "Unknown Date", dateLabel)
     }
 
-    @Then("^I see the test result content - Medical Record v2$")
+    @Then("^I see the test results content - Medical Record v2$")
     fun thenISeeTheTestResultsContentV2() {
         myRecordDetailedTestResultPage.assertContentMedicalRecordV2()
     }
@@ -118,7 +118,7 @@ open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     }
 
     companion object {
-        private const val emisDefaultTestResultsCount = 2
+        private const val emisDefaultTestResultsCount = 3
         private const val tppDefaultTestResultsCount = 6
     }
 }

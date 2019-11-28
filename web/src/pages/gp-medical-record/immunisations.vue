@@ -73,7 +73,8 @@ export default {
   },
   computed: {
     orderedImmunisations() {
-      return orderBy([item => item.effectiveDate.value], ['desc'])(this.immunisations.data);
+      return orderBy([item =>
+        this.getEffectiveDate(item.effectiveDate, '')], ['desc'])(this.immunisations.data);
     },
     showError() {
       return (

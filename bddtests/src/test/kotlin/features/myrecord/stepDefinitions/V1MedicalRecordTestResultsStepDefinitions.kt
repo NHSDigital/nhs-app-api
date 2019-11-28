@@ -100,16 +100,16 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
                 .respondWithACorruptedResponse(SerenityHelpers.getPatient())
     }
 
-    @Given("^the EMIS GP Practice has two test results where the second record has no date$")
+    @Given("^the EMIS GP Practice has three test results where the second record has no date$")
     fun givenTheEmisGpPracticeHasATestResultWithNoDate() {
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(TestResultsData.getTwoTestResultsWhereTheSecondRecordHasNoDate())
+                    .respondWithSuccess(TestResultsData.getThreeTestResultsWhereTheSecondRecordHasNoDate())
         }
     }
 
     @Given("^the GP Practice has a single test result with multiple child values with ranges for EMIS$")
-    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor() {
+    fun givenTheGpPracticeHasTwoTestResultsWithMultipleChildValuesWithRangesFor() {
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
@@ -236,9 +236,9 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
         assertEquals("Expected test results", count, medicalRecordV1Page.testResults.allRecordItems().count())
     }
 
-    @Then("^The second test result record has an unknown date - Medical Record v1$")
-    fun thenTheSecondResultHasAnUnknownDateV1() {
-        val dateLabel = medicalRecordV1Page.testResults.allRecordItems()[1].label
+    @Then("^The third test result record has an unknown date - Medical Record v1$")
+    fun thenTheThirdResultHasAnUnknownDateV1() {
+        val dateLabel = medicalRecordV1Page.testResults.allRecordItems()[2].label
         assertEquals("Test result date", "Unknown Date", dateLabel)
     }
 
@@ -270,4 +270,3 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
         }
     }
 }
-

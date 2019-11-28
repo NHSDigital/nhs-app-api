@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
@@ -93,6 +93,90 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             };
 
             result.Should().BeEquivalentTo(expectedResult);
-        }       
+        }
+
+        [TestMethod]
+        public void MapAllergyRequestsGetResponseToAllergyListResponse_WithNullEffectiveDate_ReturnsResultValuesWithEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Allergies = new List<Allergy>
+                    {
+                        new Allergy
+                        {
+                            Term = _fixture.Create<string>(),
+                        },
+                    },
+                }
+            };
+
+            // Act
+            var result = new EmisAllergyMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Allergies.Count);
+
+            var expectedResult = new Allergies
+            {
+                Data = new List<AllergyItem>
+                {
+                    new AllergyItem
+                    {
+                        Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
+                        Date = new MyRecordDate { }
+                    }
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [TestMethod]
+        public void MapAllergyRequestsGetResponseToAllergyListResponse_WithNullEffectiveDateValue_ReturnsResultValuesWithEmptyDate()
+        {
+            // Arrange
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Allergies = new List<Allergy>
+                    {
+                        new Allergy
+                        {
+                            Term = _fixture.Create<string>(),
+                            EffectiveDate = new EffectiveDate { }
+                        },
+                    },
+                }
+            };
+
+            // Act
+            var result = new EmisAllergyMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Allergies.Count);
+
+            var expectedResult = new Allergies
+            {
+                Data = new List<AllergyItem>
+                {
+                    new AllergyItem
+                    {
+                        Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
+                        Date = new MyRecordDate {
+                            Value = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.Value,
+                            DatePart = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.DatePart
+                         }
+                    }
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }
