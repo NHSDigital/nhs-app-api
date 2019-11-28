@@ -16,10 +16,9 @@
         <main :class="mainClass">
           <spinner/>
           <div class="nhsuk-width-container">
-            <div class="nhsuk-grid-row">
-              <div class="nhsuk-grid-column-two-thirds
-              nhsuk-u-padding-top-3
-               nhsuk-u-padding-bottom-6">
+            <div :class="getRowClass">
+              <div :class="[getColumnClass,
+                            'nhsuk-u-padding-top-3', 'nhsuk-u-padding-bottom-6']">
                 <connection-error :with-title="true"/>
                 <api-error :with-title="true"/>
                 <flash-message/>
@@ -65,6 +64,7 @@ import {
   isAnonymous,
   LOGIN,
   MESSAGING_MESSAGES,
+  MY_RECORD_DOCUMENT_DETAIL,
 } from '@/lib/routes';
 
 export default {
@@ -143,6 +143,18 @@ export default {
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
+    },
+    // document needs to stretch to make use of
+    // more of the screen
+    getColumnClass() {
+      return this.$route.name === MY_RECORD_DOCUMENT_DETAIL.name &&
+        !this.$store.state.device.isNativeApp ?
+        'nhsuk-grid-column-full-width' : 'nhsuk-grid-column-two-thirds';
+    },
+    getRowClass() {
+      return this.$route.name === MY_RECORD_DOCUMENT_DETAIL.name &&
+        !this.$store.state.device.isNativeApp ?
+        '' : 'nhsuk-grid-row';
     },
     showMenu() {
       return (

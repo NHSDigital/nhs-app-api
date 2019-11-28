@@ -104,6 +104,7 @@ export default {
 <style lang="scss">
   .documentContainer {
     margin-bottom: 40px;
+    word-break: break-word;
 
     img {
       max-width: 100%;
