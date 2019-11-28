@@ -1,7 +1,7 @@
 <template>
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()">
     <div v-if="showTemplate" id="mainDiv" data-sid="user-info-details">
-      <div>
+      <div v-if="$store.state.myRecord.patientDetails.patientName">
         <span data-sid="patient-name"
               :class="[$style['user-info-name'], 'nhsuk-u-padding-bottom-3']"
               data-hj-suppress>
@@ -145,6 +145,10 @@ export default {
       await store.dispatch('myRecord/acceptTerms');
       await store.dispatch('myRecord/load');
     }
+
+    return {
+      medicalRecord: store.state.myRecord.record,
+    };
   },
   updated() {
     window.scrollTo(0, 0);

@@ -11,7 +11,13 @@
                            :prevent-default="preventDefault"
                            :click-func="clickFunc">
       <span :class="$style.listMenuItemContainer">
-        <component :is="headerTag" class="nhsuk-heading-s">{{ text }}</component>
+        <component :is="headerTag"
+                   class="nhsuk-heading-s"
+                   :class="$style['inlineBlock']">{{ text }}</component>
+        <span v-if="showCount"
+              id="count"
+              :class="$style['count']"
+              class="nhsuk-u-padding-right-5">{{ count }}</span>
         <p v-if="description" class="nhsuk-u-margin-bottom-3">{{ description }}</p>
         <slot/>
       </span>
@@ -71,6 +77,16 @@ export default {
       type: String,
       default: '',
     },
+    count: {
+      type: Number,
+      default: undefined,
+    },
+  },
+  computed: {
+    showCount() {
+      return this.count !== undefined;
+    },
+
   },
 };
 </script>
@@ -83,6 +99,7 @@ export default {
 @import '../style/arrow';
 @import '~nhsuk-frontend/packages/core/tools/spacing';
 @import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/settings/colours';
 
 .listMenuItemLink {
   @include icon-arrow-left-white-background;
@@ -160,5 +177,14 @@ button.listMenuItemLink {
     }
   }
 }
-</style>
 
+.count {
+  float: right;
+  color: $nhsuk-text-color;
+  margin-top: 12px;
+}
+
+.inlineBlock{
+    display: inline-block;
+}
+</style>

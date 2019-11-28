@@ -1,19 +1,26 @@
 <template>
   <div>
-    <menu-item id="events"
-               data-purpose="events"
-               :href="eventsPath"
-               :text="$t('my_record.consultationsAndEvents.sectionHeader')"
-               :click-func="goToUrl"
-               :click-param="eventsPath"/>
-
     <menu-item id="test-results"
                data-purpose="test-results"
                :href="testResultsPath"
                :text="$t('my_record.testResults.sectionHeader.tpp')"
+               :aria-label="
+                 getAriaLabel($t('my_record.testResults.sectionHeader.tpp'),
+                              record.testResults.data.length)"
                :click-func="goToUrl"
-               :click-param="'/gp-medical-record/test-results'"/>
-    <!-- put the rest in here -->
+               :click-param="'/gp-medical-record/test-results'"
+               :count="record.testResults.data.length"/>
+
+    <menu-item id="events"
+               data-purpose="events"
+               :href="eventsPath"
+               :text="$t('my_record.consultationsAndEvents.sectionHeader')"
+               :aria-label="
+                 getAriaLabel($t('my_record.consultationsAndEvents.sectionHeader'),
+                              record.tppDcrEvents.data.length)"
+               :click-func="goToUrl"
+               :click-param="eventsPath"
+               :count="record.tppDcrEvents.data.length"/>
   </div>
 </template>
 
@@ -30,9 +37,15 @@ export default {
   },
   data() {
     return {
+      record: this.$store.state.myRecord.record,
       testResultsPath: TESTRESULTS.path,
       eventsPath: EVENTS.path,
     };
+  },
+  methods: {
+    getAriaLabel(sectionTitle, count) {
+      return `${sectionTitle}, ${count} items`;
+    },
   },
 };
 </script>
