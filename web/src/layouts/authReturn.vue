@@ -94,7 +94,7 @@
                         />
                         <api-error-button
                           from="auth_return.errors.400.backButtonText"
-                          :action="backToHomeUrl"
+                          :action="loginUrl"
                         />
                       </div>
                     </api-error-container>
@@ -118,7 +118,7 @@
                         />
                         <api-error-button
                           from="auth_return.errors.403.backButtonText"
-                          :action="backToHomeUrl"
+                          :action="loginUrl"
                         />
                       </div>
                     </api-error-container>
@@ -142,7 +142,7 @@
                         />
                         <api-error-button
                           from="auth_return.errors.500.backButtonText"
-                          :action="backToHomeUrl"
+                          :action="loginUrl"
                         />
                       </div>
                     </api-error-container>
@@ -168,7 +168,7 @@
                         />
                         <api-error-button
                           from="auth_return.errors.502.backButtonText"
-                          :action="backToHomeUrl"
+                          :action="loginUrl"
 
                         />
                       </div>
@@ -195,7 +195,7 @@
                         />
                         <api-error-button
                           from="auth_return.errors.504.backButtonText"
-                          :action="backToHomeUrl"
+                          :action="loginUrl"
 
                         />
                       </div>
@@ -222,7 +222,7 @@
                         />
                         <api-error-button
                           from="auth_return.errors.default.backButtonText"
-                          :action="backToHomeUrl"
+                          :action="loginUrl"
                         />
                       </div>
                     </api-error-container>
@@ -310,9 +310,6 @@ export default {
     },
     target() {
       return '_blank';
-    },
-    backToHomeUrl() {
-      return '/';
     },
     contactUsUrl() {
       return 'https://www.nhs.uk/contact-us/nhs-app-contact-us';

@@ -6,7 +6,7 @@
          :target="target"
          data-purpose="main-back-button"
          @click.prevent="onRetryButtonClicked">
-        {{ $t(buttonText.text) }}
+        {{ buttonText.text }}
       </a>
     </div>
   </div>
@@ -16,8 +16,6 @@
 
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
-import { redirectTo } from '@/lib/utils';
-
 
 export default {
   name: 'ApiErrorButton',
@@ -55,7 +53,6 @@ export default {
         return false;
       }
       this.goToUrl(this.retryUrl, this.statusCode);
-      redirectTo(this, this.retryUrl, null);
       return false;
     },
   },
