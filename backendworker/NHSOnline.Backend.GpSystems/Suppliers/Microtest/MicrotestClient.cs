@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return response;
         }
 
-        public async Task<MicrotestApiObjectResponse<string>> AppointmentsPost(
+        public async Task<MicrotestApiResponse> AppointmentsPost(
             string odsCode,
             string nhsNumber,
             BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest)
@@ -76,13 +76,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             _logger.LogEnter();
             _logger.LogDebug($"booking slot: {bookAppointmentSlotPostRequest.SlotId}");
 
-            var response = await Post<BookAppointmentSlotPostRequest, string>(bookAppointmentSlotPostRequest, AppointmentsPath, odsCode, nhsNumber);
-
+            var response = await PostWithoutParsing(bookAppointmentSlotPostRequest,
+                AppointmentsPath, odsCode, nhsNumber);
             _logger.LogExit();
             return response;
+            
         }
 
-        public async Task<MicrotestApiObjectResponse<string>> AppointmentsDelete(
+        public async Task<MicrotestApiResponse> AppointmentsDelete(
             string odsCode,
             string nhsNumber,
             CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest)
@@ -193,16 +194,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return await SendRequestAndParseResponse<TResponse>(request);
         }
 
-        private async Task<MicrotestApiObjectResponse<TResponse>> Post<TResponse>(
-            string path,
-            string odsCode = null,
-            string nhsNumber = null
-        )
-        {
-            var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
-            return await SendRequestAndGetResponse<TResponse>(request);
-        }
-
         private async Task<MicrotestApiObjectResponse<TResponse>> Post<TRequest, TResponse>(
             TRequest requestBody,
             string path,
@@ -214,10 +205,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             var requestBodyJson = JsonConvert.SerializeObject(requestBody);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
 
-            return await SendRequestAndGetResponse<TResponse>(request);
+            return await SendRequestAndParseResponse<TResponse>(request);
         }
 
-        private async Task<MicrotestApiObjectResponse<string>> Delete<TRequest>(
+        private async Task<MicrotestApiResponse> PostWithoutParsing<TRequest>(
+            TRequest requestBody,
+            string path,
+            string odsCode = null,
+            string nhsNumber = null
+        )
+        {
+            var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
+            var requestBodyJson = JsonConvert.SerializeObject(requestBody);
+            request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+
+            return await SendRequest(request);
+        }
+
+        private async Task<MicrotestApiResponse> Delete<TRequest>(
             TRequest requestBody,
             string path,
             string odsCode = null,
@@ -228,7 +233,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             var requestBodyJson = JsonConvert.SerializeObject(requestBody);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
 
-            return await SendRequestAndGetResponse<string>(request);
+            return await SendRequest(request);
         }
 
         private static HttpRequestMessage BuildRequest(
@@ -252,37 +257,37 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return request;
         }
 
-        private async Task<MicrotestApiObjectResponse<TResponse>> SendRequestAndGetResponse<TResponse>(
-            HttpRequestMessage request)
-        {
-            _logger.LogEnter();
-
-            var responseMessage = await _httpClient.Client.SendAsync(request);
-            var response = new MicrotestApiObjectResponse<TResponse>(responseMessage.StatusCode);
-            await response.Parse(responseMessage, _responseParser, _logger);
-
-            if (response.HasUnauthorisedResponse)
-            {
-                _logger.LogInformation("Unauthorised Microtest response");
-                throw new UnauthorisedGpSystemHttpRequestException();
-            }
-
-            _logger.LogExit();
-            return response;
-        }
-
         private async Task<MicrotestApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new MicrotestApiObjectResponse<TResponse>(responseMessage.StatusCode);
-
-            return await response.Parse(responseMessage, _responseParser, _logger);
+            await response.Parse(responseMessage, _responseParser, _logger);
+            ThrowExceptionIfIsNotAuthorised(response);
+            return response;
         }
 
-        public abstract class MicrotestApiResponse : ApiResponse
+        private async Task<MicrotestApiResponse> SendRequest(
+            HttpRequestMessage request)
         {
-            protected MicrotestApiResponse(HttpStatusCode statusCode) : base(statusCode)
+            var responseMessage = await _httpClient.Client.SendAsync(request);
+            var response = new MicrotestApiResponse(responseMessage.StatusCode);
+            ThrowExceptionIfIsNotAuthorised(response);
+            return response;
+        }
+
+        private void ThrowExceptionIfIsNotAuthorised(MicrotestApiResponse response)
+        {
+            if (response.HasUnauthorisedResponse)
+            {
+                _logger.LogInformation("Unauthorised Microtest response");
+                throw new UnauthorisedGpSystemHttpRequestException();
+            }
+        }
+
+        public class MicrotestApiResponse : ApiResponse
+        {
+            public MicrotestApiResponse(HttpStatusCode statusCode) : base(statusCode)
             {
             }
 

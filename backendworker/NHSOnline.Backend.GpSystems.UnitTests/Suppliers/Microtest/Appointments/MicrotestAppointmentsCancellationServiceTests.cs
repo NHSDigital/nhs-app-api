@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         private void MockMicrotestClientAppointmentDeleteMethod(
-            MicrotestClient.MicrotestApiObjectResponse<string> response)
+            MicrotestClient.MicrotestApiResponse response)
         {
             _mockMicrotestClient.Setup(x => x.AppointmentsDelete(
                     _microtestUserSession.OdsCode,

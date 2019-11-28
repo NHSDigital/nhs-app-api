@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
         }
 
         private AppointmentCancelResult InterpretAppointmentsDeleteResponse(
-            MicrotestClient.MicrotestApiObjectResponse<string> response)
+            MicrotestClient.MicrotestApiResponse response)
         {
             if (response.HasSuccessResponse)
             {

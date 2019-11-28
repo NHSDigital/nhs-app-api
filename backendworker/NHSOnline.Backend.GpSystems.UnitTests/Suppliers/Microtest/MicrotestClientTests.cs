@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         {
             // Arrange
             var request = _fixture.Create<BookAppointmentSlotPostRequest>();
-            const string expectedResponse = "\"Appointment successfully created.\"";
+            const string expectedResponse = "Appointment successfully created.";
 
             _mockHttpHandler
                 .WhenMicrotest(HttpMethod.Post, "patient/appointments")

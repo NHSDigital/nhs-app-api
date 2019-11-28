@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             }
         }
         
-        private AppointmentBookResult InterpretAppointmentsPostResponse(MicrotestClient.MicrotestApiObjectResponse<string> response)
+        private AppointmentBookResult InterpretAppointmentsPostResponse(MicrotestClient.MicrotestApiResponse response)
         {
             if (response.HasSuccessResponse)
             {

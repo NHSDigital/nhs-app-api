@@ -20,12 +20,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string nhsNumber,
             DateTimeOffset? pastAppointmentsFromDate);
 
-        Task<MicrotestClient.MicrotestApiObjectResponse<string>> AppointmentsPost(
+        Task<MicrotestClient.MicrotestApiResponse> AppointmentsPost(
             string odsCode,
             string nhsNumber,
             BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest);
 
-        Task<MicrotestClient.MicrotestApiObjectResponse<string>> AppointmentsDelete(
+        Task<MicrotestClient.MicrotestApiResponse> AppointmentsDelete(
             string odsCode,
             string nhsNumber,
             CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest);

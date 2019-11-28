@@ -38,7 +38,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     }
 
     override fun respondWithSuccess(): Mapping {
-        return respondWithBody("\"Appointment successfully created.\"")
+        return respondWithBody("Appointment successfully created.")
     }
 
     override fun respondWithCorrupted(): Mapping {
