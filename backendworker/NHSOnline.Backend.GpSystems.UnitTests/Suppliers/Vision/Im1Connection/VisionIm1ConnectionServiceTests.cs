@@ -175,26 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
-                        {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
-                            {
-                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
-                                {
-                                    ServiceHeader = new ServiceHeaderResponse
-                                    {
-                                        Outcome = new Outcome
-                                        {
-                                            Successful = bool.FalseString.ToLowerInvariant(),
-                                            Error = new OutcomeError
-                                            {
-                                                Code = "-30",
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
+                        RawResponse = VisionResponseWithError<PatientConfigurationResponse>("-30"),
                     }));
 
             // Act
@@ -203,6 +184,48 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails);
+        }
+
+
+
+        [TestMethod]
+        public async Task Verify_RecordCurrentlyUnavailable_ReturnsUserRecordUnavailableError()
+        {
+            // Arrange
+            _mockVisionClient.Setup(x =>
+                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = VisionResponseWithError<PatientConfigurationResponse>("-15"),
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UserRecordUnavailable);
+        }
+
+        [TestMethod]
+        public async Task Verify_VisionGatewayError_ReturnsConnectionToServiceFailedError()
+        {
+            // Arrange
+            _mockVisionClient.Setup(x =>
+                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = VisionResponseWithError<PatientConfigurationResponse>("-100"),
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed);
         }
 
         [TestMethod]
@@ -235,7 +258,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         }
 
         [TestMethod]
-        public async Task Verify_UnknownError_ReturnsConnectionToServiceFailedError()
+        public async Task Verify_WhenNoMatchedErrorCode_ReturnsUnmappedErrorWithCodeUnknownError()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -243,26 +266,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
-                        {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
-                            {
-                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
-                                {
-                                    ServiceHeader = new ServiceHeaderResponse
-                                    {
-                                        Outcome = new Outcome
-                                        {
-                                            Successful = bool.FalseString.ToLowerInvariant(),
-                                            Error = new OutcomeError
-                                            {
-                                                Code = "-100",
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
+                        RawResponse = VisionResponseWithError<PatientConfigurationResponse>("-999"),
                     }));
 
             // Act
@@ -624,29 +628,34 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<ServiceContentRegisterResponse>
+                        RawResponse = VisionResponseWithError<ServiceContentRegisterResponse>(errorCode, errorDescription),
+                    }));
+            return _mockVisionClient;
+        }
+
+        private static VisionResponseEnvelope<TResponse> VisionResponseWithError<TResponse>(string errorCode, string errorDescription = null)
+        {
+            return new VisionResponseEnvelope<TResponse>
+            {
+                Body = new VisionResponseBody<TResponse>
+                {
+                    VisionResponse = new VisionResponse<TResponse>
+                    {
+                        ServiceHeader = new ServiceHeaderResponse
                         {
-                            Body = new VisionResponseBody<ServiceContentRegisterResponse>
+                            Outcome = new Outcome
                             {
-                                VisionResponse = new VisionResponse<ServiceContentRegisterResponse>
+                                Successful = bool.FalseString.ToLowerInvariant(),
+                                Error = new OutcomeError
                                 {
-                                    ServiceHeader = new ServiceHeaderResponse()
-                                    {
-                                        Outcome = new Outcome
-                                        {
-                                            Successful = "false",
-                                            Error = new OutcomeError()
-                                            {
-                                                Code = errorCode,
-                                                Description = errorDescription
-                                            }
-                                        }
-                                    }
+                                    Code = errorCode,
+                                    Description = errorDescription
                                 },
                             },
                         },
-                    }));
-            return _mockVisionClient;
+                    },
+                },
+            };
         }
 
         private VisionIm1ConnectionService CreateSystemUnderTest()
