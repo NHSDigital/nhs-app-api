@@ -45,9 +45,11 @@
          private Mock<IDemographicsService> _mockDemographicsService;
          private Mock<ICreateFhirParameter> _mockCreateFhirParam;
          private Mock<IEvaluateServiceDefinitionQuery> _mockEvaluateServiceDefinitionQuery;
-        
+
+         private const string Provider = "stubs";
+         private const string ProviderName = "OLC Stubs";
          private const string ServiceDefinitionId = "testId";
-         private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\" }";
+         private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\", \"status\": \"success\" }";
          private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
          private const string paramString =
              "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"sessionId\",\"valueString\":\"9102fb79-bc0e-465d-b2de-2a724ec876dc\"},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
@@ -97,7 +99,7 @@
              var providersSettings = new OnlineConsultationsProvidersSettings();
              var providerSetting = new OnlineConsultationsProviderSettings
              {
-                 Provider = "eConsult", ProviderName = "eConsult Health Ltd"
+                 Provider = Provider, ProviderName = ProviderName
              };
             
              var providerSettingsList = new List<OnlineConsultationsProviderSettings> { providerSetting };
@@ -130,7 +132,7 @@
                  .Throws<HttpRequestException>();
 
              // Act
-             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
+             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -152,7 +154,7 @@
                  .ReturnsAsync(httpResponse);
              
              // Act
-             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
+             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -178,7 +180,7 @@
                  .ReturnsAsync(httpResponse);
              
              // Act
-             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
+             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -207,7 +209,7 @@
                  .ReturnsAsync(httpResponse);
              
              // Act
-             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
+             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -235,7 +237,7 @@
                  .ReturnsAsync(httpResponse);
 
              // Act
-             var response = await _service.GetServiceDefinitionById("eConsult", ServiceDefinitionId, _userSession);
+             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -247,19 +249,19 @@
          public void GetProviderName_ReturnsSuccess()
          {
              // Act
-             var response = _service.GetProviderName("eConsult");
+             var response = _service.GetProviderName(Provider);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>()
-                 .Subject.Response.Equals("eConsult Health Ltd", StringComparison.Ordinal);
+                 .Subject.Response.Equals(ProviderName, StringComparison.Ordinal);
          }
 
          [TestMethod]
          public async Task EvaluateServiceDefinition_WhenNullParametersProvided_ReturnsBadRequest()
          {
              // Act
-             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, null, false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, null, false, false, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -280,7 +282,7 @@
                  .Throws<HttpRequestException>();
              
              // Act
-             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -302,7 +304,7 @@
                  .ReturnsAsync(httpResponse);
              
              // Act
-             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -328,7 +330,7 @@
                  .ReturnsAsync(httpResponse);
 
              // Act
-             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -357,7 +359,7 @@
                  .ReturnsAsync(httpResponse);
 
              // Act
-             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), false, false, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -385,7 +387,7 @@
                  .ReturnsAsync(httpResponse);
 
              // Act
-             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), false, false, _userSession);
             
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -456,7 +458,7 @@
              var bodyParameters = (Parameters) paramsParsed;
             
              // Act
-             var response = await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, bodyParameters, false, true ,_userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, bodyParameters, false, true ,_userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -486,11 +488,37 @@
                  .ReturnsAsync(httpResponse);
              
              // Act
-             await _service.EvaluateServiceDefinition("eConsult", ServiceDefinitionId, new Parameters(), addJsDisabledHeader, false, _userSession);
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), addJsDisabledHeader, false, _userSession);
 
              // Assert
              _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
                  It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WillLogEndingConsultationWithOdsCode()
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GuidanceResponseJsonContent, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
+
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>(),
+                     null))
+                 .ReturnsAsync(httpResponse);
+             
+             // Act
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), false, false, _userSession);
+
+             // Assert
+             _mockLogger.VerifyLogger(LogLevel.Information, $"Ending consultation with ServiceDefinition: {ServiceDefinitionId}. ODSCode: {_userSession.GpUserSession.OdsCode}", Times.Once());
          }
      }
  }

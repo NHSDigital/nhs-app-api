@@ -71,18 +71,20 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             {
                 _logger.LogEnter();
                 _logger.LogInformation($"Initial evaluation for Service Definition with id: {serviceDefinitionId}");
+                
+                var odsCode = userSession.GpUserSession.OdsCode;
 
                 var requestBody = "{ \"resourceType\":\"Parameters\", \"meta\":{ \"profile\":[ " +
                                  "\"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\" ] }, " +
                                  "\"parameter\": [ { \"name\": \"organization\", \"resource\": { \"resourceType\": " +
-                                 "\"Organization\", \"identifier\": { \"value\": \"" +
-                                 userSession.GpUserSession.OdsCode + "\" }}}]}";
+                                 "\"Organization\", \"identifier\": { \"value\": \"" + odsCode + "\" }}}]}";
 
                 return await SendEvaluateQueryAndHandleResponse(
                     providerKey,
                     serviceDefinitionId,
                     requestBody,
-                    false);
+                    false,
+                    odsCode);
             }
             finally
             {
@@ -158,6 +160,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     serviceDefinitionId,
                     _serializer.SerializeToString(parameters),
                     addJavascriptDisabledHeader,
+                    userSession.GpUserSession.OdsCode,
                     GetSessionIdFromParameters(parameters));
             }
             finally
@@ -171,6 +174,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string serviceDefinitionId,
             string requestBody,
             bool addJavascriptDisabledHeader,
+            string odsCode,
             string sessionId = null)
         {
             HttpResponseMessage responseMessage;
@@ -238,7 +242,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
             {
-                _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}");
+                _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}. ODSCode: {odsCode}");
             }
 
             return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));

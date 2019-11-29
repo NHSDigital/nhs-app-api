@@ -5,9 +5,9 @@
  using Hl7.Fhir.Model;
  using Microsoft.AspNetCore.Http;
  using Microsoft.AspNetCore.Mvc;
+ using Microsoft.Extensions.Logging;
  using Microsoft.VisualStudio.TestTools.UnitTesting;
  using Moq;
- using NHSOnline.Backend.GpSystems.Demographics;
  using NHSOnline.Backend.GpSystems.Suppliers.Emis;
  using NHSOnline.Backend.PfsApi.Areas.ServiceDefinition;
  using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
@@ -24,72 +24,108 @@
          private IFixture _fixture;
          private ServiceDefinitionController _serviceDefinitionController;
          private Mock<IServiceDefinitionService> _mockServiceDefinitionService;
-        
+         private Mock<HttpContext> _mockHttpContext;
+         private Mock<ILoggerFactory> _mockLoggerFactory;
+         private Mock<ILogger<ServiceDefinitionController>> _mockLogger;
+
          private ServiceDefinitionResult _successResult;
-         private string _provider;
-         private string _id;
          private Parameters _evaluateParameters;
          private UserSession _userSession;
-         private readonly DemographicsResult.Success _successResponse = new DemographicsResult.Success(new DemographicsResponse());
-        
+
+         private const string Provider = "OLC Stubs";
+         private const string ServiceDefinitionId = "NHS_ADMIN";
+
          [TestInitialize]
          public void TestInitialize()
          {
+             _successResult = new ServiceDefinitionResult.Success("");
+             _evaluateParameters = new Parameters();
+
              _fixture = new Fixture()
                  .Customize(new AutoMoqCustomization())
                  .Customize(new ApiControllerAutoFixtureCustomization());
 
-             _mockServiceDefinitionService = _fixture
-                 .Freeze<Mock<IServiceDefinitionService>>();
-            
-             _successResult = new ServiceDefinitionResult.Success("");
-             _provider = "eConsult";
-             _id = "testId";
-             _evaluateParameters = new Parameters();
-            
              _fixture.Customize<UserSession>(c => c
                  .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-
              _userSession = _fixture.Create<UserSession>();
-             var httpContextMock = new Mock<HttpContext>();
-             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
+
+             _mockServiceDefinitionService = _fixture
+                 .Freeze<Mock<IServiceDefinitionService>>();
+
+             _mockHttpContext = _fixture.Create<Mock<HttpContext>>();
+             _mockHttpContext.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
+
+             _mockLogger = _fixture.Freeze<Mock<ILogger<ServiceDefinitionController>>>();
+             _mockLoggerFactory = _fixture.Freeze<Mock<ILoggerFactory>>();
+             _mockLoggerFactory
+                 .Setup(x => x.CreateLogger(It.IsAny<string>()))
+                 .Returns(_mockLogger.Object);
 
              _serviceDefinitionController = _fixture.Create<ServiceDefinitionController>();
-            
              _serviceDefinitionController.ControllerContext = new ControllerContext
              {
-                 HttpContext = httpContextMock.Object
+                 HttpContext = _mockHttpContext.Object
              };
-            
-             _successResponse.Response.Address = "Test";                                       
-             _successResponse.Response.NhsNumber = "111 111 111";                              
-             _successResponse.Response.DateOfBirth = DateTime.UtcNow;                          
-             _successResponse.Response.Sex = "Male";
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionsById_WhenCalled_LogsStartingConsultation()
+         {
+             // Arrange
+             _mockServiceDefinitionService
+                 .Setup(s => s.GetServiceDefinitionById(Provider,
+                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
+                     It.IsAny<UserSession>()))
+                 .Returns(Task.FromResult(_successResult));
+
+             // Act
+             var actualResponse =
+                 await _serviceDefinitionController.GetServiceDefinitionsById(ServiceDefinitionId, Provider);
+
+             // Assert
+             actualResponse.Should().BeAssignableTo<OkObjectResult>()
+                 .Subject.StatusCode.Should().Be(200);
+             _mockLogger.VerifyLogger(LogLevel.Information,
+                 $"Starting consultation with ServiceDefinition: {ServiceDefinitionId}. ODSCode: {_userSession.GpUserSession.OdsCode}",
+                 Times.Once());
+             _mockServiceDefinitionService.Verify(
+                 s => s.GetServiceDefinitionById(Provider,
+                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
+                     It.IsAny<UserSession>()),
+                 Times.Once);
          }
 
          [TestMethod]
          [DataRow(null)]
-         public async Task EvaluateServiceDefinition_WhenCalledWithoutParametersBody_ReturnsBadRequest(Parameters evaluateParameters)
+         public async Task EvaluateServiceDefinition_WhenCalledWithoutParametersBody_ReturnsBadRequest(
+             Parameters evaluateParameters)
          {
              // Act
-             var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, evaluateParameters, false);
-            
+             var actualResponse =
+                 await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
+                     evaluateParameters, false);
+
              // Assert
-             var value = actualResponse.Should().BeAssignableTo<BadRequestResult>();
-             value.Subject.StatusCode.Should().Be(400);
+             actualResponse.Should().BeAssignableTo<BadRequestResult>()
+                 .Subject.StatusCode.Should().Be(400);
              _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition("eConsult", It.IsAny<string>(),
-                     It.IsAny<Parameters>(), It.IsAny<bool>(), It.IsAny<bool>(),_userSession), Times.Never);
+                 s => s.EvaluateServiceDefinition(Provider,
+                     It.IsAny<string>(),
+                     It.IsAny<Parameters>(),
+                     It.IsAny<bool>(),
+                     It.IsAny<bool>(),
+                     _userSession),
+                 Times.Never);
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinition_WhenCalledWithIdParametersAndClientFound_ServiceEvaluateServiceDefinition()
+         public async Task
+             EvaluateServiceDefinition_WhenCalledWithIdParametersAndClientFound_ServiceEvaluateServiceDefinition()
          {
-            
              // Arrange
              _mockServiceDefinitionService
-                 .Setup(s => s.EvaluateServiceDefinition("eConsult",
-                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
+                 .Setup(s => s.EvaluateServiceDefinition(Provider,
+                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
                      It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                      It.IsAny<bool>(),
                      It.IsAny<bool>(),
@@ -97,20 +133,17 @@
                  .Returns(Task.FromResult(_successResult));
 
              // Act
-             var httpContext = new DefaultHttpContext();
-             httpContext.Request.Headers.Add("NHSO-Javascript-Disabled", "false");
-             _serviceDefinitionController.ControllerContext = new ControllerContext
-             {
-                 HttpContext = httpContext
-             };
-             var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters, false);
+             var actualResponse =
+                 await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
+                     _evaluateParameters, false);
 
              // Assert
-             var value = actualResponse.Should().BeAssignableTo<OkObjectResult>();
-             value.Subject.StatusCode.Should().Be(200);
+             ShouldLogEvaluationWithOdsCode();
+             actualResponse.Should().BeAssignableTo<OkObjectResult>()
+                 .Subject.StatusCode.Should().Be(200);
              _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition("eConsult",
-                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
+                 s => s.EvaluateServiceDefinition(Provider,
+                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
                      It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                      It.IsAny<bool>(),
                      It.IsAny<bool>(),
@@ -119,33 +152,28 @@
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinition_WhenRequestHasJSDisabledHeader_EvaluateCalledWithAddJSDisabledHeaderTrue()
+         public async Task
+             EvaluateServiceDefinition_WhenRequestHasJSDisabledHeader_EvaluateCalledWithAddJSDisabledHeaderTrue()
          {
              // Arrange
              _mockServiceDefinitionService
-                 .Setup(s => s.EvaluateServiceDefinition("eConsult",
-                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
+                 .Setup(s => s.EvaluateServiceDefinition(Provider,
+                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
                      It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                      It.IsAny<bool>(),
                      It.IsAny<bool>(),
                      It.IsAny<UserSession>()))
                  .Returns(Task.FromResult(_successResult));
-            
+
              // Act
-             var httpContext = new DefaultHttpContext();
-             httpContext.Request.Headers.Add("NHSO-Javascript-Disabled", "true");
-             _serviceDefinitionController.ControllerContext = new ControllerContext
-             {
-                 HttpContext = httpContext
-             };
-             var actualResponse = await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters, false);
+             await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
+                 _evaluateParameters, false);
 
              // Assert
-             var value = actualResponse.Should().BeAssignableTo<OkObjectResult>();
-             value.Subject.StatusCode.Should().Be(200);
+             ShouldLogEvaluationWithOdsCode();
              _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition("eConsult",
-                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
+                 s => s.EvaluateServiceDefinition(Provider,
+                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
                      It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                      It.IsAny<bool>(),
                      It.IsAny<bool>(),
@@ -156,35 +184,40 @@
          [TestMethod]
          [DataRow(true)]
          [DataRow(false)]
-         public async Task EvaluateServiceDefinition_WhenDemographicsConsentQueryStringPresent_ValueIsPassedToService(bool demographicsConsentGiven)
+         public async Task EvaluateServiceDefinition_WhenDemographicsConsentQueryStringPresent_ValueIsPassedToService(
+             bool demographicsConsentGiven)
          {
              // Arrange
              _mockServiceDefinitionService
-                 .Setup(s => s.EvaluateServiceDefinition("eConsult",
-                     It.Is<string>(id => _id.Equals(id, StringComparison.Ordinal)),
+                 .Setup(s => s.EvaluateServiceDefinition(Provider,
+                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
                      It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                      It.IsAny<bool>(),
                      It.Is<bool>(consent => consent == demographicsConsentGiven),
                      It.IsAny<UserSession>()))
                  .Returns(Task.FromResult(_successResult));
-            
+
              // Act
-             var httpContext = new DefaultHttpContext();
-             _serviceDefinitionController.ControllerContext = new ControllerContext
-             {
-                 HttpContext = httpContext
-             };
-             await _serviceDefinitionController.EvaluateServiceDefinition(_provider, _id, _evaluateParameters, demographicsConsentGiven);
+             await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
+                 _evaluateParameters, demographicsConsentGiven);
 
              // Assert
+             ShouldLogEvaluationWithOdsCode();
              _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition("eConsult",
-                     It.Is<string>(sdId => _id.Equals(sdId, StringComparison.Ordinal)),
+                 s => s.EvaluateServiceDefinition(Provider,
+                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
                      It.Is<Parameters>(parameters => _evaluateParameters == parameters),
                      It.IsAny<bool>(),
                      It.Is<bool>(consent => consent == demographicsConsentGiven),
                      It.IsAny<UserSession>()),
                  Times.Once);
+         }
+
+         private void ShouldLogEvaluationWithOdsCode()
+         {
+             _mockLogger.VerifyLogger(LogLevel.Information,
+                 $"Evaluating ServiceDefinition: {ServiceDefinitionId}. ODSCode: {_userSession.GpUserSession.OdsCode}",
+                 Times.Once());
          }
      }
  }

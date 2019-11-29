@@ -38,9 +38,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 var userSession = HttpContext.GetUserSession();
 
-                var result = await _service.GetServiceDefinitionById(provider, serviceDefinitionId, userSession);
+                _logger.LogInformation($"Starting consultation with ServiceDefinition: {serviceDefinitionId}. ODSCode: {userSession.GpUserSession.OdsCode}");
 
-                _logger.LogInformation($"Starting consultation with ServiceDefinition: {serviceDefinitionId}");
+                var result = await _service.GetServiceDefinitionById(provider, serviceDefinitionId, userSession);
 
                 return result.Accept(visitor);
             }
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 
                 var userSession = HttpContext.GetUserSession();
             
-                _logger.LogInformation($"Evaluating ServiceDefinition: {serviceDefinitionId}");
+                _logger.LogInformation($"Evaluating ServiceDefinition: {serviceDefinitionId}. ODSCode: {userSession.GpUserSession.OdsCode}");
 
                 return (await _service.EvaluateServiceDefinition(
                         provider,
