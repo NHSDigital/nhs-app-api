@@ -20,6 +20,7 @@ const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', dat
   const $env = {
     BIOMETRICS_ENABLED: true,
     THROTTLING_ENABLED: true,
+    ORGAN_DONATION_THROTTLING_URL: 'www.foo.com',
   };
 
 

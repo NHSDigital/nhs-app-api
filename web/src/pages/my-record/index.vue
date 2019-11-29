@@ -4,7 +4,7 @@
     <div v-if="showTemplate" id="mainDiv">
       <p>{{ $t('rp01.glossary.headerText') }}</p>
       <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
-                        :link-url="glossaryLinkURL"
+                        :click-action="glossaryLinkURL"
                         :is-analytics-tracked="true"/>
       <analytics-tracked-tag :class="['nhsuk-heading-s',
                                       'nhsuk-u-padding-3',
@@ -118,9 +118,9 @@ export default {
   data() {
     return {
       PATIENTDETAILS,
-      clinicalAbbreviationsUrl: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
       hasAgreed: false,
       isProxying: this.$store.getters['session/isProxying'],
+      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
   computed: {

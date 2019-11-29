@@ -1,6 +1,11 @@
 <template>
   <div :class="$style.toggleAndLabel">
-    <label :for="checkboxId" aria-hidden="true" @click.stop.prevent="onClick">{{ label }}</label>
+    <label class="nhsuk-u-font-size-19"
+           aria-hidden="true"
+           :for="checkboxId"
+           @click.stop.prevent="onClick">
+      {{ label }}
+    </label>
     <toggle :value="value" :checkbox-id="checkboxId" :is-waiting="isWaiting" @input="onClick"/>
   </div>
 </template>
@@ -42,13 +47,28 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
+@import '~nhsuk-frontend/packages/core/settings/breakpoints';
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
+
 .toggleAndLabel {
-  background: #fff;
-  border-top: 1px #d8dde0 solid;
-  border-bottom: 1px #d8dde0 solid;
-  padding: 0.5em;
-  margin: 0 0 1em;
-  max-width: 540px;
+  @include nhsuk-responsive-padding(2, "top");
+  @include nhsuk-responsive-padding(3, "left");
+  @include nhsuk-responsive-padding(2, "bottom");
+  @include nhsuk-responsive-padding(2, "right");
+  @include nhsuk-responsive-margin(4, "bottom");
+  background: $color_nhsuk-white;
+  border-top: 1px $color_nhsuk-grey-4 solid;
+  border-bottom: 1px $color_nhsuk-grey-4 solid;
+  @include govuk-media-query($until: desktop) {
+    padding-left: $nhsuk-gutter-half;
+    margin-left: (-$nhsuk-gutter-half);
+    margin-right: (-$nhsuk-gutter-half);
+  }
   label {
     display: inline-block;
     width: calc(100% - 4em);

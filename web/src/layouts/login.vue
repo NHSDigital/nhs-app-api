@@ -34,7 +34,7 @@
               <h3 class="nhsuk-u-margin-bottom-2">{{ $t('symptomBanner.howAreYouFeeling') }}</h3>
               <nhs-arrow-banner :id="symptomButtonId"
                                 :banner-text="$t('symptomBanner.checker')"
-                                :link-url="symptomsUrl"
+                                :click-action="symptomsUrl"
                                 :is-analytics-tracked="false"
                                 :open-new-window="false"/>
             </main>

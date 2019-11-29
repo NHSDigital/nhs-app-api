@@ -54,7 +54,8 @@ ul.nhs-app-message {
   border-top: 1px $nhsuk-border-color solid;
   padding-left: nhsuk-spacing(0);
   @include govuk-media-query($until: desktop) {
-    margin: nhsuk-spacing(0) -1em 1em;
+    margin-left: (-$nhsuk-gutter-half);
+    margin-right: (-$nhsuk-gutter-half);
   }
 }
 

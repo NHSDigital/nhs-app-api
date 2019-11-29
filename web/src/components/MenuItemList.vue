@@ -11,17 +11,21 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/tools/mixins';
-  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/settings/breakpoints';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
 
 .list-menu {
+  @include nhsuk-responsive-padding(0, "left");
+  @include nhsuk-responsive-margin(1, "top");
+  @include nhsuk-responsive-margin(3, "bottom");
   list-style: none;
-  padding-left: 0;
-  margin: 5px -16px 1em;
-
-  @include govuk-media-query('tablet') {
-    margin-left: 0;
-    margin-right: 0;
+  @include govuk-media-query($until: desktop) {
+    margin-left: (-$nhsuk-gutter-half) ;
+    margin-right: (-$nhsuk-gutter-half);
   }
 }
 </style>

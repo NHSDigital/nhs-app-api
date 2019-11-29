@@ -34,7 +34,7 @@
         <div v-if="!isPracticeParticipating && isThrottlingEnabled">
           <nhs-arrow-banner id="btn_organDonation"
                             :banner-text="$t('shared.organDonation.recordDecision')"
-                            :link-url="organDonationUrl"
+                            :click-action="organDonationUrl"
                             :is-analytics-tracked="true"
                             :class="$store.state.device.isNativeApp?
                               'nhsuk-u-margin-bottom-0' : '' "/>

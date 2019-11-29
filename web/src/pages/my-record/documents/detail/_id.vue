@@ -3,7 +3,7 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
-                        :link-url="glossaryLinkURL"
+                        :click-action="glossaryLinkURL"
                         :is-analytics-tracked="true"/>
       <div class="documentContainer" v-html="document"/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"

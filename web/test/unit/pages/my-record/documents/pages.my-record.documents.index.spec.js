@@ -26,7 +26,10 @@ const mountPage = ({ data } = {}) => {
 describe('my-record documents', () => {
   beforeEach(() => {
     $store = createStore({
-      $env: { MY_RECORD_DOCUMENTS_ENABLED: true },
+      $env: {
+        CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
+        MY_RECORD_DOCUMENTS_ENABLED: true,
+      },
       state: { myRecord: initialState(), device: { isNativeApp: false } },
     });
 

@@ -38,7 +38,13 @@ describe('my-record', () => {
 
   beforeEach(() => {
     Vue.filter('longDate', () => {});
-    $store = createStore({ $http: createHttp(), state: createState() });
+    $store = createStore({
+      $http: createHttp(),
+      state: createState(),
+      $env: {
+        CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
+      },
+    });
   });
 
   it('will call pageLoadComplete when mounted', () => {
@@ -49,7 +55,6 @@ describe('my-record', () => {
 
   describe('terms not accepted', () => {
     beforeEach(() => {
-      $store.state.myRecord.hasAcceptedTerms = false;
       page = mountPage({ $store });
     });
 
@@ -60,6 +65,7 @@ describe('my-record', () => {
 
   describe('terms accepted', () => {
     beforeEach(() => {
+      $store.app.$env.CLINICAL_ABBREVIATIONS_URL = '/test';
       $store.state.myRecord.hasAcceptedTerms = true;
       page = mountPage({ $store });
     });

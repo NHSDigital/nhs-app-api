@@ -2,7 +2,7 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
-                        :link-url="glossaryLinkURL"
+                        :click-action="glossaryLinkURL"
                         :is-analytics-tracked="true"/>
       <card-group v-for="(documentChunk, chunkIndex) in documentChunks"
                   :key="`document-chunk-${chunkIndex}`"

@@ -1,40 +1,38 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
-  <div v-if="showTemplate"
-       :class="['pull-content', !$store.state.device.isNativeApp && $style.desktopWeb]" >
-    <div :class="$style.info">
+  <div v-if="showTemplate">
+    <div>
       <p v-for="(paragraph, index) of $t('account.notifications.paragraphs')" :key="index">
         {{ paragraph }}
       </p>
     </div>
+
     <labelled-toggle
       v-model="registered"
       checkbox-id="allow_notifications"
       :is-waiting="isWaiting"
       :label="$t('account.notifications.toggleLabel')"
     />
-    <div>
-      <p>
-        <a href="#" :class="$style.iconLink" @click.prevent="openAppSettings">
-          <external-link-arrow-right-icon />
-          <span>{{ $t('account.notifications.settingsLinkText') }}</span>
-        </a>
-      </p>
-    </div>
+
+    <nhs-arrow-banner :banner-text="$t('account.notifications.settingsLinkText')"
+                      :open-new-window="false"
+                      :click-action="openAppSettings" />
+
     <back-button />
   </div>
 </template>
 
 <script>
 import BackButton from '@/components/BackButton';
-import ExternalLinkArrowRightIcon from '@/components/icons/ExternalLinkArrowRightIcon';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import NativeApp from '@/services/native-app';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     BackButton,
-    ExternalLinkArrowRightIcon,
     LabelledToggle,
+    NhsArrowBanner,
   },
   computed: {
     isWaiting() {
@@ -60,45 +58,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import "../../style/info";
-
-.iconLink {
-  display: flex;
-  align-items: center;
-  margin: 0 0 1em;
-  svg {
-    min-width: 2em;
-    height: 2em;
-    margin-right: 0.25em;
-    align-self: flex-start;
-  }
-  span {
-    line-height: 1.2em;
-  }
-}
-
-div {
-  .info {
-    font-size: 1em;
-    margin-bottom: 1em;
-    padding-top: 1em;
-
-    p {
-      font-family: $default-web;
-      font-weight: normal;
-      max-width: 540px;
-    }
-  }
-  .desktopWeb {
-    .info {
-      p {
-        font-family: $default-web;
-        font-weight: lighter;
-      }
-    }
-  }
-}
-
-</style>
