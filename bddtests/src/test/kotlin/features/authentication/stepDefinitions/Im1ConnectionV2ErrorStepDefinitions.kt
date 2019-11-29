@@ -1,6 +1,7 @@
 package features.authentication.stepDefinitions
 
 import com.google.gson.GsonBuilder
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.authentication.factories.Im1ConnectionV2Factory
@@ -9,9 +10,7 @@ import models.Patient
 import org.apache.http.HttpStatus
 import org.joda.time.DateTime
 import org.junit.Assert
-import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
-import utils.getOrFail
 import utils.set
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ErrorResponse
@@ -26,7 +25,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                                  gpHttpCode:Int,
                                                                                  gpError:String,
                                                                                  message: String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
         val connectionRequest = factory.validIm1Request
         val linkage = factory.validLinkageDetails
@@ -38,7 +38,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
 
     @Given("^I am a (.*) user wishing to register but the request will timeout$")
     fun iAmAUserWishingToRegisterButTheRequestWillTimeOut(gpSystem: String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
         val connectionRequest = factory.validIm1Request
         val linkage = factory.validLinkageDetails
@@ -50,7 +51,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
 
     @Given("^I am a (.*) user wishing to register but missing Odscode$")
     fun iAmAUserWishingToRegisterWithMissingOdsCode(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         val connectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
@@ -63,7 +65,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
 
     @Given("^I am a (.*) user wishing to register but missing Dob$")
     fun iAmAUserWishingToRegisterWithMissingDOB(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         val connectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
@@ -76,7 +79,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
 
     @Given("^I am a (.*) user wishing to register but missing Surname$")
     fun iAmAUserWishingToRegisterWithMissingSurname(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         val connectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
@@ -91,7 +95,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
     fun iAmAUserWishingToRegisterButRetrievingLinkageKeyWillReturnError(gpSystem: String,
                                                                         gpHttpCode:Int,
                                                                         gpError:String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         val connectionRequest = factory.validIm1Request
         connectionRequest.AccountId = null
         val linkage = factory.validLinkageDetails
@@ -107,7 +112,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                gpHttpCode:Int,
                                                                gpError:String,
                                                                message: String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
         val connectionRequest = factory.validIm1Request
         connectionRequest.AccountId = null
@@ -124,7 +130,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                      gpHttpCode:Int,
                                                                      gpError:String,
                                                                      gpErrorMessage:String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         val connectionRequest = factory.validIm1Request
         connectionRequest.AccountId = null
         val linkage = factory.validLinkageDetails
@@ -141,7 +148,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                     gpHttpCode:Int,
                                                                     gpError:String,
                                                                     message:String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         val connectionRequest = factory.validIm1Request
         connectionRequest.AccountId = null
         val linkage = factory.validLinkageDetails
@@ -159,7 +167,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                     gpHttpCode:Int,
                                                                     gpError:String,
                                                                     message:String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
         val connectionRequest = factory.validIm1Request
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
@@ -171,7 +180,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                     gpHttpCode:Int,
                                                                     gpError:String,
                                                                     message:String) {
-        val im1ConnectionV2GetFactory = Im1ConnectionV2GetFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val im1ConnectionV2GetFactory = Im1ConnectionV2GetFactory.getForSupplier(supplier)
         SerenityHelpers.setPatient(im1ConnectionV2GetFactory.patient)
         im1ConnectionV2GetFactory.errorIm1Verify(gpHttpCode, gpError, message)
     }
@@ -180,7 +190,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
     fun iAmAUserWishingToRegisterButCreatingLinkageKeyWillReturnError(gpSystem: String,
                                                                       gpHttpCode:Int,
                                                                       gpError:String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         val connectionRequest = factory.validIm1Request
         connectionRequest.AccountId = null
         val linkage = factory.validLinkageDetails
@@ -194,8 +205,9 @@ class Im1ConnectionV2ErrorStepDefinitions {
 
     @Given("^I am a (.*) user registering but creating my linkage key fail because I am under minimum age$")
     fun iAmAUserWishingToRegisterButCreatingLinkageKeyWillFailBecauseIAmUnderMinimumAge(gpSystem: String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
-        val linkageDateOfBirthFormat = Im1ConnectionV2Factory.getForSupplier(gpSystem).linkageDateOfBirthFormat
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
+        val linkageDateOfBirthFormat = Im1ConnectionV2Factory.getForSupplier(supplier).linkageDateOfBirthFormat
         val dob = DateTime.now().minusYears(MINIMUM_AGE).plusDays(1).toString(linkageDateOfBirthFormat)
         val connectionRequest = factory.validIm1Request
         connectionRequest.AccountId = null
@@ -212,8 +224,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
 
     @Then("^I receive a '(\\w+)' IM1 error status code with code '(\\w+)'$")
     fun thenIReceiveAStatusCodeWithCode(expectedStatusCode: Int, expectedErrorCode:String) {
-        val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
-        assertIm1ErrorResponse(expectedStatusCode,expectedErrorCode,  gpSystem)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        assertIm1ErrorResponse(expectedStatusCode,expectedErrorCode,  gpSystem.toString())
     }
 
     @Then("^I receive a '(\\w+)' IM1 error status code with code '(\\w+)' and GP System 'Unknown'$")

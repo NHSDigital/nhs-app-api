@@ -1,5 +1,6 @@
 package features.myrecord.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.microtest.myRecord.MyRecordModuleCounts
@@ -20,13 +21,13 @@ abstract class MyRecordFactory {
 
     companion object : SupplierSpecificFactory<MyRecordFactory>() {
 
-        override val map: HashMap<String, (() -> MyRecordFactory)>
+        override val map: HashMap<Supplier, (() -> MyRecordFactory)>
                 by lazy {
                     hashMapOf(
-                            "EMIS" to { MyRecordFactoryEmis() },
-                            "TPP" to { MyRecordFactoryTpp() },
-                            "VISION" to { MyRecordFactoryVision() },
-                            "MICROTEST" to { MyRecordFactoryMicrotest() })
+                            Supplier.EMIS to { MyRecordFactoryEmis() },
+                            Supplier.TPP to { MyRecordFactoryTpp() },
+                            Supplier.VISION to { MyRecordFactoryVision() },
+                            Supplier.MICROTEST to { MyRecordFactoryMicrotest() })
                 }
 
     }

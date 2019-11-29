@@ -1,5 +1,6 @@
 package mocking.stubs.myMedicalRecord
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.stubs.myMedicalRecord.emis.AllergiesStubs
 import mocking.stubs.myMedicalRecord.emis.ConsultationsStubs
@@ -16,10 +17,11 @@ import mocking.stubs.myMedicalRecord.tpp.ViewTestResultsStubsTpp
 
 class MedicalRecordStubs(private val mockingClient: MockingClient) {
 
-    fun generateStubs(supplier: String){
+    fun generateStubs(supplier: Supplier){
         when(supplier){
-            "EMIS" -> generateEMISStubs()
-            "TPP" -> generateTPPStubs()
+            Supplier.EMIS -> generateEMISStubs()
+            Supplier.TPP -> generateTPPStubs()
+            else -> throw IllegalArgumentException("$supplier not implemented")
         }
     }
 

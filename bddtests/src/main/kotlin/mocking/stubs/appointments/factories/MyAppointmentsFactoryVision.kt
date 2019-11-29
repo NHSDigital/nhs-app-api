@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.emis.models.AppointmentCancellationReason
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
@@ -7,7 +8,7 @@ import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentResponseObject
 import worker.models.appointments.MyAppointmentsResponse
 
-class MyAppointmentsFactoryVision : MyAppointmentsFactory("VISION") {
+class MyAppointmentsFactoryVision : MyAppointmentsFactory(Supplier.VISION) {
 
     private val defaultReasons = arrayListOf(
             AppointmentCancellationReason("1", "Reason 1"),

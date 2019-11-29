@@ -1,13 +1,14 @@
 package features.authentication.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
+import constants.Supplier
 import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
 import java.time.Duration
 
-class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
+class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
 
     override fun patientWithIncompleteResponse(patient: Patient) {
         val response = AuthenticateReply()

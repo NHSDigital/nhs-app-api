@@ -1,5 +1,6 @@
 package features.im1Appointments.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -23,18 +24,21 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) can be successful$")
     fun anAppointmentBookingForCanBeSuccessful(gpSystem: String) {
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithSuccess() }
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder.respondWithSuccess() }
     }
 
     @Given("^(.*) returns corrupted response for booking request")
     fun corruptedResponseFromMyAppointments(gpSystem: String) {
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithCorrupted() }
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder.respondWithCorrupted() }
     }
 
     @Given("^an appointment booking for (.*) can be successful with slot identifier of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForSlotId(gpSystem: String,
                                                                                numberOfCharacters: Int) {
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsBookingFactory.getForSupplier(supplier)
         val patient = factory.patient
         val slotId = "1".repeat(numberOfCharacters).toInt()
         val request = factory.defaultAppointmentRequest(patient, slotId = slotId)
@@ -43,7 +47,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) requires a booking reason$")
     fun anAppointmentBookingForRequiresABookingReason(gpSystem: String) {
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsBookingFactory.getForSupplier(supplier)
         factory.generateDefaultUserData(defaultPracticeSettings = false)
         factory.requiresBookingReason(true)
     }
@@ -51,7 +56,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
     @Given("^an appointment booking for (.*) can be successful with booking reason of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String,
                                                                                       numberOfCharacters: Int) {
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsBookingFactory.getForSupplier(supplier)
         val patient = factory.patient
         val bookingReason = "a".repeat(numberOfCharacters)
         val request = factory.defaultAppointmentRequest(patient, bookingReason = bookingReason)
@@ -60,8 +66,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) generates an unknown exception$")
     fun unknownExceptionOccursWhenTryingToBookAnAppointment(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithUnknownException() }
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder.respondWithUnknownException() }
     }
 
     @Given("^an appointment booking for (.*) can be successful, but session has expired$")
@@ -72,70 +78,72 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^online appointment booking is not available to the (.*) patient, when wanting to book an appointment$")
     fun appointmentBookingUnavailableToPatientWhenWantingToBookAnAppointment(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithGPErrorWhenNotEnabled() }
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder.respondWithGPErrorWhenNotEnabled() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the slot is not available$")
     fun appointmentBookingForSlotNotAvailable(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithExceptionWhenNotAvailable() }
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder.respondWithExceptionWhenNotAvailable() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the slot is in the past$")
     fun appointmentBookingForSlotIsInThePast(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithExceptionWhenInThePast() }
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder.respondWithExceptionWhenInThePast() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the slot is before practice defined days$")
     fun appointmentBookingForSlotIsBeforePracticeDefinedDays(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder
                 .respondWithExceptionWhenBeforePracticeDefinedDays() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the slot is after practice defined days$")
     fun appointmentBookingForSlotIsAfterPracticeDefinedDays(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder
                 .respondWithExceptionWhenAfterPracticeDefinedDays() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the slot has been booked by someone else$")
     fun appointmentBookingForSlotIsBookedBySomeoneElse(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithConflictException() }
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier) { builder -> builder.respondWithConflictException() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system is unavailable$")
     fun appointmentBookingUnavailable(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier)
         { builder -> builder.respondWithServiceUnavailable() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system will time out$")
     fun appointmentBookingTimesOut(gpSystem: String) {
-
-        defaultAppointmentBookingSetupWithResult(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        defaultAppointmentBookingSetupWithResult(supplier)
         { builder -> builder.withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
                 .respondWithSuccess() }
     }
 
     @Given("^a telephone appointment booking for (.*) can be successful$")
     fun aTelephoneAppointmentBookingForCanBeSuccessful(gpSystem: String) {
-        telephoneAppointmentBookingSetupWithResult(gpSystem, defaultTelephoneNumber) {
+        val supplier = Supplier.valueOf(gpSystem)
+        telephoneAppointmentBookingSetupWithResult(supplier, defaultTelephoneNumber) {
             builder -> builder.respondWithSuccess() }
     }
 
     @Given("^a telephone appointment booking for (.*) cannot be successful without phone number$")
     fun aTelephoneAppointmentBookingForCannotBeSuccessfulWithoutPhoneNumber(gpSystem: String) {
-        telephoneAppointmentBookingSetupWithResult(gpSystem) {
+        val supplier = Supplier.valueOf(gpSystem)
+        telephoneAppointmentBookingSetupWithResult(supplier) {
             builder -> builder.respondWithExceptionWhenRequiredFieldMissing() }
     }
 
-    private fun telephoneAppointmentBookingSetupWithResult(gpSystem: String,
+    private fun telephoneAppointmentBookingSetupWithResult(gpSystem: Supplier,
             telephoneNumber: String? = null,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
         AppointmentsBookingFactory.getForSupplier(gpSystem)
@@ -220,7 +228,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     }
 
     private fun defaultAppointmentBookingSetupWithResult(
-            gpSystem: String,
+            gpSystem: Supplier,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
         AppointmentsBookingFactory.getForSupplier(gpSystem)
                 .defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)

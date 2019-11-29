@@ -1,5 +1,6 @@
 package mocking.stubs.appointments
 
+import constants.Supplier
 import mocking.JSonXmlConverter
 import mocking.MockingClient
 import mocking.emis.data.EmisAppointmentData
@@ -19,10 +20,11 @@ const val CANCEL_APPOINTMENT_SLOT_ID = 100
 
 class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
 
-    fun generateStubs(supplier: String){
+    fun generateStubs(supplier: Supplier){
         when (supplier) {
-            "EMIS" -> generateEMISStubs()
-            "TPP" -> generateTPPStubs()
+            Supplier.EMIS -> generateEMISStubs()
+            Supplier.TPP -> generateTPPStubs()
+            else -> throw IllegalArgumentException("$supplier not implemented")
         }
     }
 

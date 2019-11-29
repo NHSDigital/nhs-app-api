@@ -1,5 +1,6 @@
 package features.im1Appointments.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.im1Appointments.steps.CancelAppointmentSteps
@@ -14,7 +15,8 @@ class CancelAppointmentStepDefinitions {
 
     @Given("^(.*) is available to cancel a previously booked appointment before cutoff time because (.*)$")
     fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
+        val supplier = Supplier.valueOf(gpSystem)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, supplier) { cancelRequest ->
             cancelRequest.respondWithSuccess()
         }
     }
@@ -22,7 +24,7 @@ class CancelAppointmentStepDefinitions {
     @Given("^VISION is available to cancel a previously booked appointment before cutoff time, " +
             "with only one available reason$")
     fun visionIsAvailableToCancelWithOneReason() {
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(gpSystem = "VISION") { cancelRequest ->
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(gpSystem = Supplier.VISION) { cancelRequest ->
             cancelRequest.respondWithSuccess()
         }
     }
@@ -45,7 +47,8 @@ class CancelAppointmentStepDefinitions {
 
     @Given("^(.*) is unavailable to cancel a previously booked appointment because (.*)$")
     fun gpSystemIsUnavailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
+        val supplier = Supplier.valueOf(gpSystem)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, supplier) { cancelRequest ->
             cancelRequest.responseWithExceptionWhenServiceUnavailable()
         }
     }

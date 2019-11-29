@@ -2,6 +2,7 @@ package features.myrecord.stepDefinitions
 
 import constants.DateTimeFormats
 import constants.ErrorResponseCodeTpp
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -20,6 +21,7 @@ import worker.models.myrecord.MyRecordResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import mocking.data.myrecord.MedicationsData
+import java.lang.UnsupportedOperationException
 
 open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -45,13 +47,13 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
         val gpSystem = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(gpSystem)
         when (gpSystem) {
-            "EMIS" -> {
+            Supplier.EMIS -> {
                 mockingClient.forEmis {
                     myRecord.medicationsRequest(SerenityHelpers.getPatient())
                             .respondWithExceptionWhenNotEnabled()
                 }
             }
-            "TPP" -> {
+            Supplier.TPP -> {
                 mockingClient.forTpp {
                     myRecord.viewPatientOverviewPost(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
@@ -59,12 +61,13 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
+            else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
         }
     }
 
     @Given("^the EMIS GP Practice has acute medication results where the first record has no date$")
     fun theEmisGpPracticeHasAcuteMedicationResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         val patient = SerenityHelpers.getPatient()
 
         mockingClient.forEmis {
@@ -97,7 +100,7 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the EMIS GP Practice has current repeat medication results where the first record has no date$")
     fun theEmisGpPracticeHasCurrentRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         val patient = SerenityHelpers.getPatient()
 
         mockingClient.forEmis {
@@ -131,7 +134,7 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the EMIS GP Practice has discontinued repeat medication results where the first record has no date$")
     fun theEmisGpPracticeHasDiscontinuedRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         val patient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             myRecord.medicationsRequest(patient)

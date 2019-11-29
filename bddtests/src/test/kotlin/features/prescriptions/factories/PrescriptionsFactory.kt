@@ -1,5 +1,6 @@
 package features.prescriptions.factories
 
+import constants.Supplier
 import utils.SerenityHelpers
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
@@ -11,7 +12,7 @@ import models.Patient
 import java.time.OffsetDateTime
 
 const val TIME_TO_SLEEP_IN_MILLIS = 1000L
-abstract class PrescriptionsFactory(gpSupplier:String) {
+abstract class PrescriptionsFactory(gpSupplier: Supplier) {
 
     abstract val getCoursesLoader: ICoursesLoader<*>
     abstract val getPrescriptionsLoader: IPrescriptionLoader<*>
@@ -61,13 +62,13 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
 
     companion object : SupplierSpecificFactory<PrescriptionsFactory>() {
 
-        override val map: HashMap<String, (() -> PrescriptionsFactory)>
+        override val map: HashMap<Supplier, (() -> PrescriptionsFactory)>
                 by lazy {
                     hashMapOf(
-                            "EMIS" to { PrescriptionsFactoryEmis() },
-                            "TPP" to { PrescriptionsFactoryTpp() },
-                            "VISION" to { PrescriptionsFactoryVision() },
-                            "MICROTEST" to { PrescriptionsFactoryMicrotest() })
+                            Supplier.EMIS to { PrescriptionsFactoryEmis() },
+                            Supplier.TPP to { PrescriptionsFactoryTpp() },
+                            Supplier.VISION to { PrescriptionsFactoryVision() },
+                            Supplier.MICROTEST to { PrescriptionsFactoryMicrotest() })
                 }
     }
 }

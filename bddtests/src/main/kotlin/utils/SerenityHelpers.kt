@@ -1,5 +1,6 @@
 package utils
 
+import constants.Supplier
 import mocking.MockingClient
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -36,11 +37,11 @@ class SerenityHelpers {
             return getValueOrNull<Patient>(Patient::class)
         }
 
-        fun getGpSupplier():String{
+        fun getGpSupplier():Supplier{
             return GlobalSerenityHelpers.GP_SYSTEM.getOrFail()
         }
 
-        fun setGpSupplier(gpSupplier: String){
+        fun setGpSupplier(gpSupplier: Supplier){
             GlobalSerenityHelpers.GP_SYSTEM.setIfNotAlreadySet(gpSupplier)
         }
 

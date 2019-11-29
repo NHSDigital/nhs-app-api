@@ -243,7 +243,7 @@ Feature: Book Appointments  Backend
 
   Scenario Outline: Booking a telephone appointment with <GP System> returns successful response if the phone number is provided
     Given a telephone appointment booking for <GP System> can be successful
-    And I have logged into <GP System> and have a valid session cookie
+    And I have logged in and have a valid session cookie
     When an appointment booking is submitted with phone number
     Then a successful response for appointment booking is returned
     Examples:
@@ -253,6 +253,6 @@ Feature: Book Appointments  Backend
 
   Scenario: Booking a telephone appointment with EMIS returns an error response if the phone number is not provided
     Given a telephone appointment booking for EMIS cannot be successful without phone number
-    And I have logged into EMIS and have a valid session cookie
+    And I have logged in and have a valid session cookie
     When an appointment booking is submitted without phone number
     Then I receive a "Bad Request" error with service desk reference prefixed "4a"

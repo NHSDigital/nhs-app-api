@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
@@ -17,7 +18,7 @@ import java.util.*
 
 private const val APPOINTMENT_SLOT_RESPONSE_VALIDITY_TIME = 10L
 
-abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
+abstract class AppointmentsSlotsFactory(gpSupplier: Supplier) : AppointmentsFactory(gpSupplier) {
 
     private val appointmentSlotsExample = AppointmentsSlotsExample()
     private val appointmentSlotsTelephoneExample = AppointmentSlotsTelephoneExample()
@@ -182,12 +183,12 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     companion object : SupplierSpecificFactory<AppointmentsSlotsFactory>() {
 
-        override val map: HashMap<String, (() -> (AppointmentsSlotsFactory))> by lazy {
+        override val map: HashMap<Supplier, (() -> (AppointmentsSlotsFactory))> by lazy {
             hashMapOf(
-                    "EMIS" to { AppointmentsSlotsFactoryEmis() },
-                    "TPP" to { AppointmentsSlotsFactoryTpp() },
-                    "VISION" to { AppointmentsSlotsFactoryVision() },
-                    "MICROTEST" to { AppointmentsSlotsFactoryMicrotest() }
+                    Supplier.EMIS to { AppointmentsSlotsFactoryEmis() },
+                    Supplier.TPP to { AppointmentsSlotsFactoryTpp() },
+                    Supplier.VISION to { AppointmentsSlotsFactoryVision() },
+                    Supplier.MICROTEST to { AppointmentsSlotsFactoryMicrotest() }
             )
         }
     }

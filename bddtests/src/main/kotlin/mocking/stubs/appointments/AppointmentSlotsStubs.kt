@@ -1,5 +1,6 @@
 package mocking.stubs.appointments
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
@@ -16,10 +17,11 @@ class AppointmentSlotsStubs(private val mockingClient: MockingClient) {
 
     private val appointmentSlotsExample = AppointmentsSlotsExample()
 
-    fun generateStubs(supplier: String){
+    fun generateStubs(supplier: Supplier){
         when(supplier){
-            "EMIS" -> generateEMISStubs()
-            "TPP" -> generateTPPStubs()
+            Supplier.EMIS -> generateEMISStubs()
+            Supplier.TPP -> generateTPPStubs()
+            else -> throw IllegalArgumentException("$supplier not implemented")
         }
     }
 

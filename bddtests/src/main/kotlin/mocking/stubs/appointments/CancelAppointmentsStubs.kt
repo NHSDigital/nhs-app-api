@@ -1,5 +1,6 @@
 package mocking.stubs.appointments
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.stubs.InputResponse
@@ -12,10 +13,11 @@ import utils.getOrFail
 
 class CancelAppointmentsStubs(private val mockingClient: MockingClient, private val patient: Patient ?= null) {
 
-    fun generateStubs(supplier: String){
+    fun generateStubs(supplier: Supplier){
         when(supplier){
-            "EMIS" -> generateEMISStubs()
-            "TPP" -> generateTPPStubs()
+            Supplier.EMIS -> generateEMISStubs()
+            Supplier.TPP -> generateTPPStubs()
+            else -> throw IllegalArgumentException("$supplier not implemented")
         }
     }
 

@@ -1,5 +1,6 @@
 package mocking.stubs.prescriptions
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.emis.prescriptionsSubmission.EmisPrescriptionsSubmissionBuilder
 import mocking.stubs.InputResponse
@@ -20,10 +21,12 @@ class OrderRepeatPrescriptionsStubs(private val patient: Patient,
                                     private val mockingClient: MockingClient,
                                     private val uuid: MutableList<String> ?= null) {
 
-    fun generateStubs(supplier: String){
+    fun generateStubs(supplier: Supplier){
         when (supplier){
-            "EMIS" -> generateEMISStubs()
-            "TPP" -> generateTPPStubs() }
+            Supplier.EMIS -> generateEMISStubs()
+            Supplier.TPP -> generateTPPStubs()
+            else -> throw IllegalArgumentException("$supplier not implemented")
+        }
     }
 
     private fun generateEMISStubs() {

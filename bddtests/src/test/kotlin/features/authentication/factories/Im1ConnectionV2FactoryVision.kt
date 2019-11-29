@@ -1,6 +1,7 @@
 package features.authentication.factories
 
 import constants.DateTimeFormats
+import constants.Supplier
 import mocking.defaults.VisionMockDefaults
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.vision.models.Account
@@ -14,7 +15,7 @@ import mockingFacade.linkage.LinkageInformationFacade
 import mocking.models.Mapping
 import java.time.Duration
 
-class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory("VISION") {
+class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
 
     override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         configuration()

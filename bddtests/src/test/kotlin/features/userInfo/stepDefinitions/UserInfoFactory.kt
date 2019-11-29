@@ -1,5 +1,6 @@
 package features.userInfo.stepDefinitions
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -15,7 +16,7 @@ class UserInfoFactory {
     val mockingClient = MockingClient.instance
 
     //This functionality is gp system agnostic
-    private val targetGpSystem = "EMIS"
+    private val targetGpSystem = Supplier.EMIS
 
     fun setUpUser() {
         val gpSystem = targetGpSystem

@@ -1,6 +1,7 @@
 package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
+import constants.Supplier
 import features.linkage.LinkageResult
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.linkage.EmisLinkageGETBuilder
@@ -13,7 +14,7 @@ import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
 import java.time.Duration
 
-class LinkageFactoryEmis : LinkageFactory("EMIS") {
+class LinkageFactoryEmis : LinkageFactory(Supplier.EMIS) {
     override val validOtherLinkageDetails = LinkageInformationFacade(
             odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
             linkageKey = "anotherPassphraseToLink",

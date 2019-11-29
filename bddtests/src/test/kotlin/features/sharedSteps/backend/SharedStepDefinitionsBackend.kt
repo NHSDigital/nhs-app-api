@@ -1,6 +1,7 @@
 package features.sharedSteps.backend
 
 import config.Config
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
@@ -9,7 +10,6 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
-import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.set
 import worker.WorkerClient
@@ -22,12 +22,10 @@ open class SharedStepDefinitionsBackend{
 
     @Given("^I have logged into (.*) and have a valid session cookie$")
     fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
-
-        GlobalSerenityHelpers.GP_SYSTEM.set(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(gpSystem)
-
+        SerenityHelpers.setGpSupplier(supplier)
         givenIHaveLoggedInAndHaveAValidSessionCookie()
     }
 
@@ -37,7 +35,7 @@ open class SharedStepDefinitionsBackend{
         val patient = SerenityHelpers.getPatientOrNull()
                 ?: Patient.getDefault(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+                SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .postSessionConnection(patient.cidUserSession)
         val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication

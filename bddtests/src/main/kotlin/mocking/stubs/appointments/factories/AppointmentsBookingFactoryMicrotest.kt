@@ -1,12 +1,13 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import models.Slot
 
-class AppointmentsBookingFactoryMicrotest : AppointmentsBookingFactory("MICROTEST") {
+class AppointmentsBookingFactoryMicrotest : AppointmentsBookingFactory(Supplier.MICROTEST) {
 
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,

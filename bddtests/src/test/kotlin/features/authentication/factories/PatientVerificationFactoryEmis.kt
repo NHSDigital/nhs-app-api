@@ -1,5 +1,6 @@
 package features.authentication.factories
 
+import constants.Supplier
 import features.authentication.stepDefinitions.PatientVerificationSerenityHelpers
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.PatientIdentifier
@@ -12,7 +13,7 @@ import java.time.Duration
 
 private const val REQUEST_DELAY = 1000_000L
 
-class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
+class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS){
 
     override fun validPatientWithNoNhsNumber() {
         emisValidCredentialsWithNHSNumbers(arrayListOf())

@@ -1,5 +1,6 @@
 package features.prescriptions.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import net.serenitybdd.core.Serenity
@@ -62,10 +63,10 @@ class PrescriptionsStepDefinitionsBackend {
         val prescriptionsListResponse = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE
                 .getOrFail<PrescriptionsListResponse>()
         Assert.assertNotNull(prescriptionsListResponse)
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
         when (currentProvider) {
-            ProviderTypes.EMIS -> {
+            Supplier.EMIS -> {
                 Assert.assertEquals(count, prescriptionsListResponse.prescriptions.count())
                 val prescriptions = prescriptionsListResponse.prescriptions
 
@@ -76,9 +77,9 @@ class PrescriptionsStepDefinitionsBackend {
                             ZonedDateTime.parse(prescriptions[int + 1].orderDate))
                 }
             }
-            ProviderTypes.TPP,
-            ProviderTypes.VISION,
-            ProviderTypes.MICROTEST -> {
+            Supplier.TPP,
+            Supplier.VISION,
+            Supplier.MICROTEST -> {
                 Assert.assertEquals(count, prescriptionsListResponse.courses.count())
             }
             else -> {

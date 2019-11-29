@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -15,6 +16,7 @@ import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
+import java.lang.UnsupportedOperationException
 
 open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -25,30 +27,31 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         val gpSystem = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(gpSystem)
         when (gpSystem) {
-            "EMIS" -> {
+            Supplier.EMIS -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
                             .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
                 }
             }
-            "TPP" -> {
+            Supplier.TPP -> {
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
                 }
             }
+            else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
         }
     }
 
     @Given("^the Patient has no access to consultations$")
     fun givenTheGPPracticeHasNoAccessToConsultations() {
         when (SerenityHelpers.getGpSupplier()) {
-            "EMIS" -> {
+            Supplier.EMIS -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithExceptionWhenNotEnabled()
                 }
             }
-            "TPP" -> {
+            Supplier.TPP -> {
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
@@ -59,19 +62,20 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
                 }
 
             }
+            else -> throw UnsupportedOperationException("Not implemented for this supplier")
         }
     }
 
     @Given("^the GP Practice has no consultations$")
     fun givenThePracticeHasNoConsultations() {
         when (SerenityHelpers.getGpSupplier()) {
-            "EMIS" -> {
+            Supplier.EMIS -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
                             .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
                 }
             }
-            "TPP" -> {
+            Supplier.TPP -> {
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
@@ -79,6 +83,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
                 }
 
             }
+            else -> throw UnsupportedOperationException("Not implemented for this supplier")
         }
     }
 
@@ -93,19 +98,20 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
     @Given("^an error occurred retrieving the consultations$")
     fun givenAnErrorOccurredRetrievingTestResults() {
         when (SerenityHelpers.getGpSupplier()) {
-            "EMIS" -> {
+            Supplier.EMIS -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithNonDataAccessException()
                 }
             }
-            "TPP" -> {
-                setPatientToDefaultFor("TPP")
+            Supplier.TPP -> {
+                setPatientToDefaultFor(Supplier.TPP)
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithServiceNotAvailableException()
                 }
 
             }
+            else -> throw UnsupportedOperationException("Not implemented for this supplier")
         }
     }
 

@@ -1,5 +1,6 @@
 package features.prescriptions.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -25,7 +26,6 @@ import models.prescriptions.HistoricPrescription
 import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage
-import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
@@ -84,13 +84,14 @@ open class PrescriptionsStepDefinitions {
 
     @Given("^I am patient using the (.*) GP System$")
     fun givenIAmAPatientUsingGPSystem(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
-        val currentPatient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
+        val currentPatient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient( currentPatient)
         SerenityHelpers.setPatient(currentPatient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
-        PrescriptionsDataSetup.initialize(gpSystem)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
+        PrescriptionsDataSetup.initialize(supplier)
     }
 
     @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
@@ -136,28 +137,28 @@ open class PrescriptionsStepDefinitions {
 
     @Given("^the GP System has disabled prescriptions$")
     fun theGPSystemHasDisabledPrescriptions() {
-        var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         if (currentProvider == null) {
-            PrescriptionsDataSetup.initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
-            currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+            PrescriptionsDataSetup.initialize(SerenityHelpers.getGpSupplier())
+            currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         }
-        PrescriptionsFactory.getForSupplier(currentProvider.toString()).disableAtGPLevel()
+        PrescriptionsFactory.getForSupplier(currentProvider!!).disableAtGPLevel()
     }
 
     @Given("^the GP System session has expired when viewing prescriptions$")
     fun theGPSystemSessionHasExpired() {
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         if (currentProvider == null) {
-            PrescriptionsDataSetup.initialize(GlobalSerenityHelpers.GP_SYSTEM.getOrFail())
+            PrescriptionsDataSetup.initialize(SerenityHelpers.getGpSupplier())
         }
-        PrescriptionsFactory.getForSupplier(currentProvider.toString()).gpSessionHasExpired()
+        PrescriptionsFactory.getForSupplier(currentProvider!!).gpSessionHasExpired()
     }
 
     @Given("prescriptions is disabled at a GP Practice level")
     fun prescriptionsIsDisabledAtAGPLevel() {
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         val currentPatient = SerenityHelpers.getPatient()
-        PrescriptionsDataSetup.disabled(currentPatient, currentProvider)
+        PrescriptionsDataSetup.disabled(currentPatient, currentProvider!!)
     }
 
     @Given("each course has (.*)")
@@ -166,7 +167,7 @@ open class PrescriptionsStepDefinitions {
         val showQuantity = contents.toLowerCase().contains("quantity")
 
         val currentPatient = SerenityHelpers.getPatient()
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
         val prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER.getOrFail<IPrescriptionLoader<*>>()
@@ -177,7 +178,7 @@ open class PrescriptionsStepDefinitions {
                 showDosage, showQuantity)
 
         when (currentProvider) {
-            ProviderTypes.EMIS -> {
+            Supplier.EMIS -> {
 
                 mockingClient
                         .forEmis {
@@ -188,7 +189,7 @@ open class PrescriptionsStepDefinitions {
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                         }
             }
-            ProviderTypes.TPP -> {
+            Supplier.TPP -> {
 
                 mockingClient
                         .forTpp {
@@ -196,7 +197,7 @@ open class PrescriptionsStepDefinitions {
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
                         }
             }
-            ProviderTypes.VISION -> {
+            Supplier.VISION -> {
 
                 mockingClient
                         .forVision {
@@ -204,7 +205,7 @@ open class PrescriptionsStepDefinitions {
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
-            ProviderTypes.MICROTEST -> {
+            Supplier.MICROTEST -> {
 
                 mockingClient
                         .forMicrotest {
@@ -286,10 +287,10 @@ open class PrescriptionsStepDefinitions {
     }
 
     private fun providerHasAllPrescriptionFields(): Boolean {
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
-        return currentProvider == ProviderTypes.EMIS ||
-                currentProvider == ProviderTypes.VISION ||
-                currentProvider == ProviderTypes.MICROTEST
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
+        return currentProvider == Supplier.EMIS ||
+                currentProvider == Supplier.VISION ||
+                currentProvider == Supplier.MICROTEST
     }
 
     @Then("I select (\\d+) prescription to order")
@@ -302,15 +303,15 @@ open class PrescriptionsStepDefinitions {
     private fun getResponseToExpectedPrescriptionFormat(): List<HistoricPrescription> {
 
         val prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER.getOrFail<IPrescriptionLoader<*>>()
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         return when (currentProvider) {
-            ProviderTypes.EMIS ->
+            Supplier.EMIS ->
                 EmisPrescriptionMapper.map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
-            ProviderTypes.TPP ->
+            Supplier.TPP ->
                 TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply)
-            ProviderTypes.VISION ->
+            Supplier.VISION ->
                 VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
-            ProviderTypes.MICROTEST ->
+            Supplier.MICROTEST ->
                 MicrotestPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistoryGetResponse)
             else -> throw NotImplementedError()
         }

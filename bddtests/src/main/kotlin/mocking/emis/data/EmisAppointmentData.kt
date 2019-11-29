@@ -3,6 +3,7 @@ package mocking.emis.data
 import addDays
 import addMinutes
 import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
+import constants.Supplier
 import mocking.commonData.BaseAppointmentData
 import mocking.emis.appointments.GetAppointmentsResponseModel
 import mocking.emis.models.Appointment
@@ -31,7 +32,7 @@ private const val SESSION_ID_EARCLINIC = 3
 class EmisAppointmentData private constructor() : BaseAppointmentData() {
     val timeZone = TimeZone.getTimeZone("Europe/London")
     override val dateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
-    override val defaultPatient = Patient.getDefault("EMIS")
+    override val defaultPatient = Patient.getDefault(Supplier.EMIS)
 
     private val expectedMyAppointment = Slot(slotType = SessionType.Timed.toString())
 

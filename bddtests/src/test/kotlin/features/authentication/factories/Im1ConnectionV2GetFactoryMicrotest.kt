@@ -1,9 +1,10 @@
 package features.authentication.factories
+import constants.Supplier
 import mocking.defaults.MicrotestMockDefaults
 import org.apache.http.HttpStatus
 import utils.SerenityHelpers
 
-class Im1ConnectionV2GetFactoryMicrotest : Im1ConnectionV2GetFactory("MICROTEST") {
+class Im1ConnectionV2GetFactoryMicrotest : Im1ConnectionV2GetFactory(Supplier.MICROTEST) {
 
     override fun errorIm1Verify(httpStatusCode: Int, errorCode: String,
                                 message: String?) {

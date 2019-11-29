@@ -1,5 +1,6 @@
 package mocking.defaults
 
+import constants.Supplier
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import models.Patient
@@ -24,7 +25,7 @@ class TppMockDefaults {
                         ",\"Passphrase\":\"$DEFAULT_TPP_PASSPHRASE\"" +
                         ",\"ProviderId\":\"$DEFAULT_TPP_PROVIDER_ID\"}"
 
-        val patientTpp = Patient.getDefault("TPP")
+        val patientTpp = Patient.getDefault(Supplier.TPP)
 
         val DEFAULT_TPP_APPLICATION = Application(
                 name = "NhsApp",

@@ -1,5 +1,6 @@
 package features.im1Appointments.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import features.im1Appointments.steps.AppointmentSerenityHelpers
@@ -20,11 +21,12 @@ class AppointmentsTelephoneBookingStepDefinitions {
 
     @Given("I wish to book a (.*) telephone appointment$")
     fun iWishToBookATelephoneAppointment(gpSystem: String, parameters: DataTable) {
+        val supplier = Supplier.valueOf(gpSystem)
         val config = AppointmentConfiguration.fromMappings(parameters.toMap())
         val patient = createPatientSetup(gpSystem, config)
         val targetTelephoneNumber = getTargetTelephoneNumber(patient, config)
 
-        val bookingFactory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        val bookingFactory = AppointmentsBookingFactory.getForSupplier(supplier)
         bookingFactory.generateAvailableSlotExampleIncludingTelephoneAppointment(
                 reasonNecessityOption = config.reasonNecessity)
         bookingFactory.telephoneAppointmentBookingSetupWithResult(targetTelephoneNumber, !config.enterSymptoms)
@@ -34,7 +36,7 @@ class AppointmentsTelephoneBookingStepDefinitions {
                     .inScenario("Appointments")
                     .willSetStateTo("Appointment Booked")
         }
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponseOnceBooked()
     }
 
@@ -46,14 +48,15 @@ class AppointmentsTelephoneBookingStepDefinitions {
     }
 
     private fun createPatientSetup(gpSystem: String, config: AppointmentConfiguration): Patient {
-        val patient = Patient.getDefault(gpSystem).copy(
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier).copy(
                 telephoneFirst = config.firstNumber,
                 telephoneSecond = config.secondNumber)
         SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(gpSystem)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient, false)
+        SerenityHelpers.setGpSupplier(supplier)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient, false)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+        DemographicsFactory.getForSupplier(supplier).enabled(patient)
         return patient
     }
 }

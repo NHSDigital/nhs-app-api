@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -7,7 +8,7 @@ import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.ZonedDateTime
 
-class AppointmentsSlotsFactoryMicrotest : AppointmentsSlotsFactory("MICROTEST") {
+class AppointmentsSlotsFactoryMicrotest : AppointmentsSlotsFactory(Supplier.MICROTEST) {
 
     override fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
                                                  endDate: ZonedDateTime,

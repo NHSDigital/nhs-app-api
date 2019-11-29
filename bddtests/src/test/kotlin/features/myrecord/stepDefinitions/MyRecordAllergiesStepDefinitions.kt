@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import constants.DateTimeFormats
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -19,6 +20,7 @@ import mocking.data.myrecord.NUMBER_OF_ALLERGY_RECORDS
 import utils.SerenityHelpers
 import utils.getOrFail
 import worker.models.myrecord.MyRecordResponse
+import java.lang.UnsupportedOperationException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -38,7 +40,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     @Given("^the GP Practice has enabled allergies functionality and has a drug and non drug allergy " +
             "record for VISION$")
     fun theGPPracticeHasEnabledAllergiesFunctionalityAndThePatientHasADrugAndNonDrugAllergyRecord() {
-        setPatientToDefaultFor("VISION")
+        setPatientToDefaultFor(Supplier.VISION)
         MyRecordVisionMocker(mockingClient).generatePatientDataResponse(
                 SerenityHelpers.getPatient(),
                 allergiesView,
@@ -53,23 +55,24 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         setPatientToDefaultFor(gpSystem)
         val patient = SerenityHelpers.getPatient()
         when (gpSystem) {
-            "EMIS" ->
+            Supplier.EMIS ->
                 mockingClient.forEmis {
                     myRecord.allergiesRequest(patient)
                             .respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
                 }
-            "TPP" -> {
+            Supplier.TPP -> {
                 mockingClient.forTpp {
                     myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithSuccess(AllergiesData.getTppAllergiesData(NUMBER_OF_ALLERGIES))
                 }
             }
+            else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
         }
     }
 
     @Given("^the EMIS GP Practice has two allergies results where the first record has no date$")
     fun givenTheEMISGPPracticeHasTwoAllergiesResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         val patient = SerenityHelpers.getPatient()
 
         mockingClient.forEmis {
@@ -87,7 +90,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
     @Given("^there is an unknown error getting allergies for VISION$")
     fun thereIsAnUnknownErrorGettingAllergiesFor() {
-        setPatientToDefaultFor("VISION")
+        setPatientToDefaultFor(Supplier.VISION)
         MyRecordVisionMocker(mockingClient).generatePatientDataResponse(
                 SerenityHelpers.getPatient(),
                 allergiesView,

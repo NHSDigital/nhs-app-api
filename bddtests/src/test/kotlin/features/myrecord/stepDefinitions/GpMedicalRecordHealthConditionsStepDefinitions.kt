@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Then
 import org.junit.Assert
 import pages.gpMedicalRecord.HealthConditionsPage
@@ -12,18 +13,18 @@ open class GpMedicalRecordHealthConditionsStepDefinitions : AbstractDemographics
     private lateinit var healthConditionsPage: HealthConditionsPage
 
     private val expectedData = mapOf(
-            "EMIS" to arrayOf(
+            Supplier.EMIS to arrayOf(
                 "15 May 2018\nConjunctivitis\nSignificance: Minor\nStatus: Past\n" +
                         "Notes:\nPatient advice given Repeated use of eye drops\nEnded: 15 May 2018",
                 "15 May 2018\nConjunctivitis\nSignificance: Minor\nStatus: Past\n" +
                         "Notes:\nPatient advice given Repeated use of eye drops\nEnded: 15 May 2018",
                 "15 May 2018\nConjunctivitis\nSignificance: Minor\nStatus: Past\n" +
                         "Notes:\nPatient advice given Repeated use of eye drops\nEnded: 15 May 2018"
-            ), "VISION" to arrayOf(
+            ), Supplier.VISION to arrayOf(
                 "10 October 2018\nPeanut allergy\nStatus: Past",
                 "10 October 2018\nBroken leg\nStatus: Current",
                 "10 October 2018\nAcne\nStatus: Random"
-            ), "MICROTEST" to arrayOf(
+            ), Supplier.MICROTEST to arrayOf(
                 "3 July 2019\nFinish Date: Ongoing\nRubric 1",
                 "3 July 2019\nFinish Date: Ongoing\nRubric 2",
                 "3 July 2019\nFinish Date: Ongoing\nRubric 3"

@@ -1,5 +1,6 @@
 package features.linkage.stepDefinitions
 
+import constants.Supplier
 import features.linkage.LinkageResult
 import mocking.SupplierSpecificFactory
 import mockingFacade.linkage.LinkageInformationFacade
@@ -8,7 +9,7 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
 
-abstract class LinkageFactory(protected val gpSystem: String) {
+abstract class LinkageFactory(protected val gpSystem: Supplier) {
 
     protected val mockingClient = SerenityHelpers.getMockingClient()
 
@@ -49,11 +50,28 @@ abstract class LinkageFactory(protected val gpSystem: String) {
             return linkage
         }
 
-        override val map: HashMap<String, () -> LinkageFactory>
+        override val map: HashMap<Supplier, () -> LinkageFactory>
             get() = hashMapOf(
-                    "EMIS" to { LinkageFactoryEmis() },
-                    "TPP" to { LinkageFactoryTpp() },
-                    "VISION" to { LinkageFactoryVision() },
-                    "MICROTEST" to { LinkageFactoryMicrotest() })
+                    Supplier.EMIS to { LinkageFactoryEmis() },
+                    Supplier.TPP to { LinkageFactoryTpp() },
+                    Supplier.VISION to { LinkageFactoryVision() },
+                    Supplier.MICROTEST to { LinkageFactoryMicrotest() })
+
+        fun validLinkage(gpSystem: Supplier): LinkageInformationFacade {
+            SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
+            SerenityHelpers.setGpSupplier(gpSystem)
+            return LinkageFactory.getForSupplier(gpSystem).validLinkageDetails
+        }
+
+        fun validOtherLinkage(gpSystem: Supplier): LinkageInformationFacade {
+            SerenityHelpers.setGpSupplier(gpSystem)
+            return LinkageFactory.getForSupplier(gpSystem).validOtherLinkageDetails
+        }
+
+        fun setLinkageInformation(linkageInformationFacade: LinkageInformationFacade,
+                                          linkageResult: LinkageResult) {
+            Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkageInformationFacade)
+            Serenity.setSessionVariable(LinkageResult::class).to(linkageResult)
+        }
     }
 }

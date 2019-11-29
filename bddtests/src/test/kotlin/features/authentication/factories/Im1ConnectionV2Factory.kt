@@ -1,5 +1,6 @@
 package features.authentication.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
@@ -9,7 +10,7 @@ import utils.SerenityHelpers
 import worker.models.patient.Im1ConnectionRequest
 import java.time.Duration
 
-abstract class Im1ConnectionV2Factory(protected val gpSystem: String) {
+abstract class Im1ConnectionV2Factory(protected val gpSystem: Supplier) {
 
     protected val mockingClient = SerenityHelpers.getMockingClient()
 
@@ -58,11 +59,11 @@ abstract class Im1ConnectionV2Factory(protected val gpSystem: String) {
 
     companion object : SupplierSpecificFactory<Im1ConnectionV2Factory>() {
 
-        override val map: HashMap<String, () -> Im1ConnectionV2Factory>
+        override val map: HashMap<Supplier, () -> Im1ConnectionV2Factory>
             get() = hashMapOf(
-                    "EMIS" to { Im1ConnectionV2FactoryEmis() },
-                    "TPP" to { Im1ConnectionV2FactoryTpp() },
-                    "VISION" to { Im1ConnectionV2FactoryVision() },
-                    "MICROTEST" to { Im1ConnectionV2FactoryMicrotest() })
+                    Supplier.EMIS to { Im1ConnectionV2FactoryEmis() },
+                    Supplier.TPP to { Im1ConnectionV2FactoryTpp() },
+                    Supplier.VISION to { Im1ConnectionV2FactoryVision() },
+                    Supplier.MICROTEST to { Im1ConnectionV2FactoryMicrotest() })
     }
 }

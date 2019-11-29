@@ -1,5 +1,6 @@
 package features.im1Appointments.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -18,7 +19,8 @@ class AvailableAppointmentsSlotsGuidanceStepDefinitions {
             "when (.*) appointment slot guidance is provided$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaWithCustomGuidance(
             gpSystem: String, guidanceMessageDescription: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
 
         val guidanceMessage = when (guidanceMessageDescription) {
             "empty" -> ""
@@ -30,7 +32,8 @@ class AvailableAppointmentsSlotsGuidanceStepDefinitions {
 
     @Given("^there are available appointment slots with different criteria for (.*) when guidance cannot be retrieved$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWhenGuidanceCannotBeRetrieved(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage()
     }
 

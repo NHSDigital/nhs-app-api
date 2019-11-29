@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.emis.models.AppointmentCancellationReason
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
@@ -13,7 +14,7 @@ import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentResponseObject
 import worker.models.appointments.MyAppointmentsResponse
 
-class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
+class MyAppointmentsFactoryTpp : MyAppointmentsFactory(Supplier.TPP) {
 
 
     override fun getDefaultCancellationReasons(): List<AppointmentCancellationReason> {

@@ -1,6 +1,7 @@
 package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
+import constants.Supplier
 import features.linkage.LinkageResult
 import mocking.models.Mapping
 import mocking.defaults.VisionMockDefaults
@@ -10,7 +11,7 @@ import mocking.vision.models.linkage.LinkageKeyGetResponse
 import mocking.vision.models.linkage.LinkageKeyPostRequest
 import mockingFacade.linkage.LinkageInformationFacade
 
-class LinkageFactoryVision : LinkageFactory("VISION") {
+class LinkageFactoryVision : LinkageFactory(Supplier.VISION) {
 
     override val validLinkageDetails = LinkageInformationFacade(
             odsCode =  VisionMockDefaults.DEFAULT_ODS_CODE_VISION,

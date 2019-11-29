@@ -1,10 +1,10 @@
 package features.im1Appointments.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.CancelAppointmentSteps
-import features.sharedSteps.backend.SharedStepDefinitionsBackend
 import mocking.MockingClient
 import mocking.stubs.StubbedEnvironment
 import mocking.vision.appointments.CancelAppointmentBuilderVision
@@ -22,26 +22,20 @@ class AppointmentsCancellingStepDefinitionsBackend {
     val mockingClient = MockingClient.instance
 
     @Steps
-    private lateinit var sharedBackendSteps: SharedStepDefinitionsBackend
-    @Steps
     private lateinit var cancelAppointmentSteps : CancelAppointmentSteps
 
     @Given("^(.*) is available to cancel a previously booked appointment before cutoff time$")
     fun gpSystemIsAvailableToCancelAnAppointment(gpSystem: String) {
-
-        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
-
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
+        val supplier = Supplier.valueOf(gpSystem)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(supplier), supplier) {
             cancelRequest -> cancelRequest.respondWithSuccess()
         }
     }
 
     @Given("^(.*) will time out when trying to cancel a previously booked appointment")
     fun gpSystemIsAvailableToCancelAnAppointmentButWillTimeout(gpSystem: String) {
-
-        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
-
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
+        val supplier = Supplier.valueOf(gpSystem)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(supplier), supplier) {
             cancelRequest -> cancelRequest.respondWithSuccess()
                 .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
         }
@@ -49,28 +43,24 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @Given("^as a VISION user I want to cancel an appointment booked by someone else$")
     fun appointmentToBeCancelledIsBookedBySomeoneElseForVision() {
-        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason("VISION"),
-                "VISION") { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(Supplier.VISION),
+                Supplier.VISION) { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
                     .respondWithConflictException()
         }
     }
 
     @Given("^as a VISION user I want to cancel an appointment that doesn't exist$")
     fun appointmentToBeCancelledDoesNotExistForVision() {
-        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason("VISION"),
-                "VISION") { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(Supplier.VISION),
+                Supplier.VISION) { cancelRequest -> (cancelRequest as CancelAppointmentBuilderVision)
                     .respondWithExceptionWhenNotAvailable()
         }
     }
 
     @Given("^(.*) returns corrupted response when trying to cancel a previously booked appointment")
     fun gpSystemIsAvailableToCancelAnAppointmentButWillReturnCorruptedResponse(gpSystem: String) {
-
-        sharedBackendSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
-
-        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(gpSystem), gpSystem) {
+        val supplier = Supplier.valueOf(gpSystem)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(getCancellationReason(supplier), supplier) {
             cancelRequest -> cancelRequest.respondWithCorrupted()
         }
     }
@@ -126,9 +116,9 @@ class AppointmentsCancellingStepDefinitionsBackend {
         Assert.assertEquals("Expected statusCode", SC_NO_CONTENT, response!!.statusLine.statusCode )
     }
 
-    private fun getCancellationReason(gpSystem: String) : String {
+    private fun getCancellationReason(gpSystem: Supplier) : String {
         return when (gpSystem) {
-            "EMIS", "MICROTEST" ->  "No longer required"
+            Supplier.EMIS, Supplier.MICROTEST ->  "No longer required"
             else -> ""
         }
     }

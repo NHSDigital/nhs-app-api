@@ -1,8 +1,9 @@
 package features.authentication.stepDefinitions
 
+import constants.Supplier
 import models.Patient
 
-class AuthenticationFactoryMicrotest : AuthenticationFactory("MICROTEST") {
+class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST) {
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forMicrotest {

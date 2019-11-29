@@ -1,5 +1,6 @@
 package features.im1Appointments.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -22,7 +23,8 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
 
     @Given("^the system will time out when trying to retrieve (.*) appointment slots$")
     fun appointmentSlotsTimesOut(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample {
             respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
                     .delayedBy(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
@@ -31,9 +33,10 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
 
     @Given("^I have (.*) telephone number\\(s\\) stored for (.*)$")
     fun iHaveTelephoneNumbersStored(telephoneNumberTypes: String, gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
         var invalidPhoneNumberTypes = true
 
-        val patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(supplier)
         patient.telephoneFirst = ""
         patient.telephoneSecond = ""
 
@@ -52,13 +55,14 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
         Assert.assertFalse("No valid telephone number type passed into the step. ", invalidPhoneNumberTypes)
 
         SerenityHelpers.setPatient(patient)
-        val factory = DemographicsFactory.getForSupplier(gpSystem)
+        val factory = DemographicsFactory.getForSupplier(supplier)
         factory.enabled(patient)
     }
 
     @Given("^the system will respond with forbidden when trying to retrieve (.*) appointment slots\$")
-    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(provider)
+    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample {
             respondWithGPErrorWhenNotEnabled()
         }

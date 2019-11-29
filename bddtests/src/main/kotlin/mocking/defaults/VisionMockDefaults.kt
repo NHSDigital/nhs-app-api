@@ -1,5 +1,6 @@
 package mocking.defaults
 
+import constants.Supplier
 import mocking.vision.VisionConstants
 import mocking.vision.demographics.Demographics
 import mocking.vision.demographics.Name
@@ -19,7 +20,7 @@ class VisionMockDefaults{
 
         const val DEFAULT_ODS_CODE_VISION: String = "X00100"
 
-        val patientVision = Patient.getDefault("VISION")
+        val patientVision = Patient.getDefault(Supplier.VISION)
 
         val visionGetConfiguration = ServiceDefinition(
                 VisionConstants.configurationName,

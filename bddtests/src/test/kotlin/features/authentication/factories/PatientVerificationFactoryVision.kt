@@ -1,5 +1,6 @@
 package features.authentication.factories
 
+import constants.Supplier
 import features.authentication.stepDefinitions.PatientVerificationSerenityHelpers
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.IdentifierType
@@ -11,7 +12,7 @@ import mocking.vision.models.VisionUserSession
 import models.Patient
 import utils.set
 
-class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
+class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISION){
 
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
         // Currently no session mocking required for vision

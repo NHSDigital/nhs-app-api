@@ -1,5 +1,6 @@
 package features.organDonation.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -16,7 +17,8 @@ class OrganDonationReferenceDataStepDefinitionsBackend {
     @Given("^I am a (\\w+) api user not registered with organ donation, where the reference data call will " +
             "return data$")
     fun iAmRegisteredWithOrganDonationAndReferenceDataWillBeSuccessful(gpSystem: String) {
-        OrganDonationFactory(gpSystem).mockingClient.forOrganDonation {
+        val supplier = Supplier.valueOf(gpSystem)
+        OrganDonationFactory(supplier).mockingClient.forOrganDonation {
             referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())
         }
     }

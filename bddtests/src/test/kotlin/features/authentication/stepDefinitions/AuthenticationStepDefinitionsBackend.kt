@@ -1,6 +1,7 @@
 package features.authentication.stepDefinitions
 
 import config.Config
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -34,11 +35,11 @@ class AuthenticationStepDefinitionsBackend {
 
     @Given("^I have a valid authCode and codeVerifier$")
     fun iHaveValidAuthCodeAndCodeVerifier() {
-        val gpSystem = "EMIS"
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.EMIS
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
     }
 
     @Given("^I have incomplete OAuth details$")
@@ -56,8 +57,8 @@ class AuthenticationStepDefinitionsBackend {
 
     @Given("^I have valid OAuth details and the CID tokens endpoint fails to process the request$")
     fun iHaveValidOAuthDetailsAndCIDTokenEndpointFails() {
-        val gpSystem = "EMIS"
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.EMIS
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         mockingClient.forCitizenId {
             tokenRequest(codeVerifier!!, authCode).respondWithServerError()
@@ -68,51 +69,57 @@ class AuthenticationStepDefinitionsBackend {
         mockingClient.forCitizenId {
             signingKeyRequest().respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
-        SessionCreateJourneyFactory.getForSupplier("EMIS", mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
     }
 
     @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
+        val supplier = Supplier.EMIS
         CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithServerError() }
         mockingClient.forEmis {
-            authentication.sessionRequest(Patient.getDefault("EMIS"))
-                    .respondWithSuccess(Patient.getDefault("EMIS"), associationType)
+            authentication.sessionRequest(Patient.getDefault(supplier))
+                    .respondWithSuccess(Patient.getDefault(supplier), associationType)
         }
     }
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
+        val supplier = Supplier.EMIS
         CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
         mockingClient.forEmis {
             authentication.endUserSessionRequest()
-                    .respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId)
+                    .respondWithSuccess(Patient.getDefault(supplier).endUserSessionId)
         }
-        mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
+        mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault(supplier)).respondWithServerError() }
     }
 
     @Given("^I have valid OAuth details and (.*) is not available$")
     fun iHaveValidOAuthDetailsAndGpSystemUnavailable(gpSystem: String) {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
-        AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsAndGpSystemUnavailable()
+        val supplier = Supplier.valueOf(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(supplier))
+        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable()
     }
 
     @Given("^I have valid OAuth details and (.*) returns with an incomplete response$")
     fun iHaveValidOAuthDetailsAndGpSystemReturnsAnIncompleteResponse(gpSystem: String) {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncompleteResponse(Patient.getDefault(gpSystem))
+        val supplier = Supplier.valueOf(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(supplier))
+        AuthenticationFactory.getForSupplier(supplier).patientWithIncompleteResponse(Patient.getDefault(supplier))
     }
 
     @Given("^I have invalid OAuth details and CID connection token fails to authenticate with (.*)$")
     fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
-        AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsCidConnectionTokenFailsToAuthenticate()
+        val supplier = Supplier.valueOf(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(supplier))
+        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsCidConnectionTokenFailsToAuthenticate()
     }
 
     @Given("^I have valid OAuth details and (.*) fails to respond in (\\d+) seconds$")
     fun iHaveValidOAuthDetailsAndEmisFailsToRespondInXSeconds(gpSystem: String, delayBySeconds: Int) {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
-        AuthenticationFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(supplier))
+        AuthenticationFactory.getForSupplier(supplier)
                 .validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds.toLong())
     }
 

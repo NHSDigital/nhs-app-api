@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -17,7 +18,6 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.openqa.selenium.JavascriptExecutor
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
 import pages.myrecord.MyRecordInfoPage
@@ -54,11 +54,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the my record wiremocks are initialised for (.*)$")
     fun givenMyRecordWiremocksAreInitialisedFor(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
-        setPatientToDefaultFor(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
+        setPatientToDefaultFor(supplier)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled summary care record functionality$")
@@ -141,25 +142,28 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the my record wiremocks return a 403 for (.*)$")
     fun givenMyRecordWiremocksReturnA403For(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
-        setPatientToDefaultFor(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
+        setPatientToDefaultFor(supplier)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(gpSystem).respondWithForbidden(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(supplier).respondWithForbidden(SerenityHelpers.getPatient())
     }
 
     @Given("^the my record wiremocks are populated for (.*)$")
     fun givenMyRecordWiremocksArePopulatedFor(gpSystem: String) {
-        setPatientToDefaultFor(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        setPatientToDefaultFor(supplier)
         givenMyRecordWiremocksArePopulatedForNoPatient(gpSystem)
     }
 
     @Given("^the my record wiremocks are populated when the patient is already set for (.*)$")
     fun givenMyRecordWiremocksArePopulatedForNoPatient(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(gpSystem).
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(supplier).
                 enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
     }
 
@@ -305,7 +309,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^the field indicating supplier is set$")
     fun thenTheFlagIndicatingSupplierIsSetTo() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals(SerenityHelpers.getGpSupplier(), result.response.supplier)
+        assertEquals(SerenityHelpers.getGpSupplier().toString().toUpperCase(), result.response.supplier.toUpperCase())
     }
 
     @Then("^I return to my medical record page$")
@@ -315,22 +319,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see the top of my medical record page$")
     fun andISeeTheTopOfMyMedicalRecordPage(){
-        assertEquals(0L, getScrollPositionX())
-        assertEquals(0L, getScrollPositionY())
+        myRecordInfoPage.assertTopOfPage()
     }
 
     @Then("^I click on the Back link on my records page$")
     fun iClickOnBackButtonOnMyRecordsPage(){
         myRecordInfoPage.clickOnBackLink()
-    }
-
-    private fun getScrollPositionX(): Any {
-        val jsExecutor = myRecordInfoPage.driver as JavascriptExecutor
-        return jsExecutor.executeScript("return window.scrollX") as Any
-    }
-
-    private fun getScrollPositionY(): Any {
-        val jsExecutor = myRecordInfoPage.driver as JavascriptExecutor
-        return jsExecutor.executeScript("return window.scrollY") as Any
     }
 }

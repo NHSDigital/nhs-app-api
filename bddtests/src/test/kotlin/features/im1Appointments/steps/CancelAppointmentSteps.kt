@@ -1,5 +1,6 @@
 package features.im1Appointments.steps
 
+import constants.Supplier
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
@@ -85,7 +86,7 @@ open class CancelAppointmentSteps {
     @Step
     fun mockCancellationRequestStubForReason(
             reason: String? = null,
-            gpSystem: String,
+            gpSystem: Supplier,
             response: ((ICancelAppointmentsBuilder) -> Mapping)? = null
     ) {
 

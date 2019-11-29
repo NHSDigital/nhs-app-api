@@ -1,5 +1,6 @@
 package features.pushNotifications.stepDefinitions
 
+import constants.Supplier
 import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.AccessTokenBuilder
@@ -23,14 +24,13 @@ class NotificationsFactory {
     val mockingClient = MockingClient.instance
     private val devicePns = "0123456789ABCDEF"
 
-    fun setUpUser(gpSystem: String? = null, patient: Patient? = null): Patient {
-        val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem,
+    fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
+        val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
                 listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
-
-        val gpSystemToUse = gpSystem ?: SerenityHelpers.getGpSupplier()
+        val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
-        SessionCreateJourneyFactory.getForSupplier(gpSystemToUse, mockingClient).createFor(patientToUse)
+        SessionCreateJourneyFactory.getForSupplier(supplierToUse, mockingClient).createFor(patientToUse)
         MongoDBConnection.UserDevicesCollection.clearCache()
         PushNotificationsSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(patientToUse.subject)
         return patientToUse

@@ -1,6 +1,7 @@
 package features.authentication.stepDefinitions
 
 import config.Config
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
@@ -28,12 +29,12 @@ class EndpointStepDefinitions  {
 
     @Given("^I have an IM1 request and a Patient Facing Request$")
     fun iHaveValidPatientDataToRegisterNewAccount() {
-        val gpSystem = "EMIS"
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.EMIS
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
-        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-        AppointmentsBookingFactory.getForSupplier(gpSystem)
+        SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        AppointmentsBookingFactory.getForSupplier(supplier)
                 .defaultAppointmentBookingSetupWithResult { builder -> builder.respondWithSuccess() }
     }
 

@@ -1,6 +1,7 @@
 package mocking.stubs.appointments.factories
 
 import constants.DateTimeFormats
+import constants.Supplier
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import java.time.LocalDateTime
@@ -8,7 +9,7 @@ import java.time.format.DateTimeFormatter
 
 private const val TIME_TO_ADD_IN_MINUTES = 30L
 
-class AppointmentsBookingFactoryTpp : AppointmentsBookingFactory("TPP") {
+class AppointmentsBookingFactoryTpp : AppointmentsBookingFactory(Supplier.TPP) {
 
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,

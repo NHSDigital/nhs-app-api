@@ -1,5 +1,6 @@
 package features.myrecord.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
@@ -19,13 +20,13 @@ abstract class TestResultsFactory {
 
     companion object : SupplierSpecificFactory<TestResultsFactory>() {
 
-        override val map: HashMap<String, (() -> TestResultsFactory)>
+        override val map: HashMap<Supplier, (() -> TestResultsFactory)>
                 by lazy {
                     hashMapOf(
-                            "EMIS" to { TestResultsFactoryEmis() },
-                            "TPP" to { TestResultsFactoryTpp() },
-                            "VISION" to { TestResultsFactoryVision() },
-                            "MICROTEST" to { TestResultsFactoryMicrotest() })
+                            Supplier.EMIS to { TestResultsFactoryEmis() },
+                            Supplier.TPP to { TestResultsFactoryTpp() },
+                            Supplier.VISION to { TestResultsFactoryVision() },
+                            Supplier.MICROTEST to { TestResultsFactoryMicrotest() })
                 }
 
     }

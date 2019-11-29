@@ -1,10 +1,11 @@
 package features.authentication.factories
 
+import constants.Supplier
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.Error
 
-class Im1ConnectionV2GetFactoryTpp : Im1ConnectionV2GetFactory("TPP") {
+class Im1ConnectionV2GetFactoryTpp : Im1ConnectionV2GetFactory(Supplier.TPP) {
 
     override fun errorIm1Verify(httpStatusCode: Int, errorCode: String,
                                 message: String?) {

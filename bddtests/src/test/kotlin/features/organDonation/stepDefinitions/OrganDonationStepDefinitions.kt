@@ -1,6 +1,7 @@
 package features.organDonation.stepDefinitions
 
 import config.Config
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -36,42 +37,48 @@ open class OrganDonationStepDefinitions {
 
     @Given("I am a (\\w+) user registered with organ donation to not donate my organs")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.existing.optOut()
     }
 
     @Given("^I am a (\\w+) user registered with organ donation to donate all organs$")
     fun iAmRegisteredWithOrganDonationToDonateAllOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.existing.optIn()
     }
 
     @Given("I am a (\\w+) user registered with organ donation with an appointed representative")
     fun iAmRegisteredWithOrganDonationWithAnAppointedRepresentative(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.existing.appointedRepresentative()
     }
 
     @Given("^I am a (\\w+) user registered with organ donation to donate some organs$")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.existing.optInSome()
     }
 
     @Given("I am a (\\w+) user registered with organ donation to donate some organs, but not all are decided on")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgansButNotAllDecidedOn(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.existing.optInSomeNotAllDecided()
     }
 
     @Given("^I am a (\\w+) user registered with organ donation with a decision to (.*) who wishes to withdraw$")
     fun iAmRegisteredWithOrganDonationAndWishToWithdraw(gpSystem: String, decision: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         val existing = factory.existing.setUpExistingDecisionForPatient(decision)
         factory.withdrawRegistration { request ->
@@ -81,7 +88,8 @@ open class OrganDonationStepDefinitions {
 
     @Given("^I am a (\\w+) user registered with organ donation to donate all organs with a faith decision of '(.*)'$")
     fun iAmRegisteredWithOrganDonationToDonateAllOrgansAndDecisionOfFaith(gpSystem: String, faith: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         val demographics = OrganDonationDemographics(faithDeclaration = OrganDonationFaithModule.getFaith(faith))
         factory.existing.optIn(demographics)
@@ -89,7 +97,8 @@ open class OrganDonationStepDefinitions {
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register$")
     fun iAmNotRegisteredWithOrganDonationWishToRegister(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
             a.respondWithError(HttpStatus.SC_NOT_FOUND) }
@@ -97,7 +106,8 @@ open class OrganDonationStepDefinitions {
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and opt out$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptOut(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         factory.create { registration -> registration.optOut { request -> request.respondWithSuccess("test") } }
@@ -105,7 +115,8 @@ open class OrganDonationStepDefinitions {
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and opt in$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptIn(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         factory.create { registration -> registration.optIn { request -> request.respondWithSuccess("test") } }
@@ -114,7 +125,8 @@ open class OrganDonationStepDefinitions {
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to opt in with '(.*)' faith " +
             "decision$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptInWithFaithDecision(gpSystem: String, faith:String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         val demographics = OrganDonationDemographics(faithDeclaration = OrganDonationFaithModule.getFaith(faith))
@@ -124,7 +136,8 @@ open class OrganDonationStepDefinitions {
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and donate some organs$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndDonateSomeOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         factory.create { registration ->

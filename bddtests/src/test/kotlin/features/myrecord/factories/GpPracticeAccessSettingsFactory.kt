@@ -1,5 +1,6 @@
 package features.myrecord.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import mockingFacade.linkedProfiles.FeaturesEnabledFacade
@@ -17,10 +18,11 @@ abstract class GpPracticeAccessSettingsFactory {
 
     companion object : SupplierSpecificFactory<GpPracticeAccessSettingsFactory>() {
 
-        override val map: HashMap<String, (() -> GpPracticeAccessSettingsFactory)>
+        override val map: HashMap<Supplier, (() -> GpPracticeAccessSettingsFactory)>
                 by lazy {
                     hashMapOf(
-                            "EMIS" to { GpPracticeAccessSettingsFactoryEmis() as GpPracticeAccessSettingsFactory }
+                            Supplier.EMIS to
+                                    { GpPracticeAccessSettingsFactoryEmis() as GpPracticeAccessSettingsFactory }
                     )
                 }
     }

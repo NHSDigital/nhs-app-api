@@ -1,4 +1,5 @@
 package features.authentication.stepDefinitions
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -36,14 +37,15 @@ class SessionExpiryStepDefinitions  {
 
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
 
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .postSessionConnection(patient.cidUserSession)
 
-        PatientVerificationFactory.getForSupplier(gpSystem)
+        PatientVerificationFactory.getForSupplier(supplier)
                 .setSessionExtendMockResponse(patient, expectedResponse)
     }
 
@@ -93,8 +95,8 @@ class SessionExpiryStepDefinitions  {
 
     @When("^I click to extend the session$")
     fun iClickToExtendSession() {
-        val patient = Patient.getDefault("EMIS")
-        PatientVerificationFactory.getForSupplier("EMIS")
+        val patient = Patient.getDefault(Supplier.EMIS)
+        PatientVerificationFactory.getForSupplier(Supplier.EMIS)
                 .setSessionExtendMockResponse(patient, "Success")
         sessionExpiry.clickExtendSession()
     }

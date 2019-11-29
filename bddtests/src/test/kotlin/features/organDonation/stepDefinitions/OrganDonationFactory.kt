@@ -1,5 +1,6 @@
 package features.organDonation.stepDefinitions
 
+import constants.Supplier
 import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
@@ -14,7 +15,7 @@ import mocking.organDonation.models.OrganDonationWithdrawRequest
 import models.Patient
 import utils.SerenityHelpers
 
-class OrganDonationFactory(val gpSystem: String) {
+class OrganDonationFactory(val gpSystem: Supplier) {
 
     val mockingClient = MockingClient.instance
 

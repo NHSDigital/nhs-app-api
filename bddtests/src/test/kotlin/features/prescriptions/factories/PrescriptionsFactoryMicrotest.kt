@@ -1,6 +1,7 @@
 package features.prescriptions.factories
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
+import constants.Supplier
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.MicrotestPrescriptionLoader
 import mocking.data.prescriptions.courses.MicrotestCoursesLoader
@@ -16,7 +17,7 @@ import utils.SerenityHelpers
 import java.time.Duration
 import java.time.OffsetDateTime
 
-class PrescriptionsFactoryMicrotest: PrescriptionsFactory("MICROTEST") {
+class PrescriptionsFactoryMicrotest: PrescriptionsFactory(Supplier.MICROTEST) {
 
     override val getCoursesLoader: ICoursesLoader<*> = MicrotestCoursesLoader
     override val getPrescriptionsLoader: IPrescriptionLoader<*> = MicrotestPrescriptionLoader

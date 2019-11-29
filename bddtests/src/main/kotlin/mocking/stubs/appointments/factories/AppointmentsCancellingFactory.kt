@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
@@ -8,7 +9,7 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.models.appointments.CancelAppointmentRequest
 
-class AppointmentsCancellingFactory(gpSystem: String) : AppointmentsFactory(gpSystem) {
+class AppointmentsCancellingFactory(gpSystem: Supplier) : AppointmentsFactory(gpSystem) {
 
     fun defaultRequest(patient: Patient,
                                 appointmentId: Int? = null,
@@ -44,12 +45,12 @@ class AppointmentsCancellingFactory(gpSystem: String) : AppointmentsFactory(gpSy
 
     companion object : SupplierSpecificFactory<AppointmentsCancellingFactory>() {
 
-        override val map: HashMap<String, (() -> AppointmentsCancellingFactory)> by lazy {
+        override val map: HashMap<Supplier, (() -> AppointmentsCancellingFactory)> by lazy {
             hashMapOf(
-                    "EMIS" to { AppointmentsCancellingFactory("EMIS") },
-                    "TPP" to { AppointmentsCancellingFactory("TPP") },
-                    "VISION" to { AppointmentsCancellingFactory("VISION") },
-                    "MICROTEST" to { AppointmentsCancellingFactory("MICROTEST") })
+                    Supplier.EMIS to { AppointmentsCancellingFactory(Supplier.EMIS) },
+                    Supplier.TPP to { AppointmentsCancellingFactory(Supplier.TPP) },
+                    Supplier.VISION to { AppointmentsCancellingFactory(Supplier.VISION) },
+                    Supplier.MICROTEST to { AppointmentsCancellingFactory(Supplier.MICROTEST) })
         }
 
         val defaultApptCancellingReason = "Cancel an appointment."

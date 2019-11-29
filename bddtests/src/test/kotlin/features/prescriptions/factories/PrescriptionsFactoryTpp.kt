@@ -1,5 +1,6 @@
 package features.prescriptions.factories
 
+import constants.Supplier
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.courses.TppCoursesLoader
@@ -14,7 +15,7 @@ import utils.SerenityHelpers
 import java.time.Duration
 import java.time.OffsetDateTime
 
-class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
+class PrescriptionsFactoryTpp: PrescriptionsFactory(Supplier.TPP) {
     override val getCoursesLoader: ICoursesLoader<*> = TppCoursesLoader
     override val getPrescriptionsLoader: IPrescriptionLoader<*> = TppPrescriptionLoader
 

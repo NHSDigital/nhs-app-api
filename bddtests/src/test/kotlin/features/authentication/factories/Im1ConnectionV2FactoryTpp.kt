@@ -1,6 +1,7 @@
 package features.authentication.factories
 
 import constants.DateTimeFormats
+import constants.Supplier
 import constants.TppConstants
 import mocking.defaults.TppMockDefaults
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
@@ -19,7 +20,7 @@ import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
 import java.time.Duration
 
-class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory("TPP") {
+class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
 
     override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         authenticate()

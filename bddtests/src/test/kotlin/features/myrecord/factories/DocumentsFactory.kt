@@ -1,5 +1,6 @@
 package features.myrecord.factories
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.SupplierSpecificFactory
 import models.Patient
@@ -16,9 +17,9 @@ abstract class DocumentsFactory {
 
     companion object : SupplierSpecificFactory<DocumentsFactoryEmis>() {
 
-        override val map: HashMap<String, (() -> DocumentsFactoryEmis)>
+        override val map: HashMap<Supplier, (() -> DocumentsFactoryEmis)>
             by lazy {
-                hashMapOf("EMIS" to { DocumentsFactoryEmis() })
+                hashMapOf(Supplier.EMIS to { DocumentsFactoryEmis() })
             }
 
     }

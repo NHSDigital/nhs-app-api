@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import constants.Supplier
 import mocking.emis.me.EmisMeApplicationsBuilder
 
 import mocking.emis.me.LinkApplicationRequestModel
@@ -9,7 +10,7 @@ import mocking.models.Mapping
 import models.Patient
 import java.time.Duration
 
-class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
+class AuthenticationFactoryEmis  : AuthenticationFactory(Supplier.EMIS){
 
     override fun patientWithIncompleteResponse(patient: Patient) {
         mockingClient.forEmis { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }

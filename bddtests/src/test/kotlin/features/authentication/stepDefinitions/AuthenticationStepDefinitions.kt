@@ -1,6 +1,7 @@
 package features.authentication.stepDefinitions
 
 import config.Config
+import constants.Supplier
 import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -64,10 +65,11 @@ class AuthenticationStepDefinitions {
 
     @Given("^I am logged in as a (.*) user where the session will fail to clear on signout$")
     fun iAmLoggedInToWhereSessionFailsToClear(gpSystem: String) {
-        if (gpSystem.toUpperCase() != "TPP") {
+        val supplier = Supplier.valueOf(gpSystem)
+        if (supplier != Supplier.TPP) {
             Assert.fail("'$gpSystem' not set up for this step")
         }
-        val patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         //Whereas the usual TppSessionCreateJourneyFactory.createFor includes the logOff request,
@@ -82,9 +84,10 @@ class AuthenticationStepDefinitions {
 
     @Given("^I want to register for a (.+) account$")
     fun iWantToRegisterForAnAccount(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
+        SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
 
         browser.goToApp()
     }
@@ -141,7 +144,8 @@ class AuthenticationStepDefinitions {
 
     @When("^I have completed (.+) account creation$")
     fun iCreateAnAccount(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         iWantToRegisterForAnAccount(gpSystem)
         login.loginPage.createAccount(patient)

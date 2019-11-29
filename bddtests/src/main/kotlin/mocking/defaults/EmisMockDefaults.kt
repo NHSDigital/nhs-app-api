@@ -1,6 +1,7 @@
 package mocking.defaults
 
 import config.Config
+import constants.Supplier
 import mocking.MockingClient
 import mocking.MockingConfiguration
 import mocking.emis.EmisConfiguration
@@ -17,7 +18,7 @@ class EmisMockDefaults{
         const val ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA = "A10003"
         const val ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND = "A10004"
 
-        val patientEmis = Patient.getDefault("EMIS")
+        val patientEmis = Patient.getDefault(Supplier.EMIS)
 
         fun createMockingClient(config: Config): MockingClient {
             val emisConfig = EmisConfiguration(config.emisApplicationId, "2.1.0.0")

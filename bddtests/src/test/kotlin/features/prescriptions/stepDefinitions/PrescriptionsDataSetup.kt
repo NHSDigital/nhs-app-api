@@ -1,15 +1,14 @@
 package features.prescriptions.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
+import constants.Supplier
 import features.prescriptions.factories.PrescriptionsFactory
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.defaults.VisionMockDefaults
 import mocking.tpp.models.Error
 import models.Patient
-import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
-import utils.getOrFail
 import utils.getOrNull
 import utils.set
 import java.time.OffsetDateTime
@@ -21,8 +20,8 @@ class PrescriptionsDataSetup {
 
         val mockingClient = MockingClient.instance
 
-        fun initialize(gpSystem: String) {
-            PrescriptionsSerenityHelpers.PROVIDER.set(ProviderTypes.valueOf(gpSystem))
+        fun initialize(gpSystem: Supplier) {
+            PrescriptionsSerenityHelpers.PROVIDER.set(gpSystem)
             val existingPatient = SerenityHelpers.getPatientOrNull()
             if (existingPatient == null) {
                 SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
@@ -67,7 +66,7 @@ class PrescriptionsDataSetup {
             var prescriptionLoader = PrescriptionsSerenityHelpers
                     .PRESCRIPTIONS_LOADER.getOrNull<IPrescriptionLoader<*>>()
             if (prescriptionLoader == null) {
-                val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
+                val gpSystem = SerenityHelpers.getGpSupplier()
                 initialize(gpSystem)
                 prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER
                         .getOrNull<IPrescriptionLoader<*>>()
@@ -75,9 +74,9 @@ class PrescriptionsDataSetup {
             return prescriptionLoader!!
         }
 
-        fun disabled(currentPatient: Patient, currentProvider: ProviderTypes?) {
+        fun disabled(currentPatient: Patient, currentProvider: Supplier) {
             when (currentProvider) {
-                ProviderTypes.EMIS -> {
+                Supplier.EMIS -> {
                     mockingClient
                             .forEmis {
                                 prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
@@ -88,7 +87,7 @@ class PrescriptionsDataSetup {
                                 prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
                             }
                 }
-                ProviderTypes.TPP -> {
+                Supplier.TPP -> {
                     mockingClient
                             .forTpp {
                                 prescriptions.listRepeatMedication(currentPatient)
@@ -98,7 +97,7 @@ class PrescriptionsDataSetup {
                                                         "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                             }
                 }
-                ProviderTypes.VISION -> {
+                Supplier.VISION -> {
                     mockingClient
                             .forVision {
                                 authentication.getConfigurationRequest(

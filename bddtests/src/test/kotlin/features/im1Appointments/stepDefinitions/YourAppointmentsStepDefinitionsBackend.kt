@@ -1,5 +1,6 @@
 package features.im1Appointments.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -26,26 +27,30 @@ class YourAppointmentsStepDefinitionsBackend {
     private val appointmentSlotsTelephoneExample = AppointmentSlotsTelephoneExample()
 
     @Given("^I have no booked appointments for (.*)$")
-    fun iHaveNoBookedAppointments(gpService: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+    fun iHaveNoBookedAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulEmptyMyAppointmentResponse()
     }
 
     @Given("^I have upcoming appointments before cutoff time for (\\w+)$")
-    fun iHaveUpcomingAppointments(gpService: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+    fun iHaveUpcomingAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse()
     }
 
     @Given("^I have upcoming telephone appointments before cutoff time for (\\w+)$")
-    fun iHaveUpcomingTelephoneAppointments(gpService: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+    fun iHaveUpcomingTelephoneAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulMyTelephoneAppointmentsResponse()
     }
 
     @Given("^I have historical telephone appointments for (\\w+)$")
-    fun iHaveHistoricalTelephoneAppointments(gpService: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+    fun iHaveHistoricalTelephoneAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulMyTelephoneAppointmentsResponse(
                 appointmentSlotsExample.getGenericExample(
                         arrayListOf(appointmentSlotsTelephoneExample.getHistoricalTelephoneAppointmentSession())
@@ -53,8 +58,9 @@ class YourAppointmentsStepDefinitionsBackend {
     }
 
     @Given("^I have historical appointments for (\\w+)$")
-    fun iHaveHistoricalAppointments(gpService: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+    fun iHaveHistoricalAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 appointmentSlotsExample.getGenericExample(
                         arrayListOf(appointmentSlotsExample.getHistoricalAppointmentSession())
@@ -63,19 +69,21 @@ class YourAppointmentsStepDefinitionsBackend {
     }
 
     @Given("^I have historical and upcoming appointments for (\\w+)$")
-    fun iHaveHistoricalAndUpcomingAppointments(gpService: String) {
+    fun iHaveHistoricalAndUpcomingAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
         val historicalAppointments = appointmentSlotsExample.getHistoricalAppointmentSession()
         val upcomingAppointments = appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime()
         val allAppointments = arrayListOf(historicalAppointments, upcomingAppointments)
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 appointmentSlotsExample.getGenericExample(allAppointments)
         )
     }
 
     @Given("^I have upcoming appointments for (\\w+), with one in the past$")
-    fun iHaveUpcomingAppointmentsAndOneInThePast(gpService: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+    fun iHaveUpcomingAppointmentsAndOneInThePast(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 appointmentSlotsExample.getGenericExample(arrayListOf(
                         appointmentSlotsExample.getExampleWithPastAppointment()
@@ -85,19 +93,19 @@ class YourAppointmentsStepDefinitionsBackend {
 
     @Given("^I have upcoming appointments before cutoff time for VISION with only one cancellation reason$")
     fun iHaveUpcomingAppointmentsBeforeCutoffWithOneCancellationReason() {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.VISION)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(numberOfCancellationReasons = 1)
     }
 
     @Given("^I have upcoming appointments before cutoff time for VISION without cancellation reasons$")
     fun iHaveUpcomingAppointmentsBeforeCutoffWithoutCancellationReasons() {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.VISION)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(numberOfCancellationReasons = 0)
     }
 
     @Given("^I have upcoming appointments within cutoff time for VISION with cancellation reasons$")
     fun iHaveUpcomingAppointmentsWithinCutoffWithOneCancellationReason() {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.VISION)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 appointmentSlotsExample.getGenericExample(
                         arrayListOf(appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
@@ -106,7 +114,7 @@ class YourAppointmentsStepDefinitionsBackend {
 
     @Given("^I have upcoming appointments within cutoff time for VISION without cancellation reasons$")
     fun iHaveUpcomingAppointmentsWithinCutoffWithoutCancellationReasons() {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.VISION)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 appointmentSlotsExample.getGenericExample(
                         arrayListOf(appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
@@ -115,7 +123,7 @@ class YourAppointmentsStepDefinitionsBackend {
 
     @Given("^I have upcoming appointments before and within cutoff time for VISION with cancellation reasons$")
     fun iHaveUpcomingAppointmentsBeforeAndWithinCutoffWithOneCancellationReason() {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.VISION)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 appointmentSlotsExample.getGenericExample(
                         arrayListOf(appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
@@ -124,36 +132,40 @@ class YourAppointmentsStepDefinitionsBackend {
 
     @Given("^a booked appointment cannot be cancelled$")
     fun aBookedAppointmentCannotBeCancelled() {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.VISION)
         viewAppointmentFactory.createSuccessfulEmptyMyAppointmentResponse(emptyList())
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponseOnceBooked(numberOfCancellationReasons = 0)
     }
 
     @Given("^(.*) does not offer online booking to my patient$")
-    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider: String) {
-        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(provider)
+    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         currentViewAppointmentFactory.createMyAppointments {
             respondWithGPErrorWhenNotEnabled()
         }
     }
 
     @Given("^(.*) returns corrupted response for my appointments")
-    fun corruptedResponseFromMyAppointments(provider: String) {
-        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(provider)
+    fun corruptedResponseFromMyAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         currentViewAppointmentFactory.createMyAppointments {
             respondWithCorrupted()
         }
     }
 
     @Given("^(.*) will time out when trying to retrieve my appointments")
-    fun timeoutResponseFromMyAppointments(provider: String) {
-        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(provider)
+    fun timeoutResponseFromMyAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         currentViewAppointmentFactory.createTimeoutMyAppointmentsResponse()
     }
 
     @Given("^an unknown exception occurs when I want to view my (\\w+) appointments$")
-    fun anUnknownExceptionOccursWhenIWantToViewMyEMISAppointments(gpService: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+    fun anUnknownExceptionOccursWhenIWantToViewMyEMISAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         viewAppointmentFactory.createMyAppointments {
             respondWithUnknownException()
         }
@@ -161,7 +173,7 @@ class YourAppointmentsStepDefinitionsBackend {
 
     @Given("^TPP is unavailable for (.*) appointments$")
     fun tppIsUnavailableForAppointments(appointmentType: String) {
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("TPP")
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.TPP)
         val example = MyAppointmentsFacade(
                 appointmentSlotsExample.getGenericExample(
                         arrayListOf(
@@ -198,7 +210,8 @@ class YourAppointmentsStepDefinitionsBackend {
 
     @Given("^the (.*) GP appointment system is unavailable$")
     fun theAppointmentSystemIsUnavailable(gpSystem: String) {
-        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
         currentViewAppointmentFactory.createMyAppointments {
             respondWithServiceUnavailable()
         }

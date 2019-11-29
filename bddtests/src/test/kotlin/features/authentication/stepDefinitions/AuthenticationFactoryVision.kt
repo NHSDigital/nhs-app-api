@@ -1,11 +1,12 @@
 package features.authentication.stepDefinitions
 
+import constants.Supplier
 import mocking.defaults.VisionMockDefaults
 import models.Patient
 import utils.SerenityHelpers
 import java.time.Duration
 
-class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
+class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
 
     override fun patientWithIncompleteResponse(patient: Patient) {
         mockingClient

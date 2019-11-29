@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.myrecord.factories.ImmunisationsFactory
@@ -20,13 +21,13 @@ open class GpMedicalRecordImmunisationsStepDefinitions : AbstractDemographicsSte
     lateinit var immunisationsPage: ImmunisationsPage
 
     val expectedData = mapOf(
-            "EMIS" to arrayOf(
+            Supplier.EMIS to arrayOf(
                 "18 February 2018\nSecond meningitis C Vaccination",
                 "15 May 2002\nFirst meningitis C Vaccination"
-            ), "VISION" to arrayOf(
+            ), Supplier.VISION to arrayOf(
                 "10 October 2018\nLumpectomy NEC",
                 "10 October 2018\nLumpectomy NEC"
-            ), "MICROTEST" to arrayOf(
+            ), Supplier.MICROTEST to arrayOf(
                 "3 July 2019\nImmunisation 1\nNext Date: no next date\nStatus: Main 1",
                 "3 July 2019\nImmunisation 2\nNext Date: no next date\nStatus: Main 2",
                 "3 July 2019\nImmunisation 3\nNext Date: no next date\nStatus: Main 3"
@@ -88,10 +89,10 @@ open class GpMedicalRecordImmunisationsStepDefinitions : AbstractDemographicsSte
 
     @Given("^MICROTEST have enabled immunisations and records exist - GP Medical Record$")
     fun givenMicrotestHaveEnabledImmunisationsAndRecordsExist() {
-        val supplier = "MICROTEST"
+        val supplier = Supplier.MICROTEST
 
         val myRecordModuleCounts = MyRecordModuleCounts()
-        myRecordModuleCounts.vaccinationsCount = expectedData["MICROTEST"]!!.size
+        myRecordModuleCounts.vaccinationsCount = expectedData[supplier]!!.size
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
@@ -103,7 +104,7 @@ open class GpMedicalRecordImmunisationsStepDefinitions : AbstractDemographicsSte
 
     @Given("MICROTEST have enabled immunisations and no records exist - GP Medical Record")
     fun givenMicrotestHaveEnabledImmunisationsNoRecords() {
-        val supplier = "MICROTEST"
+        val supplier = Supplier.MICROTEST
 
         val myRecordModuleCounts = MyRecordModuleCounts()
         myRecordModuleCounts.vaccinationsCount = 0

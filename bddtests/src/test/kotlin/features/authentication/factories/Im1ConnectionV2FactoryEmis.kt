@@ -1,6 +1,7 @@
 package features.authentication.factories
 
 import constants.DateTimeFormats
+import constants.Supplier
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.me.LinkApplicationRequestModel
@@ -16,7 +17,7 @@ import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
 import java.time.Duration
 
-class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory("EMIS") {
+class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
     override fun errorIm1Register(httpStatusCode: Int, errorCode: String, message: String?) {
         endUserSessionRequest()
         sessionRequest()

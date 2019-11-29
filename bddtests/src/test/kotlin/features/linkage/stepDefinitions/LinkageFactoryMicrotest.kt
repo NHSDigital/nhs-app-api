@@ -1,10 +1,11 @@
 package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
+import constants.Supplier
 import features.linkage.LinkageResult
 import mockingFacade.linkage.LinkageInformationFacade
 
-class LinkageFactoryMicrotest : LinkageFactory("MICROTEST") {
+class LinkageFactoryMicrotest : LinkageFactory(Supplier.MICROTEST) {
     override val validOtherLinkageDetails = LinkageInformationFacade()
 
     override val validLinkageDetails = LinkageInformationFacade(

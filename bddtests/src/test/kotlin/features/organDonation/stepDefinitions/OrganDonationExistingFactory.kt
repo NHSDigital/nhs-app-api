@@ -1,5 +1,6 @@
 package features.organDonation.stepDefinitions
 
+import constants.Supplier
 import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
@@ -8,7 +9,7 @@ import mocking.organDonation.models.OrganDonationDemographics
 import mocking.organDonation.models.Resource
 import models.Patient
 
-class OrganDonationExistingFactory (var patient: Patient, val gpSystem: String){
+class OrganDonationExistingFactory (var patient: Patient, val gpSystem: Supplier){
 
     fun optOut(organDonationDemographics: OrganDonationDemographics? = null): Resource {
         val registration = OrganDonationRegistrationDataBuilder.optOut(patient, organDonationDemographics)

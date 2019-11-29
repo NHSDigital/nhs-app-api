@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -17,12 +18,10 @@ import models.patients.EmisPatients
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
-import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.linkage.LinkageResponse
 import worker.models.patient.Im1ConnectionRequest
@@ -34,78 +33,87 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @Given("^I have a new (.+) patient with Nhs Numbers of (.*)$")
     fun iHaveValidPatientDataToRegisterNewAccount(gpSystem: String, nhsNumbers: String) {
+        val supplier = Supplier.valueOf(gpSystem)
         val nhsNumbersList = nhsNumbers.split(",").filter { it.isNotEmpty() }
-        val patient = Patient.getDefault(gpSystem).copy(nhsNumbers = nhsNumbersList)
+        val patient = Patient.getDefault(supplier).copy(nhsNumbers = nhsNumbersList)
         SerenityHelpers.setPatient(patient)
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
-        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
+        DemographicsFactory.getForSupplier(supplier).enabled(patient)
+        SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
         setIm1Request(patient)
     }
 
     @Given("^I have data for a (.+) patient that does not exist$")
     fun iHaveDataForAPatientThatDoesNotExist(gpSystem: String) {
-        val patient= Patient.getDefault(gpSystem).copy(nhsNumbers = arrayListOf("nonExistingNhsNumber"))
-        AuthenticationFactory.getForSupplier(gpSystem).patientDoesNotExist(patient)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient= Patient.getDefault(supplier).copy(nhsNumbers = arrayListOf("nonExistingNhsNumber"))
+        AuthenticationFactory.getForSupplier(supplier).patientDoesNotExist(patient)
         setIm1Request(patient)
     }
 
     @Given("^I have data for a (.+) patient with incorrect linkage key$")
     fun iHaveDataForAPatientWithIncorrectLinkageKey(gpSystem: String) {
-        val patient= Patient.getDefault(gpSystem).copy(linkageKey = "incorrectLinkageKey")
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncorrectLinkageKey(patient)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient= Patient.getDefault(supplier).copy(linkageKey = "incorrectLinkageKey")
+        AuthenticationFactory.getForSupplier(supplier).patientWithIncorrectLinkageKey(patient)
         setIm1Request(patient)
     }
 
     @Given("^I have data for a (.+) patient with incorrect surname$")
     fun iHaveDataForAPatientWithIncorrectSurname(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(surname = "incorrectSurname")
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncorrectSurname(patient)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier).copy(surname = "incorrectSurname")
+        AuthenticationFactory.getForSupplier(supplier).patientWithIncorrectSurname(patient)
         setIm1Request(patient)
     }
 
     @Given("^I have data for a (.+) patient with incorrect date of birth$")
     fun iHaveDataForAPatientWithIncorrectDateOfBirth(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(surname = "1900-01-01")
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncorrectDOB(patient)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier).copy(surname = "1900-01-01")
+        AuthenticationFactory.getForSupplier(supplier).patientWithIncorrectDOB(patient)
         setIm1Request(patient)
     }
 
     @Given("^I have a user's IM1 credentials with an ODS Code not in the expected format$")
     fun iHaveAUsersIMCredentialsWithAnODSCodeNotInTheExpectedFormat() {
-        val patient = Patient.getDefault("EMIS").copy(odsCode = INVALID_VALUE)
+        val patient = Patient.getDefault(Supplier.EMIS).copy(odsCode = INVALID_VALUE)
         setIm1Request(patient)
     }
 
     @Given("^I have a (.+) user's IM1 credentials with a Surname not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithASurnameNotInTheExpectedFormat(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(surname = INVALID_VALUE)
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithSurnameInWrongFormat(patient)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier).copy(surname = INVALID_VALUE)
+        AuthenticationFactory.getForSupplier(supplier).patientWithSurnameInWrongFormat(patient)
         setIm1Request(patient)
     }
 
     @Given("^I have a (.+) user's IM1 credentials with an Account ID not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithAnAccountIdNotInTheExpectedFormat(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
         val patient:Patient
-        if (gpSystem == "VISION") {
-            patient = Patient.getDefault(gpSystem).copy(rosuAccountId = "10496")
+        if (supplier == Supplier.VISION) {
+            patient = Patient.getDefault(supplier).copy(rosuAccountId = "10496")
         } else {
-            patient = Patient.getDefault(gpSystem).copy(accountId = INVALID_VALUE)
+            patient = Patient.getDefault(supplier).copy(accountId = INVALID_VALUE)
         }
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithAccountIDInWrongFormat(patient)
+        AuthenticationFactory.getForSupplier(supplier).patientWithAccountIDInWrongFormat(patient)
         setIm1Request(patient)
     }
 
     @Given("^I have a (.+) user's IM1 credentials with a Linkage Key not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithALinkageKeyNotInTheExpectedFormat(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(linkageKey = INVALID_VALUE)
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithLinkageKeyInWrongFormat(patient)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier).copy(linkageKey = INVALID_VALUE)
+        AuthenticationFactory.getForSupplier(supplier).patientWithLinkageKeyInWrongFormat(patient)
         setIm1Request(patient)
     }
 
     @Given("^I have a (.+) user's IM1 credentials with a Date Of Birth not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithADateOfBirthNotInTheExpectedFormat(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem).copy(dateOfBirth = INVALID_VALUE)
-        AuthenticationFactory.getForSupplier(gpSystem).patientWithDOBInWrongFormat(patient)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier).copy(dateOfBirth = INVALID_VALUE)
+        AuthenticationFactory.getForSupplier(supplier).patientWithDOBInWrongFormat(patient)
         setIm1Request(patient)
     }
 
@@ -122,7 +130,7 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @Given("^I have data for an EMIS patient that has already been associated with the application in the GP system$")
     fun iHaveDataForAnEMISPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
-        val patient = Patient.getDefault("EMIS")
+        val patient = Patient.getDefault(Supplier.EMIS)
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis {
             authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))
@@ -146,7 +154,7 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @Given("^I have data for a Vision patient and Vision returns with \"(.*)\"$")
     fun iHaveDataForAVisionPatientThatReturnsWith(errorText: String) {
-        val patient = Patient.getDefault("VISION")
+        val patient = Patient.getDefault(Supplier.VISION)
         AuthenticationFactoryVision.createInvalidTestForVision(patient, errorText)
         setIm1Request(patient)
         setSessionVariable("HttpExceptionExpected").to(true)
@@ -163,7 +171,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @Given("^I have a (.+) user's IM1 credentials with missing Surname$")
     fun iHaveAnEMISUsersIMCredentialsWithMissingSurname(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 AccountId = patient.accountId,
@@ -174,7 +183,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @Given("^I have a (.+) user's IM1 credentials with missing Account ID$")
     fun iHaveAnEMISUsersIMCredentialsWithMissingAccountID(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 LinkageKey = patient.linkageKey,
@@ -185,7 +195,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @Given("^I have a (.+) user's IM1 credentials with missing Linkage Key$")
     fun iHaveAnEMISUsersIMCredentialsWithMissingLinkageKey(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 AccountId = patient.accountId,
@@ -196,7 +207,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @Given("^I have a microtest user's IM1 credentials with a emis connection token$")
     fun iHaveAMicrotestUsersIMCredentialsEmisConnectionToken(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 AccountId = patient.accountId,
@@ -208,38 +220,26 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAUsersIMCredentials() {
-        try {
-            val im1ConnectionRequest = AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST
-                    .getOrFail<Im1ConnectionRequest>()
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.postIm1Connection(im1ConnectionRequest)
-            setSessionVariable(Im1ConnectionResponse::class).to(result)
-            AuthenticationSerenityHelpers.IM1_CONNECTION_RESPONSE.set(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val im1ConnectionRequest = AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST
+                .getOrFail<Im1ConnectionRequest>()
+        Im1ConnectionV1Api.post(im1ConnectionRequest)
     }
 
     @When("^I register the Microtest user's IM1 credentials after linkage$")
     fun iRegisterTheMicrotestUsersIMCredentialsAfterLinkage() {
+        val supplier = Supplier.MICROTEST
         val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
         Assert.assertNotNull(linkageResponse)
         Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
         val patient = SerenityHelpers.getPatient()
-        DemographicsFactory.getForSupplier("MICROTEST").enabled(Patient.getDefault("MICROTEST"))
-        SuccessfulRegistrationJourney(mockingClient).create(patient, "MICROTEST")
+        DemographicsFactory.getForSupplier(supplier).enabled(Patient.getDefault(supplier))
+        SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
         setIm1Request(patient)
-        try {
-            val im1ConnectionRequest = AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST
-                    .getOrFail<Im1ConnectionRequest>()
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.postIm1Connection(im1ConnectionRequest)
-            setSessionVariable(Im1ConnectionResponse::class).to(result)
-            AuthenticationSerenityHelpers.IM1_CONNECTION_RESPONSE.set(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+
+        val im1ConnectionRequest = AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST
+                .getOrFail<Im1ConnectionRequest>()
+        Im1ConnectionV1Api.post(im1ConnectionRequest)
     }
 
     @When("^I POST to IM1 Connection to register the user$")
@@ -253,7 +253,7 @@ class Im1ConnectionV1StepDefinitionsBackend {
                 linkingInformationExample.surname,
                 linkingInformationExample.dateOfBirth
         ))
-        val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
+        val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = Patient.getDefault(gpSystem).copy(
                 accountId = linkingInformationExample.accountId,
                 linkageKey = linkingInformationExample.linkageKey,

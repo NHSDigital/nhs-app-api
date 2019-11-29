@@ -1,10 +1,11 @@
 package features.authentication.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import models.Patient
 import utils.SerenityHelpers
 
-abstract class PatientVerificationFactory(protected val gpSystem: String)  {
+abstract class PatientVerificationFactory(protected val gpSystem: Supplier)  {
 
     protected val mockingClient = SerenityHelpers.getMockingClient()
     abstract val odsCode: String
@@ -21,11 +22,11 @@ abstract class PatientVerificationFactory(protected val gpSystem: String)  {
 
     companion object : SupplierSpecificFactory<PatientVerificationFactory>() {
 
-        override val map: HashMap<String, (()-> PatientVerificationFactory)> by lazy {
+        override val map: HashMap<Supplier, (()-> PatientVerificationFactory)> by lazy {
             hashMapOf(
-                    "EMIS" to { PatientVerificationFactoryEmis() },
-                    "TPP" to { PatientVerificationFactoryTpp() },
-                    "VISION" to { PatientVerificationFactoryVision() },
-                    "MICROTEST" to { PatientVerificationFactoryMicrotest() } )}
+                    Supplier.EMIS to { PatientVerificationFactoryEmis() },
+                    Supplier.TPP to { PatientVerificationFactoryTpp() },
+                    Supplier.VISION to { PatientVerificationFactoryVision() },
+                    Supplier.MICROTEST to { PatientVerificationFactoryMicrotest() } )}
     }
 }

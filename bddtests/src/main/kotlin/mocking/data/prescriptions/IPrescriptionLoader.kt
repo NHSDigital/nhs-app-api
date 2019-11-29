@@ -1,6 +1,6 @@
 package mocking.data.prescriptions
 
-import org.junit.Assert
+import constants.Supplier
 import java.util.*
 
 interface IPrescriptionLoader<T> {
@@ -65,23 +65,19 @@ interface IPrescriptionLoader<T> {
 
     companion object {
 
-        fun getPrescriptionsLoader(gpSystem: String): IPrescriptionLoader<*> {
-            return when (gpSystem.toUpperCase()) {
-                "EMIS" -> {
+        fun getPrescriptionsLoader(gpSystem: Supplier): IPrescriptionLoader<*> {
+            return when (gpSystem) {
+                Supplier.EMIS -> {
                     EmisPrescriptionLoader
                 }
-                "TPP" -> {
+                Supplier.TPP -> {
                     TppPrescriptionLoader
                 }
-                "VISION" -> {
+                Supplier.VISION -> {
                     VisionPrescriptionLoader
                 }
-                "MICROTEST" -> {
+                Supplier.MICROTEST -> {
                     MicrotestPrescriptionLoader
-                }
-                else -> {
-                    Assert.fail("GP System '$gpSystem' not set")
-                    return EmisPrescriptionLoader
                 }
             }
         }

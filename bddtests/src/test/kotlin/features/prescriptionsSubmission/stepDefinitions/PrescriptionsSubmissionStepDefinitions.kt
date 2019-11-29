@@ -1,6 +1,7 @@
 package features.prescriptionsSubmission.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
+import constants.Supplier
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -14,7 +15,6 @@ import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
-import features.prescriptions.stepDefinitions.ProviderTypes
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.data.prescriptions.IPrescriptionLoader
@@ -83,7 +83,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @Given("^I have a repeat prescription request with (\\d+) courses")
     fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int) {
-        SerenityHelpers.setPatient(Patient.getDefault("EMIS"))
+        SerenityHelpers.setPatient(Patient.getDefault(Supplier.EMIS))
 
         val uuids: MutableList<String> = mutableListOf()
 
@@ -175,7 +175,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         prescriptionSubmissionWireMockAndDataSetup(amount, SerenityHelpers.getGpSupplier())
     }
 
-    private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String) {
+    private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: Supplier) {
         coursesStepDefinitions.thereAreXXRepeatablePrescriptionsAvailable(amount)
         coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount)
         currentScenarioState = PrescriptionsFactory.getForSupplier(gpSystem)
@@ -200,13 +200,14 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @Given("^I am using (.*) GP System to submit my prescription$")
     fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
-        val currentPatient = Patient.getDefault(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
+        val currentPatient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(currentPatient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
-        PrescriptionsSerenityHelpers.PROVIDER.set(ProviderTypes.valueOf(gpSystem))
-        prescriptionLoader = PrescriptionsFactory.getForSupplier(gpSystem).getPrescriptionsLoader
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
+        PrescriptionsSerenityHelpers.PROVIDER.set(supplier)
+        prescriptionLoader = PrescriptionsFactory.getForSupplier(supplier).getPrescriptionsLoader
         val emisPrescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
         Serenity.setSessionVariable("EmisPrescriptionsMap").to(emisPrescriptionMap)
         val microtestPrescriptionMap = mutableMapOf<String, PrescriptionHistoryGetResponse>()
@@ -218,11 +219,11 @@ open class PrescriptionsSubmissionStepDefinitions {
         ViewSpinePdsStubs(mockingClient).generateSpineStubs()
         initialHistoricPrescriptionsCount = amount
         prescriptionLoader.loadData(amount, amount, amount)
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
         val currentPatient = SerenityHelpers.getPatient()
         when (currentProvider) {
-            ProviderTypes.EMIS -> {
+            Supplier.EMIS -> {
                 val data = prescriptionLoader.data as PrescriptionRequestsGetResponse
                 mockingClient.forEmis {
                     prescriptions.prescriptionsRequest(currentPatient)
@@ -236,19 +237,19 @@ open class PrescriptionsSubmissionStepDefinitions {
                                 PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
                 map[Scenario.STARTED] = data
             }
-            ProviderTypes.TPP -> {
+            Supplier.TPP -> {
                 mockingClient.forTpp {
                     prescriptions.listRepeatMedication(currentPatient)
                             .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
                 }
             }
-            ProviderTypes.VISION -> {
+            Supplier.VISION -> {
                 mockingClient.forVision {
                     prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                 }
             }
-            ProviderTypes.MICROTEST -> {
+            Supplier.MICROTEST -> {
                 val data = prescriptionLoader.data as PrescriptionHistoryGetResponse
                 mockingClient.forMicrotest {
                     prescriptions.getPrescriptionHistoryRequest(currentPatient)
@@ -304,16 +305,16 @@ open class PrescriptionsSubmissionStepDefinitions {
     fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
         assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
                 "Expected order success text to be visible")
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
         when (currentProvider) {
-            ProviderTypes.TPP -> {
+            Supplier.TPP -> {
                 prescriptionPage.assertPrescriptionsMatch(
                         TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply),
                         amount,
                         false)
             }
-            ProviderTypes.EMIS -> {
+            Supplier.EMIS -> {
                 val map =
                         Serenity.sessionVariableCalled<MutableMap<String,
                                 PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
@@ -321,11 +322,11 @@ open class PrescriptionsSubmissionStepDefinitions {
                 prescriptionPage.assertPrescriptionsMatch(EmisPrescriptionMapper.map(
                         map[currentScenarioState]!!), amount)
             }
-            ProviderTypes.VISION -> {
+            Supplier.VISION -> {
                 prescriptionPage.assertPrescriptionsMatch(VisionPrescriptionMapper
                         .map(prescriptionLoader.data as PrescriptionHistory), amount)
             }
-            ProviderTypes.MICROTEST -> {
+            Supplier.MICROTEST -> {
                 val map =
                         Serenity.sessionVariableCalled<MutableMap<String,
                                 PrescriptionHistoryGetResponse>>("MicrotestPrescriptionsMap")

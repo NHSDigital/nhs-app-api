@@ -1,5 +1,6 @@
 package mocking.stubs.prescriptions
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
@@ -30,10 +31,11 @@ import java.time.Duration
 
 class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
 
-    fun generateStubs(supplier: String) {
+    fun generateStubs(supplier: Supplier) {
         when(supplier) {
-            "EMIS" -> generateEMISStubs()
-            "TPP" -> generateTPPStubs()
+            Supplier.EMIS -> generateEMISStubs()
+            Supplier.TPP -> generateTPPStubs()
+            else -> throw IllegalArgumentException("$supplier not implemented")
         }
     }
 

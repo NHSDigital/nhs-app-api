@@ -1,6 +1,7 @@
 package features.organDonation.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
@@ -23,9 +24,10 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user registered with OD, but the ReferenceData call returns non-recoverable (.*) error$")
     fun iAmRegisteredWithOrganDonationButReferenceDataThrowsError(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         CitizenIdSessionCreateJourney(factory.mockingClient).createFor(factory.patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, factory.mockingClient).createFor(factory.patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, factory.mockingClient).createFor(factory.patient)
 
         factory.mockingClient.forOrganDonation {
             referenceData().respondWithError(errorCode)
@@ -34,9 +36,10 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user registered with OD, but the ReferenceData call returns recoverable (.*) error$")
     fun iAmRegisteredWithOrganDonationButReferenceDataThrowsErrorAndIRetry(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         CitizenIdSessionCreateJourney(factory.mockingClient).createFor(factory.patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, factory.mockingClient).createFor(factory.patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, factory.mockingClient).createFor(factory.patient)
         val existingRegistration = factory.existing.optIn()
         factory.mockingClient.forOrganDonation {
             referenceData().respondWithError(errorCode)
@@ -55,7 +58,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user registered with OD, but on lookup OD returns non-recoverable (.*) error$")
     fun iAmRegisteredWithODButOnLookupOrganDonationThrowsError(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
             a.respondWithError(errorCode)}
@@ -63,7 +67,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user registered as opt-in, but on lookup OD returns recoverable (.*) error$")
     fun iAmRegisteredAsOptInButOnLookupOrganDonationThrowsErrorAndIRetry(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
 
         val existingRegistration = factory.existing.optIn()
@@ -86,7 +91,8 @@ class OrganDonationErrorStepDefinitions {
     fun iAmRegisteredWithOrganDonationAndWishToWithdrawButSeesAnError(gpSystem: String,
                                                                       decision: String,
                                                                       httpStatus: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         val existing = factory.existing.setUpExistingDecisionForPatient(decision)
         factory.withdrawRegistration{
@@ -109,7 +115,8 @@ class OrganDonationErrorStepDefinitions {
     fun iAmRegisteredWithOrganDonationAndWishToWithdrawButSeesANonRecoverableError(gpSystem: String,
                                                                                    decision: String,
                                                                                    httpStatus: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.existing.setUpExistingDecisionForPatient(decision)
         factory.withdrawRegistration{
@@ -119,7 +126,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user who wishes to register as opt out, but OD returns non-recoverable (.*) error$")
     fun iAmAUserWhoWishesToRegisterAsOptOutButOrganDonationThrowsError(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
             a.respondWithError(HttpStatus.SC_NOT_FOUND) }
@@ -131,7 +139,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user who wishes to register as opt out, but OD takes too long to respond")
     fun iAmAUserWhoWishesToRegisterAsOptOutButOrganDonationTakesTooLong(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
             a.respondWithError(HttpStatus.SC_NOT_FOUND) }
@@ -144,7 +153,8 @@ class OrganDonationErrorStepDefinitions {
     @Given("^I am a (\\w+) user registered with organ donation with a decision to (.*) " +
             "who wishes to opt-out but OD takes too long to respond")
     fun iAmAUserWhoHasRegisteredAndWishToWithdrawButOrganDonationTakesTooLong(gpSystem: String, decision: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.existing.setUpExistingDecisionForPatient(decision)
         factory.withdrawRegistration{
@@ -153,7 +163,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user registered as opt-in amends to opt-out, but OD takes too long to respond")
     fun iAmRegisteredAsOptInAmendingToOptOutButOrganDonationTakesTooLong(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         val existingRegistration = factory.existing.optIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
@@ -165,7 +176,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user who wishes to register as opt out, but OD returns recoverable (.*) error$")
     fun iAmAUserWhoWishesToRegisterAsOptOutButOrganDonationThrowsErrorAndIRetry(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
             a.respondWithError(HttpStatus.SC_NOT_FOUND) }
@@ -186,7 +198,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user registered as opt-in amends to opt-out, but OD returns non-recoverable (.*) error$")
     fun iAmRegisteredAsOptInAmendingToOptOutButOrganDonationThrowsError(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         val existingRegistration = factory.existing.optIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
@@ -199,7 +212,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("^I am a (\\w+) user registered as opt-in amends to opt-out, but OD returns recoverable (.*) error$")
     fun iAmRegisteredAsOptInAmendingToOptOutButOrganDonationThrowsErrorAndIRetry(gpSystem: String, errorCode: Int) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         val existingRegistration = factory.existing.optIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
@@ -221,7 +235,8 @@ class OrganDonationErrorStepDefinitions {
 
     @Given("I am a (\\w+) user registered with organ donation but existing registration is in conflicted state")
     fun iAmAUserRegisteredWithOrganDonationButExistingRegistrationIsInConflictedState(gpSystem: String){
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
             a.respondWithError(HttpStatus.SC_CONFLICT) }

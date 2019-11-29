@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.emis.demographics.EmisDemographicsResponse
 import mocking.emis.models.InputRequirements
@@ -14,7 +15,7 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertTrue
 import java.time.ZonedDateTime
 
-class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
+class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
 
     override fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
                                                  endDate: ZonedDateTime,

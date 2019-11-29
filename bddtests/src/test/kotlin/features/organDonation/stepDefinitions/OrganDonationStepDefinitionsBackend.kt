@@ -1,5 +1,6 @@
 package features.organDonation.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -20,32 +21,37 @@ class OrganDonationStepDefinitionsBackend {
 
     @Given("I am a (\\w+) api user registered with organ donation to not donate my organs")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.existing.optOut()
     }
 
     @Given("I am a (\\w+) api user registered with organ donation to donate all organs")
     fun iAmRegisteredWithOrganDonationToDonateAllOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.existing.optIn()
     }
 
     @Given("I am a (\\w+) api user registered with organ donation with an appointed representative")
     fun iAmRegisteredWithOrganDonationWithAnAppointedRepresentative(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.existing.appointedRepresentative()
     }
 
     @Given("I am a (\\w+) api user registered with organ donation to donate some organs")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.existing.optInSome()
     }
 
     @Given("^I am a (\\w+) api user registered with an organ " +
             "donation decision to (.*) and wish to withdraw my decision$")
     fun iAmRegisteredWithOrganDonationAndWishToWithdraw(gpSystem: String, decision:String){
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         factory.setupPatientForAppUse()
         val existing = factory.existing.setUpExistingDecisionForPatient(decision)
         factory.withdrawRegistration{
@@ -55,7 +61,8 @@ class OrganDonationStepDefinitionsBackend {
 
     @Given("^I am a (\\w+) api user not registered with organ donation$")
     fun iAmNotRegisteredWithOrganDonation(gpSystem: String) {
-        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics { a->
+        val supplier = Supplier.valueOf(gpSystem)
+        OrganDonationFactory(supplier).lookUpRegistrationWithSuccessfulDemographics { a->
             a.respondWithError(HttpStatus.SC_NOT_FOUND)}
     }
 

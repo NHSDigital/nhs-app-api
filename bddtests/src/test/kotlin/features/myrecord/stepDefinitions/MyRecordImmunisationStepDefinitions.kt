@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import constants.DateTimeFormats
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -122,7 +123,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^the EMIS GP Practice has two immunisation results where the first record has no date$")
     fun givenTheEmisGpPracticeHasAnImmunisationResultWithNoDate() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.immunisationsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(ImmunisationsData.getTwoImmunisationResultsWhereTheFirstRecordHasNoDate())

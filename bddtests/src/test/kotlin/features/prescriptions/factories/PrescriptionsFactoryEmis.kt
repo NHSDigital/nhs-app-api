@@ -1,6 +1,7 @@
 package features.prescriptions.factories
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
+import constants.Supplier
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.courses.EmisCoursesLoader
@@ -18,7 +19,7 @@ import utils.SerenityHelpers
 import java.time.Duration
 import java.time.OffsetDateTime
 
-class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
+class PrescriptionsFactoryEmis: PrescriptionsFactory(Supplier.EMIS) {
     override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
         mockingClient
                 .forEmis {

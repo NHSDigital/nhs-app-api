@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
@@ -14,12 +15,12 @@ abstract class MockingClientAppointmentMappingFactory {
 
     companion object : SupplierSpecificFactory<MockingClientAppointmentMappingFactory>() {
 
-        override val map: HashMap<String, (() -> MockingClientAppointmentMappingFactory)> by lazy {
+        override val map: HashMap<Supplier, (() -> MockingClientAppointmentMappingFactory)> by lazy {
             hashMapOf(
-                    "EMIS" to { MockingClientAppointmentMappingFactoryEmis() },
-                    "TPP" to { MockingClientAppointmentMappingFactoryTpp() },
-                    "VISION" to { MockingClientAppointmentMappingFactoryVision() },
-                    "MICROTEST" to { MockingClientAppointmentMappingFactoryMicrotest() }
+                    Supplier.EMIS to { MockingClientAppointmentMappingFactoryEmis() },
+                    Supplier.TPP to { MockingClientAppointmentMappingFactoryTpp() },
+                    Supplier.VISION to { MockingClientAppointmentMappingFactoryVision() },
+                    Supplier.MICROTEST to { MockingClientAppointmentMappingFactoryMicrotest() }
             )
         }
     }

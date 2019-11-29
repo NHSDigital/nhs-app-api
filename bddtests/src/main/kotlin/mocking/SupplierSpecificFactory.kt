@@ -1,18 +1,18 @@
 package mocking
 
+import constants.Supplier
 import org.junit.Assert
-import utils.GlobalSerenityHelpers
-import utils.set
+import utils.SerenityHelpers
 
 abstract class SupplierSpecificFactory<T>{
 
-    protected abstract val map: java.util.HashMap<String, (() -> (T))>
+    protected abstract val map: java.util.HashMap<Supplier, (() -> (T))>
 
-    fun getForSupplier(gpSystem: String): T {
+    fun getForSupplier(gpSystem: Supplier): T {
         if (!map.containsKey(gpSystem)) {
             Assert.fail("GP system '$gpSystem' is not set up.")
         }
-        GlobalSerenityHelpers.GP_SYSTEM.set(gpSystem)
+        SerenityHelpers.setGpSupplier(gpSystem)
         return map.getValue(gpSystem).invoke()
     }
 }

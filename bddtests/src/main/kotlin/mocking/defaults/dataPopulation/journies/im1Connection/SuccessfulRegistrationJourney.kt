@@ -1,5 +1,6 @@
 package mocking.defaults.dataPopulation.journies.im1Connection
 
+import constants.Supplier
 import constants.TppConstants
 import mocking.MockingClient
 import mocking.defaults.TppMockDefaults
@@ -28,13 +29,12 @@ import models.Patient
 
 class SuccessfulRegistrationJourney(private val client: MockingClient) {
 
-    fun create(patient: Patient = SuccessfulRegistrationJourney.patient, gpSystem: String = "EMIS") {
+    fun create(patient: Patient = SuccessfulRegistrationJourney.patient, gpSystem: Supplier) {
         when (gpSystem) {
-            "EMIS" -> generateEmisMocks(patient)
-            "TPP" -> generateTppMocks(patient)
-            "VISION" -> generateVisionMocks(patient)
-            "MICROTEST" -> { /* Microtest does not support registration with linkage keys */ }
-            else -> throw IllegalArgumentException("$gpSystem not recognised as a supported GP System.")
+            Supplier.EMIS -> generateEmisMocks(patient)
+            Supplier.TPP -> generateTppMocks(patient)
+            Supplier.VISION -> generateVisionMocks(patient)
+            Supplier.MICROTEST -> { /* Microtest does not support registration with linkage keys */ }
         }
     }
 

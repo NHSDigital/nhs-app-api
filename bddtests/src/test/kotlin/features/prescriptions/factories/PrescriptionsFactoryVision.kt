@@ -1,5 +1,6 @@
 package features.prescriptions.factories
 
+import constants.Supplier
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.data.prescriptions.courses.VisionCoursesLoader
@@ -18,7 +19,7 @@ import utils.SerenityHelpers
 import java.time.Duration
 import java.time.OffsetDateTime
 
-class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
+class PrescriptionsFactoryVision: PrescriptionsFactory(Supplier.VISION) {
 
     override val getCoursesLoader: ICoursesLoader<*> = VisionCoursesLoader
     override val getPrescriptionsLoader: IPrescriptionLoader<*> = VisionPrescriptionLoader

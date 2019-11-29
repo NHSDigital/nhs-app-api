@@ -1,5 +1,6 @@
 package features.myrecord.factories
 
+import constants.Supplier
 import features.myrecord.stepDefinitions.HTTP_EXCEPTION
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
@@ -37,13 +38,13 @@ abstract class MedicationsFactory {
     companion object : SupplierSpecificFactory<MedicationsFactory>() {
 
 
-        override val map: HashMap<String, () -> MedicationsFactory>
+        override val map: HashMap<Supplier, () -> MedicationsFactory>
                 by lazy {
                     hashMapOf(
-                            "EMIS" to { MedicationsFactoryEmis() },
-                            "TPP" to { MedicationsFactoryTpp() },
-                            "VISION" to { MedicationsFactoryVision() },
-                            "MICROTEST" to { MedicationsFactoryMicrotest() })
+                            Supplier.EMIS to { MedicationsFactoryEmis() },
+                            Supplier.TPP to { MedicationsFactoryTpp() },
+                            Supplier.VISION to { MedicationsFactoryVision() },
+                            Supplier.MICROTEST to { MedicationsFactoryMicrotest() })
                 }
 
     }

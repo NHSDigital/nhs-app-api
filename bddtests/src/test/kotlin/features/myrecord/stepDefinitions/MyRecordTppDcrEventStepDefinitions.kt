@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -17,7 +18,7 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has multiple dcr events for TPP$")
     fun givenTheGpPracticeHasMultipleDcrEventsForTpp() {
-        setPatientToDefaultFor("TPP")
+        setPatientToDefaultFor(Supplier.TPP)
         mockingClient.forTpp {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
@@ -26,7 +27,7 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has disabled dcr events functionality for TPP$")
     fun givenThePatientDoesNotHaveAccessToDcrEventsForTPP() {
-        setPatientToDefaultFor("TPP")
+        setPatientToDefaultFor(Supplier.TPP)
         mockingClient.forTpp {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
@@ -39,7 +40,7 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^an error occurred retrieving the dcr events from TPP$")
     fun givenAnErrorOccurredRetrievingDcrEventsFromTPP() {
-        setPatientToDefaultFor("TPP")
+        setPatientToDefaultFor(Supplier.TPP)
         mockingClient.forTpp {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithServiceNotAvailableException()

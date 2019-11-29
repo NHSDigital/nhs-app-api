@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -42,15 +43,16 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
 
     @Given("^I am a (\\w+) user setup to use medical record version 2$")
     fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem,
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
                 listOf(ServiceJourneyRulesConfiguration("medical record version", "2")))
 
-        SerenityHelpers.setGpSupplier(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-        MyRecordFactory.getForSupplier(gpSystem).enabledWithBlankRecord(patient)
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(patient)
+        DemographicsFactory.getForSupplier(supplier).enabled(patient)
     }
 
     @Given("^I am on my record information page - GP Medical Record$")
@@ -60,7 +62,8 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
 
     @Given("^I have my medical record available to view for (\\w+) - GP Medical Record$")
     fun givenIHaveMyMedicalRecordAvailableToView(gpSystem: String) {
-        MyRecordFactory.getForSupplier(gpSystem).
+        val supplier = Supplier.valueOf(gpSystem)
+        MyRecordFactory.getForSupplier(supplier).
                 enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
     }
 
@@ -101,16 +104,18 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
 
     @Given("^the my record wiremocks are initialised when the patient is already set for (.*)$")
     fun givenMyRecordWiremocksAreInitialisedForNoPatient(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the my record wiremocks have data when the patient is already set for (.*)$")
     fun givenMyRecordWiremocksHaveDataForNoPatient(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(gpSystem).enabledWithAllRecords(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
+        MyRecordFactory.getForSupplier(supplier).enabledWithAllRecords(SerenityHelpers.getPatient())
     }
     
     @When("I click the (.*) link on my record - GP Medical Record")
@@ -146,7 +151,7 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     }
 
     private fun createRecordStubsMicrotest(moduleCounts: MyRecordModuleCounts) {
-        val supplier = "MICROTEST"
+        val supplier = Supplier.MICROTEST
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())

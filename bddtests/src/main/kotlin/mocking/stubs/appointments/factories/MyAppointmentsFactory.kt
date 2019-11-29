@@ -1,6 +1,7 @@
 package mocking.stubs.appointments.factories
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
@@ -24,7 +25,7 @@ import java.util.*
 
 private const val DELAY_IN_SECONDS = 90L
 
-abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
+abstract class MyAppointmentsFactory(gpSupplier: Supplier) : AppointmentsFactory(gpSupplier) {
 
     fun createSuccessfulEmptyMyAppointmentResponse(
             cancellationReasons: List<AppointmentCancellationReason> = getDefaultCancellationReasons()
@@ -187,12 +188,12 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
 
     companion object : SupplierSpecificFactory<MyAppointmentsFactory>() {
 
-        override val map: HashMap<String, (() -> (MyAppointmentsFactory))> by lazy {
+        override val map: HashMap<Supplier, (() -> (MyAppointmentsFactory))> by lazy {
             hashMapOf(
-                    "EMIS" to { MyAppointmentsFactoryEmis() },
-                    "TPP" to { MyAppointmentsFactoryTpp() },
-                    "VISION" to { MyAppointmentsFactoryVision() },
-                    "MICROTEST" to { MyAppointmentsFactoryMicrotest() }
+                    Supplier.EMIS to { MyAppointmentsFactoryEmis() },
+                    Supplier.TPP to { MyAppointmentsFactoryTpp() },
+                    Supplier.VISION to { MyAppointmentsFactoryVision() },
+                    Supplier.MICROTEST to { MyAppointmentsFactoryMicrotest() }
             )
         }
     }

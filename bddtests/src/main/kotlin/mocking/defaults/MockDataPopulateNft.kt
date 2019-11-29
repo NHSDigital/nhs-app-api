@@ -1,6 +1,7 @@
 package mocking.defaults
 
 import config.Config
+import constants.Supplier
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.courses.EmisCoursesLoader
@@ -47,7 +48,7 @@ class MockDataPopulateNft(private val mockingClient: MockingClient) {
             populateEmisPrescriptionStubs(patient, pad)
             populateEmisRecordStubs(patient)
 
-            SuccessfulRegistrationJourney(mockingClient).create(patient)
+            SuccessfulRegistrationJourney(mockingClient).create(patient, Supplier.EMIS)
         }
     }
 

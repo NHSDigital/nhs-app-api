@@ -1,5 +1,6 @@
 package features.linkedProfiles.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -66,10 +67,11 @@ class LinkedProfilesStepDefinitions {
 
     @Given("^I am logged in as a (.*) user with linked profiles and appointments provider (.*)$")
     fun iAmLoggedInWithLinkedProfilesAndAppointmentsProvider(gpSystem: String, provider: String) {
-        val patient = Patient.getPatientWithLinkedProfiles(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getPatientWithLinkedProfiles(supplier)
         Patient.setOdsCodeBasedOnAppointmentsProvider(patient, provider)
-        SerenityHelpers.setGpSupplier(gpSystem)
-        setupWithLinkedAccountsAndLogIn(patient, gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
+        setupWithLinkedAccountsAndLogIn(patient, supplier)
     }
 
     @Given("^I click on the Appointments link on the header$")
@@ -77,7 +79,7 @@ class LinkedProfilesStepDefinitions {
         webHeader.clickAppointmentsPageLink()
     }
 
-    private fun setupWithLinkedAccountsAndLogIn(patient: Patient, gpSystem: String) {
+    private fun setupWithLinkedAccountsAndLogIn(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)

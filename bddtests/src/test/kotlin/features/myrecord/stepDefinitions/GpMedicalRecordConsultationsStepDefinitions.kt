@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.data.myrecord.ConsultationsData
@@ -10,6 +11,7 @@ import org.junit.Assert
 import pages.gpMedicalRecord.ConsultationsPage
 import pages.gpMedicalRecord.EventsPage
 import utils.SerenityHelpers
+import java.lang.UnsupportedOperationException
 
 open class GpMedicalRecordConsultationsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -17,10 +19,10 @@ open class GpMedicalRecordConsultationsStepDefinitions : AbstractDemographicsSte
     lateinit var eventsPage: EventsPage
 
     val expectedData = mapOf(
-            "EMIS" to arrayOf(
+            Supplier.EMIS to arrayOf(
                     "18 February 2018\nTHE SURGERY - MOSS - Jean (Dr)",
                     "18 February 2018\nTHE SURGERY - MOSS - Jean (Dr)"
-            ), "TPP" to arrayOf(
+            ), Supplier.TPP to arrayOf(
             "16 February 2018\n" +
                 "Kainos GP Demo Unit (General Practice) - Mr General NhsApp\n" +
                 "Medication Template - Alimemazine 50mg tablets - 1 pack of 14 tablet(s)" +
@@ -37,19 +39,21 @@ open class GpMedicalRecordConsultationsStepDefinitions : AbstractDemographicsSte
     fun givenTheGpPracticeHasMultipleConsultationsFor() {
         val gpSystem = SerenityHelpers.getGpSupplier()
         when (gpSystem) {
-            "EMIS" -> {
+            Supplier.EMIS -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
                             .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
                 }
             }
-            "TPP" -> {
+            Supplier.TPP -> {
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
                 }
             }
+            else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
         }
+
     }
 
     @Then("^I see the expected consultations and events - GP Medical Record$")
@@ -68,11 +72,11 @@ open class GpMedicalRecordConsultationsStepDefinitions : AbstractDemographicsSte
         }}
     }
 
-    private fun getConsultationsOrEventsData(supplier: String): List<WebElementFacade>? {
+    private fun getConsultationsOrEventsData(supplier: Supplier): List<WebElementFacade>? {
         var elements: List<WebElementFacade>? = null
-        if(supplier == "EMIS") {
+        if(supplier == Supplier.EMIS) {
             elements = consultationsPage.getConsultationsElements()
-        } else if(supplier == "TPP") {
+        } else if(supplier == Supplier.TPP) {
             elements = eventsPage.getEventsElements()
         }
         return elements

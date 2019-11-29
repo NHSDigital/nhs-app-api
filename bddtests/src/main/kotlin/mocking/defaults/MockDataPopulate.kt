@@ -1,6 +1,7 @@
 package mocking.defaults
 
 import config.Config
+import constants.Supplier
 import mocking.MockingClient
 import mocking.dataPopulation.journies.myRecord.MyRecordJournies
 import mocking.dataPopulation.journies.prescriptions.PrescriptionsJournies
@@ -94,7 +95,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
             EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
 
-            SuccessfulRegistrationJourney(mockingClient).create(patient)
+            SuccessfulRegistrationJourney(mockingClient).create(patient, Supplier.EMIS)
         }
     }
 

@@ -1,6 +1,7 @@
 package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
+import constants.Supplier
 import features.linkage.LinkageResult
 import mocking.defaults.TppMockDefaults
 import mocking.models.Mapping
@@ -10,7 +11,7 @@ import mocking.tpp.models.LinkAccount
 import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
 
-class LinkageFactoryTpp:  LinkageFactory("TPP") {
+class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
     override val validOtherLinkageDetails = LinkageInformationFacade(
             odsCode =  TppMockDefaults.DEFAULT_ODS_CODE_TPP,
             linkageKey = "anotherPassphraseToLink",

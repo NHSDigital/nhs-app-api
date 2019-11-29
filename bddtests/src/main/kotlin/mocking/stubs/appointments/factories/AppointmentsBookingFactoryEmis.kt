@@ -1,12 +1,13 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.emis.models.InputRequirements
 import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 
-class AppointmentsBookingFactoryEmis : AppointmentsBookingFactory("EMIS") {
+class AppointmentsBookingFactoryEmis : AppointmentsBookingFactory(Supplier.EMIS) {
 
     override fun requiresBookingReason(boolean: Boolean) {
         val inputRequirements = InputRequirements(appointmentBookingReason = NecessityOption.MANDATORY.text)

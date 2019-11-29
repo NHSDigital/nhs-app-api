@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -21,7 +22,8 @@ class Im1ConnectionV2StepDefinitions {
 
     @Given("^I am a (.*) user wishing to register with full linkage details$")
     fun iAmAUserWishingToRegisterWithFullLinkageDetails(gpSystem: String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
         val connectionRequest = factory.validIm1Request
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
@@ -31,7 +33,8 @@ class Im1ConnectionV2StepDefinitions {
 
     @Given("^I am a (.*) user wishing to register with retrieved linkage details$")
     fun iAmAUserWishingToRegisterWithRetrievedLinkageDetails(gpSystem: String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
         val connectionRequest =factory.validIm1Request
         connectionRequest.AccountId = null
@@ -44,7 +47,8 @@ class Im1ConnectionV2StepDefinitions {
 
     @Given("^I am a (.*) user wishing to register with created linkage details$")
     fun iAmAUserWishingToRegisterWithCreatedLinkageDetails(gpSystem: String) {
-        val factory = Im1ConnectionV2Factory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
         val connectionRequest = factory.validIm1Request
         val linkage = factory.validLinkageDetails

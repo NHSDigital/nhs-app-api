@@ -1,5 +1,6 @@
 package features.sharedSteps
 
+import constants.Supplier
 import cucumber.api.java.After
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
@@ -47,15 +48,16 @@ open class SharedStepDefinitions {
     @Given("^I am a (.*) patient$")
     fun initialisePatientAndGpSystem(gpSystem: String)
     {
+        val supplier = Supplier.valueOf(gpSystem)
         mockingClient.clearWiremock()
         mockingClient.favicon()
 
-        val patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
     }
 
     @Given("^I am logged in$")

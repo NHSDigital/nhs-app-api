@@ -1,6 +1,7 @@
 package features.authentication.factories
 
 import constants.ErrorResponseCodeTpp
+import constants.Supplier
 import features.authentication.stepDefinitions.PatientVerificationSerenityHelpers
 import mocking.data.myrecord.DemographicsData
 import mocking.defaults.TppMockDefaults
@@ -21,7 +22,7 @@ import java.time.Duration
 
 private const val REQUEST_DELAY = 1000_000L
 
-class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
+class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
     override fun validPatientWithNoNhsNumber() {
         Assert.fail("TPP user cannot have no NHS Number")
     }
@@ -31,7 +32,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
     }
 
     override fun validPatientWithOneNhsNumber() {
-        val patient = Patient.getDefault("TPP").copy(nhsNumbers = listOf("5785445875"))
+        val patient = Patient.getDefault(Supplier.TPP).copy(nhsNumbers = listOf("5785445875"))
 
         val authenticateRequest = Authenticate(
                 apiVersion = "1",

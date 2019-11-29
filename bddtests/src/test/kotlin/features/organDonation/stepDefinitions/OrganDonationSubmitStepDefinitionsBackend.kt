@@ -1,5 +1,6 @@
 package features.organDonation.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -24,7 +25,8 @@ class OrganDonationSubmitStepDefinitionsBackend {
 
     @Given("^I am a (\\w+) api user who wants to opt-out of organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOut(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         factory.create { registration->registration.optOut {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
@@ -32,7 +34,8 @@ class OrganDonationSubmitStepDefinitionsBackend {
 
     @Given("^I am a (\\w+) api user who wants to opt-in to organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptIn(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         factory.create { registration->registration.optIn {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
@@ -40,7 +43,8 @@ class OrganDonationSubmitStepDefinitionsBackend {
 
     @Given("^I am a (\\w+) api user who wants to donate some but not all organs$")
     fun iAmAUserWhoWantsToDonateSomeButNotAllOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = OrganDonationFactory(supplier)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         factory.create { registration ->
             registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated())

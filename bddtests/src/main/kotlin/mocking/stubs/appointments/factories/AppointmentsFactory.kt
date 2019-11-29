@@ -1,6 +1,7 @@
 package mocking.stubs.appointments.factories
 
 import constants.DateTimeFormats
+import constants.Supplier
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -13,13 +14,13 @@ import utils.SerenityHelpers
 import java.text.SimpleDateFormat
 import java.util.*
 
-abstract class AppointmentsFactory(gpSupplier: String) {
+abstract class AppointmentsFactory(gpSupplier: Supplier) {
 
     private val timeZone = TimeZone.getTimeZone("Europe/London")
     protected val gpDateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     val mockingClient = MockingClient.instance
     val patient: Patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)
-    protected val supplier: String = gpSupplier
+    protected val supplier: Supplier = gpSupplier
     protected val appointmentMapper: MockingClientAppointmentMappingFactory
     protected val appointmentSlotsFactoryHelper = AppointmentSlotsFactoryHelper()
 

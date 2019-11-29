@@ -1,5 +1,6 @@
 package features.courses.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -7,7 +8,6 @@ import features.authentication.steps.LoginSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
-import features.prescriptions.stepDefinitions.ProviderTypes
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 import mocking.emis.practices.NecessityOption
@@ -69,19 +69,19 @@ open class CoursesStepDefinitions {
     @Given("^I have historic prescriptions$")
     fun iHaveHistoricPrescriptions() {
         val currentPatient = SerenityHelpers.getPatient()
-        var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         if (currentProvider == null) {
             initialize()
-            currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+            currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         }
 
-        if (currentProvider == ProviderTypes.EMIS) {
+        if (currentProvider == Supplier.EMIS) {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
         }
-        else if (currentProvider == ProviderTypes.VISION) {
+        else if (currentProvider == Supplier.VISION) {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
         }
-        else if (currentProvider == ProviderTypes.MICROTEST) {
+        else if (currentProvider == Supplier.MICROTEST) {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
         }
     }
@@ -133,9 +133,9 @@ open class CoursesStepDefinitions {
     @Given("^special request text has been enabled and is '(.*)'$")
     fun gpProviderHasEnabledSpecialRequestText(necessityString: String) {
         initialize()
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
-        if (currentProvider == ProviderTypes.EMIS) {
+        if (currentProvider == Supplier.EMIS) {
             when(necessityString) {
                 "Mandatory" -> setupEmisSpecialRequestConfigWithNecessityOptionOf(NecessityOption.MANDATORY)
                 "Optional" -> setupEmisSpecialRequestConfigWithNecessityOptionOf(NecessityOption.OPTIONAL)
@@ -149,9 +149,9 @@ open class CoursesStepDefinitions {
         initialize()
 
         PrescriptionHelpers.setPrescriptionCommentsAllowed(false)
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
-        if (currentProvider == ProviderTypes.EMIS) {
+        if (currentProvider == Supplier.EMIS) {
             setupEmisSpecialRequestConfigWithNecessityOptionOf(NecessityOption.NOT_ALLOWED)
         }
     }
@@ -277,12 +277,12 @@ open class CoursesStepDefinitions {
     }
 
     private fun setupWiremockandCreateData() {
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         if (currentProvider == null) {
             initialize()
         }
 
-        val prescriptionsFactory = PrescriptionsFactory.getForSupplier(currentProvider.toString())
+        val prescriptionsFactory = PrescriptionsFactory.getForSupplier(currentProvider!!)
 
         prescriptionsFactory.setupWireMockAndCreateData(
                 numOfCourses,
@@ -298,10 +298,10 @@ open class CoursesStepDefinitions {
 
         SerenityHelpers.setPatient(factory.patient)
         coursesLoader = factory.getCoursesLoader
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
         if (currentProvider == null) {
-            PrescriptionsSerenityHelpers.PROVIDER.set( ProviderTypes.valueOf(gpSystem))
+            PrescriptionsSerenityHelpers.PROVIDER.set(gpSystem)
         }
     }
 }

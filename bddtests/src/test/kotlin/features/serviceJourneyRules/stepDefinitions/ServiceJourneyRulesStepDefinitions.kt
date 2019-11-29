@@ -1,6 +1,7 @@
 package features.serviceJourneyRules.stepDefinitions
 
 import com.google.gson.internal.LazilyParsedNumber
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -24,15 +25,13 @@ import worker.models.serviceJourneyRules.MedicalRecordProvider
 import worker.models.serviceJourneyRules.PrescriptionsProvider
 import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
 
-private const val TPP_GP_SUPPLIER = "TPP"
-
 class ServiceJourneyRulesStepDefinitions {
 
     @Given("^I am a user whose ODS Code does not have specific journey configuration set up$")
     fun iAmAUserWhoseODSCodeDoesNotHaveASpecificJourneyConfigurationSetUp() {
-        SerenityHelpers.setGpSupplier(TPP_GP_SUPPLIER)
+        SerenityHelpers.setGpSupplier(Supplier.TPP)
 
-        val patient = Patient.getDefault(TPP_GP_SUPPLIER)
+        val patient = Patient.getDefault(Supplier.TPP)
                 .copy(odsCode = TPP_ODS_CODE_NO_SJR_CONFIGURATION)
         patient.tppUserSession!!.copy(unitId = TPP_ODS_CODE_NO_SJR_CONFIGURATION)
         SerenityHelpers.setPatient(patient)
@@ -41,7 +40,8 @@ class ServiceJourneyRulesStepDefinitions {
     @Given("^I am a (.*) user where the journey configurations are:$")
     fun iAmAGPSystemUserWhereTheJourneyConfigurationsAre(gpSystem: String,
                                                  configurations: List<ServiceJourneyRulesConfiguration>) {
-        createUser(gpSystem, configurations)
+        val supplier = Supplier.valueOf(gpSystem)
+        createUser(supplier, configurations)
     }
 
     @Given("^I am a user where the journey configurations are:$")
@@ -49,13 +49,13 @@ class ServiceJourneyRulesStepDefinitions {
         createUser(null, configurations)
     }
 
-    private fun createUser(gpSystem: String?,
+    private fun createUser(supplier: Supplier?,
                            configurations: List<ServiceJourneyRulesConfiguration>) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(gpSystem, ArrayList(configurations))
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier, ArrayList(configurations))
+        val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(
-                gpSystem ?: SerenityHelpers.getGpSupplier(),
-                mockingClient).createFor(patient)
+                supplierToUse, mockingClient).createFor(patient)
     }
 
     @When("^I request the service journey rules for my ODS Code$")

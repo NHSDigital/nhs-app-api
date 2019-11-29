@@ -2,6 +2,7 @@ package models
 
 import config.Config
 import constants.DateTimeFormats
+import constants.Supplier
 import mocking.AccessTokenBuilder
 import mocking.IdTokenBuilder
 import mocking.defaults.EmisMockDefaults
@@ -107,19 +108,18 @@ data class Patient(
             return IdTokenBuilder().getSignedToken(patient).serialize()
         }
 
-        fun getDefault(gpSystem: String): Patient {
-            return when (gpSystem.toUpperCase()) {
-                "EMIS" -> EmisPatients.getDefault()
-                "TPP" -> TppPatients.getDefault()
-                "VISION" -> VisionPatients.getDefault()
-                "MICROTEST" -> MicrotestPatients.getDefault()
-                else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
+        fun getDefault(gpSystem: Supplier): Patient {
+            return when (gpSystem) {
+                Supplier.EMIS -> EmisPatients.getDefault()
+                Supplier.TPP -> TppPatients.getDefault()
+                Supplier.VISION -> VisionPatients.getDefault()
+                Supplier.MICROTEST -> MicrotestPatients.getDefault()
             }
         }
 
-        fun getPatientWithLinkedProfiles(gpSystem: String): Patient {
-            return when (gpSystem.toUpperCase()) {
-                "EMIS" -> EmisPatients.getPatientWithLinkedProfiles()
+        fun getPatientWithLinkedProfiles(gpSystem: Supplier): Patient {
+            return when (gpSystem) {
+                Supplier.EMIS -> EmisPatients.getPatientWithLinkedProfiles()
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }

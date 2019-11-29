@@ -1,5 +1,6 @@
 package mocking.stubs
 
+import constants.Supplier
 import mocking.MockingClient
 import mocking.stubs.TppStubsPatientFactory.Companion.TppPatientList
 import mocking.stubs.myMedicalRecord.MedicalRecordStubs
@@ -11,27 +12,29 @@ import mocking.stubs.appointments.CancelAppointmentsStubs
 import mocking.stubs.appointments.AppointmentSlotsStubs
 import mocking.stubs.appointments.BookAppoinmentStubs
 
-private const val GP_SUPPLIER = "TPP"
 class TppStubbedEnvironment(private val mockingClient : MockingClient){
+
+    private val gpSupplier = Supplier.TPP
+
     fun generateStubs() {
-        PatientDataGenerator.generatePatientData(TppPatientList, GP_SUPPLIER)
+        PatientDataGenerator.generatePatientData(TppPatientList, gpSupplier)
         generateAppointmentStubs()
         generateMedicalRecordStubs()
         generatePrescriptionStubs()
     }
 
     private fun generateAppointmentStubs() {
-        AppointmentSlotsStubs(mockingClient).generateStubs(GP_SUPPLIER)
-        BookAppoinmentStubs(mockingClient).generateStubs(GP_SUPPLIER)
-        ViewAppointmentsStubs(mockingClient).generateStubs(GP_SUPPLIER)
-        CancelAppointmentsStubs(mockingClient).generateStubs(GP_SUPPLIER)
+        AppointmentSlotsStubs(mockingClient).generateStubs(gpSupplier)
+        BookAppoinmentStubs(mockingClient).generateStubs(gpSupplier)
+        ViewAppointmentsStubs(mockingClient).generateStubs(gpSupplier)
+        CancelAppointmentsStubs(mockingClient).generateStubs(gpSupplier)
     }
 
     private fun generateMedicalRecordStubs() {
-        MedicalRecordStubs(mockingClient).generateStubs(GP_SUPPLIER)
+        MedicalRecordStubs(mockingClient).generateStubs(gpSupplier)
     }
     private fun generatePrescriptionStubs(){
-        ViewPrescriptionsStubs(mockingClient).generateStubs(GP_SUPPLIER)
-        OrderRepeatPrescriptionsStubs(goodPatientTPP, mockingClient).generateStubs(GP_SUPPLIER)
+        ViewPrescriptionsStubs(mockingClient).generateStubs(gpSupplier)
+        OrderRepeatPrescriptionsStubs(goodPatientTPP, mockingClient).generateStubs(gpSupplier)
     }
 }

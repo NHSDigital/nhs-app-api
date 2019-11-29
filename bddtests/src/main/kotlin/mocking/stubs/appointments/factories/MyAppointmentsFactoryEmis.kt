@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
@@ -10,7 +11,7 @@ import models.Slot
 import worker.models.appointments.AppointmentResponseObject
 import worker.models.appointments.MyAppointmentsResponse
 
-class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
+class MyAppointmentsFactoryEmis : MyAppointmentsFactory(Supplier.EMIS) {
 
     override fun getExpectedApiResponse(facade: MyAppointmentsFacade): MyAppointmentsResponse {
         val sessions = facade.myAppointments!!.sessions

@@ -1,5 +1,6 @@
 package mocking.stubs.appointments.factories
 
+import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.emis.practices.NecessityOption
@@ -14,7 +15,7 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import worker.models.appointments.AppointmentBookRequest
 
-abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
+abstract class AppointmentsBookingFactory(gpSupplier: Supplier) : AppointmentsFactory(gpSupplier) {
 
     fun generateDefaultAvailableAppointmentSlotExample(guidanceMessage: String? = null,
                                                        reasonNecessityOption: NecessityOption =
@@ -136,13 +137,13 @@ abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFact
 
     companion object : SupplierSpecificFactory<AppointmentsBookingFactory>() {
 
-        override val map: HashMap<String, (() -> AppointmentsBookingFactory)>
+        override val map: HashMap<Supplier, (() -> AppointmentsBookingFactory)>
                 by lazy {
                     hashMapOf(
-                            "EMIS" to { AppointmentsBookingFactoryEmis() },
-                            "TPP" to { AppointmentsBookingFactoryTpp() },
-                            "VISION" to { AppointmentsBookingFactoryVision() },
-                            "MICROTEST" to { AppointmentsBookingFactoryMicrotest()})
+                            Supplier.EMIS to { AppointmentsBookingFactoryEmis() },
+                            Supplier.TPP to { AppointmentsBookingFactoryTpp() },
+                            Supplier.VISION to { AppointmentsBookingFactoryVision() },
+                            Supplier.MICROTEST to { AppointmentsBookingFactoryMicrotest()})
                 }
 
 

@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -27,28 +28,30 @@ class PatientVerificationStepDefinitions {
 
     @Given("I have an (.*) IM1 Connection Token that does not exist")
     fun givenIHaveAnImConnectionTokenThatDoesNotExist(gpSystem: String) {
-        PatientVerificationFactory.getForSupplier(gpSystem).im1ConnectionTokenDoesNotExist()
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationFactory.getForSupplier(supplier).im1ConnectionTokenDoesNotExist()
     }
 
     @Given("Vision responds with a connection to external service failed")
     fun givenVisionRespondsWithAConnectionToExternalServiceFailed() {
-        PatientVerificationFactory.getForSupplier("VISION").connectionToExternalServiceFailed()
+        PatientVerificationFactory.getForSupplier(Supplier.VISION).connectionToExternalServiceFailed()
     }
 
     @Given("I have an (.*) IM1 Connection Token that is in an invalid format")
     fun givenIHaveAnIm1ConnectionTokenThatIsInAnInvalidFormat(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
         PatientVerificationSerenityHelpers.ConnectionToken.set("token")
-        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
+        setDefaultNationalPracticeCodeSessionVariable(supplier)
     }
 
     @Given("I have an EMIS IM1 Connection Token and I try to verify as a microtest user")
     fun givenIHaveAnIm1ConnectionTokenForEmisAndIAmMicrotest() {
         PatientVerificationSerenityHelpers.ConnectionToken.set(EmisMockDefaults.DEFAULT_CONNECTION_TOKEN)
-        setDefaultNationalPracticeCodeSessionVariable("MICROTEST")
+        setDefaultNationalPracticeCodeSessionVariable(Supplier.MICROTEST)
     }
 
-    private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String) {
-        val odsCode = PatientVerificationFactory.getForSupplier(gpSystem).odsCode
+    private fun setDefaultNationalPracticeCodeSessionVariable(supplier: Supplier) {
+        val odsCode = PatientVerificationFactory.getForSupplier(supplier).odsCode
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(odsCode)
     }
 
@@ -59,7 +62,7 @@ class PatientVerificationStepDefinitions {
         mockingClient
                 .forVision {
                     authentication.getConfigurationRequest(
-                            visionUserSession = VisionUserSession.fromPatient(Patient.getDefault("VISION")))
+                            visionUserSession = VisionUserSession.fromPatient(Patient.getDefault(Supplier.VISION)))
                             .respondWithSecurityHeaderError()
                 }
     }
@@ -72,14 +75,14 @@ class PatientVerificationStepDefinitions {
         mockingClient
                 .forVision {
                     authentication.getConfigurationRequest(
-                            visionUserSession = VisionUserSession.fromPatient(Patient.getDefault("VISION")))
+                            visionUserSession = VisionUserSession.fromPatient(Patient.getDefault(Supplier.VISION)))
                             .respondWithInvalidRequest()
                 }
     }
 
     @Given("Vision responds with an unknown error")
     fun visionRespondsWithAnUnknownError() {
-        val patient =  Patient.getDefault("VISION")
+        val patient =  Patient.getDefault(Supplier.VISION)
         PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
         mockingClient
@@ -92,7 +95,7 @@ class PatientVerificationStepDefinitions {
 
     @Given("Vision responds with a record currently unavailable error")
     fun visionRespondsWithARecordCurrentlyUnavailableError() {
-        val patient =  Patient.getDefault("VISION")
+        val patient =  Patient.getDefault(Supplier.VISION)
         PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
         mockingClient
@@ -105,42 +108,50 @@ class PatientVerificationStepDefinitions {
 
     @Given("I have an (.*) ODS Code not in expected format")
     fun givenIHaveAnOdsCodeNotInExpectedFormat(gpSystem: String) {
-        PatientVerificationSerenityHelpers.ConnectionToken.set(Patient.getDefault(gpSystem).connectionToken)
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(Patient.getDefault(supplier).connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set("£$*&")
     }
 
     @Given("I have an (.*) ODS Code that does not exist")
     fun givenIHaveAnOdsCodeThatDoesNotExists(gpSystem: String) {
-        PatientVerificationSerenityHelpers.ConnectionToken.set(Patient.getDefault(gpSystem).connectionToken)
+
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(Patient.getDefault(supplier).connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set("E99999")
     }
 
 
     @Given("I have valid credentials for a (.*) patient with one NHS Number")
     fun givenIHaveValidCredentialsForAPatientWithOneNhsNumber(gpSystem: String) {
-        PatientVerificationFactory.getForSupplier(gpSystem).validPatientWithOneNhsNumber()
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationFactory.getForSupplier(supplier).validPatientWithOneNhsNumber()
     }
 
     @Given("I have valid credentials for a (.*) patient with multiple NHS Numbers")
     fun givenIHaveValidCredentialsForAPatientWithMultipleNhsNumbers(gpSystem: String) {
-        PatientVerificationFactory.getForSupplier(gpSystem).validPatientWithMultipleNumbers()
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationFactory.getForSupplier(supplier).validPatientWithMultipleNumbers()
     }
 
     @Given("I have valid credentials for a (.*) patient with no NHS Number")
     fun givenIHaveValidCredentialsForAPatientWithNoNhsNumber(gpSystem: String) {
-        PatientVerificationFactory.getForSupplier(gpSystem).validPatientWithNoNhsNumber()
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationFactory.getForSupplier(supplier).validPatientWithNoNhsNumber()
     }
 
     @Given("I have an old ODS Code and IM1 Connection Token for a (\\w*) patient that has since moved to a"
             + " different practice")
     fun givenIHaveAnOldOdsCodeAndIm1ConnectionTokenForAPatientThatHasSinceMovedToADifferentPractice(gpSystem: String) {
-        PatientVerificationFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationFactory.getForSupplier(supplier)
                                   .oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice()
     }
 
     @Given("I have valid a valid IM1 Connection Token for a (\\w+) patient but the GP System is not available$")
     fun giveIHaveAValidIM1ConnectionTokenForAPatientButTheGpSystemIsNotAvailable(gpSystem: String) {
-        PatientVerificationFactory.getForSupplier(gpSystem).gpSystemNotAvailable()
+        val supplier = Supplier.valueOf(gpSystem)
+        PatientVerificationFactory.getForSupplier(supplier).gpSystemNotAvailable()
     }
 
     @When("I verify patient data using the v1 endpoint")

@@ -1,5 +1,6 @@
 package mocking.defaults.dataPopulation.journies.session
 
+import constants.Supplier
 import mocking.MockingClient
 import models.Patient
 import org.junit.Assert
@@ -20,19 +21,19 @@ abstract class SessionCreateJourneyFactory {
 
     companion object {
 
-        private val map: (HashMap<String, (MockingClient) -> SessionCreateJourneyFactory>) by lazy { map() }
+        private val map: (HashMap<Supplier, (MockingClient) -> SessionCreateJourneyFactory>) by lazy { map() }
 
-        private fun map(): HashMap<String, (MockingClient) -> SessionCreateJourneyFactory> {
+        private fun map(): HashMap<Supplier, (MockingClient) -> SessionCreateJourneyFactory> {
             return hashMapOf(
-                    "EMIS" to { client -> EmisSessionCreateJourneyFactory(client) },
-                    "TPP" to { client -> TppSessionCreateJourneyFactory(client) },
-                    "VISION" to { client -> VisionSessionCreateJourneyFactory(client) },
-                    "MICROTEST" to { client -> MicrotestSessionCreateJourneyFactory(client) }
+                    Supplier.EMIS to { client -> EmisSessionCreateJourneyFactory(client) },
+                    Supplier.TPP to { client -> TppSessionCreateJourneyFactory(client) },
+                    Supplier.VISION to { client -> VisionSessionCreateJourneyFactory(client) },
+                    Supplier.MICROTEST to { client -> MicrotestSessionCreateJourneyFactory(client) }
             )
         }
 
-        fun getForSupplier(gpSystem: String, mockingClient: MockingClient): SessionCreateJourneyFactory {
-            if (!map.containsKey(gpSystem.toUpperCase())) {
+        fun getForSupplier(gpSystem: Supplier, mockingClient: MockingClient): SessionCreateJourneyFactory {
+            if (!map.containsKey(gpSystem)) {
                 Assert.fail("GP system '$gpSystem' is not set up.")
             }
             return map.getValue(gpSystem).invoke(mockingClient)

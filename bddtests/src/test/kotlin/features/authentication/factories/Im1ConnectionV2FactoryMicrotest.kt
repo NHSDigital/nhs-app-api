@@ -1,12 +1,13 @@
 package features.authentication.factories
 
 import constants.DateTimeFormats
+import constants.Supplier
 import mocking.gpServiceBuilderInterfaces.IErrorMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
 import java.time.Duration
 
-class Im1ConnectionV2FactoryMicrotest : Im1ConnectionV2Factory("MICROTEST") {
+class Im1ConnectionV2FactoryMicrotest : Im1ConnectionV2Factory(Supplier.MICROTEST) {
 
     override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         mockingClient.forMicrotest {

@@ -1,12 +1,11 @@
 package features.im1Appointments.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.authentication.steps.LoginSteps
 import features.im1Appointments.steps.AvailableAppointmentsSteps
-import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExample
@@ -26,9 +25,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.assertIsVisible
-import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
-import utils.getOrFail
 import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
@@ -40,10 +37,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
-    @Steps
-    lateinit var login: LoginSteps
-    @Steps
-    lateinit var navigation: NavigationSteps
 
     val mockingClient = MockingClient.instance
     private val appointmentSlotsExample = AppointmentsSlotsExample()
@@ -61,52 +54,64 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^there are available appointment slots with different criteria for (\\w+)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForSupplier(supplier)
+    }
+
+    private fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForSupplier(supplier: Supplier) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
     }
 
     @Given("^there are no available appointment slots for (.*)$")
     fun thereAreNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample(AppointmentsSlotsExampleBuilderWithExpectations().build())
     }
 
     @Given("^there is 1 available appointment slot for (.*)$")
     fun thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample(appointmentSlotsExample.singleSlotExample())
     }
 
     @Given("^there are available appointment slots for (.*) for 1 location$")
     fun thereAreAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample(appointmentSlotsExample.multipleSlotsOneLocation())
     }
 
     @Given("^there are appointment slots on some days other than tomorrow, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsButNotForTomorrowForGPSystem(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val example = appointmentSlotsExample.slotForDayAfterTomorrow()
         appointmentsSlotsFactory.generateExample(example)
     }
 
     @Given("^there are appointment slots on some days in This week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsThisWeekForGPSystem(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val example = appointmentSlotsExample.slotForEndOfToday()
         appointmentsSlotsFactory.generateExample(example)
     }
 
     @Given("^there are appointment slots on some days this week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysThisWeekButNotAllForGPSystem(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val example = appointmentSlotsExample.slotForEndOfToday()
         appointmentsSlotsFactory.generateExample(example)
     }
 
     @Given("^there are appointment slots on some days next week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysNextWeekButNotAllForGPSystem(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val example = appointmentSlotsExample.slotForThisTimeNextWeek()
         appointmentsSlotsFactory.generateExample(example)
     }
@@ -118,21 +123,24 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^there are available appointment slots with different slot types and locations for (\\w+)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentSlotTypesForGPSystem(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val exampleForFiltering = appointmentSlotsExampleForFiltering.getExampleForFilteringSlotTypesAndLocations()
         appointmentsSlotsFactory.generateExample(exampleForFiltering)
     }
 
     @Given("^there are available appointment slots with different clinician for (\\w+)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentClinicianForGPSystem(gpSystem: String) {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val exampleForFiltering = appointmentSlotsExampleForFiltering.getExampleForFilteringClinincian()
         appointmentsSlotsFactory.generateExample(exampleForFiltering)
     }
 
     @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots$")
     fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val genericExample = appointmentSlotsExample.getGenericExample()
         factory.generateExample {
             withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
@@ -142,7 +150,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots, on the first attempt$")
     fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlotsOnTheFirstAttempt(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val genericExample = appointmentSlotsExample.getGenericExample()
         // stub to generate timeout for 1st attempt
         factory.generateExample {
@@ -156,7 +165,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^will respond in a timely fashion on the second attempt$")
     fun theGpSystemWillSucceedForAvailableAppointmentSlotsOnTheSecondAttempt() {
-        val gpSystem = GlobalSerenityHelpers.GP_SYSTEM.getOrFail<String>()
+        val gpSystem= SerenityHelpers.getGpSupplier()
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val genericExample = appointmentSlotsExample.getGenericExample()
         // stub to generate success on 2nd attempt
@@ -170,7 +179,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^there are available EMIS appointment slots with different criteria " +
             "but there is a slight delay in retrieving them$")
     fun slightDelayForRetrievingAvailableAppointmentSlots() {
-        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        val factory = AppointmentsSlotsFactory.getForSupplier(Supplier.EMIS)
         val genericExample = appointmentSlotsExample.getGenericExample()
         factory.generateExample {
             respondWithSuccess(genericExample)
@@ -181,12 +190,13 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^Appointments are disabled for VISION at a GP Practice level")
     fun appointmentsAreDisabledForVisionAtAGPLevel() {
         Serenity.setSessionVariable(gpAppointmentsDisabled).to("true")
-        AppointmentsSlotsFactory.getForSupplier("VISION").generateDefaultUserData()
+        AppointmentsSlotsFactory.getForSupplier(Supplier.VISION).generateDefaultUserData()
     }
 
     @Given("^(.*) is unavailable for available appointment slots$")
     fun gpSystemIUnavailableForAvailableAppointmentSlots(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample {
             respondWithServiceUnavailable()
         }
@@ -194,7 +204,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^(.*) returns corrupt data for appointment slots$")
     fun gpSystemReturnsCorruptDataForAppointmentSlots(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample {
             respondWithCorrupted()
         }
@@ -202,13 +213,14 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^there are available EMIS appointment slots, but session has expired$")
     fun thereAreAvailableAppointmentSlotsButExpiredSession() {
-        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem("EMIS")
+        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForSupplier(Supplier.EMIS)
         Serenity.setSessionVariable(Cookie::class).to(expiredCookie)
     }
 
     @Given("^an unknown exception will occur when wanting to view (.*) appointment slots$")
     fun unknownExceptionWhenWantingToViewAppointmentSlots(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateExample {
             respondWithUnknownException()
         }

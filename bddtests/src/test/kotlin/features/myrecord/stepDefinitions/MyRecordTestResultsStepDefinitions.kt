@@ -2,6 +2,7 @@ package features.myrecord.stepDefinitions
 
 import config.Config
 import constants.DateTimeFormats
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -29,7 +30,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {
-        setPatientToDefaultFor("TPP")
+        setPatientToDefaultFor(Supplier.TPP)
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
@@ -40,7 +41,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the test result details are retrieved successfully$")
     fun successGettingTestResultDetailForTpp() {
-        setPatientToDefaultFor("TPP")
+        setPatientToDefaultFor(Supplier.TPP)
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
@@ -52,7 +53,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has test result details$")
     fun givenTestResultDetailIsRetrievedSuccessfully() {
-        setPatientToDefaultFor("TPP")
+        setPatientToDefaultFor(Supplier.TPP)
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
@@ -69,7 +70,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with multiple child values with no ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesFor() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
@@ -79,7 +80,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with single child values with no ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesFor() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
@@ -88,7 +89,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the EMIS GP Practice has two test results where the second record has no date$")
     fun givenTheEmisGpPracticeHasATestResultWithNoDate() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getTwoTestResultsWhereTheSecondRecordHasNoDate())
@@ -97,7 +98,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with multiple child values with ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
@@ -106,7 +107,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with single child value with A range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
@@ -116,7 +117,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has test results enabled " +
             "and a single test result exists with no child values or range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
@@ -125,7 +126,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with no child values and range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor() {
-        setPatientToDefaultFor("EMIS")
+        setPatientToDefaultFor(Supplier.EMIS)
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
@@ -240,7 +241,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("^I see the test result heading$")
     fun thenISeeTheTestResultHeading() {
         val header = when (SerenityHelpers.getGpSupplier()) {
-            "TPP" -> {
+            Supplier.TPP -> {
                 "Test results (past 6 months)"
             }
             else -> {
@@ -254,7 +255,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     fun thenISeeTestResultInformation() {
         val gpSystem = SerenityHelpers.getGpSupplier()
 
-        if (gpSystem == "VISION") {
+        if (gpSystem == Supplier.VISION) {
             Assert.assertTrue(myRecordInfoPage.isVisionTestResultsLinkVisible())
         } else {
             Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
