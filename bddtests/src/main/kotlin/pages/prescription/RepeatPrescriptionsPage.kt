@@ -63,6 +63,11 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         return findByXpath("//p[contains(.,'$message')]").isVisible
     }
 
+    fun isNoSpecialRequestTextEnteredMessageVisible(): Boolean {
+        val message = "Enter any special requests relating to this order"
+        return findByXpath("//p[contains(.,'$message')]").isVisible
+    }
+
     fun isNoMedicationAvailableToOrderMessageVisible(): Boolean {
         val message = "You don't have any medication available to order right now"
         return findByXpath("//h3[contains(., \"$message\")]").isVisible

@@ -4,6 +4,7 @@ import Vue from 'vue';
 import { createLocalVue, mount } from '@vue/test-utils';
 import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
 import { PRESCRIPTION_CONFIRM_COURSES } from '@/lib/routes';
+import Necessity from '@/lib/necessity';
 
 const createMockMixinPlugin = () => Vue.mixin({
   computed: {
@@ -23,7 +24,14 @@ const repeatPrescriptionCourses = [
   { id: 'repeat-course-id-3' },
 ];
 
-const createStore = (hasLoaded, submitted, selectedCoursesNoJs) => ({
+const createStore = (
+  hasLoaded,
+  submitted,
+  selectedCoursesNoJs,
+  validated,
+  specialRequestNecessity,
+  specialRequest,
+) => ({
   dispatch: jest.fn(() => Promise.resolve()),
   app: {
     router: {
@@ -36,6 +44,9 @@ const createStore = (hasLoaded, submitted, selectedCoursesNoJs) => ({
       submitted,
       repeatPrescriptionCourses,
       selectedCoursesNoJs,
+      validated,
+      specialRequestNecessity,
+      specialRequest,
     },
   },
 });
@@ -63,6 +74,7 @@ const createRepeatCoursesPage = ($store) => {
 describe('prescriptions/repeat-courses.vue -', () => {
   describe('fetch', () => {
     it('will fetch courses when not being submitted', async () => {
+      // Arrange
       const $store = createStore(false, false, []);
       $store.getters = {
         'repeatPrescriptionCourses/selectedIds': [],
@@ -70,16 +82,16 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
       jest.spyOn($store, 'dispatch');
 
-      // act
+      // Act
       const page = createRepeatCoursesPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      // assert
+      // Assert
       expect($store.dispatch).toHaveBeenCalledWith('repeatPrescriptionCourses/load');
     });
 
     it('will parse and validate values from the store when the page has been submitted without javascript - multiple courses selected', async () => {
-      // arrange
+      // Arrange
       const selectedCoursesNoJs = ['repeat-course-id-1'];
 
       const $store = createStore(false, true, selectedCoursesNoJs);
@@ -92,18 +104,18 @@ describe('prescriptions/repeat-courses.vue -', () => {
       jest.spyOn($store, 'dispatch');
       jest.spyOn($store.app.router, 'push');
 
-      // act
+      // Act
       const page = createRepeatCoursesPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      // assert
+      // Assert
       expect($store.dispatch).toHaveBeenCalledWith('repeatPrescriptionCourses/load');
       expect($store.app.router.push).toHaveBeenCalledWith(PRESCRIPTION_CONFIRM_COURSES.path);
       expect($store.state.repeatPrescriptionCourses.submitted).toBe(false);
     });
 
     it('will parse and validate values from the store when the page has been submitted without javascript - one course selected', async () => {
-      // arrange
+      // Arrange
       const selectedCoursesNoJs = 'repeat-course-id-1'; // when submitted with no js, the submitted value is a single string (not an array)
 
       const $store = createStore(false, true, selectedCoursesNoJs);
@@ -116,18 +128,18 @@ describe('prescriptions/repeat-courses.vue -', () => {
       jest.spyOn($store, 'dispatch');
       jest.spyOn($store.app.router, 'push');
 
-      // act
+      // Act
       const page = createRepeatCoursesPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      // assert
+      // Assert
       expect($store.dispatch).toHaveBeenCalledWith('repeatPrescriptionCourses/load');
       expect($store.app.router.push).toHaveBeenCalledWith(PRESCRIPTION_CONFIRM_COURSES.path);
       expect($store.state.repeatPrescriptionCourses.submitted).toBe(false);
     });
 
     it('will parse and validate values from the store when the page has been submitted without javascript - no course selected', async () => {
-      // arrange
+      // Arrange
       const selectedCoursesNoJs = '';
 
       const $store = createStore(false, true, selectedCoursesNoJs);
@@ -140,15 +152,99 @@ describe('prescriptions/repeat-courses.vue -', () => {
       jest.spyOn($store, 'dispatch');
       jest.spyOn($store.app.router, 'push');
 
-      // act
+      // Act
       const page = createRepeatCoursesPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      // assert
+      // Assert
       expect($store.dispatch).toHaveBeenCalledWith('repeatPrescriptionCourses/load');
       expect($store.app.router.push).not.toHaveBeenCalledWith(PRESCRIPTION_CONFIRM_COURSES.path);
       expect($store.state.repeatPrescriptionCourses.submitted).toBe(false);
       expect($store.dispatch).toHaveBeenCalledWith('repeatPrescriptionCourses/validate', { isValid: false, submitted: true });
+    });
+  });
+
+  describe('error', () => {
+    let page;
+
+    it('will show an error if the course selection is invalid', () => {
+      // Arrange
+      const $store = createStore(true, false, [], true);
+      $store.getters = {
+        'repeatPrescriptionCourses/selectedIds': [],
+        'repeatPrescriptionCourses/isValid': false,
+        'repeatPrescriptionCourses/specialRequestValid': true,
+      };
+
+      // Act
+      page = createRepeatCoursesPage($store);
+
+      // Assert
+      expect(page.vm.error).toBe(true);
+    });
+
+    it('will show an error if the special request is invalid and Mandatory', () => {
+      // Arrange
+      const $store = createStore(true, false, [], true, Necessity.Mandatory);
+      $store.getters = {
+        'repeatPrescriptionCourses/selectedIds': ['repeat-course-id-1'],
+        'repeatPrescriptionCourses/isValid': true,
+        'repeatPrescriptionCourses/specialRequestValid': false,
+      };
+
+      // Act
+      page = createRepeatCoursesPage($store);
+
+      // Assert
+      expect(page.vm.error).toBe(true);
+    });
+
+    it('will not show an error if the special request is invalid and not Mandatory', () => {
+      // Arrange
+      const $store = createStore(true, false, [], true, Necessity.Optional);
+      $store.getters = {
+        'repeatPrescriptionCourses/selectedIds': ['repeat-course-id-1'],
+        'repeatPrescriptionCourses/isValid': true,
+        'repeatPrescriptionCourses/specialRequestValid': false,
+      };
+
+      // Act
+      page = createRepeatCoursesPage($store);
+
+      // Assert
+      expect(page.vm.error).toBe(false);
+    });
+
+    it('will show an error if the course selection and Mandatory special request are invalid', () => {
+      // Arrange
+      const $store = createStore(true, false, [], true, Necessity.Mandatory);
+      $store.getters = {
+        'repeatPrescriptionCourses/selectedIds': [],
+        'repeatPrescriptionCourses/isValid': false,
+        'repeatPrescriptionCourses/specialRequestValid': false,
+      };
+
+      // Act
+      page = createRepeatCoursesPage($store);
+
+      // Assert
+      expect(page.vm.error).toBe(true);
+    });
+
+    it('will not show an error if the course selection and Mandatory special request are valid', () => {
+      // Arrange
+      const $store = createStore(true, false, [], true, Necessity.Mandatory, 'specialRequest');
+      $store.getters = {
+        'repeatPrescriptionCourses/selectedIds': ['repeat-course-id-1'],
+        'repeatPrescriptionCourses/isValid': true,
+        'repeatPrescriptionCourses/specialRequestValid': true,
+      };
+
+      // Act
+      page = createRepeatCoursesPage($store);
+
+      // Assert
+      expect(page.vm.error).toBe(false);
     });
   });
 });

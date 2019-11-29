@@ -130,15 +130,17 @@ open class CoursesStepDefinitions {
         setupWiremockandCreateData()
     }
 
-    @Given("special request text has been enabled")
-    fun gpProviderHasEnabledSpecialRequestText() {
+    @Given("^special request text has been enabled and is '(.*)'$")
+    fun gpProviderHasEnabledSpecialRequestText(necessityString: String) {
         initialize()
-
-        PrescriptionHelpers.setPrescriptionCommentsAllowed(true)
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
         if (currentProvider == ProviderTypes.EMIS) {
-            setupSpecialRequestConfigEmis()
+            when(necessityString) {
+                "Mandatory" -> setupEmisSpecialRequestConfigWithNecessityOptionOf(NecessityOption.MANDATORY)
+                "Optional" -> setupEmisSpecialRequestConfigWithNecessityOptionOf(NecessityOption.OPTIONAL)
+                else -> Assert.fail("Invalid necessity option provided.")
+            }
         }
     }
 
@@ -150,18 +152,14 @@ open class CoursesStepDefinitions {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<ProviderTypes>()
 
         if (currentProvider == ProviderTypes.EMIS) {
-            setupSpecialRequestConfigEmis()
+            setupEmisSpecialRequestConfigWithNecessityOptionOf(NecessityOption.NOT_ALLOWED)
         }
     }
 
-    private fun setupSpecialRequestConfigEmis() {
+    private fun setupEmisSpecialRequestConfigWithNecessityOptionOf(necessityOption: NecessityOption) {
         val response = SettingsResponseModel()
+        response.inputRequirements.prescribingComment = necessityOption.text
 
-        if (PrescriptionHelpers.getPrescriptionCommentsAllowed()) {
-            response.inputRequirements.prescribingComment = NecessityOption.OPTIONAL.text
-        } else {
-            response.inputRequirements.prescribingComment = NecessityOption.NOT_ALLOWED.text
-        }
         val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             practiceSettingsRequest(currentPatient)
@@ -265,6 +263,13 @@ open class CoursesStepDefinitions {
         Assert.assertTrue(
                 repeatPrescriptions.isNoRepeatPrescriptionsSelectedMessageVisible() ==
                 (visibility.toLowerCase() == isVisibleIndicator))
+    }
+
+    @Then("A validation message (.*) displayed indicating the user has not entered special request text")
+    fun aValidationMessageIsDisplayedIndicatingTheUserHasNotEnteredSpecialRequestText(visibility: String) {
+        Assert.assertTrue(
+                repeatPrescriptions.isNoSpecialRequestTextEnteredMessageVisible() ==
+                        (visibility.toLowerCase() == isVisibleIndicator))
     }
 
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {

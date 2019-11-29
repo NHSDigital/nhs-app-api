@@ -29,7 +29,6 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 
 export default {
@@ -44,9 +43,6 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      isValid: 'repeatPrescriptionCourses/isValid',
-    }),
     repeatPrescriptionCourses() {
       const { repeatPrescriptionCourses } = this.$store.state.repeatPrescriptionCourses;
       return (repeatPrescriptionCourses || []).length ? repeatPrescriptionCourses : null;
@@ -55,7 +51,6 @@ export default {
   methods: {
     selectedValueChanged(checkbox) {
       this.$store.dispatch('repeatPrescriptionCourses/select', checkbox.id);
-      this.$store.dispatch('repeatPrescriptionCourses/validate', { isValid: this.isValid });
       const storeSelected = this.$store.getters['repeatPrescriptionCourses.selectedIds'];
       this.$emit('input', storeSelected);
     },

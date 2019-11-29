@@ -240,7 +240,7 @@ Feature: View Courses Frontend
 
   Scenario Outline: The user can see prescription special request when the gp system <GP System> has enabled it
     Given I am a <GP System> patient
-    And special request text has been enabled
+    And special request text has been enabled and is 'Optional'
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -253,6 +253,20 @@ Feature: View Courses Frontend
       | GP System |
       | EMIS      |
       | VISION    |
+
+  Scenario: An Emis user sees a validation message when they select a repeat prescription but do not enter the mandatory special request text
+    Given I am a EMIS patient
+    And special request text has been enabled and is 'Mandatory'
+    And I have historic prescriptions
+    And there are 5 repeatable prescriptions available
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 5 available
+    When I click Continue on the Order a repeat prescription page
+    Then A validation message is displayed indicating the user has not entered special request text
+    When I navigate to prescriptions
+    And I click 'Order a new repeat prescription'
+    Then A validation message is not displayed indicating the user has not entered special request text
 
   Scenario Outline: An <GP System> User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given I am patient using the <GP System> GP System
