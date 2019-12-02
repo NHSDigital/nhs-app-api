@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
         public Consultations Map(MedicationRootObject consultationsGetResponse)
         {
-            if(consultationsGetResponse == null)
+            if (consultationsGetResponse == null)
             {
                 throw new ArgumentNullException(nameof(consultationsGetResponse));
             }
@@ -43,12 +43,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
         private ConsultationItem FilterConsultationItem(Consultation response)
         {
-            if(response == null)
+            if (response == null)
             {
                 _logger.LogWarning("Removing a consultation due to null response");
                 return null;
             }
-            
+
             var consultationHeaders = FilterConsultationHeaders(response);
 
             MyRecordDate effectiveDate = response.EffectiveDate?.Value != null
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     DatePart = response.EffectiveDate.DatePart
                 }
                 : new MyRecordDate();
-            
+
             var consultantLocation = !string.IsNullOrEmpty(response.Location)
                 ? $"{response.Location} - {response.ConsultantName}"
                 : response.ConsultantName;
@@ -93,8 +93,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                     if (string.Equals(section.Header, "Document", StringComparison.Ordinal))
                     {
-                        var documentComments = RetrieveAllComments(response);
-                        
+                        var documentComments = retrieveAllComments(response);
+
                         consultationHeaders.Add(new ConsultationHeaderItem
                         {
                             Header = section.Header,
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             return consultationHeaders;
         }
 
-        private static List<string> RetrieveAllComments(Consultation response)
+        private static List<string> retrieveAllComments(Consultation response)
         {
             var associatedTexts = new List<string>();
             if (response?.Sections != null)
@@ -127,7 +127,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 {
                     if (string.Equals(section.Header, "Comment", StringComparison.Ordinal))
                     {
-                        associatedTexts = FilterAssociatedTexts(section);
+                        if (section?.Observations != null)
+                        {
+                            foreach (var obs in section.Observations)
+                            {
+                                if (obs == null || !string.IsNullOrEmpty(obs.Term) || !FilterObservationTypes(obs) ||
+                                    obs.AssociatedText == null)
+                                {
+                                    continue;
+                                }
+
+                                if (obs.AssociatedText != null)
+                                {
+                                    foreach (var associatedText in obs.AssociatedText)
+                                    {
+                                        if (associatedText != null && !string.IsNullOrEmpty(associatedText.Text))
+                                        {
+                                            associatedTexts.Add(GetAssociatedText(associatedText));
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -150,7 +171,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                     if (obs.AssociatedText != null)
                     {
-                        associatedTexts = FilterAssociatedTextsFromObservation(obs);
+                        foreach (var associatedText in obs.AssociatedText)
+                        {
+                            if (associatedText != null && !string.IsNullOrEmpty(associatedText.Text))
+                            {
+                                associatedTexts.Add(GetAssociatedText(associatedText));
+                            }
+                        }
                     }
                 }
             }
@@ -171,7 +198,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                         continue;
                     }
 
-                    var associatedTextsWithTerms = FilterAssociatedTextsFromObservation(obs);
+                    var associatedTextsWithTerms = FilterAssociatedTextsWithTerms(obs);
 
                     observationItemWithTerms.Add(new ObservationItemWithTerm
                     {
@@ -187,11 +214,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             return observationItemWithTerms;
         }
 
-        private static List<string> FilterAssociatedTextsFromObservation(Observation observation)
+        private static List<string> FilterAssociatedTextsWithTerms(Observation obs)
         {
-            return observation.AssociatedText
-                .Where(at => at != null && !string.IsNullOrEmpty(at.Text))
-                .Select(GetAssociatedText).ToList();
+            var associatedTextsWithTerms = new List<string>();
+
+            if (obs?.AssociatedText != null)
+            {
+                foreach (var obsText in obs.AssociatedText)
+                {
+                    if (!string.IsNullOrEmpty(obsText.Text))
+                    {
+                        associatedTextsWithTerms.Add(GetAssociatedText(obsText));
+                    }
+                }
+            }
+
+            return associatedTextsWithTerms;
         }
 
         private static bool FilterObservationTypes(Observation obs)
