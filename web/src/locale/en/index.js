@@ -1427,7 +1427,7 @@ export default {
     signOut: 'Log out',
   },
   externalServiceWarning: {
-    warningText: 'This service is provided by your GP surgery',
+    warningText: 'Your GP surgery provides this service',
   },
   pageHeaders: {
     home: 'Home',
