@@ -16,14 +16,13 @@
         class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
         <Card data-label="immunisations">
           <div data-purpose="immunisations-card">
-            <span v-if="item.effectiveDate && item.effectiveDate.value">
-              <strong>
-                {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
-              </strong>
-            </span>
-            <span v-else>
-              <strong>{{ $t('my_record.noStartDate') }}</strong>
-            </span>
+            <p v-if="item.effectiveDate && item.effectiveDate.value"
+               class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
+              {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
+            </p>
+            <p v-else class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
+              {{ $t('my_record.noStartDate') }}
+            </p>
             <p class="nhsuk-body nhsuk-u-margin-bottom-2">
               {{ item.term }}
             </p>
@@ -39,14 +38,12 @@
         </Card>
       </MedicalRecordCardGroupItem>
     </div>
-
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
       :path="backPath"
       :button-text="'rp03.backButton'"
-      @clickAndPrevent="backButtonClicked"
-    />
-    <glossary v-if="!showError"/>
+      @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>
 

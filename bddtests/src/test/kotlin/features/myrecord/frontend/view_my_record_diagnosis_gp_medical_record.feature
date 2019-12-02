@@ -1,6 +1,5 @@
 @my-record
 @vision-diagnosis
-@pending @NHSO-7509
 Feature: View My Diagnosis - Medical Record v2
 
   Scenario: A VISION user has no access to diagnosis section - GP Medical Record

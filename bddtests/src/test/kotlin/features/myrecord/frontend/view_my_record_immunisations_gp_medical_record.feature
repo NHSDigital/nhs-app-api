@@ -1,6 +1,5 @@
 @my-record
-@pending @NHSO-7509
-Feature: View My Immunisation Information - GP Medical Record
+Feature: View My Immunisation Information - Medical Record v2
 
   Scenario Outline: A <GP System> user has multiple immunisations on their record - GP Medical Record
     Given I am a <GP System> user setup to use medical record version 2

@@ -4,32 +4,31 @@
       v-if="showError"
       :has-errored="events.hasErrored"
       :has-access="events.hasAccess"
-      :has-undetermined-access="events.hasUndeterminedAccess"
-    />
+      :has-undetermined-access="events.hasUndeterminedAccess"/>
     <div v-else data-purpose="events">
       <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
         <MedicalRecordCardGroupItem
           v-for="(event, index) in orderedEvents"
           :key="`event-${index}`"
-          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2"
-        >
+          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
           <Card data-label="events">
             <div data-purpose="events-card">
-              <span
-                v-if="event.date"
-                class="nhsuk-u-font-weight-bold"
-              >{{ event.date | datePart }}</span>
-              <span v-else>{{ $t('my_record.noStartDate') }}</span>
-
-              <p class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+              <p v-if="event.date"
+                 class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-header">
+                {{ event.date | datePart }}</p>
+              <p v-else clss="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-header">
+                {{ $t('my_record.noStartDate') }}</p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail">
                 {{ event.locationAndDoneBy }}
               </p>
 
               <ul class="nhsuk-list nhsuk-list--bullet">
                 <li v-for="(eventItem, eventItemIndex)
                       in event.eventItems"
-                    :key="`line-${eventItemIndex}`"
-                    :class="$style['nhsuk-body-m']">
+                    :key="`line-${eventItemIndex}`">
                   {{ eventItem }}
                 </li>
               </ul>
@@ -38,11 +37,11 @@
         </MedicalRecordCardGroupItem>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 
@@ -98,17 +97,8 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
 a {
   display: inline-block;
-  &:focus {
-    @include outlineStyle;
-    background-color: $focus_highlight;
-  }
-  &:hover {
-    @include linkHoverStyle;
-    cursor: pointer;
-  }
+  cursor: pointer;
 }
 </style>

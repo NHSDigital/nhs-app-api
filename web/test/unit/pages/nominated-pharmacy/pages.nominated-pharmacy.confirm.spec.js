@@ -172,7 +172,7 @@ describe('confirm nominated pharmacy', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
       wrapper = mountPage();
-      backLink = wrapper.find('#back-link');
+      backLink = wrapper.find('#back-link').find('a');
     });
 
     it('will exist', () => {

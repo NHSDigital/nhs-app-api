@@ -1,5 +1,4 @@
 @my-record
-@pending @NHSO-7509
 Feature: View My Medicines - Medical Record v2
 
   Scenario Outline: A <GP System> user has multiple medicines in each section - GP Medical Record

@@ -1,6 +1,5 @@
 @my-record
 @vision-procedures
-@pending @NHSO-7509
 Feature: View My Procedures - Medical Record v2
 
   Scenario: A VISION user has no access to procedures section - GP Medical Record

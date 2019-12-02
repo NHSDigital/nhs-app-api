@@ -16,29 +16,34 @@
         class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
         <Card data-label="encounters">
           <div data-purpose="encounters-card">
-            <span v-if="encounter.recordedOn && encounter.recordedOn.value">
-              <strong>
-                {{ encounter.recordedOn.value | datePart(encounter.recordedOn.datePart) }}
-              </strong>
-            </span>
-            <span v-else>
-              <strong>{{ $t('my_record.noStartDate') }}</strong>
-            </span>
-            <p> {{ encounter.description }} </p>
-            <p> {{ $t('my_record.encounters.value') }}{{ encounter.value }} </p>
-            <p> {{ $t('my_record.encounters.unit') }}{{ encounter.unit }} </p>
+            <p v-if="encounter.recordedOn && encounter.recordedOn.value"
+               data-purpose="record-item-header"
+               class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+              {{ encounter.recordedOn.value | datePart(encounter.recordedOn.datePart) }}
+            </p>
+            <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+               data-purpose="record-item-header">
+              {{ $t('my_record.noStartDate') }}
+            </p>
+            <p class="nhsuk-u-margin-bottom-0"
+               data-purpose="record-item-detail"> {{ encounter.description }} </p>
+            <p class="nhsuk-u-margin-bottom-0"
+               data-purpose="record-item-detail">
+              {{ $t('my_record.encounters.value') }}{{ encounter.value }} </p>
+            <p class=" nhsuk-u-margin-bottom-0"
+               data-purpose="record-item-detail">
+              {{ $t('my_record.encounters.unit') }}{{ encounter.unit }} </p>
           </div>
         </Card>
       </MedicalRecordCardGroupItem>
     </div>
-
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
       :path="backPath"
       :button-text="'rp03.backButton'"
       @clickAndPrevent="backButtonClicked"
     />
-    <glossary v-if="!showError"/>
   </div>
 </template>
 
@@ -97,8 +102,3 @@ export default {
   },
 };
 </script>
-
-<style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
-</style>

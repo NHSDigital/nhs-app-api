@@ -1,6 +1,5 @@
 @my-record
-@pending @NHSO-7509
-Feature: View My Referrals Information - GP Medical Record
+Feature: View My Referrals Information - Medical Record v2
 
   Scenario: A MICROTEST user can view referrals - GP Medical Record
     Given I am a MICROTEST user setup to use medical record version 2

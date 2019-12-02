@@ -1,10 +1,10 @@
 <template>
-  <a :class="[$style['nhsuk-back-link__link']]"
-     :href="path"
-     :target="target"
-     data-purpose="main-back-button"
-     @click.prevent="$emit('clickAndPrevent', $event)">
-    {{ $t(getBackButtonText) }}</a>
+  <p><a :class="[$style['nhsuk-back-link__link']]"
+        :href="path"
+        :target="target"
+        data-purpose="main-back-button"
+        @click.prevent="$emit('clickAndPrevent', $event)">
+    {{ $t(getBackButtonText) }}</a></p>
 </template>
 <script>
 export default {
@@ -34,6 +34,7 @@ export default {
 
  .nhsuk-back-link__link {
    display: inline-block;
+   cursor: pointer;
  }
 
 </style>

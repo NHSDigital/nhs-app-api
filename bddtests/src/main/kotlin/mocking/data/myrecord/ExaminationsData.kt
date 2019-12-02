@@ -14,4 +14,11 @@ object ExaminationsData {
 
         return response + html + responseStringEnd
     }
+
+    fun getVisionExaminationsDataWithNoExaminationsData(): String {
+        val response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + responseStringEnd
+    }
 }

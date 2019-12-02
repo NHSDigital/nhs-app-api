@@ -1,5 +1,4 @@
 @my-record
-@pending @NHSO-7509
 Feature: View My Health Conditions - Medical Record V2
 
   Scenario Outline: A <GP System> user has multiple health conditions on their record - GP Medical Record
@@ -41,7 +40,7 @@ Feature: View My Health Conditions - Medical Record V2
      | EMIS      |
      | VISION    |
 
-  Scenario Outline: A <GP System> user has an error accessing thier health conditions - GP Medical Record
+  Scenario Outline: A <GP System> user has an error accessing their health conditions - GP Medical Record
     Given I am a <GP System> user setup to use medical record version 2
     And there is an error retrieving Problems data
     And I am logged in

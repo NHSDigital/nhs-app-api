@@ -15,25 +15,33 @@
         >
           <Card data-label="referrals">
             <div data-purpose="referrals-card">
-              <span
+              <p
                 v-if="referral.recordDate && referral.recordDate.value"
-                class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-4"
-              >{{ referral.recordDate.value | datePart(referral.recordDate.datePart) }}</span>
-              <span v-else>{{ $t('my_record.noStartDate') }}</span>
+                class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                data-purpose="record-item-header">
+                {{ referral.recordDate.value | datePart(referral.recordDate.datePart) }}</p>
+              <p v-else class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-header">{{ $t('my_record.noStartDate') }}</p>
 
-              <p> {{ $t('my_record.referrals.description') }}{{ referral.description }} </p>
-              <p> {{ $t('my_record.referrals.speciality') }}{{ referral.speciality }} </p>
-              <p> {{ $t('my_record.referrals.ubrn') }}{{ referral.ubrn }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail">
+                {{ $t('my_record.referrals.description') }}{{ referral.description }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail">
+                {{ $t('my_record.referrals.speciality') }}{{ referral.speciality }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail">
+                {{ $t('my_record.referrals.ubrn') }}{{ referral.ubrn }} </p>
             </div>
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 

@@ -10,29 +10,29 @@
         <MedicalRecordCardGroupItem
           v-for="(allergy, index) in orderedAllergies"
           :key="`allergy.name-${index}`"
-          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2"
-        >
+          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
           <Card data-label="allergies-and-reactions">
             <div data-purpose="allergies-and-reactions-card">
-              <span
-                v-if="allergy.date && allergy.date.value"
-                class="nhsuk-u-font-weight-bold"
-              >{{ allergy.date.value | datePart(allergy.date.datePart) }}</span>
-              <span v-else>{{ $t('my_record.noStartDate') }}</span>
-
-              <p>{{ allergy.name }}</p>
-              <p v-if="allergy.drug">{{ allergy.drug }}</p>
-              <p v-if="allergy.reaction">{{ allergy.reaction }}</p>
+              <p v-if="allergy.date && allergy.date.value" data-purpose="record-item-header"
+                 class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+                {{ allergy.date.value | datePart(allergy.date.datePart) }}</p>
+              <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-header">
+                {{ $t('my_record.noStartDate') }}</p>
+              <p data-purpose="record-item-detail">{{ allergy.name }}</p>
+              <p v-if="allergy.drug" data-purpose="record-item-detail">{{ allergy.drug }}</p>
+              <p v-if="allergy.reaction" data-purpose="record-item-detail">
+                {{ allergy.reaction }}</p>
             </div>
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 

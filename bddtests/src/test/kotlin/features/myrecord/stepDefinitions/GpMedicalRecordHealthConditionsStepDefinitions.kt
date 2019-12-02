@@ -15,11 +15,11 @@ open class GpMedicalRecordHealthConditionsStepDefinitions : AbstractDemographics
     private val expectedData = mapOf(
             Supplier.EMIS to arrayOf(
                 "15 May 2018\nConjunctivitis\nSignificance: Minor\nStatus: Past\n" +
-                        "Notes:\nPatient advice given Repeated use of eye drops\nEnded: 15 May 2018",
+                        "Notes:\nPatient advice given\nRepeated use of eye drops\nEnded: 15 May 2018",
                 "15 May 2018\nConjunctivitis\nSignificance: Minor\nStatus: Past\n" +
-                        "Notes:\nPatient advice given Repeated use of eye drops\nEnded: 15 May 2018",
+                        "Notes:\nPatient advice given\nRepeated use of eye drops\nEnded: 15 May 2018",
                 "15 May 2018\nConjunctivitis\nSignificance: Minor\nStatus: Past\n" +
-                        "Notes:\nPatient advice given Repeated use of eye drops\nEnded: 15 May 2018"
+                        "Notes:\nPatient advice given\nRepeated use of eye drops\nEnded: 15 May 2018"
             ), Supplier.VISION to arrayOf(
                 "10 October 2018\nPeanut allergy\nStatus: Past",
                 "10 October 2018\nBroken leg\nStatus: Current",

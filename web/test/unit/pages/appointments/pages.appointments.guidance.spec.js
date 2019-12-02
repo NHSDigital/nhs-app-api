@@ -56,7 +56,7 @@ describe('booking guidance', () => {
 
   it('will go to the previous page when the desktop back link clicked', () => {
     wrapper = mountAs({ onlineConsultationsEnabled: true });
-    wrapper.find(DesktopGenericBackLink).trigger('click');
+    wrapper.find(DesktopGenericBackLink).find('a').trigger('click');
 
     expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
   });

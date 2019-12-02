@@ -1,6 +1,5 @@
 @my-record
 @vision-examinations
-@pending @NHSO-7509
 Feature: View My Examinations - Medical Record v2
 
   Scenario: A VISION user has no access to examinations section - GP Medical Record

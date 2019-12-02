@@ -103,7 +103,7 @@ Feature: View My Medical Record Information - Test Results Frontend
     When I click the test result section
     And I click a test result
     Then I see the appropriate error message for retrieving test result detail
-    
+
   Scenario: A TPP user can navigate to an individual test result
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
@@ -135,15 +135,6 @@ Feature: View My Medical Record Information - Test Results Frontend
     And I am on my record information page
     When I click the test result section
     And I click a test result
-
-  Scenario: A VISION user when navigating directly to test results is shown the My Record Warning Page
-    Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality
-    And I am on my record information page
-    When I enter url address for test results detail directly into the url
-    Then I am redirected to the 'My Record' page
-    And I see the your medical record page
-    And I see the top of my medical record page
 
   Scenario: A MICROTEST user can view test results section when no test results are returned
     Given I have 0 INR TestResults and 0 Path TestResults

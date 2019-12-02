@@ -58,7 +58,7 @@ object ProblemsData {
         return response + problem + responseStringEnd
     }
 
-    fun getVisionProblemsDataWithNoProblems(): String {
+    fun getVisionProblemsDataWithNoProblemsData(): String {
         val response = "<![CDATA[<root><patient>"
         val responseStringEnd = "</patient></root>]]>"
 

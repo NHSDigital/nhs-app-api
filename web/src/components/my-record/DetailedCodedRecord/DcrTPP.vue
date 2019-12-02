@@ -11,7 +11,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.consultationsAndEvents.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.consultationsAndEvents.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <events :is-collapsed="isEventsCollapsed" :events="record.tppDcrEvents" />
 
@@ -27,7 +28,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.testResults.sectionHeader.tpp') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.testResults.sectionHeader.tpp') }}</h2>
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
                   :supplier="record.supplier" />

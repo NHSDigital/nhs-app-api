@@ -1,6 +1,7 @@
 <template>
   <div>
     <menu-item id="allergies-and-reactions"
+               header-tag="h2"
                data-purpose="allergies-and-reactions"
                :href="allergiesAndReactionsPath"
                :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
@@ -12,6 +13,7 @@
                :count="record.allergies.data.length"/>
 
     <menu-item id="medicines"
+               header-tag="h2"
                data-purpose="medicines"
                :href="medicinesPath"
                :text="$t('my_record.medicines.sectionHeader')"
@@ -53,9 +55,3 @@ export default {
   },
 };
 </script>
-
-
-<style module lang="scss" scoped>
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
-</style>

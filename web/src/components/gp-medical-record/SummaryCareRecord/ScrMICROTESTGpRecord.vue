@@ -2,6 +2,7 @@
   <div>
     <menu-item id="allergies-and-reactions"
                data-purpose="allergies-and-reactions"
+               header-tag="h2"
                :href="allergiesAndReactionsPath"
                :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
                :aria-label="
@@ -13,6 +14,7 @@
 
     <menu-item id="medicines"
                data-purpose="medicines"
+               header-tag="h2"
                :href="medicinesPath"
                :text="$t('my_record.medicines.sectionHeader')"
                :aria-label="

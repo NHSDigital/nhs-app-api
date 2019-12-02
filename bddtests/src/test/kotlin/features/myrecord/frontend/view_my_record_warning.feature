@@ -44,7 +44,6 @@ Feature: View My Medical Record Information - Warning Frontend
     When I navigate away from the medical record page
     Then I return to my medical record page
     Then I see the your medical record page
-    And I see the top of my medical record page
 
   Scenario: An EMIS user accepts record and then logs out and back in and is shown the warning page
     Given the my record wiremocks are initialised for EMIS

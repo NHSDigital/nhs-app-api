@@ -83,7 +83,7 @@ describe('nominated pharmacy not found', () => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
-      backLink = wrapper.find('#back-link');
+      backLink = wrapper.find('#back-link').find('a');
     });
 
     it('will exist', () => {
@@ -134,7 +134,7 @@ describe('back button present on mobile app', () => {
     };
     $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
     wrapper = mountPage();
-    backButton = wrapper.find('#back-link');
+    backButton = wrapper.find('#back-link').find('a');
   });
 
   it('will exist', () => {

@@ -1,14 +1,12 @@
 <template>
   <div>
     <Medicines :medicines="currentMedicines" :show-error="showError"/>
-
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
       :path="getBackPath"
       :button-text="'rp03.backButton'"
-      @clickAndPrevent="backButtonClicked"
-    />
-    <glossary v-if="!showError"/>
+      @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>
 
@@ -50,8 +48,3 @@ export default {
   },
 };
 </script>
-
-<style module scoped lang="scss">
-@import "../../../style/colours";
-@import "../../../style/desktopWeb/accessibility";
-</style>

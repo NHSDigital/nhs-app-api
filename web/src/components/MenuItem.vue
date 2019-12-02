@@ -10,14 +10,18 @@
                            :click-param="clickParam"
                            :prevent-default="preventDefault"
                            :click-func="clickFunc">
-      <span :class="$style.listMenuItemContainer">
+      <span :class="[$style.listMenuItemContainer, showCount ? $style['countWidth'] : '']">
         <component :is="headerTag"
                    class="nhsuk-heading-s"
-                   :class="$style['inlineBlock']">{{ text }}</component>
-        <span v-if="showCount"
-              id="count"
-              :class="$style['count']"
-              class="nhsuk-u-padding-right-5">{{ count }}</span>
+                   :aria-label="ariaText">
+          <span v-if="showCount"
+                id="count"
+                :class="['nhsuk-u-margin-bottom-0' +
+                           'nhsuk-u-margin-left-8' +
+                           'nhsuk-u-font-weight-regular',
+                         $style['count']]">{{ count }}</span>
+          {{ text }}
+        </component>
         <p v-if="description" class="nhsuk-u-margin-bottom-3">{{ description }}</p>
         <slot/>
       </span>
@@ -85,6 +89,9 @@ export default {
   computed: {
     showCount() {
       return this.count !== undefined;
+    },
+    ariaText() {
+      return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('my_record.records')})` : this.text;
     },
 
   },
@@ -181,10 +188,8 @@ button.listMenuItemLink {
 .count {
   float: right;
   color: $nhsuk-text-color;
-  margin-top: 12px;
+  font-weight: normal;
 }
 
-.inlineBlock{
-    display: inline-block;
-}
+
 </style>

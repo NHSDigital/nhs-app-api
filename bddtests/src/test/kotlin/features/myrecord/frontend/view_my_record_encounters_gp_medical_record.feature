@@ -1,5 +1,4 @@
 @my-record
-@pending @NHSO-7509
 Feature: View My Encounters - Medical Record v2
 
   Scenario: A MICROTEST user can view immunisations - GP Medical Record

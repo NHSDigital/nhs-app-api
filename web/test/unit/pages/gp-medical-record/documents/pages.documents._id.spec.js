@@ -21,6 +21,7 @@ const newStore = ({ isDocumentsEnabled = true,
   createStore({
     $env: {
       MY_RECORD_DOCUMENTS_ENABLED: isDocumentsEnabled,
+      CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
     },
     state: {
       myRecord: {

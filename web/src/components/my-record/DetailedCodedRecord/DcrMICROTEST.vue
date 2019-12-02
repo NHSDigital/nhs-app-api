@@ -11,7 +11,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.immunisations.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.immunisations.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
 
@@ -26,7 +27,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.healthConditions.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.healthConditions.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 
@@ -42,7 +44,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.testResults.sectionHeader.default') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.testResults.sectionHeader.default') }}</h2>
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
                   :supplier="record.supplier" />
@@ -58,7 +61,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.medicalHistory.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.medicalHistory.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <medicalHistory :is-collapsed="isMedicalHistoryCollapsed"
                     :medical-history="record.medicalHistories" />
@@ -74,7 +78,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.recalls.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.recalls.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <recalls :is-collapsed="isRecallsCollapsed" :recalls="record.recalls" />
 
@@ -89,7 +94,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.encounters.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.encounters.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <encounters :is-collapsed="isEncountersCollapsed" :encounters="record.encounters" />
 
@@ -104,7 +110,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.referrals.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.referrals.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <referrals :is-collapsed="isReferralsCollapsed" :referrals="record.referrals" />
 

@@ -9,13 +9,13 @@
       :target="openNewWindow? '_blank' : ''"
       :text="bannerText"
       tag="a">
-      <Nhs-Arrow-Circle />{{ bannerText }}
+      <Nhs-Arrow-Circle tabindex="-1" />{{ bannerText }}
     </analytics-tracked-tag>
     <a v-else :id="id" class="nhsuk-action-link__link nhsuk-action-link__text" :href="linkUrl"
        :target="openNewWindow? '_blank' : ''"
        @click="doClick"
        @keypress.enter="doClick" >
-      <Nhs-Arrow-Circle />{{ bannerText }}
+      <Nhs-Arrow-Circle tabindex="-1" />{{ bannerText }}
     </a>
   </div>
 </template>

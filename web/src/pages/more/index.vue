@@ -105,9 +105,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss">
-  @import '../../style/colours';
-  @import '../../style/textstyles';
-  @import '../../style/fonts';
-</style>

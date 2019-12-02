@@ -2,6 +2,7 @@
   <div>
     <menu-item id="immunisations"
                data-purpose="immunisations"
+               header-tag="h2"
                :href="immunisationsPath"
                :text="$t('my_record.immunisations.sectionHeader')"
                :aria-label="
@@ -13,6 +14,7 @@
 
     <menu-item id="healthConditions"
                data-purpose="healthConditions"
+               header-tag="h2"
                :href="healthConditionsPath"
                :text="$t('my_record.healthConditions.sectionHeader')"
                :aria-label="
@@ -24,6 +26,7 @@
 
     <menu-item id="test-results"
                data-purpose="test-results"
+               header-tag="h2"
                :href="testResultsPath"
                :text="$t('my_record.testResults.sectionHeader.default')"
                :aria-label="
@@ -35,6 +38,7 @@
 
     <menu-item id="consultations"
                data-purpose="consultations"
+               header-tag="h2"
                :href="consultationsPath"
                :text="$t('my_record.consultationsAndEvents.sectionHeader')"
                :aria-label="
@@ -92,8 +96,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
-</style>

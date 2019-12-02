@@ -28,11 +28,11 @@
         </MedicalRecordCardGroupItem>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 

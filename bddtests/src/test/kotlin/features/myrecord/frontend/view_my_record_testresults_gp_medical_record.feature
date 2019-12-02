@@ -1,7 +1,6 @@
 @my-record
 @test-results
-@pending @NHSO-7509
-Feature: View My Test Results - GP Medical Record
+Feature: View My Test Results - Medical Record v2
 
   Scenario: A VISION user has no access to test result section
     Given I am a VISION user setup to use medical record version 2

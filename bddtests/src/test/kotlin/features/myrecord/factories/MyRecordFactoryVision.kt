@@ -44,13 +44,13 @@ class MyRecordFactoryVision: MyRecordFactory() {
         { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
 
         mocker.generatePatientDataResponse(patient, VisionConstants.problemsView)
-        { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
+        { request -> request.respondWithSuccess(ProblemsData.getVisionProblemsDataWithNoProblemsData()) }
 
         mocker.generatePatientDataResponse(patient, VisionConstants.diagnosisView)
-        { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
+        { request -> request.respondWithSuccess(DiagnosisData.getVisionDiagnosisDataWithNoDiagnosisData()) }
 
         mocker.generatePatientDataResponse(patient, VisionConstants.examinationsView)
-        { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
+        { request -> request.respondWithSuccess(ExaminationsData.getVisionExaminationsDataWithNoExaminationsData()) }
     }
 
     override fun enabledWithAllRecords(patient: Patient){

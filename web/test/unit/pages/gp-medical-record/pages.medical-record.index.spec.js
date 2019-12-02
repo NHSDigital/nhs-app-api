@@ -38,7 +38,12 @@ describe('gp-medical-record', () => {
 
   beforeEach(() => {
     Vue.filter('longDate', () => {});
-    $store = createStore({ $http: createHttp(), state: createState() });
+    $store = createStore({ $http: createHttp(),
+      state: createState(),
+      $env: {
+        CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
+        MY_RECORD_DOCUMENTS_ENABLED: true,
+      } });
   });
 
 

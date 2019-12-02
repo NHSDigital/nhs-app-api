@@ -2,6 +2,7 @@
   <div>
     <menu-item id="test-results"
                data-purpose="test-results"
+               header-tag="h2"
                :href="testResultsPath"
                :text="$t('my_record.testResults.sectionHeader.tpp')"
                :aria-label="
@@ -13,6 +14,7 @@
 
     <menu-item id="events"
                data-purpose="events"
+               header-tag="h2"
                :href="eventsPath"
                :text="$t('my_record.consultationsAndEvents.sectionHeader')"
                :aria-label="
@@ -49,8 +51,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
-</style>

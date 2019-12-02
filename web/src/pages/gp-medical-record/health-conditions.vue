@@ -15,35 +15,36 @@
         >
           <Card data-label="health-conditions">
             <div data-purpose="health-conditions-card">
-              <span
+              <p
                 v-if="problem.effectiveDate && problem.effectiveDate.value"
-                class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-4"
-              >{{ problem.effectiveDate.value | datePart(problem.effectiveDate.datePart) }}</span>
-              <span v-else>{{ $t('my_record.noStartDate') }}</span>
+                class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+              >{{ problem.effectiveDate.value | datePart(problem.effectiveDate.datePart) }}</p>
+              <p v-else class="nhsuk-u-margin-bottom-0">{{ $t('my_record.noStartDate') }}</p>
 
-              <p v-for="(lineItem, lineItemIndex)
-                   in problem.lineItems"
-                 :key="`line-${lineItemIndex}`"
-                 :class="$style['nhsuk-body-m']">
-                <span>{{ lineItem.text }}</span>
-                <ul v-if="lineItem.lineItems">
-                  <span v-for="(childLineItem, childLineItemIndex)
-                          in lineItem.lineItems"
-                        :key="`line-${childLineItemIndex}`">
+              <div v-for="(lineItem, lineItemIndex)
+                     in problem.lineItems"
+                   :key="`line-${lineItemIndex}`"
+                   :class="$style['nhsuk-body-m']">
+                <p class="nhsuk-u-margin-bottom-0">{{ lineItem.text }}</p>
+                <div v-if="lineItem.lineItems">
+                  <p v-for="(childLineItem, childLineItemIndex)
+                       in lineItem.lineItems"
+                     :key="`line-${childLineItemIndex}`"
+                     class="nhsuk-u-margin-bottom-0">
                     {{ childLineItem }}
-                  </span>
-                </ul>
-              </p>
+                  </p>
+                </div>
+              </div>
             </div>
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="getBackPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 
@@ -104,17 +105,11 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
 a {
   display: inline-block;
-  &:focus {
-    @include outlineStyle;
-    background-color: $focus_highlight;
-  }
-  &:hover {
-    @include linkHoverStyle;
-    cursor: pointer;
-  }
+  cursor: pointer;
+}
+li {
+  list-style-type: none;
 }
 </style>

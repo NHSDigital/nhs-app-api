@@ -2,6 +2,7 @@
   <div>
     <menu-item id="immunisations"
                data-purpose="immunisations"
+               header-tag="h2"
                :href="immunisationsPath"
                :text="$t('my_record.immunisations.sectionHeader')"
                :aria-label="
@@ -13,6 +14,7 @@
 
     <menu-item id="healthConditions"
                data-purpose="healthConditions"
+               header-tag="h2"
                :href="healthConditionsPath"
                :text="$t('my_record.healthConditions.sectionHeader')"
                :aria-label="
@@ -24,13 +26,15 @@
 
     <menu-item id="test-results"
                data-purpose="test-results"
+               header-tag="h2"
                :href="testResultsPath"
                :text="$t('my_record.testResults.sectionHeader.default')"
-               :click-func="viewVisionTestResults"
+               :click-func="goToUrl"
                :click-param="testResultsPath"/>
 
     <menu-item id="diagnosis"
                data-purpose="diagnosis"
+               header-tag="h2"
                :href="diagnosisPath"
                :text="$t('my_record.diagnosis.sectionHeader.default')"
                :click-func="goToUrl"
@@ -38,6 +42,7 @@
 
     <menu-item id="examinations"
                data-purpose="examinations"
+               header-tag="h2"
                :href="examinationsPath"
                :text="$t('my_record.examinations.sectionHeader.default')"
                :click-func="goToUrl"
@@ -45,6 +50,7 @@
 
     <menu-item id="procedures"
                data-purpose="procedures"
+               header-tag="h2"
                :href="proceduresPath"
                :text="$t('my_record.procedures.sectionHeader.default')"
                :click-func="goToUrl"
@@ -86,8 +92,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
-</style>

@@ -17,7 +17,7 @@ class ProblemsFactoryVision : ProblemsFactory() {
 
     override fun enabledWithBlankRecord(patient: Patient) {
         mocker.generatePatientDataResponse(patient, VisionConstants.problemsView)
-        { request -> request.respondWithSuccess(ProblemsData.getVisionProblemsDataWithNoProblems()) }
+        { request -> request.respondWithSuccess(ProblemsData.getVisionProblemsDataWithNoProblemsData()) }
     }
 
     override fun enabledWithRecords(patient: Patient) {

@@ -12,7 +12,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
                                      :allergies="record.allergies" />
@@ -28,7 +29,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.acuteMedications.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.acuteMedications.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <medications :is-collapsed="isAcuteMedicationsCollapsed"
                  :medications="record.medications.data.acuteMedications"
@@ -45,7 +47,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.currentRepeatMedications.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
                  :medications="record.medications.data.currentRepeatMedications"
@@ -63,7 +66,8 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
+      <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+        {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}</h2>
     </analytics-tracked-tag>
     <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
                  :medications="record.medications.data.discontinuedRepeatMedications"

@@ -117,7 +117,7 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
         MyRecordFactory.getForSupplier(supplier).enabledWithAllRecords(SerenityHelpers.getPatient())
     }
-    
+
     @When("I click the (.*) link on my record - GP Medical Record")
     fun iClickTheSectionLinkOnMyRecordPage(linkText: String) {
         myRecordInfoPage.clickMedicalRecordSectionLink(linkText)
@@ -160,4 +160,5 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
                 moduleCounts,
                 TestResultOptions())
     }
+
 }

@@ -1,38 +1,46 @@
 <template>
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()">
     <div v-if="showTemplate" id="mainDiv" data-sid="user-info-details">
-      <div v-if="$store.state.myRecord.patientDetails.patientName">
-        <span data-sid="patient-name"
-              :class="[$style['user-info-name'], 'nhsuk-u-padding-bottom-3']"
-              data-hj-suppress>
+      <div v-if="showPatientDetails">
+        <h2 data-sid="patient-name"
+            :class="['nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 ' +
+              'nhsuk-u-margin-bottom-0']"
+            data-hj-suppress>
           {{ $store.state.myRecord.patientDetails.patientName }}
-        </span>
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-          {{ $t('my_record.patientInfo.fieldLabelDOB') }}:
-        </span>
-        <span data-sid="user-date-of-birth"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
+        </h2>
+        <p class="nhsuk-label nhsuk-u-margin-top-0
+                  nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
+          {{ $t('my_record.patientInfo.fieldLabelDOB') }}
+        </p>
+        <p data-sid="user-date-of-birth"
+           :class="[$style['user-info'],
+                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3' +
+                      'nhsuk-u-margin-bottom-0']">
           {{ $store.state.myRecord.patientDetails.dateOfBirth | longDate }}
-        </span>
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0">
+        </p>
+        <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
+                  nhsuk-u-font-weight-bold">
           {{ $t('my_record.patientInfo.fieldLabelNHS') }}:
-        </span>
-        <span data-sid="user-nhs-number"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
+        </p>
+        <p data-sid="user-nhs-number"
+           :class="[$style['user-info'],
+                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0']">
           {{ $store.state.myRecord.patientDetails.nhsNumber }}
-        </span>
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0">
+        </p>
+        <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
+                  nhsuk-u-font-weight-bold">
           {{ $t('my_record.patientInfo.fieldLabelAddress') }}:
-        </span>
-        <span data-sid="user-address"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-5']"
-              data-hj-suppress>
+        </p>
+        <p data-sid="user-address"
+           :class="[$style['user-info'],
+                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-5 nhsuk-u-margin-bottom-0']"
+           data-hj-suppress>
           {{ $store.state.myRecord.patientDetails.address }}
-        </span>
+        </p>
       </div>
     </div>
 
-    <div v-if="hasRecordAccess()" :class="$style.summaryRecordContainer"
+    <div v-if="showTemplate && hasRecordAccess()" :class="$style.summaryRecordContainer"
          data-purpose="medical-record-menu">
       <menu-item-list>
         <template v-if="hasSummaryRecordAccess">
@@ -61,7 +69,7 @@
           </p>
         </template>
       </menu-item-list>
-      <glossary :extra-classes="[$style.glossary]"/>
+      <glossary/>
     </div>
     <div v-else class="pull-content">
       <div v-if="hasLoaded">
@@ -118,7 +126,6 @@ export default {
   data() {
     return {
       PATIENTDETAILS,
-      clinicalAbbreviationsUrl: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
       hasAgreed: false,
     };
   },
@@ -137,6 +144,12 @@ export default {
     },
     hasSummaryRecordAccess() {
       return get('$store.state.myRecord.record.hasSummaryRecordAccess')(this);
+    },
+    showPatientDetails() {
+      return (this.$store.state.myRecord.patientDetails.patientName ||
+        this.$store.state.myRecord.patientDetails.dateOfBirth ||
+        this.$store.state.myRecord.patientDetails.nhsNumber ||
+        this.$store.state.myRecord.patientDetails.address);
     },
   },
   async asyncData({ store }) {
@@ -175,17 +188,12 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/desktopWeb/accessibility';
   @import '../../style/medrecordcontent';
 
   .user-info {
-    font-weight: 600;
-    font-size: 20px;
     display: inline-block;
   }
   .user-info-name {
-    font-weight: 600;
-    font-size: 25px;
     display: inline-block;
   }
 </style>

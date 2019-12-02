@@ -15,24 +15,26 @@
         class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
         <Card data-label="medicines">
           <div data-purpose="medicines-card">
-            <span v-if="item.date">
-              <strong>
-                {{ item.date | datePart }}
-              </strong>
-            </span>
-            <span v-else>
-              <strong>{{ $t('my_record.noStartDate') }}</strong>
-            </span>
-            <p v-for="(lineItem, lineIndex) in item.lineItems"
-               :key="`line-${lineIndex}`">
-              {{ lineItem.text }}
-              <ul v-if="lineItem.lineItems">
+            <p v-if="item.date"
+               class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
+              {{ item.date | datePart }}
+            </p>
+            <p v-else
+               class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
+              {{ $t('my_record.noStartDate') }}
+            </p>
+            <div v-for="(lineItem, lineIndex) in item.lineItems"
+                 :key="`line-${lineIndex}`">
+              <p class="nhsuk-u-margin-bottom-0">
+                {{ lineItem.text }}
+              </p>
+              <ul v-if="lineItem.lineItems.length">
                 <li v-for="(innerLineItem, innerLineItemIndex) in lineItem.lineItems"
                     :key="`innerline-${innerLineItemIndex}`">
                   {{ innerLineItem }}
                 </li>
               </ul>
-            </p>
+            </div>
           </div>
         </Card>
       </MedicalRecordCardGroupItem>

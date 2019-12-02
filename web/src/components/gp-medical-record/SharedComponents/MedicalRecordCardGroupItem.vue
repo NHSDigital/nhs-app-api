@@ -11,13 +11,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/settings/colours';
   @import '~nhsuk-frontend/packages/core/tools/mixins';
-  @import '~nhsuk-frontend/packages/core/tools/spacing';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
   @import '~nhsuk-frontend/packages/core/tools/sass-mq';
-  @import '~nhsuk-frontend/packages/core/tools/typography';
-  @import '~nhsuk-frontend/packages/core/settings/typography';
 
   /* card group
    ========================================================================== */

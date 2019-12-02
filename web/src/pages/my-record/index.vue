@@ -2,10 +2,7 @@
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()"
        :class="!$store.state.device.isNativeApp">
     <div v-if="showTemplate" id="mainDiv">
-      <p>{{ $t('rp01.glossary.headerText') }}</p>
-      <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
-                        :click-action="glossaryLinkURL"
-                        :is-analytics-tracked="true"/>
+      <glossary/>
       <analytics-tracked-tag :class="['nhsuk-heading-s',
                                       'nhsuk-u-padding-3',
                                       'record-title',
@@ -17,7 +14,8 @@
                              data-purpose="accordion"
                              role="button"
                              tag="a">
-        {{ $t('my_record.patientInfo.sectionHeader') }}
+        <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
+          {{ $t('my_record.patientInfo.sectionHeader') }}</h2>
       </analytics-tracked-tag>
       <div :class="[$style.patientDetailsContainer, $style['nhsuk-u-padding-bottom-3']]">
         <patient-details v-if="!isProxying" :is-collapsed="isPatientDetailsCollapsed"
@@ -92,7 +90,7 @@ import ScrTpp from '@/components/my-record/SummaryCareRecord/ScrTPP';
 import ScrVision from '@/components/my-record/SummaryCareRecord/ScrVISION';
 import ScrMicrotest from '@/components/my-record/SummaryCareRecord/ScrMICROTEST';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
+import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -106,7 +104,6 @@ export default {
   components: {
     PatientDetails,
     AnalyticsTrackedTag,
-    NhsArrowBanner,
     DcrEmis,
     DcrTpp,
     DcrVision,
@@ -115,6 +112,7 @@ export default {
     ScrTpp,
     ScrVision,
     ScrMicrotest,
+    Glossary,
     Warning,
     Shutter,
     ProxyPatientDetails,

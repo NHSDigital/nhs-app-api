@@ -64,7 +64,7 @@ describe('can not change nominated pharmacy', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
       wrapper = mountPage();
-      backButton = wrapper.find('#back-button');
+      backButton = wrapper.find('#back-button').find('a');
       $style = {
         button: 'button',
         green: 'grey',

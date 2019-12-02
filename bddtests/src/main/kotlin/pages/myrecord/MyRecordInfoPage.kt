@@ -3,7 +3,6 @@ package pages.myrecord
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
-import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
 import pages.HybridPageObject
 import pages.HybridPageElement
@@ -42,7 +41,7 @@ class MyRecordInfoPage : HybridPageObject() {
     fun assertLabelAndValue(expectedLabel: String, expectedValue: String) {
         val labelElement =
                 HybridPageElement(
-                        webDesktopLocator = "//p[@data-purpose='record-item-header']",
+                        webDesktopLocator = "//p",
                         androidLocator = null,
                         page = this,
                         helpfulName = "Label for '$expectedLabel'")
@@ -158,14 +157,5 @@ class MyRecordInfoPage : HybridPageObject() {
 
     fun getSummaryCareNoAccessMessage(): String {
         return noSummaryCareAccessMessage.text
-    }
-
-    fun assertTopOfPage() {
-        val jsExecutor = driver as JavascriptExecutor
-        val scrollPositionX = jsExecutor.executeScript("return window.scrollX") as Any
-        val scrollPositionY = jsExecutor.executeScript("return window.scrollY") as Any
-
-        Assert.assertEquals(0L, scrollPositionX)
-        Assert.assertEquals(0L, scrollPositionY)
     }
 }

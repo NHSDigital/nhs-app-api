@@ -3,6 +3,7 @@
     <div class="nhsuk-u-margin-bottom-4">
       <menu-item-list>
         <menu-item id="acute-medicines"
+                   header-tag="h2"
                    data-purpose="acute-medicines"
                    :href="acuteMedicinesPath"
                    :text="$t('my_record.medicines.acuteMedicines.sectionHeader')"
@@ -15,6 +16,7 @@
 
         <menu-item id="current-medicines"
                    data-purpose="current-medicines"
+                   header-tag="h2"
                    :href="currentMedicinesPath"
                    :text="$t('my_record.medicines.currentMedicines.sectionHeader')"
                    :aria-label="
@@ -26,6 +28,7 @@
 
         <menu-item id="discontinued-medicines"
                    data-purpose="discontinued-medicines"
+                   header-tag="h2"
                    :href="discontinuedMedicinesPath"
                    :text="$t('my_record.medicines.discontinuedMedicines.sectionHeader')"
                    :click-func="goToUrl"
@@ -37,8 +40,7 @@
       v-if="!$store.state.device.isNativeApp"
       :path="backPath"
       :button-text="'rp03.backButton'"
-      @clickAndPrevent="backButtonClicked"
-    />
+      @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>
 

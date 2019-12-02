@@ -62,26 +62,16 @@ export default {
 .pull-content{
   display: block;
 }
-a {
-  text-decoration: underline;
-}
 div {
   .info {
     a {
       display: inline;
       vertical-align: unset;
-      font-weight: normal;
       padding: 0;
     }
   }
   .desktopWeb {
     max-width: 540px;
-    .info {
-      p {
-        font-family: $default-web;
-        font-weight: lighter;
-      }
-    }
   }
 }
 </style>

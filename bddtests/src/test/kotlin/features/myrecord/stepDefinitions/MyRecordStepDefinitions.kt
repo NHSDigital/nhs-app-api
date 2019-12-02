@@ -214,7 +214,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see the your medical record page$")
     fun iSeeTheYourMedicalRecordPage() {
         thenISeeHeaderTextIsYourGPMedicalRecord()
-        iSeeTheHeadingOnMyRecord("Your details")
         iSeePatientInformationDetails()
         thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
     }
@@ -253,12 +252,9 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see the patient information details$")
     fun iSeePatientInformationDetails() {
         val patient = SerenityHelpers.getPatient()
-        val sex = patient.sex.name
         val address = patient.address.full()
 
-        myRecordInfoPage.assertLabelAndValue("Name", patient.formattedFullName())
         myRecordInfoPage.assertLabelAndValue("Date of birth", patient.formattedDateOfBirth())
-        myRecordInfoPage.assertLabelAndValue("Sex", sex)
         myRecordInfoPage.assertLabelAndValue("Address", address)
         myRecordInfoPage.assertLabelAndValue("NHS number", patient.formattedNHSNumber())
     }
@@ -327,11 +323,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I return to my medical record page$")
     fun thenIReturnToMyMedicalRecordPage() {
         nav.select(NavBarNative.NavBarType.MY_RECORD)
-    }
-
-    @Then("^I see the top of my medical record page$")
-    fun andISeeTheTopOfMyMedicalRecordPage(){
-        myRecordInfoPage.assertTopOfPage()
     }
 
     @Then("^I click on the Back link on my records page$")

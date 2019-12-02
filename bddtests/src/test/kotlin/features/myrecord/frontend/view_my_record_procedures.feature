@@ -17,13 +17,3 @@ Feature: View My Medical Record Information - Procedures Frontend
     And I am on my record information page
     When I click the procedures section
     Then I see an error occurred message with Procedures on My Record
-
-  Scenario: A VISION user navigates directly to the procedures details page
-    Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has multiple procedures
-    And I am on my record information page
-    When I enter url address for procedures detail directly into the url
-    Then I am redirected to the 'My Record' page
-    And I see the your medical record page
-    And I see the top of my medical record page

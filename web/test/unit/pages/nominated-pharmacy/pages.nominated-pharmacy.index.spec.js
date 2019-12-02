@@ -37,7 +37,7 @@ describe('nominated pharmacy not found', () => {
       };
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
-      backButton = wrapper.find('#back-button');
+      backButton = wrapper.find('#back-button').find('a');
       noNominatedPharmacyWarning = wrapper.find(NoNominatedPharmacyWarning);
     });
 

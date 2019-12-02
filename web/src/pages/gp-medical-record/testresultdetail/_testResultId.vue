@@ -9,14 +9,15 @@
       <card v-else id="resultDetails">
         <span v-html="result.testResult" />
       </card>
-      <desktopGenericBackLink
-        v-if="!$store.state.device.isNativeApp"
-        class="nhsuk-u-margin-top-3"
-        :path="getBackPath"
-        :button-text="'rp03.backButton'"
-        @clickAndPrevent="backButtonClicked"
-      />
-      <glossary v-if="result" />
+      <div class="nhsuk-u-margin-top-3">
+        <glossary v-if="result" />
+        <desktopGenericBackLink
+          v-if="!$store.state.device.isNativeApp"
+          class="nhsuk-u-margin-top-3"
+          :path="getBackPath"
+          :button-text="'rp03.backButton'"
+          @clickAndPrevent="backButtonClicked"/>
+      </div>
     </div>
   </div>
 </template>
@@ -60,6 +61,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../../style/spacings';
   @import '../../../style/_textstyles';
 </style>

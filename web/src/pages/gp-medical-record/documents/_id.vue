@@ -19,10 +19,12 @@
         </div>
         <menu-item-list v-if="!isTooLarge" data-sid="action-list-menu">
           <menu-item id="btn_viewDocument"
+                     header-tag="h2"
                      :text="$t('my_record.documents.actions.view')"
                      :aria-label="$t('my_record.documents.actions.view')"
                      :click-func="navigateToView"/>
           <menu-item id="btn_downloadDocument"
+                     header-tag="h2"
                      :click-func="startDownload"
                      :text="$t('my_record.documents.actions.download')"
                      :aria-label="$t('my_record.documents.actions.download')"/>

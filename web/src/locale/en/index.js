@@ -1170,6 +1170,7 @@ export default {
     noRecordsOrNoAccess: {
       warningHeader: 'Sorry, this information isn\'t available through the NHS App. To access it, contact your GP surgery.',
     },
+    records: 'records',
     patientInfo: {
       fieldLabelName: 'Name',
       fieldLabelDOB: 'Date of birth',

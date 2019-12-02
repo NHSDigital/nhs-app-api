@@ -108,8 +108,3 @@ export default {
     }
   }
 </style>
-<style module lang="scss" scoped>
-  .glossary {
-    padding: 0.5em 1em 0em 1em;
-  }
-</style>

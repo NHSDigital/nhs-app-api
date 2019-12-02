@@ -167,7 +167,7 @@ describe('search pharmacies', () => {
     let backLink;
 
     beforeEach(() => {
-      backLink = page.find('#back-link');
+      backLink = page.find('#back-link').find('a');
     });
 
     it('will exist', () => {

@@ -18,17 +18,17 @@
           class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
           <Card data-label="allergies-and-reactions">
             <div data-purpose="test-results-card">
-              <span v-if="testResult.date.value">
-                <strong>
-                  {{ testResult.date.value | datePart(testResult.date.datePart) }}
-                </strong>
-              </span>
-              <span v-else>
-                <strong>
-                  {{ $t('my_record.noStartDate') }}
-                </strong>
-              </span>
-              <p v-if="supplier === 'TPP'">
+              <p v-if="testResult.date.value"
+                 class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-header">
+                {{ testResult.date.value | datePart(testResult.date.datePart) }}
+              </p>
+              <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-header">
+                {{ $t('my_record.noStartDate') }}
+              </p>
+              <p v-if="supplier === 'TPP'"
+                 class="nhsuk-u-margin-bottom-0">
                 <a :href="getTestResultPath(testResult.id)"
                    :class="$style.viewTestResult"
                    tabindex="0"
@@ -37,22 +37,24 @@
                   {{ testResult.description }}
                 </a>
               </p>
-              <p v-if="supplier === 'EMIS'" class="nhsuk-body nhsuk-u-margin-bottom-2">
+              <p v-if="supplier === 'EMIS'"
+                 class="nhsuk-body nhsuk-u-margin-bottom-2"
+                 data-purpose="record-item-detail">
                 {{ testResult.description }}</p>
-              <ul v-if="testResult.associatedTexts.length !== 0"
-                  class="nhsuk-list nhsuk-list--bullet">
+              <ul v-if="testResult.associatedTexts.length > 0"
+                  class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
                 <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
                     :key="`associatedText-${associatedTextItemIndex}`">
                   {{ associatedText }}</li>
               </ul>
-              <ul v-if="testResult.testResultChildLineItems.length !== 0"
-                  class="nhsuk-list nhsuk-list--bullet">
+              <ul v-if="testResult.testResultChildLineItems.length > 0"
+                  class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
                 <li v-for="(lineItem, lineItemIndex)
                       in testResult.testResultChildLineItems"
                     :key="`line-${lineItemIndex}`">
                   {{ lineItem.description }}
-                  <ul v-if="lineItem.associatedTexts.length !== 0"
-                      class="nhsuk-list nhsuk-list--bullet">
+                  <ul v-if="lineItem.associatedTexts.length > 0"
+                      class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
                     <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
                           in lineItem.associatedTexts"
                         :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`">
@@ -65,14 +67,12 @@
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
-
+      <glossary v-if="!showError"/>
       <desktopGenericBackLink
         v-if="!$store.state.device.isNativeApp"
         :path="backPath"
         :button-text="'rp03.backButton'"
-        @clickAndPrevent="backButtonClicked"
-      />
-      <glossary v-if="!showError"/>
+        @clickAndPrevent="backButtonClicked"/>
     </div>
   </div>
 </template>
@@ -155,17 +155,8 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
 a {
   display: inline-block;
-  &:focus {
-    @include outlineStyle;
-    background-color: $focus_highlight;
-  }
-  &:hover {
-    @include linkHoverStyle;
-    cursor: pointer;
-  }
+  cursor: pointer;
 }
 </style>

@@ -4,8 +4,7 @@
       v-if="showError"
       :has-errored="recalls.hasErrored"
       :has-access="recalls.hasAccess"
-      :has-undetermined-access="recalls.hasUndeterminedAccess"
-    />
+      :has-undetermined-access="recalls.hasUndeterminedAccess"/>
     <div v-else data-purpose="health-conditions">
       <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
         <MedicalRecordCardGroupItem
@@ -15,27 +14,37 @@
         >
           <Card data-label="recalls">
             <div data-purpose="recalls-card">
-              <span
+              <p
                 v-if="recall.recordDate && recall.recordDate.value"
-                class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-4"
-              >{{ recall.recordDate.value | datePart(recall.recordDate.datePart) }}</span>
-              <span v-else>{{ $t('my_record.noStartDate') }}</span>
+                class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                data-purpose="record-item-header">
+                {{ recall.recordDate.value | datePart(recall.recordDate.datePart) }}</p>
+              <p v-else class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-header">{{ $t('my_record.noStartDate') }}</p>
 
-              <p> {{ recall.name }} </p>
-              <p> {{ recall.description }} </p>
-              <p> {{ $t('my_record.recalls.result') }}{{ recall.result }} </p>
-              <p> {{ $t('my_record.recalls.nextDate') }}{{ recall.nextDate }} </p>
-              <p> {{ $t('my_record.recalls.status') }}{{ recall.status }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail"> {{ recall.name }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail"> {{ recall.description }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail">
+                {{ $t('my_record.recalls.result') }}{{ recall.result }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail">
+                {{ $t('my_record.recalls.nextDate') }}{{ recall.nextDate }} </p>
+              <p class="nhsuk-u-margin-bottom-0"
+                 data-purpose="record-item-detail">
+                {{ $t('my_record.recalls.status') }}{{ recall.status }} </p>
             </div>
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 
@@ -94,17 +103,8 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
 a {
   display: inline-block;
-  &:focus {
-    @include outlineStyle;
-    background-color: $focus_highlight;
-  }
-  &:hover {
-    @include linkHoverStyle;
-    cursor: pointer;
-  }
+  cursor: pointer;
 }
 </style>

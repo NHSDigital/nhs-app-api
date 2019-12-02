@@ -12,13 +12,13 @@
       <Card v-else :class="$style['vision-test-results', 'test-result-content']">
         <span v-html="myRecord.testResults.markup"/>
       </Card>
+      <glossary v-if="myRecord.testResults.markup"/>
       <desktopGenericBackLink
         v-if="!$store.state.device.isNativeApp"
         class="nhsuk-u-margin-top-3"
         :path="backPath"
         :button-text="'rp03.backButton'"
         @clickAndPrevent="backButtonClicked"/>
-      <glossary v-if="myRecord.testResults.markup"/>
     </div>
   </div>
 </template>
@@ -61,7 +61,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/spacings';
   @import '../../style/_textstyles';
   .vision-test-results {
     min-width: 50em;
@@ -74,7 +73,6 @@ export default {
     padding-bottom: 0.5em;
     margin-top: 0.5em;
     background-color: #ffffff;
-    @include space(margin, bottom, $three);
     overflow-x: scroll;
     display: inline-block;
     margin-right: 2em;

@@ -5,47 +5,51 @@
       v-if="showError"
       :has-errored="consultations.hasErrored"
       :has-access="consultations.hasAccess"
-      :has-undetermined-access="consultations.hasUndeterminedAccess"
-    />
+      :has-undetermined-access="consultations.hasUndeterminedAccess"/>
     <div v-else data-purpose="consultations">
       <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
         <MedicalRecordCardGroupItem
           v-for="(consultation, index) in orderedConsultations"
           :key="`consultation-${index}`"
-          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2"
-        >
+          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
           <Card data-label="consultations">
             <div data-purpose="consultations-card">
-              <span
+              <p
                 v-if="consultation.effectiveDate && consultation.effectiveDate.value"
-                class="nhsuk-u-font-weight-bold"
-              >
+                data-purpose="record-item-header"
+                class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
                 {{ consultation.effectiveDate.value |
                   datePart(consultation.effectiveDate.datePart) }}
-              </span>
-              <span v-else>{{ $t('my_record.noStartDate') }}</span>
-
-              <p>{{ consultation.consultantLocation }}</p>
+              </p>
+              <p v-else
+                 data-purpose="record-item-header"
+                 class="nhsuk-u-margin-bottom-0">
+                {{ $t('my_record.noStartDate') }}</p>
+              <p class="nhsuk-u-margin-bottom-0" data-purpose="record-item-detail">
+                {{ consultation.consultantLocation }}</p>
 
               <div v-for="(consultationHeader, consultationHeaderIndex)
                      in consultation.consultationHeaders"
-                   :key="`line-${consultationHeaderIndex}`" :class="$style.consultationHeader">
-                <strong> {{ consultationHeader.header }} </strong>
+                   :key="`line-${consultationHeaderIndex}`">
+                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+                  {{ consultationHeader.header }} </p>
 
-                <ul :class="[$style.consultationTerm]">
+                <ul v-if="consultationHeader.observationsWithTerm.length"
+                    class="nhsuk-u-margin-bottom-0">
                   <li v-for="(obsWithTerm, obsWithTermIndex)
                         in consultationHeader.observationsWithTerm"
                       :key="`line-${obsWithTermIndex}`">
                     {{ obsWithTerm.term }}
-                    <ul :class="[$style.observationText]">
+                    <ul v-if="obsWithTerm.associatedTexts.length"
+                        class="nhsuk-u-margin-bottom-0">
                       <li v-for="(obsWithTermText, obsWithTermTextIndex)
                             in obsWithTerm.associatedTexts"
                           :key="`line-${obsWithTermTextIndex}`" v-html="obsWithTermText"/>
                     </ul>
                   </li>
                 </ul>
-
-                <ul :class="[$style.consultationTerm]">
+                <ul v-if="consultationHeader.associatedTexts.length"
+                    class="nhsuk-u-margin-bottom-0">
                   <li v-for="(associatedText, associatedTextIndex)
                         in consultationHeader.associatedTexts"
                       :key="`line-${associatedTextIndex}`">
@@ -58,11 +62,11 @@
         </MedicalRecordCardGroupItem>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
                             @clickAndPrevent="backButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 
@@ -121,27 +125,8 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
 a {
   display: inline-block;
-  &:focus {
-    @include outlineStyle;
-    background-color: $focus_highlight;
-  }
-  &:hover {
-    @include linkHoverStyle;
-    cursor: pointer;
-  }
-}
-
-.consultationTerm {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 18px;
-}
-
-.observationText {
-  font-size: 16px;
+  cursor: pointer;
 }
 </style>
