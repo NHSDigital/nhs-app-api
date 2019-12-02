@@ -11,5 +11,15 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport
         {
             public const string ApplicationJsonFhir = "application/json+fhir";
         }
+        
+        public static class ErrorCodes
+        {
+            public const int SessionEndErrorCode = 480;
+        }
+        
+        public static class IssueCodes
+        {
+            public const string SessionEnd = "SESSION_ENDED";
+        }
     }
 }

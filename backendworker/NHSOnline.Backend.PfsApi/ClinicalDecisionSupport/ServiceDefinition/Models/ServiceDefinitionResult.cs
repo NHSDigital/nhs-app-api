@@ -1,3 +1,7 @@
+
+using Microsoft.AspNetCore.Mvc.Versioning;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
+
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models
 {
     public abstract class ServiceDefinitionResult
@@ -32,6 +36,21 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Mod
             public override T Accept<T>(IServiceDefinitionResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
+            }
+        }
+        
+        public class CustomError : ServiceDefinitionResult
+        {
+            public int ErrorCode  { get; }
+
+            public CustomError(int code)
+            {
+                ErrorCode = code;
+            }
+
+            public override T Accept<T>(IServiceDefinitionResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this, ErrorCode);
             }
         }
 

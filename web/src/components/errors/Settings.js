@@ -8,6 +8,8 @@ import {
   APPOINTMENT_BOOKING,
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CONFIRMATIONS,
+  APPOINTMENT_ADMIN_HELP,
+  APPOINTMENT_GP_ADVICE,
   AUTH_RETURN,
   BEGINLOGIN,
   GP_MEDICAL_RECORD,
@@ -85,6 +87,14 @@ export default {
         409: APPOINTMENT_BOOKING.path,
         default: APPOINTMENTS.path,
       },
+    },
+    {
+      route: APPOINTMENT_ADMIN_HELP.path,
+      ignoredErrors: [480],
+    },
+    {
+      route: APPOINTMENT_GP_ADVICE.path,
+      ignoredErrors: [480],
     },
     {
       route: AUTH_RETURN.path,

@@ -34,9 +34,21 @@ const store = {
     },
   },
   dispatch: jest.fn(),
+  state: {
+    errors: {
+      pageSettings: {
+        ignoredErrors: [480],
+      },
+    },
+  },
 };
 const state = {
   test: 'state',
+  errors: {
+    pageSettings: {
+      ignoredErrors: [480],
+    },
+  },
 };
 const rootState = {
   session: {
@@ -58,12 +70,18 @@ const rootState = {
 };
 
 describe('online consultations store actions', () => {
+  const error = {
+    response: {
+      status: 480,
+    },
+  };
   beforeEach(() => {
     commit.mockClear();
     store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate.mockClear();
     store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid.mockClear();
     store.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider.mockClear();
     store.dispatch.mockClear();
+    error.response.status = 400;
   });
 
   describe('getServiceDefinition', () => {
@@ -85,7 +103,7 @@ describe('online consultations store actions', () => {
         // Arrange
         store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid
           .mockImplementation(
-            () => Promise.reject(),
+            () => Promise.reject(error),
           );
 
         // Act
@@ -280,7 +298,7 @@ describe('online consultations store actions', () => {
           // Arrange
           store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
             .mockImplementation(
-              () => Promise.reject(),
+              () => Promise.reject(error),
             );
 
           // Act
@@ -301,12 +319,31 @@ describe('online consultations store actions', () => {
         });
       });
 
+      describe('response is session end', () => {
+        it('will not dispatch clearAndSetError', () => {
+          // Arrange
+          error.response.status = 480;
+          store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
+            .mockImplementation(
+              () => Promise.reject(error),
+            );
+
+          // Act
+          return evaluateServiceDefinition
+            .call(store, { commit, state, rootState }, actionParams)
+            .then(() => {
+              // Assert
+              expect(store.dispatch).toHaveBeenCalledTimes(0);
+            });
+        });
+      });
+
       describe('attempted evaluation is rejected', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
           store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate
             .mockImplementation(
-              () => Promise.reject(),
+              () => Promise.reject(error),
             );
 
           // Act

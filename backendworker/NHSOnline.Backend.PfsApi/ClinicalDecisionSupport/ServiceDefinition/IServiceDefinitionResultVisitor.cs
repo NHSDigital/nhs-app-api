@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         T Visit(ServiceDefinitionResult.Success result);
         T Visit(ServiceDefinitionResult.InternalServerError result);
         T Visit(ServiceDefinitionResult.BadRequest result);
+        T Visit(ServiceDefinitionResult.CustomError result, int errorCode);
         T Visit(ServiceDefinitionResult.BadGateway result);
         T Visit(ServiceDefinitionResult.NotFound result);
         T Visit(ServiceDefinitionResult.DemographicsBadGateway result);

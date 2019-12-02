@@ -51,9 +51,10 @@
          private const string ServiceDefinitionId = "testId";
          private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\", \"status\": \"success\" }";
          private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
-         private const string paramString =
+         private const string ParamString =
              "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"sessionId\",\"valueString\":\"9102fb79-bc0e-465d-b2de-2a724ec876dc\"},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
-
+         private const string SessionEndGuidanceResponse = "{ \"resourceType\": \"GuidanceResponse\", \"contained\": [ { \"resourceType\": \"Parameters\", \"id\": \"outputParams\", \"parameter\": [ { \"name\": \"sessionId\", \"valueString\": \"test\" } ] }, { \"resourceType\": \"OperationOutcome\", \"id\": \"outcome1\", \"issue\": [ { \"severity\": \"error\", \"code\": \"not-found\", \"details\": { \"coding\": [ { \"system\": \"https://test\", \"code\": \"SESSION_ENDED\", \"display\": \"sessionId test has already ended\" } ] } } ] } ], \"module\": { \"reference\": \"https://test/ServiceDefinition/GEC_ADM\" }, \"status\": \"failure\", \"occurrenceDateTime\": \"2019-12-02T13:38:09.403\", \"evaluationMessage\": [ { \"reference\": \"#outcome1\" } ], \"outputParameters\": { \"reference\": \"#outputParams\" } }";
+         
          private ServiceDefinitionService _service;
          private DemographicsResult _demographicsResult;
         
@@ -453,7 +454,7 @@
              });
 
              var fhirParser = new FhirJsonParser();
-             var paramsParsed = fhirParser.Parse(paramString);
+             var paramsParsed = fhirParser.Parse(ParamString);
            
              var bodyParameters = (Parameters) paramsParsed;
             
@@ -494,7 +495,35 @@
              _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
                  It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
          }
+         
+         [TestMethod]
+         [DataRow(false)]
+         public async Task GetServiceDefinitionResultByError_SessionEnd(bool addJsDisabledHeader)
+         {
+             // Arrange
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(SessionEndGuidanceResponse, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
 
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.Is<bool>(addHeader => addHeader == addJsDisabledHeader),
+                     null))
+                 .ReturnsAsync(httpResponse);
+             
+             // Act
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, new Parameters(), addJsDisabledHeader, false, _userSession);
+
+             // Assert
+             response.Should().BeAssignableTo<ServiceDefinitionResult.CustomError>().Subject.ErrorCode.Should()
+                 .Be(480);
+         }
+         
          [TestMethod]
          public async Task EvaluateServiceDefinition_WillLogEndingConsultationWithOdsCode()
          {

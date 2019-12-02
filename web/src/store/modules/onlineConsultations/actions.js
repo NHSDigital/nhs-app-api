@@ -1,3 +1,4 @@
+import get from 'lodash/fp/get';
 import {
   CLEAR,
   SET_SESSION_ID,
@@ -140,7 +141,6 @@ export default {
     ) {
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     }
-
     return store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate(
       requestParams,
     ).then((response) => {
@@ -200,8 +200,10 @@ export default {
       }
 
       showError(store);
-    }).catch(() => {
-      showError(store);
+    }).catch((error) => {
+      if (!store.state.errors.pageSettings.ignoredErrors.includes(get('response.status', error, 0))) {
+        showError(store);
+      }
     });
   },
   setAnswer({ commit }, answer) {

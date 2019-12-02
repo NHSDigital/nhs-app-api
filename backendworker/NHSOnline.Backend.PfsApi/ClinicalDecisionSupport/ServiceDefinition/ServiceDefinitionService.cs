@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
@@ -240,9 +241,16 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);
 
+            if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Failure)
+            {
+                _logger.LogInformation($"Ending consultation with failure status for ServiceDefinition: {serviceDefinitionId}. ODSCode: {odsCode}");
+                return GetServiceDefinitionResultFromErrorCode(guidanceResponse);
+            }
+
             if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
             {
-                _logger.LogInformation($"Ending consultation with ServiceDefinition: {serviceDefinitionId}. ODSCode: {odsCode}");
+                _logger.LogInformation(
+                    $"Ending consultation with ServiceDefinition: {serviceDefinitionId}. ODSCode: {odsCode}");
             }
 
             return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
@@ -284,6 +292,20 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 _logger.LogError(e, "Could not retrieve sessionId from parameters - Parameter list is empty");
                 return null;
             }
+        }
+
+        private ServiceDefinitionResult GetServiceDefinitionResultFromErrorCode(DomainResource guidanceResponse)
+        {
+            if (guidanceResponse
+                    .ExtractOperationOutcomes()
+                    .ExtractNotFoundOutcomes()
+                    .IsSessionEnded())
+                {
+                    return
+                        new ServiceDefinitionResult.CustomError(Constants.ErrorCodes.SessionEndErrorCode);
+                }
+
+            return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
         }
     }
 }

@@ -130,6 +130,8 @@ paths:
           description: Forbidden access when trying to obtain demographic details.
         "404":
           description: This is either that the demographic details could not be found or evaluate could not be carried out with the provided details.
+        "480":
+          description: This response code is returned if the session has ended.
         "500":
           description: An unexpected error occurred processing the request to evaluate the answer, or to obtain paitent demographics.
         "502":

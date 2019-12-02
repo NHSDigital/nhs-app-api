@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 
@@ -20,6 +21,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         public IActionResult Visit(ServiceDefinitionResult.BadRequest result)
         {
             return new BadRequestResult();
+        }
+
+        public IActionResult Visit(ServiceDefinitionResult.CustomError result, int errorCode)
+        {
+            return new StatusCodeResult(errorCode);
         }
 
         public IActionResult Visit(ServiceDefinitionResult.BadGateway result)
